@@ -269,6 +269,7 @@
     <public type="drawable" name="actions_permissions" id="NUM" />
     <public type="drawable" name="actions_remove_user" id="NUM" />
     <public type="drawable" name="actions_removed" id="NUM" />
+    <public type="drawable" name="actions_requests" id="NUM" />
     <public type="drawable" name="actions_setphoto" id="NUM" />
     <public type="drawable" name="actions_viewmembers" id="NUM" />
     <public type="drawable" name="add" id="NUM" />
@@ -519,6 +520,7 @@
     <public type="drawable" name="ic_gofullscreen" id="NUM" />
     <public type="drawable" name="ic_goinline" id="NUM" />
     <public type="drawable" name="ic_launcher_dr" id="NUM" />
+    <public type="drawable" name="ic_layer_close" id="NUM" />
     <public type="drawable" name="ic_lock_header" id="NUM" />
     <public type="drawable" name="ic_lock_white" id="NUM" />
     <public type="drawable" name="ic_masks_msk1" id="NUM" />
@@ -1586,6 +1588,7 @@
     <public type="raw" name="swipe_unread" id="NUM" />
     <public type="raw" name="ticks_double" id="NUM" />
     <public type="raw" name="ticks_single" id="NUM" />
+    <public type="raw" name="timer_3" id="NUM" />
     <public type="raw" name="tsv_monkey_close" id="NUM" />
     <public type="raw" name="tsv_setup_email_sent" id="NUM" />
     <public type="raw" name="tsv_setup_hint" id="NUM" />
@@ -1919,10 +1922,12 @@
     <public type="string" name="AddStickersInstalledInfo" id="NUM" />
     <public type="string" name="AddStickersNotFound" id="NUM" />
     <public type="string" name="AddSubscriber" id="NUM" />
+    <public type="string" name="AddToChannel" id="NUM" />
     <public type="string" name="AddToContacts" id="NUM" />
     <public type="string" name="AddToExceptions" id="NUM" />
     <public type="string" name="AddToExistingContact" id="NUM" />
     <public type="string" name="AddToFavorites" id="NUM" />
+    <public type="string" name="AddToGroup" id="NUM" />
     <public type="string" name="AddToMasks" id="NUM" />
     <public type="string" name="AddToStickers" id="NUM" />
     <public type="string" name="AddToTheGroup" id="NUM" />
@@ -1930,6 +1935,7 @@
     <public type="string" name="AddToTheGroupAlertTitle" id="NUM" />
     <public type="string" name="AddToTheGroupForwardCount" id="NUM" />
     <public type="string" name="AddUserErrorBlacklisted" id="NUM" />
+    <public type="string" name="AddedBy" id="NUM" />
     <public type="string" name="AddedToFavorites" id="NUM" />
     <public type="string" name="AdminWillBeRemoved" id="NUM" />
     <public type="string" name="Agree" id="NUM" />
@@ -1992,6 +1998,8 @@
     <public type="string" name="ApplyLocalizationFile" id="NUM" />
     <public type="string" name="ApplyTheme" id="NUM" />
     <public type="string" name="ApplyThemeFile" id="NUM" />
+    <public type="string" name="ApproveNewMembers" id="NUM" />
+    <public type="string" name="ApproveNewMembersDescription" id="NUM" />
     <public type="string" name="April" id="NUM" />
     <public type="string" name="Archive" id="NUM" />
     <public type="string" name="ArchiveAndMute" id="NUM" />
@@ -2960,6 +2968,8 @@
     <public type="string" name="DiscussionUnlinkChannelAlert" id="NUM" />
     <public type="string" name="DiscussionUnlinkGroup" id="NUM" />
     <public type="string" name="DiscussionUnlinkGroupAlert" id="NUM" />
+    <public type="string" name="Dismiss" id="NUM" />
+    <public type="string" name="DismissRequest" id="NUM" />
     <public type="string" name="DistanceUnits" id="NUM" />
     <public type="string" name="DistanceUnitsAutomatic" id="NUM" />
     <public type="string" name="DistanceUnitsKilometers" id="NUM" />
@@ -3514,6 +3524,8 @@
     <public type="string" name="Groups_two" id="NUM" />
     <public type="string" name="Groups_zero" id="NUM" />
     <public type="string" name="GrowthChartTitle" id="NUM" />
+    <public type="string" name="HasBeenAddedToChannel" id="NUM" />
+    <public type="string" name="HasBeenAddedToGroup" id="NUM" />
     <public type="string" name="HashtagCopied" id="NUM" />
     <public type="string" name="Hashtags" id="NUM" />
     <public type="string" name="HidAccount" id="NUM" />
@@ -3689,8 +3701,21 @@
     <public type="string" name="JoinByPeekGroupTitle" id="NUM" />
     <public type="string" name="JoinByPeekJoin" id="NUM" />
     <public type="string" name="JoinGroup" id="NUM" />
+    <public type="string" name="JoinRequests_few" id="NUM" />
+    <public type="string" name="JoinRequests_many" id="NUM" />
+    <public type="string" name="JoinRequests_one" id="NUM" />
+    <public type="string" name="JoinRequests_other" id="NUM" />
+    <public type="string" name="JoinRequests_two" id="NUM" />
+    <public type="string" name="JoinRequests_zero" id="NUM" />
     <public type="string" name="JoinToGroupErrorFull" id="NUM" />
     <public type="string" name="JoinToGroupErrorNotExist" id="NUM" />
+    <public type="string" name="JoinUsersRequests_few" id="NUM" />
+    <public type="string" name="JoinUsersRequests_many" id="NUM" />
+    <public type="string" name="JoinUsersRequests_one" id="NUM" />
+    <public type="string" name="JoinUsersRequests_other" id="NUM" />
+    <public type="string" name="JoinUsersRequests_two" id="NUM" />
+    <public type="string" name="JoinUsersRequests_zero" id="NUM" />
+    <public type="string" name="JoinedViaInviteLinkApproved" id="NUM" />
     <public type="string" name="July" id="NUM" />
     <public type="string" name="JumpToDate" id="NUM" />
     <public type="string" name="June" id="NUM" />
@@ -3898,6 +3923,7 @@
     <public type="string" name="MegaPublic" id="NUM" />
     <public type="string" name="MegaPublicInfo" id="NUM" />
     <public type="string" name="MegaUsernameHelp" id="NUM" />
+    <public type="string" name="MemberRequests" id="NUM" />
     <public type="string" name="MembersAreSpeakingToast_few" id="NUM" />
     <public type="string" name="MembersAreSpeakingToast_many" id="NUM" />
     <public type="string" name="MembersAreSpeakingToast_one" id="NUM" />
@@ -4117,6 +4143,8 @@
     <public type="string" name="NoMedia" id="NUM" />
     <public type="string" name="NoMediaAutoDownload" id="NUM" />
     <public type="string" name="NoMediaSecret" id="NUM" />
+    <public type="string" name="NoMemberRequests" id="NUM" />
+    <public type="string" name="NoMemberRequestsDescription" id="NUM" />
     <public type="string" name="NoMessages" id="NUM" />
     <public type="string" name="NoMessagesGreetingsDescription" id="NUM" />
     <public type="string" name="NoOneJoined" id="NUM" />
@@ -4150,6 +4178,8 @@
     <public type="string" name="NoSound" id="NUM" />
     <public type="string" name="NoStickers" id="NUM" />
     <public type="string" name="NoStickersFound" id="NUM" />
+    <public type="string" name="NoSubscribeRequests" id="NUM" />
+    <public type="string" name="NoSubscribeRequestsDescription" id="NUM" />
     <public type="string" name="NoUsernameFound" id="NUM" />
     <public type="string" name="NoVotes" id="NUM" />
     <public type="string" name="NoVotesQuiz" id="NUM" />
@@ -5100,6 +5130,16 @@
     <public type="string" name="ReportUnrelatedGroupText" id="NUM" />
     <public type="string" name="ReportUnrelatedGroupTextNoAddress" id="NUM" />
     <public type="string" name="ReportUserLocation" id="NUM" />
+    <public type="string" name="RequestToJoinChannel" id="NUM" />
+    <public type="string" name="RequestToJoinChannelApproved" id="NUM" />
+    <public type="string" name="RequestToJoinChannelDescription" id="NUM" />
+    <public type="string" name="RequestToJoinChannelSentDescription" id="NUM" />
+    <public type="string" name="RequestToJoinGroup" id="NUM" />
+    <public type="string" name="RequestToJoinGroupApproved" id="NUM" />
+    <public type="string" name="RequestToJoinGroupDescription" id="NUM" />
+    <public type="string" name="RequestToJoinGroupSentDescription" id="NUM" />
+    <public type="string" name="RequestToJoinSent" id="NUM" />
+    <public type="string" name="RequestedToJoinAt" id="NUM" />
     <public type="string" name="ResendCode" id="NUM" />
     <public type="string" name="ResendCodeInfo" id="NUM" />
     <public type="string" name="Reset" id="NUM" />
@@ -5212,6 +5252,7 @@
     <public type="string" name="SearchImagesInfo" id="NUM" />
     <public type="string" name="SearchImagesTitle" id="NUM" />
     <public type="string" name="SearchInSettings" id="NUM" />
+    <public type="string" name="SearchMemberRequests" id="NUM" />
     <public type="string" name="SearchMembers" id="NUM" />
     <public type="string" name="SearchMessages" id="NUM" />
     <public type="string" name="SearchMusic" id="NUM" />
@@ -5552,6 +5593,7 @@
     <public type="string" name="StorageUsage" id="NUM" />
     <public type="string" name="Streaming" id="NUM" />
     <public type="string" name="Strike" id="NUM" />
+    <public type="string" name="SubscribeRequests" id="NUM" />
     <public type="string" name="Subscribers_few" id="NUM" />
     <public type="string" name="Subscribers_many" id="NUM" />
     <public type="string" name="Subscribers_one" id="NUM" />
@@ -6422,6 +6464,7 @@
     <public type="style" name="Theme.TMessages.Transparent" id="NUM" />
     <public type="style" name="Theme.TMessages.TransparentWithAlerts" id="NUM" />
     <public type="style" name="TransparentDialog" id="NUM" />
+    <public type="style" name="TransparentDialog2" id="NUM" />
     <public type="style" name="WalletFragmentDefaultButtonTextAppearance" id="NUM" />
     <public type="style" name="WalletFragmentDefaultDetailsHeaderTextAppearance" id="NUM" />
     <public type="style" name="WalletFragmentDefaultDetailsTextAppearance" id="NUM" />

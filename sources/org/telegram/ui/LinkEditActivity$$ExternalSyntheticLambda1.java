@@ -10,6 +10,6 @@ public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda1 im
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$5(view);
+        this.f$0.lambda$createView$0(view);
     }
 }

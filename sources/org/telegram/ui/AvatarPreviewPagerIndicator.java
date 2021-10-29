@@ -43,7 +43,7 @@ public class AvatarPreviewPagerIndicator extends View implements ProfileGalleryV
     private final boolean[] pressedOverlayVisible = new boolean[2];
     private int previousSelectedPotision = -1;
     private float previousSelectedProgress;
-    ProfileGalleryView profileGalleryView;
+    protected ProfileGalleryView profileGalleryView;
     private float progressToCounter;
     private final RectF rect = new RectF();
     RectF rectF = new RectF();
@@ -704,5 +704,9 @@ public class AvatarPreviewPagerIndicator extends View implements ProfileGalleryV
 
     public void setProfileGalleryView(ProfileGalleryView profileGalleryView2) {
         this.profileGalleryView = profileGalleryView2;
+    }
+
+    public ProfileGalleryView getProfileGalleryView() {
+        return this.profileGalleryView;
     }
 }

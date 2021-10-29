@@ -11,7 +11,11 @@ public class TLRPC$TL_chatInvite extends TLRPC$ChatInvite {
         this.broadcast = (readInt32 & 2) != 0;
         this.isPublic = (readInt32 & 4) != 0;
         this.megagroup = (readInt32 & 8) != 0;
+        this.request_needed = (readInt32 & 64) != 0;
         this.title = abstractSerializedData.readString(z);
+        if ((this.flags & 32) != 0) {
+            this.about = abstractSerializedData.readString(z);
+        }
         this.photo = TLRPC$Photo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.participants_count = abstractSerializedData.readInt32(z);
         if ((this.flags & 16) != 0) {
@@ -43,16 +47,24 @@ public class TLRPC$TL_chatInvite extends TLRPC$ChatInvite {
         this.flags = i3;
         int i4 = this.megagroup ? i3 | 8 : i3 & -9;
         this.flags = i4;
-        abstractSerializedData.writeInt32(i4);
+        int i5 = this.about != null ? i4 | 32 : i4 & -33;
+        this.flags = i5;
+        int i6 = this.request_needed ? i5 | 64 : i5 & -65;
+        this.flags = i6;
+        abstractSerializedData.writeInt32(i6);
         abstractSerializedData.writeString(this.title);
+        String str = this.about;
+        if (str != null) {
+            abstractSerializedData.writeString(str);
+        }
         this.photo.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.participants_count);
         if ((this.flags & 16) != 0) {
             abstractSerializedData.writeInt32(NUM);
             int size = this.participants.size();
             abstractSerializedData.writeInt32(size);
-            for (int i5 = 0; i5 < size; i5++) {
-                this.participants.get(i5).serializeToStream(abstractSerializedData);
+            for (int i7 = 0; i7 < size; i7++) {
+                this.participants.get(i7).serializeToStream(abstractSerializedData);
             }
         }
     }

@@ -111,6 +111,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     private TextDetailCell linkedCell;
     private TextDetailCell locationCell;
     private TextCell logCell;
+    private TextCell memberRequestsCell;
     private TextCell membersCell;
     /* access modifiers changed from: private */
     public EditTextEmoji nameTextView;
@@ -268,12 +269,12 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         tLRPC$TL_messages_getExportedChatInvites.peer = getMessagesController().getInputPeer(-this.chatId);
         tLRPC$TL_messages_getExportedChatInvites.admin_id = getMessagesController().getInputUser(getUserConfig().getCurrentUser());
         tLRPC$TL_messages_getExportedChatInvites.limit = 0;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_getExportedChatInvites, new ChatEditActivity$$ExternalSyntheticLambda26(this));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_getExportedChatInvites, new ChatEditActivity$$ExternalSyntheticLambda27(this));
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$loadLinksCount$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new ChatEditActivity$$ExternalSyntheticLambda23(this, tLRPC$TL_error, tLObject));
+        AndroidUtilities.runOnUIThread(new ChatEditActivity$$ExternalSyntheticLambda24(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
@@ -355,14 +356,15 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         return false;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x05f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:155:0x061a  */
-    /* JADX WARNING: Removed duplicated region for block: B:163:0x063e  */
-    /* JADX WARNING: Removed duplicated region for block: B:166:0x065d  */
-    /* JADX WARNING: Removed duplicated region for block: B:176:0x06dd  */
-    /* JADX WARNING: Removed duplicated region for block: B:181:0x075b  */
-    /* JADX WARNING: Removed duplicated region for block: B:188:0x0770  */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x07b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:142:0x05ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:155:0x0615  */
+    /* JADX WARNING: Removed duplicated region for block: B:165:0x064f  */
+    /* JADX WARNING: Removed duplicated region for block: B:173:0x0673  */
+    /* JADX WARNING: Removed duplicated region for block: B:176:0x0692  */
+    /* JADX WARNING: Removed duplicated region for block: B:186:0x0712  */
+    /* JADX WARNING: Removed duplicated region for block: B:191:0x0790  */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x07a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:204:0x07eb  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r24) {
         /*
@@ -374,7 +376,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r2.onDestroy()
         L_0x000b:
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r3 = 2131165469(0x7var_d, float:1.7945156E38)
+            r3 = 2131165470(0x7var_e, float:1.7945158E38)
             r2.setBackButtonImage(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
             r3 = 1
@@ -385,7 +387,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r2.setActionBarMenuOnItemClick(r4)
             org.telegram.ui.ChatEditActivity$3 r2 = new org.telegram.ui.ChatEditActivity$3
             r2.<init>(r1)
-            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda19 r4 = org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda19.INSTANCE
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda20 r4 = org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda20.INSTANCE
             r2.setOnTouchListener(r4)
             r0.fragmentView = r2
             java.lang.String r4 = "windowBackgroundGray"
@@ -406,7 +408,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r4.addView(r5, r7)
             r5.setOrientation(r3)
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            r7 = 2131624745(0x7f0e0329, float:1.8876678E38)
+            r7 = 2131624750(0x7f0e032e, float:1.8876689E38)
             java.lang.String r9 = "ChannelEdit"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r4.setTitle(r7)
@@ -545,7 +547,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r4.addView(r9, r12)
             r0.showAvatarProgress(r14, r14)
             android.widget.LinearLayout r9 = r0.avatarContainer
-            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda15 r12 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda15
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda16 r12 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda16
             r12.<init>(r0)
             r9.setOnClickListener(r12)
             goto L_0x01a6
@@ -584,13 +586,13 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r0.nameTextView = r9
             boolean r12 = r0.isChannel
             if (r12 == 0) goto L_0x01be
-            r12 = 2131625381(0x7f0e05a5, float:1.8877968E38)
+            r12 = 2131625388(0x7f0e05ac, float:1.8877983E38)
             java.lang.String r15 = "EnterChannelName"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r15, r12)
             r9.setHint(r12)
             goto L_0x01ca
         L_0x01be:
-            r12 = 2131625801(0x7f0e0749, float:1.887882E38)
+            r12 = 2131625808(0x7f0e0750, float:1.8878834E38)
             java.lang.String r15 = "GroupName"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r15, r12)
             r9.setHint(r12)
@@ -720,7 +722,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.ui.Components.EditTextBoldCursor r10 = r0.descriptionTextView
             r10.setFilters(r4)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r0.descriptionTextView
-            r10 = 2131625227(0x7f0e050b, float:1.8877656E38)
+            r10 = 2131625232(0x7f0e0510, float:1.8877666E38)
             java.lang.String r11 = "DescriptionOptionalPlaceholder"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r4.setHint(r10)
@@ -761,7 +763,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r4.addView(r10, r11)
         L_0x0346:
             org.telegram.ui.Components.EditTextBoldCursor r4 = r0.descriptionTextView
-            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda20 r10 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda20
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda21 r10 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda21
             r10.<init>(r0)
             r4.setOnEditorActionListener(r10)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r0.descriptionTextView
@@ -823,7 +825,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
             r4.addView(r10, r11)
             org.telegram.ui.Cells.TextDetailCell r4 = r0.typeCell
-            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda6 r10 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda6
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda5 r10 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda5
             r10.<init>(r0)
             r4.setOnClickListener(r10)
         L_0x03e6:
@@ -852,7 +854,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
             r4.addView(r10, r11)
             org.telegram.ui.Cells.TextDetailCell r4 = r0.linkedCell
-            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda7 r10 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda7
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda6 r10 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda6
             r10.<init>(r0)
             r4.setOnClickListener(r10)
         L_0x0429:
@@ -878,7 +880,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
             r4.addView(r10, r11)
             org.telegram.ui.Cells.TextDetailCell r4 = r0.historyCell
-            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda17 r10 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda17
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda18 r10 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda18
             r10.<init>(r0, r1)
             r4.setOnClickListener(r10)
         L_0x0466:
@@ -891,10 +893,10 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
             r4.setBackgroundDrawable(r11)
             org.telegram.ui.Cells.TextCheckCell r15 = r0.signCell
-            r4 = 2131624800(0x7f0e0360, float:1.887679E38)
+            r4 = 2131624805(0x7f0e0365, float:1.88768E38)
             java.lang.String r11 = "ChannelSignMessages"
             java.lang.String r16 = org.telegram.messenger.LocaleController.getString(r11, r4)
-            r4 = 2131624801(0x7f0e0361, float:1.8876792E38)
+            r4 = 2131624806(0x7f0e0366, float:1.8876802E38)
             java.lang.String r11 = "ChannelSignMessagesInfo"
             java.lang.String r17 = org.telegram.messenger.LocaleController.getString(r11, r4)
             boolean r4 = r0.signMessages
@@ -907,7 +909,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r10)
             r4.addView(r11, r12)
             org.telegram.ui.Cells.TextCheckCell r4 = r0.signCell
-            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda14 r11 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda14
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda15 r11 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda15
             r11.<init>(r0)
             r4.setOnClickListener(r11)
         L_0x04ae:
@@ -921,12 +923,12 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.ui.Cells.TextDetailCell r11 = r0.historyCell
             if (r11 == 0) goto L_0x04df
         L_0x04c4:
-            r11 = 2131165499(0x7var_b, float:1.7945217E38)
+            r11 = 2131165500(0x7var_c, float:1.7945219E38)
             r12 = 1113587712(0x42600000, float:56.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r4.addItemWithWidth(r3, r11, r12)
             r0.doneButton = r4
-            r11 = 2131625278(0x7f0e053e, float:1.887776E38)
+            r11 = 2131625285(0x7f0e0545, float:1.8877774E38)
             java.lang.String r12 = "Done"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r4.setContentDescription(r11)
@@ -1003,7 +1005,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
             r4.setBackgroundDrawable(r11)
             org.telegram.ui.Cells.TextCell r4 = r0.adminCell
-            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda8 r11 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda8
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda7 r11 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda7
             r11.<init>(r0)
             r4.setOnClickListener(r11)
             org.telegram.ui.Cells.TextCell r4 = new org.telegram.ui.Cells.TextCell
@@ -1016,45 +1018,58 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r11.<init>(r0)
             r4.setOnClickListener(r11)
             org.telegram.tgnet.TLRPC$Chat r4 = r0.currentChat
+            boolean r4 = org.telegram.messenger.ChatObject.isChannelAndNotMegaGroup(r4)
+            if (r4 != 0) goto L_0x05c5
+            org.telegram.ui.Cells.TextCell r4 = new org.telegram.ui.Cells.TextCell
+            r4.<init>(r1)
+            r0.memberRequestsCell = r4
+            android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
+            r4.setBackground(r11)
+            org.telegram.ui.Cells.TextCell r4 = r0.memberRequestsCell
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda17 r11 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda17
+            r11.<init>(r0)
+            r4.setOnClickListener(r11)
+        L_0x05c5:
+            org.telegram.tgnet.TLRPC$Chat r4 = r0.currentChat
             boolean r4 = org.telegram.messenger.ChatObject.isChannel(r4)
-            if (r4 != 0) goto L_0x05b3
+            if (r4 != 0) goto L_0x05d3
             org.telegram.tgnet.TLRPC$Chat r4 = r0.currentChat
             boolean r4 = r4.gigagroup
-            if (r4 == 0) goto L_0x05dc
-        L_0x05b3:
+            if (r4 == 0) goto L_0x05fc
+        L_0x05d3:
             org.telegram.ui.Cells.TextCell r4 = new org.telegram.ui.Cells.TextCell
             r4.<init>(r1)
             r0.logCell = r4
-            r11 = 2131625399(0x7f0e05b7, float:1.8878005E38)
+            r11 = 2131625406(0x7f0e05be, float:1.887802E38)
             java.lang.String r13 = "EventLog"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
-            r13 = 2131165460(0x7var_, float:1.7945138E38)
+            r13 = 2131165461(0x7var_, float:1.794514E38)
             r4.setTextAndIcon((java.lang.String) r11, (int) r13, (boolean) r14)
             org.telegram.ui.Cells.TextCell r4 = r0.logCell
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
             r4.setBackgroundDrawable(r11)
             org.telegram.ui.Cells.TextCell r4 = r0.logCell
-            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda16 r11 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda16
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda14 r11 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda14
             r11.<init>(r0)
             r4.setOnClickListener(r11)
-        L_0x05dc:
+        L_0x05fc:
             boolean r4 = r0.isChannel
-            if (r4 != 0) goto L_0x05f1
+            if (r4 != 0) goto L_0x0611
             org.telegram.tgnet.TLRPC$Chat r4 = r0.currentChat
             boolean r4 = r4.gigagroup
-            if (r4 != 0) goto L_0x05f1
+            if (r4 != 0) goto L_0x0611
             android.widget.LinearLayout r4 = r0.infoContainer
             org.telegram.ui.Cells.TextCell r11 = r0.blockCell
             android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
             r4.addView(r11, r13)
-        L_0x05f1:
+        L_0x0611:
             boolean r4 = r0.isChannel
-            if (r4 != 0) goto L_0x0600
+            if (r4 != 0) goto L_0x0620
             android.widget.LinearLayout r4 = r0.infoContainer
             org.telegram.ui.Cells.TextCell r11 = r0.inviteLinksCell
             android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
             r4.addView(r11, r13)
-        L_0x0600:
+        L_0x0620:
             android.widget.LinearLayout r4 = r0.infoContainer
             org.telegram.ui.Cells.TextCell r11 = r0.adminCell
             android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
@@ -1063,30 +1078,40 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.ui.Cells.TextCell r11 = r0.membersCell
             android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
             r4.addView(r11, r13)
+            org.telegram.ui.Cells.TextCell r4 = r0.memberRequestsCell
+            if (r4 == 0) goto L_0x064b
+            org.telegram.tgnet.TLRPC$ChatFull r11 = r0.info
+            if (r11 == 0) goto L_0x064b
+            int r11 = r11.requests_pending
+            if (r11 <= 0) goto L_0x064b
+            android.widget.LinearLayout r11 = r0.infoContainer
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
+            r11.addView(r4, r13)
+        L_0x064b:
             boolean r4 = r0.isChannel
-            if (r4 == 0) goto L_0x0625
+            if (r4 == 0) goto L_0x065a
             android.widget.LinearLayout r4 = r0.infoContainer
             org.telegram.ui.Cells.TextCell r11 = r0.inviteLinksCell
             android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
             r4.addView(r11, r13)
-        L_0x0625:
+        L_0x065a:
             boolean r4 = r0.isChannel
-            if (r4 != 0) goto L_0x062f
+            if (r4 != 0) goto L_0x0664
             org.telegram.tgnet.TLRPC$Chat r4 = r0.currentChat
             boolean r4 = r4.gigagroup
-            if (r4 == 0) goto L_0x063a
-        L_0x062f:
+            if (r4 == 0) goto L_0x066f
+        L_0x0664:
             android.widget.LinearLayout r4 = r0.infoContainer
             org.telegram.ui.Cells.TextCell r11 = r0.blockCell
             android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
             r4.addView(r11, r13)
-        L_0x063a:
+        L_0x066f:
             org.telegram.ui.Cells.TextCell r4 = r0.logCell
-            if (r4 == 0) goto L_0x0647
+            if (r4 == 0) goto L_0x067c
             android.widget.LinearLayout r11 = r0.infoContainer
             android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
             r11.addView(r4, r13)
-        L_0x0647:
+        L_0x067c:
             org.telegram.ui.Cells.ShadowSectionCell r4 = new org.telegram.ui.Cells.ShadowSectionCell
             r4.<init>(r1)
             r0.infoSectionCell = r4
@@ -1094,18 +1119,18 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r5.addView(r4, r11)
             org.telegram.tgnet.TLRPC$Chat r4 = r0.currentChat
             boolean r4 = org.telegram.messenger.ChatObject.hasAdminRights(r4)
-            if (r4 != 0) goto L_0x0667
+            if (r4 != 0) goto L_0x069c
             android.widget.LinearLayout r4 = r0.infoContainer
             r4.setVisibility(r12)
             org.telegram.ui.Cells.ShadowSectionCell r4 = r0.settingsTopSectionCell
             r4.setVisibility(r12)
-        L_0x0667:
+        L_0x069c:
             boolean r4 = r0.isChannel
-            if (r4 != 0) goto L_0x06d2
+            if (r4 != 0) goto L_0x0707
             org.telegram.tgnet.TLRPC$ChatFull r4 = r0.info
-            if (r4 == 0) goto L_0x06d2
+            if (r4 == 0) goto L_0x0707
             boolean r4 = r4.can_set_stickers
-            if (r4 == 0) goto L_0x06d2
+            if (r4 == 0) goto L_0x0707
             android.widget.FrameLayout r4 = new android.widget.FrameLayout
             r4.<init>(r1)
             r0.stickersContainer = r4
@@ -1127,25 +1152,25 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r10)
             r4.addView(r9, r11)
             org.telegram.ui.Cells.TextSettingsCell r4 = r0.stickersCell
-            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda13 r9 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda13
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda8 r9 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda8
             r9.<init>(r0)
             r4.setOnClickListener(r9)
             org.telegram.ui.Cells.TextInfoPrivacyCell r4 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r4.<init>(r1)
             r0.stickersInfoCell3 = r4
-            r9 = 2131625807(0x7f0e074f, float:1.8878832E38)
+            r9 = 2131625814(0x7f0e0756, float:1.8878847E38)
             java.lang.String r11 = "GroupStickersInfo"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r4.setText(r9)
             org.telegram.ui.Cells.TextInfoPrivacyCell r4 = r0.stickersInfoCell3
             android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
             r5.addView(r4, r9)
-        L_0x06d2:
+        L_0x0707:
             org.telegram.tgnet.TLRPC$Chat r4 = r0.currentChat
             boolean r4 = r4.creator
-            r9 = 2131165450(0x7var_a, float:1.7945117E38)
+            r9 = 2131165451(0x7var_b, float:1.794512E38)
             java.lang.String r11 = "windowBackgroundGrayShadow"
-            if (r4 == 0) goto L_0x075b
+            if (r4 == 0) goto L_0x0790
             android.widget.FrameLayout r4 = new android.widget.FrameLayout
             r4.<init>(r1)
             r0.deleteContainer = r4
@@ -1164,26 +1189,26 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
             r4.setBackgroundDrawable(r7)
             boolean r4 = r0.isChannel
-            if (r4 == 0) goto L_0x0720
+            if (r4 == 0) goto L_0x0755
             org.telegram.ui.Cells.TextSettingsCell r4 = r0.deleteCell
-            r7 = 2131624737(0x7f0e0321, float:1.8876662E38)
+            r7 = 2131624742(0x7f0e0326, float:1.8876672E38)
             java.lang.String r12 = "ChannelDelete"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r12, r7)
             r4.setText(r7, r14)
-            goto L_0x072e
-        L_0x0720:
+            goto L_0x0763
+        L_0x0755:
             org.telegram.ui.Cells.TextSettingsCell r4 = r0.deleteCell
-            r7 = 2131625169(0x7f0e04d1, float:1.8877538E38)
+            r7 = 2131625174(0x7f0e04d6, float:1.8877549E38)
             java.lang.String r12 = "DeleteAndExitButton"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r12, r7)
             r4.setText(r7, r14)
-        L_0x072e:
+        L_0x0763:
             android.widget.FrameLayout r4 = r0.deleteContainer
             org.telegram.ui.Cells.TextSettingsCell r7 = r0.deleteCell
             android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r10)
             r4.addView(r7, r10)
             org.telegram.ui.Cells.TextSettingsCell r4 = r0.deleteCell
-            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda5 r7 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda5
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda13 r7 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda13
             r7.<init>(r0)
             r4.setOnClickListener(r7)
             org.telegram.ui.Cells.ShadowSectionCell r4 = new org.telegram.ui.Cells.ShadowSectionCell
@@ -1194,28 +1219,28 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.ui.Cells.ShadowSectionCell r4 = r0.deleteInfoCell
             android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r8)
             r5.addView(r4, r6)
-            goto L_0x076c
-        L_0x075b:
+            goto L_0x07a1
+        L_0x0790:
             boolean r4 = r0.isChannel
-            if (r4 != 0) goto L_0x076c
+            if (r4 != 0) goto L_0x07a1
             org.telegram.ui.Cells.TextInfoPrivacyCell r4 = r0.stickersInfoCell3
-            if (r4 != 0) goto L_0x076c
+            if (r4 != 0) goto L_0x07a1
             org.telegram.ui.Cells.ShadowSectionCell r4 = r0.infoSectionCell
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r9, (java.lang.String) r11)
             r4.setBackgroundDrawable(r5)
-        L_0x076c:
+        L_0x07a1:
             org.telegram.ui.Cells.TextInfoPrivacyCell r4 = r0.stickersInfoCell3
-            if (r4 == 0) goto L_0x0786
+            if (r4 == 0) goto L_0x07bb
             org.telegram.ui.Cells.ShadowSectionCell r5 = r0.deleteInfoCell
-            if (r5 != 0) goto L_0x077c
+            if (r5 != 0) goto L_0x07b1
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r9, (java.lang.String) r11)
             r4.setBackgroundDrawable(r5)
-            goto L_0x0786
-        L_0x077c:
-            r5 = 2131165449(0x7var_, float:1.7945115E38)
+            goto L_0x07bb
+        L_0x07b1:
+            r5 = 2131165450(0x7var_a, float:1.7945117E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r5, (java.lang.String) r11)
             r4.setBackgroundDrawable(r5)
-        L_0x0786:
+        L_0x07bb:
             org.telegram.ui.Components.UndoView r4 = new org.telegram.ui.Components.UndoView
             r4.<init>(r1)
             r0.undoView = r4
@@ -1236,11 +1261,11 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             int r2 = r1.length()
             r1.setSelection(r2)
             org.telegram.tgnet.TLRPC$ChatFull r1 = r0.info
-            if (r1 == 0) goto L_0x07bd
+            if (r1 == 0) goto L_0x07f2
             org.telegram.ui.Components.EditTextBoldCursor r2 = r0.descriptionTextView
             java.lang.String r1 = r1.about
             r2.setText(r1)
-        L_0x07bd:
+        L_0x07f2:
             r23.setAvatar()
             r0.updateFields(r3)
             android.view.View r1 = r0.fragmentView
@@ -1313,7 +1338,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$6(View view) {
-        this.imageUpdater.openMenu(this.avatar != null, new ChatEditActivity$$ExternalSyntheticLambda21(this), new ChatEditActivity$$ExternalSyntheticLambda3(this));
+        this.imageUpdater.openMenu(this.avatar != null, new ChatEditActivity$$ExternalSyntheticLambda22(this), new ChatEditActivity$$ExternalSyntheticLambda3(this));
         this.cameraDrawable.setCurrentFrame(0);
         this.cameraDrawable.setCustomEndFrame(43);
         this.setAvatarCell.imageView.playAnimation();
@@ -1361,7 +1386,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                     locationActivity.setInitialLocation((TLRPC$TL_channelLocation) tLRPC$ChannelLocation);
                 }
             }
-            locationActivity.setDelegate(new ChatEditActivity$$ExternalSyntheticLambda28(this));
+            locationActivity.setDelegate(new ChatEditActivity$$ExternalSyntheticLambda29(this));
             presentFragment(locationActivity);
         }
     }
@@ -1420,7 +1445,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 radioButtonCellArr[i].setTextAndValue(LocaleController.getString("ChatHistoryHidden", NUM), LocaleController.getString("ChatHistoryHiddenInfo2", NUM), false, this.historyHidden);
             }
             linearLayout2.addView(radioButtonCellArr[i], LayoutHelper.createLinear(-1, -2));
-            radioButtonCellArr[i].setOnClickListener(new ChatEditActivity$$ExternalSyntheticLambda18(this, radioButtonCellArr, builder));
+            radioButtonCellArr[i].setOnClickListener(new ChatEditActivity$$ExternalSyntheticLambda19(this, radioButtonCellArr, builder));
         }
         builder.setCustomView(linearLayout);
         showDialog(builder.create());
@@ -1487,23 +1512,28 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$19(View view) {
-        presentFragment(new ChannelAdminLogActivity(this.currentChat));
+        presentFragment(new MemberRequestsActivity(this.chatId));
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$20(View view) {
+        presentFragment(new ChannelAdminLogActivity(this.currentChat));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$createView$21(View view) {
         GroupStickersActivity groupStickersActivity = new GroupStickersActivity(this.currentChat.id);
         groupStickersActivity.setInfo(this.info);
         presentFragment(groupStickersActivity);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$22(View view) {
-        AlertsCreator.createClearOrDeleteDialogAlert(this, false, true, false, this.currentChat, (TLRPC$User) null, false, true, new ChatEditActivity$$ExternalSyntheticLambda24(this), (Theme.ResourcesProvider) null);
+    public /* synthetic */ void lambda$createView$23(View view) {
+        AlertsCreator.createClearOrDeleteDialogAlert(this, false, true, false, this.currentChat, (TLRPC$User) null, false, true, new ChatEditActivity$$ExternalSyntheticLambda25(this), (Theme.ResourcesProvider) null);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$21(boolean z) {
+    public /* synthetic */ void lambda$createView$22(boolean z) {
         if (AndroidUtilities.isTablet()) {
             getNotificationCenter().postNotificationName(NotificationCenter.closeChats, Long.valueOf(-this.chatId));
         } else {
@@ -1588,11 +1618,11 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, double d, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
-        AndroidUtilities.runOnUIThread(new ChatEditActivity$$ExternalSyntheticLambda22(this, tLRPC$PhotoSize2, tLRPC$InputFile, tLRPC$InputFile2, d, str, tLRPC$PhotoSize));
+        AndroidUtilities.runOnUIThread(new ChatEditActivity$$ExternalSyntheticLambda23(this, tLRPC$PhotoSize2, tLRPC$InputFile, tLRPC$InputFile2, d, str, tLRPC$PhotoSize));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didUploadPhoto$23(TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, double d, String str, TLRPC$PhotoSize tLRPC$PhotoSize2) {
+    public /* synthetic */ void lambda$didUploadPhoto$24(TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, double d, String str, TLRPC$PhotoSize tLRPC$PhotoSize2) {
         TLRPC$PhotoSize tLRPC$PhotoSize3 = tLRPC$PhotoSize;
         TLRPC$FileLocation tLRPC$FileLocation = tLRPC$PhotoSize3.location;
         this.avatar = tLRPC$FileLocation;
@@ -1659,12 +1689,12 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkDiscard$24(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$checkDiscard$25(DialogInterface dialogInterface, int i) {
         processDone();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkDiscard$25(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$checkDiscard$26(DialogInterface dialogInterface, int i) {
         finishFragment();
     }
 
@@ -1724,7 +1754,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.messenger.MessagesController r2 = r8.getMessagesController()
             android.app.Activity r3 = r8.getParentActivity()
             long r4 = r8.chatId
-            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda25 r7 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda25
+            org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda26 r7 = new org.telegram.ui.ChatEditActivity$$ExternalSyntheticLambda26
             r7.<init>(r8)
             r6 = r8
             r2.convertToMegaGroup(r3, r4, r6, r7)
@@ -1815,7 +1845,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processDone$26(long j) {
+    public /* synthetic */ void lambda$processDone$27(long j) {
         if (j == 0) {
             this.donePressed = false;
             return;
@@ -1831,7 +1861,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processDone$27(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$processDone$28(DialogInterface dialogInterface) {
         this.createAfterUpload = false;
         this.progressDialog = null;
         this.donePressed = false;
@@ -2064,36 +2094,35 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         TextCell textCell2 = this.membersCell;
         if (textCell2 != null) {
             if (this.info != null) {
+                TextCell textCell3 = this.memberRequestsCell;
+                if (textCell3 != null) {
+                    if (textCell3.getParent() == null) {
+                        this.infoContainer.addView(this.memberRequestsCell, this.infoContainer.indexOfChild(this.membersCell), LayoutHelper.createLinear(-1, -2));
+                    }
+                    this.memberRequestsCell.setVisibility(this.info.requests_pending > 0 ? 0 : 8);
+                }
                 if (this.isChannel) {
-                    textCell2.setTextAndValueAndIcon(LocaleController.getString("ChannelSubscribers", NUM), String.format("%d", new Object[]{Integer.valueOf(this.info.participants_count)}), NUM, true);
-                    TextCell textCell3 = this.blockCell;
+                    this.membersCell.setTextAndValueAndIcon(LocaleController.getString("ChannelSubscribers", NUM), String.format("%d", new Object[]{Integer.valueOf(this.info.participants_count)}), NUM, true);
+                    TextCell textCell4 = this.blockCell;
                     String string4 = LocaleController.getString("ChannelBlacklist", NUM);
                     TLRPC$ChatFull tLRPC$ChatFull8 = this.info;
                     String format = String.format("%d", new Object[]{Integer.valueOf(Math.max(tLRPC$ChatFull8.banned_count, tLRPC$ChatFull8.kicked_count))});
-                    TextCell textCell4 = this.logCell;
-                    textCell3.setTextAndValueAndIcon(string4, format, NUM, textCell4 != null && textCell4.getVisibility() == 0);
+                    TextCell textCell5 = this.logCell;
+                    textCell4.setTextAndValueAndIcon(string4, format, NUM, textCell5 != null && textCell5.getVisibility() == 0);
                 } else {
                     if (ChatObject.isChannel(this.currentChat)) {
-                        TextCell textCell5 = this.membersCell;
-                        String string5 = LocaleController.getString("ChannelMembers", NUM);
-                        String format2 = String.format("%d", new Object[]{Integer.valueOf(this.info.participants_count)});
-                        TextCell textCell6 = this.logCell;
-                        textCell5.setTextAndValueAndIcon(string5, format2, NUM, textCell6 != null && textCell6.getVisibility() == 0);
+                        this.membersCell.setTextAndValueAndIcon(LocaleController.getString("ChannelMembers", NUM), String.format("%d", new Object[]{Integer.valueOf(this.info.participants_count)}), NUM, true);
                     } else {
-                        TextCell textCell7 = this.membersCell;
-                        String string6 = LocaleController.getString("ChannelMembers", NUM);
-                        String format3 = String.format("%d", new Object[]{Integer.valueOf(this.info.participants.participants.size())});
-                        TextCell textCell8 = this.logCell;
-                        textCell7.setTextAndValueAndIcon(string6, format3, NUM, textCell8 != null && textCell8.getVisibility() == 0);
+                        this.membersCell.setTextAndValueAndIcon(LocaleController.getString("ChannelMembers", NUM), String.format("%d", new Object[]{Integer.valueOf(this.info.participants.participants.size())}), NUM, this.memberRequestsCell.getVisibility() == 0);
                     }
                     TLRPC$Chat tLRPC$Chat2 = this.currentChat;
                     if (tLRPC$Chat2.gigagroup) {
-                        TextCell textCell9 = this.blockCell;
-                        String string7 = LocaleController.getString("ChannelBlacklist", NUM);
+                        TextCell textCell6 = this.blockCell;
+                        String string5 = LocaleController.getString("ChannelBlacklist", NUM);
                         TLRPC$ChatFull tLRPC$ChatFull9 = this.info;
-                        String format4 = String.format("%d", new Object[]{Integer.valueOf(Math.max(tLRPC$ChatFull9.banned_count, tLRPC$ChatFull9.kicked_count))});
-                        TextCell textCell10 = this.logCell;
-                        textCell9.setTextAndValueAndIcon(string7, format4, NUM, textCell10 != null && textCell10.getVisibility() == 0);
+                        String format2 = String.format("%d", new Object[]{Integer.valueOf(Math.max(tLRPC$ChatFull9.banned_count, tLRPC$ChatFull9.kicked_count))});
+                        TextCell textCell7 = this.logCell;
+                        textCell6.setTextAndValueAndIcon(string5, format2, NUM, textCell7 != null && textCell7.getVisibility() == 0);
                     } else {
                         TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights = tLRPC$Chat2.default_banned_rights;
                         if (tLRPC$TL_chatBannedRights != null) {
@@ -2122,28 +2151,35 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                         }
                         this.blockCell.setTextAndValueAndIcon(LocaleController.getString("ChannelPermissions", NUM), String.format("%d/%d", new Object[]{Integer.valueOf(i), 8}), NUM, true);
                     }
+                    TextCell textCell8 = this.memberRequestsCell;
+                    if (textCell8 != null) {
+                        String string6 = LocaleController.getString("MemberRequests", NUM);
+                        String format3 = String.format("%d", new Object[]{Integer.valueOf(this.info.requests_pending)});
+                        TextCell textCell9 = this.logCell;
+                        textCell8.setTextAndValueAndIcon(string6, format3, NUM, textCell9 != null && textCell9.getVisibility() == 0);
+                    }
                 }
-                TextCell textCell11 = this.adminCell;
-                String string8 = LocaleController.getString("ChannelAdministrators", NUM);
+                TextCell textCell10 = this.adminCell;
+                String string7 = LocaleController.getString("ChannelAdministrators", NUM);
                 Object[] objArr = new Object[1];
                 objArr[0] = Integer.valueOf(ChatObject.isChannel(this.currentChat) ? this.info.admins_count : getAdminCount());
-                textCell11.setTextAndValueAndIcon(string8, String.format("%d", objArr), NUM, true);
+                textCell10.setTextAndValueAndIcon(string7, String.format("%d", objArr), NUM, true);
             } else {
                 if (this.isChannel) {
                     textCell2.setTextAndIcon(LocaleController.getString("ChannelSubscribers", NUM), NUM, true);
-                    TextCell textCell12 = this.blockCell;
-                    String string9 = LocaleController.getString("ChannelBlacklist", NUM);
-                    TextCell textCell13 = this.logCell;
-                    textCell12.setTextAndIcon(string9, NUM, textCell13 != null && textCell13.getVisibility() == 0);
+                    TextCell textCell11 = this.blockCell;
+                    String string8 = LocaleController.getString("ChannelBlacklist", NUM);
+                    TextCell textCell12 = this.logCell;
+                    textCell11.setTextAndIcon(string8, NUM, textCell12 != null && textCell12.getVisibility() == 0);
                 } else {
-                    String string10 = LocaleController.getString("ChannelMembers", NUM);
-                    TextCell textCell14 = this.logCell;
-                    textCell2.setTextAndIcon(string10, NUM, textCell14 != null && textCell14.getVisibility() == 0);
+                    String string9 = LocaleController.getString("ChannelMembers", NUM);
+                    TextCell textCell13 = this.logCell;
+                    textCell2.setTextAndIcon(string9, NUM, textCell13 != null && textCell13.getVisibility() == 0);
                     if (this.currentChat.gigagroup) {
-                        TextCell textCell15 = this.blockCell;
-                        String string11 = LocaleController.getString("ChannelBlacklist", NUM);
-                        TextCell textCell16 = this.logCell;
-                        textCell15.setTextAndIcon(string11, NUM, textCell16 != null && textCell16.getVisibility() == 0);
+                        TextCell textCell14 = this.blockCell;
+                        String string10 = LocaleController.getString("ChannelBlacklist", NUM);
+                        TextCell textCell15 = this.logCell;
+                        textCell14.setTextAndIcon(string10, NUM, textCell15 != null && textCell15.getVisibility() == 0);
                     } else {
                         this.blockCell.setTextAndIcon(LocaleController.getString("ChannelPermissions", NUM), NUM, true);
                     }
@@ -2170,7 +2206,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        ChatEditActivity$$ExternalSyntheticLambda27 chatEditActivity$$ExternalSyntheticLambda27 = new ChatEditActivity$$ExternalSyntheticLambda27(this);
+        ChatEditActivity$$ExternalSyntheticLambda28 chatEditActivity$$ExternalSyntheticLambda28 = new ChatEditActivity$$ExternalSyntheticLambda28(this);
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
@@ -2188,6 +2224,11 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         arrayList.add(new ThemeDescription(this.inviteLinksCell, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
         arrayList.add(new ThemeDescription((View) this.inviteLinksCell, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.inviteLinksCell, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
+        if (this.memberRequestsCell != null) {
+            arrayList.add(new ThemeDescription(this.memberRequestsCell, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
+            arrayList.add(new ThemeDescription((View) this.memberRequestsCell, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+            arrayList.add(new ThemeDescription((View) this.memberRequestsCell, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
+        }
         arrayList.add(new ThemeDescription(this.blockCell, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
         arrayList.add(new ThemeDescription((View) this.blockCell, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.blockCell, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
@@ -2229,15 +2270,15 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         arrayList.add(new ThemeDescription((View) this.stickersCell, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription(this.stickersInfoCell3, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
         arrayList.add(new ThemeDescription((View) this.stickersInfoCell3, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
-        ChatEditActivity$$ExternalSyntheticLambda27 chatEditActivity$$ExternalSyntheticLambda272 = chatEditActivity$$ExternalSyntheticLambda27;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, Theme.avatarDrawables, chatEditActivity$$ExternalSyntheticLambda272, "avatar_text"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda272, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda272, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda272, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda272, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda272, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda272, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda272, "avatar_backgroundPink"));
+        ChatEditActivity$$ExternalSyntheticLambda28 chatEditActivity$$ExternalSyntheticLambda282 = chatEditActivity$$ExternalSyntheticLambda28;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, Theme.avatarDrawables, chatEditActivity$$ExternalSyntheticLambda282, "avatar_text"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda282, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda282, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda282, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda282, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda282, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda282, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditActivity$$ExternalSyntheticLambda282, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription(this.undoView, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_background"));
         arrayList.add(new ThemeDescription((View) this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoImageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_cancelColor"));
         arrayList.add(new ThemeDescription((View) this.undoView, 0, new Class[]{UndoView.class}, new String[]{"undoTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_cancelColor"));
@@ -2249,7 +2290,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getThemeDescriptions$28() {
+    public /* synthetic */ void lambda$getThemeDescriptions$29() {
         BackupImageView backupImageView = this.avatarImage;
         if (backupImageView != null) {
             backupImageView.invalidate();

@@ -102,6 +102,10 @@
         <item name="android:colorPrimary">#527da3</item>
         <item name="android:colorAccent">#4991cc</item>
     </style>
+    <style name="TransparentDialog2">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
     <style name="Widget.Compat.NotificationActionContainer">
         <item name="android:background">@drawable/notification_action_background</item>
     </style>

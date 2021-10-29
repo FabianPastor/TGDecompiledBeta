@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import android.widget.TextView;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class ChatEditActivity$$ExternalSyntheticLambda20 implements TextView.OnEditorActionListener {
-    public final /* synthetic */ ChatEditActivity f$0;
+public final /* synthetic */ class ChatEditActivity$$ExternalSyntheticLambda20 implements View.OnTouchListener {
+    public static final /* synthetic */ ChatEditActivity$$ExternalSyntheticLambda20 INSTANCE = new ChatEditActivity$$ExternalSyntheticLambda20();
 
-    public /* synthetic */ ChatEditActivity$$ExternalSyntheticLambda20(ChatEditActivity chatEditActivity) {
-        this.f$0 = chatEditActivity;
+    private /* synthetic */ ChatEditActivity$$ExternalSyntheticLambda20() {
     }
 
-    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$createView$7(textView, i, keyEvent);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ChatEditActivity.lambda$createView$2(view, motionEvent);
     }
 }

@@ -679,7 +679,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r1 = r7.getThemedColor(r5)
             r0.setBackgroundColor(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131165469(0x7var_d, float:1.7945156E38)
+            r1 = 2131165470(0x7var_e, float:1.7945158E38)
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
             java.lang.String r4 = "dialogTextBlack"
@@ -723,7 +723,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r7.selectedMenuItem = r14
             r14.setLongClickEnabled(r11)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.selectedMenuItem
-            r1 = 2131165476(0x7var_, float:1.794517E38)
+            r1 = 2131165477(0x7var_, float:1.7945172E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.selectedMenuItem
             r1 = 2131623987(0x7f0e0033, float:1.887514E38)
@@ -773,7 +773,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r7.doneItem = r12
             r12.setLongClickEnabled(r11)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.doneItem
-            r1 = 2131625068(0x7f0e046c, float:1.8877334E38)
+            r1 = 2131625073(0x7f0e0471, float:1.8877344E38)
             java.lang.String r2 = "Create"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -811,10 +811,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r7.searchItem = r15
             r15.setLongClickEnabled(r11)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.searchItem
-            r1 = 2131165479(0x7var_, float:1.7945176E38)
+            r1 = 2131165480(0x7var_, float:1.7945178E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.searchItem
-            r1 = 2131627500(0x7f0e0dec, float:1.8882266E38)
+            r1 = 2131627537(0x7f0e0e11, float:1.8882341E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -923,7 +923,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.view.View r0 = new android.view.View
             r0.<init>(r8)
             r7.shadow = r0
-            r1 = 2131165270(0x7var_, float:1.7944752E38)
+            r1 = 2131165271(0x7var_, float:1.7944754E38)
             r0.setBackgroundResource(r1)
             android.view.View r0 = r7.shadow
             android.graphics.drawable.Drawable r0 = r0.getBackground()
@@ -1112,7 +1112,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r7.writeButtonDrawable = r2
             if (r4 >= r5) goto L_0x050a
             android.content.res.Resources r2 = r32.getResources()
-            r3 = 2131165420(0x7var_ec, float:1.7945057E38)
+            r3 = 2131165421(0x7var_ed, float:1.7945059E38)
             android.graphics.drawable.Drawable r2 = r2.getDrawable(r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
@@ -1131,7 +1131,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.graphics.drawable.Drawable r3 = r7.writeButtonDrawable
             r2.setBackgroundDrawable(r3)
             android.widget.ImageView r2 = r7.writeButton
-            r3 = 2131165269(0x7var_, float:1.794475E38)
+            r3 = 2131165270(0x7var_, float:1.7944752E38)
             r2.setImageResource(r3)
             android.widget.ImageView r2 = r7.writeButton
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter

@@ -33,6 +33,8 @@ public class SlideChooseView extends View {
     private int startMovingPreset;
     private float startX;
     private TextPaint textPaint;
+    private float xTouchDown;
+    private float yTouchDown;
 
     public interface Callback {
 
@@ -113,169 +115,185 @@ public class SlideChooseView extends View {
         this.dashedFrom = i;
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v3, resolved type: boolean} */
-    /* JADX WARNING: type inference failed for: r3v0 */
-    /* JADX WARNING: type inference failed for: r3v1, types: [int] */
-    /* JADX WARNING: type inference failed for: r3v4 */
-    /* JADX WARNING: type inference failed for: r3v5 */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v3, resolved type: boolean} */
+    /* JADX WARNING: type inference failed for: r4v0 */
+    /* JADX WARNING: type inference failed for: r4v1, types: [int] */
+    /* JADX WARNING: type inference failed for: r4v4 */
+    /* JADX WARNING: type inference failed for: r4v5 */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r9) {
         /*
             r8 = this;
             float r0 = r9.getX()
-            int r1 = r9.getAction()
-            r2 = 1097859072(0x41700000, float:15.0)
-            r3 = 0
-            r4 = 1
-            r5 = 2
-            if (r1 != 0) goto L_0x0052
-            android.view.ViewParent r9 = r8.getParent()
-            r9.requestDisallowInterceptTouchEvent(r4)
+            float r1 = r9.getY()
+            int r2 = r9.getAction()
+            r3 = 1097859072(0x41700000, float:15.0)
+            r4 = 0
+            r5 = 1
+            r6 = 2
+            if (r2 != 0) goto L_0x0053
+            r8.xTouchDown = r0
+            r8.yTouchDown = r1
             r9 = 0
-        L_0x0017:
+        L_0x0018:
             java.lang.String[] r1 = r8.optionsStr
             int r1 = r1.length
-            if (r9 >= r1) goto L_0x0104
+            if (r9 >= r1) goto L_0x0129
             int r1 = r8.sideSide
-            int r6 = r8.lineSize
+            int r2 = r8.lineSize
             int r7 = r8.gapSize
             int r7 = r7 * 2
-            int r6 = r6 + r7
+            int r2 = r2 + r7
             int r7 = r8.circleSize
-            int r6 = r6 + r7
-            int r6 = r6 * r9
-            int r1 = r1 + r6
-            int r7 = r7 / r5
+            int r2 = r2 + r7
+            int r2 = r2 * r9
+            int r1 = r1 + r2
+            int r7 = r7 / r6
             int r1 = r1 + r7
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r6 = r1 - r6
-            float r6 = (float) r6
-            int r6 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
-            if (r6 <= 0) goto L_0x004f
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r1 = r1 + r6
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r2 = r1 - r2
+            float r2 = (float) r2
+            int r2 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+            if (r2 <= 0) goto L_0x0050
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r1 = r1 + r2
             float r1 = (float) r1
             int r1 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r1 >= 0) goto L_0x004f
+            if (r1 >= 0) goto L_0x0050
             int r1 = r8.selectedIndex
-            if (r9 != r1) goto L_0x0047
-            r3 = 1
-        L_0x0047:
-            r8.startMoving = r3
+            if (r9 != r1) goto L_0x0048
+            r4 = 1
+        L_0x0048:
+            r8.startMoving = r4
             r8.startX = r0
             r8.startMovingPreset = r1
-            goto L_0x0104
-        L_0x004f:
+            goto L_0x0129
+        L_0x0050:
             int r9 = r9 + 1
-            goto L_0x0017
-        L_0x0052:
-            int r1 = r9.getAction()
-            if (r1 != r5) goto L_0x00aa
+            goto L_0x0018
+        L_0x0053:
+            int r2 = r9.getAction()
+            if (r2 != r6) goto L_0x00c8
+            boolean r9 = r8.moving
+            if (r9 != 0) goto L_0x0076
+            float r9 = r8.xTouchDown
+            float r9 = r9 - r0
+            float r9 = java.lang.Math.abs(r9)
+            float r2 = r8.yTouchDown
+            float r2 = r2 - r1
+            float r1 = java.lang.Math.abs(r2)
+            int r9 = (r9 > r1 ? 1 : (r9 == r1 ? 0 : -1))
+            if (r9 <= 0) goto L_0x0076
+            android.view.ViewParent r9 = r8.getParent()
+            r9.requestDisallowInterceptTouchEvent(r5)
+        L_0x0076:
             boolean r9 = r8.startMoving
-            if (r9 == 0) goto L_0x0073
+            if (r9 == 0) goto L_0x0091
             float r9 = r8.startX
             float r9 = r9 - r0
             float r9 = java.lang.Math.abs(r9)
             r0 = 1056964608(0x3var_, float:0.5)
-            float r0 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r0, r4)
+            float r0 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r0, r5)
             int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-            if (r9 < 0) goto L_0x0104
-            r8.moving = r4
-            r8.startMoving = r3
-            goto L_0x0104
-        L_0x0073:
+            if (r9 < 0) goto L_0x0129
+            r8.moving = r5
+            r8.startMoving = r4
+            goto L_0x0129
+        L_0x0091:
             boolean r9 = r8.moving
-            if (r9 == 0) goto L_0x0104
-        L_0x0077:
+            if (r9 == 0) goto L_0x0129
+        L_0x0095:
             java.lang.String[] r9 = r8.optionsStr
             int r9 = r9.length
-            if (r3 >= r9) goto L_0x0104
+            if (r4 >= r9) goto L_0x0129
             int r9 = r8.sideSide
             int r1 = r8.lineSize
             int r2 = r8.gapSize
-            int r6 = r2 * 2
-            int r6 = r6 + r1
+            int r3 = r2 * 2
+            int r3 = r3 + r1
             int r7 = r8.circleSize
-            int r6 = r6 + r7
-            int r6 = r6 * r3
-            int r9 = r9 + r6
-            int r6 = r7 / 2
-            int r9 = r9 + r6
-            int r1 = r1 / r5
-            int r7 = r7 / r5
+            int r3 = r3 + r7
+            int r3 = r3 * r4
+            int r9 = r9 + r3
+            int r3 = r7 / 2
+            int r9 = r9 + r3
+            int r1 = r1 / r6
+            int r7 = r7 / r6
             int r1 = r1 + r7
             int r1 = r1 + r2
             int r2 = r9 - r1
             float r2 = (float) r2
             int r2 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r2 <= 0) goto L_0x00a7
+            if (r2 <= 0) goto L_0x00c5
             int r9 = r9 + r1
             float r9 = (float) r9
             int r9 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1))
-            if (r9 >= 0) goto L_0x00a7
+            if (r9 >= 0) goto L_0x00c5
             int r9 = r8.selectedIndex
-            if (r9 == r3) goto L_0x0104
-            r8.setOption(r3)
-            goto L_0x0104
-        L_0x00a7:
-            int r3 = r3 + 1
-            goto L_0x0077
-        L_0x00aa:
+            if (r9 == r4) goto L_0x0129
+            r8.setOption(r4)
+            goto L_0x0129
+        L_0x00c5:
+            int r4 = r4 + 1
+            goto L_0x0095
+        L_0x00c8:
             int r1 = r9.getAction()
-            if (r1 == r4) goto L_0x00b7
+            if (r1 == r5) goto L_0x00d5
             int r9 = r9.getAction()
             r1 = 3
-            if (r9 != r1) goto L_0x0104
-        L_0x00b7:
+            if (r9 != r1) goto L_0x0129
+        L_0x00d5:
             boolean r9 = r8.moving
-            if (r9 != 0) goto L_0x00f0
+            if (r9 != 0) goto L_0x010e
             r9 = 0
-        L_0x00bc:
+        L_0x00da:
             r1 = 5
-            if (r9 >= r1) goto L_0x00f9
+            if (r9 >= r1) goto L_0x0117
             int r1 = r8.sideSide
-            int r6 = r8.lineSize
+            int r2 = r8.lineSize
             int r7 = r8.gapSize
             int r7 = r7 * 2
-            int r6 = r6 + r7
+            int r2 = r2 + r7
             int r7 = r8.circleSize
-            int r6 = r6 + r7
-            int r6 = r6 * r9
-            int r1 = r1 + r6
-            int r7 = r7 / r5
+            int r2 = r2 + r7
+            int r2 = r2 * r9
+            int r1 = r1 + r2
+            int r7 = r7 / r6
             int r1 = r1 + r7
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r6 = r1 - r6
-            float r6 = (float) r6
-            int r6 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
-            if (r6 <= 0) goto L_0x00ed
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r1 = r1 + r6
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r2 = r1 - r2
+            float r2 = (float) r2
+            int r2 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+            if (r2 <= 0) goto L_0x010b
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r1 = r1 + r2
             float r1 = (float) r1
             int r1 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r1 >= 0) goto L_0x00ed
+            if (r1 >= 0) goto L_0x010b
             int r0 = r8.selectedIndex
-            if (r0 == r9) goto L_0x00f9
+            if (r0 == r9) goto L_0x0117
             r8.setOption(r9)
-            goto L_0x00f9
-        L_0x00ed:
+            goto L_0x0117
+        L_0x010b:
             int r9 = r9 + 1
-            goto L_0x00bc
-        L_0x00f0:
+            goto L_0x00da
+        L_0x010e:
             int r9 = r8.selectedIndex
             int r0 = r8.startMovingPreset
-            if (r9 == r0) goto L_0x00f9
+            if (r9 == r0) goto L_0x0117
             r8.setOption(r9)
-        L_0x00f9:
+        L_0x0117:
             org.telegram.ui.Components.SlideChooseView$Callback r9 = r8.callback
-            if (r9 == 0) goto L_0x0100
+            if (r9 == 0) goto L_0x011e
             r9.onTouchEnd()
-        L_0x0100:
-            r8.startMoving = r3
-            r8.moving = r3
-        L_0x0104:
-            return r4
+        L_0x011e:
+            r8.startMoving = r4
+            r8.moving = r4
+            android.view.ViewParent r9 = r8.getParent()
+            r9.requestDisallowInterceptTouchEvent(r4)
+        L_0x0129:
+            return r5
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SlideChooseView.onTouchEvent(android.view.MotionEvent):boolean");
     }
@@ -293,7 +311,6 @@ public class SlideChooseView extends View {
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(74.0f), NUM));
-        View.MeasureSpec.getSize(i);
         this.circleSize = AndroidUtilities.dp(6.0f);
         this.gapSize = AndroidUtilities.dp(2.0f);
         this.sideSide = AndroidUtilities.dp(22.0f);
@@ -314,15 +331,9 @@ public class SlideChooseView extends View {
             int i3 = this.lineSize + (this.gapSize * 2);
             int i4 = this.circleSize;
             int i5 = i2 + ((i3 + i4) * i) + (i4 / 2);
-            if (i <= this.selectedIndex) {
-                int themedColor = getThemedColor("switchTrackChecked");
-                this.paint.setColor(themedColor);
-                this.linePaint.setColor(themedColor);
-            } else {
-                int themedColor2 = getThemedColor("switchTrack");
-                this.paint.setColor(themedColor2);
-                this.linePaint.setColor(themedColor2);
-            }
+            int themedColor = getThemedColor(i <= this.selectedIndex ? "switchTrackChecked" : "switchTrack");
+            this.paint.setColor(themedColor);
+            this.linePaint.setColor(themedColor);
             float f = (float) measuredHeight;
             canvas2.drawCircle((float) i5, f, (float) (i == this.selectedIndex ? AndroidUtilities.dp(6.0f) : this.circleSize / 2), this.paint);
             if (i != 0) {

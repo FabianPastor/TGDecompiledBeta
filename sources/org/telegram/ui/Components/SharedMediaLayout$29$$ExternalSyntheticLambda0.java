@@ -3,11 +3,11 @@ package org.telegram.ui.Components;
 import android.content.DialogInterface;
 import org.telegram.ui.Components.SharedMediaLayout;
 
-public final /* synthetic */ class SharedMediaLayout$28$$ExternalSyntheticLambda0 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ SharedMediaLayout.AnonymousClass28 f$0;
+public final /* synthetic */ class SharedMediaLayout$29$$ExternalSyntheticLambda0 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ SharedMediaLayout.AnonymousClass29 f$0;
     public final /* synthetic */ String f$1;
 
-    public /* synthetic */ SharedMediaLayout$28$$ExternalSyntheticLambda0(SharedMediaLayout.AnonymousClass28 r1, String str) {
+    public /* synthetic */ SharedMediaLayout$29$$ExternalSyntheticLambda0(SharedMediaLayout.AnonymousClass29 r1, String str) {
         this.f$0 = r1;
         this.f$1 = str;
     }

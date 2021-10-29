@@ -43,7 +43,7 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.FlickerLoadingView;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
@@ -56,7 +56,6 @@ public class MediaCalendarActivity extends BaseFragment {
     public boolean checkEnterItems;
     FrameLayout contentView;
     private long dialogId;
-    FlickerLoadingView globalGradientView;
     int lastId;
     LinearLayoutManager layoutManager;
     RecyclerListView listView;
@@ -69,6 +68,7 @@ public class MediaCalendarActivity extends BaseFragment {
     int startFromYear;
     int startOffset = 0;
     TextPaint textPaint = new TextPaint(1);
+    TextPaint textPaint2 = new TextPaint(1);
 
     public interface Callback {
         void onDateSelected(int i, int i2);
@@ -87,6 +87,8 @@ public class MediaCalendarActivity extends BaseFragment {
     public View createView(Context context) {
         this.textPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
         this.textPaint.setTextAlign(Paint.Align.CENTER);
+        this.textPaint2.setTextSize((float) AndroidUtilities.dp(11.0f));
+        this.textPaint2.setTextAlign(Paint.Align.CENTER);
         this.activeTextPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
         this.activeTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.activeTextPaint.setTextAlign(Paint.Align.CENTER);
@@ -126,7 +128,7 @@ public class MediaCalendarActivity extends BaseFragment {
                 super.onDraw(canvas);
                 float measuredWidth = ((float) getMeasuredWidth()) / 7.0f;
                 for (int i = 0; i < 7; i++) {
-                    canvas.drawText(strArr[i], (((float) i) * measuredWidth) + (measuredWidth / 2.0f), (((float) (getMeasuredHeight() - AndroidUtilities.dp(2.0f))) / 2.0f) + ((float) AndroidUtilities.dp(5.0f)), MediaCalendarActivity.this.textPaint);
+                    canvas.drawText(strArr[i], (((float) i) * measuredWidth) + (measuredWidth / 2.0f), (((float) (getMeasuredHeight() - AndroidUtilities.dp(2.0f))) / 2.0f) + ((float) AndroidUtilities.dp(5.0f)), MediaCalendarActivity.this.textPaint2);
                 }
                 mutate.setBounds(0, getMeasuredHeight() - AndroidUtilities.dp(3.0f), getMeasuredWidth(), getMeasuredHeight());
                 mutate.draw(canvas);
@@ -151,9 +153,6 @@ public class MediaCalendarActivity extends BaseFragment {
         this.startFromYear = instance.get(1);
         this.startFromMonth = instance.get(2);
         this.monthCount = 3;
-        FlickerLoadingView flickerLoadingView = new FlickerLoadingView(context);
-        this.globalGradientView = flickerLoadingView;
-        flickerLoadingView.setIsSingleCell(true);
         loadNext();
         return this.fragmentView;
     }
@@ -285,6 +284,7 @@ public class MediaCalendarActivity extends BaseFragment {
             simpleTextView.setTextSize(15);
             this.titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.titleView.setGravity(17);
+            this.titleView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             addView(this.titleView, LayoutHelper.createFrame(-1, 28.0f, 0, 0.0f, 12.0f, 0.0f, 4.0f));
         }
 
@@ -528,5 +528,9 @@ public class MediaCalendarActivity extends BaseFragment {
             this.enterAlpha = 1.0f;
             this.startEnterDelay = 1.0f;
         }
+    }
+
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
+        return super.getThemeDescriptions();
     }
 }

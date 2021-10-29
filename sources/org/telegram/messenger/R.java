@@ -250,6 +250,7 @@ public final class R {
         public static final int actions_permissions = NUM;
         public static final int actions_remove_user = NUM;
         public static final int actions_removed = NUM;
+        public static final int actions_requests = NUM;
         public static final int actions_setphoto = NUM;
         public static final int actions_viewmembers = NUM;
         public static final int add = NUM;
@@ -500,6 +501,7 @@ public final class R {
         public static final int ic_gofullscreen = NUM;
         public static final int ic_goinline = NUM;
         public static final int ic_launcher_dr = NUM;
+        public static final int ic_layer_close = NUM;
         public static final int ic_lock_header = NUM;
         public static final int ic_lock_white = NUM;
         public static final int ic_masks_msk1 = NUM;
@@ -1719,6 +1721,7 @@ public final class R {
         public static final int swipe_unread = NUM;
         public static final int ticks_double = NUM;
         public static final int ticks_single = NUM;
+        public static final int timer_3 = NUM;
         public static final int tsv_monkey_close = NUM;
         public static final int tsv_setup_email_sent = NUM;
         public static final int tsv_setup_hint = NUM;
@@ -2058,10 +2061,12 @@ public final class R {
         public static final int AddStickersInstalledInfo = NUM;
         public static final int AddStickersNotFound = NUM;
         public static final int AddSubscriber = NUM;
+        public static final int AddToChannel = NUM;
         public static final int AddToContacts = NUM;
         public static final int AddToExceptions = NUM;
         public static final int AddToExistingContact = NUM;
         public static final int AddToFavorites = NUM;
+        public static final int AddToGroup = NUM;
         public static final int AddToMasks = NUM;
         public static final int AddToStickers = NUM;
         public static final int AddToTheGroup = NUM;
@@ -2069,6 +2074,7 @@ public final class R {
         public static final int AddToTheGroupAlertTitle = NUM;
         public static final int AddToTheGroupForwardCount = NUM;
         public static final int AddUserErrorBlacklisted = NUM;
+        public static final int AddedBy = NUM;
         public static final int AddedToFavorites = NUM;
         public static final int AdminWillBeRemoved = NUM;
         public static final int Agree = NUM;
@@ -2131,6 +2137,8 @@ public final class R {
         public static final int ApplyLocalizationFile = NUM;
         public static final int ApplyTheme = NUM;
         public static final int ApplyThemeFile = NUM;
+        public static final int ApproveNewMembers = NUM;
+        public static final int ApproveNewMembersDescription = NUM;
         public static final int April = NUM;
         public static final int Archive = NUM;
         public static final int ArchiveAndMute = NUM;
@@ -3099,6 +3107,8 @@ public final class R {
         public static final int DiscussionUnlinkChannelAlert = NUM;
         public static final int DiscussionUnlinkGroup = NUM;
         public static final int DiscussionUnlinkGroupAlert = NUM;
+        public static final int Dismiss = NUM;
+        public static final int DismissRequest = NUM;
         public static final int DistanceUnits = NUM;
         public static final int DistanceUnitsAutomatic = NUM;
         public static final int DistanceUnitsKilometers = NUM;
@@ -3653,6 +3663,8 @@ public final class R {
         public static final int Groups_two = NUM;
         public static final int Groups_zero = NUM;
         public static final int GrowthChartTitle = NUM;
+        public static final int HasBeenAddedToChannel = NUM;
+        public static final int HasBeenAddedToGroup = NUM;
         public static final int HashtagCopied = NUM;
         public static final int Hashtags = NUM;
         public static final int HidAccount = NUM;
@@ -3828,8 +3840,21 @@ public final class R {
         public static final int JoinByPeekGroupTitle = NUM;
         public static final int JoinByPeekJoin = NUM;
         public static final int JoinGroup = NUM;
+        public static final int JoinRequests_few = NUM;
+        public static final int JoinRequests_many = NUM;
+        public static final int JoinRequests_one = NUM;
+        public static final int JoinRequests_other = NUM;
+        public static final int JoinRequests_two = NUM;
+        public static final int JoinRequests_zero = NUM;
         public static final int JoinToGroupErrorFull = NUM;
         public static final int JoinToGroupErrorNotExist = NUM;
+        public static final int JoinUsersRequests_few = NUM;
+        public static final int JoinUsersRequests_many = NUM;
+        public static final int JoinUsersRequests_one = NUM;
+        public static final int JoinUsersRequests_other = NUM;
+        public static final int JoinUsersRequests_two = NUM;
+        public static final int JoinUsersRequests_zero = NUM;
+        public static final int JoinedViaInviteLinkApproved = NUM;
         public static final int July = NUM;
         public static final int JumpToDate = NUM;
         public static final int June = NUM;
@@ -4037,6 +4062,7 @@ public final class R {
         public static final int MegaPublic = NUM;
         public static final int MegaPublicInfo = NUM;
         public static final int MegaUsernameHelp = NUM;
+        public static final int MemberRequests = NUM;
         public static final int MembersAreSpeakingToast_few = NUM;
         public static final int MembersAreSpeakingToast_many = NUM;
         public static final int MembersAreSpeakingToast_one = NUM;
@@ -4256,6 +4282,8 @@ public final class R {
         public static final int NoMedia = NUM;
         public static final int NoMediaAutoDownload = NUM;
         public static final int NoMediaSecret = NUM;
+        public static final int NoMemberRequests = NUM;
+        public static final int NoMemberRequestsDescription = NUM;
         public static final int NoMessages = NUM;
         public static final int NoMessagesGreetingsDescription = NUM;
         public static final int NoOneJoined = NUM;
@@ -4289,6 +4317,8 @@ public final class R {
         public static final int NoSound = NUM;
         public static final int NoStickers = NUM;
         public static final int NoStickersFound = NUM;
+        public static final int NoSubscribeRequests = NUM;
+        public static final int NoSubscribeRequestsDescription = NUM;
         public static final int NoUsernameFound = NUM;
         public static final int NoVotes = NUM;
         public static final int NoVotesQuiz = NUM;
@@ -5239,6 +5269,16 @@ public final class R {
         public static final int ReportUnrelatedGroupText = NUM;
         public static final int ReportUnrelatedGroupTextNoAddress = NUM;
         public static final int ReportUserLocation = NUM;
+        public static final int RequestToJoinChannel = NUM;
+        public static final int RequestToJoinChannelApproved = NUM;
+        public static final int RequestToJoinChannelDescription = NUM;
+        public static final int RequestToJoinChannelSentDescription = NUM;
+        public static final int RequestToJoinGroup = NUM;
+        public static final int RequestToJoinGroupApproved = NUM;
+        public static final int RequestToJoinGroupDescription = NUM;
+        public static final int RequestToJoinGroupSentDescription = NUM;
+        public static final int RequestToJoinSent = NUM;
+        public static final int RequestedToJoinAt = NUM;
         public static final int ResendCode = NUM;
         public static final int ResendCodeInfo = NUM;
         public static final int Reset = NUM;
@@ -5351,6 +5391,7 @@ public final class R {
         public static final int SearchImagesInfo = NUM;
         public static final int SearchImagesTitle = NUM;
         public static final int SearchInSettings = NUM;
+        public static final int SearchMemberRequests = NUM;
         public static final int SearchMembers = NUM;
         public static final int SearchMessages = NUM;
         public static final int SearchMusic = NUM;
@@ -5691,6 +5732,7 @@ public final class R {
         public static final int StorageUsage = NUM;
         public static final int Streaming = NUM;
         public static final int Strike = NUM;
+        public static final int SubscribeRequests = NUM;
         public static final int Subscribers_few = NUM;
         public static final int Subscribers_many = NUM;
         public static final int Subscribers_one = NUM;
@@ -6567,6 +6609,7 @@ public final class R {
         public static final int Theme_TMessages_Transparent = NUM;
         public static final int Theme_TMessages_TransparentWithAlerts = NUM;
         public static final int TransparentDialog = NUM;
+        public static final int TransparentDialog2 = NUM;
         public static final int WalletFragmentDefaultButtonTextAppearance = NUM;
         public static final int WalletFragmentDefaultDetailsHeaderTextAppearance = NUM;
         public static final int WalletFragmentDefaultDetailsTextAppearance = NUM;

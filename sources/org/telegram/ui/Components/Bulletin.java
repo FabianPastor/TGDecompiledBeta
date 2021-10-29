@@ -967,6 +967,27 @@ public final class Bulletin {
     }
 
     @SuppressLint({"ViewConstructor"})
+    public static class MultiLineLayout extends ButtonLayout {
+        public final BackupImageView imageView;
+        public final TextView textView;
+
+        public MultiLineLayout(Context context, Theme.ResourcesProvider resourcesProvider) {
+            super(context, resourcesProvider);
+            BackupImageView backupImageView = new BackupImageView(getContext());
+            this.imageView = backupImageView;
+            TextView textView2 = new TextView(getContext());
+            this.textView = textView2;
+            addView(backupImageView, LayoutHelper.createFrameRelatively(30.0f, 30.0f, 8388627, 12.0f, 8.0f, 12.0f, 8.0f));
+            textView2.setGravity(8388611);
+            textView2.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
+            textView2.setTextColor(getThemedColor("undo_infoColor"));
+            textView2.setTextSize(1, 15.0f);
+            textView2.setTypeface(Typeface.SANS_SERIF);
+            addView(textView2, LayoutHelper.createFrameRelatively(-1.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
+        }
+    }
+
+    @SuppressLint({"ViewConstructor"})
     public static class TwoLineLayout extends ButtonLayout {
         public final BackupImageView imageView;
         public final TextView subtitleTextView;

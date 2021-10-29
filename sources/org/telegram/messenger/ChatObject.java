@@ -2108,6 +2108,10 @@ public class ChatObject {
         return ((tLRPC$Chat instanceof TLRPC$TL_channel) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden)) && tLRPC$Chat.megagroup;
     }
 
+    public static boolean isChannelAndNotMegaGroup(TLRPC$Chat tLRPC$Chat) {
+        return isChannel(tLRPC$Chat) && !isMegagroup(tLRPC$Chat);
+    }
+
     public static boolean isMegagroup(int i, long j) {
         TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Long.valueOf(j));
         return isChannel(chat) && chat.megagroup;
@@ -2247,6 +2251,10 @@ public class ChatObject {
     public static boolean isChannel(long j, int i) {
         TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Long.valueOf(j));
         return (chat instanceof TLRPC$TL_channel) || (chat instanceof TLRPC$TL_channelForbidden);
+    }
+
+    public static boolean isChannelAndNotMegaGroup(long j, int i) {
+        return isChannelAndNotMegaGroup(MessagesController.getInstance(i).getChat(Long.valueOf(j)));
     }
 
     public static boolean isCanWriteToChannel(long j, int i) {

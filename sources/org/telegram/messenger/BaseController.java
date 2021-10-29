@@ -90,4 +90,9 @@ public class BaseController {
     public final FileRefController getFileRefController() {
         return this.parentAccountInstance.getFileRefController();
     }
+
+    /* access modifiers changed from: protected */
+    public final MemberRequestsController getMemberRequestsController() {
+        return this.parentAccountInstance.getMemberRequestsController();
+    }
 }

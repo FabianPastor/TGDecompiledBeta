@@ -129,18 +129,17 @@ public class FlickerLoadingView extends View {
             i = dp;
         }
         float f = 268.0f;
-        float f2 = 16.0f;
-        float f3 = 24.0f;
-        float f4 = 28.0f;
+        float f2 = 24.0f;
+        float f3 = 28.0f;
         int i2 = 1;
-        float f5 = 4.0f;
+        float f4 = 4.0f;
         if (getViewType() == 7) {
             int i3 = 0;
             while (i <= getMeasuredHeight()) {
                 int cellHeight = getCellHeight(getMeasuredWidth());
-                int dp2 = AndroidUtilities.dp(f4);
+                int dp2 = AndroidUtilities.dp(f3);
                 canvas2.drawCircle(checkRtl((float) (AndroidUtilities.dp(10.0f) + dp2)), (float) ((cellHeight >> i2) + i), (float) dp2, paint3);
-                this.rectF.set((float) AndroidUtilities.dp(76.0f), (float) (i + AndroidUtilities.dp(16.0f)), (float) AndroidUtilities.dp(148.0f), (float) (i + AndroidUtilities.dp(f3)));
+                this.rectF.set((float) AndroidUtilities.dp(76.0f), (float) (i + AndroidUtilities.dp(16.0f)), (float) AndroidUtilities.dp(148.0f), (float) (i + AndroidUtilities.dp(f2)));
                 checkRtl(this.rectF);
                 canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), paint3);
                 this.rectF.set((float) AndroidUtilities.dp(76.0f), (float) (AndroidUtilities.dp(38.0f) + i), (float) AndroidUtilities.dp(268.0f), (float) (AndroidUtilities.dp(46.0f) + i));
@@ -161,18 +160,18 @@ public class FlickerLoadingView extends View {
                 if (this.isSingleCell && i3 >= this.itemsCount) {
                     break;
                 }
-                f3 = 24.0f;
-                f4 = 28.0f;
+                f2 = 24.0f;
+                f3 = 28.0f;
                 i2 = 1;
             }
         } else {
-            float f6 = 140.0f;
+            float f5 = 140.0f;
             if (getViewType() == 1) {
                 int i4 = 0;
                 while (i <= getMeasuredHeight()) {
                     int dp3 = AndroidUtilities.dp(25.0f);
                     canvas2.drawCircle(checkRtl((float) (AndroidUtilities.dp(9.0f) + dp3)), (float) ((AndroidUtilities.dp(78.0f) >> 1) + i), (float) dp3, paint3);
-                    this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(20.0f) + i), (float) AndroidUtilities.dp(f6), (float) (i + AndroidUtilities.dp(28.0f)));
+                    this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(20.0f) + i), (float) AndroidUtilities.dp(f5), (float) (i + AndroidUtilities.dp(28.0f)));
                     checkRtl(this.rectF);
                     canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), paint3);
                     this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(42.0f) + i), (float) AndroidUtilities.dp(260.0f), (float) (AndroidUtilities.dp(50.0f) + i));
@@ -188,7 +187,7 @@ public class FlickerLoadingView extends View {
                     if (this.isSingleCell && i4 >= this.itemsCount) {
                         break;
                     }
-                    f6 = 140.0f;
+                    f5 = 140.0f;
                 }
             } else if (getViewType() == 2) {
                 int measuredWidth = (getMeasuredWidth() - (AndroidUtilities.dp(2.0f) * (getColumnsCount() - 1))) / getColumnsCount();
@@ -363,26 +362,23 @@ public class FlickerLoadingView extends View {
                     }
                 }
             } else {
+                int i15 = 0;
                 if (getViewType() == 12) {
                     int dp8 = i + AndroidUtilities.dp(14.0f);
                     while (dp8 <= getMeasuredHeight()) {
                         int measuredWidth2 = getMeasuredWidth() / 4;
-                        int i15 = 0;
-                        while (i15 < 4) {
-                            float f7 = ((float) (measuredWidth2 * i15)) + (((float) measuredWidth2) / 2.0f);
-                            canvas2.drawCircle(f7, ((float) (AndroidUtilities.dp(7.0f) + dp8)) + (((float) AndroidUtilities.dp(56.0f)) / 2.0f), (float) AndroidUtilities.dp(28.0f), paint3);
-                            float dp9 = (float) (AndroidUtilities.dp(7.0f) + dp8 + AndroidUtilities.dp(56.0f) + AndroidUtilities.dp(f2));
+                        for (int i16 = 0; i16 < 4; i16++) {
+                            float f6 = ((float) (measuredWidth2 * i16)) + (((float) measuredWidth2) / 2.0f);
+                            canvas2.drawCircle(f6, ((float) (AndroidUtilities.dp(7.0f) + dp8)) + (((float) AndroidUtilities.dp(56.0f)) / 2.0f), (float) AndroidUtilities.dp(28.0f), paint3);
+                            float dp9 = (float) (AndroidUtilities.dp(7.0f) + dp8 + AndroidUtilities.dp(56.0f) + AndroidUtilities.dp(16.0f));
                             RectF rectF2 = AndroidUtilities.rectTmp;
-                            rectF2.set(f7 - ((float) AndroidUtilities.dp(24.0f)), dp9 - ((float) AndroidUtilities.dp(4.0f)), f7 + ((float) AndroidUtilities.dp(24.0f)), dp9 + ((float) AndroidUtilities.dp(4.0f)));
+                            rectF2.set(f6 - ((float) AndroidUtilities.dp(24.0f)), dp9 - ((float) AndroidUtilities.dp(4.0f)), f6 + ((float) AndroidUtilities.dp(24.0f)), dp9 + ((float) AndroidUtilities.dp(4.0f)));
                             canvas2.drawRoundRect(rectF2, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), paint3);
-                            i15++;
-                            f2 = 16.0f;
                         }
                         dp8 += getCellHeight(getMeasuredWidth());
                         if (this.isSingleCell) {
                             break;
                         }
-                        f2 = 16.0f;
                     }
                 } else if (getViewType() == 13) {
                     float measuredHeight = ((float) getMeasuredHeight()) / 2.0f;
@@ -394,9 +390,10 @@ public class FlickerLoadingView extends View {
                         this.backgroundPaint = paint4;
                         paint4.setColor(Theme.getColor("actionBarDefaultSubmenuBackground"));
                     }
-                    for (int i16 = 0; i16 < 3; i16++) {
-                        canvas2.drawCircle((float) ((getMeasuredWidth() - AndroidUtilities.dp(56.0f)) + AndroidUtilities.dp(13.0f) + (AndroidUtilities.dp(12.0f) * i16)), measuredHeight, (float) AndroidUtilities.dp(13.0f), this.backgroundPaint);
-                        canvas2.drawCircle((float) ((getMeasuredWidth() - AndroidUtilities.dp(56.0f)) + AndroidUtilities.dp(13.0f) + (AndroidUtilities.dp(12.0f) * i16)), measuredHeight, (float) AndroidUtilities.dp(12.0f), paint3);
+                    while (i15 < 3) {
+                        canvas2.drawCircle((float) ((getMeasuredWidth() - AndroidUtilities.dp(56.0f)) + AndroidUtilities.dp(13.0f) + (AndroidUtilities.dp(12.0f) * i15)), measuredHeight, (float) AndroidUtilities.dp(13.0f), this.backgroundPaint);
+                        canvas2.drawCircle((float) ((getMeasuredWidth() - AndroidUtilities.dp(56.0f)) + AndroidUtilities.dp(13.0f) + (AndroidUtilities.dp(12.0f) * i15)), measuredHeight, (float) AndroidUtilities.dp(12.0f), paint3);
+                        i15++;
                     }
                 } else if (getViewType() == 14) {
                     int dp10 = AndroidUtilities.dp(12.0f);
@@ -413,21 +410,40 @@ public class FlickerLoadingView extends View {
                         float dp15 = (float) (AndroidUtilities.dp(8.0f) + dp12);
                         RectF rectF4 = AndroidUtilities.rectTmp;
                         int i17 = dp10 + dp11;
-                        rectF4.set((float) (AndroidUtilities.dp(f5) + dp10), (float) AndroidUtilities.dp(f5), (float) (i17 - AndroidUtilities.dp(f5)), (float) (getMeasuredHeight() - AndroidUtilities.dp(f5)));
+                        rectF4.set((float) (AndroidUtilities.dp(f4) + dp10), (float) AndroidUtilities.dp(f4), (float) (i17 - AndroidUtilities.dp(f4)), (float) (getMeasuredHeight() - AndroidUtilities.dp(f4)));
                         canvas2.drawRoundRect(rectF4, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), paint3);
-                        float f8 = (float) dp10;
-                        float dp16 = ((float) (AndroidUtilities.dp(22.0f) + dp12)) + f8;
+                        float f7 = (float) dp10;
+                        float dp16 = ((float) (AndroidUtilities.dp(22.0f) + dp12)) + f7;
                         this.rectF.set(dp16, dp15, dp16 + dp14, dp15 + dp13);
                         RectF rectF5 = this.rectF;
                         canvas2.drawRoundRect(rectF5, rectF5.height() * 0.5f, this.rectF.height() * 0.5f, this.backgroundPaint);
                         float dp17 = dp15 + ((float) AndroidUtilities.dp(4.0f)) + dp13;
-                        float dp18 = f8 + ((float) (AndroidUtilities.dp(5.0f) + dp12));
+                        float dp18 = f7 + ((float) (AndroidUtilities.dp(5.0f) + dp12));
                         this.rectF.set(dp18, dp17, dp18 + dp14, dp17 + dp13);
                         RectF rectF6 = this.rectF;
                         canvas2.drawRoundRect(rectF6, rectF6.height() * 0.5f, this.rectF.height() * 0.5f, this.backgroundPaint);
                         canvas2.drawCircle((float) (dp10 + (dp11 / 2)), (float) (getMeasuredHeight() - AndroidUtilities.dp(20.0f)), (float) AndroidUtilities.dp(8.0f), this.backgroundPaint);
                         dp10 = i17;
-                        f5 = 4.0f;
+                        f4 = 4.0f;
+                    }
+                } else if (getViewType() == 15) {
+                    int dp19 = AndroidUtilities.dp(23.0f);
+                    int dp20 = AndroidUtilities.dp(4.0f);
+                    while (i <= getMeasuredHeight()) {
+                        float f8 = (float) dp19;
+                        canvas2.drawCircle(checkRtl((float) (this.paddingLeft + AndroidUtilities.dp(12.0f))) + f8, (float) (AndroidUtilities.dp(8.0f) + i + dp19), f8, paint3);
+                        this.rectF.set((float) (this.paddingLeft + AndroidUtilities.dp(74.0f)), (float) (AndroidUtilities.dp(12.0f) + i), (float) (this.paddingLeft + AndroidUtilities.dp(260.0f)), (float) (AndroidUtilities.dp(20.0f) + i));
+                        checkRtl(this.rectF);
+                        float f9 = (float) dp20;
+                        canvas2.drawRoundRect(this.rectF, f9, f9, paint3);
+                        this.rectF.set((float) (this.paddingLeft + AndroidUtilities.dp(74.0f)), (float) (AndroidUtilities.dp(36.0f) + i), (float) (this.paddingLeft + AndroidUtilities.dp(140.0f)), (float) (AndroidUtilities.dp(42.0f) + i));
+                        checkRtl(this.rectF);
+                        canvas2.drawRoundRect(this.rectF, f9, f9, paint3);
+                        i += getCellHeight(getMeasuredWidth());
+                        i15++;
+                        if (this.isSingleCell && i15 >= this.itemsCount) {
+                            break;
+                        }
                     }
                 }
             }
@@ -522,10 +538,10 @@ public class FlickerLoadingView extends View {
                 return ((i - (AndroidUtilities.dp(2.0f) * (getColumnsCount() - 1))) / getColumnsCount()) + AndroidUtilities.dp(2.0f);
             }
             if (getViewType() == 3) {
-                return AndroidUtilities.dp(56.0f) + 1;
+                return AndroidUtilities.dp(56.0f);
             }
             if (getViewType() == 4) {
-                return AndroidUtilities.dp(56.0f) + 1;
+                return AndroidUtilities.dp(56.0f);
             }
             if (getViewType() == 5) {
                 return AndroidUtilities.dp(80.0f);
@@ -547,6 +563,9 @@ public class FlickerLoadingView extends View {
             }
             if (getViewType() == 12) {
                 return AndroidUtilities.dp(103.0f);
+            }
+            if (getViewType() == 15) {
+                return AndroidUtilities.dp(107.0f);
             }
             return 0;
         }

@@ -270,4 +270,12 @@ public class TextCell extends FrameLayout {
             accessibilityNodeInfo.setText(text);
         }
     }
+
+    public void setNeedDivider(boolean z) {
+        if (this.needDivider != z) {
+            this.needDivider = z;
+            setWillNotDraw(!z);
+            invalidate();
+        }
+    }
 }

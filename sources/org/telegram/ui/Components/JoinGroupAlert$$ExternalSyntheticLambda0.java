@@ -1,15 +1,20 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import android.content.Context;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda0 implements View.OnClickListener {
+public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda0 implements DialogInterface.OnDismissListener {
     public final /* synthetic */ JoinGroupAlert f$0;
+    public final /* synthetic */ Context f$1;
+    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ JoinGroupAlert$$ExternalSyntheticLambda0(JoinGroupAlert joinGroupAlert) {
+    public /* synthetic */ JoinGroupAlert$$ExternalSyntheticLambda0(JoinGroupAlert joinGroupAlert, Context context, boolean z) {
         this.f$0 = joinGroupAlert;
+        this.f$1 = context;
+        this.f$2 = z;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$new$0(view);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.lambda$new$1(this.f$1, this.f$2, dialogInterface);
     }
 }

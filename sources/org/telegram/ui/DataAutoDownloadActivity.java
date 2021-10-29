@@ -495,7 +495,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r18.<init>(r19, r20, r21, r22, r23)
             int r1 = r12.photosRow
             if (r8 != r1) goto L_0x026e
-            r1 = 2131624482(0x7f0e0222, float:1.8876145E38)
+            r1 = 2131624487(0x7f0e0227, float:1.8876155E38)
             java.lang.String r2 = "AutoDownloadPhotosTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
@@ -503,13 +503,13 @@ public class DataAutoDownloadActivity extends BaseFragment {
         L_0x026e:
             int r1 = r12.videosRow
             if (r8 != r1) goto L_0x027f
-            r1 = 2131624492(0x7f0e022c, float:1.8876165E38)
+            r1 = 2131624497(0x7f0e0231, float:1.8876175E38)
             java.lang.String r2 = "AutoDownloadVideosTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
             goto L_0x028b
         L_0x027f:
-            r1 = 2131624462(0x7f0e020e, float:1.8876104E38)
+            r1 = 2131624467(0x7f0e0213, float:1.8876115E38)
             java.lang.String r2 = "AutoDownloadFilesTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
@@ -530,7 +530,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r9[r15] = r2
             if (r15 != 0) goto L_0x02cd
             r10 = r9[r15]
-            r14 = 2131624514(0x7f0e0242, float:1.887621E38)
+            r14 = 2131624519(0x7f0e0247, float:1.887622E38)
             r22 = r0
             java.lang.String r0 = "AutodownloadContacts"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r14)
@@ -554,7 +554,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r1 = 1
             if (r15 != r1) goto L_0x02ee
             r0 = r9[r15]
-            r10 = 2131624516(0x7f0e0244, float:1.8876214E38)
+            r10 = 2131624521(0x7f0e0249, float:1.8876224E38)
             java.lang.String r14 = "AutodownloadPrivateChats"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r14, r10)
             int[] r14 = r7.mask
@@ -572,7 +572,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r10 = 2
             if (r15 != r10) goto L_0x030c
             r0 = r9[r15]
-            r1 = 2131624515(0x7f0e0243, float:1.8876212E38)
+            r1 = 2131624520(0x7f0e0248, float:1.8876222E38)
             java.lang.String r14 = "AutodownloadGroupChats"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r14, r1)
             int[] r14 = r7.mask
@@ -589,7 +589,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             goto L_0x032d
         L_0x030c:
             r0 = r9[r15]
-            r1 = 2131624513(0x7f0e0241, float:1.8876208E38)
+            r1 = 2131624518(0x7f0e0246, float:1.8876218E38)
             java.lang.String r10 = "AutodownloadChannels"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r1)
             int[] r10 = r7.mask
@@ -706,7 +706,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r0.<init>(r6)
             r1.setOnClickListener(r0)
             android.app.Activity r0 = r29.getParentActivity()
-            r1 = 2131165449(0x7var_, float:1.7945115E38)
+            r1 = 2131165450(0x7var_a, float:1.7945117E38)
             java.lang.String r3 = "windowBackgroundGrayShadow"
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r3)
             org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -724,17 +724,17 @@ public class DataAutoDownloadActivity extends BaseFragment {
             if (r8 != r0) goto L_0x0458
             r0 = 0
             r1 = r22[r0]
-            r3 = 2131624467(0x7f0e0213, float:1.8876115E38)
+            r3 = 2131624472(0x7f0e0218, float:1.8876125E38)
             java.lang.String r4 = "AutoDownloadMaxVideoSize"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)
             r1 = r6[r0]
-            r3 = 2131624486(0x7f0e0226, float:1.8876153E38)
+            r3 = 2131624491(0x7f0e022b, float:1.8876163E38)
             java.lang.String r4 = "AutoDownloadPreloadVideo"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             boolean r4 = r2.preloadVideo
             r1.setTextAndCheck(r3, r4, r0)
-            r1 = 2131624487(0x7f0e0227, float:1.8876155E38)
+            r1 = 2131624492(0x7f0e022c, float:1.8876165E38)
             r3 = 1
             java.lang.Object[] r4 = new java.lang.Object[r3]
             int[] r3 = r2.sizes
@@ -749,17 +749,17 @@ public class DataAutoDownloadActivity extends BaseFragment {
         L_0x0458:
             r0 = 0
             r1 = r22[r0]
-            r3 = 2131624466(0x7f0e0212, float:1.8876113E38)
+            r3 = 2131624471(0x7f0e0217, float:1.8876123E38)
             java.lang.String r4 = "AutoDownloadMaxFileSize"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)
             r1 = r6[r0]
-            r3 = 2131624484(0x7f0e0224, float:1.887615E38)
+            r3 = 2131624489(0x7f0e0229, float:1.887616E38)
             java.lang.String r4 = "AutoDownloadPreloadMusic"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             boolean r4 = r2.preloadMusic
             r1.setTextAndCheck(r3, r4, r0)
-            r1 = 2131624485(0x7f0e0225, float:1.8876151E38)
+            r1 = 2131624490(0x7f0e022a, float:1.8876161E38)
             java.lang.String r3 = "AutoDownloadPreloadMusicInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r15.setText(r1)
@@ -843,7 +843,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             java.lang.String r5 = "fonts/rmedium.ttf"
             android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r1.setTypeface(r7)
-            r7 = 2131624667(0x7f0e02db, float:1.887652E38)
+            r7 = 2131624672(0x7f0e02e0, float:1.887653E38)
             java.lang.String r10 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -872,7 +872,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r14.setGravity(r4)
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r14.setTypeface(r1)
-            r1 = 2131627478(0x7f0e0dd6, float:1.8882222E38)
+            r1 = 2131627515(0x7f0e0dfb, float:1.8882297E38)
             java.lang.String r2 = "Save"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -1201,10 +1201,10 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 org.telegram.ui.Cells.TextInfoPrivacyCell r1 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r1
                 org.telegram.ui.DataAutoDownloadActivity r3 = org.telegram.ui.DataAutoDownloadActivity.this
                 int r3 = r3.typeSectionRow
-                r7 = 2131165449(0x7var_, float:1.7945115E38)
+                r7 = 2131165450(0x7var_a, float:1.7945117E38)
                 java.lang.String r9 = "windowBackgroundGrayShadow"
                 if (r2 != r3) goto L_0x004a
-                r2 = 2131624455(0x7f0e0207, float:1.887609E38)
+                r2 = 2131624460(0x7f0e020c, float:1.88761E38)
                 java.lang.String r3 = "AutoDownloadAudioInfo"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -1223,13 +1223,13 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 r3 = -1
                 if (r2 != r3) goto L_0x00aa
                 android.content.Context r2 = r0.mContext
-                r3 = 2131165450(0x7var_a, float:1.7945117E38)
+                r3 = 2131165451(0x7var_b, float:1.794512E38)
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r9)
                 r1.setBackgroundDrawable(r2)
                 org.telegram.ui.DataAutoDownloadActivity r2 = org.telegram.ui.DataAutoDownloadActivity.this
                 int r2 = r2.currentType
                 if (r2 != 0) goto L_0x007c
-                r2 = 2131624474(0x7f0e021a, float:1.8876129E38)
+                r2 = 2131624479(0x7f0e021f, float:1.8876139E38)
                 java.lang.String r3 = "AutoDownloadOnMobileDataInfo"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -1238,7 +1238,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 org.telegram.ui.DataAutoDownloadActivity r2 = org.telegram.ui.DataAutoDownloadActivity.this
                 int r2 = r2.currentType
                 if (r2 != r5) goto L_0x0091
-                r2 = 2131624479(0x7f0e021f, float:1.8876139E38)
+                r2 = 2131624484(0x7f0e0224, float:1.887615E38)
                 java.lang.String r3 = "AutoDownloadOnWiFiDataInfo"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -1247,7 +1247,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 org.telegram.ui.DataAutoDownloadActivity r2 = org.telegram.ui.DataAutoDownloadActivity.this
                 int r2 = r2.currentType
                 if (r2 != r6) goto L_0x00a5
-                r2 = 2131624476(0x7f0e021c, float:1.8876133E38)
+                r2 = 2131624481(0x7f0e0221, float:1.8876143E38)
                 java.lang.String r3 = "AutoDownloadOnRoamingDataInfo"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -1277,7 +1277,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 org.telegram.ui.DataAutoDownloadActivity r1 = org.telegram.ui.DataAutoDownloadActivity.this
                 int r1 = r1.photosRow
                 if (r2 != r1) goto L_0x00e5
-                r1 = 2131624480(0x7f0e0220, float:1.887614E38)
+                r1 = 2131624485(0x7f0e0225, float:1.8876151E38)
                 java.lang.String r3 = "AutoDownloadPhotos"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r10 = r1
@@ -1287,14 +1287,14 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 org.telegram.ui.DataAutoDownloadActivity r1 = org.telegram.ui.DataAutoDownloadActivity.this
                 int r1 = r1.videosRow
                 if (r2 != r1) goto L_0x00f9
-                r1 = 2131624490(0x7f0e022a, float:1.8876161E38)
+                r1 = 2131624495(0x7f0e022f, float:1.8876171E38)
                 java.lang.String r3 = "AutoDownloadVideos"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r10 = r1
                 r3 = 4
                 goto L_0x0105
             L_0x00f9:
-                r1 = 2131624460(0x7f0e020c, float:1.88761E38)
+                r1 = 2131624465(0x7f0e0211, float:1.887611E38)
                 java.lang.String r3 = "AutoDownloadFiles"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r3 = 8
@@ -1348,25 +1348,25 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 if (r13 == r7) goto L_0x016e
                 goto L_0x01a1
             L_0x016e:
-                r4 = 2131624456(0x7f0e0208, float:1.8876092E38)
+                r4 = 2131624461(0x7f0e020d, float:1.8876102E38)
                 java.lang.String r15 = "AutoDownloadChannels"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r15, r4)
                 r12.append(r4)
                 goto L_0x01a1
             L_0x017b:
-                r4 = 2131624463(0x7f0e020f, float:1.8876106E38)
+                r4 = 2131624468(0x7f0e0214, float:1.8876117E38)
                 java.lang.String r15 = "AutoDownloadGroups"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r15, r4)
                 r12.append(r4)
                 goto L_0x01a1
             L_0x0188:
-                r4 = 2131624483(0x7f0e0223, float:1.8876147E38)
+                r4 = 2131624488(0x7f0e0228, float:1.8876157E38)
                 java.lang.String r15 = "AutoDownloadPm"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r15, r4)
                 r12.append(r4)
                 goto L_0x01a1
             L_0x0195:
-                r4 = 2131624457(0x7f0e0209, float:1.8876094E38)
+                r4 = 2131624462(0x7f0e020e, float:1.8876104E38)
                 java.lang.String r15 = "AutoDownloadContacts"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r15, r4)
                 r12.append(r4)
@@ -1383,13 +1383,13 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 org.telegram.ui.DataAutoDownloadActivity r1 = org.telegram.ui.DataAutoDownloadActivity.this
                 int r1 = r1.photosRow
                 if (r2 != r1) goto L_0x01c2
-                r1 = 2131624471(0x7f0e0217, float:1.8876123E38)
+                r1 = 2131624476(0x7f0e021c, float:1.8876133E38)
                 java.lang.String r3 = "AutoDownloadOnAllChats"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r12.append(r1)
                 goto L_0x01e7
             L_0x01c2:
-                r1 = 2131624489(0x7f0e0229, float:1.887616E38)
+                r1 = 2131624494(0x7f0e022e, float:1.887617E38)
                 java.lang.Object[] r3 = new java.lang.Object[r5]
                 long r6 = (long) r11
                 java.lang.String r4 = org.telegram.messenger.AndroidUtilities.formatFileSize(r6)
@@ -1401,7 +1401,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 goto L_0x01e7
             L_0x01d9:
                 if (r14 != 0) goto L_0x01e9
-                r1 = 2131624470(0x7f0e0216, float:1.887612E38)
+                r1 = 2131624475(0x7f0e021b, float:1.887613E38)
                 java.lang.String r3 = "AutoDownloadOff"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r12.append(r1)
@@ -1413,7 +1413,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 int r1 = r1.photosRow
                 if (r2 != r1) goto L_0x0209
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
-                r3 = 2131624472(0x7f0e0218, float:1.8876125E38)
+                r3 = 2131624477(0x7f0e021d, float:1.8876135E38)
                 java.lang.Object[] r4 = new java.lang.Object[r5]
                 java.lang.String r6 = r12.toString()
                 r7 = 0
@@ -1425,7 +1425,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             L_0x0209:
                 r7 = 0
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
-                r3 = 2131624477(0x7f0e021d, float:1.8876135E38)
+                r3 = 2131624482(0x7f0e0222, float:1.8876145E38)
                 java.lang.Object[] r4 = new java.lang.Object[r6]
                 long r5 = (long) r11
                 java.lang.String r5 = org.telegram.messenger.AndroidUtilities.formatFileSize(r5)
@@ -1480,7 +1480,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 org.telegram.ui.DataAutoDownloadActivity r3 = org.telegram.ui.DataAutoDownloadActivity.this
                 int r3 = r3.usageHeaderRow
                 if (r2 != r3) goto L_0x0274
-                r2 = 2131624459(0x7f0e020b, float:1.8876098E38)
+                r2 = 2131624464(0x7f0e0210, float:1.8876108E38)
                 java.lang.String r3 = "AutoDownloadDataUsage"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -1489,7 +1489,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 org.telegram.ui.DataAutoDownloadActivity r3 = org.telegram.ui.DataAutoDownloadActivity.this
                 int r3 = r3.typeHeaderRow
                 if (r2 != r3) goto L_0x02d5
-                r2 = 2131624488(0x7f0e0228, float:1.8876157E38)
+                r2 = 2131624493(0x7f0e022d, float:1.8876167E38)
                 java.lang.String r3 = "AutoDownloadTypes"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -1502,7 +1502,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 if (r2 != r3) goto L_0x02d5
                 r2 = 1
                 r1.setDrawCheckRipple(r2)
-                r2 = 2131624468(0x7f0e0214, float:1.8876117E38)
+                r2 = 2131624473(0x7f0e0219, float:1.8876127E38)
                 java.lang.String r3 = "AutoDownloadMedia"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 org.telegram.ui.DataAutoDownloadActivity r3 = org.telegram.ui.DataAutoDownloadActivity.this

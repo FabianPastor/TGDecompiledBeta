@@ -75,6 +75,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
     public RecyclerListView listView;
     int loadingRow;
     private boolean permanent;
+    int requestedHeaderRow;
     int rowCount;
     /* access modifiers changed from: private */
     public int scrollOffsetY;
@@ -231,13 +232,13 @@ public class InviteLinkBottomSheet extends BottomSheet {
             java.lang.String r4 = "fonts/rmedium.ttf"
             android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r1.setTypeface(r4)
-            r1 = 2131625955(0x7f0e07e3, float:1.8879133E38)
+            r1 = 2131625964(0x7f0e07ec, float:1.887915E38)
             java.lang.String r4 = "InviteLink"
             if (r5 != 0) goto L_0x0150
             boolean r5 = r2.expired
             if (r5 == 0) goto L_0x0131
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131625520(0x7f0e0630, float:1.887825E38)
+            r4 = 2131625527(0x7f0e0637, float:1.8878264E38)
             java.lang.String r5 = "ExpiredLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
@@ -246,7 +247,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             boolean r5 = r2.revoked
             if (r5 == 0) goto L_0x0144
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131627473(0x7f0e0dd1, float:1.8882211E38)
+            r4 = 2131627510(0x7f0e0df6, float:1.8882286E38)
             java.lang.String r5 = "RevokedLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
@@ -397,68 +398,121 @@ public class InviteLinkBottomSheet extends BottomSheet {
         });
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:13:0x0068  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x00ac  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void updateRows() {
-        this.rowCount = 0;
-        this.dividerRow = -1;
-        this.divider2Row = -1;
-        this.usersHeaderRow = -1;
-        this.usersStartRow = -1;
-        this.usersEndRow = -1;
-        this.emptyView2 = -1;
-        this.linkActionRow = -1;
-        this.linkInfoRow = -1;
-        this.emptyHintRow = -1;
-        if (!this.permanent) {
-            int i = 0 + 1;
-            this.rowCount = i;
-            this.linkActionRow = 0;
-            this.rowCount = i + 1;
-            this.linkInfoRow = i;
-        }
-        int i2 = this.rowCount;
-        int i3 = i2 + 1;
-        this.rowCount = i3;
-        this.creatorHeaderRow = i2;
-        int i4 = i3 + 1;
-        this.rowCount = i4;
-        this.creatorRow = i3;
-        int i5 = i4 + 1;
-        this.rowCount = i5;
-        this.emptyView = i4;
-        TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported = this.invite;
-        if (!(tLRPC$TL_chatInviteExported.usage == 0 && tLRPC$TL_chatInviteExported.usage_limit == 0)) {
-            int i6 = i5 + 1;
-            this.rowCount = i6;
-            this.dividerRow = i5;
-            this.rowCount = i6 + 1;
-            this.usersHeaderRow = i6;
-            if (!this.invitedUsers.isEmpty()) {
-                int i7 = this.rowCount;
-                this.usersStartRow = i7;
-                int size = i7 + this.invitedUsers.size();
-                this.rowCount = size;
-                this.usersEndRow = size;
-                this.rowCount = size + 1;
-                this.emptyView2 = size;
-            } else if (this.invite.usage > 0) {
-                int i8 = this.rowCount;
-                int i9 = i8 + 1;
-                this.rowCount = i9;
-                this.loadingRow = i8;
-                this.rowCount = i9 + 1;
-                this.emptyView2 = i9;
-            } else {
-                int i10 = this.rowCount;
-                this.rowCount = i10 + 1;
-                this.emptyHintRow = i10;
-            }
-        }
-        if (this.emptyHintRow == -1) {
-            int i11 = this.rowCount;
-            this.rowCount = i11 + 1;
-            this.divider2Row = i11;
-        }
-        this.adapter.notifyDataSetChanged();
+        /*
+            r6 = this;
+            r0 = 0
+            r6.rowCount = r0
+            r1 = -1
+            r6.dividerRow = r1
+            r6.divider2Row = r1
+            r6.usersHeaderRow = r1
+            r6.usersStartRow = r1
+            r6.usersEndRow = r1
+            r6.emptyView2 = r1
+            r6.linkActionRow = r1
+            r6.linkInfoRow = r1
+            r6.emptyHintRow = r1
+            r6.requestedHeaderRow = r1
+            boolean r2 = r6.permanent
+            r3 = 1
+            if (r2 != 0) goto L_0x0029
+            r2 = 0
+            int r2 = r2 + r3
+            r6.rowCount = r2
+            r6.linkActionRow = r0
+            int r4 = r2 + 1
+            r6.rowCount = r4
+            r6.linkInfoRow = r2
+        L_0x0029:
+            int r2 = r6.rowCount
+            int r4 = r2 + 1
+            r6.rowCount = r4
+            r6.creatorHeaderRow = r2
+            int r2 = r4 + 1
+            r6.rowCount = r2
+            r6.creatorRow = r4
+            int r4 = r2 + 1
+            r6.rowCount = r4
+            r6.emptyView = r2
+            org.telegram.tgnet.TLRPC$TL_chatInviteExported r2 = r6.invite
+            int r5 = r2.usage
+            if (r5 != 0) goto L_0x0059
+            int r5 = r2.usage_limit
+            if (r5 == 0) goto L_0x0048
+            goto L_0x0059
+        L_0x0048:
+            int r2 = r2.requested
+            if (r2 <= 0) goto L_0x0066
+            int r0 = r4 + 1
+            r6.rowCount = r0
+            r6.dividerRow = r4
+            int r2 = r0 + 1
+            r6.rowCount = r2
+            r6.requestedHeaderRow = r0
+            goto L_0x0065
+        L_0x0059:
+            int r0 = r4 + 1
+            r6.rowCount = r0
+            r6.dividerRow = r4
+            int r2 = r0 + 1
+            r6.rowCount = r2
+            r6.usersHeaderRow = r0
+        L_0x0065:
+            r0 = 1
+        L_0x0066:
+            if (r0 == 0) goto L_0x00a8
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_chatInviteImporter> r0 = r6.invitedUsers
+            boolean r0 = r0.isEmpty()
+            if (r0 != 0) goto L_0x0086
+            int r0 = r6.rowCount
+            r6.usersStartRow = r0
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_chatInviteImporter> r2 = r6.invitedUsers
+            int r2 = r2.size()
+            int r0 = r0 + r2
+            r6.rowCount = r0
+            r6.usersEndRow = r0
+            int r2 = r0 + 1
+            r6.rowCount = r2
+            r6.emptyView2 = r0
+            goto L_0x00a8
+        L_0x0086:
+            org.telegram.tgnet.TLRPC$TL_chatInviteExported r0 = r6.invite
+            int r2 = r0.usage
+            if (r2 > 0) goto L_0x009a
+            int r0 = r0.requested
+            if (r0 <= 0) goto L_0x0091
+            goto L_0x009a
+        L_0x0091:
+            int r0 = r6.rowCount
+            int r2 = r0 + 1
+            r6.rowCount = r2
+            r6.emptyHintRow = r0
+            goto L_0x00a8
+        L_0x009a:
+            int r0 = r6.rowCount
+            int r2 = r0 + 1
+            r6.rowCount = r2
+            r6.loadingRow = r0
+            int r0 = r2 + 1
+            r6.rowCount = r0
+            r6.emptyView2 = r2
+        L_0x00a8:
+            int r0 = r6.emptyHintRow
+            if (r0 != r1) goto L_0x00b4
+            int r0 = r6.rowCount
+            int r1 = r0 + 1
+            r6.rowCount = r1
+            r6.divider2Row = r0
+        L_0x00b4:
+            org.telegram.ui.Components.InviteLinkBottomSheet$Adapter r0 = r6.adapter
+            r0.notifyDataSetChanged()
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteLinkBottomSheet.updateRows():void");
     }
 
     private class Adapter extends RecyclerListView.SelectionAdapter {
@@ -467,7 +521,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
 
         public int getItemViewType(int i) {
             InviteLinkBottomSheet inviteLinkBottomSheet = InviteLinkBottomSheet.this;
-            if (i == inviteLinkBottomSheet.creatorHeaderRow) {
+            if (i == inviteLinkBottomSheet.creatorHeaderRow || i == inviteLinkBottomSheet.requestedHeaderRow) {
                 return 0;
             }
             if (i == inviteLinkBottomSheet.creatorRow) {
@@ -561,7 +615,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             L_0x004c:
                 org.telegram.ui.Cells.ShadowSectionCell r12 = new org.telegram.ui.Cells.ShadowSectionCell
                 r12.<init>(r1, r2)
-                r2 = 2131165450(0x7var_a, float:1.7945117E38)
+                r2 = 2131165451(0x7var_b, float:1.794512E38)
                 android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r2, (java.lang.String) r11)
                 android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
@@ -591,7 +645,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 android.graphics.drawable.ColorDrawable r4 = new android.graphics.drawable.ColorDrawable
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r4.<init>(r0)
-                r0 = 2131165449(0x7var_, float:1.7945115E38)
+                r0 = 2131165450(0x7var_a, float:1.7945117E38)
                 android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r0, (java.lang.String) r11)
                 r2.<init>(r4, r11)
                 r2.setFullsize(r3)
@@ -773,6 +827,8 @@ public class InviteLinkBottomSheet extends BottomSheet {
                     } else {
                         headerCell.setText2(LocaleController.formatPluralString("PeopleJoinedRemaining", i2 - i3));
                     }
+                } else if (i == inviteLinkBottomSheet2.requestedHeaderRow) {
+                    headerCell.setText(LocaleController.formatPluralString("JoinRequests", inviteLinkBottomSheet2.invite.requested));
                 }
             }
         }
@@ -880,10 +936,14 @@ public class InviteLinkBottomSheet extends BottomSheet {
     }
 
     public void loadUsers() {
-        if (this.invite.usage > 0 && !this.usersLoading) {
+        TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported = this.invite;
+        if ((tLRPC$TL_chatInviteExported.usage > 0 || tLRPC$TL_chatInviteExported.requested > 0) && !this.usersLoading) {
             TLRPC$TL_messages_getChatInviteImporters tLRPC$TL_messages_getChatInviteImporters = new TLRPC$TL_messages_getChatInviteImporters();
+            tLRPC$TL_messages_getChatInviteImporters.flags |= 2;
             tLRPC$TL_messages_getChatInviteImporters.link = this.invite.link;
             tLRPC$TL_messages_getChatInviteImporters.peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer(-this.chatId);
+            TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported2 = this.invite;
+            tLRPC$TL_messages_getChatInviteImporters.requested = tLRPC$TL_chatInviteExported2.requested > 0 && tLRPC$TL_chatInviteExported2.request_needed;
             if (this.invitedUsers.isEmpty()) {
                 tLRPC$TL_messages_getChatInviteImporters.offset_user = new TLRPC$TL_inputUserEmpty();
             } else {

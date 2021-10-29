@@ -42,6 +42,7 @@ import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.DotDividerSpan;
+import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
 import org.telegram.ui.Components.RLottieDrawable;
@@ -57,8 +58,10 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     private TextView dateTextView;
     private SpannableStringBuilder dotSpan;
     private boolean drawDownloadIcon;
+    float enterAlpha;
     /* access modifiers changed from: private */
     public TextView extTextView;
+    FlickerLoadingView globalGradientView;
     boolean ignoreRequestLayout;
     private boolean loaded;
     private boolean loading;
@@ -95,6 +98,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         this.drawDownloadIcon = true;
         int i3 = UserConfig.selectedAccount;
         this.currentAccount = i3;
+        this.enterAlpha = 1.0f;
         this.resourcesProvider = resourcesProvider2;
         this.viewType = i2;
         this.TAG = DownloadController.getInstance(i3).generateObserverTag();
@@ -128,7 +132,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             boolean z4 = LocaleController.isRTL;
             addView(textView3, LayoutHelper.createFrame(32, -2.0f, (z4 ? 5 : 3) | 48, z4 ? 0.0f : 16.0f, 22.0f, z4 ? 16.0f : 0.0f, 0.0f));
         }
-        AnonymousClass1 r12 = new BackupImageView(context2) {
+        AnonymousClass1 r13 = new BackupImageView(context2) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 float f = 1.0f;
@@ -140,8 +144,8 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                 super.onDraw(canvas);
             }
         };
-        this.thumbImageView = r12;
-        r12.setRoundRadius(AndroidUtilities.dp(4.0f));
+        this.thumbImageView = r13;
+        r13.setRoundRadius(AndroidUtilities.dp(4.0f));
         if (i2 == 1) {
             BackupImageView backupImageView = this.thumbImageView;
             boolean z5 = LocaleController.isRTL;
@@ -196,7 +200,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             addView(textView8, LayoutHelper.createFrame(-1, -2.0f, (z9 ? 5 : 3) | 48, z9 ? 8.0f : 72.0f, 30.0f, z9 ? 72.0f : 8.0f, 0.0f));
             this.captionTextView.setVisibility(8);
         } else {
-            this.nameTextView.setMaxLines(2);
+            this.nameTextView.setMaxLines(1);
             TextView textView9 = this.nameTextView;
             boolean z10 = LocaleController.isRTL;
             addView(textView9, LayoutHelper.createFrame(-1, -2.0f, (z10 ? 5 : 3) | 48, z10 ? 8.0f : 72.0f, 5.0f, z10 ? 72.0f : 8.0f, 0.0f));
@@ -608,19 +612,22 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        if (this.viewType == 1) {
+        int i3 = this.viewType;
+        if (i3 == 1) {
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + (this.needDivider ? 1 : 0), NUM));
-            return;
+        } else if (i3 == 0) {
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
+        } else {
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
+            int dp = AndroidUtilities.dp(34.0f) + this.nameTextView.getMeasuredHeight() + (this.needDivider ? 1 : 0);
+            if (!(this.caption == null || this.captionTextView == null || !this.message.hasHighlightedWords())) {
+                this.ignoreRequestLayout = true;
+                this.captionTextView.setText(AndroidUtilities.ellipsizeCenterEnd(this.caption, this.message.highlightedWords.get(0), this.captionTextView.getMeasuredWidth(), this.captionTextView.getPaint(), 130));
+                this.ignoreRequestLayout = false;
+                dp += this.captionTextView.getMeasuredHeight() + AndroidUtilities.dp(3.0f);
+            }
+            setMeasuredDimension(getMeasuredWidth(), dp);
         }
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
-        int dp = AndroidUtilities.dp(34.0f) + this.nameTextView.getMeasuredHeight() + (this.needDivider ? 1 : 0);
-        if (!(this.caption == null || this.captionTextView == null || !this.message.hasHighlightedWords())) {
-            this.ignoreRequestLayout = true;
-            this.captionTextView.setText(AndroidUtilities.ellipsizeCenterEnd(this.caption, this.message.highlightedWords.get(0), this.captionTextView.getMeasuredWidth(), this.captionTextView.getPaint(), 130));
-            this.ignoreRequestLayout = false;
-            dp += this.captionTextView.getMeasuredHeight() + AndroidUtilities.dp(3.0f);
-        }
-        setMeasuredDimension(getMeasuredWidth(), dp);
     }
 
     public void requestLayout() {
@@ -649,13 +656,6 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         rLottieImageView.layout(rLottieImageView.getLeft(), this.statusImageView.getTop() + measuredHeight, this.statusImageView.getRight(), measuredHeight + this.statusImageView.getBottom());
         LineProgressView lineProgressView = this.progressView;
         lineProgressView.layout(lineProgressView.getLeft(), (getMeasuredHeight() - this.progressView.getMeasuredHeight()) - (this.needDivider ? 1 : 0), this.progressView.getRight(), getMeasuredHeight() - (this.needDivider ? 1 : 0));
-    }
-
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
-        if (this.needDivider) {
-            canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
-        }
     }
 
     public void onFailedDownload(String str, boolean z) {
@@ -690,5 +690,41 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
         Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
+    }
+
+    public void setGlobalGradientView(FlickerLoadingView flickerLoadingView) {
+        this.globalGradientView = flickerLoadingView;
+    }
+
+    /* access modifiers changed from: protected */
+    public void dispatchDraw(Canvas canvas) {
+        if (this.enterAlpha == 1.0f || this.globalGradientView == null) {
+            super.dispatchDraw(canvas);
+            drawDivider(canvas);
+            return;
+        }
+        canvas.saveLayerAlpha(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), (int) ((1.0f - this.enterAlpha) * 255.0f), 31);
+        this.globalGradientView.setViewType(3);
+        this.globalGradientView.updateGradient();
+        this.globalGradientView.updateColors();
+        this.globalGradientView.draw(canvas);
+        canvas.restore();
+        canvas.saveLayerAlpha(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), (int) (this.enterAlpha * 255.0f), 31);
+        super.dispatchDraw(canvas);
+        drawDivider(canvas);
+        canvas.restore();
+    }
+
+    private void drawDivider(Canvas canvas) {
+        if (this.needDivider) {
+            canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+        }
+    }
+
+    public void setEnterAnimationAlpha(float f) {
+        if (this.enterAlpha != f) {
+            this.enterAlpha = f;
+            invalidate();
+        }
     }
 }

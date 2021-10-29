@@ -26,6 +26,7 @@ import org.telegram.ui.Cells.GroupCallUserCell;
 public class AvatarsImageView extends FrameLayout {
     DrawingState[] animatingStates = new DrawingState[3];
     boolean centered;
+    protected int count;
     DrawingState[] currentStates = new DrawingState[3];
     int currentStyle;
     private boolean isInCall;
@@ -991,5 +992,16 @@ public class AvatarsImageView extends FrameLayout {
 
     public void setCentered(boolean z) {
         this.centered = z;
+    }
+
+    public void setCount(int i) {
+        this.count = i;
+        requestLayout();
+    }
+
+    public void reset() {
+        for (int i = 0; i < this.animatingStates.length; i++) {
+            setObject(0, 0, (TLObject) null);
+        }
     }
 }

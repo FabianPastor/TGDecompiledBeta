@@ -14,6 +14,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -208,18 +209,33 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
 
     /* access modifiers changed from: private */
     public void setSticker() {
-        TLRPC$TL_messages_stickerSet stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByName("tg_placeholders_android");
-        if (stickerSetByName == null) {
-            stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByEmojiOrName("tg_placeholders_android");
+        TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet;
+        String str;
+        TLRPC$Document tLRPC$Document;
+        TLRPC$Document tLRPC$Document2 = null;
+        if (this.stickerType == 2) {
+            tLRPC$Document = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker("👍");
+            str = null;
+            tLRPC$TL_messages_stickerSet = null;
+        } else {
+            TLRPC$TL_messages_stickerSet stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByName("tg_placeholders_android");
+            if (stickerSetByName == null) {
+                stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByEmojiOrName("tg_placeholders_android");
+            }
+            if (stickerSetByName != null && stickerSetByName.documents.size() >= 2) {
+                tLRPC$Document2 = stickerSetByName.documents.get(this.stickerType);
+            }
+            tLRPC$TL_messages_stickerSet = stickerSetByName;
+            tLRPC$Document = tLRPC$Document2;
+            str = "130_130";
         }
-        TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = stickerSetByName;
-        if (tLRPC$TL_messages_stickerSet == null || tLRPC$TL_messages_stickerSet.documents.size() < 2) {
-            MediaDataController.getInstance(this.currentAccount).loadStickersByEmojiOrName("tg_placeholders_android", false, tLRPC$TL_messages_stickerSet == null);
-            this.stickerView.setImageDrawable(this.stubDrawable);
+        if (tLRPC$Document != null) {
+            this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$Document), str, "tgs", (Drawable) this.stubDrawable, (Object) tLRPC$TL_messages_stickerSet);
+            this.stickerView.getImageReceiver().setAutoRepeat(2);
             return;
         }
-        this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$TL_messages_stickerSet.documents.get(this.stickerType)), "130_130", "tgs", (Drawable) this.stubDrawable, (Object) tLRPC$TL_messages_stickerSet);
-        this.stickerView.getImageReceiver().setAutoRepeat(2);
+        MediaDataController.getInstance(this.currentAccount).loadStickersByEmojiOrName("tg_placeholders_android", false, tLRPC$TL_messages_stickerSet == null);
+        this.stickerView.setImageDrawable(this.stubDrawable);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {

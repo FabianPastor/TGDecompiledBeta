@@ -46,6 +46,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     private boolean firstLayout = true;
     private boolean hasCutout;
     private boolean inLayout;
+    private boolean keyboardVisibility;
     private Object lastInsets;
     private boolean maybeStartTracking;
     private int minDrawerMargin = ((int) ((AndroidUtilities.density * 64.0f) + 0.5f));
@@ -81,6 +82,12 @@ public class DrawerLayoutContainer extends FrameLayout {
 
     /* access modifiers changed from: private */
     public /* synthetic */ WindowInsets lambda$new$0(View view, WindowInsets windowInsets) {
+        boolean isVisible;
+        int i = Build.VERSION.SDK_INT;
+        if (i >= 30 && this.keyboardVisibility != (isVisible = windowInsets.isVisible(WindowInsets.Type.ime()))) {
+            this.keyboardVisibility = isVisible;
+            requestLayout();
+        }
         DrawerLayoutContainer drawerLayoutContainer = (DrawerLayoutContainer) view;
         if (AndroidUtilities.statusBarHeight != windowInsets.getSystemWindowInsetTop()) {
             drawerLayoutContainer.requestLayout();
@@ -93,7 +100,6 @@ public class DrawerLayoutContainer extends FrameLayout {
         this.firstLayout = false;
         this.lastInsets = windowInsets;
         drawerLayoutContainer.setWillNotDraw(windowInsets.getSystemWindowInsetTop() <= 0 && getBackground() == null);
-        int i = Build.VERSION.SDK_INT;
         if (i >= 28) {
             DisplayCutout displayCutout = windowInsets.getDisplayCutout();
             if (!(displayCutout == null || displayCutout.getBoundingRects().size() == 0)) {
