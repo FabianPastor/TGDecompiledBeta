@@ -15,6 +15,6 @@ public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda6 im
     }
 
     public final void run() {
-        this.f$0.lambda$createView$8(this.f$1, this.f$2);
+        this.f$0.lambda$createView$7(this.f$1, this.f$2);
     }
 }

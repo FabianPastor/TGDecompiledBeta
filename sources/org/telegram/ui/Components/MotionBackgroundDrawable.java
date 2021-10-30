@@ -465,6 +465,9 @@ public class MotionBackgroundDrawable extends Drawable {
             Bitmap bitmap = this.patternBitmap;
             if (bitmap != null) {
                 if (!useLegacyBitmap) {
+                    if (this.matrix == null) {
+                        this.matrix = new Matrix();
+                    }
                     this.matrix.reset();
                     this.matrix.setTranslate(f6, f7 + f);
                     float min = 1.0f / Math.min(((float) this.currentBitmap.getWidth()) / ((float) bounds.width()), ((float) this.currentBitmap.getHeight()) / ((float) bounds.height()));

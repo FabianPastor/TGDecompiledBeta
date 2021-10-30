@@ -119,6 +119,17 @@ public class ImageLoader {
     /* access modifiers changed from: private */
     public LruCache<BitmapDrawable> wallpaperMemCache;
 
+    public void moveToFront(String str) {
+        if (str != null) {
+            if (this.memCache.get(str) != null) {
+                this.memCache.moveToFront(str);
+            }
+            if (this.smallImagesMemCache.get(str) != null) {
+                this.smallImagesMemCache.moveToFront(str);
+            }
+        }
+    }
+
     public void putThumbsToCache(ArrayList<MessageThumb> arrayList) {
         for (int i = 0; i < arrayList.size(); i++) {
             putImageToCache(arrayList.get(i).drawable, arrayList.get(i).key, true);

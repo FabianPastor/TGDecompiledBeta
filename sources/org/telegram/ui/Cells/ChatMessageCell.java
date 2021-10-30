@@ -13178,20 +13178,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r0 = r14.type
             r4 = 5
             if (r0 != r4) goto L_0x3804
-            int r0 = r1.availableTimeWidth
+            int r0 = org.telegram.messenger.AndroidUtilities.roundMessageSize
             double r4 = (double) r0
             android.text.TextPaint r0 = org.telegram.ui.ActionBar.Theme.chat_audioTimePaint
             java.lang.String r6 = "00:00"
             float r0 = r0.measureText(r6)
             double r6 = (double) r0
             double r6 = java.lang.Math.ceil(r6)
-            r0 = 1104150528(0x41d00000, float:26.0)
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            double r8 = (double) r0
-            java.lang.Double.isNaN(r8)
-            double r6 = r6 + r8
             java.lang.Double.isNaN(r4)
             double r4 = r4 - r6
+            r0 = 1109393408(0x42200000, float:40.0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            double r6 = (double) r0
+            java.lang.Double.isNaN(r6)
+            double r4 = r4 + r6
             int r0 = (int) r4
             r1.availableTimeWidth = r0
         L_0x3804:
@@ -16898,6 +16898,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (this.currentMessageObject.type == 12) {
                 this.totalHeight = dp2 + AndroidUtilities.dp(14.0f);
             }
+            if (this.hasNewLineForTime) {
+                this.totalHeight += AndroidUtilities.dp(16.0f);
+            }
             StaticLayout staticLayout = this.instantViewLayout;
             if (staticLayout != null && staticLayout.getLineCount() > 0) {
                 double d = (double) this.instantWidth;
@@ -20561,6 +20564,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     dp2 = AndroidUtilities.dp(1.0f);
                 } else if (this.currentMessageObject.isSponsored()) {
                     dp = (this.textY + this.currentMessageObject.textHeight) - AndroidUtilities.dp(2.0f);
+                    if (this.hasNewLineForTime) {
+                        dp += AndroidUtilities.dp(16.0f);
+                    }
                     i = this.unmovedTextX;
                     dp2 = AndroidUtilities.dp(1.0f);
                 } else {
@@ -23948,7 +23954,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     private boolean checkNeedDrawShareButton(MessageObject messageObject) {
-        if (this.currentMessageObject.deleted) {
+        MessageObject messageObject2 = this.currentMessageObject;
+        if (messageObject2.deleted || messageObject2.isSponsored()) {
             return false;
         }
         MessageObject.GroupedMessagePosition groupedMessagePosition = this.currentPosition;
@@ -30520,6 +30527,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 } else {
                     if (this.currentMessageObject.isSponsored()) {
                         i5 = -AndroidUtilities.dp(48.0f);
+                        if (this.hasNewLineForTime) {
+                            i5 -= AndroidUtilities.dp(16.0f);
+                        }
                     } else {
                         i5 = -(this.drawCommentButton ? AndroidUtilities.dp(43.0f) : 0);
                     }
@@ -35998,7 +36008,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         private ClickableSpan getLinkById(int i, boolean z) {
             if (z) {
                 int i2 = i - 3000;
-                if (!(ChatMessageCell.this.currentMessageObject.caption instanceof Spannable)) {
+                if (!(ChatMessageCell.this.currentMessageObject.caption instanceof Spannable) || i2 < 0) {
                     return null;
                 }
                 Spannable spannable = (Spannable) ChatMessageCell.this.currentMessageObject.caption;
@@ -36009,7 +36019,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 return clickableSpanArr[i2];
             }
             int i3 = i - 2000;
-            if (!(ChatMessageCell.this.currentMessageObject.messageText instanceof Spannable)) {
+            if (!(ChatMessageCell.this.currentMessageObject.messageText instanceof Spannable) || i3 < 0) {
                 return null;
             }
             Spannable spannable2 = (Spannable) ChatMessageCell.this.currentMessageObject.messageText;

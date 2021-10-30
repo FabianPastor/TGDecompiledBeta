@@ -457,21 +457,28 @@ public class JoinGroupAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$4(Context context, boolean z, View view) {
-        this.requestTextView.setVisibility(4);
-        this.requestProgressView.setVisibility(0);
+    public /* synthetic */ void lambda$new$5(Context context, boolean z, View view) {
+        AndroidUtilities.runOnUIThread(new JoinGroupAlert$$ExternalSyntheticLambda5(this), 400);
         TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite = new TLRPC$TL_messages_importChatInvite();
         tLRPC$TL_messages_importChatInvite.hash = this.hash;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_importChatInvite, new JoinGroupAlert$$ExternalSyntheticLambda7(this, context, z, tLRPC$TL_messages_importChatInvite), 2);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_importChatInvite, new JoinGroupAlert$$ExternalSyntheticLambda8(this, context, z, tLRPC$TL_messages_importChatInvite), 2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$3(Context context, boolean z, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new JoinGroupAlert$$ExternalSyntheticLambda5(this, tLRPC$TL_error, context, z, tLRPC$TL_messages_importChatInvite));
+    public /* synthetic */ void lambda$new$1() {
+        if (!isDismissed()) {
+            this.requestTextView.setVisibility(4);
+            this.requestProgressView.setVisibility(0);
+        }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$2(TLRPC$TL_error tLRPC$TL_error, Context context, boolean z, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite) {
+    public /* synthetic */ void lambda$new$4(Context context, boolean z, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new JoinGroupAlert$$ExternalSyntheticLambda6(this, tLRPC$TL_error, context, z, tLRPC$TL_messages_importChatInvite));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$3(TLRPC$TL_error tLRPC$TL_error, Context context, boolean z, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
             if (tLRPC$TL_error != null) {
@@ -486,7 +493,7 @@ public class JoinGroupAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(Context context, boolean z, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$new$2(Context context, boolean z, DialogInterface dialogInterface) {
         String str;
         Bulletin.TwoLineLottieLayout twoLineLottieLayout = new Bulletin.TwoLineLottieLayout(context, this.fragment.getResourceProvider());
         twoLineLottieLayout.imageView.setAnimation(NUM, 28, 28);
@@ -501,28 +508,28 @@ public class JoinGroupAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$5(View view) {
+    public /* synthetic */ void lambda$new$6(View view) {
         dismiss();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$8(View view) {
+    public /* synthetic */ void lambda$new$9(View view) {
         dismiss();
         TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite = new TLRPC$TL_messages_importChatInvite();
         tLRPC$TL_messages_importChatInvite.hash = this.hash;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_importChatInvite, new JoinGroupAlert$$ExternalSyntheticLambda8(this, tLRPC$TL_messages_importChatInvite), 2);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_importChatInvite, new JoinGroupAlert$$ExternalSyntheticLambda9(this, tLRPC$TL_messages_importChatInvite), 2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$7(TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$new$8(TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC$Updates) tLObject, false);
         }
-        AndroidUtilities.runOnUIThread(new JoinGroupAlert$$ExternalSyntheticLambda6(this, tLRPC$TL_error, tLObject, tLRPC$TL_messages_importChatInvite));
+        AndroidUtilities.runOnUIThread(new JoinGroupAlert$$ExternalSyntheticLambda7(this, tLRPC$TL_error, tLObject, tLRPC$TL_messages_importChatInvite));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$6(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite) {
+    public /* synthetic */ void lambda$new$7(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
             if (tLRPC$TL_error == null) {

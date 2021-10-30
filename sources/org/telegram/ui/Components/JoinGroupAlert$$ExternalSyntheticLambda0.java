@@ -15,6 +15,6 @@ public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda0 impl
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$new$1(this.f$1, this.f$2, dialogInterface);
+        this.f$0.lambda$new$2(this.f$1, this.f$2, dialogInterface);
     }
 }

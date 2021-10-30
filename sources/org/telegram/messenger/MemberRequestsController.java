@@ -74,9 +74,9 @@ public class MemberRequestsController extends BaseController {
 
     public void onPendingRequestsUpdated(TLRPC$TL_updatePendingJoinRequests tLRPC$TL_updatePendingJoinRequests) {
         long j = -MessageObject.getPeerId(tLRPC$TL_updatePendingJoinRequests.peer);
+        this.firstImportersCache.put(j, (Object) null);
         TLRPC$ChatFull chatFull = getMessagesController().getChatFull(j);
         if (chatFull != null) {
-            this.firstImportersCache.put(j, (Object) null);
             chatFull.requests_pending = tLRPC$TL_updatePendingJoinRequests.requests_pending;
             chatFull.recent_requesters = tLRPC$TL_updatePendingJoinRequests.recent_requesters;
             chatFull.flags |= 131072;

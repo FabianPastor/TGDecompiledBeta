@@ -175,7 +175,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             if (this.isShowLastItemDivider) {
                 this.loadingView.setBackgroundColor(Theme.getColor("windowBackgroundWhite", this.fragment.getResourceProvider()));
             }
-            this.loadingView.setColors("windowBackgroundGray", "windowBackgroundWhite", (String) null);
+            this.loadingView.setColors("windowBackgroundWhite", "windowBackgroundGray", (String) null);
             this.loadingView.setViewType(15);
         }
         return this.loadingView;
@@ -266,8 +266,9 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         this.importer = importer2;
         TLRPC$User tLRPC$User = this.users.get(importer2.user_id);
         if (tLRPC$User != null) {
-            boolean z = false;
-            if (tLRPC$User.photo == null) {
+            this.fragment.getMessagesController().putUser(tLRPC$User, false);
+            Point point = AndroidUtilities.displaySize;
+            if (tLRPC$User.photo == null || (point.x > point.y)) {
                 this.isNeedRestoreList = true;
                 this.fragment.dismissCurrentDialog();
                 Bundle bundle = new Bundle();
@@ -275,13 +276,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                 bundle.putLong("user_id", tLRPC$User.id);
                 bundle.putBoolean("removeFragmentOnChatOpen", false);
                 this.fragment.presentFragment(profileActivity);
-                return;
-            }
-            Point point = AndroidUtilities.displaySize;
-            if (point.x > point.y) {
-                z = true;
-            }
-            if (this.previewDialog == null && !z) {
+            } else if (this.previewDialog == null) {
                 PreviewDialog previewDialog2 = new PreviewDialog(this.fragment.getParentActivity(), (RecyclerListView) memberRequestCell.getParent(), this.fragment.getResourceProvider(), this.isChannel);
                 this.previewDialog = previewDialog2;
                 previewDialog2.setImporter(this.importer, memberRequestCell.getAvatarImageView());
@@ -314,6 +309,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             Utilities.searchQueue.cancelRunnable(this.searchRunnable);
             this.searchRunnable = null;
         }
+        int i = 0;
         if (this.searchRequestId != 0) {
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.searchRequestId, false);
             this.searchRequestId = 0;
@@ -322,23 +318,23 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         if (!this.isDataLoaded || !this.allImporters.isEmpty()) {
             if (TextUtils.isEmpty(str)) {
                 this.adapter.setItems(this.allImporters);
-                if (str == null && this.showSearchMenu) {
-                    this.fragment.getActionBar().createMenu().getItem(0).setVisibility(this.allImporters.isEmpty() ? 8 : 0);
-                }
-                RecyclerListView recyclerListView = this.recyclerView;
-                if (recyclerListView != null) {
-                    recyclerListView.setVisibility(0);
-                }
-                if (this.loadingView != null) {
-                    setLoadingVisible(false, false);
-                }
+                setViewVisible(this.recyclerView, true, true);
+                setViewVisible(this.loadingView, false, false);
                 StickerEmptyView stickerEmptyView = this.searchEmptyView;
                 if (stickerEmptyView != null) {
                     stickerEmptyView.setVisibility(4);
                 }
+                if (str == null && this.showSearchMenu) {
+                    ActionBarMenuItem item = this.fragment.getActionBar().createMenu().getItem(0);
+                    if (this.allImporters.isEmpty()) {
+                        i = 8;
+                    }
+                    item.setVisibility(i);
+                }
             } else {
                 this.adapter.setItems(Collections.emptyList());
-                setLoadingVisible(true, true);
+                setViewVisible(this.recyclerView, false, false);
+                setViewVisible(this.loadingView, true, true);
                 DispatchQueue dispatchQueue = Utilities.searchQueue;
                 MemberRequestsDelegate$$ExternalSyntheticLambda1 memberRequestsDelegate$$ExternalSyntheticLambda1 = new MemberRequestsDelegate$$ExternalSyntheticLambda1(this);
                 this.searchRunnable = memberRequestsDelegate$$ExternalSyntheticLambda1;
@@ -358,7 +354,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             }
             return;
         }
-        setLoadingVisible(false, false);
+        setViewVisible(this.loadingView, false, false);
     }
 
     public void loadMembers() {
@@ -395,7 +391,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$loadMembers$2() {
-        setLoadingVisible(true, true);
+        setViewVisible(this.loadingView, true, true);
     }
 
     /* access modifiers changed from: private */
@@ -410,7 +406,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         if (z) {
             AndroidUtilities.cancelRunOnUIThread(runnable);
         }
-        setLoadingVisible(false, false);
+        setViewVisible(this.loadingView, false, false);
         if (TextUtils.equals(str, this.query) && tLRPC$TL_error == null) {
             this.isDataLoaded = true;
             onImportersLoaded((TLRPC$TL_messages_chatInviteImporters) tLObject, str, z2, false);
@@ -429,14 +425,13 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             this.adapter.appendItems(tLRPC$TL_messages_chatInviteImporters.importers);
         }
         if (TextUtils.isEmpty(str)) {
-            if (this.allImporters.isEmpty()) {
-                this.allImporters.addAll(tLRPC$TL_messages_chatInviteImporters.importers);
-            }
+            this.allImporters.clear();
+            this.allImporters.addAll(tLRPC$TL_messages_chatInviteImporters.importers);
             if (this.showSearchMenu) {
                 this.fragment.getActionBar().createMenu().getItem(0).setVisibility(this.allImporters.isEmpty() ? 8 : 0);
             }
         }
-        onImportersChanged(str, z2);
+        onImportersChanged(str, z2, false);
         if (this.currentImporters.size() < tLRPC$TL_messages_chatInviteImporters.count) {
             z3 = true;
         }
@@ -451,34 +446,38 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         hideChatJoinRequest(tLRPC$TL_chatInviteImporter, false);
     }
 
+    public void setAdapterItemsEnabled(boolean z) {
+        int access$200;
+        if (this.recyclerView != null && (access$200 = this.adapter.extraFirstHolders()) >= 0 && access$200 < this.recyclerView.getChildCount()) {
+            this.recyclerView.getChildAt(access$200).setEnabled(z);
+        }
+    }
+
     /* access modifiers changed from: protected */
-    public void onImportersChanged(String str, boolean z) {
-        boolean z2;
+    public void onImportersChanged(String str, boolean z, boolean z2) {
+        boolean z3;
         if (TextUtils.isEmpty(str)) {
-            z2 = !this.allImporters.isEmpty() || z;
+            z3 = !this.allImporters.isEmpty() || z;
             StickerEmptyView stickerEmptyView = this.emptyView;
             if (stickerEmptyView != null) {
-                stickerEmptyView.setVisibility(z2 ? 4 : 0);
+                stickerEmptyView.setVisibility(z3 ? 4 : 0);
             }
             StickerEmptyView stickerEmptyView2 = this.searchEmptyView;
             if (stickerEmptyView2 != null) {
                 stickerEmptyView2.setVisibility(4);
             }
         } else {
-            z2 = !this.currentImporters.isEmpty() || z;
+            z3 = !this.currentImporters.isEmpty() || z;
             StickerEmptyView stickerEmptyView3 = this.emptyView;
             if (stickerEmptyView3 != null) {
                 stickerEmptyView3.setVisibility(4);
             }
             StickerEmptyView stickerEmptyView4 = this.searchEmptyView;
             if (stickerEmptyView4 != null) {
-                stickerEmptyView4.setVisibility(z2 ? 4 : 0);
+                stickerEmptyView4.setVisibility(z3 ? 4 : 0);
             }
         }
-        RecyclerListView recyclerListView = this.recyclerView;
-        if (recyclerListView != null) {
-            recyclerListView.setVisibility(z2 ? 0 : 4);
-        }
+        setViewVisible(this.recyclerView, z3, true);
         if (this.allImporters.isEmpty()) {
             StickerEmptyView stickerEmptyView5 = this.emptyView;
             if (stickerEmptyView5 != null) {
@@ -488,7 +487,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             if (stickerEmptyView6 != null) {
                 stickerEmptyView6.setVisibility(4);
             }
-            setLoadingVisible(false, false);
+            setViewVisible(this.loadingView, false, false);
             if (this.isSearchExpanded && this.showSearchMenu) {
                 this.fragment.getActionBar().createMenu().closeSearchField(true);
             }
@@ -540,7 +539,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                 }
             }
             this.adapter.removeItem(tLRPC$TL_chatInviteImporter);
-            onImportersChanged(this.query, false);
+            onImportersChanged(this.query, false, true);
             if (z) {
                 Bulletin.MultiLineLayout multiLineLayout = new Bulletin.MultiLineLayout(this.fragment.getParentActivity(), this.fragment.getResourceProvider());
                 multiLineLayout.imageView.setRoundRadius(AndroidUtilities.dp(15.0f));
@@ -577,19 +576,25 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         this.importer = null;
     }
 
-    private void setLoadingVisible(boolean z, boolean z2) {
-        FlickerLoadingView flickerLoadingView = this.loadingView;
-        if (flickerLoadingView != null) {
+    private void setViewVisible(View view, boolean z, boolean z2) {
+        if (view != null) {
             int i = 0;
-            if (z2) {
-                flickerLoadingView.setVisibility(0);
-                this.loadingView.animate().alpha(z ? 1.0f : 0.0f).setDuration(150).start();
-                return;
+            boolean z3 = view.getVisibility() == 0;
+            float f = z ? 1.0f : 0.0f;
+            if (z != z3 || f != view.getAlpha()) {
+                if (z2) {
+                    if (z) {
+                        view.setAlpha(0.0f);
+                    }
+                    view.setVisibility(0);
+                    view.animate().alpha(f).setDuration(150).start();
+                    return;
+                }
+                if (!z) {
+                    i = 4;
+                }
+                view.setVisibility(i);
             }
-            if (!z) {
-                i = 4;
-            }
-            flickerLoadingView.setVisibility(i);
         }
     }
 
@@ -626,13 +631,13 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             if (viewHolder.getItemViewType() == 0) {
                 MemberRequestCell memberRequestCell = (MemberRequestCell) viewHolder.itemView;
                 int extraFirstHolders = i - extraFirstHolders();
-                LongSparseArray access$600 = MemberRequestsDelegate.this.users;
+                LongSparseArray access$700 = MemberRequestsDelegate.this.users;
                 TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter = (TLRPC$TL_chatInviteImporter) MemberRequestsDelegate.this.currentImporters.get(extraFirstHolders);
                 boolean z = true;
                 if (extraFirstHolders == MemberRequestsDelegate.this.currentImporters.size() - 1) {
                     z = false;
                 }
-                memberRequestCell.setData(access$600, tLRPC$TL_chatInviteImporter, z);
+                memberRequestCell.setData(access$700, tLRPC$TL_chatInviteImporter, z);
             } else if (viewHolder.getItemViewType() == 2) {
                 viewHolder.itemView.requestLayout();
             }
@@ -695,7 +700,8 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             }
         }
 
-        private int extraFirstHolders() {
+        /* access modifiers changed from: private */
+        public int extraFirstHolders() {
             return MemberRequestsDelegate.this.isShowLastItemDivider ^ true ? 1 : 0;
         }
 
@@ -797,11 +803,11 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                     int dp2 = measuredHeight2 + AndroidUtilities.dp(12.0f);
                     PreviewDialog.this.pagerShadowDrawable.setBounds(PreviewDialog.this.viewPager.getLeft() - PreviewDialog.this.shadowPaddingLeft, PreviewDialog.this.viewPager.getTop() - PreviewDialog.this.shadowPaddingTop, PreviewDialog.this.viewPager.getRight() + PreviewDialog.this.shadowPaddingLeft, PreviewDialog.this.shadowPaddingTop + dp2);
                     PreviewDialog.this.popupLayout.layout((PreviewDialog.this.viewPager.getRight() - PreviewDialog.this.popupLayout.getMeasuredWidth()) + PreviewDialog.this.shadowPaddingLeft, dp2, PreviewDialog.this.viewPager.getRight() + PreviewDialog.this.shadowPaddingLeft, PreviewDialog.this.popupLayout.getMeasuredHeight() + dp2);
-                    ActionBarPopupWindow.ActionBarPopupWindowLayout access$1200 = PreviewDialog.this.popupLayout;
+                    ActionBarPopupWindow.ActionBarPopupWindowLayout access$1300 = PreviewDialog.this.popupLayout;
                     if (PreviewDialog.this.popupLayout.getBottom() < i4) {
                         i5 = 0;
                     }
-                    access$1200.setVisibility(i5);
+                    access$1300.setVisibility(i5);
                     int dp3 = AndroidUtilities.dp(6.0f);
                     this.rectF.set((float) PreviewDialog.this.viewPager.getLeft(), (float) PreviewDialog.this.viewPager.getTop(), (float) PreviewDialog.this.viewPager.getRight(), (float) (PreviewDialog.this.viewPager.getTop() + (dp3 * 2)));
                     this.clipPath.reset();

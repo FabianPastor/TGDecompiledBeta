@@ -798,8 +798,8 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         }
         canvas.saveLayerAlpha(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), (int) ((1.0f - this.enterAlpha) * 255.0f), 31);
         this.globalGradientView.setViewType(4);
-        this.globalGradientView.updateGradient();
         this.globalGradientView.updateColors();
+        this.globalGradientView.updateGradient();
         this.globalGradientView.draw(canvas);
         canvas.restore();
         canvas.saveLayerAlpha(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), (int) (this.enterAlpha * 255.0f), 31);

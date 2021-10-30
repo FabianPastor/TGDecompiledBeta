@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatThemeController$$ExternalSyntheticLambda1
     }
 
     public final void run() {
-        ChatThemeController.lambda$getWallpaperBitmap$5(this.f$0, this.f$1);
+        ChatThemeController.lambda$getWallpaperBitmap$6(this.f$0, this.f$1);
     }
 }

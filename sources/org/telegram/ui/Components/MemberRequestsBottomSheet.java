@@ -1,7 +1,6 @@
 package org.telegram.ui.Components;
 
 import android.app.Activity;
-import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -28,13 +27,16 @@ public class MemberRequestsBottomSheet extends UsersAlertBase {
         this.isEmptyViewVisible = false;
         AnonymousClass1 r4 = new MemberRequestsDelegate(baseFragment, j, false) {
             /* access modifiers changed from: protected */
-            public void onImportersChanged(String str, boolean z) {
-                super.onImportersChanged(str, z);
+            public void onImportersChanged(String str, boolean z, boolean z2) {
                 if (!hasAllImporters()) {
                     if (MemberRequestsBottomSheet.this.membersEmptyView.getVisibility() != 4) {
                         MemberRequestsBottomSheet.this.membersEmptyView.setVisibility(4);
                     }
                     MemberRequestsBottomSheet.this.dismiss();
+                } else if (z2) {
+                    MemberRequestsBottomSheet.this.searchView.searchEditText.setText("");
+                } else {
+                    super.onImportersChanged(str, z, z2);
                 }
             }
         };
@@ -43,8 +45,8 @@ public class MemberRequestsBottomSheet extends UsersAlertBase {
         setDimBehindAlpha(75);
         this.searchView.searchEditText.setHint(LocaleController.getString("SearchMemberRequests", NUM));
         MemberRequestsDelegate.Adapter adapter = r4.getAdapter();
-        this.searchListViewAdapter = adapter;
         this.listViewAdapter = adapter;
+        this.searchListViewAdapter = adapter;
         this.listView.setAdapter(adapter);
         r4.setRecyclerView(this.listView);
         int indexOfChild = ((ViewGroup) this.listView.getParent()).indexOfChild(this.listView);
@@ -110,17 +112,13 @@ public class MemberRequestsBottomSheet extends UsersAlertBase {
     public void search(String str) {
         super.search(str);
         this.delegate.setQuery(str);
-        if (TextUtils.isEmpty(str)) {
-            this.listView.setAnimateEmptyView(false, 0);
-            this.listView.setAdapter(this.listViewAdapter);
-            this.listView.setAnimateEmptyView(true, 0);
-        }
     }
 
     /* access modifiers changed from: protected */
     public void onSearchViewTouched(MotionEvent motionEvent, EditTextBoldCursor editTextBoldCursor) {
         if (motionEvent.getAction() == 0) {
             this.yOffset = (float) this.scrollOffsetY;
+            this.delegate.setAdapterItemsEnabled(false);
         } else if (motionEvent.getAction() == 1 && Math.abs(((float) this.scrollOffsetY) - this.yOffset) < ((float) this.touchSlop) && !this.enterEventSent) {
             Activity findActivity = AndroidUtilities.findActivity(getContext());
             BaseFragment baseFragment = null;
@@ -132,12 +130,15 @@ public class MemberRequestsBottomSheet extends UsersAlertBase {
                 boolean needEnterText = ((ChatActivity) baseFragment).needEnterText();
                 this.enterEventSent = true;
                 AndroidUtilities.runOnUIThread(new MemberRequestsBottomSheet$$ExternalSyntheticLambda2(this, editTextBoldCursor), needEnterText ? 200 : 0);
-                return;
+            } else {
+                this.enterEventSent = true;
+                setFocusable(true);
+                editTextBoldCursor.requestFocus();
+                AndroidUtilities.runOnUIThread(new MemberRequestsBottomSheet$$ExternalSyntheticLambda0(editTextBoldCursor));
             }
-            this.enterEventSent = true;
-            setFocusable(true);
-            editTextBoldCursor.requestFocus();
-            AndroidUtilities.runOnUIThread(new MemberRequestsBottomSheet$$ExternalSyntheticLambda0(editTextBoldCursor));
+        }
+        if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
+            this.delegate.setAdapterItemsEnabled(true);
         }
     }
 

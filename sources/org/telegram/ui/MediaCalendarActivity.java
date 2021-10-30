@@ -56,6 +56,8 @@ public class MediaCalendarActivity extends BaseFragment {
     public boolean checkEnterItems;
     FrameLayout contentView;
     private long dialogId;
+    boolean endReached;
+    private boolean isOpened;
     int lastId;
     LinearLayoutManager layoutManager;
     RecyclerListView listView;
@@ -72,6 +74,10 @@ public class MediaCalendarActivity extends BaseFragment {
 
     public interface Callback {
         void onDateSelected(int i, int i2);
+    }
+
+    public boolean needDelayOpenAnimation() {
+        return true;
     }
 
     public MediaCalendarActivity(Bundle bundle, int i) {
@@ -134,13 +140,6 @@ public class MediaCalendarActivity extends BaseFragment {
                 mutate.draw(canvas);
             }
         }, LayoutHelper.createFrame(-1, 38.0f, 0, 0.0f, 0.0f, 0.0f, 0.0f));
-        this.actionBar.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        this.activeTextPaint.setColor(-1);
-        this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.actionBar.setTitleColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.actionBar.setBackButtonImage(NUM);
-        this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteBlackText"), false);
-        this.actionBar.setItemsBackgroundColor(Theme.getColor("listSelectorSDK21"), false);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == -1) {
@@ -154,23 +153,40 @@ public class MediaCalendarActivity extends BaseFragment {
         this.startFromMonth = instance.get(2);
         this.monthCount = 3;
         loadNext();
+        updateColors();
+        this.activeTextPaint.setColor(-1);
+        this.actionBar.setBackButtonImage(NUM);
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    public void updateColors() {
+        this.actionBar.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+        this.activeTextPaint.setColor(-1);
+        this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.actionBar.setTitleColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteBlackText"), false);
+        this.actionBar.setItemsBackgroundColor(Theme.getColor("listSelectorSDK21"), false);
+    }
+
     private void loadNext() {
-        this.loading = true;
-        TLRPC$TL_messages_getSearchResultsCalendar tLRPC$TL_messages_getSearchResultsCalendar = new TLRPC$TL_messages_getSearchResultsCalendar();
-        int i = this.photosVideosTypeFilter;
-        if (i == 1) {
-            tLRPC$TL_messages_getSearchResultsCalendar.filter = new TLRPC$TL_inputMessagesFilterPhotos();
-        } else if (i == 2) {
-            tLRPC$TL_messages_getSearchResultsCalendar.filter = new TLRPC$TL_inputMessagesFilterVideo();
-        } else {
-            tLRPC$TL_messages_getSearchResultsCalendar.filter = new TLRPC$TL_inputMessagesFilterPhotoVideo();
+        if (!this.loading && !this.endReached) {
+            this.loading = true;
+            TLRPC$TL_messages_getSearchResultsCalendar tLRPC$TL_messages_getSearchResultsCalendar = new TLRPC$TL_messages_getSearchResultsCalendar();
+            int i = this.photosVideosTypeFilter;
+            if (i == 1) {
+                tLRPC$TL_messages_getSearchResultsCalendar.filter = new TLRPC$TL_inputMessagesFilterPhotos();
+            } else if (i == 2) {
+                tLRPC$TL_messages_getSearchResultsCalendar.filter = new TLRPC$TL_inputMessagesFilterVideo();
+            } else {
+                tLRPC$TL_messages_getSearchResultsCalendar.filter = new TLRPC$TL_inputMessagesFilterPhotoVideo();
+            }
+            tLRPC$TL_messages_getSearchResultsCalendar.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(this.dialogId);
+            tLRPC$TL_messages_getSearchResultsCalendar.offset_id = this.lastId;
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_getSearchResultsCalendar, new MediaCalendarActivity$$ExternalSyntheticLambda1(this, Calendar.getInstance()));
         }
-        tLRPC$TL_messages_getSearchResultsCalendar.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(this.dialogId);
-        tLRPC$TL_messages_getSearchResultsCalendar.offset_id = this.lastId;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_getSearchResultsCalendar, new MediaCalendarActivity$$ExternalSyntheticLambda1(this, Calendar.getInstance()));
     }
 
     /* access modifiers changed from: private */
@@ -182,7 +198,11 @@ public class MediaCalendarActivity extends BaseFragment {
     public /* synthetic */ void lambda$loadNext$0(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, Calendar calendar) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_searchResultsCalendar tLRPC$TL_messages_searchResultsCalendar = (TLRPC$TL_messages_searchResultsCalendar) tLObject;
-            this.monthCount = ((int) (((calendar.getTimeInMillis() / 1000) - ((long) tLRPC$TL_messages_searchResultsCalendar.min_date)) / 2629800)) + 2;
+            int timeInMillis = ((int) (((calendar.getTimeInMillis() / 1000) - ((long) tLRPC$TL_messages_searchResultsCalendar.min_date)) / 2629800)) + 1;
+            this.monthCount = timeInMillis;
+            if (timeInMillis < 3) {
+                this.monthCount = 3;
+            }
             for (int i = 0; i < tLRPC$TL_messages_searchResultsCalendar.periods.size(); i++) {
                 calendar.setTimeInMillis(((long) tLRPC$TL_messages_searchResultsCalendar.periods.get(i).date) * 1000);
                 int i2 = (calendar.get(1) * 100) + calendar.get(2);
@@ -206,17 +226,23 @@ public class MediaCalendarActivity extends BaseFragment {
             if (!tLRPC$TL_messages_searchResultsCalendar.messages.isEmpty()) {
                 ArrayList<TLRPC$Message> arrayList = tLRPC$TL_messages_searchResultsCalendar.messages;
                 this.lastId = arrayList.get(arrayList.size() - 1).id;
+                this.endReached = false;
                 checkLoadNext();
+            } else {
+                this.endReached = true;
             }
-            this.checkEnterItems = true;
+            if (this.isOpened) {
+                this.checkEnterItems = true;
+            }
             this.listView.invalidate();
             this.adapter.notifyDataSetChanged();
+            resumeDelayedFragmentAnimation();
         }
     }
 
     /* access modifiers changed from: private */
     public void checkLoadNext() {
-        if (!this.loading) {
+        if (!this.loading && !this.endReached) {
             int i = Integer.MAX_VALUE;
             for (int i2 = 0; i2 < this.listView.getChildCount(); i2++) {
                 View childAt = this.listView.getChildAt(i2);
@@ -531,6 +557,26 @@ public class MediaCalendarActivity extends BaseFragment {
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
+        AnonymousClass5 r8 = new ThemeDescription.ThemeDescriptionDelegate() {
+            public /* synthetic */ void onAnimationProgress(float f) {
+                ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+            }
+
+            public void didSetColor() {
+                MediaCalendarActivity.this.updateColors();
+            }
+        };
+        new ArrayList();
+        AnonymousClass5 r6 = r8;
+        new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r6, "windowBackgroundWhite");
+        new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r6, "windowBackgroundWhiteBlackText");
+        new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r6, "listSelectorSDK21");
         return super.getThemeDescriptions();
+    }
+
+    /* access modifiers changed from: protected */
+    public void onTransitionAnimationStart(boolean z, boolean z2) {
+        super.onTransitionAnimationStart(z, z2);
+        this.isOpened = true;
     }
 }

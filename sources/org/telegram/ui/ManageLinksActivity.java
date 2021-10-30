@@ -2589,9 +2589,13 @@ public class ManageLinksActivity extends BaseFragment {
 
     /* access modifiers changed from: protected */
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
+        InviteLinkBottomSheet inviteLinkBottomSheet2;
         super.onTransitionAnimationEnd(z, z2);
         if (z) {
             this.isOpened = true;
+            if (z2 && (inviteLinkBottomSheet2 = this.inviteLinkBottomSheet) != null && inviteLinkBottomSheet2.isNeedReopen) {
+                inviteLinkBottomSheet2.show();
+            }
         }
         NotificationCenter.getInstance(this.currentAccount).onAnimationFinish(this.animationIndex);
     }

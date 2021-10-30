@@ -61,6 +61,7 @@ public class LinkEditActivity extends BaseFragment {
     AlertDialog progressDialog;
     private TextSettingsCell revokeLink;
     boolean scrollToEnd;
+    boolean scrollToStart;
     /* access modifiers changed from: private */
     public ScrollView scrollView;
     private SlideChooseView timeChooseView;
@@ -70,8 +71,6 @@ public class LinkEditActivity extends BaseFragment {
     private SlideChooseView usesChooseView;
     /* access modifiers changed from: private */
     public EditText usesEditText;
-    /* access modifiers changed from: private */
-    public boolean usesHasFocus;
     private HeaderCell usesHeaderCell;
 
     public interface Callback {
@@ -160,11 +159,15 @@ public class LinkEditActivity extends BaseFragment {
                 measureKeyboardHeight();
                 int i3 = this.oldKeyboardHeight;
                 int i4 = this.keyboardHeight;
-                if (i3 != i4 && i4 > AndroidUtilities.dp(20.0f) && LinkEditActivity.this.usesHasFocus) {
+                if (i3 != i4 && i4 > AndroidUtilities.dp(20.0f) && LinkEditActivity.this.usesEditText.isCursorVisible()) {
                     LinkEditActivity.this.scrollToEnd = true;
                     invalidate();
+                } else if (LinkEditActivity.this.scrollView.getScrollY() == 0 && !LinkEditActivity.this.usesEditText.isCursorVisible()) {
+                    LinkEditActivity.this.scrollToStart = true;
+                    invalidate();
                 }
-                if (this.keyboardHeight < AndroidUtilities.dp(20.0f)) {
+                int i5 = this.keyboardHeight;
+                if (i5 != 0 && i5 < AndroidUtilities.dp(20.0f)) {
                     LinkEditActivity.this.usesEditText.clearFocus();
                 }
                 this.oldKeyboardHeight = this.keyboardHeight;
@@ -191,6 +194,9 @@ public class LinkEditActivity extends BaseFragment {
                 if (linkEditActivity.scrollToEnd) {
                     linkEditActivity.scrollToEnd = false;
                     linkEditActivity.scrollView.smoothScrollTo(0, Math.max(0, LinkEditActivity.this.scrollView.getChildAt(0).getMeasuredHeight() - LinkEditActivity.this.scrollView.getMeasuredHeight()));
+                } else if (linkEditActivity.scrollToStart) {
+                    linkEditActivity.scrollToStart = false;
+                    linkEditActivity.scrollView.smoothScrollTo(0, 0);
                 }
             }
         };
@@ -285,7 +291,7 @@ public class LinkEditActivity extends BaseFragment {
         this.timeEditText.setTextSize(1, 16.0f);
         this.timeEditText.setHint(LocaleController.getString("TimeLimitHint", NUM));
         this.timeEditText.setOnClickListener(new LinkEditActivity$$ExternalSyntheticLambda4(this, context2));
-        this.timeChooseView.setCallback(new LinkEditActivity$$ExternalSyntheticLambda12(this));
+        this.timeChooseView.setCallback(new LinkEditActivity$$ExternalSyntheticLambda11(this));
         resetDates();
         r4.addView(this.timeEditText, LayoutHelper.createLinear(-1, 50));
         TextInfoPrivacyCell textInfoPrivacyCell2 = new TextInfoPrivacyCell(context2);
@@ -298,7 +304,7 @@ public class LinkEditActivity extends BaseFragment {
         r4.addView(this.usesHeaderCell);
         SlideChooseView slideChooseView2 = new SlideChooseView(context2);
         this.usesChooseView = slideChooseView2;
-        slideChooseView2.setCallback(new LinkEditActivity$$ExternalSyntheticLambda13(this));
+        slideChooseView2.setCallback(new LinkEditActivity$$ExternalSyntheticLambda12(this));
         resetUses();
         r4.addView(this.usesChooseView);
         AnonymousClass5 r52 = new EditText(this, context2) {
@@ -342,7 +348,6 @@ public class LinkEditActivity extends BaseFragment {
                 }
             }
         });
-        this.usesEditText.setOnFocusChangeListener(new LinkEditActivity$$ExternalSyntheticLambda5(this));
         r4.addView(this.usesEditText, LayoutHelper.createLinear(-1, 50));
         TextInfoPrivacyCell textInfoPrivacyCell3 = new TextInfoPrivacyCell(context2);
         this.dividerUses = textInfoPrivacyCell3;
@@ -400,7 +405,7 @@ public class LinkEditActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$2(Context context, View view) {
-        AlertsCreator.createDatePickerDialog(context, -1, new LinkEditActivity$$ExternalSyntheticLambda11(this));
+        AlertsCreator.createDatePickerDialog(context, -1, new LinkEditActivity$$ExternalSyntheticLambda10(this));
     }
 
     /* access modifiers changed from: private */
@@ -425,12 +430,7 @@ public class LinkEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$5(View view, boolean z) {
-        this.usesHasFocus = z;
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$7(View view) {
+    public /* synthetic */ void lambda$createView$6(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setMessage(LocaleController.getString("RevokeAlert", NUM));
         builder.setTitle(LocaleController.getString("RevokeLink", NUM));
@@ -440,7 +440,7 @@ public class LinkEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$6(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createView$5(DialogInterface dialogInterface, int i) {
         this.callback.revokeLink(this.inviteToEdit);
         finishFragment();
     }
@@ -452,7 +452,7 @@ public class LinkEditActivity extends BaseFragment {
     /* JADX WARNING: Removed duplicated region for block: B:57:0x01a5  */
     /* JADX WARNING: Removed duplicated region for block: B:58:0x01be  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$createView$12(android.content.Context r9, android.view.View r10) {
+    public /* synthetic */ void lambda$createView$11(android.content.Context r9, android.view.View r10) {
         /*
             r8 = this;
             boolean r10 = r8.loading
@@ -550,7 +550,7 @@ public class LinkEditActivity extends BaseFragment {
             r9.usage_limit = r1
         L_0x00cc:
             org.telegram.tgnet.ConnectionsManager r10 = r8.getConnectionsManager()
-            org.telegram.ui.LinkEditActivity$$ExternalSyntheticLambda8 r0 = new org.telegram.ui.LinkEditActivity$$ExternalSyntheticLambda8
+            org.telegram.ui.LinkEditActivity$$ExternalSyntheticLambda7 r0 = new org.telegram.ui.LinkEditActivity$$ExternalSyntheticLambda7
             r0.<init>(r8)
             r10.sendRequest(r9, r0)
             goto L_0x01c1
@@ -661,7 +661,7 @@ public class LinkEditActivity extends BaseFragment {
             r8.progressDialog = r1
             r1.showDelayed(r2)
             org.telegram.tgnet.ConnectionsManager r9 = r8.getConnectionsManager()
-            org.telegram.ui.LinkEditActivity$$ExternalSyntheticLambda9 r0 = new org.telegram.ui.LinkEditActivity$$ExternalSyntheticLambda9
+            org.telegram.ui.LinkEditActivity$$ExternalSyntheticLambda8 r0 = new org.telegram.ui.LinkEditActivity$$ExternalSyntheticLambda8
             r0.<init>(r8)
             r9.sendRequest(r10, r0)
             goto L_0x01c1
@@ -670,16 +670,16 @@ public class LinkEditActivity extends BaseFragment {
         L_0x01c1:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LinkEditActivity.lambda$createView$12(android.content.Context, android.view.View):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LinkEditActivity.lambda$createView$11(android.content.Context, android.view.View):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$9(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$createView$8(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new LinkEditActivity$$ExternalSyntheticLambda6(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$8(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$createView$7(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.loading = false;
         AlertDialog alertDialog = this.progressDialog;
         if (alertDialog != null) {
@@ -697,12 +697,12 @@ public class LinkEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$11(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new LinkEditActivity$$ExternalSyntheticLambda7(this, tLRPC$TL_error, tLObject));
+    public /* synthetic */ void lambda$createView$10(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new LinkEditActivity$$ExternalSyntheticLambda5(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$10(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$createView$9(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.loading = false;
         AlertDialog alertDialog = this.progressDialog;
         if (alertDialog != null) {
@@ -886,7 +886,7 @@ public class LinkEditActivity extends BaseFragment {
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        LinkEditActivity$$ExternalSyntheticLambda10 linkEditActivity$$ExternalSyntheticLambda10 = new LinkEditActivity$$ExternalSyntheticLambda10(this);
+        LinkEditActivity$$ExternalSyntheticLambda9 linkEditActivity$$ExternalSyntheticLambda9 = new LinkEditActivity$$ExternalSyntheticLambda9(this);
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
         arrayList.add(new ThemeDescription((View) this.timeHeaderCell, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
         arrayList.add(new ThemeDescription((View) this.usesHeaderCell, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
@@ -904,19 +904,19 @@ public class LinkEditActivity extends BaseFragment {
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
-        LinkEditActivity$$ExternalSyntheticLambda10 linkEditActivity$$ExternalSyntheticLambda102 = linkEditActivity$$ExternalSyntheticLambda10;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda102, "windowBackgroundGrayShadow"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda102, "featuredStickers_addButton"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda102, "featuredStickers_addButtonPressed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda102, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda102, "windowBackgroundWhiteGrayText"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda102, "featuredStickers_buttonText"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda102, "windowBackgroundWhiteRedText5"));
+        LinkEditActivity$$ExternalSyntheticLambda9 linkEditActivity$$ExternalSyntheticLambda92 = linkEditActivity$$ExternalSyntheticLambda9;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda92, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda92, "featuredStickers_addButton"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda92, "featuredStickers_addButtonPressed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda92, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda92, "windowBackgroundWhiteGrayText"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda92, "featuredStickers_buttonText"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, linkEditActivity$$ExternalSyntheticLambda92, "windowBackgroundWhiteRedText5"));
         return arrayList;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getThemeDescriptions$13() {
+    public /* synthetic */ void lambda$getThemeDescriptions$12() {
         TextInfoPrivacyCell textInfoPrivacyCell = this.dividerUses;
         if (textInfoPrivacyCell != null) {
             Context context = textInfoPrivacyCell.getContext();

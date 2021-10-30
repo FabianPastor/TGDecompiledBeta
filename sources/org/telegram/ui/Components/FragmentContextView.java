@@ -702,29 +702,29 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (i2 == 0) {
             MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
             if (this.fragment != null && playingMessageObject != null) {
-                if (playingMessageObject.isMusic()) {
+                if (!playingMessageObject.isMusic()) {
+                    BaseFragment baseFragment2 = this.fragment;
+                    if (baseFragment2 instanceof ChatActivity) {
+                        j2 = ((ChatActivity) baseFragment2).getDialogId();
+                    }
+                    if (playingMessageObject.getDialogId() == j2) {
+                        ((ChatActivity) this.fragment).scrollToMessageId(playingMessageObject.getId(), 0, false, 0, true, 0);
+                        return;
+                    }
+                    long dialogId = playingMessageObject.getDialogId();
+                    Bundle bundle = new Bundle();
+                    if (DialogObject.isEncryptedDialog(dialogId)) {
+                        bundle.putInt("enc_id", DialogObject.getEncryptedChatId(dialogId));
+                    } else if (DialogObject.isUserDialog(dialogId)) {
+                        bundle.putLong("user_id", dialogId);
+                    } else {
+                        bundle.putLong("chat_id", -dialogId);
+                    }
+                    bundle.putInt("message_id", playingMessageObject.getId());
+                    this.fragment.presentFragment(new ChatActivity(bundle), this.fragment instanceof ChatActivity);
+                } else if (getContext() instanceof LaunchActivity) {
                     this.fragment.showDialog(new AudioPlayerAlert(getContext(), resourcesProvider2));
-                    return;
                 }
-                BaseFragment baseFragment2 = this.fragment;
-                if (baseFragment2 instanceof ChatActivity) {
-                    j2 = ((ChatActivity) baseFragment2).getDialogId();
-                }
-                if (playingMessageObject.getDialogId() == j2) {
-                    ((ChatActivity) this.fragment).scrollToMessageId(playingMessageObject.getId(), 0, false, 0, true, 0);
-                    return;
-                }
-                long dialogId = playingMessageObject.getDialogId();
-                Bundle bundle = new Bundle();
-                if (DialogObject.isEncryptedDialog(dialogId)) {
-                    bundle.putInt("enc_id", DialogObject.getEncryptedChatId(dialogId));
-                } else if (DialogObject.isUserDialog(dialogId)) {
-                    bundle.putLong("user_id", dialogId);
-                } else {
-                    bundle.putLong("chat_id", -dialogId);
-                }
-                bundle.putInt("message_id", playingMessageObject.getId());
-                this.fragment.presentFragment(new ChatActivity(bundle), this.fragment instanceof ChatActivity);
             }
         } else if (i2 == 1) {
             getContext().startActivity(new Intent(getContext(), LaunchActivity.class).setAction("voip"));

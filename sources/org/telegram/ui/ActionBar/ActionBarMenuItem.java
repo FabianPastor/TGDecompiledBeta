@@ -725,7 +725,7 @@ public class ActionBarMenuItem extends FrameLayout {
             r3 = -2
             r4 = 0
             r5 = 0
-            r6 = 1086324736(0x40CLASSNAME, float:6.0)
+            r6 = 1082130432(0x40800000, float:4.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r6 = -r6
             r7 = 0

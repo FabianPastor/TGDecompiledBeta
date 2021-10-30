@@ -3148,4 +3148,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     public ArrayList<Runnable> getLoadingOperations() {
         return this.loadingOperations;
     }
+
+    public void moveImageToFront() {
+        ImageLoader.getInstance().moveToFront(this.currentImageKey);
+        ImageLoader.getInstance().moveToFront(this.currentThumbKey);
+    }
 }

@@ -146,11 +146,11 @@ public class ChatActivityMemberRequestsDelegate {
     private void showBottomSheet() {
         if (this.bottomSheet == null) {
             this.bottomSheet = new MemberRequestsBottomSheet(this.fragment, this.currentChat.id) {
-                public void dismissInternal() {
-                    super.dismissInternal();
+                public void dismiss() {
                     if (!ChatActivityMemberRequestsDelegate.this.bottomSheet.isNeedRestoreDialog()) {
                         MemberRequestsBottomSheet unused = ChatActivityMemberRequestsDelegate.this.bottomSheet = null;
                     }
+                    super.dismiss();
                 }
             };
         }

@@ -70,7 +70,7 @@ public class ChatThemeController extends BaseController {
         if (list == null || list.isEmpty() || z2) {
             TLRPC$TL_account_getChatThemes tLRPC$TL_account_getChatThemes = new TLRPC$TL_account_getChatThemes();
             tLRPC$TL_account_getChatThemes.hash = themesHash;
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_account_getChatThemes, new ChatThemeController$$ExternalSyntheticLambda5(resultCallback, z));
+            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_account_getChatThemes, new ChatThemeController$$ExternalSyntheticLambda6(resultCallback, z));
             return;
         }
         ArrayList<EmojiThemes> arrayList = new ArrayList<>(allChatThemes);
@@ -155,7 +155,7 @@ public class ChatThemeController extends BaseController {
             goto L_0x00a4
         L_0x009a:
             r0 = 0
-            org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda3 r7 = new org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda3
+            org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda4 r7 = new org.telegram.messenger.ChatThemeController$$ExternalSyntheticLambda4
             r7.<init>(r8, r9)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)
             r7 = 1
@@ -313,7 +313,7 @@ public class ChatThemeController extends BaseController {
     public static void preloadAllWallpaperThumbs(boolean z) {
         for (EmojiThemes next : allChatThemes) {
             if (!themeIdWallpaperThumbMap.containsKey(Long.valueOf(next.getTlTheme(z ? 1 : 0).id))) {
-                next.loadWallpaperThumb(z, ChatThemeController$$ExternalSyntheticLambda6.INSTANCE);
+                next.loadWallpaperThumb(z, ChatThemeController$$ExternalSyntheticLambda7.INSTANCE);
             }
         }
     }
@@ -338,7 +338,7 @@ public class ChatThemeController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$getWallpaperBitmap$5(File file, ResultCallback resultCallback) {
+    public static /* synthetic */ void lambda$getWallpaperBitmap$6(File file, ResultCallback resultCallback) {
         Bitmap bitmap = null;
         try {
             if (file.exists()) {
@@ -347,7 +347,9 @@ public class ChatThemeController extends BaseController {
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        resultCallback.onComplete(bitmap);
+        if (resultCallback != null) {
+            AndroidUtilities.runOnUIThread(new ChatThemeController$$ExternalSyntheticLambda3(resultCallback, bitmap));
+        }
     }
 
     private static File getPatternFile(long j) {
@@ -359,7 +361,7 @@ public class ChatThemeController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$saveWallpaperBitmap$6(File file, Bitmap bitmap) {
+    public static /* synthetic */ void lambda$saveWallpaperBitmap$7(File file, Bitmap bitmap) {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 87, fileOutputStream);

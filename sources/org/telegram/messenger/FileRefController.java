@@ -1385,7 +1385,7 @@ public class FileRefController extends BaseController {
             if (r12 >= r2) goto L_0x01d9
             java.util.ArrayList<org.telegram.tgnet.TLRPC$WallPaper> r8 = r0.wallpapers
             java.lang.Object r8 = r8.get(r12)
-            org.telegram.tgnet.TLRPC$TL_wallPaper r8 = (org.telegram.tgnet.TLRPC$TL_wallPaper) r8
+            org.telegram.tgnet.TLRPC$WallPaper r8 = (org.telegram.tgnet.TLRPC$WallPaper) r8
             org.telegram.tgnet.TLRPC$Document r8 = r8.document
             org.telegram.tgnet.TLRPC$InputFileLocation r13 = r11.location
             byte[] r8 = r6.getFileReference((org.telegram.tgnet.TLRPC$Document) r8, (org.telegram.tgnet.TLRPC$InputFileLocation) r13, (boolean[]) r4, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r5)

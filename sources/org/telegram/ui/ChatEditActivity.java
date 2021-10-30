@@ -2097,7 +2097,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 TextCell textCell3 = this.memberRequestsCell;
                 if (textCell3 != null) {
                     if (textCell3.getParent() == null) {
-                        this.infoContainer.addView(this.memberRequestsCell, this.infoContainer.indexOfChild(this.membersCell), LayoutHelper.createLinear(-1, -2));
+                        this.infoContainer.addView(this.memberRequestsCell, this.infoContainer.indexOfChild(this.membersCell) + 1, LayoutHelper.createLinear(-1, -2));
                     }
                     this.memberRequestsCell.setVisibility(this.info.requests_pending > 0 ? 0 : 8);
                 }
