@@ -695,6 +695,13 @@
     <string name="CacheWasCleared">%s freed on your device!</string>
     <string name="CalculatingSize">Calculating...</string>
     <string name="Calendar">Calendar</string>
+    <string name="CalendarWeekNameShortFriday">Friday</string>
+    <string name="CalendarWeekNameShortMonday">M</string>
+    <string name="CalendarWeekNameShortSaturday">S</string>
+    <string name="CalendarWeekNameShortSunday">S</string>
+    <string name="CalendarWeekNameShortThursday">T</string>
+    <string name="CalendarWeekNameShortTuesday">T</string>
+    <string name="CalendarWeekNameShortWednesday">W</string>
     <string name="Call">Call</string>
     <string name="CallAgain">Call Again</string>
     <string name="CallAlert">Are you sure you want to call **%1$s**?</string>

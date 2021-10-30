@@ -66,6 +66,8 @@ public class MediaCalendarActivity extends BaseFragment {
     int minMontYear;
     int monthCount;
     private int photosVideosTypeFilter;
+    int selectedMonth;
+    int selectedYear;
     int startFromMonth;
     int startFromYear;
     int startOffset = 0;
@@ -80,9 +82,15 @@ public class MediaCalendarActivity extends BaseFragment {
         return true;
     }
 
-    public MediaCalendarActivity(Bundle bundle, int i) {
+    public MediaCalendarActivity(Bundle bundle, int i, int i2) {
         super(bundle);
         this.photosVideosTypeFilter = i;
+        if (i2 != 0) {
+            Calendar instance = Calendar.getInstance();
+            instance.setTimeInMillis(((long) i2) * 1000);
+            this.selectedYear = instance.get(1);
+            this.selectedMonth = instance.get(2);
+        }
     }
 
     public boolean onFragmentCreate() {
@@ -126,7 +134,7 @@ public class MediaCalendarActivity extends BaseFragment {
             }
         });
         this.contentView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 0, 0.0f, 36.0f, 0.0f, 0.0f));
-        final String[] strArr = {"M", "T", "W", "T", "F", "S", "S"};
+        final String[] strArr = {LocaleController.getString("CalendarWeekNameShortMonday", NUM), LocaleController.getString("CalendarWeekNameShortTuesday", NUM), LocaleController.getString("CalendarWeekNameShortWednesday", NUM), LocaleController.getString("CalendarWeekNameShortThursday", NUM), LocaleController.getString("CalendarWeekNameShortFriday", NUM), LocaleController.getString("CalendarWeekNameShortSaturday", NUM), LocaleController.getString("CalendarWeekNameShortSunday", NUM)};
         final Drawable mutate = ContextCompat.getDrawable(context, NUM).mutate();
         this.contentView.addView(new View(context) {
             /* access modifiers changed from: protected */
@@ -150,8 +158,17 @@ public class MediaCalendarActivity extends BaseFragment {
         this.fragmentView = this.contentView;
         Calendar instance = Calendar.getInstance();
         this.startFromYear = instance.get(1);
-        this.startFromMonth = instance.get(2);
-        this.monthCount = 3;
+        int i = instance.get(2);
+        this.startFromMonth = i;
+        int i2 = this.selectedYear;
+        if (i2 != 0) {
+            int i3 = ((((this.startFromYear - i2) * 12) + i) - this.selectedMonth) + 1;
+            this.monthCount = i3;
+            this.layoutManager.scrollToPositionWithOffset(i3 - 1, AndroidUtilities.dp(120.0f));
+        }
+        if (this.monthCount < 3) {
+            this.monthCount = 3;
+        }
         loadNext();
         updateColors();
         this.activeTextPaint.setColor(-1);
@@ -185,7 +202,9 @@ public class MediaCalendarActivity extends BaseFragment {
             }
             tLRPC$TL_messages_getSearchResultsCalendar.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(this.dialogId);
             tLRPC$TL_messages_getSearchResultsCalendar.offset_id = this.lastId;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_getSearchResultsCalendar, new MediaCalendarActivity$$ExternalSyntheticLambda1(this, Calendar.getInstance()));
+            Calendar instance = Calendar.getInstance();
+            this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_getSearchResultsCalendar, new MediaCalendarActivity$$ExternalSyntheticLambda1(this, instance));
         }
     }
 
@@ -198,11 +217,6 @@ public class MediaCalendarActivity extends BaseFragment {
     public /* synthetic */ void lambda$loadNext$0(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, Calendar calendar) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_searchResultsCalendar tLRPC$TL_messages_searchResultsCalendar = (TLRPC$TL_messages_searchResultsCalendar) tLObject;
-            int timeInMillis = ((int) (((calendar.getTimeInMillis() / 1000) - ((long) tLRPC$TL_messages_searchResultsCalendar.min_date)) / 2629800)) + 1;
-            this.monthCount = timeInMillis;
-            if (timeInMillis < 3) {
-                this.monthCount = 3;
-            }
             for (int i = 0; i < tLRPC$TL_messages_searchResultsCalendar.periods.size(); i++) {
                 calendar.setTimeInMillis(((long) tLRPC$TL_messages_searchResultsCalendar.periods.get(i).date) * 1000);
                 int i2 = (calendar.get(1) * 100) + calendar.get(2);
@@ -216,9 +230,12 @@ public class MediaCalendarActivity extends BaseFragment {
                 int i3 = this.startOffset + tLRPC$TL_messages_searchResultsCalendar.periods.get(i).count;
                 this.startOffset = i3;
                 periodDay.startOffset = i3;
-                sparseArray.put(calendar.get(5) - 1, periodDay);
-                int i4 = this.minMontYear;
-                if (i2 < i4 || i4 == 0) {
+                int i4 = calendar.get(5) - 1;
+                if (sparseArray.get(i4, (Object) null) == null) {
+                    sparseArray.put(i4, periodDay);
+                }
+                int i5 = this.minMontYear;
+                if (i2 < i5 || i5 == 0) {
                     this.minMontYear = i2;
                 }
             }
@@ -235,8 +252,16 @@ public class MediaCalendarActivity extends BaseFragment {
                 this.checkEnterItems = true;
             }
             this.listView.invalidate();
-            this.adapter.notifyDataSetChanged();
-            resumeDelayedFragmentAnimation();
+            int timeInMillis = ((int) (((calendar.getTimeInMillis() / 1000) - ((long) tLRPC$TL_messages_searchResultsCalendar.min_date)) / 2629800)) + 1;
+            this.adapter.notifyItemRangeChanged(0, this.monthCount);
+            int i6 = this.monthCount;
+            if (timeInMillis > i6) {
+                this.adapter.notifyItemRangeInserted(i6 + 1, timeInMillis);
+                this.monthCount = timeInMillis;
+            }
+            if (this.endReached) {
+                resumeDelayedFragmentAnimation();
+            }
         }
     }
 
@@ -281,6 +306,11 @@ public class MediaCalendarActivity extends BaseFragment {
             monthView.setDate(i2, i3, mediaCalendarActivity.messagesByYearMounth.get((i2 * 100) + i3), monthView.currentYear == i2 && monthView.currentMonthInYear == i3);
         }
 
+        public long getItemId(int i) {
+            MediaCalendarActivity mediaCalendarActivity = MediaCalendarActivity.this;
+            return (((long) (mediaCalendarActivity.startFromYear - (i / 12))) * 100) + ((long) (mediaCalendarActivity.startFromMonth - (i % 12)));
+        }
+
         public int getItemCount() {
             return MediaCalendarActivity.this.monthCount;
         }
@@ -315,14 +345,14 @@ public class MediaCalendarActivity extends BaseFragment {
         }
 
         public void setDate(int i, int i2, SparseArray<PeriodDay> sparseArray, boolean z) {
-            ImageReceiver imageReceiver;
             int i3 = i;
             int i4 = i2;
             SparseArray<PeriodDay> sparseArray2 = sparseArray;
+            boolean z2 = (i3 == this.currentYear || i4 == this.currentMonthInYear) ? false : true;
             this.currentYear = i3;
             this.currentMonthInYear = i4;
             this.messagesByDays = sparseArray2;
-            if (this.imagesByDays != null) {
+            if (z2 && this.imagesByDays != null) {
                 for (int i5 = 0; i5 < this.imagesByDays.size(); i5++) {
                     this.imagesByDays.valueAt(i5).onDetachedFromWindow();
                     this.imagesByDays.valueAt(i5).setParentView((View) null);
@@ -330,58 +360,58 @@ public class MediaCalendarActivity extends BaseFragment {
                 this.imagesByDays = null;
             }
             if (sparseArray2 != null) {
-                this.imagesByDays = new SparseArray<>();
+                if (this.imagesByDays == null) {
+                    this.imagesByDays = new SparseArray<>();
+                }
                 for (int i6 = 0; i6 < sparseArray.size(); i6++) {
                     int keyAt = sparseArray2.keyAt(i6);
-                    ImageReceiver imageReceiver2 = new ImageReceiver();
-                    imageReceiver2.setParentView(this);
-                    MessageObject messageObject = sparseArray2.get(keyAt).messageObject;
-                    if (messageObject != null) {
-                        if (messageObject.isVideo()) {
-                            TLRPC$Document document = messageObject.getDocument();
-                            TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 50);
-                            TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 320);
-                            if (closestPhotoSizeWithSize == closestPhotoSizeWithSize2) {
-                                closestPhotoSizeWithSize2 = null;
-                            }
-                            if (closestPhotoSizeWithSize == null) {
-                                imageReceiver = imageReceiver2;
-                            } else if (messageObject.strippedThumb != null) {
-                                imageReceiver = imageReceiver2;
-                                imageReceiver2.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize2, document), "44_44", messageObject.strippedThumb, (String) null, messageObject, 0);
+                    if (this.imagesByDays.get(keyAt, (Object) null) == null) {
+                        ImageReceiver imageReceiver = new ImageReceiver();
+                        imageReceiver.setParentView(this);
+                        MessageObject messageObject = sparseArray2.get(keyAt).messageObject;
+                        if (messageObject != null) {
+                            if (messageObject.isVideo()) {
+                                TLRPC$Document document = messageObject.getDocument();
+                                TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 50);
+                                TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 320);
+                                if (closestPhotoSizeWithSize == closestPhotoSizeWithSize2) {
+                                    closestPhotoSizeWithSize2 = null;
+                                }
+                                if (closestPhotoSizeWithSize != null) {
+                                    if (messageObject.strippedThumb != null) {
+                                        imageReceiver.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize2, document), "44_44", messageObject.strippedThumb, (String) null, messageObject, 0);
+                                    } else {
+                                        imageReceiver.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize2, document), "44_44", ImageLocation.getForDocument(closestPhotoSizeWithSize, document), "b", (String) null, (Object) messageObject, 0);
+                                    }
+                                }
                             } else {
-                                imageReceiver = imageReceiver2;
-                                imageReceiver.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize2, document), "44_44", ImageLocation.getForDocument(closestPhotoSizeWithSize, document), "b", (String) null, (Object) messageObject, 0);
-                            }
-                        } else {
-                            imageReceiver = imageReceiver2;
-                            MessageObject messageObject2 = messageObject;
-                            TLRPC$MessageMedia tLRPC$MessageMedia = messageObject2.messageOwner.media;
-                            if ((tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaPhoto) && tLRPC$MessageMedia.photo != null && !messageObject2.photoThumbs.isEmpty()) {
-                                TLRPC$PhotoSize closestPhotoSizeWithSize3 = FileLoader.getClosestPhotoSizeWithSize(messageObject2.photoThumbs, 50);
-                                TLRPC$PhotoSize closestPhotoSizeWithSize4 = FileLoader.getClosestPhotoSizeWithSize(messageObject2.photoThumbs, 320, false, closestPhotoSizeWithSize3, false);
-                                if (messageObject2.mediaExists || DownloadController.getInstance(MediaCalendarActivity.this.currentAccount).canDownloadMedia(messageObject2)) {
-                                    if (closestPhotoSizeWithSize4 == closestPhotoSizeWithSize3) {
-                                        closestPhotoSizeWithSize3 = null;
-                                    }
-                                    if (messageObject2.strippedThumb != null) {
-                                        imageReceiver.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject2.photoThumbsObject), "44_44", (ImageLocation) null, (String) null, messageObject2.strippedThumb, closestPhotoSizeWithSize4 != null ? closestPhotoSizeWithSize4.size : 0, (String) null, messageObject2, messageObject2.shouldEncryptPhotoOrVideo() ? 2 : 1);
+                                TLRPC$MessageMedia tLRPC$MessageMedia = messageObject.messageOwner.media;
+                                if ((tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaPhoto) && tLRPC$MessageMedia.photo != null && !messageObject.photoThumbs.isEmpty()) {
+                                    TLRPC$PhotoSize closestPhotoSizeWithSize3 = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 50);
+                                    TLRPC$PhotoSize closestPhotoSizeWithSize4 = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 320, false, closestPhotoSizeWithSize3, false);
+                                    if (messageObject.mediaExists || DownloadController.getInstance(MediaCalendarActivity.this.currentAccount).canDownloadMedia(messageObject)) {
+                                        MessageObject messageObject2 = messageObject;
+                                        if (closestPhotoSizeWithSize4 == closestPhotoSizeWithSize3) {
+                                            closestPhotoSizeWithSize3 = null;
+                                        }
+                                        if (messageObject2.strippedThumb != null) {
+                                            imageReceiver.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject2.photoThumbsObject), "44_44", (ImageLocation) null, (String) null, messageObject2.strippedThumb, closestPhotoSizeWithSize4 != null ? closestPhotoSizeWithSize4.size : 0, (String) null, messageObject2, messageObject2.shouldEncryptPhotoOrVideo() ? 2 : 1);
+                                        } else {
+                                            imageReceiver.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject2.photoThumbsObject), "44_44", ImageLocation.getForObject(closestPhotoSizeWithSize3, messageObject2.photoThumbsObject), "b", closestPhotoSizeWithSize4 != null ? closestPhotoSizeWithSize4.size : 0, (String) null, messageObject2, messageObject2.shouldEncryptPhotoOrVideo() ? 2 : 1);
+                                        }
                                     } else {
-                                        imageReceiver.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject2.photoThumbsObject), "44_44", ImageLocation.getForObject(closestPhotoSizeWithSize3, messageObject2.photoThumbsObject), "b", closestPhotoSizeWithSize4 != null ? closestPhotoSizeWithSize4.size : 0, (String) null, messageObject2, messageObject2.shouldEncryptPhotoOrVideo() ? 2 : 1);
-                                    }
-                                } else {
-                                    BitmapDrawable bitmapDrawable = messageObject2.strippedThumb;
-                                    if (bitmapDrawable != null) {
-                                        imageReceiver.setImage((ImageLocation) null, (String) null, bitmapDrawable, (String) null, messageObject2, 0);
-                                    } else {
-                                        imageReceiver.setImage((ImageLocation) null, (String) null, ImageLocation.getForObject(closestPhotoSizeWithSize3, messageObject2.photoThumbsObject), "b", (String) null, (Object) messageObject2, 0);
+                                        BitmapDrawable bitmapDrawable = messageObject.strippedThumb;
+                                        if (bitmapDrawable != null) {
+                                            imageReceiver.setImage((ImageLocation) null, (String) null, bitmapDrawable, (String) null, messageObject, 0);
+                                        } else {
+                                            imageReceiver.setImage((ImageLocation) null, (String) null, ImageLocation.getForObject(closestPhotoSizeWithSize3, messageObject.photoThumbsObject), "b", (String) null, (Object) messageObject, 0);
+                                        }
                                     }
                                 }
                             }
+                            imageReceiver.setRoundRadius(AndroidUtilities.dp(22.0f));
+                            this.imagesByDays.put(keyAt, imageReceiver);
                         }
-                        ImageReceiver imageReceiver3 = imageReceiver;
-                        imageReceiver3.setRoundRadius(AndroidUtilities.dp(22.0f));
-                        this.imagesByDays.put(keyAt, imageReceiver3);
                     }
                 }
             }
@@ -481,6 +511,11 @@ public class MediaCalendarActivity extends BaseFragment {
                                 }
                             }
                             f2 = this.messagesByDays.get(i2).enterAlpha;
+                            if (f2 != 1.0f) {
+                                canvas.save();
+                                float f5 = (0.2f * f2) + 0.8f;
+                                canvas2.scale(f5, f5, f4, dp2);
+                            }
                             this.imagesByDays.get(i2).setAlpha(this.messagesByDays.get(i2).enterAlpha);
                             f = measuredWidth;
                             this.imagesByDays.get(i2).setImageCoords(f4 - (((float) AndroidUtilities.dp(44.0f)) / 2.0f), dp2 - (((float) AndroidUtilities.dp(44.0f)) / 2.0f), (float) AndroidUtilities.dp(44.0f), (float) AndroidUtilities.dp(44.0f));
@@ -489,6 +524,9 @@ public class MediaCalendarActivity extends BaseFragment {
                             canvas2.drawCircle(f4, dp2, ((float) AndroidUtilities.dp(44.0f)) / 2.0f, MediaCalendarActivity.this.blackoutPaint);
                             this.messagesByDays.get(i2).wasDrawn = true;
                             f3 = 1.0f;
+                            if (f2 != 1.0f) {
+                                canvas.restore();
+                            }
                         } else {
                             f = measuredWidth;
                             f3 = 1.0f;

@@ -2327,6 +2327,13 @@
     <public type="string" name="CacheWasCleared" id="NUM" />
     <public type="string" name="CalculatingSize" id="NUM" />
     <public type="string" name="Calendar" id="NUM" />
+    <public type="string" name="CalendarWeekNameShortFriday" id="NUM" />
+    <public type="string" name="CalendarWeekNameShortMonday" id="NUM" />
+    <public type="string" name="CalendarWeekNameShortSaturday" id="NUM" />
+    <public type="string" name="CalendarWeekNameShortSunday" id="NUM" />
+    <public type="string" name="CalendarWeekNameShortThursday" id="NUM" />
+    <public type="string" name="CalendarWeekNameShortTuesday" id="NUM" />
+    <public type="string" name="CalendarWeekNameShortWednesday" id="NUM" />
     <public type="string" name="Call" id="NUM" />
     <public type="string" name="CallAgain" id="NUM" />
     <public type="string" name="CallAlert" id="NUM" />

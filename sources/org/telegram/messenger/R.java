@@ -2466,6 +2466,13 @@ public final class R {
         public static final int CacheWasCleared = NUM;
         public static final int CalculatingSize = NUM;
         public static final int Calendar = NUM;
+        public static final int CalendarWeekNameShortFriday = NUM;
+        public static final int CalendarWeekNameShortMonday = NUM;
+        public static final int CalendarWeekNameShortSaturday = NUM;
+        public static final int CalendarWeekNameShortSunday = NUM;
+        public static final int CalendarWeekNameShortThursday = NUM;
+        public static final int CalendarWeekNameShortTuesday = NUM;
+        public static final int CalendarWeekNameShortWednesday = NUM;
         public static final int Call = NUM;
         public static final int CallAgain = NUM;
         public static final int CallAlert = NUM;

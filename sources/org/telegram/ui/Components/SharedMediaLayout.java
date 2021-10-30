@@ -2046,7 +2046,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     r0.addView(actionBarMenuSubItem3);
                     actionBarMenuSubItem3.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View view) {
-                            SharedMediaLayout.this.showMediaCalendar();
+                            SharedMediaLayout.this.showMediaCalendar(false);
                             ActionBarPopupWindow actionBarPopupWindow = SharedMediaLayout.this.optionsWindow;
                             if (actionBarPopupWindow != null) {
                                 actionBarPopupWindow.dismiss();
@@ -3675,11 +3675,62 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    public void showMediaCalendar() {
+    public void showMediaCalendar(boolean z) {
+        int i;
+        MediaPage mediaPage;
         Bundle bundle = new Bundle();
         bundle.putLong("dialog_id", this.dialog_id);
-        MediaCalendarActivity mediaCalendarActivity = new MediaCalendarActivity(bundle, this.sharedMediaData[0].filterType);
-        mediaCalendarActivity.setCallback(new MediaCalendarActivity.Callback() {
+        if (z && (mediaPage = getMediaPage(0)) != null) {
+            ArrayList<Period> arrayList = this.sharedMediaData[0].fastScrollPeriods;
+            Period period = null;
+            int findFirstVisibleItemPosition = mediaPage.layoutManager.findFirstVisibleItemPosition();
+            if (findFirstVisibleItemPosition >= 0) {
+                if (arrayList != null) {
+                    int i2 = 0;
+                    while (true) {
+                        if (i2 >= arrayList.size()) {
+                            break;
+                        } else if (findFirstVisibleItemPosition <= arrayList.get(i2).startOffset) {
+                            period = arrayList.get(i2);
+                            break;
+                        } else {
+                            i2++;
+                        }
+                    }
+                    if (period == null) {
+                        period = arrayList.get(arrayList.size() - 1);
+                    }
+                }
+                if (period != null) {
+                    i = period.date;
+                    MediaCalendarActivity mediaCalendarActivity = new MediaCalendarActivity(bundle, this.sharedMediaData[0].filterType, i);
+                    mediaCalendarActivity.setCallback(new MediaCalendarActivity.Callback() {
+                        public void onDateSelected(int i, int i2) {
+                            int i3 = -1;
+                            for (int i4 = 0; i4 < SharedMediaLayout.this.sharedMediaData[0].messages.size(); i4++) {
+                                if (SharedMediaLayout.this.sharedMediaData[0].messages.get(i4).getId() == i) {
+                                    i3 = i4;
+                                }
+                            }
+                            MediaPage access$2700 = SharedMediaLayout.this.getMediaPage(0);
+                            if (i3 < 0 || access$2700 == null) {
+                                SharedMediaLayout.this.jumpToDate(0, i, i2, true);
+                            } else {
+                                access$2700.layoutManager.scrollToPositionWithOffset(i3, 0);
+                            }
+                            if (access$2700 != null) {
+                                access$2700.highlightMessageId = i;
+                                access$2700.highlightAnimation = false;
+                            }
+                        }
+                    });
+                    this.profileActivity.presentFragment(mediaCalendarActivity);
+                }
+            }
+        }
+        i = 0;
+        MediaCalendarActivity mediaCalendarActivity2 = new MediaCalendarActivity(bundle, this.sharedMediaData[0].filterType, i);
+        mediaCalendarActivity2.setCallback(new MediaCalendarActivity.Callback() {
             public void onDateSelected(int i, int i2) {
                 int i3 = -1;
                 for (int i4 = 0; i4 < SharedMediaLayout.this.sharedMediaData[0].messages.size(); i4++) {
@@ -3699,7 +3750,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 }
             }
         });
-        this.profileActivity.presentFragment(mediaCalendarActivity);
+        this.profileActivity.presentFragment(mediaCalendarActivity2);
     }
 
     private void startPinchToMediaColumnsCount(boolean z) {
@@ -6463,7 +6514,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r4)
             if (r0 != 0) goto L_0x0127
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131625806(0x7f0e074e, float:1.887883E38)
+            r3 = 2131625813(0x7f0e0755, float:1.8878845E38)
             java.lang.String r10 = "GroupMembers"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r3)
             r0.addTextTab(r4, r3, r13)
@@ -6491,14 +6542,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.chatInfo
             if (r0 != 0) goto L_0x0166
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131627738(0x7f0e0eda, float:1.8882749E38)
+            r3 = 2131627745(0x7f0e0ee1, float:1.8882763E38)
             java.lang.String r4 = "SharedMediaTabFull2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3, r13)
             goto L_0x0174
         L_0x0166:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131627737(0x7f0e0ed9, float:1.8882747E38)
+            r3 = 2131627744(0x7f0e0ee0, float:1.8882761E38)
             java.lang.String r4 = "SharedMediaTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3, r13)
@@ -6510,14 +6561,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r2)
             if (r0 != 0) goto L_0x0190
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r3 = 2131627730(0x7f0e0ed2, float:1.8882733E38)
+            r3 = 2131627737(0x7f0e0ed9, float:1.8882747E38)
             java.lang.String r4 = "SharedFilesTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r2, r3, r13)
         L_0x0190:
             long r2 = r12.dialog_id
             boolean r0 = org.telegram.messenger.DialogObject.isEncryptedDialog(r2)
-            r2 = 2131627739(0x7f0e0edb, float:1.888275E38)
+            r2 = 2131627746(0x7f0e0ee2, float:1.8882765E38)
             java.lang.String r3 = "SharedMusicTab2"
             if (r0 != 0) goto L_0x01d1
             int[] r0 = r12.hasMedia
@@ -6527,7 +6578,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r5)
             if (r0 != 0) goto L_0x01b9
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r4 = 2131627734(0x7f0e0ed6, float:1.888274E38)
+            r4 = 2131627741(0x7f0e0edd, float:1.8882755E38)
             java.lang.String r10 = "SharedLinksTab2"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r10, r4)
             r0.addTextTab(r5, r4, r13)
@@ -6560,7 +6611,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r7)
             if (r0 != 0) goto L_0x0204
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131627743(0x7f0e0edf, float:1.888276E38)
+            r2 = 2131627750(0x7f0e0ee6, float:1.8882773E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r7, r2, r13)
@@ -6572,7 +6623,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r8)
             if (r0 != 0) goto L_0x0220
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131627731(0x7f0e0ed3, float:1.8882735E38)
+            r2 = 2131627738(0x7f0e0eda, float:1.8882749E38)
             java.lang.String r3 = "SharedGIFsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r8, r2, r13)
@@ -6584,7 +6635,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r9)
             if (r0 != 0) goto L_0x023c
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131627732(0x7f0e0ed4, float:1.8882737E38)
+            r2 = 2131627739(0x7f0e0edb, float:1.888275E38)
             java.lang.String r3 = "SharedGroupsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r9, r2, r13)
@@ -7693,9 +7744,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (startOffset == 0) {
                 return startOffset;
             }
-            SharedMediaData[] access$600 = SharedMediaLayout.this.sharedMediaData;
-            int i = this.currentType;
-            if (!access$600[i].endReached[i] || !SharedMediaLayout.this.sharedMediaData[this.currentType].endReached[1]) {
+            if (!SharedMediaLayout.this.sharedMediaData[this.currentType].endReached[0] || !SharedMediaLayout.this.sharedMediaData[this.currentType].endReached[1]) {
                 return SharedMediaLayout.this.sharedMediaData[this.currentType].getEndLoadingStubs() != 0 ? startOffset + SharedMediaLayout.this.sharedMediaData[this.currentType].getEndLoadingStubs() : startOffset + 1;
             }
             return startOffset;
@@ -8186,7 +8235,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         }
 
         public void onFastScrollSingleTap() {
-            SharedMediaLayout.this.showMediaCalendar();
+            SharedMediaLayout.this.showMediaCalendar(true);
         }
     }
 
