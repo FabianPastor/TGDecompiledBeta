@@ -164,7 +164,7 @@ public class MediaCalendarActivity extends BaseFragment {
         this.actionBar.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         this.activeTextPaint.setColor(-1);
         this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.textPaint2.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.actionBar.setTitleColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteBlackText"), false);

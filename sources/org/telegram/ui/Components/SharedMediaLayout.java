@@ -7683,12 +7683,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (SharedMediaLayout.this.sharedMediaData[this.currentType].messages.size() == 0 && !SharedMediaLayout.this.sharedMediaData[this.currentType].loading) {
                 return 1;
             }
-            if (SharedMediaLayout.this.sharedMediaData[this.currentType].messages.size() == 0) {
-                SharedMediaData[] access$600 = SharedMediaLayout.this.sharedMediaData;
-                int i = this.currentType;
-                if ((!access$600[i].endReached[i] || !SharedMediaLayout.this.sharedMediaData[this.currentType].endReached[1]) && SharedMediaLayout.this.sharedMediaData[this.currentType].startReached) {
-                    return 0;
-                }
+            if (SharedMediaLayout.this.sharedMediaData[this.currentType].messages.size() == 0 && ((!SharedMediaLayout.this.sharedMediaData[this.currentType].endReached[0] || !SharedMediaLayout.this.sharedMediaData[this.currentType].endReached[1]) && SharedMediaLayout.this.sharedMediaData[this.currentType].startReached)) {
+                return 0;
             }
             if (SharedMediaLayout.this.sharedMediaData[this.currentType].totalCount != 0) {
                 return SharedMediaLayout.this.sharedMediaData[this.currentType].totalCount;
@@ -7697,9 +7693,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (startOffset == 0) {
                 return startOffset;
             }
-            SharedMediaData[] access$6002 = SharedMediaLayout.this.sharedMediaData;
-            int i2 = this.currentType;
-            if (!access$6002[i2].endReached[i2] || !SharedMediaLayout.this.sharedMediaData[this.currentType].endReached[1]) {
+            SharedMediaData[] access$600 = SharedMediaLayout.this.sharedMediaData;
+            int i = this.currentType;
+            if (!access$600[i].endReached[i] || !SharedMediaLayout.this.sharedMediaData[this.currentType].endReached[1]) {
                 return SharedMediaLayout.this.sharedMediaData[this.currentType].getEndLoadingStubs() != 0 ? startOffset + SharedMediaLayout.this.sharedMediaData[this.currentType].getEndLoadingStubs() : startOffset + 1;
             }
             return startOffset;

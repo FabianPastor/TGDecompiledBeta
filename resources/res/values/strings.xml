@@ -367,7 +367,7 @@
     <string name="ApplyTheme">APPLY</string>
     <string name="ApplyThemeFile">Apply theme file</string>
     <string name="ApproveNewMembers">Approve New Members</string>
-    <string name="ApproveNewMembersDescription">Turn this on to require admin approval from users who want to join the group with this link.</string>
+    <string name="ApproveNewMembersDescription">Turn this on if you want users to join only after they are approved by an admin.</string>
     <string name="April">April</string>
     <string name="Archive">Archive</string>
     <string name="ArchiveAndMute">Archive and Mute</string>
@@ -2511,7 +2511,7 @@
     <string name="NoMedia">Share photos and videos in this chat and access them on any of your devices.</string>
     <string name="NoMediaAutoDownload">No media</string>
     <string name="NoMediaSecret">Photos and videos from this chat will be shown here.</string>
-    <string name="NoMemberRequests">No member requests</string>
+    <string name="NoMemberRequests">No join requests</string>
     <string name="NoMemberRequestsDescription">You have no pending requests\10to join your group.</string>
     <string name="NoMessages">No messages here yet...</string>
     <string name="NoMessagesGreetingsDescription">Send a message or tap the greeting below.</string>
@@ -2546,8 +2546,8 @@
     <string name="NoSound">No sound</string>
     <string name="NoStickers">No stickers yet</string>
     <string name="NoStickersFound">No stickers found</string>
-    <string name="NoSubscribeRequests">No subscribe requests</string>
-    <string name="NoSubscribeRequestsDescription">You have no pending requests\10to join your channel.</string>
+    <string name="NoSubscribeRequests">No join requests</string>
+    <string name="NoSubscribeRequestsDescription">There are no pending requests\10to join this channel.</string>
     <string name="NoUsernameFound">There is no Telegram account with this username.</string>
     <string name="NoVotes">No votes</string>
     <string name="NoVotesQuiz">Nobody answered</string>
