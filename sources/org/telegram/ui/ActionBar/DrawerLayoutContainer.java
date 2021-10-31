@@ -45,6 +45,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     private float drawerPosition;
     private boolean firstLayout = true;
     private boolean hasCutout;
+    private int imeHeight;
     private boolean inLayout;
     private boolean keyboardVisibility;
     private Object lastInsets;
@@ -82,11 +83,15 @@ public class DrawerLayoutContainer extends FrameLayout {
 
     /* access modifiers changed from: private */
     public /* synthetic */ WindowInsets lambda$new$0(View view, WindowInsets windowInsets) {
-        boolean isVisible;
         int i = Build.VERSION.SDK_INT;
-        if (i >= 30 && this.keyboardVisibility != (isVisible = windowInsets.isVisible(WindowInsets.Type.ime()))) {
-            this.keyboardVisibility = isVisible;
-            requestLayout();
+        if (i >= 30) {
+            boolean isVisible = windowInsets.isVisible(WindowInsets.Type.ime());
+            int i2 = windowInsets.getInsets(WindowInsets.Type.ime()).bottom;
+            if (!(this.keyboardVisibility == isVisible && this.imeHeight == i2)) {
+                this.keyboardVisibility = isVisible;
+                this.imeHeight = i2;
+                requestLayout();
+            }
         }
         DrawerLayoutContainer drawerLayoutContainer = (DrawerLayoutContainer) view;
         if (AndroidUtilities.statusBarHeight != windowInsets.getSystemWindowInsetTop()) {

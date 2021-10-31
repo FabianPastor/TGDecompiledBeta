@@ -51,7 +51,7 @@ public class SharedPhotoVideoCell2 extends View {
         this.imageReceiver.setParentView(this);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:88:0x0212  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x0212  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setMessageObject(org.telegram.messenger.MessageObject r16, int r17) {
         /*
@@ -59,18 +59,18 @@ public class SharedPhotoVideoCell2 extends View {
             r0 = r15
             r9 = r16
             r1 = r17
-            r0.currentParentColumnsCount = r1
-            org.telegram.messenger.MessageObject r2 = r0.currentMessageObject
-            if (r2 != 0) goto L_0x000e
-            if (r9 != 0) goto L_0x000e
-            return
-        L_0x000e:
-            if (r2 == 0) goto L_0x0021
-            if (r9 == 0) goto L_0x0021
-            int r2 = r2.getId()
-            int r3 = r16.getId()
-            if (r2 != r3) goto L_0x0021
             int r2 = r0.currentParentColumnsCount
+            r0.currentParentColumnsCount = r1
+            org.telegram.messenger.MessageObject r3 = r0.currentMessageObject
+            if (r3 != 0) goto L_0x0010
+            if (r9 != 0) goto L_0x0010
+            return
+        L_0x0010:
+            if (r3 == 0) goto L_0x0021
+            if (r9 == 0) goto L_0x0021
+            int r3 = r3.getId()
+            int r4 = r16.getId()
+            if (r3 != r4) goto L_0x0021
             if (r2 != r1) goto L_0x0021
             return
         L_0x0021:
@@ -919,10 +919,6 @@ public class SharedPhotoVideoCell2 extends View {
             this.highlightProgress = f;
             invalidate();
         }
-    }
-
-    public void moveImageToFront() {
-        this.imageReceiver.moveImageToFront();
     }
 
     public static class SharedResources {

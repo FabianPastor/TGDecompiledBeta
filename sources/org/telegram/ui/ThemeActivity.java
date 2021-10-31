@@ -1090,15 +1090,15 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     org.telegram.ui.ThemeActivity r1 = org.telegram.ui.ThemeActivity.this
                     android.app.Activity r1 = r1.getParentActivity()
                     r13.<init>((android.content.Context) r1)
-                    r1 = 2131628057(0x7f0e1019, float:1.8883396E38)
+                    r1 = 2131628061(0x7f0e101d, float:1.8883404E38)
                     java.lang.String r2 = "ThemeResetToDefaultsTitle"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     r13.setTitle(r1)
-                    r1 = 2131628056(0x7f0e1018, float:1.8883394E38)
+                    r1 = 2131628060(0x7f0e101c, float:1.8883402E38)
                     java.lang.String r2 = "ThemeResetToDefaultsText"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     r13.setMessage(r1)
-                    r1 = 2131627458(0x7f0e0dc2, float:1.888218E38)
+                    r1 = 2131627461(0x7f0e0dc5, float:1.8882187E38)
                     java.lang.String r2 = "Reset"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     org.telegram.ui.ThemeActivity$1$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.ThemeActivity$1$$ExternalSyntheticLambda0
@@ -2128,7 +2128,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0160:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x0176 }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131627714(0x7f0e0ec2, float:1.88827E38)
+                r0 = 2131627718(0x7f0e0ec6, float:1.8882708E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x0176 }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x0176 }
                 r10 = 500(0x1f4, float:7.0E-43)
@@ -2171,15 +2171,15 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131625226(0x7f0e050a, float:1.8877654E38)
+                r10 = 2131625227(0x7f0e050b, float:1.8877656E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131625225(0x7f0e0509, float:1.8877652E38)
+                r10 = 2131625226(0x7f0e050a, float:1.8877654E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131625167(0x7f0e04cf, float:1.8877534E38)
+                r10 = 2131625168(0x7f0e04d0, float:1.8877536E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 org.telegram.ui.ThemeActivity$ListAdapter$$ExternalSyntheticLambda1 r0 = new org.telegram.ui.ThemeActivity$ListAdapter$$ExternalSyntheticLambda1

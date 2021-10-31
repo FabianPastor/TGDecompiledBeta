@@ -103,6 +103,7 @@ public class MediaCalendarActivity extends BaseFragment {
         this.textPaint.setTextAlign(Paint.Align.CENTER);
         this.textPaint2.setTextSize((float) AndroidUtilities.dp(11.0f));
         this.textPaint2.setTextAlign(Paint.Align.CENTER);
+        this.textPaint2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.activeTextPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
         this.activeTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.activeTextPaint.setTextAlign(Paint.Align.CENTER);

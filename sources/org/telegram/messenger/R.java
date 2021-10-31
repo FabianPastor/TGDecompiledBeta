@@ -2916,6 +2916,7 @@ public final class R {
         public static final int CreateGroupError = NUM;
         public static final int CreateGroupForImport = NUM;
         public static final int CreateLink = NUM;
+        public static final int CreateLinkHeader = NUM;
         public static final int CreateNewContact = NUM;
         public static final int CreateNewFilter = NUM;
         public static final int CreateNewFilterInfo = NUM;
@@ -3939,6 +3940,8 @@ public final class R {
         public static final int LinkIsExpiredLimitReached = NUM;
         public static final int LinkIsNoActive = NUM;
         public static final int LinkLimitReached = NUM;
+        public static final int LinkNameHelp = NUM;
+        public static final int LinkNameHint = NUM;
         public static final int LinkNotFound = NUM;
         public static final int LinkPreview = NUM;
         public static final int LinkedChannel = NUM;
@@ -5356,6 +5359,7 @@ public final class R {
         public static final int SaveChangesAlertText = NUM;
         public static final int SaveChangesAlertTitle = NUM;
         public static final int SaveLink = NUM;
+        public static final int SaveLinkHeader = NUM;
         public static final int SaveTheme = NUM;
         public static final int SaveToDownloads = NUM;
         public static final int SaveToGIFs = NUM;
@@ -6015,6 +6019,9 @@ public final class R {
         public static final int UseProxyTelegramInfo = NUM;
         public static final int UseProxyTelegramInfo2 = NUM;
         public static final int UseProxyUsername = NUM;
+        public static final int UserAcceptedToGroupAction = NUM;
+        public static final int UserAcceptedToGroupPush = NUM;
+        public static final int UserAcceptedToGroupPushWithGroup = NUM;
         public static final int UserBio = NUM;
         public static final int UserBioDetail = NUM;
         public static final int UserBioEmpty = NUM;

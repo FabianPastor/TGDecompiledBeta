@@ -25,7 +25,7 @@ public class MemberRequestsBottomSheet extends UsersAlertBase {
         super(baseFragment.getParentActivity(), false, baseFragment.getCurrentAccount(), baseFragment.getResourceProvider());
         this.needSnapToTop = false;
         this.isEmptyViewVisible = false;
-        AnonymousClass1 r4 = new MemberRequestsDelegate(baseFragment, j, false) {
+        AnonymousClass1 r4 = new MemberRequestsDelegate(baseFragment, this.container, j, false) {
             /* access modifiers changed from: protected */
             public void onImportersChanged(String str, boolean z, boolean z2) {
                 if (!hasAllImporters()) {

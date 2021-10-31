@@ -194,7 +194,7 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             goto L_0x0224
         L_0x011b:
             android.widget.TextView r1 = r0.titleTextView
-            r3 = 2131627388(0x7f0e0d7c, float:1.888204E38)
+            r3 = 2131627391(0x7f0e0d7f, float:1.8882045E38)
             java.lang.String r4 = "RemovedFromFavorites"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)
@@ -203,7 +203,7 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             goto L_0x0224
         L_0x0130:
             android.widget.TextView r1 = r0.titleTextView
-            r3 = 2131627389(0x7f0e0d7d, float:1.8882041E38)
+            r3 = 2131627392(0x7f0e0d80, float:1.8882047E38)
             java.lang.String r4 = "RemovedFromRecent"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)
@@ -246,12 +246,12 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             boolean r1 = r10.masks
             if (r1 == 0) goto L_0x01b8
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131626192(0x7f0e08d0, float:1.8879613E38)
+            r2 = 2131626195(0x7f0e08d3, float:1.887962E38)
             java.lang.String r3 = "MasksArchived"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             android.widget.TextView r1 = r0.subtitleTextView
-            r2 = 2131626193(0x7f0e08d1, float:1.8879615E38)
+            r2 = 2131626196(0x7f0e08d4, float:1.8879621E38)
             java.lang.Object[] r3 = new java.lang.Object[r11]
             java.lang.String r4 = r10.title
             r3[r9] = r4
@@ -261,12 +261,12 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             goto L_0x0224
         L_0x01b8:
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131627871(0x7f0e0f5f, float:1.8883019E38)
+            r2 = 2131627875(0x7f0e0var_, float:1.8883027E38)
             java.lang.String r3 = "StickersArchived"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             android.widget.TextView r1 = r0.subtitleTextView
-            r2 = 2131627872(0x7f0e0var_, float:1.888302E38)
+            r2 = 2131627876(0x7f0e0var_, float:1.8883029E38)
             java.lang.Object[] r3 = new java.lang.Object[r11]
             java.lang.String r4 = r10.title
             r3[r9] = r4
@@ -278,12 +278,12 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             boolean r1 = r10.masks
             if (r1 == 0) goto L_0x0202
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131626201(0x7f0e08d9, float:1.8879632E38)
+            r2 = 2131626204(0x7f0e08dc, float:1.8879638E38)
             java.lang.String r3 = "MasksRemoved"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             android.widget.TextView r1 = r0.subtitleTextView
-            r2 = 2131626202(0x7f0e08da, float:1.8879634E38)
+            r2 = 2131626205(0x7f0e08dd, float:1.887964E38)
             java.lang.Object[] r3 = new java.lang.Object[r11]
             java.lang.String r4 = r10.title
             r3[r9] = r4
@@ -293,12 +293,12 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             goto L_0x0224
         L_0x0202:
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131627878(0x7f0e0var_, float:1.8883033E38)
+            r2 = 2131627882(0x7f0e0f6a, float:1.888304E38)
             java.lang.String r3 = "StickersRemoved"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             android.widget.TextView r1 = r0.subtitleTextView
-            r2 = 2131627879(0x7f0e0var_, float:1.8883035E38)
+            r2 = 2131627883(0x7f0e0f6b, float:1.8883043E38)
             java.lang.Object[] r3 = new java.lang.Object[r11]
             java.lang.String r4 = r10.title
             r3[r9] = r4

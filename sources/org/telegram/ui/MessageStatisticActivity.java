@@ -271,7 +271,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.<init>(r1)
             r0.emptyView = r3
             java.lang.String r4 = "NoResult"
-            r5 = 2131626480(0x7f0e09f0, float:1.8880197E38)
+            r5 = 2131626483(0x7f0e09f3, float:1.8880203E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r3.setText(r4)
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.emptyView
@@ -304,7 +304,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.setTextColor(r7)
             r3.setTag(r6)
             java.lang.String r7 = "LoadingStats"
-            r8 = 2131626128(0x7f0e0890, float:1.8879483E38)
+            r8 = 2131626131(0x7f0e0893, float:1.887949E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)
             r3.setText(r7)
             r3.setGravity(r5)
@@ -317,7 +317,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r7.setTextColor(r9)
             r7.setTag(r8)
             java.lang.String r9 = "LoadingStatsDescription"
-            r10 = 2131626129(0x7f0e0891, float:1.8879485E38)
+            r10 = 2131626132(0x7f0e0894, float:1.8879492E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r7.setText(r9)
             r7.setGravity(r5)
@@ -1031,7 +1031,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 org.telegram.ui.MessageStatisticActivity r0 = org.telegram.ui.MessageStatisticActivity.this
                 int r0 = r0.overviewHeaderRow
                 if (r10 != r0) goto L_0x0053
-                r10 = 2131627860(0x7f0e0var_, float:1.8882996E38)
+                r10 = 2131627864(0x7f0e0var_, float:1.8883004E38)
                 java.lang.Object[] r0 = new java.lang.Object[r2]
                 java.lang.String r1 = "StatisticOverview"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.formatString(r1, r10, r0)

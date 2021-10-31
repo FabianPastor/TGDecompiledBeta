@@ -279,11 +279,11 @@ public class JoinGroupAlert extends BottomSheet {
             r3.setSingleLine(r5)
             android.widget.TextView r3 = r0.requestTextView
             if (r6 == 0) goto L_0x0237
-            r8 = 2131627446(0x7f0e0db6, float:1.8882157E38)
+            r8 = 2131627449(0x7f0e0db9, float:1.8882163E38)
             java.lang.String r9 = "RequestToJoinChannel"
             goto L_0x023c
         L_0x0237:
-            r8 = 2131627450(0x7f0e0dba, float:1.8882165E38)
+            r8 = 2131627453(0x7f0e0dbd, float:1.888217E38)
             java.lang.String r9 = "RequestToJoinGroup"
         L_0x023c:
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
@@ -317,11 +317,11 @@ public class JoinGroupAlert extends BottomSheet {
             r1.setGravity(r11)
             r1.setTextSize(r5, r14)
             if (r6 == 0) goto L_0x0294
-            r2 = 2131627448(0x7f0e0db8, float:1.888216E38)
+            r2 = 2131627451(0x7f0e0dbb, float:1.8882167E38)
             java.lang.String r3 = "RequestToJoinChannelDescription"
             goto L_0x0299
         L_0x0294:
-            r2 = 2131627452(0x7f0e0dbc, float:1.8882169E38)
+            r2 = 2131627455(0x7f0e0dbf, float:1.8882175E38)
             java.lang.String r3 = "RequestToJoinGroupDescription"
         L_0x0299:
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
@@ -428,7 +428,7 @@ public class JoinGroupAlert extends BottomSheet {
             if (r1 != 0) goto L_0x03b7
         L_0x03a4:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131627293(0x7f0e0d1d, float:1.8881846E38)
+            r2 = 2131627296(0x7f0e0d20, float:1.8881852E38)
             java.lang.String r3 = "ProfileJoinChannel"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
@@ -436,7 +436,7 @@ public class JoinGroupAlert extends BottomSheet {
             goto L_0x03c5
         L_0x03b7:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131626016(0x7f0e0820, float:1.8879256E38)
+            r2 = 2131626017(0x7f0e0821, float:1.8879258E38)
             java.lang.String r3 = "JoinGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)

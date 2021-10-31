@@ -147,7 +147,7 @@ public class ChatActivityMemberRequestsDelegate {
         if (this.bottomSheet == null) {
             this.bottomSheet = new MemberRequestsBottomSheet(this.fragment, this.currentChat.id) {
                 public void dismiss() {
-                    if (!ChatActivityMemberRequestsDelegate.this.bottomSheet.isNeedRestoreDialog()) {
+                    if (ChatActivityMemberRequestsDelegate.this.bottomSheet != null && !ChatActivityMemberRequestsDelegate.this.bottomSheet.isNeedRestoreDialog()) {
                         MemberRequestsBottomSheet unused = ChatActivityMemberRequestsDelegate.this.bottomSheet = null;
                     }
                     super.dismiss();

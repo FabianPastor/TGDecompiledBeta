@@ -2777,6 +2777,7 @@
     <public type="string" name="CreateGroupError" id="NUM" />
     <public type="string" name="CreateGroupForImport" id="NUM" />
     <public type="string" name="CreateLink" id="NUM" />
+    <public type="string" name="CreateLinkHeader" id="NUM" />
     <public type="string" name="CreateNewContact" id="NUM" />
     <public type="string" name="CreateNewFilter" id="NUM" />
     <public type="string" name="CreateNewFilterInfo" id="NUM" />
@@ -3800,6 +3801,8 @@
     <public type="string" name="LinkIsExpiredLimitReached" id="NUM" />
     <public type="string" name="LinkIsNoActive" id="NUM" />
     <public type="string" name="LinkLimitReached" id="NUM" />
+    <public type="string" name="LinkNameHelp" id="NUM" />
+    <public type="string" name="LinkNameHint" id="NUM" />
     <public type="string" name="LinkNotFound" id="NUM" />
     <public type="string" name="LinkPreview" id="NUM" />
     <public type="string" name="LinkedChannel" id="NUM" />
@@ -5217,6 +5220,7 @@
     <public type="string" name="SaveChangesAlertText" id="NUM" />
     <public type="string" name="SaveChangesAlertTitle" id="NUM" />
     <public type="string" name="SaveLink" id="NUM" />
+    <public type="string" name="SaveLinkHeader" id="NUM" />
     <public type="string" name="SaveTheme" id="NUM" />
     <public type="string" name="SaveToDownloads" id="NUM" />
     <public type="string" name="SaveToGIFs" id="NUM" />
@@ -5876,6 +5880,9 @@
     <public type="string" name="UseProxyTelegramInfo" id="NUM" />
     <public type="string" name="UseProxyTelegramInfo2" id="NUM" />
     <public type="string" name="UseProxyUsername" id="NUM" />
+    <public type="string" name="UserAcceptedToGroupAction" id="NUM" />
+    <public type="string" name="UserAcceptedToGroupPush" id="NUM" />
+    <public type="string" name="UserAcceptedToGroupPushWithGroup" id="NUM" />
     <public type="string" name="UserBio" id="NUM" />
     <public type="string" name="UserBioDetail" id="NUM" />
     <public type="string" name="UserBioEmpty" id="NUM" />

@@ -99,6 +99,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
     private boolean isSearchExpanded;
     /* access modifiers changed from: private */
     public boolean isShowLastItemDivider = true;
+    private final FrameLayout layoutContainer;
     /* access modifiers changed from: private */
     public final RecyclerView.OnScrollListener listScrollListener = new RecyclerView.OnScrollListener() {
         public void onScrolled(RecyclerView recyclerView, int i, int i2) {
@@ -122,8 +123,9 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
     /* access modifiers changed from: private */
     public final LongSparseArray<TLRPC$User> users = new LongSparseArray<>();
 
-    public MemberRequestsDelegate(BaseFragment baseFragment, long j, boolean z) {
+    public MemberRequestsDelegate(BaseFragment baseFragment, FrameLayout frameLayout, long j, boolean z) {
         this.fragment = baseFragment;
+        this.layoutContainer = frameLayout;
         this.chatId = j;
         int currentAccount2 = baseFragment.getCurrentAccount();
         this.currentAccount = currentAccount2;
@@ -554,7 +556,11 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                 int indexOf = str.indexOf(firstName);
                 spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), indexOf, firstName.length() + indexOf, 18);
                 multiLineLayout.textView.setText(spannableStringBuilder);
-                Bulletin.make(this.fragment, (Bulletin.Layout) multiLineLayout, 2750).show();
+                if (this.allImporters.isEmpty()) {
+                    Bulletin.make(this.fragment, (Bulletin.Layout) multiLineLayout, 2750).show();
+                } else {
+                    Bulletin.make(this.layoutContainer, (Bulletin.Layout) multiLineLayout, 2750).show();
+                }
             }
             ActionBarMenu createMenu = this.fragment.getActionBar().createMenu();
             if (TextUtils.isEmpty(this.query) && this.showSearchMenu) {
@@ -711,8 +717,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
     }
 
     private class PreviewDialog extends Dialog {
-        /* access modifiers changed from: private */
-        public float animationProgress;
+        private float animationProgress;
         private ValueAnimator animator;
         private BitmapDrawable backgroundDrawable;
         /* access modifiers changed from: private */
@@ -842,14 +847,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
 
                 /* access modifiers changed from: protected */
                 public void onDraw(Canvas canvas) {
-                    if (PreviewDialog.this.animationProgress < 1.0f) {
-                        canvas.save();
-                        canvas.clipRect(0.0f, ((float) getHeight()) / 2.0f, (float) getWidth(), (float) getHeight());
-                    }
                     PreviewDialog.this.pagerShadowDrawable.draw(canvas);
-                    if (PreviewDialog.this.animationProgress < 1.0f) {
-                        canvas.restore();
-                    }
                     super.onDraw(canvas);
                 }
 
@@ -977,8 +975,8 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         public void setImporter(TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter, BackupImageView backupImageView) {
             this.importer = tLRPC$TL_chatInviteImporter;
             this.imageView = backupImageView;
-            this.viewPager.setData(tLRPC$TL_chatInviteImporter.user_id, true);
             this.viewPager.setParentAvatarImage(backupImageView);
+            this.viewPager.setData(tLRPC$TL_chatInviteImporter.user_id, true);
             this.nameText.setText(UserObject.getUserName((TLRPC$User) MemberRequestsDelegate.this.users.get(tLRPC$TL_chatInviteImporter.user_id)));
             this.bioText.setText(tLRPC$TL_chatInviteImporter.about);
             this.bioText.setVisibility(TextUtils.isEmpty(tLRPC$TL_chatInviteImporter.about) ? 8 : 0);

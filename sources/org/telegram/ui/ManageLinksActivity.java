@@ -33,6 +33,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DocumentObject;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
@@ -441,17 +442,17 @@ public class ManageLinksActivity extends BaseFragment {
     public /* synthetic */ void lambda$loadLinks$3(org.telegram.tgnet.TLRPC$TL_chatInviteExported r7, org.telegram.tgnet.TLRPC$TL_error r8, org.telegram.tgnet.TLObject r9, boolean r10) {
         /*
             r6 = this;
-            r0 = 0
-            r6.linksLoading = r0
-            r6.hasMore = r0
-            if (r7 == 0) goto L_0x000f
+            org.telegram.ui.ManageLinksActivity$DiffCallback r0 = r6.saveListState()
+            r1 = 0
+            r6.linksLoading = r1
+            r6.hasMore = r1
+            if (r7 == 0) goto L_0x0013
             r6.invite = r7
-            org.telegram.tgnet.TLRPC$ChatFull r1 = r6.info
-            if (r1 == 0) goto L_0x000f
-            r1.exported_invite = r7
-        L_0x000f:
-            org.telegram.ui.ManageLinksActivity$DiffCallback r7 = r6.saveListState()
-            r1 = 1
+            org.telegram.tgnet.TLRPC$ChatFull r2 = r6.info
+            if (r2 == 0) goto L_0x0013
+            r2.exported_invite = r7
+        L_0x0013:
+            r7 = 1
             if (r8 != 0) goto L_0x010b
             org.telegram.tgnet.TLRPC$TL_messages_exportedChatInvites r9 = (org.telegram.tgnet.TLRPC$TL_messages_exportedChatInvites) r9
             if (r10 == 0) goto L_0x0036
@@ -482,11 +483,11 @@ public class ManageLinksActivity extends BaseFragment {
             int r8 = r8.size()
             if (r8 <= 0) goto L_0x0065
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ExportedChatInvite> r8 = r9.invites
-            java.lang.Object r8 = r8.get(r0)
+            java.lang.Object r8 = r8.get(r1)
             org.telegram.tgnet.TLRPC$TL_chatInviteExported r8 = (org.telegram.tgnet.TLRPC$TL_chatInviteExported) r8
             r6.invite = r8
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ExportedChatInvite> r8 = r9.invites
-            r8.remove(r0)
+            r8.remove(r1)
         L_0x0065:
             r8 = 0
         L_0x0066:
@@ -524,13 +525,13 @@ public class ManageLinksActivity extends BaseFragment {
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ExportedChatInvite> r2 = r9.invites
             int r2 = r2.size()
             if (r2 != 0) goto L_0x00b5
-            r6.hasMore = r0
+            r6.hasMore = r1
             goto L_0x00d8
         L_0x00b5:
             if (r10 == 0) goto L_0x00c8
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_chatInviteExported> r2 = r6.revokedInvites
             int r2 = r2.size()
-            int r2 = r2 + r1
+            int r2 = r2 + r7
             int r3 = r9.count
             if (r2 >= r3) goto L_0x00c4
             r2 = 1
@@ -543,7 +544,7 @@ public class ManageLinksActivity extends BaseFragment {
         L_0x00c8:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_chatInviteExported> r2 = r6.invites
             int r2 = r2.size()
-            int r2 = r2 + r1
+            int r2 = r2 + r7
             int r3 = r9.count
             if (r2 >= r3) goto L_0x00d5
             r2 = 1
@@ -562,7 +563,7 @@ public class ManageLinksActivity extends BaseFragment {
             if (r2 == 0) goto L_0x00f0
             boolean r3 = r6.isPaused
             if (r3 != 0) goto L_0x00f0
-            int r8 = r8 + r1
+            int r8 = r8 + r7
             r2.showItemsAnimated(r8)
         L_0x00f0:
             r8 = 0
@@ -582,7 +583,7 @@ public class ManageLinksActivity extends BaseFragment {
             r9.saveChatLinksCount(r2, r10)
             goto L_0x010e
         L_0x010b:
-            r6.hasMore = r0
+            r6.hasMore = r1
             r8 = 0
         L_0x010e:
             boolean r9 = r6.hasMore
@@ -595,16 +596,16 @@ public class ManageLinksActivity extends BaseFragment {
             long r2 = r2.clientUserId
             int r4 = (r9 > r2 ? 1 : (r9 == r2 ? 0 : -1))
             if (r4 != 0) goto L_0x012b
-            r6.hasMore = r1
-            r6.loadAdmins = r1
+            r6.hasMore = r7
+            r6.loadAdmins = r7
             goto L_0x0137
         L_0x012b:
             boolean r9 = r6.hasMore
             if (r9 != 0) goto L_0x0139
             boolean r9 = r6.loadRevoked
             if (r9 != 0) goto L_0x0139
-            r6.hasMore = r1
-            r6.loadRevoked = r1
+            r6.hasMore = r7
+            r6.loadRevoked = r7
         L_0x0137:
             r9 = 1
             goto L_0x013a
@@ -627,7 +628,7 @@ public class ManageLinksActivity extends BaseFragment {
             r6.resumeDelayedFragmentAnimation()
         L_0x0158:
             if (r9 == 0) goto L_0x015d
-            r6.loadLinks(r0)
+            r6.loadLinks(r1)
         L_0x015d:
             if (r8 == 0) goto L_0x016f
             org.telegram.ui.ManageLinksActivity$ListAdapter r8 = r6.listViewAdapter
@@ -635,10 +636,10 @@ public class ManageLinksActivity extends BaseFragment {
             org.telegram.ui.Components.RecyclerListView r8 = r6.listView
             int r8 = r8.getChildCount()
             if (r8 <= 0) goto L_0x016f
-            r6.updateRecyclerViewAnimated(r7)
+            r6.updateRecyclerViewAnimated(r0)
             goto L_0x0172
         L_0x016f:
-            r6.updateRows(r1)
+            r6.updateRows(r7)
         L_0x0172:
             return
         */
@@ -1091,7 +1092,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.Cells.TextInfoPrivacyCell r14 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r0 = r12.mContext
                 r14.<init>(r0)
-                r0 = 2131625089(0x7f0e0481, float:1.8877376E38)
+                r0 = 2131625090(0x7f0e0482, float:1.8877378E38)
                 java.lang.String r1 = "CreateNewLinkHelp"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r14.setText(r0)
@@ -1105,7 +1106,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r13.<init>(r14)
                 int r14 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r13.setBackgroundColor(r14)
-                r14 = 2131625179(0x7f0e04db, float:1.8877559E38)
+                r14 = 2131625180(0x7f0e04dc, float:1.887756E38)
                 java.lang.String r0 = "DeleteAllRevokedLinks"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14, r1)
@@ -1331,7 +1332,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r0.setColorFilter(r2)
                 org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
                 r2.<init>(r10, r0)
-                r10 = 2131625088(0x7f0e0480, float:1.8877374E38)
+                r10 = 2131625089(0x7f0e0481, float:1.8877376E38)
                 java.lang.String r0 = "CreateNewLink"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
@@ -1424,7 +1425,7 @@ public class ManageLinksActivity extends BaseFragment {
                 long r2 = r10.clientUserId
                 int r10 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
                 if (r10 != 0) goto L_0x021a
-                r10 = 2131627319(0x7f0e0d37, float:1.88819E38)
+                r10 = 2131627322(0x7f0e0d3a, float:1.8881905E38)
                 java.lang.String r0 = "PublicLink"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setText(r10)
@@ -1444,7 +1445,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r9.setText(r10)
                 goto L_0x0288
             L_0x023d:
-                r10 = 2131627059(0x7f0e0CLASSNAME, float:1.8881372E38)
+                r10 = 2131627062(0x7f0e0CLASSNAME, float:1.8881378E38)
                 java.lang.String r0 = "PermanentLinkForThisAdmin"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setText(r10)
@@ -1453,7 +1454,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.revokedHeader
                 if (r10 != r0) goto L_0x025f
-                r10 = 2131627518(0x7f0e0dfe, float:1.8882303E38)
+                r10 = 2131627521(0x7f0e0e01, float:1.8882309E38)
                 java.lang.String r0 = "RevokedLinks"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setText(r10)
@@ -1462,7 +1463,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.linksHeaderRow
                 if (r10 != r0) goto L_0x0274
-                r10 = 2131626113(0x7f0e0881, float:1.8879453E38)
+                r10 = 2131626116(0x7f0e0884, float:1.887946E38)
                 java.lang.String r0 = "LinksCreatedByThisAdmin"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setText(r10)
@@ -1471,7 +1472,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.adminsHeaderRow
                 if (r10 != r0) goto L_0x0288
-                r10 = 2131626112(0x7f0e0880, float:1.887945E38)
+                r10 = 2131626115(0x7f0e0883, float:1.8879457E38)
                 java.lang.String r0 = "LinksCreatedByOtherAdmins"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setText(r10)
@@ -1711,7 +1712,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r4 = 0
                 r5 = 1
                 if (r2 == 0) goto L_0x003d
-                r2 = 2131625167(0x7f0e04cf, float:1.8877534E38)
+                r2 = 2131625168(0x7f0e04d0, float:1.8877536E38)
                 java.lang.String r6 = "Delete"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1733,7 +1734,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r0.add(r2)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r4)
                 r1.add(r2)
-                r2 = 2131627715(0x7f0e0ec3, float:1.8882702E38)
+                r2 = 2131627719(0x7f0e0ec7, float:1.888271E38)
                 java.lang.String r6 = "ShareLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1748,7 +1749,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r2 = org.telegram.ui.ManageLinksActivity.this
                 boolean r2 = r2.canEdit
                 if (r2 == 0) goto L_0x00a3
-                r2 = 2131625333(0x7f0e0575, float:1.887787E38)
+                r2 = 2131625334(0x7f0e0576, float:1.8877873E38)
                 java.lang.String r6 = "EditLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1762,7 +1763,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r2 = org.telegram.ui.ManageLinksActivity.this
                 boolean r2 = r2.canEdit
                 if (r2 == 0) goto L_0x00c8
-                r2 = 2131627513(0x7f0e0df9, float:1.8882293E38)
+                r2 = 2131627516(0x7f0e0dfc, float:1.8882299E38)
                 java.lang.String r6 = "RevokeLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1786,7 +1787,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity$LinkCell$$ExternalSyntheticLambda0 r6 = new org.telegram.ui.ManageLinksActivity$LinkCell$$ExternalSyntheticLambda0
                 r6.<init>(r7, r1)
                 r3.setItems(r4, r0, r6)
-                r0 = 2131625971(0x7f0e07f3, float:1.8879165E38)
+                r0 = 2131625972(0x7f0e07f4, float:1.8879167E38)
                 java.lang.String r1 = "InviteLink"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r3.setTitle(r0)
@@ -2229,7 +2230,11 @@ public class ManageLinksActivity extends BaseFragment {
             this.invite = tLRPC$TL_chatInviteExported;
             this.position = i;
             if (tLRPC$TL_chatInviteExported != null) {
-                if (tLRPC$TL_chatInviteExported.link.startsWith("https://t.me/+")) {
+                if (!TextUtils.isEmpty(tLRPC$TL_chatInviteExported.title)) {
+                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(tLRPC$TL_chatInviteExported.title);
+                    Emoji.replaceEmoji(spannableStringBuilder, this.titleView.getPaint().getFontMetricsInt(), (int) this.titleView.getPaint().getTextSize(), false);
+                    this.titleView.setText(spannableStringBuilder);
+                } else if (tLRPC$TL_chatInviteExported.link.startsWith("https://t.me/+")) {
                     this.titleView.setText(tLRPC$TL_chatInviteExported.link.substring(14));
                 } else if (tLRPC$TL_chatInviteExported.link.startsWith("https://t.me/joinchat/")) {
                     this.titleView.setText(tLRPC$TL_chatInviteExported.link.substring(22));
@@ -2258,20 +2263,20 @@ public class ManageLinksActivity extends BaseFragment {
                     }
                 }
                 if (tLRPC$TL_chatInviteExported.permanent && !tLRPC$TL_chatInviteExported.revoked) {
-                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str);
+                    SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder(str);
                     DotDividerSpan dotDividerSpan = new DotDividerSpan();
                     dotDividerSpan.setTopPadding(AndroidUtilities.dp(1.5f));
-                    spannableStringBuilder.append("  .  ").setSpan(dotDividerSpan, spannableStringBuilder.length() - 3, spannableStringBuilder.length() - 2, 0);
-                    spannableStringBuilder.append(LocaleController.getString("Permanent", NUM));
-                    this.subtitleView.setText(spannableStringBuilder);
+                    spannableStringBuilder2.append("  .  ").setSpan(dotDividerSpan, spannableStringBuilder2.length() - 3, spannableStringBuilder2.length() - 2, 0);
+                    spannableStringBuilder2.append(LocaleController.getString("Permanent", NUM));
+                    this.subtitleView.setText(spannableStringBuilder2);
                 } else if (tLRPC$TL_chatInviteExported.expired || tLRPC$TL_chatInviteExported.revoked) {
                     if (tLRPC$TL_chatInviteExported.revoked && tLRPC$TL_chatInviteExported.usage == 0) {
                         str = LocaleController.getString("NoOneJoined", NUM);
                     }
-                    SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder(str);
+                    SpannableStringBuilder spannableStringBuilder3 = new SpannableStringBuilder(str);
                     DotDividerSpan dotDividerSpan2 = new DotDividerSpan();
                     dotDividerSpan2.setTopPadding(AndroidUtilities.dp(1.5f));
-                    spannableStringBuilder2.append("  .  ").setSpan(dotDividerSpan2, spannableStringBuilder2.length() - 3, spannableStringBuilder2.length() - 2, 0);
+                    spannableStringBuilder3.append("  .  ").setSpan(dotDividerSpan2, spannableStringBuilder3.length() - 3, spannableStringBuilder3.length() - 2, 0);
                     boolean z = tLRPC$TL_chatInviteExported.revoked;
                     if (z || (i3 = tLRPC$TL_chatInviteExported.usage_limit) <= 0 || tLRPC$TL_chatInviteExported.usage < i3) {
                         if (z) {
@@ -2281,32 +2286,32 @@ public class ManageLinksActivity extends BaseFragment {
                             i2 = NUM;
                             str2 = "Expired";
                         }
-                        spannableStringBuilder2.append(LocaleController.getString(str2, i2));
+                        spannableStringBuilder3.append(LocaleController.getString(str2, i2));
                     } else {
-                        spannableStringBuilder2.append(LocaleController.getString("LinkLimitReached", NUM));
+                        spannableStringBuilder3.append(LocaleController.getString("LinkLimitReached", NUM));
                     }
-                    this.subtitleView.setText(spannableStringBuilder2);
+                    this.subtitleView.setText(spannableStringBuilder3);
                 } else if (tLRPC$TL_chatInviteExported.expire_date > 0) {
-                    SpannableStringBuilder spannableStringBuilder3 = new SpannableStringBuilder(str);
+                    SpannableStringBuilder spannableStringBuilder4 = new SpannableStringBuilder(str);
                     DotDividerSpan dotDividerSpan3 = new DotDividerSpan();
                     dotDividerSpan3.setTopPadding(AndroidUtilities.dp(1.5f));
-                    spannableStringBuilder3.append("  .  ").setSpan(dotDividerSpan3, spannableStringBuilder3.length() - 3, spannableStringBuilder3.length() - 2, 0);
+                    spannableStringBuilder4.append("  .  ").setSpan(dotDividerSpan3, spannableStringBuilder4.length() - 3, spannableStringBuilder4.length() - 2, 0);
                     long currentTimeMillis = (((long) tLRPC$TL_chatInviteExported.expire_date) * 1000) - (System.currentTimeMillis() + (ManageLinksActivity.this.timeDif * 1000));
                     if (currentTimeMillis < 0) {
                         currentTimeMillis = 0;
                     }
                     if (currentTimeMillis > 86400000) {
-                        spannableStringBuilder3.append(LocaleController.formatPluralString("DaysLeft", (int) (currentTimeMillis / 86400000)));
+                        spannableStringBuilder4.append(LocaleController.formatPluralString("DaysLeft", (int) (currentTimeMillis / 86400000)));
                     } else {
                         long j = currentTimeMillis / 1000;
                         int i6 = (int) (j % 60);
                         long j2 = j / 60;
                         int i7 = (int) (j2 / 60);
                         Locale locale = Locale.ENGLISH;
-                        spannableStringBuilder3.append(String.format(locale, "%02d", new Object[]{Integer.valueOf(i7)})).append(String.format(locale, ":%02d", new Object[]{Integer.valueOf((int) (j2 % 60))})).append(String.format(locale, ":%02d", new Object[]{Integer.valueOf(i6)}));
+                        spannableStringBuilder4.append(String.format(locale, "%02d", new Object[]{Integer.valueOf(i7)})).append(String.format(locale, ":%02d", new Object[]{Integer.valueOf((int) (j2 % 60))})).append(String.format(locale, ":%02d", new Object[]{Integer.valueOf(i6)}));
                         this.timerRunning = true;
                     }
-                    this.subtitleView.setText(spannableStringBuilder3);
+                    this.subtitleView.setText(spannableStringBuilder4);
                 } else {
                     this.subtitleView.setText(str);
                 }

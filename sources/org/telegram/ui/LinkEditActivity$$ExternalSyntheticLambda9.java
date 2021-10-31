@@ -10,7 +10,7 @@ public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda9 im
     }
 
     public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$12();
+        this.f$0.lambda$getThemeDescriptions$11();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

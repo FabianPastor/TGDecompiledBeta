@@ -4,12 +4,12 @@ import android.view.View;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.Components.SharedMediaLayout;
 
-public final /* synthetic */ class SharedMediaLayout$4$$ExternalSyntheticLambda0 implements View.OnClickListener {
-    public final /* synthetic */ SharedMediaLayout.AnonymousClass4 f$0;
+public final /* synthetic */ class SharedMediaLayout$5$$ExternalSyntheticLambda0 implements View.OnClickListener {
+    public final /* synthetic */ SharedMediaLayout.AnonymousClass5 f$0;
     public final /* synthetic */ ActionBarMenuSubItem f$1;
     public final /* synthetic */ ActionBarMenuSubItem f$2;
 
-    public /* synthetic */ SharedMediaLayout$4$$ExternalSyntheticLambda0(SharedMediaLayout.AnonymousClass4 r1, ActionBarMenuSubItem actionBarMenuSubItem, ActionBarMenuSubItem actionBarMenuSubItem2) {
+    public /* synthetic */ SharedMediaLayout$5$$ExternalSyntheticLambda0(SharedMediaLayout.AnonymousClass5 r1, ActionBarMenuSubItem actionBarMenuSubItem, ActionBarMenuSubItem actionBarMenuSubItem2) {
         this.f$0 = r1;
         this.f$1 = actionBarMenuSubItem;
         this.f$2 = actionBarMenuSubItem2;

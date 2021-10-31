@@ -617,7 +617,7 @@ public class ClearHistoryAlert extends BottomSheet {
             int r1 = r0.currentTimer
             if (r1 != 0) goto L_0x0498
             org.telegram.ui.Components.ClearHistoryAlert$BottomSheetCell r1 = r0.setTimerButton
-            r3 = 2131625374(0x7f0e059e, float:1.8877954E38)
+            r3 = 2131625375(0x7f0e059f, float:1.8877956E38)
             java.lang.String r4 = "EnableAutoDelete"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)

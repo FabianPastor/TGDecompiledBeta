@@ -4659,7 +4659,7 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02c9 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02c9 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02c9 }
-            r10 = 2131626402(0x7f0e09a2, float:1.888004E38)
+            r10 = 2131626405(0x7f0e09a5, float:1.8880045E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02c9 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02c9 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02c9 }
@@ -5360,7 +5360,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0074
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627403(0x7f0e0d8b, float:1.888207E38)
+            r9 = 2131627406(0x7f0e0d8e, float:1.8882076E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
         L_0x0071:
             r9 = r4
@@ -5370,7 +5370,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0084
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627532(0x7f0e0e0c, float:1.8882331E38)
+            r9 = 2131627536(0x7f0e0e10, float:1.888234E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
             goto L_0x0071
         L_0x0084:
@@ -6330,7 +6330,7 @@ public class MediaDataController extends BaseController {
             r6 = r19
             r0.<init>(r1, r2, r3, r5, r6)
             r7.postRunnable(r8)
-            goto L_0x0148
+            goto L_0x0141
         L_0x0080:
             androidx.collection.LongSparseArray r3 = new androidx.collection.LongSparseArray
             r3.<init>()
@@ -6338,16 +6338,16 @@ public class MediaDataController extends BaseController {
             r6.<init>()
         L_0x008a:
             int r1 = r15.size()
-            if (r2 >= r1) goto L_0x0122
+            if (r2 >= r1) goto L_0x011b
             java.lang.Object r1 = r15.get(r2)
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
             if (r1 != 0) goto L_0x009a
-            goto L_0x011e
+            goto L_0x0117
         L_0x009a:
             int r7 = r1.getId()
-            if (r7 <= 0) goto L_0x011e
+            if (r7 <= 0) goto L_0x0117
             boolean r7 = r1.isReply()
-            if (r7 == 0) goto L_0x011e
+            if (r7 == 0) goto L_0x0117
             org.telegram.tgnet.TLRPC$Message r7 = r1.messageOwner
             org.telegram.tgnet.TLRPC$TL_messageReplyHeader r8 = r7.reply_to
             int r9 = r8.reply_to_msg_id
@@ -6367,58 +6367,53 @@ public class MediaDataController extends BaseController {
             r10 = r12
         L_0x00c2:
             org.telegram.messenger.MessageObject r8 = r1.replyMessageObject
-            if (r8 == 0) goto L_0x00da
+            if (r8 == 0) goto L_0x00d3
             org.telegram.tgnet.TLRPC$Message r8 = r8.messageOwner
-            if (r8 == 0) goto L_0x011e
+            if (r8 == 0) goto L_0x0117
             org.telegram.tgnet.TLRPC$Peer r8 = r8.peer_id
-            if (r8 == 0) goto L_0x011e
+            if (r8 == 0) goto L_0x0117
             boolean r7 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
             if (r7 == 0) goto L_0x00d3
-            goto L_0x011e
+            goto L_0x0117
         L_0x00d3:
-            long r7 = r8.channel_id
-            int r12 = (r7 > r10 ? 1 : (r7 == r10 ? 0 : -1))
-            if (r12 != 0) goto L_0x00da
-            goto L_0x011e
-        L_0x00da:
             java.lang.Object r7 = r3.get(r4)
             android.util.SparseArray r7 = (android.util.SparseArray) r7
             java.lang.Object r8 = r6.get(r10)
             java.util.ArrayList r8 = (java.util.ArrayList) r8
-            if (r7 != 0) goto L_0x00f0
+            if (r7 != 0) goto L_0x00e9
             android.util.SparseArray r7 = new android.util.SparseArray
             r7.<init>()
             r3.put(r4, r7)
-        L_0x00f0:
-            if (r8 != 0) goto L_0x00fa
+        L_0x00e9:
+            if (r8 != 0) goto L_0x00f3
             java.util.ArrayList r8 = new java.util.ArrayList
             r8.<init>()
             r6.put(r10, r8)
-        L_0x00fa:
+        L_0x00f3:
             java.lang.Object r10 = r7.get(r9)
             java.util.ArrayList r10 = (java.util.ArrayList) r10
-            if (r10 != 0) goto L_0x011b
+            if (r10 != 0) goto L_0x0114
             java.util.ArrayList r10 = new java.util.ArrayList
             r10.<init>()
             r7.put(r9, r10)
             java.lang.Integer r7 = java.lang.Integer.valueOf(r9)
             boolean r7 = r8.contains(r7)
-            if (r7 != 0) goto L_0x011b
+            if (r7 != 0) goto L_0x0114
             java.lang.Integer r7 = java.lang.Integer.valueOf(r9)
             r8.add(r7)
-        L_0x011b:
+        L_0x0114:
             r10.add(r1)
-        L_0x011e:
+        L_0x0117:
             int r2 = r2 + 1
             goto L_0x008a
-        L_0x0122:
+        L_0x011b:
             boolean r0 = r3.isEmpty()
-            if (r0 == 0) goto L_0x012e
-            if (r19 == 0) goto L_0x012d
+            if (r0 == 0) goto L_0x0127
+            if (r19 == 0) goto L_0x0126
             r19.run()
-        L_0x012d:
+        L_0x0126:
             return
-        L_0x012e:
+        L_0x0127:
             org.telegram.messenger.MessagesStorage r0 = r14.getMessagesStorage()
             org.telegram.messenger.DispatchQueue r8 = r0.getStorageQueue()
             org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda44 r9 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda44
@@ -6431,7 +6426,7 @@ public class MediaDataController extends BaseController {
             r7 = r19
             r0.<init>(r1, r2, r3, r4, r6, r7)
             r8.postRunnable(r9)
-        L_0x0148:
+        L_0x0141:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.loadReplyMessagesForMessages(java.util.ArrayList, long, boolean, java.lang.Runnable):void");

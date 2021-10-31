@@ -513,7 +513,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r15)
             r5.setPadding(r11, r6, r12, r6)
             android.widget.TextView r5 = r0.doneTextView
-            r11 = 2131625292(0x7f0e054c, float:1.8877788E38)
+            r11 = 2131625293(0x7f0e054d, float:1.887779E38)
             java.lang.String r12 = "Done"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             java.lang.String r11 = r11.toUpperCase()
@@ -674,7 +674,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r9 = 16
             r5.setGravity(r9)
             if (r3 != 0) goto L_0x03fe
-            r9 = 2131625102(0x7f0e048e, float:1.8877402E38)
+            r9 = 2131625103(0x7f0e048f, float:1.8877404E38)
             java.lang.String r10 = "CurvesAll"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             java.lang.StringBuilder r10 = new java.lang.StringBuilder
@@ -696,7 +696,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             goto L_0x04b0
         L_0x03fe:
             if (r3 != r8) goto L_0x0439
-            r9 = 2131625105(0x7f0e0491, float:1.8877409E38)
+            r9 = 2131625106(0x7f0e0492, float:1.887741E38)
             java.lang.String r10 = "CurvesRed"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             java.lang.StringBuilder r10 = new java.lang.StringBuilder
@@ -718,7 +718,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         L_0x0439:
             r9 = 2
             if (r3 != r9) goto L_0x0475
-            r10 = 2131625104(0x7f0e0490, float:1.8877407E38)
+            r10 = 2131625105(0x7f0e0491, float:1.8877409E38)
             java.lang.String r11 = "CurvesGreen"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -740,7 +740,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         L_0x0475:
             r10 = 3
             if (r3 != r10) goto L_0x04b0
-            r10 = 2131625103(0x7f0e048f, float:1.8877404E38)
+            r10 = 2131625104(0x7f0e0490, float:1.8877407E38)
             java.lang.String r11 = "CurvesBlue"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             java.lang.StringBuilder r11 = new java.lang.StringBuilder

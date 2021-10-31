@@ -244,13 +244,13 @@ public class InviteLinkBottomSheet extends BottomSheet {
             java.lang.String r4 = "fonts/rmedium.ttf"
             android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r1.setTypeface(r4)
-            r1 = 2131625971(0x7f0e07f3, float:1.8879165E38)
+            r1 = 2131625972(0x7f0e07f4, float:1.8879167E38)
             java.lang.String r4 = "InviteLink"
             if (r5 != 0) goto L_0x0159
             boolean r5 = r2.expired
             if (r5 == 0) goto L_0x013a
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131625534(0x7f0e063e, float:1.8878279E38)
+            r4 = 2131625535(0x7f0e063f, float:1.887828E38)
             java.lang.String r5 = "ExpiredLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
@@ -259,7 +259,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             boolean r5 = r2.revoked
             if (r5 == 0) goto L_0x014d
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131627517(0x7f0e0dfd, float:1.88823E38)
+            r4 = 2131627520(0x7f0e0e00, float:1.8882307E38)
             java.lang.String r5 = "RevokedLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
@@ -281,6 +281,23 @@ public class InviteLinkBottomSheet extends BottomSheet {
             android.widget.TextView r1 = r0.titleTextView
             r1.setAlpha(r11)
         L_0x016e:
+            java.lang.String r1 = r2.title
+            boolean r1 = android.text.TextUtils.isEmpty(r1)
+            if (r1 != 0) goto L_0x019a
+            android.text.SpannableStringBuilder r1 = new android.text.SpannableStringBuilder
+            java.lang.String r4 = r2.title
+            r1.<init>(r4)
+            android.widget.TextView r4 = r0.titleTextView
+            android.text.TextPaint r4 = r4.getPaint()
+            android.graphics.Paint$FontMetricsInt r4 = r4.getFontMetricsInt()
+            android.widget.TextView r5 = r0.titleTextView
+            android.text.TextPaint r5 = r5.getPaint()
+            float r5 = r5.getTextSize()
+            int r5 = (int) r5
+            org.telegram.messenger.Emoji.replaceEmoji(r1, r4, r5, r6)
+            android.widget.TextView r4 = r0.titleTextView
+            r4.setText(r1)
+        L_0x019a:
             android.view.ViewGroup r1 = r0.containerView
             org.telegram.ui.Components.RecyclerListView r4 = r0.listView
             r12 = -1
@@ -288,12 +305,12 @@ public class InviteLinkBottomSheet extends BottomSheet {
             r14 = 51
             r15 = 0
             boolean r5 = r0.titleVisible
-            if (r5 != 0) goto L_0x017f
+            if (r5 != 0) goto L_0x01ab
             r16 = 0
-            goto L_0x0181
-        L_0x017f:
+            goto L_0x01ad
+        L_0x01ab:
             r16 = 1111490560(0x42400000, float:48.0)
-        L_0x0181:
+        L_0x01ad:
             r17 = 0
             r18 = 0
             android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
@@ -302,13 +319,13 @@ public class InviteLinkBottomSheet extends BottomSheet {
             android.widget.TextView r4 = r0.titleTextView
             r10 = -1
             boolean r5 = r0.titleVisible
-            if (r5 != 0) goto L_0x0198
+            if (r5 != 0) goto L_0x01c4
             r11 = 1111490560(0x42400000, float:48.0)
-            goto L_0x019c
-        L_0x0198:
+            goto L_0x01c8
+        L_0x01c4:
             r9 = 1112014848(0x42480000, float:50.0)
             r11 = 1112014848(0x42480000, float:50.0)
-        L_0x019c:
+        L_0x01c8:
             r12 = 51
             r13 = 0
             r14 = 0
@@ -318,14 +335,14 @@ public class InviteLinkBottomSheet extends BottomSheet {
             r1.addView(r4, r5)
             r19.updateRows()
             r19.loadUsers()
-            if (r3 == 0) goto L_0x01be
+            if (r3 == 0) goto L_0x01ea
             long r1 = r2.admin_id
             java.lang.Long r1 = java.lang.Long.valueOf(r1)
             java.lang.Object r1 = r3.get(r1)
-            if (r1 != 0) goto L_0x01c1
-        L_0x01be:
+            if (r1 != 0) goto L_0x01ed
+        L_0x01ea:
             r19.loadCreator()
-        L_0x01c1:
+        L_0x01ed:
             r19.updateColors()
             return
         */

@@ -15,7 +15,7 @@ public class MemberRequestsActivity extends BaseFragment {
     public final MemberRequestsDelegate delegate;
 
     public MemberRequestsActivity(long j) {
-        this.delegate = new MemberRequestsDelegate(this, j, true) {
+        this.delegate = new MemberRequestsDelegate(this, getLayoutContainer(), j, true) {
             /* access modifiers changed from: protected */
             public void onImportersChanged(String str, boolean z, boolean z2) {
                 if (z2) {

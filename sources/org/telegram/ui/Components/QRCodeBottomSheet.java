@@ -35,7 +35,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             r2 = 0
             r0.<init>(r1, r2)
             java.lang.String r3 = "InviteByQRCode"
-            r4 = 2131625967(0x7f0e07ef, float:1.8879157E38)
+            r4 = 2131625968(0x7f0e07f0, float:1.8879159E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r4 = 1
             r0.setTitle(r3, r4)
@@ -122,7 +122,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             java.lang.String r2 = "fonts/rmedium.ttf"
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r3.setTypeface(r2)
-            r2 = 2131627723(0x7f0e0ecb, float:1.8882718E38)
+            r2 = 2131627727(0x7f0e0ecf, float:1.8882727E38)
             java.lang.String r4 = "ShareQrCode"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r3.setText(r2)

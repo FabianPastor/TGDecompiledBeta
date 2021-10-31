@@ -125,7 +125,7 @@ public class MemberRequestCell extends FrameLayout {
         String formatDateAudio = LocaleController.formatDateAudio((long) tLRPC$TL_chatInviteImporter.date, false);
         long j = tLRPC$TL_chatInviteImporter.approved_by;
         if (j == 0) {
-            this.statusTextView.setText(LocaleController.formatString("RequestToJoin", NUM, formatDateAudio));
+            this.statusTextView.setText(LocaleController.formatString("RequestedToJoinAt", NUM, formatDateAudio));
             return;
         }
         TLRPC$User tLRPC$User2 = longSparseArray.get(j);

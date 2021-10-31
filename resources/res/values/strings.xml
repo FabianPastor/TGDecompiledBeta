@@ -695,7 +695,7 @@
     <string name="CacheWasCleared">%s freed on your device!</string>
     <string name="CalculatingSize">Calculating...</string>
     <string name="Calendar">Calendar</string>
-    <string name="CalendarWeekNameShortFriday">Friday</string>
+    <string name="CalendarWeekNameShortFriday">F</string>
     <string name="CalendarWeekNameShortMonday">M</string>
     <string name="CalendarWeekNameShortSaturday">S</string>
     <string name="CalendarWeekNameShortSunday">S</string>
@@ -1145,6 +1145,7 @@
     <string name="CreateGroupError">Sorry, you can\'t create a group with these users because of their privacy settings.</string>
     <string name="CreateGroupForImport">Create a New Group to Import</string>
     <string name="CreateLink">Create Link</string>
+    <string name="CreateLinkHeader">CREATE</string>
     <string name="CreateNewContact">Create New Contact</string>
     <string name="CreateNewFilter">Create New Folder</string>
     <string name="CreateNewFilterInfo">Create folders for different groups of chats and quickly switch between them.</string>
@@ -2168,6 +2169,8 @@
     <string name="LinkIsExpiredLimitReached">This link reached its usage limit.</string>
     <string name="LinkIsNoActive">This link is no longer active</string>
     <string name="LinkLimitReached">Limit reached</string>
+    <string name="LinkNameHelp">Only you and other admins will see this name.</string>
+    <string name="LinkNameHint">Link Name (Optional)</string>
     <string name="LinkNotFound">Unfortunately, you can\'t access this message. You are not a member of the chat where it was posted.</string>
     <string name="LinkPreview">Link preview</string>
     <string name="LinkedChannel">Linked Channel</string>
@@ -3585,6 +3588,7 @@
     <string name="SaveChangesAlertText">Do you want to apply the new colors you chose?</string>
     <string name="SaveChangesAlertTitle">Save changes?</string>
     <string name="SaveLink">Save Link</string>
+    <string name="SaveLinkHeader">SAVE</string>
     <string name="SaveTheme">SAVE THEME</string>
     <string name="SaveToDownloads">Save to downloads</string>
     <string name="SaveToGIFs">Save to GIFs</string>
@@ -4244,6 +4248,9 @@
     <string name="UseProxyTelegramInfo">MTProto proxy settings.</string>
     <string name="UseProxyTelegramInfo2">This proxy may display a sponsored channel in your chat list. This doesn\'t reveal any of your Telegram traffic.</string>
     <string name="UseProxyUsername">Username</string>
+    <string name="UserAcceptedToGroupAction">un1 was accepted into the group</string>
+    <string name="UserAcceptedToGroupPush">%1$s was accepted into the group</string>
+    <string name="UserAcceptedToGroupPushWithGroup">%2$s|%1$s was accepted into the group</string>
     <string name="UserBio">Bio</string>
     <string name="UserBioDetail">Add a few words about yourself</string>
     <string name="UserBioEmpty">None</string>

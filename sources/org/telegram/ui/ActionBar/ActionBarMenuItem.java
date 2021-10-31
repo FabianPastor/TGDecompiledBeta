@@ -902,6 +902,8 @@ public class ActionBarMenuItem extends FrameLayout {
                 if (z) {
                     AndroidUtilities.hideKeyboard(this.searchField);
                 }
+                this.parentMenu.requestLayout();
+                requestLayout();
                 return false;
             }
             this.searchContainer.setVisibility(0);
