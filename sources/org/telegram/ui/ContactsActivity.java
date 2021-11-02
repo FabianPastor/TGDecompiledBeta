@@ -192,7 +192,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: protected */
     public void onTransitionAnimationProgress(boolean z, float f) {
         super.onTransitionAnimationProgress(z, f);
-        this.fragmentView.invalidate();
+        View view = this.fragmentView;
+        if (view != null) {
+            view.invalidate();
+        }
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:38:0x0141  */

@@ -87,9 +87,6 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
             this.showArchiveHint = globalMainSettings.getBoolean("archivehint", true);
             globalMainSettings.edit().putBoolean("archivehint", false).commit();
-            if (this.showArchiveHint) {
-                this.archiveHintCell = new ArchiveHintCell(context);
-            }
         }
         if (i2 == 0) {
             this.preloader = new DialogsPreloader();
@@ -404,6 +401,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v0, resolved type: org.telegram.ui.Cells.DialogCell} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v2, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v3, resolved type: org.telegram.ui.Cells.HeaderCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v10, resolved type: org.telegram.ui.Cells.ArchiveHintCell} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v8, resolved type: org.telegram.ui.Cells.DialogCell} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v14, resolved type: org.telegram.ui.Cells.DialogCell} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v15, resolved type: org.telegram.ui.Cells.DialogCell} */
@@ -417,19 +415,17 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v23, resolved type: org.telegram.ui.Cells.DialogCell} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v24, resolved type: org.telegram.ui.Cells.DialogCell} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v25, resolved type: org.telegram.ui.Cells.DialogCell} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v26, resolved type: org.telegram.ui.Cells.DialogCell} */
     /* JADX WARNING: type inference failed for: r5v4, types: [android.widget.FrameLayout, org.telegram.ui.Adapters.DialogsAdapter$1] */
     /* JADX WARNING: type inference failed for: r5v5, types: [org.telegram.ui.Cells.DialogMeUrlCell] */
     /* JADX WARNING: type inference failed for: r5v6, types: [org.telegram.ui.Cells.DialogsEmptyCell] */
     /* JADX WARNING: type inference failed for: r5v7, types: [org.telegram.ui.Cells.UserCell] */
     /* JADX WARNING: type inference failed for: r5v8, types: [org.telegram.ui.Cells.HeaderCell] */
     /* JADX WARNING: type inference failed for: r5v9, types: [org.telegram.ui.Cells.ShadowSectionCell, android.view.View] */
-    /* JADX WARNING: type inference failed for: r5v10, types: [org.telegram.ui.Cells.ArchiveHintCell, android.widget.FrameLayout] */
     /* JADX WARNING: type inference failed for: r5v11, types: [org.telegram.ui.Adapters.DialogsAdapter$LastEmptyView] */
     /* JADX WARNING: type inference failed for: r5v12, types: [android.view.View, org.telegram.ui.Adapters.DialogsAdapter$2] */
     /* JADX WARNING: type inference failed for: r5v13, types: [org.telegram.ui.Cells.TextCell] */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Unknown variable types count: 4 */
+    /* JADX WARNING: Unknown variable types count: 3 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r14, int r15) {
         /*
@@ -441,15 +437,15 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             java.lang.String r3 = "windowBackgroundGray"
             r4 = 1
             switch(r15) {
-                case 0: goto L_0x0147;
-                case 1: goto L_0x0138;
-                case 2: goto L_0x00cc;
-                case 3: goto L_0x00a3;
-                case 4: goto L_0x009a;
-                case 5: goto L_0x0091;
-                case 6: goto L_0x0085;
-                case 7: goto L_0x007c;
-                case 8: goto L_0x0059;
+                case 0: goto L_0x013b;
+                case 1: goto L_0x012c;
+                case 2: goto L_0x00c0;
+                case 3: goto L_0x0097;
+                case 4: goto L_0x008e;
+                case 5: goto L_0x0085;
+                case 6: goto L_0x0079;
+                case 7: goto L_0x0070;
+                case 8: goto L_0x004d;
                 case 9: goto L_0x0042;
                 case 10: goto L_0x0039;
                 case 11: goto L_0x0016;
@@ -459,7 +455,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.TextCell r5 = new org.telegram.ui.Cells.TextCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0160
+            goto L_0x0154
         L_0x0016:
             org.telegram.ui.Adapters.DialogsAdapter$2 r5 = new org.telegram.ui.Adapters.DialogsAdapter$2
             android.content.Context r6 = r13.mContext
@@ -473,23 +469,19 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r2.<init>(r6, r1)
             r2.setFullsize(r4)
             r5.setBackgroundDrawable(r2)
-            goto L_0x0160
+            goto L_0x0154
         L_0x0039:
             org.telegram.ui.Adapters.DialogsAdapter$LastEmptyView r5 = new org.telegram.ui.Adapters.DialogsAdapter$LastEmptyView
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0160
+            goto L_0x0154
         L_0x0042:
-            org.telegram.ui.Cells.ArchiveHintCell r5 = r13.archiveHintCell
-            android.view.ViewParent r1 = r5.getParent()
-            if (r1 == 0) goto L_0x0160
-            org.telegram.ui.Cells.ArchiveHintCell r1 = r13.archiveHintCell
-            android.view.ViewParent r1 = r1.getParent()
-            android.view.ViewGroup r1 = (android.view.ViewGroup) r1
-            org.telegram.ui.Cells.ArchiveHintCell r2 = r13.archiveHintCell
-            r1.removeView(r2)
-            goto L_0x0160
-        L_0x0059:
+            org.telegram.ui.Cells.ArchiveHintCell r5 = new org.telegram.ui.Cells.ArchiveHintCell
+            android.content.Context r1 = r13.mContext
+            r5.<init>(r1)
+            r13.archiveHintCell = r5
+            goto L_0x0154
+        L_0x004d:
             org.telegram.ui.Cells.ShadowSectionCell r5 = new org.telegram.ui.Cells.ShadowSectionCell
             android.content.Context r6 = r13.mContext
             r5.<init>(r6)
@@ -502,30 +494,30 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r2.<init>(r6, r1)
             r2.setFullsize(r4)
             r5.setBackgroundDrawable(r2)
-            goto L_0x0160
-        L_0x007c:
+            goto L_0x0154
+        L_0x0070:
             org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0160
-        L_0x0085:
+            goto L_0x0154
+        L_0x0079:
             org.telegram.ui.Cells.UserCell r5 = new org.telegram.ui.Cells.UserCell
             android.content.Context r1 = r13.mContext
             r2 = 8
             r3 = 0
             r5.<init>(r1, r2, r3, r3)
-            goto L_0x0160
-        L_0x0091:
+            goto L_0x0154
+        L_0x0085:
             org.telegram.ui.Cells.DialogsEmptyCell r5 = new org.telegram.ui.Cells.DialogsEmptyCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0160
-        L_0x009a:
+            goto L_0x0154
+        L_0x008e:
             org.telegram.ui.Cells.DialogMeUrlCell r5 = new org.telegram.ui.Cells.DialogMeUrlCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0160
-        L_0x00a3:
+            goto L_0x0154
+        L_0x0097:
             org.telegram.ui.Adapters.DialogsAdapter$1 r5 = new org.telegram.ui.Adapters.DialogsAdapter$1
             android.content.Context r4 = r13.mContext
             r5.<init>(r13, r4)
@@ -540,8 +532,8 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r1 = -1082130432(0xffffffffbvar_, float:-1.0)
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r0, r1)
             r5.addView(r3, r1)
-            goto L_0x0160
-        L_0x00cc:
+            goto L_0x0154
+        L_0x00c0:
             org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
@@ -566,22 +558,22 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r1.setText(r2)
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
             r3 = 3
-            if (r2 == 0) goto L_0x0110
+            if (r2 == 0) goto L_0x0104
             r2 = 3
-            goto L_0x0111
-        L_0x0110:
+            goto L_0x0105
+        L_0x0104:
             r2 = 5
-        L_0x0111:
+        L_0x0105:
             r2 = r2 | 16
             r1.setGravity(r2)
             r6 = -1
             r7 = -1082130432(0xffffffffbvar_, float:-1.0)
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            if (r2 == 0) goto L_0x011e
-            goto L_0x011f
-        L_0x011e:
+            if (r2 == 0) goto L_0x0112
+            goto L_0x0113
+        L_0x0112:
             r3 = 5
-        L_0x011f:
+        L_0x0113:
             r8 = r3 | 48
             r9 = 1099431936(0x41880000, float:17.0)
             r10 = 1097859072(0x41700000, float:15.0)
@@ -592,16 +584,16 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Adapters.DialogsAdapter$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.Adapters.DialogsAdapter$$ExternalSyntheticLambda0
             r2.<init>(r13)
             r1.setOnClickListener(r2)
-            goto L_0x0160
-        L_0x0138:
+            goto L_0x0154
+        L_0x012c:
             org.telegram.ui.Components.FlickerLoadingView r5 = new org.telegram.ui.Components.FlickerLoadingView
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
             r5.setIsSingleCell(r4)
             r1 = 7
             r5.setViewType(r1)
-            goto L_0x0160
-        L_0x0147:
+            goto L_0x0154
+        L_0x013b:
             org.telegram.ui.Cells.DialogCell r5 = new org.telegram.ui.Cells.DialogCell
             org.telegram.ui.DialogsActivity r7 = r13.parentFragment
             android.content.Context r8 = r13.mContext
@@ -615,14 +607,14 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r5.setArchivedPullAnimation(r1)
             org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader r1 = r13.preloader
             r5.setPreloader(r1)
-        L_0x0160:
+        L_0x0154:
             androidx.recyclerview.widget.RecyclerView$LayoutParams r1 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-            if (r15 != r14) goto L_0x0166
+            if (r15 != r14) goto L_0x015a
             r14 = -1
-            goto L_0x0167
-        L_0x0166:
+            goto L_0x015b
+        L_0x015a:
             r14 = -2
-        L_0x0167:
+        L_0x015b:
             r1.<init>((int) r0, (int) r14)
             r5.setLayoutParams(r1)
             org.telegram.ui.Components.RecyclerListView$Holder r14 = new org.telegram.ui.Components.RecyclerListView$Holder

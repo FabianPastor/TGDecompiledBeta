@@ -250,7 +250,7 @@ public class ManageLinksActivity extends BaseFragment {
         this.linkEditActivityCallback = new LinkEditActivity.Callback() {
             public void onLinkCreated(TLObject tLObject) {
                 if (tLObject instanceof TLRPC$TL_chatInviteExported) {
-                    AndroidUtilities.runOnUIThread(new ManageLinksActivity$6$$ExternalSyntheticLambda0(this, tLObject), 200);
+                    AndroidUtilities.runOnUIThread(new ManageLinksActivity$7$$ExternalSyntheticLambda0(this, tLObject), 200);
                 }
             }
 
@@ -258,11 +258,11 @@ public class ManageLinksActivity extends BaseFragment {
             public /* synthetic */ void lambda$onLinkCreated$0(TLObject tLObject) {
                 DiffCallback access$4300 = ManageLinksActivity.this.saveListState();
                 ManageLinksActivity.this.invites.add(0, (TLRPC$TL_chatInviteExported) tLObject);
-                ManageLinksActivity.this.updateRecyclerViewAnimated(access$4300);
                 if (ManageLinksActivity.this.info != null) {
                     ManageLinksActivity.this.info.invitesCount++;
                     ManageLinksActivity.this.getMessagesStorage().saveChatLinksCount(ManageLinksActivity.this.currentChatId, ManageLinksActivity.this.info.invitesCount);
                 }
+                ManageLinksActivity.this.updateRecyclerViewAnimated(access$4300);
             }
 
             public void onLinkEdited(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLObject tLObject) {
@@ -823,8 +823,12 @@ public class ManageLinksActivity extends BaseFragment {
                 ManageLinksActivity.this.recyclerItemsEnterAnimator.onDetached();
             }
         };
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
-        this.listView.setLayoutManager(linearLayoutManager);
+        final AnonymousClass5 r2 = new LinearLayoutManager(this, context, 1, false) {
+            public boolean supportsPredictiveItemAnimations() {
+                return false;
+            }
+        };
+        this.listView.setLayoutManager(r2);
         RecyclerListView recyclerListView = this.listView;
         ListAdapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
@@ -834,7 +838,7 @@ public class ManageLinksActivity extends BaseFragment {
                 super.onScrolled(recyclerView, i, i2);
                 ManageLinksActivity manageLinksActivity = ManageLinksActivity.this;
                 if (manageLinksActivity.hasMore && !manageLinksActivity.linksLoading) {
-                    if (ManageLinksActivity.this.rowCount - linearLayoutManager.findLastVisibleItemPosition() < 10) {
+                    if (ManageLinksActivity.this.rowCount - r2.findLastVisibleItemPosition() < 10) {
                         ManageLinksActivity.this.loadLinks(true);
                     }
                 }

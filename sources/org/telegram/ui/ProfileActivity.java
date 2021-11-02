@@ -4453,12 +4453,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int closestTab = sharedMediaLayout2.getClosestTab();
             int[] lastMediaCount = this.sharedMediaPreloader.getLastMediaCount();
             if (closestTab == 0) {
-                if (this.sharedMediaLayout.getPhotosVideosTypeFilter() == 1) {
+                if (lastMediaCount[7] == 0 && lastMediaCount[6] == 0) {
+                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Media", lastMediaCount[0]));
+                } else if (this.sharedMediaLayout.getPhotosVideosTypeFilter() == 1 || lastMediaCount[7] == 0) {
                     this.mediaCounterTextView.setText(LocaleController.formatPluralString("Photos", lastMediaCount[6]));
-                } else if (this.sharedMediaLayout.getPhotosVideosTypeFilter() == 2) {
+                } else if (this.sharedMediaLayout.getPhotosVideosTypeFilter() == 2 || lastMediaCount[6] == 0) {
                     this.mediaCounterTextView.setText(LocaleController.formatPluralString("Videos", lastMediaCount[7]));
                 } else {
-                    this.mediaCounterTextView.setText(LocaleController.formatPluralString("Media", lastMediaCount[0]));
+                    this.mediaCounterTextView.setText(String.format("%s, %s", new Object[]{LocaleController.formatPluralString("Photos", lastMediaCount[6]), LocaleController.formatPluralString("Videos", lastMediaCount[7])}));
                 }
             } else if (closestTab == 1) {
                 this.mediaCounterTextView.setText(LocaleController.formatPluralString("Files", lastMediaCount[1]));
