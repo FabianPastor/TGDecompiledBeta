@@ -22,6 +22,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -263,16 +264,15 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
     }
 
     public void onTapItem(ChatMessageCell chatMessageCell, ChatActivity chatActivity2) {
-        int i;
-        if (chatActivity2.currentUser != null && !chatActivity2.isSecretChat()) {
+        if (chatActivity2.currentUser != null && !chatActivity2.isSecretChat() && chatMessageCell.getMessageObject() != null && chatMessageCell.getMessageObject().getId() >= 0) {
             boolean showAnimationForCell = showAnimationForCell(chatMessageCell, -1, true, false);
             if (showAnimationForCell && !EmojiData.hasEmojiSupportVibration(chatMessageCell.getMessageObject().getStickerEmoji())) {
                 chatMessageCell.performHapticFeedback(3);
             }
             Integer printingStringType = MessagesController.getInstance(this.currentAccount).getPrintingStringType(this.dialogId, this.threadMsgId);
             if ((printingStringType == null || printingStringType.intValue() != 5) && this.hintRunnable == null && showAnimationForCell) {
-                if ((Bulletin.getVisibleBulletin() == null || !Bulletin.getVisibleBulletin().isShowing()) && (i = SharedConfig.emojiInteractionsHintCount) > 0) {
-                    SharedConfig.updateEmojiInteractionsHintCount(i - 1);
+                if ((Bulletin.getVisibleBulletin() == null || !Bulletin.getVisibleBulletin().isShowing()) && SharedConfig.emojiInteractionsHintCount > 0 && UserConfig.getInstance(this.currentAccount).getClientUserId() != chatActivity2.currentUser.id) {
+                    SharedConfig.updateEmojiInteractionsHintCount(SharedConfig.emojiInteractionsHintCount - 1);
                     StickerSetBulletinLayout stickerSetBulletinLayout = new StickerSetBulletinLayout(chatActivity2.getParentActivity(), (TLObject) null, -1, MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(chatMessageCell.getMessageObject().getStickerEmoji()), chatActivity2.getResourceProvider());
                     stickerSetBulletinLayout.subtitleTextView.setVisibility(8);
                     stickerSetBulletinLayout.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EmojiInteractionTapHint", NUM, chatActivity2.currentUser.first_name)));

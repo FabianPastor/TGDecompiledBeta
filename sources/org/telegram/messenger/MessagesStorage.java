@@ -114,7 +114,7 @@ import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
 public class MessagesStorage extends BaseController {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
-    private static final int LAST_DB_VERSION = 84;
+    private static final int LAST_DB_VERSION = 85;
     private int archiveUnreadCount;
     private int[][] bots = {new int[2], new int[2]};
     private File cacheFile;
@@ -390,8 +390,8 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS seq_idx_messages_seq ON messages_seq(seq_in, seq_out);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE params(id INTEGER PRIMARY KEY, seq INTEGER, pts INTEGER, date INTEGER, qts INTEGER, lsv INTEGER, sg INTEGER, pbytes BLOB)").stepThis().dispose();
                 this.database.executeFast("INSERT INTO params VALUES(1, 0, 0, 0, 0, 0, 0, NULL)").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE media_v3(mid INTEGER, uid INTEGER, date INTEGER, type INTEGER, data BLOB, PRIMARY KEY(mid, uid))").stepThis().dispose();
-                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media_v3 ON media_v3(uid, mid, type, date);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE media_v4(mid INTEGER, uid INTEGER, date INTEGER, type INTEGER, data BLOB, PRIMARY KEY(mid, uid, type))").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media_v3 ON media_v4(uid, mid, type, date);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE bot_keyboard(uid INTEGER PRIMARY KEY, mid INTEGER, info BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS bot_keyboard_idx_mid_v2 ON bot_keyboard(mid, uid);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE chat_settings_v2(uid INTEGER PRIMARY KEY, info BLOB, pinned INTEGER, online INTEGER, inviter INTEGER, links INTEGER)").stepThis().dispose();
@@ -439,7 +439,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE polls_v2(mid INTEGER, uid INTEGER, id INTEGER, PRIMARY KEY (mid, uid));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id_v2 ON polls_v2(id);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 84").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 85").stepThis().dispose();
                 AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda13(this));
                 loadDialogFilters();
                 loadUnreadMessages();
@@ -483,7 +483,7 @@ public class MessagesStorage extends BaseController {
                             FileLog.e((Throwable) e2);
                         }
                     }
-                    if (intValue < 84) {
+                    if (intValue < 85) {
                         updateDbToLastVersion(intValue);
                     }
                     AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda13(this));
@@ -533,19 +533,20 @@ public class MessagesStorage extends BaseController {
 
     private void updateDbToLastVersion(int i) throws Exception {
         SQLiteCursor sQLiteCursor;
+        SQLiteCursor sQLiteCursor2;
         int i2;
         int i3;
         NativeByteBuffer nativeByteBuffer;
-        SQLiteCursor sQLiteCursor2;
         SQLiteCursor sQLiteCursor3;
         SQLiteCursor sQLiteCursor4;
         SQLiteCursor sQLiteCursor5;
         SQLiteCursor sQLiteCursor6;
         SQLiteCursor sQLiteCursor7;
+        SQLiteCursor sQLiteCursor8;
         MessagesStorage messagesStorage = this;
         int i4 = i;
         AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda20(messagesStorage));
-        FileLog.d("MessagesStorage start db migration from " + i4 + " to " + 84);
+        FileLog.d("MessagesStorage start db migration from " + i4 + " to " + 85);
         int i5 = 4;
         if (i4 < 4) {
             messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
@@ -1054,22 +1055,22 @@ public class MessagesStorage extends BaseController {
             messagesStorage.database.executeFast("DROP INDEX IF EXISTS bot_keyboard_idx_mid;").stepThis().dispose();
             messagesStorage.database.beginTransaction();
             try {
-                sQLiteCursor7 = messagesStorage.database.queryFinalized("SELECT mid, uid, send_state, date, data, ttl, replydata FROM scheduled_messages_v2 WHERE 1", new Object[0]);
+                sQLiteCursor8 = messagesStorage.database.queryFinalized("SELECT mid, uid, send_state, date, data, ttl, replydata FROM scheduled_messages_v2 WHERE 1", new Object[0]);
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
-                sQLiteCursor7 = null;
+                sQLiteCursor8 = null;
             }
-            if (sQLiteCursor7 != null) {
+            if (sQLiteCursor8 != null) {
                 SQLitePreparedStatement executeFast4 = messagesStorage.database.executeFast("REPLACE INTO scheduled_messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?)");
-                while (sQLiteCursor7.next()) {
-                    NativeByteBuffer byteBufferValue3 = sQLiteCursor7.byteBufferValue(4);
+                while (sQLiteCursor8.next()) {
+                    NativeByteBuffer byteBufferValue3 = sQLiteCursor8.byteBufferValue(4);
                     if (byteBufferValue3 != null) {
-                        int intValue5 = sQLiteCursor7.intValue(i9);
-                        long longValue2 = sQLiteCursor7.longValue(1);
-                        int intValue6 = sQLiteCursor7.intValue(2);
-                        int intValue7 = sQLiteCursor7.intValue(3);
-                        int intValue8 = sQLiteCursor7.intValue(i12);
-                        NativeByteBuffer byteBufferValue4 = sQLiteCursor7.byteBufferValue(6);
+                        int intValue5 = sQLiteCursor8.intValue(i9);
+                        long longValue2 = sQLiteCursor8.longValue(1);
+                        int intValue6 = sQLiteCursor8.intValue(2);
+                        int intValue7 = sQLiteCursor8.intValue(3);
+                        int intValue8 = sQLiteCursor8.intValue(i12);
+                        NativeByteBuffer byteBufferValue4 = sQLiteCursor8.byteBufferValue(6);
                         executeFast4.requery();
                         executeFast4.bindInteger(1, intValue5);
                         executeFast4.bindLong(2, longValue2);
@@ -1091,7 +1092,7 @@ public class MessagesStorage extends BaseController {
                         i12 = 5;
                     }
                 }
-                sQLiteCursor7.dispose();
+                sQLiteCursor8.dispose();
                 executeFast4.dispose();
             }
             messagesStorage.database.executeFast("DROP INDEX IF EXISTS send_state_idx_scheduled_messages;").stepThis().dispose();
@@ -1106,23 +1107,23 @@ public class MessagesStorage extends BaseController {
             messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_type_date_idx_media_v3 ON media_v3(uid, mid, type, date);").stepThis().dispose();
             messagesStorage.database.beginTransaction();
             try {
-                sQLiteCursor6 = messagesStorage.database.queryFinalized("SELECT mid, uid, date, type, data FROM media_v2 WHERE 1", new Object[0]);
+                sQLiteCursor7 = messagesStorage.database.queryFinalized("SELECT mid, uid, date, type, data FROM media_v2 WHERE 1", new Object[0]);
             } catch (Exception e2) {
                 FileLog.e((Throwable) e2);
-                sQLiteCursor6 = null;
+                sQLiteCursor7 = null;
             }
-            if (sQLiteCursor6 != null) {
+            if (sQLiteCursor7 != null) {
                 SQLitePreparedStatement executeFast5 = messagesStorage.database.executeFast("REPLACE INTO media_v3 VALUES(?, ?, ?, ?, ?)");
-                while (sQLiteCursor6.next()) {
-                    NativeByteBuffer byteBufferValue5 = sQLiteCursor6.byteBufferValue(4);
+                while (sQLiteCursor7.next()) {
+                    NativeByteBuffer byteBufferValue5 = sQLiteCursor7.byteBufferValue(4);
                     if (byteBufferValue5 != null) {
-                        int intValue9 = sQLiteCursor6.intValue(0);
-                        long longValue3 = sQLiteCursor6.longValue(1);
+                        int intValue9 = sQLiteCursor7.intValue(0);
+                        long longValue3 = sQLiteCursor7.longValue(1);
                         if (((int) longValue3) == 0) {
                             longValue3 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue3 >> 32)));
                         }
-                        int intValue10 = sQLiteCursor6.intValue(2);
-                        int intValue11 = sQLiteCursor6.intValue(3);
+                        int intValue10 = sQLiteCursor7.intValue(2);
+                        int intValue11 = sQLiteCursor7.intValue(3);
                         executeFast5.requery();
                         executeFast5.bindInteger(1, intValue9);
                         executeFast5.bindLong(2, longValue3);
@@ -1133,7 +1134,7 @@ public class MessagesStorage extends BaseController {
                         byteBufferValue5.reuse();
                     }
                 }
-                sQLiteCursor6.dispose();
+                sQLiteCursor7.dispose();
                 executeFast5.dispose();
             }
             messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mid_type_date_idx_media;").stepThis().dispose();
@@ -1152,17 +1153,17 @@ public class MessagesStorage extends BaseController {
             messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS webpage_pending_v2(id INTEGER, mid INTEGER, uid INTEGER, PRIMARY KEY (id, mid, uid));").stepThis().dispose();
             messagesStorage.database.beginTransaction();
             try {
-                sQLiteCursor2 = messagesStorage.database.queryFinalized("SELECT r.random_id, r.mid, m.uid FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE 1", new Object[0]);
+                sQLiteCursor3 = messagesStorage.database.queryFinalized("SELECT r.random_id, r.mid, m.uid FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE 1", new Object[0]);
             } catch (Exception e3) {
                 FileLog.e((Throwable) e3);
-                sQLiteCursor2 = null;
+                sQLiteCursor3 = null;
             }
-            if (sQLiteCursor2 != null) {
+            if (sQLiteCursor3 != null) {
                 SQLitePreparedStatement executeFast6 = messagesStorage.database.executeFast("REPLACE INTO randoms_v2 VALUES(?, ?, ?)");
-                while (sQLiteCursor2.next()) {
-                    long longValue4 = sQLiteCursor2.longValue(0);
-                    int intValue12 = sQLiteCursor2.intValue(1);
-                    long longValue5 = sQLiteCursor2.longValue(2);
+                while (sQLiteCursor3.next()) {
+                    long longValue4 = sQLiteCursor3.longValue(0);
+                    int intValue12 = sQLiteCursor3.intValue(1);
+                    long longValue5 = sQLiteCursor3.longValue(2);
                     if (((int) longValue5) == 0) {
                         longValue5 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue5 >> 32)));
                     }
@@ -1172,21 +1173,21 @@ public class MessagesStorage extends BaseController {
                     executeFast6.bindLong(3, longValue5);
                     executeFast6.step();
                 }
-                sQLiteCursor2.dispose();
+                sQLiteCursor3.dispose();
                 executeFast6.dispose();
             }
             try {
-                sQLiteCursor3 = messagesStorage.database.queryFinalized("SELECT p.mid, m.uid, p.id FROM polls as p INNER JOIN messages as m ON p.mid = m.mid WHERE 1", new Object[0]);
+                sQLiteCursor4 = messagesStorage.database.queryFinalized("SELECT p.mid, m.uid, p.id FROM polls as p INNER JOIN messages as m ON p.mid = m.mid WHERE 1", new Object[0]);
             } catch (Exception e4) {
                 FileLog.e((Throwable) e4);
-                sQLiteCursor3 = null;
+                sQLiteCursor4 = null;
             }
-            if (sQLiteCursor3 != null) {
+            if (sQLiteCursor4 != null) {
                 SQLitePreparedStatement executeFast7 = messagesStorage.database.executeFast("REPLACE INTO polls_v2 VALUES(?, ?, ?)");
-                while (sQLiteCursor3.next()) {
-                    int intValue13 = sQLiteCursor3.intValue(0);
-                    long longValue6 = sQLiteCursor3.longValue(1);
-                    long longValue7 = sQLiteCursor3.longValue(2);
+                while (sQLiteCursor4.next()) {
+                    int intValue13 = sQLiteCursor4.intValue(0);
+                    long longValue6 = sQLiteCursor4.longValue(1);
+                    long longValue7 = sQLiteCursor4.longValue(2);
                     if (((int) longValue6) == 0) {
                         longValue6 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue6 >> 32)));
                     }
@@ -1196,21 +1197,21 @@ public class MessagesStorage extends BaseController {
                     executeFast7.bindLong(3, longValue7);
                     executeFast7.step();
                 }
-                sQLiteCursor3.dispose();
+                sQLiteCursor4.dispose();
                 executeFast7.dispose();
             }
             try {
-                sQLiteCursor4 = messagesStorage.database.queryFinalized("SELECT wp.id, wp.mid, m.uid FROM webpage_pending as wp INNER JOIN messages as m ON wp.mid = m.mid WHERE 1", new Object[0]);
+                sQLiteCursor5 = messagesStorage.database.queryFinalized("SELECT wp.id, wp.mid, m.uid FROM webpage_pending as wp INNER JOIN messages as m ON wp.mid = m.mid WHERE 1", new Object[0]);
             } catch (Exception e5) {
                 FileLog.e((Throwable) e5);
-                sQLiteCursor4 = null;
+                sQLiteCursor5 = null;
             }
-            if (sQLiteCursor4 != null) {
+            if (sQLiteCursor5 != null) {
                 SQLitePreparedStatement executeFast8 = messagesStorage.database.executeFast("REPLACE INTO webpage_pending_v2 VALUES(?, ?, ?)");
-                while (sQLiteCursor4.next()) {
-                    long longValue8 = sQLiteCursor4.longValue(0);
-                    int intValue14 = sQLiteCursor4.intValue(1);
-                    long longValue9 = sQLiteCursor4.longValue(2);
+                while (sQLiteCursor5.next()) {
+                    long longValue8 = sQLiteCursor5.longValue(0);
+                    int intValue14 = sQLiteCursor5.intValue(1);
+                    long longValue9 = sQLiteCursor5.longValue(2);
                     if (((int) longValue9) == 0) {
                         longValue9 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue9 >> 32)));
                     }
@@ -1220,22 +1221,22 @@ public class MessagesStorage extends BaseController {
                     executeFast8.bindLong(3, longValue9);
                     executeFast8.step();
                 }
-                sQLiteCursor4.dispose();
+                sQLiteCursor5.dispose();
                 executeFast8.dispose();
             }
             try {
-                sQLiteCursor5 = messagesStorage.database.queryFinalized("SELECT et.mid, m.uid, et.date, et.media FROM enc_tasks_v3 as et INNER JOIN messages as m ON et.mid = m.mid WHERE 1", new Object[0]);
+                sQLiteCursor6 = messagesStorage.database.queryFinalized("SELECT et.mid, m.uid, et.date, et.media FROM enc_tasks_v3 as et INNER JOIN messages as m ON et.mid = m.mid WHERE 1", new Object[0]);
             } catch (Exception e6) {
                 FileLog.e((Throwable) e6);
-                sQLiteCursor5 = null;
+                sQLiteCursor6 = null;
             }
-            if (sQLiteCursor5 != null) {
+            if (sQLiteCursor6 != null) {
                 SQLitePreparedStatement executeFast9 = messagesStorage.database.executeFast("REPLACE INTO enc_tasks_v4 VALUES(?, ?, ?, ?)");
-                while (sQLiteCursor5.next()) {
-                    int intValue15 = sQLiteCursor5.intValue(0);
-                    long longValue10 = sQLiteCursor5.longValue(1);
-                    int intValue16 = sQLiteCursor5.intValue(2);
-                    int intValue17 = sQLiteCursor5.intValue(3);
+                while (sQLiteCursor6.next()) {
+                    int intValue15 = sQLiteCursor6.intValue(0);
+                    long longValue10 = sQLiteCursor6.longValue(1);
+                    int intValue16 = sQLiteCursor6.intValue(2);
+                    int intValue17 = sQLiteCursor6.intValue(3);
                     if (((int) longValue10) == 0) {
                         longValue10 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue10 >> 32)));
                     }
@@ -1246,7 +1247,7 @@ public class MessagesStorage extends BaseController {
                     executeFast9.bindInteger(4, intValue17);
                     executeFast9.step();
                 }
-                sQLiteCursor5.dispose();
+                sQLiteCursor6.dispose();
                 executeFast9.dispose();
             }
             messagesStorage.database.executeFast("DROP INDEX IF EXISTS mid_idx_randoms;").stepThis().dispose();
@@ -1271,34 +1272,34 @@ public class MessagesStorage extends BaseController {
             messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS is_channel_idx_messages_v2 ON messages_v2(mid, is_channel);").stepThis().dispose();
             messagesStorage.database.beginTransaction();
             try {
-                sQLiteCursor = messagesStorage.database.queryFinalized("SELECT mid, uid, read_state, send_state, date, data, out, ttl, media, replydata, imp, mention, forwards, replies_data, thread_reply_id FROM messages WHERE 1", new Object[0]);
+                sQLiteCursor2 = messagesStorage.database.queryFinalized("SELECT mid, uid, read_state, send_state, date, data, out, ttl, media, replydata, imp, mention, forwards, replies_data, thread_reply_id FROM messages WHERE 1", new Object[0]);
             } catch (Exception e7) {
                 FileLog.e((Throwable) e7);
-                sQLiteCursor = null;
+                sQLiteCursor2 = null;
             }
-            if (sQLiteCursor != null) {
+            if (sQLiteCursor2 != null) {
                 SQLitePreparedStatement executeFast10 = messagesStorage.database.executeFast("REPLACE INTO messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                while (sQLiteCursor.next()) {
-                    NativeByteBuffer byteBufferValue6 = sQLiteCursor.byteBufferValue(5);
+                while (sQLiteCursor2.next()) {
+                    NativeByteBuffer byteBufferValue6 = sQLiteCursor2.byteBufferValue(5);
                     if (byteBufferValue6 != null) {
-                        long intValue18 = (long) sQLiteCursor.intValue(0);
-                        long longValue11 = sQLiteCursor.longValue(i8);
+                        long intValue18 = (long) sQLiteCursor2.intValue(0);
+                        long longValue11 = sQLiteCursor2.longValue(i8);
                         if (((int) longValue11) == 0) {
                             longValue11 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue11 >> 32)));
                         }
-                        int intValue19 = sQLiteCursor.intValue(i7);
-                        int intValue20 = sQLiteCursor.intValue(i11);
-                        int intValue21 = sQLiteCursor.intValue(i5);
-                        int intValue22 = sQLiteCursor.intValue(i6);
-                        int intValue23 = sQLiteCursor.intValue(7);
-                        int intValue24 = sQLiteCursor.intValue(8);
-                        NativeByteBuffer byteBufferValue7 = sQLiteCursor.byteBufferValue(9);
-                        int intValue25 = sQLiteCursor.intValue(10);
-                        int intValue26 = sQLiteCursor.intValue(11);
-                        int intValue27 = sQLiteCursor.intValue(12);
-                        NativeByteBuffer byteBufferValue8 = sQLiteCursor.byteBufferValue(13);
-                        SQLiteCursor sQLiteCursor8 = sQLiteCursor;
-                        int intValue28 = sQLiteCursor.intValue(14);
+                        int intValue19 = sQLiteCursor2.intValue(i7);
+                        int intValue20 = sQLiteCursor2.intValue(i11);
+                        int intValue21 = sQLiteCursor2.intValue(i5);
+                        int intValue22 = sQLiteCursor2.intValue(i6);
+                        int intValue23 = sQLiteCursor2.intValue(7);
+                        int intValue24 = sQLiteCursor2.intValue(8);
+                        NativeByteBuffer byteBufferValue7 = sQLiteCursor2.byteBufferValue(9);
+                        int intValue25 = sQLiteCursor2.intValue(10);
+                        int intValue26 = sQLiteCursor2.intValue(11);
+                        int intValue27 = sQLiteCursor2.intValue(12);
+                        NativeByteBuffer byteBufferValue8 = sQLiteCursor2.byteBufferValue(13);
+                        SQLiteCursor sQLiteCursor9 = sQLiteCursor2;
+                        int intValue28 = sQLiteCursor2.intValue(14);
                         int i13 = (int) (longValue11 >> 32);
                         if (intValue23 < 0) {
                             TLRPC$Message TLdeserialize2 = TLRPC$Message.TLdeserialize(byteBufferValue6, byteBufferValue6.readInt32(false), false);
@@ -1364,7 +1365,7 @@ public class MessagesStorage extends BaseController {
                             nativeByteBuffer.reuse();
                         }
                         byteBufferValue6.reuse();
-                        sQLiteCursor = sQLiteCursor8;
+                        sQLiteCursor2 = sQLiteCursor9;
                         i5 = 4;
                         i6 = 6;
                         i7 = 2;
@@ -1372,7 +1373,7 @@ public class MessagesStorage extends BaseController {
                         i11 = 3;
                     }
                 }
-                sQLiteCursor.dispose();
+                sQLiteCursor2.dispose();
                 executeFast10.dispose();
             }
             messagesStorage = this;
@@ -1405,16 +1406,18 @@ public class MessagesStorage extends BaseController {
             }
             executeFast11.dispose();
             queryFinalized4.dispose();
+            int i17 = 0;
             SQLiteCursor queryFinalized5 = messagesStorage.database.queryFinalized("SELECT uid, mid FROM unread_push_messages WHERE 1", new Object[0]);
             SQLitePreparedStatement executeFast12 = messagesStorage.database.executeFast("UPDATE unread_push_messages SET mid = ? WHERE uid = ? AND mid = ?");
             while (queryFinalized5.next()) {
-                long longValue13 = queryFinalized5.longValue(0);
+                long longValue13 = queryFinalized5.longValue(i17);
                 int intValue29 = queryFinalized5.intValue(1);
                 executeFast12.requery();
                 executeFast12.bindInteger(1, intValue29);
                 executeFast12.bindLong(2, longValue13);
                 executeFast12.bindInteger(3, intValue29);
                 executeFast12.step();
+                i17 = 0;
             }
             executeFast12.dispose();
             queryFinalized5.dispose();
@@ -1423,8 +1426,8 @@ public class MessagesStorage extends BaseController {
                 SQLitePreparedStatement executeFast14 = messagesStorage.database.executeFast("UPDATE dialog_filter_pin_v2 SET peer = ? WHERE peer = ?");
                 SQLitePreparedStatement executeFast15 = messagesStorage.database.executeFast("UPDATE dialog_filter_ep SET peer = ? WHERE peer = ?");
                 int size = arrayList.size();
-                for (int i17 = 0; i17 < size; i17++) {
-                    long intValue30 = (long) ((Integer) arrayList.get(i17)).intValue();
+                for (int i18 = 0; i18 < size; i18++) {
+                    long intValue30 = (long) ((Integer) arrayList.get(i18)).intValue();
                     long makeEncryptedDialogId = DialogObject.makeEncryptedDialogId(intValue30);
                     long j = intValue30 << 32;
                     executeFast13.requery();
@@ -1447,8 +1450,8 @@ public class MessagesStorage extends BaseController {
             if (arrayList2 != null) {
                 SQLitePreparedStatement executeFast16 = messagesStorage.database.executeFast("UPDATE dialogs SET did = ? WHERE did = ?");
                 int size2 = arrayList2.size();
-                for (int i18 = 0; i18 < size2; i18++) {
-                    int intValue31 = ((Integer) arrayList2.get(i18)).intValue();
+                for (int i19 = 0; i19 < size2; i19++) {
+                    int intValue31 = ((Integer) arrayList2.get(i19)).intValue();
                     long makeFolderDialogId = DialogObject.makeFolderDialogId(intValue31);
                     executeFast16.requery();
                     executeFast16.bindLong(1, makeFolderDialogId);
@@ -1464,6 +1467,45 @@ public class MessagesStorage extends BaseController {
             messagesStorage.database.executeFast("DROP INDEX IF EXISTS send_state_idx_messages2;").stepThis().dispose();
             messagesStorage.database.executeFast("DROP INDEX IF EXISTS uid_mention_idx_messages;").stepThis().dispose();
             messagesStorage.database.executeFast("DROP TABLE IF EXISTS messages;").stepThis().dispose();
+            messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("PRAGMA user_version = 84").stepThis().dispose();
+            i4 = 84;
+        }
+        if (i4 == 84) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS media_v4(mid INTEGER, uid INTEGER, date INTEGER, type INTEGER, data BLOB, PRIMARY KEY(mid, uid, type))").stepThis().dispose();
+            messagesStorage.database.beginTransaction();
+            try {
+                sQLiteCursor = messagesStorage.database.queryFinalized("SELECT mid, uid, date, type, data FROM media_v3 WHERE 1", new Object[0]);
+            } catch (Exception e8) {
+                FileLog.e((Throwable) e8);
+                sQLiteCursor = null;
+            }
+            if (sQLiteCursor != null) {
+                SQLitePreparedStatement executeFast17 = messagesStorage.database.executeFast("REPLACE INTO media_v4 VALUES(?, ?, ?, ?, ?)");
+                while (sQLiteCursor.next()) {
+                    NativeByteBuffer byteBufferValue9 = sQLiteCursor.byteBufferValue(4);
+                    if (byteBufferValue9 != null) {
+                        int intValue32 = sQLiteCursor.intValue(0);
+                        long longValue14 = sQLiteCursor.longValue(1);
+                        if (((int) longValue14) == 0) {
+                            longValue14 = DialogObject.makeEncryptedDialogId((long) ((int) (longValue14 >> 32)));
+                        }
+                        int intValue33 = sQLiteCursor.intValue(2);
+                        int intValue34 = sQLiteCursor.intValue(3);
+                        executeFast17.requery();
+                        executeFast17.bindInteger(1, intValue32);
+                        executeFast17.bindLong(2, longValue14);
+                        executeFast17.bindInteger(3, intValue33);
+                        executeFast17.bindInteger(4, intValue34);
+                        executeFast17.bindByteBuffer(5, byteBufferValue9);
+                        executeFast17.step();
+                        byteBufferValue9.reuse();
+                    }
+                }
+                sQLiteCursor.dispose();
+                executeFast17.dispose();
+            }
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS media_v3;").stepThis().dispose();
             messagesStorage.database.commitTransaction();
             messagesStorage.database.executeFast("PRAGMA user_version = 84").stepThis().dispose();
         }
@@ -5276,7 +5318,7 @@ public class MessagesStorage extends BaseController {
         L_0x00dd:
             java.lang.String r2 = "DELETE FROM media_holes_v2 WHERE uid = "
             java.lang.String r3 = "DELETE FROM messages_holes WHERE uid = "
-            java.lang.String r4 = "DELETE FROM media_v3 WHERE uid = "
+            java.lang.String r4 = "DELETE FROM media_v4 WHERE uid = "
             java.lang.String r5 = "DELETE FROM media_counts_v2 WHERE uid = "
             java.lang.String r6 = "DELETE FROM bot_keyboard WHERE uid = "
             java.lang.String r12 = "DELETE FROM messages_v2 WHERE uid = "
@@ -5877,7 +5919,7 @@ public class MessagesStorage extends BaseController {
             org.telegram.SQLite.SQLiteDatabase r7 = r1.database     // Catch:{ Exception -> 0x0312 }
             java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0312 }
             r10.<init>()     // Catch:{ Exception -> 0x0312 }
-            java.lang.String r14 = "DELETE FROM media_v3 WHERE uid IN "
+            java.lang.String r14 = "DELETE FROM media_v4 WHERE uid IN "
             r10.append(r14)     // Catch:{ Exception -> 0x0312 }
             r10.append(r2)     // Catch:{ Exception -> 0x0312 }
             java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x0312 }
@@ -16135,7 +16177,7 @@ public class MessagesStorage extends BaseController {
             if (!arrayList.isEmpty()) {
                 this.database.beginTransaction();
                 SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE messages_v2 SET data = ? WHERE mid = ? AND uid = ?");
-                SQLitePreparedStatement executeFast2 = this.database.executeFast("UPDATE media_v3 SET data = ? WHERE mid = ? AND uid = ?");
+                SQLitePreparedStatement executeFast2 = this.database.executeFast("UPDATE media_v4 SET data = ? WHERE mid = ? AND uid = ?");
                 for (int i5 = 0; i5 < arrayList.size(); i5++) {
                     TLRPC$Message tLRPC$Message = (TLRPC$Message) arrayList.get(i5);
                     NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$Message.getObjectSize());
@@ -16263,7 +16305,7 @@ public class MessagesStorage extends BaseController {
             org.telegram.SQLite.SQLiteDatabase r1 = r9.database     // Catch:{ Exception -> 0x0196 }
             java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0196 }
             r3.<init>()     // Catch:{ Exception -> 0x0196 }
-            java.lang.String r4 = "DELETE FROM media_v3 WHERE uid = "
+            java.lang.String r4 = "DELETE FROM media_v4 WHERE uid = "
             r3.append(r4)     // Catch:{ Exception -> 0x0196 }
             r3.append(r13)     // Catch:{ Exception -> 0x0196 }
             java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0196 }
@@ -17081,7 +17123,7 @@ public class MessagesStorage extends BaseController {
             r34 = r6
             java.util.Locale r6 = java.util.Locale.US     // Catch:{ Exception -> 0x010d }
             r35 = r9
-            java.lang.String r9 = "SELECT mid, type FROM media_v3 WHERE mid IN(%s) AND uid = %d"
+            java.lang.String r9 = "SELECT mid, type FROM media_v4 WHERE mid IN(%s) AND uid = %d"
             r36 = r10
             r20 = r13
             r10 = 2
@@ -17521,7 +17563,7 @@ public class MessagesStorage extends BaseController {
             if (r4 == 0) goto L_0x06ce
             if (r6 != 0) goto L_0x06ac
             org.telegram.SQLite.SQLiteDatabase r4 = r1.database     // Catch:{ Exception -> 0x010d }
-            java.lang.String r6 = "REPLACE INTO media_v3 VALUES(?, ?, ?, ?, ?)"
+            java.lang.String r6 = "REPLACE INTO media_v4 VALUES(?, ?, ?, ?, ?)"
             org.telegram.SQLite.SQLitePreparedStatement r6 = r4.executeFast(r6)     // Catch:{ Exception -> 0x010d }
         L_0x06ac:
             r6.requery()     // Catch:{ Exception -> 0x010d }
@@ -18289,7 +18331,7 @@ public class MessagesStorage extends BaseController {
         r3 = r5;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:146:?, code lost:
-        r3 = r1.database.executeFast("UPDATE media_v3 SET mid = ? WHERE mid = ? AND uid = ?");
+        r3 = r1.database.executeFast("UPDATE media_v4 SET mid = ? WHERE mid = ? AND uid = ?");
         r3.bindInteger(1, r2);
         r3.bindInteger(2, r12);
         r3.bindLong(3, r7);
@@ -18299,7 +18341,7 @@ public class MessagesStorage extends BaseController {
         r0 = move-exception;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:149:?, code lost:
-        r1.database.executeFast(java.lang.String.format(java.util.Locale.US, "DELETE FROM media_v3 WHERE mid = %d AND uid = %d", new java.lang.Object[]{java.lang.Integer.valueOf(r12), java.lang.Long.valueOf(r7)})).stepThis().dispose();
+        r1.database.executeFast(java.lang.String.format(java.util.Locale.US, "DELETE FROM media_v4 WHERE mid = %d AND uid = %d", new java.lang.Object[]{java.lang.Integer.valueOf(r12), java.lang.Long.valueOf(r7)})).stepThis().dispose();
      */
     /* JADX WARNING: Code restructure failed: missing block: B:150:0x029b, code lost:
         r0 = move-exception;
@@ -18750,7 +18792,7 @@ public class MessagesStorage extends BaseController {
             r3 = r5
         L_0x025b:
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0275 }
-            java.lang.String r4 = "UPDATE media_v3 SET mid = ? WHERE mid = ? AND uid = ?"
+            java.lang.String r4 = "UPDATE media_v4 SET mid = ? WHERE mid = ? AND uid = ?"
             org.telegram.SQLite.SQLitePreparedStatement r3 = r0.executeFast(r4)     // Catch:{ Exception -> 0x0275 }
             r4 = 1
             r3.bindInteger(r4, r2)     // Catch:{ Exception -> 0x0275 }
@@ -18766,7 +18808,7 @@ public class MessagesStorage extends BaseController {
         L_0x0275:
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x029b }
             java.util.Locale r4 = java.util.Locale.US     // Catch:{ Exception -> 0x029b }
-            java.lang.String r10 = "DELETE FROM media_v3 WHERE mid = %d AND uid = %d"
+            java.lang.String r10 = "DELETE FROM media_v4 WHERE mid = %d AND uid = %d"
             r11 = 2
             java.lang.Object[] r13 = new java.lang.Object[r11]     // Catch:{ Exception -> 0x029b }
             java.lang.Integer r11 = java.lang.Integer.valueOf(r12)     // Catch:{ Exception -> 0x029b }
@@ -19652,7 +19694,7 @@ public class MessagesStorage extends BaseController {
             boolean r0 = r15.isEmpty()     // Catch:{ Exception -> 0x05cf }
             if (r0 == 0) goto L_0x051c
             org.telegram.SQLite.SQLiteDatabase r0 = r7.database     // Catch:{ Exception -> 0x05cf }
-            java.lang.String r3 = "SELECT uid, type FROM media_v3 WHERE mid IN(%s) AND uid = %d"
+            java.lang.String r3 = "SELECT uid, type FROM media_v4 WHERE mid IN(%s) AND uid = %d"
             r6 = 2
             java.lang.Object[] r12 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x05cf }
             r6 = 0
@@ -19814,7 +19856,7 @@ public class MessagesStorage extends BaseController {
         L_0x0527:
             org.telegram.SQLite.SQLiteDatabase r0 = r7.database     // Catch:{ Exception -> 0x05cf }
             java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x05cf }
-            java.lang.String r3 = "DELETE FROM media_v3 WHERE mid IN(%s) AND uid = %d"
+            java.lang.String r3 = "DELETE FROM media_v4 WHERE mid IN(%s) AND uid = %d"
             r6 = 2
             java.lang.Object[] r8 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x05cf }
             r9 = 0
@@ -20500,7 +20542,7 @@ public class MessagesStorage extends BaseController {
             org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0286 }
             r0.dispose()     // Catch:{ Exception -> 0x0286 }
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0286 }
-            java.lang.String r6 = "DELETE FROM media_v3 WHERE uid = %d AND mid <= %d"
+            java.lang.String r6 = "DELETE FROM media_v4 WHERE uid = %d AND mid <= %d"
             r7 = 2
             java.lang.Object[] r7 = new java.lang.Object[r7]     // Catch:{ Exception -> 0x0286 }
             java.lang.Long r8 = java.lang.Long.valueOf(r2)     // Catch:{ Exception -> 0x0286 }
@@ -20558,12 +20600,12 @@ public class MessagesStorage extends BaseController {
             TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
             if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported_old) {
                 if (tLRPC$MessageMedia.bytes.length == 0) {
-                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(133);
+                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(134);
                 }
             } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported) {
                 TLRPC$TL_messageMediaUnsupported_old tLRPC$TL_messageMediaUnsupported_old = new TLRPC$TL_messageMediaUnsupported_old();
                 tLRPC$Message.media = tLRPC$TL_messageMediaUnsupported_old;
-                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(133);
+                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(134);
                 tLRPC$Message.flags |= 512;
             }
         }
@@ -20597,7 +20639,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast(String.format(Locale.US, "DELETE FROM media_holes_v2 WHERE uid = %d AND start = 0", new Object[]{Long.valueOf(j)})).stepThis().dispose();
             }
             SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
-            for (int i3 = 0; i3 < 6; i3++) {
+            for (int i3 = 0; i3 < 8; i3++) {
                 executeFast.requery();
                 executeFast.bindLong(1, j);
                 executeFast.bindInteger(2, i3);
@@ -20908,7 +20950,7 @@ public class MessagesStorage extends BaseController {
             java.lang.String r8 = "REPLACE INTO messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?, ?, ?, ?, ?)"
             org.telegram.SQLite.SQLitePreparedStatement r7 = r7.executeFast(r8)     // Catch:{ Exception -> 0x01c2 }
             org.telegram.SQLite.SQLiteDatabase r8 = r1.database     // Catch:{ Exception -> 0x01c2 }
-            java.lang.String r9 = "REPLACE INTO media_v3 VALUES(?, ?, ?, ?, ?)"
+            java.lang.String r9 = "REPLACE INTO media_v4 VALUES(?, ?, ?, ?, ?)"
             org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r9)     // Catch:{ Exception -> 0x01c2 }
             long r9 = r4.dialog_id     // Catch:{ Exception -> 0x01c2 }
             r11 = 0
@@ -21327,7 +21369,7 @@ public class MessagesStorage extends BaseController {
             java.lang.String r1 = "REPLACE INTO messages_v2 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?, ?, ?, ?, ?)"
             org.telegram.SQLite.SQLitePreparedStatement r2 = r0.executeFast(r1)     // Catch:{ Exception -> 0x06ac }
             org.telegram.SQLite.SQLiteDatabase r0 = r9.database     // Catch:{ Exception -> 0x06ac }
-            java.lang.String r1 = "REPLACE INTO media_v3 VALUES(?, ?, ?, ?, ?)"
+            java.lang.String r1 = "REPLACE INTO media_v4 VALUES(?, ?, ?, ?, ?)"
             org.telegram.SQLite.SQLitePreparedStatement r1 = r0.executeFast(r1)     // Catch:{ Exception -> 0x06ac }
             r0 = 2147483647(0x7fffffff, float:NaN)
             r14 = 0
@@ -21772,7 +21814,7 @@ public class MessagesStorage extends BaseController {
             if (r0 == 0) goto L_0x0523
             org.telegram.SQLite.SQLiteDatabase r0 = r9.database     // Catch:{ Exception -> 0x051c }
             java.util.Locale r5 = java.util.Locale.US     // Catch:{ Exception -> 0x051c }
-            java.lang.String r4 = "DELETE FROM media_v3 WHERE mid = %d AND uid = %d"
+            java.lang.String r4 = "DELETE FROM media_v4 WHERE mid = %d AND uid = %d"
             r30 = r1
             r6 = 2
             java.lang.Object[] r1 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x051a }
@@ -22756,7 +22798,7 @@ public class MessagesStorage extends BaseController {
         sQLitePreparedStatement.bindInteger(2, i == 1 ? 1 : 0);
         sQLitePreparedStatement.bindInteger(3, i);
         sQLitePreparedStatement.step();
-        for (int i2 = 0; i2 < 6; i2++) {
+        for (int i2 = 0; i2 < 8; i2++) {
             sQLitePreparedStatement2.requery();
             sQLitePreparedStatement2.bindLong(1, j);
             sQLitePreparedStatement2.bindInteger(2, i2);
@@ -22827,7 +22869,7 @@ public class MessagesStorage extends BaseController {
             java.lang.String r2 = "REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             org.telegram.SQLite.SQLitePreparedStatement r12 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0400 }
             org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x0400 }
-            java.lang.String r2 = "REPLACE INTO media_v3 VALUES(?, ?, ?, ?, ?)"
+            java.lang.String r2 = "REPLACE INTO media_v4 VALUES(?, ?, ?, ?, ?)"
             org.telegram.SQLite.SQLitePreparedStatement r13 = r1.executeFast(r2)     // Catch:{ Exception -> 0x0400 }
             org.telegram.SQLite.SQLiteDatabase r1 = r7.database     // Catch:{ Exception -> 0x0400 }
             java.lang.String r2 = "REPLACE INTO dialog_settings VALUES(?, ?)"
@@ -23980,7 +24022,7 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0021:
             java.lang.String r7 = "SavedMessages"
-            r8 = 2131627478(0x7f0e0dd6, float:1.8882222E38)
+            r8 = 2131627536(0x7f0e0e10, float:1.888234E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)     // Catch:{ Exception -> 0x0654 }
             java.lang.String r7 = r7.toLowerCase()     // Catch:{ Exception -> 0x0654 }
             java.lang.String r8 = "saved messages"

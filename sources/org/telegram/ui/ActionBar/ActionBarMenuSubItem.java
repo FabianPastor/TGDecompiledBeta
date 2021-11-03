@@ -257,4 +257,8 @@ public class ActionBarMenuSubItem extends FrameLayout {
         Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
     }
+
+    public CheckBox2 getCheckView() {
+        return this.checkView;
+    }
 }

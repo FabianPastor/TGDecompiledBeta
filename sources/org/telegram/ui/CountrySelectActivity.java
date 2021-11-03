@@ -129,7 +129,7 @@ public class CountrySelectActivity extends BaseFragment {
         recyclerListView.setSectionsType(1);
         this.listView.setEmptyView(this.emptyView);
         this.listView.setVerticalScrollBarEnabled(false);
-        this.listView.setFastScrollEnabled();
+        this.listView.setFastScrollEnabled(0);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setAdapter(this.listViewAdapter);
         RecyclerListView recyclerListView2 = this.listView;
@@ -365,8 +365,9 @@ public class CountrySelectActivity extends BaseFragment {
             return this.sortedCountries.get(sectionForPosition);
         }
 
-        public int getPositionForScrollProgress(float f) {
-            return (int) (((float) getItemCount()) * f);
+        public void getPositionForScrollProgress(RecyclerListView recyclerListView, float f, int[] iArr) {
+            iArr[0] = (int) (((float) getItemCount()) * f);
+            iArr[1] = 0;
         }
     }
 

@@ -10,7 +10,7 @@ public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda11 i
     }
 
     public final void onOptionSelected(int i) {
-        this.f$0.lambda$createView$2(i);
+        this.f$0.lambda$createView$3(i);
     }
 
     public /* synthetic */ void onTouchEnd() {

@@ -6,8 +6,8 @@ public class TLRPC$TL_channelAdminLogEventActionExportedInviteEdit extends TLRPC
     public TLRPC$TL_chatInviteExported prev_invite;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        this.prev_invite = (TLRPC$TL_chatInviteExported) TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        this.new_invite = (TLRPC$TL_chatInviteExported) TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        this.prev_invite = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        this.new_invite = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {

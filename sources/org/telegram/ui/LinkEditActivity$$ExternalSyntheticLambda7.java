@@ -12,6 +12,6 @@ public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda7 im
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$createView$7(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$onCreateClicked$8(tLObject, tLRPC$TL_error);
     }
 }

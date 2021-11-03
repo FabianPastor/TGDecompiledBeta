@@ -1480,7 +1480,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             r6.<init>(r3)     // Catch:{ all -> 0x00fc }
             android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x00fc }
             android.content.res.Resources r7 = r7.getResources()     // Catch:{ all -> 0x00fc }
-            r8 = 2131165610(0x7var_aa, float:1.7945442E38)
+            r8 = 2131165613(0x7var_ad, float:1.7945448E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r8)     // Catch:{ all -> 0x00fc }
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ all -> 0x00fc }
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x00fc }
@@ -2144,7 +2144,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             java.lang.Long r1 = java.lang.Long.valueOf(r5)
             org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
             org.telegram.ui.Components.HintView r1 = r7.hintView
-            r3 = 2131627258(0x7f0e0cfa, float:1.8881775E38)
+            r3 = 2131627305(0x7f0e0d29, float:1.888187E38)
             java.lang.Object[] r5 = new java.lang.Object[r4]
             java.lang.String r0 = org.telegram.messenger.UserObject.getFirstName(r0)
             r5[r2] = r0
@@ -2154,7 +2154,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             goto L_0x0065
         L_0x0057:
             org.telegram.ui.Components.HintView r0 = r7.hintView
-            r1 = 2131627257(0x7f0e0cf9, float:1.8881773E38)
+            r1 = 2131627304(0x7f0e0d28, float:1.8881869E38)
             java.lang.String r2 = "ProximityTooltioGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setOverrideText(r1)

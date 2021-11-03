@@ -243,51 +243,51 @@ public class LogoutActivity extends BaseFragment {
             /*
                 r2 = this;
                 java.lang.String r3 = "windowBackgroundWhite"
-                if (r4 == 0) goto L_0x004e
+                if (r4 == 0) goto L_0x004c
                 r0 = 1
-                if (r4 == r0) goto L_0x003c
+                if (r4 == r0) goto L_0x003a
                 r0 = 2
-                if (r4 == r0) goto L_0x0034
+                if (r4 == r0) goto L_0x0032
                 r0 = 3
-                if (r4 == r0) goto L_0x0025
+                if (r4 == r0) goto L_0x0023
                 org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r4 = r2.mContext
                 r3.<init>(r4)
                 android.content.Context r4 = r2.mContext
-                r0 = 2131165448(0x7var_, float:1.7945113E38)
+                r0 = 2131165450(0x7var_a, float:1.7945117E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r4, (int) r0, (java.lang.String) r1)
                 r3.setBackgroundDrawable(r4)
-                goto L_0x005d
-            L_0x0025:
+                goto L_0x005b
+            L_0x0023:
                 org.telegram.ui.Cells.TextSettingsCell r4 = new org.telegram.ui.Cells.TextSettingsCell
                 android.content.Context r0 = r2.mContext
                 r4.<init>(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-                goto L_0x005c
-            L_0x0034:
+                goto L_0x005a
+            L_0x0032:
                 org.telegram.ui.Cells.ShadowSectionCell r3 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r4 = r2.mContext
                 r3.<init>(r4)
-                goto L_0x005d
-            L_0x003c:
+                goto L_0x005b
+            L_0x003a:
                 org.telegram.ui.Cells.TextDetailSettingsCell r4 = new org.telegram.ui.Cells.TextDetailSettingsCell
                 android.content.Context r1 = r2.mContext
                 r4.<init>(r1)
                 r4.setMultilineDetail(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-                goto L_0x005c
-            L_0x004e:
+                goto L_0x005a
+            L_0x004c:
                 org.telegram.ui.Cells.HeaderCell r4 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r0 = r2.mContext
                 r4.<init>(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-            L_0x005c:
+            L_0x005a:
                 r3 = r4
-            L_0x005d:
+            L_0x005b:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r4 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2

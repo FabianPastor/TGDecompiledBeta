@@ -510,7 +510,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         frameLayout.addView(this.recyclerListView);
         ChatAvatarContainer chatAvatarContainer = new ChatAvatarContainer(context2, (ChatActivity) null, false);
         this.avatarContainer = chatAvatarContainer;
-        this.actionBar.addView(chatAvatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, !this.inPreviewMode ? 56.0f : 0.0f, 0.0f, 40.0f, 0.0f));
+        chatAvatarContainer.setOccupyStatusBar(!AndroidUtilities.isTablet());
+        this.actionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, !this.inPreviewMode ? 56.0f : 0.0f, 0.0f, 40.0f, 0.0f));
         TLRPC$Chat chat2 = getMessagesController().getChat(Long.valueOf(this.chat.id));
         this.avatarContainer.setChatAvatar(chat2);
         this.avatarContainer.setTitle(chat2.title);
@@ -831,7 +832,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 org.telegram.ui.Charts.BaseChartView$SharedUiComponents r2 = r2.sharedUi
                 r1.<init>(r4, r5, r6, r2)
                 r1.setWillNotDraw(r0)
-                goto L_0x00c2
+                goto L_0x00be
             L_0x001a:
                 r1 = 9
                 if (r6 != r1) goto L_0x0032
@@ -841,29 +842,29 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 org.telegram.tgnet.TLRPC$ChatFull r6 = r6.chat
                 r1.<init>(r4, r5, r6)
                 r1.setWillNotDraw(r0)
-                goto L_0x00c2
+                goto L_0x00be
             L_0x0032:
                 r1 = 11
                 java.lang.String r2 = "windowBackgroundWhite"
-                if (r6 != r1) goto L_0x004b
+                if (r6 != r1) goto L_0x004a
                 org.telegram.ui.Cells.LoadingCell r1 = new org.telegram.ui.Cells.LoadingCell
                 android.content.Context r5 = r5.getContext()
                 r1.<init>(r5)
                 int r5 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 r1.setBackgroundColor(r5)
-                goto L_0x00c2
-            L_0x004b:
+                goto L_0x00be
+            L_0x004a:
                 r1 = 12
-                if (r6 != r1) goto L_0x005f
+                if (r6 != r1) goto L_0x005e
                 org.telegram.ui.Cells.EmptyCell r1 = new org.telegram.ui.Cells.EmptyCell
                 android.content.Context r5 = r5.getContext()
                 r6 = 1097859072(0x41700000, float:15.0)
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 r1.<init>(r5, r6)
-                goto L_0x00c2
-            L_0x005f:
+                goto L_0x00be
+            L_0x005e:
                 r3 = 13
-                if (r6 != r3) goto L_0x0085
+                if (r6 != r3) goto L_0x0084
                 org.telegram.ui.StatisticActivity$Adapter$3 r1 = new org.telegram.ui.StatisticActivity$Adapter$3
                 android.content.Context r5 = r5.getContext()
                 r1.<init>(r4, r5)
@@ -874,17 +875,17 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 int r2 = r1.getRight()
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 r1.setPadding(r5, r0, r2, r6)
-                goto L_0x00c2
-            L_0x0085:
+                goto L_0x00be
+            L_0x0084:
                 r0 = 14
-                if (r6 != r0) goto L_0x0093
+                if (r6 != r0) goto L_0x0092
                 org.telegram.ui.StatisticActivity$OverviewCell r1 = new org.telegram.ui.StatisticActivity$OverviewCell
                 android.content.Context r5 = r5.getContext()
                 r1.<init>(r5)
-                goto L_0x00c2
-            L_0x0093:
+                goto L_0x00be
+            L_0x0092:
                 r0 = 15
-                if (r6 != r0) goto L_0x00b1
+                if (r6 != r0) goto L_0x00ae
                 org.telegram.ui.Cells.ManageChatTextCell r1 = new org.telegram.ui.Cells.ManageChatTextCell
                 android.content.Context r5 = r5.getContext()
                 r1.<init>(r5)
@@ -893,15 +894,15 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 java.lang.String r5 = "windowBackgroundWhiteBlueIcon"
                 java.lang.String r6 = "windowBackgroundWhiteBlueButton"
                 r1.setColors(r5, r6)
-                goto L_0x00c2
-            L_0x00b1:
+                goto L_0x00be
+            L_0x00ae:
                 org.telegram.ui.Cells.ShadowSectionCell r6 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r5 = r5.getContext()
                 java.lang.String r0 = "windowBackgroundGray"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r6.<init>(r5, r1, r0)
                 r1 = r6
-            L_0x00c2:
+            L_0x00be:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r5 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r6 = -1
                 r0 = -2
@@ -3185,22 +3186,22 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r4 = 0
                 r12 = 0
             L_0x0072:
-                r5 = 2131627801(0x7f0e0var_, float:1.8882877E38)
+                r5 = 2131627863(0x7f0e0var_, float:1.8883002E38)
                 java.lang.String r6 = "StatisticOpenProfile"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 r1.add(r5)
-                r5 = 2131165677(0x7var_ed, float:1.7945578E38)
+                r5 = 2131165680(0x7var_f0, float:1.7945584E38)
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r6 = r16
                 r6.add(r5)
                 r5 = 2
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r2.add(r5)
-                r5 = 2131627803(0x7f0e0f1b, float:1.888288E38)
+                r5 = 2131627865(0x7f0e0var_, float:1.8883006E38)
                 java.lang.String r9 = "StatisticSearchUserHistory"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
                 r1.add(r5)
-                r5 = 2131165639(0x7var_c7, float:1.79455E38)
+                r5 = 2131165642(0x7var_ca, float:1.7945507E38)
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r6.add(r5)
                 r5 = 1
@@ -3315,11 +3316,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r5 = 0
             L_0x018c:
                 if (r5 == 0) goto L_0x0194
-                r0 = 2131627626(0x7f0e0e6a, float:1.8882522E38)
+                r0 = 2131627685(0x7f0e0ea5, float:1.8882641E38)
                 java.lang.String r9 = "SetAsAdmin"
                 goto L_0x0199
             L_0x0194:
-                r0 = 2131625295(0x7f0e054f, float:1.8877794E38)
+                r0 = 2131625315(0x7f0e0563, float:1.8877834E38)
                 java.lang.String r9 = "EditAdminRights"
             L_0x0199:
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r9, r0)

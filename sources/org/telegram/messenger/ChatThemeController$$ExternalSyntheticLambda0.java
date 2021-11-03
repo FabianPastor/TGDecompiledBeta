@@ -1,18 +1,18 @@
 package org.telegram.messenger;
 
-import java.util.List;
-import org.telegram.tgnet.ResultCallback;
+import android.graphics.Bitmap;
+import java.io.File;
 
 public final /* synthetic */ class ChatThemeController$$ExternalSyntheticLambda0 implements Runnable {
-    public final /* synthetic */ List f$0;
-    public final /* synthetic */ ResultCallback f$1;
+    public final /* synthetic */ File f$0;
+    public final /* synthetic */ Bitmap f$1;
 
-    public /* synthetic */ ChatThemeController$$ExternalSyntheticLambda0(List list, ResultCallback resultCallback) {
-        this.f$0 = list;
-        this.f$1 = resultCallback;
+    public /* synthetic */ ChatThemeController$$ExternalSyntheticLambda0(File file, Bitmap bitmap) {
+        this.f$0 = file;
+        this.f$1 = bitmap;
     }
 
     public final void run() {
-        ChatThemeController.lambda$requestAllChatThemes$1(this.f$0, this.f$1);
+        ChatThemeController.lambda$saveWallpaperBitmap$7(this.f$0, this.f$1);
     }
 }

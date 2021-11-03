@@ -580,59 +580,59 @@ public class InviteContactsActivity extends BaseFragment implements Notification
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:10:0x003b, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:10:0x003a, code lost:
         r4 = (org.telegram.ui.Cells.InviteUserCell) r4;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$createView$0(android.view.View r4, int r5) {
         /*
             r3 = this;
-            if (r5 != 0) goto L_0x0036
+            if (r5 != 0) goto L_0x0035
             boolean r5 = r3.searching
-            if (r5 != 0) goto L_0x0036
-            android.content.Intent r4 = new android.content.Intent     // Catch:{ Exception -> 0x0031 }
+            if (r5 != 0) goto L_0x0035
+            android.content.Intent r4 = new android.content.Intent     // Catch:{ Exception -> 0x0030 }
             java.lang.String r5 = "android.intent.action.SEND"
-            r4.<init>(r5)     // Catch:{ Exception -> 0x0031 }
+            r4.<init>(r5)     // Catch:{ Exception -> 0x0030 }
             java.lang.String r5 = "text/plain"
-            r4.setType(r5)     // Catch:{ Exception -> 0x0031 }
-            int r5 = r3.currentAccount     // Catch:{ Exception -> 0x0031 }
-            org.telegram.messenger.ContactsController r5 = org.telegram.messenger.ContactsController.getInstance(r5)     // Catch:{ Exception -> 0x0031 }
+            r4.setType(r5)     // Catch:{ Exception -> 0x0030 }
+            int r5 = r3.currentAccount     // Catch:{ Exception -> 0x0030 }
+            org.telegram.messenger.ContactsController r5 = org.telegram.messenger.ContactsController.getInstance(r5)     // Catch:{ Exception -> 0x0030 }
             r0 = 0
-            java.lang.String r5 = r5.getInviteText(r0)     // Catch:{ Exception -> 0x0031 }
+            java.lang.String r5 = r5.getInviteText(r0)     // Catch:{ Exception -> 0x0030 }
             java.lang.String r0 = "android.intent.extra.TEXT"
-            r4.putExtra(r0, r5)     // Catch:{ Exception -> 0x0031 }
-            android.app.Activity r0 = r3.getParentActivity()     // Catch:{ Exception -> 0x0031 }
-            android.content.Intent r4 = android.content.Intent.createChooser(r4, r5)     // Catch:{ Exception -> 0x0031 }
+            r4.putExtra(r0, r5)     // Catch:{ Exception -> 0x0030 }
+            android.app.Activity r0 = r3.getParentActivity()     // Catch:{ Exception -> 0x0030 }
+            android.content.Intent r4 = android.content.Intent.createChooser(r4, r5)     // Catch:{ Exception -> 0x0030 }
             r5 = 500(0x1f4, float:7.0E-43)
-            r0.startActivityForResult(r4, r5)     // Catch:{ Exception -> 0x0031 }
-            goto L_0x0035
-        L_0x0031:
+            r0.startActivityForResult(r4, r5)     // Catch:{ Exception -> 0x0030 }
+            goto L_0x0034
+        L_0x0030:
             r4 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)
+        L_0x0034:
+            return
         L_0x0035:
-            return
-        L_0x0036:
             boolean r5 = r4 instanceof org.telegram.ui.Cells.InviteUserCell
-            if (r5 != 0) goto L_0x003b
+            if (r5 != 0) goto L_0x003a
             return
-        L_0x003b:
+        L_0x003a:
             org.telegram.ui.Cells.InviteUserCell r4 = (org.telegram.ui.Cells.InviteUserCell) r4
             org.telegram.messenger.ContactsController$Contact r5 = r4.getContact()
-            if (r5 != 0) goto L_0x0044
+            if (r5 != 0) goto L_0x0043
             return
-        L_0x0044:
+        L_0x0043:
             java.util.HashMap<java.lang.String, org.telegram.ui.Components.GroupCreateSpan> r0 = r3.selectedContacts
             java.lang.String r1 = r5.key
             boolean r0 = r0.containsKey(r1)
-            if (r0 == 0) goto L_0x005e
+            if (r0 == 0) goto L_0x005d
             java.util.HashMap<java.lang.String, org.telegram.ui.Components.GroupCreateSpan> r1 = r3.selectedContacts
             java.lang.String r5 = r5.key
             java.lang.Object r5 = r1.get(r5)
             org.telegram.ui.Components.GroupCreateSpan r5 = (org.telegram.ui.Components.GroupCreateSpan) r5
             org.telegram.ui.InviteContactsActivity$SpansContainer r1 = r3.spansContainer
             r1.removeSpan(r5)
-            goto L_0x0071
-        L_0x005e:
+            goto L_0x0070
+        L_0x005d:
             org.telegram.ui.Components.GroupCreateSpan r1 = new org.telegram.ui.Components.GroupCreateSpan
             org.telegram.ui.Components.EditTextBoldCursor r2 = r3.editText
             android.content.Context r2 = r2.getContext()
@@ -640,29 +640,29 @@ public class InviteContactsActivity extends BaseFragment implements Notification
             org.telegram.ui.InviteContactsActivity$SpansContainer r5 = r3.spansContainer
             r5.addSpan(r1)
             r1.setOnClickListener(r3)
-        L_0x0071:
+        L_0x0070:
             r3.updateHint()
             boolean r5 = r3.searching
-            if (r5 != 0) goto L_0x0083
+            if (r5 != 0) goto L_0x0082
             boolean r5 = r3.searchWas
-            if (r5 == 0) goto L_0x007d
-            goto L_0x0083
-        L_0x007d:
+            if (r5 == 0) goto L_0x007c
+            goto L_0x0082
+        L_0x007c:
             r5 = 1
             r0 = r0 ^ r5
             r4.setChecked(r0, r5)
-            goto L_0x0088
-        L_0x0083:
+            goto L_0x0087
+        L_0x0082:
             org.telegram.ui.Components.EditTextBoldCursor r4 = r3.editText
             org.telegram.messenger.AndroidUtilities.showKeyboard(r4)
-        L_0x0088:
+        L_0x0087:
             org.telegram.ui.Components.EditTextBoldCursor r4 = r3.editText
             int r4 = r4.length()
-            if (r4 <= 0) goto L_0x0096
+            if (r4 <= 0) goto L_0x0095
             org.telegram.ui.Components.EditTextBoldCursor r4 = r3.editText
             r5 = 0
             r4.setText(r5)
-        L_0x0096:
+        L_0x0095:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.InviteContactsActivity.lambda$createView$0(android.view.View, int):void");

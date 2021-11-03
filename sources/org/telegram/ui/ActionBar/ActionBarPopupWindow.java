@@ -290,12 +290,16 @@ public class ActionBarPopupWindow extends PopupWindow {
             if (this.animationEnabled) {
                 final AnimatorSet animatorSet = new AnimatorSet();
                 Animator[] animatorArr = new Animator[2];
-                animatorArr[0] = ObjectAnimator.ofFloat(view, View.ALPHA, new float[]{0.0f, 1.0f});
-                Property property = View.TRANSLATION_Y;
+                Property property = View.ALPHA;
                 float[] fArr = new float[2];
-                fArr[0] = (float) AndroidUtilities.dp(this.shownFromBotton ? 6.0f : -6.0f);
-                fArr[1] = 0.0f;
-                animatorArr[1] = ObjectAnimator.ofFloat(view, property, fArr);
+                fArr[0] = 0.0f;
+                fArr[1] = view.isEnabled() ? 1.0f : 0.5f;
+                animatorArr[0] = ObjectAnimator.ofFloat(view, property, fArr);
+                Property property2 = View.TRANSLATION_Y;
+                float[] fArr2 = new float[2];
+                fArr2[0] = (float) AndroidUtilities.dp(this.shownFromBotton ? 6.0f : -6.0f);
+                fArr2[1] = 0.0f;
+                animatorArr[1] = ObjectAnimator.ofFloat(view, property2, fArr2);
                 animatorSet.playTogether(animatorArr);
                 animatorSet.setDuration(180);
                 animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -543,21 +547,33 @@ public class ActionBarPopupWindow extends PopupWindow {
     }
 
     public void startAnimation() {
+        ActionBarPopupWindowLayout actionBarPopupWindowLayout;
         if (this.animationEnabled && this.windowAnimatorSet == null) {
-            ActionBarPopupWindowLayout actionBarPopupWindowLayout = (ActionBarPopupWindowLayout) getContentView();
+            ViewGroup viewGroup = (ViewGroup) getContentView();
+            ActionBarPopupWindowLayout actionBarPopupWindowLayout2 = null;
+            if (viewGroup instanceof ActionBarPopupWindowLayout) {
+                actionBarPopupWindowLayout = (ActionBarPopupWindowLayout) viewGroup;
+            } else {
+                for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                    if (viewGroup.getChildAt(i) instanceof ActionBarPopupWindowLayout) {
+                        actionBarPopupWindowLayout2 = (ActionBarPopupWindowLayout) viewGroup.getChildAt(i);
+                    }
+                }
+                actionBarPopupWindowLayout = actionBarPopupWindowLayout2;
+            }
             actionBarPopupWindowLayout.setTranslationY(0.0f);
             actionBarPopupWindowLayout.setAlpha(1.0f);
             actionBarPopupWindowLayout.setPivotX((float) actionBarPopupWindowLayout.getMeasuredWidth());
             actionBarPopupWindowLayout.setPivotY(0.0f);
             int itemsCount = actionBarPopupWindowLayout.getItemsCount();
             actionBarPopupWindowLayout.positions.clear();
-            int i = 0;
-            for (int i2 = 0; i2 < itemsCount; i2++) {
-                View itemAt = actionBarPopupWindowLayout.getItemAt(i2);
+            int i2 = 0;
+            for (int i3 = 0; i3 < itemsCount; i3++) {
+                View itemAt = actionBarPopupWindowLayout.getItemAt(i3);
                 itemAt.setAlpha(0.0f);
                 if (itemAt.getVisibility() == 0) {
-                    actionBarPopupWindowLayout.positions.put(itemAt, Integer.valueOf(i));
-                    i++;
+                    actionBarPopupWindowLayout.positions.put(itemAt, Integer.valueOf(i2));
+                    i2++;
                 }
             }
             if (actionBarPopupWindowLayout.shownFromBotton) {
@@ -568,14 +584,27 @@ public class ActionBarPopupWindow extends PopupWindow {
             AnimatorSet animatorSet = new AnimatorSet();
             this.windowAnimatorSet = animatorSet;
             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(actionBarPopupWindowLayout, "backScaleY", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(actionBarPopupWindowLayout, "backAlpha", new int[]{0, 255})});
-            this.windowAnimatorSet.setDuration((long) ((i * 16) + 150));
+            this.windowAnimatorSet.setDuration((long) ((i2 * 16) + 150));
             this.windowAnimatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
+                    ActionBarPopupWindowLayout actionBarPopupWindowLayout;
+                    ActionBarPopupWindowLayout actionBarPopupWindowLayout2 = null;
                     AnimatorSet unused = ActionBarPopupWindow.this.windowAnimatorSet = null;
-                    ActionBarPopupWindowLayout actionBarPopupWindowLayout = (ActionBarPopupWindowLayout) ActionBarPopupWindow.this.getContentView();
+                    ViewGroup viewGroup = (ViewGroup) ActionBarPopupWindow.this.getContentView();
+                    if (viewGroup instanceof ActionBarPopupWindowLayout) {
+                        actionBarPopupWindowLayout = (ActionBarPopupWindowLayout) viewGroup;
+                    } else {
+                        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                            if (viewGroup.getChildAt(i) instanceof ActionBarPopupWindowLayout) {
+                                actionBarPopupWindowLayout2 = (ActionBarPopupWindowLayout) viewGroup.getChildAt(i);
+                            }
+                        }
+                        actionBarPopupWindowLayout = actionBarPopupWindowLayout2;
+                    }
                     int itemsCount = actionBarPopupWindowLayout.getItemsCount();
-                    for (int i = 0; i < itemsCount; i++) {
-                        actionBarPopupWindowLayout.getItemAt(i).setAlpha(1.0f);
+                    for (int i2 = 0; i2 < itemsCount; i2++) {
+                        View itemAt = actionBarPopupWindowLayout.getItemAt(i2);
+                        itemAt.setAlpha(itemAt.isEnabled() ? 1.0f : 0.5f);
                     }
                 }
             });

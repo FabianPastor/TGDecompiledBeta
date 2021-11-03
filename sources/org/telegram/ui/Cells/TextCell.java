@@ -15,10 +15,11 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 
 public class TextCell extends FrameLayout {
-    private int imageLeft;
+    public int imageLeft;
     public final RLottieImageView imageView;
     private boolean inDialogs;
     private int leftPadding;
@@ -72,7 +73,7 @@ public class TextCell extends FrameLayout {
         return this.textView;
     }
 
-    public ImageView getImageView() {
+    public RLottieImageView getImageView() {
         return this.imageView;
     }
 
@@ -171,7 +172,11 @@ public class TextCell extends FrameLayout {
         this.textView.setText(str);
         this.valueTextView.setText((CharSequence) null);
         this.imageView.setColorFilter((ColorFilter) null);
-        this.imageView.setImageDrawable(drawable);
+        if (drawable instanceof RLottieDrawable) {
+            this.imageView.setAnimation((RLottieDrawable) drawable);
+        } else {
+            this.imageView.setImageDrawable(drawable);
+        }
         this.imageView.setVisibility(0);
         this.valueTextView.setVisibility(8);
         this.valueImageView.setVisibility(8);
@@ -263,6 +268,14 @@ public class TextCell extends FrameLayout {
                 return;
             }
             accessibilityNodeInfo.setText(text);
+        }
+    }
+
+    public void setNeedDivider(boolean z) {
+        if (this.needDivider != z) {
+            this.needDivider = z;
+            setWillNotDraw(!z);
+            invalidate();
         }
     }
 }

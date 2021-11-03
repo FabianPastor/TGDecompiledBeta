@@ -15,6 +15,8 @@ public abstract class TLRPC$ChannelParticipant extends TLObject {
     public long promoted_by;
     public String rank;
     public boolean self;
+    public long user_id;
+    public boolean via_invite;
 
     public static TLRPC$ChannelParticipant TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$ChannelParticipant tLRPC$ChannelParticipant;
@@ -62,13 +64,16 @@ public abstract class TLRPC$ChannelParticipant extends TLObject {
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantBanned_layer92();
                 break;
             case 682146919:
-                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantSelf();
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantSelf_layer133();
                 break;
             case 803602899:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantCreator();
                 break;
             case 885242707:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantAdmin();
+                break;
+            case 900251559:
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantSelf();
                 break;
             case 1149094475:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantCreator_layer131();

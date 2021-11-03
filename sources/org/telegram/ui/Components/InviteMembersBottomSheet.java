@@ -145,51 +145,52 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r8 = r17
             r9 = r20
             r11 = 0
-            r0 = 0
-            r1 = r18
-            r7.<init>(r8, r11, r1, r0)
-            java.util.ArrayList r2 = new java.util.ArrayList
-            r2.<init>()
-            r7.contacts = r2
-            androidx.collection.LongSparseArray r2 = new androidx.collection.LongSparseArray
-            r2.<init>()
-            r7.selectedContacts = r2
+            r0 = r18
+            r1 = r23
+            r7.<init>(r8, r11, r0, r1)
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r7.contacts = r1
+            androidx.collection.LongSparseArray r1 = new androidx.collection.LongSparseArray
+            r1.<init>()
+            r7.selectedContacts = r1
             r12 = 0
             r7.spansEnterProgress = r12
-            org.telegram.ui.Components.InviteMembersBottomSheet$1 r2 = new org.telegram.ui.Components.InviteMembersBottomSheet$1
-            r2.<init>()
-            r7.spanClickListener = r2
+            org.telegram.ui.Components.InviteMembersBottomSheet$1 r1 = new org.telegram.ui.Components.InviteMembersBottomSheet$1
+            r1.<init>()
+            r7.spanClickListener = r1
             r5 = r19
             r7.ignoreUsers = r5
             r7.needSnapToTop = r11
             r4 = r22
             r7.parentFragment = r4
             r7.chatId = r9
-            org.telegram.ui.Components.UsersAlertBase$SearchField r2 = r7.searchView
-            org.telegram.ui.Components.EditTextBoldCursor r2 = r2.searchEditText
-            java.lang.String r3 = "SearchForChats"
-            r6 = 2131627503(0x7f0e0def, float:1.8882272E38)
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r6)
-            r2.setHint(r3)
-            android.view.ViewConfiguration r2 = android.view.ViewConfiguration.get(r17)
-            int r2 = r2.getScaledTouchSlop()
-            float r2 = (float) r2
-            r7.touchSlop = r2
-            org.telegram.ui.Components.InviteMembersBottomSheet$SearchAdapter r2 = new org.telegram.ui.Components.InviteMembersBottomSheet$SearchAdapter
+            org.telegram.ui.Components.UsersAlertBase$SearchField r1 = r7.searchView
+            org.telegram.ui.Components.EditTextBoldCursor r1 = r1.searchEditText
+            java.lang.String r2 = "SearchForChats"
+            r3 = 2131627561(0x7f0e0e29, float:1.888239E38)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            r1.setHint(r2)
+            android.view.ViewConfiguration r1 = android.view.ViewConfiguration.get(r17)
+            int r1 = r1.getScaledTouchSlop()
+            float r1 = (float) r1
+            r7.touchSlop = r1
+            org.telegram.ui.Components.InviteMembersBottomSheet$SearchAdapter r1 = new org.telegram.ui.Components.InviteMembersBottomSheet$SearchAdapter
+            r1.<init>()
+            r7.searchAdapter = r1
+            r7.searchListViewAdapter = r1
+            org.telegram.ui.Components.RecyclerListView r1 = r7.listView
+            org.telegram.ui.Components.InviteMembersBottomSheet$ListAdapter r2 = new org.telegram.ui.Components.InviteMembersBottomSheet$ListAdapter
+            r3 = 0
             r2.<init>()
-            r7.searchAdapter = r2
-            r7.searchListViewAdapter = r2
-            org.telegram.ui.Components.RecyclerListView r2 = r7.listView
-            org.telegram.ui.Components.InviteMembersBottomSheet$ListAdapter r3 = new org.telegram.ui.Components.InviteMembersBottomSheet$ListAdapter
-            r3.<init>()
-            r7.listViewAdapter = r3
-            r2.setAdapter(r3)
+            r7.listViewAdapter = r2
+            r1.setAdapter(r2)
             org.telegram.messenger.ContactsController r0 = org.telegram.messenger.ContactsController.getInstance(r18)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_contact> r0 = r0.contacts
             r1 = 0
-        L_0x0068:
+        L_0x006a:
             int r2 = r0.size()
-            if (r1 >= r2) goto L_0x0097
+            if (r1 >= r2) goto L_0x0099
             int r2 = r7.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
             java.lang.Object r3 = r0.get(r1)
@@ -197,19 +198,19 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             long r13 = r3.user_id
             java.lang.Long r3 = java.lang.Long.valueOf(r13)
             org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r3)
-            if (r2 == 0) goto L_0x0094
+            if (r2 == 0) goto L_0x0096
             boolean r3 = r2.self
-            if (r3 != 0) goto L_0x0094
+            if (r3 != 0) goto L_0x0096
             boolean r3 = r2.deleted
-            if (r3 == 0) goto L_0x008f
-            goto L_0x0094
-        L_0x008f:
+            if (r3 == 0) goto L_0x0091
+            goto L_0x0096
+        L_0x0091:
             java.util.ArrayList<org.telegram.tgnet.TLObject> r3 = r7.contacts
             r3.add(r2)
-        L_0x0094:
+        L_0x0096:
             int r1 = r1 + 1
-            goto L_0x0068
-        L_0x0097:
+            goto L_0x006a
+        L_0x0099:
             org.telegram.ui.Components.InviteMembersBottomSheet$SpansContainer r13 = new org.telegram.ui.Components.InviteMembersBottomSheet$SpansContainer
             r13.<init>(r8)
             r7.spansContainer = r13
@@ -251,9 +252,9 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r2, r3, r4)
             int r3 = android.os.Build.VERSION.SDK_INT
             r4 = 21
-            if (r3 >= r4) goto L_0x012b
+            if (r3 >= r4) goto L_0x012d
             android.content.res.Resources r5 = r17.getResources()
-            r6 = 2131165418(0x7var_ea, float:1.7945053E38)
+            r6 = 2131165420(0x7var_ec, float:1.7945057E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r6)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             android.graphics.PorterDuffColorFilter r6 = new android.graphics.PorterDuffColorFilter
@@ -267,7 +268,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r6.setIconSize(r2, r1)
             r2 = r6
-        L_0x012b:
+        L_0x012d:
             r0.setBackgroundDrawable(r2)
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
             java.lang.String r2 = "chats_actionIcon"
@@ -275,10 +276,10 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
             r1.<init>(r2, r5)
             r0.setColorFilter(r1)
-            r1 = 2131165415(0x7var_e7, float:1.7945046E38)
+            r1 = 2131165417(0x7var_e9, float:1.794505E38)
             r0.setImageResource(r1)
             r1 = 1082130432(0x40800000, float:4.0)
-            if (r3 < r4) goto L_0x01a2
+            if (r3 < r4) goto L_0x01a4
             android.animation.StateListAnimator r2 = new android.animation.StateListAnimator
             r2.<init>()
             r5 = 1
@@ -316,7 +317,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             org.telegram.ui.Components.InviteMembersBottomSheet$3 r2 = new org.telegram.ui.Components.InviteMembersBottomSheet$3
             r2.<init>(r7)
             r0.setOutlineProvider(r2)
-        L_0x01a2:
+        L_0x01a4:
             org.telegram.ui.Components.InviteMembersBottomSheet$$ExternalSyntheticLambda2 r2 = new org.telegram.ui.Components.InviteMembersBottomSheet$$ExternalSyntheticLambda2
             r2.<init>(r7, r8, r9)
             r0.setOnClickListener(r2)
@@ -326,7 +327,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r0.setScaleX(r2)
             r0.setScaleY(r2)
             r0.setAlpha(r2)
-            r2 = 2131626385(0x7f0e0991, float:1.8880005E38)
+            r2 = 2131626428(0x7f0e09bc, float:1.8880092E38)
             java.lang.String r4 = "Next"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setContentDescription(r2)
@@ -334,17 +335,17 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r4 = 56
             r5 = 60
             r6 = 21
-            if (r3 < r6) goto L_0x01d1
+            if (r3 < r6) goto L_0x01d3
             r8 = 56
-            goto L_0x01d3
-        L_0x01d1:
-            r8 = 60
+            goto L_0x01d5
         L_0x01d3:
-            if (r3 < r6) goto L_0x01d6
-            goto L_0x01d8
-        L_0x01d6:
-            r4 = 60
+            r8 = 60
+        L_0x01d5:
+            if (r3 < r6) goto L_0x01d8
+            goto L_0x01da
         L_0x01d8:
+            r4 = 60
+        L_0x01da:
             float r3 = (float) r4
             r4 = 85
             r5 = 1096810496(0x41600000, float:14.0)
@@ -498,7 +499,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             if (r10 < r4) goto L_0x00fc
             int r4 = r3.contactsEndRow
             if (r10 >= r4) goto L_0x00fc
-            org.telegram.ui.Components.RecyclerListView$SelectionAdapter r4 = r3.listViewAdapter
+            androidx.recyclerview.widget.RecyclerView$Adapter r4 = r3.listViewAdapter
             org.telegram.ui.Components.InviteMembersBottomSheet$ListAdapter r4 = (org.telegram.ui.Components.InviteMembersBottomSheet.ListAdapter) r4
             org.telegram.tgnet.TLObject r1 = r4.getObject(r10)
         L_0x00fc:
@@ -1326,7 +1327,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             L_0x0172:
                 android.view.View r12 = r12.itemView
                 org.telegram.ui.Cells.GroupCreateSectionCell r12 = (org.telegram.ui.Cells.GroupCreateSectionCell) r12
-                r13 = 2131625775(0x7f0e072f, float:1.8878767E38)
+                r13 = 2131625796(0x7f0e0744, float:1.887881E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)
@@ -1392,9 +1393,9 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             if (!TextUtils.isEmpty(str)) {
                 RecyclerView.Adapter adapter = InviteMembersBottomSheet.this.listView.getAdapter();
                 InviteMembersBottomSheet inviteMembersBottomSheet = InviteMembersBottomSheet.this;
-                RecyclerListView.SelectionAdapter selectionAdapter = inviteMembersBottomSheet.searchListViewAdapter;
-                if (adapter != selectionAdapter) {
-                    inviteMembersBottomSheet.listView.setAdapter(selectionAdapter);
+                RecyclerView.Adapter adapter2 = inviteMembersBottomSheet.searchListViewAdapter;
+                if (adapter != adapter2) {
+                    inviteMembersBottomSheet.listView.setAdapter(adapter2);
                 }
                 InviteMembersBottomSheet.this.emptyView.showProgress(true, false);
                 DispatchQueue dispatchQueue = Utilities.searchQueue;
@@ -1403,11 +1404,11 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 dispatchQueue.postRunnable(inviteMembersBottomSheet$SearchAdapter$$ExternalSyntheticLambda2, 300);
                 return;
             }
-            RecyclerView.Adapter adapter2 = InviteMembersBottomSheet.this.listView.getAdapter();
+            RecyclerView.Adapter adapter3 = InviteMembersBottomSheet.this.listView.getAdapter();
             InviteMembersBottomSheet inviteMembersBottomSheet2 = InviteMembersBottomSheet.this;
-            RecyclerListView.SelectionAdapter selectionAdapter2 = inviteMembersBottomSheet2.listViewAdapter;
-            if (adapter2 != selectionAdapter2) {
-                inviteMembersBottomSheet2.listView.setAdapter(selectionAdapter2);
+            RecyclerView.Adapter adapter4 = inviteMembersBottomSheet2.listViewAdapter;
+            if (adapter3 != adapter4) {
+                inviteMembersBottomSheet2.listView.setAdapter(adapter4);
             }
         }
 

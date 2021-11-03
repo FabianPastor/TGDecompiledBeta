@@ -1,23 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_importChatInvite;
+import android.view.View;
 
-public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda2 implements Runnable {
+public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda2 implements View.OnClickListener {
     public final /* synthetic */ JoinGroupAlert f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ TLRPC$TL_messages_importChatInvite f$3;
 
-    public /* synthetic */ JoinGroupAlert$$ExternalSyntheticLambda2(JoinGroupAlert joinGroupAlert, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite) {
+    public /* synthetic */ JoinGroupAlert$$ExternalSyntheticLambda2(JoinGroupAlert joinGroupAlert) {
         this.f$0 = joinGroupAlert;
-        this.f$1 = tLRPC$TL_error;
-        this.f$2 = tLObject;
-        this.f$3 = tLRPC$TL_messages_importChatInvite;
     }
 
-    public final void run() {
-        this.f$0.lambda$new$1(this.f$1, this.f$2, this.f$3);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$9(view);
     }
 }

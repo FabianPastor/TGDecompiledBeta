@@ -290,10 +290,12 @@
     <string name="AddStickersInstalledInfo">%1$s has been added to your stickers.</string>
     <string name="AddStickersNotFound">Stickers not found</string>
     <string name="AddSubscriber">Add subscriber</string>
+    <string name="AddToChannel">Add to Channel</string>
     <string name="AddToContacts">Add to contacts</string>
     <string name="AddToExceptions">Add to exceptions</string>
     <string name="AddToExistingContact">Add to Existing Contact</string>
     <string name="AddToFavorites">Add to Favorites</string>
+    <string name="AddToGroup">Add to Group</string>
     <string name="AddToMasks">Add to Masks</string>
     <string name="AddToStickers">Add to Stickers</string>
     <string name="AddToTheGroup">Add %1$s to the group?</string>
@@ -301,6 +303,7 @@
     <string name="AddToTheGroupAlertTitle">Add bot</string>
     <string name="AddToTheGroupForwardCount">Number of last messages to forward:</string>
     <string name="AddUserErrorBlacklisted">Sorry, you can\'t add this user because they are in the Removed Users list and you can\'t unban them.</string>
+    <string name="AddedBy">added by %1$s %2$s</string>
     <string name="AddedToFavorites">Sticker was added to Favorites</string>
     <string name="AdminWillBeRemoved">%1$s will be removed from admins if you restrict them.</string>
     <string name="Agree">Agree</string>
@@ -363,6 +366,8 @@
     <string name="ApplyLocalizationFile">Apply localization file</string>
     <string name="ApplyTheme">APPLY</string>
     <string name="ApplyThemeFile">Apply theme file</string>
+    <string name="ApproveNewMembers">Approve New Members</string>
+    <string name="ApproveNewMembersDescription">Turn this on if you want users to join only after they are approved by an admin.</string>
     <string name="April">April</string>
     <string name="Archive">Archive</string>
     <string name="ArchiveAndMute">Archive and Mute</string>
@@ -466,6 +471,7 @@
     <string name="AttachLocation">Location</string>
     <string name="AttachMediaRestricted">The admins of this group have restricted you from sending media here until %1$s</string>
     <string name="AttachMediaRestrictedForever">The admins of this group have restricted you from sending media here.</string>
+    <string name="AttachMenu">Attach...</string>
     <string name="AttachMusic">Music</string>
     <string name="AttachPhoto">Photo</string>
     <string name="AttachPhotoExpired">Photo has expired</string>
@@ -678,7 +684,9 @@
     <string name="BroadcastGroupConvertSuccess">Your group can now have more than 200,000 members.</string>
     <string name="BroadcastGroupInfo">Only admins can send messages in this group.</string>
     <string name="Brown">Brown</string>
+    <string name="BrowseThemes">Browse Themes</string>
     <string name="BubbleRadius">Message corners</string>
+    <string name="BuildMyOwnTheme">Build my own theme</string>
     <string name="BuiltInThemes">Built-in themes</string>
     <string name="BytesReceived">Bytes received</string>
     <string name="BytesSent">Bytes sent</string>
@@ -686,6 +694,14 @@
     <string name="CacheEmpty">Empty</string>
     <string name="CacheWasCleared">%s freed on your device!</string>
     <string name="CalculatingSize">Calculating...</string>
+    <string name="Calendar">Calendar</string>
+    <string name="CalendarWeekNameShortFriday">F</string>
+    <string name="CalendarWeekNameShortMonday">M</string>
+    <string name="CalendarWeekNameShortSaturday">S</string>
+    <string name="CalendarWeekNameShortSunday">S</string>
+    <string name="CalendarWeekNameShortThursday">T</string>
+    <string name="CalendarWeekNameShortTuesday">T</string>
+    <string name="CalendarWeekNameShortWednesday">W</string>
     <string name="Call">Call</string>
     <string name="CallAgain">Call Again</string>
     <string name="CallAlert">Are you sure you want to call **%1$s**?</string>
@@ -1129,11 +1145,13 @@
     <string name="CreateGroupError">Sorry, you can\'t create a group with these users because of their privacy settings.</string>
     <string name="CreateGroupForImport">Create a New Group to Import</string>
     <string name="CreateLink">Create Link</string>
+    <string name="CreateLinkHeader">CREATE</string>
     <string name="CreateNewContact">Create New Contact</string>
     <string name="CreateNewFilter">Create New Folder</string>
     <string name="CreateNewFilterInfo">Create folders for different groups of chats and quickly switch between them.</string>
     <string name="CreateNewLink">Create a New Link</string>
     <string name="CreateNewLinkHelp">You can generate invite links that expire after they are used.</string>
+    <string name="CreateNewTheme">Create a New Theme</string>
     <string name="CreateNewThemeAlert">You can create your own theme by changing colors within the app.\10\10You can always switch back to the default Telegram theme here.</string>
     <string name="CreateNewThemeHelp">Tap on the palette icon to view the list of elements on each screen - and edit them.</string>
     <string name="CreateNewThemeMenu">Create new theme</string>
@@ -1326,6 +1344,8 @@
     <string name="DiscussionUnlinkChannelAlert">Are you sure you want to unlink **%1$s** from this channel?</string>
     <string name="DiscussionUnlinkGroup">Unlink Group</string>
     <string name="DiscussionUnlinkGroupAlert">Are you sure you want to unlink **%1$s** from this group?</string>
+    <string name="Dismiss">Dismiss</string>
+    <string name="DismissRequest">Dismiss request</string>
     <string name="DistanceUnits">Distance Units</string>
     <string name="DistanceUnitsAutomatic">Automatic</string>
     <string name="DistanceUnitsKilometers">Kilometers</string>
@@ -1373,6 +1393,7 @@
     <string name="EditCaption">Edit Caption</string>
     <string name="EditChannelAdminTransferAlertText">You can transfer this channel to **%1$s** only if you have:</string>
     <string name="EditContact">Edit contact</string>
+    <string name="EditCurrentTheme">Edit Current Theme</string>
     <string name="EditLink">Edit link</string>
     <string name="EditMessage">Edit Message</string>
     <string name="EditMessageEditPhoto">Edit this photo</string>
@@ -1879,6 +1900,8 @@
     <string name="Groups_two">%1$d groups</string>
     <string name="Groups_zero">%1$d groups</string>
     <string name="GrowthChartTitle">Growth</string>
+    <string name="HasBeenAddedToChannel">%1$s has been added to the channel</string>
+    <string name="HasBeenAddedToGroup">%1$s has been added to the group</string>
     <string name="HashtagCopied">Hashtag copied to clipboard.</string>
     <string name="Hashtags">HASHTAGS</string>
     <string name="HidAccount">The account was hidden by the user</string>
@@ -2054,8 +2077,21 @@
     <string name="JoinByPeekGroupTitle">Join Group</string>
     <string name="JoinByPeekJoin">JOIN</string>
     <string name="JoinGroup">JOIN GROUP</string>
+    <string name="JoinRequests_few">%1$d requested to join</string>
+    <string name="JoinRequests_many">%1$d requested to join</string>
+    <string name="JoinRequests_one">%1$d requested to join</string>
+    <string name="JoinRequests_other">%1$d requested to join</string>
+    <string name="JoinRequests_two">%1$d requested to join</string>
+    <string name="JoinRequests_zero">%1$d requested to join</string>
     <string name="JoinToGroupErrorFull">Sorry, this group is already full.</string>
     <string name="JoinToGroupErrorNotExist">Sorry, this chat does not seem to exist.</string>
+    <string name="JoinUsersRequests_few">%1$d users requested to join</string>
+    <string name="JoinUsersRequests_many">%1$d users requested to join</string>
+    <string name="JoinUsersRequests_one">%1$d user requested to join</string>
+    <string name="JoinUsersRequests_other">%1$d users requested to join</string>
+    <string name="JoinUsersRequests_two">%1$d users requested to join</string>
+    <string name="JoinUsersRequests_zero">%1$d users requested to join</string>
+    <string name="JoinedViaInviteLinkApproved">un1 joined via invite link un2, approved by un3</string>
     <string name="July">July</string>
     <string name="JumpToDate">Jump to Date</string>
     <string name="June">June</string>
@@ -2133,6 +2169,8 @@
     <string name="LinkIsExpiredLimitReached">This link reached its usage limit.</string>
     <string name="LinkIsNoActive">This link is no longer active</string>
     <string name="LinkLimitReached">Limit reached</string>
+    <string name="LinkNameHelp">Only you and other admins will see this name.</string>
+    <string name="LinkNameHint">Link Name (Optional)</string>
     <string name="LinkNotFound">Unfortunately, you can\'t access this message. You are not a member of the chat where it was posted.</string>
     <string name="LinkPreview">Link preview</string>
     <string name="LinkedChannel">Linked Channel</string>
@@ -2240,6 +2278,10 @@
     <string name="MediaSelected_other">%1$d media selected</string>
     <string name="MediaSelected_two">%1$d media selected</string>
     <string name="MediaSelected_zero">%1$d media selected</string>
+    <string name="MediaShowPhotos">Show photos</string>
+    <string name="MediaShowVideos">Show videos</string>
+    <string name="MediaZoomIn">Zoom in</string>
+    <string name="MediaZoomOut">Zoom out</string>
     <string name="Media_few">%1$d media</string>
     <string name="Media_many">%1$d media</string>
     <string name="Media_one">%1$d media</string>
@@ -2259,6 +2301,7 @@
     <string name="MegaPublic">Public Group</string>
     <string name="MegaPublicInfo">Public groups can be found in search, chat history is available to everyone and anyone can join.</string>
     <string name="MegaUsernameHelp">If you set a permanent link, other people will be able to find and join your group.\10\10You can use a-z, 0-9 and underscores.\10Minimum length is 5 characters.</string>
+    <string name="MemberRequests">Member Requests</string>
     <string name="MembersAreSpeakingToast_few">un1 are speaking</string>
     <string name="MembersAreSpeakingToast_many">un1 are speaking</string>
     <string name="MembersAreSpeakingToast_one">un1 is speaking</string>
@@ -2478,6 +2521,8 @@
     <string name="NoMedia">Share photos and videos in this chat and access them on any of your devices.</string>
     <string name="NoMediaAutoDownload">No media</string>
     <string name="NoMediaSecret">Photos and videos from this chat will be shown here.</string>
+    <string name="NoMemberRequests">No join requests</string>
+    <string name="NoMemberRequestsDescription">You have no pending requests\10to join your group.</string>
     <string name="NoMessages">No messages here yet...</string>
     <string name="NoMessagesGreetingsDescription">Send a message or tap the greeting below.</string>
     <string name="NoOneJoined">No one joined</string>
@@ -2511,6 +2556,8 @@
     <string name="NoSound">No sound</string>
     <string name="NoStickers">No stickers yet</string>
     <string name="NoStickersFound">No stickers found</string>
+    <string name="NoSubscribeRequests">No join requests</string>
+    <string name="NoSubscribeRequestsDescription">There are no pending requests\10to join this channel.</string>
     <string name="NoUsernameFound">There is no Telegram account with this username.</string>
     <string name="NoVotes">No votes</string>
     <string name="NoVotesQuiz">Nobody answered</string>
@@ -3461,6 +3508,16 @@
     <string name="ReportUnrelatedGroupText">Please let us know if this group is not related to this location:\10\10**%1$s**</string>
     <string name="ReportUnrelatedGroupTextNoAddress">Please let us know if this group is not related to this location.</string>
     <string name="ReportUserLocation">Report</string>
+    <string name="RequestToJoinChannel">Request to Join Channel</string>
+    <string name="RequestToJoinChannelApproved">Your request to join the channel was approved</string>
+    <string name="RequestToJoinChannelDescription">This channel accepts new subscribers only after they are approved by its admins.</string>
+    <string name="RequestToJoinChannelSentDescription">You will be added to the channel once its admins approve your request.</string>
+    <string name="RequestToJoinGroup">Request to Join Group</string>
+    <string name="RequestToJoinGroupApproved">Your request to join the group was approved</string>
+    <string name="RequestToJoinGroupDescription">This group accepts new members only after they are approved by its admins.</string>
+    <string name="RequestToJoinGroupSentDescription">You will be added to the group once its admins approve your request.</string>
+    <string name="RequestToJoinSent">Request to join sent</string>
+    <string name="RequestedToJoinAt">requested to join %1$s</string>
     <string name="ResendCode">Resend code</string>
     <string name="ResendCodeInfo">The verification code was sent to your email.</string>
     <string name="Reset">Reset</string>
@@ -3531,6 +3588,7 @@
     <string name="SaveChangesAlertText">Do you want to apply the new colors you chose?</string>
     <string name="SaveChangesAlertTitle">Save changes?</string>
     <string name="SaveLink">Save Link</string>
+    <string name="SaveLinkHeader">SAVE</string>
     <string name="SaveTheme">SAVE THEME</string>
     <string name="SaveToDownloads">Save to downloads</string>
     <string name="SaveToGIFs">Save to GIFs</string>
@@ -3573,6 +3631,7 @@
     <string name="SearchImagesInfo">WEB SEARCH</string>
     <string name="SearchImagesTitle">Search web</string>
     <string name="SearchInSettings">Search Settings and FAQ</string>
+    <string name="SearchMemberRequests">Search member requests</string>
     <string name="SearchMembers">Search members</string>
     <string name="SearchMessages">Messages</string>
     <string name="SearchMusic">Search music</string>
@@ -3704,6 +3763,7 @@
     <string name="SetUrlInvalidStartNumber">Sorry, the link can\'t start with a number.</string>
     <string name="SetUrlPlaceholder">Link</string>
     <string name="Settings">Settings</string>
+    <string name="SettingsBrowseThemes">Browse Themes</string>
     <string name="SettingsDebug">Debug</string>
     <string name="SettingsFaqSearchTitle">Frequently asked questions</string>
     <string name="SettingsHelp">Help</string>
@@ -3711,6 +3771,7 @@
     <string name="SettingsNoResults">No results found</string>
     <string name="SettingsRecent">Recent searches</string>
     <string name="SettingsSearchFaq">FAQ</string>
+    <string name="SettingsSwitchToNightMode">Switch to Night Mode</string>
     <string name="Shadows">Shadows</string>
     <string name="ShareComment">Write a comment...</string>
     <string name="ShareContact">Share contact</string>
@@ -3744,6 +3805,7 @@
     <string name="SharedLinks">Links</string>
     <string name="SharedLinksTab2">Links</string>
     <string name="SharedMedia">Shared Media</string>
+    <string name="SharedMediaFastScrollHint">You can hold and move this bar for faster scrolling</string>
     <string name="SharedMediaTab2">Media</string>
     <string name="SharedMediaTabFull2">Shared Media</string>
     <string name="SharedMusicTab2">Music</string>
@@ -3910,6 +3972,7 @@
     <string name="StorageUsage">Storage Usage</string>
     <string name="Streaming">Streaming</string>
     <string name="Strike">Strikethrough</string>
+    <string name="SubscribeRequests">Subscribe Requests</string>
     <string name="Subscribers_few">%1$d subscribers</string>
     <string name="Subscribers_many">%1$d subscribers</string>
     <string name="Subscribers_one">%1$d subscriber</string>
@@ -4185,6 +4248,9 @@
     <string name="UseProxyTelegramInfo">MTProto proxy settings.</string>
     <string name="UseProxyTelegramInfo2">This proxy may display a sponsored channel in your chat list. This doesn\'t reveal any of your Telegram traffic.</string>
     <string name="UseProxyUsername">Username</string>
+    <string name="UserAcceptedToGroupAction">un1 was accepted into the group</string>
+    <string name="UserAcceptedToGroupPush">%1$s was accepted into the group</string>
+    <string name="UserAcceptedToGroupPushWithGroup">%2$s|%1$s was accepted into the group</string>
     <string name="UserBio">Bio</string>
     <string name="UserBioDetail">Add a few words about yourself</string>
     <string name="UserBioEmpty">None</string>

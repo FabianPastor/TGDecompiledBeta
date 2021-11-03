@@ -556,7 +556,7 @@ public class FilterCreateActivity extends BaseFragment {
             int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ
             r1 = r1 & r0
             if (r1 == 0) goto L_0x002e
-            r0 = 2131625589(0x7f0e0675, float:1.887839E38)
+            r0 = 2131625610(0x7f0e068a, float:1.8878433E38)
             java.lang.String r1 = "FilterNameUnread"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -564,7 +564,7 @@ public class FilterCreateActivity extends BaseFragment {
             int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
             r0 = r0 & r1
             if (r0 == 0) goto L_0x00a7
-            r0 = 2131625588(0x7f0e0674, float:1.8878388E38)
+            r0 = 2131625609(0x7f0e0689, float:1.887843E38)
             java.lang.String r1 = "FilterNameNonMuted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -575,7 +575,7 @@ public class FilterCreateActivity extends BaseFragment {
             r0 = r0 ^ -1
             r0 = r0 & r2
             if (r0 != 0) goto L_0x00a7
-            r0 = 2131625566(0x7f0e065e, float:1.8878344E38)
+            r0 = 2131625587(0x7f0e0673, float:1.8878386E38)
             java.lang.String r1 = "FilterContacts"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -586,7 +586,7 @@ public class FilterCreateActivity extends BaseFragment {
             r0 = r0 ^ -1
             r0 = r0 & r2
             if (r0 != 0) goto L_0x00a7
-            r0 = 2131625596(0x7f0e067c, float:1.8878404E38)
+            r0 = 2131625617(0x7f0e0691, float:1.8878447E38)
             java.lang.String r1 = "FilterNonContacts"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -597,7 +597,7 @@ public class FilterCreateActivity extends BaseFragment {
             r0 = r0 ^ -1
             r0 = r0 & r2
             if (r0 != 0) goto L_0x00a7
-            r0 = 2131625583(0x7f0e066f, float:1.8878378E38)
+            r0 = 2131625604(0x7f0e0684, float:1.887842E38)
             java.lang.String r1 = "FilterGroups"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -608,7 +608,7 @@ public class FilterCreateActivity extends BaseFragment {
             r0 = r0 ^ -1
             r0 = r0 & r2
             if (r0 != 0) goto L_0x00a7
-            r0 = 2131625556(0x7f0e0654, float:1.8878323E38)
+            r0 = 2131625577(0x7f0e0669, float:1.8878366E38)
             java.lang.String r1 = "FilterBots"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -619,7 +619,7 @@ public class FilterCreateActivity extends BaseFragment {
             r0 = r0 ^ -1
             r0 = r0 & r2
             if (r0 != 0) goto L_0x00a7
-            r0 = 2131625557(0x7f0e0655, float:1.8878325E38)
+            r0 = 2131625578(0x7f0e066a, float:1.8878368E38)
             java.lang.String r1 = "FilterChannels"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x00a8
@@ -1009,39 +1009,39 @@ public class FilterCreateActivity extends BaseFragment {
             /*
                 r4 = this;
                 java.lang.String r5 = "windowBackgroundWhite"
-                if (r6 == 0) goto L_0x0080
+                if (r6 == 0) goto L_0x007f
                 r0 = 1
-                if (r6 == r0) goto L_0x006c
+                if (r6 == r0) goto L_0x006b
                 r1 = 2
-                if (r6 == r1) goto L_0x003c
+                if (r6 == r1) goto L_0x003b
                 r0 = 3
-                if (r6 == r0) goto L_0x0034
+                if (r6 == r0) goto L_0x0033
                 r0 = 4
-                if (r6 == r0) goto L_0x0025
+                if (r6 == r0) goto L_0x0024
                 r5 = 5
-                if (r6 == r5) goto L_0x001d
+                if (r6 == r5) goto L_0x001c
                 org.telegram.ui.Cells.TextInfoPrivacyCell r5 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r6 = r4.mContext
                 r5.<init>(r6)
-                goto L_0x008f
-            L_0x001d:
+                goto L_0x008e
+            L_0x001c:
                 org.telegram.ui.FilterCreateActivity$HintInnerCell r5 = new org.telegram.ui.FilterCreateActivity$HintInnerCell
                 android.content.Context r6 = r4.mContext
                 r5.<init>(r6)
-                goto L_0x008f
-            L_0x0025:
+                goto L_0x008e
+            L_0x0024:
                 org.telegram.ui.Cells.TextCell r6 = new org.telegram.ui.Cells.TextCell
                 android.content.Context r0 = r4.mContext
                 r6.<init>(r0)
                 int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
                 r6.setBackgroundColor(r5)
-                goto L_0x008e
-            L_0x0034:
+                goto L_0x008d
+            L_0x0033:
                 org.telegram.ui.Cells.ShadowSectionCell r5 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r6 = r4.mContext
                 r5.<init>(r6)
-                goto L_0x008f
-            L_0x003c:
+                goto L_0x008e
+            L_0x003b:
                 org.telegram.ui.Cells.PollEditTextCell r6 = new org.telegram.ui.Cells.PollEditTextCell
                 android.content.Context r1 = r4.mContext
                 r2 = 0
@@ -1059,8 +1059,8 @@ public class FilterCreateActivity extends BaseFragment {
                 r5.setOnFocusChangeListener(r0)
                 r0 = 268435462(0x10000006, float:2.5243567E-29)
                 r5.setImeOptions(r0)
-                goto L_0x008e
-            L_0x006c:
+                goto L_0x008d
+            L_0x006b:
                 org.telegram.ui.Cells.UserCell r6 = new org.telegram.ui.Cells.UserCell
                 android.content.Context r1 = r4.mContext
                 r2 = 6
@@ -1069,16 +1069,16 @@ public class FilterCreateActivity extends BaseFragment {
                 r6.setSelfAsSavedMessages(r0)
                 int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
                 r6.setBackgroundColor(r5)
-                goto L_0x008e
-            L_0x0080:
+                goto L_0x008d
+            L_0x007f:
                 org.telegram.ui.Cells.HeaderCell r6 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r0 = r4.mContext
                 r6.<init>(r0)
                 int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
                 r6.setBackgroundColor(r5)
-            L_0x008e:
+            L_0x008d:
                 r5 = r6
-            L_0x008f:
+            L_0x008e:
                 org.telegram.ui.Components.RecyclerListView$Holder r6 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r6.<init>(r5)
                 return r6
@@ -1106,91 +1106,91 @@ public class FilterCreateActivity extends BaseFragment {
             }
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:54:0x0185, code lost:
-            if (r12 == (org.telegram.ui.FilterCreateActivity.access$1200(r10.this$0) - 1)) goto L_0x0188;
+        /* JADX WARNING: Code restructure failed: missing block: B:54:0x0181, code lost:
+            if (r12 == (org.telegram.ui.FilterCreateActivity.access$1200(r10.this$0) - 1)) goto L_0x0184;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:64:0x01bd, code lost:
-            if (r12 == (org.telegram.ui.FilterCreateActivity.access$1600(r10.this$0) - 1)) goto L_0x0188;
+        /* JADX WARNING: Code restructure failed: missing block: B:64:0x01b9, code lost:
+            if (r12 == (org.telegram.ui.FilterCreateActivity.access$1600(r10.this$0) - 1)) goto L_0x0184;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r11, int r12) {
             /*
                 r10 = this;
                 int r0 = r11.getItemViewType()
-                if (r0 == 0) goto L_0x0365
+                if (r0 == 0) goto L_0x0361
                 r1 = -1
                 r2 = 0
                 r3 = 1
-                if (r0 == r3) goto L_0x014d
+                if (r0 == r3) goto L_0x0149
                 r4 = 3
-                r5 = 2131165449(0x7var_, float:1.7945115E38)
-                r6 = 2131165448(0x7var_, float:1.7945113E38)
+                r5 = 2131165451(0x7var_b, float:1.794512E38)
+                r6 = 2131165450(0x7var_a, float:1.7945117E38)
                 java.lang.String r7 = "windowBackgroundGrayShadow"
-                if (r0 == r4) goto L_0x012b
+                if (r0 == r4) goto L_0x0127
                 r4 = 4
-                if (r0 == r4) goto L_0x0076
+                if (r0 == r4) goto L_0x0075
                 r2 = 6
-                if (r0 == r2) goto L_0x001f
-                goto L_0x0392
-            L_0x001f:
+                if (r0 == r2) goto L_0x001e
+                goto L_0x038e
+            L_0x001e:
                 android.view.View r0 = r11.itemView
                 org.telegram.ui.Cells.TextInfoPrivacyCell r0 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r0
                 org.telegram.ui.FilterCreateActivity r2 = org.telegram.ui.FilterCreateActivity.this
                 int r2 = r2.includeSectionRow
-                if (r12 != r2) goto L_0x0038
-                r2 = 2131625585(0x7f0e0671, float:1.8878382E38)
+                if (r12 != r2) goto L_0x0037
+                r2 = 2131625606(0x7f0e0686, float:1.8878425E38)
                 java.lang.String r3 = "FilterIncludeInfo"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
-                goto L_0x004c
-            L_0x0038:
+                goto L_0x004b
+            L_0x0037:
                 org.telegram.ui.FilterCreateActivity r2 = org.telegram.ui.FilterCreateActivity.this
                 int r2 = r2.excludeSectionRow
-                if (r12 != r2) goto L_0x004c
-                r2 = 2131625580(0x7f0e066c, float:1.8878372E38)
+                if (r12 != r2) goto L_0x004b
+                r2 = 2131625601(0x7f0e0681, float:1.8878415E38)
                 java.lang.String r3 = "FilterExcludeInfo"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
-            L_0x004c:
+            L_0x004b:
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.excludeSectionRow
-                if (r12 != r0) goto L_0x0069
+                if (r12 != r0) goto L_0x0068
                 org.telegram.ui.FilterCreateActivity r12 = org.telegram.ui.FilterCreateActivity.this
                 int r12 = r12.removeSectionRow
-                if (r12 != r1) goto L_0x0069
+                if (r12 != r1) goto L_0x0068
                 android.view.View r11 = r11.itemView
                 android.content.Context r12 = r10.mContext
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r5, (java.lang.String) r7)
                 r11.setBackgroundDrawable(r12)
-                goto L_0x0392
-            L_0x0069:
+                goto L_0x038e
+            L_0x0068:
                 android.view.View r11 = r11.itemView
                 android.content.Context r12 = r10.mContext
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r6, (java.lang.String) r7)
                 r11.setBackgroundDrawable(r12)
-                goto L_0x0392
-            L_0x0076:
+                goto L_0x038e
+            L_0x0075:
                 android.view.View r11 = r11.itemView
                 org.telegram.ui.Cells.TextCell r11 = (org.telegram.ui.Cells.TextCell) r11
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.removeRow
-                if (r12 != r0) goto L_0x0097
+                if (r12 != r0) goto L_0x0095
                 r12 = 0
                 java.lang.String r0 = "windowBackgroundWhiteRedText5"
                 r11.setColors(r12, r0)
-                r12 = 2131625567(0x7f0e065f, float:1.8878346E38)
+                r12 = 2131625588(0x7f0e0674, float:1.8878388E38)
                 java.lang.String r0 = "FilterDelete"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12, r2)
-                goto L_0x0392
-            L_0x0097:
+                goto L_0x038e
+            L_0x0095:
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.includeShowMoreRow
-                r1 = 2131165266(0x7var_, float:1.7944744E38)
+                r1 = 2131165267(0x7var_, float:1.7944746E38)
                 java.lang.String r4 = "FilterShowMoreChats"
                 java.lang.String r5 = "windowBackgroundWhiteBlueText4"
                 java.lang.String r6 = "switchTrackChecked"
-                if (r12 != r0) goto L_0x00c2
+                if (r12 != r0) goto L_0x00be
                 r11.setColors(r6, r5)
                 org.telegram.ui.FilterCreateActivity r12 = org.telegram.ui.FilterCreateActivity.this
                 java.util.ArrayList r12 = r12.newAlwaysShow
@@ -1198,11 +1198,11 @@ public class FilterCreateActivity extends BaseFragment {
                 int r12 = r12 + -5
                 java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r4, r12)
                 r11.setTextAndIcon((java.lang.String) r12, (int) r1, (boolean) r2)
-                goto L_0x0392
-            L_0x00c2:
+                goto L_0x038e
+            L_0x00be:
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.excludeShowMoreRow
-                if (r12 != r0) goto L_0x00e2
+                if (r12 != r0) goto L_0x00de
                 r11.setColors(r6, r5)
                 org.telegram.ui.FilterCreateActivity r12 = org.telegram.ui.FilterCreateActivity.this
                 java.util.ArrayList r12 = r12.newNeverShow
@@ -1210,65 +1210,65 @@ public class FilterCreateActivity extends BaseFragment {
                 int r12 = r12 + -5
                 java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r4, r12)
                 r11.setTextAndIcon((java.lang.String) r12, (int) r1, (boolean) r2)
-                goto L_0x0392
-            L_0x00e2:
+                goto L_0x038e
+            L_0x00de:
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.includeAddRow
                 r1 = 2131165248(0x7var_, float:1.7944708E38)
-                if (r12 != r0) goto L_0x0108
+                if (r12 != r0) goto L_0x0104
                 r11.setColors(r6, r5)
-                r0 = 2131625543(0x7f0e0647, float:1.8878297E38)
+                r0 = 2131625564(0x7f0e065c, float:1.887834E38)
                 java.lang.String r4 = "FilterAddChats"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
                 int r12 = r12 + r3
                 org.telegram.ui.FilterCreateActivity r4 = org.telegram.ui.FilterCreateActivity.this
                 int r4 = r4.includeSectionRow
-                if (r12 == r4) goto L_0x0103
+                if (r12 == r4) goto L_0x00ff
                 r2 = 1
-            L_0x0103:
+            L_0x00ff:
                 r11.setTextAndIcon((java.lang.String) r0, (int) r1, (boolean) r2)
-                goto L_0x0392
-            L_0x0108:
+                goto L_0x038e
+            L_0x0104:
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.excludeAddRow
-                if (r12 != r0) goto L_0x0392
+                if (r12 != r0) goto L_0x038e
                 r11.setColors(r6, r5)
-                r0 = 2131625599(0x7f0e067f, float:1.887841E38)
+                r0 = 2131625620(0x7f0e0694, float:1.8878453E38)
                 java.lang.String r4 = "FilterRemoveChats"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
                 int r12 = r12 + r3
                 org.telegram.ui.FilterCreateActivity r4 = org.telegram.ui.FilterCreateActivity.this
                 int r4 = r4.excludeSectionRow
-                if (r12 == r4) goto L_0x0126
+                if (r12 == r4) goto L_0x0122
                 r2 = 1
-            L_0x0126:
+            L_0x0122:
                 r11.setTextAndIcon((java.lang.String) r0, (int) r1, (boolean) r2)
-                goto L_0x0392
-            L_0x012b:
+                goto L_0x038e
+            L_0x0127:
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.removeSectionRow
-                if (r12 != r0) goto L_0x0140
+                if (r12 != r0) goto L_0x013c
                 android.view.View r11 = r11.itemView
                 android.content.Context r12 = r10.mContext
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r5, (java.lang.String) r7)
                 r11.setBackgroundDrawable(r12)
-                goto L_0x0392
-            L_0x0140:
+                goto L_0x038e
+            L_0x013c:
                 android.view.View r11 = r11.itemView
                 android.content.Context r12 = r10.mContext
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r6, (java.lang.String) r7)
                 r11.setBackgroundDrawable(r12)
-                goto L_0x0392
-            L_0x014d:
+                goto L_0x038e
+            L_0x0149:
                 android.view.View r11 = r11.itemView
                 r4 = r11
                 org.telegram.ui.Cells.UserCell r4 = (org.telegram.ui.Cells.UserCell) r4
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.includeStartRow
-                if (r12 < r11) goto L_0x018a
+                if (r12 < r11) goto L_0x0186
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.includeEndRow
-                if (r12 >= r11) goto L_0x018a
+                if (r12 >= r11) goto L_0x0186
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 java.util.ArrayList r11 = r11.newAlwaysShow
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
@@ -1278,23 +1278,23 @@ public class FilterCreateActivity extends BaseFragment {
                 java.lang.Long r11 = (java.lang.Long) r11
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.includeShowMoreRow
-                if (r0 != r1) goto L_0x0187
+                if (r0 != r1) goto L_0x0183
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.includeEndRow
                 int r0 = r0 - r3
-                if (r12 == r0) goto L_0x0188
-            L_0x0187:
+                if (r12 == r0) goto L_0x0184
+            L_0x0183:
                 r2 = 1
-            L_0x0188:
+            L_0x0184:
                 r9 = r2
-                goto L_0x01c0
-            L_0x018a:
+                goto L_0x01bc
+            L_0x0186:
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.excludeStartRow
-                if (r12 < r11) goto L_0x0270
+                if (r12 < r11) goto L_0x026c
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.excludeEndRow
-                if (r12 >= r11) goto L_0x0270
+                if (r12 >= r11) goto L_0x026c
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 java.util.ArrayList r11 = r11.newNeverShow
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
@@ -1304,243 +1304,243 @@ public class FilterCreateActivity extends BaseFragment {
                 java.lang.Long r11 = (java.lang.Long) r11
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.excludeShowMoreRow
-                if (r0 != r1) goto L_0x0187
+                if (r0 != r1) goto L_0x0183
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.excludeEndRow
                 int r0 = r0 - r3
-                if (r12 == r0) goto L_0x0188
-                goto L_0x0187
-            L_0x01c0:
+                if (r12 == r0) goto L_0x0184
+                goto L_0x0183
+            L_0x01bc:
                 long r0 = r11.longValue()
                 r2 = 0
                 int r12 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-                if (r12 <= 0) goto L_0x0204
+                if (r12 <= 0) goto L_0x0200
                 org.telegram.ui.FilterCreateActivity r12 = org.telegram.ui.FilterCreateActivity.this
                 org.telegram.messenger.MessagesController r12 = r12.getMessagesController()
                 org.telegram.tgnet.TLRPC$User r5 = r12.getUser(r11)
-                if (r5 == 0) goto L_0x0392
+                if (r5 == 0) goto L_0x038e
                 boolean r11 = r5.bot
-                if (r11 == 0) goto L_0x01e5
-                r11 = 2131624591(0x7f0e028f, float:1.8876366E38)
+                if (r11 == 0) goto L_0x01e1
+                r11 = 2131624597(0x7f0e0295, float:1.8876378E38)
                 java.lang.String r12 = "Bot"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-            L_0x01e3:
+            L_0x01df:
                 r7 = r11
-                goto L_0x01fd
-            L_0x01e5:
+                goto L_0x01f9
+            L_0x01e1:
                 boolean r11 = r5.contact
-                if (r11 == 0) goto L_0x01f3
-                r11 = 2131625565(0x7f0e065d, float:1.8878342E38)
+                if (r11 == 0) goto L_0x01ef
+                r11 = 2131625586(0x7f0e0672, float:1.8878384E38)
                 java.lang.String r12 = "FilterContact"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                goto L_0x01e3
-            L_0x01f3:
-                r11 = 2131625595(0x7f0e067b, float:1.8878402E38)
+                goto L_0x01df
+            L_0x01ef:
+                r11 = 2131625616(0x7f0e0690, float:1.8878445E38)
                 java.lang.String r12 = "FilterNonContact"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                goto L_0x01e3
-            L_0x01fd:
+                goto L_0x01df
+            L_0x01f9:
                 r6 = 0
                 r8 = 0
                 r4.setData(r5, r6, r7, r8, r9)
-                goto L_0x0392
-            L_0x0204:
+                goto L_0x038e
+            L_0x0200:
                 org.telegram.ui.FilterCreateActivity r12 = org.telegram.ui.FilterCreateActivity.this
                 org.telegram.messenger.MessagesController r12 = r12.getMessagesController()
                 long r0 = r11.longValue()
                 long r0 = -r0
                 java.lang.Long r11 = java.lang.Long.valueOf(r0)
                 org.telegram.tgnet.TLRPC$Chat r5 = r12.getChat(r11)
-                if (r5 == 0) goto L_0x0392
+                if (r5 == 0) goto L_0x038e
                 int r11 = r5.participants_count
-                if (r11 == 0) goto L_0x0225
+                if (r11 == 0) goto L_0x0221
                 java.lang.String r12 = "Members"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.formatPluralString(r12, r11)
-            L_0x0223:
+            L_0x021f:
                 r7 = r11
-                goto L_0x0269
-            L_0x0225:
+                goto L_0x0265
+            L_0x0221:
                 java.lang.String r11 = r5.username
                 boolean r11 = android.text.TextUtils.isEmpty(r11)
-                if (r11 == 0) goto L_0x024b
+                if (r11 == 0) goto L_0x0247
                 boolean r11 = org.telegram.messenger.ChatObject.isChannel(r5)
-                if (r11 == 0) goto L_0x0241
+                if (r11 == 0) goto L_0x023d
                 boolean r11 = r5.megagroup
-                if (r11 != 0) goto L_0x0241
-                r11 = 2131624782(0x7f0e034e, float:1.8876753E38)
+                if (r11 != 0) goto L_0x023d
+                r11 = 2131624798(0x7f0e035e, float:1.8876786E38)
                 java.lang.String r12 = "ChannelPrivate"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                goto L_0x0223
-            L_0x0241:
-                r11 = 2131626194(0x7f0e08d2, float:1.8879617E38)
+                goto L_0x021f
+            L_0x023d:
+                r11 = 2131626236(0x7f0e08fc, float:1.8879702E38)
                 java.lang.String r12 = "MegaPrivate"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                goto L_0x0223
-            L_0x024b:
+                goto L_0x021f
+            L_0x0247:
                 boolean r11 = org.telegram.messenger.ChatObject.isChannel(r5)
-                if (r11 == 0) goto L_0x025f
+                if (r11 == 0) goto L_0x025b
                 boolean r11 = r5.megagroup
-                if (r11 != 0) goto L_0x025f
-                r11 = 2131624785(0x7f0e0351, float:1.887676E38)
+                if (r11 != 0) goto L_0x025b
+                r11 = 2131624801(0x7f0e0361, float:1.8876792E38)
                 java.lang.String r12 = "ChannelPublic"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                goto L_0x0223
-            L_0x025f:
-                r11 = 2131626197(0x7f0e08d5, float:1.8879623E38)
+                goto L_0x021f
+            L_0x025b:
+                r11 = 2131626239(0x7f0e08ff, float:1.8879709E38)
                 java.lang.String r12 = "MegaPublic"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                goto L_0x0223
-            L_0x0269:
+                goto L_0x021f
+            L_0x0265:
                 r6 = 0
                 r8 = 0
                 r4.setData(r5, r6, r7, r8, r9)
-                goto L_0x0392
-            L_0x0270:
+                goto L_0x038e
+            L_0x026c:
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.includeContactsRow
-                if (r12 != r11) goto L_0x0292
-                r11 = 2131625566(0x7f0e065e, float:1.8878344E38)
+                if (r12 != r11) goto L_0x028e
+                r11 = 2131625587(0x7f0e0673, float:1.8878386E38)
                 java.lang.String r0 = "FilterContacts"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.includeSectionRow
-                if (r12 == r0) goto L_0x028b
+                if (r12 == r0) goto L_0x0287
                 r2 = 1
-            L_0x028b:
+            L_0x0287:
                 java.lang.String r12 = "contacts"
-            L_0x028d:
+            L_0x0289:
                 r6 = r11
                 r5 = r12
                 r9 = r2
-                goto L_0x035f
-            L_0x0292:
+                goto L_0x035b
+            L_0x028e:
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.includeNonContactsRow
-                if (r12 != r11) goto L_0x02b0
-                r11 = 2131625596(0x7f0e067c, float:1.8878404E38)
+                if (r12 != r11) goto L_0x02ac
+                r11 = 2131625617(0x7f0e0691, float:1.8878447E38)
                 java.lang.String r0 = "FilterNonContacts"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.includeSectionRow
-                if (r12 == r0) goto L_0x02ad
+                if (r12 == r0) goto L_0x02a9
                 r2 = 1
-            L_0x02ad:
+            L_0x02a9:
                 java.lang.String r12 = "non_contacts"
-                goto L_0x028d
-            L_0x02b0:
+                goto L_0x0289
+            L_0x02ac:
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.includeGroupsRow
-                if (r12 != r11) goto L_0x02ce
-                r11 = 2131625583(0x7f0e066f, float:1.8878378E38)
+                if (r12 != r11) goto L_0x02ca
+                r11 = 2131625604(0x7f0e0684, float:1.887842E38)
                 java.lang.String r0 = "FilterGroups"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.includeSectionRow
-                if (r12 == r0) goto L_0x02cb
+                if (r12 == r0) goto L_0x02c7
                 r2 = 1
-            L_0x02cb:
+            L_0x02c7:
                 java.lang.String r12 = "groups"
-                goto L_0x028d
-            L_0x02ce:
+                goto L_0x0289
+            L_0x02ca:
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.includeChannelsRow
-                if (r12 != r11) goto L_0x02ec
-                r11 = 2131625557(0x7f0e0655, float:1.8878325E38)
+                if (r12 != r11) goto L_0x02e8
+                r11 = 2131625578(0x7f0e066a, float:1.8878368E38)
                 java.lang.String r0 = "FilterChannels"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.includeSectionRow
-                if (r12 == r0) goto L_0x02e9
+                if (r12 == r0) goto L_0x02e5
                 r2 = 1
-            L_0x02e9:
+            L_0x02e5:
                 java.lang.String r12 = "channels"
-                goto L_0x028d
-            L_0x02ec:
+                goto L_0x0289
+            L_0x02e8:
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.includeBotsRow
-                if (r12 != r11) goto L_0x030a
-                r11 = 2131625556(0x7f0e0654, float:1.8878323E38)
+                if (r12 != r11) goto L_0x0306
+                r11 = 2131625577(0x7f0e0669, float:1.8878366E38)
                 java.lang.String r0 = "FilterBots"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.includeSectionRow
-                if (r12 == r0) goto L_0x0307
+                if (r12 == r0) goto L_0x0303
                 r2 = 1
-            L_0x0307:
+            L_0x0303:
                 java.lang.String r12 = "bots"
-                goto L_0x028d
-            L_0x030a:
+                goto L_0x0289
+            L_0x0306:
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.excludeMutedRow
-                if (r12 != r11) goto L_0x0329
-                r11 = 2131625586(0x7f0e0672, float:1.8878384E38)
+                if (r12 != r11) goto L_0x0325
+                r11 = 2131625607(0x7f0e0687, float:1.8878427E38)
                 java.lang.String r0 = "FilterMuted"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.excludeSectionRow
-                if (r12 == r0) goto L_0x0325
+                if (r12 == r0) goto L_0x0321
                 r2 = 1
-            L_0x0325:
+            L_0x0321:
                 java.lang.String r12 = "muted"
-                goto L_0x028d
-            L_0x0329:
+                goto L_0x0289
+            L_0x0325:
                 org.telegram.ui.FilterCreateActivity r11 = org.telegram.ui.FilterCreateActivity.this
                 int r11 = r11.excludeReadRow
-                if (r12 != r11) goto L_0x0348
-                r11 = 2131625597(0x7f0e067d, float:1.8878406E38)
+                if (r12 != r11) goto L_0x0344
+                r11 = 2131625618(0x7f0e0692, float:1.887845E38)
                 java.lang.String r0 = "FilterRead"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.excludeSectionRow
-                if (r12 == r0) goto L_0x0344
+                if (r12 == r0) goto L_0x0340
                 r2 = 1
-            L_0x0344:
+            L_0x0340:
                 java.lang.String r12 = "read"
-                goto L_0x028d
-            L_0x0348:
-                r11 = 2131625553(0x7f0e0651, float:1.8878317E38)
+                goto L_0x0289
+            L_0x0344:
+                r11 = 2131625574(0x7f0e0666, float:1.887836E38)
                 java.lang.String r0 = "FilterArchived"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 int r12 = r12 + r3
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.excludeSectionRow
-                if (r12 == r0) goto L_0x035b
+                if (r12 == r0) goto L_0x0357
                 r2 = 1
-            L_0x035b:
+            L_0x0357:
                 java.lang.String r12 = "archived"
-                goto L_0x028d
-            L_0x035f:
+                goto L_0x0289
+            L_0x035b:
                 r7 = 0
                 r8 = 0
                 r4.setData(r5, r6, r7, r8, r9)
                 return
-            L_0x0365:
+            L_0x0361:
                 android.view.View r11 = r11.itemView
                 org.telegram.ui.Cells.HeaderCell r11 = (org.telegram.ui.Cells.HeaderCell) r11
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.includeHeaderRow
-                if (r12 != r0) goto L_0x037e
-                r12 = 2131625584(0x7f0e0670, float:1.887838E38)
+                if (r12 != r0) goto L_0x037a
+                r12 = 2131625605(0x7f0e0685, float:1.8878423E38)
                 java.lang.String r0 = "FilterInclude"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-                goto L_0x0392
-            L_0x037e:
+                goto L_0x038e
+            L_0x037a:
                 org.telegram.ui.FilterCreateActivity r0 = org.telegram.ui.FilterCreateActivity.this
                 int r0 = r0.excludeHeaderRow
-                if (r12 != r0) goto L_0x0392
-                r12 = 2131625578(0x7f0e066a, float:1.8878368E38)
+                if (r12 != r0) goto L_0x038e
+                r12 = 2131625599(0x7f0e067f, float:1.887841E38)
                 java.lang.String r0 = "FilterExclude"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
-            L_0x0392:
+            L_0x038e:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilterCreateActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

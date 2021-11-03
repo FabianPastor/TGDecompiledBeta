@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
-import org.telegram.messenger.ChatObject$Call$$ExternalSyntheticBackport0;
-import org.telegram.ui.ActionBar.Theme;
+public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda7 implements Runnable {
+    public final /* synthetic */ ThemeActivity f$0;
+    public final /* synthetic */ String f$1;
 
-public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda7 implements Comparator {
-    public static final /* synthetic */ ThemeActivity$$ExternalSyntheticLambda7 INSTANCE = new ThemeActivity$$ExternalSyntheticLambda7();
-
-    private /* synthetic */ ThemeActivity$$ExternalSyntheticLambda7() {
+    public /* synthetic */ ThemeActivity$$ExternalSyntheticLambda7(ThemeActivity themeActivity, String str) {
+        this.f$0 = themeActivity;
+        this.f$1 = str;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return ChatObject$Call$$ExternalSyntheticBackport0.m(((Theme.ThemeInfo) obj).sortIndex, ((Theme.ThemeInfo) obj2).sortIndex);
+    public final void run() {
+        this.f$0.lambda$updateSunTime$8(this.f$1);
     }
 }

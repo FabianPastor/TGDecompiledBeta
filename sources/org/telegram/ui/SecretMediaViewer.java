@@ -1421,7 +1421,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
 
     /* JADX WARNING: Removed duplicated region for block: B:19:0x0068  */
     /* JADX WARNING: Removed duplicated region for block: B:22:0x0070  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x0250  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x024f  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean closePhoto(boolean r19, boolean r20) {
         /*
@@ -1429,12 +1429,12 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r0 = r18
             android.app.Activity r1 = r0.parentActivity
             r2 = 0
-            if (r1 == 0) goto L_0x02c2
+            if (r1 == 0) goto L_0x02c1
             boolean r1 = r0.isPhotoVisible
-            if (r1 == 0) goto L_0x02c2
+            if (r1 == 0) goto L_0x02c1
             boolean r1 = r18.checkPhotoAnimation()
             if (r1 == 0) goto L_0x0013
-            goto L_0x02c2
+            goto L_0x02c1
         L_0x0013:
             int r1 = r0.currentAccount
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
@@ -1483,7 +1483,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r7 = 3
             r8 = 2
             r9 = 0
-            if (r19 == 0) goto L_0x0250
+            if (r19 == 0) goto L_0x024f
             r0.photoAnimationInProgress = r7
             org.telegram.ui.SecretMediaViewer$FrameLayoutDrawer r10 = r0.containerView
             r10.invalidate()
@@ -1641,7 +1641,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             boolean r3 = r0.isVideo
             java.lang.String r5 = "animationValue"
             r6 = 5
-            if (r3 == 0) goto L_0x01c6
+            if (r3 == 0) goto L_0x01c5
             r0.videoCrossfadeStarted = r2
             r0.textureUploaded = r2
             android.animation.AnimatorSet r3 = r0.imageMoveAnimation
@@ -1675,8 +1675,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r5 = 4
             r6[r5] = r2
             r3.playTogether(r6)
-            goto L_0x0216
-        L_0x01c6:
+            goto L_0x0215
+        L_0x01c5:
             org.telegram.messenger.ImageReceiver r3 = r0.centerImage
             r3.setManualAlphaAnimator(r4)
             android.animation.AnimatorSet r3 = r0.imageMoveAnimation
@@ -1711,7 +1711,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r5 = 4
             r6[r5] = r2
             r3.playTogether(r6)
-        L_0x0216:
+        L_0x0215:
             org.telegram.ui.SecretMediaViewer$$ExternalSyntheticLambda5 r2 = new org.telegram.ui.SecretMediaViewer$$ExternalSyntheticLambda5
             r2.<init>(r0, r1)
             r0.photoAnimationEndRunnable = r2
@@ -1730,15 +1730,15 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r0.photoTransitionAnimationStartTime = r1
             int r1 = android.os.Build.VERSION.SDK_INT
             r2 = 18
-            if (r1 < r2) goto L_0x024a
+            if (r1 < r2) goto L_0x0249
             org.telegram.ui.SecretMediaViewer$FrameLayoutDrawer r1 = r0.containerView
             r2 = 0
             r1.setLayerType(r8, r2)
-        L_0x024a:
+        L_0x0249:
             android.animation.AnimatorSet r1 = r0.imageMoveAnimation
             r1.start()
-            goto L_0x02c1
-        L_0x0250:
+            goto L_0x02c0
+        L_0x024f:
             android.animation.AnimatorSet r3 = new android.animation.AnimatorSet
             r3.<init>()
             r5 = 4
@@ -1782,15 +1782,15 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             r0.photoTransitionAnimationStartTime = r1
             int r1 = android.os.Build.VERSION.SDK_INT
             r2 = 18
-            if (r1 < r2) goto L_0x02be
+            if (r1 < r2) goto L_0x02bd
             org.telegram.ui.SecretMediaViewer$FrameLayoutDrawer r1 = r0.containerView
             r2 = 0
             r1.setLayerType(r8, r2)
-        L_0x02be:
+        L_0x02bd:
             r3.start()
-        L_0x02c1:
+        L_0x02c0:
             return r4
-        L_0x02c2:
+        L_0x02c1:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.SecretMediaViewer.closePhoto(boolean, boolean):boolean");

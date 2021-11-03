@@ -24,6 +24,7 @@ public class Utilities {
     public static SecureRandom random = new SecureRandom();
     public static volatile DispatchQueue searchQueue = new DispatchQueue("searchQueue");
     public static volatile DispatchQueue stageQueue = new DispatchQueue("stageQueue");
+    public static volatile DispatchQueue themeQueue = new DispatchQueue("themeQueue");
 
     public static native void aesCbcEncryption(ByteBuffer byteBuffer, byte[] bArr, byte[] bArr2, int i, int i2, int i3);
 

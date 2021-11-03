@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="24329" android:versionName="8.1.2" android:installLocation="auto" android:compileSdkVersion="31" android:compileSdkVersionCodename="12" package="org.telegram.messenger.web" platformBuildVersionCode="31" platformBuildVersionName="12">
-    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="29"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="24539" android:versionName="8.2.0" android:installLocation="auto" android:compileSdkVersion="31" android:compileSdkVersionCodename="12" package="org.telegram.messenger.web" platformBuildVersionCode="31" platformBuildVersionName="12">
+    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="30"/>
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
     <uses-feature android:name="android.hardware.location.network" android:required="false"/>
     <uses-feature android:name="android.hardware.location" android:required="false"/>

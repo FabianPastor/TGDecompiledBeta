@@ -152,7 +152,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                     default: goto L_0x0012;
                 }
             L_0x0012:
-                goto L_0x00d0
+                goto L_0x00cf
             L_0x0014:
                 android.view.View r8 = r8.itemView
                 org.telegram.ui.Cells.EditTextSettingsCell r8 = (org.telegram.ui.Cells.EditTextSettingsCell) r8
@@ -160,7 +160,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 int r0 = r0.reply1Row
                 r2 = 0
                 if (r9 != r0) goto L_0x0030
-                r0 = 2131627291(0x7f0e0d1b, float:1.8881842E38)
+                r0 = 2131627338(0x7f0e0d4a, float:1.8881938E38)
                 java.lang.String r2 = "QuickReplyDefault1"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg1"
@@ -173,7 +173,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
                 int r0 = r0.reply2Row
                 if (r9 != r0) goto L_0x0044
-                r0 = 2131627292(0x7f0e0d1c, float:1.8881844E38)
+                r0 = 2131627339(0x7f0e0d4b, float:1.888194E38)
                 java.lang.String r2 = "QuickReplyDefault2"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg2"
@@ -182,7 +182,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
                 int r0 = r0.reply3Row
                 if (r9 != r0) goto L_0x0058
-                r0 = 2131627293(0x7f0e0d1d, float:1.8881846E38)
+                r0 = 2131627340(0x7f0e0d4c, float:1.8881942E38)
                 java.lang.String r2 = "QuickReplyDefault3"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg3"
@@ -191,7 +191,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
                 int r0 = r0.reply4Row
                 if (r9 != r0) goto L_0x006c
-                r0 = 2131627294(0x7f0e0d1e, float:1.8881848E38)
+                r0 = 2131627341(0x7f0e0d4d, float:1.8881944E38)
                 java.lang.String r2 = "QuickReplyDefault4"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg4"
@@ -212,11 +212,11 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 r1 = 0
             L_0x0087:
                 r8.setTextAndHint(r2, r0, r1)
-                goto L_0x00d0
+                goto L_0x00cf
             L_0x008b:
                 android.view.View r8 = r8.itemView
                 org.telegram.ui.Cells.TextCheckCell r8 = (org.telegram.ui.Cells.TextCheckCell) r8
-                r9 = 2131624248(0x7f0e0138, float:1.887567E38)
+                r9 = 2131624251(0x7f0e013b, float:1.8875676E38)
                 java.lang.String r0 = "AllowCustomQuickReply"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
@@ -225,24 +225,24 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 java.lang.String r2 = "quick_reply_allow_custom"
                 boolean r0 = r0.getBoolean(r2, r1)
                 r8.setTextAndCheck(r9, r0, r4)
-                goto L_0x00d0
+                goto L_0x00cf
             L_0x00ac:
                 android.view.View r8 = r8.itemView
                 org.telegram.ui.Cells.TextSettingsCell r8 = (org.telegram.ui.Cells.TextSettingsCell) r8
-                goto L_0x00d0
+                goto L_0x00cf
             L_0x00b1:
                 android.view.View r8 = r8.itemView
                 org.telegram.ui.Cells.TextInfoPrivacyCell r8 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r8
                 android.content.Context r9 = r7.mContext
-                r0 = 2131165449(0x7var_, float:1.7945115E38)
+                r0 = 2131165451(0x7var_b, float:1.794512E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r9, (int) r0, (java.lang.String) r1)
                 r8.setBackgroundDrawable(r9)
-                r9 = 2131628484(0x7f0e11c4, float:1.8884262E38)
+                r9 = 2131628550(0x7f0e1206, float:1.8884396E38)
                 java.lang.String r0 = "VoipQuickRepliesExplain"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
                 r8.setText(r9)
-            L_0x00d0:
+            L_0x00cf:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.QuickRepliesSettingsActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

@@ -565,7 +565,8 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
         return null;
     }
 
-    public int getPositionForScrollProgress(float f) {
-        return (int) (((float) getItemCount()) * f);
+    public void getPositionForScrollProgress(RecyclerListView recyclerListView, float f, int[] iArr) {
+        iArr[0] = (int) (((float) getItemCount()) * f);
+        iArr[1] = 0;
     }
 }

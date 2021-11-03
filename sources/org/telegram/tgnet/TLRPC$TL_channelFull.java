@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -37,7 +37,7 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         this.chat_photo = TLRPC$Photo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.notify_settings = TLRPC$PeerNotifySettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         if ((this.flags & 8388608) != 0) {
-            this.exported_invite = (TLRPC$TL_chatInviteExported) TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.exported_invite = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         int readInt322 = abstractSerializedData.readInt32(z);
         if (readInt322 == NUM) {
@@ -110,6 +110,20 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
             }
             if ((this.flags & NUM) != 0) {
                 this.theme_emoticon = abstractSerializedData.readString(z);
+            }
+            if ((this.flags & NUM) != 0) {
+                this.requests_pending = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & NUM) != 0) {
+                int readInt326 = abstractSerializedData.readInt32(z);
+                if (readInt326 == NUM) {
+                    int readInt327 = abstractSerializedData.readInt32(z);
+                    for (int i3 = 0; i3 < readInt327; i3++) {
+                        this.recent_requesters.add(Long.valueOf(abstractSerializedData.readInt64(z)));
+                    }
+                } else if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt326)}));
+                }
             }
         } else if (z) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
@@ -219,6 +233,17 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         }
         if ((this.flags & NUM) != 0) {
             abstractSerializedData.writeString(this.theme_emoticon);
+        }
+        if ((this.flags & NUM) != 0) {
+            abstractSerializedData.writeInt32(this.requests_pending);
+        }
+        if ((this.flags & NUM) != 0) {
+            abstractSerializedData.writeInt32(NUM);
+            int size3 = this.recent_requesters.size();
+            abstractSerializedData.writeInt32(size3);
+            for (int i11 = 0; i11 < size3; i11++) {
+                abstractSerializedData.writeInt64(this.recent_requesters.get(i11).longValue());
+            }
         }
     }
 }

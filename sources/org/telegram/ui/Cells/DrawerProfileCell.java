@@ -1,7 +1,6 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -22,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserObject;
@@ -93,7 +91,7 @@ public class DrawerProfileCell extends FrameLayout {
         addView(this.arrowView, LayoutHelper.createFrame(59, 59, 85));
         setArrowState(false);
         this.sunDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f), true, (int[]) null);
-        if (isCurrentThemeDay()) {
+        if (Theme.isCurrentThemeDay()) {
             this.sunDrawable.setCustomEndFrame(36);
         } else {
             this.sunDrawable.setCustomEndFrame(0);
@@ -136,9 +134,9 @@ public class DrawerProfileCell extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x005b  */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x0067  */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x0079  */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x006f  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x007b  */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x008d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$new$0(android.view.View r7) {
         /*
@@ -157,53 +155,61 @@ public class DrawerProfileCell extends FrameLayout {
             java.lang.String r2 = "Blue"
             java.lang.String r0 = r7.getString(r0, r2)
             org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getTheme(r0)
-            if (r3 != 0) goto L_0x0020
+            if (r3 == 0) goto L_0x0029
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getTheme(r0)
+            boolean r3 = r3.isDark()
+            if (r3 == 0) goto L_0x002a
+        L_0x0029:
             r0 = r2
-        L_0x0020:
+        L_0x002a:
             java.lang.String r3 = "lastDarkTheme"
             java.lang.String r4 = "Dark Blue"
             java.lang.String r7 = r7.getString(r3, r4)
             org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getTheme(r7)
-            if (r3 != 0) goto L_0x002f
+            if (r3 == 0) goto L_0x0042
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getTheme(r7)
+            boolean r3 = r3.isDark()
+            if (r3 != 0) goto L_0x0043
+        L_0x0042:
             r7 = r4
-        L_0x002f:
+        L_0x0043:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
             boolean r5 = r0.equals(r7)
-            if (r5 == 0) goto L_0x004f
+            if (r5 == 0) goto L_0x0063
             boolean r5 = r3.isDark()
-            if (r5 != 0) goto L_0x004d
+            if (r5 != 0) goto L_0x0061
             boolean r5 = r0.equals(r4)
-            if (r5 != 0) goto L_0x004d
+            if (r5 != 0) goto L_0x0061
             java.lang.String r5 = "Night"
             boolean r5 = r0.equals(r5)
-            if (r5 == 0) goto L_0x0050
-        L_0x004d:
+            if (r5 == 0) goto L_0x0064
+        L_0x0061:
             r4 = r7
-            goto L_0x0051
-        L_0x004f:
+            goto L_0x0065
+        L_0x0063:
             r4 = r7
-        L_0x0050:
+        L_0x0064:
             r2 = r0
-        L_0x0051:
+        L_0x0065:
             java.lang.String r7 = r3.getKey()
             boolean r7 = r2.equals(r7)
-            if (r7 == 0) goto L_0x0067
+            if (r7 == 0) goto L_0x007b
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = org.telegram.ui.ActionBar.Theme.getTheme(r4)
             org.telegram.ui.Components.RLottieDrawable r2 = r6.sunDrawable
             r3 = 36
             r2.setCustomEndFrame(r3)
-            goto L_0x0070
-        L_0x0067:
+            goto L_0x0084
+        L_0x007b:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = org.telegram.ui.ActionBar.Theme.getTheme(r2)
             org.telegram.ui.Components.RLottieDrawable r2 = r6.sunDrawable
             r2.setCustomEndFrame(r1)
-        L_0x0070:
+        L_0x0084:
             org.telegram.ui.Components.RLottieImageView r2 = r6.darkThemeView
             r2.playAnimation()
             int r2 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
-            if (r2 == 0) goto L_0x0095
+            if (r2 == 0) goto L_0x00a9
             android.content.Context r2 = r6.getContext()
-            r3 = 2131624502(0x7f0e0236, float:1.8876186E38)
+            r3 = 2131624508(0x7f0e023c, float:1.8876198E38)
             java.lang.String r4 = "AutoNightModeOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.widget.Toast r2 = android.widget.Toast.makeText(r2, r3, r1)
@@ -211,7 +217,7 @@ public class DrawerProfileCell extends FrameLayout {
             org.telegram.ui.ActionBar.Theme.selectedAutoNightType = r1
             org.telegram.ui.ActionBar.Theme.saveAutoNightThemeConfig()
             org.telegram.ui.ActionBar.Theme.cancelAutoNightThemeCallbacks()
-        L_0x0095:
+        L_0x00a9:
             r6.switchTheme(r0, r7)
             return
         */
@@ -264,25 +270,6 @@ public class DrawerProfileCell extends FrameLayout {
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DrawerProfileCell.switchTheme(org.telegram.ui.ActionBar.Theme$ThemeInfo, boolean):void");
-    }
-
-    private boolean isCurrentThemeDay() {
-        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0);
-        String str = "Blue";
-        String string = sharedPreferences.getString("lastDayTheme", str);
-        if (Theme.getTheme(string) == null) {
-            string = str;
-        }
-        String str2 = "Dark Blue";
-        String string2 = sharedPreferences.getString("lastDarkTheme", str2);
-        if (Theme.getTheme(string2) != null) {
-            str2 = string2;
-        }
-        Theme.ThemeInfo activeTheme = Theme.getActiveTheme();
-        if (!string.equals(str2) || !activeTheme.isDark()) {
-            str = string;
-        }
-        return str.equals(activeTheme.getKey());
     }
 
     /* access modifiers changed from: protected */

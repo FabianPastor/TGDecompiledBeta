@@ -40,6 +40,8 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public int pts;
     public int read_inbox_max_id;
     public int read_outbox_max_id;
+    public ArrayList<Long> recent_requesters = new ArrayList<>();
+    public int requests_pending;
     public int slowmode_next_send_date;
     public int slowmode_seconds;
     public int stats_dc;
@@ -74,7 +76,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer89();
                 break;
             case -374179305:
-                tLRPC$ChatFull = new TLRPC$TL_channelFull();
+                tLRPC$ChatFull = new TLRPC$TL_channelFull_layer133();
                 break;
             case -304961647:
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer92();
@@ -127,14 +129,20 @@ public abstract class TLRPC$ChatFull extends TLObject {
             case 793980732:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer132();
                 break;
+            case 1185349556:
+                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                break;
             case 1235264985:
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer132();
                 break;
             case 1304281241:
-                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                tLRPC$ChatFull = new TLRPC$TL_chatFull_layer133();
                 break;
             case 1418477459:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer131();
+                break;
+            case 1506802019:
+                tLRPC$ChatFull = new TLRPC$TL_channelFull();
                 break;
             case 1991201921:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer72();

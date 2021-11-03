@@ -133,7 +133,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         try {
             ArrayList arrayList = new ArrayList();
             ArrayList arrayList2 = new ArrayList();
-            SQLiteCursor queryFinalized = messagesStorage.getDatabase().queryFinalized(String.format(Locale.US, "SELECT DISTINCT uid FROM media_v3 WHERE uid != 0 AND mid > 0 AND type = %d", new Object[]{4}), new Object[0]);
+            SQLiteCursor queryFinalized = messagesStorage.getDatabase().queryFinalized(String.format(Locale.US, "SELECT DISTINCT uid FROM media_v4 WHERE uid != 0 AND mid > 0 AND type = %d", new Object[]{4}), new Object[0]);
             while (queryFinalized.next()) {
                 long longValue = queryFinalized.longValue(0);
                 if (!DialogObject.isEncryptedDialog(longValue)) {
@@ -148,7 +148,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             queryFinalized.dispose();
             if (!this.dialogs.isEmpty()) {
                 String join = TextUtils.join(",", this.dialogs);
-                SQLiteCursor queryFinalized2 = messagesStorage.getDatabase().queryFinalized(String.format(Locale.US, "SELECT uid, data, mid FROM media_v3 WHERE uid IN (%s) AND mid > 0 AND type = %d ORDER BY date DESC, mid DESC", new Object[]{join, 4}), new Object[0]);
+                SQLiteCursor queryFinalized2 = messagesStorage.getDatabase().queryFinalized(String.format(Locale.US, "SELECT uid, data, mid FROM media_v4 WHERE uid IN (%s) AND mid > 0 AND type = %d ORDER BY date DESC, mid DESC", new Object[]{join, 4}), new Object[0]);
                 while (queryFinalized2.next()) {
                     NativeByteBuffer byteBufferValue = queryFinalized2.byteBufferValue(1);
                     if (byteBufferValue != null) {

@@ -10,6 +10,6 @@ public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda2 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$updateSunTime$6(dialogInterface, i);
+        this.f$0.lambda$updateSunTime$7(dialogInterface, i);
     }
 }

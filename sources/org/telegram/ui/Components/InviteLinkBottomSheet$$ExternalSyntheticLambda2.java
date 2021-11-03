@@ -12,6 +12,6 @@ public final /* synthetic */ class InviteLinkBottomSheet$$ExternalSyntheticLambd
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadCreator$0(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadCreator$2(tLObject, tLRPC$TL_error);
     }
 }

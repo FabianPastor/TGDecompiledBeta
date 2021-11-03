@@ -711,7 +711,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             this.smallPhoto = scaleAndSaveImage;
             if (scaleAndSaveImage != null) {
                 try {
-                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(BitmapFactory.decodeFile(FileLoader.getPathToAttach(scaleAndSaveImage, true).getAbsolutePath())), this.smallPhoto.location.volume_id + "_" + this.smallPhoto.location.local_id + "@50_50");
+                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(BitmapFactory.decodeFile(FileLoader.getPathToAttach(scaleAndSaveImage, true).getAbsolutePath())), this.smallPhoto.location.volume_id + "_" + this.smallPhoto.location.local_id + "@50_50", true);
                 } catch (Throwable unused) {
                 }
             }
@@ -855,7 +855,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                                 if (scaleAndSaveImage != null) {
                                     try {
                                         Bitmap decodeFile = BitmapFactory.decodeFile(FileLoader.getPathToAttach(scaleAndSaveImage, true).getAbsolutePath());
-                                        ImageLoader.getInstance().putImageToCache(new BitmapDrawable(decodeFile), this.smallPhoto.location.volume_id + "_" + this.smallPhoto.location.local_id + "@50_50");
+                                        ImageLoader.getInstance().putImageToCache(new BitmapDrawable(decodeFile), this.smallPhoto.location.volume_id + "_" + this.smallPhoto.location.local_id + "@50_50", true);
                                     } catch (Throwable unused) {
                                     }
                                 }

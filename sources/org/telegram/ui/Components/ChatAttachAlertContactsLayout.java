@@ -293,7 +293,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 boolean r12 = android.text.TextUtils.isEmpty(r12)
                 if (r12 == 0) goto L_0x00ec
                 org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-                r0 = 2131626640(0x7f0e0a90, float:1.8880522E38)
+                r0 = 2131626687(0x7f0e0abf, float:1.8880617E38)
                 java.lang.String r1 = "NumberUnknown"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r12.setText(r0)
@@ -695,10 +695,6 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             return null;
         }
 
-        public int getPositionForScrollProgress(float f) {
-            return 0;
-        }
-
         public View getSectionHeaderView(int i, View view) {
             return null;
         }
@@ -794,6 +790,11 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 return 1;
             }
             return i == getSectionCount() - 1 ? 2 : 0;
+        }
+
+        public void getPositionForScrollProgress(RecyclerListView recyclerListView, float f, int[] iArr) {
+            iArr[0] = 0;
+            iArr[1] = 0;
         }
 
         public void notifyDataSetChanged() {

@@ -110,24 +110,24 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v0, resolved type: org.telegram.messenger.ImageLocation} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v4, resolved type: org.telegram.messenger.ImageLocation} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v5, resolved type: org.telegram.messenger.ImageLocation} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v10, resolved type: org.telegram.messenger.MessageObject} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v11, resolved type: org.telegram.messenger.MessageObject} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v0, resolved type: org.telegram.messenger.ImageLocation} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v11, resolved type: org.telegram.messenger.ImageLocation} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v12, resolved type: org.telegram.messenger.ImageLocation} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v1, resolved type: org.telegram.messenger.ImageLocation} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v2, resolved type: org.telegram.messenger.ImageLocation} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v3, resolved type: org.telegram.messenger.ImageLocation} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v4, resolved type: org.telegram.messenger.ImageLocation} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v16, resolved type: org.telegram.messenger.MessageObject} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v17, resolved type: org.telegram.messenger.MessageObject} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v5, resolved type: org.telegram.messenger.ImageLocation} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v6, resolved type: org.telegram.messenger.ImageLocation} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v20, resolved type: org.telegram.messenger.ImageLocation} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v21, resolved type: org.telegram.tgnet.TLRPC$PageBlock} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v22, resolved type: org.telegram.tgnet.TLRPC$PageBlock} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v23, resolved type: org.telegram.messenger.ImageLocation} */
-    /* JADX WARNING: type inference failed for: r11v12 */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v22, resolved type: org.telegram.messenger.ImageLocation} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v23, resolved type: org.telegram.tgnet.TLRPC$PageBlock} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v24, resolved type: org.telegram.tgnet.TLRPC$PageBlock} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v25, resolved type: org.telegram.messenger.ImageLocation} */
+    /* JADX WARNING: type inference failed for: r11v13 */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:114:0x0252  */
-    /* JADX WARNING: Removed duplicated region for block: B:189:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x0268  */
+    /* JADX WARNING: Removed duplicated region for block: B:195:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void fillList() {
         /*
@@ -155,9 +155,14 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             r7 = 0
             r8 = 0
             r10 = 1
-            if (r3 == 0) goto L_0x004d
+            if (r3 == 0) goto L_0x0058
             boolean r11 = r3.isEmpty()
-            if (r11 != 0) goto L_0x004d
+            if (r11 != 0) goto L_0x0058
+            int r11 = r3.size()
+            if (r1 < r11) goto L_0x0046
+            int r1 = r3.size()
+            int r1 = r1 - r10
+        L_0x0046:
             java.lang.Object r11 = r3.get(r1)
             org.telegram.messenger.ImageLocation r11 = (org.telegram.messenger.ImageLocation) r11
             int r12 = r3.size()
@@ -165,99 +170,104 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             r17 = r3
             r15 = r12
             r12 = 0
-            goto L_0x0147
-        L_0x004d:
-            if (r4 == 0) goto L_0x00e3
+            goto L_0x015d
+        L_0x0058:
+            if (r4 == 0) goto L_0x00f9
             boolean r11 = r4.isEmpty()
-            if (r11 != 0) goto L_0x00e3
+            if (r11 != 0) goto L_0x00f9
+            int r11 = r4.size()
+            if (r1 < r11) goto L_0x006b
+            int r1 = r4.size()
+            int r1 = r1 - r10
+        L_0x006b:
             java.lang.Object r11 = r4.get(r1)
             org.telegram.messenger.MessageObject r11 = (org.telegram.messenger.MessageObject) r11
             org.telegram.ui.Components.GroupedPhotosListView$GroupedPhotosListViewDelegate r12 = r0.delegate
             long r13 = r11.getGroupIdForUse()
             boolean r12 = r12.validGroupId(r13)
-            if (r12 == 0) goto L_0x006c
+            if (r12 == 0) goto L_0x0082
             long r12 = r11.getGroupIdForUse()
-            goto L_0x006d
-        L_0x006c:
+            goto L_0x0083
+        L_0x0082:
             r12 = r8
-        L_0x006d:
+        L_0x0083:
             long r14 = r0.currentGroupId
             int r16 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1))
-            if (r16 == 0) goto L_0x0077
+            if (r16 == 0) goto L_0x008d
             r0.currentGroupId = r12
             r12 = 1
-            goto L_0x0078
-        L_0x0077:
+            goto L_0x008e
+        L_0x008d:
             r12 = 0
-        L_0x0078:
+        L_0x008e:
             long r13 = r0.currentGroupId
             int r15 = (r13 > r8 ? 1 : (r13 == r8 ? 0 : -1))
-            if (r15 == 0) goto L_0x00db
+            if (r15 == 0) goto L_0x00f1
             r0.hasPhotos = r10
             int r13 = r1 + 10
             int r14 = r4.size()
             int r13 = java.lang.Math.min(r13, r14)
             r14 = r1
             r15 = 0
-        L_0x008c:
-            if (r14 >= r13) goto L_0x00ad
+        L_0x00a2:
+            if (r14 >= r13) goto L_0x00c3
             java.lang.Object r16 = r4.get(r14)
             org.telegram.messenger.MessageObject r16 = (org.telegram.messenger.MessageObject) r16
-            if (r6 != 0) goto L_0x00a3
+            if (r6 != 0) goto L_0x00b9
             long r16 = r16.getGroupIdForUse()
             r18 = r11
             long r10 = r0.currentGroupId
             int r19 = (r16 > r10 ? 1 : (r16 == r10 ? 0 : -1))
-            if (r19 != 0) goto L_0x00af
-            goto L_0x00a5
-        L_0x00a3:
+            if (r19 != 0) goto L_0x00c5
+            goto L_0x00bb
+        L_0x00b9:
             r18 = r11
-        L_0x00a5:
+        L_0x00bb:
             int r15 = r15 + 1
             int r14 = r14 + 1
             r11 = r18
             r10 = 1
-            goto L_0x008c
-        L_0x00ad:
+            goto L_0x00a2
+        L_0x00c3:
             r18 = r11
-        L_0x00af:
+        L_0x00c5:
             int r10 = r1 + -10
             int r10 = java.lang.Math.max(r10, r2)
             int r11 = r1 + -1
-        L_0x00b7:
-            if (r11 < r10) goto L_0x00d8
+        L_0x00cd:
+            if (r11 < r10) goto L_0x00ee
             java.lang.Object r13 = r4.get(r11)
             org.telegram.messenger.MessageObject r13 = (org.telegram.messenger.MessageObject) r13
-            if (r6 != 0) goto L_0x00ce
+            if (r6 != 0) goto L_0x00e4
             long r13 = r13.getGroupIdForUse()
             r17 = r3
             long r2 = r0.currentGroupId
             int r19 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1))
-            if (r19 != 0) goto L_0x00e0
-            goto L_0x00d0
-        L_0x00ce:
+            if (r19 != 0) goto L_0x00f6
+            goto L_0x00e6
+        L_0x00e4:
             r17 = r3
-        L_0x00d0:
+        L_0x00e6:
             int r15 = r15 + 1
             int r11 = r11 + -1
             r3 = r17
             r2 = 0
-            goto L_0x00b7
-        L_0x00d8:
+            goto L_0x00cd
+        L_0x00ee:
             r17 = r3
-            goto L_0x00e0
-        L_0x00db:
+            goto L_0x00f6
+        L_0x00f1:
             r17 = r3
             r18 = r11
             r15 = 0
-        L_0x00e0:
+        L_0x00f6:
             r11 = r18
-            goto L_0x0147
-        L_0x00e3:
+            goto L_0x015d
+        L_0x00f9:
             r17 = r3
-            if (r5 == 0) goto L_0x0144
+            if (r5 == 0) goto L_0x015a
             boolean r2 = r5.isEmpty()
-            if (r2 != 0) goto L_0x0144
+            if (r2 != 0) goto L_0x015a
             java.lang.Object r2 = r5.get(r1)
             r11 = r2
             org.telegram.tgnet.TLRPC$PageBlock r11 = (org.telegram.tgnet.TLRPC$PageBlock) r11
@@ -265,82 +275,82 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             long r12 = (long) r2
             long r14 = r0.currentGroupId
             int r3 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1))
-            if (r3 == 0) goto L_0x0102
+            if (r3 == 0) goto L_0x0118
             long r2 = (long) r2
             r0.currentGroupId = r2
             r12 = 1
-            goto L_0x0103
-        L_0x0102:
+            goto L_0x0119
+        L_0x0118:
             r12 = 0
-        L_0x0103:
+        L_0x0119:
             long r2 = r0.currentGroupId
             int r10 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1))
-            if (r10 == 0) goto L_0x0146
+            if (r10 == 0) goto L_0x015c
             r2 = 1
             r0.hasPhotos = r2
             int r2 = r5.size()
             r10 = r1
             r3 = 0
-        L_0x0112:
-            if (r10 >= r2) goto L_0x012a
+        L_0x0128:
+            if (r10 >= r2) goto L_0x0140
             java.lang.Object r13 = r5.get(r10)
             org.telegram.tgnet.TLRPC$PageBlock r13 = (org.telegram.tgnet.TLRPC$PageBlock) r13
             int r13 = r13.groupId
             long r13 = (long) r13
             long r8 = r0.currentGroupId
             int r15 = (r13 > r8 ? 1 : (r13 == r8 ? 0 : -1))
-            if (r15 != 0) goto L_0x012a
+            if (r15 != 0) goto L_0x0140
             int r3 = r3 + 1
             int r10 = r10 + 1
             r8 = 0
-            goto L_0x0112
-        L_0x012a:
+            goto L_0x0128
+        L_0x0140:
             int r2 = r1 + -1
-        L_0x012c:
-            if (r2 < 0) goto L_0x0142
+        L_0x0142:
+            if (r2 < 0) goto L_0x0158
             java.lang.Object r8 = r5.get(r2)
             org.telegram.tgnet.TLRPC$PageBlock r8 = (org.telegram.tgnet.TLRPC$PageBlock) r8
             int r8 = r8.groupId
             long r8 = (long) r8
             long r13 = r0.currentGroupId
             int r10 = (r8 > r13 ? 1 : (r8 == r13 ? 0 : -1))
-            if (r10 != 0) goto L_0x0142
+            if (r10 != 0) goto L_0x0158
             int r3 = r3 + 1
             int r2 = r2 + -1
-            goto L_0x012c
-        L_0x0142:
+            goto L_0x0142
+        L_0x0158:
             r15 = r3
-            goto L_0x0147
-        L_0x0144:
+            goto L_0x015d
+        L_0x015a:
             r11 = r7
             r12 = 0
-        L_0x0146:
+        L_0x015c:
             r15 = 0
-        L_0x0147:
-            if (r11 != 0) goto L_0x014a
+        L_0x015d:
+            if (r11 != 0) goto L_0x0160
             return
-        L_0x014a:
+        L_0x0160:
             boolean r2 = r0.animationsEnabled
-            if (r2 == 0) goto L_0x01e3
+            if (r2 == 0) goto L_0x01f9
             boolean r2 = r0.hasPhotos
             r3 = 1128792064(0x43480000, float:200.0)
             r8 = 2
-            if (r2 != 0) goto L_0x01a3
+            if (r2 != 0) goto L_0x01b9
             android.animation.ValueAnimator r2 = r0.showAnimator
-            if (r2 == 0) goto L_0x015e
+            if (r2 == 0) goto L_0x0174
             r2.cancel()
             r0.showAnimator = r7
-        L_0x015e:
+        L_0x0174:
             float r2 = r0.drawAlpha
             r7 = 0
             int r2 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-            if (r2 <= 0) goto L_0x01e3
+            if (r2 <= 0) goto L_0x01f9
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r2 = r0.currentPhotos
             int r2 = r2.size()
             r9 = 1
-            if (r2 <= r9) goto L_0x01e3
+            if (r2 <= r9) goto L_0x01f9
             android.animation.ValueAnimator r1 = r0.hideAnimator
-            if (r1 != 0) goto L_0x01a2
+            if (r1 != 0) goto L_0x01b8
             float[] r1 = new float[r8]
             float r2 = r0.drawAlpha
             r4 = 0
@@ -362,20 +372,20 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             r1.addUpdateListener(r2)
             android.animation.ValueAnimator r1 = r0.hideAnimator
             r1.start()
-        L_0x01a2:
+        L_0x01b8:
             return
-        L_0x01a3:
+        L_0x01b9:
             android.animation.ValueAnimator r2 = r0.hideAnimator
-            if (r2 == 0) goto L_0x01ac
+            if (r2 == 0) goto L_0x01c2
             r0.hideAnimator = r7
             r2.cancel()
-        L_0x01ac:
+        L_0x01c2:
             float r2 = r0.drawAlpha
             r7 = 1065353216(0x3var_, float:1.0)
             int r9 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-            if (r9 >= 0) goto L_0x01e3
+            if (r9 >= 0) goto L_0x01f9
             android.animation.ValueAnimator r9 = r0.showAnimator
-            if (r9 != 0) goto L_0x01e3
+            if (r9 != 0) goto L_0x01f9
             float[] r8 = new float[r8]
             r9 = 0
             r8[r9] = r2
@@ -396,36 +406,36 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             org.telegram.ui.Components.GroupedPhotosListView$$ExternalSyntheticLambda1 r3 = new org.telegram.ui.Components.GroupedPhotosListView$$ExternalSyntheticLambda1
             r3.<init>(r0)
             r2.addUpdateListener(r3)
-        L_0x01e3:
+        L_0x01f9:
             r2 = -1
-            if (r12 != 0) goto L_0x024f
+            if (r12 != 0) goto L_0x0265
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.currentPhotos
             int r3 = r3.size()
-            if (r15 != r3) goto L_0x024c
+            if (r15 != r3) goto L_0x0262
             java.util.ArrayList<java.lang.Object> r3 = r0.currentObjects
             boolean r3 = r3.contains(r11)
-            if (r3 != 0) goto L_0x01f7
-            goto L_0x024c
-        L_0x01f7:
+            if (r3 != 0) goto L_0x020d
+            goto L_0x0262
+        L_0x020d:
             java.util.ArrayList<java.lang.Object> r3 = r0.currentObjects
             int r3 = r3.indexOf(r11)
             int r7 = r0.currentImage
-            if (r7 == r3) goto L_0x024f
-            if (r3 == r2) goto L_0x024f
+            if (r7 == r3) goto L_0x0265
+            if (r3 == r2) goto L_0x0265
             boolean r8 = r0.animateAllLine
-            if (r8 != 0) goto L_0x0217
+            if (r8 != 0) goto L_0x022d
             boolean r9 = r0.moving
-            if (r9 != 0) goto L_0x0217
+            if (r9 != 0) goto L_0x022d
             int r9 = r7 + -1
-            if (r3 == r9) goto L_0x0213
+            if (r3 == r9) goto L_0x0229
             int r9 = r7 + 1
-            if (r3 != r9) goto L_0x0217
-        L_0x0213:
+            if (r3 != r9) goto L_0x022d
+        L_0x0229:
             r8 = 1
             r0.animateToItemFast = r8
             r8 = 1
-        L_0x0217:
-            if (r8 == 0) goto L_0x0238
+        L_0x022d:
+            if (r8 == 0) goto L_0x024e
             r0.animateToItem = r3
             r0.nextImage = r3
             int r7 = r7 - r3
@@ -442,8 +452,8 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             r0.lastUpdateTime = r9
             r20.invalidate()
             r3 = 0
-            goto L_0x0249
-        L_0x0238:
+            goto L_0x025f
+        L_0x024e:
             r8 = 1
             int r7 = r7 - r3
             int r9 = r0.itemWidth
@@ -454,17 +464,17 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             r0.currentImage = r3
             r3 = 0
             r0.moving = r3
-        L_0x0249:
+        L_0x025f:
             r0.drawDx = r3
-            goto L_0x0250
-        L_0x024c:
+            goto L_0x0266
+        L_0x0262:
             r3 = 0
             r12 = 1
-            goto L_0x0250
-        L_0x024f:
+            goto L_0x0266
+        L_0x0265:
             r3 = 0
-        L_0x0250:
-            if (r12 == 0) goto L_0x03a4
+        L_0x0266:
+            if (r12 == 0) goto L_0x03ba
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r7 = r0.currentPhotos
             int r7 = r7.size()
             r0.animateAllLine = r3
@@ -472,9 +482,9 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             r3.clear()
             java.util.ArrayList<java.lang.Object> r3 = r0.currentObjects
             r3.clear()
-            if (r17 == 0) goto L_0x0281
+            if (r17 == 0) goto L_0x0297
             boolean r3 = r17.isEmpty()
-            if (r3 != 0) goto L_0x0281
+            if (r3 != 0) goto L_0x0297
             java.util.ArrayList<java.lang.Object> r3 = r0.currentObjects
             r4 = r17
             r3.addAll(r4)
@@ -484,32 +494,32 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             r0.animateToItem = r2
             r1 = 0
             r0.animateToItemFast = r1
-            goto L_0x0382
-        L_0x0281:
-            if (r4 == 0) goto L_0x0311
+            goto L_0x0398
+        L_0x0297:
+            if (r4 == 0) goto L_0x0327
             boolean r3 = r4.isEmpty()
-            if (r3 != 0) goto L_0x0311
+            if (r3 != 0) goto L_0x0327
             long r8 = r0.currentGroupId
             r10 = 0
             int r3 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r3 != 0) goto L_0x0293
-            if (r6 == 0) goto L_0x0382
-        L_0x0293:
+            if (r3 != 0) goto L_0x02a9
+            if (r6 == 0) goto L_0x0398
+        L_0x02a9:
             int r3 = r1 + 10
             int r5 = r4.size()
             int r3 = java.lang.Math.min(r3, r5)
             r5 = r1
-        L_0x029e:
+        L_0x02b4:
             r8 = 56
-            if (r5 >= r3) goto L_0x02ce
+            if (r5 >= r3) goto L_0x02e4
             java.lang.Object r9 = r4.get(r5)
             org.telegram.messenger.MessageObject r9 = (org.telegram.messenger.MessageObject) r9
-            if (r6 != 0) goto L_0x02b4
+            if (r6 != 0) goto L_0x02ca
             long r10 = r9.getGroupIdForUse()
             long r12 = r0.currentGroupId
             int r14 = (r10 > r12 ? 1 : (r10 == r12 ? 0 : -1))
-            if (r14 != 0) goto L_0x02ce
-        L_0x02b4:
+            if (r14 != 0) goto L_0x02e4
+        L_0x02ca:
             java.util.ArrayList<java.lang.Object> r10 = r0.currentObjects
             r10.add(r9)
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r10 = r0.currentPhotos
@@ -520,8 +530,8 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForObject(r8, r9)
             r10.add(r8)
             int r5 = r5 + 1
-            goto L_0x029e
-        L_0x02ce:
+            goto L_0x02b4
+        L_0x02e4:
             r3 = 0
             r0.currentImage = r3
             r0.animateToItem = r2
@@ -530,16 +540,16 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             int r2 = java.lang.Math.max(r2, r3)
             r3 = 1
             int r1 = r1 - r3
-        L_0x02dd:
-            if (r1 < r2) goto L_0x0382
+        L_0x02f3:
+            if (r1 < r2) goto L_0x0398
             java.lang.Object r3 = r4.get(r1)
             org.telegram.messenger.MessageObject r3 = (org.telegram.messenger.MessageObject) r3
-            if (r6 != 0) goto L_0x02f1
+            if (r6 != 0) goto L_0x0307
             long r9 = r3.getGroupIdForUse()
             long r11 = r0.currentGroupId
             int r5 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
-            if (r5 != 0) goto L_0x0382
-        L_0x02f1:
+            if (r5 != 0) goto L_0x0398
+        L_0x0307:
             java.util.ArrayList<java.lang.Object> r5 = r0.currentObjects
             r9 = 0
             r5.add(r9, r3)
@@ -554,26 +564,26 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             int r3 = r3 + r11
             r0.currentImage = r3
             int r1 = r1 + -1
-            goto L_0x02dd
-        L_0x0311:
-            if (r5 == 0) goto L_0x0382
+            goto L_0x02f3
+        L_0x0327:
+            if (r5 == 0) goto L_0x0398
             boolean r3 = r5.isEmpty()
-            if (r3 != 0) goto L_0x0382
+            if (r3 != 0) goto L_0x0398
             long r3 = r0.currentGroupId
             r8 = 0
             int r6 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
-            if (r6 == 0) goto L_0x0382
+            if (r6 == 0) goto L_0x0398
             int r3 = r5.size()
             r4 = r1
-        L_0x0326:
-            if (r4 >= r3) goto L_0x034c
+        L_0x033c:
+            if (r4 >= r3) goto L_0x0362
             java.lang.Object r6 = r5.get(r4)
             org.telegram.tgnet.TLRPC$PageBlock r6 = (org.telegram.tgnet.TLRPC$PageBlock) r6
             int r8 = r6.groupId
             long r8 = (long) r8
             long r10 = r0.currentGroupId
             int r12 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r12 != 0) goto L_0x034c
+            if (r12 != 0) goto L_0x0362
             java.util.ArrayList<java.lang.Object> r8 = r0.currentObjects
             r8.add(r6)
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r8 = r0.currentPhotos
@@ -582,23 +592,23 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForObject(r9, r6)
             r8.add(r6)
             int r4 = r4 + 1
-            goto L_0x0326
-        L_0x034c:
+            goto L_0x033c
+        L_0x0362:
             r3 = 0
             r0.currentImage = r3
             r0.animateToItem = r2
             r0.animateToItemFast = r3
             r2 = 1
             int r1 = r1 - r2
-        L_0x0355:
-            if (r1 < 0) goto L_0x0382
+        L_0x036b:
+            if (r1 < 0) goto L_0x0398
             java.lang.Object r2 = r5.get(r1)
             org.telegram.tgnet.TLRPC$PageBlock r2 = (org.telegram.tgnet.TLRPC$PageBlock) r2
             int r3 = r2.groupId
             long r3 = (long) r3
             long r8 = r0.currentGroupId
             int r6 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
-            if (r6 != 0) goto L_0x0382
+            if (r6 != 0) goto L_0x0398
             java.util.ArrayList<java.lang.Object> r3 = r0.currentObjects
             r4 = 0
             r3.add(r4, r2)
@@ -612,25 +622,25 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             int r2 = r2 + r3
             r0.currentImage = r2
             int r1 = r1 + -1
-            goto L_0x0355
-        L_0x0382:
+            goto L_0x036b
+        L_0x0398:
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r1 = r0.currentPhotos
             int r1 = r1.size()
             r2 = 1
-            if (r1 != r2) goto L_0x0395
+            if (r1 != r2) goto L_0x03ab
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r1 = r0.currentPhotos
             r1.clear()
             java.util.ArrayList<java.lang.Object> r1 = r0.currentObjects
             r1.clear()
-        L_0x0395:
+        L_0x03ab:
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r1 = r0.currentPhotos
             int r1 = r1.size()
-            if (r1 == r7) goto L_0x03a0
+            if (r1 == r7) goto L_0x03b6
             r20.requestLayout()
-        L_0x03a0:
+        L_0x03b6:
             r1 = 0
             r0.fillImages(r1, r1)
-        L_0x03a4:
+        L_0x03ba:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupedPhotosListView.fillList():void");

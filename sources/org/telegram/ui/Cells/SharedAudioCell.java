@@ -26,6 +26,7 @@ import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.DotDividerSpan;
+import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgress2;
 
@@ -48,6 +49,8 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
     private StaticLayout descriptionLayout;
     private int descriptionY;
     private SpannableStringBuilder dotSpan;
+    float enterAlpha;
+    FlickerLoadingView globalGradientView;
     private int hasMiniProgress;
     private boolean miniButtonPressed;
     private int miniButtonState;
@@ -80,6 +83,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         this.descriptionY = AndroidUtilities.dp(29.0f);
         this.captionY = AndroidUtilities.dp(29.0f);
         this.currentAccount = UserConfig.selectedAccount;
+        this.enterAlpha = 1.0f;
         this.resourcesProvider = resourcesProvider2;
         this.viewType = i;
         setFocusable(true);
@@ -643,54 +647,6 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         }
     }
 
-    /* access modifiers changed from: protected */
-    public void onDraw(Canvas canvas) {
-        StaticLayout staticLayout;
-        if (this.viewType == 1) {
-            this.description2TextPaint.setColor(getThemedColor("windowBackgroundWhiteGrayText3"));
-        }
-        int i = 0;
-        float f = 8.0f;
-        if (this.dateLayout != null) {
-            canvas.save();
-            canvas.translate((float) (AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline) + (LocaleController.isRTL ? 0 : this.dateLayoutX)), (float) this.titleY);
-            this.dateLayout.draw(canvas);
-            canvas.restore();
-        }
-        if (this.titleLayout != null) {
-            canvas.save();
-            int dp = AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline);
-            if (LocaleController.isRTL && (staticLayout = this.dateLayout) != null) {
-                i = staticLayout.getWidth() + AndroidUtilities.dp(4.0f);
-            }
-            canvas.translate((float) (dp + i), (float) this.titleY);
-            this.titleLayout.draw(canvas);
-            canvas.restore();
-        }
-        if (this.captionLayout != null) {
-            this.captionTextPaint.setColor(getThemedColor("windowBackgroundWhiteBlackText"));
-            canvas.save();
-            canvas.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.captionY);
-            this.captionLayout.draw(canvas);
-            canvas.restore();
-        }
-        if (this.descriptionLayout != null) {
-            Theme.chat_contextResult_descriptionTextPaint.setColor(getThemedColor("windowBackgroundWhiteGrayText2"));
-            canvas.save();
-            if (!LocaleController.isRTL) {
-                f = (float) AndroidUtilities.leftBaseline;
-            }
-            canvas.translate((float) AndroidUtilities.dp(f), (float) this.descriptionY);
-            this.descriptionLayout.draw(canvas);
-            canvas.restore();
-        }
-        this.radialProgress.setProgressColor(getThemedColor(this.buttonPressed ? "chat_inAudioSelectedProgress" : "chat_inAudioProgress"));
-        this.radialProgress.draw(canvas);
-        if (this.needDivider) {
-            canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
-        }
-    }
-
     private int getMiniIconForCurrentState() {
         int i = this.miniButtonState;
         if (i < 0) {
@@ -827,5 +783,82 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
         Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
+    }
+
+    public void setGlobalGradientView(FlickerLoadingView flickerLoadingView) {
+        this.globalGradientView = flickerLoadingView;
+    }
+
+    /* access modifiers changed from: protected */
+    public void dispatchDraw(Canvas canvas) {
+        if (this.enterAlpha == 1.0f || this.globalGradientView == null) {
+            drawInternal(canvas);
+            super.dispatchDraw(canvas);
+            return;
+        }
+        canvas.saveLayerAlpha(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), (int) ((1.0f - this.enterAlpha) * 255.0f), 31);
+        this.globalGradientView.setViewType(4);
+        this.globalGradientView.updateColors();
+        this.globalGradientView.updateGradient();
+        this.globalGradientView.draw(canvas);
+        canvas.restore();
+        canvas.saveLayerAlpha(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), (int) (this.enterAlpha * 255.0f), 31);
+        drawInternal(canvas);
+        super.dispatchDraw(canvas);
+        canvas.restore();
+    }
+
+    private void drawInternal(Canvas canvas) {
+        StaticLayout staticLayout;
+        if (this.viewType == 1) {
+            this.description2TextPaint.setColor(getThemedColor("windowBackgroundWhiteGrayText3"));
+        }
+        int i = 0;
+        float f = 8.0f;
+        if (this.dateLayout != null) {
+            canvas.save();
+            canvas.translate((float) (AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline) + (LocaleController.isRTL ? 0 : this.dateLayoutX)), (float) this.titleY);
+            this.dateLayout.draw(canvas);
+            canvas.restore();
+        }
+        if (this.titleLayout != null) {
+            canvas.save();
+            int dp = AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline);
+            if (LocaleController.isRTL && (staticLayout = this.dateLayout) != null) {
+                i = staticLayout.getWidth() + AndroidUtilities.dp(4.0f);
+            }
+            canvas.translate((float) (dp + i), (float) this.titleY);
+            this.titleLayout.draw(canvas);
+            canvas.restore();
+        }
+        if (this.captionLayout != null) {
+            this.captionTextPaint.setColor(getThemedColor("windowBackgroundWhiteBlackText"));
+            canvas.save();
+            canvas.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.captionY);
+            this.captionLayout.draw(canvas);
+            canvas.restore();
+        }
+        if (this.descriptionLayout != null) {
+            Theme.chat_contextResult_descriptionTextPaint.setColor(getThemedColor("windowBackgroundWhiteGrayText2"));
+            canvas.save();
+            if (!LocaleController.isRTL) {
+                f = (float) AndroidUtilities.leftBaseline;
+            }
+            canvas.translate((float) AndroidUtilities.dp(f), (float) this.descriptionY);
+            this.descriptionLayout.draw(canvas);
+            canvas.restore();
+        }
+        this.radialProgress.setProgressColor(getThemedColor(this.buttonPressed ? "chat_inAudioSelectedProgress" : "chat_inAudioProgress"));
+        this.radialProgress.draw(canvas);
+        if (this.needDivider) {
+            canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+        }
+    }
+
+    public void setEnterAnimationAlpha(float f) {
+        if (this.enterAlpha != f) {
+            this.enterAlpha = f;
+            invalidate();
+        }
     }
 }

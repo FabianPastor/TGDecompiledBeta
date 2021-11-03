@@ -11,9 +11,9 @@ public class TLRPC$TL_chatFull_layer92 extends TLRPC$TL_chatFull {
             this.chat_photo = TLRPC$Photo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         this.notify_settings = TLRPC$PeerNotifySettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        TLRPC$ExportedChatInvite TLdeserialize = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        TLRPC$TL_chatInviteExported TLdeserialize = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         if (TLdeserialize instanceof TLRPC$TL_chatInviteExported) {
-            this.exported_invite = (TLRPC$TL_chatInviteExported) TLdeserialize;
+            this.exported_invite = TLdeserialize;
         }
         if ((this.flags & 8) != 0) {
             int readInt32 = abstractSerializedData.readInt32(z);

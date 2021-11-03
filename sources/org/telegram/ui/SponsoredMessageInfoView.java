@@ -8,6 +8,7 @@ import android.graphics.RectF;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -78,6 +79,8 @@ public class SponsoredMessageInfoView extends FrameLayout {
         linearLayout.addView(textView4, LayoutHelper.createLinear(-1, -2, 0, 0, 24, 0, 0));
         linearLayout.addView(r15, LayoutHelper.createLinear(-2, 34, 1, 0, 14, 0, 0));
         linearLayout.addView(textView5, LayoutHelper.createLinear(-1, -2, 0, 0, 14, 0, 0));
-        addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 0, 22.0f, 12.0f, 22.0f, 22.0f));
+        ScrollView scrollView = new ScrollView(getContext());
+        scrollView.addView(linearLayout);
+        addView(scrollView, LayoutHelper.createFrame(-1, -2.0f, 0, 22.0f, 12.0f, 22.0f, 22.0f));
     }
 }

@@ -5,7 +5,7 @@ public class TLRPC$TL_channelAdminLogEventActionParticipantJoinByInvite extends 
     public TLRPC$TL_chatInviteExported invite;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
-        this.invite = (TLRPC$TL_chatInviteExported) TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        this.invite = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {

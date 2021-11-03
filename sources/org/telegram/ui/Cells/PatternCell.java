@@ -180,7 +180,6 @@ public class PatternCell extends BackupImageView implements DownloadController.F
     public void onDraw(Canvas canvas) {
         Canvas canvas2 = canvas;
         float intensity = this.delegate.getIntensity();
-        this.imageReceiver.setAlpha(Math.abs(intensity));
         this.imageReceiver.setBlendMode((Object) null);
         int backgroundColor = this.delegate.getBackgroundColor();
         int backgroundGradientColor1 = this.delegate.getBackgroundGradientColor1();

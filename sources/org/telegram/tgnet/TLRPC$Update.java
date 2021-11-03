@@ -244,6 +244,9 @@ public abstract class TLRPC$Update extends TLObject {
             case 1852826908:
                 tLRPC$Update = new TLRPC$TL_updateDialogPinned();
                 break;
+            case 1885586395:
+                tLRPC$Update = new TLRPC$TL_updatePendingJoinRequests();
+                break;
             case 1887741886:
                 tLRPC$Update = new TLRPC$TL_updateContactsReset();
                 break;

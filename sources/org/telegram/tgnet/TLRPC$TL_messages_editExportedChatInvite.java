@@ -1,12 +1,14 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_messages_editExportedChatInvite extends TLObject {
-    public static int constructor = 48562110;
+    public static int constructor = -NUM;
     public int expire_date;
     public int flags;
     public String link;
     public TLRPC$InputPeer peer;
+    public boolean request_needed;
     public boolean revoked;
+    public String title;
     public int usage_limit;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -25,6 +27,12 @@ public class TLRPC$TL_messages_editExportedChatInvite extends TLObject {
         }
         if ((this.flags & 2) != 0) {
             abstractSerializedData.writeInt32(this.usage_limit);
+        }
+        if ((this.flags & 8) != 0) {
+            abstractSerializedData.writeBool(this.request_needed);
+        }
+        if ((this.flags & 16) != 0) {
+            abstractSerializedData.writeString(this.title);
         }
     }
 }

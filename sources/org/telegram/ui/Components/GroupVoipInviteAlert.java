@@ -350,9 +350,9 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 }
             }
             updateRows();
-            RecyclerListView.SelectionAdapter selectionAdapter = this.listViewAdapter;
-            if (selectionAdapter != null) {
-                selectionAdapter.notifyDataSetChanged();
+            RecyclerView.Adapter adapter = this.listViewAdapter;
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
                 return;
             }
             return;
@@ -362,9 +362,9 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
         if (stickerEmptyView != null) {
             stickerEmptyView.showProgress(true, false);
         }
-        RecyclerListView.SelectionAdapter selectionAdapter2 = this.listViewAdapter;
-        if (selectionAdapter2 != null) {
-            selectionAdapter2.notifyDataSetChanged();
+        RecyclerView.Adapter adapter2 = this.listViewAdapter;
+        if (adapter2 != null) {
+            adapter2.notifyDataSetChanged();
         }
         TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants = new TLRPC$TL_channels_getParticipants();
         tLRPC$TL_channels_getParticipants.channel = MessagesController.getInputChannel(this.currentChat);
@@ -463,8 +463,8 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             if (this.flickerProgressRow == 1) {
                 i = 1;
             } else {
-                RecyclerListView.SelectionAdapter selectionAdapter = this.listViewAdapter;
-                i = selectionAdapter != null ? selectionAdapter.getItemCount() - 1 : 0;
+                RecyclerView.Adapter adapter = this.listViewAdapter;
+                i = adapter != null ? adapter.getItemCount() - 1 : 0;
             }
             showItemsAnimated(i);
             if (this.participants.isEmpty()) {
@@ -473,9 +473,9 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             }
         }
         updateRows();
-        RecyclerListView.SelectionAdapter selectionAdapter2 = this.listViewAdapter;
-        if (selectionAdapter2 != null) {
-            selectionAdapter2.notifyDataSetChanged();
+        RecyclerView.Adapter adapter2 = this.listViewAdapter;
+        if (adapter2 != null) {
+            adapter2.notifyDataSetChanged();
             if (this.emptyView != null && this.listViewAdapter.getItemCount() == 0 && this.firstLoaded) {
                 this.emptyView.showProgress(false, true);
             }
@@ -603,9 +603,9 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 AndroidUtilities.runOnUIThread(groupVoipInviteAlert$SearchAdapter$$ExternalSyntheticLambda1, 300);
                 RecyclerView.Adapter adapter = GroupVoipInviteAlert.this.listView.getAdapter();
                 GroupVoipInviteAlert groupVoipInviteAlert = GroupVoipInviteAlert.this;
-                RecyclerListView.SelectionAdapter selectionAdapter = groupVoipInviteAlert.searchListViewAdapter;
-                if (adapter != selectionAdapter) {
-                    groupVoipInviteAlert.listView.setAdapter(selectionAdapter);
+                RecyclerView.Adapter adapter2 = groupVoipInviteAlert.searchListViewAdapter;
+                if (adapter != adapter2) {
+                    groupVoipInviteAlert.listView.setAdapter(adapter2);
                     return;
                 }
                 return;
@@ -900,7 +900,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 android.content.Context r0 = r2.mContext
                 r1 = 0
                 r4.<init>(r0, r3, r3, r1)
-                r3 = 2131165763(0x7var_, float:1.7945752E38)
+                r3 = 2131165767(0x7var_, float:1.794576E38)
                 r4.setCustomRightImage(r3)
                 java.lang.String r3 = "voipgroup_nameText"
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
@@ -942,7 +942,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 org.telegram.ui.Cells.GraySectionCell r14 = (org.telegram.ui.Cells.GraySectionCell) r14
                 int r0 = r13.groupStartRow
                 if (r15 != r0) goto L_0x0021
-                r15 = 2131624753(0x7f0e0331, float:1.8876695E38)
+                r15 = 2131624769(0x7f0e0341, float:1.8876727E38)
                 java.lang.String r0 = "ChannelMembers"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -950,7 +950,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             L_0x0021:
                 int r0 = r13.globalStartRow
                 if (r15 != r0) goto L_0x0133
-                r15 = 2131625775(0x7f0e072f, float:1.8878767E38)
+                r15 = 2131625796(0x7f0e0744, float:1.887881E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -1189,7 +1189,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 android.content.Context r3 = r5.mContext
                 r4 = 0
                 r7.<init>(r3, r0, r1, r4)
-                r0 = 2131165763(0x7var_, float:1.7945752E38)
+                r0 = 2131165767(0x7var_, float:1.794576E38)
                 r7.setCustomRightImage(r0)
                 java.lang.String r0 = "voipgroup_nameText"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)

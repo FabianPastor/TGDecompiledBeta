@@ -71,6 +71,7 @@ public class NotificationCenter {
     public static final int didUpdateReactions;
     public static final int didVerifyMessagesStickers;
     public static final int emojiLoaded;
+    public static final int emojiPreviewThemesChanged;
     public static final int encryptedChatCreated;
     public static final int encryptedChatUpdated;
     public static final int featuredStickersDidLoad;
@@ -781,8 +782,11 @@ public class NotificationCenter {
         int i186 = i185 + 1;
         totalEvents = i186;
         onDatabaseMigration = i185;
-        totalEvents = i186 + 1;
+        int i187 = i186 + 1;
+        totalEvents = i187;
         onEmojiInteractionsReceived = i186;
+        totalEvents = i187 + 1;
+        emojiPreviewThemesChanged = i187;
     }
 
     private static class DelayedPost {

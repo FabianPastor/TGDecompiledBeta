@@ -246,10 +246,10 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x02d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x02da  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0315  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x0335  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x02d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x02d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0313  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0333  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r21) {
         /*
@@ -257,7 +257,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r0 = r20
             r1 = r21
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r3 = 2131165468(0x7var_c, float:1.7945154E38)
+            r3 = 2131165470(0x7var_e, float:1.7945158E38)
             r2.setBackButtonImage(r3)
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
@@ -271,7 +271,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.<init>(r1)
             r0.emptyView = r3
             java.lang.String r4 = "NoResult"
-            r5 = 2131626438(0x7f0e09c6, float:1.8880112E38)
+            r5 = 2131626483(0x7f0e09f3, float:1.8880203E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r3.setText(r4)
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.emptyView
@@ -304,7 +304,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.setTextColor(r7)
             r3.setTag(r6)
             java.lang.String r7 = "LoadingStats"
-            r8 = 2131626093(0x7f0e086d, float:1.8879412E38)
+            r8 = 2131626131(0x7f0e0893, float:1.887949E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)
             r3.setText(r7)
             r3.setGravity(r5)
@@ -317,7 +317,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r7.setTextColor(r9)
             r7.setTag(r8)
             java.lang.String r9 = "LoadingStatsDescription"
-            r10 = 2131626094(0x7f0e086e, float:1.8879414E38)
+            r10 = 2131626132(0x7f0e0894, float:1.8879492E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r7.setText(r9)
             r7.setGravity(r5)
@@ -376,12 +376,12 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.setAdapter(r9)
             org.telegram.ui.Components.RecyclerListView r3 = r0.listView
             boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            if (r9 == 0) goto L_0x012c
+            if (r9 == 0) goto L_0x012b
             r9 = 1
-            goto L_0x012d
-        L_0x012c:
+            goto L_0x012c
+        L_0x012b:
             r9 = 2
-        L_0x012d:
+        L_0x012c:
             r3.setVerticalScrollbarPosition(r9)
             org.telegram.ui.Components.RecyclerListView r3 = r0.listView
             org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda9 r9 = new org.telegram.ui.MessageStatisticActivity$$ExternalSyntheticLambda9
@@ -435,13 +435,13 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r11 = -2
             r13 = 51
             boolean r4 = r0.inPreviewMode
-            if (r4 != 0) goto L_0x01b5
+            if (r4 != 0) goto L_0x01b4
             r7 = 1113587712(0x42600000, float:56.0)
             r14 = 1113587712(0x42600000, float:56.0)
-            goto L_0x01b6
-        L_0x01b5:
+            goto L_0x01b5
+        L_0x01b4:
             r14 = 0
-        L_0x01b6:
+        L_0x01b5:
             r15 = 0
             r16 = 1109393408(0x42200000, float:40.0)
             r17 = 0
@@ -451,52 +451,52 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             long r11 = r0.chatId
             java.lang.Long r2 = java.lang.Long.valueOf(r11)
             org.telegram.tgnet.TLRPC$Chat r1 = r1.getChat(r2)
-            if (r1 == 0) goto L_0x01de
+            if (r1 == 0) goto L_0x01dd
             org.telegram.ui.Components.ChatAvatarContainer r2 = r0.avatarContainer
             r2.setChatAvatar(r1)
             org.telegram.ui.Components.ChatAvatarContainer r2 = r0.avatarContainer
             java.lang.String r1 = r1.title
             r2.setTitle(r1)
-        L_0x01de:
+        L_0x01dd:
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             boolean r1 = r1.needDrawBluredPreview()
-            if (r1 != 0) goto L_0x02ca
+            if (r1 != 0) goto L_0x02c8
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             boolean r1 = r1.isPhoto()
-            if (r1 != 0) goto L_0x01fe
+            if (r1 != 0) goto L_0x01fd
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             boolean r1 = r1.isNewGif()
-            if (r1 != 0) goto L_0x01fe
+            if (r1 != 0) goto L_0x01fd
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             boolean r1 = r1.isVideo()
-            if (r1 == 0) goto L_0x02ca
-        L_0x01fe:
+            if (r1 == 0) goto L_0x02c8
+        L_0x01fd:
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             boolean r1 = r1.isWebpage()
-            if (r1 == 0) goto L_0x0211
+            if (r1 == 0) goto L_0x0210
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r1.media
             org.telegram.tgnet.TLRPC$WebPage r1 = r1.webpage
             java.lang.String r1 = r1.type
-            goto L_0x0212
-        L_0x0211:
+            goto L_0x0211
+        L_0x0210:
             r1 = r3
-        L_0x0212:
+        L_0x0211:
             java.lang.String r2 = "app"
             boolean r2 = r2.equals(r1)
-            if (r2 != 0) goto L_0x02ca
+            if (r2 != 0) goto L_0x02c8
             java.lang.String r2 = "profile"
             boolean r2 = r2.equals(r1)
-            if (r2 != 0) goto L_0x02ca
+            if (r2 != 0) goto L_0x02c8
             java.lang.String r2 = "article"
             boolean r2 = r2.equals(r1)
-            if (r2 != 0) goto L_0x02ca
-            if (r1 == 0) goto L_0x0235
+            if (r2 != 0) goto L_0x02c8
+            if (r1 == 0) goto L_0x0233
             java.lang.String r2 = "telegram_"
             boolean r1 = r1.startsWith(r2)
-            if (r1 != 0) goto L_0x02ca
-        L_0x0235:
+            if (r1 != 0) goto L_0x02c8
+        L_0x0233:
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r1.photoThumbs
             r2 = 40
@@ -505,30 +505,30 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r2.photoThumbs
             int r4 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
             org.telegram.tgnet.TLRPC$PhotoSize r2 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r2, r4)
-            if (r1 != r2) goto L_0x024e
-            goto L_0x024f
-        L_0x024e:
+            if (r1 != r2) goto L_0x024c
+            goto L_0x024d
+        L_0x024c:
             r3 = r2
-        L_0x024f:
-            if (r1 == 0) goto L_0x02ca
+        L_0x024d:
+            if (r1 == 0) goto L_0x02c8
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             boolean r2 = r2.isVideo()
             r0.drawPlay = r2
             java.lang.String r2 = org.telegram.messenger.FileLoader.getAttachFileName(r3)
             org.telegram.messenger.MessageObject r4 = r0.messageObject
             boolean r4 = r4.mediaExists
-            if (r4 != 0) goto L_0x0298
+            if (r4 != 0) goto L_0x0296
             int r4 = r0.currentAccount
             org.telegram.messenger.DownloadController r4 = org.telegram.messenger.DownloadController.getInstance(r4)
             org.telegram.messenger.MessageObject r7 = r0.messageObject
             boolean r4 = r4.canDownloadMedia((org.telegram.messenger.MessageObject) r7)
-            if (r4 != 0) goto L_0x0298
+            if (r4 != 0) goto L_0x0296
             int r4 = r0.currentAccount
             org.telegram.messenger.FileLoader r4 = org.telegram.messenger.FileLoader.getInstance(r4)
             boolean r2 = r4.isLoadingFile(r2)
-            if (r2 == 0) goto L_0x027e
-            goto L_0x0298
-        L_0x027e:
+            if (r2 == 0) goto L_0x027c
+            goto L_0x0296
+        L_0x027c:
             org.telegram.messenger.ImageReceiver r11 = r0.thumbImage
             r12 = 0
             r13 = 0
@@ -541,22 +541,22 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             java.lang.String r15 = "20_20"
             r17 = r1
             r11.setImage((org.telegram.messenger.ImageLocation) r12, (java.lang.String) r13, (org.telegram.messenger.ImageLocation) r14, (java.lang.String) r15, (android.graphics.drawable.Drawable) r16, (java.lang.Object) r17, (int) r18)
-            goto L_0x02c8
-        L_0x0298:
+            goto L_0x02c6
+        L_0x0296:
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             int r4 = r2.type
-            if (r4 != r5) goto L_0x02a7
-            if (r3 == 0) goto L_0x02a3
+            if (r4 != r5) goto L_0x02a5
+            if (r3 == 0) goto L_0x02a1
             int r4 = r3.size
-            goto L_0x02a4
-        L_0x02a3:
+            goto L_0x02a2
+        L_0x02a1:
             r4 = 0
-        L_0x02a4:
+        L_0x02a2:
             r16 = r4
-            goto L_0x02a9
-        L_0x02a7:
+            goto L_0x02a7
+        L_0x02a5:
             r16 = 0
-        L_0x02a9:
+        L_0x02a7:
             org.telegram.messenger.ImageReceiver r11 = r0.thumbImage
             org.telegram.tgnet.TLObject r2 = r2.photoThumbsObject
             org.telegram.messenger.ImageLocation r12 = org.telegram.messenger.ImageLocation.getForObject(r3, r2)
@@ -570,32 +570,32 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             java.lang.String r15 = "20_20"
             r18 = r1
             r11.setImage(r12, r13, r14, r15, r16, r17, r18, r19)
-        L_0x02c8:
+        L_0x02c6:
             r1 = 1
-            goto L_0x02cb
-        L_0x02ca:
+            goto L_0x02c9
+        L_0x02c8:
             r1 = 0
-        L_0x02cb:
+        L_0x02c9:
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             java.lang.CharSequence r2 = r2.caption
             boolean r2 = android.text.TextUtils.isEmpty(r2)
-            if (r2 != 0) goto L_0x02da
+            if (r2 != 0) goto L_0x02d8
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             java.lang.CharSequence r2 = r2.caption
-            goto L_0x0313
-        L_0x02da:
+            goto L_0x0311
+        L_0x02d8:
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner
             java.lang.String r2 = r2.message
             boolean r2 = android.text.TextUtils.isEmpty(r2)
-            if (r2 != 0) goto L_0x030f
+            if (r2 != 0) goto L_0x030d
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             java.lang.CharSequence r2 = r2.messageText
             int r3 = r2.length()
             r4 = 150(0x96, float:2.1E-43)
-            if (r3 <= r4) goto L_0x02f6
+            if (r3 <= r4) goto L_0x02f4
             java.lang.CharSequence r2 = r2.subSequence(r10, r4)
-        L_0x02f6:
+        L_0x02f4:
             org.telegram.ui.Components.ChatAvatarContainer r3 = r0.avatarContainer
             org.telegram.ui.ActionBar.SimpleTextView r3 = r3.getSubtitleTextView()
             android.text.TextPaint r3 = r3.getTextPaint()
@@ -603,12 +603,12 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r4 = 1099431936(0x41880000, float:17.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             java.lang.CharSequence r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r3, r4, r10)
-            goto L_0x0313
-        L_0x030f:
+            goto L_0x0311
+        L_0x030d:
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             java.lang.CharSequence r2 = r2.messageText
-        L_0x0313:
-            if (r1 == 0) goto L_0x0335
+        L_0x0311:
+            if (r1 == 0) goto L_0x0333
             android.text.SpannableStringBuilder r1 = new android.text.SpannableStringBuilder
             r1.<init>(r2)
             java.lang.String r2 = " "
@@ -621,13 +621,13 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r1.setSpan(r2, r10, r5, r3)
             org.telegram.ui.Components.ChatAvatarContainer r2 = r0.avatarContainer
             r2.setSubtitle(r1)
-            goto L_0x033e
-        L_0x0335:
+            goto L_0x033c
+        L_0x0333:
             org.telegram.ui.Components.ChatAvatarContainer r1 = r0.avatarContainer
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             java.lang.CharSequence r2 = r2.messageText
             r1.setSubtitle(r2)
-        L_0x033e:
+        L_0x033c:
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
             org.telegram.ui.ActionBar.BackDrawable r2 = new org.telegram.ui.ActionBar.BackDrawable
             r2.<init>(r10)
@@ -903,16 +903,16 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 r9 = 6
                 r0 = 2
                 java.lang.String r1 = "windowBackgroundWhite"
-                if (r10 == 0) goto L_0x009c
+                if (r10 == 0) goto L_0x009a
                 r2 = 1
-                if (r10 == r2) goto L_0x0094
-                if (r10 == r0) goto L_0x0077
+                if (r10 == r2) goto L_0x0092
+                if (r10 == r0) goto L_0x0076
                 r0 = 4
-                if (r10 == r0) goto L_0x005d
+                if (r10 == r0) goto L_0x005c
                 r0 = 5
                 r2 = -1
-                if (r10 == r0) goto L_0x0043
-                if (r10 == r9) goto L_0x002a
+                if (r10 == r0) goto L_0x0042
+                if (r10 == r9) goto L_0x0029
                 org.telegram.ui.Cells.LoadingCell r9 = new org.telegram.ui.Cells.LoadingCell
                 android.content.Context r10 = r8.mContext
                 r0 = 1109393408(0x42200000, float:40.0)
@@ -920,8 +920,8 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 r1 = 1123024896(0x42var_, float:120.0)
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                 r9.<init>(r10, r0, r1)
-                goto L_0x00ac
-            L_0x002a:
+                goto L_0x00aa
+            L_0x0029:
                 org.telegram.ui.Cells.EmptyCell r9 = new org.telegram.ui.Cells.EmptyCell
                 android.content.Context r10 = r8.mContext
                 r0 = 16
@@ -931,8 +931,8 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 r9.setLayoutParams(r10)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-                goto L_0x00ac
-            L_0x0043:
+                goto L_0x00aa
+            L_0x0042:
                 org.telegram.ui.MessageStatisticActivity$OverviewCell r9 = new org.telegram.ui.MessageStatisticActivity$OverviewCell
                 org.telegram.ui.MessageStatisticActivity r10 = org.telegram.ui.MessageStatisticActivity.this
                 android.content.Context r0 = r8.mContext
@@ -943,8 +943,8 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 r9.setLayoutParams(r10)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-                goto L_0x00ac
-            L_0x005d:
+                goto L_0x00aa
+            L_0x005c:
                 org.telegram.ui.MessageStatisticActivity$ListAdapter$1 r9 = new org.telegram.ui.MessageStatisticActivity$ListAdapter$1
                 android.content.Context r10 = r8.mContext
                 org.telegram.ui.MessageStatisticActivity r0 = org.telegram.ui.MessageStatisticActivity.this
@@ -954,8 +954,8 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 r9.<init>(r10, r2, r0)
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r9.setBackgroundColor(r10)
-                goto L_0x00ac
-            L_0x0077:
+                goto L_0x00aa
+            L_0x0076:
                 org.telegram.ui.Cells.HeaderCell r9 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r3 = r8.mContext
                 r5 = 16
@@ -968,13 +968,13 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 r9.setBackgroundColor(r10)
                 r10 = 43
                 r9.setHeight(r10)
-                goto L_0x00ac
-            L_0x0094:
+                goto L_0x00aa
+            L_0x0092:
                 org.telegram.ui.Cells.ShadowSectionCell r9 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r10 = r8.mContext
                 r9.<init>(r10)
-                goto L_0x00ac
-            L_0x009c:
+                goto L_0x00aa
+            L_0x009a:
                 org.telegram.ui.Cells.ManageChatUserCell r10 = new org.telegram.ui.Cells.ManageChatUserCell
                 android.content.Context r2 = r8.mContext
                 r3 = 0
@@ -982,7 +982,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 int r9 = org.telegram.ui.ActionBar.Theme.getColor(r1)
                 r10.setBackgroundColor(r9)
                 r9 = r10
-            L_0x00ac:
+            L_0x00aa:
                 org.telegram.ui.Components.RecyclerListView$Holder r10 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r10.<init>(r9)
                 return r10
@@ -990,7 +990,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.MessageStatisticActivity.ListAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:30:0x00e2  */
+        /* JADX WARNING: Removed duplicated region for block: B:30:0x00e1  */
         /* JADX WARNING: Removed duplicated region for block: B:40:? A[RETURN, SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r9, int r10) {
@@ -1000,19 +1000,19 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 r1 = 2
                 r2 = 0
                 r3 = 1
-                if (r0 == 0) goto L_0x0077
+                if (r0 == 0) goto L_0x0076
                 if (r0 == r3) goto L_0x0064
                 if (r0 == r1) goto L_0x0037
                 r10 = 4
                 if (r0 == r10) goto L_0x001e
                 r10 = 5
                 if (r0 == r10) goto L_0x0015
-                goto L_0x00ef
+                goto L_0x00ee
             L_0x0015:
                 android.view.View r9 = r9.itemView
                 org.telegram.ui.MessageStatisticActivity$OverviewCell r9 = (org.telegram.ui.MessageStatisticActivity.OverviewCell) r9
                 r9.setData()
-                goto L_0x00ef
+                goto L_0x00ee
             L_0x001e:
                 android.view.View r9 = r9.itemView
                 org.telegram.ui.StatisticActivity$BaseChartCell r9 = (org.telegram.ui.StatisticActivity.BaseChartCell) r9
@@ -1024,68 +1024,68 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 r1 = -2
                 r10.<init>((int) r0, (int) r1)
                 r9.setLayoutParams(r10)
-                goto L_0x00ef
+                goto L_0x00ee
             L_0x0037:
                 android.view.View r9 = r9.itemView
                 org.telegram.ui.Cells.HeaderCell r9 = (org.telegram.ui.Cells.HeaderCell) r9
                 org.telegram.ui.MessageStatisticActivity r0 = org.telegram.ui.MessageStatisticActivity.this
                 int r0 = r0.overviewHeaderRow
                 if (r10 != r0) goto L_0x0053
-                r10 = 2131627802(0x7f0e0f1a, float:1.8882879E38)
+                r10 = 2131627864(0x7f0e0var_, float:1.8883004E38)
                 java.lang.Object[] r0 = new java.lang.Object[r2]
                 java.lang.String r1 = "StatisticOverview"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.formatString(r1, r10, r0)
                 r9.setText(r10)
-                goto L_0x00ef
+                goto L_0x00ee
             L_0x0053:
                 org.telegram.ui.MessageStatisticActivity r10 = org.telegram.ui.MessageStatisticActivity.this
                 int r10 = r10.publicChats
                 java.lang.String r0 = "PublicSharesCount"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.formatPluralString(r0, r10)
                 r9.setText(r10)
-                goto L_0x00ef
+                goto L_0x00ee
             L_0x0064:
                 android.view.View r9 = r9.itemView
                 android.content.Context r10 = r8.mContext
-                r0 = 2131165449(0x7var_, float:1.7945115E38)
+                r0 = 2131165451(0x7var_b, float:1.794512E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r10, (int) r0, (java.lang.String) r1)
                 r9.setBackgroundDrawable(r10)
-                goto L_0x00ef
-            L_0x0077:
+                goto L_0x00ee
+            L_0x0076:
                 android.view.View r9 = r9.itemView
                 org.telegram.ui.Cells.ManageChatUserCell r9 = (org.telegram.ui.Cells.ManageChatUserCell) r9
                 org.telegram.tgnet.TLRPC$Message r0 = r8.getItem(r10)
                 long r4 = org.telegram.messenger.MessageObject.getDialogId(r0)
                 boolean r6 = org.telegram.messenger.DialogObject.isUserDialog(r4)
                 r7 = 0
-                if (r6 == 0) goto L_0x0099
+                if (r6 == 0) goto L_0x0098
                 org.telegram.ui.MessageStatisticActivity r0 = org.telegram.ui.MessageStatisticActivity.this
                 org.telegram.messenger.MessagesController r0 = r0.getMessagesController()
                 java.lang.Long r1 = java.lang.Long.valueOf(r4)
                 org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
-                goto L_0x00df
-            L_0x0099:
+                goto L_0x00de
+            L_0x0098:
                 org.telegram.ui.MessageStatisticActivity r6 = org.telegram.ui.MessageStatisticActivity.this
                 org.telegram.messenger.MessagesController r6 = r6.getMessagesController()
                 long r4 = -r4
                 java.lang.Long r4 = java.lang.Long.valueOf(r4)
                 org.telegram.tgnet.TLRPC$Chat r4 = r6.getChat(r4)
                 int r5 = r4.participants_count
-                if (r5 == 0) goto L_0x00de
+                if (r5 == 0) goto L_0x00dd
                 boolean r5 = org.telegram.messenger.ChatObject.isChannel(r4)
-                if (r5 == 0) goto L_0x00bf
+                if (r5 == 0) goto L_0x00be
                 boolean r5 = r4.megagroup
-                if (r5 != 0) goto L_0x00bf
+                if (r5 != 0) goto L_0x00be
                 int r5 = r4.participants_count
                 java.lang.String r6 = "Subscribers"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r6, r5)
-                goto L_0x00c7
-            L_0x00bf:
+                goto L_0x00c6
+            L_0x00be:
                 int r5 = r4.participants_count
                 java.lang.String r6 = "Members"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r6, r5)
-            L_0x00c7:
+            L_0x00c6:
                 java.lang.Object[] r1 = new java.lang.Object[r1]
                 r1[r2] = r5
                 int r0 = r0.views
@@ -1096,21 +1096,21 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 java.lang.String r0 = java.lang.String.format(r0, r1)
                 r1 = r0
                 r0 = r4
-                goto L_0x00e0
-            L_0x00de:
+                goto L_0x00df
+            L_0x00dd:
                 r0 = r4
-            L_0x00df:
+            L_0x00de:
                 r1 = r7
-            L_0x00e0:
-                if (r0 == 0) goto L_0x00ef
+            L_0x00df:
+                if (r0 == 0) goto L_0x00ee
                 org.telegram.ui.MessageStatisticActivity r4 = org.telegram.ui.MessageStatisticActivity.this
                 int r4 = r4.endRow
                 int r4 = r4 - r3
-                if (r10 == r4) goto L_0x00ec
+                if (r10 == r4) goto L_0x00eb
                 r2 = 1
-            L_0x00ec:
+            L_0x00eb:
                 r9.setData(r0, r7, r1, r2)
-            L_0x00ef:
+            L_0x00ee:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.MessageStatisticActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

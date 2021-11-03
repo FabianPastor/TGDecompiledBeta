@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -45,6 +46,7 @@ public class UsersAlertBase extends BottomSheet {
     protected StickerEmptyView emptyView;
     protected FlickerLoadingView flickerLoadingView;
     protected FrameLayout frameLayout;
+    protected boolean isEmptyViewVisible = true;
     protected String keyActionBarUnscrolled = "windowBackgroundWhite";
     protected String keyInviteMembersBackground = "windowBackgroundWhite";
     protected String keyLastSeenText = "windowBackgroundWhiteGrayText";
@@ -60,12 +62,12 @@ public class UsersAlertBase extends BottomSheet {
     protected String keySearchText = "dialogSearchText";
     protected final FillLastLinearLayoutManager layoutManager;
     protected RecyclerListView listView;
-    protected RecyclerListView.SelectionAdapter listViewAdapter;
+    protected RecyclerView.Adapter listViewAdapter;
     protected boolean needSnapToTop = true;
     /* access modifiers changed from: private */
     public RectF rect = new RectF();
     protected int scrollOffsetY;
-    protected RecyclerListView.SelectionAdapter searchListViewAdapter;
+    protected RecyclerView.Adapter searchListViewAdapter;
     protected SearchField searchView;
     protected View shadow;
     protected AnimatorSet shadowAnimation;
@@ -121,10 +123,10 @@ public class UsersAlertBase extends BottomSheet {
         this.emptyView.showProgress(true, false);
         this.emptyView.setColors(this.keyNameText, this.keyLastSeenText, this.keyInviteMembersBackground, this.keySearchBackground);
         this.containerView.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 62.0f, 0.0f, 0.0f));
-        AnonymousClass1 r13 = new RecyclerListView(this, context) {
+        AnonymousClass1 r13 = new RecyclerListView(context) {
             /* access modifiers changed from: protected */
             public boolean allowSelectChildAtPosition(float f, float f2) {
-                return f2 >= ((float) (AndroidUtilities.dp(58.0f) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
+                return UsersAlertBase.this.isAllowSelectChildAtPosition(f, f2);
             }
 
             public void setTranslationY(float f) {
@@ -134,7 +136,7 @@ public class UsersAlertBase extends BottomSheet {
 
             /* access modifiers changed from: protected */
             public boolean emptyViewIsVisible() {
-                if (getAdapter() != null && getAdapter().getItemCount() <= 2) {
+                if (getAdapter() != null && UsersAlertBase.this.isEmptyViewVisible && getAdapter().getItemCount() <= 2) {
                     return true;
                 }
                 return false;
@@ -182,9 +184,19 @@ public class UsersAlertBase extends BottomSheet {
         this.listView.setAnimateEmptyView(true, 0);
     }
 
+    public void onConfigurationChanged(Configuration configuration) {
+        super.onConfigurationChanged(configuration);
+        AndroidUtilities.statusBarHeight = AndroidUtilities.getStatusBarHeight(getContext());
+    }
+
     /* access modifiers changed from: protected */
     public ContainerView createContainerView(Context context) {
         return new ContainerView(context);
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean isAllowSelectChildAtPosition(float f, float f2) {
+        return f2 >= ((float) (AndroidUtilities.dp(58.0f) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
     }
 
     protected class SearchField extends FrameLayout {
@@ -368,7 +380,7 @@ public class UsersAlertBase extends BottomSheet {
         super.dismiss();
     }
 
-    /* access modifiers changed from: private */
+    /* access modifiers changed from: protected */
     @SuppressLint({"NewApi"})
     public void updateLayout() {
         if (this.listView.getChildCount() > 0) {
@@ -382,14 +394,19 @@ public class UsersAlertBase extends BottomSheet {
                 runShadowAnimation(false);
             }
             if (this.scrollOffsetY != top) {
-                RecyclerListView recyclerListView = this.listView;
                 this.scrollOffsetY = top;
-                recyclerListView.setTopGlowOffset(top);
-                this.frameLayout.setTranslationY((float) this.scrollOffsetY);
-                this.emptyView.setTranslationY((float) this.scrollOffsetY);
-                this.containerView.invalidate();
+                setTranslationY(top);
             }
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public void setTranslationY(int i) {
+        this.listView.setTopGlowOffset(i);
+        float f = (float) i;
+        this.frameLayout.setTranslationY(f);
+        this.emptyView.setTranslationY(f);
+        this.containerView.invalidate();
     }
 
     private void runShadowAnimation(final boolean z) {

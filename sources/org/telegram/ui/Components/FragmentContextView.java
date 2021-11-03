@@ -702,29 +702,29 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (i2 == 0) {
             MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
             if (this.fragment != null && playingMessageObject != null) {
-                if (playingMessageObject.isMusic()) {
+                if (!playingMessageObject.isMusic()) {
+                    BaseFragment baseFragment2 = this.fragment;
+                    if (baseFragment2 instanceof ChatActivity) {
+                        j2 = ((ChatActivity) baseFragment2).getDialogId();
+                    }
+                    if (playingMessageObject.getDialogId() == j2) {
+                        ((ChatActivity) this.fragment).scrollToMessageId(playingMessageObject.getId(), 0, false, 0, true, 0);
+                        return;
+                    }
+                    long dialogId = playingMessageObject.getDialogId();
+                    Bundle bundle = new Bundle();
+                    if (DialogObject.isEncryptedDialog(dialogId)) {
+                        bundle.putInt("enc_id", DialogObject.getEncryptedChatId(dialogId));
+                    } else if (DialogObject.isUserDialog(dialogId)) {
+                        bundle.putLong("user_id", dialogId);
+                    } else {
+                        bundle.putLong("chat_id", -dialogId);
+                    }
+                    bundle.putInt("message_id", playingMessageObject.getId());
+                    this.fragment.presentFragment(new ChatActivity(bundle), this.fragment instanceof ChatActivity);
+                } else if (getContext() instanceof LaunchActivity) {
                     this.fragment.showDialog(new AudioPlayerAlert(getContext(), resourcesProvider2));
-                    return;
                 }
-                BaseFragment baseFragment2 = this.fragment;
-                if (baseFragment2 instanceof ChatActivity) {
-                    j2 = ((ChatActivity) baseFragment2).getDialogId();
-                }
-                if (playingMessageObject.getDialogId() == j2) {
-                    ((ChatActivity) this.fragment).scrollToMessageId(playingMessageObject.getId(), 0, false, 0, true, 0);
-                    return;
-                }
-                long dialogId = playingMessageObject.getDialogId();
-                Bundle bundle = new Bundle();
-                if (DialogObject.isEncryptedDialog(dialogId)) {
-                    bundle.putInt("enc_id", DialogObject.getEncryptedChatId(dialogId));
-                } else if (DialogObject.isUserDialog(dialogId)) {
-                    bundle.putLong("user_id", dialogId);
-                } else {
-                    bundle.putLong("chat_id", -dialogId);
-                }
-                bundle.putInt("message_id", playingMessageObject.getId());
-                this.fragment.presentFragment(new ChatActivity(bundle), this.fragment instanceof ChatActivity);
             }
         } else if (i2 == 1) {
             getContext().startActivity(new Intent(getContext(), LaunchActivity.class).setAction("voip"));
@@ -2152,14 +2152,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x020a
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628300(0x7f0e110c, float:1.8883889E38)
+            r9 = 2131628366(0x7f0e114e, float:1.8884023E38)
             java.lang.String r11 = "VoipChannelScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0218
         L_0x020a:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628407(0x7f0e1177, float:1.8884106E38)
+            r9 = 2131628473(0x7f0e11b9, float:1.888424E38)
             java.lang.String r11 = "VoipGroupScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2183,14 +2183,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x024e
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628313(0x7f0e1119, float:1.8883915E38)
+            r9 = 2131628379(0x7f0e115b, float:1.888405E38)
             java.lang.String r11 = "VoipChannelVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x025c
         L_0x024e:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628439(0x7f0e1197, float:1.888417E38)
+            r9 = 2131628505(0x7f0e11d9, float:1.8884305E38)
             java.lang.String r11 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2199,7 +2199,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r4 = r4.participants_count
             if (r4 != 0) goto L_0x0271
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r4 = r0.subtitleTextView
-            r6 = 2131626215(0x7f0e08e7, float:1.887966E38)
+            r6 = 2131626258(0x7f0e0912, float:1.8879747E38)
             java.lang.String r9 = "MembersTalkingNobody"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r4.setText(r6, r5)

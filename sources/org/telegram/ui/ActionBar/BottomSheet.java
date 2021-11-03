@@ -59,8 +59,7 @@ public class BottomSheet extends Dialog {
     public boolean applyBottomPadding;
     /* access modifiers changed from: private */
     public boolean applyTopPadding;
-    /* access modifiers changed from: protected */
-    public ColorDrawable backDrawable;
+    protected ColorDrawable backDrawable;
     /* access modifiers changed from: protected */
     public int backgroundPaddingLeft;
     /* access modifiers changed from: protected */
@@ -73,8 +72,7 @@ public class BottomSheet extends Dialog {
     public int bottomInset;
     protected boolean calcMandatoryInsets;
     private boolean canDismissWithSwipe;
-    /* access modifiers changed from: protected */
-    public ContainerView container;
+    protected ContainerView container;
     /* access modifiers changed from: protected */
     public ViewGroup containerView;
     /* access modifiers changed from: protected */
@@ -82,8 +80,7 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
     public float currentPanTranslationY;
     protected AnimatorSet currentSheetAnimation;
-    /* access modifiers changed from: protected */
-    public int currentSheetAnimationType;
+    protected int currentSheetAnimationType;
     /* access modifiers changed from: private */
     public View customView;
     /* access modifiers changed from: private */
@@ -127,13 +124,11 @@ public class BottomSheet extends Dialog {
     protected Interpolator openInterpolator;
     /* access modifiers changed from: private */
     public int overlayDrawNavBarColor;
-    /* access modifiers changed from: protected */
-    public Theme.ResourcesProvider resourcesProvider;
+    protected Theme.ResourcesProvider resourcesProvider;
     /* access modifiers changed from: private */
     public int rightInset;
     protected boolean scrollNavBar;
-    /* access modifiers changed from: protected */
-    public Drawable shadowDrawable;
+    protected Drawable shadowDrawable;
     private boolean showWithoutAnimation;
     protected boolean smoothKeyboardAnimationEnabled;
     protected Runnable startAnimationRunnable;

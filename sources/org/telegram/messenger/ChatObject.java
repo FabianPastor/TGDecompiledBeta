@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.SparseArray;
 import androidx.collection.LongSparseArray;
 import com.google.android.exoplayer2.util.Log;
+import com.google.android.gms.internal.vision.zzhv$$ExternalSyntheticBackport0;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -133,7 +134,7 @@ public class ChatObject {
         public final ArrayList<TLRPC$TL_groupCallParticipant> sortedParticipants = new ArrayList<>();
         public int speakingMembersCount;
         public final HashMap<String, Bitmap> thumbs = new HashMap<>();
-        private Runnable typingUpdateRunnable = new ChatObject$Call$$ExternalSyntheticLambda2(this);
+        private Runnable typingUpdateRunnable = new ChatObject$Call$$ExternalSyntheticLambda1(this);
         private boolean typingUpdateRunnableScheduled;
         /* access modifiers changed from: private */
         public final Runnable updateCurrentSpeakingRunnable = new Runnable() {
@@ -398,13 +399,13 @@ public class ChatObject {
                 }
                 tLRPC$TL_phone_getGroupParticipants.offset = str;
                 tLRPC$TL_phone_getGroupParticipants.limit = 20;
-                this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupParticipants, new ChatObject$Call$$ExternalSyntheticLambda14(this, z, tLRPC$TL_phone_getGroupParticipants));
+                this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupParticipants, new ChatObject$Call$$ExternalSyntheticLambda13(this, z, tLRPC$TL_phone_getGroupParticipants));
             }
         }
 
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$loadMembers$2(boolean z, TLRPC$TL_phone_getGroupParticipants tLRPC$TL_phone_getGroupParticipants, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new ChatObject$Call$$ExternalSyntheticLambda6(this, z, tLObject, tLRPC$TL_phone_getGroupParticipants));
+            AndroidUtilities.runOnUIThread(new ChatObject$Call$$ExternalSyntheticLambda5(this, z, tLObject, tLRPC$TL_phone_getGroupParticipants));
         }
 
         /* access modifiers changed from: private */
@@ -432,7 +433,7 @@ public class ChatObject {
             TLRPC$TL_phone_editGroupCallTitle tLRPC$TL_phone_editGroupCallTitle = new TLRPC$TL_phone_editGroupCallTitle();
             tLRPC$TL_phone_editGroupCallTitle.call = getInputGroupCall();
             tLRPC$TL_phone_editGroupCallTitle.title = str;
-            this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_editGroupCallTitle, new ChatObject$Call$$ExternalSyntheticLambda11(this));
+            this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_editGroupCallTitle, new ChatObject$Call$$ExternalSyntheticLambda10(this));
         }
 
         /* access modifiers changed from: private */
@@ -523,13 +524,13 @@ public class ChatObject {
                 }
                 tLRPC$TL_phone_getGroupParticipants.offset = "";
                 tLRPC$TL_phone_getGroupParticipants.limit = 100;
-                this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupParticipants, new ChatObject$Call$$ExternalSyntheticLambda13(this, i2, onParticipantsLoad, arrayList, hashSet));
+                this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupParticipants, new ChatObject$Call$$ExternalSyntheticLambda12(this, i2, onParticipantsLoad, arrayList, hashSet));
             }
         }
 
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$loadUnknownParticipants$5(int i, OnParticipantsLoad onParticipantsLoad, ArrayList arrayList, HashSet hashSet, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new ChatObject$Call$$ExternalSyntheticLambda3(this, i, tLObject, onParticipantsLoad, arrayList, hashSet));
+            AndroidUtilities.runOnUIThread(new ChatObject$Call$$ExternalSyntheticLambda2(this, i, tLObject, onParticipantsLoad, arrayList, hashSet));
         }
 
         /* access modifiers changed from: private */
@@ -839,7 +840,7 @@ public class ChatObject {
         }
 
         private void processUpdatesQueue() {
-            Collections.sort(this.updatesQueue, ChatObject$Call$$ExternalSyntheticLambda8.INSTANCE);
+            Collections.sort(this.updatesQueue, ChatObject$Call$$ExternalSyntheticLambda7.INSTANCE);
             ArrayList<TLRPC$TL_updateGroupCallParticipants> arrayList = this.updatesQueue;
             if (arrayList != null && !arrayList.isEmpty()) {
                 boolean z = false;
@@ -890,9 +891,9 @@ public class ChatObject {
                 processUpdatesQueue();
             }
             if (!this.updatesQueue.isEmpty()) {
-                ChatObject$Call$$ExternalSyntheticLambda1 chatObject$Call$$ExternalSyntheticLambda1 = new ChatObject$Call$$ExternalSyntheticLambda1(this);
-                this.checkQueueRunnable = chatObject$Call$$ExternalSyntheticLambda1;
-                AndroidUtilities.runOnUIThread(chatObject$Call$$ExternalSyntheticLambda1, 1000);
+                ChatObject$Call$$ExternalSyntheticLambda0 chatObject$Call$$ExternalSyntheticLambda0 = new ChatObject$Call$$ExternalSyntheticLambda0(this);
+                this.checkQueueRunnable = chatObject$Call$$ExternalSyntheticLambda0;
+                AndroidUtilities.runOnUIThread(chatObject$Call$$ExternalSyntheticLambda0, 1000);
             }
         }
 
@@ -900,12 +901,12 @@ public class ChatObject {
             TLRPC$TL_phone_getGroupCall tLRPC$TL_phone_getGroupCall = new TLRPC$TL_phone_getGroupCall();
             tLRPC$TL_phone_getGroupCall.call = getInputGroupCall();
             tLRPC$TL_phone_getGroupCall.limit = 100;
-            this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupCall, new ChatObject$Call$$ExternalSyntheticLambda12(this));
+            this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupCall, new ChatObject$Call$$ExternalSyntheticLambda11(this));
         }
 
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$reloadGroupCall$8(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new ChatObject$Call$$ExternalSyntheticLambda5(this, tLObject));
+            AndroidUtilities.runOnUIThread(new ChatObject$Call$$ExternalSyntheticLambda4(this, tLObject));
         }
 
         /* access modifiers changed from: private */
@@ -929,13 +930,13 @@ public class ChatObject {
                 tLRPC$TL_phone_getGroupParticipants.call = getInputGroupCall();
                 tLRPC$TL_phone_getGroupParticipants.offset = "";
                 tLRPC$TL_phone_getGroupParticipants.limit = 1;
-                this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupParticipants, new ChatObject$Call$$ExternalSyntheticLambda9(this));
+                this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupParticipants, new ChatObject$Call$$ExternalSyntheticLambda8(this));
             }
         }
 
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$loadGroupCall$10(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new ChatObject$Call$$ExternalSyntheticLambda4(this, tLObject));
+            AndroidUtilities.runOnUIThread(new ChatObject$Call$$ExternalSyntheticLambda3(this, tLObject));
         }
 
         /* access modifiers changed from: private */
@@ -959,7 +960,7 @@ public class ChatObject {
             }
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:157:0x03e3  */
+        /* JADX WARNING: Removed duplicated region for block: B:157:0x03e2  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void processParticipantsUpdate(org.telegram.tgnet.TLRPC$TL_updateGroupCallParticipants r28, boolean r29) {
             /*
@@ -1034,7 +1035,7 @@ public class ChatObject {
                 r2.add(r1)
                 java.lang.Runnable r1 = r0.checkQueueRunnable
                 if (r1 != 0) goto L_0x008c
-                org.telegram.messenger.ChatObject$Call$$ExternalSyntheticLambda1 r1 = new org.telegram.messenger.ChatObject$Call$$ExternalSyntheticLambda1
+                org.telegram.messenger.ChatObject$Call$$ExternalSyntheticLambda0 r1 = new org.telegram.messenger.ChatObject$Call$$ExternalSyntheticLambda0
                 r1.<init>(r0)
                 r0.checkQueueRunnable = r1
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r7)
@@ -1085,7 +1086,7 @@ public class ChatObject {
                 r17 = 0
                 r18 = 0
             L_0x00e6:
-                if (r13 >= r12) goto L_0x044f
+                if (r13 >= r12) goto L_0x044e
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r15 = r1.participants
                 java.lang.Object r15 = r15.get(r13)
                 org.telegram.tgnet.TLRPC$TL_groupCallParticipant r15 = (org.telegram.tgnet.TLRPC$TL_groupCallParticipant) r15
@@ -1127,20 +1128,20 @@ public class ChatObject {
                 java.lang.String r5 = " "
                 r23 = r12
                 java.lang.String r12 = "GroupCall"
-                if (r6 == 0) goto L_0x0246
-                if (r2 != 0) goto L_0x0165
+                if (r6 == 0) goto L_0x0245
+                if (r2 != 0) goto L_0x0164
                 int r6 = r1.version
                 org.telegram.tgnet.TLRPC$GroupCall r15 = r0.call
                 int r15 = r15.version
-                if (r6 != r15) goto L_0x0165
+                if (r6 != r15) goto L_0x0164
                 boolean r6 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-                if (r6 == 0) goto L_0x0164
+                if (r6 == 0) goto L_0x0163
                 java.lang.String r6 = "unknowd participant left, reload call"
                 org.telegram.messenger.FileLog.d(r6)
-            L_0x0164:
+            L_0x0163:
                 r14 = 1
-            L_0x0165:
-                if (r2 == 0) goto L_0x022e
+            L_0x0164:
+                if (r2 == 0) goto L_0x022d
                 androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r6 = r0.participants
                 r6.remove(r3)
                 r6 = 0
@@ -1152,11 +1153,11 @@ public class ChatObject {
                 androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r6 = r0.currentSpeakingPeers
                 r15 = 0
                 java.lang.Object r6 = r6.get(r3, r15)
-                if (r6 == 0) goto L_0x01fd
+                if (r6 == 0) goto L_0x01fc
                 java.lang.String r6 = "left remove from speaking "
                 r21 = 0
                 int r15 = (r3 > r21 ? 1 : (r3 == r21 ? 0 : -1))
-                if (r15 <= 0) goto L_0x01c0
+                if (r15 <= 0) goto L_0x01bf
                 org.telegram.messenger.AccountInstance r15 = r0.currentAccount
                 int r15 = r15.getCurrentAccount()
                 org.telegram.messenger.MessagesController r15 = org.telegram.messenger.MessagesController.getInstance(r15)
@@ -1168,18 +1169,18 @@ public class ChatObject {
                 r15.append(r6)
                 r15.append(r3)
                 r15.append(r5)
-                if (r14 != 0) goto L_0x01b1
+                if (r14 != 0) goto L_0x01b0
                 r5 = 0
-                goto L_0x01b3
-            L_0x01b1:
+                goto L_0x01b2
+            L_0x01b0:
                 java.lang.String r5 = r14.first_name
-            L_0x01b3:
+            L_0x01b2:
                 r15.append(r5)
                 java.lang.String r5 = r15.toString()
                 com.google.android.exoplayer2.util.Log.d(r12, r5)
                 r25 = r7
-                goto L_0x01f5
-            L_0x01c0:
+                goto L_0x01f4
+            L_0x01bf:
                 r24 = r14
                 org.telegram.messenger.AccountInstance r14 = r0.currentAccount
                 int r14 = r14.getCurrentAccount()
@@ -1193,29 +1194,29 @@ public class ChatObject {
                 r8.append(r6)
                 r8.append(r3)
                 r8.append(r5)
-                if (r7 != 0) goto L_0x01e9
+                if (r7 != 0) goto L_0x01e8
                 r15 = 0
-                goto L_0x01eb
-            L_0x01e9:
+                goto L_0x01ea
+            L_0x01e8:
                 java.lang.String r15 = r7.title
-            L_0x01eb:
+            L_0x01ea:
                 r8.append(r15)
                 java.lang.String r5 = r8.toString()
                 com.google.android.exoplayer2.util.Log.d(r12, r5)
-            L_0x01f5:
+            L_0x01f4:
                 androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r5 = r0.currentSpeakingPeers
                 r5.remove(r3)
                 r17 = 1
-                goto L_0x0201
-            L_0x01fd:
+                goto L_0x0200
+            L_0x01fc:
                 r25 = r7
                 r24 = r14
-            L_0x0201:
+            L_0x0200:
                 r5 = 0
-            L_0x0202:
+            L_0x0201:
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r6 = r0.visibleVideoParticipants
                 int r6 = r6.size()
-                if (r5 >= r6) goto L_0x0232
+                if (r5 >= r6) goto L_0x0231
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r6 = r0.visibleVideoParticipants
                 java.lang.Object r6 = r6.get(r5)
                 org.telegram.messenger.ChatObject$VideoParticipant r6 = (org.telegram.messenger.ChatObject.VideoParticipant) r6
@@ -1225,63 +1226,63 @@ public class ChatObject {
                 org.telegram.tgnet.TLRPC$Peer r8 = r2.peer
                 long r14 = org.telegram.messenger.MessageObject.getPeerId(r8)
                 int r8 = (r6 > r14 ? 1 : (r6 == r14 ? 0 : -1))
-                if (r8 != 0) goto L_0x022b
+                if (r8 != 0) goto L_0x022a
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r6 = r0.visibleVideoParticipants
                 r6.remove(r5)
                 int r5 = r5 + -1
-            L_0x022b:
+            L_0x022a:
                 r6 = 1
                 int r5 = r5 + r6
-                goto L_0x0202
-            L_0x022e:
+                goto L_0x0201
+            L_0x022d:
                 r25 = r7
                 r24 = r14
-            L_0x0232:
+            L_0x0231:
                 r6 = 1
                 org.telegram.tgnet.TLRPC$GroupCall r2 = r0.call
                 int r5 = r2.participants_count
                 int r5 = r5 - r6
                 r2.participants_count = r5
-                if (r5 >= 0) goto L_0x023f
+                if (r5 >= 0) goto L_0x023e
                 r5 = 0
                 r2.participants_count = r5
-            L_0x023f:
+            L_0x023e:
                 r8 = r13
                 r14 = r24
                 r12 = 0
-                goto L_0x043b
-            L_0x0246:
+                goto L_0x043a
+            L_0x0245:
                 r25 = r7
                 java.util.HashSet<java.lang.Long> r6 = r0.invitedUsersMap
                 java.lang.Long r7 = java.lang.Long.valueOf(r3)
                 boolean r6 = r6.contains(r7)
-                if (r6 == 0) goto L_0x0262
+                if (r6 == 0) goto L_0x0261
                 java.lang.Long r6 = java.lang.Long.valueOf(r3)
                 java.util.HashSet<java.lang.Long> r7 = r0.invitedUsersMap
                 r7.remove(r6)
                 java.util.ArrayList<java.lang.Long> r7 = r0.invitedUsers
                 r7.remove(r6)
-            L_0x0262:
-                if (r2 == 0) goto L_0x03aa
+            L_0x0261:
+                if (r2 == 0) goto L_0x03a9
                 boolean r6 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-                if (r6 == 0) goto L_0x026d
+                if (r6 == 0) goto L_0x026c
                 java.lang.String r6 = "new participant, update old"
                 org.telegram.messenger.FileLog.d(r6)
-            L_0x026d:
+            L_0x026c:
                 boolean r6 = r15.muted
                 r2.muted = r6
                 boolean r6 = r15.muted
-                if (r6 == 0) goto L_0x02f6
+                if (r6 == 0) goto L_0x02f5
                 androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r6 = r0.currentSpeakingPeers
                 r7 = 0
                 java.lang.Object r6 = r6.get(r3, r7)
-                if (r6 == 0) goto L_0x02f6
+                if (r6 == 0) goto L_0x02f5
                 androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r6 = r0.currentSpeakingPeers
                 r6.remove(r3)
                 java.lang.String r6 = "muted remove from speaking "
                 r16 = 0
                 int r8 = (r3 > r16 ? 1 : (r3 == r16 ? 0 : -1))
-                if (r8 <= 0) goto L_0x02bf
+                if (r8 <= 0) goto L_0x02be
                 org.telegram.messenger.AccountInstance r8 = r0.currentAccount
                 int r8 = r8.getCurrentAccount()
                 org.telegram.messenger.MessagesController r8 = org.telegram.messenger.MessagesController.getInstance(r8)
@@ -1292,19 +1293,19 @@ public class ChatObject {
                 r8.append(r6)
                 r8.append(r3)
                 r8.append(r5)
-                if (r7 != 0) goto L_0x02af
+                if (r7 != 0) goto L_0x02ae
                 r5 = 0
-                goto L_0x02b1
-            L_0x02af:
+                goto L_0x02b0
+            L_0x02ae:
                 java.lang.String r5 = r7.first_name
-            L_0x02b1:
+            L_0x02b0:
                 r8.append(r5)
                 java.lang.String r5 = r8.toString()
                 com.google.android.exoplayer2.util.Log.d(r12, r5)
                 r8 = r13
                 r24 = r14
-                goto L_0x02f3
-            L_0x02bf:
+                goto L_0x02f2
+            L_0x02be:
                 org.telegram.messenger.AccountInstance r7 = r0.currentAccount
                 int r7 = r7.getCurrentAccount()
                 org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
@@ -1318,46 +1319,46 @@ public class ChatObject {
                 r13.append(r6)
                 r13.append(r3)
                 r13.append(r5)
-                if (r7 != 0) goto L_0x02e7
+                if (r7 != 0) goto L_0x02e6
                 r5 = 0
-                goto L_0x02e9
-            L_0x02e7:
+                goto L_0x02e8
+            L_0x02e6:
                 java.lang.String r5 = r7.title
-            L_0x02e9:
+            L_0x02e8:
                 r13.append(r5)
                 java.lang.String r5 = r13.toString()
                 com.google.android.exoplayer2.util.Log.d(r12, r5)
-            L_0x02f3:
+            L_0x02f2:
                 r17 = 1
-                goto L_0x02f9
-            L_0x02f6:
+                goto L_0x02f8
+            L_0x02f5:
                 r8 = r13
                 r24 = r14
-            L_0x02f9:
+            L_0x02f8:
                 boolean r5 = r15.min
-                if (r5 != 0) goto L_0x0306
+                if (r5 != 0) goto L_0x0305
                 int r5 = r15.volume
                 r2.volume = r5
                 boolean r5 = r15.muted_by_you
                 r2.muted_by_you = r5
-                goto L_0x0322
-            L_0x0306:
+                goto L_0x0321
+            L_0x0305:
                 int r5 = r15.flags
                 r6 = r5 & 128(0x80, float:1.794E-43)
-                if (r6 == 0) goto L_0x0316
+                if (r6 == 0) goto L_0x0315
                 int r6 = r2.flags
                 r6 = r6 & 128(0x80, float:1.794E-43)
-                if (r6 != 0) goto L_0x0316
+                if (r6 != 0) goto L_0x0315
                 r5 = r5 & -129(0xffffffffffffff7f, float:NaN)
                 r15.flags = r5
-            L_0x0316:
+            L_0x0315:
                 boolean r5 = r15.volume_by_admin
-                if (r5 == 0) goto L_0x0322
+                if (r5 == 0) goto L_0x0321
                 boolean r5 = r2.volume_by_admin
-                if (r5 == 0) goto L_0x0322
+                if (r5 == 0) goto L_0x0321
                 int r5 = r15.volume
                 r2.volume = r5
-            L_0x0322:
+            L_0x0321:
                 int r5 = r15.flags
                 r2.flags = r5
                 boolean r5 = r15.can_self_unmute
@@ -1367,13 +1368,13 @@ public class ChatObject {
                 long r5 = r2.raise_hand_rating
                 r12 = 0
                 int r7 = (r5 > r12 ? 1 : (r5 == r12 ? 0 : -1))
-                if (r7 != 0) goto L_0x0342
+                if (r7 != 0) goto L_0x0341
                 long r5 = r15.raise_hand_rating
                 int r7 = (r5 > r12 ? 1 : (r5 == r12 ? 0 : -1))
-                if (r7 == 0) goto L_0x0342
+                if (r7 == 0) goto L_0x0341
                 long r5 = android.os.SystemClock.elapsedRealtime()
                 r2.lastRaiseHandDate = r5
-            L_0x0342:
+            L_0x0341:
                 long r5 = r15.raise_hand_rating
                 r2.raise_hand_rating = r5
                 int r5 = r15.date
@@ -1384,30 +1385,30 @@ public class ChatObject {
                 r2.lastTypingDate = r5
                 long r6 = r2.lastVisibleDate
                 int r12 = (r9 > r6 ? 1 : (r9 == r6 ? 0 : -1))
-                if (r12 == 0) goto L_0x035c
+                if (r12 == 0) goto L_0x035b
                 r2.active_date = r5
-            L_0x035c:
+            L_0x035b:
                 int r5 = r2.source
                 int r6 = r15.source
-                if (r5 != r6) goto L_0x0384
+                if (r5 != r6) goto L_0x0383
                 org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideo r5 = r2.video
                 org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideo r6 = r15.video
                 boolean r5 = r0.isSameVideo(r5, r6)
-                if (r5 == 0) goto L_0x0384
+                if (r5 == 0) goto L_0x0383
                 org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideo r5 = r2.presentation
                 org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideo r6 = r15.presentation
                 boolean r5 = r0.isSameVideo(r5, r6)
-                if (r5 != 0) goto L_0x0377
-                goto L_0x0384
-            L_0x0377:
+                if (r5 != 0) goto L_0x0376
+                goto L_0x0383
+            L_0x0376:
                 org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideo r2 = r2.video
-                if (r2 == 0) goto L_0x03a4
+                if (r2 == 0) goto L_0x03a3
                 org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideo r5 = r15.video
-                if (r5 == 0) goto L_0x03a4
+                if (r5 == 0) goto L_0x03a3
                 boolean r5 = r5.paused
                 r2.paused = r5
-                goto L_0x03a4
-            L_0x0384:
+                goto L_0x03a3
+            L_0x0383:
                 r5 = 0
                 r0.processAllSources(r2, r5)
                 org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideo r5 = r15.video
@@ -1424,19 +1425,19 @@ public class ChatObject {
                 r15.videoEndpoint = r5
                 int r2 = r2.videoIndex
                 r15.videoIndex = r2
-            L_0x03a4:
+            L_0x03a3:
                 r14 = r24
                 r12 = 0
-                goto L_0x041d
-            L_0x03aa:
+                goto L_0x041c
+            L_0x03a9:
                 r8 = r13
                 r24 = r14
                 boolean r2 = r15.just_joined
-                if (r2 == 0) goto L_0x03d9
+                if (r2 == 0) goto L_0x03d8
                 int r2 = (r3 > r25 ? 1 : (r3 == r25 ? 0 : -1))
-                if (r2 == 0) goto L_0x03b7
+                if (r2 == 0) goto L_0x03b6
                 r19 = r3
-            L_0x03b7:
+            L_0x03b6:
                 org.telegram.tgnet.TLRPC$GroupCall r2 = r0.call
                 int r5 = r2.participants_count
                 r6 = 1
@@ -1444,76 +1445,76 @@ public class ChatObject {
                 r2.participants_count = r5
                 int r5 = r1.version
                 int r2 = r2.version
-                if (r5 != r2) goto L_0x03d0
+                if (r5 != r2) goto L_0x03cf
                 boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-                if (r2 == 0) goto L_0x03ce
+                if (r2 == 0) goto L_0x03cd
                 java.lang.String r2 = "new participant, just joined, reload call"
                 org.telegram.messenger.FileLog.d(r2)
-            L_0x03ce:
+            L_0x03cd:
                 r14 = 1
-                goto L_0x03db
-            L_0x03d0:
+                goto L_0x03da
+            L_0x03cf:
                 boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-                if (r2 == 0) goto L_0x03d9
+                if (r2 == 0) goto L_0x03d8
                 java.lang.String r2 = "new participant, just joined"
                 org.telegram.messenger.FileLog.d(r2)
-            L_0x03d9:
+            L_0x03d8:
                 r14 = r24
-            L_0x03db:
+            L_0x03da:
                 long r5 = r15.raise_hand_rating
                 r12 = 0
                 int r2 = (r5 > r12 ? 1 : (r5 == r12 ? 0 : -1))
-                if (r2 == 0) goto L_0x03e9
+                if (r2 == 0) goto L_0x03e8
                 long r5 = android.os.SystemClock.elapsedRealtime()
                 r15.lastRaiseHandDate = r5
-            L_0x03e9:
+            L_0x03e8:
                 int r2 = (r3 > r25 ? 1 : (r3 == r25 ? 0 : -1))
-                if (r2 == 0) goto L_0x040f
+                if (r2 == 0) goto L_0x040e
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r2 = r0.sortedParticipants
                 int r2 = r2.size()
                 r5 = 20
-                if (r2 < r5) goto L_0x040f
+                if (r2 < r5) goto L_0x040e
                 int r2 = r15.date
-                if (r2 <= r11) goto L_0x040f
+                if (r2 <= r11) goto L_0x040e
                 int r2 = r15.active_date
-                if (r2 != 0) goto L_0x040f
+                if (r2 != 0) goto L_0x040e
                 boolean r2 = r15.can_self_unmute
-                if (r2 != 0) goto L_0x040f
+                if (r2 != 0) goto L_0x040e
                 boolean r2 = r15.muted
-                if (r2 == 0) goto L_0x040f
+                if (r2 == 0) goto L_0x040e
                 boolean r2 = r15.min
-                if (r2 == 0) goto L_0x040f
+                if (r2 == 0) goto L_0x040e
                 boolean r2 = r0.membersLoadEndReached
-                if (r2 == 0) goto L_0x0414
-            L_0x040f:
+                if (r2 == 0) goto L_0x0413
+            L_0x040e:
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r2 = r0.sortedParticipants
                 r2.add(r15)
-            L_0x0414:
+            L_0x0413:
                 androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r2 = r0.participants
                 r2.put(r3, r15)
                 r2 = 1
                 r0.processAllSources(r15, r2)
-            L_0x041d:
+            L_0x041c:
                 int r2 = (r3 > r25 ? 1 : (r3 == r25 ? 0 : -1))
-                if (r2 != 0) goto L_0x0439
+                if (r2 != 0) goto L_0x0438
                 int r2 = r15.active_date
-                if (r2 != 0) goto L_0x0439
+                if (r2 != 0) goto L_0x0438
                 boolean r2 = r15.can_self_unmute
-                if (r2 != 0) goto L_0x042d
+                if (r2 != 0) goto L_0x042c
                 boolean r2 = r15.muted
-                if (r2 != 0) goto L_0x0439
-            L_0x042d:
+                if (r2 != 0) goto L_0x0438
+            L_0x042c:
                 org.telegram.messenger.AccountInstance r2 = r0.currentAccount
                 org.telegram.tgnet.ConnectionsManager r2 = r2.getConnectionsManager()
                 int r2 = r2.getCurrentTime()
                 r15.active_date = r2
-            L_0x0439:
+            L_0x0438:
                 r16 = 1
-            L_0x043b:
+            L_0x043a:
                 int r2 = (r3 > r25 ? 1 : (r3 == r25 ? 0 : -1))
-                if (r2 != 0) goto L_0x0441
+                if (r2 != 0) goto L_0x0440
                 r18 = 1
-            L_0x0441:
+            L_0x0440:
                 int r2 = r8 + 1
                 r3 = r12
                 r12 = r23
@@ -1524,28 +1525,28 @@ public class ChatObject {
                 r13 = r2
                 r2 = 0
                 goto L_0x00e6
-            L_0x044f:
+            L_0x044e:
                 r24 = r14
                 int r1 = r1.version
                 org.telegram.tgnet.TLRPC$GroupCall r2 = r0.call
                 int r3 = r2.version
-                if (r1 <= r3) goto L_0x0460
+                if (r1 <= r3) goto L_0x045f
                 r2.version = r1
-                if (r29 != 0) goto L_0x0460
+                if (r29 != 0) goto L_0x045f
                 r27.processUpdatesQueue()
-            L_0x0460:
+            L_0x045f:
                 org.telegram.tgnet.TLRPC$GroupCall r1 = r0.call
                 int r1 = r1.participants_count
                 androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r2 = r0.participants
                 int r2 = r2.size()
-                if (r1 >= r2) goto L_0x0476
+                if (r1 >= r2) goto L_0x0475
                 org.telegram.tgnet.TLRPC$GroupCall r1 = r0.call
                 androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r2 = r0.participants
                 int r2 = r2.size()
                 r1.participants_count = r2
-            L_0x0476:
+            L_0x0475:
                 boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-                if (r1 == 0) goto L_0x0492
+                if (r1 == 0) goto L_0x0491
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
                 java.lang.String r2 = "new participants count after update "
@@ -1555,16 +1556,16 @@ public class ChatObject {
                 r1.append(r2)
                 java.lang.String r1 = r1.toString()
                 org.telegram.messenger.FileLog.d(r1)
-            L_0x0492:
-                if (r24 == 0) goto L_0x0497
+            L_0x0491:
+                if (r24 == 0) goto L_0x0496
                 r27.loadGroupCall()
-            L_0x0497:
+            L_0x0496:
                 r1 = 2
                 r2 = 3
-                if (r15 == 0) goto L_0x04ce
-                if (r16 == 0) goto L_0x04a0
+                if (r15 == 0) goto L_0x04cd
+                if (r16 == 0) goto L_0x049f
                 r27.sortParticipants()
-            L_0x04a0:
+            L_0x049f:
                 org.telegram.messenger.AccountInstance r3 = r0.currentAccount
                 org.telegram.messenger.NotificationCenter r3 = r3.getNotificationCenter()
                 int r4 = org.telegram.messenger.NotificationCenter.groupCallUpdated
@@ -1584,8 +1585,8 @@ public class ChatObject {
                 java.lang.Long r6 = java.lang.Long.valueOf(r19)
                 r5[r2] = r6
                 r3.postNotificationName(r4, r5)
-            L_0x04ce:
-                if (r17 == 0) goto L_0x04f5
+            L_0x04cd:
+                if (r17 == 0) goto L_0x04f4
                 org.telegram.messenger.AccountInstance r3 = r0.currentAccount
                 org.telegram.messenger.NotificationCenter r3 = r3.getNotificationCenter()
                 int r4 = org.telegram.messenger.NotificationCenter.groupCallSpeakingUsersUpdated
@@ -1602,7 +1603,7 @@ public class ChatObject {
                 java.lang.Boolean r5 = java.lang.Boolean.FALSE
                 r2[r1] = r5
                 r3.postNotificationName(r4, r2)
-            L_0x04f5:
+            L_0x04f4:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ChatObject.Call.processParticipantsUpdate(org.telegram.tgnet.TLRPC$TL_updateGroupCallParticipants, boolean):void");
@@ -1721,7 +1722,7 @@ public class ChatObject {
                     tLRPC$TL_groupCallParticipant3.videoIndex = 0;
                 }
             }
-            Collections.sort(this.sortedParticipants, new ChatObject$Call$$ExternalSyntheticLambda7(this, selfId, canManageCalls));
+            Collections.sort(this.sortedParticipants, new ChatObject$Call$$ExternalSyntheticLambda6(this, selfId, canManageCalls));
             if (this.sortedParticipants.isEmpty()) {
                 tLRPC$TL_groupCallParticipant = null;
             } else {
@@ -1834,7 +1835,7 @@ public class ChatObject {
             }
             int i4 = tLRPC$TL_groupCallParticipant.active_date;
             if (i4 != 0 && (i = tLRPC$TL_groupCallParticipant2.active_date) != 0) {
-                return ChatObject$Call$$ExternalSyntheticBackport0.m(i, i4);
+                return zzhv$$ExternalSyntheticBackport0.m(i, i4);
             }
             if (i4 != 0) {
                 return -1;
@@ -1864,9 +1865,9 @@ public class ChatObject {
                 }
             }
             if (this.call.join_date_asc) {
-                return ChatObject$Call$$ExternalSyntheticBackport0.m(tLRPC$TL_groupCallParticipant.date, tLRPC$TL_groupCallParticipant2.date);
+                return zzhv$$ExternalSyntheticBackport0.m(tLRPC$TL_groupCallParticipant.date, tLRPC$TL_groupCallParticipant2.date);
             }
-            return ChatObject$Call$$ExternalSyntheticBackport0.m(tLRPC$TL_groupCallParticipant2.date, tLRPC$TL_groupCallParticipant.date);
+            return zzhv$$ExternalSyntheticBackport0.m(tLRPC$TL_groupCallParticipant2.date, tLRPC$TL_groupCallParticipant.date);
         }
 
         public boolean canRecordVideo() {
@@ -1928,7 +1929,7 @@ public class ChatObject {
                 tLRPC$TL_phone_toggleGroupCallRecord.video = true;
                 tLRPC$TL_phone_toggleGroupCallRecord.video_portrait = i == 1;
             }
-            this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_toggleGroupCallRecord, new ChatObject$Call$$ExternalSyntheticLambda10(this));
+            this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_toggleGroupCallRecord, new ChatObject$Call$$ExternalSyntheticLambda9(this));
             this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.groupCallUpdated, Long.valueOf(this.chatId), Long.valueOf(this.call.id), Boolean.FALSE);
         }
 
@@ -2107,6 +2108,10 @@ public class ChatObject {
         return ((tLRPC$Chat instanceof TLRPC$TL_channel) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden)) && tLRPC$Chat.megagroup;
     }
 
+    public static boolean isChannelAndNotMegaGroup(TLRPC$Chat tLRPC$Chat) {
+        return isChannel(tLRPC$Chat) && !isMegagroup(tLRPC$Chat);
+    }
+
     public static boolean isMegagroup(int i, long j) {
         TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Long.valueOf(j));
         return isChannel(chat) && chat.megagroup;
@@ -2246,6 +2251,10 @@ public class ChatObject {
     public static boolean isChannel(long j, int i) {
         TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Long.valueOf(j));
         return (chat instanceof TLRPC$TL_channel) || (chat instanceof TLRPC$TL_channelForbidden);
+    }
+
+    public static boolean isChannelAndNotMegaGroup(long j, int i) {
+        return isChannelAndNotMegaGroup(MessagesController.getInstance(i).getChat(Long.valueOf(j)));
     }
 
     public static boolean isCanWriteToChannel(long j, int i) {

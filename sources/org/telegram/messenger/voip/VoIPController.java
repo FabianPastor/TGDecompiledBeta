@@ -174,12 +174,12 @@ public class VoIPController {
         nativeSetMicMute(this.nativeInst, z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:14:0x0032  */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x0034  */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x0041  */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x0043  */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x0049  */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x0060  */
+    /* JADX WARNING: Removed duplicated region for block: B:14:0x0031  */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0033  */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x003f  */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0041  */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x0047  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x005d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setConfig(double r17, double r19, int r21, long r22) {
         /*
@@ -204,31 +204,31 @@ public class VoIPController {
             boolean r5 = r5.getBoolean(r6, r3)
             long r6 = r14.nativeInst
             r8 = 1
-            if (r2 == 0) goto L_0x0034
+            if (r2 == 0) goto L_0x0033
             java.lang.String r2 = "use_system_aec"
             boolean r2 = org.telegram.messenger.voip.VoIPServerConfig.getBoolean(r2, r8)
-            if (r2 != 0) goto L_0x0032
-            goto L_0x0034
-        L_0x0032:
+            if (r2 != 0) goto L_0x0031
+            goto L_0x0033
+        L_0x0031:
             r9 = 0
-            goto L_0x0035
-        L_0x0034:
+            goto L_0x0034
+        L_0x0033:
             r9 = 1
-        L_0x0035:
-            if (r4 == 0) goto L_0x0043
+        L_0x0034:
+            if (r4 == 0) goto L_0x0041
             java.lang.String r2 = "use_system_ns"
             boolean r2 = org.telegram.messenger.voip.VoIPServerConfig.getBoolean(r2, r8)
-            if (r2 != 0) goto L_0x0041
-            goto L_0x0043
-        L_0x0041:
+            if (r2 != 0) goto L_0x003f
+            goto L_0x0041
+        L_0x003f:
             r10 = 0
-            goto L_0x0044
-        L_0x0043:
+            goto L_0x0042
+        L_0x0041:
             r10 = 1
-        L_0x0044:
+        L_0x0042:
             r11 = 1
             boolean r2 = org.telegram.messenger.BuildVars.DEBUG_VERSION
-            if (r2 == 0) goto L_0x0060
+            if (r2 == 0) goto L_0x005d
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             java.lang.String r3 = "voip"
@@ -236,20 +236,20 @@ public class VoIPController {
             r2.append(r0)
             java.lang.String r0 = r2.toString()
             java.lang.String r0 = r14.getLogFilePath((java.lang.String) r0)
-            goto L_0x0064
-        L_0x0060:
+            goto L_0x0061
+        L_0x005d:
             java.lang.String r0 = r14.getLogFilePath((long) r0)
-        L_0x0064:
+        L_0x0061:
             r12 = r0
             boolean r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION
-            if (r0 == 0) goto L_0x0073
-            if (r5 == 0) goto L_0x0073
+            if (r0 == 0) goto L_0x006f
+            if (r5 == 0) goto L_0x006f
             java.lang.String r0 = "voipStats"
             java.lang.String r0 = r14.getLogFilePath((java.lang.String) r0)
-            goto L_0x0074
-        L_0x0073:
+            goto L_0x0070
+        L_0x006f:
             r0 = 0
-        L_0x0074:
+        L_0x0070:
             r13 = r0
             boolean r15 = org.telegram.messenger.BuildVars.DEBUG_VERSION
             r0 = r16

@@ -433,7 +433,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131166021(0x7var_, float:1.7946276E38)
+            r3 = 2131166027(0x7var_b, float:1.7946288E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>(r2)
@@ -1375,10 +1375,6 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             return null;
         }
 
-        public int getPositionForScrollProgress(float f) {
-            return 0;
-        }
-
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
             return true;
         }
@@ -1516,6 +1512,11 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             }
             return 2;
         }
+
+        public void getPositionForScrollProgress(RecyclerListView recyclerListView, float f, int[] iArr) {
+            iArr[0] = 0;
+            iArr[1] = 0;
+        }
     }
 
     private class SharedDocumentsAdapter extends RecyclerListView.SectionsAdapter {
@@ -1528,10 +1529,6 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
 
         public String getLetter(int i) {
             return null;
-        }
-
-        public int getPositionForScrollProgress(float f) {
-            return 0;
         }
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
@@ -1711,6 +1708,11 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             int i3 = this.currentType;
             return (i3 == 2 || i3 == 4) ? 3 : 1;
         }
+
+        public void getPositionForScrollProgress(RecyclerListView recyclerListView, float f, int[] iArr) {
+            iArr[0] = 0;
+            iArr[1] = 0;
+        }
     }
 
     /* access modifiers changed from: private */
@@ -1824,7 +1826,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
                 android.content.Context r4 = r4.getContext()
                 r5.<init>(r4)
-                r4 = 2131627515(0x7f0e0dfb, float:1.8882297E38)
+                r4 = 2131627574(0x7f0e0e36, float:1.8882416E38)
                 java.lang.String r0 = "SearchMessages"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                 r5.setText(r4)

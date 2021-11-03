@@ -1,30 +1,33 @@
 package org.telegram.tgnet;
 
 public abstract class TLRPC$Theme extends TLObject {
-    public static TLRPC$Theme TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$Theme tLRPC$Theme;
+    public static TLRPC$TL_theme TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
+        TLRPC$TL_theme tLRPC$TL_theme;
         switch (i) {
+            case -1609668650:
+                tLRPC$TL_theme = new TLRPC$TL_theme();
+                break;
             case -402474788:
-                tLRPC$Theme = new TLRPC$TL_theme();
+                tLRPC$TL_theme = new TLRPC$TL_theme_layer133();
                 break;
             case -136770336:
-                tLRPC$Theme = new TLRPC$TL_theme_layer106();
+                tLRPC$TL_theme = new TLRPC$TL_theme_layer106();
                 break;
             case 42930452:
-                tLRPC$Theme = new TLRPC$TL_theme_layer131();
+                tLRPC$TL_theme = new TLRPC$TL_theme_layer131();
                 break;
             case 1211967244:
-                tLRPC$Theme = new TLRPC$TL_themeDocumentNotModified_layer106();
+                tLRPC$TL_theme = new TLRPC$TL_themeDocumentNotModified_layer106();
                 break;
             default:
-                tLRPC$Theme = null;
+                tLRPC$TL_theme = null;
                 break;
         }
-        if (tLRPC$Theme != null || !z) {
-            if (tLRPC$Theme != null) {
-                tLRPC$Theme.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_theme != null || !z) {
+            if (tLRPC$TL_theme != null) {
+                tLRPC$TL_theme.readParams(abstractSerializedData, z);
             }
-            return tLRPC$Theme;
+            return tLRPC$TL_theme;
         }
         throw new RuntimeException(String.format("can't parse magic %x in Theme", new Object[]{Integer.valueOf(i)}));
     }

@@ -132,8 +132,8 @@ public class EmuDetector {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x00d0 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x00d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x00ce A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00cf  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean checkBasic() {
         /*
@@ -146,91 +146,91 @@ public class EmuDetector {
             java.lang.String r3 = "google_sdk"
             java.lang.String r4 = "generic"
             r5 = 1
-            if (r0 != 0) goto L_0x00cd
+            if (r0 != 0) goto L_0x00cb
             java.lang.String r0 = android.os.Build.BOOTLOADER
             java.lang.String r0 = r0.toLowerCase()
             boolean r0 = r0.contains(r1)
-            if (r0 != 0) goto L_0x00cd
+            if (r0 != 0) goto L_0x00cb
             java.lang.String r0 = android.os.Build.FINGERPRINT
             boolean r0 = r0.startsWith(r4)
-            if (r0 != 0) goto L_0x00cd
+            if (r0 != 0) goto L_0x00cb
             java.lang.String r0 = android.os.Build.MODEL
             java.lang.String r6 = r0.toLowerCase()
             boolean r6 = r6.contains(r3)
-            if (r6 != 0) goto L_0x00cd
+            if (r6 != 0) goto L_0x00cb
             java.lang.String r6 = r0.toLowerCase()
             java.lang.String r7 = "droid4x"
             boolean r6 = r6.contains(r7)
-            if (r6 != 0) goto L_0x00cd
+            if (r6 != 0) goto L_0x00cb
             java.lang.String r6 = r0.toLowerCase()
             java.lang.String r7 = "emulator"
             boolean r6 = r6.contains(r7)
-            if (r6 != 0) goto L_0x00cd
+            if (r6 != 0) goto L_0x00cb
             java.lang.String r6 = "Android SDK built for x86"
             boolean r0 = r0.contains(r6)
-            if (r0 != 0) goto L_0x00cd
+            if (r0 != 0) goto L_0x00cb
             java.lang.String r0 = android.os.Build.MANUFACTURER
             java.lang.String r0 = r0.toLowerCase()
             java.lang.String r6 = "genymotion"
             boolean r0 = r0.contains(r6)
-            if (r0 != 0) goto L_0x00cd
+            if (r0 != 0) goto L_0x00cb
             java.lang.String r0 = android.os.Build.HARDWARE
             java.lang.String r6 = r0.toLowerCase()
             java.lang.String r7 = "goldfish"
             boolean r6 = r6.contains(r7)
-            if (r6 != 0) goto L_0x00cd
+            if (r6 != 0) goto L_0x00cb
             java.lang.String r6 = r0.toLowerCase()
             java.lang.String r7 = "vbox86"
             boolean r6 = r6.contains(r7)
-            if (r6 != 0) goto L_0x00cd
+            if (r6 != 0) goto L_0x00cb
             java.lang.String r6 = r0.toLowerCase()
             java.lang.String r7 = "android_x86"
             boolean r6 = r6.contains(r7)
-            if (r6 != 0) goto L_0x00cd
+            if (r6 != 0) goto L_0x00cb
             java.lang.String r0 = r0.toLowerCase()
             boolean r0 = r0.contains(r1)
-            if (r0 != 0) goto L_0x00cd
+            if (r0 != 0) goto L_0x00cb
             java.lang.String r0 = android.os.Build.PRODUCT
             java.lang.String r6 = "sdk"
             boolean r6 = r0.equals(r6)
-            if (r6 != 0) goto L_0x00cd
+            if (r6 != 0) goto L_0x00cb
             boolean r6 = r0.equals(r3)
-            if (r6 != 0) goto L_0x00cd
+            if (r6 != 0) goto L_0x00cb
             java.lang.String r6 = "sdk_x86"
             boolean r6 = r0.equals(r6)
-            if (r6 != 0) goto L_0x00cd
+            if (r6 != 0) goto L_0x00cb
             java.lang.String r6 = "vbox86p"
             boolean r6 = r0.equals(r6)
-            if (r6 != 0) goto L_0x00cd
+            if (r6 != 0) goto L_0x00cb
             java.lang.String r0 = r0.toLowerCase()
             boolean r0 = r0.contains(r1)
-            if (r0 != 0) goto L_0x00cd
+            if (r0 != 0) goto L_0x00cb
             java.lang.String r0 = android.os.Build.SERIAL
             java.lang.String r0 = r0.toLowerCase()
             boolean r0 = r0.contains(r1)
-            if (r0 == 0) goto L_0x00cb
-            goto L_0x00cd
-        L_0x00cb:
+            if (r0 == 0) goto L_0x00c9
+            goto L_0x00cb
+        L_0x00c9:
             r0 = 0
-            goto L_0x00ce
-        L_0x00cd:
+            goto L_0x00cc
+        L_0x00cb:
             r0 = 1
-        L_0x00ce:
-            if (r0 == 0) goto L_0x00d1
+        L_0x00cc:
+            if (r0 == 0) goto L_0x00cf
             return r5
-        L_0x00d1:
+        L_0x00cf:
             java.lang.String r1 = android.os.Build.BRAND
             boolean r1 = r1.startsWith(r4)
-            if (r1 == 0) goto L_0x00e2
+            if (r1 == 0) goto L_0x00e0
             java.lang.String r1 = android.os.Build.DEVICE
             boolean r1 = r1.startsWith(r4)
-            if (r1 == 0) goto L_0x00e2
+            if (r1 == 0) goto L_0x00e0
             r2 = 1
-        L_0x00e2:
+        L_0x00e0:
             r0 = r0 | r2
-            if (r0 == 0) goto L_0x00e6
+            if (r0 == 0) goto L_0x00e4
             return r5
-        L_0x00e6:
+        L_0x00e4:
             java.lang.String r1 = android.os.Build.PRODUCT
             boolean r1 = r3.equals(r1)
             r0 = r0 | r1

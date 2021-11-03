@@ -43,7 +43,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
     /* access modifiers changed from: private */
     public Paint backgroundPaint;
     /* access modifiers changed from: private */
-    public int currentAccount;
+    public int currentAccount = UserConfig.selectedAccount;
     private SharedPhotoVideoCellDelegate delegate;
     private boolean ignoreLayout;
     private int[] indeces;
@@ -269,15 +269,10 @@ public class SharedPhotoVideoCell extends FrameLayout {
         }
     }
 
-    public SharedPhotoVideoCell(Context context) {
-        this(context, 0);
-    }
-
     public SharedPhotoVideoCell(Context context, int i) {
         super(context);
         Paint paint = new Paint();
         this.backgroundPaint = paint;
-        this.currentAccount = UserConfig.selectedAccount;
         this.type = i;
         paint.setColor(Theme.getColor("sharedMedia_photoPlaceholder"));
         this.messageObjects = new MessageObject[6];

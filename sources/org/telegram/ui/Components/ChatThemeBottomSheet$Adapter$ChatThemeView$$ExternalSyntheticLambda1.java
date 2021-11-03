@@ -8,16 +8,18 @@ import org.telegram.ui.Components.ChatThemeBottomSheet;
 public final /* synthetic */ class ChatThemeBottomSheet$Adapter$ChatThemeView$$ExternalSyntheticLambda1 implements ResultCallback {
     public final /* synthetic */ ChatThemeBottomSheet.Adapter.ChatThemeView f$0;
     public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ ChatThemeBottomSheet.ChatThemeItem f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ ChatThemeBottomSheet$Adapter$ChatThemeView$$ExternalSyntheticLambda1(ChatThemeBottomSheet.Adapter.ChatThemeView chatThemeView, long j, int i) {
+    public /* synthetic */ ChatThemeBottomSheet$Adapter$ChatThemeView$$ExternalSyntheticLambda1(ChatThemeBottomSheet.Adapter.ChatThemeView chatThemeView, long j, ChatThemeBottomSheet.ChatThemeItem chatThemeItem, int i) {
         this.f$0 = chatThemeView;
         this.f$1 = j;
-        this.f$2 = i;
+        this.f$2 = chatThemeItem;
+        this.f$3 = i;
     }
 
     public final void onComplete(Object obj) {
-        this.f$0.lambda$setItem$0(this.f$1, this.f$2, (Pair) obj);
+        this.f$0.lambda$setItem$0(this.f$1, this.f$2, this.f$3, (Pair) obj);
     }
 
     public /* synthetic */ void onError(TLRPC$TL_error tLRPC$TL_error) {
