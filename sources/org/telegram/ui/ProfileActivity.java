@@ -11800,7 +11800,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         saveScrollPosition();
         updateRowsIds();
         diffCallback.fillPositions(diffCallback.newPositionToItem);
-        DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo((RecyclerView.Adapter) this.listAdapter);
+        try {
+            DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo((RecyclerView.Adapter) this.listAdapter);
+        } catch (Exception unused) {
+            this.listAdapter.notifyDataSetChanged();
+        }
         int i = this.savedScrollPosition;
         if (i >= 0) {
             this.layoutManager.scrollToPositionWithOffset(i, this.savedScrollOffset - this.listView.getPaddingTop());

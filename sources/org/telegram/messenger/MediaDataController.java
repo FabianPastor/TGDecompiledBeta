@@ -6330,7 +6330,7 @@ public class MediaDataController extends BaseController {
             r6 = r19
             r0.<init>(r1, r2, r3, r5, r6)
             r7.postRunnable(r8)
-            goto L_0x0141
+            goto L_0x0148
         L_0x0080:
             androidx.collection.LongSparseArray r3 = new androidx.collection.LongSparseArray
             r3.<init>()
@@ -6338,16 +6338,16 @@ public class MediaDataController extends BaseController {
             r6.<init>()
         L_0x008a:
             int r1 = r15.size()
-            if (r2 >= r1) goto L_0x011b
+            if (r2 >= r1) goto L_0x0122
             java.lang.Object r1 = r15.get(r2)
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
             if (r1 != 0) goto L_0x009a
-            goto L_0x0117
+            goto L_0x011e
         L_0x009a:
             int r7 = r1.getId()
-            if (r7 <= 0) goto L_0x0117
+            if (r7 <= 0) goto L_0x011e
             boolean r7 = r1.isReply()
-            if (r7 == 0) goto L_0x0117
+            if (r7 == 0) goto L_0x011e
             org.telegram.tgnet.TLRPC$Message r7 = r1.messageOwner
             org.telegram.tgnet.TLRPC$TL_messageReplyHeader r8 = r7.reply_to
             int r9 = r8.reply_to_msg_id
@@ -6367,53 +6367,58 @@ public class MediaDataController extends BaseController {
             r10 = r12
         L_0x00c2:
             org.telegram.messenger.MessageObject r8 = r1.replyMessageObject
-            if (r8 == 0) goto L_0x00d3
+            if (r8 == 0) goto L_0x00da
             org.telegram.tgnet.TLRPC$Message r8 = r8.messageOwner
-            if (r8 == 0) goto L_0x0117
+            if (r8 == 0) goto L_0x011e
             org.telegram.tgnet.TLRPC$Peer r8 = r8.peer_id
-            if (r8 == 0) goto L_0x0117
+            if (r8 == 0) goto L_0x011e
             boolean r7 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
             if (r7 == 0) goto L_0x00d3
-            goto L_0x0117
+            goto L_0x011e
         L_0x00d3:
+            long r7 = r8.channel_id
+            int r12 = (r7 > r10 ? 1 : (r7 == r10 ? 0 : -1))
+            if (r12 != 0) goto L_0x00da
+            goto L_0x011e
+        L_0x00da:
             java.lang.Object r7 = r3.get(r4)
             android.util.SparseArray r7 = (android.util.SparseArray) r7
             java.lang.Object r8 = r6.get(r10)
             java.util.ArrayList r8 = (java.util.ArrayList) r8
-            if (r7 != 0) goto L_0x00e9
+            if (r7 != 0) goto L_0x00f0
             android.util.SparseArray r7 = new android.util.SparseArray
             r7.<init>()
             r3.put(r4, r7)
-        L_0x00e9:
-            if (r8 != 0) goto L_0x00f3
+        L_0x00f0:
+            if (r8 != 0) goto L_0x00fa
             java.util.ArrayList r8 = new java.util.ArrayList
             r8.<init>()
             r6.put(r10, r8)
-        L_0x00f3:
+        L_0x00fa:
             java.lang.Object r10 = r7.get(r9)
             java.util.ArrayList r10 = (java.util.ArrayList) r10
-            if (r10 != 0) goto L_0x0114
+            if (r10 != 0) goto L_0x011b
             java.util.ArrayList r10 = new java.util.ArrayList
             r10.<init>()
             r7.put(r9, r10)
             java.lang.Integer r7 = java.lang.Integer.valueOf(r9)
             boolean r7 = r8.contains(r7)
-            if (r7 != 0) goto L_0x0114
+            if (r7 != 0) goto L_0x011b
             java.lang.Integer r7 = java.lang.Integer.valueOf(r9)
             r8.add(r7)
-        L_0x0114:
+        L_0x011b:
             r10.add(r1)
-        L_0x0117:
+        L_0x011e:
             int r2 = r2 + 1
             goto L_0x008a
-        L_0x011b:
+        L_0x0122:
             boolean r0 = r3.isEmpty()
-            if (r0 == 0) goto L_0x0127
-            if (r19 == 0) goto L_0x0126
+            if (r0 == 0) goto L_0x012e
+            if (r19 == 0) goto L_0x012d
             r19.run()
-        L_0x0126:
+        L_0x012d:
             return
-        L_0x0127:
+        L_0x012e:
             org.telegram.messenger.MessagesStorage r0 = r14.getMessagesStorage()
             org.telegram.messenger.DispatchQueue r8 = r0.getStorageQueue()
             org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda44 r9 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda44
@@ -6426,7 +6431,7 @@ public class MediaDataController extends BaseController {
             r7 = r19
             r0.<init>(r1, r2, r3, r4, r6, r7)
             r8.postRunnable(r9)
-        L_0x0141:
+        L_0x0148:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.loadReplyMessagesForMessages(java.util.ArrayList, long, boolean, java.lang.Runnable):void");
@@ -6635,9 +6640,9 @@ public class MediaDataController extends BaseController {
         try {
             getMessagesStorage().getDatabase().beginTransaction();
             if (z) {
-                sQLitePreparedStatement = getMessagesStorage().getDatabase().executeFast("UPDATE scheduled_messages_v2 SET replydata = ? WHERE mid = ? AND uid = ?");
+                sQLitePreparedStatement = getMessagesStorage().getDatabase().executeFast("UPDATE scheduled_messages_v2 SET replydata = ?, reply_to_message_id = ? WHERE mid = ? AND uid = ?");
             } else {
-                sQLitePreparedStatement = getMessagesStorage().getDatabase().executeFast("UPDATE messages_v2 SET replydata = ? WHERE mid = ? AND uid = ?");
+                sQLitePreparedStatement = getMessagesStorage().getDatabase().executeFast("UPDATE messages_v2 SET replydata = ?, reply_to_message_id = ? WHERE mid = ? AND uid = ?");
             }
             for (int i = 0; i < arrayList.size(); i++) {
                 TLRPC$Message tLRPC$Message = (TLRPC$Message) arrayList.get(i);
@@ -6651,8 +6656,9 @@ public class MediaDataController extends BaseController {
                             MessageObject messageObject = (MessageObject) arrayList2.get(i2);
                             sQLitePreparedStatement.requery();
                             sQLitePreparedStatement.bindByteBuffer(1, nativeByteBuffer);
-                            sQLitePreparedStatement.bindInteger(2, messageObject.getId());
-                            sQLitePreparedStatement.bindLong(3, messageObject.getDialogId());
+                            sQLitePreparedStatement.bindInteger(2, tLRPC$Message.id);
+                            sQLitePreparedStatement.bindInteger(3, messageObject.getId());
+                            sQLitePreparedStatement.bindLong(4, messageObject.getDialogId());
                             sQLitePreparedStatement.step();
                         }
                         nativeByteBuffer.reuse();

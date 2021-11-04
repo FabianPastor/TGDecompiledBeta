@@ -1452,7 +1452,11 @@ public class RecyclerListView extends RecyclerView {
         selectorDrawable2.setCallback(this);
         try {
             if (!gotAttributes) {
-                attributes = getResourceDeclareStyleableIntArray("com.android.internal", "View");
+                int[] resourceDeclareStyleableIntArray = getResourceDeclareStyleableIntArray("com.android.internal", "View");
+                attributes = resourceDeclareStyleableIntArray;
+                if (resourceDeclareStyleableIntArray == null) {
+                    attributes = new int[0];
+                }
                 gotAttributes = true;
             }
             TypedArray obtainStyledAttributes = context.getTheme().obtainStyledAttributes(attributes);

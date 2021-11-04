@@ -9647,16 +9647,24 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     public void checkAppUpdate(boolean z) {
-        TLRPC$TL_help_getAppUpdate tLRPC$TL_help_getAppUpdate = new TLRPC$TL_help_getAppUpdate();
-        try {
-            tLRPC$TL_help_getAppUpdate.source = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
-        } catch (Exception unused) {
+        if (!z && BuildVars.DEBUG_VERSION) {
+            return;
         }
-        if (tLRPC$TL_help_getAppUpdate.source == null) {
-            tLRPC$TL_help_getAppUpdate.source = "";
+        if (!z && !BuildVars.CHECK_UPDATES) {
+            return;
         }
-        int i = this.currentAccount;
-        ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_help_getAppUpdate, new LaunchActivity$$ExternalSyntheticLambda56(this, i));
+        if (z || Math.abs(System.currentTimeMillis() - SharedConfig.lastUpdateCheckTime) >= ((long) (MessagesController.getInstance(0).updateCheckDelay * 1000))) {
+            TLRPC$TL_help_getAppUpdate tLRPC$TL_help_getAppUpdate = new TLRPC$TL_help_getAppUpdate();
+            try {
+                tLRPC$TL_help_getAppUpdate.source = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
+            } catch (Exception unused) {
+            }
+            if (tLRPC$TL_help_getAppUpdate.source == null) {
+                tLRPC$TL_help_getAppUpdate.source = "";
+            }
+            int i = this.currentAccount;
+            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_help_getAppUpdate, new LaunchActivity$$ExternalSyntheticLambda56(this, i));
+        }
     }
 
     /* access modifiers changed from: private */
