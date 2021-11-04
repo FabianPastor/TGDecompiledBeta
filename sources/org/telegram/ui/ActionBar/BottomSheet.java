@@ -60,8 +60,10 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
     public boolean applyTopPadding;
     protected ColorDrawable backDrawable;
-    protected int backgroundPaddingLeft;
-    protected int backgroundPaddingTop;
+    /* access modifiers changed from: protected */
+    public int backgroundPaddingLeft;
+    /* access modifiers changed from: protected */
+    public int backgroundPaddingTop;
     protected int behindKeyboardColor;
     protected String behindKeyboardColorKey;
     /* access modifiers changed from: private */
@@ -71,8 +73,10 @@ public class BottomSheet extends Dialog {
     protected boolean calcMandatoryInsets;
     private boolean canDismissWithSwipe;
     protected ContainerView container;
-    protected ViewGroup containerView;
-    protected int currentAccount;
+    /* access modifiers changed from: protected */
+    public ViewGroup containerView;
+    /* access modifiers changed from: protected */
+    public int currentAccount;
     /* access modifiers changed from: private */
     public float currentPanTranslationY;
     protected AnimatorSet currentSheetAnimation;
@@ -93,7 +97,8 @@ public class BottomSheet extends Dialog {
     protected boolean drawNavigationBar;
     private boolean focusable;
     protected boolean fullWidth;
-    protected boolean isFullscreen;
+    /* access modifiers changed from: protected */
+    public boolean isFullscreen;
     /* access modifiers changed from: private */
     public int[] itemIcons;
     private ArrayList<BottomSheetCell> itemViews;
@@ -101,14 +106,16 @@ public class BottomSheet extends Dialog {
     public CharSequence[] items;
     /* access modifiers changed from: private */
     public ValueAnimator keyboardContentAnimator;
-    protected boolean keyboardVisible;
+    /* access modifiers changed from: protected */
+    public boolean keyboardVisible;
     /* access modifiers changed from: private */
     public WindowInsets lastInsets;
     /* access modifiers changed from: private */
     public int layoutCount;
     /* access modifiers changed from: private */
     public int leftInset;
-    protected int navBarColor;
+    /* access modifiers changed from: protected */
+    public int navBarColor;
     protected String navBarColorKey;
     protected View nestedScrollChild;
     /* access modifiers changed from: private */
@@ -125,7 +132,8 @@ public class BottomSheet extends Dialog {
     private boolean showWithoutAnimation;
     protected boolean smoothKeyboardAnimationEnabled;
     protected Runnable startAnimationRunnable;
-    protected int statusBarHeight;
+    /* access modifiers changed from: protected */
+    public int statusBarHeight;
     /* access modifiers changed from: private */
     public CharSequence title;
     private TextView titleView;

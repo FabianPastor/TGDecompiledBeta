@@ -14475,6 +14475,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 showAttachmentError();
             }
+            ChatAttachAlert chatAttachAlert3 = this.chatAttachAlert;
+            if (chatAttachAlert3 != null) {
+                chatAttachAlert3.dismiss();
+            }
             afterMessageSend();
         }
     }

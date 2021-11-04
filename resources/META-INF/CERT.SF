@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 7.0.1
-SHA1-Digest-Manifest: LMX4NBKqZoXYbfAXbYdBuX+ISaM=
+SHA1-Digest-Manifest: 4zGxaxeZK9Liu7P06pYzD9JmAUM=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: o57D5IzRgZjwAVcIPs+vearkiR4=
+SHA1-Digest: Y6/o9xU4M00dHt03QvczOPbffe0=
 
 Name: META-INF/androidx.annotation_annotation-experimental.version
 SHA1-Digest: 4Tx/OE4OYuecGI9+583MUWSivc0=
@@ -10525,13 +10525,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: 3qblOWwyN6ICa9uLaKzXTgOYagY=
+SHA1-Digest: 59QwnpAfwt8C4MpOEZLh5syPd/0=
 
 Name: classes2.dex
 SHA1-Digest: A72KjyjpR6B3AcD9qU8AobBsQ9M=
 
 Name: classes3.dex
-SHA1-Digest: 9NEDbE9M394lEDLVec1Vc7Drvlc=
+SHA1-Digest: oo4hXAwRidsbTfyyYESFlCMqit4=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
