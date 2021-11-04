@@ -285,6 +285,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     public boolean tabsAnimationInProgress;
     int topPadding;
     private VelocityTracker velocityTracker;
+    private final int viewType;
     /* access modifiers changed from: private */
     public SharedDocumentsAdapter voiceAdapter;
 
@@ -482,6 +483,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
     private void selectPinchPosition(int i, int i2) {
         this.pinchCenterPosition = -1;
+        if (getY() != 0.0f && this.viewType == 1) {
+            i2 = 0;
+        }
         for (int i3 = 0; i3 < this.mediaPages[0].listView.getChildCount(); i3++) {
             View childAt = this.mediaPages[0].listView.getChildAt(i3);
             childAt.getHitRect(this.rect);
@@ -1482,13 +1486,13 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public SharedMediaLayout(Context context, long j, SharedMediaPreloader sharedMediaPreloader2, int i, ArrayList<Integer> arrayList, TLRPC$ChatFull tLRPC$ChatFull, boolean z, BaseFragment baseFragment, Delegate delegate2) {
+    public SharedMediaLayout(Context context, long j, SharedMediaPreloader sharedMediaPreloader2, int i, ArrayList<Integer> arrayList, TLRPC$ChatFull tLRPC$ChatFull, boolean z, BaseFragment baseFragment, Delegate delegate2, int i2) {
         super(context);
         RecyclerListView.Holder holder;
         TLRPC$ChatFull tLRPC$ChatFull2;
         final Context context2 = context;
         TLRPC$ChatFull tLRPC$ChatFull3 = tLRPC$ChatFull;
-        int i2 = 2;
+        int i3 = 2;
         this.mediaPages = new MediaPage[2];
         this.cellCache = new ArrayList<>(10);
         this.cache = new ArrayList<>(10);
@@ -1846,6 +1850,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 }
             }
         };
+        this.viewType = i2;
         FlickerLoadingView flickerLoadingView = new FlickerLoadingView(context2);
         this.globalGradientView = flickerLoadingView;
         flickerLoadingView.setIsSingleCell(true);
@@ -1856,39 +1861,39 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         if (z) {
             this.initialTab = 7;
         } else {
-            int i3 = 0;
+            int i4 = 0;
             while (true) {
                 int[] iArr = this.hasMedia;
-                if (i3 >= iArr.length) {
+                if (i4 >= iArr.length) {
                     break;
-                } else if (iArr[i3] == -1 || iArr[i3] > 0) {
-                    this.initialTab = i3;
+                } else if (iArr[i4] == -1 || iArr[i4] > 0) {
+                    this.initialTab = i4;
                 } else {
-                    i3++;
+                    i4++;
                 }
             }
-            this.initialTab = i3;
+            this.initialTab = i4;
         }
         this.info = tLRPC$ChatFull3;
         if (tLRPC$ChatFull3 != null) {
             this.mergeDialogId = -tLRPC$ChatFull3.migrated_from_chat_id;
         }
         this.dialog_id = j;
-        int i4 = 0;
+        int i5 = 0;
         while (true) {
             SharedMediaData[] sharedMediaDataArr = this.sharedMediaData;
-            if (i4 >= sharedMediaDataArr.length) {
+            if (i5 >= sharedMediaDataArr.length) {
                 break;
             }
-            sharedMediaDataArr[i4] = new SharedMediaData();
-            this.sharedMediaData[i4].max_id[0] = DialogObject.isEncryptedDialog(this.dialog_id) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-            fillMediaData(i4);
+            sharedMediaDataArr[i5] = new SharedMediaData();
+            this.sharedMediaData[i5].max_id[0] = DialogObject.isEncryptedDialog(this.dialog_id) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+            fillMediaData(i5);
             if (!(this.mergeDialogId == 0 || (tLRPC$ChatFull2 = this.info) == null)) {
                 SharedMediaData[] sharedMediaDataArr2 = this.sharedMediaData;
-                sharedMediaDataArr2[i4].max_id[1] = tLRPC$ChatFull2.migrated_from_max_id;
-                sharedMediaDataArr2[i4].endReached[1] = false;
+                sharedMediaDataArr2[i5].max_id[1] = tLRPC$ChatFull2.migrated_from_max_id;
+                sharedMediaDataArr2[i5].endReached[1] = false;
             }
-            i4++;
+            i5++;
         }
         this.profileActivity = baseFragment;
         this.actionBar = baseFragment.getActionBar();
@@ -1900,7 +1905,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         this.profileActivity.getNotificationCenter().addObserver(this, NotificationCenter.messagePlayingDidReset);
         this.profileActivity.getNotificationCenter().addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         this.profileActivity.getNotificationCenter().addObserver(this, NotificationCenter.messagePlayingDidStart);
-        for (int i5 = 0; i5 < 10; i5++) {
+        for (int i6 = 0; i6 < 10; i6++) {
             if (this.initialTab == 4) {
                 AnonymousClass2 r3 = new SharedAudioCell(context2) {
                     public boolean needPlayMessage(MessageObject messageObject) {
@@ -1930,8 +1935,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             this.initialTab = scrollSlidingTextTabStrip2.getCurrentTabId();
         }
         this.scrollSlidingTextTabStrip = createScrollingTextTabStrip(context);
-        for (int i6 = 1; i6 >= 0; i6--) {
-            this.selectedFiles[i6].clear();
+        for (int i7 = 1; i7 >= 0; i7--) {
+            this.selectedFiles[i7].clear();
         }
         this.cantDeleteMessagesCount = 0;
         this.actionModeViews.clear();
@@ -2226,20 +2231,20 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         TLRPC$ChatFull unused2 = this.chatUsersAdapter.chatInfo = !z ? null : tLRPC$ChatFull3;
         this.linksAdapter = new SharedLinksAdapter(context2);
         setWillNotDraw(false);
-        int i7 = 0;
-        int i8 = -1;
-        int i9 = 0;
+        int i8 = 0;
+        int i9 = -1;
+        int i10 = 0;
         while (true) {
             MediaPage[] mediaPageArr = this.mediaPages;
-            if (i7 >= mediaPageArr.length) {
+            if (i8 >= mediaPageArr.length) {
                 break;
             }
-            if (!(i7 != 0 || mediaPageArr[i7] == null || mediaPageArr[i7].layoutManager == null)) {
-                i8 = this.mediaPages[i7].layoutManager.findFirstVisibleItemPosition();
-                if (i8 == this.mediaPages[i7].layoutManager.getItemCount() - 1 || (holder = (RecyclerListView.Holder) this.mediaPages[i7].listView.findViewHolderForAdapterPosition(i8)) == null) {
-                    i8 = -1;
+            if (!(i8 != 0 || mediaPageArr[i8] == null || mediaPageArr[i8].layoutManager == null)) {
+                i9 = this.mediaPages[i8].layoutManager.findFirstVisibleItemPosition();
+                if (i9 == this.mediaPages[i8].layoutManager.getItemCount() - 1 || (holder = (RecyclerListView.Holder) this.mediaPages[i8].listView.findViewHolderForAdapterPosition(i9)) == null) {
+                    i9 = -1;
                 } else {
-                    i9 = holder.itemView.getTop();
+                    i10 = holder.itemView.getTop();
                 }
             }
             final AnonymousClass7 r5 = new MediaPage(context2) {
@@ -2276,8 +2281,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             };
             addView(r5, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
             MediaPage[] mediaPageArr2 = this.mediaPages;
-            mediaPageArr2[i7] = r5;
-            final ExtendedGridLayoutManager access$202 = mediaPageArr2[i7].layoutManager = new ExtendedGridLayoutManager(context2, 100) {
+            mediaPageArr2[i8] = r5;
+            final ExtendedGridLayoutManager access$202 = mediaPageArr2[i8].layoutManager = new ExtendedGridLayoutManager(context2, 100) {
                 private Size size = new Size();
 
                 public boolean supportsPredictiveItemAnimations() {
@@ -2365,7 +2370,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     }
                 }
             });
-            RecyclerListView unused3 = this.mediaPages[i7].listView = new RecyclerListView(context2) {
+            RecyclerListView unused3 = this.mediaPages[i8].listView = new RecyclerListView(context2) {
                 ArrayList<SharedPhotoVideoCell2> drawingViews = new ArrayList<>();
                 ArrayList<SharedPhotoVideoCell2> drawingViews2 = new ArrayList<>();
                 ArrayList<SharedPhotoVideoCell2> drawingViews3 = new ArrayList<>();
@@ -3337,18 +3342,18 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     return true;
                 }
             };
-            this.mediaPages[i7].listView.setFastScrollEnabled(1);
-            this.mediaPages[i7].listView.setScrollingTouchSlop(1);
-            this.mediaPages[i7].listView.setPinnedSectionOffsetY(-AndroidUtilities.dp(2.0f));
-            this.mediaPages[i7].listView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
-            this.mediaPages[i7].listView.setItemAnimator(itemAnimator);
-            this.mediaPages[i7].listView.setClipToPadding(false);
-            this.mediaPages[i7].listView.setSectionsType(i2);
-            this.mediaPages[i7].listView.setLayoutManager(access$202);
+            this.mediaPages[i8].listView.setFastScrollEnabled(1);
+            this.mediaPages[i8].listView.setScrollingTouchSlop(1);
+            this.mediaPages[i8].listView.setPinnedSectionOffsetY(-AndroidUtilities.dp(2.0f));
+            this.mediaPages[i8].listView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
+            this.mediaPages[i8].listView.setItemAnimator(itemAnimator);
+            this.mediaPages[i8].listView.setClipToPadding(false);
+            this.mediaPages[i8].listView.setSectionsType(i3);
+            this.mediaPages[i8].listView.setLayoutManager(access$202);
             MediaPage[] mediaPageArr3 = this.mediaPages;
-            mediaPageArr3[i7].addView(mediaPageArr3[i7].listView, LayoutHelper.createFrame(-1, -1.0f));
-            RecyclerListView unused4 = this.mediaPages[i7].animationSupportingListView = new RecyclerListView(context2);
-            this.mediaPages[i7].animationSupportingListView.setLayoutManager(this.mediaPages[i7].animationSupportingLayoutManager = new GridLayoutManager(context2, 3) {
+            mediaPageArr3[i8].addView(mediaPageArr3[i8].listView, LayoutHelper.createFrame(-1, -1.0f));
+            RecyclerListView unused4 = this.mediaPages[i8].animationSupportingListView = new RecyclerListView(context2);
+            this.mediaPages[i8].animationSupportingListView.setLayoutManager(this.mediaPages[i8].animationSupportingLayoutManager = new GridLayoutManager(context2, 3) {
                 public boolean supportsPredictiveItemAnimations() {
                     return false;
                 }
@@ -3361,9 +3366,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 }
             });
             MediaPage[] mediaPageArr4 = this.mediaPages;
-            mediaPageArr4[i7].addView(mediaPageArr4[i7].animationSupportingListView, LayoutHelper.createFrame(-1, -1.0f));
-            this.mediaPages[i7].animationSupportingListView.setVisibility(8);
-            this.mediaPages[i7].listView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            mediaPageArr4[i8].addView(mediaPageArr4[i8].animationSupportingListView, LayoutHelper.createFrame(-1, -1.0f));
+            this.mediaPages[i8].animationSupportingListView.setVisibility(8);
+            this.mediaPages[i8].listView.addItemDecoration(new RecyclerView.ItemDecoration() {
                 public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
                     int i = 0;
                     if (r5.listView.getAdapter() == SharedMediaLayout.this.gifAdapter) {
@@ -3387,8 +3392,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     rect.right = 0;
                 }
             });
-            this.mediaPages[i7].listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SharedMediaLayout$$ExternalSyntheticLambda15(this, r5));
-            this.mediaPages[i7].listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            this.mediaPages[i8].listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SharedMediaLayout$$ExternalSyntheticLambda15(this, r5));
+            this.mediaPages[i8].listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                 public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                     boolean unused = SharedMediaLayout.this.scrolling = i != 0;
                 }
@@ -3408,20 +3413,20 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     }
                 }
             });
-            this.mediaPages[i7].listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new SharedMediaLayout$$ExternalSyntheticLambda16(this, r5));
-            if (i7 == 0 && i8 != -1) {
-                access$202.scrollToPositionWithOffset(i8, i9);
+            this.mediaPages[i8].listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new SharedMediaLayout$$ExternalSyntheticLambda16(this, r5));
+            if (i8 == 0 && i9 != -1) {
+                access$202.scrollToPositionWithOffset(i9, i10);
             }
-            final RecyclerListView access$000 = this.mediaPages[i7].listView;
-            ClippingImageView unused5 = this.mediaPages[i7].animatingImageView = new ClippingImageView(this, context2) {
+            final RecyclerListView access$000 = this.mediaPages[i8].listView;
+            ClippingImageView unused5 = this.mediaPages[i8].animatingImageView = new ClippingImageView(this, context2) {
                 public void invalidate() {
                     super.invalidate();
                     access$000.invalidate();
                 }
             };
-            this.mediaPages[i7].animatingImageView.setVisibility(8);
-            this.mediaPages[i7].listView.addOverlayView(this.mediaPages[i7].animatingImageView, LayoutHelper.createFrame(-1, -1.0f));
-            FlickerLoadingView unused6 = this.mediaPages[i7].progressView = new FlickerLoadingView(context2) {
+            this.mediaPages[i8].animatingImageView.setVisibility(8);
+            this.mediaPages[i8].listView.addOverlayView(this.mediaPages[i8].animatingImageView, LayoutHelper.createFrame(-1, -1.0f));
+            FlickerLoadingView unused6 = this.mediaPages[i8].progressView = new FlickerLoadingView(context2) {
                 public int getColumnsCount() {
                     return SharedMediaLayout.this.mediaColumnsCount;
                 }
@@ -3456,28 +3461,28 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     super.onDraw(canvas);
                 }
             };
-            this.mediaPages[i7].progressView.showDate(false);
-            if (i7 != 0) {
-                this.mediaPages[i7].setVisibility(8);
+            this.mediaPages[i8].progressView.showDate(false);
+            if (i8 != 0) {
+                this.mediaPages[i8].setVisibility(8);
             }
             MediaPage[] mediaPageArr5 = this.mediaPages;
-            StickerEmptyView unused7 = mediaPageArr5[i7].emptyView = new StickerEmptyView(context2, mediaPageArr5[i7].progressView, 1);
-            this.mediaPages[i7].emptyView.setVisibility(8);
-            this.mediaPages[i7].emptyView.setAnimateLayoutChange(true);
+            StickerEmptyView unused7 = mediaPageArr5[i8].emptyView = new StickerEmptyView(context2, mediaPageArr5[i8].progressView, 1);
+            this.mediaPages[i8].emptyView.setVisibility(8);
+            this.mediaPages[i8].emptyView.setAnimateLayoutChange(true);
             MediaPage[] mediaPageArr6 = this.mediaPages;
-            mediaPageArr6[i7].addView(mediaPageArr6[i7].emptyView, LayoutHelper.createFrame(-1, -1.0f));
-            this.mediaPages[i7].emptyView.setOnTouchListener(SharedMediaLayout$$ExternalSyntheticLambda4.INSTANCE);
-            this.mediaPages[i7].emptyView.showProgress(true, false);
-            this.mediaPages[i7].emptyView.title.setText(LocaleController.getString("NoResult", NUM));
-            this.mediaPages[i7].emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", NUM));
-            this.mediaPages[i7].emptyView.addView(this.mediaPages[i7].progressView, LayoutHelper.createFrame(-1, -1.0f));
-            this.mediaPages[i7].listView.setEmptyView(this.mediaPages[i7].emptyView);
-            this.mediaPages[i7].listView.setAnimateEmptyView(true, 0);
+            mediaPageArr6[i8].addView(mediaPageArr6[i8].emptyView, LayoutHelper.createFrame(-1, -1.0f));
+            this.mediaPages[i8].emptyView.setOnTouchListener(SharedMediaLayout$$ExternalSyntheticLambda4.INSTANCE);
+            this.mediaPages[i8].emptyView.showProgress(true, false);
+            this.mediaPages[i8].emptyView.title.setText(LocaleController.getString("NoResult", NUM));
+            this.mediaPages[i8].emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", NUM));
+            this.mediaPages[i8].emptyView.addView(this.mediaPages[i8].progressView, LayoutHelper.createFrame(-1, -1.0f));
+            this.mediaPages[i8].listView.setEmptyView(this.mediaPages[i8].emptyView);
+            this.mediaPages[i8].listView.setAnimateEmptyView(true, 0);
             MediaPage[] mediaPageArr7 = this.mediaPages;
-            RecyclerAnimationScrollHelper unused8 = mediaPageArr7[i7].scrollHelper = new RecyclerAnimationScrollHelper(mediaPageArr7[i7].listView, this.mediaPages[i7].layoutManager);
-            i7++;
+            RecyclerAnimationScrollHelper unused8 = mediaPageArr7[i8].scrollHelper = new RecyclerAnimationScrollHelper(mediaPageArr7[i8].listView, this.mediaPages[i8].layoutManager);
+            i8++;
             itemAnimator = null;
-            i2 = 2;
+            i3 = 2;
         }
         ChatActionCell chatActionCell = new ChatActionCell(context2);
         this.floatingDateView = chatActionCell;

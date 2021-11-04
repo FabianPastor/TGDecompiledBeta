@@ -4206,6 +4206,9 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public TLRPC$User getUser(Long l) {
+        if (l.longValue() == 0) {
+            return UserConfig.getInstance(this.currentAccount).getCurrentUser();
+        }
         return this.users.get(l);
     }
 

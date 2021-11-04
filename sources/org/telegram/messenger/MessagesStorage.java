@@ -359,7 +359,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS send_state_idx_scheduled_messages_v2 ON scheduled_messages_v2(mid, send_state, date);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_idx_scheduled_messages_v2 ON scheduled_messages_v2(uid, date);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS reply_to_idx_scheduled_messages_v2 ON scheduled_messages_v2(mid, reply_to_message_id);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE messages_v2(mid INTEGER, uid INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB imp INTEGER, mention INTEGER, forwards INTEGER, replies_data BLOB, thread_reply_id INTEGER, is_channel INTEGER, reply_to_message_id INTEGER, PRIMARY KEY(mid, uid))").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE messages_v2(mid INTEGER, uid INTEGER, read_state INTEGER, send_state INTEGER, date INTEGER, data BLOB, out INTEGER, ttl INTEGER, media INTEGER, replydata BLOB, imp INTEGER, mention INTEGER, forwards INTEGER, replies_data BLOB, thread_reply_id INTEGER, is_channel INTEGER, reply_to_message_id INTEGER, PRIMARY KEY(mid, uid))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_mid_read_out_idx_messages_v2 ON messages_v2(uid, mid, read_state, out);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_date_mid_idx_messages_v2 ON messages_v2(uid, date, mid);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS mid_out_idx_messages_v2 ON messages_v2(mid, out);").stepThis().dispose();
@@ -1513,18 +1513,18 @@ public class MessagesStorage extends BaseController {
                 sQLiteCursor.dispose();
                 executeFast17.dispose();
             }
-            messagesStorage.database.executeFast("DROP TABLE IF EXISTS media_v3;").stepThis().dispose();
             messagesStorage.database.commitTransaction();
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS media_v3;").stepThis().dispose();
             messagesStorage.database.executeFast("PRAGMA user_version = 85").stepThis().dispose();
             i4 = 85;
         }
         if (i4 == 85) {
-            messagesStorage.database.executeFast("ALTER TABLE messages_v2 ADD COLUMN reply_to_message_id INTEGER default 0").stepThis().dispose();
-            messagesStorage.database.executeFast("ALTER TABLE scheduled_messages_v2 ADD COLUMN reply_to_message_id INTEGER default 0").stepThis().dispose();
+            messagesStorage.executeNoException("ALTER TABLE messages_v2 ADD COLUMN reply_to_message_id INTEGER default 0");
+            messagesStorage.executeNoException("ALTER TABLE scheduled_messages_v2 ADD COLUMN reply_to_message_id INTEGER default 0");
             messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS reply_to_idx_messages_v2 ON messages_v2(mid, reply_to_message_id);").stepThis().dispose();
             messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS reply_to_idx_scheduled_messages_v2 ON scheduled_messages_v2(mid, reply_to_message_id);").stepThis().dispose();
-            messagesStorage.database.executeFast("UPDATE messages_v2 SET replydata = NULL").stepThis().dispose();
-            messagesStorage.database.executeFast("UPDATE scheduled_messages_v2 SET replydata = NULL").stepThis().dispose();
+            messagesStorage.executeNoException("UPDATE messages_v2 SET replydata = NULL");
+            messagesStorage.executeNoException("UPDATE scheduled_messages_v2 SET replydata = NULL");
             messagesStorage.database.executeFast("PRAGMA user_version = 86").stepThis().dispose();
         }
         FileLog.d("MessagesStorage db migration finished");
