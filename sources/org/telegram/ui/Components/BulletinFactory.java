@@ -334,12 +334,12 @@ public final class BulletinFactory {
             r10[r5] = r0
             r9.setAnimation(r4, r6, r6, r10)
             android.widget.TextView r10 = r9.titleTextView
-            r0 = 2131627141(0x7f0e0CLASSNAME, float:1.8881538E38)
+            r0 = 2131627142(0x7f0e0CLASSNAME, float:1.888154E38)
             java.lang.String r1 = "PinnedMessagesHidden"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setText(r0)
             android.widget.TextView r10 = r9.subtitleTextView
-            r0 = 2131627142(0x7f0e0CLASSNAME, float:1.888154E38)
+            r0 = 2131627143(0x7f0e0CLASSNAME, float:1.8881542E38)
             java.lang.String r1 = "PinnedMessagesHiddenInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setText(r0)

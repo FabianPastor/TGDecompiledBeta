@@ -45,7 +45,8 @@ import org.telegram.ui.ActionBar.Theme;
 public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public ActionBar actionBar;
-    protected Bundle arguments;
+    /* access modifiers changed from: protected */
+    public Bundle arguments;
     /* access modifiers changed from: protected */
     public int classGuid;
     /* access modifiers changed from: protected */

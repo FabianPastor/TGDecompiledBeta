@@ -3682,35 +3682,37 @@ public class ImageLoader {
         }
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:15:0x002b */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:16:0x0031 */
     @android.annotation.TargetApi(26)
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private static void moveDirectory(java.io.File r1, java.io.File r2) {
         /*
+            boolean r0 = r1.exists()
+            if (r0 == 0) goto L_0x0036
             boolean r0 = r2.exists()
-            if (r0 != 0) goto L_0x000d
+            if (r0 != 0) goto L_0x0013
             boolean r0 = r2.mkdir()
-            if (r0 != 0) goto L_0x000d
-            return
-        L_0x000d:
-            java.nio.file.Path r1 = r1.toPath()     // Catch:{ Exception -> 0x002c }
-            java.util.stream.Stream r1 = java.nio.file.Files.list(r1)     // Catch:{ Exception -> 0x002c }
-            j$.util.stream.Stream r1 = j$.wrappers.C$r8$wrapper$java$util$stream$Stream$VWRP.convert(r1)     // Catch:{ Exception -> 0x002c }
-            org.telegram.messenger.ImageLoader$$ExternalSyntheticLambda13 r0 = new org.telegram.messenger.ImageLoader$$ExternalSyntheticLambda13     // Catch:{ all -> 0x0025 }
-            r0.<init>(r2)     // Catch:{ all -> 0x0025 }
-            r1.forEach(r0)     // Catch:{ all -> 0x0025 }
-            r1.close()     // Catch:{ Exception -> 0x002c }
-            goto L_0x0030
-        L_0x0025:
-            r2 = move-exception
-            if (r1 == 0) goto L_0x002b
-            r1.close()     // Catch:{ all -> 0x002b }
+            if (r0 != 0) goto L_0x0013
+            goto L_0x0036
+        L_0x0013:
+            java.nio.file.Path r1 = r1.toPath()     // Catch:{ Exception -> 0x0032 }
+            java.util.stream.Stream r1 = java.nio.file.Files.list(r1)     // Catch:{ Exception -> 0x0032 }
+            j$.util.stream.Stream r1 = j$.wrappers.C$r8$wrapper$java$util$stream$Stream$VWRP.convert(r1)     // Catch:{ Exception -> 0x0032 }
+            org.telegram.messenger.ImageLoader$$ExternalSyntheticLambda13 r0 = new org.telegram.messenger.ImageLoader$$ExternalSyntheticLambda13     // Catch:{ all -> 0x002b }
+            r0.<init>(r2)     // Catch:{ all -> 0x002b }
+            r1.forEach(r0)     // Catch:{ all -> 0x002b }
+            r1.close()     // Catch:{ Exception -> 0x0032 }
+            goto L_0x0036
         L_0x002b:
-            throw r2     // Catch:{ Exception -> 0x002c }
-        L_0x002c:
+            r2 = move-exception
+            if (r1 == 0) goto L_0x0031
+            r1.close()     // Catch:{ all -> 0x0031 }
+        L_0x0031:
+            throw r2     // Catch:{ Exception -> 0x0032 }
+        L_0x0032:
             r1 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-        L_0x0030:
+        L_0x0036:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.moveDirectory(java.io.File, java.io.File):void");
@@ -3764,73 +3766,77 @@ public class ImageLoader {
                         i++;
                     }
                 }
-                File file2 = new File(externalStorageDirectory, "Telegram");
-                this.telegramPath = file2;
-                file2.mkdirs();
-                if (Build.VERSION.SDK_INT >= 19 && !this.telegramPath.isDirectory()) {
+                int i2 = Build.VERSION.SDK_INT;
+                if (i2 >= 30) {
+                    this.telegramPath = new File(ApplicationLoader.applicationContext.getExternalFilesDir((String) null), "Telegram");
+                } else {
+                    this.telegramPath = new File(externalStorageDirectory, "Telegram");
+                }
+                this.telegramPath.mkdirs();
+                if (i2 >= 19 && !this.telegramPath.isDirectory()) {
                     ArrayList<File> dataDirs = AndroidUtilities.getDataDirs();
                     int size2 = dataDirs.size();
-                    int i2 = 0;
+                    int i3 = 0;
                     while (true) {
-                        if (i2 >= size2) {
+                        if (i3 >= size2) {
                             break;
                         }
-                        File file3 = dataDirs.get(i2);
-                        if (file3.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
-                            File file4 = new File(file3, "Telegram");
-                            this.telegramPath = file4;
-                            file4.mkdirs();
+                        File file2 = dataDirs.get(i3);
+                        if (file2.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
+                            File file3 = new File(file2, "Telegram");
+                            this.telegramPath = file3;
+                            file3.mkdirs();
                             break;
                         }
-                        i2++;
+                        i3++;
                     }
                 }
                 if (this.telegramPath.isDirectory()) {
                     try {
-                        File file5 = new File(this.telegramPath, "Telegram Images");
-                        file5.mkdir();
-                        if (file5.isDirectory() && canMoveFiles(cacheDir, file5, 0)) {
-                            sparseArray.put(0, file5);
+                        File file4 = new File(this.telegramPath, "Telegram Images");
+                        file4.mkdir();
+                        if (file4.isDirectory() && canMoveFiles(cacheDir, file4, 0)) {
+                            sparseArray.put(0, file4);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("image path = " + file5);
+                                FileLog.d("image path = " + file4);
                             }
                         }
                     } catch (Exception e2) {
                         FileLog.e((Throwable) e2);
                     }
                     try {
-                        File file6 = new File(this.telegramPath, "Telegram Video");
-                        file6.mkdir();
-                        if (file6.isDirectory() && canMoveFiles(cacheDir, file6, 2)) {
-                            sparseArray.put(2, file6);
+                        File file5 = new File(this.telegramPath, "Telegram Video");
+                        file5.mkdir();
+                        if (file5.isDirectory() && canMoveFiles(cacheDir, file5, 2)) {
+                            sparseArray.put(2, file5);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("video path = " + file6);
+                                FileLog.d("video path = " + file5);
                             }
                         }
                     } catch (Exception e3) {
                         FileLog.e((Throwable) e3);
                     }
                     try {
-                        File file7 = new File(this.telegramPath, "Telegram Audio");
-                        file7.mkdir();
-                        if (file7.isDirectory() && canMoveFiles(cacheDir, file7, 1)) {
-                            AndroidUtilities.createEmptyFile(new File(file7, ".nomedia"));
-                            sparseArray.put(1, file7);
+                        File file6 = new File(this.telegramPath, "Telegram Audio");
+                        file6.mkdir();
+                        if (file6.isDirectory() && canMoveFiles(cacheDir, file6, 1)) {
+                            AndroidUtilities.createEmptyFile(new File(file6, ".nomedia"));
+                            sparseArray.put(1, file6);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("audio path = " + file7);
+                                FileLog.d("audio path = " + file6);
                             }
                         }
                     } catch (Exception e4) {
                         FileLog.e((Throwable) e4);
                     }
                     try {
-                        File file8 = new File(this.telegramPath, "Telegram Documents");
-                        file8.mkdir();
-                        if (file8.isDirectory() && canMoveFiles(cacheDir, file8, 3)) {
-                            AndroidUtilities.createEmptyFile(new File(file8, ".nomedia"));
-                            sparseArray.put(3, file8);
+                        File file7 = new File(this.telegramPath, "Telegram Documents");
+                        file7.mkdir();
+                        if (file7.isDirectory() && canMoveFiles(cacheDir, file7, 3)) {
+                            AndroidUtilities.createEmptyFile(new File(file7, ".nomedia"));
+                            sparseArray.put(3, file7);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("documents path = " + file8);
+                                FileLog.d("documents path = " + file7);
                             }
                         }
                     } catch (Exception e5) {

@@ -26150,4 +26150,11 @@ public class MessagesController extends BaseController implements NotificationCe
         SharedPreferences.Editor edit = this.mainPreferences.edit();
         edit.putInt("chatPendingRequests" + j, i).apply();
     }
+
+    public void markSponsoredAsRead(long j, MessageObject messageObject) {
+        ArrayList<MessageObject> sponsoredMessages2 = getSponsoredMessages(j);
+        if (sponsoredMessages2 != null) {
+            sponsoredMessages2.remove(messageObject);
+        }
+    }
 }

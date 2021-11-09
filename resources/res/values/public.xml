@@ -4399,6 +4399,7 @@
     <public type="string" name="OpenBot" id="NUM" />
     <public type="string" name="OpenChannel" id="NUM" />
     <public type="string" name="OpenChannel2" id="NUM" />
+    <public type="string" name="OpenChannelPost" id="NUM" />
     <public type="string" name="OpenFile" id="NUM" />
     <public type="string" name="OpenGroup" id="NUM" />
     <public type="string" name="OpenGroup2" id="NUM" />
@@ -6355,27 +6356,6 @@
     <public type="string" name="YourPasswordSuccessText" id="NUM" />
     <public type="string" name="YourPhone" id="NUM" />
     <public type="string" name="ZoomOut" id="NUM" />
-    <public type="string" name="appcenter_distribute_dialog_actioned_on_disabled_toast" id="NUM" />
-    <public type="string" name="appcenter_distribute_download_progress_number_format" id="NUM" />
-    <public type="string" name="appcenter_distribute_downloading_error" id="NUM" />
-    <public type="string" name="appcenter_distribute_downloading_mandatory_update" id="NUM" />
-    <public type="string" name="appcenter_distribute_downloading_update" id="NUM" />
-    <public type="string" name="appcenter_distribute_install" id="NUM" />
-    <public type="string" name="appcenter_distribute_install_ready_message" id="NUM" />
-    <public type="string" name="appcenter_distribute_install_ready_title" id="NUM" />
-    <public type="string" name="appcenter_distribute_notification_category" id="NUM" />
-    <public type="string" name="appcenter_distribute_unknown_sources_dialog_message" id="NUM" />
-    <public type="string" name="appcenter_distribute_unknown_sources_dialog_settings" id="NUM" />
-    <public type="string" name="appcenter_distribute_update_dialog_download" id="NUM" />
-    <public type="string" name="appcenter_distribute_update_dialog_message_mandatory" id="NUM" />
-    <public type="string" name="appcenter_distribute_update_dialog_message_optional" id="NUM" />
-    <public type="string" name="appcenter_distribute_update_dialog_postpone" id="NUM" />
-    <public type="string" name="appcenter_distribute_update_dialog_title" id="NUM" />
-    <public type="string" name="appcenter_distribute_update_dialog_view_release_notes" id="NUM" />
-    <public type="string" name="appcenter_distribute_update_failed_dialog_ignore" id="NUM" />
-    <public type="string" name="appcenter_distribute_update_failed_dialog_message" id="NUM" />
-    <public type="string" name="appcenter_distribute_update_failed_dialog_reinstall" id="NUM" />
-    <public type="string" name="appcenter_distribute_update_failed_dialog_title" id="NUM" />
     <public type="string" name="chatDate" id="NUM" />
     <public type="string" name="chatFullDate" id="NUM" />
     <public type="string" name="common_google_play_services_enable_button" id="NUM" />

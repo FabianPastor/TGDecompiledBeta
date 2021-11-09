@@ -74,9 +74,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import com.android.internal.telephony.ITelephony;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.crashes.Crashes;
-import com.microsoft.appcenter.distribute.Distribute;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -84,6 +81,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -180,6 +178,9 @@ public class AndroidUtilities {
     private static boolean waitingForCall = false;
     private static boolean waitingForSms = false;
 
+    public static void checkForUpdates() {
+    }
+
     public static int compare(int i, int i2) {
         if (i == i2) {
             return 0;
@@ -223,6 +224,9 @@ public class AndroidUtilities {
 
     public static int setPeerLayerVersion(int i, int i2) {
         return (i & 65535) | (i2 << 16);
+    }
+
+    public static void startAppCenter(Activity activity) {
     }
 
     static {
@@ -1186,27 +1190,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131627089(0x7f0e0CLASSNAME, float:1.8881433E38)
+                r0 = 2131627090(0x7f0e0CLASSNAME, float:1.8881435E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131627090(0x7f0e0CLASSNAME, float:1.8881435E38)
+                r0 = 2131627091(0x7f0e0CLASSNAME, float:1.8881437E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131627081(0x7f0e0CLASSNAME, float:1.8881416E38)
+                r0 = 2131627082(0x7f0e0c4a, float:1.8881418E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131627080(0x7f0e0CLASSNAME, float:1.8881414E38)
+                r0 = 2131627081(0x7f0e0CLASSNAME, float:1.8881416E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131627082(0x7f0e0c4a, float:1.8881418E38)
+                r0 = 2131627083(0x7f0e0c4b, float:1.888142E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -2669,29 +2673,6 @@ public class AndroidUtilities {
         }
     }
 
-    public static void startAppCenter(Activity activity) {
-        try {
-            if (BuildVars.DEBUG_VERSION) {
-                Distribute.setEnabledForDebuggableBuild(true);
-                AppCenter.start(activity.getApplication(), BuildVars.DEBUG_VERSION ? BuildVars.APPCENTER_HASH_DEBUG : BuildVars.APPCENTER_HASH, Distribute.class, Crashes.class);
-                AppCenter.setUserId("uid=" + UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
-            }
-        } catch (Throwable th) {
-            FileLog.e(th);
-        }
-    }
-
-    public static void checkForUpdates() {
-        try {
-            if (BuildVars.DEBUG_VERSION && SystemClock.elapsedRealtime() - lastUpdateCheckTime >= 3600000) {
-                lastUpdateCheckTime = SystemClock.elapsedRealtime();
-                Distribute.checkForUpdate();
-            }
-        } catch (Throwable th) {
-            FileLog.e(th);
-        }
-    }
-
     public static void addToClipboard(CharSequence charSequence) {
         try {
             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", charSequence));
@@ -2702,15 +2683,16 @@ public class AndroidUtilities {
 
     public static void addMediaToGallery(String str) {
         if (str != null) {
-            addMediaToGallery(Uri.fromFile(new File(str)));
+            addMediaToGallery(new File(str));
         }
     }
 
-    public static void addMediaToGallery(Uri uri) {
-        if (uri != null) {
+    public static void addMediaToGallery(File file) {
+        Uri fromFile = Uri.fromFile(file);
+        if (fromFile != null) {
             try {
                 Intent intent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
-                intent.setData(uri);
+                intent.setData(fromFile);
                 ApplicationLoader.applicationContext.sendBroadcast(intent);
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
@@ -2719,8 +2701,8 @@ public class AndroidUtilities {
     }
 
     private static File getAlbumDir(boolean z) {
-        if (z || (Build.VERSION.SDK_INT >= 23 && ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0)) {
-            return FileLoader.getDirectory(4);
+        if (z || !BuildVars.NO_SCOPED_STORAGE || (Build.VERSION.SDK_INT >= 23 && ApplicationLoader.applicationContext.checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0)) {
+            return FileLoader.getDirectory(0);
         }
         if ("mounted".equals(Environment.getExternalStorageState())) {
             File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Telegram");
@@ -2864,10 +2846,18 @@ public class AndroidUtilities {
 
     public static File generatePicturePath(boolean z, String str) {
         try {
-            File albumDir = getAlbumDir(z);
-            Date date = new Date();
-            date.setTime(System.currentTimeMillis() + ((long) Utilities.random.nextInt(1000)) + 1);
-            String format = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
+            return new File(ApplicationLoader.applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), generateFileName(0, str));
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+            return null;
+        }
+    }
+
+    public static String generateFileName(int i, String str) {
+        Date date = new Date();
+        date.setTime(System.currentTimeMillis() + ((long) Utilities.random.nextInt(1000)) + 1);
+        String format = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
+        if (i == 0) {
             StringBuilder sb = new StringBuilder();
             sb.append("IMG_");
             sb.append(format);
@@ -2876,11 +2866,9 @@ public class AndroidUtilities {
                 str = "jpg";
             }
             sb.append(str);
-            return new File(albumDir, sb.toString());
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-            return null;
+            return sb.toString();
         }
+        return "VID_" + format + ".mp4";
     }
 
     public static CharSequence generateSearchName(String str, String str2, String str3) {
@@ -3171,15 +3159,18 @@ public class AndroidUtilities {
     }
 
     public static boolean copyFile(InputStream inputStream, File file) throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        return copyFile(inputStream, (OutputStream) new FileOutputStream(file));
+    }
+
+    public static boolean copyFile(InputStream inputStream, OutputStream outputStream) throws IOException {
         byte[] bArr = new byte[4096];
         while (true) {
             int read = inputStream.read(bArr);
             if (read > 0) {
                 Thread.yield();
-                fileOutputStream.write(bArr, 0, read);
+                outputStream.write(bArr, 0, read);
             } else {
-                fileOutputStream.close();
+                outputStream.close();
                 return true;
             }
         }
@@ -3478,7 +3469,7 @@ public class AndroidUtilities {
             java.lang.String r8 = "ApkRestricted"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setMessage(r7)
-            r7 = 2131627074(0x7f0e0CLASSNAME, float:1.8881402E38)
+            r7 = 2131627075(0x7f0e0CLASSNAME, float:1.8881404E38)
             java.lang.String r8 = "PermissionOpenSettings"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.messenger.AndroidUtilities$$ExternalSyntheticLambda0 r8 = new org.telegram.messenger.AndroidUtilities$$ExternalSyntheticLambda0

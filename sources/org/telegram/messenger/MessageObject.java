@@ -2552,7 +2552,7 @@ public class MessageObject {
         L_0x04e7:
             r24 = r14
             java.lang.StringBuilder r5 = new java.lang.StringBuilder
-            r3 = 2131628228(0x7f0e10c4, float:1.8883743E38)
+            r3 = 2131628229(0x7f0e10c5, float:1.8883745E38)
             java.lang.String r8 = "UserRestrictionsUntilForever"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r3)
             r5.<init>(r3)
@@ -6402,7 +6402,7 @@ public class MessageObject {
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
             if (r2 == 0) goto L_0x07ae
-            r2 = 2131628715(0x7f0e12ab, float:1.888473E38)
+            r2 = 2131628695(0x7f0e1297, float:1.888469E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -6568,7 +6568,7 @@ public class MessageObject {
         L_0x08eb:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
             if (r11 == 0) goto L_0x08ff
-            r0 = 2131628637(0x7f0e125d, float:1.8884572E38)
+            r0 = 2131628638(0x7f0e125e, float:1.8884574E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"
@@ -7022,19 +7022,19 @@ public class MessageObject {
             int r2 = r6.currentAccount
             boolean r0 = org.telegram.messenger.ChatObject.isChannelAndNotMegaGroup(r0, r2)
             if (r0 == 0) goto L_0x0cb9
-            r0 = 2131627450(0x7f0e0dba, float:1.8882165E38)
+            r0 = 2131627451(0x7f0e0dbb, float:1.8882167E38)
             java.lang.String r1 = "RequestToJoinChannelApproved"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0cc2
         L_0x0cb9:
-            r0 = 2131627454(0x7f0e0dbe, float:1.8882173E38)
+            r0 = 2131627455(0x7f0e0dbf, float:1.8882175E38)
             java.lang.String r1 = "RequestToJoinGroupApproved"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x0cc2:
             r6.messageText = r0
             goto L_0x0f0f
         L_0x0cc6:
-            r0 = 2131628190(0x7f0e109e, float:1.8883666E38)
+            r0 = 2131628191(0x7f0e109f, float:1.8883668E38)
             java.lang.String r1 = "UserAcceptedToGroupAction"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
@@ -7077,13 +7077,13 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$Poll r0 = r1.poll
             boolean r0 = r0.quiz
             if (r0 == 0) goto L_0x0d31
-            r0 = 2131627344(0x7f0e0d50, float:1.888195E38)
+            r0 = 2131627345(0x7f0e0d51, float:1.8881952E38)
             java.lang.String r1 = "QuizPoll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0f0f
         L_0x0d31:
-            r0 = 2131627163(0x7f0e0c9b, float:1.8881583E38)
+            r0 = 2131627164(0x7f0e0c9c, float:1.8881585E38)
             java.lang.String r1 = "Poll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -7186,7 +7186,7 @@ public class MessageObject {
         L_0x0e06:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaUnsupported
             if (r0 == 0) goto L_0x0e17
-            r0 = 2131628148(0x7f0e1074, float:1.888358E38)
+            r0 = 2131628149(0x7f0e1075, float:1.8883583E38)
             java.lang.String r1 = "UnsupportedMedia"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0

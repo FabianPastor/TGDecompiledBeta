@@ -343,148 +343,157 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         updateEmptyView();
     }
 
-    /* JADX WARNING: type inference failed for: r3v2, types: [org.telegram.ui.ActionBar.BaseFragment] */
+    /* JADX WARNING: type inference failed for: r1v15, types: [org.telegram.ui.ActionBar.BaseFragment] */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$new$1(android.view.View r13, int r14) {
+    public /* synthetic */ void lambda$new$1(android.view.View r14, int r15) {
         /*
-            r12 = this;
-            org.telegram.ui.Components.RecyclerListView r0 = r12.listView
+            r13 = this;
+            org.telegram.ui.Components.RecyclerListView r0 = r13.listView
             androidx.recyclerview.widget.RecyclerView$Adapter r0 = r0.getAdapter()
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListAdapter r1 = r12.listAdapter
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListAdapter r1 = r13.listAdapter
             if (r0 != r1) goto L_0x000f
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r14 = r1.getItem(r14)
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r15 = r1.getItem(r15)
             goto L_0x0015
         L_0x000f:
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$SearchAdapter r0 = r12.searchAdapter
-            java.lang.Object r14 = r0.getItem(r14)
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$SearchAdapter r0 = r13.searchAdapter
+            java.lang.Object r15 = r0.getItem(r15)
         L_0x0015:
-            boolean r0 = r14 instanceof org.telegram.ui.Components.ChatAttachAlertDocumentLayout.ListItem
-            if (r0 == 0) goto L_0x0107
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r14 = (org.telegram.ui.Components.ChatAttachAlertDocumentLayout.ListItem) r14
-            java.io.File r0 = r14.file
+            boolean r0 = r15 instanceof org.telegram.ui.Components.ChatAttachAlertDocumentLayout.ListItem
+            if (r0 == 0) goto L_0x0115
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r15 = (org.telegram.ui.Components.ChatAttachAlertDocumentLayout.ListItem) r15
+            java.io.File r0 = r15.file
+            int r1 = android.os.Build.VERSION.SDK_INT
+            r2 = 30
+            r3 = 0
+            if (r1 < r2) goto L_0x0029
+            boolean r1 = android.os.Environment.isExternalStorageManager()
+            goto L_0x002a
+        L_0x0029:
             r1 = 0
+        L_0x002a:
             r2 = 0
-            if (r0 != 0) goto L_0x00bb
-            int r13 = r14.icon
-            r14 = 2131165405(0x7var_dd, float:1.7945026E38)
+            if (r0 != 0) goto L_0x00c9
+            int r14 = r15.icon
+            r15 = 2131165405(0x7var_dd, float:1.7945026E38)
             r0 = 1
-            if (r13 != r14) goto L_0x006f
-            java.util.HashMap r13 = new java.util.HashMap
-            r13.<init>()
-            java.util.ArrayList r14 = new java.util.ArrayList
+            if (r14 != r15) goto L_0x007b
+            java.util.HashMap r14 = new java.util.HashMap
             r14.<init>()
-            org.telegram.ui.Components.ChatAttachAlert r3 = r12.parentAlert
-            org.telegram.ui.ActionBar.BaseFragment r3 = r3.baseFragment
-            boolean r4 = r3 instanceof org.telegram.ui.ChatActivity
-            if (r4 == 0) goto L_0x003e
-            r1 = r3
-            org.telegram.ui.ChatActivity r1 = (org.telegram.ui.ChatActivity) r1
-        L_0x003e:
-            r10 = r1
-            org.telegram.ui.PhotoPickerActivity r1 = new org.telegram.ui.PhotoPickerActivity
-            r4 = 0
-            org.telegram.messenger.MediaController$AlbumEntry r5 = org.telegram.messenger.MediaController.allMediaAlbumEntry
-            r8 = 0
-            if (r10 == 0) goto L_0x0049
-            r9 = 1
-            goto L_0x004a
-        L_0x0049:
-            r9 = 0
+            java.util.ArrayList r15 = new java.util.ArrayList
+            r15.<init>()
+            org.telegram.ui.Components.ChatAttachAlert r1 = r13.parentAlert
+            org.telegram.ui.ActionBar.BaseFragment r1 = r1.baseFragment
+            boolean r4 = r1 instanceof org.telegram.ui.ChatActivity
+            if (r4 == 0) goto L_0x004a
+            r2 = r1
+            org.telegram.ui.ChatActivity r2 = (org.telegram.ui.ChatActivity) r2
         L_0x004a:
-            r11 = 0
-            r3 = r1
-            r6 = r13
+            r11 = r2
+            org.telegram.ui.PhotoPickerActivity r1 = new org.telegram.ui.PhotoPickerActivity
+            r5 = 0
+            org.telegram.messenger.MediaController$AlbumEntry r6 = org.telegram.messenger.MediaController.allMediaAlbumEntry
+            r9 = 0
+            if (r11 == 0) goto L_0x0055
+            r10 = 1
+            goto L_0x0056
+        L_0x0055:
+            r10 = 0
+        L_0x0056:
+            r12 = 0
+            r4 = r1
             r7 = r14
-            r3.<init>(r4, r5, r6, r7, r8, r9, r10, r11)
+            r8 = r15
+            r4.<init>(r5, r6, r7, r8, r9, r10, r11, r12)
             r1.setDocumentsPicker(r0)
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$6 r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$6
-            r0.<init>(r13, r14)
+            r0.<init>(r14, r15)
             r1.setDelegate(r0)
-            int r13 = r12.maxSelectedFiles
-            r1.setMaxSelectedPhotos(r13, r2)
-            org.telegram.ui.Components.ChatAttachAlert r13 = r12.parentAlert
-            org.telegram.ui.ActionBar.BaseFragment r13 = r13.baseFragment
-            r13.presentFragment(r1)
-            org.telegram.ui.Components.ChatAttachAlert r13 = r12.parentAlert
-            r13.dismiss()
-            goto L_0x010a
-        L_0x006f:
-            r14 = 2131165407(0x7var_df, float:1.794503E38)
-            if (r13 != r14) goto L_0x007d
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$DocumentSelectActivityDelegate r13 = r12.delegate
-            if (r13 == 0) goto L_0x010a
-            r13.startMusicSelectActivity()
-            goto L_0x010a
-        L_0x007d:
-            boolean r14 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
-            if (r14 != 0) goto L_0x008d
-            r14 = 2131165408(0x7var_e0, float:1.7945032E38)
-            if (r13 != r14) goto L_0x008d
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$DocumentSelectActivityDelegate r13 = r12.delegate
-            r13.startDocumentSelectActivity()
-            goto L_0x010a
-        L_0x008d:
-            int r13 = r12.getTopForScroll()
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r14 = r12.history
-            int r1 = r14.size()
+            int r14 = r13.maxSelectedFiles
+            r1.setMaxSelectedPhotos(r14, r3)
+            org.telegram.ui.Components.ChatAttachAlert r14 = r13.parentAlert
+            org.telegram.ui.ActionBar.BaseFragment r14 = r14.baseFragment
+            r14.presentFragment(r1)
+            org.telegram.ui.Components.ChatAttachAlert r14 = r13.parentAlert
+            r14.dismiss()
+            goto L_0x0118
+        L_0x007b:
+            r15 = 2131165407(0x7var_df, float:1.794503E38)
+            if (r14 != r15) goto L_0x0089
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$DocumentSelectActivityDelegate r14 = r13.delegate
+            if (r14 == 0) goto L_0x0118
+            r14.startMusicSelectActivity()
+            goto L_0x0118
+        L_0x0089:
+            boolean r15 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
+            if (r15 != 0) goto L_0x009b
+            r15 = 2131165408(0x7var_e0, float:1.7945032E38)
+            if (r14 != r15) goto L_0x009b
+            if (r1 != 0) goto L_0x009b
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$DocumentSelectActivityDelegate r14 = r13.delegate
+            r14.startDocumentSelectActivity()
+            goto L_0x0118
+        L_0x009b:
+            int r14 = r13.getTopForScroll()
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r15 = r13.history
+            int r1 = r15.size()
             int r1 = r1 - r0
-            java.lang.Object r14 = r14.remove(r1)
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry r14 = (org.telegram.ui.Components.ChatAttachAlertDocumentLayout.HistoryEntry) r14
-            org.telegram.ui.Components.ChatAttachAlert r0 = r12.parentAlert
+            java.lang.Object r15 = r15.remove(r1)
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry r15 = (org.telegram.ui.Components.ChatAttachAlertDocumentLayout.HistoryEntry) r15
+            org.telegram.ui.Components.ChatAttachAlert r0 = r13.parentAlert
             org.telegram.ui.ActionBar.ActionBar r0 = r0.actionBar
-            java.lang.String r1 = r14.title
+            java.lang.String r1 = r15.title
             r0.setTitle(r1)
-            java.io.File r14 = r14.dir
-            if (r14 == 0) goto L_0x00af
-            r12.listFiles(r14)
-            goto L_0x00b2
-        L_0x00af:
-            r12.listRoots()
-        L_0x00b2:
-            r12.updateSearchButton()
-            androidx.recyclerview.widget.LinearLayoutManager r14 = r12.layoutManager
-            r14.scrollToPositionWithOffset(r2, r13)
-            goto L_0x010a
-        L_0x00bb:
-            boolean r3 = r0.isDirectory()
-            if (r3 == 0) goto L_0x0103
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry r13 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry
-            r13.<init>()
-            org.telegram.ui.Components.RecyclerListView r1 = r12.listView
-            android.view.View r1 = r1.getChildAt(r2)
-            org.telegram.ui.Components.RecyclerListView r2 = r12.listView
+            java.io.File r15 = r15.dir
+            if (r15 == 0) goto L_0x00bd
+            r13.listFiles(r15)
+            goto L_0x00c0
+        L_0x00bd:
+            r13.listRoots()
+        L_0x00c0:
+            r13.updateSearchButton()
+            androidx.recyclerview.widget.LinearLayoutManager r15 = r13.layoutManager
+            r15.scrollToPositionWithOffset(r3, r14)
+            goto L_0x0118
+        L_0x00c9:
+            boolean r1 = r0.isDirectory()
+            if (r1 == 0) goto L_0x0111
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry r14 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry
+            r14.<init>()
+            org.telegram.ui.Components.RecyclerListView r1 = r13.listView
+            android.view.View r1 = r1.getChildAt(r3)
+            org.telegram.ui.Components.RecyclerListView r2 = r13.listView
             androidx.recyclerview.widget.RecyclerView$ViewHolder r2 = r2.findContainingViewHolder(r1)
-            if (r2 == 0) goto L_0x010a
+            if (r2 == 0) goto L_0x0118
             r2.getAdapterPosition()
             r1.getTop()
-            java.io.File r1 = r12.currentDir
-            r13.dir = r1
-            org.telegram.ui.Components.ChatAttachAlert r1 = r12.parentAlert
+            java.io.File r1 = r13.currentDir
+            r14.dir = r1
+            org.telegram.ui.Components.ChatAttachAlert r1 = r13.parentAlert
             org.telegram.ui.ActionBar.ActionBar r1 = r1.actionBar
             java.lang.String r1 = r1.getTitle()
-            r13.title = r1
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r1 = r12.history
-            r1.add(r13)
-            boolean r0 = r12.listFiles(r0)
-            if (r0 != 0) goto L_0x00f9
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r14 = r12.history
-            r14.remove(r13)
+            r14.title = r1
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r1 = r13.history
+            r1.add(r14)
+            boolean r0 = r13.listFiles(r0)
+            if (r0 != 0) goto L_0x0107
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r15 = r13.history
+            r15.remove(r14)
             return
-        L_0x00f9:
-            org.telegram.ui.Components.ChatAttachAlert r13 = r12.parentAlert
-            org.telegram.ui.ActionBar.ActionBar r13 = r13.actionBar
-            java.lang.String r14 = r14.title
-            r13.setTitle(r14)
-            goto L_0x010a
-        L_0x0103:
-            r12.onItemClick(r13, r14)
-            goto L_0x010a
         L_0x0107:
-            r12.onItemClick(r13, r14)
-        L_0x010a:
+            org.telegram.ui.Components.ChatAttachAlert r14 = r13.parentAlert
+            org.telegram.ui.ActionBar.ActionBar r14 = r14.actionBar
+            java.lang.String r15 = r15.title
+            r14.setTitle(r15)
+            goto L_0x0118
+        L_0x0111:
+            r13.onItemClick(r14, r15)
+            goto L_0x0118
+        L_0x0115:
+            r13.onItemClick(r14, r15)
+        L_0x0118:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.lambda$new$1(android.view.View, int):void");
@@ -1041,10 +1050,10 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x01b1 A[Catch:{ Exception -> 0x01d0 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x01ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x022f  */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x0243 A[SYNTHETIC, Splitter:B:87:0x0243] */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x01bf A[Catch:{ Exception -> 0x01de }] */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x020d  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x023d  */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x0251 A[SYNTHETIC, Splitter:B:91:0x0251] */
     @android.annotation.SuppressLint({"NewApi"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void listRoots() {
@@ -1056,209 +1065,216 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r1.currentDir = r3
             r0 = 0
             r1.hasFiles = r0
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r0 = r1.items
-            r0.clear()
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r4 = r1.items
+            r4.clear()
             java.util.HashSet r4 = new java.util.HashSet
             r4.<init>()
-            boolean r0 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
-            r5 = 2131625950(0x7f0e07de, float:1.8879122E38)
-            java.lang.String r6 = "InternalFolderInfo"
-            r7 = 2131165408(0x7var_e0, float:1.7945032E38)
-            r8 = 2131625951(0x7f0e07df, float:1.8879124E38)
-            java.lang.String r9 = "InternalStorage"
-            if (r0 != 0) goto L_0x003f
+            int r5 = android.os.Build.VERSION.SDK_INT
+            r6 = 30
+            if (r5 < r6) goto L_0x001e
+            boolean r0 = android.os.Environment.isExternalStorageManager()
+        L_0x001e:
+            boolean r5 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
+            r6 = 2131625950(0x7f0e07de, float:1.8879122E38)
+            java.lang.String r7 = "InternalFolderInfo"
+            r8 = 2131165408(0x7var_e0, float:1.7945032E38)
+            r9 = 2131625951(0x7f0e07df, float:1.8879124E38)
+            java.lang.String r10 = "InternalStorage"
+            if (r5 != 0) goto L_0x004b
+            if (r0 != 0) goto L_0x004b
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
             r0.<init>()
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r8)
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.title = r4
-            r0.icon = r7
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r5)
+            r0.icon = r8
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r0.subtitle = r4
             java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r4 = r1.items
             r4.add(r0)
-            goto L_0x01a2
-        L_0x003f:
+            goto L_0x01ae
+        L_0x004b:
             java.io.File r0 = android.os.Environment.getExternalStorageDirectory()
             java.lang.String r0 = r0.getPath()
-            java.lang.String r10 = android.os.Environment.getExternalStorageState()
+            java.lang.String r5 = android.os.Environment.getExternalStorageState()
             java.lang.String r11 = "mounted"
-            boolean r11 = r10.equals(r11)
+            boolean r11 = r5.equals(r11)
             r12 = 2131625538(0x7f0e0642, float:1.8878287E38)
             java.lang.String r13 = "ExternalFolderInfo"
             r14 = 2131165406(0x7var_de, float:1.7945028E38)
-            r15 = 2131627547(0x7f0e0e1b, float:1.8882362E38)
-            java.lang.String r5 = "SdCard"
-            if (r11 != 0) goto L_0x0068
+            r15 = 2131627548(0x7f0e0e1c, float:1.8882364E38)
+            java.lang.String r6 = "SdCard"
+            if (r11 != 0) goto L_0x0074
             java.lang.String r11 = "mounted_ro"
-            boolean r10 = r10.equals(r11)
-            if (r10 == 0) goto L_0x00a1
-        L_0x0068:
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r10 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
-            r10.<init>()
+            boolean r5 = r5.equals(r11)
+            if (r5 == 0) goto L_0x00ad
+        L_0x0074:
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r5 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
+            r5.<init>()
             boolean r11 = android.os.Environment.isExternalStorageRemovable()
-            if (r11 == 0) goto L_0x0082
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r5, r15)
-            r10.title = r6
-            r10.icon = r14
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r13, r12)
-            r10.subtitle = r6
-            goto L_0x0093
-        L_0x0082:
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
-            r10.title = r8
-            r10.icon = r7
-            r7 = 2131625950(0x7f0e07de, float:1.8879122E38)
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)
-            r10.subtitle = r6
-        L_0x0093:
-            java.io.File r6 = android.os.Environment.getExternalStorageDirectory()
-            r10.file = r6
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r6 = r1.items
-            r6.add(r10)
+            if (r11 == 0) goto L_0x008e
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r6, r15)
+            r5.title = r7
+            r5.icon = r14
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r13, r12)
+            r5.subtitle = r7
+            goto L_0x009f
+        L_0x008e:
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            r5.title = r9
+            r5.icon = r8
+            r8 = 2131625950(0x7f0e07de, float:1.8879122E38)
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)
+            r5.subtitle = r7
+        L_0x009f:
+            java.io.File r7 = android.os.Environment.getExternalStorageDirectory()
+            r5.file = r7
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r7 = r1.items
+            r7.add(r5)
             r4.add(r0)
-        L_0x00a1:
-            java.io.BufferedReader r6 = new java.io.BufferedReader     // Catch:{ Exception -> 0x0192, all -> 0x018e }
-            java.io.FileReader r0 = new java.io.FileReader     // Catch:{ Exception -> 0x0192, all -> 0x018e }
-            java.lang.String r7 = "/proc/mounts"
-            r0.<init>(r7)     // Catch:{ Exception -> 0x0192, all -> 0x018e }
-            r6.<init>(r0)     // Catch:{ Exception -> 0x0192, all -> 0x018e }
         L_0x00ad:
-            java.lang.String r0 = r6.readLine()     // Catch:{ Exception -> 0x018c }
-            if (r0 == 0) goto L_0x0188
+            java.io.BufferedReader r5 = new java.io.BufferedReader     // Catch:{ Exception -> 0x019e, all -> 0x019a }
+            java.io.FileReader r0 = new java.io.FileReader     // Catch:{ Exception -> 0x019e, all -> 0x019a }
+            java.lang.String r7 = "/proc/mounts"
+            r0.<init>(r7)     // Catch:{ Exception -> 0x019e, all -> 0x019a }
+            r5.<init>(r0)     // Catch:{ Exception -> 0x019e, all -> 0x019a }
+        L_0x00b9:
+            java.lang.String r0 = r5.readLine()     // Catch:{ Exception -> 0x0198 }
+            if (r0 == 0) goto L_0x0194
             java.lang.String r7 = "vfat"
-            boolean r7 = r0.contains(r7)     // Catch:{ Exception -> 0x018c }
-            if (r7 != 0) goto L_0x00c3
+            boolean r7 = r0.contains(r7)     // Catch:{ Exception -> 0x0198 }
+            if (r7 != 0) goto L_0x00cf
             java.lang.String r7 = "/mnt"
-            boolean r7 = r0.contains(r7)     // Catch:{ Exception -> 0x018c }
-            if (r7 == 0) goto L_0x00ad
-        L_0x00c3:
-            boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x018c }
-            if (r7 == 0) goto L_0x00ca
-            org.telegram.messenger.FileLog.d(r0)     // Catch:{ Exception -> 0x018c }
-        L_0x00ca:
-            java.util.StringTokenizer r7 = new java.util.StringTokenizer     // Catch:{ Exception -> 0x018c }
+            boolean r7 = r0.contains(r7)     // Catch:{ Exception -> 0x0198 }
+            if (r7 == 0) goto L_0x00b9
+        L_0x00cf:
+            boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0198 }
+            if (r7 == 0) goto L_0x00d6
+            org.telegram.messenger.FileLog.d(r0)     // Catch:{ Exception -> 0x0198 }
+        L_0x00d6:
+            java.util.StringTokenizer r7 = new java.util.StringTokenizer     // Catch:{ Exception -> 0x0198 }
             java.lang.String r8 = " "
-            r7.<init>(r0, r8)     // Catch:{ Exception -> 0x018c }
-            r7.nextToken()     // Catch:{ Exception -> 0x018c }
-            java.lang.String r7 = r7.nextToken()     // Catch:{ Exception -> 0x018c }
-            boolean r8 = r4.contains(r7)     // Catch:{ Exception -> 0x018c }
-            if (r8 == 0) goto L_0x00df
-            goto L_0x00ad
-        L_0x00df:
+            r7.<init>(r0, r8)     // Catch:{ Exception -> 0x0198 }
+            r7.nextToken()     // Catch:{ Exception -> 0x0198 }
+            java.lang.String r7 = r7.nextToken()     // Catch:{ Exception -> 0x0198 }
+            boolean r8 = r4.contains(r7)     // Catch:{ Exception -> 0x0198 }
+            if (r8 == 0) goto L_0x00eb
+            goto L_0x00b9
+        L_0x00eb:
             java.lang.String r8 = "/dev/block/vold"
-            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x018c }
-            if (r8 == 0) goto L_0x00ad
+            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x0198 }
+            if (r8 == 0) goto L_0x00b9
             java.lang.String r8 = "/mnt/secure"
-            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x018c }
-            if (r8 != 0) goto L_0x00ad
+            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x0198 }
+            if (r8 != 0) goto L_0x00b9
             java.lang.String r8 = "/mnt/asec"
-            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x018c }
-            if (r8 != 0) goto L_0x00ad
+            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x0198 }
+            if (r8 != 0) goto L_0x00b9
             java.lang.String r8 = "/mnt/obb"
-            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x018c }
-            if (r8 != 0) goto L_0x00ad
+            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x0198 }
+            if (r8 != 0) goto L_0x00b9
             java.lang.String r8 = "/dev/mapper"
-            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x018c }
-            if (r8 != 0) goto L_0x00ad
+            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x0198 }
+            if (r8 != 0) goto L_0x00b9
             java.lang.String r8 = "tmpfs"
-            boolean r0 = r0.contains(r8)     // Catch:{ Exception -> 0x018c }
-            if (r0 != 0) goto L_0x00ad
-            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x018c }
-            r0.<init>(r7)     // Catch:{ Exception -> 0x018c }
-            boolean r0 = r0.isDirectory()     // Catch:{ Exception -> 0x018c }
-            if (r0 != 0) goto L_0x0146
+            boolean r0 = r0.contains(r8)     // Catch:{ Exception -> 0x0198 }
+            if (r0 != 0) goto L_0x00b9
+            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x0198 }
+            r0.<init>(r7)     // Catch:{ Exception -> 0x0198 }
+            boolean r0 = r0.isDirectory()     // Catch:{ Exception -> 0x0198 }
+            if (r0 != 0) goto L_0x0152
             r0 = 47
-            int r0 = r7.lastIndexOf(r0)     // Catch:{ Exception -> 0x018c }
+            int r0 = r7.lastIndexOf(r0)     // Catch:{ Exception -> 0x0198 }
             r8 = -1
-            if (r0 == r8) goto L_0x0146
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x018c }
-            r8.<init>()     // Catch:{ Exception -> 0x018c }
+            if (r0 == r8) goto L_0x0152
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0198 }
+            r8.<init>()     // Catch:{ Exception -> 0x0198 }
             java.lang.String r9 = "/storage/"
-            r8.append(r9)     // Catch:{ Exception -> 0x018c }
+            r8.append(r9)     // Catch:{ Exception -> 0x0198 }
             int r0 = r0 + 1
-            java.lang.String r0 = r7.substring(r0)     // Catch:{ Exception -> 0x018c }
-            r8.append(r0)     // Catch:{ Exception -> 0x018c }
-            java.lang.String r0 = r8.toString()     // Catch:{ Exception -> 0x018c }
-            java.io.File r8 = new java.io.File     // Catch:{ Exception -> 0x018c }
-            r8.<init>(r0)     // Catch:{ Exception -> 0x018c }
-            boolean r8 = r8.isDirectory()     // Catch:{ Exception -> 0x018c }
-            if (r8 == 0) goto L_0x0146
+            java.lang.String r0 = r7.substring(r0)     // Catch:{ Exception -> 0x0198 }
+            r8.append(r0)     // Catch:{ Exception -> 0x0198 }
+            java.lang.String r0 = r8.toString()     // Catch:{ Exception -> 0x0198 }
+            java.io.File r8 = new java.io.File     // Catch:{ Exception -> 0x0198 }
+            r8.<init>(r0)     // Catch:{ Exception -> 0x0198 }
+            boolean r8 = r8.isDirectory()     // Catch:{ Exception -> 0x0198 }
+            if (r8 == 0) goto L_0x0152
             r7 = r0
-        L_0x0146:
-            r4.add(r7)     // Catch:{ Exception -> 0x018c }
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem     // Catch:{ Exception -> 0x0182 }
-            r0.<init>()     // Catch:{ Exception -> 0x0182 }
-            java.lang.String r8 = r7.toLowerCase()     // Catch:{ Exception -> 0x0182 }
+        L_0x0152:
+            r4.add(r7)     // Catch:{ Exception -> 0x0198 }
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem     // Catch:{ Exception -> 0x018e }
+            r0.<init>()     // Catch:{ Exception -> 0x018e }
+            java.lang.String r8 = r7.toLowerCase()     // Catch:{ Exception -> 0x018e }
             java.lang.String r9 = "sd"
-            boolean r8 = r8.contains(r9)     // Catch:{ Exception -> 0x0182 }
-            if (r8 == 0) goto L_0x0161
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r5, r15)     // Catch:{ Exception -> 0x0182 }
-            r0.title = r8     // Catch:{ Exception -> 0x0182 }
-            goto L_0x016c
-        L_0x0161:
+            boolean r8 = r8.contains(r9)     // Catch:{ Exception -> 0x018e }
+            if (r8 == 0) goto L_0x016d
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r6, r15)     // Catch:{ Exception -> 0x018e }
+            r0.title = r8     // Catch:{ Exception -> 0x018e }
+            goto L_0x0178
+        L_0x016d:
             java.lang.String r8 = "ExternalStorage"
             r9 = 2131625539(0x7f0e0643, float:1.8878289E38)
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0182 }
-            r0.title = r8     // Catch:{ Exception -> 0x0182 }
-        L_0x016c:
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r13, r12)     // Catch:{ Exception -> 0x0182 }
-            r0.subtitle = r8     // Catch:{ Exception -> 0x0182 }
-            r0.icon = r14     // Catch:{ Exception -> 0x0182 }
-            java.io.File r8 = new java.io.File     // Catch:{ Exception -> 0x0182 }
-            r8.<init>(r7)     // Catch:{ Exception -> 0x0182 }
-            r0.file = r8     // Catch:{ Exception -> 0x0182 }
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r7 = r1.items     // Catch:{ Exception -> 0x0182 }
-            r7.add(r0)     // Catch:{ Exception -> 0x0182 }
-            goto L_0x00ad
-        L_0x0182:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x018c }
-            goto L_0x00ad
-        L_0x0188:
-            r6.close()     // Catch:{ Exception -> 0x019d }
-            goto L_0x01a2
-        L_0x018c:
-            r0 = move-exception
-            goto L_0x0194
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x018e }
+            r0.title = r8     // Catch:{ Exception -> 0x018e }
+        L_0x0178:
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r13, r12)     // Catch:{ Exception -> 0x018e }
+            r0.subtitle = r8     // Catch:{ Exception -> 0x018e }
+            r0.icon = r14     // Catch:{ Exception -> 0x018e }
+            java.io.File r8 = new java.io.File     // Catch:{ Exception -> 0x018e }
+            r8.<init>(r7)     // Catch:{ Exception -> 0x018e }
+            r0.file = r8     // Catch:{ Exception -> 0x018e }
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r7 = r1.items     // Catch:{ Exception -> 0x018e }
+            r7.add(r0)     // Catch:{ Exception -> 0x018e }
+            goto L_0x00b9
         L_0x018e:
             r0 = move-exception
-            r2 = r0
-            goto L_0x0241
-        L_0x0192:
-            r0 = move-exception
-            r6 = r3
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x0198 }
+            goto L_0x00b9
         L_0x0194:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x023e }
-            if (r6 == 0) goto L_0x01a2
-            r6.close()     // Catch:{ Exception -> 0x019d }
-            goto L_0x01a2
-        L_0x019d:
+            r5.close()     // Catch:{ Exception -> 0x01a9 }
+            goto L_0x01ae
+        L_0x0198:
+            r0 = move-exception
+            goto L_0x01a0
+        L_0x019a:
+            r0 = move-exception
+            r2 = r0
+            goto L_0x024f
+        L_0x019e:
+            r0 = move-exception
+            r5 = r3
+        L_0x01a0:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x024c }
+            if (r5 == 0) goto L_0x01ae
+            r5.close()     // Catch:{ Exception -> 0x01a9 }
+            goto L_0x01ae
+        L_0x01a9:
             r0 = move-exception
             r4 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)
-        L_0x01a2:
-            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x01d0 }
-            java.io.File r4 = android.os.Environment.getExternalStorageDirectory()     // Catch:{ Exception -> 0x01d0 }
-            r0.<init>(r4, r2)     // Catch:{ Exception -> 0x01d0 }
-            boolean r4 = r0.exists()     // Catch:{ Exception -> 0x01d0 }
-            if (r4 == 0) goto L_0x01d4
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r4 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem     // Catch:{ Exception -> 0x01d0 }
-            r4.<init>()     // Catch:{ Exception -> 0x01d0 }
-            r4.title = r2     // Catch:{ Exception -> 0x01d0 }
+        L_0x01ae:
+            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x01de }
+            android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x01de }
+            java.io.File r4 = r4.getExternalFilesDir(r3)     // Catch:{ Exception -> 0x01de }
+            r0.<init>(r4, r2)     // Catch:{ Exception -> 0x01de }
+            boolean r4 = r0.exists()     // Catch:{ Exception -> 0x01de }
+            if (r4 == 0) goto L_0x01e2
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r4 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem     // Catch:{ Exception -> 0x01de }
+            r4.<init>()     // Catch:{ Exception -> 0x01de }
+            r4.title = r2     // Catch:{ Exception -> 0x01de }
             java.lang.String r2 = "AppFolderInfo"
             r5 = 2131624290(0x7f0e0162, float:1.8875756E38)
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r5)     // Catch:{ Exception -> 0x01d0 }
-            r4.subtitle = r2     // Catch:{ Exception -> 0x01d0 }
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r5)     // Catch:{ Exception -> 0x01de }
+            r4.subtitle = r2     // Catch:{ Exception -> 0x01de }
             r2 = 2131165404(0x7var_dc, float:1.7945024E38)
-            r4.icon = r2     // Catch:{ Exception -> 0x01d0 }
-            r4.file = r0     // Catch:{ Exception -> 0x01d0 }
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r0 = r1.items     // Catch:{ Exception -> 0x01d0 }
-            r0.add(r4)     // Catch:{ Exception -> 0x01d0 }
-            goto L_0x01d4
-        L_0x01d0:
+            r4.icon = r2     // Catch:{ Exception -> 0x01de }
+            r4.file = r0     // Catch:{ Exception -> 0x01de }
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r0 = r1.items     // Catch:{ Exception -> 0x01de }
+            r0.add(r4)     // Catch:{ Exception -> 0x01de }
+            goto L_0x01e2
+        L_0x01de:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x01d4:
+        L_0x01e2:
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
             r0.<init>()
             r2 = 2131625769(0x7f0e0729, float:1.8878755E38)
@@ -1275,7 +1291,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r2 = r1.items
             r2.add(r0)
             boolean r0 = r1.allowMusic
-            if (r0 == 0) goto L_0x0226
+            if (r0 == 0) goto L_0x0234
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
             r0.<init>()
             r2 = 2131624410(0x7f0e01da, float:1.8875999E38)
@@ -1291,37 +1307,37 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r0.file = r3
             java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r2 = r1.items
             r2.add(r0)
-        L_0x0226:
+        L_0x0234:
             java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r0 = r1.recentItems
             boolean r0 = r0.isEmpty()
             r2 = 1
-            if (r0 != 0) goto L_0x0231
+            if (r0 != 0) goto L_0x023f
             r1.hasFiles = r2
-        L_0x0231:
+        L_0x023f:
             org.telegram.ui.Components.RecyclerListView r0 = r1.listView
             org.telegram.messenger.AndroidUtilities.clearDrawableAnimation(r0)
             r1.scrolling = r2
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListAdapter r0 = r1.listAdapter
             r0.notifyDataSetChanged()
             return
-        L_0x023e:
+        L_0x024c:
             r0 = move-exception
             r2 = r0
-            r3 = r6
-        L_0x0241:
-            if (r3 == 0) goto L_0x024c
-            r3.close()     // Catch:{ Exception -> 0x0247 }
-            goto L_0x024c
-        L_0x0247:
+            r3 = r5
+        L_0x024f:
+            if (r3 == 0) goto L_0x025a
+            r3.close()     // Catch:{ Exception -> 0x0255 }
+            goto L_0x025a
+        L_0x0255:
             r0 = move-exception
             r3 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
-        L_0x024c:
-            goto L_0x024e
-        L_0x024d:
+        L_0x025a:
+            goto L_0x025c
+        L_0x025b:
             throw r2
-        L_0x024e:
-            goto L_0x024d
+        L_0x025c:
+            goto L_0x025b
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.listRoots():void");
     }
