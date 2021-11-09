@@ -6,8 +6,8 @@ import android.os.Build;
 public class BuildVars {
     public static String APP_HASH = "014b35b6184100b085b0d0572f9b5103";
     public static int APP_ID = 4;
-    public static int BUILD_VERSION = 2466;
-    public static String BUILD_VERSION_STRING = "8.2.3";
+    public static int BUILD_VERSION = 2467;
+    public static String BUILD_VERSION_STRING = "8.2.4";
     public static boolean CHECK_UPDATES = true;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean DEBUG_VERSION = false;
