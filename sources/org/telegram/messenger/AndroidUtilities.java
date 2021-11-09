@@ -74,6 +74,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import com.android.internal.telephony.ITelephony;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.crashes.Crashes;
+import com.microsoft.appcenter.distribute.Distribute;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -178,9 +181,6 @@ public class AndroidUtilities {
     private static boolean waitingForCall = false;
     private static boolean waitingForSms = false;
 
-    public static void checkForUpdates() {
-    }
-
     public static int compare(int i, int i2) {
         if (i == i2) {
             return 0;
@@ -224,9 +224,6 @@ public class AndroidUtilities {
 
     public static int setPeerLayerVersion(int i, int i2) {
         return (i & 65535) | (i2 << 16);
-    }
-
-    public static void startAppCenter(Activity activity) {
     }
 
     static {
@@ -2670,6 +2667,29 @@ public class AndroidUtilities {
                 }
             });
             animatorSet.start();
+        }
+    }
+
+    public static void startAppCenter(Activity activity) {
+        try {
+            if (BuildVars.DEBUG_VERSION) {
+                Distribute.setEnabledForDebuggableBuild(true);
+                AppCenter.start(activity.getApplication(), BuildVars.DEBUG_VERSION ? BuildVars.APPCENTER_HASH_DEBUG : BuildVars.APPCENTER_HASH, Distribute.class, Crashes.class);
+                AppCenter.setUserId("uid=" + UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
+            }
+        } catch (Throwable th) {
+            FileLog.e(th);
+        }
+    }
+
+    public static void checkForUpdates() {
+        try {
+            if (BuildVars.DEBUG_VERSION && SystemClock.elapsedRealtime() - lastUpdateCheckTime >= 3600000) {
+                lastUpdateCheckTime = SystemClock.elapsedRealtime();
+                Distribute.checkForUpdate();
+            }
+        } catch (Throwable th) {
+            FileLog.e(th);
         }
     }
 

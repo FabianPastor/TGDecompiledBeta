@@ -15404,7 +15404,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             java.lang.String r9 = r14.format((java.util.Date) r15)
             r13[r7] = r9
             java.lang.String r9 = "formatDateAtTime"
-            r10 = 2131628695(0x7f0e1297, float:1.888469E38)
+            r10 = 2131628716(0x7f0e12ac, float:1.8884733E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.formatString(r9, r10, r13)
             if (r3 == 0) goto L_0x0279
             if (r5 == 0) goto L_0x0279
