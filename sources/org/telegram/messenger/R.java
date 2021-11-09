@@ -4538,6 +4538,7 @@ public final class R {
         public static final int OpenBot = NUM;
         public static final int OpenChannel = NUM;
         public static final int OpenChannel2 = NUM;
+        public static final int OpenChannelPost = NUM;
         public static final int OpenFile = NUM;
         public static final int OpenGroup = NUM;
         public static final int OpenGroup2 = NUM;

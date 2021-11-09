@@ -1900,7 +1900,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             r2.setBackground(r5)
         L_0x0749:
             android.widget.ImageView r2 = r0.stickerSettingsButton
-            r5 = 2131627704(0x7f0e0eb8, float:1.888268E38)
+            r5 = 2131627705(0x7f0e0eb9, float:1.8882682E38)
             java.lang.String r7 = "Settings"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r2.setContentDescription(r5)
@@ -1956,7 +1956,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r5)
             android.widget.ImageView r2 = r0.searchButton
-            r5 = 2131627548(0x7f0e0e1c, float:1.8882364E38)
+            r5 = 2131627549(0x7f0e0e1d, float:1.8882366E38)
             java.lang.String r7 = "Search"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r2.setContentDescription(r5)
@@ -4875,7 +4875,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 java.util.ArrayList r0 = r0.recentStickers
                 if (r10 != r0) goto L_0x00cb
-                r10 = 2131627364(0x7f0e0d64, float:1.888199E38)
+                r10 = 2131627365(0x7f0e0d65, float:1.8881992E38)
                 java.lang.String r0 = "RecentStickers"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setText(r10, r1)

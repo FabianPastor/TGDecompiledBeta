@@ -90,7 +90,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r3 = 2131427356(0x7f0b001c, float:1.8476326E38)
             r0.<init>(r2, r3)
             r2 = 2131230941(0x7var_dd, float:1.8077949E38)
-            r3 = 2131628616(0x7f0e1248, float:1.888453E38)
+            r3 = 2131628617(0x7f0e1249, float:1.8884532E38)
             java.lang.String r4 = "WidgetLoggedOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setTextViewText(r2, r3)
@@ -107,7 +107,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r5 = 2131427357(0x7f0b001d, float:1.8476328E38)
             r0.<init>(r2, r5)
             r2 = 2131230943(0x7var_df, float:1.8077953E38)
-            r5 = 2131627970(0x7f0e0fc2, float:1.888322E38)
+            r5 = 2131627971(0x7f0e0fc3, float:1.8883221E38)
             java.lang.String r6 = "TapToEditWidget"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.setTextViewText(r2, r5)
@@ -144,14 +144,14 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             if (r0 == 0) goto L_0x00f3
             boolean r10 = org.telegram.messenger.UserObject.isUserSelf(r0)
             if (r10 == 0) goto L_0x00ab
-            r10 = 2131627536(0x7f0e0e10, float:1.888234E38)
+            r10 = 2131627537(0x7f0e0e11, float:1.8882341E38)
             java.lang.String r11 = "SavedMessages"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             goto L_0x00d3
         L_0x00ab:
             boolean r10 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
             if (r10 == 0) goto L_0x00bb
-            r10 = 2131627406(0x7f0e0d8e, float:1.8882076E38)
+            r10 = 2131627407(0x7f0e0d8f, float:1.8882078E38)
             java.lang.String r11 = "RepliesTitle"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             goto L_0x00d3

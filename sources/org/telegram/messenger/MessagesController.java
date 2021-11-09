@@ -4206,6 +4206,9 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public TLRPC$User getUser(Long l) {
+        if (l.longValue() == 0) {
+            return UserConfig.getInstance(this.currentAccount).getCurrentUser();
+        }
         return this.users.get(l);
     }
 
@@ -26146,5 +26149,12 @@ public class MessagesController extends BaseController implements NotificationCe
     public void setChatPendingRequestsOnClose(long j, int i) {
         SharedPreferences.Editor edit = this.mainPreferences.edit();
         edit.putInt("chatPendingRequests" + j, i).apply();
+    }
+
+    public void markSponsoredAsRead(long j, MessageObject messageObject) {
+        ArrayList<MessageObject> sponsoredMessages2 = getSponsoredMessages(j);
+        if (sponsoredMessages2 != null) {
+            sponsoredMessages2.remove(messageObject);
+        }
     }
 }

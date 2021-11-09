@@ -1276,7 +1276,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r2) goto L_0x0099
-                r12 = 2131626742(0x7f0e0af6, float:1.8880729E38)
+                r12 = 2131626743(0x7f0e0af7, float:1.888073E38)
                 java.lang.String r0 = "P2PEverybody"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
@@ -1302,7 +1302,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r2) goto L_0x00dd
-                r12 = 2131626737(0x7f0e0af1, float:1.8880719E38)
+                r12 = 2131626738(0x7f0e0af2, float:1.888072E38)
                 java.lang.String r0 = "P2PContacts"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
@@ -1341,7 +1341,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r2) goto L_0x011a
-                r12 = 2131626744(0x7f0e0af8, float:1.8880733E38)
+                r12 = 2131626745(0x7f0e0af9, float:1.8880735E38)
                 java.lang.String r0 = "P2PNobody"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
@@ -1375,7 +1375,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r7) goto L_0x0154
-                r12 = 2131627283(0x7f0e0d13, float:1.8881826E38)
+                r12 = 2131627284(0x7f0e0d14, float:1.8881828E38)
                 java.lang.String r0 = "PrivacyPhoneTitle"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1384,7 +1384,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r6) goto L_0x016a
-                r12 = 2131627267(0x7f0e0d03, float:1.8881794E38)
+                r12 = 2131627268(0x7f0e0d04, float:1.8881796E38)
                 java.lang.String r0 = "PrivacyForwardsTitle"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1393,7 +1393,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r5) goto L_0x0180
-                r12 = 2131627291(0x7f0e0d1b, float:1.8881842E38)
+                r12 = 2131627292(0x7f0e0d1c, float:1.8881844E38)
                 java.lang.String r0 = "PrivacyProfilePhotoTitle"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1402,7 +1402,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r2) goto L_0x0196
-                r12 = 2131626741(0x7f0e0af5, float:1.8880727E38)
+                r12 = 2131626742(0x7f0e0af6, float:1.8880729E38)
                 java.lang.String r0 = "P2PEnabledWith"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1411,7 +1411,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r8) goto L_0x01ac
-                r12 = 2131628613(0x7f0e1245, float:1.8884524E38)
+                r12 = 2131628614(0x7f0e1246, float:1.8884526E38)
                 java.lang.String r0 = "WhoCanCallMe"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1420,7 +1420,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r4) goto L_0x01c2
-                r12 = 2131628608(0x7f0e1240, float:1.8884513E38)
+                r12 = 2131628609(0x7f0e1241, float:1.8884516E38)
                 java.lang.String r0 = "WhoCanAddMe"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1444,7 +1444,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.p2pSectionRow
                 if (r12 != r0) goto L_0x01fc
-                r12 = 2131627271(0x7f0e0d07, float:1.8881802E38)
+                r12 = 2131627272(0x7f0e0d08, float:1.8881804E38)
                 java.lang.String r0 = "PrivacyP2PHeader"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1453,7 +1453,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.phoneSectionRow
                 if (r12 != r0) goto L_0x048c
-                r12 = 2131627284(0x7f0e0d14, float:1.8881828E38)
+                r12 = 2131627285(0x7f0e0d15, float:1.888183E38)
                 java.lang.String r0 = "PrivacyPhoneTitle2"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1479,13 +1479,13 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             L_0x023d:
                 boolean r12 = r12.prevSubtypeContacts = r3
                 if (r12 == 0) goto L_0x0251
-                r12 = 2131627282(0x7f0e0d12, float:1.8881824E38)
+                r12 = 2131627283(0x7f0e0d13, float:1.8881826E38)
                 java.lang.String r0 = "PrivacyPhoneInfo3"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
                 goto L_0x02d4
             L_0x0251:
-                r12 = 2131627280(0x7f0e0d10, float:1.888182E38)
+                r12 = 2131627281(0x7f0e0d11, float:1.8881822E38)
                 java.lang.String r0 = "PrivacyPhoneInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1494,7 +1494,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r6) goto L_0x0274
-                r12 = 2131627263(0x7f0e0cff, float:1.8881785E38)
+                r12 = 2131627264(0x7f0e0d00, float:1.8881788E38)
                 java.lang.String r0 = "PrivacyForwardsInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1503,7 +1503,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r5) goto L_0x0289
-                r12 = 2131627289(0x7f0e0d19, float:1.8881838E38)
+                r12 = 2131627290(0x7f0e0d1a, float:1.888184E38)
                 java.lang.String r0 = "PrivacyProfilePhotoInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1512,7 +1512,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r2) goto L_0x029e
-                r12 = 2131627254(0x7f0e0cf6, float:1.8881767E38)
+                r12 = 2131627255(0x7f0e0cf7, float:1.888177E38)
                 java.lang.String r0 = "PrivacyCallsP2PHelp"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1521,7 +1521,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r8) goto L_0x02b3
-                r12 = 2131628614(0x7f0e1246, float:1.8884526E38)
+                r12 = 2131628615(0x7f0e1247, float:1.8884528E38)
                 java.lang.String r0 = "WhoCanCallMeInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1530,7 +1530,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r4) goto L_0x02c8
-                r12 = 2131628609(0x7f0e1241, float:1.8884516E38)
+                r12 = 2131628610(0x7f0e1242, float:1.8884518E38)
                 java.lang.String r0 = "WhoCanAddMeInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1550,7 +1550,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r7) goto L_0x02f7
-                r12 = 2131627281(0x7f0e0d11, float:1.8881822E38)
+                r12 = 2131627282(0x7f0e0d12, float:1.8881824E38)
                 java.lang.String r0 = "PrivacyPhoneInfo2"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1559,7 +1559,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r6) goto L_0x030c
-                r12 = 2131627264(0x7f0e0d00, float:1.8881788E38)
+                r12 = 2131627265(0x7f0e0d01, float:1.888179E38)
                 java.lang.String r0 = "PrivacyForwardsInfo2"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1568,7 +1568,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r5) goto L_0x0321
-                r12 = 2131627290(0x7f0e0d1a, float:1.888184E38)
+                r12 = 2131627291(0x7f0e0d1b, float:1.8881842E38)
                 java.lang.String r0 = "PrivacyProfilePhotoInfo2"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1723,7 +1723,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.messenger.AccountInstance r12 = r12.getAccountInstance()
                 java.lang.String r12 = org.telegram.ui.PrivacySettingsActivity.formatRulesString(r12, r2)
             L_0x0480:
-                r0 = 2131627270(0x7f0e0d06, float:1.88818E38)
+                r0 = 2131627271(0x7f0e0d07, float:1.8881802E38)
                 java.lang.String r1 = "PrivacyP2P2"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r11.setTextAndValue(r0, r12, r3)

@@ -651,7 +651,7 @@ public class UserCell extends FrameLayout {
             boolean r5 = org.telegram.messenger.UserObject.isUserSelf(r1)
             if (r5 == 0) goto L_0x01a6
             org.telegram.ui.ActionBar.SimpleTextView r2 = r0.nameTextView
-            r4 = 2131627536(0x7f0e0e10, float:1.888234E38)
+            r4 = 2131627537(0x7f0e0e11, float:1.8882341E38)
             java.lang.String r5 = "SavedMessages"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r2.setText(r4, r6)

@@ -3186,7 +3186,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r4 = 0
                 r12 = 0
             L_0x0072:
-                r5 = 2131627863(0x7f0e0var_, float:1.8883002E38)
+                r5 = 2131627864(0x7f0e0var_, float:1.8883004E38)
                 java.lang.String r6 = "StatisticOpenProfile"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 r1.add(r5)
@@ -3197,7 +3197,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r5 = 2
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r2.add(r5)
-                r5 = 2131627865(0x7f0e0var_, float:1.8883006E38)
+                r5 = 2131627866(0x7f0e0f5a, float:1.8883009E38)
                 java.lang.String r9 = "StatisticSearchUserHistory"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
                 r1.add(r5)
@@ -3316,7 +3316,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r5 = 0
             L_0x018c:
                 if (r5 == 0) goto L_0x0194
-                r0 = 2131627685(0x7f0e0ea5, float:1.8882641E38)
+                r0 = 2131627686(0x7f0e0ea6, float:1.8882643E38)
                 java.lang.String r9 = "SetAsAdmin"
                 goto L_0x0199
             L_0x0194:

@@ -4399,6 +4399,7 @@
     <public type="string" name="OpenBot" id="NUM" />
     <public type="string" name="OpenChannel" id="NUM" />
     <public type="string" name="OpenChannel2" id="NUM" />
+    <public type="string" name="OpenChannelPost" id="NUM" />
     <public type="string" name="OpenFile" id="NUM" />
     <public type="string" name="OpenGroup" id="NUM" />
     <public type="string" name="OpenGroup2" id="NUM" />

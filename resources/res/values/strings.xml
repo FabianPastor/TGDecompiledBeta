@@ -2767,6 +2767,7 @@
     <string name="OpenBot">OPEN BOT</string>
     <string name="OpenChannel">VIEW CHANNEL</string>
     <string name="OpenChannel2">Open Channel</string>
+    <string name="OpenChannelPost">VIEW POST</string>
     <string name="OpenFile">OPEN FILE</string>
     <string name="OpenGroup">VIEW GROUP</string>
     <string name="OpenGroup2">Open Group</string>
