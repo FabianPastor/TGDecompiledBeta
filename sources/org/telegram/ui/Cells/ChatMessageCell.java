@@ -2750,7 +2750,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     /* JADX WARNING: Removed duplicated region for block: B:24:0x0051  */
     /* JADX WARNING: Removed duplicated region for block: B:25:0x0058  */
-    /* JADX WARNING: Removed duplicated region for block: B:93:0x01b9  */
+    /* JADX WARNING: Removed duplicated region for block: B:88:0x0199  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x01be  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean checkPhotoImageMotionEvent(android.view.MotionEvent r9) {
         /*
@@ -2776,7 +2777,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r3 = (int) r3
             int r4 = r9.getAction()
             r5 = -1
-            if (r4 != 0) goto L_0x01e3
+            if (r4 != 0) goto L_0x01e8
             r9 = 1111490560(0x42400000, float:48.0)
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
             int r4 = r8.miniButtonState
@@ -2803,7 +2804,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x0058
             r8.miniButtonPressed = r2
             r8.invalidate()
-            goto L_0x01b5
+            goto L_0x01ba
         L_0x0058:
             int r4 = r8.buttonState
             if (r4 == r5) goto L_0x007a
@@ -2821,7 +2822,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r3 > r4) goto L_0x007a
             r8.buttonPressed = r2
             r8.invalidate()
-            goto L_0x01b5
+            goto L_0x01ba
         L_0x007a:
             boolean r9 = r8.drawVideoImageButton
             if (r9 == 0) goto L_0x00ac
@@ -2845,7 +2846,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r3 > r9) goto L_0x00ac
             r8.videoButtonPressed = r2
             r8.invalidate()
-            goto L_0x01b5
+            goto L_0x01ba
         L_0x00ac:
             int r9 = r8.documentAttachType
             if (r9 != r2) goto L_0x00f1
@@ -2878,7 +2879,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
             if (r9 > 0) goto L_0x0112
             r8.imagePressed = r2
-            goto L_0x01b5
+            goto L_0x01ba
         L_0x00f1:
             org.telegram.messenger.MessageObject r9 = r8.currentMessageObject
             boolean r9 = r9.isAnyKindOfSticker()
@@ -2895,7 +2896,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             goto L_0x0115
         L_0x0112:
             r2 = 0
-            goto L_0x01b5
+            goto L_0x01ba
         L_0x0115:
             float r9 = (float) r0
             org.telegram.messenger.ImageReceiver r0 = r8.photoImage
@@ -2957,101 +2958,105 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r2 = 0
         L_0x0191:
             org.telegram.messenger.MessageObject r9 = r8.currentMessageObject
-            int r9 = r9.type
-            r0 = 12
-            if (r9 != r0) goto L_0x01b5
+            int r0 = r9.type
+            r3 = 12
+            if (r0 != r3) goto L_0x01ba
+            org.telegram.tgnet.TLRPC$Message r9 = r9.messageOwner
+            org.telegram.tgnet.TLRPC$MessageMedia r9 = r9.media
+            long r3 = r9.user_id
+            r9 = 0
+            r6 = 0
+            int r0 = (r3 > r6 ? 1 : (r3 == r6 ? 0 : -1))
+            if (r0 == 0) goto L_0x01b4
             int r9 = r8.currentAccount
             org.telegram.messenger.MessagesController r9 = org.telegram.messenger.MessagesController.getInstance(r9)
-            org.telegram.messenger.MessageObject r0 = r8.currentMessageObject
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-            org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
-            long r3 = r0.user_id
             java.lang.Long r0 = java.lang.Long.valueOf(r3)
             org.telegram.tgnet.TLRPC$User r9 = r9.getUser(r0)
-            if (r9 != 0) goto L_0x01b5
+        L_0x01b4:
+            if (r9 != 0) goto L_0x01ba
             r8.imagePressed = r1
             goto L_0x0112
-        L_0x01b5:
+        L_0x01ba:
             boolean r9 = r8.imagePressed
-            if (r9 == 0) goto L_0x01e1
+            if (r9 == 0) goto L_0x01e6
             org.telegram.messenger.MessageObject r9 = r8.currentMessageObject
             boolean r9 = r9.isSendError()
-            if (r9 == 0) goto L_0x01c5
+            if (r9 == 0) goto L_0x01ca
             r8.imagePressed = r1
-            goto L_0x0248
-        L_0x01c5:
+            goto L_0x024d
+        L_0x01ca:
             org.telegram.messenger.MessageObject r9 = r8.currentMessageObject
             int r9 = r9.type
             r0 = 8
-            if (r9 != r0) goto L_0x01e1
+            if (r9 != r0) goto L_0x01e6
             int r9 = r8.buttonState
-            if (r9 != r5) goto L_0x01e1
+            if (r9 != r5) goto L_0x01e6
             boolean r9 = org.telegram.messenger.SharedConfig.autoplayGifs
-            if (r9 == 0) goto L_0x01e1
+            if (r9 == 0) goto L_0x01e6
             org.telegram.messenger.ImageReceiver r9 = r8.photoImage
             org.telegram.ui.Components.AnimatedFileDrawable r9 = r9.getAnimation()
-            if (r9 != 0) goto L_0x01e1
+            if (r9 != 0) goto L_0x01e6
             r8.imagePressed = r1
-            goto L_0x0248
-        L_0x01e1:
+            goto L_0x024d
+        L_0x01e6:
             r1 = r2
-            goto L_0x0248
-        L_0x01e3:
+            goto L_0x024d
+        L_0x01e8:
             int r9 = r9.getAction()
-            if (r9 != r2) goto L_0x0248
+            if (r9 != r2) goto L_0x024d
             int r9 = r8.videoButtonPressed
-            if (r9 != r2) goto L_0x01f9
+            if (r9 != r2) goto L_0x01fe
             r8.videoButtonPressed = r1
             r8.playSoundEffect(r1)
             r8.didPressButton(r2, r2)
             r8.invalidate()
-            goto L_0x0248
-        L_0x01f9:
+            goto L_0x024d
+        L_0x01fe:
             int r9 = r8.buttonPressed
-            if (r9 != r2) goto L_0x0211
+            if (r9 != r2) goto L_0x0216
             r8.buttonPressed = r1
             r8.playSoundEffect(r1)
             boolean r9 = r8.drawVideoImageButton
-            if (r9 == 0) goto L_0x020a
+            if (r9 == 0) goto L_0x020f
             r8.didClickedImage()
-            goto L_0x020d
-        L_0x020a:
+            goto L_0x0212
+        L_0x020f:
             r8.didPressButton(r2, r1)
-        L_0x020d:
+        L_0x0212:
             r8.invalidate()
-            goto L_0x0248
-        L_0x0211:
+            goto L_0x024d
+        L_0x0216:
             int r9 = r8.miniButtonPressed
-            if (r9 != r2) goto L_0x0221
+            if (r9 != r2) goto L_0x0226
             r8.miniButtonPressed = r1
             r8.playSoundEffect(r1)
             r8.didPressMiniButton(r2)
             r8.invalidate()
-            goto L_0x0248
-        L_0x0221:
+            goto L_0x024d
+        L_0x0226:
             boolean r9 = r8.imagePressed
-            if (r9 == 0) goto L_0x0248
+            if (r9 == 0) goto L_0x024d
             r8.imagePressed = r1
             int r9 = r8.buttonState
-            if (r9 == r5) goto L_0x023f
+            if (r9 == r5) goto L_0x0244
             r0 = 2
-            if (r9 == r0) goto L_0x023f
+            if (r9 == r0) goto L_0x0244
             r0 = 3
-            if (r9 == r0) goto L_0x023f
+            if (r9 == r0) goto L_0x0244
             boolean r0 = r8.drawVideoImageButton
-            if (r0 == 0) goto L_0x0236
-            goto L_0x023f
-        L_0x0236:
-            if (r9 != 0) goto L_0x0245
+            if (r0 == 0) goto L_0x023b
+            goto L_0x0244
+        L_0x023b:
+            if (r9 != 0) goto L_0x024a
             r8.playSoundEffect(r1)
             r8.didPressButton(r2, r1)
-            goto L_0x0245
-        L_0x023f:
+            goto L_0x024a
+        L_0x0244:
             r8.playSoundEffect(r1)
             r8.didClickedImage()
-        L_0x0245:
+        L_0x024a:
             r8.invalidate()
-        L_0x0248:
+        L_0x024d:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.checkPhotoImageMotionEvent(android.view.MotionEvent):boolean");
@@ -4457,7 +4462,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             MessageObject messageObject2 = this.currentMessageObject;
             int i2 = messageObject2.type;
             if (i2 == 12) {
-                this.delegate.didPressUserAvatar(this, MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.currentMessageObject.messageOwner.media.user_id)), this.lastTouchX, this.lastTouchY);
+                long j = messageObject2.messageOwner.media.user_id;
+                TLRPC$User tLRPC$User = null;
+                if (j != 0) {
+                    tLRPC$User = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(j));
+                }
+                this.delegate.didPressUserAvatar(this, tLRPC$User, this.lastTouchX, this.lastTouchY);
             } else if (i2 == 5) {
                 if (this.buttonState != -1) {
                     didPressButton(true, false);

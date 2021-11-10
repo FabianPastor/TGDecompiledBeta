@@ -1472,7 +1472,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     }
                     arrayList2.add(9);
                 } else if (messageType == 8) {
-                    TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.selectedObject.messageOwner.media.user_id));
+                    long j = this.selectedObject.messageOwner.media.user_id;
+                    TLRPC$User user = j != 0 ? MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(j)) : null;
                     if (!(user == null || user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ContactsController.getInstance(this.currentAccount).contactsDict.get(Long.valueOf(user.id)) != null)) {
                         arrayList.add(LocaleController.getString("AddContactTitle", NUM));
                         arrayList2.add(15);

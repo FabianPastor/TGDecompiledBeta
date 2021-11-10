@@ -5056,12 +5056,12 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             java.lang.String r12 = "image"
             boolean r12 = r11.startsWith(r12)     // Catch:{ Exception -> 0x0114 }
             if (r12 == 0) goto L_0x003a
-            r1 = 1
+            r1 = 0
         L_0x003a:
             java.lang.String r12 = "video"
             boolean r12 = r11.startsWith(r12)     // Catch:{ Exception -> 0x0114 }
             if (r12 == 0) goto L_0x0043
-            r1 = 2
+            r1 = 1
         L_0x0043:
             java.lang.String r12 = "mime_type"
             java.lang.String r13 = "relative_path"

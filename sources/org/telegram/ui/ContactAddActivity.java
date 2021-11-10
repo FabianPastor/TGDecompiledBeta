@@ -74,7 +74,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.addContact = getArguments().getBoolean("addContact", false);
         SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(this.currentAccount);
         this.needAddException = notificationsSettings.getBoolean("dialog_bar_exception" + this.user_id, false);
-        if (getMessagesController().getUser(Long.valueOf(this.user_id)) == null || !super.onFragmentCreate()) {
+        if ((this.user_id != 0 ? getMessagesController().getUser(Long.valueOf(this.user_id)) : null) == null || !super.onFragmentCreate()) {
             return false;
         }
         return true;
