@@ -2073,19 +2073,23 @@ public class LoginActivity extends BaseFragment {
                     z2 = true;
                     z = true;
                 } else {
-                    z2 = this.this$0.getParentActivity().checkSelfPermission("android.permission.READ_PHONE_STATE") == 0;
+                    z3 = this.this$0.getParentActivity().checkSelfPermission("android.permission.READ_PHONE_STATE") == 0;
                     z = this.this$0.getParentActivity().checkSelfPermission("android.permission.CALL_PHONE") == 0;
-                    z3 = i < 28 || this.this$0.getParentActivity().checkSelfPermission("android.permission.READ_CALL_LOG") == 0;
+                    z2 = i < 28 || this.this$0.getParentActivity().checkSelfPermission("android.permission.READ_CALL_LOG") == 0;
+                    boolean z6 = i < 26 || this.this$0.getParentActivity().checkSelfPermission("android.permission.READ_PHONE_NUMBERS") == 0;
                     if (this.this$0.checkPermissions) {
                         this.this$0.permissionsItems.clear();
-                        if (!z2) {
+                        if (!z3) {
                             this.this$0.permissionsItems.add("android.permission.READ_PHONE_STATE");
                         }
                         if (!z) {
                             this.this$0.permissionsItems.add("android.permission.CALL_PHONE");
                         }
-                        if (!z3) {
+                        if (!z2) {
                             this.this$0.permissionsItems.add("android.permission.READ_CALL_LOG");
+                        }
+                        if (!z6) {
+                            this.this$0.permissionsItems.add("android.permission.READ_PHONE_NUMBERS");
                         }
                         if (!this.this$0.permissionsItems.isEmpty()) {
                             SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
@@ -2094,9 +2098,9 @@ public class LoginActivity extends BaseFragment {
                                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.this$0.getParentActivity());
                                 builder.setTitle(LocaleController.getString("AppName", NUM));
                                 builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-                                if (!z2 && (!z || !z3)) {
+                                if (!z3 && (!z || !z2)) {
                                     builder.setMessage(LocaleController.getString("AllowReadCallAndLog", NUM));
-                                } else if (!z || !z3) {
+                                } else if (!z || !z2) {
                                     builder.setMessage(LocaleController.getString("AllowReadCallLog", NUM));
                                 } else {
                                     builder.setMessage(LocaleController.getString("AllowReadCall", NUM));
@@ -2128,15 +2132,15 @@ public class LoginActivity extends BaseFragment {
                     this.this$0.onFieldError(this.phoneField);
                 } else {
                     String stripExceptNumbers = PhoneFormat.stripExceptNumbers("" + this.codeField.getText() + this.phoneField.getText());
-                    boolean z6 = BuildVars.DEBUG_PRIVATE_VERSION && this.this$0.getConnectionsManager().isTestBackend();
-                    if (z6 != this.this$0.testBackend) {
+                    boolean z7 = BuildVars.DEBUG_PRIVATE_VERSION && this.this$0.getConnectionsManager().isTestBackend();
+                    if (z7 != this.this$0.testBackend) {
                         this.this$0.getConnectionsManager().switchBackend(false);
-                        z6 = this.this$0.testBackend;
+                        z7 = this.this$0.testBackend;
                     }
                     if (this.this$0.getParentActivity() instanceof LaunchActivity) {
                         for (int i3 = 0; i3 < 3; i3++) {
                             UserConfig instance = UserConfig.getInstance(i3);
-                            if (instance.isClientActivated() && PhoneNumberUtils.compare(stripExceptNumbers, instance.getCurrentUser().phone) && ConnectionsManager.getInstance(i3).isTestBackend() == z6) {
+                            if (instance.isClientActivated() && PhoneNumberUtils.compare(stripExceptNumbers, instance.getCurrentUser().phone) && ConnectionsManager.getInstance(i3).isTestBackend() == z7) {
                                 AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) this.this$0.getParentActivity());
                                 builder2.setTitle(LocaleController.getString("AppName", NUM));
                                 builder2.setMessage(LocaleController.getString("AccountAlreadyLoggedIn", NUM));
@@ -2154,7 +2158,7 @@ public class LoginActivity extends BaseFragment {
                     tLRPC$TL_auth_sendCode.phone_number = stripExceptNumbers;
                     TLRPC$TL_codeSettings tLRPC$TL_codeSettings = new TLRPC$TL_codeSettings();
                     tLRPC$TL_auth_sendCode.settings = tLRPC$TL_codeSettings;
-                    tLRPC$TL_codeSettings.allow_flashcall = z5 && z2 && z && z3;
+                    tLRPC$TL_codeSettings.allow_flashcall = z5 && z3 && z && z2;
                     tLRPC$TL_codeSettings.allow_app_hash = ApplicationLoader.hasPlayServices;
                     SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
                     if (tLRPC$TL_auth_sendCode.settings.allow_app_hash) {

@@ -501,7 +501,7 @@ public class JoinGroupAlert extends BottomSheet {
         if (z) {
             str = LocaleController.getString("RequestToJoinChannelSentDescription", NUM);
         } else {
-            str = LocaleController.getString("RequestToJoinSentDescription", NUM);
+            str = LocaleController.getString("RequestToJoinGroupSentDescription", NUM);
         }
         twoLineLottieLayout.subtitleTextView.setText(str);
         Bulletin.make(this.fragment, (Bulletin.Layout) twoLineLottieLayout, 2750).show();
