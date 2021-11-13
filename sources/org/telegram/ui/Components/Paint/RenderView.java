@@ -264,7 +264,7 @@ public class RenderView extends TextureView {
                         AndroidUtilities.runOnUIThread(new RenderView$CanvasInternal$1$$ExternalSyntheticLambda0(this));
                     }
                     if (!CanvasInternal.this.ready) {
-                        RenderView.this.queue.postRunnable(new RenderView$CanvasInternal$1$$ExternalSyntheticLambda1(this), 200);
+                        boolean unused3 = CanvasInternal.this.ready = true;
                     }
                 }
             }
@@ -272,11 +272,6 @@ public class RenderView extends TextureView {
             /* access modifiers changed from: private */
             public /* synthetic */ void lambda$run$0() {
                 RenderView.this.delegate.onFirstDraw();
-            }
-
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$run$1() {
-                boolean unused = CanvasInternal.this.ready = true;
             }
         };
         /* access modifiers changed from: private */
@@ -289,7 +284,7 @@ public class RenderView extends TextureView {
         /* access modifiers changed from: private */
         public boolean initialized;
         /* access modifiers changed from: private */
-        public boolean ready;
+        public volatile boolean ready;
         private Runnable scheduledRunnable;
         private SurfaceTexture surfaceTexture;
 
