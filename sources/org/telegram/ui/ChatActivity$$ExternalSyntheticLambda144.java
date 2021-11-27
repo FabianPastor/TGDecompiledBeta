@@ -1,17 +1,14 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.Comparator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda144 implements RequestDelegate {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda144 implements Comparator {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda144 INSTANCE = new ChatActivity$$ExternalSyntheticLambda144();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda144(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda144() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$startEditingMessageObject$115(tLObject, tLRPC$TL_error);
+    public final int compare(Object obj, Object obj2) {
+        return ((Integer) obj2).compareTo((Integer) obj);
     }
 }

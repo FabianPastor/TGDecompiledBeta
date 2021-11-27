@@ -20,3920 +20,3825 @@ public class MediaCodecVideoConvertor {
     private MediaExtractor extractor;
     private MP4Builder mediaMuxer;
 
-    public boolean convertVideo(String str, File file, int i, boolean z, int i2, int i3, int i4, int i5, int i6, long j, long j2, long j3, boolean z2, long j4, MediaController.SavedFilterState savedFilterState, String str2, ArrayList<VideoEditedInfo.MediaEntity> arrayList, boolean z3, MediaController.CropState cropState, MediaController.VideoConvertorListener videoConvertorListener) {
+    public boolean convertVideo(String str, File file, int i, boolean z, int i2, int i3, int i4, int i5, int i6, int i7, int i8, long j, long j2, long j3, boolean z2, long j4, MediaController.SavedFilterState savedFilterState, String str2, ArrayList<VideoEditedInfo.MediaEntity> arrayList, boolean z3, MediaController.CropState cropState, MediaController.VideoConvertorListener videoConvertorListener) {
         String str3 = str;
         long j5 = j4;
         this.callback = videoConvertorListener;
-        return convertVideoInternal(str, file, i, z, i2, i3, i4, i5, i6, j, j2, j3, j5, z2, false, savedFilterState, str2, arrayList, z3, cropState);
+        return convertVideoInternal(str, file, i, z, i2, i3, i4, i5, i6, i7, i8, j, j2, j3, j5, z2, false, savedFilterState, str2, arrayList, z3, cropState);
     }
 
     public long getLastFrameTimestamp() {
         return this.endPresentationTime;
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v0, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v0, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v1, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v1, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v2, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v2, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v3, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v3, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v4, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v5, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v5, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v6, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v6, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v7, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v7, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v8, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v8, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v9, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v9, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v10, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v10, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v11, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v11, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v12, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v12, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v13, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v13, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v14, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v14, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v15, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v15, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v16, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v18, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v16, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v20, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r90v1, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v21, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v17, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r90v2, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v22, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r90v3, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v18, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v19, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v25, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v26, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v20, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v27, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v28, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v29, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v21, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v30, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v22, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v23, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v31, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v32, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v24, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v33, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v25, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v26, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v32, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v39, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v27, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v28, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v34, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v29, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r70v1, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v30, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r70v3, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v32, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v35, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v37, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v38, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v40, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v41, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v42, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v37, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v43, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v44, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v39, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v59, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v42, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v47, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v48, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v43, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v49, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v44, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v50, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v45, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v70, resolved type: org.telegram.messenger.video.InputSurface} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v79, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v54, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v80, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v56, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v57, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v58, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v59, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v60, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v61, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v62, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v64, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v65, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v67, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v68, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v69, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v70, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v72, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v74, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v78, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v81, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r70v4, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r70v5, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r70v6, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r70v8, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v88, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v89, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r70v16, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v94, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v46, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v95, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v47, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v96, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v48, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v49, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v98, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v77, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v102, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v78, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v100, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v101, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v106, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v82, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v83, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v109, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v102, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v110, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v111, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v103, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v87, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v113, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v104, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v105, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v106, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v107, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v108, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r90v15, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v109, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v52, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r90v16, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v110, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v53, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r90v17, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v111, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v55, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v112, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v56, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r90v18, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v113, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v58, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v114, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v59, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v115, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v61, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v116, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v62, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v117, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v63, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v118, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v64, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v119, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v120, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v65, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v66, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v67, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v68, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v121, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v69, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v122, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v70, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v123, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v71, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v124, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v72, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v125, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v73, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v126, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v74, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v127, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v75, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v128, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v76, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v129, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v77, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v130, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v78, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v131, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v79, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v134, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v80, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v135, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v81, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v136, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v82, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v137, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v83, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v138, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v84, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v139, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v85, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v140, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v86, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v141, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r26v87, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v147, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v148, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v150, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v151, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v190, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v191, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v194, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v195, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v154, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v158, resolved type: java.lang.String} */
-    /* JADX WARNING: type inference failed for: r9v132 */
-    /* JADX WARNING: Code restructure failed: missing block: B:1001:0x10cd, code lost:
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v0, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v0, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v1, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v1, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v2, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v2, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v3, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v3, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v4, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v2, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v4, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v3, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v5, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v4, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v6, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v5, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v7, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v8, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v8, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v9, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v7, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v10, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v8, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v11, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v9, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v12, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v10, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v13, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v11, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v14, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v12, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v15, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v13, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v16, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v17, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v14, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v18, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v15, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v19, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v21, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v16, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v23, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v18, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v24, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v15, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v16, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v25, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v26, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v21, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v17, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v27, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v28, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v29, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v30, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v18, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v19, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v31, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v20, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v32, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v21, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v33, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v34, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v22, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v35, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v23, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v36, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v37, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v25, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v26, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v38, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v39, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v61, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v28, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v40, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v63, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v29, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v2, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v26, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v9, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v6, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v41, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v31, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v42, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v32, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v43, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v33, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v34, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v35, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v36, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r66v0, resolved type: java.nio.ByteBuffer[]} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v37, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v44, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v66, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v38, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v45, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v39, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v46, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v68, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v40, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v47, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v41, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v42, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v43, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v44, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v45, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v46, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v48, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v49, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v47, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v47, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v50, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v49, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v50, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v48, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v51, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v49, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v52, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v54, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v49, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v42, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v43, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v44, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v61, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v62, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v56, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v50, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v53, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v59, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v51, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v54, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v52, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v55, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v53, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v56, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v60, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v56, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v57, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v97, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v57, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v58, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v59, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v60, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v61, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v71, resolved type: org.telegram.messenger.video.MP4Builder} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v62, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v63, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v64, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v99, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v66, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v111, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v68, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v71, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v84, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v30, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v31, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v73, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v57, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v74, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v58, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v59, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v79, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v76, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v88, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v39, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v81, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v97, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v32, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v42, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v98, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v99, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v127, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v85, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v128, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v129, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v86, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v87, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v88, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v132, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v89, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v89, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v133, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v134, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v135, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v94, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v95, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v95, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v96, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v96, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v137, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v97, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v98, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v99, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v100, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v63, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v64, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v104, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v101, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v102, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v66, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v103, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v104, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v105, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v106, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v107, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v108, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v109, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v110, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v111, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v75, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v76, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v112, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v77, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v113, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v78, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v114, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v79, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v115, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v80, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v116, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v81, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v82, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v117, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v83, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v118, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v84, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v119, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v85, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v120, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v86, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v121, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v87, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v122, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v88, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v123, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v89, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v124, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v90, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v125, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v91, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v126, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v92, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v127, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v93, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v128, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v94, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v138, resolved type: java.nio.ByteBuffer[]} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v242, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v246, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v248, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v36, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v139, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v140, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v255, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v256, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v257, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v258, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v259, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v261, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v262, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v263, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v264, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v266, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v146, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v148, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v149, resolved type: org.telegram.messenger.video.InputSurface} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v270, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v278, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v280, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v283, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v284, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v150, resolved type: java.nio.ByteBuffer[]} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v151, resolved type: java.nio.ByteBuffer[]} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v153, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v154, resolved type: int} */
+    /* JADX WARNING: type inference failed for: r4v48 */
+    /* JADX WARNING: type inference failed for: r4v49 */
+    /* JADX WARNING: type inference failed for: r4v124 */
+    /* JADX WARNING: Code restructure failed: missing block: B:1001:0x11f3, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:1002:0x11f4, code lost:
+        r32 = r84;
+        r4 = r5;
+        r11 = r14;
+        r55 = r22;
+        r5 = r80;
+        r2 = r0;
+        r7 = r4;
+        r44 = r82;
+        r1 = r26;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:1003:0x1206, code lost:
         r0 = th;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:1021:0x1134, code lost:
-        r0 = e;
+    /* JADX WARNING: Code restructure failed: missing block: B:1004:0x1207, code lost:
+        r5 = r80;
+        r32 = r84;
+        r11 = r14;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:1022:0x1135, code lost:
-        r8 = r83;
-        r34 = r4;
-        r9 = r56;
-        r5 = r3;
+    /* JADX WARNING: Code restructure failed: missing block: B:1005:0x120c, code lost:
+        r13 = r82;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:1028:0x1162, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1029:0x1163, code lost:
-        r8 = r83;
-        r2 = r3;
-        r34 = r4;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1037:0x1195, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1038:0x1196, code lost:
-        r8 = r83;
-        r34 = r4;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1055:0x11f0, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1056:0x11f1, code lost:
-        r8 = r83;
-        r12 = r84;
-        r4 = r88;
-        r2 = r3;
-        r9 = r56;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1057:0x11fb, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1058:0x11fc, code lost:
-        r8 = r83;
-        r12 = r84;
-        r4 = r88;
-        r9 = r56;
-        r3 = r57;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1059:0x1207, code lost:
-        r34 = r4;
-        r6 = r12;
-        r5 = r29;
-        r1 = -5;
-        r28 = null;
-        r8 = r8;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1060:0x1211, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1061:0x1212, code lost:
-        r8 = r83;
-        r4 = r88;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1067:0x1240, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:1009:0x1219, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:1068:0x1241, code lost:
-        r26 = r90;
-        r12 = r6;
-        r8 = r9;
-        r61 = r23;
+    /* JADX WARNING: Code restructure failed: missing block: B:1010:0x121a, code lost:
+        r5 = r80;
+        r32 = r84;
+        r11 = r14;
+        r55 = r22;
         r2 = r0;
-        r34 = r88;
-        r56 = r1;
-        r5 = r29;
-        r1 = -5;
-        r3 = null;
-        r28 = null;
-        r30 = null;
+        r44 = r82;
+        r1 = r26;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:1069:0x1259, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:1032:0x128b, code lost:
+        r9 = true;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:1098:0x13c5, code lost:
+        r2.release();
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:109:0x022d, code lost:
+        r0 = e;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:1102:?, code lost:
+        r2.finishMovie();
+        r15.endPresentationTime = r15.mediaMuxer.getLastFrameTimestamp(r1);
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:1103:0x13d8, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:1070:0x125a, code lost:
-        r26 = r90;
-        r12 = r6;
-        r8 = r9;
-        r61 = r23;
+    /* JADX WARNING: Code restructure failed: missing block: B:1104:0x13d9, code lost:
+        org.telegram.messenger.FileLog.e(r0);
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:193:0x03af, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:194:0x03b0, code lost:
+        r11 = r77;
+        r5 = r80;
+        r44 = r82;
+        r32 = r84;
         r2 = r0;
-        r34 = r88;
-        r5 = r29;
-        r1 = -5;
-        r3 = null;
+        r1 = r12;
+        r10 = r36;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:1071:0x126b, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1072:0x126c, code lost:
-        r4 = r88;
-        r26 = r90;
-        r8 = r9;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:1076:0x127c, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:210:0x0408, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:1077:0x127d, code lost:
-        r26 = r90;
-        r8 = r9;
-        r61 = r23;
-        r2 = r0;
-        r34 = r88;
-        r5 = r29;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:187:0x037c, code lost:
-        r4 = java.nio.ByteBuffer.allocate(r6);
-        r7 = java.nio.ByteBuffer.allocate(r14.size - r6);
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:188:0x0387, code lost:
-        r21 = r1;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:190:?, code lost:
-        r4.put(r3, 0, r6).position(0);
-        r7.put(r3, r6, r14.size - r6).position(0);
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:191:0x039b, code lost:
-        r6 = r4;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:192:0x039d, code lost:
-        r0 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:193:0x039e, code lost:
-        r2 = r0;
-        r6 = r13;
-        r1 = r21;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:195:0x03ad, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:196:0x03ae, code lost:
-        r21 = r1;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:259:0x04f6, code lost:
-        r0 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:260:0x04f7, code lost:
-        r8 = r83;
-        r34 = r88;
-        r26 = r90;
-        r2 = r0;
-        r1 = r21;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:261:0x0501, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:262:0x0502, code lost:
-        r40 = r40;
-        r6 = r13;
-        r1 = r21;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:263:0x0508, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:264:0x050a, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:265:0x050b, code lost:
-        r21 = r1;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:269:0x0514, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:277:0x053b, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:278:0x053c, code lost:
-        r2 = r40;
-        r6 = r81;
-        r11 = r51;
-        r1 = -5;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:279:0x0545, code lost:
-        r0 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:280:0x0546, code lost:
-        r8 = r83;
-        r34 = r88;
-        r26 = r90;
-        r2 = r0;
-        r9 = r50;
-        r11 = r51;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:281:0x0552, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:282:0x0553, code lost:
-        r2 = r40;
-        r6 = r81;
-        r11 = r51;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:283:0x055b, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:284:0x055c, code lost:
-        r13 = r6;
-        r50 = r9;
-        r51 = r11;
-        r40 = r2;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:285:0x0563, code lost:
-        r1 = -5;
-        r19 = null;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:287:0x0568, code lost:
-        r0 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:288:0x0569, code lost:
-        r13 = r6;
-        r50 = r9;
-        r51 = r11;
+    /* JADX WARNING: Code restructure failed: missing block: B:211:0x0409, code lost:
+        r36 = r10;
         r2 = r0;
         r1 = -5;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:289:0x0571, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:212:0x040e, code lost:
         r0 = th;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:290:0x0572, code lost:
-        r50 = r9;
-        r51 = r11;
+    /* JADX WARNING: Code restructure failed: missing block: B:213:0x040f, code lost:
+        r36 = r10;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:308:0x059f, code lost:
-        r47 = true;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:489:0x08d0, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:491:0x08dc, code lost:
-        r0 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:492:0x08dd, code lost:
-        r8 = r83;
-        r6 = r84;
-        r34 = r88;
+    /* JADX WARNING: Code restructure failed: missing block: B:214:0x0411, code lost:
+        r11 = r77;
+        r5 = r80;
+        r44 = r82;
+        r32 = r84;
         r2 = r0;
-        r28 = null;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:542:0x0996, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:555:0x09ba, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:556:0x09bb, code lost:
-        r4 = r88;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:558:0x09c8, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:654:0x0b49, code lost:
-        if (r13.presentationTimeUs < r4) goto L_0x0b4b;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:712:0x0CLASSNAME, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:72:0x01d3, code lost:
-        r6 = r7;
-        r7 = r9;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:754:0x0d1e, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:215:0x041c, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:755:0x0d1f, code lost:
-        r8 = r83;
+    /* JADX WARNING: Code restructure failed: missing block: B:216:0x041d, code lost:
+        r36 = r10;
         r2 = r0;
-        r34 = r4;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:773:0x0d4c, code lost:
-        r0 = e;
+    /* JADX WARNING: Code restructure failed: missing block: B:237:0x0456, code lost:
+        r22 = true;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:835:0x0e4f, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:345:0x0630, code lost:
         r0 = th;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:836:0x0e51, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:349:0x063e, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:837:0x0e52, code lost:
-        r8 = r83;
+    /* JADX WARNING: Code restructure failed: missing block: B:350:0x063f, code lost:
+        r44 = r82;
         r2 = r0;
-        r6 = r12;
-        r5 = r29;
-        r3 = r57;
+        r32 = r3;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:874:0x0f0a, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:875:0x0f0b, code lost:
-        r8 = r83;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:923:0x0faf, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:924:0x0fb1, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:925:0x0fb4, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:926:0x0fb5, code lost:
-        r8 = r83;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:92:0x0221, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:970:0x1049, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:422:0x07b6, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:973:?, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:423:0x07b7, code lost:
+        r8 = r75;
+        r9 = r76;
+        r11 = r77;
+        r5 = r80;
+        r44 = r82;
+        r2 = r0;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:424:0x07c4, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:425:0x07c5, code lost:
+        r11 = r77;
+        r7 = r78;
+        r5 = r80;
+        r44 = r82;
+        r2 = r0;
+        r10 = r3;
+        r59 = null;
+        r25 = r14;
+        r1 = r26;
+        r40 = -5;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:461:0x0854, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:462:0x0855, code lost:
+        r52 = r3;
+        r25 = r14;
+        r11 = r77;
+        r7 = r78;
+        r5 = r80;
+        r44 = r82;
+        r2 = r0;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:493:0x08c9, code lost:
+        r0 = th;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:494:0x08cb, code lost:
+        r0 = e;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:51:0x012a, code lost:
+        r0 = th;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:599:0x0aa3, code lost:
+        if (r12.presentationTimeUs < r13) goto L_0x0aa5;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:65:0x0173, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:66:0x0174, code lost:
+        r2 = r0;
+        r34 = r3;
+        r36 = r10;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:77:0x019d, code lost:
+        r11 = r12;
+        r12 = r18;
+        r18 = r19;
+        r19 = r35;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:901:0x0fdf, code lost:
+        r0 = e;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:902:0x0fe0, code lost:
+        r11 = r11;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:922:0x1013, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:924:0x1015, code lost:
+        r11 = r11;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:925:?, code lost:
         org.telegram.messenger.FileLog.e((java.lang.Throwable) r0);
-        r6 = true;
+        r13 = true;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:991:0x108d, code lost:
-        r0 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:992:0x108e, code lost:
-        r12 = r81;
-        r11 = r82;
-        r1 = r88;
-        r2 = r0;
-        r9 = r29;
-        r7 = false;
-        r74 = r26;
-        r26 = r34;
-        r34 = r74;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:993:0x10a0, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:939:0x1049, code lost:
         r0 = e;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:994:0x10a1, code lost:
-        r9 = r56;
+    /* JADX WARNING: Code restructure failed: missing block: B:940:0x104a, code lost:
+        r11 = r11;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:959:0x1109, code lost:
+        r0 = th;
+        r11 = r11;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:961:0x1113, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:962:0x1114, code lost:
+        r59 = r85;
+        r2 = r0;
+        r49 = r7;
+        r11 = r11;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:965:0x111e, code lost:
+        r0 = th;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:966:0x111f, code lost:
+        r11 = r77;
+        r40 = r1;
+        r5 = r6;
+        r44 = r13;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:969:0x112d, code lost:
+        r0 = e;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:970:0x112e, code lost:
+        r11 = r77;
+        r4 = r78;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:986:0x1196, code lost:
+        r0 = e;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:987:0x1197, code lost:
+        r11 = r77;
+        r4 = r78;
+        r5 = r80;
+        r25 = r14;
+        r7 = r49;
+        r10 = r52;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:989:0x11ab, code lost:
+        r0 = th;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:990:0x11ac, code lost:
+        r11 = r77;
+        r5 = r80;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:991:0x11b2, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:992:0x11b3, code lost:
+        r11 = r77;
+        r4 = r78;
+        r5 = r80;
+        r13 = r82;
+        r7 = r49;
+        r10 = r52;
+        r2 = r0;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:993:0x11c1, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:994:0x11c2, code lost:
+        r32 = r84;
+        r7 = r2;
+        r10 = r3;
+        r4 = r5;
+        r11 = r14;
+        r55 = r22;
+        r5 = r80;
+        r13 = r82;
+        r2 = r0;
+        r49 = r7;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:995:0x11d1, code lost:
+        r44 = r13;
+        r1 = r26;
+        r11 = r11;
      */
     /* JADX WARNING: Failed to insert additional move for type inference */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:1001:0x10cd A[ExcHandler: all (th java.lang.Throwable), PHI: r8 
-      PHI: (r8v65 int) = (r8v64 int), (r8v71 int), (r8v71 int), (r8v71 int), (r8v71 int) binds: [B:998:0x10b6, B:911:0x0f6f, B:912:?, B:905:0x0var_, B:906:?] A[DONT_GENERATE, DONT_INLINE], Splitter:B:905:0x0var_] */
-    /* JADX WARNING: Removed duplicated region for block: B:1037:0x1195 A[ExcHandler: all (th java.lang.Throwable), Splitter:B:698:0x0CLASSNAME] */
-    /* JADX WARNING: Removed duplicated region for block: B:1060:0x1211 A[ExcHandler: all (th java.lang.Throwable), Splitter:B:478:0x08ae] */
-    /* JADX WARNING: Removed duplicated region for block: B:1071:0x126b A[ExcHandler: all (th java.lang.Throwable), Splitter:B:468:0x084e] */
-    /* JADX WARNING: Removed duplicated region for block: B:1091:0x12db A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:1106:0x1323 A[Catch:{ all -> 0x1332 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:1120:0x1357  */
-    /* JADX WARNING: Removed duplicated region for block: B:1122:0x1372 A[SYNTHETIC, Splitter:B:1122:0x1372] */
-    /* JADX WARNING: Removed duplicated region for block: B:1128:0x1381 A[Catch:{ all -> 0x1376 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:1130:0x1386 A[Catch:{ all -> 0x1376 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:1132:0x138e A[Catch:{ all -> 0x1376 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:1137:0x139b  */
-    /* JADX WARNING: Removed duplicated region for block: B:1140:0x13a2 A[SYNTHETIC, Splitter:B:1140:0x13a2] */
-    /* JADX WARNING: Removed duplicated region for block: B:1154:0x140a  */
-    /* JADX WARNING: Removed duplicated region for block: B:1157:0x1411 A[SYNTHETIC, Splitter:B:1157:0x1411] */
-    /* JADX WARNING: Removed duplicated region for block: B:1163:0x1429  */
-    /* JADX WARNING: Removed duplicated region for block: B:1165:0x1452  */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x0417 A[Catch:{ Exception -> 0x04b0, all -> 0x04ab }] */
-    /* JADX WARNING: Removed duplicated region for block: B:221:0x0419 A[Catch:{ Exception -> 0x04b0, all -> 0x04ab }] */
-    /* JADX WARNING: Removed duplicated region for block: B:225:0x0428  */
-    /* JADX WARNING: Removed duplicated region for block: B:226:0x043f  */
-    /* JADX WARNING: Removed duplicated region for block: B:259:0x04f6 A[ExcHandler: all (r0v170 'th' java.lang.Throwable A[CUSTOM_DECLARE]), PHI: r21 
-      PHI: (r21v22 int) = (r21v21 int), (r21v33 int), (r21v33 int) binds: [B:254:0x04bf, B:189:0x038a, B:190:?] A[DONT_GENERATE, DONT_INLINE], Splitter:B:189:0x038a] */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x050a A[ExcHandler: all (th java.lang.Throwable), PHI: r1 
-      PHI: (r1v182 int) = (r1v181 int), (r1v181 int), (r1v181 int), (r1v181 int), (r1v181 int), (r1v181 int), (r1v181 int), (r1v209 int), (r1v181 int) binds: [B:73:0x01d6, B:74:?, B:78:0x01e4, B:116:0x0298, B:117:?, B:125:0x02a7, B:126:?, B:178:0x0366, B:122:0x02a1] A[DONT_GENERATE, DONT_INLINE], Splitter:B:78:0x01e4] */
-    /* JADX WARNING: Removed duplicated region for block: B:269:0x0514 A[ExcHandler: all (th java.lang.Throwable), PHI: r1 r51 
-      PHI: (r1v180 int) = (r1v175 int), (r1v175 int), (r1v181 int), (r1v181 int), (r1v181 int), (r1v181 int) binds: [B:67:0x01c6, B:68:?, B:137:0x02bc, B:120:0x029e, B:121:?, B:86:0x0203] A[DONT_GENERATE, DONT_INLINE]
-      PHI: (r51v10 int) = (r51v5 int), (r51v5 int), (r51v11 int), (r51v11 int), (r51v11 int), (r51v11 int) binds: [B:67:0x01c6, B:68:?, B:137:0x02bc, B:120:0x029e, B:121:?, B:86:0x0203] A[DONT_GENERATE, DONT_INLINE], Splitter:B:67:0x01c6] */
-    /* JADX WARNING: Removed duplicated region for block: B:279:0x0545 A[ExcHandler: all (r0v152 'th' java.lang.Throwable A[CUSTOM_DECLARE]), Splitter:B:53:0x01a5] */
-    /* JADX WARNING: Removed duplicated region for block: B:289:0x0571 A[ExcHandler: all (th java.lang.Throwable), Splitter:B:39:0x0111] */
-    /* JADX WARNING: Removed duplicated region for block: B:307:0x059d A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:320:0x05df A[SYNTHETIC, Splitter:B:320:0x05df] */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x05ee A[Catch:{ all -> 0x05e3 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:327:0x05f3 A[Catch:{ all -> 0x05e3 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:374:0x06cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:393:0x071c A[SYNTHETIC, Splitter:B:393:0x071c] */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x0745  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x0748  */
-    /* JADX WARNING: Removed duplicated region for block: B:409:0x074e A[SYNTHETIC, Splitter:B:409:0x074e] */
-    /* JADX WARNING: Removed duplicated region for block: B:419:0x0782  */
-    /* JADX WARNING: Removed duplicated region for block: B:432:0x07b5  */
-    /* JADX WARNING: Removed duplicated region for block: B:440:0x07cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:444:0x07d6 A[SYNTHETIC, Splitter:B:444:0x07d6] */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x081a A[SYNTHETIC, Splitter:B:451:0x081a] */
-    /* JADX WARNING: Removed duplicated region for block: B:466:0x084a  */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x08c7 A[SYNTHETIC, Splitter:B:487:0x08c7] */
-    /* JADX WARNING: Removed duplicated region for block: B:489:0x08d0 A[ExcHandler: all (th java.lang.Throwable), Splitter:B:487:0x08c7] */
-    /* JADX WARNING: Removed duplicated region for block: B:494:0x08ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:497:0x08f0 A[SYNTHETIC, Splitter:B:497:0x08f0] */
-    /* JADX WARNING: Removed duplicated region for block: B:508:0x091e  */
-    /* JADX WARNING: Removed duplicated region for block: B:510:0x0921  */
-    /* JADX WARNING: Removed duplicated region for block: B:558:0x09c8 A[ExcHandler: all (th java.lang.Throwable), Splitter:B:535:0x0982] */
-    /* JADX WARNING: Removed duplicated region for block: B:560:0x09cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:569:0x09f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:572:0x0a03  */
-    /* JADX WARNING: Removed duplicated region for block: B:573:0x0a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:578:0x0a28 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a46 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:598:0x0a77  */
-    /* JADX WARNING: Removed duplicated region for block: B:687:0x0bd6  */
-    /* JADX WARNING: Removed duplicated region for block: B:691:0x0bf6 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:696:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:697:0x0c1d  */
-    /* JADX WARNING: Removed duplicated region for block: B:702:0x0c2c  */
-    /* JADX WARNING: Removed duplicated region for block: B:704:0x0c4b  */
-    /* JADX WARNING: Removed duplicated region for block: B:712:0x0CLASSNAME A[Catch:{ Exception -> 0x0c7a, all -> 0x0CLASSNAME }, ExcHandler: all (th java.lang.Throwable), Splitter:B:706:0x0c4e] */
-    /* JADX WARNING: Removed duplicated region for block: B:835:0x0e4f A[ExcHandler: all (th java.lang.Throwable), PHI: r34 
-      PHI: (r34v68 long) = (r34v69 long), (r34v69 long), (r34v69 long), (r34v72 long) binds: [B:798:0x0da0, B:799:?, B:801:0x0da5, B:771:0x0d41] A[DONT_GENERATE, DONT_INLINE], Splitter:B:771:0x0d41] */
-    /* JADX WARNING: Removed duplicated region for block: B:849:0x0e7d A[Catch:{ Exception -> 0x112b, all -> 0x1125 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:850:0x0e80 A[Catch:{ Exception -> 0x112b, all -> 0x1125 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:854:0x0e90  */
-    /* JADX WARNING: Removed duplicated region for block: B:856:0x0eb0  */
-    /* JADX WARNING: Removed duplicated region for block: B:874:0x0f0a A[ExcHandler: Exception (e java.lang.Exception), Splitter:B:868:0x0ee4] */
-    /* JADX WARNING: Removed duplicated region for block: B:924:0x0fb1 A[ExcHandler: Exception (e java.lang.Exception), Splitter:B:899:0x0var_] */
-    /* JADX WARNING: Removed duplicated region for block: B:932:0x0fd3  */
-    /* JADX WARNING: Removed duplicated region for block: B:933:0x0fd6  */
-    /* JADX WARNING: Removed duplicated region for block: B:940:0x0fe4 A[SYNTHETIC, Splitter:B:940:0x0fe4] */
-    /* JADX WARNING: Removed duplicated region for block: B:945:0x1008 A[Catch:{ Exception -> 0x1016, all -> 0x108d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:953:0x101d A[Catch:{ Exception -> 0x1016, all -> 0x108d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:954:0x1020 A[Catch:{ Exception -> 0x1016, all -> 0x108d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:962:0x1035  */
-    /* JADX WARNING: Removed duplicated region for block: B:980:0x1066 A[Catch:{ Exception -> 0x1085, all -> 0x108d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:983:0x1072 A[Catch:{ Exception -> 0x1085, all -> 0x108d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:988:0x1081  */
-    /* JADX WARNING: Removed duplicated region for block: B:991:0x108d A[ExcHandler: all (r0v53 'th' java.lang.Throwable A[CUSTOM_DECLARE]), Splitter:B:959:0x1030] */
+    /* JADX WARNING: Removed duplicated region for block: B:1003:0x1206 A[ExcHandler: all (th java.lang.Throwable), Splitter:B:400:0x0722] */
+    /* JADX WARNING: Removed duplicated region for block: B:1031:0x1289 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:1046:0x12d4 A[Catch:{ all -> 0x12e4 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:1060:0x130c  */
+    /* JADX WARNING: Removed duplicated region for block: B:1062:0x1325 A[SYNTHETIC, Splitter:B:1062:0x1325] */
+    /* JADX WARNING: Removed duplicated region for block: B:1067:0x1336 A[Catch:{ all -> 0x1329 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:1069:0x133b A[Catch:{ all -> 0x1329 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:1071:0x1343 A[Catch:{ all -> 0x1329 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:1076:0x1354  */
+    /* JADX WARNING: Removed duplicated region for block: B:1079:0x135b A[SYNTHETIC, Splitter:B:1079:0x135b] */
+    /* JADX WARNING: Removed duplicated region for block: B:1098:0x13c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:1101:0x13cc A[SYNTHETIC, Splitter:B:1101:0x13cc] */
+    /* JADX WARNING: Removed duplicated region for block: B:1107:0x13e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:1109:0x1411  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x03af A[ExcHandler: all (r0v161 'th' java.lang.Throwable A[CUSTOM_DECLARE]), Splitter:B:83:0x01bb] */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x040e A[ExcHandler: all (th java.lang.Throwable), Splitter:B:46:0x0101] */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x0454 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:249:0x0494 A[SYNTHETIC, Splitter:B:249:0x0494] */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x04a4 A[Catch:{ all -> 0x0498 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:306:0x0596  */
+    /* JADX WARNING: Removed duplicated region for block: B:349:0x063e A[ExcHandler: Exception (r0v127 'e' java.lang.Exception A[CUSTOM_DECLARE]), Splitter:B:337:0x0620] */
+    /* JADX WARNING: Removed duplicated region for block: B:368:0x0690  */
+    /* JADX WARNING: Removed duplicated region for block: B:379:0x06b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:383:0x06c1  */
+    /* JADX WARNING: Removed duplicated region for block: B:386:0x06e0  */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x0706 A[SYNTHETIC, Splitter:B:391:0x0706] */
+    /* JADX WARNING: Removed duplicated region for block: B:398:0x071e  */
+    /* JADX WARNING: Removed duplicated region for block: B:420:0x07ad A[SYNTHETIC, Splitter:B:420:0x07ad] */
+    /* JADX WARNING: Removed duplicated region for block: B:422:0x07b6 A[ExcHandler: all (r0v120 'th' java.lang.Throwable A[CUSTOM_DECLARE]), Splitter:B:420:0x07ad] */
+    /* JADX WARNING: Removed duplicated region for block: B:426:0x07d9  */
+    /* JADX WARNING: Removed duplicated region for block: B:429:0x07df A[SYNTHETIC, Splitter:B:429:0x07df] */
+    /* JADX WARNING: Removed duplicated region for block: B:440:0x080d  */
+    /* JADX WARNING: Removed duplicated region for block: B:442:0x0810  */
+    /* JADX WARNING: Removed duplicated region for block: B:493:0x08c9 A[ExcHandler: all (th java.lang.Throwable), Splitter:B:467:0x0873] */
+    /* JADX WARNING: Removed duplicated region for block: B:504:0x08f6  */
+    /* JADX WARNING: Removed duplicated region for block: B:510:0x092c  */
+    /* JADX WARNING: Removed duplicated region for block: B:514:0x093d  */
+    /* JADX WARNING: Removed duplicated region for block: B:515:0x0940  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x012a A[ExcHandler: all (th java.lang.Throwable), Splitter:B:49:0x0105] */
+    /* JADX WARNING: Removed duplicated region for block: B:520:0x095f A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:526:0x097d A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:536:0x09b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:640:0x0b93  */
+    /* JADX WARNING: Removed duplicated region for block: B:644:0x0bbb A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:649:0x0bdf  */
+    /* JADX WARNING: Removed duplicated region for block: B:650:0x0be8  */
+    /* JADX WARNING: Removed duplicated region for block: B:656:0x0bfb  */
+    /* JADX WARNING: Removed duplicated region for block: B:658:0x0CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:791:0x0e2a A[Catch:{ Exception -> 0x10b6, all -> 0x10af }] */
+    /* JADX WARNING: Removed duplicated region for block: B:792:0x0e2c A[Catch:{ Exception -> 0x10b6, all -> 0x10af }] */
+    /* JADX WARNING: Removed duplicated region for block: B:796:0x0e38  */
+    /* JADX WARNING: Removed duplicated region for block: B:797:0x0e55  */
+    /* JADX WARNING: Removed duplicated region for block: B:884:0x0f9d  */
+    /* JADX WARNING: Removed duplicated region for block: B:885:0x0fa0  */
+    /* JADX WARNING: Removed duplicated region for block: B:892:0x0fad A[SYNTHETIC, Splitter:B:892:0x0fad] */
+    /* JADX WARNING: Removed duplicated region for block: B:897:0x0fd1 A[Catch:{ Exception -> 0x0fdf, all -> 0x1109 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:905:0x0fe5 A[Catch:{ Exception -> 0x0fdf, all -> 0x1109 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:906:0x0fe8 A[Catch:{ Exception -> 0x0fdf, all -> 0x1109 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:914:0x0ffd  */
+    /* JADX WARNING: Removed duplicated region for block: B:931:0x102d A[Catch:{ Exception -> 0x1113, all -> 0x1109 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:935:0x1037 A[Catch:{ Exception -> 0x1113, all -> 0x1109 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:959:0x1109 A[ExcHandler: all (th java.lang.Throwable), PHI: r11 r32 r40 r44 
+      PHI: (r11v68 java.lang.String) = (r11v252 java.lang.String), (r11v255 int), (r11v257 int), (r11v258 int), (r11v259 int), (r11v261 int), (r11v262 int), (r11v264 int), (r11v266 int), (r11v278 int), (r11v280 int), (r11v284 java.lang.String) binds: [B:799:0x0e5b, B:919:0x100e, B:929:0x1026, B:924:0x1015, B:920:?, B:916:0x1003, B:911:0x0ff8, B:912:?, B:892:0x0fad, B:856:0x0var_, B:857:?, B:788:0x0e24] A[DONT_GENERATE, DONT_INLINE]
+      PHI: (r32v46 long) = (r32v41 long), (r32v52 long), (r32v52 long), (r32v52 long), (r32v52 long), (r32v52 long), (r32v52 long), (r32v52 long), (r32v52 long), (r32v41 long), (r32v41 long), (r32v41 long) binds: [B:799:0x0e5b, B:919:0x100e, B:929:0x1026, B:924:0x1015, B:920:?, B:916:0x1003, B:911:0x0ff8, B:912:?, B:892:0x0fad, B:856:0x0var_, B:857:?, B:788:0x0e24] A[DONT_GENERATE, DONT_INLINE]
+      PHI: (r40v29 int) = (r40v22 int), (r40v41 int), (r40v41 int), (r40v41 int), (r40v41 int), (r40v41 int), (r40v41 int), (r40v41 int), (r40v41 int), (r40v50 int), (r40v50 int), (r40v22 int) binds: [B:799:0x0e5b, B:919:0x100e, B:929:0x1026, B:924:0x1015, B:920:?, B:916:0x1003, B:911:0x0ff8, B:912:?, B:892:0x0fad, B:856:0x0var_, B:857:?, B:788:0x0e24] A[DONT_GENERATE, DONT_INLINE]
+      PHI: (r44v39 long) = (r44v46 long), (r44v49 long), (r44v49 long), (r44v49 long), (r44v49 long), (r44v49 long), (r44v49 long), (r44v49 long), (r44v49 long), (r44v46 long), (r44v46 long), (r44v56 long) binds: [B:799:0x0e5b, B:919:0x100e, B:929:0x1026, B:924:0x1015, B:920:?, B:916:0x1003, B:911:0x0ff8, B:912:?, B:892:0x0fad, B:856:0x0var_, B:857:?, B:788:0x0e24] A[DONT_GENERATE, DONT_INLINE], Splitter:B:788:0x0e24] */
+    /* JADX WARNING: Removed duplicated region for block: B:965:0x111e A[ExcHandler: all (th java.lang.Throwable), Splitter:B:646:0x0bda] */
+    /* JADX WARNING: Removed duplicated region for block: B:989:0x11ab A[ExcHandler: all (th java.lang.Throwable), Splitter:B:411:0x078d] */
+    /* JADX WARNING: Unknown variable types count: 1 */
     @android.annotation.TargetApi(18)
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private boolean convertVideoInternal(java.lang.String r77, java.io.File r78, int r79, boolean r80, int r81, int r82, int r83, int r84, int r85, long r86, long r88, long r90, long r92, boolean r94, boolean r95, org.telegram.messenger.MediaController.SavedFilterState r96, java.lang.String r97, java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r98, boolean r99, org.telegram.messenger.MediaController.CropState r100) {
+    private boolean convertVideoInternal(java.lang.String r69, java.io.File r70, int r71, boolean r72, int r73, int r74, int r75, int r76, int r77, int r78, int r79, long r80, long r82, long r84, long r86, boolean r88, boolean r89, org.telegram.messenger.MediaController.SavedFilterState r90, java.lang.String r91, java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r92, boolean r93, org.telegram.messenger.MediaController.CropState r94) {
         /*
-            r76 = this;
-            r15 = r76
-            r13 = r77
-            r14 = r79
-            r12 = r81
-            r11 = r82
-            r10 = r83
-            r9 = r84
-            r8 = r85
-            r6 = r86
-            r4 = r92
-            r3 = r94
-            r2 = r100
+            r68 = this;
+            r15 = r68
+            r13 = r69
+            r14 = r71
+            r12 = r75
+            r11 = r76
+            r9 = r77
+            r10 = r78
+            r7 = r79
+            r5 = r80
+            r3 = r86
+            r8 = r88
+            r2 = r94
             long r16 = java.lang.System.currentTimeMillis()
             r18 = -1
-            r7 = 0
-            android.media.MediaCodec$BufferInfo r6 = new android.media.MediaCodec$BufferInfo     // Catch:{ all -> 0x13c8 }
-            r6.<init>()     // Catch:{ all -> 0x13c8 }
-            org.telegram.messenger.video.Mp4Movie r1 = new org.telegram.messenger.video.Mp4Movie     // Catch:{ all -> 0x13c8 }
-            r1.<init>()     // Catch:{ all -> 0x13c8 }
-            r22 = r6
-            r6 = r78
-            r1.setCacheFile(r6)     // Catch:{ all -> 0x13c8 }
-            r1.setRotation(r7)     // Catch:{ all -> 0x13c8 }
-            r1.setSize(r12, r11)     // Catch:{ all -> 0x13c8 }
-            org.telegram.messenger.video.MP4Builder r7 = new org.telegram.messenger.video.MP4Builder     // Catch:{ all -> 0x13c8 }
-            r7.<init>()     // Catch:{ all -> 0x13c8 }
-            r6 = r80
-            org.telegram.messenger.video.MP4Builder r1 = r7.createMovie(r1, r6)     // Catch:{ all -> 0x13c8 }
-            r15.mediaMuxer = r1     // Catch:{ all -> 0x13c8 }
-            float r1 = (float) r4     // Catch:{ all -> 0x13c8 }
-            r24 = 1148846080(0x447a0000, float:1000.0)
-            float r25 = r1 / r24
-            r26 = 1000(0x3e8, double:4.94E-321)
-            long r1 = r4 * r26
-            r15.endPresentationTime = r1     // Catch:{ all -> 0x13c8 }
-            r76.checkConversionCanceled()     // Catch:{ all -> 0x13c8 }
-            java.lang.String r7 = "csd-1"
-            java.lang.String r1 = "csd-0"
-            java.lang.String r6 = "prepend-sps-pps-to-idr-frames"
-            r2 = 921600(0xe1000, float:1.291437E-39)
-            r28 = r6
-            r27 = r7
-            java.lang.String r7 = "video/avc"
-            r34 = r7
-            r6 = 0
-            if (r99 == 0) goto L_0x062e
-            int r18 = (r90 > r6 ? 1 : (r90 == r6 ? 0 : -1))
-            if (r18 < 0) goto L_0x008c
-            r2 = 1157234688(0x44fa0000, float:2000.0)
-            int r2 = (r25 > r2 ? 1 : (r25 == r2 ? 0 : -1))
-            if (r2 > 0) goto L_0x0077
-            r2 = 2600000(0x27aCLASSNAME, float:3.643376E-39)
-            r9 = 2600000(0x27aCLASSNAME, float:3.643376E-39)
-            goto L_0x0091
-        L_0x0077:
-            r2 = 1167867904(0x459CLASSNAME, float:5000.0)
-            int r2 = (r25 > r2 ? 1 : (r25 == r2 ? 0 : -1))
-            if (r2 > 0) goto L_0x0085
-            r2 = 2200000(0x2191c0, float:3.082857E-39)
-            r9 = 2200000(0x2191c0, float:3.082857E-39)
-            goto L_0x0091
-        L_0x0085:
-            r2 = 1560000(0x17cdc0, float:2.186026E-39)
-            r9 = 1560000(0x17cdc0, float:2.186026E-39)
-            goto L_0x0091
-        L_0x008c:
-            if (r9 > 0) goto L_0x0091
-            r9 = 921600(0xe1000, float:1.291437E-39)
-        L_0x0091:
-            int r2 = r12 % 16
-            r18 = 1098907648(0x41800000, float:16.0)
-            if (r2 == 0) goto L_0x00da
-            boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            if (r2 == 0) goto L_0x00c0
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            r2.<init>()     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            java.lang.String r6 = "changing width from "
-            r2.append(r6)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            r2.append(r12)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            java.lang.String r6 = " to "
-            r2.append(r6)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            float r6 = (float) r12     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            float r6 = r6 / r18
-            int r6 = java.lang.Math.round(r6)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            int r6 = r6 * 16
-            r2.append(r6)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-        L_0x00c0:
-            float r2 = (float) r12     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            float r2 = r2 / r18
-            int r2 = java.lang.Math.round(r2)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            int r2 = r2 * 16
-            r12 = r2
-            goto L_0x00da
-        L_0x00cb:
-            r0 = move-exception
-            r34 = r88
-            r26 = r90
-            r2 = r0
-            r8 = r10
-            goto L_0x0589
-        L_0x00d4:
-            r0 = move-exception
-            r2 = r0
-            r50 = r9
-            goto L_0x0593
-        L_0x00da:
-            int r2 = r11 % 16
-            if (r2 == 0) goto L_0x0111
-            boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            if (r2 == 0) goto L_0x0107
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            r2.<init>()     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            java.lang.String r6 = "changing height from "
-            r2.append(r6)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            r2.append(r11)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            java.lang.String r6 = " to "
-            r2.append(r6)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            float r6 = (float) r11     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            float r6 = r6 / r18
-            int r6 = java.lang.Math.round(r6)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            int r6 = r6 * 16
-            r2.append(r6)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-        L_0x0107:
-            float r2 = (float) r11     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            float r2 = r2 / r18
-            int r2 = java.lang.Math.round(r2)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            int r2 = r2 * 16
-            r11 = r2
-        L_0x0111:
-            boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0577, all -> 0x0571 }
-            if (r2 == 0) goto L_0x0139
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            r2.<init>()     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            java.lang.String r6 = "create photo encoder "
-            r2.append(r6)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            r2.append(r12)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            java.lang.String r6 = " "
-            r2.append(r6)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            r2.append(r11)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            java.lang.String r6 = " duration = "
-            r2.append(r6)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            r2.append(r4)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x00d4, all -> 0x00cb }
-        L_0x0139:
-            r7 = r34
-            android.media.MediaFormat r2 = android.media.MediaFormat.createVideoFormat(r7, r12, r11)     // Catch:{ Exception -> 0x0577, all -> 0x0571 }
-            java.lang.String r6 = "color-format"
-            r34 = r1
-            r1 = 2130708361(0x7var_, float:1.701803E38)
-            r2.setInteger(r6, r1)     // Catch:{ Exception -> 0x0577, all -> 0x0571 }
-            java.lang.String r1 = "bitrate"
-            r2.setInteger(r1, r9)     // Catch:{ Exception -> 0x0577, all -> 0x0571 }
-            java.lang.String r1 = "frame-rate"
-            r2.setInteger(r1, r10)     // Catch:{ Exception -> 0x0577, all -> 0x0571 }
-            java.lang.String r1 = "i-frame-interval"
-            r6 = 2
-            r2.setInteger(r1, r6)     // Catch:{ Exception -> 0x0577, all -> 0x0571 }
-            android.media.MediaCodec r6 = android.media.MediaCodec.createEncoderByType(r7)     // Catch:{ Exception -> 0x0577, all -> 0x0571 }
-            r18 = r7
-            r1 = 0
-            r7 = 1
-            r6.configure(r2, r1, r1, r7)     // Catch:{ Exception -> 0x0568, all -> 0x0571 }
-            org.telegram.messenger.video.InputSurface r2 = new org.telegram.messenger.video.InputSurface     // Catch:{ Exception -> 0x0568, all -> 0x0571 }
-            android.view.Surface r1 = r6.createInputSurface()     // Catch:{ Exception -> 0x0568, all -> 0x0571 }
-            r2.<init>(r1)     // Catch:{ Exception -> 0x0568, all -> 0x0571 }
-            r2.makeCurrent()     // Catch:{ Exception -> 0x055b, all -> 0x0571 }
-            r6.start()     // Catch:{ Exception -> 0x055b, all -> 0x0571 }
-            org.telegram.messenger.video.OutputSurface r19 = new org.telegram.messenger.video.OutputSurface     // Catch:{ Exception -> 0x055b, all -> 0x0571 }
-            r20 = 0
-            float r1 = (float) r10
-            r32 = 1
-            r21 = r1
-            r39 = r34
-            r34 = 0
-            r1 = r19
-            r40 = r2
-            r2 = r96
-            r3 = r77
-            r4 = r97
-            r5 = r98
-            r7 = r6
-            r14 = r22
-            r13 = 21
-            r6 = r20
-            r81 = r7
-            r49 = r18
-            r48 = r27
-            r7 = r12
-            r8 = r11
-            r50 = r9
-            r9 = r79
-            r10 = r21
-            r51 = r11
-            r11 = r32
-            r1.<init>(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x0552, all -> 0x0545 }
-            int r1 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x053b, all -> 0x0545 }
-            if (r1 >= r13) goto L_0x01ba
-            java.nio.ByteBuffer[] r6 = r81.getOutputBuffers()     // Catch:{ Exception -> 0x01b1, all -> 0x0545 }
-            goto L_0x01bb
-        L_0x01b1:
-            r0 = move-exception
-            r6 = r81
-            r2 = r0
-            r11 = r51
-            r1 = -5
-            goto L_0x0599
-        L_0x01ba:
-            r6 = 0
-        L_0x01bb:
-            r76.checkConversionCanceled()     // Catch:{ Exception -> 0x053b, all -> 0x0545 }
-            r1 = -5
-            r2 = 1
-            r3 = 0
-            r4 = 0
+            android.media.MediaCodec$BufferInfo r1 = new android.media.MediaCodec$BufferInfo     // Catch:{ all -> 0x1381 }
+            r1.<init>()     // Catch:{ all -> 0x1381 }
+            org.telegram.messenger.video.Mp4Movie r2 = new org.telegram.messenger.video.Mp4Movie     // Catch:{ all -> 0x1381 }
+            r2.<init>()     // Catch:{ all -> 0x1381 }
+            r14 = r70
+            r2.setCacheFile(r14)     // Catch:{ all -> 0x1381 }
             r5 = 0
-            r7 = 0
-        L_0x01c4:
-            if (r7 != 0) goto L_0x052b
-            r76.checkConversionCanceled()     // Catch:{ Exception -> 0x0522, all -> 0x0514 }
-            r8 = r3 ^ 1
-            r9 = r7
-            r7 = r6
-            r6 = 1
-        L_0x01ce:
-            if (r8 != 0) goto L_0x01d6
-            if (r6 == 0) goto L_0x01d3
-            goto L_0x01d6
-        L_0x01d3:
-            r6 = r7
-            r7 = r9
-            goto L_0x01c4
-        L_0x01d6:
-            r76.checkConversionCanceled()     // Catch:{ Exception -> 0x050e, all -> 0x050a }
-            if (r95 == 0) goto L_0x01e0
-            r10 = 22000(0x55f0, double:1.08694E-319)
-            r13 = r81
-            goto L_0x01e4
-        L_0x01e0:
-            r13 = r81
-            r10 = 2500(0x9c4, double:1.235E-320)
-        L_0x01e4:
-            int r10 = r13.dequeueOutputBuffer(r14, r10)     // Catch:{ Exception -> 0x0508, all -> 0x050a }
-            r11 = -1
-            if (r10 != r11) goto L_0x0200
-            r81 = r1
-            r20 = r4
-            r18 = r5
-            r82 = r8
-            r8 = r39
-            r11 = r48
-            r4 = r49
-            r1 = -1
-            r6 = 0
-        L_0x01fb:
-            r5 = r3
-            r3 = r51
-            goto L_0x0426
-        L_0x0200:
-            r11 = -3
-            if (r10 != r11) goto L_0x0228
-            int r11 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r81 = r6
-            r6 = 21
-            if (r11 >= r6) goto L_0x020f
-            java.nio.ByteBuffer[] r7 = r13.getOutputBuffers()     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-        L_0x020f:
-            r6 = r81
-            r81 = r1
-            r20 = r4
-            r18 = r5
-            r82 = r8
-            r8 = r39
-            r11 = r48
-        L_0x021d:
-            r4 = r49
-            r1 = -1
-            goto L_0x01fb
-        L_0x0221:
-            r0 = move-exception
-        L_0x0222:
-            r2 = r0
-        L_0x0223:
-            r6 = r13
-        L_0x0224:
-            r11 = r51
-            goto L_0x0599
-        L_0x0228:
-            r81 = r6
-            r6 = -2
-            if (r10 != r6) goto L_0x0290
-            android.media.MediaFormat r6 = r13.getOutputFormat()     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            boolean r11 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            if (r11 == 0) goto L_0x024c
-            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r11.<init>()     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r82 = r8
-            java.lang.String r8 = "photo encoder new format "
-            r11.append(r8)     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r11.append(r6)     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            java.lang.String r8 = r11.toString()     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            org.telegram.messenger.FileLog.d(r8)     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            goto L_0x024e
-        L_0x024c:
-            r82 = r8
-        L_0x024e:
-            r8 = -5
-            if (r1 != r8) goto L_0x0283
-            if (r6 == 0) goto L_0x0283
-            org.telegram.messenger.video.MP4Builder r11 = r15.mediaMuxer     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
+            r2.setRotation(r5)     // Catch:{ all -> 0x137d }
+            r2.setSize(r12, r11)     // Catch:{ all -> 0x137d }
+            org.telegram.messenger.video.MP4Builder r5 = new org.telegram.messenger.video.MP4Builder     // Catch:{ all -> 0x137d }
+            r5.<init>()     // Catch:{ all -> 0x137d }
+            r6 = r72
+            org.telegram.messenger.video.MP4Builder r2 = r5.createMovie(r2, r6)     // Catch:{ all -> 0x137d }
+            r15.mediaMuxer = r2     // Catch:{ all -> 0x137d }
+            float r2 = (float) r3     // Catch:{ all -> 0x137d }
+            r23 = 1148846080(0x447a0000, float:1000.0)
+            float r24 = r2 / r23
+            r25 = 1000(0x3e8, double:4.94E-321)
+            long r5 = r3 * r25
+            r15.endPresentationTime = r5     // Catch:{ all -> 0x137d }
+            r68.checkConversionCanceled()     // Catch:{ all -> 0x137d }
+            java.lang.String r6 = "csd-1"
+            java.lang.String r2 = "csd-0"
+            java.lang.String r5 = "prepend-sps-pps-to-idr-frames"
+            java.lang.String r14 = "video/avc"
             r8 = 0
-            int r1 = r11.addTrack(r6, r8)     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r11 = r28
-            boolean r18 = r6.containsKey(r11)     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            if (r18 == 0) goto L_0x0281
-            int r8 = r6.getInteger(r11)     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r28 = r11
-            r11 = 1
-            if (r8 != r11) goto L_0x0283
-            r8 = r39
-            java.nio.ByteBuffer r4 = r6.getByteBuffer(r8)     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r11 = r48
-            java.nio.ByteBuffer r6 = r6.getByteBuffer(r11)     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            int r4 = r4.limit()     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            int r6 = r6.limit()     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            int r4 = r4 + r6
-            goto L_0x0287
-        L_0x0281:
-            r28 = r11
-        L_0x0283:
-            r8 = r39
-            r11 = r48
-        L_0x0287:
-            r6 = r81
-            r81 = r1
-            r20 = r4
-            r18 = r5
-            goto L_0x021d
-        L_0x0290:
-            r82 = r8
-            r8 = r39
-            r11 = r48
-            if (r10 < 0) goto L_0x04db
-            int r6 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0508, all -> 0x050a }
-            r9 = 21
-            if (r6 >= r9) goto L_0x02a1
-            r6 = r7[r10]     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            goto L_0x02a5
-        L_0x02a1:
-            java.nio.ByteBuffer r6 = r13.getOutputBuffer(r10)     // Catch:{ Exception -> 0x0508, all -> 0x050a }
-        L_0x02a5:
-            if (r6 == 0) goto L_0x04bb
-            int r9 = r14.size     // Catch:{ Exception -> 0x04b4, all -> 0x050a }
-            r84 = r7
-            r7 = 1
-            if (r9 <= r7) goto L_0x0404
-            int r7 = r14.flags     // Catch:{ Exception -> 0x03fa, all -> 0x03e9 }
-            r18 = r7 & 2
-            if (r18 != 0) goto L_0x0345
-            if (r4 == 0) goto L_0x02c5
-            r18 = r7 & 1
-            if (r18 == 0) goto L_0x02c5
-            r18 = r5
-            int r5 = r14.offset     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            int r5 = r5 + r4
-            r14.offset = r5     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            int r9 = r9 - r4
-            r14.size = r9     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            goto L_0x02c7
-        L_0x02c5:
-            r18 = r5
-        L_0x02c7:
-            if (r2 == 0) goto L_0x0316
-            r5 = r7 & 1
-            if (r5 == 0) goto L_0x0316
-            int r2 = r14.size     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r7 = 100
-            if (r2 <= r7) goto L_0x0314
-            int r2 = r14.offset     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r6.position(r2)     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            byte[] r2 = new byte[r7]     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r6.get(r2)     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r5 = 0
-            r9 = 0
-        L_0x02df:
-            r7 = 96
-            if (r5 >= r7) goto L_0x0314
-            byte r7 = r2[r5]     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            if (r7 != 0) goto L_0x030b
-            int r7 = r5 + 1
-            byte r7 = r2[r7]     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            if (r7 != 0) goto L_0x030b
-            int r7 = r5 + 2
-            byte r7 = r2[r7]     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            if (r7 != 0) goto L_0x030b
-            int r7 = r5 + 3
-            byte r7 = r2[r7]     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r20 = r2
-            r2 = 1
-            if (r7 != r2) goto L_0x030d
-            int r9 = r9 + 1
-            if (r9 <= r2) goto L_0x030d
-            int r2 = r14.offset     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            int r2 = r2 + r5
-            r14.offset = r2     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            int r2 = r14.size     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            int r2 = r2 - r5
-            r14.size = r2     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            goto L_0x0314
-        L_0x030b:
-            r20 = r2
-        L_0x030d:
-            int r5 = r5 + 1
-            r2 = r20
-            r7 = 100
-            goto L_0x02df
-        L_0x0314:
-            r7 = 0
-            goto L_0x0317
-        L_0x0316:
-            r7 = r2
-        L_0x0317:
-            org.telegram.messenger.video.MP4Builder r2 = r15.mediaMuxer     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r9 = r7
-            r5 = 1
-            long r6 = r2.writeSampleData(r1, r6, r14, r5)     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            r5 = r3
-            r2 = 0
-            int r20 = (r6 > r2 ? 1 : (r6 == r2 ? 0 : -1))
-            if (r20 == 0) goto L_0x0339
-            org.telegram.messenger.MediaController$VideoConvertorListener r2 = r15.callback     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            if (r2 == 0) goto L_0x0339
-            r20 = r4
-            r21 = r9
+            if (r93 == 0) goto L_0x04e3
+            int r18 = (r84 > r8 ? 1 : (r84 == r8 ? 0 : -1))
+            if (r18 < 0) goto L_0x0078
+            r10 = 1157234688(0x44fa0000, float:2000.0)
+            int r10 = (r24 > r10 ? 1 : (r24 == r10 ? 0 : -1))
+            if (r10 > 0) goto L_0x0069
+            r10 = 2600000(0x27aCLASSNAME, float:3.643376E-39)
+            goto L_0x007d
+        L_0x0069:
+            r10 = 1167867904(0x459CLASSNAME, float:5000.0)
+            int r10 = (r24 > r10 ? 1 : (r24 == r10 ? 0 : -1))
+            if (r10 > 0) goto L_0x0074
+            r10 = 2200000(0x2191c0, float:3.082857E-39)
+            goto L_0x007d
+        L_0x0074:
+            r10 = 1560000(0x17cdc0, float:2.186026E-39)
+            goto L_0x007d
+        L_0x0078:
+            if (r10 > 0) goto L_0x007d
+            r10 = 921600(0xe1000, float:1.291437E-39)
+        L_0x007d:
+            int r18 = r12 % 16
+            r19 = 1098907648(0x41800000, float:16.0)
+            if (r18 == 0) goto L_0x00bf
+            boolean r18 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+            if (r18 == 0) goto L_0x00ac
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+            r8.<init>()     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+            java.lang.String r9 = "changing width from "
+            r8.append(r9)     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+            r8.append(r12)     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+            java.lang.String r9 = " to "
+            r8.append(r9)     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+            float r9 = (float) r12     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+            float r9 = r9 / r19
+            int r9 = java.lang.Math.round(r9)     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+            int r9 = r9 * 16
+            r8.append(r9)     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+            java.lang.String r8 = r8.toString()     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+            org.telegram.messenger.FileLog.d(r8)     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+        L_0x00ac:
+            float r8 = (float) r12     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+            float r8 = r8 / r19
+            int r8 = java.lang.Math.round(r8)     // Catch:{ Exception -> 0x00b9, all -> 0x00b6 }
+            int r8 = r8 * 16
+            goto L_0x00c0
+        L_0x00b6:
+            r0 = move-exception
+            goto L_0x0436
+        L_0x00b9:
+            r0 = move-exception
+            r2 = r0
+            r36 = r10
+            goto L_0x044a
+        L_0x00bf:
+            r8 = r12
+        L_0x00c0:
+            int r9 = r11 % 16
+            if (r9 == 0) goto L_0x0100
+            boolean r9 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+            if (r9 == 0) goto L_0x00ed
+            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+            r9.<init>()     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+            java.lang.String r12 = "changing height from "
+            r9.append(r12)     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+            r9.append(r11)     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+            java.lang.String r12 = " to "
+            r9.append(r12)     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+            float r12 = (float) r11     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+            float r12 = r12 / r19
+            int r12 = java.lang.Math.round(r12)     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+            int r12 = r12 * 16
+            r9.append(r12)     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+            java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+            org.telegram.messenger.FileLog.d(r9)     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+        L_0x00ed:
+            float r9 = (float) r11     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+            float r9 = r9 / r19
+            int r9 = java.lang.Math.round(r9)     // Catch:{ Exception -> 0x00fa, all -> 0x00f7 }
+            int r9 = r9 * 16
+            goto L_0x0101
+        L_0x00f7:
+            r0 = move-exception
+            goto L_0x0424
+        L_0x00fa:
+            r0 = move-exception
+            r2 = r0
+            r36 = r10
+            goto L_0x0431
+        L_0x0100:
+            r9 = r11
+        L_0x0101:
+            boolean r11 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x041c, all -> 0x040e }
+            if (r11 == 0) goto L_0x0133
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x012d, all -> 0x012a }
+            r11.<init>()     // Catch:{ Exception -> 0x012d, all -> 0x012a }
+            java.lang.String r12 = "create photo encoder "
+            r11.append(r12)     // Catch:{ Exception -> 0x012d, all -> 0x012a }
+            r11.append(r8)     // Catch:{ Exception -> 0x012d, all -> 0x012a }
+            java.lang.String r12 = " "
+            r11.append(r12)     // Catch:{ Exception -> 0x012d, all -> 0x012a }
+            r11.append(r9)     // Catch:{ Exception -> 0x012d, all -> 0x012a }
+            java.lang.String r12 = " duration = "
+            r11.append(r12)     // Catch:{ Exception -> 0x012d, all -> 0x012a }
+            r11.append(r3)     // Catch:{ Exception -> 0x012d, all -> 0x012a }
+            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x012d, all -> 0x012a }
+            org.telegram.messenger.FileLog.d(r11)     // Catch:{ Exception -> 0x012d, all -> 0x012a }
+            goto L_0x0133
+        L_0x012a:
+            r0 = move-exception
+            goto L_0x0411
+        L_0x012d:
+            r0 = move-exception
+            r2 = r0
+            r36 = r10
+            goto L_0x044c
+        L_0x0133:
+            android.media.MediaFormat r11 = android.media.MediaFormat.createVideoFormat(r14, r8, r9)     // Catch:{ Exception -> 0x041c, all -> 0x040e }
+            java.lang.String r12 = "color-format"
+            r7 = 2130708361(0x7var_, float:1.701803E38)
+            r11.setInteger(r12, r7)     // Catch:{ Exception -> 0x041c, all -> 0x040e }
+            java.lang.String r7 = "bitrate"
+            r11.setInteger(r7, r10)     // Catch:{ Exception -> 0x041c, all -> 0x040e }
+            java.lang.String r7 = "frame-rate"
+            r12 = 30
+            r11.setInteger(r7, r12)     // Catch:{ Exception -> 0x041c, all -> 0x040e }
+            java.lang.String r7 = "i-frame-interval"
+            r12 = 1
+            r11.setInteger(r7, r12)     // Catch:{ Exception -> 0x041c, all -> 0x040e }
+            android.media.MediaCodec r7 = android.media.MediaCodec.createEncoderByType(r14)     // Catch:{ Exception -> 0x041c, all -> 0x040e }
             r3 = 0
-            float r9 = (float) r3     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            float r9 = r9 / r24
-            float r9 = r9 / r25
-            r2.didWriteData(r6, r9)     // Catch:{ Exception -> 0x0221, all -> 0x0514 }
-            goto L_0x033d
+            r7.configure(r11, r3, r3, r12)     // Catch:{ Exception -> 0x0408, all -> 0x040e }
+            org.telegram.messenger.video.InputSurface r3 = new org.telegram.messenger.video.InputSurface     // Catch:{ Exception -> 0x0408, all -> 0x040e }
+            android.view.Surface r4 = r7.createInputSurface()     // Catch:{ Exception -> 0x0408, all -> 0x040e }
+            r3.<init>(r4)     // Catch:{ Exception -> 0x0408, all -> 0x040e }
+            r3.makeCurrent()     // Catch:{ Exception -> 0x03fd, all -> 0x040e }
+            r7.start()     // Catch:{ Exception -> 0x03fd, all -> 0x040e }
+            int r4 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x03fd, all -> 0x040e }
+            r11 = 21
+            if (r4 >= r11) goto L_0x017b
+            java.nio.ByteBuffer[] r4 = r7.getOutputBuffers()     // Catch:{ Exception -> 0x0173, all -> 0x012a }
+            goto L_0x017c
+        L_0x0173:
+            r0 = move-exception
+            r2 = r0
+            r34 = r3
+            r36 = r10
+            goto L_0x0405
+        L_0x017b:
+            r4 = 0
+        L_0x017c:
+            r68.checkConversionCanceled()     // Catch:{ Exception -> 0x03fd, all -> 0x040e }
+            r11 = -5
+            r12 = 1
+            r18 = 0
+            r19 = 0
+        L_0x0185:
+            if (r18 != 0) goto L_0x03f4
+            r68.checkConversionCanceled()     // Catch:{ Exception -> 0x03e9, all -> 0x03dc }
+            r26 = 0
+            r21 = 1
+            r26 = r26 ^ 1
+            r35 = r19
+            r19 = r18
+            r18 = r12
+            r12 = r11
+            r11 = 1
+        L_0x0198:
+            if (r26 != 0) goto L_0x01a5
+            if (r11 == 0) goto L_0x019d
+            goto L_0x01a5
+        L_0x019d:
+            r11 = r12
+            r12 = r18
+            r18 = r19
+            r19 = r35
+            goto L_0x0185
+        L_0x01a5:
+            r68.checkConversionCanceled()     // Catch:{ Exception -> 0x03d1, all -> 0x03c2 }
+            if (r89 == 0) goto L_0x01b5
+            r36 = 22000(0x55f0, double:1.08694E-319)
+            r75 = r11
+            r66 = r36
+            r36 = r10
+            r10 = r66
+            goto L_0x01bb
+        L_0x01b5:
+            r36 = r10
+            r75 = r11
+            r10 = 2500(0x9c4, double:1.235E-320)
+        L_0x01bb:
+            int r10 = r7.dequeueOutputBuffer(r1, r10)     // Catch:{ Exception -> 0x03be, all -> 0x03af }
+            r11 = -1
+            if (r10 != r11) goto L_0x01ca
+            r76 = r3
+            r37 = r5
+            r3 = -1
+            r11 = 0
+            goto L_0x036e
+        L_0x01ca:
+            r11 = -3
+            if (r10 != r11) goto L_0x01e0
+            int r11 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x03be, all -> 0x03af }
+            r76 = r3
+            r3 = 21
+            if (r11 >= r3) goto L_0x01d9
+            java.nio.ByteBuffer[] r4 = r7.getOutputBuffers()     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+        L_0x01d9:
+            r11 = r75
+            r37 = r5
+        L_0x01dd:
+            r3 = -1
+            goto L_0x036e
+        L_0x01e0:
+            r76 = r3
+            r3 = -2
+            if (r10 != r3) goto L_0x0230
+            android.media.MediaFormat r3 = r7.getOutputFormat()     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            boolean r11 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            if (r11 == 0) goto L_0x0201
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r11.<init>()     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            java.lang.String r13 = "photo encoder new format "
+            r11.append(r13)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r11.append(r3)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            org.telegram.messenger.FileLog.d(r11)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+        L_0x0201:
+            r11 = -5
+            if (r12 != r11) goto L_0x01d9
+            if (r3 == 0) goto L_0x01d9
+            org.telegram.messenger.video.MP4Builder r11 = r15.mediaMuxer     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r13 = 0
+            int r12 = r11.addTrack(r3, r13)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            boolean r11 = r3.containsKey(r5)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            if (r11 == 0) goto L_0x01d9
+            int r11 = r3.getInteger(r5)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r13 = 1
+            if (r11 != r13) goto L_0x01d9
+            java.nio.ByteBuffer r11 = r3.getByteBuffer(r2)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            java.nio.ByteBuffer r3 = r3.getByteBuffer(r6)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r11 = r11.limit()     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r3 = r3.limit()     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r35 = r11 + r3
+            goto L_0x01d9
+        L_0x022d:
+            r0 = move-exception
+            goto L_0x03d6
+        L_0x0230:
+            if (r10 < 0) goto L_0x0398
+            int r3 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r13 = 21
+            if (r3 >= r13) goto L_0x023b
+            r3 = r4[r10]     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            goto L_0x023f
+        L_0x023b:
+            java.nio.ByteBuffer r3 = r7.getOutputBuffer(r10)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+        L_0x023f:
+            if (r3 == 0) goto L_0x037c
+            int r11 = r1.size     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r13 = 1
+            if (r11 <= r13) goto L_0x0354
+            int r13 = r1.flags     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r19 = r13 & 2
+            if (r19 != 0) goto L_0x02d9
+            if (r35 == 0) goto L_0x025f
+            r19 = r13 & 1
+            if (r19 == 0) goto L_0x025f
+            r78 = r4
+            int r4 = r1.offset     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r4 = r4 + r35
+            r1.offset = r4     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r11 = r11 - r35
+            r1.size = r11     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            goto L_0x0261
+        L_0x025f:
+            r78 = r4
+        L_0x0261:
+            if (r18 == 0) goto L_0x02b4
+            r4 = r13 & 1
+            if (r4 == 0) goto L_0x02b4
+            int r4 = r1.size     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r13 = 100
+            if (r4 <= r13) goto L_0x02b2
+            int r4 = r1.offset     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r3.position(r4)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            byte[] r4 = new byte[r13]     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r3.get(r4)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r11 = 0
+            r18 = 0
+        L_0x027a:
+            r13 = 96
+            if (r11 >= r13) goto L_0x02b2
+            byte r13 = r4[r11]     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            if (r13 != 0) goto L_0x02a9
+            int r13 = r11 + 1
+            byte r13 = r4[r13]     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            if (r13 != 0) goto L_0x02a9
+            int r13 = r11 + 2
+            byte r13 = r4[r13]     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            if (r13 != 0) goto L_0x02a9
+            int r13 = r11 + 3
+            byte r13 = r4[r13]     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r19 = r4
+            r4 = 1
+            if (r13 != r4) goto L_0x02ab
+            int r13 = r18 + 1
+            if (r13 <= r4) goto L_0x02a6
+            int r4 = r1.offset     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r4 = r4 + r11
+            r1.offset = r4     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r4 = r1.size     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r4 = r4 - r11
+            r1.size = r4     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            goto L_0x02b2
+        L_0x02a6:
+            r18 = r13
+            goto L_0x02ab
+        L_0x02a9:
+            r19 = r4
+        L_0x02ab:
+            int r11 = r11 + 1
+            r4 = r19
+            r13 = 100
+            goto L_0x027a
+        L_0x02b2:
+            r18 = 0
+        L_0x02b4:
+            org.telegram.messenger.video.MP4Builder r4 = r15.mediaMuxer     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r11 = 1
+            long r3 = r4.writeSampleData(r12, r3, r1, r11)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r37 = r5
+            r13 = r6
+            r5 = 0
+            int r11 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r11 == 0) goto L_0x02d3
+            org.telegram.messenger.MediaController$VideoConvertorListener r11 = r15.callback     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            if (r11 == 0) goto L_0x02d3
+            r19 = r13
+            float r13 = (float) r5     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            float r13 = r13 / r23
+            float r13 = r13 / r24
+            r11.didWriteData(r3, r13)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            goto L_0x02d5
+        L_0x02d3:
+            r19 = r13
+        L_0x02d5:
+            r6 = r19
+            goto L_0x0358
+        L_0x02d9:
+            r78 = r4
+            r37 = r5
+            r19 = r6
+            r4 = -5
+            r5 = 0
+            if (r12 != r4) goto L_0x02d5
+            byte[] r13 = new byte[r11]     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r4 = r1.offset     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r4 = r4 + r11
+            r3.limit(r4)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r4 = r1.offset     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r3.position(r4)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r3.get(r13)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r3 = r1.size     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r4 = 1
+            int r3 = r3 - r4
+        L_0x02f8:
+            if (r3 < 0) goto L_0x0337
+            r11 = 3
+            if (r3 <= r11) goto L_0x0337
+            byte r11 = r13[r3]     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            if (r11 != r4) goto L_0x0331
+            int r4 = r3 + -1
+            byte r4 = r13[r4]     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            if (r4 != 0) goto L_0x0331
+            int r4 = r3 + -2
+            byte r4 = r13[r4]     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            if (r4 != 0) goto L_0x0331
+            int r4 = r3 + -3
+            byte r11 = r13[r4]     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            if (r11 != 0) goto L_0x0331
+            java.nio.ByteBuffer r3 = java.nio.ByteBuffer.allocate(r4)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r11 = r1.size     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r11 = r11 - r4
+            java.nio.ByteBuffer r11 = java.nio.ByteBuffer.allocate(r11)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r5 = 0
+            java.nio.ByteBuffer r6 = r3.put(r13, r5, r4)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r6.position(r5)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r6 = r1.size     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            int r6 = r6 - r4
+            java.nio.ByteBuffer r4 = r11.put(r13, r4, r6)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r4.position(r5)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            goto L_0x0339
+        L_0x0331:
+            int r3 = r3 + -1
+            r4 = 1
+            r5 = 0
+            goto L_0x02f8
+        L_0x0337:
+            r3 = 0
+            r11 = 0
         L_0x0339:
-            r20 = r4
-            r21 = r9
-        L_0x033d:
-            r2 = r21
-            r4 = r49
-            r3 = r51
-            goto L_0x0411
-        L_0x0345:
-            r20 = r4
-            r18 = r5
-            r7 = -5
-            r5 = r3
-            if (r1 != r7) goto L_0x03e4
-            byte[] r3 = new byte[r9]     // Catch:{ Exception -> 0x03fa, all -> 0x03e9 }
-            int r4 = r14.offset     // Catch:{ Exception -> 0x03fa, all -> 0x03e9 }
-            int r4 = r4 + r9
-            r6.limit(r4)     // Catch:{ Exception -> 0x03fa, all -> 0x03e9 }
-            int r4 = r14.offset     // Catch:{ Exception -> 0x03fa, all -> 0x03e9 }
-            r6.position(r4)     // Catch:{ Exception -> 0x03fa, all -> 0x03e9 }
-            r6.get(r3)     // Catch:{ Exception -> 0x03fa, all -> 0x03e9 }
-            int r4 = r14.size     // Catch:{ Exception -> 0x03fa, all -> 0x03e9 }
-            r6 = 1
-            int r4 = r4 - r6
+            android.media.MediaFormat r4 = android.media.MediaFormat.createVideoFormat(r14, r8, r9)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            if (r3 == 0) goto L_0x034a
+            if (r11 == 0) goto L_0x034a
+            r4.setByteBuffer(r2, r3)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r6 = r19
+            r4.setByteBuffer(r6, r11)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            goto L_0x034c
+        L_0x034a:
+            r6 = r19
+        L_0x034c:
+            org.telegram.messenger.video.MP4Builder r3 = r15.mediaMuxer     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r5 = 0
+            int r12 = r3.addTrack(r4, r5)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            goto L_0x0358
+        L_0x0354:
+            r78 = r4
+            r37 = r5
+        L_0x0358:
+            int r3 = r1.flags     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r3 = r3 & 4
+            if (r3 == 0) goto L_0x0361
+            r3 = 0
+            r5 = 1
+            goto L_0x0363
         L_0x0361:
-            if (r4 < 0) goto L_0x03b2
-            r9 = 3
-            if (r4 <= r9) goto L_0x03b2
-            byte r7 = r3[r4]     // Catch:{ Exception -> 0x03ad, all -> 0x050a }
-            if (r7 != r6) goto L_0x03a4
-            int r6 = r4 + -1
-            byte r6 = r3[r6]     // Catch:{ Exception -> 0x03ad, all -> 0x050a }
-            if (r6 != 0) goto L_0x03a4
-            int r6 = r4 + -2
-            byte r6 = r3[r6]     // Catch:{ Exception -> 0x03ad, all -> 0x050a }
-            if (r6 != 0) goto L_0x03a4
-            int r6 = r4 + -3
-            byte r7 = r3[r6]     // Catch:{ Exception -> 0x03ad, all -> 0x050a }
-            if (r7 != 0) goto L_0x03a4
-            java.nio.ByteBuffer r4 = java.nio.ByteBuffer.allocate(r6)     // Catch:{ Exception -> 0x03ad, all -> 0x050a }
-            int r7 = r14.size     // Catch:{ Exception -> 0x03ad, all -> 0x050a }
-            int r7 = r7 - r6
-            java.nio.ByteBuffer r7 = java.nio.ByteBuffer.allocate(r7)     // Catch:{ Exception -> 0x03ad, all -> 0x050a }
-            r21 = r1
-            r9 = 0
-            java.nio.ByteBuffer r1 = r4.put(r3, r9, r6)     // Catch:{ Exception -> 0x039d, all -> 0x04f6 }
-            r1.position(r9)     // Catch:{ Exception -> 0x039d, all -> 0x04f6 }
-            int r1 = r14.size     // Catch:{ Exception -> 0x039d, all -> 0x04f6 }
-            int r1 = r1 - r6
-            java.nio.ByteBuffer r1 = r7.put(r3, r6, r1)     // Catch:{ Exception -> 0x039d, all -> 0x04f6 }
-            r1.position(r9)     // Catch:{ Exception -> 0x039d, all -> 0x04f6 }
-            r6 = r4
-            goto L_0x03b6
-        L_0x039d:
+            r3 = 0
+            r5 = 0
+        L_0x0363:
+            r7.releaseOutputBuffer(r10, r3)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r11 = r75
+            r4 = r78
+            r19 = r5
+            goto L_0x01dd
+        L_0x036e:
+            if (r10 == r3) goto L_0x037a
+            r13 = r69
+            r3 = r76
+            r10 = r36
+            r5 = r37
+            goto L_0x0198
+        L_0x037a:
+            r1 = 0
+            throw r1     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+        L_0x037c:
+            java.lang.RuntimeException r1 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r2.<init>()     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            java.lang.String r3 = "encoderOutputBuffer "
+            r2.append(r3)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r2.append(r10)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            java.lang.String r3 = " was null"
+            r2.append(r3)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r1.<init>(r2)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            throw r1     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+        L_0x0398:
+            java.lang.RuntimeException r1 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r2.<init>()     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            java.lang.String r3 = "unexpected result from encoder.dequeueOutputBuffer: "
+            r2.append(r3)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r2.append(r10)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            r1.<init>(r2)     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+            throw r1     // Catch:{ Exception -> 0x022d, all -> 0x03af }
+        L_0x03af:
             r0 = move-exception
+            r11 = r77
+            r5 = r80
+            r44 = r82
+            r32 = r84
             r2 = r0
-            r6 = r13
-            r1 = r21
-            goto L_0x0224
-        L_0x03a4:
-            r21 = r1
-            int r4 = r4 + -1
-            r1 = r21
-            r6 = 1
-            r7 = -5
-            goto L_0x0361
-        L_0x03ad:
+            r1 = r12
+            r10 = r36
+            goto L_0x1390
+        L_0x03be:
             r0 = move-exception
-            r21 = r1
-            goto L_0x0222
-        L_0x03b2:
-            r21 = r1
-            r6 = 0
-            r7 = 0
-        L_0x03b6:
-            r4 = r49
-            r3 = r51
-            android.media.MediaFormat r1 = android.media.MediaFormat.createVideoFormat(r4, r12, r3)     // Catch:{ Exception -> 0x03dc, all -> 0x03d0 }
-            if (r6 == 0) goto L_0x03c8
-            if (r7 == 0) goto L_0x03c8
-            r1.setByteBuffer(r8, r6)     // Catch:{ Exception -> 0x03dc, all -> 0x03d0 }
-            r1.setByteBuffer(r11, r7)     // Catch:{ Exception -> 0x03dc, all -> 0x03d0 }
-        L_0x03c8:
-            org.telegram.messenger.video.MP4Builder r6 = r15.mediaMuxer     // Catch:{ Exception -> 0x03dc, all -> 0x03d0 }
-            r7 = 0
-            int r1 = r6.addTrack(r1, r7)     // Catch:{ Exception -> 0x03dc, all -> 0x03d0 }
-            goto L_0x0411
-        L_0x03d0:
+            r76 = r3
+            goto L_0x03d6
+        L_0x03c2:
             r0 = move-exception
-            r8 = r83
-            r34 = r88
-            r26 = r90
+            r36 = r10
+            r11 = r77
+            r5 = r80
+            r44 = r82
+            r32 = r84
             r2 = r0
-            r11 = r3
-            r1 = r21
-            goto L_0x03f6
+            r1 = r12
+            goto L_0x1390
+        L_0x03d1:
+            r0 = move-exception
+            r76 = r3
+            r36 = r10
+        L_0x03d6:
+            r34 = r76
+            r2 = r0
+            r1 = r12
+            goto L_0x0450
         L_0x03dc:
             r0 = move-exception
+            r36 = r10
+            r5 = r80
+            r44 = r82
+            r32 = r84
             r2 = r0
-            r11 = r3
-            r6 = r13
-            r1 = r21
-            goto L_0x0599
-        L_0x03e4:
-            r21 = r1
-            r4 = r49
-            goto L_0x040d
+            r1 = r11
+            goto L_0x0440
         L_0x03e9:
             r0 = move-exception
-            r21 = r1
-            r3 = r51
-            r8 = r83
-            r34 = r88
-            r26 = r90
+            r76 = r3
+            r36 = r10
+            r34 = r76
             r2 = r0
-            r11 = r3
-        L_0x03f6:
-            r9 = r50
-            goto L_0x058a
-        L_0x03fa:
-            r0 = move-exception
-            r21 = r1
-            r3 = r51
-            r2 = r0
-            r11 = r3
-            r6 = r13
-            goto L_0x0599
-        L_0x0404:
-            r21 = r1
-            r20 = r4
-            r18 = r5
-            r4 = r49
-            r5 = r3
-        L_0x040d:
-            r3 = r51
-            r1 = r21
-        L_0x0411:
-            int r6 = r14.flags     // Catch:{ Exception -> 0x04b0, all -> 0x04ab }
-            r6 = r6 & 4
-            if (r6 == 0) goto L_0x0419
-            r6 = 1
-            goto L_0x041a
-        L_0x0419:
-            r6 = 0
-        L_0x041a:
-            r7 = 0
-            r13.releaseOutputBuffer(r10, r7)     // Catch:{ Exception -> 0x04b0, all -> 0x04ab }
-            r7 = r84
-            r9 = r6
-            r6 = r81
-            r81 = r1
-            r1 = -1
-        L_0x0426:
-            if (r10 == r1) goto L_0x043f
-            r1 = r81
-            r51 = r3
-            r49 = r4
-            r3 = r5
-            r39 = r8
-            r48 = r11
-            r81 = r13
-            r5 = r18
-            r4 = r20
-            r13 = 21
-            r8 = r82
-            goto L_0x01ce
-        L_0x043f:
-            if (r5 != 0) goto L_0x048a
-            r19.drawImage()     // Catch:{ Exception -> 0x0481, all -> 0x047a }
-            r1 = r18
-            float r10 = (float) r1
-            r18 = 1106247680(0x41var_, float:30.0)
-            float r10 = r10 / r18
-            float r10 = r10 * r24
-            float r10 = r10 * r24
-            float r10 = r10 * r24
-            r84 = r2
-            r51 = r3
-            long r2 = (long) r10
-            r10 = r40
-            r10.setPresentationTime(r2)     // Catch:{ Exception -> 0x0472, all -> 0x0470 }
-            r10.swapBuffers()     // Catch:{ Exception -> 0x0472, all -> 0x0470 }
-            int r1 = r1 + 1
-            float r2 = (float) r1     // Catch:{ Exception -> 0x0472, all -> 0x0470 }
-            r3 = 1106247680(0x41var_, float:30.0)
-            float r3 = r3 * r25
-            int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r2 < 0) goto L_0x0492
-            r13.signalEndOfInputStream()     // Catch:{ Exception -> 0x0472, all -> 0x0470 }
-            r5 = r1
+            r1 = r11
+            goto L_0x0450
+        L_0x03f4:
+            r76 = r3
+            r13 = r77
             r1 = 0
-            r3 = 1
-            goto L_0x0496
-        L_0x0470:
+            r22 = 0
+            goto L_0x0492
+        L_0x03fd:
             r0 = move-exception
-            goto L_0x047d
-        L_0x0472:
-            r0 = move-exception
-            r1 = r81
+            r76 = r3
+            r36 = r10
+            r34 = r76
             r2 = r0
-            r40 = r10
-            goto L_0x0223
-        L_0x047a:
+        L_0x0405:
+            r1 = -5
+            goto L_0x0450
+        L_0x0408:
             r0 = move-exception
-            r51 = r3
-        L_0x047d:
-            r1 = r81
-            goto L_0x0515
-        L_0x0481:
-            r0 = move-exception
-            r51 = r3
-            r10 = r40
-            r1 = r81
-            goto L_0x0222
-        L_0x048a:
-            r84 = r2
-            r51 = r3
-            r1 = r18
-            r10 = r40
-        L_0x0492:
-            r3 = r5
-            r5 = r1
-            r1 = r82
-        L_0x0496:
-            r2 = r84
-            r49 = r4
-            r39 = r8
-            r40 = r10
-            r48 = r11
-            r4 = r20
-            r8 = r1
-            r1 = r81
-            r81 = r13
-            r13 = 21
-            goto L_0x01ce
-        L_0x04ab:
-            r0 = move-exception
-            r51 = r3
-            goto L_0x0515
-        L_0x04b0:
-            r0 = move-exception
-            r51 = r3
-            goto L_0x04b7
-        L_0x04b4:
-            r0 = move-exception
-            r21 = r1
-        L_0x04b7:
-            r10 = r40
-            goto L_0x0222
-        L_0x04bb:
-            r21 = r1
-            r2 = r40
-            java.lang.RuntimeException r1 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            r3.<init>()     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            java.lang.String r4 = "encoderOutputBuffer "
-            r3.append(r4)     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            r3.append(r10)     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            java.lang.String r4 = " was null"
-            r3.append(r4)     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            r1.<init>(r3)     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            throw r1     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-        L_0x04db:
-            r21 = r1
-            r2 = r40
-            java.lang.RuntimeException r1 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            r3.<init>()     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            java.lang.String r4 = "unexpected result from encoder.dequeueOutputBuffer: "
-            r3.append(r4)     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            r3.append(r10)     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            r1.<init>(r3)     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-            throw r1     // Catch:{ Exception -> 0x0501, all -> 0x04f6 }
-        L_0x04f6:
-            r0 = move-exception
-            r8 = r83
-            r34 = r88
-            r26 = r90
+            r36 = r10
             r2 = r0
-            r1 = r21
-            goto L_0x051c
-        L_0x0501:
+            r1 = -5
+            goto L_0x044e
+        L_0x040e:
             r0 = move-exception
-            r40 = r2
-            r6 = r13
-            r1 = r21
-            goto L_0x0528
-        L_0x0508:
-            r0 = move-exception
-            goto L_0x0511
-        L_0x050a:
-            r0 = move-exception
-            r21 = r1
-            goto L_0x0515
-        L_0x050e:
-            r0 = move-exception
-            r13 = r81
-        L_0x0511:
-            r21 = r1
-            goto L_0x0525
-        L_0x0514:
-            r0 = move-exception
-        L_0x0515:
-            r8 = r83
-            r34 = r88
-            r26 = r90
+            r36 = r10
+        L_0x0411:
+            r11 = r77
+            r5 = r80
+            r44 = r82
+            r32 = r84
             r2 = r0
-        L_0x051c:
-            r9 = r50
-            r11 = r51
-            goto L_0x058a
-        L_0x0522:
+            goto L_0x138f
+        L_0x041c:
             r0 = move-exception
-            r13 = r81
-        L_0x0525:
-            r2 = r40
-            r6 = r13
-        L_0x0528:
-            r11 = r51
-            goto L_0x0566
-        L_0x052b:
-            r13 = r81
-            r2 = r40
-            r6 = r13
-            r9 = r50
-            r11 = r51
+            r36 = r10
+            r2 = r0
+            goto L_0x044c
+        L_0x0421:
+            r0 = move-exception
+            r36 = r10
+        L_0x0424:
+            r5 = r80
+            r44 = r82
+            r32 = r84
+            r2 = r0
+            r9 = r11
+            goto L_0x043f
+        L_0x042d:
+            r0 = move-exception
+            r36 = r10
+            r2 = r0
+        L_0x0431:
+            r9 = r11
+            goto L_0x044c
+        L_0x0433:
+            r0 = move-exception
+            r36 = r10
+        L_0x0436:
+            r5 = r80
+            r44 = r82
+            r32 = r84
+            r2 = r0
+            r9 = r11
+            r8 = r12
+        L_0x043f:
+            r1 = -5
+        L_0x0440:
+            r40 = 0
+            r11 = r77
+            goto L_0x1392
+        L_0x0446:
+            r0 = move-exception
+            r36 = r10
+            r2 = r0
+        L_0x044a:
+            r9 = r11
+            r8 = r12
+        L_0x044c:
+            r1 = -5
             r7 = 0
-            r47 = 0
-            r13 = r83
-            goto L_0x05dd
+        L_0x044e:
+            r34 = 0
+        L_0x0450:
+            boolean r3 = r2 instanceof java.lang.IllegalStateException     // Catch:{ all -> 0x04d5 }
+            if (r3 == 0) goto L_0x0459
+            if (r89 != 0) goto L_0x0459
+            r22 = 1
+            goto L_0x045b
+        L_0x0459:
+            r22 = 0
+        L_0x045b:
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x04c5 }
+            r3.<init>()     // Catch:{ all -> 0x04c5 }
+            java.lang.String r4 = "bitrate: "
+            r3.append(r4)     // Catch:{ all -> 0x04c5 }
+            r10 = r36
+            r3.append(r10)     // Catch:{ all -> 0x04c3 }
+            java.lang.String r4 = " framerate: "
+            r3.append(r4)     // Catch:{ all -> 0x04c3 }
+            r13 = r77
+            r3.append(r13)     // Catch:{ all -> 0x04b9 }
+            java.lang.String r4 = " size: "
+            r3.append(r4)     // Catch:{ all -> 0x04b9 }
+            r3.append(r9)     // Catch:{ all -> 0x04b9 }
+            java.lang.String r4 = "x"
+            r3.append(r4)     // Catch:{ all -> 0x04b9 }
+            r3.append(r8)     // Catch:{ all -> 0x04b9 }
+            java.lang.String r3 = r3.toString()     // Catch:{ all -> 0x04b9 }
+            org.telegram.messenger.FileLog.e((java.lang.String) r3)     // Catch:{ all -> 0x04b9 }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x04b9 }
+            r11 = r1
+            r3 = r34
+            r1 = 1
+        L_0x0492:
+            if (r3 == 0) goto L_0x04a2
+            r3.release()     // Catch:{ all -> 0x0498 }
+            goto L_0x04a2
+        L_0x0498:
+            r0 = move-exception
+            r5 = r80
+            r44 = r82
+            r32 = r84
+            r2 = r0
+            r1 = r11
+            goto L_0x04c1
+        L_0x04a2:
+            if (r7 == 0) goto L_0x04aa
+            r7.stop()     // Catch:{ all -> 0x0498 }
+            r7.release()     // Catch:{ all -> 0x0498 }
+        L_0x04aa:
+            r68.checkConversionCanceled()     // Catch:{ all -> 0x0498 }
+            r5 = r80
+            r32 = r84
+            r40 = r1
+            r26 = r10
+            r1 = r11
+            r11 = r13
+            goto L_0x0573
+        L_0x04b9:
+            r0 = move-exception
+            r5 = r80
+            r44 = r82
+            r32 = r84
+            r2 = r0
+        L_0x04c1:
+            r11 = r13
+            goto L_0x04d1
+        L_0x04c3:
+            r0 = move-exception
+            goto L_0x04c8
+        L_0x04c5:
+            r0 = move-exception
+            r10 = r36
+        L_0x04c8:
+            r11 = r77
+            r5 = r80
+            r44 = r82
+            r32 = r84
+            r2 = r0
+        L_0x04d1:
+            r40 = r22
+            goto L_0x1392
+        L_0x04d5:
+            r0 = move-exception
+            r10 = r36
+            r11 = r77
+            r5 = r80
+            r44 = r82
+            r32 = r84
+            r2 = r0
+            goto L_0x1390
+        L_0x04e3:
+            r13 = r77
+            r37 = r5
+            android.media.MediaExtractor r3 = new android.media.MediaExtractor     // Catch:{ all -> 0x1374 }
+            r3.<init>()     // Catch:{ all -> 0x1374 }
+            r15.extractor = r3     // Catch:{ all -> 0x1374 }
+            r7 = r69
+            r3.setDataSource(r7)     // Catch:{ all -> 0x1374 }
+            android.media.MediaExtractor r3 = r15.extractor     // Catch:{ all -> 0x1374 }
+            r5 = 0
+            int r4 = org.telegram.messenger.MediaController.findTrack(r3, r5)     // Catch:{ all -> 0x1374 }
+            r3 = -1
+            if (r10 == r3) goto L_0x0512
+            android.media.MediaExtractor r3 = r15.extractor     // Catch:{ all -> 0x0505 }
+            r5 = 1
+            int r3 = org.telegram.messenger.MediaController.findTrack(r3, r5)     // Catch:{ all -> 0x0505 }
+            goto L_0x0514
+        L_0x0505:
+            r0 = move-exception
+            r5 = r80
+            r44 = r82
+            r32 = r84
+            r2 = r0
+            r9 = r11
+        L_0x050e:
+            r8 = r12
+            r11 = r13
+            goto L_0x138f
+        L_0x0512:
+            r5 = 1
+            r3 = -1
+        L_0x0514:
+            java.lang.String r11 = "mime"
+            if (r4 < 0) goto L_0x0535
+            android.media.MediaExtractor r5 = r15.extractor     // Catch:{ all -> 0x052a }
+            android.media.MediaFormat r5 = r5.getTrackFormat(r4)     // Catch:{ all -> 0x052a }
+            java.lang.String r5 = r5.getString(r11)     // Catch:{ all -> 0x052a }
+            boolean r5 = r5.equals(r14)     // Catch:{ all -> 0x052a }
+            if (r5 != 0) goto L_0x0535
+            r5 = 1
+            goto L_0x0536
+        L_0x052a:
+            r0 = move-exception
+            r9 = r76
+            r5 = r80
+            r44 = r82
+            r32 = r84
+            r2 = r0
+            goto L_0x050e
+        L_0x0535:
+            r5 = 0
+        L_0x0536:
+            if (r88 != 0) goto L_0x058d
+            if (r5 == 0) goto L_0x053b
+            goto L_0x058d
         L_0x053b:
-            r0 = move-exception
-            r13 = r81
-            r2 = r40
-            r6 = r13
-            r11 = r51
+            android.media.MediaExtractor r2 = r15.extractor     // Catch:{ all -> 0x0579 }
+            org.telegram.messenger.video.MP4Builder r3 = r15.mediaMuxer     // Catch:{ all -> 0x0579 }
+            r5 = -1
+            r4 = r1
+            r9 = 0
+            r11 = 1
+            r14 = -5
+            if (r10 == r5) goto L_0x0549
+            r21 = 1
+            goto L_0x054b
+        L_0x0549:
+            r21 = 0
+        L_0x054b:
+            r1 = r68
+            r8 = r94
+            r13 = r80
+            r5 = r80
+            r13 = r79
+            r14 = r8
+            r7 = r82
+            r14 = r77
+            r9 = r86
+            r11 = r70
+            r12 = r21
+            r1.readAndWriteTracks(r2, r3, r4, r5, r7, r9, r11, r12)     // Catch:{ all -> 0x0577 }
+            r8 = r75
+            r9 = r76
+            r26 = r78
+            r5 = r80
+            r32 = r84
+            r11 = r14
             r1 = -5
-            goto L_0x0566
-        L_0x0545:
-            r0 = move-exception
-            r8 = r83
-            r34 = r88
-            r26 = r90
-            r2 = r0
-            r9 = r50
-            r11 = r51
-            goto L_0x0589
-        L_0x0552:
-            r0 = move-exception
-            r13 = r81
-            r2 = r40
-            r6 = r13
-            r11 = r51
-            goto L_0x0563
-        L_0x055b:
-            r0 = move-exception
-            r13 = r6
-            r50 = r9
-            r51 = r11
-            r40 = r2
-        L_0x0563:
-            r1 = -5
-            r19 = 0
-        L_0x0566:
-            r2 = r0
-            goto L_0x0599
-        L_0x0568:
-            r0 = move-exception
-            r13 = r6
-            r50 = r9
-            r51 = r11
-            r2 = r0
-            r1 = -5
-            goto L_0x0595
-        L_0x0571:
-            r0 = move-exception
-            r50 = r9
-            r51 = r11
-            goto L_0x0582
+            r22 = 0
+            r40 = 0
+        L_0x0573:
+            r13 = r82
+            goto L_0x1350
         L_0x0577:
             r0 = move-exception
-            r50 = r9
-            r51 = r11
-            goto L_0x0592
+            goto L_0x057d
+        L_0x0579:
+            r0 = move-exception
+            r14 = r13
+            r13 = r79
         L_0x057d:
-            r0 = move-exception
-            r50 = r9
-            r11 = r82
-        L_0x0582:
-            r8 = r83
-        L_0x0584:
-            r34 = r88
-            r26 = r90
+            r8 = r75
+            r9 = r76
+            r10 = r78
+            r5 = r80
+            r44 = r82
+            r32 = r84
             r2 = r0
-        L_0x0589:
-            r1 = -5
-        L_0x058a:
-            r7 = 0
-            goto L_0x13d7
+            r11 = r14
+            goto L_0x138f
         L_0x058d:
-            r0 = move-exception
-            r50 = r9
-            r11 = r82
-        L_0x0592:
-            r2 = r0
-        L_0x0593:
-            r1 = -5
-            r6 = 0
-        L_0x0595:
-            r19 = 0
-            r40 = 0
-        L_0x0599:
-            boolean r3 = r2 instanceof java.lang.IllegalStateException     // Catch:{ all -> 0x0622 }
-            if (r3 == 0) goto L_0x05a2
-            if (r95 != 0) goto L_0x05a2
-            r47 = 1
-            goto L_0x05a4
-        L_0x05a2:
-            r47 = 0
-        L_0x05a4:
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x0614 }
-            r3.<init>()     // Catch:{ all -> 0x0614 }
-            java.lang.String r4 = "bitrate: "
-            r3.append(r4)     // Catch:{ all -> 0x0614 }
-            r9 = r50
-            r3.append(r9)     // Catch:{ all -> 0x0612 }
-            java.lang.String r4 = " framerate: "
-            r3.append(r4)     // Catch:{ all -> 0x0612 }
-            r13 = r83
-            r3.append(r13)     // Catch:{ all -> 0x060a }
-            java.lang.String r4 = " size: "
-            r3.append(r4)     // Catch:{ all -> 0x060a }
-            r3.append(r11)     // Catch:{ all -> 0x060a }
-            java.lang.String r4 = "x"
-            r3.append(r4)     // Catch:{ all -> 0x060a }
-            r3.append(r12)     // Catch:{ all -> 0x060a }
-            java.lang.String r3 = r3.toString()     // Catch:{ all -> 0x060a }
-            org.telegram.messenger.FileLog.e((java.lang.String) r3)     // Catch:{ all -> 0x060a }
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x060a }
-            r2 = r40
-            r7 = r47
-            r47 = 1
-        L_0x05dd:
-            if (r19 == 0) goto L_0x05ec
-            r19.release()     // Catch:{ all -> 0x05e3 }
-            goto L_0x05ec
-        L_0x05e3:
-            r0 = move-exception
-            r34 = r88
-            r26 = r90
-            r2 = r0
-            r8 = r13
-            goto L_0x13d7
-        L_0x05ec:
-            if (r2 == 0) goto L_0x05f1
-            r2.release()     // Catch:{ all -> 0x05e3 }
-        L_0x05f1:
-            if (r6 == 0) goto L_0x05f9
-            r6.stop()     // Catch:{ all -> 0x05e3 }
-            r6.release()     // Catch:{ all -> 0x05e3 }
-        L_0x05f9:
-            r76.checkConversionCanceled()     // Catch:{ all -> 0x05e3 }
-            r34 = r88
-            r26 = r90
-            r29 = r9
-            r9 = r12
-            r8 = r13
-            r6 = r47
-            r13 = r7
-            r7 = r11
-            goto L_0x1397
-        L_0x060a:
-            r0 = move-exception
-            r34 = r88
-            r26 = r90
-            r2 = r0
-            r8 = r13
-            goto L_0x061e
-        L_0x0612:
-            r0 = move-exception
-            goto L_0x0617
-        L_0x0614:
-            r0 = move-exception
-            r9 = r50
-        L_0x0617:
-            r8 = r83
-            r34 = r88
-            r26 = r90
-            r2 = r0
-        L_0x061e:
-            r7 = r47
-            goto L_0x13d7
-        L_0x0622:
-            r0 = move-exception
-            r9 = r50
-            r8 = r83
-            r34 = r88
-            r26 = r90
-            r2 = r0
-            goto L_0x058a
-        L_0x062e:
-            r8 = r1
-            r13 = r10
-            r14 = r22
-            r11 = r27
-            r1 = r28
-            r4 = r34
-            r10 = 3
-            android.media.MediaExtractor r3 = new android.media.MediaExtractor     // Catch:{ all -> 0x13ba }
-            r3.<init>()     // Catch:{ all -> 0x13ba }
-            r15.extractor = r3     // Catch:{ all -> 0x13ba }
-            r7 = r77
-            r6 = r1
-            r3.setDataSource(r7)     // Catch:{ all -> 0x13ba }
-            android.media.MediaExtractor r1 = r15.extractor     // Catch:{ all -> 0x13ba }
-            r5 = 0
-            int r3 = org.telegram.messenger.MediaController.findTrack(r1, r5)     // Catch:{ all -> 0x13ba }
-            r1 = -1
-            if (r9 == r1) goto L_0x0665
-            android.media.MediaExtractor r1 = r15.extractor     // Catch:{ all -> 0x065a }
-            r48 = r11
-            r11 = 1
-            int r1 = org.telegram.messenger.MediaController.findTrack(r1, r11)     // Catch:{ all -> 0x065a }
-            goto L_0x0668
-        L_0x065a:
-            r0 = move-exception
-            r11 = r82
-            r34 = r88
-            r26 = r90
-            r2 = r0
-            r8 = r13
-            goto L_0x0589
-        L_0x0665:
-            r48 = r11
-            r1 = -1
-        L_0x0668:
-            java.lang.String r11 = "mime"
-            if (r3 < 0) goto L_0x0680
-            android.media.MediaExtractor r5 = r15.extractor     // Catch:{ all -> 0x065a }
-            android.media.MediaFormat r5 = r5.getTrackFormat(r3)     // Catch:{ all -> 0x065a }
-            java.lang.String r5 = r5.getString(r11)     // Catch:{ all -> 0x065a }
-            boolean r5 = r5.equals(r4)     // Catch:{ all -> 0x065a }
-            if (r5 != 0) goto L_0x0680
-            r13 = r94
-            r5 = 1
-            goto L_0x0683
-        L_0x0680:
-            r13 = r94
-            r5 = 0
-        L_0x0683:
-            if (r13 != 0) goto L_0x06c8
-            if (r5 == 0) goto L_0x0688
-            goto L_0x06c8
-        L_0x0688:
-            android.media.MediaExtractor r2 = r15.extractor     // Catch:{ all -> 0x06bb }
-            org.telegram.messenger.video.MP4Builder r3 = r15.mediaMuxer     // Catch:{ all -> 0x06bb }
+            r12 = r1
+            r10 = r14
             r5 = -1
-            if (r9 == r5) goto L_0x0692
-            r18 = 1
-            goto L_0x0694
-        L_0x0692:
-            r18 = 0
-        L_0x0694:
-            r1 = r76
-            r4 = r14
-            r8 = 0
-            r5 = r86
-            r14 = r7
-            r10 = 0
-            r11 = -5
-            r7 = r88
-            r13 = 0
-            r9 = r92
-            r11 = r78
-            r12 = r18
-            r1.readAndWriteTracks(r2, r3, r4, r5, r7, r9, r11, r12)     // Catch:{ all -> 0x06b9 }
-            r9 = r81
-            r7 = r82
-            r8 = r83
-            r29 = r84
-            r34 = r88
-            r26 = r90
-            r1 = -5
-            r6 = 0
-            goto L_0x1397
-        L_0x06b9:
-            r0 = move-exception
-            goto L_0x06be
-        L_0x06bb:
-            r0 = move-exception
-            r14 = r7
-            r13 = 0
-        L_0x06be:
-            r12 = r81
-            r11 = r82
-            r8 = r83
-            r9 = r84
-            goto L_0x0584
-        L_0x06c8:
-            r12 = r7
-            r5 = -1
-            r13 = 0
-            if (r3 < 0) goto L_0x1357
-            r20 = -2147483648(0xfffffffvar_, double:NaN)
-            r7 = 1000(0x3e8, float:1.401E-42)
-            r9 = r83
-            int r7 = r7 / r9
-            int r7 = r7 * 1000
-            r22 = r14
-            long r13 = (long) r7     // Catch:{ Exception -> 0x12c1, all -> 0x12b0 }
-            android.media.MediaExtractor r7 = r15.extractor     // Catch:{ Exception -> 0x12c1, all -> 0x12b0 }
-            r7.selectTrack(r3)     // Catch:{ Exception -> 0x12c1, all -> 0x12b0 }
-            android.media.MediaExtractor r7 = r15.extractor     // Catch:{ Exception -> 0x12c1, all -> 0x12b0 }
-            android.media.MediaFormat r7 = r7.getTrackFormat(r3)     // Catch:{ Exception -> 0x12c1, all -> 0x12b0 }
-            r26 = 0
-            int r23 = (r90 > r26 ? 1 : (r90 == r26 ? 0 : -1))
-            if (r23 < 0) goto L_0x0708
-            r23 = 1157234688(0x44fa0000, float:2000.0)
-            int r23 = (r25 > r23 ? 1 : (r25 == r23 ? 0 : -1))
-            if (r23 > 0) goto L_0x06f5
-            r23 = 2600000(0x27aCLASSNAME, float:3.643376E-39)
-            goto L_0x0703
-        L_0x06f5:
-            r23 = 1167867904(0x459CLASSNAME, float:5000.0)
-            int r23 = (r25 > r23 ? 1 : (r25 == r23 ? 0 : -1))
-            if (r23 > 0) goto L_0x0700
-            r23 = 2200000(0x2191c0, float:3.082857E-39)
-            goto L_0x0703
-        L_0x0700:
-            r23 = 1560000(0x17cdc0, float:2.186026E-39)
-        L_0x0703:
-            r5 = r23
-            r26 = 0
-            goto L_0x0716
-        L_0x0708:
-            if (r84 > 0) goto L_0x0712
-            r26 = r90
-            r23 = r3
-            r5 = 921600(0xe1000, float:1.291437E-39)
-            goto L_0x0718
-        L_0x0712:
-            r5 = r84
-            r26 = r90
-        L_0x0716:
-            r23 = r3
-        L_0x0718:
-            r3 = r85
-            if (r3 <= 0) goto L_0x073f
-            int r5 = java.lang.Math.min(r3, r5)     // Catch:{ Exception -> 0x072d, all -> 0x0721 }
-            goto L_0x073f
-        L_0x0721:
-            r0 = move-exception
-            r12 = r81
-            r11 = r82
-            r34 = r88
-        L_0x0728:
-            r2 = r0
-            r8 = r9
-            r1 = -5
-            goto L_0x1353
-        L_0x072d:
-            r0 = move-exception
-            r34 = r88
-        L_0x0730:
-            r2 = r0
-            r8 = r9
-            r61 = r23
-        L_0x0734:
-            r1 = -5
-            r3 = 0
-            r6 = 0
-        L_0x0737:
-            r28 = 0
-            r30 = 0
-            r56 = 0
-            goto L_0x12d7
-        L_0x073f:
-            r28 = 0
-            int r30 = (r26 > r28 ? 1 : (r26 == r28 ? 0 : -1))
-            if (r30 < 0) goto L_0x0748
-            r2 = r18
-            goto L_0x074a
-        L_0x0748:
-            r2 = r26
-        L_0x074a:
-            int r26 = (r2 > r28 ? 1 : (r2 == r28 ? 0 : -1))
-            if (r26 < 0) goto L_0x0782
-            android.media.MediaExtractor r10 = r15.extractor     // Catch:{ Exception -> 0x076e, all -> 0x075f }
-            r26 = r1
-            r1 = 0
-            r10.seekTo(r2, r1)     // Catch:{ Exception -> 0x076e, all -> 0x075f }
-            r10 = r100
-            r90 = r2
-            r49 = r4
-        L_0x075c:
-            r2 = 0
-            goto L_0x07b3
-        L_0x075f:
-            r0 = move-exception
-            r12 = r81
-            r11 = r82
-            r34 = r88
-            r26 = r2
-            r8 = r9
-            r1 = -5
-            r7 = 0
-            r2 = r0
-            goto L_0x1354
-        L_0x076e:
-            r0 = move-exception
-            r34 = r88
-            r26 = r2
-        L_0x0773:
-            r8 = r9
-            r61 = r23
-            r1 = -5
-            r3 = 0
-            r6 = 0
-            r28 = 0
-            r30 = 0
-            r56 = 0
-        L_0x077f:
-            r2 = r0
-            goto L_0x12d7
-        L_0x0782:
-            r26 = r1
-            r90 = r2
-            r49 = r4
-            r1 = 0
-            r3 = r86
-            int r10 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1))
-            if (r10 <= 0) goto L_0x07a9
-            android.media.MediaExtractor r1 = r15.extractor     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            r2 = 0
-            r1.seekTo(r3, r2)     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            r10 = r100
-            goto L_0x075c
-        L_0x0799:
-            r0 = move-exception
-            r12 = r81
-            r11 = r82
-            r34 = r88
-            r26 = r90
-            goto L_0x0728
-        L_0x07a3:
-            r0 = move-exception
-            r34 = r88
-            r26 = r90
-            goto L_0x0730
-        L_0x07a9:
-            android.media.MediaExtractor r1 = r15.extractor     // Catch:{ Exception -> 0x1299, all -> 0x128b }
-            r2 = 0
-            r4 = 0
-            r1.seekTo(r2, r4)     // Catch:{ Exception -> 0x1299, all -> 0x128b }
-            r10 = r100
-        L_0x07b3:
-            if (r10 == 0) goto L_0x07cc
-            r1 = 90
-            r4 = r79
-            if (r4 == r1) goto L_0x07c5
-            r1 = 270(0x10e, float:3.78E-43)
-            if (r4 != r1) goto L_0x07c0
-            goto L_0x07c5
-        L_0x07c0:
-            int r1 = r10.transformWidth     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            int r2 = r10.transformHeight     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            goto L_0x07c9
-        L_0x07c5:
-            int r1 = r10.transformHeight     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            int r2 = r10.transformWidth     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-        L_0x07c9:
-            r3 = r2
-            r2 = r1
-            goto L_0x07d2
-        L_0x07cc:
-            r4 = r79
-            r2 = r81
-            r3 = r82
-        L_0x07d2:
-            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x1299, all -> 0x128b }
-            if (r1 == 0) goto L_0x07f2
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            r1.<init>()     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            java.lang.String r4 = "create encoder with w = "
-            r1.append(r4)     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            r1.append(r2)     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            java.lang.String r4 = " h = "
-            r1.append(r4)     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            r1.append(r3)     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            org.telegram.messenger.FileLog.d(r1)     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-        L_0x07f2:
-            r4 = r49
-            android.media.MediaFormat r1 = android.media.MediaFormat.createVideoFormat(r4, r2, r3)     // Catch:{ Exception -> 0x1299, all -> 0x128b }
-            r28 = r6
-            java.lang.String r6 = "color-format"
-            r39 = r8
-            r8 = 2130708361(0x7var_, float:1.701803E38)
-            r1.setInteger(r6, r8)     // Catch:{ Exception -> 0x1299, all -> 0x128b }
-            java.lang.String r6 = "bitrate"
-            r1.setInteger(r6, r5)     // Catch:{ Exception -> 0x1299, all -> 0x128b }
-            java.lang.String r6 = "frame-rate"
-            r1.setInteger(r6, r9)     // Catch:{ Exception -> 0x1299, all -> 0x128b }
-            java.lang.String r6 = "i-frame-interval"
-            r8 = 2
-            r1.setInteger(r6, r8)     // Catch:{ Exception -> 0x1299, all -> 0x128b }
-            int r8 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x1299, all -> 0x128b }
-            r6 = 23
-            if (r8 >= r6) goto L_0x084a
-            int r6 = java.lang.Math.min(r3, r2)     // Catch:{ Exception -> 0x07a3, all -> 0x0799 }
-            r27 = r2
-            r2 = 480(0x1e0, float:6.73E-43)
-            if (r6 > r2) goto L_0x084c
-            r2 = 921600(0xe1000, float:1.291437E-39)
-            if (r5 <= r2) goto L_0x082a
-            goto L_0x082b
-        L_0x082a:
-            r2 = r5
-        L_0x082b:
-            java.lang.String r5 = "bitrate"
-            r1.setInteger(r5, r2)     // Catch:{ Exception -> 0x0842, all -> 0x0833 }
-            r29 = r2
-            goto L_0x084e
-        L_0x0833:
-            r0 = move-exception
-            r12 = r81
-            r11 = r82
-            r34 = r88
-            r26 = r90
-            r8 = r9
-            r1 = -5
-            r7 = 0
-            r9 = r2
-            goto L_0x137c
-        L_0x0842:
-            r0 = move-exception
-            r34 = r88
-            r26 = r90
-            r5 = r2
-            goto L_0x0773
-        L_0x084a:
-            r27 = r2
-        L_0x084c:
-            r29 = r5
-        L_0x084e:
-            android.media.MediaCodec r6 = android.media.MediaCodec.createEncoderByType(r4)     // Catch:{ Exception -> 0x127c, all -> 0x126b }
-            r2 = 1
-            r5 = 0
-            r6.configure(r1, r5, r5, r2)     // Catch:{ Exception -> 0x1259, all -> 0x126b }
-            org.telegram.messenger.video.InputSurface r1 = new org.telegram.messenger.video.InputSurface     // Catch:{ Exception -> 0x1259, all -> 0x126b }
-            android.view.Surface r2 = r6.createInputSurface()     // Catch:{ Exception -> 0x1259, all -> 0x126b }
-            r1.<init>(r2)     // Catch:{ Exception -> 0x1259, all -> 0x126b }
-            r1.makeCurrent()     // Catch:{ Exception -> 0x1240, all -> 0x126b }
-            r6.start()     // Catch:{ Exception -> 0x1240, all -> 0x126b }
-            java.lang.String r2 = r7.getString(r11)     // Catch:{ Exception -> 0x1240, all -> 0x126b }
-            android.media.MediaCodec r2 = android.media.MediaCodec.createDecoderByType(r2)     // Catch:{ Exception -> 0x1240, all -> 0x126b }
-            org.telegram.messenger.video.OutputSurface r30 = new org.telegram.messenger.video.OutputSurface     // Catch:{ Exception -> 0x1228, all -> 0x126b }
-            r31 = 0
-            r32 = r3
-            float r3 = (float) r9
-            r33 = 0
-            r56 = r1
-            r55 = r26
-            r1 = r30
-            r57 = r2
-            r58 = r27
-            r26 = r90
-            r2 = r96
-            r61 = r23
-            r62 = r32
-            r23 = r3
-            r3 = r31
-            r63 = r4
-            r4 = r97
-            r5 = r98
-            r84 = r6
-            r64 = r28
-            r6 = r100
-            r65 = r7
-            r7 = r81
-            r66 = r8
-            r67 = r39
-            r8 = r82
-            r9 = r79
-            r10 = r23
-            r39 = r13
-            r13 = r48
-            r14 = r11
-            r11 = r33
-            r1.<init>(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x1218, all -> 0x1211 }
-            android.view.Surface r1 = r30.getSurface()     // Catch:{ Exception -> 0x11fb, all -> 0x1211 }
-            r3 = r57
-            r2 = r65
-            r4 = 0
-            r5 = 0
-            r3.configure(r2, r1, r4, r5)     // Catch:{ Exception -> 0x11f0, all -> 0x1211 }
-            r3.start()     // Catch:{ Exception -> 0x11f0, all -> 0x1211 }
-            r1 = r66
-            r2 = 21
-            if (r1 >= r2) goto L_0x08ea
-            java.nio.ByteBuffer[] r6 = r3.getInputBuffers()     // Catch:{ Exception -> 0x08dc, all -> 0x08d0 }
-            java.nio.ByteBuffer[] r1 = r84.getOutputBuffers()     // Catch:{ Exception -> 0x08dc, all -> 0x08d0 }
-            goto L_0x08ec
-        L_0x08d0:
-            r0 = move-exception
-        L_0x08d1:
-            r12 = r81
-            r11 = r82
-            r8 = r83
-            r34 = r88
-            r2 = r0
-            goto L_0x1278
-        L_0x08dc:
-            r0 = move-exception
-            r8 = r83
-            r6 = r84
-            r34 = r88
-            r2 = r0
-            r28 = r4
-        L_0x08e6:
-            r5 = r29
-            goto L_0x12ae
-        L_0x08ea:
-            r1 = r4
-            r6 = r1
-        L_0x08ec:
-            r2 = r55
-            if (r2 < 0) goto L_0x09f5
-            android.media.MediaExtractor r5 = r15.extractor     // Catch:{ Exception -> 0x09e2, all -> 0x09d5 }
-            android.media.MediaFormat r5 = r5.getTrackFormat(r2)     // Catch:{ Exception -> 0x09e2, all -> 0x09d5 }
-            java.lang.String r7 = r5.getString(r14)     // Catch:{ Exception -> 0x09e2, all -> 0x09d5 }
-            java.lang.String r8 = "audio/mp4a-latm"
-            boolean r7 = r7.equals(r8)     // Catch:{ Exception -> 0x09e2, all -> 0x09d5 }
-            if (r7 != 0) goto L_0x0911
-            java.lang.String r7 = r5.getString(r14)     // Catch:{ Exception -> 0x08dc, all -> 0x08d0 }
-            java.lang.String r8 = "audio/mpeg"
-            boolean r7 = r7.equals(r8)     // Catch:{ Exception -> 0x08dc, all -> 0x08d0 }
-            if (r7 == 0) goto L_0x090f
-            goto L_0x0911
-        L_0x090f:
-            r7 = 0
-            goto L_0x0912
-        L_0x0911:
-            r7 = 1
-        L_0x0912:
-            java.lang.String r8 = r5.getString(r14)     // Catch:{ Exception -> 0x09e2, all -> 0x09d5 }
-            java.lang.String r9 = "audio/unknown"
-            boolean r8 = r8.equals(r9)     // Catch:{ Exception -> 0x09e2, all -> 0x09d5 }
-            if (r8 == 0) goto L_0x091f
-            r2 = -1
-        L_0x091f:
-            if (r2 < 0) goto L_0x09cc
-            if (r7 == 0) goto L_0x097d
-            org.telegram.messenger.video.MP4Builder r8 = r15.mediaMuxer     // Catch:{ Exception -> 0x0971, all -> 0x096c }
-            r9 = 1
-            int r8 = r8.addTrack(r5, r9)     // Catch:{ Exception -> 0x0971, all -> 0x096c }
-            android.media.MediaExtractor r10 = r15.extractor     // Catch:{ Exception -> 0x0971, all -> 0x096c }
-            r10.selectTrack(r2)     // Catch:{ Exception -> 0x0971, all -> 0x096c }
-            java.lang.String r10 = "max-input-size"
-            int r5 = r5.getInteger(r10)     // Catch:{ Exception -> 0x0936, all -> 0x08d0 }
-            goto L_0x093c
-        L_0x0936:
-            r0 = move-exception
-            r5 = r0
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)     // Catch:{ Exception -> 0x0971, all -> 0x096c }
-            r5 = 0
-        L_0x093c:
-            if (r5 > 0) goto L_0x0940
-            r5 = 65536(0x10000, float:9.18355E-41)
-        L_0x0940:
-            java.nio.ByteBuffer r10 = java.nio.ByteBuffer.allocateDirect(r5)     // Catch:{ Exception -> 0x0971, all -> 0x096c }
-            r91 = r5
-            r90 = r10
-            r4 = 0
-            r9 = r86
-            int r11 = (r9 > r4 ? 1 : (r9 == r4 ? 0 : -1))
-            if (r11 <= 0) goto L_0x0957
-            android.media.MediaExtractor r11 = r15.extractor     // Catch:{ Exception -> 0x0996, all -> 0x08d0 }
-            r14 = 0
-            r11.seekTo(r9, r14)     // Catch:{ Exception -> 0x0996, all -> 0x08d0 }
-            goto L_0x095d
-        L_0x0957:
-            android.media.MediaExtractor r11 = r15.extractor     // Catch:{ Exception -> 0x0996, all -> 0x08d0 }
-            r14 = 0
-            r11.seekTo(r4, r14)     // Catch:{ Exception -> 0x0996, all -> 0x08d0 }
-        L_0x095d:
-            r4 = r88
-            r11 = r91
-            r14 = 0
-            r74 = r2
-            r2 = r90
-            r90 = r1
-            r1 = r74
-            goto L_0x0a01
-        L_0x096c:
-            r0 = move-exception
-            r9 = r86
-            goto L_0x08d1
-        L_0x0971:
-            r0 = move-exception
-            r9 = r86
-        L_0x0974:
-            r8 = r83
-            r6 = r84
-            r34 = r88
-            r2 = r0
-            goto L_0x09ee
-        L_0x097d:
-            r9 = r86
-            r8 = r5
-            r4 = 0
-            android.media.MediaExtractor r11 = new android.media.MediaExtractor     // Catch:{ Exception -> 0x09ca, all -> 0x09c8 }
-            r11.<init>()     // Catch:{ Exception -> 0x09ca, all -> 0x09c8 }
-            r11.setDataSource(r12)     // Catch:{ Exception -> 0x09ca, all -> 0x09c8 }
-            r11.selectTrack(r2)     // Catch:{ Exception -> 0x09ca, all -> 0x09c8 }
-            int r14 = (r9 > r4 ? 1 : (r9 == r4 ? 0 : -1))
-            if (r14 <= 0) goto L_0x0998
-            r14 = 0
-            r11.seekTo(r9, r14)     // Catch:{ Exception -> 0x0996, all -> 0x08d0 }
-            goto L_0x099c
-        L_0x0996:
-            r0 = move-exception
-            goto L_0x0974
-        L_0x0998:
-            r14 = 0
-            r11.seekTo(r4, r14)     // Catch:{ Exception -> 0x09ca, all -> 0x09c8 }
-        L_0x099c:
-            org.telegram.messenger.video.AudioRecoder r14 = new org.telegram.messenger.video.AudioRecoder     // Catch:{ Exception -> 0x09ca, all -> 0x09c8 }
-            r14.<init>(r8, r11, r2)     // Catch:{ Exception -> 0x09ca, all -> 0x09c8 }
-            r14.startTime = r9     // Catch:{ Exception -> 0x09ba, all -> 0x09c8 }
-            r4 = r88
-            r14.endTime = r4     // Catch:{ Exception -> 0x09b8, all -> 0x09b6 }
-            org.telegram.messenger.video.MP4Builder r8 = r15.mediaMuxer     // Catch:{ Exception -> 0x09b8, all -> 0x09b6 }
-            android.media.MediaFormat r11 = r14.format     // Catch:{ Exception -> 0x09b8, all -> 0x09b6 }
-            r90 = r1
-            r1 = 1
-            int r8 = r8.addTrack(r11, r1)     // Catch:{ Exception -> 0x09b8, all -> 0x09b6 }
-            r1 = r2
-            r2 = 0
-            r11 = 0
-            goto L_0x0a01
-        L_0x09b6:
-            r0 = move-exception
-            goto L_0x09da
-        L_0x09b8:
-            r0 = move-exception
-            goto L_0x09bd
-        L_0x09ba:
-            r0 = move-exception
-            r4 = r88
-        L_0x09bd:
-            r8 = r83
-            r6 = r84
-            r2 = r0
-            r34 = r4
-            r28 = r14
-            goto L_0x08e6
-        L_0x09c8:
-            r0 = move-exception
-            goto L_0x09d8
-        L_0x09ca:
-            r0 = move-exception
-            goto L_0x09e5
-        L_0x09cc:
-            r9 = r86
-            r4 = r88
-            r90 = r1
-            r1 = r2
-            r2 = 0
-            goto L_0x09fe
-        L_0x09d5:
-            r0 = move-exception
-            r9 = r86
-        L_0x09d8:
-            r4 = r88
-        L_0x09da:
-            r12 = r81
-            r11 = r82
-            r8 = r83
-            goto L_0x1275
-        L_0x09e2:
-            r0 = move-exception
-            r9 = r86
-        L_0x09e5:
-            r4 = r88
-            r8 = r83
-            r6 = r84
-            r2 = r0
-            r34 = r4
-        L_0x09ee:
-            r5 = r29
-            r1 = -5
-            r28 = 0
-            goto L_0x12d7
-        L_0x09f5:
-            r9 = r86
-            r4 = r88
-            r90 = r1
-            r1 = r2
-            r2 = 0
-            r7 = 1
-        L_0x09fe:
-            r8 = -5
-            r11 = 0
-            r14 = 0
-        L_0x0a01:
-            if (r1 >= 0) goto L_0x0a06
-            r23 = 1
-            goto L_0x0a08
-        L_0x0a06:
-            r23 = 0
-        L_0x0a08:
-            r76.checkConversionCanceled()     // Catch:{ Exception -> 0x11de, all -> 0x11d9 }
-            r68 = r18
-            r59 = r20
-            r32 = r23
-            r88 = -5
-            r21 = 0
-            r23 = 1
-            r28 = 0
-            r31 = 0
-            r41 = 0
-            r48 = 0
-            r50 = 0
-            r20 = r2
-            r2 = r11
-            r11 = r90
-        L_0x0a26:
-            if (r28 == 0) goto L_0x0a41
-            if (r7 != 0) goto L_0x0a2d
-            if (r32 != 0) goto L_0x0a2d
-            goto L_0x0a41
-        L_0x0a2d:
-            r9 = r81
-            r7 = r82
-            r8 = r83
-            r1 = r88
-            r2 = r3
-            r34 = r4
-            r28 = r14
-            r6 = 0
-            r47 = 0
-            r3 = r84
-            goto L_0x131a
-        L_0x0a41:
-            r76.checkConversionCanceled()     // Catch:{ Exception -> 0x11c4, all -> 0x11b2 }
-            if (r7 != 0) goto L_0x0a71
-            if (r14 == 0) goto L_0x0a71
-            r89 = r11
-            org.telegram.messenger.video.MP4Builder r11 = r15.mediaMuxer     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            boolean r11 = r14.step(r11, r8)     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            goto L_0x0a75
-        L_0x0a51:
-            r0 = move-exception
-            r12 = r81
-            r11 = r82
-            r8 = r83
-            r1 = r88
-        L_0x0a5a:
-            r2 = r0
-            r34 = r4
-        L_0x0a5d:
-            r9 = r29
-            goto L_0x058a
-        L_0x0a61:
-            r0 = move-exception
-            r8 = r83
-            r6 = r84
-            r1 = r88
-            r2 = r0
-            r34 = r4
-        L_0x0a6b:
-            r28 = r14
-        L_0x0a6d:
-            r5 = r29
-            goto L_0x12d7
-        L_0x0a71:
-            r89 = r11
-            r11 = r32
-        L_0x0a75:
-            if (r21 != 0) goto L_0x0bd6
-            r90 = r11
-            android.media.MediaExtractor r11 = r15.extractor     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            int r11 = r11.getSampleTrackIndex()     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            r12 = r61
-            if (r11 != r12) goto L_0x0ae0
-            r61 = r12
-            r46 = r13
-            r12 = 2500(0x9c4, double:1.235E-320)
-            int r11 = r3.dequeueInputBuffer(r12)     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            if (r11 < 0) goto L_0x0acf
-            int r12 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            r13 = 21
-            if (r12 >= r13) goto L_0x0a98
-            r12 = r6[r11]     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            goto L_0x0a9c
-        L_0x0a98:
-            java.nio.ByteBuffer r12 = r3.getInputBuffer(r11)     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-        L_0x0a9c:
-            android.media.MediaExtractor r13 = r15.extractor     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            r91 = r6
-            r6 = 0
-            int r35 = r13.readSampleData(r12, r6)     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            if (r35 >= 0) goto L_0x0ab8
-            r34 = 0
-            r35 = 0
-            r36 = 0
-            r38 = 4
-            r32 = r3
-            r33 = r11
-            r32.queueInputBuffer(r33, r34, r35, r36, r38)     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            r6 = 1
-            goto L_0x0ad3
-        L_0x0ab8:
-            r34 = 0
-            android.media.MediaExtractor r6 = r15.extractor     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            long r36 = r6.getSampleTime()     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            r38 = 0
-            r32 = r3
-            r33 = r11
-            r32.queueInputBuffer(r33, r34, r35, r36, r38)     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            android.media.MediaExtractor r6 = r15.extractor     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            r6.advance()     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            goto L_0x0ad1
-        L_0x0acf:
-            r91 = r6
-        L_0x0ad1:
-            r6 = r21
-        L_0x0ad3:
-            r70 = r4
-            r21 = r6
-            r53 = r7
-            r13 = r22
-            r6 = 0
-            r22 = r1
-            goto L_0x0b9c
-        L_0x0ae0:
-            r91 = r6
-            r61 = r12
-            r46 = r13
-            if (r7 == 0) goto L_0x0b8e
-            r6 = -1
-            if (r1 == r6) goto L_0x0b8e
-            if (r11 != r1) goto L_0x0b8e
-            int r11 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            r12 = 28
-            if (r11 < r12) goto L_0x0b09
-            android.media.MediaExtractor r12 = r15.extractor     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            long r12 = r12.getSampleSize()     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            r53 = r7
-            long r6 = (long) r2     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            int r32 = (r12 > r6 ? 1 : (r12 == r6 ? 0 : -1))
-            if (r32 <= 0) goto L_0x0b0b
-            r6 = 1024(0x400, double:5.06E-321)
-            long r12 = r12 + r6
-            int r2 = (int) r12     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            java.nio.ByteBuffer r20 = java.nio.ByteBuffer.allocateDirect(r2)     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            goto L_0x0b0b
-        L_0x0b09:
-            r53 = r7
-        L_0x0b0b:
-            r6 = r20
-            android.media.MediaExtractor r7 = r15.extractor     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            r12 = 0
-            int r7 = r7.readSampleData(r6, r12)     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            r13 = r22
-            r13.size = r7     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            r7 = 21
-            if (r11 >= r7) goto L_0x0b24
-            r6.position(r12)     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            int r7 = r13.size     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            r6.limit(r7)     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-        L_0x0b24:
-            int r7 = r13.size     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            if (r7 < 0) goto L_0x0b36
-            android.media.MediaExtractor r7 = r15.extractor     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            long r11 = r7.getSampleTime()     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            r13.presentationTimeUs = r11     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            android.media.MediaExtractor r7 = r15.extractor     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            r7.advance()     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            goto L_0x0b3b
-        L_0x0b36:
-            r7 = 0
-            r13.size = r7     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            r21 = 1
-        L_0x0b3b:
-            int r7 = r13.size     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            if (r7 <= 0) goto L_0x0b83
-            r11 = 0
-            int r7 = (r4 > r11 ? 1 : (r4 == r11 ? 0 : -1))
-            if (r7 < 0) goto L_0x0b4b
-            long r11 = r13.presentationTimeUs     // Catch:{ Exception -> 0x0a61, all -> 0x0a51 }
-            int r7 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
-            if (r7 >= 0) goto L_0x0b83
-        L_0x0b4b:
-            r7 = 0
-            r13.offset = r7     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            android.media.MediaExtractor r11 = r15.extractor     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            int r11 = r11.getSampleFlags()     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            r13.flags = r11     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            org.telegram.messenger.video.MP4Builder r11 = r15.mediaMuxer     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            long r11 = r11.writeSampleData(r8, r6, r13, r7)     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            r32 = 0
-            int r7 = (r11 > r32 ? 1 : (r11 == r32 ? 0 : -1))
-            if (r7 == 0) goto L_0x0b83
-            org.telegram.messenger.MediaController$VideoConvertorListener r7 = r15.callback     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            if (r7 == 0) goto L_0x0b83
-            r22 = r1
-            r20 = r2
-            long r1 = r13.presentationTimeUs     // Catch:{ Exception -> 0x0bc4, all -> 0x0bb9 }
-            long r32 = r1 - r9
-            int r34 = (r32 > r48 ? 1 : (r32 == r48 ? 0 : -1))
-            if (r34 <= 0) goto L_0x0b74
-            long r48 = r1 - r9
-        L_0x0b74:
-            r1 = r48
-            r70 = r4
-            float r4 = (float) r1
-            float r4 = r4 / r24
-            float r4 = r4 / r25
-            r7.didWriteData(r11, r4)     // Catch:{ Exception -> 0x0bb7, all -> 0x0bb5 }
-            r48 = r1
-            goto L_0x0b89
-        L_0x0b83:
-            r22 = r1
-            r20 = r2
-            r70 = r4
-        L_0x0b89:
-            r2 = r20
-            r20 = r6
-            goto L_0x0b9b
-        L_0x0b8e:
-            r70 = r4
-            r53 = r7
-            r13 = r22
-            r22 = r1
-            r1 = -1
-            if (r11 != r1) goto L_0x0b9b
-            r6 = 1
-            goto L_0x0b9c
-        L_0x0b9b:
-            r6 = 0
-        L_0x0b9c:
-            if (r6 == 0) goto L_0x0be4
-            r4 = 2500(0x9c4, double:1.235E-320)
-            int r33 = r3.dequeueInputBuffer(r4)     // Catch:{ Exception -> 0x0bb7, all -> 0x0bb5 }
-            if (r33 < 0) goto L_0x0be4
-            r34 = 0
-            r35 = 0
-            r36 = 0
-            r38 = 4
-            r32 = r3
-            r32.queueInputBuffer(r33, r34, r35, r36, r38)     // Catch:{ Exception -> 0x0bb7, all -> 0x0bb5 }
-            r6 = 1
-            goto L_0x0be6
-        L_0x0bb5:
-            r0 = move-exception
-            goto L_0x0bbc
-        L_0x0bb7:
-            r0 = move-exception
-            goto L_0x0bc7
-        L_0x0bb9:
-            r0 = move-exception
-            r70 = r4
-        L_0x0bbc:
-            r12 = r81
-            r11 = r82
-            r8 = r83
-            goto L_0x11bb
-        L_0x0bc4:
-            r0 = move-exception
-            r70 = r4
-        L_0x0bc7:
-            r8 = r83
-            r6 = r84
-            r1 = r88
-            r2 = r0
-            r28 = r14
-            r5 = r29
-            r34 = r70
-            goto L_0x12d7
-        L_0x0bd6:
-            r70 = r4
-            r91 = r6
-            r53 = r7
-            r90 = r11
-            r46 = r13
-            r13 = r22
-            r22 = r1
-        L_0x0be4:
-            r6 = r21
-        L_0x0be6:
-            r1 = r31 ^ 1
-            r11 = r89
-            r7 = r1
-            r21 = r6
-            r72 = r59
-            r4 = r70
-            r6 = 1
-            r1 = r88
-        L_0x0bf4:
-            if (r7 != 0) goto L_0x0c0d
-            if (r6 == 0) goto L_0x0bf9
-            goto L_0x0c0d
-        L_0x0bf9:
-            r12 = r77
-            r32 = r90
-            r6 = r91
-            r88 = r1
-            r1 = r22
-            r7 = r53
-            r59 = r72
-            r22 = r13
-            r13 = r46
-            goto L_0x0a26
-        L_0x0c0d:
-            r76.checkConversionCanceled()     // Catch:{ Exception -> 0x11a1, all -> 0x1195 }
-            if (r95 == 0) goto L_0x0c1d
-            r32 = 22000(0x55f0, double:1.08694E-319)
-            r12 = r84
-            r88 = r6
-            r89 = r7
-            r6 = r32
-            goto L_0x0CLASSNAME
-        L_0x0c1d:
-            r12 = r84
-            r88 = r6
-            r89 = r7
-            r6 = 2500(0x9c4, double:1.235E-320)
-        L_0x0CLASSNAME:
-            int r6 = r12.dequeueOutputBuffer(r13, r6)     // Catch:{ Exception -> 0x1191, all -> 0x1195 }
-            r7 = -1
-            if (r6 != r7) goto L_0x0c4b
-            r88 = r1
-            r84 = r2
-            r57 = r3
-            r34 = r4
-            r5 = r6
-            r32 = r8
-            r7 = r46
-            r2 = r58
-            r3 = r62
-            r4 = r63
-            r8 = r67
-            r1 = -1
-            r6 = 0
-        L_0x0CLASSNAME:
-            r74 = r28
-            r28 = r14
-            r14 = r74
-            goto L_0x0e8e
-        L_0x0c4b:
-            r7 = -3
-            if (r6 != r7) goto L_0x0CLASSNAME
-            int r7 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0c7a, all -> 0x0CLASSNAME }
-            r84 = r2
-            r2 = 21
-            if (r7 >= r2) goto L_0x0c5a
-            java.nio.ByteBuffer[] r11 = r12.getOutputBuffers()     // Catch:{ Exception -> 0x0c7a, all -> 0x0CLASSNAME }
-        L_0x0c5a:
-            r57 = r3
-            r34 = r4
-            r5 = r6
-            r32 = r8
-            r7 = r46
-            r2 = r58
-            r3 = r62
-            r4 = r63
-            r8 = r67
-        L_0x0c6b:
-            r6 = r88
-            r88 = r1
-            r1 = -1
-            goto L_0x0CLASSNAME
-        L_0x0CLASSNAME:
-            r0 = move-exception
-        L_0x0CLASSNAME:
-            r12 = r81
-            r11 = r82
-            r8 = r83
-            goto L_0x0a5a
-        L_0x0c7a:
-            r0 = move-exception
-        L_0x0c7b:
-            r8 = r83
-            r2 = r0
-            r34 = r4
-            r6 = r12
-            goto L_0x0a6b
-        L_0x0CLASSNAME:
-            r84 = r2
-            r2 = -2
-            if (r6 != r2) goto L_0x0d0b
-            android.media.MediaFormat r2 = r12.getOutputFormat()     // Catch:{ Exception -> 0x0c7a, all -> 0x0CLASSNAME }
             r7 = -5
-            if (r1 != r7) goto L_0x0cf8
-            if (r2 == 0) goto L_0x0cf8
-            org.telegram.messenger.video.MP4Builder r7 = r15.mediaMuxer     // Catch:{ Exception -> 0x0c7a, all -> 0x0CLASSNAME }
-            r32 = r8
+            r14 = r13
+            r13 = r79
+            if (r4 < 0) goto L_0x130c
+            r20 = -2147483648(0xfffffffvar_, double:NaN)
+            r1 = 1000(0x3e8, float:1.401E-42)
+            int r1 = r1 / r14
+            int r1 = r1 * 1000
+            long r8 = (long) r1     // Catch:{ Exception -> 0x126c, all -> 0x125b }
+            android.media.MediaExtractor r1 = r15.extractor     // Catch:{ Exception -> 0x126c, all -> 0x125b }
+            r1.selectTrack(r4)     // Catch:{ Exception -> 0x126c, all -> 0x125b }
+            android.media.MediaExtractor r1 = r15.extractor     // Catch:{ Exception -> 0x126c, all -> 0x125b }
+            android.media.MediaFormat r1 = r1.getTrackFormat(r4)     // Catch:{ Exception -> 0x126c, all -> 0x125b }
+            r28 = 0
+            int r22 = (r84 > r28 ? 1 : (r84 == r28 ? 0 : -1))
+            if (r22 < 0) goto L_0x05cd
+            r22 = 1157234688(0x44fa0000, float:2000.0)
+            int r22 = (r24 > r22 ? 1 : (r24 == r22 ? 0 : -1))
+            if (r22 > 0) goto L_0x05ba
+            r22 = 2600000(0x27aCLASSNAME, float:3.643376E-39)
+            goto L_0x05c8
+        L_0x05ba:
+            r22 = 1167867904(0x459CLASSNAME, float:5000.0)
+            int r22 = (r24 > r22 ? 1 : (r24 == r22 ? 0 : -1))
+            if (r22 > 0) goto L_0x05c5
+            r22 = 2200000(0x2191c0, float:3.082857E-39)
+            goto L_0x05c8
+        L_0x05c5:
+            r22 = 1560000(0x17cdc0, float:2.186026E-39)
+        L_0x05c8:
+            r5 = r22
+            r28 = 0
+            goto L_0x05d9
+        L_0x05cd:
+            if (r78 > 0) goto L_0x05d5
+            r28 = r84
+            r5 = 921600(0xe1000, float:1.291437E-39)
+            goto L_0x05d9
+        L_0x05d5:
+            r5 = r78
+            r28 = r84
+        L_0x05d9:
+            if (r13 <= 0) goto L_0x060b
+            int r5 = java.lang.Math.min(r13, r5)     // Catch:{ Exception -> 0x05f3, all -> 0x05e0 }
+            goto L_0x060b
+        L_0x05e0:
+            r0 = move-exception
+            r8 = r75
+            r9 = r76
+            r44 = r82
+            r2 = r0
+            r10 = r5
+            r11 = r14
+            r32 = r28
+        L_0x05ec:
+            r1 = -5
+            r40 = 0
+            r5 = r80
+            goto L_0x1392
+        L_0x05f3:
+            r0 = move-exception
+            r44 = r82
+            r2 = r0
+            r55 = r4
+            r1 = r5
+            r11 = r14
+            r32 = r28
+        L_0x05fd:
+            r7 = 0
+            r10 = 0
+            r25 = 0
+            r40 = -5
+            r49 = 0
+            r59 = 0
+            r5 = r80
+            goto L_0x1285
+        L_0x060b:
+            r32 = 0
+            int r22 = (r28 > r32 ? 1 : (r28 == r32 ? 0 : -1))
+            r35 = r3
+            if (r22 < 0) goto L_0x0618
+            r22 = r4
+            r3 = r18
+            goto L_0x061c
+        L_0x0618:
+            r22 = r4
+            r3 = r28
+        L_0x061c:
+            int r28 = (r3 > r32 ? 1 : (r3 == r32 ? 0 : -1))
+            if (r28 < 0) goto L_0x0649
+            android.media.MediaExtractor r7 = r15.extractor     // Catch:{ Exception -> 0x063e, all -> 0x0630 }
+            r13 = 0
+            r7.seekTo(r3, r13)     // Catch:{ Exception -> 0x063e, all -> 0x062e }
+            r7 = r94
+            r84 = r3
+        L_0x062a:
+            r3 = 0
+            goto L_0x068e
+        L_0x062e:
+            r0 = move-exception
+            goto L_0x0632
+        L_0x0630:
+            r0 = move-exception
+            r13 = 0
+        L_0x0632:
+            r8 = r75
+            r9 = r76
+            r44 = r82
+            r2 = r0
+            r32 = r3
+        L_0x063b:
+            r10 = r5
+            r11 = r14
+            goto L_0x05ec
+        L_0x063e:
+            r0 = move-exception
+            r44 = r82
+            r2 = r0
+            r32 = r3
+        L_0x0644:
+            r1 = r5
+            r11 = r14
+            r55 = r22
+            goto L_0x05fd
+        L_0x0649:
+            r84 = r3
+            r13 = 0
+            r32 = 0
+            r3 = r80
+            int r7 = (r3 > r32 ? 1 : (r3 == r32 ? 0 : -1))
+            if (r7 <= 0) goto L_0x0685
+            android.media.MediaExtractor r7 = r15.extractor     // Catch:{ Exception -> 0x066e, all -> 0x065c }
+            r7.seekTo(r3, r13)     // Catch:{ Exception -> 0x066e, all -> 0x065c }
+            r7 = r94
+            goto L_0x062a
+        L_0x065c:
+            r0 = move-exception
+            r8 = r75
+            r9 = r76
+            r44 = r82
+            r32 = r84
+            r2 = r0
+            r10 = r5
+            r11 = r14
+            r1 = -5
+            r40 = 0
+            r5 = r3
+            goto L_0x1392
+        L_0x066e:
+            r0 = move-exception
+            r44 = r82
+            r32 = r84
+            r2 = r0
+            r1 = r5
+            r11 = r14
+            r55 = r22
+            r7 = 0
+            r10 = 0
+            r25 = 0
+            r40 = -5
+            r49 = 0
+            r59 = 0
+            r5 = r3
+            goto L_0x1285
+        L_0x0685:
+            android.media.MediaExtractor r7 = r15.extractor     // Catch:{ Exception -> 0x1250, all -> 0x1240 }
+            r3 = 0
+            r7.seekTo(r3, r13)     // Catch:{ Exception -> 0x1234, all -> 0x122a }
+            r7 = r94
+        L_0x068e:
+            if (r7 == 0) goto L_0x06b7
+            r3 = 90
+            r4 = r71
+            if (r4 == r3) goto L_0x06a0
+            r3 = 270(0x10e, float:3.78E-43)
+            if (r4 != r3) goto L_0x069b
+            goto L_0x06a0
+        L_0x069b:
+            int r3 = r7.transformWidth     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            int r13 = r7.transformHeight     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            goto L_0x06bd
+        L_0x06a0:
+            int r3 = r7.transformHeight     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            int r13 = r7.transformWidth     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            goto L_0x06bd
+        L_0x06a5:
+            r0 = move-exception
+            r8 = r75
+            r9 = r76
+            r44 = r82
+            r32 = r84
+            r2 = r0
+            goto L_0x063b
+        L_0x06b0:
+            r0 = move-exception
+            r44 = r82
+            r32 = r84
+            r2 = r0
+            goto L_0x0644
+        L_0x06b7:
+            r4 = r71
+            r3 = r75
+            r13 = r76
+        L_0x06bd:
+            boolean r29 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x1234, all -> 0x122a }
+            if (r29 == 0) goto L_0x06e0
+            r29 = r2
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            r2.<init>()     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            java.lang.String r4 = "create encoder with w = "
+            r2.append(r4)     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            r2.append(r3)     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            java.lang.String r4 = " h = "
+            r2.append(r4)     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            r2.append(r13)     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            goto L_0x06e2
+        L_0x06e0:
+            r29 = r2
+        L_0x06e2:
+            android.media.MediaFormat r2 = android.media.MediaFormat.createVideoFormat(r10, r3, r13)     // Catch:{ Exception -> 0x1234, all -> 0x122a }
+            java.lang.String r4 = "color-format"
+            r36 = r6
+            r6 = 2130708361(0x7var_, float:1.701803E38)
+            r2.setInteger(r4, r6)     // Catch:{ Exception -> 0x1234, all -> 0x122a }
+            java.lang.String r4 = "bitrate"
+            r2.setInteger(r4, r5)     // Catch:{ Exception -> 0x1234, all -> 0x122a }
+            java.lang.String r4 = "frame-rate"
+            r2.setInteger(r4, r14)     // Catch:{ Exception -> 0x1234, all -> 0x122a }
+            java.lang.String r4 = "i-frame-interval"
+            r6 = 2
+            r2.setInteger(r4, r6)     // Catch:{ Exception -> 0x1234, all -> 0x122a }
+            int r6 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x1234, all -> 0x122a }
+            r4 = 23
+            if (r6 >= r4) goto L_0x071e
+            int r4 = java.lang.Math.min(r13, r3)     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            r78 = r3
+            r3 = 480(0x1e0, float:6.73E-43)
+            if (r4 > r3) goto L_0x0720
+            r3 = 921600(0xe1000, float:1.291437E-39)
+            if (r5 <= r3) goto L_0x0718
+            r5 = 921600(0xe1000, float:1.291437E-39)
+        L_0x0718:
+            java.lang.String r3 = "bitrate"
+            r2.setInteger(r3, r5)     // Catch:{ Exception -> 0x06b0, all -> 0x06a5 }
+            goto L_0x0720
+        L_0x071e:
+            r78 = r3
+        L_0x0720:
+            r26 = r5
+            android.media.MediaCodec r5 = android.media.MediaCodec.createEncoderByType(r10)     // Catch:{ Exception -> 0x1219, all -> 0x1206 }
+            r3 = 1
+            r4 = 0
+            r5.configure(r2, r4, r4, r3)     // Catch:{ Exception -> 0x11f3, all -> 0x1206 }
+            org.telegram.messenger.video.InputSurface r2 = new org.telegram.messenger.video.InputSurface     // Catch:{ Exception -> 0x11f3, all -> 0x1206 }
+            android.view.Surface r3 = r5.createInputSurface()     // Catch:{ Exception -> 0x11f3, all -> 0x1206 }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x11f3, all -> 0x1206 }
+            r2.makeCurrent()     // Catch:{ Exception -> 0x11d6, all -> 0x1206 }
+            r5.start()     // Catch:{ Exception -> 0x11d6, all -> 0x1206 }
+            java.lang.String r3 = r1.getString(r11)     // Catch:{ Exception -> 0x11d6, all -> 0x1206 }
+            android.media.MediaCodec r3 = android.media.MediaCodec.createDecoderByType(r3)     // Catch:{ Exception -> 0x11d6, all -> 0x1206 }
+            r34 = r11
+            org.telegram.messenger.video.OutputSurface r11 = new org.telegram.messenger.video.OutputSurface     // Catch:{ Exception -> 0x11c1, all -> 0x1206 }
+            r41 = 0
+            r42 = r3
+            float r3 = (float) r14
+            r43 = 0
+            r48 = r1
+            r1 = r11
+            r49 = r2
+            r50 = r29
+            r2 = r90
+            r53 = r78
+            r32 = r84
+            r29 = r3
+            r51 = r35
+            r52 = r42
+            r44 = 0
+            r3 = r41
+            r55 = r22
+            r22 = r4
+            r4 = r91
+            r78 = r5
+            r56 = r37
+            r25 = -1
+            r5 = r92
+            r57 = r6
+            r58 = r36
+            r6 = r94
+            r7 = r75
+            r30 = r8
+            r9 = 21
+            r8 = r76
+            r9 = r71
+            r61 = r10
+            r10 = r29
+            r14 = r11
+            r22 = r13
+            r13 = r34
+            r11 = r43
+            r1.<init>(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x11b2, all -> 0x11ab }
+            java.lang.String r1 = createFragmentShader(r73, r74, r75, r76)     // Catch:{ Exception -> 0x1196, all -> 0x11ab }
+            r14.changeFragmentShader(r1)     // Catch:{ Exception -> 0x1196, all -> 0x11ab }
+            android.view.Surface r1 = r14.getSurface()     // Catch:{ Exception -> 0x1196, all -> 0x11ab }
+            r2 = r48
+            r3 = r52
+            r4 = 0
+            r5 = 0
+            r3.configure(r2, r1, r4, r5)     // Catch:{ Exception -> 0x1189, all -> 0x11ab }
+            r3.start()     // Catch:{ Exception -> 0x1189, all -> 0x11ab }
+            r1 = r57
+            r2 = 21
+            if (r1 >= r2) goto L_0x07d9
+            java.nio.ByteBuffer[] r7 = r3.getInputBuffers()     // Catch:{ Exception -> 0x07c4, all -> 0x07b6 }
+            java.nio.ByteBuffer[] r1 = r78.getOutputBuffers()     // Catch:{ Exception -> 0x07c4, all -> 0x07b6 }
+            goto L_0x07db
+        L_0x07b6:
+            r0 = move-exception
+            r8 = r75
+            r9 = r76
+            r11 = r77
+            r5 = r80
+            r44 = r82
+            r2 = r0
+            goto L_0x1215
+        L_0x07c4:
+            r0 = move-exception
+            r11 = r77
+            r7 = r78
+            r5 = r80
+            r44 = r82
+            r2 = r0
+            r10 = r3
+            r59 = r4
+            r25 = r14
+            r1 = r26
+            r40 = -5
+            goto L_0x1285
+        L_0x07d9:
+            r1 = r4
+            r7 = r1
+        L_0x07db:
+            r5 = r51
+            if (r5 < 0) goto L_0x092c
+            android.media.MediaExtractor r6 = r15.extractor     // Catch:{ Exception -> 0x0912, all -> 0x0903 }
+            android.media.MediaFormat r6 = r6.getTrackFormat(r5)     // Catch:{ Exception -> 0x0912, all -> 0x0903 }
+            java.lang.String r8 = r6.getString(r13)     // Catch:{ Exception -> 0x0912, all -> 0x0903 }
+            java.lang.String r9 = "audio/mp4a-latm"
+            boolean r8 = r8.equals(r9)     // Catch:{ Exception -> 0x0912, all -> 0x0903 }
+            if (r8 != 0) goto L_0x0800
+            java.lang.String r8 = r6.getString(r13)     // Catch:{ Exception -> 0x07c4, all -> 0x07b6 }
+            java.lang.String r9 = "audio/mpeg"
+            boolean r8 = r8.equals(r9)     // Catch:{ Exception -> 0x07c4, all -> 0x07b6 }
+            if (r8 == 0) goto L_0x07fe
+            goto L_0x0800
+        L_0x07fe:
             r8 = 0
-            int r1 = r7.addTrack(r2, r8)     // Catch:{ Exception -> 0x0c7a, all -> 0x0CLASSNAME }
-            r7 = r64
-            boolean r8 = r2.containsKey(r7)     // Catch:{ Exception -> 0x0cf4, all -> 0x0cef }
-            if (r8 == 0) goto L_0x0ce4
-            int r8 = r2.getInteger(r7)     // Catch:{ Exception -> 0x0cf4, all -> 0x0cef }
-            r33 = r1
-            r1 = 1
-            if (r8 != r1) goto L_0x0ce6
-            r8 = r67
-            java.nio.ByteBuffer r1 = r2.getByteBuffer(r8)     // Catch:{ Exception -> 0x0cd5, all -> 0x0cc5 }
-            r64 = r7
-            r7 = r46
-            java.nio.ByteBuffer r2 = r2.getByteBuffer(r7)     // Catch:{ Exception -> 0x0cd5, all -> 0x0cc5 }
-            int r1 = r1.limit()     // Catch:{ Exception -> 0x0cd5, all -> 0x0cc5 }
-            int r2 = r2.limit()     // Catch:{ Exception -> 0x0cd5, all -> 0x0cc5 }
-            int r1 = r1 + r2
-            r41 = r1
-            goto L_0x0cec
-        L_0x0cc5:
+            goto L_0x0801
+        L_0x0800:
+            r8 = 1
+        L_0x0801:
+            java.lang.String r9 = r6.getString(r13)     // Catch:{ Exception -> 0x0912, all -> 0x0903 }
+            java.lang.String r10 = "audio/unknown"
+            boolean r9 = r9.equals(r10)     // Catch:{ Exception -> 0x0912, all -> 0x0903 }
+            if (r9 == 0) goto L_0x080e
+            r5 = -1
+        L_0x080e:
+            if (r5 < 0) goto L_0x08f6
+            if (r8 == 0) goto L_0x0864
+            org.telegram.messenger.video.MP4Builder r9 = r15.mediaMuxer     // Catch:{ Exception -> 0x0854, all -> 0x07b6 }
+            r10 = 1
+            int r9 = r9.addTrack(r6, r10)     // Catch:{ Exception -> 0x0854, all -> 0x07b6 }
+            android.media.MediaExtractor r11 = r15.extractor     // Catch:{ Exception -> 0x0854, all -> 0x07b6 }
+            r11.selectTrack(r5)     // Catch:{ Exception -> 0x0854, all -> 0x07b6 }
+            java.lang.String r11 = "max-input-size"
+            int r6 = r6.getInteger(r11)     // Catch:{ Exception -> 0x0825, all -> 0x07b6 }
+            goto L_0x082b
+        L_0x0825:
             r0 = move-exception
-            r12 = r81
-            r11 = r82
-            r8 = r83
+            r6 = r0
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)     // Catch:{ Exception -> 0x0854, all -> 0x07b6 }
+            r6 = 0
+        L_0x082b:
+            if (r6 > 0) goto L_0x082f
+            r6 = 65536(0x10000, float:9.18355E-41)
+        L_0x082f:
+            java.nio.ByteBuffer r11 = java.nio.ByteBuffer.allocateDirect(r6)     // Catch:{ Exception -> 0x0854, all -> 0x07b6 }
+            r52 = r3
+            r25 = r14
+            r13 = 0
+            r2 = r80
+            int r28 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
+            if (r28 <= 0) goto L_0x0846
+            android.media.MediaExtractor r4 = r15.extractor     // Catch:{ Exception -> 0x088d, all -> 0x0882 }
+            r10 = 0
+            r4.seekTo(r2, r10)     // Catch:{ Exception -> 0x088d, all -> 0x0882 }
+            goto L_0x084c
+        L_0x0846:
+            android.media.MediaExtractor r4 = r15.extractor     // Catch:{ Exception -> 0x088d, all -> 0x0882 }
+            r10 = 0
+            r4.seekTo(r13, r10)     // Catch:{ Exception -> 0x088d, all -> 0x0882 }
+        L_0x084c:
+            r13 = r82
+            r4 = r9
+            r10 = 0
+            r9 = r69
+            goto L_0x093b
+        L_0x0854:
+            r0 = move-exception
+            r52 = r3
+            r25 = r14
+            r11 = r77
+            r7 = r78
+            r5 = r80
+            r44 = r82
             r2 = r0
-            r34 = r4
-            r9 = r29
-            r1 = r33
-            goto L_0x058a
-        L_0x0cd5:
+            goto L_0x0924
+        L_0x0864:
+            r52 = r3
+            r25 = r14
+            r13 = 0
+            r2 = r80
+            android.media.MediaExtractor r4 = new android.media.MediaExtractor     // Catch:{ Exception -> 0x08e0, all -> 0x08cd }
+            r4.<init>()     // Catch:{ Exception -> 0x08e0, all -> 0x08cd }
+            r9 = r69
+            r4.setDataSource(r9)     // Catch:{ Exception -> 0x08cb, all -> 0x08c9 }
+            r4.selectTrack(r5)     // Catch:{ Exception -> 0x08cb, all -> 0x08c9 }
+            int r10 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
+            if (r10 <= 0) goto L_0x0896
+            r10 = 0
+            r4.seekTo(r2, r10)     // Catch:{ Exception -> 0x088d, all -> 0x0882 }
+            goto L_0x089a
+        L_0x0882:
             r0 = move-exception
-            r8 = r83
-            r2 = r0
-            r34 = r4
-            r6 = r12
-            r28 = r14
-            r5 = r29
-            r1 = r33
-            goto L_0x12d7
-        L_0x0ce4:
-            r33 = r1
-        L_0x0ce6:
-            r64 = r7
-            r7 = r46
-            r8 = r67
-        L_0x0cec:
-            r1 = r33
-            goto L_0x0cfe
-        L_0x0cef:
+            r8 = r75
+            r9 = r76
+            r11 = r77
+            r44 = r82
+            r5 = r2
+            goto L_0x08db
+        L_0x088d:
             r0 = move-exception
-            r33 = r1
-            goto L_0x0CLASSNAME
-        L_0x0cf4:
-            r0 = move-exception
-            r33 = r1
-            goto L_0x0c7b
-        L_0x0cf8:
-            r32 = r8
-            r7 = r46
-            r8 = r67
-        L_0x0cfe:
-            r57 = r3
-            r34 = r4
-            r5 = r6
-            r2 = r58
-            r3 = r62
-            r4 = r63
-            goto L_0x0c6b
-        L_0x0d0b:
-            r32 = r8
-            r7 = r46
-            r8 = r67
-            if (r6 < 0) goto L_0x1169
-            int r2 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x1191, all -> 0x1195 }
-            r28 = r14
-            r14 = 21
-            if (r2 >= r14) goto L_0x0d26
-            r2 = r11[r6]     // Catch:{ Exception -> 0x0d1e, all -> 0x0CLASSNAME }
-            goto L_0x0d2a
-        L_0x0d1e:
-            r0 = move-exception
-            r8 = r83
-            r2 = r0
-            r34 = r4
-            goto L_0x10eb
-        L_0x0d26:
-            java.nio.ByteBuffer r2 = r12.getOutputBuffer(r6)     // Catch:{ Exception -> 0x1162, all -> 0x1195 }
-        L_0x0d2a:
-            if (r2 == 0) goto L_0x113e
-            int r14 = r13.size     // Catch:{ Exception -> 0x1134, all -> 0x1195 }
-            r33 = r11
+            r11 = r77
+            r7 = r78
+            r44 = r82
+            r5 = r2
+            goto L_0x08ec
+        L_0x0896:
+            r10 = 0
+            r4.seekTo(r13, r10)     // Catch:{ Exception -> 0x08cb, all -> 0x08c9 }
+        L_0x089a:
+            org.telegram.messenger.video.AudioRecoder r10 = new org.telegram.messenger.video.AudioRecoder     // Catch:{ Exception -> 0x08cb, all -> 0x08c9 }
+            r10.<init>(r6, r4, r5)     // Catch:{ Exception -> 0x08cb, all -> 0x08c9 }
+            r10.startTime = r2     // Catch:{ Exception -> 0x08b5, all -> 0x08c9 }
+            r13 = r82
+            r10.endTime = r13     // Catch:{ Exception -> 0x08b3, all -> 0x08b1 }
+            org.telegram.messenger.video.MP4Builder r4 = r15.mediaMuxer     // Catch:{ Exception -> 0x08b3, all -> 0x08b1 }
+            android.media.MediaFormat r6 = r10.format     // Catch:{ Exception -> 0x08b3, all -> 0x08b1 }
             r11 = 1
-            if (r14 <= r11) goto L_0x0e70
-            int r11 = r13.flags     // Catch:{ Exception -> 0x0e67, all -> 0x0e5c }
-            r34 = r11 & 2
-            if (r34 != 0) goto L_0x0dd7
-            if (r41 == 0) goto L_0x0d4f
-            r34 = r11 & 1
-            if (r34 == 0) goto L_0x0d4f
-            r34 = r4
-            int r4 = r13.offset     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            int r4 = r4 + r41
-            r13.offset = r4     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            int r14 = r14 - r41
-            r13.size = r14     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            goto L_0x0d51
-        L_0x0d4c:
+            int r4 = r4.addTrack(r6, r11)     // Catch:{ Exception -> 0x08b3, all -> 0x08b1 }
+            r6 = 0
+            goto L_0x093a
+        L_0x08b1:
             r0 = move-exception
-            goto L_0x0e6c
-        L_0x0d4f:
-            r34 = r4
-        L_0x0d51:
-            if (r23 == 0) goto L_0x0da0
-            r4 = r11 & 1
-            if (r4 == 0) goto L_0x0da0
-            int r4 = r13.size     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            r5 = 100
-            if (r4 <= r5) goto L_0x0d9e
-            int r4 = r13.offset     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            r2.position(r4)     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            byte[] r4 = new byte[r5]     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            r2.get(r4)     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
+            goto L_0x08d2
+        L_0x08b3:
+            r0 = move-exception
+            goto L_0x08b8
+        L_0x08b5:
+            r0 = move-exception
+            r13 = r82
+        L_0x08b8:
+            r11 = r77
+            r7 = r78
+            r5 = r2
+            r59 = r10
+            r44 = r13
+            r1 = r26
+            r10 = r52
+            r40 = -5
+            goto L_0x0b90
+        L_0x08c9:
+            r0 = move-exception
+            goto L_0x08d0
+        L_0x08cb:
+            r0 = move-exception
+            goto L_0x08e3
+        L_0x08cd:
+            r0 = move-exception
+            r9 = r69
+        L_0x08d0:
+            r13 = r82
+        L_0x08d2:
+            r8 = r75
+            r9 = r76
+            r11 = r77
+            r5 = r2
+            r44 = r13
+        L_0x08db:
+            r10 = r26
+            r1 = -5
+            goto L_0x0b78
+        L_0x08e0:
+            r0 = move-exception
+            r9 = r69
+        L_0x08e3:
+            r13 = r82
+            r11 = r77
+            r7 = r78
+            r5 = r2
+            r44 = r13
+        L_0x08ec:
+            r1 = r26
+            r10 = r52
+            r40 = -5
+            r59 = 0
+            goto L_0x0b90
+        L_0x08f6:
+            r9 = r69
+            r52 = r3
+            r25 = r14
+            r2 = r80
+            r13 = r82
+            r4 = -5
+            r6 = 0
+            goto L_0x0939
+        L_0x0903:
+            r0 = move-exception
+            r9 = r69
+            r13 = r82
+            r8 = r75
+            r9 = r76
+            r11 = r77
+            r5 = r80
+            goto L_0x1212
+        L_0x0912:
+            r0 = move-exception
+            r9 = r69
+            r52 = r3
+            r25 = r14
+            r13 = r82
+            r11 = r77
+            r7 = r78
+            r5 = r80
+            r2 = r0
+            r44 = r13
+        L_0x0924:
+            r1 = r26
+            r10 = r52
+            r40 = -5
+            goto L_0x1283
+        L_0x092c:
+            r9 = r69
+            r52 = r3
+            r25 = r14
+            r2 = r80
+            r13 = r82
+            r4 = -5
+            r6 = 0
+            r8 = 1
+        L_0x0939:
+            r10 = 0
+        L_0x093a:
             r11 = 0
-            r14 = 0
-        L_0x0d69:
-            r5 = 96
-            if (r11 >= r5) goto L_0x0d9e
-            byte r5 = r4[r11]     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            if (r5 != 0) goto L_0x0d95
-            int r5 = r11 + 1
-            byte r5 = r4[r5]     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            if (r5 != 0) goto L_0x0d95
-            int r5 = r11 + 2
-            byte r5 = r4[r5]     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            if (r5 != 0) goto L_0x0d95
-            int r5 = r11 + 3
-            byte r5 = r4[r5]     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            r23 = r4
-            r4 = 1
-            if (r5 != r4) goto L_0x0d97
-            int r14 = r14 + 1
-            if (r14 <= r4) goto L_0x0d97
-            int r4 = r13.offset     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            int r4 = r4 + r11
-            r13.offset = r4     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            int r4 = r13.size     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            int r4 = r4 - r11
-            r13.size = r4     // Catch:{ Exception -> 0x0d4c, all -> 0x0e4f }
-            goto L_0x0d9e
-        L_0x0d95:
-            r23 = r4
-        L_0x0d97:
-            int r11 = r11 + 1
-            r4 = r23
-            r5 = 100
-            goto L_0x0d69
-        L_0x0d9e:
-            r23 = 0
-        L_0x0da0:
-            org.telegram.messenger.video.MP4Builder r4 = r15.mediaMuxer     // Catch:{ Exception -> 0x0dd2, all -> 0x0e4f }
-            r57 = r3
-            r5 = 1
-            long r2 = r4.writeSampleData(r1, r2, r13, r5)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            r4 = 0
-            int r11 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r11 == 0) goto L_0x0e74
-            org.telegram.messenger.MediaController$VideoConvertorListener r4 = r15.callback     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            if (r4 == 0) goto L_0x0e74
-            r11 = r6
-            long r5 = r13.presentationTimeUs     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            long r36 = r5 - r9
-            int r14 = (r36 > r48 ? 1 : (r36 == r48 ? 0 : -1))
-            if (r14 <= 0) goto L_0x0dbe
-            long r48 = r5 - r9
-        L_0x0dbe:
-            r5 = r48
-            float r14 = (float) r5     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            float r14 = r14 / r24
-            float r14 = r14 / r25
-            r4.didWriteData(r2, r14)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            r48 = r5
-        L_0x0dca:
-            r2 = r58
-            r3 = r62
-            r4 = r63
-            goto L_0x0e77
-        L_0x0dd2:
+        L_0x093b:
+            if (r5 >= 0) goto L_0x0940
+            r28 = 1
+            goto L_0x0942
+        L_0x0940:
+            r28 = 0
+        L_0x0942:
+            r68.checkConversionCanceled()     // Catch:{ Exception -> 0x1172, all -> 0x116c }
+            r48 = r11
+            r64 = r18
+            r62 = r20
+            r41 = r28
+            r82 = -5
+            r11 = 0
+            r20 = 0
+            r28 = 0
+            r29 = 1
+            r34 = 0
+            r36 = 0
+            r21 = r1
+            r1 = 0
+        L_0x095d:
+            if (r1 == 0) goto L_0x0978
+            if (r8 != 0) goto L_0x0964
+            if (r41 != 0) goto L_0x0964
+            goto L_0x0978
+        L_0x0964:
+            r8 = r75
+            r4 = r76
+            r11 = r77
+            r7 = r78
+            r5 = r2
+            r44 = r13
+            r3 = r52
+            r1 = 0
+            r40 = 0
+            r2 = r82
+            goto L_0x12cb
+        L_0x0978:
+            r68.checkConversionCanceled()     // Catch:{ Exception -> 0x1153, all -> 0x1140 }
+            if (r8 != 0) goto L_0x09aa
+            if (r10 == 0) goto L_0x09aa
+            r83 = r1
+            org.telegram.messenger.video.MP4Builder r1 = r15.mediaMuxer     // Catch:{ Exception -> 0x0998, all -> 0x0988 }
+            boolean r1 = r10.step(r1, r4)     // Catch:{ Exception -> 0x0998, all -> 0x0988 }
+            goto L_0x09ae
+        L_0x0988:
             r0 = move-exception
-            r57 = r3
-            goto L_0x0e6c
-        L_0x0dd7:
-            r57 = r3
-            r34 = r4
-            r11 = r6
-            r3 = -5
-            if (r1 != r3) goto L_0x0dca
-            byte[] r3 = new byte[r14]     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            int r4 = r13.offset     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            int r4 = r4 + r14
-            r2.limit(r4)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            int r4 = r13.offset     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            r2.position(r4)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            r2.get(r3)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            int r2 = r13.size     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            r6 = 1
-            int r2 = r2 - r6
-        L_0x0df3:
-            if (r2 < 0) goto L_0x0e31
-            r4 = 3
-            if (r2 <= r4) goto L_0x0e31
-            byte r5 = r3[r2]     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            if (r5 != r6) goto L_0x0e2d
-            int r5 = r2 + -1
-            byte r5 = r3[r5]     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            if (r5 != 0) goto L_0x0e2d
-            int r5 = r2 + -2
-            byte r5 = r3[r5]     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            if (r5 != 0) goto L_0x0e2d
-            int r5 = r2 + -3
-            byte r14 = r3[r5]     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            if (r14 != 0) goto L_0x0e2d
-            java.nio.ByteBuffer r2 = java.nio.ByteBuffer.allocate(r5)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            int r14 = r13.size     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            int r14 = r14 - r5
-            java.nio.ByteBuffer r14 = java.nio.ByteBuffer.allocate(r14)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            r4 = 0
-            java.nio.ByteBuffer r6 = r2.put(r3, r4, r5)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            r6.position(r4)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            int r6 = r13.size     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            int r6 = r6 - r5
-            java.nio.ByteBuffer r3 = r14.put(r3, r5, r6)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            r3.position(r4)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
+            r8 = r75
+            r9 = r76
+            r11 = r77
+            r1 = r82
+            r5 = r2
+            r44 = r13
+            r10 = r26
+            goto L_0x0b78
+        L_0x0998:
+            r0 = move-exception
+            r11 = r77
+            r7 = r78
+            r40 = r82
+            r5 = r2
+            r59 = r10
+            r44 = r13
+            r1 = r26
+            r10 = r52
+            goto L_0x0b90
+        L_0x09aa:
+            r83 = r1
+            r1 = r41
+        L_0x09ae:
+            if (r11 != 0) goto L_0x0b93
+            r84 = r1
+            android.media.MediaExtractor r1 = r15.extractor     // Catch:{ Exception -> 0x0b7c, all -> 0x0b68 }
+            int r1 = r1.getSampleTrackIndex()     // Catch:{ Exception -> 0x0b7c, all -> 0x0b68 }
+            r9 = r55
+            if (r1 != r9) goto L_0x0a3e
+            r85 = r10
+            r10 = r52
+            r2 = 2500(0x9c4, double:1.235E-320)
+            int r1 = r10.dequeueInputBuffer(r2)     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            if (r1 < 0) goto L_0x0a08
+            int r2 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            r3 = 21
+            if (r2 >= r3) goto L_0x09d1
+            r3 = r7[r1]     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            goto L_0x09d5
+        L_0x09d1:
+            java.nio.ByteBuffer r3 = r10.getInputBuffer(r1)     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+        L_0x09d5:
+            android.media.MediaExtractor r2 = r15.extractor     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            r51 = r7
+            r7 = 0
+            int r44 = r2.readSampleData(r3, r7)     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            if (r44 >= 0) goto L_0x09f1
+            r43 = 0
+            r44 = 0
+            r45 = 0
+            r47 = 4
+            r41 = r10
+            r42 = r1
+            r41.queueInputBuffer(r42, r43, r44, r45, r47)     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            r1 = 1
+            goto L_0x0a0b
+        L_0x09f1:
+            r43 = 0
+            android.media.MediaExtractor r2 = r15.extractor     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            long r45 = r2.getSampleTime()     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            r47 = 0
+            r41 = r10
+            r42 = r1
+            r41.queueInputBuffer(r42, r43, r44, r45, r47)     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            android.media.MediaExtractor r1 = r15.extractor     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            r1.advance()     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            goto L_0x0a0a
+        L_0x0a08:
+            r51 = r7
+        L_0x0a0a:
+            r1 = r11
+        L_0x0a0b:
+            r11 = r1
+            r54 = r4
+            r52 = r5
+            r2 = r6
+            r38 = r13
+            r1 = 0
+            r6 = r80
+            goto L_0x0b2e
+        L_0x0a18:
+            r0 = move-exception
+            r8 = r75
+            r9 = r76
+            r11 = r77
+            r5 = r80
+            r1 = r82
+            r2 = r0
+        L_0x0a24:
+            r44 = r13
+        L_0x0a26:
+            r10 = r26
+            goto L_0x1390
+        L_0x0a2a:
+            r0 = move-exception
+            r11 = r77
+            r7 = r78
+            r5 = r80
+            r40 = r82
+            r59 = r85
+            r2 = r0
+            r55 = r9
+            r44 = r13
+        L_0x0a3a:
+            r1 = r26
+            goto L_0x1285
+        L_0x0a3e:
+            r51 = r7
+            r85 = r10
+            r10 = r52
+            if (r8 == 0) goto L_0x0b1f
+            r2 = -1
+            if (r5 == r2) goto L_0x0b1f
+            if (r1 != r5) goto L_0x0b1f
+            int r1 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            r3 = 28
+            if (r1 < r3) goto L_0x0a65
+            android.media.MediaExtractor r3 = r15.extractor     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            long r41 = r3.getSampleSize()     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            long r2 = (long) r6     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            int r7 = (r41 > r2 ? 1 : (r41 == r2 ? 0 : -1))
+            if (r7 <= 0) goto L_0x0a65
+            r2 = 1024(0x400, double:5.06E-321)
+            long r2 = r41 + r2
+            int r6 = (int) r2     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            java.nio.ByteBuffer r48 = java.nio.ByteBuffer.allocateDirect(r6)     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+        L_0x0a65:
+            r2 = r48
+            android.media.MediaExtractor r3 = r15.extractor     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            r7 = 0
+            int r3 = r3.readSampleData(r2, r7)     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            r12.size = r3     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            r3 = 21
+            if (r1 >= r3) goto L_0x0a7c
+            r2.position(r7)     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            int r1 = r12.size     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            r2.limit(r1)     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+        L_0x0a7c:
+            int r1 = r12.size     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            if (r1 < 0) goto L_0x0a90
+            android.media.MediaExtractor r1 = r15.extractor     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            r7 = r4
+            long r3 = r1.getSampleTime()     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            r12.presentationTimeUs = r3     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            android.media.MediaExtractor r1 = r15.extractor     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            r1.advance()     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            r1 = r11
+            goto L_0x0a95
+        L_0x0a90:
+            r7 = r4
+            r1 = 0
+            r12.size = r1     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            r1 = 1
+        L_0x0a95:
+            int r3 = r12.size     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            if (r3 <= 0) goto L_0x0aea
+            r3 = 0
+            int r11 = (r13 > r3 ? 1 : (r13 == r3 ? 0 : -1))
+            if (r11 < 0) goto L_0x0aa5
+            long r3 = r12.presentationTimeUs     // Catch:{ Exception -> 0x0a2a, all -> 0x0a18 }
+            int r11 = (r3 > r13 ? 1 : (r3 == r13 ? 0 : -1))
+            if (r11 >= 0) goto L_0x0aea
+        L_0x0aa5:
+            r3 = 0
+            r12.offset = r3     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            android.media.MediaExtractor r4 = r15.extractor     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            int r4 = r4.getSampleFlags()     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            r12.flags = r4     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            org.telegram.messenger.video.MP4Builder r4 = r15.mediaMuxer     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            r52 = r5
+            long r4 = r4.writeSampleData(r7, r2, r12, r3)     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            r41 = 0
+            int r3 = (r4 > r41 ? 1 : (r4 == r41 ? 0 : -1))
+            if (r3 == 0) goto L_0x0ae6
+            org.telegram.messenger.MediaController$VideoConvertorListener r3 = r15.callback     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            if (r3 == 0) goto L_0x0ae6
+            r11 = r1
+            r41 = r2
+            long r1 = r12.presentationTimeUs     // Catch:{ Exception -> 0x0b09, all -> 0x0afc }
+            r42 = r6
+            r54 = r7
+            r38 = r13
+            r13 = 2500(0x9c4, double:1.235E-320)
+            r6 = r80
+            long r43 = r1 - r6
+            int r45 = (r43 > r34 ? 1 : (r43 == r34 ? 0 : -1))
+            if (r45 <= 0) goto L_0x0ad9
+            long r34 = r1 - r6
+        L_0x0ad9:
+            r1 = r34
+            float r13 = (float) r1
+            float r13 = r13 / r23
+            float r13 = r13 / r24
+            r3.didWriteData(r4, r13)     // Catch:{ Exception -> 0x0b55, all -> 0x0b48 }
+            r34 = r1
+            goto L_0x0af7
+        L_0x0ae6:
+            r11 = r1
+            r41 = r2
+            goto L_0x0aef
+        L_0x0aea:
+            r11 = r1
+            r41 = r2
+            r52 = r5
+        L_0x0aef:
+            r42 = r6
+            r54 = r7
+            r38 = r13
+            r6 = r80
+        L_0x0af7:
+            r48 = r41
+            r2 = r42
+            goto L_0x0b2d
+        L_0x0afc:
+            r0 = move-exception
+            r38 = r13
+            r8 = r75
+            r9 = r76
+            r11 = r77
+            r5 = r80
+            goto L_0x114a
+        L_0x0b09:
+            r0 = move-exception
+            r38 = r13
+            r11 = r77
+            r7 = r78
+            r5 = r80
+            r40 = r82
+            r59 = r85
+            r2 = r0
+            r55 = r9
+            r1 = r26
+            r44 = r38
+            goto L_0x1285
+        L_0x0b1f:
+            r54 = r4
+            r52 = r5
+            r2 = r6
+            r38 = r13
+            r6 = r80
+            r3 = -1
+            if (r1 != r3) goto L_0x0b2d
+            r1 = 1
+            goto L_0x0b2e
+        L_0x0b2d:
+            r1 = 0
+        L_0x0b2e:
+            if (r1 == 0) goto L_0x0ba8
+            r3 = 2500(0x9c4, double:1.235E-320)
+            int r42 = r10.dequeueInputBuffer(r3)     // Catch:{ Exception -> 0x0b55, all -> 0x0b48 }
+            if (r42 < 0) goto L_0x0ba8
+            r43 = 0
+            r44 = 0
+            r45 = 0
+            r47 = 4
+            r41 = r10
+            r41.queueInputBuffer(r42, r43, r44, r45, r47)     // Catch:{ Exception -> 0x0b55, all -> 0x0b48 }
+            r1 = 1
+            goto L_0x0ba9
+        L_0x0b48:
+            r0 = move-exception
+            r8 = r75
+            r9 = r76
+            r11 = r77
+            r1 = r82
+            r2 = r0
+            r5 = r6
+            goto L_0x114d
+        L_0x0b55:
+            r0 = move-exception
+            r11 = r77
+            r40 = r82
+            r59 = r85
+            r2 = r0
+            r5 = r6
+            r55 = r9
+            r1 = r26
+            r44 = r38
+            r7 = r78
+            goto L_0x1285
+        L_0x0b68:
+            r0 = move-exception
+            r38 = r13
+            r8 = r75
+            r9 = r76
+            r11 = r77
+            r1 = r82
+            r5 = r2
+            r10 = r26
+            r44 = r38
+        L_0x0b78:
+            r40 = 0
+            goto L_0x12e9
+        L_0x0b7c:
+            r0 = move-exception
+            r85 = r10
+            r38 = r13
+            r10 = r52
+            r11 = r77
+            r7 = r78
+            r40 = r82
+            r59 = r85
+            r5 = r2
+            r1 = r26
+            r44 = r38
+        L_0x0b90:
+            r2 = r0
+            goto L_0x1285
+        L_0x0b93:
+            r84 = r1
+            r54 = r4
+            r51 = r7
+            r85 = r10
+            r38 = r13
+            r10 = r52
+            r9 = r55
+            r52 = r5
+            r66 = r2
+            r2 = r6
+            r6 = r66
+        L_0x0ba8:
+            r1 = r11
+        L_0x0ba9:
+            r3 = r20 ^ 1
+            r5 = r83
+            r11 = r1
+            r41 = r8
+            r55 = r9
+            r13 = r38
+            r8 = r62
+            r4 = 1
+            r1 = r82
+        L_0x0bb9:
+            if (r3 != 0) goto L_0x0bda
+            if (r4 == 0) goto L_0x0bbe
+            goto L_0x0bda
+        L_0x0bbe:
+            r82 = r1
+            r1 = r5
+            r62 = r8
+            r8 = r41
+            r5 = r52
+            r4 = r54
+            r9 = r69
+            r41 = r84
+            r52 = r10
+            r10 = r85
+            r66 = r6
             r6 = r2
-            goto L_0x0e33
-        L_0x0e2d:
-            int r2 = r2 + -1
-            r6 = 1
-            goto L_0x0df3
-        L_0x0e31:
-            r6 = 0
-            r14 = 0
-        L_0x0e33:
-            r2 = r58
-            r3 = r62
-            r4 = r63
-            android.media.MediaFormat r5 = android.media.MediaFormat.createVideoFormat(r4, r2, r3)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            if (r6 == 0) goto L_0x0e47
-            if (r14 == 0) goto L_0x0e47
-            r5.setByteBuffer(r8, r6)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            r5.setByteBuffer(r7, r14)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-        L_0x0e47:
-            org.telegram.messenger.video.MP4Builder r6 = r15.mediaMuxer     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            r14 = 0
-            int r1 = r6.addTrack(r5, r14)     // Catch:{ Exception -> 0x0e51, all -> 0x0e4f }
-            goto L_0x0e77
-        L_0x0e4f:
+            r2 = r66
+            r7 = r51
+            goto L_0x095d
+        L_0x0bda:
+            r68.checkConversionCanceled()     // Catch:{ Exception -> 0x112d, all -> 0x111e }
+            if (r89 == 0) goto L_0x0be8
+            r38 = 22000(0x55f0, double:1.08694E-319)
+            r83 = r2
+            r82 = r3
+            r2 = r38
+            goto L_0x0bee
+        L_0x0be8:
+            r83 = r2
+            r82 = r3
+            r2 = 2500(0x9c4, double:1.235E-320)
+        L_0x0bee:
+            r66 = r4
+            r4 = r78
+            r78 = r66
+            int r2 = r4.dequeueOutputBuffer(r12, r2)     // Catch:{ Exception -> 0x111a, all -> 0x111e }
+            r3 = -1
+            if (r2 != r3) goto L_0x0CLASSNAME
+            r38 = r5
+            r42 = r8
+            r39 = r11
+            r44 = r13
+            r6 = r22
+            r11 = r50
+            r5 = r53
+            r3 = r58
+            r9 = r61
+            r7 = 0
+        L_0x0c0e:
+            r8 = 3
+            r13 = -1
+            goto L_0x0e36
+        L_0x0CLASSNAME:
+            r3 = -3
+            if (r2 != r3) goto L_0x0c4c
+            int r3 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0c3f, all -> 0x0CLASSNAME }
+            r38 = r5
+            r5 = 21
+            if (r3 >= r5) goto L_0x0CLASSNAME
+            java.nio.ByteBuffer[] r21 = r4.getOutputBuffers()     // Catch:{ Exception -> 0x0c3f, all -> 0x0CLASSNAME }
+        L_0x0CLASSNAME:
+            r7 = r78
+            r42 = r8
+            r39 = r11
+            r44 = r13
+            r6 = r22
+            r11 = r50
+            r5 = r53
+            r3 = r58
+        L_0x0CLASSNAME:
+            r9 = r61
+            goto L_0x0c0e
+        L_0x0CLASSNAME:
             r0 = move-exception
-            goto L_0x0e5f
-        L_0x0e51:
-            r0 = move-exception
-            r8 = r83
+        L_0x0CLASSNAME:
+            r8 = r75
+            r9 = r76
+            r11 = r77
             r2 = r0
-            r6 = r12
-            r5 = r29
-            r3 = r57
-            goto L_0x12d7
-        L_0x0e5c:
+            r5 = r6
+            goto L_0x0a24
+        L_0x0c3f:
             r0 = move-exception
-            r34 = r4
-        L_0x0e5f:
-            r12 = r81
-            r11 = r82
-            r8 = r83
-            goto L_0x119e
-        L_0x0e67:
-            r0 = move-exception
-            r57 = r3
-            r34 = r4
-        L_0x0e6c:
-            r8 = r83
+            r11 = r77
+            r59 = r85
+            r2 = r0
+            r40 = r1
+            r5 = r6
+            r44 = r13
             goto L_0x113c
-        L_0x0e70:
-            r57 = r3
-            r34 = r4
-        L_0x0e74:
-            r11 = r6
-            goto L_0x0dca
-        L_0x0e77:
-            int r5 = r13.flags     // Catch:{ Exception -> 0x112b, all -> 0x1125 }
-            r5 = r5 & 4
-            if (r5 == 0) goto L_0x0e80
-            r5 = r11
-            r6 = 1
-            goto L_0x0e82
-        L_0x0e80:
-            r5 = r11
-            r6 = 0
-        L_0x0e82:
+        L_0x0c4c:
+            r38 = r5
+            r5 = -2
+            if (r2 != r5) goto L_0x0cd3
+            android.media.MediaFormat r5 = r4.getOutputFormat()     // Catch:{ Exception -> 0x0c3f, all -> 0x0CLASSNAME }
+            r3 = -5
+            if (r1 != r3) goto L_0x0cc1
+            if (r5 == 0) goto L_0x0cc1
+            org.telegram.messenger.video.MP4Builder r3 = r15.mediaMuxer     // Catch:{ Exception -> 0x0c3f, all -> 0x0CLASSNAME }
+            r39 = r11
             r11 = 0
-            r12.releaseOutputBuffer(r5, r11)     // Catch:{ Exception -> 0x112b, all -> 0x1125 }
-            r14 = r6
-            r11 = r33
-            r6 = r88
-            r88 = r1
-            r1 = -1
-        L_0x0e8e:
-            if (r5 == r1) goto L_0x0eb0
-            r1 = r88
-            r58 = r2
-            r62 = r3
-            r63 = r4
-            r46 = r7
-            r67 = r8
+            int r1 = r3.addTrack(r5, r11)     // Catch:{ Exception -> 0x0c3f, all -> 0x0CLASSNAME }
+            r3 = r56
+            boolean r11 = r5.containsKey(r3)     // Catch:{ Exception -> 0x0cb0, all -> 0x0cac }
+            if (r11 == 0) goto L_0x0ca1
+            int r11 = r5.getInteger(r3)     // Catch:{ Exception -> 0x0cb0, all -> 0x0cac }
+            r42 = r1
+            r1 = 1
+            if (r11 != r1) goto L_0x0ca3
+            r11 = r50
+            java.nio.ByteBuffer r1 = r5.getByteBuffer(r11)     // Catch:{ Exception -> 0x0c9f, all -> 0x0c8e }
+            r56 = r3
+            r3 = r58
+            java.nio.ByteBuffer r5 = r5.getByteBuffer(r3)     // Catch:{ Exception -> 0x0c9f, all -> 0x0c8e }
+            int r1 = r1.limit()     // Catch:{ Exception -> 0x0c9f, all -> 0x0c8e }
+            int r5 = r5.limit()     // Catch:{ Exception -> 0x0c9f, all -> 0x0c8e }
+            int r1 = r1 + r5
+            r28 = r1
+            goto L_0x0ca9
+        L_0x0c8e:
+            r0 = move-exception
+            r8 = r75
+            r9 = r76
+            r11 = r77
+            r2 = r0
+            r5 = r6
+            r44 = r13
+            r10 = r26
+            r1 = r42
+            goto L_0x1390
+        L_0x0c9f:
+            r0 = move-exception
+            goto L_0x0cb3
+        L_0x0ca1:
+            r42 = r1
+        L_0x0ca3:
+            r56 = r3
+            r11 = r50
+            r3 = r58
+        L_0x0ca9:
+            r1 = r42
+            goto L_0x0cc7
+        L_0x0cac:
+            r0 = move-exception
+            r42 = r1
+            goto L_0x0CLASSNAME
+        L_0x0cb0:
+            r0 = move-exception
+            r42 = r1
+        L_0x0cb3:
+            r11 = r77
+            r59 = r85
+            r2 = r0
+            r5 = r6
+            r44 = r13
+            r1 = r26
+            r40 = r42
+            goto L_0x11f0
+        L_0x0cc1:
+            r39 = r11
+            r11 = r50
+            r3 = r58
+        L_0x0cc7:
+            r7 = r78
+            r42 = r8
+            r44 = r13
+            r6 = r22
+            r5 = r53
+            goto L_0x0CLASSNAME
+        L_0x0cd3:
+            r39 = r11
+            r11 = r50
+            r3 = r58
+            if (r2 < 0) goto L_0x10e9
+            int r5 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x111a, all -> 0x111e }
+            r42 = r8
+            r8 = 21
+            if (r5 >= r8) goto L_0x0ce6
+            r5 = r21[r2]     // Catch:{ Exception -> 0x0c3f, all -> 0x0CLASSNAME }
+            goto L_0x0cea
+        L_0x0ce6:
+            java.nio.ByteBuffer r5 = r4.getOutputBuffer(r2)     // Catch:{ Exception -> 0x111a, all -> 0x111e }
+        L_0x0cea:
+            if (r5 == 0) goto L_0x10c4
+            int r9 = r12.size     // Catch:{ Exception -> 0x111a, all -> 0x111e }
+            r8 = 1
+            if (r9 <= r8) goto L_0x0e20
+            int r8 = r12.flags     // Catch:{ Exception -> 0x0e1b, all -> 0x0e16 }
+            r38 = r8 & 2
+            if (r38 != 0) goto L_0x0da1
+            if (r28 == 0) goto L_0x0d20
+            r38 = r8 & 1
+            if (r38 == 0) goto L_0x0d20
+            r44 = r13
+            int r13 = r12.offset     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            int r13 = r13 + r28
+            r12.offset = r13     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            int r9 = r9 - r28
+            r12.size = r9     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            goto L_0x0d22
+        L_0x0d0a:
+            r0 = move-exception
+            r8 = r75
+            r9 = r76
+            r11 = r77
+            r2 = r0
+            r5 = r6
+            goto L_0x0a26
+        L_0x0d15:
+            r0 = move-exception
+            r11 = r77
+            r59 = r85
+            r2 = r0
+            r40 = r1
+            r5 = r6
+            goto L_0x113c
+        L_0x0d20:
+            r44 = r13
+        L_0x0d22:
+            if (r29 == 0) goto L_0x0d71
+            r8 = r8 & 1
+            if (r8 == 0) goto L_0x0d71
+            int r8 = r12.size     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            r13 = 100
+            if (r8 <= r13) goto L_0x0d6f
+            int r8 = r12.offset     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            r5.position(r8)     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            byte[] r8 = new byte[r13]     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            r5.get(r8)     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            r9 = 0
+            r14 = 0
+        L_0x0d3a:
+            r13 = 96
+            if (r9 >= r13) goto L_0x0d6f
+            byte r13 = r8[r9]     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            if (r13 != 0) goto L_0x0d66
+            int r13 = r9 + 1
+            byte r13 = r8[r13]     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            if (r13 != 0) goto L_0x0d66
+            int r13 = r9 + 2
+            byte r13 = r8[r13]     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            if (r13 != 0) goto L_0x0d66
+            int r13 = r9 + 3
+            byte r13 = r8[r13]     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            r29 = r8
+            r8 = 1
+            if (r13 != r8) goto L_0x0d68
+            int r14 = r14 + 1
+            if (r14 <= r8) goto L_0x0d68
+            int r8 = r12.offset     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            int r8 = r8 + r9
+            r12.offset = r8     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            int r8 = r12.size     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            int r8 = r8 - r9
+            r12.size = r8     // Catch:{ Exception -> 0x0d15, all -> 0x0d0a }
+            goto L_0x0d6f
+        L_0x0d66:
+            r29 = r8
+        L_0x0d68:
+            int r9 = r9 + 1
+            r8 = r29
+            r13 = 100
+            goto L_0x0d3a
+        L_0x0d6f:
+            r29 = 0
+        L_0x0d71:
+            org.telegram.messenger.video.MP4Builder r8 = r15.mediaMuxer     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r9 = 1
+            long r13 = r8.writeSampleData(r1, r5, r12, r9)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r8 = 0
+            int r5 = (r13 > r8 ? 1 : (r13 == r8 ? 0 : -1))
+            if (r5 == 0) goto L_0x0d98
+            org.telegram.messenger.MediaController$VideoConvertorListener r5 = r15.callback     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            if (r5 == 0) goto L_0x0d98
+            long r8 = r12.presentationTimeUs     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            long r46 = r8 - r6
+            int r38 = (r46 > r34 ? 1 : (r46 == r34 ? 0 : -1))
+            if (r38 <= 0) goto L_0x0d8c
+            long r34 = r8 - r6
+        L_0x0d8c:
+            r8 = r34
+            float r6 = (float) r8     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            float r6 = r6 / r23
+            float r6 = r6 / r24
+            r5.didWriteData(r13, r6)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r34 = r8
+        L_0x0d98:
+            r6 = r22
+            r5 = r53
+            r9 = r61
+            r8 = 3
+            goto L_0x0e24
+        L_0x0da1:
+            r44 = r13
+            r6 = -5
+            if (r1 != r6) goto L_0x0d98
+            byte[] r6 = new byte[r9]     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            int r7 = r12.offset     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            int r7 = r7 + r9
+            r5.limit(r7)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            int r7 = r12.offset     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r5.position(r7)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r5.get(r6)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            int r5 = r12.size     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r7 = 1
+            int r5 = r5 - r7
+        L_0x0dba:
+            r8 = 3
+            if (r5 < 0) goto L_0x0df8
+            if (r5 <= r8) goto L_0x0df8
+            byte r9 = r6[r5]     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            if (r9 != r7) goto L_0x0df4
+            int r9 = r5 + -1
+            byte r9 = r6[r9]     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            if (r9 != 0) goto L_0x0df4
+            int r9 = r5 + -2
+            byte r9 = r6[r9]     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            if (r9 != 0) goto L_0x0df4
+            int r9 = r5 + -3
+            byte r13 = r6[r9]     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            if (r13 != 0) goto L_0x0df4
+            java.nio.ByteBuffer r5 = java.nio.ByteBuffer.allocate(r9)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            int r13 = r12.size     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            int r13 = r13 - r9
+            java.nio.ByteBuffer r13 = java.nio.ByteBuffer.allocate(r13)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r14 = 0
+            java.nio.ByteBuffer r7 = r5.put(r6, r14, r9)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r7.position(r14)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            int r7 = r12.size     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            int r7 = r7 - r9
+            java.nio.ByteBuffer r6 = r13.put(r6, r9, r7)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r6.position(r14)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r7 = r5
+            goto L_0x0dfa
+        L_0x0df4:
+            int r5 = r5 + -1
+            r7 = 1
+            goto L_0x0dba
+        L_0x0df8:
+            r7 = 0
+            r13 = 0
+        L_0x0dfa:
+            r6 = r22
+            r5 = r53
+            r9 = r61
+            android.media.MediaFormat r14 = android.media.MediaFormat.createVideoFormat(r9, r5, r6)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            if (r7 == 0) goto L_0x0e0e
+            if (r13 == 0) goto L_0x0e0e
+            r14.setByteBuffer(r11, r7)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r14.setByteBuffer(r3, r13)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+        L_0x0e0e:
+            org.telegram.messenger.video.MP4Builder r7 = r15.mediaMuxer     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r13 = 0
+            int r1 = r7.addTrack(r14, r13)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            goto L_0x0e24
+        L_0x0e16:
+            r0 = move-exception
+            r44 = r13
+            goto L_0x0ea4
+        L_0x0e1b:
+            r0 = move-exception
+            r44 = r13
+            goto L_0x0eaf
+        L_0x0e20:
+            r44 = r13
+            goto L_0x0d98
+        L_0x0e24:
+            int r7 = r12.flags     // Catch:{ Exception -> 0x10b6, all -> 0x10af }
+            r7 = r7 & 4
+            if (r7 == 0) goto L_0x0e2c
+            r7 = 1
+            goto L_0x0e2d
+        L_0x0e2c:
+            r7 = 0
+        L_0x0e2d:
+            r13 = 0
+            r4.releaseOutputBuffer(r2, r13)     // Catch:{ Exception -> 0x10b6, all -> 0x10af }
+            r38 = r7
+            r13 = -1
+            r7 = r78
+        L_0x0e36:
+            if (r2 == r13) goto L_0x0e55
+            r2 = r83
+            r58 = r3
+            r78 = r4
+            r53 = r5
+            r22 = r6
+            r4 = r7
+            r61 = r9
+            r50 = r11
+            r5 = r38
+            r11 = r39
+            r8 = r42
+            r13 = r44
+            r6 = r80
+            r3 = r82
+            goto L_0x0bb9
+        L_0x0e55:
+            if (r20 != 0) goto L_0x107d
+            r61 = r9
+            r8 = 2500(0x9c4, double:1.235E-320)
+            int r2 = r10.dequeueOutputBuffer(r12, r8)     // Catch:{ Exception -> 0x1074, all -> 0x106b }
+            if (r2 != r13) goto L_0x0e76
+            r40 = r1
+            r53 = r5
+            r22 = r6
+            r78 = r7
+            r50 = r11
+            r13 = r44
+            r7 = r49
+            r1 = 0
+            r11 = r77
+            r5 = r80
+            goto L_0x1097
+        L_0x0e76:
+            r14 = -3
+            if (r2 != r14) goto L_0x0e83
+        L_0x0e79:
+            r40 = r1
+            r53 = r5
+            r22 = r6
+            r78 = r7
+            goto L_0x1087
+        L_0x0e83:
+            r14 = -2
+            if (r2 != r14) goto L_0x0ebb
+            android.media.MediaFormat r2 = r10.getOutputFormat()     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            boolean r14 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            if (r14 == 0) goto L_0x0e79
+            java.lang.StringBuilder r14 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r14.<init>()     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            java.lang.String r8 = "newFormat = "
+            r14.append(r8)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r14.append(r2)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            java.lang.String r2 = r14.toString()     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            goto L_0x0e79
+        L_0x0ea3:
+            r0 = move-exception
+        L_0x0ea4:
+            r8 = r75
+            r9 = r76
+            r11 = r77
+            r5 = r80
+            goto L_0x112a
+        L_0x0eae:
+            r0 = move-exception
+        L_0x0eaf:
+            r11 = r77
+            r5 = r80
+        L_0x0eb3:
+            r59 = r85
+            r2 = r0
+            r40 = r1
+        L_0x0eb8:
+            r7 = r4
+            goto L_0x0a3a
+        L_0x0ebb:
+            if (r2 < 0) goto L_0x104c
+            int r8 = r12.size     // Catch:{ Exception -> 0x1074, all -> 0x106b }
+            if (r8 == 0) goto L_0x0ec3
+            r8 = 1
+            goto L_0x0ec4
+        L_0x0ec3:
+            r8 = 0
+        L_0x0ec4:
+            long r13 = r12.presentationTimeUs     // Catch:{ Exception -> 0x1074, all -> 0x106b }
+            r46 = 0
+            int r9 = (r44 > r46 ? 1 : (r44 == r46 ? 0 : -1))
+            if (r9 <= 0) goto L_0x0edb
+            int r9 = (r13 > r44 ? 1 : (r13 == r44 ? 0 : -1))
+            if (r9 < 0) goto L_0x0edb
+            int r8 = r12.flags     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r8 = r8 | 4
+            r12.flags = r8     // Catch:{ Exception -> 0x0eae, all -> 0x0ea3 }
+            r8 = 0
+            r20 = 1
+            r39 = 1
+        L_0x0edb:
+            r46 = 0
+            int r9 = (r32 > r46 ? 1 : (r32 == r46 ? 0 : -1))
+            if (r9 < 0) goto L_0x0var_
+            int r9 = r12.flags     // Catch:{ Exception -> 0x0var_, all -> 0x0f6d }
+            r9 = r9 & 4
+            if (r9 == 0) goto L_0x0var_
+            r53 = r5
+            r22 = r6
+            r5 = r80
+            long r46 = r32 - r5
+            long r46 = java.lang.Math.abs(r46)     // Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+            r9 = 1000000(0xvar_, float:1.401298E-39)
+            r50 = r11
+            r11 = r77
+            int r9 = r9 / r11
+            r78 = r7
+            r57 = r8
+            long r7 = (long) r9
+            int r9 = (r46 > r7 ? 1 : (r46 == r7 ? 0 : -1))
+            if (r9 <= 0) goto L_0x0f5c
+            r7 = 0
+            int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+            if (r9 <= 0) goto L_0x0var_
+            android.media.MediaExtractor r7 = r15.extractor     // Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+            r8 = 0
+            r7.seekTo(r5, r8)     // Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+            r40 = r1
+            r1 = 0
+            goto L_0x0var_
+        L_0x0var_:
+            r0 = move-exception
+            goto L_0x1126
+        L_0x0var_:
+            r0 = move-exception
+            goto L_0x0eb3
+        L_0x0var_:
+            android.media.MediaExtractor r7 = r15.extractor     // Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+            r40 = r1
+            r1 = 0
+            r8 = 0
+            r7.seekTo(r8, r1)     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+        L_0x0var_:
+            long r36 = r42 + r30
+            int r7 = r12.flags     // Catch:{ Exception -> 0x0f4f, all -> 0x0f3d }
+            r8 = -5
+            r7 = r7 & r8
+            r12.flags = r7     // Catch:{ Exception -> 0x0f4f, all -> 0x0f3d }
+            r10.flush()     // Catch:{ Exception -> 0x0f4f, all -> 0x0f3d }
+            r44 = r32
+            r7 = 1
+            r20 = 0
+            r39 = 0
+            r46 = 0
+            r57 = 0
+            r32 = r18
+            goto L_0x0var_
+        L_0x0f3d:
+            r0 = move-exception
+            r8 = r75
+            r9 = r76
+            r2 = r0
+            r10 = r26
+            r44 = r32
+            r1 = r40
+            r40 = 0
+            r32 = r18
+            goto L_0x1392
+        L_0x0f4f:
+            r0 = move-exception
+            r59 = r85
+            r2 = r0
+            r7 = r4
+            r1 = r26
+            r44 = r32
+            r32 = r18
+            goto L_0x1285
+        L_0x0f5c:
+            r40 = r1
+            r1 = 0
+            r8 = -5
+            goto L_0x0var_
+        L_0x0var_:
+            r0 = move-exception
+            goto L_0x0var_
+        L_0x0var_:
+            r0 = move-exception
+            goto L_0x0f7c
+        L_0x0var_:
+            r0 = move-exception
+            r11 = r77
+            goto L_0x0var_
+        L_0x0var_:
+            r0 = move-exception
+            r11 = r77
+            goto L_0x0f7c
+        L_0x0f6d:
+            r0 = move-exception
+            r11 = r77
+            r5 = r80
+        L_0x0var_:
+            r40 = r1
+            r1 = 0
+            goto L_0x110a
+        L_0x0var_:
+            r0 = move-exception
+            r11 = r77
+            r5 = r80
+        L_0x0f7c:
+            r40 = r1
+            r1 = 0
+        L_0x0f7f:
+            r59 = r85
+            r2 = r0
+            goto L_0x0eb8
+        L_0x0var_:
+            r40 = r1
+            r53 = r5
+            r22 = r6
+            r78 = r7
+            r57 = r8
+            r50 = r11
+            r1 = 0
+            r8 = -5
+            r11 = r77
+            r5 = r80
+        L_0x0var_:
+            r7 = 0
+            r46 = 0
+        L_0x0var_:
+            int r9 = (r32 > r46 ? 1 : (r32 == r46 ? 0 : -1))
+            if (r9 < 0) goto L_0x0fa0
             r8 = r32
-            r4 = r34
-            r3 = r57
-            r2 = r84
-            r7 = r89
-            r84 = r12
-        L_0x0ea8:
-            r74 = r28
-            r28 = r14
-            r14 = r74
-            goto L_0x0bf4
-        L_0x0eb0:
-            if (r31 != 0) goto L_0x10ee
-            r58 = r2
-            r62 = r3
-            r5 = r57
-            r1 = 2500(0x9c4, double:1.235E-320)
-            int r3 = r5.dequeueOutputBuffer(r13, r1)     // Catch:{ Exception -> 0x10e2, all -> 0x10d7 }
-            r1 = -1
-            if (r3 != r1) goto L_0x0ed2
-            r63 = r4
-            r52 = r6
-            r37 = r7
-            r67 = r8
-            r9 = r56
-            r1 = 0
-            r7 = 0
-            r8 = r83
-            goto L_0x1108
-        L_0x0ed2:
-            r2 = -3
-            if (r3 != r2) goto L_0x0ee1
-        L_0x0ed5:
-            r63 = r4
-            r52 = r6
-            r37 = r7
-            r67 = r8
-            r9 = r56
-            goto L_0x10fe
-        L_0x0ee1:
-            r2 = -2
-            if (r3 != r2) goto L_0x0f0f
-            android.media.MediaFormat r2 = r5.getOutputFormat()     // Catch:{ Exception -> 0x0f0a, all -> 0x0var_ }
-            boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0f0a, all -> 0x0var_ }
-            if (r3 == 0) goto L_0x0ed5
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0f0a, all -> 0x0var_ }
-            r3.<init>()     // Catch:{ Exception -> 0x0f0a, all -> 0x0var_ }
-            java.lang.String r1 = "newFormat = "
-            r3.append(r1)     // Catch:{ Exception -> 0x0f0a, all -> 0x0var_ }
-            r3.append(r2)     // Catch:{ Exception -> 0x0f0a, all -> 0x0var_ }
-            java.lang.String r1 = r3.toString()     // Catch:{ Exception -> 0x0f0a, all -> 0x0var_ }
-            org.telegram.messenger.FileLog.d(r1)     // Catch:{ Exception -> 0x0f0a, all -> 0x0var_ }
-            goto L_0x0ed5
-        L_0x0var_:
-            r0 = move-exception
-            r12 = r81
-            r11 = r82
-            r8 = r83
-            goto L_0x10de
-        L_0x0f0a:
-            r0 = move-exception
-            r8 = r83
-            goto L_0x10e7
-        L_0x0f0f:
-            if (r3 < 0) goto L_0x10b2
-            int r1 = r13.size     // Catch:{ Exception -> 0x10e2, all -> 0x10d7 }
-            if (r1 == 0) goto L_0x0var_
-            r36 = 1
-            goto L_0x0f1a
-        L_0x0var_:
-            r36 = 0
-        L_0x0f1a:
-            long r1 = r13.presentationTimeUs     // Catch:{ Exception -> 0x10e2, all -> 0x10d7 }
-            r43 = 0
-            int r37 = (r34 > r43 ? 1 : (r34 == r43 ? 0 : -1))
-            if (r37 <= 0) goto L_0x0var_
-            int r37 = (r1 > r34 ? 1 : (r1 == r34 ? 0 : -1))
-            if (r37 < 0) goto L_0x0var_
-            r63 = r4
-            int r4 = r13.flags     // Catch:{ Exception -> 0x0f0a, all -> 0x0var_ }
-            r4 = r4 | 4
-            r13.flags = r4     // Catch:{ Exception -> 0x0f0a, all -> 0x0var_ }
-            r21 = 1
-            r31 = 1
-            r36 = 0
-            goto L_0x0var_
-        L_0x0var_:
-            r63 = r4
-        L_0x0var_:
-            r43 = 0
-            int r4 = (r26 > r43 ? 1 : (r26 == r43 ? 0 : -1))
-            if (r4 < 0) goto L_0x0fba
-            int r4 = r13.flags     // Catch:{ Exception -> 0x0f0a, all -> 0x0fb4 }
-            r4 = r4 & 4
-            if (r4 == 0) goto L_0x0fba
-            long r54 = r26 - r9
-            long r54 = java.lang.Math.abs(r54)     // Catch:{ Exception -> 0x0f0a, all -> 0x0fb4 }
-            r4 = 1000000(0xvar_, float:1.401298E-39)
-            r67 = r8
-            r8 = r83
-            int r4 = r4 / r8
-            r52 = r6
-            r37 = r7
-            long r6 = (long) r4
-            int r4 = (r54 > r6 ? 1 : (r54 == r6 ? 0 : -1))
-            if (r4 <= 0) goto L_0x0faa
-            r6 = 0
-            int r4 = (r9 > r6 ? 1 : (r9 == r6 ? 0 : -1))
-            if (r4 <= 0) goto L_0x0f6a
-            android.media.MediaExtractor r4 = r15.extractor     // Catch:{ Exception -> 0x0fb1, all -> 0x10cd }
-            r6 = 0
-            r4.seekTo(r9, r6)     // Catch:{ Exception -> 0x0fb1, all -> 0x10cd }
-            r6 = r72
-            r9 = 0
-            goto L_0x0var_
-        L_0x0f6a:
-            android.media.MediaExtractor r4 = r15.extractor     // Catch:{ Exception -> 0x0fb1, all -> 0x0faf }
-            r6 = 0
-            r9 = 0
-            r4.seekTo(r6, r9)     // Catch:{ Exception -> 0x0fb1, all -> 0x10cd }
-            r6 = r72
-        L_0x0var_:
-            long r50 = r6 + r39
-            int r4 = r13.flags     // Catch:{ Exception -> 0x0f9c, all -> 0x0f8b }
-            r10 = -5
-            r4 = r4 & r10
-            r13.flags = r4     // Catch:{ Exception -> 0x0f9c, all -> 0x0f8b }
-            r5.flush()     // Catch:{ Exception -> 0x0f9c, all -> 0x0f8b }
-            r34 = r18
-            r4 = 1
-            r21 = 0
-            r31 = 0
-            r36 = 0
-            r43 = 0
-            goto L_0x0fcf
-        L_0x0f8b:
-            r0 = move-exception
-            r12 = r81
-            r11 = r82
-            r1 = r88
-            r2 = r0
-            r34 = r26
-            r9 = r29
-            r7 = 0
-            r26 = r18
-            goto L_0x13d7
-        L_0x0f9c:
-            r0 = move-exception
-            r1 = r88
-            r2 = r0
-            r3 = r5
-            r6 = r12
-            r34 = r26
-            r5 = r29
-            r26 = r18
-            goto L_0x12d7
-        L_0x0faa:
-            r6 = r72
-            r9 = 0
-            r10 = -5
-            goto L_0x0fc6
-        L_0x0faf:
-            r0 = move-exception
-            goto L_0x0fb7
-        L_0x0fb1:
-            r0 = move-exception
-            goto L_0x10e7
-        L_0x0fb4:
-            r0 = move-exception
-            r8 = r83
-        L_0x0fb7:
-            r9 = 0
-            goto L_0x10da
-        L_0x0fba:
-            r52 = r6
-            r37 = r7
-            r67 = r8
-            r6 = r72
-            r9 = 0
-            r10 = -5
-            r8 = r83
-        L_0x0fc6:
-            r4 = 0
-            r43 = 0
-            r74 = r26
-            r26 = r34
-            r34 = r74
+            goto L_0x0fa1
+        L_0x0fa0:
+            r8 = r5
+        L_0x0fa1:
+            int r58 = (r8 > r46 ? 1 : (r8 == r46 ? 0 : -1))
+            if (r58 <= 0) goto L_0x0fe1
+            int r46 = (r64 > r18 ? 1 : (r64 == r18 ? 0 : -1))
+            if (r46 != 0) goto L_0x0fe1
+            int r46 = (r13 > r8 ? 1 : (r13 == r8 ? 0 : -1))
+            if (r46 >= 0) goto L_0x0fd1
+            boolean r13 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            if (r13 == 0) goto L_0x0fcf
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            r13.<init>()     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            java.lang.String r14 = "drop frame startTime = "
+            r13.append(r14)     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            r13.append(r8)     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            java.lang.String r8 = " present time = "
+            r13.append(r8)     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            long r8 = r12.presentationTimeUs     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            r13.append(r8)     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            java.lang.String r8 = r13.toString()     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            org.telegram.messenger.FileLog.d(r8)     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
         L_0x0fcf:
-            int r38 = (r34 > r43 ? 1 : (r34 == r43 ? 0 : -1))
-            if (r38 < 0) goto L_0x0fd6
-            r9 = r34
-            goto L_0x0fd8
-        L_0x0fd6:
-            r9 = r86
-        L_0x0fd8:
-            int r54 = (r9 > r43 ? 1 : (r9 == r43 ? 0 : -1))
-            if (r54 <= 0) goto L_0x1019
-            int r54 = (r68 > r18 ? 1 : (r68 == r18 ? 0 : -1))
-            if (r54 != 0) goto L_0x1019
-            int r54 = (r1 > r9 ? 1 : (r1 == r9 ? 0 : -1))
-            if (r54 >= 0) goto L_0x1008
-            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            if (r1 == 0) goto L_0x1006
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            r1.<init>()     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            java.lang.String r2 = "drop frame startTime = "
-            r1.append(r2)     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            r1.append(r9)     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            java.lang.String r2 = " present time = "
-            r1.append(r2)     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            long r9 = r13.presentationTimeUs     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            r1.append(r9)     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            org.telegram.messenger.FileLog.d(r1)     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-        L_0x1006:
-            r1 = 0
-            goto L_0x101b
-        L_0x1008:
-            long r1 = r13.presentationTimeUs     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            r9 = -2147483648(0xfffffffvar_, double:NaN)
-            int r54 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
-            if (r54 == 0) goto L_0x1013
-            long r50 = r50 - r1
-        L_0x1013:
-            r68 = r1
-            goto L_0x1019
-        L_0x1016:
+            r8 = 0
+            goto L_0x0fe3
+        L_0x0fd1:
+            long r8 = r12.presentationTimeUs     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            r13 = -2147483648(0xfffffffvar_, double:NaN)
+            int r46 = (r42 > r13 ? 1 : (r42 == r13 ? 0 : -1))
+            if (r46 == 0) goto L_0x0fdc
+            long r36 = r36 - r8
+        L_0x0fdc:
+            r64 = r8
+            goto L_0x0fe1
+        L_0x0fdf:
             r0 = move-exception
-            goto L_0x10a3
+            goto L_0x0f7f
+        L_0x0fe1:
+            r8 = r57
+        L_0x0fe3:
+            if (r7 == 0) goto L_0x0fe8
+            r64 = r18
+            goto L_0x0ffb
+        L_0x0fe8:
+            int r7 = (r32 > r18 ? 1 : (r32 == r18 ? 0 : -1))
+            if (r7 != 0) goto L_0x0ff8
+            r13 = 0
+            int r7 = (r36 > r13 ? 1 : (r36 == r13 ? 0 : -1))
+            if (r7 == 0) goto L_0x0ff8
+            long r13 = r12.presentationTimeUs     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            long r13 = r13 + r36
+            r12.presentationTimeUs = r13     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+        L_0x0ff8:
+            r10.releaseOutputBuffer(r2, r8)     // Catch:{ Exception -> 0x1049, all -> 0x1109 }
+        L_0x0ffb:
+            if (r8 == 0) goto L_0x102d
+            r7 = 0
+            int r2 = (r32 > r7 ? 1 : (r32 == r7 ? 0 : -1))
+            if (r2 < 0) goto L_0x100c
+            long r13 = r12.presentationTimeUs     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            r1 = r42
+            long r1 = java.lang.Math.max(r1, r13)     // Catch:{ Exception -> 0x0fdf, all -> 0x1109 }
+            goto L_0x100e
+        L_0x100c:
+            r1 = r42
+        L_0x100e:
+            r25.awaitNewImage()     // Catch:{ Exception -> 0x1013, all -> 0x1109 }
+            r13 = 0
+            goto L_0x1019
+        L_0x1013:
+            r0 = move-exception
+            r13 = r0
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)     // Catch:{ Exception -> 0x1049, all -> 0x1109 }
+            r13 = 1
         L_0x1019:
-            r1 = r36
-        L_0x101b:
-            if (r4 == 0) goto L_0x1020
-            r68 = r18
-            goto L_0x1033
-        L_0x1020:
-            int r2 = (r34 > r18 ? 1 : (r34 == r18 ? 0 : -1))
-            if (r2 != 0) goto L_0x1030
-            r9 = 0
-            int r2 = (r50 > r9 ? 1 : (r50 == r9 ? 0 : -1))
-            if (r2 == 0) goto L_0x1030
-            long r9 = r13.presentationTimeUs     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            long r9 = r9 + r50
-            r13.presentationTimeUs = r9     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-        L_0x1030:
-            r5.releaseOutputBuffer(r3, r1)     // Catch:{ Exception -> 0x10a0, all -> 0x108d }
-        L_0x1033:
-            if (r1 == 0) goto L_0x1066
+            if (r13 != 0) goto L_0x102f
+            r25.drawImage()     // Catch:{ Exception -> 0x1049, all -> 0x1109 }
+            long r13 = r12.presentationTimeUs     // Catch:{ Exception -> 0x1049, all -> 0x1109 }
+            r42 = 1000(0x3e8, double:4.94E-321)
+            long r13 = r13 * r42
+            r7 = r49
+            r7.setPresentationTime(r13)     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            r7.swapBuffers()     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            goto L_0x1031
+        L_0x102d:
+            r1 = r42
+        L_0x102f:
+            r7 = r49
+        L_0x1031:
+            int r8 = r12.flags     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            r8 = r8 & 4
+            if (r8 == 0) goto L_0x1091
+            boolean r8 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            if (r8 == 0) goto L_0x1040
+            java.lang.String r8 = "decoder stream end"
+            org.telegram.messenger.FileLog.d(r8)     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+        L_0x1040:
+            r4.signalEndOfInputStream()     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            r42 = r1
+            r13 = r44
             r1 = 0
-            int r3 = (r34 > r1 ? 1 : (r34 == r1 ? 0 : -1))
-            if (r3 < 0) goto L_0x1042
-            long r3 = r13.presentationTimeUs     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            long r72 = java.lang.Math.max(r6, r3)     // Catch:{ Exception -> 0x1016, all -> 0x108d }
-            goto L_0x1044
-        L_0x1042:
-            r72 = r6
-        L_0x1044:
-            r30.awaitNewImage()     // Catch:{ Exception -> 0x1049, all -> 0x108d }
-            r6 = 0
-            goto L_0x104f
+            goto L_0x1097
         L_0x1049:
             r0 = move-exception
-            r3 = r0
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ Exception -> 0x10a0, all -> 0x108d }
-            r6 = 1
-        L_0x104f:
-            if (r6 != 0) goto L_0x1063
-            r30.drawImage()     // Catch:{ Exception -> 0x10a0, all -> 0x108d }
-            long r3 = r13.presentationTimeUs     // Catch:{ Exception -> 0x10a0, all -> 0x108d }
-            r6 = 1000(0x3e8, double:4.94E-321)
-            long r3 = r3 * r6
-            r9 = r56
-            r9.setPresentationTime(r3)     // Catch:{ Exception -> 0x1085, all -> 0x108d }
-            r9.swapBuffers()     // Catch:{ Exception -> 0x1085, all -> 0x108d }
-            goto L_0x106c
-        L_0x1063:
-            r9 = r56
-            goto L_0x106c
-        L_0x1066:
-            r9 = r56
-            r1 = 0
-            r72 = r6
-        L_0x106c:
-            int r3 = r13.flags     // Catch:{ Exception -> 0x1085, all -> 0x108d }
-            r3 = r3 & 4
-            if (r3 == 0) goto L_0x1081
-            boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x1085, all -> 0x108d }
-            if (r3 == 0) goto L_0x107b
-            java.lang.String r3 = "decoder stream end"
-            org.telegram.messenger.FileLog.d(r3)     // Catch:{ Exception -> 0x1085, all -> 0x108d }
-        L_0x107b:
-            r12.signalEndOfInputStream()     // Catch:{ Exception -> 0x1085, all -> 0x108d }
-            r7 = 0
-            goto L_0x110e
-        L_0x1081:
-            r7 = r89
-            goto L_0x110e
-        L_0x1085:
+            goto L_0x1137
+        L_0x104c:
+            r11 = r77
+            r5 = r80
+            r40 = r1
+            r7 = r49
+            java.lang.RuntimeException r1 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            r3.<init>()     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            java.lang.String r8 = "unexpected result from decoder.dequeueOutputBuffer: "
+            r3.append(r8)     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            r3.append(r2)     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            java.lang.String r2 = r3.toString()     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            r1.<init>(r2)     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            throw r1     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+        L_0x106b:
             r0 = move-exception
-            r1 = r88
+            r11 = r77
+            r5 = r80
+            r40 = r1
+            goto L_0x1126
+        L_0x1074:
+            r0 = move-exception
+            r11 = r77
+            r5 = r80
+            r40 = r1
+            goto L_0x1137
+        L_0x107d:
+            r40 = r1
+            r53 = r5
+            r22 = r6
+            r78 = r7
+            r61 = r9
+        L_0x1087:
+            r50 = r11
+            r1 = r42
+            r7 = r49
+            r11 = r77
+            r5 = r80
+        L_0x1091:
+            r42 = r1
+            r13 = r44
+            r1 = r82
+        L_0x1097:
+            r2 = r83
+            r58 = r3
+            r49 = r7
+            r11 = r39
+            r8 = r42
+            r3 = r1
+            r6 = r5
+            r5 = r38
+            r1 = r40
+            r66 = r4
+            r4 = r78
+            r78 = r66
+            goto L_0x0bb9
+        L_0x10af:
+            r0 = move-exception
+            r11 = r77
+            r5 = r80
+            goto L_0x1126
+        L_0x10b6:
+            r0 = move-exception
+            r11 = r77
+            r5 = r80
+            r7 = r49
+            r59 = r85
             r2 = r0
-            r3 = r5
-            r56 = r9
-            goto L_0x10a7
-        L_0x108d:
-            r0 = move-exception
-            r12 = r81
-            r11 = r82
-            r1 = r88
-            r2 = r0
-            r9 = r29
-            r7 = 0
-            r74 = r26
-            r26 = r34
-            r34 = r74
-            goto L_0x13d7
-        L_0x10a0:
-            r0 = move-exception
-            r9 = r56
-        L_0x10a3:
-            r1 = r88
-            r2 = r0
-            r3 = r5
-        L_0x10a7:
-            r6 = r12
-            r5 = r29
-            r74 = r26
-            r26 = r34
-            r34 = r74
-            goto L_0x12d7
-        L_0x10b2:
-            r8 = r83
-            r9 = r56
-            java.lang.RuntimeException r1 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x10cf, all -> 0x10cd }
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x10cf, all -> 0x10cd }
-            r2.<init>()     // Catch:{ Exception -> 0x10cf, all -> 0x10cd }
-            java.lang.String r4 = "unexpected result from decoder.dequeueOutputBuffer: "
-            r2.append(r4)     // Catch:{ Exception -> 0x10cf, all -> 0x10cd }
-            r2.append(r3)     // Catch:{ Exception -> 0x10cf, all -> 0x10cd }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x10cf, all -> 0x10cd }
-            r1.<init>(r2)     // Catch:{ Exception -> 0x10cf, all -> 0x10cd }
-            throw r1     // Catch:{ Exception -> 0x10cf, all -> 0x10cd }
-        L_0x10cd:
-            r0 = move-exception
-            goto L_0x10da
-        L_0x10cf:
-            r0 = move-exception
-            r1 = r88
-            r2 = r0
-            r3 = r5
-            r56 = r9
-            goto L_0x10eb
-        L_0x10d7:
-            r0 = move-exception
-            r8 = r83
-        L_0x10da:
-            r12 = r81
-            r11 = r82
-        L_0x10de:
-            r1 = r88
-            goto L_0x119e
-        L_0x10e2:
-            r0 = move-exception
-            r8 = r83
-            r9 = r56
-        L_0x10e7:
-            r1 = r88
+            r40 = r1
+            goto L_0x113c
+        L_0x10c4:
+            r11 = r77
+            r40 = r1
+            r5 = r6
+            r44 = r13
+            r7 = r49
+            java.lang.RuntimeException r1 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            r3.<init>()     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            java.lang.String r8 = "encoderOutputBuffer "
+            r3.append(r8)     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            r3.append(r2)     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            java.lang.String r2 = " was null"
+            r3.append(r2)     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            java.lang.String r2 = r3.toString()     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            r1.<init>(r2)     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            throw r1     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
         L_0x10e9:
+            r11 = r77
+            r40 = r1
+            r5 = r6
+            r44 = r13
+            r7 = r49
+            java.lang.RuntimeException r1 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            r3.<init>()     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            java.lang.String r8 = "unexpected result from encoder.dequeueOutputBuffer: "
+            r3.append(r8)     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            r3.append(r2)     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            java.lang.String r2 = r3.toString()     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            r1.<init>(r2)     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+            throw r1     // Catch:{ Exception -> 0x1113, all -> 0x1109 }
+        L_0x1109:
+            r0 = move-exception
+        L_0x110a:
+            r8 = r75
+            r9 = r76
             r2 = r0
-            r3 = r5
-        L_0x10eb:
-            r6 = r12
-            goto L_0x0a6d
-        L_0x10ee:
-            r58 = r2
-            r62 = r3
-            r63 = r4
-            r52 = r6
-            r37 = r7
-            r67 = r8
-            r9 = r56
-            r5 = r57
-        L_0x10fe:
-            r6 = r72
-            r1 = 0
-            r8 = r83
-            r72 = r6
-            r7 = r89
-        L_0x1108:
-            r74 = r26
-            r26 = r34
-            r34 = r74
-        L_0x110e:
-            r2 = r84
-            r1 = r88
-            r3 = r5
-            r56 = r9
-            r84 = r12
-            r4 = r26
-            r8 = r32
-            r26 = r34
-            r46 = r37
-            r6 = r52
-            r9 = r86
-            goto L_0x0ea8
-        L_0x1125:
+            r10 = r26
+            goto L_0x1308
+        L_0x1113:
             r0 = move-exception
-            r8 = r83
-            r3 = r1
-            goto L_0x119a
-        L_0x112b:
+            r59 = r85
+            r2 = r0
+            r49 = r7
+            goto L_0x113c
+        L_0x111a:
             r0 = move-exception
-            r8 = r83
-            r3 = r1
-            r9 = r56
-            r5 = r57
-            goto L_0x10e9
-        L_0x1134:
+            r11 = r77
+            goto L_0x1132
+        L_0x111e:
             r0 = move-exception
-            r8 = r83
-            r34 = r4
-            r9 = r56
-            r5 = r3
+            r11 = r77
+            r40 = r1
+            r5 = r6
+            r44 = r13
+        L_0x1126:
+            r8 = r75
+            r9 = r76
+        L_0x112a:
+            r2 = r0
+            goto L_0x0a26
+        L_0x112d:
+            r0 = move-exception
+            r11 = r77
+            r4 = r78
+        L_0x1132:
+            r40 = r1
+            r5 = r6
+            r44 = r13
+        L_0x1137:
+            r7 = r49
+            r59 = r85
+            r2 = r0
         L_0x113c:
+            r1 = r26
+            goto L_0x11f0
+        L_0x1140:
+            r0 = move-exception
+            r11 = r77
+            r5 = r2
+            r38 = r13
+            r8 = r75
+            r9 = r76
+        L_0x114a:
+            r1 = r82
             r2 = r0
-            goto L_0x10eb
-        L_0x113e:
-            r8 = r83
-            r2 = r3
-            r34 = r4
-            r5 = r6
-            r9 = r56
-            java.lang.RuntimeException r3 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            r4.<init>()     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            java.lang.String r6 = "encoderOutputBuffer "
-            r4.append(r6)     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            r4.append(r5)     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            java.lang.String r5 = " was null"
-            r4.append(r5)     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            r3.<init>(r4)     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            throw r3     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-        L_0x1162:
+        L_0x114d:
+            r10 = r26
+            r44 = r38
+            goto L_0x1390
+        L_0x1153:
             r0 = move-exception
-            r8 = r83
-            r2 = r3
-            r34 = r4
-            goto L_0x11ab
-        L_0x1169:
-            r8 = r83
-            r2 = r3
-            r34 = r4
-            r5 = r6
-            r28 = r14
-            r9 = r56
-            java.lang.RuntimeException r3 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            r4.<init>()     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            java.lang.String r6 = "unexpected result from encoder.dequeueOutputBuffer: "
-            r4.append(r6)     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            r4.append(r5)     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            r3.<init>(r4)     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-            throw r3     // Catch:{ Exception -> 0x118c, all -> 0x118a }
-        L_0x118a:
-            r0 = move-exception
-            goto L_0x119a
-        L_0x118c:
-            r0 = move-exception
-            r3 = r2
-            r56 = r9
-            goto L_0x11ad
-        L_0x1191:
-            r0 = move-exception
-            r8 = r83
-            goto L_0x11a6
-        L_0x1195:
-            r0 = move-exception
-            r8 = r83
-            r34 = r4
-        L_0x119a:
-            r12 = r81
-            r11 = r82
-        L_0x119e:
+            r11 = r77
+            r4 = r78
+            r5 = r2
+            r85 = r10
+            r38 = r13
+            r7 = r49
+            r10 = r52
+            r40 = r82
+            r59 = r85
             r2 = r0
-            goto L_0x0a5d
-        L_0x11a1:
+            r1 = r26
+            r44 = r38
+            goto L_0x11f0
+        L_0x116c:
             r0 = move-exception
-            r8 = r83
-            r12 = r84
-        L_0x11a6:
-            r2 = r3
-            r34 = r4
-            r28 = r14
+            r11 = r77
+            r5 = r2
+            goto L_0x120e
+        L_0x1172:
+            r0 = move-exception
+            r11 = r77
+            r4 = r78
+            r5 = r2
+            r85 = r10
+            r7 = r49
+            r10 = r52
+            r59 = r85
+            r2 = r0
+            r44 = r13
+            r1 = r26
+            r40 = -5
+            goto L_0x11f0
+        L_0x1189:
+            r0 = move-exception
+            r11 = r77
+            r4 = r78
+            r5 = r80
+            r10 = r3
+            r25 = r14
+            r7 = r49
+            goto L_0x11a3
+        L_0x1196:
+            r0 = move-exception
+            r11 = r77
+            r4 = r78
+            r5 = r80
+            r25 = r14
+            r7 = r49
+            r10 = r52
+        L_0x11a3:
+            r13 = r82
+            r2 = r0
+            r44 = r13
+            r1 = r26
+            goto L_0x11ec
         L_0x11ab:
-            r9 = r56
-        L_0x11ad:
-            r6 = r12
-            r5 = r29
-            goto L_0x077f
+            r0 = move-exception
+            r11 = r77
+            r5 = r80
+            goto L_0x120c
         L_0x11b2:
             r0 = move-exception
-            r8 = r83
-            r70 = r4
-            r12 = r81
-            r11 = r82
-        L_0x11bb:
-            r1 = r88
+            r11 = r77
+            r4 = r78
+            r5 = r80
+            r13 = r82
+            r7 = r49
+            r10 = r52
             r2 = r0
-            r9 = r29
-            r34 = r70
-            goto L_0x058a
-        L_0x11c4:
+            goto L_0x11d1
+        L_0x11c1:
             r0 = move-exception
-            r8 = r83
-            r12 = r84
-            r2 = r3
-            r70 = r4
-            r28 = r14
-            r9 = r56
-            r1 = r88
-            r6 = r12
-            r5 = r29
-            r34 = r70
-            goto L_0x077f
-        L_0x11d9:
+            r32 = r84
+            r7 = r2
+            r10 = r3
+            r4 = r5
+            r11 = r14
+            r55 = r22
+            r5 = r80
+            r13 = r82
+            r2 = r0
+            r49 = r7
+        L_0x11d1:
+            r44 = r13
+            r1 = r26
+            goto L_0x11ea
+        L_0x11d6:
             r0 = move-exception
-            r8 = r83
-            goto L_0x1271
-        L_0x11de:
-            r0 = move-exception
-            r8 = r83
-            r12 = r84
-            r2 = r3
-            r28 = r14
-            r9 = r56
-            r34 = r4
-            r6 = r12
-            r5 = r29
-            r1 = -5
-            goto L_0x077f
+            r32 = r84
+            r7 = r2
+            r4 = r5
+            r11 = r14
+            r55 = r22
+            r5 = r80
+            r13 = r82
+            r2 = r0
+            r49 = r7
+            r44 = r13
+            r1 = r26
+            r10 = 0
+        L_0x11ea:
+            r25 = 0
+        L_0x11ec:
+            r40 = -5
+            r59 = 0
         L_0x11f0:
+            r7 = r4
+            goto L_0x1285
+        L_0x11f3:
             r0 = move-exception
-            r8 = r83
-            r12 = r84
-            r4 = r88
-            r2 = r3
-            r9 = r56
-            goto L_0x1207
-        L_0x11fb:
+            r32 = r84
+            r4 = r5
+            r11 = r14
+            r55 = r22
+            r5 = r80
+            r13 = r82
+            r2 = r0
+            r7 = r4
+            r44 = r13
+            r1 = r26
+            goto L_0x127c
+        L_0x1206:
             r0 = move-exception
-            r8 = r83
-            r12 = r84
-            r4 = r88
-            r9 = r56
-            r2 = r57
-            r3 = r2
-        L_0x1207:
-            r34 = r4
-            r6 = r12
-            r5 = r29
-            r1 = -5
-            r28 = 0
-            goto L_0x077f
-        L_0x1211:
+            r5 = r80
+            r32 = r84
+            r11 = r14
+        L_0x120c:
+            r13 = r82
+        L_0x120e:
+            r8 = r75
+            r9 = r76
+        L_0x1212:
+            r2 = r0
+            r44 = r13
+        L_0x1215:
+            r10 = r26
+            goto L_0x138f
+        L_0x1219:
             r0 = move-exception
-            r8 = r83
-            r4 = r88
-            goto L_0x1271
-        L_0x1218:
+            r5 = r80
+            r32 = r84
+            r11 = r14
+            r55 = r22
+            r13 = r82
+            r2 = r0
+            r44 = r13
+            r1 = r26
+            goto L_0x127b
+        L_0x122a:
             r0 = move-exception
-            r8 = r83
-            r12 = r84
-            r4 = r88
-            r9 = r56
-            r2 = r57
-            r3 = r2
-            r34 = r4
-            r6 = r12
-            goto L_0x1237
-        L_0x1228:
+            r32 = r84
+            r1 = r5
+            r11 = r14
+            r5 = r80
+            r13 = r82
+            goto L_0x1248
+        L_0x1234:
             r0 = move-exception
-            r4 = r88
-            r26 = r90
-            r12 = r6
-            r8 = r9
-            r61 = r23
-            r9 = r1
-            r3 = r2
-            r34 = r4
-            r56 = r9
-        L_0x1237:
-            r5 = r29
-            r1 = -5
-            r28 = 0
-            r30 = 0
-            goto L_0x077f
+            r32 = r84
+            r1 = r5
+            r11 = r14
+            r55 = r22
+            r5 = r80
+            r13 = r82
+            goto L_0x1278
         L_0x1240:
             r0 = move-exception
-            r4 = r88
-            r26 = r90
-            r12 = r6
-            r8 = r9
-            r61 = r23
-            r9 = r1
-            r2 = r0
-            r34 = r4
-            r56 = r9
-            r5 = r29
-            r1 = -5
-            r3 = 0
-            r28 = 0
-            r30 = 0
-            goto L_0x12d7
-        L_0x1259:
-            r0 = move-exception
-            r4 = r88
-            r26 = r90
-            r12 = r6
-            r8 = r9
-            r61 = r23
-            r2 = r0
-            r34 = r4
-            r5 = r29
-            r1 = -5
-            r3 = 0
-            goto L_0x0737
-        L_0x126b:
-            r0 = move-exception
-            r4 = r88
-            r26 = r90
-            r8 = r9
-        L_0x1271:
-            r12 = r81
-            r11 = r82
-        L_0x1275:
-            r2 = r0
-            r34 = r4
-        L_0x1278:
-            r9 = r29
-            goto L_0x0589
-        L_0x127c:
-            r0 = move-exception
-            r4 = r88
-            r26 = r90
-            r8 = r9
-            r61 = r23
-            r2 = r0
-            r34 = r4
-            r5 = r29
-            goto L_0x0734
-        L_0x128b:
-            r0 = move-exception
-            r26 = r90
+            r32 = r84
             r1 = r5
-            r8 = r9
-            r4 = r88
-            r12 = r81
-            r11 = r82
+            r11 = r14
+            r13 = r82
+            r5 = r3
+        L_0x1248:
+            r8 = r75
+            r9 = r76
             r2 = r0
-            r9 = r1
-            goto L_0x12bd
-        L_0x1299:
+            r10 = r1
+            goto L_0x138d
+        L_0x1250:
             r0 = move-exception
-            r26 = r90
+            r32 = r84
             r1 = r5
-            r8 = r9
-            r61 = r23
-            r4 = r88
-            r2 = r0
-            r34 = r4
-            r3 = 0
-            r6 = 0
-            r28 = 0
-            r30 = 0
-            r56 = 0
-            r5 = r1
-        L_0x12ae:
-            r1 = -5
-            goto L_0x12d7
-        L_0x12b0:
+            r11 = r14
+            r55 = r22
+            r13 = r82
+            r5 = r3
+            goto L_0x1278
+        L_0x125b:
             r0 = move-exception
-            r4 = r88
-            r8 = r9
-            r12 = r81
-            r11 = r82
-            r9 = r84
-            r26 = r90
-            r2 = r0
-        L_0x12bd:
-            r34 = r4
-            goto L_0x0589
-        L_0x12c1:
-            r0 = move-exception
-            r4 = r88
-            r61 = r3
-            r8 = r9
-            r26 = r90
-            r2 = r0
-            r34 = r4
-            r1 = -5
-            r3 = 0
-            r6 = 0
-            r28 = 0
-            r30 = 0
-            r56 = 0
-            r5 = r84
-        L_0x12d7:
-            boolean r4 = r2 instanceof java.lang.IllegalStateException     // Catch:{ all -> 0x134b }
-            if (r4 == 0) goto L_0x12e0
-            if (r95 != 0) goto L_0x12e0
-            r47 = 1
-            goto L_0x12e2
-        L_0x12e0:
-            r47 = 0
-        L_0x12e2:
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ all -> 0x1340 }
-            r4.<init>()     // Catch:{ all -> 0x1340 }
-            java.lang.String r7 = "bitrate: "
-            r4.append(r7)     // Catch:{ all -> 0x1340 }
-            r4.append(r5)     // Catch:{ all -> 0x1340 }
-            java.lang.String r7 = " framerate: "
-            r4.append(r7)     // Catch:{ all -> 0x1340 }
-            r4.append(r8)     // Catch:{ all -> 0x1340 }
-            java.lang.String r7 = " size: "
-            r4.append(r7)     // Catch:{ all -> 0x1340 }
-            r7 = r82
-            r4.append(r7)     // Catch:{ all -> 0x133c }
-            java.lang.String r9 = "x"
-            r4.append(r9)     // Catch:{ all -> 0x133c }
-            r9 = r81
-            r4.append(r9)     // Catch:{ all -> 0x133a }
-            java.lang.String r4 = r4.toString()     // Catch:{ all -> 0x133a }
-            org.telegram.messenger.FileLog.e((java.lang.String) r4)     // Catch:{ all -> 0x133a }
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x133a }
-            r2 = r3
-            r29 = r5
-            r3 = r6
-            r6 = 1
-        L_0x131a:
-            android.media.MediaExtractor r4 = r15.extractor     // Catch:{ all -> 0x1332 }
-            r5 = r61
-            r4.unselectTrack(r5)     // Catch:{ all -> 0x1332 }
-            if (r2 == 0) goto L_0x1329
-            r2.stop()     // Catch:{ all -> 0x1332 }
-            r2.release()     // Catch:{ all -> 0x1332 }
-        L_0x1329:
-            r42 = r3
-            r2 = r47
-            r47 = r6
-            r6 = r30
-            goto L_0x1370
-        L_0x1332:
-            r0 = move-exception
-            r2 = r0
-            r11 = r7
-            r12 = r9
-            r9 = r29
-            goto L_0x061e
-        L_0x133a:
-            r0 = move-exception
-            goto L_0x1345
-        L_0x133c:
-            r0 = move-exception
-            r9 = r81
-            goto L_0x1345
-        L_0x1340:
-            r0 = move-exception
-            r9 = r81
-            r7 = r82
-        L_0x1345:
-            r2 = r0
-            r11 = r7
-            r12 = r9
-            r7 = r47
-            goto L_0x1354
-        L_0x134b:
-            r0 = move-exception
-            r9 = r81
-            r7 = r82
-            r2 = r0
-            r11 = r7
-            r12 = r9
-        L_0x1353:
-            r7 = 0
-        L_0x1354:
-            r9 = r5
-            goto L_0x13d7
-        L_0x1357:
-            r9 = r81
-            r7 = r82
-            r8 = r83
-            r4 = r88
-            r29 = r84
-            r26 = r90
-            r34 = r4
-            r1 = -5
-            r2 = 0
-            r6 = 0
-            r28 = 0
-            r42 = 0
-            r47 = 0
-            r56 = 0
-        L_0x1370:
-            if (r6 == 0) goto L_0x137f
-            r6.release()     // Catch:{ all -> 0x1376 }
-            goto L_0x137f
-        L_0x1376:
-            r0 = move-exception
-            r11 = r7
-            r12 = r9
-            r9 = r29
-            r7 = r2
-        L_0x137c:
-            r2 = r0
-            goto L_0x13d7
-        L_0x137f:
-            if (r56 == 0) goto L_0x1384
-            r56.release()     // Catch:{ all -> 0x1376 }
-        L_0x1384:
-            if (r42 == 0) goto L_0x138c
-            r42.stop()     // Catch:{ all -> 0x1376 }
-            r42.release()     // Catch:{ all -> 0x1376 }
-        L_0x138c:
-            if (r28 == 0) goto L_0x1391
-            r28.release()     // Catch:{ all -> 0x1376 }
-        L_0x1391:
-            r76.checkConversionCanceled()     // Catch:{ all -> 0x1376 }
-            r13 = r2
-            r6 = r47
-        L_0x1397:
-            android.media.MediaExtractor r2 = r15.extractor
-            if (r2 == 0) goto L_0x139e
-            r2.release()
-        L_0x139e:
-            org.telegram.messenger.video.MP4Builder r2 = r15.mediaMuxer
-            if (r2 == 0) goto L_0x13b3
-            r2.finishMovie()     // Catch:{ all -> 0x13ae }
-            org.telegram.messenger.video.MP4Builder r2 = r15.mediaMuxer     // Catch:{ all -> 0x13ae }
-            long r1 = r2.getLastFrameTimestamp(r1)     // Catch:{ all -> 0x13ae }
-            r15.endPresentationTime = r1     // Catch:{ all -> 0x13ae }
-            goto L_0x13b3
-        L_0x13ae:
-            r0 = move-exception
-            r1 = r0
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-        L_0x13b3:
-            r45 = r6
-            r6 = r9
-            r9 = r29
-            goto L_0x1427
-        L_0x13ba:
-            r0 = move-exception
-            r7 = r82
-            r4 = r88
-            r9 = r12
-            r8 = r13
-            r26 = r90
-            r2 = r0
-            r34 = r4
-            r11 = r7
-            goto L_0x13d3
-        L_0x13c8:
-            r0 = move-exception
-            r4 = r88
-            r8 = r10
-            r7 = r11
-            r9 = r12
-            r26 = r90
-            r2 = r0
-            r34 = r4
-        L_0x13d3:
-            r1 = -5
-            r7 = 0
-            r9 = r84
-        L_0x13d7:
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x1493 }
-            r3.<init>()     // Catch:{ all -> 0x1493 }
-            java.lang.String r4 = "bitrate: "
-            r3.append(r4)     // Catch:{ all -> 0x1493 }
-            r3.append(r9)     // Catch:{ all -> 0x1493 }
-            java.lang.String r4 = " framerate: "
-            r3.append(r4)     // Catch:{ all -> 0x1493 }
-            r3.append(r8)     // Catch:{ all -> 0x1493 }
-            java.lang.String r4 = " size: "
-            r3.append(r4)     // Catch:{ all -> 0x1493 }
-            r3.append(r11)     // Catch:{ all -> 0x1493 }
-            java.lang.String r4 = "x"
-            r3.append(r4)     // Catch:{ all -> 0x1493 }
-            r3.append(r12)     // Catch:{ all -> 0x1493 }
-            java.lang.String r3 = r3.toString()     // Catch:{ all -> 0x1493 }
-            org.telegram.messenger.FileLog.e((java.lang.String) r3)     // Catch:{ all -> 0x1493 }
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x1493 }
-            android.media.MediaExtractor r2 = r15.extractor
-            if (r2 == 0) goto L_0x140d
-            r2.release()
-        L_0x140d:
-            org.telegram.messenger.video.MP4Builder r2 = r15.mediaMuxer
-            if (r2 == 0) goto L_0x1422
-            r2.finishMovie()     // Catch:{ all -> 0x141d }
-            org.telegram.messenger.video.MP4Builder r2 = r15.mediaMuxer     // Catch:{ all -> 0x141d }
-            long r1 = r2.getLastFrameTimestamp(r1)     // Catch:{ all -> 0x141d }
-            r15.endPresentationTime = r1     // Catch:{ all -> 0x141d }
-            goto L_0x1422
-        L_0x141d:
-            r0 = move-exception
-            r1 = r0
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-        L_0x1422:
-            r13 = r7
-            r7 = r11
-            r6 = r12
-            r45 = 1
-        L_0x1427:
-            if (r13 == 0) goto L_0x1452
-            r20 = 1
-            r1 = r76
-            r2 = r77
-            r3 = r78
-            r4 = r79
             r5 = r80
-            r8 = r83
-            r10 = r85
-            r11 = r86
-            r13 = r34
-            r15 = r26
-            r17 = r92
-            r19 = r94
-            r21 = r96
-            r22 = r97
-            r23 = r98
-            r24 = r99
-            r25 = r100
-            boolean r1 = r1.convertVideoInternal(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r13, r15, r17, r19, r20, r21, r22, r23, r24, r25)
+            r11 = r14
+            r13 = r82
+            r8 = r75
+            r9 = r76
+            r10 = r78
+            r32 = r84
+            r2 = r0
+            goto L_0x138d
+        L_0x126c:
+            r0 = move-exception
+            r5 = r80
+            r55 = r4
+            r11 = r14
+            r13 = r82
+            r1 = r78
+            r32 = r84
+        L_0x1278:
+            r2 = r0
+            r44 = r13
+        L_0x127b:
+            r7 = 0
+        L_0x127c:
+            r10 = 0
+            r25 = 0
+            r40 = -5
+            r49 = 0
+        L_0x1283:
+            r59 = 0
+        L_0x1285:
+            boolean r3 = r2 instanceof java.lang.IllegalStateException     // Catch:{ all -> 0x1300 }
+            if (r3 == 0) goto L_0x128d
+            if (r89 != 0) goto L_0x128d
+            r9 = 1
+            goto L_0x128e
+        L_0x128d:
+            r9 = 0
+        L_0x128e:
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x12f2 }
+            r3.<init>()     // Catch:{ all -> 0x12f2 }
+            java.lang.String r4 = "bitrate: "
+            r3.append(r4)     // Catch:{ all -> 0x12f2 }
+            r3.append(r1)     // Catch:{ all -> 0x12f2 }
+            java.lang.String r4 = " framerate: "
+            r3.append(r4)     // Catch:{ all -> 0x12f2 }
+            r3.append(r11)     // Catch:{ all -> 0x12f2 }
+            java.lang.String r4 = " size: "
+            r3.append(r4)     // Catch:{ all -> 0x12f2 }
+            r4 = r76
+            r3.append(r4)     // Catch:{ all -> 0x12ee }
+            java.lang.String r8 = "x"
+            r3.append(r8)     // Catch:{ all -> 0x12ee }
+            r8 = r75
+            r3.append(r8)     // Catch:{ all -> 0x12ec }
+            java.lang.String r3 = r3.toString()     // Catch:{ all -> 0x12ec }
+            org.telegram.messenger.FileLog.e((java.lang.String) r3)     // Catch:{ all -> 0x12ec }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x12ec }
+            r26 = r1
+            r3 = r10
+            r2 = r40
+            r10 = r59
+            r1 = 1
+            r40 = r9
+        L_0x12cb:
+            android.media.MediaExtractor r9 = r15.extractor     // Catch:{ all -> 0x12e4 }
+            r12 = r55
+            r9.unselectTrack(r12)     // Catch:{ all -> 0x12e4 }
+            if (r3 == 0) goto L_0x12da
+            r3.stop()     // Catch:{ all -> 0x12e4 }
+            r3.release()     // Catch:{ all -> 0x12e4 }
+        L_0x12da:
+            r60 = r2
+            r2 = r7
+            r7 = r25
+            r13 = r44
+            r59 = r49
+            goto L_0x1323
+        L_0x12e4:
+            r0 = move-exception
+            r1 = r2
+            r9 = r4
+            r10 = r26
+        L_0x12e9:
+            r2 = r0
+            goto L_0x1392
+        L_0x12ec:
+            r0 = move-exception
+            goto L_0x12f7
+        L_0x12ee:
+            r0 = move-exception
+            r8 = r75
+            goto L_0x12f7
+        L_0x12f2:
+            r0 = move-exception
+            r8 = r75
+            r4 = r76
+        L_0x12f7:
+            r2 = r0
+            r10 = r1
+            r1 = r40
+            r40 = r9
+            r9 = r4
+            goto L_0x1392
+        L_0x1300:
+            r0 = move-exception
+            r8 = r75
+            r4 = r76
+            r2 = r0
+            r10 = r1
+            r9 = r4
+        L_0x1308:
+            r1 = r40
+            goto L_0x1390
+        L_0x130c:
+            r8 = r75
+            r4 = r76
+            r5 = r80
+            r11 = r14
+            r13 = r82
+            r26 = r78
+            r32 = r84
+            r1 = 0
+            r2 = 0
+            r7 = 0
+            r10 = 0
+            r40 = 0
+            r59 = 0
+            r60 = -5
+        L_0x1323:
+            if (r7 == 0) goto L_0x1334
+            r7.release()     // Catch:{ all -> 0x1329 }
+            goto L_0x1334
+        L_0x1329:
+            r0 = move-exception
+            r2 = r0
+            r9 = r4
+            r44 = r13
+            r10 = r26
+            r1 = r60
+            goto L_0x1392
+        L_0x1334:
+            if (r59 == 0) goto L_0x1339
+            r59.release()     // Catch:{ all -> 0x1329 }
+        L_0x1339:
+            if (r2 == 0) goto L_0x1341
+            r2.stop()     // Catch:{ all -> 0x1329 }
+            r2.release()     // Catch:{ all -> 0x1329 }
+        L_0x1341:
+            if (r10 == 0) goto L_0x1346
+            r10.release()     // Catch:{ all -> 0x1329 }
+        L_0x1346:
+            r68.checkConversionCanceled()     // Catch:{ all -> 0x1329 }
+            r9 = r4
+            r22 = r40
+            r40 = r1
+            r1 = r60
+        L_0x1350:
+            android.media.MediaExtractor r2 = r15.extractor
+            if (r2 == 0) goto L_0x1357
+            r2.release()
+        L_0x1357:
+            org.telegram.messenger.video.MP4Builder r2 = r15.mediaMuxer
+            if (r2 == 0) goto L_0x136c
+            r2.finishMovie()     // Catch:{ all -> 0x1367 }
+            org.telegram.messenger.video.MP4Builder r2 = r15.mediaMuxer     // Catch:{ all -> 0x1367 }
+            long r1 = r2.getLastFrameTimestamp(r1)     // Catch:{ all -> 0x1367 }
+            r15.endPresentationTime = r1     // Catch:{ all -> 0x1367 }
+            goto L_0x136c
+        L_0x1367:
+            r0 = move-exception
+            r1 = r0
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
+        L_0x136c:
+            r44 = r13
+            r12 = r26
+            r1 = r40
+            goto L_0x13e1
+        L_0x1374:
+            r0 = move-exception
+            r5 = r80
+            r4 = r11
+            r8 = r12
+            r11 = r13
+            r13 = r82
+            goto L_0x1387
+        L_0x137d:
+            r0 = move-exception
+            r5 = r80
+            goto L_0x1382
+        L_0x1381:
+            r0 = move-exception
+        L_0x1382:
+            r13 = r82
+            r4 = r11
+            r8 = r12
+            r11 = r9
+        L_0x1387:
+            r10 = r78
+            r32 = r84
+            r2 = r0
+            r9 = r4
+        L_0x138d:
+            r44 = r13
+        L_0x138f:
+            r1 = -5
+        L_0x1390:
+            r40 = 0
+        L_0x1392:
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x1452 }
+            r3.<init>()     // Catch:{ all -> 0x1452 }
+            java.lang.String r4 = "bitrate: "
+            r3.append(r4)     // Catch:{ all -> 0x1452 }
+            r3.append(r10)     // Catch:{ all -> 0x1452 }
+            java.lang.String r4 = " framerate: "
+            r3.append(r4)     // Catch:{ all -> 0x1452 }
+            r3.append(r11)     // Catch:{ all -> 0x1452 }
+            java.lang.String r4 = " size: "
+            r3.append(r4)     // Catch:{ all -> 0x1452 }
+            r3.append(r9)     // Catch:{ all -> 0x1452 }
+            java.lang.String r4 = "x"
+            r3.append(r4)     // Catch:{ all -> 0x1452 }
+            r3.append(r8)     // Catch:{ all -> 0x1452 }
+            java.lang.String r3 = r3.toString()     // Catch:{ all -> 0x1452 }
+            org.telegram.messenger.FileLog.e((java.lang.String) r3)     // Catch:{ all -> 0x1452 }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x1452 }
+            android.media.MediaExtractor r2 = r15.extractor
+            if (r2 == 0) goto L_0x13c8
+            r2.release()
+        L_0x13c8:
+            org.telegram.messenger.video.MP4Builder r2 = r15.mediaMuxer
+            if (r2 == 0) goto L_0x13dd
+            r2.finishMovie()     // Catch:{ all -> 0x13d8 }
+            org.telegram.messenger.video.MP4Builder r2 = r15.mediaMuxer     // Catch:{ all -> 0x13d8 }
+            long r1 = r2.getLastFrameTimestamp(r1)     // Catch:{ all -> 0x13d8 }
+            r15.endPresentationTime = r1     // Catch:{ all -> 0x13d8 }
+            goto L_0x13dd
+        L_0x13d8:
+            r0 = move-exception
+            r1 = r0
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
+        L_0x13dd:
+            r12 = r10
+            r22 = r40
+            r1 = 1
+        L_0x13e1:
+            if (r22 == 0) goto L_0x1411
+            r22 = 1
+            r1 = r68
+            r2 = r69
+            r3 = r70
+            r4 = r71
+            r5 = r72
+            r6 = r73
+            r7 = r74
+            r10 = r77
+            r11 = r12
+            r12 = r79
+            r13 = r80
+            r15 = r44
+            r17 = r32
+            r19 = r86
+            r21 = r88
+            r23 = r90
+            r24 = r91
+            r25 = r92
+            r26 = r93
+            r27 = r94
+            boolean r1 = r1.convertVideoInternal(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r15, r17, r19, r21, r22, r23, r24, r25, r26, r27)
+            return r1
+        L_0x1411:
+            long r2 = java.lang.System.currentTimeMillis()
+            long r2 = r2 - r16
+            boolean r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r4 == 0) goto L_0x1451
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder
+            r4.<init>()
+            java.lang.String r5 = "compression completed time="
+            r4.append(r5)
+            r4.append(r2)
+            java.lang.String r2 = " needCompress="
+            r4.append(r2)
+            r2 = r88
+            r4.append(r2)
+            java.lang.String r2 = " w="
+            r4.append(r2)
+            r4.append(r8)
+            java.lang.String r2 = " h="
+            r4.append(r2)
+            r4.append(r9)
+            java.lang.String r2 = " bitrate="
+            r4.append(r2)
+            r4.append(r12)
+            java.lang.String r2 = r4.toString()
+            org.telegram.messenger.FileLog.d(r2)
+        L_0x1451:
             return r1
         L_0x1452:
-            long r1 = java.lang.System.currentTimeMillis()
-            long r1 = r1 - r16
-            boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r3 == 0) goto L_0x1492
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder
-            r3.<init>()
-            java.lang.String r4 = "compression completed time="
-            r3.append(r4)
-            r3.append(r1)
-            java.lang.String r1 = " needCompress="
-            r3.append(r1)
-            r1 = r94
-            r3.append(r1)
-            java.lang.String r1 = " w="
-            r3.append(r1)
-            r3.append(r6)
-            java.lang.String r1 = " h="
-            r3.append(r1)
-            r3.append(r7)
-            java.lang.String r1 = " bitrate="
-            r3.append(r1)
-            r3.append(r9)
-            java.lang.String r1 = r3.toString()
-            org.telegram.messenger.FileLog.d(r1)
-        L_0x1492:
-            return r45
-        L_0x1493:
             r0 = move-exception
-            r2 = r76
+            r2 = r68
             r3 = r0
             android.media.MediaExtractor r4 = r2.extractor
-            if (r4 == 0) goto L_0x149e
+            if (r4 == 0) goto L_0x145d
             r4.release()
-        L_0x149e:
+        L_0x145d:
             org.telegram.messenger.video.MP4Builder r4 = r2.mediaMuxer
-            if (r4 == 0) goto L_0x14b3
-            r4.finishMovie()     // Catch:{ all -> 0x14ae }
-            org.telegram.messenger.video.MP4Builder r4 = r2.mediaMuxer     // Catch:{ all -> 0x14ae }
-            long r4 = r4.getLastFrameTimestamp(r1)     // Catch:{ all -> 0x14ae }
-            r2.endPresentationTime = r4     // Catch:{ all -> 0x14ae }
-            goto L_0x14b3
-        L_0x14ae:
+            if (r4 == 0) goto L_0x1472
+            r4.finishMovie()     // Catch:{ all -> 0x146d }
+            org.telegram.messenger.video.MP4Builder r4 = r2.mediaMuxer     // Catch:{ all -> 0x146d }
+            long r4 = r4.getLastFrameTimestamp(r1)     // Catch:{ all -> 0x146d }
+            r2.endPresentationTime = r4     // Catch:{ all -> 0x146d }
+            goto L_0x1472
+        L_0x146d:
             r0 = move-exception
             r1 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-        L_0x14b3:
-            goto L_0x14b5
-        L_0x14b4:
+        L_0x1472:
+            goto L_0x1474
+        L_0x1473:
             throw r3
-        L_0x14b5:
-            goto L_0x14b4
+        L_0x1474:
+            goto L_0x1473
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.video.MediaCodecVideoConvertor.convertVideoInternal(java.lang.String, java.io.File, int, boolean, int, int, int, int, int, long, long, long, long, boolean, boolean, org.telegram.messenger.MediaController$SavedFilterState, java.lang.String, java.util.ArrayList, boolean, org.telegram.messenger.MediaController$CropState):boolean");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.video.MediaCodecVideoConvertor.convertVideoInternal(java.lang.String, java.io.File, int, boolean, int, int, int, int, int, int, int, long, long, long, long, boolean, boolean, org.telegram.messenger.MediaController$SavedFilterState, java.lang.String, java.util.ArrayList, boolean, org.telegram.messenger.MediaController$CropState):boolean");
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:70:0x0123, code lost:
@@ -4279,7 +4184,40 @@ public class MediaCodecVideoConvertor {
     private void checkConversionCanceled() {
         MediaController.VideoConvertorListener videoConvertorListener = this.callback;
         if (videoConvertorListener != null && videoConvertorListener.checkConversionCanceled()) {
-            throw new RuntimeException("canceled conversion");
+            throw new ConversionCanceledException();
+        }
+    }
+
+    private static String createFragmentShader(int i, int i2, int i3, int i4) {
+        float f = (float) i;
+        float max = Math.max(2.0f, f / ((float) i3));
+        float f2 = (float) i2;
+        float max2 = Math.max(2.0f, f2 / ((float) i4));
+        int ceil = ((int) Math.ceil((double) (max - 0.1f))) / 2;
+        int ceil2 = ((int) Math.ceil((double) (max2 - 0.1f))) / 2;
+        int i5 = (ceil * 2) + 1;
+        float f3 = (max / ((float) i5)) * (1.0f / f);
+        int i6 = (ceil2 * 2) + 1;
+        float f4 = (max2 / ((float) i6)) * (1.0f / f2);
+        float f5 = (float) (i5 * i6);
+        StringBuilder sb = new StringBuilder();
+        for (int i7 = -ceil; i7 <= ceil; i7++) {
+            for (int i8 = -ceil2; i8 <= ceil2; i8++) {
+                if (i7 != 0 || i8 != 0) {
+                    sb.append("      + texture2D(sTexture, vTextureCoord.xy + vec2(");
+                    sb.append(((float) i7) * f3);
+                    sb.append(", ");
+                    sb.append(((float) i8) * f4);
+                    sb.append("))\n");
+                }
+            }
+        }
+        return "#extension GL_OES_EGL_image_external : require\nprecision mediump float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n    gl_FragColor = (texture2D(sTexture, vTextureCoord)\n" + sb.toString() + "    ) / " + f5 + ";\n}\n";
+    }
+
+    public class ConversionCanceledException extends RuntimeException {
+        public ConversionCanceledException() {
+            super("canceled conversion");
         }
     }
 }

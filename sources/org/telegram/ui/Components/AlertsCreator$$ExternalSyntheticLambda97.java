@@ -16,6 +16,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda97 impl
     }
 
     public final void onScrollStateChange(NumberPicker numberPicker, int i) {
-        AlertsCreator.lambda$createDatePickerDialog$35(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i);
+        AlertsCreator.lambda$createDatePickerDialog$37(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i);
     }
 }

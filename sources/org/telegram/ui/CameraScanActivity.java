@@ -21,6 +21,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Property;
 import android.view.MotionEvent;
@@ -28,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.core.graphics.ColorUtils;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.zxing.qrcode.QRCodeReader;
 import java.util.ArrayList;
@@ -51,6 +54,9 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LinkPath;
+import org.telegram.ui.Components.TypefaceSpan;
+import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.PhotoAlbumPickerActivity;
 
 @TargetApi(18)
@@ -113,15 +119,16 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     public static /* synthetic */ void lambda$new$0() {
     }
 
-    public static ActionBarLayout[] showAsSheet(BaseFragment baseFragment, boolean z, CameraScanActivityDelegate cameraScanActivityDelegate) {
+    public static ActionBarLayout[] showAsSheet(BaseFragment baseFragment, boolean z, int i, CameraScanActivityDelegate cameraScanActivityDelegate) {
         if (baseFragment == null || baseFragment.getParentActivity() == null) {
             return null;
         }
         ActionBarLayout[] actionBarLayoutArr = {new ActionBarLayout(baseFragment.getParentActivity())};
-        new BottomSheet(baseFragment.getParentActivity(), false, actionBarLayoutArr, z, cameraScanActivityDelegate) {
+        new BottomSheet(baseFragment.getParentActivity(), false, actionBarLayoutArr, i, z, cameraScanActivityDelegate) {
             final /* synthetic */ ActionBarLayout[] val$actionBarLayout;
             final /* synthetic */ CameraScanActivityDelegate val$delegate;
             final /* synthetic */ boolean val$gallery;
+            final /* synthetic */ int val$type;
 
             /* access modifiers changed from: protected */
             public boolean canDismissWithSwipe() {
@@ -130,10 +137,11 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
 
             {
                 this.val$actionBarLayout = r4;
-                this.val$gallery = r5;
-                this.val$delegate = r6;
+                this.val$type = r5;
+                this.val$gallery = r6;
+                this.val$delegate = r7;
                 r4[0].init(new ArrayList());
-                AnonymousClass1 r3 = new CameraScanActivity(1) {
+                AnonymousClass1 r3 = new CameraScanActivity(r5) {
                     public void finishFragment() {
                         AnonymousClass1.this.dismiss();
                     }
@@ -142,13 +150,13 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                         AnonymousClass1.this.dismiss();
                     }
                 };
-                boolean unused = r3.needGalleryButton = r5;
+                boolean unused = r3.needGalleryButton = r6;
                 r4[0].addFragmentToStack(r3);
                 r4[0].showLastFragment();
                 ActionBarLayout actionBarLayout = r4[0];
                 int i = this.backgroundPaddingLeft;
                 actionBarLayout.setPadding(i, 0, i, 0);
-                r3.setDelegate(r6);
+                r3.setDelegate(r7);
                 this.containerView = r4[0];
                 setApplyBottomPadding(false);
                 setApplyBottomPadding(false);
@@ -175,7 +183,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     public CameraScanActivity(int i) {
         CameraController.getInstance().initCamera(CameraScanActivity$$ExternalSyntheticLambda9.INSTANCE);
         this.currentType = i;
-        if (i == 1) {
+        if (isQr()) {
             this.qrReader = new QRCodeReader();
             this.visionQrReader = new BarcodeDetector.Builder(ApplicationLoader.applicationContext).setBarcodeFormats(256).build();
         }
@@ -198,11 +206,12 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     public View createView(Context context) {
+        Context context2 = context;
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteGrayText2"), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarWhiteSelector"), false);
         this.actionBar.setCastShadows(false);
-        if (!AndroidUtilities.isTablet() && this.currentType != 1) {
+        if (!AndroidUtilities.isTablet() && !isQr()) {
             this.actionBar.showActionModeTop();
         }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -217,7 +226,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         this.cornerPaint.setStyle(Paint.Style.STROKE);
         this.cornerPaint.setStrokeWidth((float) AndroidUtilities.dp(4.0f));
         this.cornerPaint.setStrokeJoin(Paint.Join.ROUND);
-        AnonymousClass3 r0 = new ViewGroup(context) {
+        AnonymousClass3 r2 = new ViewGroup(context2) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 int size = View.MeasureSpec.getSize(i);
@@ -233,7 +242,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                     }
                     CameraScanActivity.this.flashButton.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM));
                 }
-                CameraScanActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
+                CameraScanActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(72.0f), NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
                 CameraScanActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) size) * 0.9f), NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
                 setMeasuredDimension(size, size2);
             }
@@ -241,43 +250,52 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             /* access modifiers changed from: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                 int i5;
-                int i6 = i3 - i;
-                int i7 = i4 - i2;
+                int i6;
+                int i7;
+                int i8 = i3 - i;
+                int i9 = i4 - i2;
                 if (CameraScanActivity.this.currentType == 0) {
                     CameraScanActivity.this.cameraView.layout(0, 0, CameraScanActivity.this.cameraView.getMeasuredWidth(), CameraScanActivity.this.cameraView.getMeasuredHeight() + 0);
-                    int i8 = (int) (((float) i7) * 0.65f);
-                    CameraScanActivity.this.titleTextView.layout(0, i8, CameraScanActivity.this.titleTextView.getMeasuredWidth(), CameraScanActivity.this.titleTextView.getMeasuredHeight() + i8);
+                    int i10 = (int) (((float) i9) * 0.65f);
+                    CameraScanActivity.this.titleTextView.layout(AndroidUtilities.dp(36.0f), i10, AndroidUtilities.dp(36.0f) + CameraScanActivity.this.titleTextView.getMeasuredWidth(), CameraScanActivity.this.titleTextView.getMeasuredHeight() + i10);
                     CameraScanActivity.this.recognizedMrzView.setTextSize(0, (float) (CameraScanActivity.this.cameraView.getMeasuredHeight() / 22));
                     CameraScanActivity.this.recognizedMrzView.setPadding(0, 0, 0, CameraScanActivity.this.cameraView.getMeasuredHeight() / 15);
                 } else {
                     CameraScanActivity.this.actionBar.layout(0, 0, CameraScanActivity.this.actionBar.getMeasuredWidth(), CameraScanActivity.this.actionBar.getMeasuredHeight());
                     CameraScanActivity.this.cameraView.layout(0, 0, CameraScanActivity.this.cameraView.getMeasuredWidth(), CameraScanActivity.this.cameraView.getMeasuredHeight());
                     int min = (int) (((float) Math.min(CameraScanActivity.this.cameraView.getWidth(), CameraScanActivity.this.cameraView.getHeight())) / 1.5f);
-                    int measuredHeight = (((CameraScanActivity.this.cameraView.getMeasuredHeight() - min) / 2) - CameraScanActivity.this.titleTextView.getMeasuredHeight()) - AndroidUtilities.dp(30.0f);
-                    CameraScanActivity.this.titleTextView.layout(0, measuredHeight, CameraScanActivity.this.titleTextView.getMeasuredWidth(), CameraScanActivity.this.titleTextView.getMeasuredHeight() + measuredHeight);
+                    if (CameraScanActivity.this.currentType == 1) {
+                        i6 = ((CameraScanActivity.this.cameraView.getMeasuredHeight() - min) / 2) - CameraScanActivity.this.titleTextView.getMeasuredHeight();
+                        i5 = AndroidUtilities.dp(30.0f);
+                    } else {
+                        i6 = ((CameraScanActivity.this.cameraView.getMeasuredHeight() - min) / 2) - CameraScanActivity.this.titleTextView.getMeasuredHeight();
+                        i5 = AndroidUtilities.dp(64.0f);
+                    }
+                    int i11 = i6 - i5;
+                    CameraScanActivity.this.titleTextView.layout(AndroidUtilities.dp(36.0f), i11, AndroidUtilities.dp(36.0f) + CameraScanActivity.this.titleTextView.getMeasuredWidth(), CameraScanActivity.this.titleTextView.getMeasuredHeight() + i11);
                     CameraScanActivity.this.recognizedMrzView.layout(0, getMeasuredHeight() - CameraScanActivity.this.recognizedMrzView.getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight());
                     if (CameraScanActivity.this.needGalleryButton) {
-                        i5 = (CameraScanActivity.this.cameraView.getMeasuredWidth() / 2) + AndroidUtilities.dp(35.0f);
+                        i7 = (CameraScanActivity.this.cameraView.getMeasuredWidth() / 2) + AndroidUtilities.dp(35.0f);
                     } else {
-                        i5 = (CameraScanActivity.this.cameraView.getMeasuredWidth() / 2) - (CameraScanActivity.this.flashButton.getMeasuredWidth() / 2);
+                        i7 = (CameraScanActivity.this.cameraView.getMeasuredWidth() / 2) - (CameraScanActivity.this.flashButton.getMeasuredWidth() / 2);
                     }
-                    int measuredHeight2 = ((CameraScanActivity.this.cameraView.getMeasuredHeight() - min) / 2) + min + AndroidUtilities.dp(30.0f);
-                    CameraScanActivity.this.flashButton.layout(i5, measuredHeight2, CameraScanActivity.this.flashButton.getMeasuredWidth() + i5, CameraScanActivity.this.flashButton.getMeasuredHeight() + measuredHeight2);
+                    int measuredHeight = ((CameraScanActivity.this.cameraView.getMeasuredHeight() - min) / 2) + min + AndroidUtilities.dp(30.0f);
+                    CameraScanActivity.this.flashButton.layout(i7, measuredHeight, CameraScanActivity.this.flashButton.getMeasuredWidth() + i7, CameraScanActivity.this.flashButton.getMeasuredHeight() + measuredHeight);
                     if (CameraScanActivity.this.galleryButton != null) {
                         int measuredWidth = ((CameraScanActivity.this.cameraView.getMeasuredWidth() / 2) - AndroidUtilities.dp(35.0f)) - CameraScanActivity.this.galleryButton.getMeasuredWidth();
-                        CameraScanActivity.this.galleryButton.layout(measuredWidth, measuredHeight2, CameraScanActivity.this.galleryButton.getMeasuredWidth() + measuredWidth, CameraScanActivity.this.galleryButton.getMeasuredHeight() + measuredHeight2);
+                        CameraScanActivity.this.galleryButton.layout(measuredWidth, measuredHeight, CameraScanActivity.this.galleryButton.getMeasuredWidth() + measuredWidth, CameraScanActivity.this.galleryButton.getMeasuredHeight() + measuredHeight);
                     }
                 }
-                int i9 = (int) (((float) i7) * 0.74f);
-                int i10 = (int) (((float) i6) * 0.05f);
-                CameraScanActivity.this.descriptionText.layout(i10, i9, CameraScanActivity.this.descriptionText.getMeasuredWidth() + i10, CameraScanActivity.this.descriptionText.getMeasuredHeight() + i9);
+                int i12 = (int) (((float) i9) * 0.74f);
+                int i13 = (int) (((float) i8) * 0.05f);
+                CameraScanActivity.this.descriptionText.layout(i13, i12, CameraScanActivity.this.descriptionText.getMeasuredWidth() + i13, CameraScanActivity.this.descriptionText.getMeasuredHeight() + i12);
             }
 
             /* access modifiers changed from: protected */
             public boolean drawChild(Canvas canvas, View view, long j) {
                 Canvas canvas2 = canvas;
                 boolean drawChild = super.drawChild(canvas, view, j);
-                if (CameraScanActivity.this.currentType != 1 || view != CameraScanActivity.this.cameraView) {
+                if (!CameraScanActivity.this.isQr() || view != CameraScanActivity.this.cameraView) {
                     return drawChild;
                 }
                 int min = (int) (((float) Math.min(view.getWidth(), view.getHeight())) / 1.5f);
@@ -321,9 +339,9 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 return z;
             }
         };
-        r0.setOnTouchListener(CameraScanActivity$$ExternalSyntheticLambda3.INSTANCE);
-        this.fragmentView = r0;
-        CameraView cameraView2 = new CameraView(context, false);
+        r2.setOnTouchListener(CameraScanActivity$$ExternalSyntheticLambda3.INSTANCE);
+        this.fragmentView = r2;
+        CameraView cameraView2 = new CameraView(context2, false);
         this.cameraView = cameraView2;
         cameraView2.setUseMaxPreview(true);
         this.cameraView.setOptimizeForBarcode(true);
@@ -335,7 +353,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 CameraScanActivity.this.startRecognizing();
             }
         });
-        r0.addView(this.cameraView, LayoutHelper.createFrame(-1, -1.0f));
+        r2.addView(this.cameraView, LayoutHelper.createFrame(-1, -1.0f));
         if (this.currentType == 0) {
             this.actionBar.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
@@ -344,26 +362,73 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             this.actionBar.setAddToContainer(false);
             this.actionBar.setItemsColor(-1, false);
             this.actionBar.setItemsBackgroundColor(NUM, false);
-            r0.setBackgroundColor(Theme.getColor("wallet_blackBackground"));
-            r0.addView(this.actionBar);
+            r2.setBackgroundColor(Theme.getColor("wallet_blackBackground"));
+            r2.addView(this.actionBar);
         }
-        TextView textView = new TextView(context);
-        this.titleTextView = textView;
-        textView.setGravity(1);
+        if (this.currentType == 2) {
+            this.actionBar.setTitle(LocaleController.getString("AuthAnotherClientScan", NUM));
+        }
+        final Paint paint2 = new Paint(1);
+        paint2.setColor(ColorUtils.setAlphaComponent(-1, 100));
+        AnonymousClass5 r8 = new TextView(this, context2) {
+            LinkPath textPath;
+
+            /* access modifiers changed from: protected */
+            public void onMeasure(int i, int i2) {
+                int i3;
+                super.onMeasure(i, i2);
+                if (getText() instanceof Spanned) {
+                    Spanned spanned = (Spanned) getText();
+                    URLSpanNoUnderline[] uRLSpanNoUnderlineArr = (URLSpanNoUnderline[]) spanned.getSpans(0, spanned.length(), URLSpanNoUnderline.class);
+                    if (uRLSpanNoUnderlineArr != null && uRLSpanNoUnderlineArr.length > 0) {
+                        LinkPath linkPath = new LinkPath(true);
+                        this.textPath = linkPath;
+                        linkPath.setAllowReset(false);
+                        for (int i4 = 0; i4 < uRLSpanNoUnderlineArr.length; i4++) {
+                            int spanStart = spanned.getSpanStart(uRLSpanNoUnderlineArr[i4]);
+                            int spanEnd = spanned.getSpanEnd(uRLSpanNoUnderlineArr[i4]);
+                            this.textPath.setCurrentLayout(getLayout(), spanStart, 0.0f);
+                            int i5 = getText() != null ? getPaint().baselineShift : 0;
+                            LinkPath linkPath2 = this.textPath;
+                            if (i5 != 0) {
+                                i3 = i5 + AndroidUtilities.dp(i5 > 0 ? 5.0f : -2.0f);
+                            } else {
+                                i3 = 0;
+                            }
+                            linkPath2.setBaselineShift(i3);
+                            getLayout().getSelectionPath(spanStart, spanEnd, this.textPath);
+                        }
+                        this.textPath.setAllowReset(true);
+                    }
+                }
+            }
+
+            /* access modifiers changed from: protected */
+            public void onDraw(Canvas canvas) {
+                LinkPath linkPath = this.textPath;
+                if (linkPath != null) {
+                    canvas.drawPath(linkPath, paint2);
+                }
+                super.onDraw(canvas);
+            }
+        };
+        this.titleTextView = r8;
+        r8.setGravity(1);
         this.titleTextView.setTextSize(1, 24.0f);
-        r0.addView(this.titleTextView);
-        TextView textView2 = new TextView(context);
-        this.descriptionText = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
+        r2.addView(this.titleTextView);
+        TextView textView = new TextView(context2);
+        this.descriptionText = textView;
+        textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
         this.descriptionText.setGravity(1);
         this.descriptionText.setTextSize(1, 16.0f);
-        r0.addView(this.descriptionText);
-        TextView textView3 = new TextView(context);
-        this.recognizedMrzView = textView3;
-        textView3.setTextColor(-1);
+        r2.addView(this.descriptionText);
+        TextView textView2 = new TextView(context2);
+        this.recognizedMrzView = textView2;
+        textView2.setTextColor(-1);
         this.recognizedMrzView.setGravity(81);
         this.recognizedMrzView.setAlpha(0.0f);
-        if (this.currentType == 0) {
+        int i = this.currentType;
+        if (i == 0) {
             this.titleTextView.setText(LocaleController.getString("PassportScanPassport", NUM));
             this.descriptionText.setText(LocaleController.getString("PassportScanPassportInfo", NUM));
             this.titleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -371,7 +436,42 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             this.cameraView.addView(this.recognizedMrzView);
         } else {
             if (!this.needGalleryButton) {
-                this.titleTextView.setText(LocaleController.getString("AuthAnotherClientScan", NUM));
+                if (i == 1) {
+                    this.titleTextView.setText(LocaleController.getString("AuthAnotherClientScan", NUM));
+                } else {
+                    String string = LocaleController.getString("AuthAnotherClientInfo5", NUM);
+                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(string);
+                    int indexOf = string.indexOf(42);
+                    int i2 = indexOf + 1;
+                    int indexOf2 = string.indexOf(42, i2);
+                    if (!(indexOf == -1 || indexOf2 == -1 || indexOf == indexOf2)) {
+                        this.titleTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
+                        int i3 = indexOf2 + 1;
+                        spannableStringBuilder.replace(indexOf2, i3, " ");
+                        spannableStringBuilder.replace(indexOf, i2, " ");
+                        int i4 = i3 - 1;
+                        spannableStringBuilder.setSpan(new URLSpanNoUnderline(LocaleController.getString("AuthAnotherClientDownloadClientUrl", NUM)), i2, i4, 33);
+                        spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), i2, i4, 33);
+                    }
+                    String spannableStringBuilder2 = spannableStringBuilder.toString();
+                    int indexOf3 = spannableStringBuilder2.indexOf(42);
+                    int i5 = indexOf3 + 1;
+                    int indexOf4 = spannableStringBuilder2.indexOf(42, i5);
+                    if (!(indexOf3 == -1 || indexOf4 == -1 || indexOf3 == indexOf4)) {
+                        int i6 = indexOf4 + 1;
+                        spannableStringBuilder.replace(indexOf4, i6, " ");
+                        spannableStringBuilder.replace(indexOf3, i5, " ");
+                        int i7 = i6 - 1;
+                        spannableStringBuilder.setSpan(new URLSpanNoUnderline(LocaleController.getString("AuthAnotherWebClientUrl", NUM)), i5, i7, 33);
+                        spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), i5, i7, 33);
+                    }
+                    this.titleTextView.setLinkTextColor(-1);
+                    this.titleTextView.setHighlightColor(Theme.getColor("windowBackgroundWhiteLinkSelection"));
+                    this.titleTextView.setTextSize(1, 16.0f);
+                    this.titleTextView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+                    this.titleTextView.setPadding(0, 0, 0, 0);
+                    this.titleTextView.setText(spannableStringBuilder);
+                }
             }
             this.titleTextView.setTextColor(-1);
             this.recognizedMrzView.setTextSize(1, 16.0f);
@@ -379,22 +479,22 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             if (!this.needGalleryButton) {
                 this.recognizedMrzView.setText(LocaleController.getString("AuthAnotherClientNotFound", NUM));
             }
-            r0.addView(this.recognizedMrzView);
+            r2.addView(this.recognizedMrzView);
             if (this.needGalleryButton) {
-                ImageView imageView = new ImageView(context);
+                ImageView imageView = new ImageView(context2);
                 this.galleryButton = imageView;
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
                 this.galleryButton.setImageResource(NUM);
                 this.galleryButton.setBackgroundDrawable(Theme.createSelectorDrawableFromDrawables(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM), Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM)));
-                r0.addView(this.galleryButton);
+                r2.addView(this.galleryButton);
                 this.galleryButton.setOnClickListener(new CameraScanActivity$$ExternalSyntheticLambda1(this));
             }
-            ImageView imageView2 = new ImageView(context);
+            ImageView imageView2 = new ImageView(context2);
             this.flashButton = imageView2;
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
             this.flashButton.setImageResource(NUM);
             this.flashButton.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(60.0f), NUM));
-            r0.addView(this.flashButton);
+            r2.addView(this.flashButton);
             this.flashButton.setOnClickListener(new CameraScanActivity$$ExternalSyntheticLambda2(this));
         }
         if (getParentActivity() != null) {
@@ -418,10 +518,10 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                                 SendMessagesHelper.SendingMediaInfo sendingMediaInfo = arrayList.get(0);
                                 if (sendingMediaInfo.path != null) {
                                     Point realScreenSize = AndroidUtilities.getRealScreenSize();
-                                    String access$1800 = CameraScanActivity.this.tryReadQr((byte[]) null, (Size) null, 0, 0, 0, ImageLoader.loadBitmap(sendingMediaInfo.path, (Uri) null, (float) realScreenSize.x, (float) realScreenSize.y, true));
-                                    if (access$1800 != null) {
+                                    String access$1900 = CameraScanActivity.this.tryReadQr((byte[]) null, (Size) null, 0, 0, 0, ImageLoader.loadBitmap(sendingMediaInfo.path, (Uri) null, (float) realScreenSize.x, (float) realScreenSize.y, true));
+                                    if (access$1900 != null) {
                                         if (CameraScanActivity.this.delegate != null) {
-                                            CameraScanActivity.this.delegate.didFindQr(access$1800);
+                                            CameraScanActivity.this.delegate.didFindQr(access$1900);
                                         }
                                         CameraScanActivity.this.removeSelfFromStack();
                                     }
@@ -720,9 +820,15 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CameraScanActivity.tryReadQr(byte[], org.telegram.messenger.camera.Size, int, int, int, android.graphics.Bitmap):java.lang.String");
     }
 
+    /* access modifiers changed from: private */
+    public boolean isQr() {
+        int i = this.currentType;
+        return i == 1 || i == 2;
+    }
+
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        if (this.currentType == 1) {
+        if (isQr()) {
             return arrayList;
         }
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));

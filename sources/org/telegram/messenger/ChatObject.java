@@ -2096,6 +2096,10 @@ public class ChatObject {
         return tLRPC$Chat == null || (tLRPC$Chat instanceof TLRPC$TL_chatEmpty) || (tLRPC$Chat instanceof TLRPC$TL_chatForbidden) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden) || tLRPC$Chat.left || tLRPC$Chat.kicked || tLRPC$Chat.deactivated;
     }
 
+    public static boolean canSendAsPeers(TLRPC$Chat tLRPC$Chat) {
+        return isChannel(tLRPC$Chat) && tLRPC$Chat.megagroup && (!TextUtils.isEmpty(tLRPC$Chat.username) || tLRPC$Chat.has_geo || tLRPC$Chat.has_link);
+    }
+
     public static boolean isChannel(TLRPC$Chat tLRPC$Chat) {
         return (tLRPC$Chat instanceof TLRPC$TL_channel) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden);
     }
@@ -2204,6 +2208,27 @@ public class ChatObject {
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ChatObject.shouldSendAnonymously(org.telegram.tgnet.TLRPC$Chat):boolean");
+    }
+
+    public static long getSendAsPeerId(TLRPC$Chat tLRPC$Chat, TLRPC$ChatFull tLRPC$ChatFull) {
+        return getSendAsPeerId(tLRPC$Chat, tLRPC$ChatFull, false);
+    }
+
+    public static long getSendAsPeerId(TLRPC$Chat tLRPC$Chat, TLRPC$ChatFull tLRPC$ChatFull, boolean z) {
+        TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights;
+        TLRPC$Peer tLRPC$Peer;
+        if (tLRPC$Chat != null && tLRPC$ChatFull != null && (tLRPC$Peer = tLRPC$ChatFull.default_send_as) != null) {
+            long j = tLRPC$Peer.user_id;
+            if (j != 0) {
+                return j;
+            }
+            return z ? -tLRPC$Peer.channel_id : tLRPC$Peer.channel_id;
+        } else if (tLRPC$Chat == null || (tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights) == null || !tLRPC$TL_chatAdminRights.anonymous) {
+            return UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+        } else {
+            long j2 = tLRPC$Chat.id;
+            return z ? -j2 : j2;
+        }
     }
 
     public static boolean canAddBotsToChat(TLRPC$Chat tLRPC$Chat) {

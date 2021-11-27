@@ -11,6 +11,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda52 impl
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$showBlockReportSpamAlert$6(this.f$0, view);
+        AlertsCreator.lambda$showBlockReportSpamReplyAlert$3(this.f$0, view);
     }
 }

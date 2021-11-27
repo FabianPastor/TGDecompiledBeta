@@ -3782,7 +3782,6 @@
     <string name="Terminate">종료</string>
     <string name="TerminateAllSessions">다른 세션 모두 종료</string>
     <string name="TerminateAllWebSessions">모든 웹 사이트 연결 끊기</string>
-    <string name="TerminateSessionInfo">세션을 종료하려면 짧게 누르세요.</string>
     <string name="TerminateSessionQuestion">이 세션을 종료할까요?</string>
     <string name="TerminateSessionText">정말 이 세션을 종료하시겠습니까?</string>
     <string name="TerminateWebSessionInfo">텔레그램 계정과 연결을 끊으려면 짧게 누르세요.</string>

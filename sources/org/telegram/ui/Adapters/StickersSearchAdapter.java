@@ -639,7 +639,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             android.widget.ImageView$ScaleType r0 = android.widget.ImageView.ScaleType.CENTER
             r8.setScaleType(r0)
             android.widget.ImageView r8 = r6.emptyImageView
-            r0 = 2131166096(0x7var_, float:1.7946428E38)
+            r0 = 2131166115(0x7var_a3, float:1.7946466E38)
             r8.setImageResource(r0)
             android.widget.ImageView r8 = r6.emptyImageView
             android.graphics.PorterDuffColorFilter r0 = new android.graphics.PorterDuffColorFilter
@@ -663,7 +663,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             android.content.Context r3 = r6.context
             r8.<init>(r3)
             r6.emptyTextView = r8
-            r3 = 2131626496(0x7f0e0a00, float:1.888023E38)
+            r3 = 2131626538(0x7f0e0a2a, float:1.8880315E38)
             java.lang.String r5 = "NoStickersFound"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r8.setText(r3)
@@ -897,11 +897,9 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
         featuredStickerSetInfoCell2.setNeedDivider(z5);
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v2, resolved type: org.telegram.tgnet.TLRPC$StickerSetCovered} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v21, resolved type: org.telegram.tgnet.TLRPC$TL_messages_stickerSet} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v22, resolved type: org.telegram.tgnet.TLRPC$StickerSetCovered} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v23, resolved type: org.telegram.tgnet.TLRPC$StickerSetCovered} */
+    /* JADX WARNING: type inference failed for: r7v21, types: [org.telegram.tgnet.TLRPC$messages_StickerSet, org.telegram.tgnet.TLRPC$TL_messages_stickerSet] */
     /* JADX WARNING: Multi-variable type inference failed */
+    /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void notifyDataSetChanged() {
         /*

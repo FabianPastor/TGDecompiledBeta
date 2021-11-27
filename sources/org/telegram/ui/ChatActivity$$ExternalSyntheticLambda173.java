@@ -1,23 +1,15 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.GroupCreateActivity;
+import android.view.MotionEvent;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda173 implements GroupCreateActivity.ContactsAddActivityDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ long f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda173 implements RecyclerListView.OnInterceptTouchListener {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda173 INSTANCE = new ChatActivity$$ExternalSyntheticLambda173();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda173(ChatActivity chatActivity, long j) {
-        this.f$0 = chatActivity;
-        this.f$1 = j;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda173() {
     }
 
-    public final void didSelectUsers(ArrayList arrayList, int i) {
-        this.f$0.lambda$createView$21(this.f$1, arrayList, i);
-    }
-
-    public /* synthetic */ void needAddBot(TLRPC$User tLRPC$User) {
-        GroupCreateActivity.ContactsAddActivityDelegate.CC.$default$needAddBot(this, tLRPC$User);
+    public final boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        return ChatActivity.lambda$showChatThemeBottomSheet$173(motionEvent);
     }
 }

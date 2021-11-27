@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda19 implements RecyclerListView.OnItemClickListener {
-    public final /* synthetic */ SessionsActivity f$0;
+public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda19 implements RequestDelegate {
+    public static final /* synthetic */ SessionsActivity$$ExternalSyntheticLambda19 INSTANCE = new SessionsActivity$$ExternalSyntheticLambda19();
 
-    public /* synthetic */ SessionsActivity$$ExternalSyntheticLambda19(SessionsActivity sessionsActivity) {
-        this.f$0 = sessionsActivity;
+    private /* synthetic */ SessionsActivity$$ExternalSyntheticLambda19() {
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$15(view, i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        SessionsActivity.lambda$createView$0(tLObject, tLRPC$TL_error);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda32
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$removeSuggestion$16(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$processUpdates$289(tLObject, tLRPC$TL_error);
     }
 }

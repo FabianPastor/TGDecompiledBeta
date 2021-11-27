@@ -52,18 +52,15 @@ public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public int currentAccount;
     private boolean finishing;
-    /* access modifiers changed from: protected */
-    public boolean fragmentBeginToShow;
+    protected boolean fragmentBeginToShow;
     /* access modifiers changed from: protected */
     public View fragmentView;
     protected boolean hasOwnBackground;
-    /* access modifiers changed from: protected */
-    public boolean inBubbleMode;
+    protected boolean inBubbleMode;
     /* access modifiers changed from: protected */
     public boolean inPreviewMode;
     private boolean isFinished;
-    /* access modifiers changed from: protected */
-    public boolean isPaused;
+    protected boolean isPaused;
     protected Dialog parentDialog;
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
@@ -465,6 +462,11 @@ public abstract class BaseFragment {
         return actionBarLayout != null && actionBarLayout.presentFragmentAsPreview(baseFragment);
     }
 
+    public boolean presentFragmentAsPreviewWithMenu(BaseFragment baseFragment, View view) {
+        ActionBarLayout actionBarLayout = this.parentLayout;
+        return actionBarLayout != null && actionBarLayout.presentFragmentAsPreviewWithMenu(baseFragment, view);
+    }
+
     public boolean presentFragment(BaseFragment baseFragment) {
         ActionBarLayout actionBarLayout = this.parentLayout;
         return actionBarLayout != null && actionBarLayout.presentFragment(baseFragment);
@@ -477,7 +479,7 @@ public abstract class BaseFragment {
 
     public boolean presentFragment(BaseFragment baseFragment, boolean z, boolean z2) {
         ActionBarLayout actionBarLayout = this.parentLayout;
-        return actionBarLayout != null && actionBarLayout.presentFragment(baseFragment, z, z2, true, false);
+        return actionBarLayout != null && actionBarLayout.presentFragment(baseFragment, z, z2, true, false, (View) null);
     }
 
     public Activity getParentActivity() {

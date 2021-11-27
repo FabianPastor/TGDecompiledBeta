@@ -42,6 +42,7 @@ public class EmojiThemes {
         public int patternBgGradientColor1;
         public int patternBgGradientColor2;
         public int patternBgGradientColor3;
+        public int patternBgRotation;
         int settingsIndex;
         public Theme.ThemeInfo themeInfo;
         TLRPC$TL_theme tlTheme;
@@ -95,33 +96,38 @@ public class EmojiThemes {
     public static EmojiThemes createPreviewCustom() {
         EmojiThemes emojiThemes = new EmojiThemes();
         emojiThemes.emoji = "🎨";
+        int i = 0;
         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0);
         String string = sharedPreferences.getString("lastDayCustomTheme", (String) null);
-        int i = sharedPreferences.getInt("lastDayCustomThemeAccentId", -1);
+        int i2 = sharedPreferences.getInt("lastDayCustomThemeAccentId", -1);
         if (string == null || Theme.getTheme(string) == null) {
             string = sharedPreferences.getString("lastDayTheme", "Blue");
             if (Theme.getTheme(string) == null) {
+                i2 = 99;
                 string = "Blue";
             }
             sharedPreferences.edit().putString("lastDayCustomTheme", string).apply();
         }
         String string2 = sharedPreferences.getString("lastDarkCustomTheme", (String) null);
-        int i2 = sharedPreferences.getInt("lastDarkCustomThemeAccentId", -1);
+        int i3 = sharedPreferences.getInt("lastDarkCustomThemeAccentId", -1);
         if (string2 == null || Theme.getTheme(string2) == null) {
             string2 = sharedPreferences.getString("lastDarkTheme", "Dark Blue");
             if (Theme.getTheme(string2) == null) {
                 string2 = "Dark Blue";
+            } else {
+                i = i3;
             }
             sharedPreferences.edit().putString("lastDarkCustomTheme", string2).apply();
+            i3 = i;
         }
         ThemeItem themeItem = new ThemeItem();
         themeItem.themeInfo = Theme.getTheme(string);
-        themeItem.accentId = i;
+        themeItem.accentId = i2;
         emojiThemes.items.add(themeItem);
         emojiThemes.items.add((Object) null);
         ThemeItem themeItem2 = new ThemeItem();
         themeItem2.themeInfo = Theme.getTheme(string2);
-        themeItem2.accentId = i2;
+        themeItem2.accentId = i3;
         emojiThemes.items.add(themeItem2);
         emojiThemes.items.add((Object) null);
         return emojiThemes;
@@ -436,6 +442,12 @@ public class EmojiThemes {
                     this.items.get(i2).patternBgGradientColor3 = 0;
                 } else {
                     this.items.get(i2).patternBgGradientColor3 = num7.intValue();
+                }
+                Integer num8 = currentColors.get("chat_wallpaper_gradient_rotation");
+                if (num8 == null) {
+                    this.items.get(i2).patternBgRotation = 0;
+                } else {
+                    this.items.get(i2).patternBgRotation = num8.intValue();
                 }
                 if (this.items.get(i2).themeInfo != null && this.items.get(i2).themeInfo.getKey().equals("Blue")) {
                     if ((this.items.get(i2).accentId >= 0 ? this.items.get(i2).accentId : this.items.get(i2).themeInfo.currentAccentId) == 99) {

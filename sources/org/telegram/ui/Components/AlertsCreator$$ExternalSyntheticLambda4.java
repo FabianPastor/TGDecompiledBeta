@@ -12,6 +12,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda4 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createColorSelectDialog$66(this.f$0, this.f$1, dialogInterface, i);
+        AlertsCreator.lambda$createColorSelectDialog$68(this.f$0, this.f$1, dialogInterface, i);
     }
 }

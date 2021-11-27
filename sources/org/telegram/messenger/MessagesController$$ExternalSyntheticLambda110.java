@@ -1,32 +1,20 @@
 package org.telegram.messenger;
 
-import android.content.Context;
-import org.telegram.messenger.MessagesStorage;
-import org.telegram.tgnet.TLRPC$TL_channels_convertToGigagroup;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$updates_Difference;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda110 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ MessagesStorage.BooleanCallback f$1;
-    public final /* synthetic */ Context f$2;
-    public final /* synthetic */ AlertDialog f$3;
-    public final /* synthetic */ TLRPC$TL_error f$4;
-    public final /* synthetic */ BaseFragment f$5;
-    public final /* synthetic */ TLRPC$TL_channels_convertToGigagroup f$6;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ TLRPC$updates_Difference f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda110(MessagesController messagesController, MessagesStorage.BooleanCallback booleanCallback, Context context, AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, BaseFragment baseFragment, TLRPC$TL_channels_convertToGigagroup tLRPC$TL_channels_convertToGigagroup) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda110(MessagesController messagesController, ArrayList arrayList, TLRPC$updates_Difference tLRPC$updates_Difference) {
         this.f$0 = messagesController;
-        this.f$1 = booleanCallback;
-        this.f$2 = context;
-        this.f$3 = alertDialog;
-        this.f$4 = tLRPC$TL_error;
-        this.f$5 = baseFragment;
-        this.f$6 = tLRPC$TL_channels_convertToGigagroup;
+        this.f$1 = arrayList;
+        this.f$2 = tLRPC$updates_Difference;
     }
 
     public final void run() {
-        this.f$0.lambda$convertToGigaGroup$209(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        this.f$0.lambda$getDifference$263(this.f$1, this.f$2);
     }
 }

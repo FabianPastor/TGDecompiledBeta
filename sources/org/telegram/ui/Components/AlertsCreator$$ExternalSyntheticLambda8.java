@@ -11,6 +11,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda8 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createDrawOverlayPermissionDialog$72(this.f$0, dialogInterface, i);
+        AlertsCreator.lambda$createBackgroundLocationPermissionDialog$72(this.f$0, dialogInterface, i);
     }
 }

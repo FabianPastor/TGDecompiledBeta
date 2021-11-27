@@ -3782,7 +3782,6 @@
     <string name="Terminate">Beenden</string>
     <string name="TerminateAllSessions">Alle anderen Sitzungen beenden</string>
     <string name="TerminateAllWebSessions">Alle Webseiten trennen</string>
-    <string name="TerminateSessionInfo">Tippe auf eine Sitzung, um sie zu beenden.</string>
     <string name="TerminateSessionQuestion">Diese Sitzung abmelden?</string>
     <string name="TerminateSessionText">Bist du sicher, dass du diese Sitzung beenden möchtest?</string>
     <string name="TerminateWebSessionInfo">Antippen, um dich mit deinem Telegram-Konto abzumelden.</string>

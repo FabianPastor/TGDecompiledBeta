@@ -1,16 +1,22 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$Dialog;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda197 implements Comparator {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda197 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ BaseFragment f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda197(MessagesController messagesController) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda197(MessagesController messagesController, AlertDialog[] alertDialogArr, int i, BaseFragment baseFragment) {
         this.f$0 = messagesController;
+        this.f$1 = alertDialogArr;
+        this.f$2 = i;
+        this.f$3 = baseFragment;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$new$2((TLRPC$Dialog) obj, (TLRPC$Dialog) obj2);
+    public final void run() {
+        this.f$0.lambda$openByUserName$328(this.f$1, this.f$2, this.f$3);
     }
 }

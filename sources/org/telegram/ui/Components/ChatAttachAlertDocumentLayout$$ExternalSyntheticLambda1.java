@@ -1,16 +1,18 @@
 package org.telegram.ui.Components;
 
-import java.util.Comparator;
-import org.telegram.ui.Components.ChatAttachAlertDocumentLayout;
+import android.content.DialogInterface;
+import org.telegram.ui.Cells.TextCheckBoxCell;
 
-public final /* synthetic */ class ChatAttachAlertDocumentLayout$$ExternalSyntheticLambda1 implements Comparator {
+public final /* synthetic */ class ChatAttachAlertDocumentLayout$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatAttachAlertDocumentLayout f$0;
+    public final /* synthetic */ TextCheckBoxCell f$1;
 
-    public /* synthetic */ ChatAttachAlertDocumentLayout$$ExternalSyntheticLambda1(ChatAttachAlertDocumentLayout chatAttachAlertDocumentLayout) {
+    public /* synthetic */ ChatAttachAlertDocumentLayout$$ExternalSyntheticLambda1(ChatAttachAlertDocumentLayout chatAttachAlertDocumentLayout, TextCheckBoxCell textCheckBoxCell) {
         this.f$0 = chatAttachAlertDocumentLayout;
+        this.f$1 = textCheckBoxCell;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$sortRecentItems$4((ChatAttachAlertDocumentLayout.ListItem) obj, (ChatAttachAlertDocumentLayout.ListItem) obj2);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$new$2(this.f$1, dialogInterface, i);
     }
 }

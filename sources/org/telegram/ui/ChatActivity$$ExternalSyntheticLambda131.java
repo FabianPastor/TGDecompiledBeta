@@ -1,19 +1,20 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_editMessage;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda131 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ AlertDialog[] f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ TLRPC$TL_error f$1;
+    public final /* synthetic */ TLRPC$TL_messages_editMessage f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda131(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda131(ChatActivity chatActivity, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_messages_editMessage tLRPC$TL_messages_editMessage) {
         this.f$0 = chatActivity;
-        this.f$1 = alertDialogArr;
-        this.f$2 = i;
+        this.f$1 = tLRPC$TL_error;
+        this.f$2 = tLRPC$TL_messages_editMessage;
     }
 
     public final void run() {
-        this.f$0.lambda$processSelectedOption$128(this.f$1, this.f$2);
+        this.f$0.lambda$processSelectedOption$138(this.f$1, this.f$2);
     }
 }

@@ -952,4 +952,9 @@ public class TextureRenderer {
             }
         }
     }
+
+    public void changeFragmentShader(String str) {
+        GLES20.glDeleteProgram(this.mProgram[0]);
+        this.mProgram[0] = createProgram("uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n  gl_Position = uMVPMatrix * aPosition;\n  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n", str);
+    }
 }

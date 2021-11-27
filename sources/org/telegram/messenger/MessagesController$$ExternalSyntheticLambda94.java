@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda94
     }
 
     public final void run() {
-        this.f$0.lambda$processUpdateArray$296(this.f$1);
+        this.f$0.lambda$generateJoinMessage$276(this.f$1);
     }
 }

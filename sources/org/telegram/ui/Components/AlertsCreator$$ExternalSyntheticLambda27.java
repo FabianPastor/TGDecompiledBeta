@@ -1,7 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.ui.LanguageSelectActivity;
+import org.telegram.ui.CacheControlActivity;
 import org.telegram.ui.LaunchActivity;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda27 implements DialogInterface.OnClickListener {
@@ -12,6 +12,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda27 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$runLinkRequest$43(new LanguageSelectActivity());
+        this.f$0.lambda$runLinkRequest$43(new CacheControlActivity());
     }
 }

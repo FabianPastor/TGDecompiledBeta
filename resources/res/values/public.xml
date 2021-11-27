@@ -403,6 +403,20 @@
     <public type="drawable" name="contacts_sort_time" id="NUM" />
     <public type="drawable" name="contacts_widget_preview" id="NUM" />
     <public type="drawable" name="delete" id="NUM" />
+    <public type="drawable" name="device_desktop_osx" id="NUM" />
+    <public type="drawable" name="device_desktop_other" id="NUM" />
+    <public type="drawable" name="device_desktop_win" id="NUM" />
+    <public type="drawable" name="device_phone_android" id="NUM" />
+    <public type="drawable" name="device_phone_ios" id="NUM" />
+    <public type="drawable" name="device_phone_windows" id="NUM" />
+    <public type="drawable" name="device_tablet_android" id="NUM" />
+    <public type="drawable" name="device_tablet_ios" id="NUM" />
+    <public type="drawable" name="device_web_chrome" id="NUM" />
+    <public type="drawable" name="device_web_edge" id="NUM" />
+    <public type="drawable" name="device_web_firefox" id="NUM" />
+    <public type="drawable" name="device_web_opera" id="NUM" />
+    <public type="drawable" name="device_web_other" id="NUM" />
+    <public type="drawable" name="device_web_safari" id="NUM" />
     <public type="drawable" name="devices" id="NUM" />
     <public type="drawable" name="dice" id="NUM" />
     <public type="drawable" name="doc_big" id="NUM" />
@@ -415,6 +429,7 @@
     <public type="drawable" name="emoji_tabs_recent" id="NUM" />
     <public type="drawable" name="fab_highlight_dark" id="NUM" />
     <public type="drawable" name="fast_reply" id="NUM" />
+    <public type="drawable" name="fast_scroll_shadow" id="NUM" />
     <public type="drawable" name="field_carret_empty" id="NUM" />
     <public type="drawable" name="files_empty" id="NUM" />
     <public type="drawable" name="files_folder" id="NUM" />
@@ -619,6 +634,8 @@
     <public type="drawable" name="lock_open" id="NUM" />
     <public type="drawable" name="lock_round_shadow" id="NUM" />
     <public type="drawable" name="log_info" id="NUM" />
+    <public type="drawable" name="login_arrow1" id="NUM" />
+    <public type="drawable" name="login_phone1" id="NUM" />
     <public type="drawable" name="logo_avatar" id="NUM" />
     <public type="drawable" name="logo_middle" id="NUM" />
     <public type="drawable" name="map_pin" id="NUM" />
@@ -798,6 +815,7 @@
     <public type="drawable" name="msg_media" id="NUM" />
     <public type="drawable" name="msg_mention" id="NUM" />
     <public type="drawable" name="msg_message" id="NUM" />
+    <public type="drawable" name="msg_mini_qr" id="NUM" />
     <public type="drawable" name="msg_minvideo" id="NUM" />
     <public type="drawable" name="msg_more_0_2" id="NUM" />
     <public type="drawable" name="msg_more_0_5" id="NUM" />
@@ -851,6 +869,7 @@
     <public type="drawable" name="msg_screencast_off" id="NUM" />
     <public type="drawable" name="msg_search" id="NUM" />
     <public type="drawable" name="msg_seen" id="NUM" />
+    <public type="drawable" name="msg_select" id="NUM" />
     <public type="drawable" name="msg_sendfile" id="NUM" />
     <public type="drawable" name="msg_sendphoto" id="NUM" />
     <public type="drawable" name="msg_share" id="NUM" />
@@ -1488,6 +1507,7 @@
     <public type="mipmap" name="icon_foreground" id="NUM" />
     <public type="mipmap" name="icon_foreground_round" id="NUM" />
     <public type="mipmap" name="icon_foreground_sa" id="NUM" />
+    <public type="raw" name="android_30" id="NUM" />
     <public type="raw" name="attach_contact" id="NUM" />
     <public type="raw" name="attach_file" id="NUM" />
     <public type="raw" name="attach_gallery" id="NUM" />
@@ -1496,6 +1516,7 @@
     <public type="raw" name="attach_poll" id="NUM" />
     <public type="raw" name="audio_speed" id="NUM" />
     <public type="raw" name="audio_stop_speed" id="NUM" />
+    <public type="raw" name="calls_log" id="NUM" />
     <public type="raw" name="camera" id="NUM" />
     <public type="raw" name="camera_flip" id="NUM" />
     <public type="raw" name="camera_outline" id="NUM" />
@@ -1510,6 +1531,7 @@
     <public type="raw" name="chats_swipearchive" id="NUM" />
     <public type="raw" name="chats_unarchive" id="NUM" />
     <public type="raw" name="chats_unhide" id="NUM" />
+    <public type="raw" name="chrome_30" id="NUM" />
     <public type="raw" name="contact_check" id="NUM" />
     <public type="raw" name="contacts_sync_off" id="NUM" />
     <public type="raw" name="contacts_sync_on" id="NUM" />
@@ -1519,12 +1541,14 @@
     <public type="raw" name="default_pattern" id="NUM" />
     <public type="raw" name="diceloop" id="NUM" />
     <public type="raw" name="download_arrow" id="NUM" />
+    <public type="raw" name="edge_30" id="NUM" />
     <public type="raw" name="error" id="NUM" />
     <public type="raw" name="filter_new" id="NUM" />
     <public type="raw" name="filter_no_chats" id="NUM" />
     <public type="raw" name="filters" id="NUM" />
     <public type="raw" name="fire_off" id="NUM" />
     <public type="raw" name="fire_on" id="NUM" />
+    <public type="raw" name="firefox_30" id="NUM" />
     <public type="raw" name="folder_in" id="NUM" />
     <public type="raw" name="folder_out" id="NUM" />
     <public type="raw" name="forward" id="NUM" />
@@ -1549,7 +1573,12 @@
     <public type="raw" name="import_loop" id="NUM" />
     <public type="raw" name="import_progress" id="NUM" />
     <public type="raw" name="imported" id="NUM" />
+    <public type="raw" name="incoming_calls" id="NUM" />
+    <public type="raw" name="ipad_30" id="NUM" />
+    <public type="raw" name="iphone_30" id="NUM" />
     <public type="raw" name="linkbroken" id="NUM" />
+    <public type="raw" name="linux_30" id="NUM" />
+    <public type="raw" name="mac_30" id="NUM" />
     <public type="raw" name="mapstyle_night" id="NUM" />
     <public type="raw" name="passcode_lock_close" id="NUM" />
     <public type="raw" name="payment_success" id="NUM" />
@@ -1567,6 +1596,7 @@
     <public type="raw" name="record_video_l" id="NUM" />
     <public type="raw" name="record_video_p" id="NUM" />
     <public type="raw" name="report_police" id="NUM" />
+    <public type="raw" name="safari_30" id="NUM" />
     <public type="raw" name="saved_messages" id="NUM" />
     <public type="raw" name="shared_link_enter" id="NUM" />
     <public type="raw" name="silent_mute" id="NUM" />
@@ -1600,6 +1630,7 @@
     <public type="raw" name="tsv_setup_monkey_idle2" id="NUM" />
     <public type="raw" name="tsv_setup_monkey_peek" id="NUM" />
     <public type="raw" name="tsv_setup_monkey_tracking" id="NUM" />
+    <public type="raw" name="ubuntu_30" id="NUM" />
     <public type="raw" name="utyan_call" id="NUM" />
     <public type="raw" name="utyan_gigagroup" id="NUM" />
     <public type="raw" name="utyan_private" id="NUM" />
@@ -1630,6 +1661,7 @@
     <public type="raw" name="wallet_congrats" id="NUM" />
     <public type="raw" name="wallet_perfect" id="NUM" />
     <public type="raw" name="wallet_science" id="NUM" />
+    <public type="raw" name="windows_30" id="NUM" />
     <public type="raw" name="write_contacts_fab_icon" id="NUM" />
     <public type="raw" name="write_contacts_fab_icon_reverse" id="NUM" />
     <public type="string" name="ALongTimeAgo" id="NUM" />
@@ -1776,6 +1808,10 @@
     <public type="string" name="AccSwitchToFullscreen" id="NUM" />
     <public type="string" name="Accept" id="NUM" />
     <public type="string" name="AcceptCall" id="NUM" />
+    <public type="string" name="AcceptCalls" id="NUM" />
+    <public type="string" name="AcceptCallsChatsDescription" id="NUM" />
+    <public type="string" name="AcceptSecretChats" id="NUM" />
+    <public type="string" name="AcceptSecretChatsDescription" id="NUM" />
     <public type="string" name="AccessError" id="NUM" />
     <public type="string" name="Account" id="NUM" />
     <public type="string" name="AccountAlreadyLoggedIn" id="NUM" />
@@ -1819,6 +1855,10 @@
     <public type="string" name="ActionDeletedInviteLinkClickable" id="NUM" />
     <public type="string" name="ActionEditedInviteLinkClickable" id="NUM" />
     <public type="string" name="ActionEditedInviteLinkToSameClickable" id="NUM" />
+    <public type="string" name="ActionForwardsEnabledChannel" id="NUM" />
+    <public type="string" name="ActionForwardsEnabledGroup" id="NUM" />
+    <public type="string" name="ActionForwardsRestrictedChannel" id="NUM" />
+    <public type="string" name="ActionForwardsRestrictedGroup" id="NUM" />
     <public type="string" name="ActionGroupCallEndedBy" id="NUM" />
     <public type="string" name="ActionGroupCallEndedByYou" id="NUM" />
     <public type="string" name="ActionGroupCallInvited" id="NUM" />
@@ -1945,6 +1985,7 @@
     <public type="string" name="AllMedia" id="NUM" />
     <public type="string" name="AllPhotos" id="NUM" />
     <public type="string" name="AllVideos" id="NUM" />
+    <public type="string" name="Allow" id="NUM" />
     <public type="string" name="AllowCustomQuickReply" id="NUM" />
     <public type="string" name="AllowFillNumber" id="NUM" />
     <public type="string" name="AllowReadCall" id="NUM" />
@@ -1995,6 +2036,7 @@
     <public type="string" name="AppUpdateRemindMeLater" id="NUM" />
     <public type="string" name="AppUpdateVersionAndSize" id="NUM" />
     <public type="string" name="Appearance" id="NUM" />
+    <public type="string" name="Application" id="NUM" />
     <public type="string" name="ApplyLocalizationFile" id="NUM" />
     <public type="string" name="ApplyTheme" id="NUM" />
     <public type="string" name="ApplyThemeFile" id="NUM" />
@@ -2132,11 +2174,14 @@
     <public type="string" name="AuthAnotherClientInfo1" id="NUM" />
     <public type="string" name="AuthAnotherClientInfo2" id="NUM" />
     <public type="string" name="AuthAnotherClientInfo3" id="NUM" />
+    <public type="string" name="AuthAnotherClientInfo4" id="NUM" />
+    <public type="string" name="AuthAnotherClientInfo5" id="NUM" />
     <public type="string" name="AuthAnotherClientNotFound" id="NUM" />
     <public type="string" name="AuthAnotherClientOk" id="NUM" />
     <public type="string" name="AuthAnotherClientScan" id="NUM" />
     <public type="string" name="AuthAnotherClientTokenError" id="NUM" />
     <public type="string" name="AuthAnotherClientUrl" id="NUM" />
+    <public type="string" name="AuthAnotherWebClientUrl" id="NUM" />
     <public type="string" name="AutoDelete1Month" id="NUM" />
     <public type="string" name="AutoDelete24Hours" id="NUM" />
     <public type="string" name="AutoDelete7Days" id="NUM" />
@@ -2663,6 +2708,8 @@
     <public type="string" name="ClearFewChatsTitle" id="NUM" />
     <public type="string" name="ClearHistory" id="NUM" />
     <public type="string" name="ClearHistoryCache" id="NUM" />
+    <public type="string" name="ClearHistoryForTheseDays" id="NUM" />
+    <public type="string" name="ClearHistoryForThisDay" id="NUM" />
     <public type="string" name="ClearHistoryOptionAlso" id="NUM" />
     <public type="string" name="ClearLocalDatabase" id="NUM" />
     <public type="string" name="ClearMediaCache" id="NUM" />
@@ -2890,6 +2937,12 @@
     <public type="string" name="DeleteChatBackgroundsAlert" id="NUM" />
     <public type="string" name="DeleteChatUser" id="NUM" />
     <public type="string" name="DeleteContact" id="NUM" />
+    <public type="string" name="DeleteDays_few" id="NUM" />
+    <public type="string" name="DeleteDays_many" id="NUM" />
+    <public type="string" name="DeleteDays_one" id="NUM" />
+    <public type="string" name="DeleteDays_other" id="NUM" />
+    <public type="string" name="DeleteDays_two" id="NUM" />
+    <public type="string" name="DeleteDays_zero" id="NUM" />
     <public type="string" name="DeleteFewChatsTitle" id="NUM" />
     <public type="string" name="DeleteForAll" id="NUM" />
     <public type="string" name="DeleteForUser" id="NUM" />
@@ -2897,6 +2950,7 @@
     <public type="string" name="DeleteFromRecent" id="NUM" />
     <public type="string" name="DeleteGif" id="NUM" />
     <public type="string" name="DeleteGroupForAll" id="NUM" />
+    <public type="string" name="DeleteHistoryByDaysMessage" id="NUM" />
     <public type="string" name="DeleteLink" id="NUM" />
     <public type="string" name="DeleteLinkHelp" id="NUM" />
     <public type="string" name="DeleteLocalizationText" id="NUM" />
@@ -2986,6 +3040,7 @@
     <public type="string" name="DoNoSetTheme" id="NUM" />
     <public type="string" name="DocumentsTitle" id="NUM" />
     <public type="string" name="Done" id="NUM" />
+    <public type="string" name="DontAskAgain" id="NUM" />
     <public type="string" name="Draft" id="NUM" />
     <public type="string" name="Edit" id="NUM" />
     <public type="string" name="EditAdmin" id="NUM" />
@@ -3434,6 +3489,8 @@
     <public type="string" name="ForwardedVideo_zero" id="NUM" />
     <public type="string" name="ForwardingFromNameAndMessage" id="NUM" />
     <public type="string" name="ForwardingFromNames" id="NUM" />
+    <public type="string" name="ForwardsRestrictedInfoChannel" id="NUM" />
+    <public type="string" name="ForwardsRestrictedInfoGroup" id="NUM" />
     <public type="string" name="FreeOfTotal" id="NUM" />
     <public type="string" name="From" id="NUM" />
     <public type="string" name="FromCamera" id="NUM" />
@@ -3575,6 +3632,7 @@
     <public type="string" name="Hours_zero" id="NUM" />
     <public type="string" name="Hybrid" id="NUM" />
     <public type="string" name="IVInteractionsChartTitle" id="NUM" />
+    <public type="string" name="IfInactiveFor" id="NUM" />
     <public type="string" name="ImagesTab2" id="NUM" />
     <public type="string" name="ImporImportingService" id="NUM" />
     <public type="string" name="ImporImportingStickersService" id="NUM" />
@@ -3687,6 +3745,7 @@
     <public type="string" name="Invited" id="NUM" />
     <public type="string" name="InvoiceCantForwardSecretChat" id="NUM" />
     <public type="string" name="InvoiceCantSendSecretChat" id="NUM" />
+    <public type="string" name="IpAddress" id="NUM" />
     <public type="string" name="IsChoosingSticker" id="NUM" />
     <public type="string" name="IsEnjoyngAnimations" id="NUM" />
     <public type="string" name="IsRecordingAudio" id="NUM" />
@@ -3785,6 +3844,7 @@
     <public type="string" name="LinkCopiedPrivate" id="NUM" />
     <public type="string" name="LinkCopiedPrivateInfo" id="NUM" />
     <public type="string" name="LinkCreatedeBy" id="NUM" />
+    <public type="string" name="LinkDesktopDevice" id="NUM" />
     <public type="string" name="LinkExpiresIn" id="NUM" />
     <public type="string" name="LinkExpiresInTime" id="NUM" />
     <public type="string" name="LinkHashExpired" id="NUM" />
@@ -3837,6 +3897,7 @@
     <public type="string" name="LocalPhotoCache" id="NUM" />
     <public type="string" name="LocalVideoCache" id="NUM" />
     <public type="string" name="LocatedChannelsTooMuch" id="NUM" />
+    <public type="string" name="Location" id="NUM" />
     <public type="string" name="LocationNotifiation" id="NUM" />
     <public type="string" name="LocationNotifiationButtonGroup" id="NUM" />
     <public type="string" name="LocationNotifiationButtonUser" id="NUM" />
@@ -3868,6 +3929,8 @@
     <public type="string" name="MakeMyselfVisible" id="NUM" />
     <public type="string" name="MakeMyselfVisibleInfo" id="NUM" />
     <public type="string" name="MakeMyselfVisibleTitle" id="NUM" />
+    <public type="string" name="ManageAllFilesRational" id="NUM" />
+    <public type="string" name="ManageAllFilesRational2" id="NUM" />
     <public type="string" name="ManageChannel" id="NUM" />
     <public type="string" name="ManageChannelMenu" id="NUM" />
     <public type="string" name="ManageGroup" id="NUM" />
@@ -4014,6 +4077,12 @@
     <public type="string" name="MessagesDeletedHint_other" id="NUM" />
     <public type="string" name="MessagesDeletedHint_two" id="NUM" />
     <public type="string" name="MessagesDeletedHint_zero" id="NUM" />
+    <public type="string" name="MessagesDeletedUndo_few" id="NUM" />
+    <public type="string" name="MessagesDeletedUndo_many" id="NUM" />
+    <public type="string" name="MessagesDeletedUndo_one" id="NUM" />
+    <public type="string" name="MessagesDeletedUndo_other" id="NUM" />
+    <public type="string" name="MessagesDeletedUndo_two" id="NUM" />
+    <public type="string" name="MessagesDeletedUndo_zero" id="NUM" />
     <public type="string" name="MessagesOverview" id="NUM" />
     <public type="string" name="MessagesSettings" id="NUM" />
     <public type="string" name="MessagesUnpinned_few" id="NUM" />
@@ -4032,6 +4101,7 @@
     <public type="string" name="Meters_two" id="NUM" />
     <public type="string" name="Meters_zero" id="NUM" />
     <public type="string" name="Mi" id="NUM" />
+    <public type="string" name="MigrateOldFolder" id="NUM" />
     <public type="string" name="MilesAway" id="NUM" />
     <public type="string" name="MilesFromYou" id="NUM" />
     <public type="string" name="MilesShort" id="NUM" />
@@ -4053,6 +4123,9 @@
     <public type="string" name="Minutes_other" id="NUM" />
     <public type="string" name="Minutes_two" id="NUM" />
     <public type="string" name="Minutes_zero" id="NUM" />
+    <public type="string" name="MissedCallDescriptionSubtitle" id="NUM" />
+    <public type="string" name="MissedCallDescriptionSubtitle2" id="NUM" />
+    <public type="string" name="MissedCallDescriptionTitle" id="NUM" />
     <public type="string" name="MobileHidden" id="NUM" />
     <public type="string" name="MobileHiddenExceptionInfo" id="NUM" />
     <public type="string" name="MobileVisibleInfo" id="NUM" />
@@ -4156,6 +4229,7 @@
     <public type="string" name="NoMemberRequests" id="NUM" />
     <public type="string" name="NoMemberRequestsDescription" id="NUM" />
     <public type="string" name="NoMessages" id="NUM" />
+    <public type="string" name="NoMessagesForThisDay" id="NUM" />
     <public type="string" name="NoMessagesGreetingsDescription" id="NUM" />
     <public type="string" name="NoOneJoined" id="NUM" />
     <public type="string" name="NoOneJoinedYet" id="NUM" />
@@ -5195,6 +5269,8 @@
     <public type="string" name="RestorePasswordResetPassword" id="NUM" />
     <public type="string" name="RestorePasswordResetPasswordOk" id="NUM" />
     <public type="string" name="RestorePasswordResetPasswordText" id="NUM" />
+    <public type="string" name="RestrictSavingContent" id="NUM" />
+    <public type="string" name="RestrictSavingContentInfo" id="NUM" />
     <public type="string" name="Restrictions_few" id="NUM" />
     <public type="string" name="Restrictions_many" id="NUM" />
     <public type="string" name="Restrictions_one" id="NUM" />
@@ -5230,6 +5306,7 @@
     <public type="string" name="SaveToMusic" id="NUM" />
     <public type="string" name="SavedMessages" id="NUM" />
     <public type="string" name="SavedMessagesInfo" id="NUM" />
+    <public type="string" name="SavingContentTitle" id="NUM" />
     <public type="string" name="ScamMessage" id="NUM" />
     <public type="string" name="Schedule" id="NUM" />
     <public type="string" name="ScheduleMessage" id="NUM" />
@@ -5311,10 +5388,13 @@
     <public type="string" name="SelectColorTitle" id="NUM" />
     <public type="string" name="SelectContact" id="NUM" />
     <public type="string" name="SelectContacts" id="NUM" />
+    <public type="string" name="SelectDays" id="NUM" />
+    <public type="string" name="SelectDaysTooltip" id="NUM" />
     <public type="string" name="SelectFile" id="NUM" />
     <public type="string" name="SelectFromGallery" id="NUM" />
     <public type="string" name="SelectImage" id="NUM" />
     <public type="string" name="SelectTheme" id="NUM" />
+    <public type="string" name="SelectThisDay" id="NUM" />
     <public type="string" name="SelectingContact" id="NUM" />
     <public type="string" name="SelectingLocation" id="NUM" />
     <public type="string" name="Send" id="NUM" />
@@ -5340,6 +5420,7 @@
     <public type="string" name="SendLiveLocationMenu" id="NUM" />
     <public type="string" name="SendLocation" id="NUM" />
     <public type="string" name="SendMessage" id="NUM" />
+    <public type="string" name="SendMessageAsTitle" id="NUM" />
     <public type="string" name="SendMessageLocation" id="NUM" />
     <public type="string" name="SendMessageRestricted" id="NUM" />
     <public type="string" name="SendMessageRestrictedForever" id="NUM" />
@@ -5371,6 +5452,7 @@
     <public type="string" name="September" id="NUM" />
     <public type="string" name="ServiceNotifications" id="NUM" />
     <public type="string" name="SessionsInfo" id="NUM" />
+    <public type="string" name="SessionsListInfo" id="NUM" />
     <public type="string" name="SessionsTitle" id="NUM" />
     <public type="string" name="Set" id="NUM" />
     <public type="string" name="SetAdditionalPassword" id="NUM" />
@@ -5404,6 +5486,7 @@
     <public type="string" name="SettingsNoResults" id="NUM" />
     <public type="string" name="SettingsRecent" id="NUM" />
     <public type="string" name="SettingsSearchFaq" id="NUM" />
+    <public type="string" name="SettingsSwitchToDayMode" id="NUM" />
     <public type="string" name="SettingsSwitchToNightMode" id="NUM" />
     <public type="string" name="Shadows" id="NUM" />
     <public type="string" name="ShareComment" id="NUM" />
@@ -5689,7 +5772,8 @@
     <public type="string" name="Terminate" id="NUM" />
     <public type="string" name="TerminateAllSessions" id="NUM" />
     <public type="string" name="TerminateAllWebSessions" id="NUM" />
-    <public type="string" name="TerminateSessionInfo" id="NUM" />
+    <public type="string" name="TerminateOldSessionHeader" id="NUM" />
+    <public type="string" name="TerminateSession" id="NUM" />
     <public type="string" name="TerminateSessionQuestion" id="NUM" />
     <public type="string" name="TerminateSessionText" id="NUM" />
     <public type="string" name="TerminateWebSessionInfo" id="NUM" />
@@ -5807,6 +5891,8 @@
     <public type="string" name="TypeMessage" id="NUM" />
     <public type="string" name="TypePrivate" id="NUM" />
     <public type="string" name="TypePrivateGroup" id="NUM" />
+    <public type="string" name="TypePrivateGroupRestrictedForwards" id="NUM" />
+    <public type="string" name="TypePrivateRestrictedForwards" id="NUM" />
     <public type="string" name="TypePublic" id="NUM" />
     <public type="string" name="TypePublicGroup" id="NUM" />
     <public type="string" name="TypeScheduleMessage" id="NUM" />
@@ -5861,6 +5947,7 @@
     <public type="string" name="UsbActive" id="NUM" />
     <public type="string" name="UseDifferentTheme" id="NUM" />
     <public type="string" name="UseDifferentThemeInfo" id="NUM" />
+    <public type="string" name="UseFileManger" id="NUM" />
     <public type="string" name="UseLessDataAlways" id="NUM" />
     <public type="string" name="UseLessDataNever" id="NUM" />
     <public type="string" name="UseLessDataOnMobile" id="NUM" />
@@ -6480,6 +6567,7 @@
     <public type="style" name="Theme.TMessages.TransparentWithAlerts" id="NUM" />
     <public type="style" name="TransparentDialog" id="NUM" />
     <public type="style" name="TransparentDialog2" id="NUM" />
+    <public type="style" name="TransparentDialogNoAnimation" id="NUM" />
     <public type="style" name="WalletFragmentDefaultButtonTextAppearance" id="NUM" />
     <public type="style" name="WalletFragmentDefaultDetailsHeaderTextAppearance" id="NUM" />
     <public type="style" name="WalletFragmentDefaultDetailsTextAppearance" id="NUM" />

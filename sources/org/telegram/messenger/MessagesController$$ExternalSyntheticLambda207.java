@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.Comparator;
+import org.telegram.messenger.MessagesController;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda207 implements RequestDelegate {
-    public final /* synthetic */ MessagesController f$0;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda207 implements Comparator {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda207 INSTANCE = new MessagesController$$ExternalSyntheticLambda207();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda207(MessagesController messagesController) {
-        this.f$0 = messagesController;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda207() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$didReceivedNotification$19(tLObject, tLRPC$TL_error);
+    public final int compare(Object obj, Object obj2) {
+        return MessagesController.lambda$processLoadedDialogFilters$7((MessagesController.DialogFilter) obj, (MessagesController.DialogFilter) obj2);
     }
 }

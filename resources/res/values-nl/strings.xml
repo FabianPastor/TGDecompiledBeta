@@ -3782,7 +3782,6 @@
     <string name="Terminate">Beëindigen</string>
     <string name="TerminateAllSessions">Beëindig alle andere sessies</string>
     <string name="TerminateAllWebSessions">Verbinding met alle websites verbreken</string>
-    <string name="TerminateSessionInfo">Tik op een sessie om deze te beëindigen.</string>
     <string name="TerminateSessionQuestion">Deze sessie beëindigen?</string>
     <string name="TerminateSessionText">Deze sessie echt beëindigen?</string>
     <string name="TerminateWebSessionInfo">Tik om de verbinding met je Telegram-account te verbreken.</string>

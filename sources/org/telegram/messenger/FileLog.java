@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Locale;
 import org.telegram.messenger.time.FastDateFormat;
+import org.telegram.messenger.video.MediaCodecVideoConvertor;
 
 public class FileLog {
     private static volatile FileLog Instance = null;
@@ -153,7 +154,14 @@ public class FileLog {
     }
 
     public static void e(Throwable th) {
+        e(th, true);
+    }
+
+    public static void e(Throwable th, boolean z) {
         if (BuildVars.LOGS_ENABLED) {
+            if (BuildVars.DEBUG_VERSION && needSent(th)) {
+                AndroidUtilities.appCenterLog(th);
+            }
             ensureInitied();
             th.printStackTrace();
             if (getInstance().streamWriter != null) {
@@ -178,6 +186,10 @@ public class FileLog {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static boolean needSent(Throwable th) {
+        return !(th instanceof InterruptedException) && !(th instanceof MediaCodecVideoConvertor.ConversionCanceledException);
     }
 
     public static void d(String str) {

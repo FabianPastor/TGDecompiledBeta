@@ -257,7 +257,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r0 = r20
             r1 = r21
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r3 = 2131165470(0x7var_e, float:1.7945158E38)
+            r3 = 2131165485(0x7var_d, float:1.7945188E38)
             r2.setBackButtonImage(r3)
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
@@ -271,7 +271,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.<init>(r1)
             r0.emptyView = r3
             java.lang.String r4 = "NoResult"
-            r5 = 2131626483(0x7f0e09f3, float:1.8880203E38)
+            r5 = 2131626525(0x7f0e0a1d, float:1.8880289E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r3.setText(r4)
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.emptyView
@@ -287,7 +287,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r0.imageView = r3
             r3.setAutoRepeat(r5)
             org.telegram.ui.Components.RLottieImageView r3 = r0.imageView
-            r6 = 2131558487(0x7f0d0057, float:1.8742291E38)
+            r6 = 2131558498(0x7f0d0062, float:1.8742314E38)
             r7 = 120(0x78, float:1.68E-43)
             r3.setAnimation(r6, r7, r7)
             org.telegram.ui.Components.RLottieImageView r3 = r0.imageView
@@ -304,7 +304,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.setTextColor(r7)
             r3.setTag(r6)
             java.lang.String r7 = "LoadingStats"
-            r8 = 2131626131(0x7f0e0893, float:1.887949E38)
+            r8 = 2131626159(0x7f0e08af, float:1.8879546E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)
             r3.setText(r7)
             r3.setGravity(r5)
@@ -317,7 +317,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r7.setTextColor(r9)
             r7.setTag(r8)
             java.lang.String r9 = "LoadingStatsDescription"
-            r10 = 2131626132(0x7f0e0894, float:1.8879492E38)
+            r10 = 2131626160(0x7f0e08b0, float:1.8879548E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r7.setText(r9)
             r7.setGravity(r5)
@@ -1031,7 +1031,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 org.telegram.ui.MessageStatisticActivity r0 = org.telegram.ui.MessageStatisticActivity.this
                 int r0 = r0.overviewHeaderRow
                 if (r10 != r0) goto L_0x0053
-                r10 = 2131627865(0x7f0e0var_, float:1.8883006E38)
+                r10 = 2131627916(0x7f0e0f8c, float:1.888311E38)
                 java.lang.Object[] r0 = new java.lang.Object[r2]
                 java.lang.String r1 = "StatisticOverview"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.formatString(r1, r10, r0)
@@ -1047,7 +1047,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             L_0x0064:
                 android.view.View r9 = r9.itemView
                 android.content.Context r10 = r8.mContext
-                r0 = 2131165451(0x7var_b, float:1.794512E38)
+                r0 = 2131165466(0x7var_a, float:1.794515E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r10, (int) r0, (java.lang.String) r1)
                 r9.setBackgroundDrawable(r10)

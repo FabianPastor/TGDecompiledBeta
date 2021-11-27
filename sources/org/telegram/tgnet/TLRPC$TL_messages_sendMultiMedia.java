@@ -11,6 +11,7 @@ public class TLRPC$TL_messages_sendMultiMedia extends TLObject {
     public TLRPC$InputPeer peer;
     public int reply_to_msg_id;
     public int schedule_date;
+    public TLRPC$InputPeer send_as;
     public boolean silent;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -38,6 +39,9 @@ public class TLRPC$TL_messages_sendMultiMedia extends TLObject {
         }
         if ((this.flags & 1024) != 0) {
             abstractSerializedData.writeInt32(this.schedule_date);
+        }
+        if ((this.flags & 8192) != 0) {
+            this.send_as.serializeToStream(abstractSerializedData);
         }
     }
 }

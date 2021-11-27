@@ -1,14 +1,13 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.MediaController;
-
 public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda35 implements Runnable {
-    public static final /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda35 INSTANCE = new ChatActivityEnterView$$ExternalSyntheticLambda35();
+    public final /* synthetic */ ChatActivityEnterView f$0;
 
-    private /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda35() {
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda35(ChatActivityEnterView chatActivityEnterView) {
+        this.f$0 = chatActivityEnterView;
     }
 
     public final void run() {
-        MediaController.getInstance().stopRecording(0, false, 0);
+        this.f$0.updateSlowModeText();
     }
 }

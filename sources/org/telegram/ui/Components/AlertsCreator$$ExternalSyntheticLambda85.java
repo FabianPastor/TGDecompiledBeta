@@ -1,20 +1,19 @@
 package org.telegram.ui.Components;
 
-import java.util.Calendar;
-import org.telegram.ui.Components.NumberPicker;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda85 implements NumberPicker.Formatter {
-    public final /* synthetic */ long f$0;
-    public final /* synthetic */ Calendar f$1;
-    public final /* synthetic */ int f$2;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda85 implements ActionBarMenuItem.ActionBarMenuItemDelegate {
+    public final /* synthetic */ AlertsCreator.ScheduleDatePickerDelegate f$0;
+    public final /* synthetic */ BottomSheet.Builder f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda85(long j, Calendar calendar, int i) {
-        this.f$0 = j;
-        this.f$1 = calendar;
-        this.f$2 = i;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda85(AlertsCreator.ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder) {
+        this.f$0 = scheduleDatePickerDelegate;
+        this.f$1 = builder;
     }
 
-    public final String format(int i) {
-        return AlertsCreator.lambda$createScheduleDatePickerDialog$40(this.f$0, this.f$1, this.f$2, i);
+    public final void onItemClick(int i) {
+        AlertsCreator.lambda$createScheduleDatePickerDialog$41(this.f$0, this.f$1, i);
     }
 }

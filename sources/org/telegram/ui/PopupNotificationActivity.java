@@ -40,6 +40,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$KeyboardButton;
 import org.telegram.tgnet.TLRPC$ReplyMarkup;
+import org.telegram.tgnet.TLRPC$TL_channels_sendAsPeers;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonCallback;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonRow;
 import org.telegram.tgnet.TLRPC$User;
@@ -362,12 +363,24 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             public void didPressAttachButton() {
             }
 
+            public /* synthetic */ int getContentViewHeight() {
+                return ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$getContentViewHeight(this);
+            }
+
+            public /* synthetic */ TLRPC$TL_channels_sendAsPeers getSendAsPeers() {
+                return ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$getSendAsPeers(this);
+            }
+
             public /* synthetic */ boolean hasForwardingMessages() {
                 return ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$hasForwardingMessages(this);
             }
 
             public /* synthetic */ boolean hasScheduledMessages() {
                 return ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$hasScheduledMessages(this);
+            }
+
+            public /* synthetic */ int measureKeyboardHeight() {
+                return ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$measureKeyboardHeight(this);
             }
 
             public void needChangeVideoPreviewState(int i, float f) {

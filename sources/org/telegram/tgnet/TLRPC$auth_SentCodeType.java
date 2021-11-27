@@ -3,10 +3,14 @@ package org.telegram.tgnet;
 public abstract class TLRPC$auth_SentCodeType extends TLObject {
     public int length;
     public String pattern;
+    public String prefix;
 
     public static TLRPC$auth_SentCodeType TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$auth_SentCodeType tLRPC$auth_SentCodeType;
         switch (i) {
+            case -2113903484:
+                tLRPC$auth_SentCodeType = new TLRPC$TL_auth_sentCodeTypeMissedCall();
+                break;
             case -1425815847:
                 tLRPC$auth_SentCodeType = new TLRPC$TL_auth_sentCodeTypeFlashCall();
                 break;

@@ -160,7 +160,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 int r0 = r0.reply1Row
                 r2 = 0
                 if (r9 != r0) goto L_0x0030
-                r0 = 2131627339(0x7f0e0d4b, float:1.888194E38)
+                r0 = 2131627381(0x7f0e0d75, float:1.8882025E38)
                 java.lang.String r2 = "QuickReplyDefault1"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg1"
@@ -173,7 +173,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
                 int r0 = r0.reply2Row
                 if (r9 != r0) goto L_0x0044
-                r0 = 2131627340(0x7f0e0d4c, float:1.8881942E38)
+                r0 = 2131627382(0x7f0e0d76, float:1.8882027E38)
                 java.lang.String r2 = "QuickReplyDefault2"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg2"
@@ -182,7 +182,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
                 int r0 = r0.reply3Row
                 if (r9 != r0) goto L_0x0058
-                r0 = 2131627341(0x7f0e0d4d, float:1.8881944E38)
+                r0 = 2131627383(0x7f0e0d77, float:1.8882029E38)
                 java.lang.String r2 = "QuickReplyDefault3"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg3"
@@ -191,7 +191,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
                 int r0 = r0.reply4Row
                 if (r9 != r0) goto L_0x006c
-                r0 = 2131627342(0x7f0e0d4e, float:1.8881946E38)
+                r0 = 2131627384(0x7f0e0d78, float:1.888203E38)
                 java.lang.String r2 = "QuickReplyDefault4"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg4"
@@ -216,7 +216,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
             L_0x008b:
                 android.view.View r8 = r8.itemView
                 org.telegram.ui.Cells.TextCheckCell r8 = (org.telegram.ui.Cells.TextCheckCell) r8
-                r9 = 2131624251(0x7f0e013b, float:1.8875676E38)
+                r9 = 2131624260(0x7f0e0144, float:1.8875695E38)
                 java.lang.String r0 = "AllowCustomQuickReply"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
@@ -234,11 +234,11 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 android.view.View r8 = r8.itemView
                 org.telegram.ui.Cells.TextInfoPrivacyCell r8 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r8
                 android.content.Context r9 = r7.mContext
-                r0 = 2131165451(0x7var_b, float:1.794512E38)
+                r0 = 2131165466(0x7var_a, float:1.794515E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r9, (int) r0, (java.lang.String) r1)
                 r8.setBackgroundDrawable(r9)
-                r9 = 2131628551(0x7f0e1207, float:1.8884398E38)
+                r9 = 2131628607(0x7f0e123f, float:1.8884511E38)
                 java.lang.String r0 = "VoipQuickRepliesExplain"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
                 r8.setText(r9)

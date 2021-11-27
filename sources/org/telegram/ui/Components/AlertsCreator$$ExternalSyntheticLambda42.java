@@ -1,19 +1,19 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
 import android.view.View;
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.Components.AlertsCreator;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda42 implements View.OnClickListener {
-    public final /* synthetic */ AlertDialog.Builder f$0;
-    public final /* synthetic */ DialogInterface.OnClickListener f$1;
+    public final /* synthetic */ ActionBarMenuItem f$0;
+    public final /* synthetic */ AlertsCreator.ScheduleDatePickerColors f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda42(AlertDialog.Builder builder, DialogInterface.OnClickListener onClickListener) {
-        this.f$0 = builder;
-        this.f$1 = onClickListener;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda42(ActionBarMenuItem actionBarMenuItem, AlertsCreator.ScheduleDatePickerColors scheduleDatePickerColors) {
+        this.f$0 = actionBarMenuItem;
+        this.f$1 = scheduleDatePickerColors;
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createSingleChoiceDialog$81(this.f$0, this.f$1, view);
+        AlertsCreator.lambda$createScheduleDatePickerDialog$40(this.f$0, this.f$1, view);
     }
 }

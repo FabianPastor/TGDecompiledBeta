@@ -201,7 +201,7 @@ public class PatternCell extends BackupImageView implements DownloadController.F
                 this.gradientShader = null;
                 MotionBackgroundDrawable motionBackgroundDrawable = this.backgroundDrawable;
                 if (motionBackgroundDrawable != null) {
-                    motionBackgroundDrawable.setColors(backgroundColor, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientColor3, false);
+                    motionBackgroundDrawable.setColors(backgroundColor, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientColor3, 0, false);
                 } else {
                     MotionBackgroundDrawable motionBackgroundDrawable2 = new MotionBackgroundDrawable(backgroundColor, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientColor3, true);
                     this.backgroundDrawable = motionBackgroundDrawable2;

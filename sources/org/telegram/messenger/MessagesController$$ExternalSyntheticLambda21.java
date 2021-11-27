@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda21
     }
 
     public final void run() {
-        this.f$0.lambda$registerForPush$236();
+        this.f$0.lambda$hidePromoDialog$99();
     }
 }

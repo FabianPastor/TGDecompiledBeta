@@ -19,11 +19,13 @@ public class TextCheckBoxCell extends FrameLayout {
     private TextView textView;
 
     public TextCheckBoxCell(Context context) {
-        this(context, false);
+        this(context, false, false);
     }
 
-    public TextCheckBoxCell(Context context, boolean z) {
+    public TextCheckBoxCell(Context context, boolean z, boolean z2) {
         super(context);
+        boolean z3 = LocaleController.isRTL;
+        z3 = z2 ? !z3 : z3;
         TextView textView2 = new TextView(context);
         this.textView = textView2;
         textView2.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
@@ -34,16 +36,14 @@ public class TextCheckBoxCell extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
-        TextView textView3 = this.textView;
-        boolean z2 = LocaleController.isRTL;
-        addView(textView3, LayoutHelper.createFrame(-1, -1.0f, (z2 ? 5 : 3) | 48, z2 ? 66.0f : 21.0f, 0.0f, z2 ? 21.0f : 66.0f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (z3 ? 5 : 3) | 48, z3 ? 66.0f : 21.0f, 0.0f, z3 ? 21.0f : 66.0f, 0.0f));
         CheckBoxSquare checkBoxSquare = new CheckBoxSquare(context, z);
         this.checkBox = checkBoxSquare;
         checkBoxSquare.setDuplicateParentStateEnabled(false);
         this.checkBox.setFocusable(false);
         this.checkBox.setFocusableInTouchMode(false);
         this.checkBox.setClickable(false);
-        addView(this.checkBox, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 3 : i) | 16, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(this.checkBox, LayoutHelper.createFrame(18, 18.0f, (z3 ? 3 : i) | 16, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
     public void invalidate() {

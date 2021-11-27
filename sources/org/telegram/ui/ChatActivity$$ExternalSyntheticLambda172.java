@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Delegates.ChatActivityMemberRequestsDelegate;
+import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda172 implements ChatActivityMemberRequestsDelegate.Callback {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda172 implements RecyclerAnimationScrollHelper.ScrollListener {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda172(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void onEnterOffsetChanged() {
-        this.f$0.invalidateChatListViewTopPadding();
+    public final void onScroll() {
+        this.f$0.invalidateMessagesVisiblePart();
     }
 }

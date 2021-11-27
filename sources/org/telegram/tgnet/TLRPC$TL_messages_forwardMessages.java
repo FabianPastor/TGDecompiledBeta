@@ -12,6 +12,7 @@ public class TLRPC$TL_messages_forwardMessages extends TLObject {
     public ArrayList<Integer> id = new ArrayList<>();
     public ArrayList<Long> random_id = new ArrayList<>();
     public int schedule_date;
+    public TLRPC$InputPeer send_as;
     public boolean silent;
     public TLRPC$InputPeer to_peer;
     public boolean with_my_score;
@@ -49,6 +50,9 @@ public class TLRPC$TL_messages_forwardMessages extends TLObject {
         this.to_peer.serializeToStream(abstractSerializedData);
         if ((this.flags & 1024) != 0) {
             abstractSerializedData.writeInt32(this.schedule_date);
+        }
+        if ((this.flags & 8192) != 0) {
+            this.send_as.serializeToStream(abstractSerializedData);
         }
     }
 }

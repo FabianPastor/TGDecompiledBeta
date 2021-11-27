@@ -3782,7 +3782,6 @@
     <string name="Terminate">إنهاء</string>
     <string name="TerminateAllSessions">إنهاء جميع الجلسات الأخرى</string>
     <string name="TerminateAllWebSessions">فك الارتباط مع كل المواقع</string>
-    <string name="TerminateSessionInfo">اضغط على أي جلسة لإنهائها.</string>
     <string name="TerminateSessionQuestion">إنهاء هذه الجلسة؟</string>
     <string name="TerminateSessionText">هل ترغب حقًا في إنهاء هذه الجلسة؟</string>
     <string name="TerminateWebSessionInfo">اضغط لفك الارتباط من حسابك في تيليجرام.</string>

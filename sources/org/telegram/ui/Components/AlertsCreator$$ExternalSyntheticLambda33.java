@@ -1,17 +1,14 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import android.widget.EditText;
-import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda33 implements DialogInterface.OnDismissListener {
-    public final /* synthetic */ EditText f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda33 implements DialogInterface.OnClickListener {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda33 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda33();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda33(EditText editText) {
-        this.f$0 = editText;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda33() {
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        AndroidUtilities.hideKeyboard(this.f$0);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        AlertsCreator.lambda$createThemeCreateDialog$96(dialogInterface, i);
     }
 }

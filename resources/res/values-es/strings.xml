@@ -3782,7 +3782,6 @@
     <string name="Terminate">Cerrar</string>
     <string name="TerminateAllSessions">Cerrar todas las demás sesiones</string>
     <string name="TerminateAllWebSessions">Desconectar todos los sitios web</string>
-    <string name="TerminateSessionInfo">Toca en una sesión para cerrarla.</string>
     <string name="TerminateSessionQuestion">¿Cerrar esta sesión?</string>
     <string name="TerminateSessionText">¿Quieres cerrar esta sesión?</string>
     <string name="TerminateWebSessionInfo">Toca para desconectar de tu cuenta de Telegram.</string>

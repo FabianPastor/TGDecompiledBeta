@@ -1,22 +1,14 @@
 package org.telegram.ui.Components;
 
-import java.util.ArrayList;
-import org.telegram.messenger.MessageObject;
-import org.telegram.tgnet.TLRPC$KeyboardButton;
-import org.telegram.ui.DialogsActivity;
+import org.telegram.messenger.MediaController;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda44 implements DialogsActivity.DialogsActivityDelegate {
-    public final /* synthetic */ ChatActivityEnterView f$0;
-    public final /* synthetic */ MessageObject f$1;
-    public final /* synthetic */ TLRPC$KeyboardButton f$2;
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda44 implements Runnable {
+    public static final /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda44 INSTANCE = new ChatActivityEnterView$$ExternalSyntheticLambda44();
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda44(ChatActivityEnterView chatActivityEnterView, MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton) {
-        this.f$0 = chatActivityEnterView;
-        this.f$1 = messageObject;
-        this.f$2 = tLRPC$KeyboardButton;
+    private /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda44() {
     }
 
-    public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-        this.f$0.lambda$didPressedBotButton$35(this.f$1, this.f$2, dialogsActivity, arrayList, charSequence, z);
+    public final void run() {
+        MediaController.getInstance().stopRecording(0, false, 0);
     }
 }

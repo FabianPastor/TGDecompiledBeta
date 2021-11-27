@@ -81,7 +81,7 @@ public final class Instance {
     static {
         List<String> list;
         if (Build.VERSION.SDK_INT >= 18) {
-            list = Arrays.asList(new String[]{"2.7.7", "2.4.4"});
+            list = Arrays.asList(new String[]{"3.0.0", "2.7.7", "2.4.4"});
         } else {
             list = Arrays.asList(new String[]{"2.4.4"});
         }
@@ -104,7 +104,7 @@ public final class Instance {
             }
         } catch (JSONException e) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("failed to parse tgvoip server config", e);
+                FileLog.e("failed to parse tgvoip server config", (Throwable) e);
             }
         }
     }

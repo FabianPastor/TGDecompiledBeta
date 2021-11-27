@@ -144,6 +144,10 @@
     <string name="AccSwitchToFullscreen">Switch to fullscreen</string>
     <string name="Accept">Accept</string>
     <string name="AcceptCall">Accept</string>
+    <string name="AcceptCalls">Accept Calls</string>
+    <string name="AcceptCallsChatsDescription">Use this device for Calls</string>
+    <string name="AcceptSecretChats">Accept Secret Chats</string>
+    <string name="AcceptSecretChatsDescription">Use this device for Secret Chats</string>
     <string name="AccessError">Access error</string>
     <string name="Account">Account</string>
     <string name="AccountAlreadyLoggedIn">This account is already logged in from this app.</string>
@@ -187,6 +191,10 @@
     <string name="ActionDeletedInviteLinkClickable">un1 deleted invite link un2</string>
     <string name="ActionEditedInviteLinkClickable">un1 edited invite link un2 to un3</string>
     <string name="ActionEditedInviteLinkToSameClickable">un1 edited invite link un2</string>
+    <string name="ActionForwardsEnabledChannel">un1 enabled forwards from this channel</string>
+    <string name="ActionForwardsEnabledGroup">un1 enabled forwards from this group</string>
+    <string name="ActionForwardsRestrictedChannel">un1 restricted forwards from this channel</string>
+    <string name="ActionForwardsRestrictedGroup">un1 restricted forwards from this group</string>
     <string name="ActionGroupCallEndedBy">un1 ended the voice chat (%s)</string>
     <string name="ActionGroupCallEndedByYou">You ended the voice chat (%s)</string>
     <string name="ActionGroupCallInvited">un1 invited un2 to the voice chat</string>
@@ -313,6 +321,7 @@
     <string name="AllMedia">All media</string>
     <string name="AllPhotos">All photos</string>
     <string name="AllVideos">All videos</string>
+    <string name="Allow">Allow</string>
     <string name="AllowCustomQuickReply">Allow Custom</string>
     <string name="AllowFillNumber">Please allow Telegram to receive calls so that we can automatically confirm your phone number.</string>
     <string name="AllowReadCall">Please allow Telegram to receive calls so that we can automatically enter your code for you.</string>
@@ -363,6 +372,7 @@
     <string name="AppUpdateRemindMeLater">Remind me later</string>
     <string name="AppUpdateVersionAndSize">Version %1$s • %2$s</string>
     <string name="Appearance">Appearance</string>
+    <string name="Application">Application</string>
     <string name="ApplyLocalizationFile">Apply localization file</string>
     <string name="ApplyTheme">APPLY</string>
     <string name="ApplyThemeFile">Apply theme file</string>
@@ -496,15 +506,18 @@
     <string name="AudiosSavedHint_zero">%1$d files saved to music</string>
     <string name="August">August</string>
     <string name="AuthAnotherClient">Scan QR Code</string>
-    <string name="AuthAnotherClientDownloadClientUrl">https://desktop.telegram.org/</string>
-    <string name="AuthAnotherClientInfo1">Download Telegram on your computer from *desktop.telegram.org*.</string>
+    <string name="AuthAnotherClientDownloadClientUrl">https://getdesktop.telegram.org/</string>
+    <string name="AuthAnotherClientInfo1">Download Telegram on your computer from *getdesktop.telegram.org*.</string>
     <string name="AuthAnotherClientInfo2">Run Telegram Desktop to get the QR code.</string>
     <string name="AuthAnotherClientInfo3">Scan the QR code to connect your account.</string>
+    <string name="AuthAnotherClientInfo4">Link *Telegram Desktop* or *Telegram Web* by scanning the QR.</string>
+    <string name="AuthAnotherClientInfo5">Go to *getdesktop.telegram.org* or *web.telegram.org*  to get the QR code </string>
     <string name="AuthAnotherClientNotFound">No auth token found</string>
     <string name="AuthAnotherClientOk">Auth successfull</string>
     <string name="AuthAnotherClientScan">Scan QR Code</string>
     <string name="AuthAnotherClientTokenError">Token invalid or already expired.</string>
     <string name="AuthAnotherClientUrl">This code can be used to allow someone to log in to your Telegram account.\10\10To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and scan the code.</string>
+    <string name="AuthAnotherWebClientUrl">https://web.telegram.org/</string>
     <string name="AutoDelete1Month">1 month</string>
     <string name="AutoDelete24Hours">24 hours</string>
     <string name="AutoDelete7Days">1 week</string>
@@ -1031,6 +1044,8 @@
     <string name="ClearFewChatsTitle">Clear %1$s</string>
     <string name="ClearHistory">Clear history</string>
     <string name="ClearHistoryCache">Delete from cache</string>
+    <string name="ClearHistoryForTheseDays">Clear History for these days</string>
+    <string name="ClearHistoryForThisDay">Clear History for this day</string>
     <string name="ClearHistoryOptionAlso">Also clear history for %1$s</string>
     <string name="ClearLocalDatabase">Clear Local Database</string>
     <string name="ClearMediaCache">Clear Cache</string>
@@ -1258,6 +1273,12 @@
     <string name="DeleteChatBackgroundsAlert">Are you sure you want to delete the selected backgrounds?</string>
     <string name="DeleteChatUser">Delete chat</string>
     <string name="DeleteContact">Delete contact</string>
+    <string name="DeleteDays_few">Delete %1$s days</string>
+    <string name="DeleteDays_many">Delete %1$s days</string>
+    <string name="DeleteDays_one">Delete %1$s day</string>
+    <string name="DeleteDays_other">Delete %1$s days</string>
+    <string name="DeleteDays_two">Delete %1$s days</string>
+    <string name="DeleteDays_zero">Delete %1$s days</string>
     <string name="DeleteFewChatsTitle">Delete %1$s</string>
     <string name="DeleteForAll">Delete for all members</string>
     <string name="DeleteForUser">Delete for %1$s</string>
@@ -1265,6 +1286,7 @@
     <string name="DeleteFromRecent">Delete from Recent</string>
     <string name="DeleteGif">Delete GIF?</string>
     <string name="DeleteGroupForAll">Delete the group for all members</string>
+    <string name="DeleteHistoryByDaysMessage">Are you sure you want to delete all messages for the selected days?</string>
     <string name="DeleteLink">Delete Link</string>
     <string name="DeleteLinkHelp">This will delete link.</string>
     <string name="DeleteLocalizationText">Are you sure you want to delete **%1$s** language pack?</string>
@@ -1354,6 +1376,7 @@
     <string name="DoNoSetTheme">Do No Set Theme</string>
     <string name="DocumentsTitle">Shared Files</string>
     <string name="Done">Done</string>
+    <string name="DontAskAgain">Don\'t ask again</string>
     <string name="Draft">Draft</string>
     <string name="Edit">Edit</string>
     <string name="EditAdmin">Admin Rights</string>
@@ -1802,6 +1825,8 @@
     <string name="ForwardedVideo_zero">%1$d forwarded videos</string>
     <string name="ForwardingFromNameAndMessage">%s: %s</string>
     <string name="ForwardingFromNames">From %s</string>
+    <string name="ForwardsRestrictedInfoChannel">Forwards from this channel are restricted.</string>
+    <string name="ForwardsRestrictedInfoGroup">Forwards from this group are restricted.</string>
     <string name="FreeOfTotal">Free %1$s of %2$s</string>
     <string name="From">From</string>
     <string name="FromCamera">From camera</string>
@@ -1943,6 +1968,7 @@
     <string name="Hours_zero">%1$d hours</string>
     <string name="Hybrid">Hybrid</string>
     <string name="IVInteractionsChartTitle">IV Interactions</string>
+    <string name="IfInactiveFor">if inactive for</string>
     <string name="ImagesTab2">Images</string>
     <string name="ImporImportingService">Importing messages and media...</string>
     <string name="ImporImportingStickersService">Importing stickers...</string>
@@ -2055,6 +2081,7 @@
     <string name="Invited">invited</string>
     <string name="InvoiceCantForwardSecretChat">Sorry, invoices can’t be forwarded to secret chats.</string>
     <string name="InvoiceCantSendSecretChat">Sorry, invoices can’t be sent to secret chats.</string>
+    <string name="IpAddress">IP address</string>
     <string name="IsChoosingSticker">%1$s is ch**oo**sing a sticker</string>
     <string name="IsEnjoyngAnimations">%1$s is **oo** watching %2$s</string>
     <string name="IsRecordingAudio">%1$s is recording a voice message...</string>
@@ -2153,6 +2180,7 @@
     <string name="LinkCopiedPrivate">Link copied to clipboard.\10This link will only work for members of this chat.</string>
     <string name="LinkCopiedPrivateInfo">This link will only work for members of this chat.</string>
     <string name="LinkCreatedeBy">Link created by</string>
+    <string name="LinkDesktopDevice">Link Desktop Device</string>
     <string name="LinkExpiresIn">The link expires %s</string>
     <string name="LinkExpiresInTime">The link expires in %s</string>
     <string name="LinkHashExpired">Link is no longer active</string>
@@ -2205,6 +2233,7 @@
     <string name="LocalPhotoCache">Photos</string>
     <string name="LocalVideoCache">Videos</string>
     <string name="LocatedChannelsTooMuch">Sorry, the target user owns too many location-based groups. Please ask them to delete or transfer an existing one first.</string>
+    <string name="Location">Location</string>
     <string name="LocationNotifiation">Proximity alert</string>
     <string name="LocationNotifiationButtonGroup">Notify when someone is within %1$s</string>
     <string name="LocationNotifiationButtonUser">Notify when %1$s is within %2$s</string>
@@ -2236,6 +2265,8 @@
     <string name="MakeMyselfVisible">Make Myself Visible</string>
     <string name="MakeMyselfVisibleInfo">Users nearby will be able to view your profile and send you messages. This may help you find new friends, but could also attract excessive attention. You can stop sharing your profile at any time.\10\10Your phone number will remain hidden.</string>
     <string name="MakeMyselfVisibleTitle">Show Your Profile?</string>
+    <string name="ManageAllFilesRational">Please allow **Telegram** to manage all files to open in-app file browse</string>
+    <string name="ManageAllFilesRational2">Telegram needs permission to manage all files to migrate old cache files to Scoped Storage</string>
     <string name="ManageChannel">Manage Channel</string>
     <string name="ManageChannelMenu">Manage channel</string>
     <string name="ManageGroup">Manage Group</string>
@@ -2382,6 +2413,12 @@
     <string name="MessagesDeletedHint_other">%1$d messages deleted</string>
     <string name="MessagesDeletedHint_two">%1$d messages deleted</string>
     <string name="MessagesDeletedHint_zero">%1$d messages deleted</string>
+    <string name="MessagesDeletedUndo_few">Messages for %1$s days deleted</string>
+    <string name="MessagesDeletedUndo_many">Messages for %1$s days deleted</string>
+    <string name="MessagesDeletedUndo_one">Messages for %1$s day deleted</string>
+    <string name="MessagesDeletedUndo_other">Messages for %1$s days deleted</string>
+    <string name="MessagesDeletedUndo_two">Messages for %1$s days deleted</string>
+    <string name="MessagesDeletedUndo_zero">Messages for %1$s days deleted</string>
     <string name="MessagesOverview">Messages</string>
     <string name="MessagesSettings">Messages</string>
     <string name="MessagesUnpinned_few">%1$d messages unpinned</string>
@@ -2400,6 +2437,7 @@
     <string name="Meters_two">%1$d meters</string>
     <string name="Meters_zero">%1$d meters</string>
     <string name="Mi">mi</string>
+    <string name="MigrateOldFolder">Migrate old folder to Scoped Storage</string>
     <string name="MilesAway">%1$s mi away</string>
     <string name="MilesFromYou">%1$s mi from you</string>
     <string name="MilesShort">%1$s mi</string>
@@ -2421,6 +2459,9 @@
     <string name="Minutes_other">%1$d minutes</string>
     <string name="Minutes_two">%1$d minutes</string>
     <string name="Minutes_zero">%1$d minutes</string>
+    <string name="MissedCallDescriptionSubtitle">Within next few seconds you should receive a short call from:</string>
+    <string name="MissedCallDescriptionSubtitle2">Please enter the last digits of the missed call</string>
+    <string name="MissedCallDescriptionTitle">Enter the missing digits</string>
     <string name="MobileHidden">Mobile hidden</string>
     <string name="MobileHiddenExceptionInfo">Phone number will be visible once %1$s adds you as a contact.</string>
     <string name="MobileVisibleInfo">When you tap **DONE**, your phone number will become visible to %1$s.</string>
@@ -2524,6 +2565,7 @@
     <string name="NoMemberRequests">No join requests</string>
     <string name="NoMemberRequestsDescription">You have no pending requests\10to join your group.</string>
     <string name="NoMessages">No messages here yet...</string>
+    <string name="NoMessagesForThisDay">No messages for this day</string>
     <string name="NoMessagesGreetingsDescription">Send a message or tap the greeting below.</string>
     <string name="NoOneJoined">No one joined</string>
     <string name="NoOneJoinedYet">No one joined yet</string>
@@ -3563,6 +3605,8 @@
     <string name="RestorePasswordResetPassword">RESET PASSWORD</string>
     <string name="RestorePasswordResetPasswordOk">Your 2-Step Verification password was reset.</string>
     <string name="RestorePasswordResetPasswordText">Are you sure you want to reset your 2-Step Verification password?</string>
+    <string name="RestrictSavingContent">Restrict saving content</string>
+    <string name="RestrictSavingContentInfo">Participants won\'t be able to forward messages from this group or save media files.</string>
     <string name="Restrictions_few">%1$d restrictions</string>
     <string name="Restrictions_many">%1$d restrictions</string>
     <string name="Restrictions_one">%1$d restriction</string>
@@ -3598,6 +3642,7 @@
     <string name="SaveToMusic">Save to music</string>
     <string name="SavedMessages">Saved Messages</string>
     <string name="SavedMessagesInfo">Forward here to save.</string>
+    <string name="SavingContentTitle">Saving content</string>
     <string name="ScamMessage">SCAM</string>
     <string name="Schedule">Schedule</string>
     <string name="ScheduleMessage">Schedule message</string>
@@ -3679,10 +3724,13 @@
     <string name="SelectColorTitle">Select a color</string>
     <string name="SelectContact">Select Contact</string>
     <string name="SelectContacts">Select Contacts</string>
+    <string name="SelectDays">Select Days</string>
+    <string name="SelectDaysTooltip">Please select one ore more days first.</string>
     <string name="SelectFile">Select File</string>
     <string name="SelectFromGallery">Select from gallery</string>
     <string name="SelectImage">Select image</string>
     <string name="SelectTheme">Select theme</string>
+    <string name="SelectThisDay">Select this day</string>
     <string name="SelectingContact">selecting a contact to share...</string>
     <string name="SelectingLocation">selecting a location to share...</string>
     <string name="Send">Send</string>
@@ -3708,6 +3756,7 @@
     <string name="SendLiveLocationMenu">Share my Live Location</string>
     <string name="SendLocation">Send my current location</string>
     <string name="SendMessage">Send Message</string>
+    <string name="SendMessageAsTitle">Send message as...</string>
     <string name="SendMessageLocation">Send Message</string>
     <string name="SendMessageRestricted">The admins of this group have restricted you from writing here until %1$s</string>
     <string name="SendMessageRestrictedForever">The admins of this group have restricted you from writing here.</string>
@@ -3739,6 +3788,7 @@
     <string name="September">September</string>
     <string name="ServiceNotifications">Service notifications</string>
     <string name="SessionsInfo">Control your sessions on other devices.</string>
+    <string name="SessionsListInfo">The official Telegram app available for Android, iPhone, iPad, Windows, macOS and Linux.</string>
     <string name="SessionsTitle">Active Sessions</string>
     <string name="Set">Set</string>
     <string name="SetAdditionalPassword">Set Additional Password</string>
@@ -3772,6 +3822,7 @@
     <string name="SettingsNoResults">No results found</string>
     <string name="SettingsRecent">Recent searches</string>
     <string name="SettingsSearchFaq">FAQ</string>
+    <string name="SettingsSwitchToDayMode">Switch to Day Mode</string>
     <string name="SettingsSwitchToNightMode">Switch to Night Mode</string>
     <string name="Shadows">Shadows</string>
     <string name="ShareComment">Write a comment...</string>
@@ -4057,7 +4108,8 @@
     <string name="Terminate">Terminate</string>
     <string name="TerminateAllSessions">Terminate All Other Sessions</string>
     <string name="TerminateAllWebSessions">Disconnect All Websites</string>
-    <string name="TerminateSessionInfo">Tap on a session to terminate.</string>
+    <string name="TerminateOldSessionHeader">Automatically terminate old sessions</string>
+    <string name="TerminateSession">Terminate Session</string>
     <string name="TerminateSessionQuestion">Terminate this session?</string>
     <string name="TerminateSessionText">Are you sure you want to terminate this session?</string>
     <string name="TerminateWebSessionInfo">Tap to disconnect from your Telegram account.</string>
@@ -4175,6 +4227,8 @@
     <string name="TypeMessage">Message</string>
     <string name="TypePrivate">Private</string>
     <string name="TypePrivateGroup">Private</string>
+    <string name="TypePrivateGroupRestrictedForwards">Private restricted</string>
+    <string name="TypePrivateRestrictedForwards">Private restricted</string>
     <string name="TypePublic">Public</string>
     <string name="TypePublicGroup">Public</string>
     <string name="TypeScheduleMessage">Schedule message</string>
@@ -4229,6 +4283,7 @@
     <string name="UsbActive">USB transfer active</string>
     <string name="UseDifferentTheme">Use a different theme</string>
     <string name="UseDifferentThemeInfo">You can also use an existing custom theme as a foundation for your theme.</string>
+    <string name="UseFileManger">Use Another App</string>
     <string name="UseLessDataAlways">Always</string>
     <string name="UseLessDataNever">Never</string>
     <string name="UseLessDataOnMobile">Only on mobile data</string>
