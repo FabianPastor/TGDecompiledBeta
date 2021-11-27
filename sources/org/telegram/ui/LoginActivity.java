@@ -36,8 +36,6 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.android.exoplayer2.util.Log;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -2168,7 +2166,6 @@ public class LoginActivity extends BaseFragment {
                                 tLRPC$TL_codeSettings2.logout_tokens = new ArrayList<>();
                             }
                             tLRPC$TL_auth_sendCode.settings.logout_tokens.add(savedLogOutTokens.get(i5).future_auth_token);
-                            Log.d("kek", "apply token" + new String(savedLogOutTokens.get(i5).future_auth_token, StandardCharsets.UTF_8));
                         }
                         MessagesController.saveLogOutTokens(savedLogOutTokens);
                     }
@@ -3219,7 +3216,7 @@ public class LoginActivity extends BaseFragment {
 
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$resendCode$2(Bundle bundle, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda4(this, tLRPC$TL_error, bundle, tLObject));
+            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda3(this, tLRPC$TL_error, bundle, tLObject));
         }
 
         /* access modifiers changed from: private */
@@ -3549,7 +3546,6 @@ public class LoginActivity extends BaseFragment {
                 return;
             }
             String code = this.codeFieldContainer.getCode();
-            Log.d("kek", "code " + code);
             if (TextUtils.isEmpty(code)) {
                 this.this$0.onFieldError(this.codeFieldContainer);
                 return;
@@ -3575,44 +3571,33 @@ public class LoginActivity extends BaseFragment {
 
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$onNextPressed$6(TLRPC$TL_auth_signIn tLRPC$TL_auth_signIn, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda3(this, tLObject, tLRPC$TL_error, tLRPC$TL_auth_signIn));
+            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda5(this, tLRPC$TL_error, tLObject, tLRPC$TL_auth_signIn));
         }
 
         /* access modifiers changed from: private */
-        /* JADX WARNING: Removed duplicated region for block: B:55:0x01b2  */
+        /* JADX WARNING: Removed duplicated region for block: B:55:0x0194  */
         /* JADX WARNING: Removed duplicated region for block: B:59:? A[RETURN, SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$onNextPressed$5(org.telegram.tgnet.TLObject r6, org.telegram.tgnet.TLRPC$TL_error r7, org.telegram.tgnet.TLRPC$TL_auth_signIn r8) {
+        public /* synthetic */ void lambda$onNextPressed$5(org.telegram.tgnet.TLRPC$TL_error r6, org.telegram.tgnet.TLObject r7, org.telegram.tgnet.TLRPC$TL_auth_signIn r8) {
             /*
                 r5 = this;
-                java.lang.StringBuilder r0 = new java.lang.StringBuilder
-                r0.<init>()
-                java.lang.String r1 = "res="
-                r0.append(r1)
-                r0.append(r6)
-                java.lang.String r1 = "  error="
-                r0.append(r1)
-                r0.append(r7)
-                java.lang.String r0 = r0.toString()
-                java.lang.String r1 = "kek"
-                com.google.android.exoplayer2.util.Log.d(r1, r0)
                 r0 = 3
                 r1 = 0
                 r2 = 1
-                if (r7 != 0) goto L_0x0068
+                if (r6 != 0) goto L_0x004a
                 r5.nextPressed = r1
-                org.telegram.ui.LoginActivity r7 = r5.this$0
-                r7.showDoneButton(r1, r2)
+                org.telegram.ui.LoginActivity r6 = r5.this$0
+                r6.showDoneButton(r1, r2)
                 r5.destroyTimer()
                 r5.destroyCodeTimer()
-                boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_auth_authorizationSignUpRequired
-                if (r7 == 0) goto L_0x0060
-                org.telegram.tgnet.TLRPC$TL_auth_authorizationSignUpRequired r6 = (org.telegram.tgnet.TLRPC$TL_auth_authorizationSignUpRequired) r6
-                org.telegram.tgnet.TLRPC$TL_help_termsOfService r6 = r6.terms_of_service
-                if (r6 == 0) goto L_0x003f
+                boolean r6 = r7 instanceof org.telegram.tgnet.TLRPC$TL_auth_authorizationSignUpRequired
+                if (r6 == 0) goto L_0x0042
+                org.telegram.tgnet.TLRPC$TL_auth_authorizationSignUpRequired r7 = (org.telegram.tgnet.TLRPC$TL_auth_authorizationSignUpRequired) r7
+                org.telegram.tgnet.TLRPC$TL_help_termsOfService r6 = r7.terms_of_service
+                if (r6 == 0) goto L_0x0021
                 org.telegram.ui.LoginActivity r7 = r5.this$0
                 org.telegram.tgnet.TLRPC$TL_help_termsOfService unused = r7.currentTermsOfService = r6
-            L_0x003f:
+            L_0x0021:
                 android.os.Bundle r6 = new android.os.Bundle
                 r6.<init>()
                 java.lang.String r7 = r5.requestPhone
@@ -3627,18 +3612,18 @@ public class LoginActivity extends BaseFragment {
                 org.telegram.ui.LoginActivity r7 = r5.this$0
                 r8 = 5
                 r7.setPage(r8, r2, r6, r1)
-                goto L_0x0093
-            L_0x0060:
-                org.telegram.ui.LoginActivity r7 = r5.this$0
-                org.telegram.tgnet.TLRPC$TL_auth_authorization r6 = (org.telegram.tgnet.TLRPC$TL_auth_authorization) r6
-                r7.onAuthSuccess(r6)
-                goto L_0x0093
-            L_0x0068:
-                java.lang.String r6 = r7.text
-                r5.lastError = r6
+                goto L_0x0075
+            L_0x0042:
+                org.telegram.ui.LoginActivity r6 = r5.this$0
+                org.telegram.tgnet.TLRPC$TL_auth_authorization r7 = (org.telegram.tgnet.TLRPC$TL_auth_authorization) r7
+                r6.onAuthSuccess(r7)
+                goto L_0x0075
+            L_0x004a:
+                java.lang.String r7 = r6.text
+                r5.lastError = r7
                 java.lang.String r3 = "SESSION_PASSWORD_NEEDED"
-                boolean r6 = r6.contains(r3)
-                if (r6 == 0) goto L_0x0096
+                boolean r7 = r7.contains(r3)
+                if (r7 == 0) goto L_0x0078
                 org.telegram.tgnet.TLRPC$TL_account_getPassword r6 = new org.telegram.tgnet.TLRPC$TL_account_getPassword
                 r6.<init>()
                 org.telegram.ui.LoginActivity r7 = r5.this$0
@@ -3650,77 +3635,77 @@ public class LoginActivity extends BaseFragment {
                 r7.sendRequest(r6, r1, r8)
                 r5.destroyTimer()
                 r5.destroyCodeTimer()
-            L_0x0093:
+            L_0x0075:
                 r1 = 1
-                goto L_0x01ac
-            L_0x0096:
+                goto L_0x018e
+            L_0x0078:
                 r5.nextPressed = r1
-                org.telegram.ui.LoginActivity r6 = r5.this$0
-                r6.showDoneButton(r1, r2)
-                int r6 = r5.currentType
+                org.telegram.ui.LoginActivity r7 = r5.this$0
+                r7.showDoneButton(r1, r2)
+                int r7 = r5.currentType
                 r8 = 4
                 r3 = 2
-                if (r6 != r0) goto L_0x00a9
+                if (r7 != r0) goto L_0x008b
                 int r4 = r5.nextType
-                if (r4 == r8) goto L_0x00b7
-                if (r4 == r3) goto L_0x00b7
-            L_0x00a9:
-                if (r6 != r3) goto L_0x00b1
+                if (r4 == r8) goto L_0x0099
+                if (r4 == r3) goto L_0x0099
+            L_0x008b:
+                if (r7 != r3) goto L_0x0093
                 int r4 = r5.nextType
-                if (r4 == r8) goto L_0x00b7
-                if (r4 == r0) goto L_0x00b7
-            L_0x00b1:
-                if (r6 != r8) goto L_0x00ba
-                int r6 = r5.nextType
-                if (r6 != r3) goto L_0x00ba
-            L_0x00b7:
+                if (r4 == r8) goto L_0x0099
+                if (r4 == r0) goto L_0x0099
+            L_0x0093:
+                if (r7 != r8) goto L_0x009c
+                int r7 = r5.nextType
+                if (r7 != r3) goto L_0x009c
+            L_0x0099:
                 r5.createTimer()
-            L_0x00ba:
-                int r6 = r5.currentType
-                if (r6 != r3) goto L_0x00cb
+            L_0x009c:
+                int r7 = r5.currentType
+                if (r7 != r3) goto L_0x00ad
                 org.telegram.messenger.AndroidUtilities.setWaitingForSms(r2)
-                org.telegram.messenger.NotificationCenter r6 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
+                org.telegram.messenger.NotificationCenter r7 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
                 int r8 = org.telegram.messenger.NotificationCenter.didReceiveSmsCode
-                r6.addObserver(r5, r8)
-                goto L_0x00d9
-            L_0x00cb:
-                if (r6 != r0) goto L_0x00d9
+                r7.addObserver(r5, r8)
+                goto L_0x00bb
+            L_0x00ad:
+                if (r7 != r0) goto L_0x00bb
                 org.telegram.messenger.AndroidUtilities.setWaitingForCall(r2)
-                org.telegram.messenger.NotificationCenter r6 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
+                org.telegram.messenger.NotificationCenter r7 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
                 int r8 = org.telegram.messenger.NotificationCenter.didReceiveCall
-                r6.addObserver(r5, r8)
-            L_0x00d9:
+                r7.addObserver(r5, r8)
+            L_0x00bb:
                 r5.waitingForEvent = r2
-                int r6 = r5.currentType
-                if (r6 == r0) goto L_0x01ac
-                java.lang.String r6 = r7.text
+                int r7 = r5.currentType
+                if (r7 == r0) goto L_0x018e
+                java.lang.String r7 = r6.text
                 java.lang.String r8 = "PHONE_NUMBER_INVALID"
-                boolean r6 = r6.contains(r8)
+                boolean r7 = r7.contains(r8)
                 r8 = 2131624300(0x7f0e016c, float:1.8875776E38)
                 java.lang.String r3 = "AppName"
-                if (r6 == 0) goto L_0x0102
+                if (r7 == 0) goto L_0x00e4
                 org.telegram.ui.LoginActivity r6 = r5.this$0
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r8)
                 r8 = 2131625985(0x7f0e0801, float:1.8879193E38)
                 java.lang.String r2 = "InvalidPhoneNumber"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r8)
                 r6.needShowAlert(r7, r8)
-                goto L_0x01ac
-            L_0x0102:
-                java.lang.String r6 = r7.text
+                goto L_0x018e
+            L_0x00e4:
+                java.lang.String r7 = r6.text
                 java.lang.String r4 = "PHONE_CODE_EMPTY"
-                boolean r6 = r6.contains(r4)
-                if (r6 != 0) goto L_0x0183
-                java.lang.String r6 = r7.text
+                boolean r7 = r7.contains(r4)
+                if (r7 != 0) goto L_0x0165
+                java.lang.String r7 = r6.text
                 java.lang.String r4 = "PHONE_CODE_INVALID"
-                boolean r6 = r6.contains(r4)
-                if (r6 == 0) goto L_0x0117
-                goto L_0x0183
-            L_0x0117:
-                java.lang.String r6 = r7.text
+                boolean r7 = r7.contains(r4)
+                if (r7 == 0) goto L_0x00f9
+                goto L_0x0165
+            L_0x00f9:
+                java.lang.String r7 = r6.text
                 java.lang.String r4 = "PHONE_CODE_EXPIRED"
-                boolean r6 = r6.contains(r4)
-                if (r6 == 0) goto L_0x013d
+                boolean r7 = r7.contains(r4)
+                if (r7 == 0) goto L_0x011f
                 r5.onBackPressed(r2)
                 org.telegram.ui.LoginActivity r6 = r5.this$0
                 r7 = 0
@@ -3731,21 +3716,21 @@ public class LoginActivity extends BaseFragment {
                 java.lang.String r2 = "CodeExpired"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r8)
                 r6.needShowAlert(r7, r8)
-                goto L_0x01ac
-            L_0x013d:
-                java.lang.String r6 = r7.text
+                goto L_0x018e
+            L_0x011f:
+                java.lang.String r7 = r6.text
                 java.lang.String r2 = "FLOOD_WAIT"
-                boolean r6 = r6.startsWith(r2)
-                if (r6 == 0) goto L_0x015a
+                boolean r7 = r7.startsWith(r2)
+                if (r7 == 0) goto L_0x013c
                 org.telegram.ui.LoginActivity r6 = r5.this$0
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r8)
                 r8 = 2131625673(0x7f0e06c9, float:1.887856E38)
                 java.lang.String r2 = "FloodWait"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r8)
                 r6.needShowAlert(r7, r8)
-                goto L_0x01ac
-            L_0x015a:
-                org.telegram.ui.LoginActivity r6 = r5.this$0
+                goto L_0x018e
+            L_0x013c:
+                org.telegram.ui.LoginActivity r7 = r5.this$0
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r3, r8)
                 java.lang.StringBuilder r2 = new java.lang.StringBuilder
                 r2.<init>()
@@ -3755,12 +3740,12 @@ public class LoginActivity extends BaseFragment {
                 r2.append(r3)
                 java.lang.String r3 = "\n"
                 r2.append(r3)
-                java.lang.String r7 = r7.text
-                r2.append(r7)
-                java.lang.String r7 = r2.toString()
-                r6.needShowAlert(r8, r7)
-                goto L_0x01ac
-            L_0x0183:
+                java.lang.String r6 = r6.text
+                r2.append(r6)
+                java.lang.String r6 = r2.toString()
+                r7.needShowAlert(r8, r6)
+                goto L_0x018e
+            L_0x0165:
                 org.telegram.ui.LoginActivity r6 = r5.this$0
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r8)
                 r8 = 2131625982(0x7f0e07fe, float:1.8879187E38)
@@ -3768,33 +3753,33 @@ public class LoginActivity extends BaseFragment {
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r8)
                 r6.needShowAlert(r7, r8)
                 r6 = 0
-            L_0x0196:
+            L_0x0178:
                 org.telegram.ui.CodeFieldContainer r7 = r5.codeFieldContainer
                 org.telegram.ui.CodeNumberField[] r7 = r7.codeField
                 int r8 = r7.length
-                if (r6 >= r8) goto L_0x01a7
+                if (r6 >= r8) goto L_0x0189
                 r7 = r7[r6]
                 java.lang.String r8 = ""
                 r7.setText(r8)
                 int r6 = r6 + 1
-                goto L_0x0196
-            L_0x01a7:
+                goto L_0x0178
+            L_0x0189:
                 r6 = r7[r1]
                 r6.requestFocus()
-            L_0x01ac:
-                if (r1 == 0) goto L_0x01b5
+            L_0x018e:
+                if (r1 == 0) goto L_0x0197
                 int r6 = r5.currentType
-                if (r6 != r0) goto L_0x01b5
+                if (r6 != r0) goto L_0x0197
                 org.telegram.messenger.AndroidUtilities.endIncomingCall()
-            L_0x01b5:
+            L_0x0197:
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LoginActivity.LoginActivitySmsView.lambda$onNextPressed$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLRPC$TL_auth_signIn):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LoginActivity.LoginActivitySmsView.lambda$onNextPressed$5(org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_auth_signIn):void");
         }
 
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$onNextPressed$4(TLRPC$TL_auth_signIn tLRPC$TL_auth_signIn, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda5(this, tLRPC$TL_error, tLObject, tLRPC$TL_auth_signIn));
+            AndroidUtilities.runOnUIThread(new LoginActivity$LoginActivitySmsView$$ExternalSyntheticLambda4(this, tLRPC$TL_error, tLObject, tLRPC$TL_auth_signIn));
         }
 
         /* access modifiers changed from: private */

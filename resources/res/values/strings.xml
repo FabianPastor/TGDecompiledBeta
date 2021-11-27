@@ -1247,7 +1247,7 @@
     <string name="DeleteAccountHelp">If you do not come online at least once within this period, your account will be deleted along with all messages and contacts.</string>
     <string name="DeleteAccountIfAwayFor2">Delete my account if away for</string>
     <string name="DeleteAccountIfAwayFor3">If away for</string>
-    <string name="DeleteAccountTitle">Account self-destructs</string>
+    <string name="DeleteAccountTitle">Account self-destruct</string>
     <string name="DeleteAll">Delete All</string>
     <string name="DeleteAllCalls">Delete all calls</string>
     <string name="DeleteAllCallsText">Do you want to delete all recent calls?</string>

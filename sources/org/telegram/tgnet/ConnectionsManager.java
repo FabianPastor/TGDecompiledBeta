@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
-import com.google.android.exoplayer2.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import java.io.File;
@@ -331,12 +330,12 @@ public class ConnectionsManager extends BaseController {
 
     public int sendRequest(TLObject tLObject, RequestDelegate requestDelegate, RequestDelegateTimestamp requestDelegateTimestamp, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i, int i2, int i3, boolean z) {
         int andIncrement = this.lastRequestToken.getAndIncrement();
-        Utilities.stageQueue.postRunnable(new ConnectionsManager$$ExternalSyntheticLambda9(this, tLObject, andIncrement, i2, requestDelegate, requestDelegateTimestamp, quickAckDelegate, writeToSocketDelegate, i, i3, z));
+        Utilities.stageQueue.postRunnable(new ConnectionsManager$$ExternalSyntheticLambda9(this, tLObject, andIncrement, requestDelegate, requestDelegateTimestamp, quickAckDelegate, writeToSocketDelegate, i, i2, i3, z));
         return andIncrement;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$sendRequest$2(TLObject tLObject, int i, int i2, RequestDelegate requestDelegate, RequestDelegateTimestamp requestDelegateTimestamp, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i3, int i4, boolean z) {
+    public /* synthetic */ void lambda$sendRequest$2(TLObject tLObject, int i, RequestDelegate requestDelegate, RequestDelegateTimestamp requestDelegateTimestamp, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i2, int i3, int i4, boolean z) {
         TLObject tLObject2 = tLObject;
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("send request " + tLObject2 + " with token = " + i);
@@ -348,7 +347,7 @@ public class ConnectionsManager extends BaseController {
             tLObject2.serializeToStream(nativeByteBuffer);
             tLObject.freeResources();
             try {
-                native_sendRequest(this.currentAccount, nativeByteBuffer.address, new ConnectionsManager$$ExternalSyntheticLambda13(tLObject2, i2, requestDelegate, requestDelegateTimestamp), quickAckDelegate, writeToSocketDelegate, i3, i2, i4, z, i);
+                native_sendRequest(this.currentAccount, nativeByteBuffer.address, new ConnectionsManager$$ExternalSyntheticLambda13(tLObject2, requestDelegate, requestDelegateTimestamp), quickAckDelegate, writeToSocketDelegate, i2, i3, i4, z, i);
             } catch (Exception e) {
                 e = e;
             }
@@ -359,42 +358,41 @@ public class ConnectionsManager extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$sendRequest$1(TLObject tLObject, int i, RequestDelegate requestDelegate, RequestDelegateTimestamp requestDelegateTimestamp, long j, int i2, String str, int i3, long j2) {
+    public static /* synthetic */ void lambda$sendRequest$1(TLObject tLObject, RequestDelegate requestDelegate, RequestDelegateTimestamp requestDelegateTimestamp, long j, int i, String str, int i2, long j2) {
         TLRPC$TL_error tLRPC$TL_error;
         TLObject tLObject2;
+        TLObject tLObject3 = tLObject;
         String str2 = str;
-        try {
-            if ((tLObject instanceof TLRPC$TL_upload_getFile) && i != 2) {
-                Log.d("kek", "error");
-            }
-            if (j != 0) {
+        if (j != 0) {
+            try {
                 NativeByteBuffer wrap = NativeByteBuffer.wrap(j);
                 wrap.reused = true;
                 tLObject2 = tLObject.deserializeResponse(wrap, wrap.readInt32(true), true);
                 tLRPC$TL_error = null;
-            } else if (str2 != null) {
-                TLRPC$TL_error tLRPC$TL_error2 = new TLRPC$TL_error();
-                tLRPC$TL_error2.code = i2;
-                tLRPC$TL_error2.text = str2;
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e(tLObject + " got error " + tLRPC$TL_error2.code + " " + tLRPC$TL_error2.text);
-                }
-                tLRPC$TL_error = tLRPC$TL_error2;
-                tLObject2 = null;
-            } else {
-                tLObject2 = null;
-                tLRPC$TL_error = null;
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+                return;
             }
-            if (tLObject2 != null) {
-                tLObject2.networkType = i3;
-            }
+        } else if (str2 != null) {
+            TLRPC$TL_error tLRPC$TL_error2 = new TLRPC$TL_error();
+            tLRPC$TL_error2.code = i;
+            tLRPC$TL_error2.text = str2;
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("java received " + tLObject2 + " error = " + tLRPC$TL_error);
+                FileLog.e(tLObject + " got error " + tLRPC$TL_error2.code + " " + tLRPC$TL_error2.text);
             }
-            Utilities.stageQueue.postRunnable(new ConnectionsManager$$ExternalSyntheticLambda11(requestDelegate, tLObject2, tLRPC$TL_error, requestDelegateTimestamp, j2));
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            tLRPC$TL_error = tLRPC$TL_error2;
+            tLObject2 = null;
+        } else {
+            tLObject2 = null;
+            tLRPC$TL_error = null;
         }
+        if (tLObject2 != null) {
+            tLObject2.networkType = i2;
+        }
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("java received " + tLObject2 + " error = " + tLRPC$TL_error);
+        }
+        Utilities.stageQueue.postRunnable(new ConnectionsManager$$ExternalSyntheticLambda11(requestDelegate, tLObject2, tLRPC$TL_error, requestDelegateTimestamp, j2));
     }
 
     /* access modifiers changed from: private */

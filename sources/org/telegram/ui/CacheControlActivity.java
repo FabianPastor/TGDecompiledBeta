@@ -23,7 +23,6 @@ import android.widget.TextView;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.exoplayer2.util.Log;
 import java.io.File;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
@@ -702,6 +701,9 @@ public class CacheControlActivity extends BaseFragment {
                 int movedFilesCount;
                 int totalFilesCount;
 
+                private void updateProgress() {
+                }
+
                 public void run() {
                     ArrayList<File> rootDirs;
                     super.run();
@@ -802,11 +804,6 @@ public class CacheControlActivity extends BaseFragment {
                     }
                     this.movedFilesCount++;
                     updateProgress();
-                }
-
-                private void updateProgress() {
-                    float f = ((float) this.movedFilesCount) / ((float) this.totalFilesCount);
-                    Log.d("kek", "progress: " + f);
                 }
             }.start();
             return;

@@ -6926,8 +6926,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     /* JADX WARNING: Removed duplicated region for block: B:28:0x00f7  */
     /* JADX WARNING: Removed duplicated region for block: B:33:0x0102  */
     /* JADX WARNING: Removed duplicated region for block: B:34:0x0105  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x018d  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x01c1  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x018b  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x0199  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean convertVideo(org.telegram.messenger.MediaController.VideoConvertMessage r45) {
         /*
@@ -6936,9 +6936,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r0 = r45
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             org.telegram.messenger.VideoEditedInfo r2 = r0.videoEditedInfo
-            if (r1 == 0) goto L_0x0213
+            if (r1 == 0) goto L_0x01eb
             if (r2 != 0) goto L_0x000e
-            goto L_0x0213
+            goto L_0x01eb
         L_0x000e:
             java.lang.String r4 = r2.originalPath
             long r5 = r2.startTime
@@ -7105,9 +7105,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r13 = r44
             r28 = r7
             r40 = r10
+            r22 = r16
             r7 = r41
             r10 = r45
-            r41 = r16
             r12.<init>(r1, r7, r10)
             r1.videoConvertFirstWrite = r9
             org.telegram.messenger.video.MediaCodecVideoConvertor r8 = new org.telegram.messenger.video.MediaCodecVideoConvertor
@@ -7132,38 +7132,23 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r18 = r3
             r19 = r2
             r20 = r0
-            r22 = r41
             r23 = r11
             r24 = r5
             boolean r0 = r12.convertVideo(r13, r14, r15, r16, r17, r18, r19, r20, r21, r22, r23, r24, r26, r28, r30, r31, r33, r34, r35, r36, r37, r38)
             boolean r2 = r1.canceled
-            if (r2 != 0) goto L_0x0197
+            if (r2 != 0) goto L_0x0195
             java.lang.Object r3 = r9.videoConvertSync
             monitor-enter(r3)
-            boolean r2 = r1.canceled     // Catch:{ all -> 0x0194 }
-            monitor-exit(r3)     // Catch:{ all -> 0x0194 }
-            goto L_0x0197
-        L_0x0194:
+            boolean r2 = r1.canceled     // Catch:{ all -> 0x0192 }
+            monitor-exit(r3)     // Catch:{ all -> 0x0192 }
+            goto L_0x0195
+        L_0x0192:
             r0 = move-exception
-            monitor-exit(r3)     // Catch:{ all -> 0x0194 }
+            monitor-exit(r3)     // Catch:{ all -> 0x0192 }
             throw r0
-        L_0x0197:
-            java.lang.String r1 = "kek"
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder
-            r3.<init>()
-            java.lang.String r4 = "convert time "
-            r3.append(r4)
-            long r4 = java.lang.System.currentTimeMillis()
-            long r4 = r4 - r42
-            r3.append(r4)
-            java.lang.String r4 = " bitrate="
-            r3.append(r4)
-            r4 = r41
-            r3.append(r4)
-            java.lang.String r3 = r3.toString()
-            com.google.android.exoplayer2.util.Log.d(r1, r3)
+        L_0x0195:
             boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r1 == 0) goto L_0x01e3
+            if (r1 == 0) goto L_0x01bb
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             java.lang.String r3 = "time="
@@ -7176,7 +7161,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r1.append(r2)
             java.lang.String r1 = r1.toString()
             org.telegram.messenger.FileLog.d(r1)
-        L_0x01e3:
+        L_0x01bb:
             android.content.SharedPreferences$Editor r1 = r40.edit()
             java.lang.String r3 = "isPreviousOk"
             r11 = 1
@@ -7185,15 +7170,15 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r4 = 1
             long r5 = r8.getLastFrameTimestamp()
             long r12 = r7.length()
-            if (r0 != 0) goto L_0x0202
-            if (r2 == 0) goto L_0x01ff
-            goto L_0x0202
-        L_0x01ff:
+            if (r0 != 0) goto L_0x01da
+            if (r2 == 0) goto L_0x01d7
+            goto L_0x01da
+        L_0x01d7:
             r39 = 0
-            goto L_0x0204
-        L_0x0202:
+            goto L_0x01dc
+        L_0x01da:
             r39 = 1
-        L_0x0204:
+        L_0x01dc:
             r0 = 1065353216(0x3var_, float:1.0)
             r1 = r44
             r3 = r7
@@ -7203,7 +7188,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r10 = r0
             r1.didWriteData(r2, r3, r4, r5, r7, r9, r10)
             return r11
-        L_0x0213:
+        L_0x01eb:
             r0 = 0
             return r0
         */

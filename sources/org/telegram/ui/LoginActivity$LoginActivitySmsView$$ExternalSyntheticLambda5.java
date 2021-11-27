@@ -19,6 +19,6 @@ public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalS
     }
 
     public final void run() {
-        this.f$0.lambda$onNextPressed$3(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$onNextPressed$5(this.f$1, this.f$2, this.f$3);
     }
 }

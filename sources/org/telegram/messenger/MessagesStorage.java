@@ -20947,7 +20947,7 @@ public class MessagesStorage extends BaseController {
                                 Locale locale3 = Locale.US;
                                 sQLiteDatabase3.executeFast(String.format(locale3, "UPDATE " + str2 + " SET end = %d WHERE uid = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(i), Long.valueOf(j), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                             } catch (Exception e) {
-                                FileLog.e((Throwable) e);
+                                FileLog.e((Throwable) e, false);
                             }
                         }
                         i6++;
@@ -20961,7 +20961,7 @@ public class MessagesStorage extends BaseController {
                                     Locale locale4 = Locale.US;
                                     sQLiteDatabase4.executeFast(String.format(locale4, "UPDATE " + str2 + " SET start = %d WHERE uid = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(i2), Long.valueOf(j), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                                 } catch (Exception e2) {
-                                    FileLog.e((Throwable) e2);
+                                    FileLog.e((Throwable) e2, false);
                                 }
                             }
                             i6++;

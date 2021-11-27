@@ -16,10 +16,8 @@ import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import androidx.collection.LongSparseArray;
-import com.google.android.exoplayer2.util.Log;
 import j$.util.concurrent.ConcurrentHashMap;
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15257,9 +15255,7 @@ public class MessagesController extends BaseController implements NotificationCe
         boolean z = true;
         if (i == 1) {
             unregistedPush();
-            TLRPC$TL_auth_logOut tLRPC$TL_auth_logOut = new TLRPC$TL_auth_logOut();
-            Log.d("kek", "perform log out");
-            getConnectionsManager().sendRequest(tLRPC$TL_auth_logOut, new MessagesController$$ExternalSyntheticLambda217(this));
+            getConnectionsManager().sendRequest(new TLRPC$TL_auth_logOut(), new MessagesController$$ExternalSyntheticLambda217(this));
         } else {
             getConnectionsManager().cleanup(i == 2);
         }
@@ -15305,23 +15301,22 @@ public class MessagesController extends BaseController implements NotificationCe
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$performLogout$238(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        Log.d("kek", "perform log out 2");
         getConnectionsManager().cleanup(false);
         AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda201(tLObject));
     }
 
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$performLogout$237(TLObject tLObject) {
-        Log.d("kek", "perform log out 3");
         if (tLObject instanceof TLRPC$TL_auth_loggedOut) {
             TLRPC$TL_auth_loggedOut tLRPC$TL_auth_loggedOut = (TLRPC$TL_auth_loggedOut) tLObject;
-            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("saved_tokens", 0);
-            int i = sharedPreferences.getInt("count", 0);
-            SerializedData serializedData = new SerializedData(tLObject.getObjectSize());
-            tLRPC$TL_auth_loggedOut.serializeToStream(serializedData);
-            SharedPreferences.Editor edit = sharedPreferences.edit();
-            edit.putString("log_out_token_" + i, Utilities.bytesToHex(serializedData.toByteArray())).putInt("count", i + 1).apply();
-            Log.d("kek", "save token" + new String(tLRPC$TL_auth_loggedOut.future_auth_token, StandardCharsets.UTF_8));
+            if (tLRPC$TL_auth_loggedOut.future_auth_token != null) {
+                SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("saved_tokens", 0);
+                int i = sharedPreferences.getInt("count", 0);
+                SerializedData serializedData = new SerializedData(tLObject.getObjectSize());
+                tLRPC$TL_auth_loggedOut.serializeToStream(serializedData);
+                SharedPreferences.Editor edit = sharedPreferences.edit();
+                edit.putString("log_out_token_" + i, Utilities.bytesToHex(serializedData.toByteArray())).putInt("count", i + 1).apply();
+            }
         }
     }
 

@@ -415,7 +415,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
                 TLRPC$TL_theme tlTheme = this.adapter.items.get(i).chatTheme.getTlTheme(this.themeIndex);
                 Theme.ThemeInfo themeInfo = this.adapter.items.get(i).chatTheme.getThemeInfo(this.themeIndex);
                 if (tlTheme != null) {
-                    if (Theme.getCurrentTheme().name.equals(Theme.getBaseThemeKey(tlTheme.settings.get(this.adapter.items.get(i).chatTheme.getSettingsIndex(this.themeIndex)))) && (themeAccent = Theme.getCurrentTheme().accentsByThemeId.get(tlTheme.id)) != null && themeAccent.id == Theme.getCurrentTheme().currentAccentId) {
+                    if (Theme.getCurrentTheme().name.equals(Theme.getBaseThemeKey(tlTheme.settings.get(this.adapter.items.get(i).chatTheme.getSettingsIndex(this.themeIndex)))) && Theme.getCurrentTheme().accentsByThemeId != null && (themeAccent = Theme.getCurrentTheme().accentsByThemeId.get(tlTheme.id)) != null && themeAccent.id == Theme.getCurrentTheme().currentAccentId) {
                         this.selectedPosition = i;
                         break;
                     }

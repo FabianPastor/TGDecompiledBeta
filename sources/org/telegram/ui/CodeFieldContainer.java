@@ -179,7 +179,7 @@ public class CodeFieldContainer extends LinearLayout {
                                     CodeFieldContainer.this.codeField[i7].setText(num);
                                 } else {
                                     int i4 = i7;
-                                    if (i4 >= i) {
+                                    if (i4 >= i - 1) {
                                         CodeFieldContainer.this.processNextPressed();
                                     } else {
                                         CodeFieldContainer.this.codeField[i4 + 1].requestFocus();

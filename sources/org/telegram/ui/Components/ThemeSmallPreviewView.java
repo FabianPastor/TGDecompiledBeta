@@ -266,7 +266,8 @@ public class ThemeSmallPreviewView extends FrameLayout {
             Drawable drawable = chatThemeItem2.previewDrawable;
             if (drawable instanceof MotionBackgroundDrawable) {
                 MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
-                motionBackgroundDrawable.setPatternBitmap(tLRPC$WallPaper.settings.intensity >= 0 ? 100 : -100, bitmap);
+                TLRPC$WallPaperSettings tLRPC$WallPaperSettings = tLRPC$WallPaper.settings;
+                motionBackgroundDrawable.setPatternBitmap((tLRPC$WallPaperSettings == null || tLRPC$WallPaperSettings.intensity >= 0) ? 100 : -100, bitmap);
                 motionBackgroundDrawable.setPatternColorFilter(this.patternColor);
                 invalidate();
             }

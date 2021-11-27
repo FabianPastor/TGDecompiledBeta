@@ -546,38 +546,40 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     private void showSessionBottomSheet(TLRPC$TL_authorization tLRPC$TL_authorization, boolean z) {
-        new SessionBottomSheet(this, tLRPC$TL_authorization, z, new SessionBottomSheet.Callback() {
-            public void onSessionTerminated(TLRPC$TL_authorization tLRPC$TL_authorization) {
-                AlertDialog alertDialog = new AlertDialog(SessionsActivity.this.getParentActivity(), 3);
-                alertDialog.setCanCacnel(false);
-                alertDialog.show();
-                TLRPC$TL_account_resetAuthorization tLRPC$TL_account_resetAuthorization = new TLRPC$TL_account_resetAuthorization();
-                tLRPC$TL_account_resetAuthorization.hash = tLRPC$TL_authorization.hash;
-                ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(tLRPC$TL_account_resetAuthorization, new SessionsActivity$4$$ExternalSyntheticLambda1(this, alertDialog, tLRPC$TL_authorization));
-            }
-
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$onSessionTerminated$1(AlertDialog alertDialog, TLRPC$TL_authorization tLRPC$TL_authorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                AndroidUtilities.runOnUIThread(new SessionsActivity$4$$ExternalSyntheticLambda0(this, alertDialog, tLRPC$TL_error, tLRPC$TL_authorization));
-            }
-
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$onSessionTerminated$0(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_authorization tLRPC$TL_authorization) {
-                try {
-                    alertDialog.dismiss();
-                } catch (Exception e) {
-                    FileLog.e((Throwable) e);
+        if (tLRPC$TL_authorization != null) {
+            new SessionBottomSheet(this, tLRPC$TL_authorization, z, new SessionBottomSheet.Callback() {
+                public void onSessionTerminated(TLRPC$TL_authorization tLRPC$TL_authorization) {
+                    AlertDialog alertDialog = new AlertDialog(SessionsActivity.this.getParentActivity(), 3);
+                    alertDialog.setCanCacnel(false);
+                    alertDialog.show();
+                    TLRPC$TL_account_resetAuthorization tLRPC$TL_account_resetAuthorization = new TLRPC$TL_account_resetAuthorization();
+                    tLRPC$TL_account_resetAuthorization.hash = tLRPC$TL_authorization.hash;
+                    ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(tLRPC$TL_account_resetAuthorization, new SessionsActivity$4$$ExternalSyntheticLambda1(this, alertDialog, tLRPC$TL_authorization));
                 }
-                if (tLRPC$TL_error == null) {
-                    SessionsActivity.this.sessions.remove(tLRPC$TL_authorization);
-                    SessionsActivity.this.passwordSessions.remove(tLRPC$TL_authorization);
-                    SessionsActivity.this.updateRows();
-                    if (SessionsActivity.this.listAdapter != null) {
-                        SessionsActivity.this.listAdapter.notifyDataSetChanged();
+
+                /* access modifiers changed from: private */
+                public /* synthetic */ void lambda$onSessionTerminated$1(AlertDialog alertDialog, TLRPC$TL_authorization tLRPC$TL_authorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    AndroidUtilities.runOnUIThread(new SessionsActivity$4$$ExternalSyntheticLambda0(this, alertDialog, tLRPC$TL_error, tLRPC$TL_authorization));
+                }
+
+                /* access modifiers changed from: private */
+                public /* synthetic */ void lambda$onSessionTerminated$0(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_authorization tLRPC$TL_authorization) {
+                    try {
+                        alertDialog.dismiss();
+                    } catch (Exception e) {
+                        FileLog.e((Throwable) e);
+                    }
+                    if (tLRPC$TL_error == null) {
+                        SessionsActivity.this.sessions.remove(tLRPC$TL_authorization);
+                        SessionsActivity.this.passwordSessions.remove(tLRPC$TL_authorization);
+                        SessionsActivity.this.updateRows();
+                        if (SessionsActivity.this.listAdapter != null) {
+                            SessionsActivity.this.listAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
-            }
-        }).show();
+            }).show();
+        }
     }
 
     public void onPause() {

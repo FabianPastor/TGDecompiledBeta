@@ -11,7 +11,6 @@ import android.util.SparseArray;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatThemeController;
@@ -23,18 +22,20 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ResultCallback;
+import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_theme;
 import org.telegram.tgnet.TLRPC$WallPaper;
 import org.telegram.ui.ActionBar.Theme;
 
 public class EmojiThemes {
+    private static final String[] previewColorKeys = {"chat_inBubble", "chat_outBubble", "featuredStickers_addButton", "chat_wallpaper", "chat_wallpaper_gradient_to", "key_chat_wallpaper_gradient_to2", "key_chat_wallpaper_gradient_to3", "chat_wallpaper_gradient_rotation"};
     String emoji;
     ArrayList<ThemeItem> items = new ArrayList<>();
     public boolean showAsDefaultStub;
 
     public static class ThemeItem {
         public int accentId = -1;
-        public HashMap<String, Integer> currentColors;
+        public HashMap<String, Integer> currentPreviewColors;
         public int inBubbleColor;
         public int outBubbleColor;
         public int outLineColor;
@@ -156,8 +157,8 @@ public class EmojiThemes {
     }
 
     public void initColors() {
-        getCurrentColors(0, 0);
-        getCurrentColors(0, 1);
+        getPreviewColors(0, 0);
+        getPreviewColors(0, 1);
     }
 
     public String getEmoticon() {
@@ -184,9 +185,9 @@ public class EmojiThemes {
         return this.items.get(i).settingsIndex;
     }
 
-    public HashMap<String, Integer> getCurrentColors(int i, int i2) {
+    public HashMap<String, Integer> getPreviewColors(int i, int i2) {
         Theme.ThemeAccent themeAccent;
-        HashMap<String, Integer> hashMap = this.items.get(i2).currentColors;
+        HashMap<String, Integer> hashMap = this.items.get(i2).currentPreviewColors;
         if (hashMap != null) {
             return hashMap;
         }
@@ -212,24 +213,30 @@ public class EmojiThemes {
                 hashMap2.putAll(Theme.getThemeFileValues((File) null, str, strArr));
             }
         }
+        int i3 = 0;
         String unused = this.items.get(i2).wallpaperLink = strArr[0];
-        HashMap<String, Integer> hashMap3 = new HashMap<>(hashMap2);
         if (themeAccent != null) {
+            HashMap hashMap3 = new HashMap(hashMap2);
             themeAccent.fillAccentColors(hashMap2, hashMap3);
+            hashMap2.clear();
+            hashMap2 = hashMap3;
         }
-        for (Map.Entry next : Theme.getFallbackKeys().entrySet()) {
-            String str2 = (String) next.getKey();
-            if (!hashMap3.containsKey(str2)) {
-                hashMap3.put(str2, hashMap3.get(next.getValue()));
+        HashMap<String, String> fallbackKeys = Theme.getFallbackKeys();
+        this.items.get(i2).currentPreviewColors = new HashMap<>();
+        while (true) {
+            String[] strArr2 = previewColorKeys;
+            if (i3 < strArr2.length) {
+                String str2 = strArr2[i3];
+                this.items.get(i2).currentPreviewColors.put(str2, (Integer) hashMap2.get(str2));
+                if (!this.items.get(i2).currentPreviewColors.containsKey(str2)) {
+                    hashMap2.put(str2, (Integer) hashMap2.get(fallbackKeys.get(str2)));
+                }
+                i3++;
+            } else {
+                hashMap2.clear();
+                return this.items.get(i2).currentPreviewColors;
             }
         }
-        for (Map.Entry next2 : Theme.getDefaultColors().entrySet()) {
-            if (!hashMap3.containsKey(next2.getKey())) {
-                hashMap3.put((String) next2.getKey(), (Integer) next2.getValue());
-            }
-        }
-        this.items.get(i2).currentColors = hashMap3;
-        return hashMap3;
     }
 
     public Theme.ThemeInfo getThemeInfo(int i) {
@@ -301,11 +308,16 @@ public class EmojiThemes {
                 }
             }
             if (wallpaperThumbBitmap == null) {
-                ImageLocation forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(wallpaper.document.thumbs, 120), wallpaper.document);
-                ImageReceiver imageReceiver = new ImageReceiver();
-                imageReceiver.setImage(forDocument, "120_80", (Drawable) null, (String) null, (Object) null, 1);
-                imageReceiver.setDelegate(new EmojiThemes$$ExternalSyntheticLambda2(resultCallback, j, wallpaperThumbFile));
-                ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
+                TLRPC$Document tLRPC$Document = wallpaper.document;
+                if (tLRPC$Document != null) {
+                    ImageLocation forDocument = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 120), wallpaper.document);
+                    ImageReceiver imageReceiver = new ImageReceiver();
+                    imageReceiver.setImage(forDocument, "120_80", (Drawable) null, (String) null, (Object) null, 1);
+                    imageReceiver.setDelegate(new EmojiThemes$$ExternalSyntheticLambda2(resultCallback, j, wallpaperThumbFile));
+                    ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
+                } else if (resultCallback != null) {
+                    resultCallback.onComplete(new Pair(Long.valueOf(j), (Object) null));
+                }
             } else if (resultCallback != null) {
                 resultCallback.onComplete(new Pair(Long.valueOf(j), wallpaperThumbBitmap));
             }
@@ -403,47 +415,47 @@ public class EmojiThemes {
     public void loadPreviewColors(int i) {
         for (int i2 = 0; i2 < this.items.size(); i2++) {
             if (this.items.get(i2) != null) {
-                HashMap<String, Integer> currentColors = getCurrentColors(i, i2);
-                Integer num = currentColors.get("chat_inBubble");
+                HashMap<String, Integer> previewColors = getPreviewColors(i, i2);
+                Integer num = previewColors.get("chat_inBubble");
                 if (num == null) {
                     num = Integer.valueOf(Theme.getDefaultColor("chat_inBubble"));
                 }
                 this.items.get(i2).inBubbleColor = num.intValue();
-                Integer num2 = currentColors.get("chat_outBubble");
+                Integer num2 = previewColors.get("chat_outBubble");
                 if (num2 == null) {
                     num2 = Integer.valueOf(Theme.getDefaultColor("chat_outBubble"));
                 }
                 this.items.get(i2).outBubbleColor = num2.intValue();
-                Integer num3 = currentColors.get("featuredStickers_addButton");
+                Integer num3 = previewColors.get("featuredStickers_addButton");
                 if (num3 == null) {
                     num3 = Integer.valueOf(Theme.getDefaultColor("featuredStickers_addButton"));
                 }
                 this.items.get(i2).outLineColor = num3.intValue();
-                Integer num4 = currentColors.get("chat_wallpaper");
+                Integer num4 = previewColors.get("chat_wallpaper");
                 if (num4 == null) {
                     this.items.get(i2).patternBgColor = 0;
                 } else {
                     this.items.get(i2).patternBgColor = num4.intValue();
                 }
-                Integer num5 = currentColors.get("chat_wallpaper_gradient_to");
+                Integer num5 = previewColors.get("chat_wallpaper_gradient_to");
                 if (num5 == null) {
                     this.items.get(i2).patternBgGradientColor1 = 0;
                 } else {
                     this.items.get(i2).patternBgGradientColor1 = num5.intValue();
                 }
-                Integer num6 = currentColors.get("key_chat_wallpaper_gradient_to2");
+                Integer num6 = previewColors.get("key_chat_wallpaper_gradient_to2");
                 if (num6 == null) {
                     this.items.get(i2).patternBgGradientColor2 = 0;
                 } else {
                     this.items.get(i2).patternBgGradientColor2 = num6.intValue();
                 }
-                Integer num7 = currentColors.get("key_chat_wallpaper_gradient_to3");
+                Integer num7 = previewColors.get("key_chat_wallpaper_gradient_to3");
                 if (num7 == null) {
                     this.items.get(i2).patternBgGradientColor3 = 0;
                 } else {
                     this.items.get(i2).patternBgGradientColor3 = num7.intValue();
                 }
-                Integer num8 = currentColors.get("chat_wallpaper_gradient_rotation");
+                Integer num8 = previewColors.get("chat_wallpaper_gradient_rotation");
                 if (num8 == null) {
                     this.items.get(i2).patternBgRotation = 0;
                 } else {
