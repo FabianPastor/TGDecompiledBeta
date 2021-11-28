@@ -363,6 +363,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     /* access modifiers changed from: private */
     public ArrayList<Long> selectedDialogs = new ArrayList<>();
     private NumberTextView selectedDialogsCountTextView;
+    private boolean showSetPasswordConfirm;
     private String showingSuggestion;
     private RecyclerView sideMenu;
     ValueAnimator slideBackTransitionAnimator;
@@ -2046,6 +2047,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             this.messagesCount = this.arguments.getInt("messagesCount", 0);
             this.hasPoll = this.arguments.getInt("hasPoll", 0);
             this.hasInvoice = this.arguments.getBoolean("hasInvoice", false);
+            this.showSetPasswordConfirm = this.arguments.getBoolean("showSetPasswordConfirm", this.showSetPasswordConfirm);
+            this.arguments.getInt("otherwiseRelogin");
         }
         if (this.initialDialogsType == 0) {
             this.askAboutContacts = MessagesController.getGlobalNotificationsSettings().getBoolean("askAboutContacts", true);
@@ -2236,7 +2239,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r6 = r0.createMenu()
             boolean r0 = r10.onlySelect
-            r14 = 2131625315(0x7f0e0563, float:1.8877834E38)
+            r14 = 2131625320(0x7f0e0568, float:1.8877845E38)
             java.lang.String r15 = "Done"
             r9 = 0
             r8 = 2
@@ -2289,7 +2292,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r10.proxyDrawable = r0
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.addItem((int) r8, (android.graphics.drawable.Drawable) r0)
             r10.proxyItem = r0
-            r1 = 2131627352(0x7f0e0d58, float:1.8881966E38)
+            r1 = 2131627366(0x7f0e0d66, float:1.8881994E38)
             java.lang.String r2 = "ProxySettings"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -2302,7 +2305,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r24 = 0
             java.lang.String r20 = "passcode_lock_close"
             r18 = r0
-            r18.<init>((int) r19, (java.lang.String) r20, (int) r21, (int) r22, (boolean) r23, (int[]) r24)
+            r18.<init>(r19, r20, r21, r22, r23, r24)
             r10.passcodeDrawable = r0
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.addItem((int) r12, (android.graphics.drawable.Drawable) r0)
             r10.passcodeItem = r0
@@ -2326,7 +2329,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setActionBarMenuItemSearchListener(r1)
             r10.searchItem = r0
             java.lang.String r1 = "Search"
-            r2 = 2131627594(0x7f0e0e4a, float:1.8882457E38)
+            r2 = 2131627608(0x7f0e0e58, float:1.8882485E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setSearchFieldHint(r3)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r10.searchItem
@@ -2345,7 +2348,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             java.lang.String r1 = r10.selectAlertString
             if (r1 != 0) goto L_0x013a
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131625696(0x7f0e06e0, float:1.8878607E38)
+            r1 = 2131625709(0x7f0e06ed, float:1.8878634E38)
             java.lang.String r2 = "ForwardTo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -2353,14 +2356,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x013a:
             if (r0 != r5) goto L_0x014b
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131627660(0x7f0e0e8c, float:1.888259E38)
+            r1 = 2131627674(0x7f0e0e9a, float:1.888262E38)
             java.lang.String r2 = "SelectChats"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x0159
         L_0x014b:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131627659(0x7f0e0e8b, float:1.8882589E38)
+            r1 = 2131627673(0x7f0e0e99, float:1.8882617E38)
             java.lang.String r2 = "SelectChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -2763,7 +2766,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r8 = 2
             r9 = 0
             r12 = 1
-            r14 = 2131625315(0x7f0e0563, float:1.8877834E38)
+            r14 = 2131625320(0x7f0e0568, float:1.8877845E38)
             goto L_0x02fa
         L_0x04fd:
             r12 = r6
@@ -2943,7 +2946,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1 = 2131165432(0x7var_f8, float:1.794508E38)
             r0.setImageResource(r1)
             android.widget.FrameLayout r0 = r10.floatingButtonContainer
-            r1 = 2131625315(0x7f0e0563, float:1.8877834E38)
+            r1 = 2131625320(0x7f0e0568, float:1.8877845E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r15, r1)
             r0.setContentDescription(r1)
             goto L_0x0686
@@ -2954,7 +2957,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r4 = 52
             r0.setAnimation(r1, r3, r4)
             android.widget.FrameLayout r0 = r10.floatingButtonContainer
-            r1 = 2131626451(0x7f0e09d3, float:1.8880139E38)
+            r1 = 2131626465(0x7f0e09e1, float:1.8880167E38)
             java.lang.String r3 = "NewMessageTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setContentDescription(r1)
@@ -4259,11 +4262,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0.<init>((android.content.Context) r6)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r4)
-            r4 = 2131627118(0x7f0e0c6e, float:1.8881491E38)
+            r4 = 2131627132(0x7f0e0c7c, float:1.888152E38)
             java.lang.String r5 = "PermissionStorage"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setMessage(r4)
-            r4 = 2131626730(0x7f0e0aea, float:1.8880704E38)
+            r4 = 2131626744(0x7f0e0af8, float:1.8880733E38)
             java.lang.String r5 = "OK"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setPositiveButton(r4, r1)
@@ -4300,17 +4303,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r0.setTitle(r1)
-            r1 = 2131627119(0x7f0e0c6f, float:1.8881493E38)
+            r1 = 2131627133(0x7f0e0c7d, float:1.8881522E38)
             java.lang.String r4 = "PermissionXiaomiLockscreen"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r0.setMessage(r1)
-            r1 = 2131627117(0x7f0e0c6d, float:1.888149E38)
+            r1 = 2131627131(0x7f0e0c7b, float:1.8881518E38)
             java.lang.String r4 = "PermissionOpenSettings"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda9 r4 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda9
             r4.<init>(r11)
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r0.setPositiveButton(r1, r4)
-            r1 = 2131625073(0x7f0e0471, float:1.8877344E38)
+            r1 = 2131625078(0x7f0e0476, float:1.8877354E38)
             java.lang.String r4 = "ContactsPermissionAlertNotNow"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda14 r4 = org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda14.INSTANCE
@@ -6515,7 +6518,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             java.lang.String r4 = "AppName"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setTitle(r3)
-            r3 = 2131627167(0x7f0e0c9f, float:1.888159E38)
+            r3 = 2131627181(0x7f0e0cad, float:1.888162E38)
             java.lang.Object[] r4 = new java.lang.Object[r12]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r2, r0)
             r2 = 0
@@ -6523,13 +6526,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             java.lang.String r0 = "PinToTopLimitReached2"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
             r1.setMessage(r0)
-            r0 = 2131625667(0x7f0e06c3, float:1.8878548E38)
+            r0 = 2131625672(0x7f0e06c8, float:1.8878559E38)
             java.lang.String r2 = "FiltersSetupPinAlert"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda8 r2 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda8
             r2.<init>(r13)
             r1.setNegativeButton(r0, r2)
-            r0 = 2131626730(0x7f0e0aea, float:1.8880704E38)
+            r0 = 2131626744(0x7f0e0af8, float:1.8880733E38)
             java.lang.String r2 = "OK"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r2 = 0
@@ -6539,7 +6542,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r2 = 0
             goto L_0x01aa
         L_0x0195:
-            r1 = 2131627157(0x7f0e0CLASSNAME, float:1.888157E38)
+            r1 = 2131627171(0x7f0e0ca3, float:1.8881599E38)
             java.lang.Object[] r3 = new java.lang.Object[r12]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r2, r0)
             r2 = 0
@@ -6573,7 +6576,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             android.app.Activity r2 = r39.getParentActivity()
             r1.<init>((android.content.Context) r2)
             if (r14 != r0) goto L_0x0203
-            r0 = 2131625219(0x7f0e0503, float:1.887764E38)
+            r0 = 2131625224(0x7f0e0508, float:1.887765E38)
             java.lang.Object[] r2 = new java.lang.Object[r12]
             java.lang.String r4 = "ChatsSelected"
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r10)
@@ -6592,7 +6595,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x0203:
             int r0 = r13.canClearCacheCount
             if (r0 == 0) goto L_0x022b
-            r0 = 2131624979(0x7f0e0413, float:1.8877153E38)
+            r0 = 2131624984(0x7f0e0418, float:1.8877163E38)
             java.lang.Object[] r2 = new java.lang.Object[r12]
             java.lang.String r4 = "ChatsSelectedClearCache"
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r10)
@@ -6607,7 +6610,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1.setMessage(r0)
             goto L_0x0200
         L_0x022b:
-            r0 = 2131624981(0x7f0e0415, float:1.8877157E38)
+            r0 = 2131624986(0x7f0e041a, float:1.8877167E38)
             java.lang.Object[] r2 = new java.lang.Object[r12]
             java.lang.String r4 = "ChatsSelectedClear"
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r10)
@@ -6623,19 +6626,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             goto L_0x0200
         L_0x024f:
             if (r14 != r0) goto L_0x025b
-            r0 = 2131625183(0x7f0e04df, float:1.8877567E38)
+            r0 = 2131625188(0x7f0e04e4, float:1.8877577E38)
             java.lang.String r2 = "Delete"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             goto L_0x0272
         L_0x025b:
             int r0 = r13.canClearCacheCount
             if (r0 == 0) goto L_0x0269
-            r0 = 2131624983(0x7f0e0417, float:1.8877161E38)
+            r0 = 2131624988(0x7f0e041c, float:1.8877171E38)
             java.lang.String r2 = "ClearHistoryCache"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             goto L_0x0272
         L_0x0269:
-            r0 = 2131624982(0x7f0e0416, float:1.887716E38)
+            r0 = 2131624987(0x7f0e041b, float:1.887717E38)
             java.lang.String r2 = "ClearHistory"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
         L_0x0272:
@@ -6938,15 +6941,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r39.getParentActivity()
             r0.<init>((android.content.Context) r1)
-            r1 = 2131627355(0x7f0e0d5b, float:1.8881972E38)
+            r1 = 2131627369(0x7f0e0d69, float:1.8882E38)
             java.lang.String r2 = "PsaHideChatAlertTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131627354(0x7f0e0d5a, float:1.888197E38)
+            r1 = 2131627368(0x7f0e0d68, float:1.8881998E38)
             java.lang.String r2 = "PsaHideChatAlertText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
-            r1 = 2131627353(0x7f0e0d59, float:1.8881968E38)
+            r1 = 2131627367(0x7f0e0d67, float:1.8881996E38)
             java.lang.String r2 = "PsaHide"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda10 r2 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda10

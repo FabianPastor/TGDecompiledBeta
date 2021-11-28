@@ -12,6 +12,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda36 impl
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        AlertsCreator.lambda$createScheduleDatePickerDialog$47(this.f$0, this.f$1, dialogInterface);
+        AlertsCreator.lambda$createScheduleDatePickerDialog$48(this.f$0, this.f$1, dialogInterface);
     }
 }

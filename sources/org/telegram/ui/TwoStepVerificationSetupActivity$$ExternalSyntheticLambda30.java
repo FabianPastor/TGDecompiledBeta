@@ -12,6 +12,6 @@ public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyn
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$setNewPassword$29(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$createView$3(tLObject, tLRPC$TL_error);
     }
 }

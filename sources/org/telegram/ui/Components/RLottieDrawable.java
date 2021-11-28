@@ -95,7 +95,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     protected boolean waitingForNextTask;
     protected int width;
 
-    public static native long create(String str, String str2, int i, int i2, int[] iArr, boolean z, int[] iArr2, boolean z2);
+    public static native long create(String str, String str2, int i, int i2, int[] iArr, boolean z, int[] iArr2, boolean z2, int i3);
 
     /* access modifiers changed from: private */
     public static native void createCache(long j, int i, int i2);
@@ -173,7 +173,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    public RLottieDrawable(File file, int i, int i2, boolean z, boolean z2, int[] iArr) {
+    public RLottieDrawable(File file, int i, int i2, boolean z, boolean z2, int[] iArr, int i3) {
         int[] iArr2 = new int[3];
         this.metaData = iArr2;
         this.customEndFrame = -1;
@@ -396,13 +396,13 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 }
             }
         };
-        int i3 = i;
-        this.width = i3;
-        int i4 = i2;
-        this.height = i4;
+        int i4 = i;
+        this.width = i4;
+        int i5 = i2;
+        this.height = i5;
         this.shouldLimitFps = z2;
         getPaint().setFlags(2);
-        this.nativePtr = create(file.getAbsolutePath(), (String) null, i3, i4, iArr2, z, iArr, this.shouldLimitFps);
+        this.nativePtr = create(file.getAbsolutePath(), (String) null, i4, i5, iArr2, z, iArr, this.shouldLimitFps, i3);
         if (z && lottieCacheGenerateQueue == null) {
             lottieCacheGenerateQueue = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue());
         }
@@ -415,7 +415,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.timeBetweenFrames = Math.max(this.shouldLimitFps ? 33 : 16, (int) (1000.0f / ((float) iArr2[1])));
     }
 
-    public RLottieDrawable(File file, String str, int i, int i2, boolean z, boolean z2, int[] iArr) {
+    public RLottieDrawable(File file, String str, int i, int i2, boolean z, boolean z2, int[] iArr, int i3) {
         int[] iArr2 = new int[3];
         this.metaData = iArr2;
         this.customEndFrame = -1;
@@ -638,13 +638,13 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 }
             }
         };
-        int i3 = i;
-        this.width = i3;
-        int i4 = i2;
-        this.height = i4;
+        int i4 = i;
+        this.width = i4;
+        int i5 = i2;
+        this.height = i5;
         this.shouldLimitFps = z2;
         getPaint().setFlags(2);
-        this.nativePtr = create(file.getAbsolutePath(), str, i3, i4, iArr2, z, iArr, this.shouldLimitFps);
+        this.nativePtr = create(file.getAbsolutePath(), str, i4, i5, iArr2, z, iArr, this.shouldLimitFps, i3);
         if (z && lottieCacheGenerateQueue == null) {
             lottieCacheGenerateQueue = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue());
         }

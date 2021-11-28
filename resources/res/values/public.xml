@@ -2626,6 +2626,11 @@
     <public type="string" name="ChatThemeSaveDialogTitle" id="NUM" />
     <public type="string" name="ChatVideo" id="NUM" />
     <public type="string" name="ChatWasMovedToMainList" id="NUM" />
+    <public type="string" name="ChatWithAdminChannelTitle" id="NUM" />
+    <public type="string" name="ChatWithAdminGroupTitle" id="NUM" />
+    <public type="string" name="ChatWithAdminMessage" id="NUM" />
+    <public type="string" name="ChatWithChannelAdmin" id="NUM" />
+    <public type="string" name="ChatWithGroupAdmin" id="NUM" />
     <public type="string" name="ChatYourSelf" id="NUM" />
     <public type="string" name="ChatYourSelfDescription1" id="NUM" />
     <public type="string" name="ChatYourSelfDescription2" id="NUM" />
@@ -3409,6 +3414,14 @@
     <public type="string" name="FootsAway" id="NUM" />
     <public type="string" name="FootsFromYou" id="NUM" />
     <public type="string" name="FootsShort" id="NUM" />
+    <public type="string" name="ForceSetPasswordAlertMessage_few" id="NUM" />
+    <public type="string" name="ForceSetPasswordAlertMessage_many" id="NUM" />
+    <public type="string" name="ForceSetPasswordAlertMessage_one" id="NUM" />
+    <public type="string" name="ForceSetPasswordAlertMessage_other" id="NUM" />
+    <public type="string" name="ForceSetPasswordAlertMessage_two" id="NUM" />
+    <public type="string" name="ForceSetPasswordAlertMessage_zero" id="NUM" />
+    <public type="string" name="ForceSetPasswordCancel" id="NUM" />
+    <public type="string" name="ForceSetPasswordContinue" id="NUM" />
     <public type="string" name="ForgotPassword" id="NUM" />
     <public type="string" name="Forward" id="NUM" />
     <public type="string" name="ForwardAnotherChat" id="NUM" />
@@ -3631,6 +3644,7 @@
     <public type="string" name="Hours_two" id="NUM" />
     <public type="string" name="Hours_zero" id="NUM" />
     <public type="string" name="Hybrid" id="NUM" />
+    <public type="string" name="IUnderstand" id="NUM" />
     <public type="string" name="IVInteractionsChartTitle" id="NUM" />
     <public type="string" name="IfInactiveFor" id="NUM" />
     <public type="string" name="ImagesTab2" id="NUM" />
@@ -6369,6 +6383,7 @@
     <public type="string" name="WaitingForNetwork" id="NUM" />
     <public type="string" name="WantsToSpeak" id="NUM" />
     <public type="string" name="Warmth" id="NUM" />
+    <public type="string" name="Warning" id="NUM" />
     <public type="string" name="WebSessionsTitle" id="NUM" />
     <public type="string" name="Weeks_few" id="NUM" />
     <public type="string" name="Weeks_many" id="NUM" />

@@ -15,6 +15,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda87 impl
     }
 
     public final String format(int i) {
-        return AlertsCreator.lambda$createDatePickerDialog$49(this.f$0, this.f$1, this.f$2, i);
+        return AlertsCreator.lambda$createScheduleDatePickerDialog$43(this.f$0, this.f$1, this.f$2, i);
     }
 }

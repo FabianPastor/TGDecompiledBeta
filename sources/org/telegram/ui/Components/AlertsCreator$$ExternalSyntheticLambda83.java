@@ -11,6 +11,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda83 impl
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AlertsCreator.lambda$createChangeBioAlert$22(tLObject, tLRPC$TL_error);
+        AlertsCreator.lambda$createChangeNameAlert$26(tLObject, tLRPC$TL_error);
     }
 }

@@ -1,7 +1,6 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.messenger.MessagesController;
 import org.telegram.ui.ActionBar.BaseFragment;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda23 implements DialogInterface.OnClickListener {
@@ -12,6 +11,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda23 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        MessagesController.getInstance(this.f$0.getCurrentAccount()).openByUserName("spambot", this.f$0, 1);
+        AlertsCreator.performAskAQuestion(this.f$0);
     }
 }

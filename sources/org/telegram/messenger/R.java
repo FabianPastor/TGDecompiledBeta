@@ -2765,6 +2765,11 @@ public final class R {
         public static final int ChatThemeSaveDialogTitle = NUM;
         public static final int ChatVideo = NUM;
         public static final int ChatWasMovedToMainList = NUM;
+        public static final int ChatWithAdminChannelTitle = NUM;
+        public static final int ChatWithAdminGroupTitle = NUM;
+        public static final int ChatWithAdminMessage = NUM;
+        public static final int ChatWithChannelAdmin = NUM;
+        public static final int ChatWithGroupAdmin = NUM;
         public static final int ChatYourSelf = NUM;
         public static final int ChatYourSelfDescription1 = NUM;
         public static final int ChatYourSelfDescription2 = NUM;
@@ -3548,6 +3553,14 @@ public final class R {
         public static final int FootsAway = NUM;
         public static final int FootsFromYou = NUM;
         public static final int FootsShort = NUM;
+        public static final int ForceSetPasswordAlertMessage_few = NUM;
+        public static final int ForceSetPasswordAlertMessage_many = NUM;
+        public static final int ForceSetPasswordAlertMessage_one = NUM;
+        public static final int ForceSetPasswordAlertMessage_other = NUM;
+        public static final int ForceSetPasswordAlertMessage_two = NUM;
+        public static final int ForceSetPasswordAlertMessage_zero = NUM;
+        public static final int ForceSetPasswordCancel = NUM;
+        public static final int ForceSetPasswordContinue = NUM;
         public static final int ForgotPassword = NUM;
         public static final int Forward = NUM;
         public static final int ForwardAnotherChat = NUM;
@@ -3770,6 +3783,7 @@ public final class R {
         public static final int Hours_two = NUM;
         public static final int Hours_zero = NUM;
         public static final int Hybrid = NUM;
+        public static final int IUnderstand = NUM;
         public static final int IVInteractionsChartTitle = NUM;
         public static final int IfInactiveFor = NUM;
         public static final int ImagesTab2 = NUM;
@@ -6508,6 +6522,7 @@ public final class R {
         public static final int WaitingForNetwork = NUM;
         public static final int WantsToSpeak = NUM;
         public static final int Warmth = NUM;
+        public static final int Warning = NUM;
         public static final int WebSessionsTitle = NUM;
         public static final int Weeks_few = NUM;
         public static final int Weeks_many = NUM;

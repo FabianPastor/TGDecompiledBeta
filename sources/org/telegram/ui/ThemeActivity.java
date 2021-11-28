@@ -876,6 +876,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.needShareTheme);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.needSetDayNightTheme);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiPreviewThemesChanged);
         getNotificationCenter().addObserver(this, NotificationCenter.themeUploadedToServer);
         getNotificationCenter().addObserver(this, NotificationCenter.themeUploadError);
         if (this.currentType == 0) {
@@ -895,14 +896,16 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needShareTheme);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needSetDayNightTheme);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiPreviewThemesChanged);
         getNotificationCenter().removeObserver(this, NotificationCenter.themeUploadedToServer);
         getNotificationCenter().removeObserver(this, NotificationCenter.themeUploadError);
         Theme.saveAutoNightThemeConfig();
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        AlertDialog alertDialog;
         int i3;
+        AlertDialog alertDialog;
+        int i4;
         if (i == NotificationCenter.locationPermissionGranted) {
             updateSunTime((Location) null, true);
         } else if (i == NotificationCenter.didSetNewWallpapper || i == NotificationCenter.emojiLoaded) {
@@ -913,8 +916,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             updateMenuItem();
         } else if (i == NotificationCenter.themeAccentListUpdated) {
             ListAdapter listAdapter2 = this.listAdapter;
-            if (listAdapter2 != null && (i3 = this.themeAccentListRow) != -1) {
-                listAdapter2.notifyItemChanged(i3, new Object());
+            if (listAdapter2 != null && (i4 = this.themeAccentListRow) != -1) {
+                listAdapter2.notifyItemChanged(i4, new Object());
             }
         } else if (i == NotificationCenter.themeListUpdated) {
             updateRows(true);
@@ -952,6 +955,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         } else if (i == NotificationCenter.needSetDayNightTheme) {
             updateMenuItem();
             checkCurrentDayNight();
+        } else if (i == NotificationCenter.emojiPreviewThemesChanged && (i3 = this.themeListRow2) >= 0) {
+            this.listAdapter.notifyItemChanged(i3);
         }
     }
 
@@ -1079,15 +1084,15 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     org.telegram.ui.ThemeActivity r1 = org.telegram.ui.ThemeActivity.this
                     android.app.Activity r1 = r1.getParentActivity()
                     r13.<init>((android.content.Context) r1)
-                    r1 = 2131628115(0x7f0e1053, float:1.8883514E38)
+                    r1 = 2131628129(0x7f0e1061, float:1.8883542E38)
                     java.lang.String r2 = "ThemeResetToDefaultsTitle"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     r13.setTitle(r1)
-                    r1 = 2131628114(0x7f0e1052, float:1.8883512E38)
+                    r1 = 2131628128(0x7f0e1060, float:1.888354E38)
                     java.lang.String r2 = "ThemeResetToDefaultsText"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     r13.setMessage(r1)
-                    r1 = 2131627504(0x7f0e0df0, float:1.8882274E38)
+                    r1 = 2131627518(0x7f0e0dfe, float:1.8882303E38)
                     java.lang.String r2 = "Reset"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     org.telegram.ui.ThemeActivity$1$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.ThemeActivity$1$$ExternalSyntheticLambda0
@@ -2117,7 +2122,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0160:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x0176 }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131627770(0x7f0e0efa, float:1.8882814E38)
+                r0 = 2131627784(0x7f0e0var_, float:1.8882842E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x0176 }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x0176 }
                 r10 = 500(0x1f4, float:7.0E-43)
@@ -2160,15 +2165,15 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131625249(0x7f0e0521, float:1.88777E38)
+                r10 = 2131625254(0x7f0e0526, float:1.887771E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131625248(0x7f0e0520, float:1.8877699E38)
+                r10 = 2131625253(0x7f0e0525, float:1.8877709E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131625183(0x7f0e04df, float:1.8877567E38)
+                r10 = 2131625188(0x7f0e04e4, float:1.8877577E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 org.telegram.ui.ThemeActivity$ListAdapter$$ExternalSyntheticLambda1 r0 = new org.telegram.ui.ThemeActivity$ListAdapter$$ExternalSyntheticLambda1

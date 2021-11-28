@@ -10,6 +10,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda65 impl
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return AlertsCreator.lambda$createCalendarPickerDialog$54(view, motionEvent);
+        return AlertsCreator.lambda$createCalendarPickerDialog$55(view, motionEvent);
     }
 }

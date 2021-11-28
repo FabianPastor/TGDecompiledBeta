@@ -13,6 +13,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda50 impl
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createLocationUpdateDialog$70(this.f$0, this.f$1, view);
+        AlertsCreator.lambda$createFreeSpaceDialog$79(this.f$0, this.f$1, view);
     }
 }

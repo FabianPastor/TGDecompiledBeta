@@ -874,7 +874,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     } else {
                         textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     }
-                } else if (i == SessionsActivity.this.qrCodeDividerRow || i == SessionsActivity.this.ttlDivideRow) {
+                } else if (i == SessionsActivity.this.qrCodeDividerRow || i == SessionsActivity.this.ttlDivideRow || i == SessionsActivity.this.noOtherSessionsRow) {
                     textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     textInfoPrivacyCell.setText("");
                     textInfoPrivacyCell.setFixedSize(12);
@@ -905,11 +905,11 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                 sessionCell.showStub(SessionsActivity.this.globalFlickerLoadingView);
                                 return;
                             }
-                            TLRPC$TL_authorization access$2900 = SessionsActivity.this.currentSession;
+                            TLRPC$TL_authorization access$3000 = SessionsActivity.this.currentSession;
                             if (SessionsActivity.this.sessions.isEmpty() && SessionsActivity.this.passwordSessions.isEmpty() && SessionsActivity.this.qrCodeRow == -1) {
                                 z = false;
                             }
-                            sessionCell.setSession(access$2900, z);
+                            sessionCell.setSession(access$3000, z);
                         } else if (i >= SessionsActivity.this.otherSessionsStartRow && i < SessionsActivity.this.otherSessionsEndRow) {
                             TLObject tLObject = (TLObject) SessionsActivity.this.sessions.get(i - SessionsActivity.this.otherSessionsStartRow);
                             if (i == SessionsActivity.this.otherSessionsEndRow - 1) {
@@ -957,14 +957,11 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             if (i == SessionsActivity.this.terminateAllSessionsRow) {
                 return 0;
             }
-            if (i == SessionsActivity.this.terminateAllSessionsDetailRow || i == SessionsActivity.this.otherSessionsTerminateDetail || i == SessionsActivity.this.passwordSessionsDetailRow || i == SessionsActivity.this.qrCodeDividerRow || i == SessionsActivity.this.ttlDivideRow) {
+            if (i == SessionsActivity.this.terminateAllSessionsDetailRow || i == SessionsActivity.this.otherSessionsTerminateDetail || i == SessionsActivity.this.passwordSessionsDetailRow || i == SessionsActivity.this.qrCodeDividerRow || i == SessionsActivity.this.ttlDivideRow || i == SessionsActivity.this.noOtherSessionsRow) {
                 return 1;
             }
             if (i == SessionsActivity.this.currentSessionSectionRow || i == SessionsActivity.this.otherSessionsSectionRow || i == SessionsActivity.this.passwordSessionsSectionRow || i == SessionsActivity.this.ttlHeaderRow) {
                 return 2;
-            }
-            if (i == SessionsActivity.this.noOtherSessionsRow) {
-                return 3;
             }
             if (i == SessionsActivity.this.currentSessionRow) {
                 return 4;

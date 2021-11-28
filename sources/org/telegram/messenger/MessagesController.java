@@ -5451,6 +5451,9 @@ public class MessagesController extends BaseController implements NotificationCe
                 edit.putBoolean("dialog_bar_location" + j, tLRPC$TL_peerSettings.report_geo);
                 edit.putBoolean("dialog_bar_archived" + j, tLRPC$TL_peerSettings.autoarchived);
                 edit.putBoolean("dialog_bar_invite" + j, tLRPC$TL_peerSettings.invite_members);
+                edit.putString("dialog_bar_chat_with_admin_title" + j, tLRPC$TL_peerSettings.request_chat_title);
+                edit.putBoolean("dialog_bar_chat_with_channel" + j, tLRPC$TL_peerSettings.request_chat_broadcast);
+                edit.putInt("dialog_bar_chat_with_date" + j, tLRPC$TL_peerSettings.request_chat_date);
                 SharedPreferences sharedPreferences2 = this.notificationsPreferences;
                 if (sharedPreferences2.getInt("dialog_bar_distance" + j, -1) != -2) {
                     if ((tLRPC$TL_peerSettings.flags & 64) != 0) {

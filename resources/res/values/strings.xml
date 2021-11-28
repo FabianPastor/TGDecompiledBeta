@@ -962,6 +962,11 @@
     <string name="ChatThemeSaveDialogTitle">Save changes?</string>
     <string name="ChatVideo">Video</string>
     <string name="ChatWasMovedToMainList">The chat was moved to your main list.</string>
+    <string name="ChatWithAdminChannelTitle">Chat with channel\'s admin</string>
+    <string name="ChatWithAdminGroupTitle">Chat with group\'s admin</string>
+    <string name="ChatWithAdminMessage">You received this message because you requsted to join **%1$s** on %2$s</string>
+    <string name="ChatWithChannelAdmin">**%1$s** is an admin of **%2$s**, a channel you requested to join.</string>
+    <string name="ChatWithGroupAdmin">**%1$s** is an admin of **%2$s**, a group you requested to join.</string>
     <string name="ChatYourSelf">forward here to save</string>
     <string name="ChatYourSelfDescription1">Forward messages here to save them</string>
     <string name="ChatYourSelfDescription2">Send media and files to store them</string>
@@ -1745,6 +1750,14 @@
     <string name="FootsAway">%1$s ft away</string>
     <string name="FootsFromYou">%1$s ft from you</string>
     <string name="FootsShort">%1$s ft</string>
+    <string name="ForceSetPasswordAlertMessage_few">Proceed without a password? If you do not set a password, you will only be able to log into your account via SMS once every %1$s days.</string>
+    <string name="ForceSetPasswordAlertMessage_many">Proceed without a password? If you do not set a password, you will only be able to log into your account via SMS once every %1$s days.</string>
+    <string name="ForceSetPasswordAlertMessage_one">Proceed without a password? If you do not set a password, you will only be able to log into your account via SMS once every %1$s day.</string>
+    <string name="ForceSetPasswordAlertMessage_other">Proceed without a password? If you do not set a password, you will only be able to log into your account via SMS once every %1$s days.</string>
+    <string name="ForceSetPasswordAlertMessage_two">Proceed without a password? If you do not set a password, you will only be able to log into your account via SMS once every %1$s days.</string>
+    <string name="ForceSetPasswordAlertMessage_zero">Proceed without a password? If you do not set a password, you will only be able to log into your account via SMS once every %1$s days.</string>
+    <string name="ForceSetPasswordCancel">Yes, i\'m sure</string>
+    <string name="ForceSetPasswordContinue">No, let me set a password</string>
     <string name="ForgotPassword">Forgot password?</string>
     <string name="Forward">Forward</string>
     <string name="ForwardAnotherChat">Forward to another chat</string>
@@ -1967,6 +1980,7 @@
     <string name="Hours_two">%1$d hours</string>
     <string name="Hours_zero">%1$d hours</string>
     <string name="Hybrid">Hybrid</string>
+    <string name="IUnderstand">I understand</string>
     <string name="IVInteractionsChartTitle">IV Interactions</string>
     <string name="IfInactiveFor">if inactive for</string>
     <string name="ImagesTab2">Images</string>
@@ -4705,6 +4719,7 @@
     <string name="WaitingForNetwork">Waiting for network...</string>
     <string name="WantsToSpeak">wants to speak</string>
     <string name="Warmth">Warmth</string>
+    <string name="Warning">Warning</string>
     <string name="WebSessionsTitle">Logged in with Telegram</string>
     <string name="Weeks_few">%1$d weeks</string>
     <string name="Weeks_many">%1$d weeks</string>

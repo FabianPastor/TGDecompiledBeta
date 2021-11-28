@@ -33,6 +33,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_theme;
@@ -42,7 +43,7 @@ import org.telegram.ui.ActionBar.EmojiThemes;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ChatThemeBottomSheet;
 
-public class ThemeSmallPreviewView extends FrameLayout {
+public class ThemeSmallPreviewView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
     public final float BUBBLE_HEIGHT = ((float) AndroidUtilities.dp(21.0f));
     /* access modifiers changed from: private */
@@ -193,6 +194,7 @@ public class ThemeSmallPreviewView extends FrameLayout {
         if (z3) {
             Drawable svgThumb = emojiAnimatedSticker != null ? DocumentObject.getSvgThumb(emojiAnimatedSticker, "emptyListPlaceholder", 0.2f) : null;
             if (svgThumb == null) {
+                Emoji.preloadEmoji(chatThemeItem2.chatTheme.getEmoticon());
                 svgThumb = Emoji.getEmojiDrawable(chatThemeItem2.chatTheme.getEmoticon());
             }
             this.backupImageView.setImage(ImageLocation.getForDocument(emojiAnimatedSticker), "50_50", svgThumb, (Object) null);
@@ -813,6 +815,24 @@ public class ThemeSmallPreviewView extends FrameLayout {
             ThemeSmallPreviewView themeSmallPreviewView7 = ThemeSmallPreviewView.this;
             themeSmallPreviewView7.messageDrawableIn.setRoundRadius((int) (themeSmallPreviewView7.rectF.height() * 0.5f));
             ThemeSmallPreviewView.this.messageDrawableIn.draw(canvas, this.inBubblePaint);
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
+    }
+
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.emojiLoaded) {
+            invalidate();
         }
     }
 }

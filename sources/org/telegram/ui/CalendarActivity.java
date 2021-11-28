@@ -526,39 +526,40 @@ public class CalendarActivity extends BaseFragment {
             super(context);
             boolean z = false;
             setWillNotDraw(false);
-            SimpleTextView simpleTextView = new SimpleTextView(context);
-            this.titleView = simpleTextView;
-            simpleTextView.setOnLongClickListener(new CalendarActivity$MonthView$$ExternalSyntheticLambda1(this));
-            this.titleView.setOnClickListener(new View.OnClickListener(CalendarActivity.this) {
-                public void onClick(View view) {
-                    MonthView monthView;
-                    if (CalendarActivity.this.inSelectionMode) {
-                        int i = 0;
-                        int i2 = -1;
-                        int i3 = -1;
-                        while (true) {
-                            monthView = MonthView.this;
-                            if (i >= monthView.daysInMonth) {
-                                break;
-                            }
-                            PeriodDay periodDay = monthView.messagesByDays.get(i, (Object) null);
-                            if (periodDay != null) {
-                                if (i2 == -1) {
-                                    i2 = periodDay.date;
+            this.titleView = new SimpleTextView(context);
+            if (CalendarActivity.this.calendarType == 0 && CalendarActivity.this.canClearHistory) {
+                this.titleView.setOnLongClickListener(new CalendarActivity$MonthView$$ExternalSyntheticLambda1(this));
+                this.titleView.setOnClickListener(new View.OnClickListener(CalendarActivity.this) {
+                    public void onClick(View view) {
+                        MonthView monthView;
+                        if (CalendarActivity.this.inSelectionMode) {
+                            int i = 0;
+                            int i2 = -1;
+                            int i3 = -1;
+                            while (true) {
+                                monthView = MonthView.this;
+                                if (i >= monthView.daysInMonth) {
+                                    break;
                                 }
-                                i3 = periodDay.date;
+                                PeriodDay periodDay = monthView.messagesByDays.get(i, (Object) null);
+                                if (periodDay != null) {
+                                    if (i2 == -1) {
+                                        i2 = periodDay.date;
+                                    }
+                                    i3 = periodDay.date;
+                                }
+                                i++;
                             }
-                            i++;
-                        }
-                        if (i2 >= 0 && i3 >= 0) {
-                            int unused = CalendarActivity.this.dateSelectedStart = i2;
-                            int unused2 = CalendarActivity.this.dateSelectedEnd = i3;
-                            CalendarActivity.this.updateTitle();
-                            CalendarActivity.this.animateSelection();
+                            if (i2 >= 0 && i3 >= 0) {
+                                int unused = CalendarActivity.this.dateSelectedStart = i2;
+                                int unused2 = CalendarActivity.this.dateSelectedEnd = i3;
+                                CalendarActivity.this.updateTitle();
+                                CalendarActivity.this.animateSelection();
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
             this.titleView.setBackground(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 2));
             this.titleView.setTextSize(15);
             this.titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));

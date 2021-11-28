@@ -1,16 +1,20 @@
 package org.telegram.ui.Components;
 
+import android.content.DialogInterface;
 import android.view.KeyEvent;
 import android.widget.TextView;
-import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda68 implements TextView.OnEditorActionListener {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda68 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda68();
+    public final /* synthetic */ AlertDialog f$0;
+    public final /* synthetic */ DialogInterface.OnClickListener f$1;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda68() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda68(AlertDialog alertDialog, DialogInterface.OnClickListener onClickListener) {
+        this.f$0 = alertDialog;
+        this.f$1 = onClickListener;
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return AndroidUtilities.hideKeyboard(textView);
+        return AlertsCreator.lambda$createChangeNameAlert$29(this.f$0, this.f$1, textView, i, keyEvent);
     }
 }

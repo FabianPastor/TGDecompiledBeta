@@ -9,6 +9,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda94 impl
     }
 
     public final String format(int i) {
-        return AlertsCreator.lambda$createTTLAlert$84(i);
+        return AlertsCreator.lambda$createTTLAlert$85(i);
     }
 }

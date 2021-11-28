@@ -11,6 +11,7 @@ import android.util.SparseArray;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatThemeController;
@@ -101,34 +102,53 @@ public class EmojiThemes {
         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0);
         String string = sharedPreferences.getString("lastDayCustomTheme", (String) null);
         int i2 = sharedPreferences.getInt("lastDayCustomThemeAccentId", -1);
+        int i3 = 99;
+        String str = "Blue";
         if (string == null || Theme.getTheme(string) == null) {
-            string = sharedPreferences.getString("lastDayTheme", "Blue");
-            if (Theme.getTheme(string) == null) {
+            string = sharedPreferences.getString("lastDayTheme", str);
+            Theme.ThemeInfo theme = Theme.getTheme(string);
+            if (theme == null) {
+                string = str;
                 i2 = 99;
-                string = "Blue";
+            } else {
+                i2 = theme.currentAccentId;
             }
             sharedPreferences.edit().putString("lastDayCustomTheme", string).apply();
+        } else if (i2 == -1) {
+            i2 = Theme.getTheme(string).lastAccentId;
+        }
+        if (i2 != -1) {
+            str = string;
+            i3 = i2;
         }
         String string2 = sharedPreferences.getString("lastDarkCustomTheme", (String) null);
-        int i3 = sharedPreferences.getInt("lastDarkCustomThemeAccentId", -1);
+        int i4 = sharedPreferences.getInt("lastDarkCustomThemeAccentId", -1);
+        String str2 = "Dark Blue";
         if (string2 == null || Theme.getTheme(string2) == null) {
-            string2 = sharedPreferences.getString("lastDarkTheme", "Dark Blue");
-            if (Theme.getTheme(string2) == null) {
-                string2 = "Dark Blue";
+            string2 = sharedPreferences.getString("lastDarkTheme", str2);
+            Theme.ThemeInfo theme2 = Theme.getTheme(string2);
+            if (theme2 == null) {
+                string2 = str2;
+                i4 = 0;
             } else {
-                i = i3;
+                i4 = theme2.currentAccentId;
             }
             sharedPreferences.edit().putString("lastDarkCustomTheme", string2).apply();
-            i3 = i;
+        } else if (i4 == -1) {
+            i4 = Theme.getTheme(str).lastAccentId;
+        }
+        if (i4 != -1) {
+            str2 = string2;
+            i = i4;
         }
         ThemeItem themeItem = new ThemeItem();
-        themeItem.themeInfo = Theme.getTheme(string);
-        themeItem.accentId = i2;
+        themeItem.themeInfo = Theme.getTheme(str);
+        themeItem.accentId = i3;
         emojiThemes.items.add(themeItem);
         emojiThemes.items.add((Object) null);
         ThemeItem themeItem2 = new ThemeItem();
-        themeItem2.themeInfo = Theme.getTheme(string2);
-        themeItem2.accentId = i3;
+        themeItem2.themeInfo = Theme.getTheme(str2);
+        themeItem2.accentId = i;
         emojiThemes.items.add(themeItem2);
         emojiThemes.items.add((Object) null);
         return emojiThemes;
@@ -237,6 +257,51 @@ public class EmojiThemes {
                 return this.items.get(i2).currentPreviewColors;
             }
         }
+    }
+
+    public HashMap<String, Integer> createColors(int i, int i2) {
+        Theme.ThemeAccent themeAccent;
+        Theme.ThemeInfo themeInfo = getThemeInfo(i2);
+        if (themeInfo == null) {
+            int settingsIndex = getSettingsIndex(i2);
+            TLRPC$TL_theme tlTheme = getTlTheme(i2);
+            Theme.ThemeInfo themeInfo2 = new Theme.ThemeInfo(Theme.getTheme(Theme.getBaseThemeKey(tlTheme.settings.get(settingsIndex))));
+            themeAccent = themeInfo2.createNewAccent(tlTheme, i, true, settingsIndex);
+            themeInfo2.setCurrentAccentId(themeAccent.id);
+            themeInfo = themeInfo2;
+        } else {
+            SparseArray<Theme.ThemeAccent> sparseArray = themeInfo.themeAccentsMap;
+            themeAccent = sparseArray != null ? sparseArray.get(this.items.get(i2).accentId) : null;
+        }
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        String[] strArr = new String[1];
+        if (themeInfo.pathToFile != null) {
+            hashMap.putAll(Theme.getThemeFileValues(new File(themeInfo.pathToFile), (String) null, strArr));
+        } else {
+            String str = themeInfo.assetName;
+            if (str != null) {
+                hashMap.putAll(Theme.getThemeFileValues((File) null, str, strArr));
+            }
+        }
+        String unused = this.items.get(i2).wallpaperLink = strArr[0];
+        if (themeAccent != null) {
+            HashMap<String, Integer> hashMap2 = new HashMap<>(hashMap);
+            themeAccent.fillAccentColors(hashMap, hashMap2);
+            hashMap.clear();
+            hashMap = hashMap2;
+        }
+        for (Map.Entry next : Theme.getFallbackKeys().entrySet()) {
+            String str2 = (String) next.getKey();
+            if (!hashMap.containsKey(str2)) {
+                hashMap.put(str2, hashMap.get(next.getValue()));
+            }
+        }
+        for (Map.Entry next2 : Theme.getDefaultColors().entrySet()) {
+            if (!hashMap.containsKey(next2.getKey())) {
+                hashMap.put((String) next2.getKey(), (Integer) next2.getValue());
+            }
+        }
+        return hashMap;
     }
 
     public Theme.ThemeInfo getThemeInfo(int i) {
