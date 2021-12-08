@@ -9,6 +9,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda93 impl
     }
 
     public final String format(int i) {
-        return AlertsCreator.lambda$createTTLAlert$82(i);
+        return String.format("%02d", new Object[]{Integer.valueOf(i)});
     }
 }

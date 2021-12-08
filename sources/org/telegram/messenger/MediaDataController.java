@@ -143,6 +143,7 @@ import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$Vector;
 import org.telegram.tgnet.TLRPC$messages_Messages;
+import org.telegram.tgnet.TLRPC$messages_StickerSet;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.StickerSetBulletinLayout;
@@ -334,6 +335,7 @@ public class MediaDataController extends BaseController {
             } catch (Exception unused) {
             }
         }
+        loadStickersByEmojiOrName("tg_placeholders_android", false, true);
     }
 
     public void cleanup() {
@@ -868,7 +870,7 @@ public class MediaDataController extends BaseController {
             SQLiteCursor queryFinalized = database.queryFinalized("SELECT document FROM web_recent_v3 WHERE id = 's_" + tLRPC$StickerSet.id + "'", new Object[0]);
             TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = null;
             if (queryFinalized.next() && !queryFinalized.isNull(0) && (byteBufferValue = queryFinalized.byteBufferValue(0)) != null) {
-                tLRPC$TL_messages_stickerSet = TLRPC$TL_messages_stickerSet.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                tLRPC$TL_messages_stickerSet = TLRPC$messages_StickerSet.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
                 byteBufferValue.reuse();
             }
             queryFinalized.dispose();
@@ -1961,24 +1963,14 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v0, resolved type: org.telegram.SQLite.SQLiteCursor} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v0, resolved type: org.telegram.tgnet.TLRPC$TL_messages_stickerSet} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v0, resolved type: org.telegram.SQLite.SQLiteCursor} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v1, resolved type: org.telegram.SQLite.SQLiteCursor} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v1, resolved type: org.telegram.tgnet.TLRPC$TL_messages_stickerSet} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v1, resolved type: org.telegram.SQLite.SQLiteCursor} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v5, resolved type: org.telegram.SQLite.SQLiteCursor} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v2, resolved type: org.telegram.SQLite.SQLiteCursor} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v3, resolved type: org.telegram.SQLite.SQLiteCursor} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v2, resolved type: org.telegram.tgnet.TLRPC$TL_messages_stickerSet} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v4, resolved type: org.telegram.SQLite.SQLiteCursor} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v6, resolved type: org.telegram.SQLite.SQLiteCursor} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v7, resolved type: org.telegram.SQLite.SQLiteCursor} */
+    /* JADX WARNING: type inference failed for: r7v0, types: [org.telegram.tgnet.TLRPC$TL_messages_stickerSet] */
+    /* JADX WARNING: type inference failed for: r7v1 */
+    /* JADX WARNING: type inference failed for: r7v2 */
     /* JADX WARNING: type inference failed for: r0v5, types: [org.telegram.tgnet.TLRPC$TL_messages_stickerSet] */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:18:0x0042 A[DONT_GENERATE] */
-    /* JADX WARNING: Unknown variable types count: 1 */
+    /* JADX WARNING: Unknown variable types count: 2 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$loadStickersByEmojiOrName$40(java.lang.String r12, boolean r13) {
         /*
@@ -1997,7 +1989,7 @@ public class MediaDataController extends BaseController {
             org.telegram.tgnet.NativeByteBuffer r3 = r2.byteBufferValue(r1)     // Catch:{ all -> 0x0036 }
             if (r3 == 0) goto L_0x002c
             int r5 = r3.readInt32(r1)     // Catch:{ all -> 0x0036 }
-            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = org.telegram.tgnet.TLRPC$TL_messages_stickerSet.TLdeserialize(r3, r5, r1)     // Catch:{ all -> 0x0036 }
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = org.telegram.tgnet.TLRPC$messages_StickerSet.TLdeserialize(r3, r5, r1)     // Catch:{ all -> 0x0036 }
             r3.reuse()     // Catch:{ all -> 0x0036 }
         L_0x002c:
             int r1 = r2.intValue(r4)     // Catch:{ all -> 0x0036 }
@@ -2283,7 +2275,7 @@ public class MediaDataController extends BaseController {
         L_0x003b:
             if (r7 >= r0) goto L_0x004b
             int r8 = r5.readInt32(r1)     // Catch:{ all -> 0x0050 }
-            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r8 = org.telegram.tgnet.TLRPC$TL_messages_stickerSet.TLdeserialize(r5, r8, r1)     // Catch:{ all -> 0x0050 }
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r8 = org.telegram.tgnet.TLRPC$messages_StickerSet.TLdeserialize(r5, r8, r1)     // Catch:{ all -> 0x0050 }
             r6.add(r8)     // Catch:{ all -> 0x0050 }
             int r7 = r7 + 1
             goto L_0x003b
@@ -4659,13 +4651,13 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02c9 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02c9 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02c9 }
-            r10 = 2131626405(0x7f0e09a5, float:1.8880045E38)
+            r10 = 2131626462(0x7f0e09de, float:1.888016E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02c9 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02c9 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02c9 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r9.setLongLabel(r0)     // Catch:{ all -> 0x02c9 }
             android.content.Context r9 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02c9 }
-            r10 = 2131166055(0x7var_, float:1.7946345E38)
+            r10 = 2131166074(0x7var_a, float:1.7946383E38)
             androidx.core.graphics.drawable.IconCompat r9 = androidx.core.graphics.drawable.IconCompat.createWithResource(r9, r10)     // Catch:{ all -> 0x02c9 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r0.setIcon(r9)     // Catch:{ all -> 0x02c9 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r0.setIntent(r2)     // Catch:{ all -> 0x02c9 }
@@ -4882,7 +4874,7 @@ public class MediaDataController extends BaseController {
             goto L_0x02a7
         L_0x029b:
             android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02c9 }
-            r8 = 2131166056(0x7var_, float:1.7946347E38)
+            r8 = 2131166075(0x7var_b, float:1.7946385E38)
             androidx.core.graphics.drawable.IconCompat r6 = androidx.core.graphics.drawable.IconCompat.createWithResource(r6, r8)     // Catch:{ all -> 0x02c9 }
             r1.setIcon(r6)     // Catch:{ all -> 0x02c9 }
         L_0x02a7:
@@ -5360,7 +5352,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0074
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627407(0x7f0e0d8f, float:1.8882078E38)
+            r9 = 2131627465(0x7f0e0dc9, float:1.8882195E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
         L_0x0071:
             r9 = r4
@@ -5370,7 +5362,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0084
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627537(0x7f0e0e11, float:1.8882341E38)
+            r9 = 2131627598(0x7f0e0e4e, float:1.8882465E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
             goto L_0x0071
         L_0x0084:

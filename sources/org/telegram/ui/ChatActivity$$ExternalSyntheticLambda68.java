@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda68 imple
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$createView$41(this.f$1, view, motionEvent);
+        return this.f$0.lambda$createView$49(this.f$1, view, motionEvent);
     }
 }

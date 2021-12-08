@@ -1,16 +1,21 @@
 package org.telegram.ui.Components;
 
 import android.view.View;
-import org.telegram.ui.Cells.CheckBoxCell;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.Components.AlertsCreator;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda52 implements View.OnClickListener {
-    public final /* synthetic */ CheckBoxCell[] f$0;
+    public final /* synthetic */ AlertDialog[] f$0;
+    public final /* synthetic */ Runnable f$1;
+    public final /* synthetic */ AlertsCreator.AccountSelectDelegate f$2;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda52(CheckBoxCell[] checkBoxCellArr) {
-        this.f$0 = checkBoxCellArr;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda52(AlertDialog[] alertDialogArr, Runnable runnable, AlertsCreator.AccountSelectDelegate accountSelectDelegate) {
+        this.f$0 = alertDialogArr;
+        this.f$1 = runnable;
+        this.f$2 = accountSelectDelegate;
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$showBlockReportSpamAlert$6(this.f$0, view);
+        AlertsCreator.lambda$createAccountSelectDialog$87(this.f$0, this.f$1, this.f$2, view);
     }
 }

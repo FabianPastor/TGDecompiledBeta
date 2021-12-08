@@ -244,13 +244,13 @@ public class InviteLinkBottomSheet extends BottomSheet {
             java.lang.String r4 = "fonts/rmedium.ttf"
             android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r1.setTypeface(r4)
-            r1 = 2131625972(0x7f0e07f4, float:1.8879167E38)
+            r1 = 2131626014(0x7f0e081e, float:1.8879252E38)
             java.lang.String r4 = "InviteLink"
             if (r5 != 0) goto L_0x0159
             boolean r5 = r2.expired
             if (r5 == 0) goto L_0x013a
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131625535(0x7f0e063f, float:1.887828E38)
+            r4 = 2131625565(0x7f0e065d, float:1.8878342E38)
             java.lang.String r5 = "ExpiredLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
@@ -259,7 +259,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             boolean r5 = r2.revoked
             if (r5 == 0) goto L_0x014d
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131627521(0x7f0e0e01, float:1.8882309E38)
+            r4 = 2131627582(0x7f0e0e3e, float:1.8882433E38)
             java.lang.String r5 = "RevokedLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
@@ -659,7 +659,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             L_0x004c:
                 org.telegram.ui.Cells.ShadowSectionCell r12 = new org.telegram.ui.Cells.ShadowSectionCell
                 r12.<init>(r1, r2)
-                r2 = 2131165451(0x7var_b, float:1.794512E38)
+                r2 = 2131165466(0x7var_a, float:1.794515E38)
                 android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r2, (java.lang.String) r11)
                 android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
@@ -692,7 +692,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 android.graphics.drawable.ColorDrawable r4 = new android.graphics.drawable.ColorDrawable
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r4.<init>(r0)
-                r0 = 2131165450(0x7var_a, float:1.7945117E38)
+                r0 = 2131165465(0x7var_, float:1.7945148E38)
                 android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r0, (java.lang.String) r11)
                 r2.<init>(r4, r11)
                 r2.setFullsize(r3)

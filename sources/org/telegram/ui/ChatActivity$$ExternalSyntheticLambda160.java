@@ -1,20 +1,23 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessageObject;
-import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_editMessage;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda160 implements AlertsCreator.ScheduleDatePickerDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda160 implements RequestDelegate {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessageObject.GroupedMessages f$1;
-    public final /* synthetic */ MessageObject f$2;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ TLRPC$TL_messages_editMessage f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda160(ChatActivity chatActivity, MessageObject.GroupedMessages groupedMessages, MessageObject messageObject) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda160(ChatActivity chatActivity, AlertDialog[] alertDialogArr, TLRPC$TL_messages_editMessage tLRPC$TL_messages_editMessage) {
         this.f$0 = chatActivity;
-        this.f$1 = groupedMessages;
-        this.f$2 = messageObject;
+        this.f$1 = alertDialogArr;
+        this.f$2 = tLRPC$TL_messages_editMessage;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$processSelectedOption$138(this.f$1, this.f$2, z, i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$processSelectedOption$139(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

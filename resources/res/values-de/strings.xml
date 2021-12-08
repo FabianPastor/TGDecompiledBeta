@@ -2380,7 +2380,7 @@
     <string name="NoGroupsInCommon">Keine gemeinsamen Gruppen</string>
     <string name="NoHandleAppInstalled">Du hast keine Applikationen, die den Dateityp \'%1$s\' öffnen könnten. Bitte installiere eine entsprechende Anwendung um fortzufahren.</string>
     <string name="NoLimit">Kein Limit</string>
-    <string name="NoMailInstalled">Bitte sende eine E-Mail an reports@stel.com mit einer Beschreibung des Problems.</string>
+    <string name="NoMailInstalled">Bitte sende eine E-Mail an sms@telegram.org mit einer Beschreibung des Problems.</string>
     <string name="NoMasks">Noch keine Masken</string>
     <string name="NoMedia">Die hier geteilten Bilder und Videos kannst du von jedem deiner Geräte aufrufen.</string>
     <string name="NoMediaAutoDownload">kein automatischer Download</string>
@@ -3782,7 +3782,6 @@
     <string name="Terminate">Beenden</string>
     <string name="TerminateAllSessions">Alle anderen Sitzungen beenden</string>
     <string name="TerminateAllWebSessions">Alle Webseiten trennen</string>
-    <string name="TerminateSessionInfo">Tippe auf eine Sitzung, um sie zu beenden.</string>
     <string name="TerminateSessionQuestion">Diese Sitzung abmelden?</string>
     <string name="TerminateSessionText">Bist du sicher, dass du diese Sitzung beenden möchtest?</string>
     <string name="TerminateWebSessionInfo">Antippen, um dich mit deinem Telegram-Konto abzumelden.</string>

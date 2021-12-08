@@ -2180,7 +2180,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.resetInfoRow
                 if (r14 != r0) goto L_0x027e
-                r14 = 2131627475(0x7f0e0dd3, float:1.8882215E38)
+                r14 = 2131627533(0x7f0e0e0d, float:1.8882333E38)
                 java.lang.String r0 = "ResetChatBackgroundsInfo"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14)
@@ -2438,27 +2438,27 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.uploadImageRow
                 if (r14 != r0) goto L_0x0252
-                r14 = 2131627621(0x7f0e0e65, float:1.8882512E38)
+                r14 = 2131627685(0x7f0e0ea5, float:1.8882641E38)
                 java.lang.String r0 = "SelectFromGallery"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                r0 = 2131166008(0x7var_, float:1.794625E38)
+                r0 = 2131166027(0x7var_b, float:1.7946288E38)
                 r13.setTextAndIcon((java.lang.String) r14, (int) r0, (boolean) r2)
                 goto L_0x027e
             L_0x0252:
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.setColorRow
                 if (r14 != r0) goto L_0x026a
-                r14 = 2131627689(0x7f0e0ea9, float:1.888265E38)
+                r14 = 2131627757(0x7f0e0eed, float:1.8882787E38)
                 java.lang.String r0 = "SetColor"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                r0 = 2131165676(0x7var_ec, float:1.7945576E38)
+                r0 = 2131165693(0x7var_fd, float:1.794561E38)
                 r13.setTextAndIcon((java.lang.String) r14, (int) r0, (boolean) r2)
                 goto L_0x027e
             L_0x026a:
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.resetRow
                 if (r14 != r0) goto L_0x027e
-                r14 = 2131627472(0x7f0e0dd0, float:1.888221E38)
+                r14 = 2131627530(0x7f0e0e0a, float:1.8882327E38)
                 java.lang.String r0 = "ResetChatBackgrounds"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14, r1)

@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$loadAdminedChannels$8(this.f$1, dialogInterface, i);
+        this.f$0.lambda$loadAdminedChannels$9(this.f$1, dialogInterface, i);
     }
 }

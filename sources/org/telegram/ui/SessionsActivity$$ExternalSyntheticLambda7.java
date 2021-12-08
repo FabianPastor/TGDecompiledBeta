@@ -15,6 +15,6 @@ public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda7 im
     }
 
     public final void run() {
-        this.f$0.lambda$loadSessions$18(this.f$1, this.f$2);
+        this.f$0.lambda$loadSessions$14(this.f$1, this.f$2);
     }
 }

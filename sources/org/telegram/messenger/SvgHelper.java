@@ -375,88 +375,94 @@ public class SvgHelper {
         }
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:12:0x003f */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static android.graphics.Bitmap getBitmap(int r8, int r9, int r10, int r11) {
-        /*
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0040 }
-            android.content.res.Resources r0 = r0.getResources()     // Catch:{ Exception -> 0x0040 }
-            java.io.InputStream r8 = r0.openRawResource(r8)     // Catch:{ Exception -> 0x0040 }
-            javax.xml.parsers.SAXParserFactory r0 = javax.xml.parsers.SAXParserFactory.newInstance()     // Catch:{ all -> 0x0039 }
-            javax.xml.parsers.SAXParser r0 = r0.newSAXParser()     // Catch:{ all -> 0x0039 }
-            org.xml.sax.XMLReader r0 = r0.getXMLReader()     // Catch:{ all -> 0x0039 }
-            org.telegram.messenger.SvgHelper$SVGHandler r7 = new org.telegram.messenger.SvgHelper$SVGHandler     // Catch:{ all -> 0x0039 }
-            java.lang.Integer r4 = java.lang.Integer.valueOf(r11)     // Catch:{ all -> 0x0039 }
-            r5 = 0
-            r6 = 0
-            r1 = r7
-            r2 = r9
-            r3 = r10
-            r1.<init>(r2, r3, r4, r5)     // Catch:{ all -> 0x0039 }
-            r0.setContentHandler(r7)     // Catch:{ all -> 0x0039 }
-            org.xml.sax.InputSource r9 = new org.xml.sax.InputSource     // Catch:{ all -> 0x0039 }
-            r9.<init>(r8)     // Catch:{ all -> 0x0039 }
-            r0.parse(r9)     // Catch:{ all -> 0x0039 }
-            android.graphics.Bitmap r9 = r7.getBitmap()     // Catch:{ all -> 0x0039 }
-            if (r8 == 0) goto L_0x0038
-            r8.close()     // Catch:{ Exception -> 0x0040 }
-        L_0x0038:
-            return r9
-        L_0x0039:
-            r9 = move-exception
-            if (r8 == 0) goto L_0x003f
-            r8.close()     // Catch:{ all -> 0x003f }
-        L_0x003f:
-            throw r9     // Catch:{ Exception -> 0x0040 }
-        L_0x0040:
-            r8 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-            r8 = 0
-            return r8
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.getBitmap(int, int, int, int):android.graphics.Bitmap");
+    public static Bitmap getBitmap(int i, int i2, int i3, int i4) {
+        return getBitmap(i, i2, i3, i4, 1.0f);
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:15:0x003d */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:12:0x0040 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static android.graphics.Bitmap getBitmap(java.io.File r9, int r10, int r11, boolean r12) {
+    public static android.graphics.Bitmap getBitmap(int r9, int r10, int r11, int r12, float r13) {
+        /*
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0041 }
+            android.content.res.Resources r0 = r0.getResources()     // Catch:{ Exception -> 0x0041 }
+            java.io.InputStream r9 = r0.openRawResource(r9)     // Catch:{ Exception -> 0x0041 }
+            javax.xml.parsers.SAXParserFactory r0 = javax.xml.parsers.SAXParserFactory.newInstance()     // Catch:{ all -> 0x003a }
+            javax.xml.parsers.SAXParser r0 = r0.newSAXParser()     // Catch:{ all -> 0x003a }
+            org.xml.sax.XMLReader r0 = r0.getXMLReader()     // Catch:{ all -> 0x003a }
+            org.telegram.messenger.SvgHelper$SVGHandler r8 = new org.telegram.messenger.SvgHelper$SVGHandler     // Catch:{ all -> 0x003a }
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r12)     // Catch:{ all -> 0x003a }
+            r5 = 0
+            r7 = 0
+            r1 = r8
+            r2 = r10
+            r3 = r11
+            r6 = r13
+            r1.<init>(r2, r3, r4, r5, r6)     // Catch:{ all -> 0x003a }
+            r0.setContentHandler(r8)     // Catch:{ all -> 0x003a }
+            org.xml.sax.InputSource r10 = new org.xml.sax.InputSource     // Catch:{ all -> 0x003a }
+            r10.<init>(r9)     // Catch:{ all -> 0x003a }
+            r0.parse(r10)     // Catch:{ all -> 0x003a }
+            android.graphics.Bitmap r10 = r8.getBitmap()     // Catch:{ all -> 0x003a }
+            if (r9 == 0) goto L_0x0039
+            r9.close()     // Catch:{ Exception -> 0x0041 }
+        L_0x0039:
+            return r10
+        L_0x003a:
+            r10 = move-exception
+            if (r9 == 0) goto L_0x0040
+            r9.close()     // Catch:{ all -> 0x0040 }
+        L_0x0040:
+            throw r10     // Catch:{ Exception -> 0x0041 }
+        L_0x0041:
+            r9 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)
+            r9 = 0
+            return r9
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.getBitmap(int, int, int, int, float):android.graphics.Bitmap");
+    }
+
+    /* JADX WARNING: Missing exception handler attribute for start block: B:15:0x003f */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static android.graphics.Bitmap getBitmap(java.io.File r10, int r11, int r12, boolean r13) {
         /*
             r0 = 0
-            java.io.FileInputStream r1 = new java.io.FileInputStream     // Catch:{ Exception -> 0x003e }
-            r1.<init>(r9)     // Catch:{ Exception -> 0x003e }
-            javax.xml.parsers.SAXParserFactory r9 = javax.xml.parsers.SAXParserFactory.newInstance()     // Catch:{ all -> 0x0039 }
-            javax.xml.parsers.SAXParser r9 = r9.newSAXParser()     // Catch:{ all -> 0x0039 }
-            org.xml.sax.XMLReader r9 = r9.getXMLReader()     // Catch:{ all -> 0x0039 }
-            org.telegram.messenger.SvgHelper$SVGHandler r8 = new org.telegram.messenger.SvgHelper$SVGHandler     // Catch:{ all -> 0x0039 }
-            if (r12 == 0) goto L_0x001d
-            r12 = -1
-            java.lang.Integer r12 = java.lang.Integer.valueOf(r12)     // Catch:{ all -> 0x0039 }
-            r5 = r12
+            java.io.FileInputStream r1 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0040 }
+            r1.<init>(r10)     // Catch:{ Exception -> 0x0040 }
+            javax.xml.parsers.SAXParserFactory r10 = javax.xml.parsers.SAXParserFactory.newInstance()     // Catch:{ all -> 0x003b }
+            javax.xml.parsers.SAXParser r10 = r10.newSAXParser()     // Catch:{ all -> 0x003b }
+            org.xml.sax.XMLReader r10 = r10.getXMLReader()     // Catch:{ all -> 0x003b }
+            org.telegram.messenger.SvgHelper$SVGHandler r9 = new org.telegram.messenger.SvgHelper$SVGHandler     // Catch:{ all -> 0x003b }
+            if (r13 == 0) goto L_0x001d
+            r13 = -1
+            java.lang.Integer r13 = java.lang.Integer.valueOf(r13)     // Catch:{ all -> 0x003b }
+            r5 = r13
             goto L_0x001e
         L_0x001d:
             r5 = r0
         L_0x001e:
             r6 = 0
-            r7 = 0
-            r2 = r8
-            r3 = r10
-            r4 = r11
-            r2.<init>(r3, r4, r5, r6)     // Catch:{ all -> 0x0039 }
-            r9.setContentHandler(r8)     // Catch:{ all -> 0x0039 }
-            org.xml.sax.InputSource r10 = new org.xml.sax.InputSource     // Catch:{ all -> 0x0039 }
-            r10.<init>(r1)     // Catch:{ all -> 0x0039 }
-            r9.parse(r10)     // Catch:{ all -> 0x0039 }
-            android.graphics.Bitmap r9 = r8.getBitmap()     // Catch:{ all -> 0x0039 }
-            r1.close()     // Catch:{ Exception -> 0x003e }
-            return r9
-        L_0x0039:
-            r9 = move-exception
-            r1.close()     // Catch:{ all -> 0x003d }
-        L_0x003d:
-            throw r9     // Catch:{ Exception -> 0x003e }
-        L_0x003e:
-            r9 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)
+            r7 = 1065353216(0x3var_, float:1.0)
+            r8 = 0
+            r2 = r9
+            r3 = r11
+            r4 = r12
+            r2.<init>(r3, r4, r5, r6, r7)     // Catch:{ all -> 0x003b }
+            r10.setContentHandler(r9)     // Catch:{ all -> 0x003b }
+            org.xml.sax.InputSource r11 = new org.xml.sax.InputSource     // Catch:{ all -> 0x003b }
+            r11.<init>(r1)     // Catch:{ all -> 0x003b }
+            r10.parse(r11)     // Catch:{ all -> 0x003b }
+            android.graphics.Bitmap r10 = r9.getBitmap()     // Catch:{ all -> 0x003b }
+            r1.close()     // Catch:{ Exception -> 0x0040 }
+            return r10
+        L_0x003b:
+            r10 = move-exception
+            r1.close()     // Catch:{ all -> 0x003f }
+        L_0x003f:
+            throw r10     // Catch:{ Exception -> 0x0040 }
+        L_0x0040:
+            r10 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.getBitmap(java.io.File, int, int, boolean):android.graphics.Bitmap");
@@ -465,7 +471,7 @@ public class SvgHelper {
     public static Bitmap getBitmap(String str, int i, int i2, boolean z) {
         try {
             XMLReader xMLReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-            SVGHandler sVGHandler = new SVGHandler(i, i2, z ? -1 : null, false);
+            SVGHandler sVGHandler = new SVGHandler(i, i2, z ? -1 : null, false, 1.0f);
             xMLReader.setContentHandler(sVGHandler);
             xMLReader.parse(new InputSource(new StringReader(str)));
             return sVGHandler.getBitmap();
@@ -478,7 +484,7 @@ public class SvgHelper {
     public static SvgDrawable getDrawable(String str) {
         try {
             XMLReader xMLReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-            SVGHandler sVGHandler = new SVGHandler(0, 0, (Integer) null, true);
+            SVGHandler sVGHandler = new SVGHandler(0, 0, (Integer) null, true, 1.0f);
             xMLReader.setContentHandler(sVGHandler);
             xMLReader.parse(new InputSource(new StringReader(str)));
             return sVGHandler.getDrawable();
@@ -491,7 +497,7 @@ public class SvgHelper {
     public static SvgDrawable getDrawable(int i, int i2) {
         try {
             XMLReader xMLReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-            SVGHandler sVGHandler = new SVGHandler(0, 0, Integer.valueOf(i2), true);
+            SVGHandler sVGHandler = new SVGHandler(0, 0, Integer.valueOf(i2), true, 1.0f);
             xMLReader.setContentHandler(sVGHandler);
             xMLReader.parse(new InputSource(ApplicationLoader.applicationContext.getResources().openRawResource(i)));
             return sVGHandler.getDrawable();
@@ -1323,6 +1329,7 @@ public class SvgHelper {
         private int desiredHeight;
         private int desiredWidth;
         private SvgDrawable drawable;
+        private float globalScale;
         private HashMap<String, StyleSet> globalStyles;
         private Paint paint;
         private Integer paintColor;
@@ -1338,13 +1345,15 @@ public class SvgHelper {
         public void startDocument() {
         }
 
-        private SVGHandler(int i, int i2, Integer num, boolean z) {
+        private SVGHandler(int i, int i2, Integer num, boolean z, float f) {
             this.scale = 1.0f;
             this.paint = new Paint(1);
             this.rect = new RectF();
             this.rectTmp = new RectF();
+            this.globalScale = 1.0f;
             this.pushed = false;
             this.globalStyles = new HashMap<>();
+            this.globalScale = f;
             this.desiredWidth = i;
             this.desiredHeight = i2;
             this.paintColor = num;
@@ -1678,7 +1687,8 @@ public class SvgHelper {
                             this.canvas = canvas2;
                             float f3 = this.scale;
                             if (f3 != 0.0f) {
-                                canvas2.scale(f3, f3);
+                                float f4 = this.globalScale;
+                                canvas2.scale(f4 * f3, f4 * f3);
                                 return;
                             }
                             return;

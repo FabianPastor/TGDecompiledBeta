@@ -14,6 +14,6 @@ public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda1 im
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createView$14(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$createView$12(this.f$1, this.f$2, dialogInterface, i);
     }
 }

@@ -2,28 +2,21 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_inputChatPhoto;
+import org.telegram.tgnet.TLRPC$TL_messages_saveRecentSticker;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda291 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$TL_inputChatPhoto f$1;
-    public final /* synthetic */ TLRPC$FileLocation f$2;
-    public final /* synthetic */ TLRPC$FileLocation f$3;
-    public final /* synthetic */ String f$4;
-    public final /* synthetic */ Runnable f$5;
+    public final /* synthetic */ Object f$1;
+    public final /* synthetic */ TLRPC$TL_messages_saveRecentSticker f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda291(MessagesController messagesController, TLRPC$TL_inputChatPhoto tLRPC$TL_inputChatPhoto, TLRPC$FileLocation tLRPC$FileLocation, TLRPC$FileLocation tLRPC$FileLocation2, String str, Runnable runnable) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda291(MessagesController messagesController, Object obj, TLRPC$TL_messages_saveRecentSticker tLRPC$TL_messages_saveRecentSticker) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$TL_inputChatPhoto;
-        this.f$2 = tLRPC$FileLocation;
-        this.f$3 = tLRPC$FileLocation2;
-        this.f$4 = str;
-        this.f$5 = runnable;
+        this.f$1 = obj;
+        this.f$2 = tLRPC$TL_messages_saveRecentSticker;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$changeChatAvatar$232(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$saveRecentSticker$107(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

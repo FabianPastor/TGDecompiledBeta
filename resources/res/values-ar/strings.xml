@@ -2380,7 +2380,7 @@
     <string name="NoGroupsInCommon">ما من مجموعات مشتركة</string>
     <string name="NoHandleAppInstalled">لا تملك تطبيقًا يمكنه فتح صيغة الملفات \'%1$s\'، يرجى تنزيل تطبيق مناسب للاستمرار</string>
     <string name="NoLimit">بلا حد</string>
-    <string name="NoMailInstalled">يرجى مراسلتنا عبر البريد الإلكتروني reports@stel.com لإخبارنا بمشكلتك.</string>
+    <string name="NoMailInstalled">يرجى مراسلتنا عبر البريد الإلكتروني sms@telegram.org لإخبارنا بمشكلتك.</string>
     <string name="NoMasks">لا توجد أقنعة بعد</string>
     <string name="NoMedia">شارك الصور والمقاطع المرئية في هذه المحادثة للوصول إليها عبر أي جهاز من أجهزتك.</string>
     <string name="NoMediaAutoDownload">لا وسائط</string>
@@ -3782,7 +3782,6 @@
     <string name="Terminate">إنهاء</string>
     <string name="TerminateAllSessions">إنهاء جميع الجلسات الأخرى</string>
     <string name="TerminateAllWebSessions">فك الارتباط مع كل المواقع</string>
-    <string name="TerminateSessionInfo">اضغط على أي جلسة لإنهائها.</string>
     <string name="TerminateSessionQuestion">إنهاء هذه الجلسة؟</string>
     <string name="TerminateSessionText">هل ترغب حقًا في إنهاء هذه الجلسة؟</string>
     <string name="TerminateWebSessionInfo">اضغط لفك الارتباط من حسابك في تيليجرام.</string>

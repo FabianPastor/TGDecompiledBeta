@@ -3,7 +3,6 @@ package org.telegram.ui.Components;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -58,8 +57,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
     private ActionBarMenuItem forwardItem;
     private ActionBarMenuItem gotoItem;
     private boolean isActionModeShowed;
-    /* access modifiers changed from: private */
-    public RecyclerItemsEnterAnimator itemsEnterAnimator;
+    private RecyclerItemsEnterAnimator itemsEnterAnimator;
     private int keyboardSize;
     /* access modifiers changed from: private */
     public boolean lastSearchScrolledToTop;
@@ -107,29 +105,17 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 }
             }
         };
-        AnonymousClass2 r5 = new RecyclerListView(context) {
-            /* access modifiers changed from: protected */
-            public void dispatchDraw(Canvas canvas) {
-                SearchViewPager.this.itemsEnterAnimator.dispatchDraw();
-                super.dispatchDraw(canvas);
-            }
-
-            /* access modifiers changed from: protected */
-            public void onDetachedFromWindow() {
-                super.onDetachedFromWindow();
-                SearchViewPager.this.itemsEnterAnimator.onDetached();
-            }
-        };
-        this.searchListView = r5;
-        r5.setPivotY(0.0f);
+        RecyclerListView recyclerListView = new RecyclerListView(context);
+        this.searchListView = recyclerListView;
+        recyclerListView.setPivotY(0.0f);
         this.searchListView.setAdapter(this.dialogsSearchAdapter);
         this.searchListView.setVerticalScrollBarEnabled(true);
         this.searchListView.setInstantClick(true);
         this.searchListView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
-        RecyclerListView recyclerListView = this.searchListView;
+        RecyclerListView recyclerListView2 = this.searchListView;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.searchLayoutManager = linearLayoutManager;
-        recyclerListView.setLayoutManager(linearLayoutManager);
+        recyclerListView2.setLayoutManager(linearLayoutManager);
         this.searchListView.setAnimateEmptyView(true, 0);
         this.searchListView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
@@ -154,7 +140,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         this.searchContainer = new FrameLayout(context);
         FlickerLoadingView flickerLoadingView = new FlickerLoadingView(context);
         flickerLoadingView.setViewType(1);
-        AnonymousClass4 r7 = new StickerEmptyView(context, flickerLoadingView, 1) {
+        AnonymousClass3 r7 = new StickerEmptyView(context, flickerLoadingView, 1) {
             public void setVisibility(int i) {
                 if (SearchViewPager.this.noMediaFiltersSearchView.getTag() != null) {
                     super.setVisibility(8);

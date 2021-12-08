@@ -12,6 +12,7 @@ public class MenuDrawable extends Drawable {
     public static int TYPE_DEFAULT = 0;
     public static int TYPE_UDPATE_AVAILABLE = 1;
     public static int TYPE_UDPATE_DOWNLOADING = 2;
+    private int alpha;
     private float animatedDownloadProgress;
     private int backColor;
     private Paint backPaint;
@@ -38,9 +39,6 @@ public class MenuDrawable extends Drawable {
         return -2;
     }
 
-    public void setAlpha(int i) {
-    }
-
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
@@ -54,6 +52,7 @@ public class MenuDrawable extends Drawable {
         this.rotateToBack = true;
         this.interpolator = new DecelerateInterpolator();
         this.rect = new RectF();
+        this.alpha = 255;
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.backPaint.setStrokeWidth(AndroidUtilities.density * 1.66f);
         this.backPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -65,6 +64,10 @@ public class MenuDrawable extends Drawable {
 
     public void setRotateToBack(boolean z) {
         this.rotateToBack = z;
+    }
+
+    public float getCurrentRotation() {
+        return this.currentRotation;
     }
 
     public void setRotation(float f, boolean z) {
@@ -106,15 +109,15 @@ public class MenuDrawable extends Drawable {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:37:0x0101  */
-    /* JADX WARNING: Removed duplicated region for block: B:44:0x0194  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x02e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x0304  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x0358  */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x0388  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x0395  */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x03d0  */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x03dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x0436  */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x019b  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x02fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x0319  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x036d  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x03a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x03b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x03ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x03fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0458  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void draw(android.graphics.Canvas r26) {
         /*
@@ -257,7 +260,7 @@ public class MenuDrawable extends Drawable {
             r21 = 1073741824(0x40000000, float:2.0)
             r22 = 1084227584(0x40a00000, float:5.0)
             r23 = 1077936128(0x40400000, float:3.0)
-            if (r2 == 0) goto L_0x0194
+            if (r2 == 0) goto L_0x019b
             float r2 = r0.currentRotation
             boolean r4 = r0.reverseAngle
             if (r4 == 0) goto L_0x010a
@@ -273,6 +276,9 @@ public class MenuDrawable extends Drawable {
             r7.rotate(r2, r4, r15)
             android.graphics.Paint r2 = r0.paint
             r2.setColor(r1)
+            android.graphics.Paint r1 = r0.paint
+            int r2 = r0.alpha
+            r1.setAlpha(r2)
             r2 = 0
             r4 = 0
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r20)
@@ -324,33 +330,36 @@ public class MenuDrawable extends Drawable {
             float r4 = (float) r4
             float r5 = r0.currentRotation
             float r5 = java.lang.Math.abs(r5)
-        L_0x018b:
+        L_0x0192:
             float r4 = r4 * r5
-        L_0x018d:
+        L_0x0194:
             r6 = r1
             r14 = r2
             r12 = r4
             r5 = r13
             r13 = r3
-            goto L_0x02e1
-        L_0x0194:
+            goto L_0x02f6
+        L_0x019b:
             float r2 = r0.currentRotation
             boolean r4 = r0.reverseAngle
-            if (r4 == 0) goto L_0x019d
+            if (r4 == 0) goto L_0x01a4
             r4 = -225(0xffffffffffffff1f, float:NaN)
-            goto L_0x019f
-        L_0x019d:
+            goto L_0x01a6
+        L_0x01a4:
             r4 = 135(0x87, float:1.89E-43)
-        L_0x019f:
+        L_0x01a6:
             float r4 = (float) r4
             float r2 = r2 * r4
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r12)
             float r4 = (float) r4
             r7.rotate(r2, r4, r15)
             boolean r2 = r0.miniIcon
-            if (r2 == 0) goto L_0x024d
+            if (r2 == 0) goto L_0x025b
             android.graphics.Paint r2 = r0.paint
             r2.setColor(r1)
+            android.graphics.Paint r1 = r0.paint
+            int r2 = r0.alpha
+            r1.setAlpha(r2)
             float r1 = org.telegram.messenger.AndroidUtilities.dpf2(r21)
             float r2 = r0.currentRotation
             float r2 = java.lang.Math.abs(r2)
@@ -414,8 +423,8 @@ public class MenuDrawable extends Drawable {
             float r6 = java.lang.Math.abs(r6)
             float r5 = r5 * r6
             float r4 = r4 + r5
-            goto L_0x018d
-        L_0x024d:
+            goto L_0x0194
+        L_0x025b:
             java.lang.String r2 = "actionBarActionModeDefaultIcon"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             java.lang.String r4 = "actionBarActionModeDefault"
@@ -426,6 +435,9 @@ public class MenuDrawable extends Drawable {
             float r5 = r0.currentRotation
             int r1 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r1, r2, r5, r11)
             r4.setColor(r1)
+            android.graphics.Paint r1 = r0.paint
+            int r2 = r0.alpha
+            r1.setAlpha(r2)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r11)
             float r1 = (float) r1
             float r2 = r0.currentRotation
@@ -479,10 +491,10 @@ public class MenuDrawable extends Drawable {
             float r4 = (float) r4
             float r5 = r0.currentRotation
             float r5 = java.lang.Math.abs(r5)
-            goto L_0x018b
-        L_0x02e1:
+            goto L_0x0192
+        L_0x02f6:
             boolean r1 = r0.miniIcon
-            if (r1 == 0) goto L_0x0304
+            if (r1 == 0) goto L_0x0319
             float r3 = -r13
             float r4 = -r6
             android.graphics.Paint r2 = r0.paint
@@ -500,8 +512,8 @@ public class MenuDrawable extends Drawable {
             r3 = r13
             r5 = r19
             r1.drawLine(r2, r3, r4, r5, r6)
-            goto L_0x0320
-        L_0x0304:
+            goto L_0x0335
+        L_0x0319:
             r10 = r5
             r19 = r6
             float r3 = -r13
@@ -518,20 +530,20 @@ public class MenuDrawable extends Drawable {
             r4 = r14
             r5 = r19
             r1.drawLine(r2, r3, r4, r5, r6)
-        L_0x0320:
+        L_0x0335:
             int r1 = r0.type
             int r2 = TYPE_DEFAULT
-            if (r1 == r2) goto L_0x032c
+            if (r1 == r2) goto L_0x0341
             float r1 = r0.currentRotation
             int r1 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
-            if (r1 != 0) goto L_0x0336
-        L_0x032c:
+            if (r1 != 0) goto L_0x034b
+        L_0x0341:
             int r1 = r0.previousType
-            if (r1 == r2) goto L_0x0458
+            if (r1 == r2) goto L_0x047a
             float r1 = r0.typeAnimationProgress
             int r1 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
-            if (r1 == 0) goto L_0x0458
-        L_0x0336:
+            if (r1 == 0) goto L_0x047a
+        L_0x034b:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
             float r12 = (float) r1
             r1 = 1083179008(0x40900000, float:4.5)
@@ -547,23 +559,24 @@ public class MenuDrawable extends Drawable {
             r7.scale(r3, r2, r12, r13)
             int r2 = r0.type
             int r3 = TYPE_DEFAULT
-            if (r2 != r3) goto L_0x035e
+            if (r2 != r3) goto L_0x0373
             float r2 = r0.typeAnimationProgress
             float r2 = r11 - r2
             float r1 = r1 * r2
-        L_0x035e:
+        L_0x0373:
             android.graphics.Paint r2 = r0.backPaint
             r2.setColor(r10)
+            android.graphics.Paint r2 = r0.backPaint
+            int r3 = r0.alpha
+            r2.setAlpha(r3)
             android.graphics.Paint r2 = r0.paint
             r7.drawCircle(r12, r13, r1, r2)
             int r1 = r0.type
             int r2 = TYPE_UDPATE_AVAILABLE
-            r10 = 1132396544(0x437var_, float:255.0)
-            r14 = 255(0xff, float:3.57E-43)
-            if (r1 == r2) goto L_0x0376
+            if (r1 == r2) goto L_0x038e
             int r1 = r0.previousType
-            if (r1 != r2) goto L_0x03b6
-        L_0x0376:
+            if (r1 != r2) goto L_0x03d3
+        L_0x038e:
             android.graphics.Paint r1 = r0.backPaint
             float r2 = org.telegram.messenger.AndroidUtilities.density
             r3 = 1070889697(0x3fd47ae1, float:1.66)
@@ -571,18 +584,21 @@ public class MenuDrawable extends Drawable {
             r1.setStrokeWidth(r2)
             int r1 = r0.previousType
             int r2 = TYPE_UDPATE_AVAILABLE
-            if (r1 != r2) goto L_0x0395
+            if (r1 != r2) goto L_0x03b0
             android.graphics.Paint r1 = r0.backPaint
-            float r2 = r0.typeAnimationProgress
-            float r2 = r11 - r2
-            float r2 = r2 * r10
+            int r2 = r0.alpha
+            float r2 = (float) r2
+            float r3 = r0.typeAnimationProgress
+            float r3 = r11 - r3
+            float r2 = r2 * r3
             int r2 = (int) r2
             r1.setAlpha(r2)
-            goto L_0x039a
-        L_0x0395:
+            goto L_0x03b7
+        L_0x03b0:
             android.graphics.Paint r1 = r0.backPaint
-            r1.setAlpha(r14)
-        L_0x039a:
+            int r2 = r0.alpha
+            r1.setAlpha(r2)
+        L_0x03b7:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
             float r1 = (float) r1
             float r3 = r13 - r1
@@ -597,31 +613,34 @@ public class MenuDrawable extends Drawable {
             float r1 = r1 + r13
             android.graphics.Paint r2 = r0.backPaint
             r7.drawPoint(r12, r1, r2)
-        L_0x03b6:
+        L_0x03d3:
             int r1 = r0.type
             int r2 = TYPE_UDPATE_DOWNLOADING
-            if (r1 == r2) goto L_0x03c0
+            if (r1 == r2) goto L_0x03dd
             int r1 = r0.previousType
-            if (r1 != r2) goto L_0x0458
-        L_0x03c0:
+            if (r1 != r2) goto L_0x047a
+        L_0x03dd:
             android.graphics.Paint r1 = r0.backPaint
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r21)
             float r2 = (float) r2
             r1.setStrokeWidth(r2)
             int r1 = r0.previousType
             int r2 = TYPE_UDPATE_DOWNLOADING
-            if (r1 != r2) goto L_0x03dc
+            if (r1 != r2) goto L_0x03fc
             android.graphics.Paint r1 = r0.backPaint
-            float r2 = r0.typeAnimationProgress
-            float r11 = r11 - r2
-            float r11 = r11 * r10
-            int r2 = (int) r11
+            int r2 = r0.alpha
+            float r2 = (float) r2
+            float r3 = r0.typeAnimationProgress
+            float r11 = r11 - r3
+            float r2 = r2 * r11
+            int r2 = (int) r2
             r1.setAlpha(r2)
-            goto L_0x03e1
-        L_0x03dc:
+            goto L_0x0403
+        L_0x03fc:
             android.graphics.Paint r1 = r0.backPaint
-            r1.setAlpha(r14)
-        L_0x03e1:
+            int r2 = r0.alpha
+            r1.setAlpha(r2)
+        L_0x0403:
             r1 = 1082130432(0x40800000, float:4.0)
             r2 = 1135869952(0x43b40000, float:360.0)
             float r3 = r0.animatedDownloadProgress
@@ -661,28 +680,28 @@ public class MenuDrawable extends Drawable {
             float r2 = r0.downloadProgressAnimationStart
             float r3 = r1 - r2
             int r4 = (r3 > r15 ? 1 : (r3 == r15 ? 0 : -1))
-            if (r4 <= 0) goto L_0x0455
+            if (r4 <= 0) goto L_0x0477
             float r4 = r0.downloadProgressTime
             float r5 = (float) r8
             float r4 = r4 + r5
             r0.downloadProgressTime = r4
             r5 = 1128792064(0x43480000, float:200.0)
             int r6 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-            if (r6 < 0) goto L_0x0449
+            if (r6 < 0) goto L_0x046b
             r0.animatedDownloadProgress = r1
             r0.downloadProgressAnimationStart = r1
             r0.downloadProgressTime = r15
-            goto L_0x0455
-        L_0x0449:
+            goto L_0x0477
+        L_0x046b:
             android.view.animation.DecelerateInterpolator r1 = r0.interpolator
             float r4 = r4 / r5
             float r1 = r1.getInterpolation(r4)
             float r3 = r3 * r1
             float r2 = r2 + r3
             r0.animatedDownloadProgress = r2
-        L_0x0455:
+        L_0x0477:
             r25.invalidateSelf()
-        L_0x0458:
+        L_0x047a:
             r26.restore()
             return
         */
@@ -702,6 +721,15 @@ public class MenuDrawable extends Drawable {
         this.downloadProgress = f;
         this.downloadProgressTime = 0.0f;
         invalidateSelf();
+    }
+
+    public void setAlpha(int i) {
+        if (this.alpha != i) {
+            this.alpha = i;
+            this.paint.setAlpha(i);
+            this.backPaint.setAlpha(i);
+            invalidateSelf();
+        }
     }
 
     public int getIntrinsicWidth() {

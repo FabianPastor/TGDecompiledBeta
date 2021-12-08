@@ -44,6 +44,7 @@ import org.telegram.ui.Cells.LoadingCell;
 import org.telegram.ui.Cells.RadioButtonCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
+import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.EditTextBoldCursor;
@@ -79,6 +80,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     private boolean isChannel;
     private boolean isForcePublic;
     private boolean isPrivate;
+    private boolean isSaveRestricted;
     private String lastCheckName;
     private boolean lastNameAvailable;
     private LinearLayout linearLayout;
@@ -93,6 +95,10 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     private LinearLayout publicContainer;
     private RadioButtonCell radioButtonCell1;
     private RadioButtonCell radioButtonCell2;
+    private LinearLayout saveContainer;
+    private HeaderCell saveHeaderCell;
+    private TextCheckCell saveRestrictCell;
+    private TextInfoPrivacyCell saveRestrictInfoCell;
     private ShadowSectionCell sectionCell2;
     private TextSettingsCell textCell;
     private TextSettingsCell textCell2;
@@ -159,26 +165,37 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             r10.isPrivate = r0
             org.telegram.tgnet.TLRPC$Chat r0 = r10.currentChat
             boolean r0 = org.telegram.messenger.ChatObject.isChannel(r0)
-            if (r0 == 0) goto L_0x006d
+            if (r0 == 0) goto L_0x006e
             org.telegram.tgnet.TLRPC$Chat r0 = r10.currentChat
             boolean r0 = r0.megagroup
-            if (r0 != 0) goto L_0x006d
+            if (r0 != 0) goto L_0x006e
+            r0 = 1
+            goto L_0x006f
+        L_0x006e:
+            r0 = 0
+        L_0x006f:
+            r10.isChannel = r0
+            boolean r0 = r10.isPrivate
+            if (r0 == 0) goto L_0x007c
+            org.telegram.tgnet.TLRPC$Chat r0 = r10.currentChat
+            boolean r0 = r0.noforwards
+            if (r0 == 0) goto L_0x007c
             r1 = 1
-        L_0x006d:
-            r10.isChannel = r1
+        L_0x007c:
+            r10.isSaveRestricted = r1
             boolean r0 = r10.isForcePublic
-            if (r0 == 0) goto L_0x007d
+            if (r0 == 0) goto L_0x008c
             org.telegram.tgnet.TLRPC$Chat r0 = r10.currentChat
             java.lang.String r0 = r0.username
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x0087
-        L_0x007d:
+            if (r0 != 0) goto L_0x0096
+        L_0x008c:
             boolean r0 = r10.isPrivate
-            if (r0 == 0) goto L_0x00a3
+            if (r0 == 0) goto L_0x00b2
             org.telegram.tgnet.TLRPC$Chat r0 = r10.currentChat
             boolean r0 = r0.creator
-            if (r0 == 0) goto L_0x00a3
-        L_0x0087:
+            if (r0 == 0) goto L_0x00b2
+        L_0x0096:
             org.telegram.tgnet.TLRPC$TL_channels_checkUsername r0 = new org.telegram.tgnet.TLRPC$TL_channels_checkUsername
             r0.<init>()
             java.lang.String r1 = "1"
@@ -187,19 +204,19 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             r1.<init>()
             r0.channel = r1
             org.telegram.tgnet.ConnectionsManager r1 = r10.getConnectionsManager()
-            org.telegram.ui.ChatEditTypeActivity$$ExternalSyntheticLambda12 r3 = new org.telegram.ui.ChatEditTypeActivity$$ExternalSyntheticLambda12
+            org.telegram.ui.ChatEditTypeActivity$$ExternalSyntheticLambda14 r3 = new org.telegram.ui.ChatEditTypeActivity$$ExternalSyntheticLambda14
             r3.<init>(r10)
             r1.sendRequest(r0, r3)
-        L_0x00a3:
+        L_0x00b2:
             boolean r0 = r10.isPrivate
-            if (r0 == 0) goto L_0x00b6
+            if (r0 == 0) goto L_0x00c5
             org.telegram.tgnet.TLRPC$ChatFull r0 = r10.info
-            if (r0 == 0) goto L_0x00b6
+            if (r0 == 0) goto L_0x00c5
             org.telegram.messenger.MessagesController r0 = r10.getMessagesController()
             long r3 = r10.chatId
             int r1 = r10.classGuid
             r0.loadFullChat(r3, r1, r2)
-        L_0x00b6:
+        L_0x00c5:
             org.telegram.messenger.NotificationCenter r0 = r10.getNotificationCenter()
             int r1 = org.telegram.messenger.NotificationCenter.chatInfoDidLoad
             r0.addObserver(r10, r1)
@@ -211,7 +228,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$onFragmentCreate$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new ChatEditTypeActivity$$ExternalSyntheticLambda9(this, tLRPC$TL_error));
+        AndroidUtilities.runOnUIThread(new ChatEditTypeActivity$$ExternalSyntheticLambda10(this, tLRPC$TL_error));
     }
 
     /* access modifiers changed from: private */
@@ -402,8 +419,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         this.privateContainer = linearLayout6;
         linearLayout6.setOrientation(1);
         this.linkContainer.addView(this.privateContainer, LayoutHelper.createLinear(-1, -2));
-        LinkActionView linkActionView = r0;
-        LinkActionView linkActionView2 = new LinkActionView(context, this, (BottomSheet) null, this.chatId, true, ChatObject.isChannel(this.currentChat));
+        LinkActionView linkActionView = new LinkActionView(context, this, (BottomSheet) null, this.chatId, true, ChatObject.isChannel(this.currentChat));
         this.permanentLinkView = linkActionView;
         linkActionView.setDelegate(new LinkActionView.Delegate() {
             public /* synthetic */ void editLink() {
@@ -458,6 +474,29 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         TextInfoPrivacyCell textInfoPrivacyCell3 = new TextInfoPrivacyCell(context2);
         this.manageLinksInfoCell = textInfoPrivacyCell3;
         this.linearLayout.addView(textInfoPrivacyCell3, LayoutHelper.createLinear(-1, -2));
+        LinearLayout linearLayout8 = new LinearLayout(context2);
+        this.saveContainer = linearLayout8;
+        linearLayout8.setOrientation(1);
+        this.linearLayout.addView(this.saveContainer);
+        HeaderCell headerCell5 = new HeaderCell(context2, 23);
+        this.saveHeaderCell = headerCell5;
+        headerCell5.setHeight(46);
+        this.saveHeaderCell.setText(LocaleController.getString("SavingContentTitle", NUM));
+        this.saveHeaderCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+        this.saveContainer.addView(this.saveHeaderCell, LayoutHelper.createLinear(-1, -2));
+        TextCheckCell textCheckCell = new TextCheckCell(context2);
+        this.saveRestrictCell = textCheckCell;
+        textCheckCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+        this.saveRestrictCell.setTextAndCheck(LocaleController.getString("RestrictSavingContent", NUM), this.isSaveRestricted, false);
+        this.saveRestrictCell.setOnClickListener(new ChatEditTypeActivity$$ExternalSyntheticLambda4(this));
+        this.saveContainer.addView(this.saveRestrictCell, LayoutHelper.createLinear(-1, -2));
+        this.saveRestrictInfoCell = new TextInfoPrivacyCell(context2);
+        if (!this.isChannel || ChatObject.isMegagroup(this.currentChat)) {
+            this.saveRestrictInfoCell.setText(LocaleController.getString("RestrictSavingContentInfoGroup", NUM));
+        } else {
+            this.saveRestrictInfoCell.setText(LocaleController.getString("RestrictSavingContentInfoChannel", NUM));
+        }
+        this.saveContainer.addView(this.saveRestrictInfoCell, LayoutHelper.createLinear(-1, -2));
         if (!this.isPrivate && (str = this.currentChat.username) != null) {
             this.ignoreTextChanges = true;
             this.usernameTextView.setText(str);
@@ -491,6 +530,13 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         presentFragment(manageLinksActivity);
     }
 
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$createView$5(View view) {
+        boolean z = !this.isSaveRestricted;
+        this.isSaveRestricted = z;
+        ((TextCheckCell) view).setChecked(z);
+    }
+
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.chatInfoDidLoad) {
             TLRPC$ChatFull tLRPC$ChatFull = objArr[0];
@@ -516,6 +562,14 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
     /* access modifiers changed from: private */
     public void processDone() {
+        if (this.isPrivate && this.currentChat.noforwards != this.isSaveRestricted) {
+            MessagesController messagesController = getMessagesController();
+            long j = this.chatId;
+            TLRPC$Chat tLRPC$Chat = this.currentChat;
+            boolean z = this.isSaveRestricted;
+            tLRPC$Chat.noforwards = z;
+            messagesController.toggleChatNoForwards(j, z);
+        }
         if (trySetUsername()) {
             finishFragment();
         }
@@ -539,7 +593,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                 return true;
             }
             if (!ChatObject.isChannel(this.currentChat)) {
-                getMessagesController().convertToMegaGroup(getParentActivity(), this.chatId, this, new ChatEditTypeActivity$$ExternalSyntheticLambda11(this));
+                getMessagesController().convertToMegaGroup(getParentActivity(), this.chatId, this, new ChatEditTypeActivity$$ExternalSyntheticLambda12(this));
                 return false;
             }
             getMessagesController().updateChannelUserName(this.chatId, str3);
@@ -555,7 +609,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$trySetUsername$5(long j) {
+    public /* synthetic */ void lambda$trySetUsername$6(long j) {
         if (j != 0) {
             this.chatId = j;
             this.currentChat = getMessagesController().getChat(Long.valueOf(j));
@@ -572,12 +626,12 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadAdminedChannels$11(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new ChatEditTypeActivity$$ExternalSyntheticLambda8(this, tLObject));
+    public /* synthetic */ void lambda$loadAdminedChannels$12(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ChatEditTypeActivity$$ExternalSyntheticLambda9(this, tLObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadAdminedChannels$10(TLObject tLObject) {
+    public /* synthetic */ void lambda$loadAdminedChannels$11(TLObject tLObject) {
         this.loadingAdminedChannels = false;
         if (tLObject != null && getParentActivity() != null) {
             for (int i = 0; i < this.adminedChannelCells.size(); i++) {
@@ -586,7 +640,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             this.adminedChannelCells.clear();
             TLRPC$TL_messages_chats tLRPC$TL_messages_chats = (TLRPC$TL_messages_chats) tLObject;
             for (int i2 = 0; i2 < tLRPC$TL_messages_chats.chats.size(); i2++) {
-                AdminedChannelCell adminedChannelCell = new AdminedChannelCell(getParentActivity(), new ChatEditTypeActivity$$ExternalSyntheticLambda4(this));
+                AdminedChannelCell adminedChannelCell = new AdminedChannelCell(getParentActivity(), new ChatEditTypeActivity$$ExternalSyntheticLambda5(this));
                 TLRPC$Chat tLRPC$Chat = tLRPC$TL_messages_chats.chats.get(i2);
                 boolean z = true;
                 if (i2 != tLRPC$TL_messages_chats.chats.size() - 1) {
@@ -601,7 +655,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadAdminedChannels$9(View view) {
+    public /* synthetic */ void lambda$loadAdminedChannels$10(View view) {
         TLRPC$Chat currentChannel = ((AdminedChannelCell) view.getParent()).getCurrentChannel();
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("AppName", NUM));
@@ -616,22 +670,22 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadAdminedChannels$8(TLRPC$Chat tLRPC$Chat, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$loadAdminedChannels$9(TLRPC$Chat tLRPC$Chat, DialogInterface dialogInterface, int i) {
         TLRPC$TL_channels_updateUsername tLRPC$TL_channels_updateUsername = new TLRPC$TL_channels_updateUsername();
         tLRPC$TL_channels_updateUsername.channel = MessagesController.getInputChannel(tLRPC$Chat);
         tLRPC$TL_channels_updateUsername.username = "";
-        getConnectionsManager().sendRequest(tLRPC$TL_channels_updateUsername, new ChatEditTypeActivity$$ExternalSyntheticLambda14(this), 64);
+        getConnectionsManager().sendRequest(tLRPC$TL_channels_updateUsername, new ChatEditTypeActivity$$ExternalSyntheticLambda15(this), 64);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadAdminedChannels$7(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadAdminedChannels$8(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject instanceof TLRPC$TL_boolTrue) {
-            AndroidUtilities.runOnUIThread(new ChatEditTypeActivity$$ExternalSyntheticLambda5(this));
+            AndroidUtilities.runOnUIThread(new ChatEditTypeActivity$$ExternalSyntheticLambda6(this));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadAdminedChannels$6() {
+    public /* synthetic */ void lambda$loadAdminedChannels$7() {
         this.canCreatePublic = true;
         if (this.usernameTextView.length() > 0) {
             checkUserName(this.usernameTextView.getText().toString());
@@ -686,6 +740,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                 }
                 this.publicContainer.setVisibility(this.isPrivate ? 8 : 0);
                 this.privateContainer.setVisibility(this.isPrivate ? 0 : 8);
+                this.saveContainer.setVisibility(this.isPrivate ? 0 : 8);
                 this.manageLinksTextView.setVisibility(0);
                 this.manageLinksInfoCell.setVisibility(0);
                 this.linkContainer.setPadding(0, 0, 0, this.isPrivate ? 0 : AndroidUtilities.dp(7.0f));
@@ -810,28 +865,28 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             this.checkTextView.setText(LocaleController.getString("LinkChecking", NUM));
             this.checkTextView.setTextColor("windowBackgroundWhiteGrayText8");
             this.lastCheckName = str;
-            ChatEditTypeActivity$$ExternalSyntheticLambda6 chatEditTypeActivity$$ExternalSyntheticLambda6 = new ChatEditTypeActivity$$ExternalSyntheticLambda6(this, str);
-            this.checkRunnable = chatEditTypeActivity$$ExternalSyntheticLambda6;
-            AndroidUtilities.runOnUIThread(chatEditTypeActivity$$ExternalSyntheticLambda6, 300);
+            ChatEditTypeActivity$$ExternalSyntheticLambda7 chatEditTypeActivity$$ExternalSyntheticLambda7 = new ChatEditTypeActivity$$ExternalSyntheticLambda7(this, str);
+            this.checkRunnable = chatEditTypeActivity$$ExternalSyntheticLambda7;
+            AndroidUtilities.runOnUIThread(chatEditTypeActivity$$ExternalSyntheticLambda7, 300);
             return true;
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUserName$14(String str) {
+    public /* synthetic */ void lambda$checkUserName$15(String str) {
         TLRPC$TL_channels_checkUsername tLRPC$TL_channels_checkUsername = new TLRPC$TL_channels_checkUsername();
         tLRPC$TL_channels_checkUsername.username = str;
         tLRPC$TL_channels_checkUsername.channel = getMessagesController().getInputChannel(this.chatId);
-        this.checkReqId = getConnectionsManager().sendRequest(tLRPC$TL_channels_checkUsername, new ChatEditTypeActivity$$ExternalSyntheticLambda15(this, str), 2);
+        this.checkReqId = getConnectionsManager().sendRequest(tLRPC$TL_channels_checkUsername, new ChatEditTypeActivity$$ExternalSyntheticLambda16(this, str), 2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUserName$13(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new ChatEditTypeActivity$$ExternalSyntheticLambda7(this, str, tLRPC$TL_error, tLObject));
+    public /* synthetic */ void lambda$checkUserName$14(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ChatEditTypeActivity$$ExternalSyntheticLambda8(this, str, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUserName$12(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$checkUserName$13(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.checkReqId = 0;
         String str2 = this.lastCheckName;
         if (str2 != null && str2.equals(str)) {
@@ -857,16 +912,16 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
         tLRPC$TL_messages_exportChatInvite.legacy_revoke_permanent = true;
         tLRPC$TL_messages_exportChatInvite.peer = getMessagesController().getInputPeer(-this.chatId);
-        getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_exportChatInvite, new ChatEditTypeActivity$$ExternalSyntheticLambda16(this, z)), this.classGuid);
+        getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_exportChatInvite, new ChatEditTypeActivity$$ExternalSyntheticLambda17(this, z)), this.classGuid);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$generateLink$16(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new ChatEditTypeActivity$$ExternalSyntheticLambda10(this, tLRPC$TL_error, tLObject, z));
+    public /* synthetic */ void lambda$generateLink$17(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new ChatEditTypeActivity$$ExternalSyntheticLambda11(this, tLRPC$TL_error, tLObject, z));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$generateLink$15(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
+    public /* synthetic */ void lambda$generateLink$16(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
         String str = null;
         if (tLRPC$TL_error == null) {
             TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported = (TLRPC$TL_chatInviteExported) tLObject;
@@ -900,7 +955,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        ChatEditTypeActivity$$ExternalSyntheticLambda17 chatEditTypeActivity$$ExternalSyntheticLambda17 = new ChatEditTypeActivity$$ExternalSyntheticLambda17(this);
+        ChatEditTypeActivity$$ExternalSyntheticLambda18 chatEditTypeActivity$$ExternalSyntheticLambda18 = new ChatEditTypeActivity$$ExternalSyntheticLambda18(this);
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
@@ -919,8 +974,13 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         arrayList.add(new ThemeDescription(this.linkContainer, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription((View) this.headerCell, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
         arrayList.add(new ThemeDescription((View) this.headerCell2, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
+        arrayList.add(new ThemeDescription((View) this.saveHeaderCell, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
         arrayList.add(new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
+        arrayList.add(new ThemeDescription(this.saveRestrictCell, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription((View) this.saveRestrictCell, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) this.saveRestrictCell, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"));
+        arrayList.add(new ThemeDescription((View) this.saveRestrictCell, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
         arrayList.add(new ThemeDescription((View) this.checkTextView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText4"));
         arrayList.add(new ThemeDescription((View) this.checkTextView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText8"));
         arrayList.add(new ThemeDescription((View) this.checkTextView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGreenText"));
@@ -930,6 +990,9 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         arrayList.add(new ThemeDescription(this.manageLinksInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
         arrayList.add(new ThemeDescription((View) this.manageLinksInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
         arrayList.add(new ThemeDescription((View) this.manageLinksInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText4"));
+        arrayList.add(new ThemeDescription(this.saveRestrictInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
+        arrayList.add(new ThemeDescription((View) this.saveRestrictInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
+        arrayList.add(new ThemeDescription((View) this.saveRestrictInfoCell, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteRedText4"));
         arrayList.add(new ThemeDescription(this.adminedInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
         arrayList.add(new ThemeDescription(this.adminnedChannelsLayout, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription((View) this.loadingAdminedCell, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
@@ -947,15 +1010,15 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         arrayList.add(new ThemeDescription((View) this.adminnedChannelsLayout, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
         arrayList.add(new ThemeDescription((View) this.adminnedChannelsLayout, ThemeDescription.FLAG_LINKCOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteLinkText"));
         arrayList.add(new ThemeDescription((View) this.adminnedChannelsLayout, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{AdminedChannelCell.class}, new String[]{"deleteButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
-        ChatEditTypeActivity$$ExternalSyntheticLambda17 chatEditTypeActivity$$ExternalSyntheticLambda172 = chatEditTypeActivity$$ExternalSyntheticLambda17;
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, Theme.avatarDrawables, chatEditTypeActivity$$ExternalSyntheticLambda172, "avatar_text"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda172, "avatar_backgroundRed"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda172, "avatar_backgroundOrange"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda172, "avatar_backgroundViolet"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda172, "avatar_backgroundGreen"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda172, "avatar_backgroundCyan"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda172, "avatar_backgroundBlue"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda172, "avatar_backgroundPink"));
+        ChatEditTypeActivity$$ExternalSyntheticLambda18 chatEditTypeActivity$$ExternalSyntheticLambda182 = chatEditTypeActivity$$ExternalSyntheticLambda18;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, Theme.avatarDrawables, chatEditTypeActivity$$ExternalSyntheticLambda182, "avatar_text"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda182, "avatar_backgroundRed"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda182, "avatar_backgroundOrange"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda182, "avatar_backgroundViolet"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda182, "avatar_backgroundGreen"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda182, "avatar_backgroundCyan"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda182, "avatar_backgroundBlue"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, chatEditTypeActivity$$ExternalSyntheticLambda182, "avatar_backgroundPink"));
         arrayList.add(new ThemeDescription(this.manageLinksTextView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
         arrayList.add(new ThemeDescription((View) this.manageLinksTextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.manageLinksTextView, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayIcon"));
@@ -963,7 +1026,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getThemeDescriptions$17() {
+    public /* synthetic */ void lambda$getThemeDescriptions$18() {
         LinearLayout linearLayout2 = this.adminnedChannelsLayout;
         if (linearLayout2 != null) {
             int childCount = linearLayout2.getChildCount();

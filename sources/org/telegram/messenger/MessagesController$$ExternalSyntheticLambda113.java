@@ -1,19 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.support.LongSparseIntArray;
-
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda113 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ LongSparseIntArray f$1;
-    public final /* synthetic */ LongSparseIntArray f$2;
+    public final /* synthetic */ MessageObject f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda113(MessagesController messagesController, LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda113(MessagesController messagesController, MessageObject messageObject) {
         this.f$0 = messagesController;
-        this.f$1 = longSparseIntArray;
-        this.f$2 = longSparseIntArray2;
+        this.f$1 = messageObject;
     }
 
     public final void run() {
-        this.f$0.lambda$processDialogsUpdateRead$172(this.f$1, this.f$2);
+        this.f$0.lambda$addToViewsQueue$179(this.f$1);
     }
 }

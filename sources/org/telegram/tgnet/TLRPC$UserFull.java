@@ -9,11 +9,13 @@ public abstract class TLRPC$UserFull extends TLObject {
     public int flags;
     public int folder_id;
     public boolean has_scheduled;
+    public long id;
     public TLRPC$TL_contacts_link_layer101 link;
     public TLRPC$PeerNotifySettings notify_settings;
     public boolean phone_calls_available;
     public boolean phone_calls_private;
     public int pinned_msg_id;
+    public String private_forward_name;
     public TLRPC$Photo profile_photo;
     public TLRPC$TL_peerSettings settings;
     public String theme_emoticon;
@@ -27,8 +29,11 @@ public abstract class TLRPC$UserFull extends TLObject {
             case -1901811583:
                 tLRPC$UserFull = new TLRPC$TL_userFull_layer98();
                 break;
-            case -694681851:
+            case -818518751:
                 tLRPC$UserFull = new TLRPC$TL_userFull();
+                break;
+            case -694681851:
+                tLRPC$UserFull = new TLRPC$TL_userFull_layer134();
                 break;
             case -302941166:
                 tLRPC$UserFull = new TLRPC$TL_userFull_layer123();

@@ -3,7 +3,7 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public class TLRPC$TL_messages_sendMedia extends TLObject {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
     public boolean background;
     public boolean clear_draft;
     public ArrayList<TLRPC$MessageEntity> entities = new ArrayList<>();
@@ -15,6 +15,7 @@ public class TLRPC$TL_messages_sendMedia extends TLObject {
     public TLRPC$ReplyMarkup reply_markup;
     public int reply_to_msg_id;
     public int schedule_date;
+    public TLRPC$InputPeer send_as;
     public boolean silent;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -50,6 +51,9 @@ public class TLRPC$TL_messages_sendMedia extends TLObject {
         }
         if ((this.flags & 1024) != 0) {
             abstractSerializedData.writeInt32(this.schedule_date);
+        }
+        if ((this.flags & 8192) != 0) {
+            this.send_as.serializeToStream(abstractSerializedData);
         }
     }
 }

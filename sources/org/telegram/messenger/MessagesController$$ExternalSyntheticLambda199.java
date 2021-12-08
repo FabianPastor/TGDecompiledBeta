@@ -1,16 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$Updates;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda199 implements Comparator {
-    public final /* synthetic */ MessagesController f$0;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda199 implements Runnable {
+    public final /* synthetic */ MessagesStorage.BooleanCallback f$0;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda199(MessagesController messagesController) {
-        this.f$0 = messagesController;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda199(MessagesStorage.BooleanCallback booleanCallback) {
+        this.f$0 = booleanCallback;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$processUpdatesQueue$240((TLRPC$Updates) obj, (TLRPC$Updates) obj2);
+    public final void run() {
+        MessagesController.lambda$convertToGigaGroup$208(this.f$0);
     }
 }

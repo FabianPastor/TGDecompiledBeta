@@ -21,18 +21,31 @@ public class NumberTextView extends View {
     /* access modifiers changed from: private */
     public ArrayList<StaticLayout> oldLetters = new ArrayList<>();
     private float oldTextWidth;
+    private OnTextWidthProgressChangedListener onTextWidthProgressChangedListener;
     private float progress = 0.0f;
     private TextPaint textPaint = new TextPaint(1);
     private float textWidth;
 
+    public interface OnTextWidthProgressChangedListener {
+        void onTextWidthProgress(float f, float f2, float f3);
+    }
+
     public NumberTextView(Context context) {
         super(context);
+    }
+
+    public void setOnTextWidthProgressChangedListener(OnTextWidthProgressChangedListener onTextWidthProgressChangedListener2) {
+        this.onTextWidthProgressChangedListener = onTextWidthProgressChangedListener2;
     }
 
     @Keep
     public void setProgress(float f) {
         if (this.progress != f) {
             this.progress = f;
+            OnTextWidthProgressChangedListener onTextWidthProgressChangedListener2 = this.onTextWidthProgressChangedListener;
+            if (onTextWidthProgressChangedListener2 != null) {
+                onTextWidthProgressChangedListener2.onTextWidthProgress(this.oldTextWidth, this.textWidth, f);
+            }
             invalidate();
         }
     }
@@ -55,11 +68,6 @@ public class NumberTextView extends View {
     /* JADX WARNING: Code restructure failed: missing block: B:14:0x0072, code lost:
         if (r1 > r0.currentNumber) goto L_0x004e;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x009e  */
-    /* JADX WARNING: Removed duplicated region for block: B:45:0x0122  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0125  */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x0137  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x013a  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void setNumber(int r22, boolean r23) {
         /*
@@ -123,14 +131,14 @@ public class NumberTextView extends View {
             if (r1 <= r7) goto L_0x0050
             goto L_0x004e
         L_0x0075:
-            boolean r8 = r0.center
-            if (r8 == 0) goto L_0x0091
             android.text.TextPaint r8 = r0.textPaint
             float r8 = r8.measureText(r2)
             r0.textWidth = r8
             android.text.TextPaint r8 = r0.textPaint
             float r8 = r8.measureText(r6)
             r0.oldTextWidth = r8
+            boolean r9 = r0.center
+            if (r9 == 0) goto L_0x0091
             float r9 = r0.textWidth
             int r8 = (r9 > r8 ? 1 : (r9 == r8 ? 0 : -1))
             if (r8 == 0) goto L_0x0091
@@ -204,10 +212,10 @@ public class NumberTextView extends View {
             r9 = r10
             goto L_0x0098
         L_0x0113:
-            if (r23 == 0) goto L_0x014e
+            if (r23 == 0) goto L_0x014f
             java.util.ArrayList<android.text.StaticLayout> r2 = r0.oldLetters
             boolean r2 = r2.isEmpty()
-            if (r2 != 0) goto L_0x014e
+            if (r2 != 0) goto L_0x014f
             r2 = 2
             float[] r2 = new float[r2]
             if (r7 == 0) goto L_0x0125
@@ -235,7 +243,15 @@ public class NumberTextView extends View {
             r1.addListener(r2)
             android.animation.ObjectAnimator r1 = r0.animator
             r1.start()
-        L_0x014e:
+            goto L_0x015c
+        L_0x014f:
+            org.telegram.ui.Components.NumberTextView$OnTextWidthProgressChangedListener r1 = r0.onTextWidthProgressChangedListener
+            if (r1 == 0) goto L_0x015c
+            float r2 = r0.oldTextWidth
+            float r3 = r0.textWidth
+            float r4 = r0.progress
+            r1.onTextWidthProgress(r2, r3, r4)
+        L_0x015c:
             r21.invalidate()
             return
         */
@@ -336,5 +352,13 @@ public class NumberTextView extends View {
             }
             canvas.restore();
         }
+    }
+
+    public float getOldTextWidth() {
+        return this.oldTextWidth;
+    }
+
+    public float getTextWidth() {
+        return this.textWidth;
     }
 }

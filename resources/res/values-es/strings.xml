@@ -2380,7 +2380,7 @@
     <string name="NoGroupsInCommon">Sin grupos en común</string>
     <string name="NoHandleAppInstalled">No tienes aplicaciones que puedan manejar el tipo de archivo “%1$s”. Por favor, instala una para continuar.</string>
     <string name="NoLimit">∞</string>
-    <string name="NoMailInstalled">Por favor, envía un correo describiendo tu problema a reports@stel.com</string>
+    <string name="NoMailInstalled">Por favor, envía un correo describiendo tu problema a sms@telegram.org</string>
     <string name="NoMasks">Aún no hay máscaras</string>
     <string name="NoMedia">Comparte fotos y videos en este chat y accede a ellos desde cualquier dispositivo.</string>
     <string name="NoMediaAutoDownload">Ningún contenido multimedia</string>
@@ -3782,7 +3782,6 @@
     <string name="Terminate">Cerrar</string>
     <string name="TerminateAllSessions">Cerrar todas las demás sesiones</string>
     <string name="TerminateAllWebSessions">Desconectar todos los sitios web</string>
-    <string name="TerminateSessionInfo">Toca en una sesión para cerrarla.</string>
     <string name="TerminateSessionQuestion">¿Cerrar esta sesión?</string>
     <string name="TerminateSessionText">¿Quieres cerrar esta sesión?</string>
     <string name="TerminateWebSessionInfo">Toca para desconectar de tu cuenta de Telegram.</string>

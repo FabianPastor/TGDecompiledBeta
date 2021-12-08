@@ -8,6 +8,6 @@ public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyn
     }
 
     public final void run() {
-        this.f$0.lambda$new$0();
+        this.f$0.lambda$setRandomMonkeyIdleAnimation$25();
     }
 }

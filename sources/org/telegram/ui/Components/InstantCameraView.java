@@ -3210,6 +3210,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$finishZoom$5(ValueAnimator valueAnimator) {
-        this.cameraSession.setZoom(((Float) valueAnimator.getAnimatedValue()).floatValue());
+        CameraSession cameraSession2 = this.cameraSession;
+        if (cameraSession2 != null) {
+            cameraSession2.setZoom(((Float) valueAnimator.getAnimatedValue()).floatValue());
+        }
     }
 }

@@ -23,7 +23,7 @@ public class SlideView extends LinearLayout {
     public void onDestroyActivity() {
     }
 
-    public void onNextPressed() {
+    public void onNextPressed(String str) {
     }
 
     public void onShow() {

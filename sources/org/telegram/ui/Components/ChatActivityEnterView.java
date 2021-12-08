@@ -7,11 +7,13 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -45,6 +47,8 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
@@ -75,6 +79,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -112,6 +117,7 @@ import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$ReplyMarkup;
 import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
+import org.telegram.tgnet.TLRPC$TL_channels_sendAsPeers;
 import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
 import org.telegram.tgnet.TLRPC$TL_document;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;
@@ -333,7 +339,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     /* access modifiers changed from: private */
     public CrossOutDrawable notifySilentDrawable;
     /* access modifiers changed from: private */
+    public Runnable onEmojiSearchClosed;
+    /* access modifiers changed from: private */
     public Runnable onFinishInitCameraRunnable;
+    private Runnable onKeyboardClosed;
     /* access modifiers changed from: private */
     public Runnable openKeyboardRunnable;
     private int originalViewHeight;
@@ -351,6 +360,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private MessageObject pendingMessageObject;
     /* access modifiers changed from: private */
     public MediaActionDrawable playPauseDrawable;
+    private int popupX;
+    private int popupY;
     public boolean preventInput;
     private CloseProgressDrawable2 progressDrawable;
     private Runnable recordAudioVideoRunnable;
@@ -432,6 +443,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     public ActionBarPopupWindow sendPopupWindow;
     /* access modifiers changed from: private */
     public Rect sendRect;
+    /* access modifiers changed from: private */
+    public ActionBarPopupWindow senderSelectPopupWindow;
+    /* access modifiers changed from: private */
+    public SenderSelectView senderSelectView;
     private Runnable setTextFieldRunnable;
     protected boolean shouldAnimateEditTextWithBounds;
     private boolean showKeyboardOnResume;
@@ -498,12 +513,24 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             public static void $default$bottomPanelTranslationYChanged(ChatActivityEnterViewDelegate chatActivityEnterViewDelegate, float f) {
             }
 
+            public static int $default$getContentViewHeight(ChatActivityEnterViewDelegate chatActivityEnterViewDelegate) {
+                return 0;
+            }
+
+            public static TLRPC$TL_channels_sendAsPeers $default$getSendAsPeers(ChatActivityEnterViewDelegate chatActivityEnterViewDelegate) {
+                return null;
+            }
+
             public static boolean $default$hasForwardingMessages(ChatActivityEnterViewDelegate chatActivityEnterViewDelegate) {
                 return false;
             }
 
             public static boolean $default$hasScheduledMessages(ChatActivityEnterViewDelegate chatActivityEnterViewDelegate) {
                 return true;
+            }
+
+            public static int $default$measureKeyboardHeight(ChatActivityEnterViewDelegate chatActivityEnterViewDelegate) {
+                return 0;
             }
 
             public static void $default$onTrendingStickersShowed(ChatActivityEnterViewDelegate chatActivityEnterViewDelegate, boolean z) {
@@ -523,9 +550,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         void didPressAttachButton();
 
+        int getContentViewHeight();
+
+        TLRPC$TL_channels_sendAsPeers getSendAsPeers();
+
         boolean hasForwardingMessages();
 
         boolean hasScheduledMessages();
+
+        int measureKeyboardHeight();
 
         void needChangeVideoPreviewState(int i, float f);
 
@@ -577,7 +610,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$new$9(View view, MotionEvent motionEvent) {
+    public static /* synthetic */ boolean lambda$new$17(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -2620,6 +2653,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 accessibilityNodeInfo.setLongClickable(true);
             }
         };
+        int i3 = 2;
         this.emojiButton = new ImageView[2];
         this.currentPopupContentType = -1;
         this.currentEmojiIcon = -1;
@@ -2765,9 +2799,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
         };
         this.backgroundPaint = new Paint();
-        this.topViewUpdateListener = new ChatActivityEnterView$$ExternalSyntheticLambda2(this);
+        this.topViewUpdateListener = new ChatActivityEnterView$$ExternalSyntheticLambda4(this);
         this.botCommandLastPosition = -1;
         this.resourcesProvider = resourcesProvider3;
+        boolean z2 = false;
         this.smoothKeyboard = z && SharedConfig.smoothKeyboard && !AndroidUtilities.isInMultiwindow && (chatActivity2 == null || !chatActivity.isInBubbleMode());
         Paint paint2 = new Paint(1);
         this.dotPaint = paint2;
@@ -2806,7 +2841,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.textFieldContainer.setClipToPadding(false);
         this.textFieldContainer.setPadding(0, AndroidUtilities.dp(1.0f), 0, 0);
         addView(this.textFieldContainer, LayoutHelper.createFrame(-1, -2.0f, 83, 0.0f, 1.0f, 0.0f, 0.0f));
-        AnonymousClass9 r6 = new FrameLayout(activity2) {
+        AnonymousClass9 r5 = new FrameLayout(activity2) {
             /* access modifiers changed from: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                 super.onLayout(z, i, i2, i3, i4);
@@ -2839,11 +2874,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 return drawChild;
             }
         };
-        r6.setClipChildren(false);
-        this.textFieldContainer.addView(r6, LayoutHelper.createFrame(-1, -2.0f, 80, 0.0f, 0.0f, 48.0f, 0.0f));
-        int i3 = 0;
-        for (int i4 = 2; i3 < i4; i4 = 2) {
-            this.emojiButton[i3] = new ImageView(activity2) {
+        r5.setClipChildren(false);
+        this.textFieldContainer.addView(r5, LayoutHelper.createFrame(-1, -2.0f, 80, 0.0f, 0.0f, 48.0f, 0.0f));
+        int i4 = 0;
+        while (i4 < i3) {
+            this.emojiButton[i4] = new ImageView(activity2) {
                 /* access modifiers changed from: protected */
                 public void onDraw(Canvas canvas) {
                     super.onDraw(canvas);
@@ -2852,26 +2887,25 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 }
             };
-            this.emojiButton[i3].setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
-            this.emojiButton[i3].setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            this.emojiButton[i4].setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
+            this.emojiButton[i4].setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             if (Build.VERSION.SDK_INT >= 21) {
-                this.emojiButton[i3].setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor("listSelectorSDK21")));
+                this.emojiButton[i4].setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor("listSelectorSDK21")));
             }
-            r6.addView(this.emojiButton[i3], LayoutHelper.createFrame(48, 48.0f, 83, 3.0f, 0.0f, 0.0f, 0.0f));
-            this.emojiButton[i3].setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda18(this));
-            this.emojiButton[i3].setContentDescription(LocaleController.getString("AccDescrEmojiButton", NUM));
-            if (i3 == 1) {
-                this.emojiButton[i3].setVisibility(4);
-                this.emojiButton[i3].setAlpha(0.0f);
-                this.emojiButton[i3].setScaleX(0.1f);
-                this.emojiButton[i3].setScaleY(0.1f);
-                ImageView imageView = this.emojiButton[i3];
-            } else {
-                ImageView imageView2 = this.emojiButton[i3];
+            r5.addView(this.emojiButton[i4], LayoutHelper.createFrame(48, 48.0f, 83, 3.0f, 0.0f, 0.0f, 0.0f));
+            this.emojiButton[i4].setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda21(this));
+            this.emojiButton[i4].setContentDescription(LocaleController.getString("AccDescrEmojiButton", NUM));
+            if (i4 == 1) {
+                this.emojiButton[i4].setVisibility(4);
+                this.emojiButton[i4].setAlpha(0.0f);
+                this.emojiButton[i4].setScaleX(0.1f);
+                this.emojiButton[i4].setScaleY(0.1f);
             }
-            i3++;
+            i4++;
+            i3 = 2;
+            z2 = false;
         }
-        setEmojiButtonImage(false, false);
+        setEmojiButtonImage(z2, z2);
         NumberTextView numberTextView = new NumberTextView(activity2);
         this.captionLimitView = numberTextView;
         numberTextView.setVisibility(8);
@@ -2880,10 +2914,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.captionLimitView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.captionLimitView.setCenterAlign(true);
         addView(this.captionLimitView, LayoutHelper.createFrame(48, 20.0f, 85, 3.0f, 0.0f, 0.0f, 48.0f));
+        AnonymousClass11 r13 = r0;
         String str3 = "listSelectorSDK21";
         final Theme.ResourcesProvider resourcesProvider4 = resourcesProvider2;
+        AnonymousClass9 r14 = r5;
         final ChatActivity chatActivity3 = chatActivity;
-        AnonymousClass9 r13 = r6;
         final Activity activity3 = activity;
         AnonymousClass11 r0 = new EditTextCaption(activity, resourcesProvider2) {
             /* access modifiers changed from: private */
@@ -3101,8 +3136,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 return resourcesProvider4;
             }
         };
-        this.messageEditText = r0;
-        r0.setDelegate(new ChatActivityEnterView$$ExternalSyntheticLambda43(this));
+        this.messageEditText = r13;
+        r13.setDelegate(new ChatActivityEnterView$$ExternalSyntheticLambda51(this));
         this.messageEditText.setIncludeFontPadding(false);
         this.messageEditText.setWindowView(this.parentActivity.getWindow().getDecorView());
         ChatActivity chatActivity4 = this.parentFragment;
@@ -3122,7 +3157,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.messageEditText.setHintColor(getThemedColor("chat_messagePanelHint"));
         this.messageEditText.setHintTextColor(getThemedColor("chat_messagePanelHint"));
         this.messageEditText.setCursorColor(getThemedColor("chat_messagePanelCursor"));
-        r13.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 80, 52.0f, 0.0f, z ? 50.0f : 2.0f, 0.0f));
+        r14.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 80, 52.0f, 0.0f, z ? 50.0f : 2.0f, 0.0f));
         this.messageEditText.setOnKeyListener(new View.OnKeyListener() {
             boolean ctrlPressed = false;
 
@@ -3450,9 +3485,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
                 mutate2.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_recordedVoiceDot"), PorterDuff.Mode.MULTIPLY));
                 CombinedDrawable combinedDrawable = new CombinedDrawable(mutate, mutate2);
-                ImageView imageView3 = new ImageView(activity2);
-                this.scheduledButton = imageView3;
-                imageView3.setImageDrawable(combinedDrawable);
+                ImageView imageView = new ImageView(activity2);
+                this.scheduledButton = imageView;
+                imageView.setImageDrawable(combinedDrawable);
                 this.scheduledButton.setVisibility(8);
                 this.scheduledButton.setContentDescription(LocaleController.getString("ScheduledMessages", NUM));
                 this.scheduledButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -3462,8 +3497,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 } else {
                     str = str3;
                 }
-                r13.addView(this.scheduledButton, LayoutHelper.createFrame(48, 48, 85));
-                this.scheduledButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda19(this));
+                r14.addView(this.scheduledButton, LayoutHelper.createFrame(48, 48, 85));
+                this.scheduledButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda24(this));
             } else {
                 str = str3;
             }
@@ -3473,23 +3508,23 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.attachLayout.setEnabled(false);
             this.attachLayout.setPivotX((float) AndroidUtilities.dp(48.0f));
             this.attachLayout.setClipChildren(false);
-            r13.addView(this.attachLayout, LayoutHelper.createFrame(-2, 48, 85));
+            r14.addView(this.attachLayout, LayoutHelper.createFrame(-2, 48, 85));
             BotCommandsMenuView botCommandsMenuView = new BotCommandsMenuView(getContext());
             this.botCommandsMenuButton = botCommandsMenuView;
-            botCommandsMenuView.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda13(this));
-            r13.addView(this.botCommandsMenuButton, LayoutHelper.createFrame(-2, 32.0f, 83, 10.0f, 8.0f, 10.0f, 8.0f));
+            botCommandsMenuView.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda17(this));
+            r14.addView(this.botCommandsMenuButton, LayoutHelper.createFrame(-2, 32.0f, 83, 10.0f, 8.0f, 10.0f, 8.0f));
             AndroidUtilities.updateViewVisibilityAnimated(this.botCommandsMenuButton, false, 1.0f, false);
             this.botCommandsMenuButton.setExpanded(true, false);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity2);
-            AnonymousClass15 r62 = new BotCommandsMenuContainer(activity2) {
+            AnonymousClass15 r52 = new BotCommandsMenuContainer(activity2) {
                 /* access modifiers changed from: protected */
                 public void onDismiss() {
                     super.onDismiss();
                     ChatActivityEnterView.this.botCommandsMenuButton.setOpened(false);
                 }
             };
-            this.botCommandsMenuContainer = r62;
-            r62.listView.setLayoutManager(linearLayoutManager);
+            this.botCommandsMenuContainer = r52;
+            r52.listView.setLayoutManager(linearLayoutManager);
             RecyclerListView recyclerListView = this.botCommandsMenuContainer.listView;
             BotCommandsMenuView.BotCommandsAdapter botCommandsAdapter2 = new BotCommandsMenuView.BotCommandsAdapter();
             this.botCommandsAdapter = botCommandsAdapter2;
@@ -3536,11 +3571,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.botCommandsMenuContainer.setClipToPadding(false);
             this.sizeNotifierLayout.addView(this.botCommandsMenuContainer, 14, LayoutHelper.createFrame(-1, -1, 80));
             this.botCommandsMenuContainer.setVisibility(8);
-            ImageView imageView4 = new ImageView(activity2);
-            this.botButton = imageView4;
+            ImageView imageView2 = new ImageView(activity2);
+            this.botButton = imageView2;
             ReplaceableIconDrawable replaceableIconDrawable = new ReplaceableIconDrawable(activity2);
             this.botButtonDrawable = replaceableIconDrawable;
-            imageView4.setImageDrawable(replaceableIconDrawable);
+            imageView2.setImageDrawable(replaceableIconDrawable);
             this.botButtonDrawable.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
             this.botButtonDrawable.setIcon(NUM, false);
             this.botButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -3550,13 +3585,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             this.botButton.setVisibility(8);
             this.attachLayout.addView(this.botButton, LayoutHelper.createLinear(48, 48));
-            this.botButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda12(this));
+            this.botButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda15(this));
             this.notifyButton = new ImageView(activity2);
             CrossOutDrawable crossOutDrawable = new CrossOutDrawable(activity2, NUM, "chat_messagePanelIcons");
             this.notifySilentDrawable = crossOutDrawable;
             this.notifyButton.setImageDrawable(crossOutDrawable);
             this.notifySilentDrawable.setCrossOut(this.silent, false);
-            ImageView imageView5 = this.notifyButton;
+            ImageView imageView3 = this.notifyButton;
             if (this.silent) {
                 i = NUM;
                 str2 = "AccDescrChanSilentOn";
@@ -3564,7 +3599,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 i = NUM;
                 str2 = "AccDescrChanSilentOff";
             }
-            imageView5.setContentDescription(LocaleController.getString(str2, i));
+            imageView3.setContentDescription(LocaleController.getString(str2, i));
             this.notifyButton.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
             this.notifyButton.setScaleType(ImageView.ScaleType.CENTER);
             if (i5 >= 21) {
@@ -3609,27 +3644,32 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     ChatActivityEnterView.this.updateFieldHint(true);
                 }
             });
-            ImageView imageView6 = new ImageView(activity2);
-            this.attachButton = imageView6;
-            imageView6.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
+            ImageView imageView4 = new ImageView(activity2);
+            this.attachButton = imageView4;
+            imageView4.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
             this.attachButton.setImageResource(NUM);
             this.attachButton.setScaleType(ImageView.ScaleType.CENTER);
             if (i5 >= 21) {
                 this.attachButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(str)));
             }
             this.attachLayout.addView(this.attachButton, LayoutHelper.createLinear(48, 48));
-            this.attachButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda15(this));
+            this.attachButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda18(this));
             this.attachButton.setContentDescription(LocaleController.getString("AccDescrAttachButton", NUM));
         } else {
             str = str3;
         }
+        SenderSelectView senderSelectView2 = new SenderSelectView(getContext());
+        this.senderSelectView = senderSelectView2;
+        senderSelectView2.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda26(this, sizeNotifierFrameLayout2));
+        this.senderSelectView.setVisibility(8);
+        r14.addView(this.senderSelectView, LayoutHelper.createFrame(32, 32.0f, 83, 10.0f, 8.0f, 10.0f, 8.0f));
         FrameLayout frameLayout2 = new FrameLayout(activity2);
         this.recordedAudioPanel = frameLayout2;
         frameLayout2.setVisibility(this.audioToSend == null ? 8 : 0);
         this.recordedAudioPanel.setFocusable(true);
         this.recordedAudioPanel.setFocusableInTouchMode(true);
         this.recordedAudioPanel.setClickable(true);
-        r13.addView(this.recordedAudioPanel, LayoutHelper.createFrame(-1, 48, 80));
+        r14.addView(this.recordedAudioPanel, LayoutHelper.createFrame(-1, 48, 80));
         RLottieImageView rLottieImageView = new RLottieImageView(activity2);
         this.recordDeleteImageView = rLottieImageView;
         rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -3642,7 +3682,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.recordDeleteImageView.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(str)));
         }
         this.recordedAudioPanel.addView(this.recordDeleteImageView, LayoutHelper.createFrame(48, 48.0f));
-        this.recordDeleteImageView.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda10(this));
+        this.recordDeleteImageView.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda13(this));
         VideoTimelineView videoTimelineView2 = new VideoTimelineView(activity2);
         this.videoTimelineView = videoTimelineView2;
         videoTimelineView2.setColor(getThemedColor("chat_messagePanelVideoFrame"));
@@ -3702,8 +3742,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.recordPanel = frameLayout3;
         frameLayout3.setClipChildren(false);
         this.recordPanel.setVisibility(8);
-        r13.addView(this.recordPanel, LayoutHelper.createFrame(-1, 48.0f));
-        this.recordPanel.setOnTouchListener(ChatActivityEnterView$$ExternalSyntheticLambda24.INSTANCE);
+        r14.addView(this.recordPanel, LayoutHelper.createFrame(-1, 48.0f));
+        this.recordPanel.setOnTouchListener(ChatActivityEnterView$$ExternalSyntheticLambda30.INSTANCE);
         SlideTextView slideTextView = new SlideTextView(activity2);
         this.slideText = slideTextView;
         this.recordPanel.addView(slideTextView, LayoutHelper.createFrame(-1, -1.0f, 0, 45.0f, 0.0f, 0.0f, 0.0f));
@@ -3718,7 +3758,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         TimerView timerView = new TimerView(activity2);
         this.recordTimerView = timerView;
         this.recordTimeContainer.addView(timerView, LayoutHelper.createLinear(-1, -1, 16, 6, 0, 0, 0));
-        AnonymousClass20 r1 = new FrameLayout(activity2) {
+        AnonymousClass26 r1 = new FrameLayout(activity2) {
             /* access modifiers changed from: protected */
             public boolean drawChild(Canvas canvas, View view, long j) {
                 if (view != ChatActivityEnterView.this.sendButton || !ChatActivityEnterView.this.textTransitionIsRunning) {
@@ -3735,10 +3775,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.audioVideoButtonContainer = frameLayout4;
         frameLayout4.setSoundEffectsEnabled(false);
         this.sendButtonContainer.addView(this.audioVideoButtonContainer, LayoutHelper.createFrame(48, 48.0f));
-        this.audioVideoButtonContainer.setOnTouchListener(new ChatActivityEnterView$$ExternalSyntheticLambda23(this, resourcesProvider3));
-        ImageView imageView7 = new ImageView(activity2);
-        this.audioSendButton = imageView7;
-        imageView7.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        this.audioVideoButtonContainer.setOnTouchListener(new ChatActivityEnterView$$ExternalSyntheticLambda29(this, resourcesProvider3));
+        ImageView imageView5 = new ImageView(activity2);
+        this.audioSendButton = imageView5;
+        imageView5.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         this.audioSendButton.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
         this.audioSendButton.setImageResource(NUM);
         this.audioSendButton.setPadding(0, 0, AndroidUtilities.dp(4.0f), 0);
@@ -3747,9 +3787,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.audioSendButton.setAccessibilityDelegate(this.mediaMessageButtonsDelegate);
         this.audioVideoButtonContainer.addView(this.audioSendButton, LayoutHelper.createFrame(48, 48.0f));
         if (z) {
-            ImageView imageView8 = new ImageView(activity2);
-            this.videoSendButton = imageView8;
-            imageView8.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            ImageView imageView6 = new ImageView(activity2);
+            this.videoSendButton = imageView6;
+            imageView6.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             this.videoSendButton.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
             this.videoSendButton.setImageResource(NUM);
             this.videoSendButton.setPadding(0, 0, AndroidUtilities.dp(4.0f), 0);
@@ -3762,14 +3802,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.recordCircle = recordCircle2;
         recordCircle2.setVisibility(8);
         this.sizeNotifierLayout.addView(this.recordCircle, LayoutHelper.createFrame(-1, -2.0f, 80, 0.0f, 0.0f, 0.0f, 0.0f));
-        ImageView imageView9 = new ImageView(activity2);
-        this.cancelBotButton = imageView9;
-        imageView9.setVisibility(4);
+        ImageView imageView7 = new ImageView(activity2);
+        this.cancelBotButton = imageView7;
+        imageView7.setVisibility(4);
         this.cancelBotButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        ImageView imageView10 = this.cancelBotButton;
+        ImageView imageView8 = this.cancelBotButton;
         CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2();
         this.progressDrawable = closeProgressDrawable2;
-        imageView10.setImageDrawable(closeProgressDrawable2);
+        imageView8.setImageDrawable(closeProgressDrawable2);
         this.cancelBotButton.setContentDescription(LocaleController.getString("Cancel", NUM));
         this.progressDrawable.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelCancelInlineBot"), PorterDuff.Mode.MULTIPLY));
         this.cancelBotButton.setSoundEffectsEnabled(false);
@@ -3780,7 +3820,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.cancelBotButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(str)));
         }
         this.sendButtonContainer.addView(this.cancelBotButton, LayoutHelper.createFrame(48, 48.0f));
-        this.cancelBotButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda9(this));
+        this.cancelBotButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda23(this));
         if (isInScheduleMode()) {
             this.sendButtonDrawable = activity.getResources().getDrawable(NUM).mutate();
             this.sendButtonInverseDrawable = activity.getResources().getDrawable(NUM).mutate();
@@ -3790,7 +3830,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.sendButtonInverseDrawable = activity.getResources().getDrawable(NUM).mutate();
             this.inactinveSendButtonDrawable = activity.getResources().getDrawable(NUM).mutate();
         }
-        AnonymousClass21 r12 = new View(activity2) {
+        AnonymousClass27 r12 = new View(activity2) {
             private float animationDuration;
             private float animationProgress;
             private int drawableColor;
@@ -3908,8 +3948,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.sendButton.setBackgroundDrawable(Theme.createSelectorDrawable(Color.argb(24, Color.red(themedColor), Color.green(themedColor), Color.blue(themedColor)), 1));
         }
         this.sendButtonContainer.addView(this.sendButton, LayoutHelper.createFrame(48, 48.0f));
-        this.sendButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda11(this));
-        this.sendButton.setOnLongClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda21(this));
+        this.sendButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda22(this));
+        this.sendButton.setOnLongClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda27(this));
         SimpleTextView simpleTextView = new SimpleTextView(activity2);
         this.slowModeButton = simpleTextView;
         simpleTextView.setTextSize(18);
@@ -3922,9 +3962,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.slowModeButton.setGravity(21);
         this.slowModeButton.setTextColor(getThemedColor("chat_messagePanelIcons"));
         this.sendButtonContainer.addView(this.slowModeButton, LayoutHelper.createFrame(64, 48, 53));
-        this.slowModeButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda17(this));
-        this.slowModeButton.setOnLongClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda22(this));
-        AnonymousClass22 r14 = new ImageView(this, activity2) {
+        this.slowModeButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda20(this));
+        this.slowModeButton.setOnLongClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda28(this));
+        AnonymousClass28 r15 = new ImageView(this, activity2) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (getAlpha() <= 0.0f) {
                     return false;
@@ -3932,12 +3972,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 return super.onTouchEvent(motionEvent);
             }
         };
-        this.expandStickersButton = r14;
-        r14.setScaleType(ImageView.ScaleType.CENTER);
-        ImageView imageView11 = this.expandStickersButton;
+        this.expandStickersButton = r15;
+        r15.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView9 = this.expandStickersButton;
         AnimatedArrowDrawable animatedArrowDrawable = new AnimatedArrowDrawable(getThemedColor("chat_messagePanelIcons"), false);
         this.stickersArrow = animatedArrowDrawable;
-        imageView11.setImageDrawable(animatedArrowDrawable);
+        imageView9.setImageDrawable(animatedArrowDrawable);
         this.expandStickersButton.setVisibility(8);
         this.expandStickersButton.setScaleX(0.1f);
         this.expandStickersButton.setScaleY(0.1f);
@@ -3946,7 +3986,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.expandStickersButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(str)));
         }
         this.sendButtonContainer.addView(this.expandStickersButton, LayoutHelper.createFrame(48, 48.0f));
-        this.expandStickersButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda8(this));
+        this.expandStickersButton.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda19(this));
         this.expandStickersButton.setContentDescription(LocaleController.getString("AccDescrExpandPanel", NUM));
         FrameLayout frameLayout5 = new FrameLayout(activity2);
         this.doneButtonContainer = frameLayout5;
@@ -3959,9 +3999,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         mutate3.setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelVoicePressed"), PorterDuff.Mode.MULTIPLY));
         CombinedDrawable combinedDrawable2 = new CombinedDrawable(createCircleDrawable, mutate3, 0, AndroidUtilities.dp(1.0f));
         combinedDrawable2.setCustomSize(AndroidUtilities.dp(32.0f), AndroidUtilities.dp(32.0f));
-        ImageView imageView12 = new ImageView(activity2);
-        this.doneButtonImage = imageView12;
-        imageView12.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView10 = new ImageView(activity2);
+        this.doneButtonImage = imageView10;
+        imageView10.setScaleType(ImageView.ScaleType.CENTER);
         this.doneButtonImage.setImageDrawable(combinedDrawable2);
         this.doneButtonImage.setContentDescription(LocaleController.getString("Done", NUM));
         this.doneButtonContainer.addView(this.doneButtonImage, LayoutHelper.createFrame(48, 48.0f));
@@ -4002,7 +4042,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (this.stickersExpanded) {
                 setStickersExpanded(false, true, false);
                 this.waitingForKeyboardOpenAfterAnimation = true;
-                AndroidUtilities.runOnUIThread(new ChatActivityEnterView$$ExternalSyntheticLambda25(this), 200);
+                AndroidUtilities.runOnUIThread(new ChatActivityEnterView$$ExternalSyntheticLambda34(this), 200);
                 return;
             }
             openKeyboardInternal();
@@ -4080,7 +4120,673 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$7(View view) {
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x02f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0300  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x031a  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x031f  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x0333  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x0335  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x033f  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0364  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$new$14(org.telegram.ui.Components.SizeNotifierFrameLayout r28, android.view.View r29) {
+        /*
+            r27 = this;
+            r12 = r27
+            float r0 = r27.getTranslationY()
+            r13 = 0
+            r14 = 1
+            int r0 = (r0 > r13 ? 1 : (r0 == r13 ? 0 : -1))
+            if (r0 == 0) goto L_0x0017
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda31 r0 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda31
+            r0.<init>(r12)
+            r12.onEmojiSearchClosed = r0
+            r12.hidePopup(r14, r14)
+            return
+        L_0x0017:
+            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r0 = r12.delegate
+            int r0 = r0.measureKeyboardHeight()
+            r15 = 1101004800(0x41a00000, float:20.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            if (r0 <= r1) goto L_0x0054
+            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r0 = r12.delegate
+            int r0 = r0.getContentViewHeight()
+            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r1 = r12.delegate
+            int r1 = r1.measureKeyboardHeight()
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            if (r1 > r2) goto L_0x0038
+            int r0 = r0 + r1
+        L_0x0038:
+            boolean r1 = r12.emojiViewVisible
+            if (r1 == 0) goto L_0x0041
+            int r1 = r27.getEmojiPadding()
+            int r0 = r0 - r1
+        L_0x0041:
+            r1 = 1128792064(0x43480000, float:200.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            if (r0 >= r1) goto L_0x0054
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda38 r0 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda38
+            r0.<init>(r12)
+            r12.onKeyboardClosed = r0
+            r27.closeKeyboard()
+            return
+        L_0x0054:
+            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r0 = r12.delegate
+            org.telegram.tgnet.TLRPC$TL_channels_sendAsPeers r0 = r0.getSendAsPeers()
+            if (r0 == 0) goto L_0x03fa
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
+            r11 = 0
+            if (r0 == 0) goto L_0x006a
+            r0.setPauseNotifications(r11)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
+            r0.dismiss()
+            return
+        L_0x006a:
+            int r0 = r12.currentAccount
+            org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r0)
+            long r0 = r12.dialog_id
+            long r0 = -r0
+            org.telegram.tgnet.TLRPC$ChatFull r10 = r4.getChatFull(r0)
+            if (r10 != 0) goto L_0x007a
+            return
+        L_0x007a:
+            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r0 = r12.delegate
+            org.telegram.tgnet.TLRPC$TL_channels_sendAsPeers r0 = r0.getSendAsPeers()
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r9 = r0.peers
+            org.telegram.ui.ChatActivity r0 = r12.parentFragment
+            org.telegram.ui.ActionBar.ActionBarLayout r8 = r0.getParentLayout()
+            org.telegram.ui.Components.ChatActivityEnterView$19 r7 = new org.telegram.ui.Components.ChatActivityEnterView$19
+            android.content.Context r0 = r27.getContext()
+            r7.<init>(r0)
+            r0 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r6 = -2
+            android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r0)
+            r7.setLayoutParams(r0)
+            android.content.Context r0 = r27.getContext()
+            r1 = 2131166008(0x7var_, float:1.794625E38)
+            android.graphics.drawable.Drawable r0 = androidx.core.content.ContextCompat.getDrawable(r0, r1)
+            android.graphics.drawable.Drawable r0 = r0.mutate()
+            android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r2 = "actionBarDefaultSubmenuBackground"
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            android.graphics.PorterDuff$Mode r3 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r1.<init>(r2, r3)
+            r0.setColorFilter(r1)
+            r7.setBackground(r0)
+            android.view.View r5 = new android.view.View
+            android.content.Context r0 = r27.getContext()
+            r5.<init>(r0)
+            r0 = 855638016(0x33000000, float:2.9802322E-8)
+            r5.setBackgroundColor(r0)
+            r0 = 1138819072(0x43e10000, float:450.0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            org.telegram.ui.Components.ChatActivityEnterView$20 r3 = new org.telegram.ui.Components.ChatActivityEnterView$20
+            android.content.Context r1 = r27.getContext()
+            r3.<init>(r12, r1, r0)
+            r3.setOrientation(r14)
+            android.widget.TextView r2 = new android.widget.TextView
+            android.content.Context r0 = r28.getContext()
+            r2.<init>(r0)
+            java.lang.String r0 = "dialogTextBlue"
+            int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+            r2.setTextColor(r0)
+            r0 = 1097859072(0x41700000, float:15.0)
+            r2.setTextSize(r14, r0)
+            r0 = 2131627715(0x7f0e0ec3, float:1.8882702E38)
+            java.lang.String r1 = "SendMessageAsTitle"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            r2.setText(r0)
+            java.lang.String r0 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r0 = org.telegram.messenger.AndroidUtilities.getTypeface(r0)
+            r2.setTypeface(r0, r14)
+            r0 = 1099956224(0x41900000, float:18.0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            r1 = 1095761920(0x41500000, float:13.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            r2.setPadding(r0, r6, r0, r1)
+            r3.addView(r2)
+            android.view.View r6 = new android.view.View
+            android.content.Context r0 = r27.getContext()
+            r6.<init>(r0)
+            r6.setAlpha(r13)
+            android.widget.FrameLayout r1 = new android.widget.FrameLayout
+            android.content.Context r0 = r27.getContext()
+            r1.<init>(r0)
+            org.telegram.ui.Components.RecyclerListView r0 = new org.telegram.ui.Components.RecyclerListView
+            android.content.Context r11 = r27.getContext()
+            r0.<init>(r11)
+            androidx.recyclerview.widget.LinearLayoutManager r11 = new androidx.recyclerview.widget.LinearLayoutManager
+            android.content.Context r13 = r27.getContext()
+            r11.<init>(r13)
+            java.util.concurrent.atomic.AtomicReference r13 = new java.util.concurrent.atomic.AtomicReference
+            r13.<init>()
+            java.util.concurrent.atomic.AtomicReference r17 = new java.util.concurrent.atomic.AtomicReference
+            r17.<init>()
+            java.util.concurrent.atomic.AtomicReference r18 = new java.util.concurrent.atomic.AtomicReference
+            r18.<init>()
+            r0.setLayoutManager(r11)
+            org.telegram.ui.Components.ChatActivityEnterView$21 r15 = new org.telegram.ui.Components.ChatActivityEnterView$21
+            r15.<init>(r12, r9, r4, r10)
+            r0.setAdapter(r15)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda52 r15 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda52
+            r28 = r0
+            r0 = r15
+            r14 = r1
+            r1 = r27
+            r19 = r2
+            r2 = r9
+            r20 = r9
+            r9 = r3
+            r3 = r10
+            r21 = r5
+            r5 = r28
+            r16 = r9
+            r22 = r10
+            r9 = -2
+            r10 = r6
+            r6 = r17
+            r23 = r7
+            r7 = r13
+            r24 = r8
+            r8 = r18
+            r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8)
+            r8 = r28
+            r8.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r15)
+            r15 = 150(0x96, float:2.1E-43)
+            org.telegram.ui.Components.ChatActivityEnterView$23 r0 = new org.telegram.ui.Components.ChatActivityEnterView$23
+            r0.<init>(r12, r11, r10, r15)
+            r8.addOnScrollListener(r0)
+            r7 = 2
+            r8.setOverScrollMode(r7)
+            r14.addView(r8)
+            android.content.Context r0 = r27.getContext()
+            r1 = 2131165466(0x7var_a, float:1.794515E38)
+            java.lang.String r2 = "windowBackgroundGrayShadow"
+            android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r2)
+            r10.setBackground(r0)
+            r6 = -1
+            r5 = 1082130432(0x40800000, float:4.0)
+            android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r5)
+            r14.addView(r10, r0)
+            android.widget.LinearLayout$LayoutParams r0 = new android.widget.LinearLayout$LayoutParams
+            r0.<init>(r6, r9)
+            r9 = r16
+            r9.addView(r14, r0)
+            r14 = r23
+            r14.addView(r9)
+            org.telegram.ui.Components.ChatActivityEnterView$24 r4 = new org.telegram.ui.Components.ChatActivityEnterView$24
+            r3 = -2
+            r16 = -2
+            r0 = r4
+            r1 = r27
+            r2 = r14
+            r15 = r4
+            r4 = r16
+            r16 = 1082130432(0x40800000, float:4.0)
+            r5 = r24
+            r6 = r21
+            r7 = r14
+            r23 = r8
+            r8 = r9
+            r25 = r20
+            r20 = r9
+            r9 = r13
+            r13 = r22
+            r22 = r10
+            r10 = r17
+            r26 = r11
+            r17 = r13
+            r13 = 0
+            r11 = r18
+            r0.<init>(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
+            r12.senderSelectPopupWindow = r15
+            r0 = 1
+            r15.setPauseNotifications(r0)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r1 = r12.senderSelectPopupWindow
+            r2 = 220(0xdc, float:3.08E-43)
+            r1.setDismissAnimationDuration(r2)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r1 = r12.senderSelectPopupWindow
+            r1.setOutsideTouchable(r0)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r1 = r12.senderSelectPopupWindow
+            r1.setClippingEnabled(r0)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r1 = r12.senderSelectPopupWindow
+            r1.setFocusable(r0)
+            r0 = 1148846080(0x447a0000, float:1000.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            r2 = -2147483648(0xfffffffvar_, float:-0.0)
+            int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r1, r2)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r2)
+            r14.measure(r1, r0)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
+            r1 = 2
+            r0.setInputMethodMode(r1)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
+            r0.setSoftInputMode(r13)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
+            android.view.View r0 = r0.getContentView()
+            r2 = 1
+            r0.setFocusableInTouchMode(r2)
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
+            r0.setAnimationEnabled(r13)
+            r0 = r17
+            org.telegram.tgnet.TLRPC$Peer r0 = r0.default_send_as
+            if (r0 == 0) goto L_0x0243
+            goto L_0x0244
+        L_0x0243:
+            r0 = 0
+        L_0x0244:
+            r2 = 1065353216(0x3var_, float:1.0)
+            if (r0 == 0) goto L_0x02e4
+            r3 = 1114112000(0x42680000, float:58.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r4 = r25.size()
+            int r4 = r4 * r3
+            r11 = 0
+        L_0x0255:
+            int r5 = r25.size()
+            if (r11 >= r5) goto L_0x02e4
+            r5 = r25
+            java.lang.Object r6 = r5.get(r11)
+            org.telegram.tgnet.TLRPC$Peer r6 = (org.telegram.tgnet.TLRPC$Peer) r6
+            long r7 = r6.channel_id
+            r9 = 0
+            int r15 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
+            if (r15 == 0) goto L_0x0273
+            r15 = r14
+            long r13 = r0.channel_id
+            int r17 = (r7 > r13 ? 1 : (r7 == r13 ? 0 : -1))
+            if (r17 == 0) goto L_0x028c
+            goto L_0x0274
+        L_0x0273:
+            r15 = r14
+        L_0x0274:
+            long r7 = r6.user_id
+            int r13 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
+            if (r13 == 0) goto L_0x0280
+            long r13 = r0.user_id
+            int r17 = (r7 > r13 ? 1 : (r7 == r13 ? 0 : -1))
+            if (r17 == 0) goto L_0x028c
+        L_0x0280:
+            long r6 = r6.chat_id
+            int r8 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
+            if (r8 == 0) goto L_0x02d6
+            long r8 = r0.chat_id
+            int r10 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
+            if (r10 != 0) goto L_0x02d6
+        L_0x028c:
+            int r0 = r5.size()
+            r6 = 1
+            int r0 = r0 - r6
+            if (r11 == r0) goto L_0x02a0
+            int r0 = r23.getMeasuredHeight()
+            if (r0 >= r4) goto L_0x02a0
+            int r0 = r23.getMeasuredHeight()
+            int r0 = r0 % r3
+            goto L_0x02a1
+        L_0x02a0:
+            r0 = 0
+        L_0x02a1:
+            r6 = 1088421888(0x40e00000, float:7.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r0 = r0 + r6
+            int r5 = r5.size()
+            int r5 = r5 - r1
+            int r5 = r5 * r3
+            int r4 = r4 - r5
+            int r0 = r0 + r4
+            r6 = r26
+            r6.scrollToPositionWithOffset(r11, r0)
+            int r0 = r23.computeVerticalScrollOffset()
+            if (r0 <= 0) goto L_0x02e5
+            android.view.ViewPropertyAnimator r0 = r22.animate()
+            r0.cancel()
+            android.view.ViewPropertyAnimator r0 = r22.animate()
+            android.view.ViewPropertyAnimator r0 = r0.alpha(r2)
+            r7 = 150(0x96, float:2.1E-43)
+            long r3 = (long) r7
+            android.view.ViewPropertyAnimator r0 = r0.setDuration(r3)
+            r0.start()
+            goto L_0x02e5
+        L_0x02d6:
+            r6 = r26
+            r7 = 150(0x96, float:2.1E-43)
+            int r11 = r11 + 1
+            r25 = r5
+            r26 = r6
+            r14 = r15
+            r13 = 0
+            goto L_0x0255
+        L_0x02e4:
+            r15 = r14
+        L_0x02e5:
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r0 = -r0
+            int[] r3 = new int[r1]
+            boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r4 == 0) goto L_0x0300
+            org.telegram.ui.ChatActivity r4 = r12.parentFragment
+            android.view.View r4 = r4.getFragmentView()
+            r4.getLocationInWindow(r3)
+            r4 = 0
+            r5 = r3[r4]
+            int r5 = r5 + r0
+            goto L_0x0302
+        L_0x0300:
+            r4 = 0
+            r5 = r0
+        L_0x0302:
+            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r6 = r12.delegate
+            int r6 = r6.getContentViewHeight()
+            int r7 = r15.getMeasuredHeight()
+            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r8 = r12.delegate
+            int r8 = r8.measureKeyboardHeight()
+            r9 = 1101004800(0x41a00000, float:20.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            if (r8 > r9) goto L_0x031b
+            int r6 = r6 + r8
+        L_0x031b:
+            boolean r8 = r12.emojiViewVisible
+            if (r8 == 0) goto L_0x0324
+            int r8 = r27.getEmojiPadding()
+            int r6 = r6 - r8
+        L_0x0324:
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r9 = r0 * 2
+            int r9 = r9 + r6
+            org.telegram.ui.ChatActivity r10 = r12.parentFragment
+            boolean r10 = r10.isInBubbleMode()
+            if (r10 == 0) goto L_0x0335
+            r11 = 0
+            goto L_0x0337
+        L_0x0335:
+            int r11 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+        L_0x0337:
+            int r9 = r9 - r11
+            int r10 = r19.getMeasuredHeight()
+            int r9 = r9 - r10
+            if (r7 >= r9) goto L_0x0364
+            r12.getLocationInWindow(r3)
+            r4 = 1
+            r3 = r3[r4]
+            int r3 = r3 - r7
+            int r3 = r3 - r0
+            r4 = 1073741824(0x40000000, float:2.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r3 = r3 - r6
+            android.widget.FrameLayout$LayoutParams r6 = new android.widget.FrameLayout$LayoutParams
+            int r0 = r0 + r3
+            int r0 = r0 + r7
+            int r0 = r0 + r8
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r0 = r0 + r4
+            r7 = -1
+            r6.<init>(r7, r0)
+            r0 = r21
+            r9 = r24
+            r9.addView(r0, r6)
+            goto L_0x039a
+        L_0x0364:
+            r0 = r21
+            r9 = r24
+            r7 = -1
+            org.telegram.ui.ChatActivity r3 = r12.parentFragment
+            boolean r3 = r3.isInBubbleMode()
+            if (r3 == 0) goto L_0x0373
+            r11 = 0
+            goto L_0x0375
+        L_0x0373:
+            int r11 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+        L_0x0375:
+            r3 = 1096810496(0x41600000, float:14.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            android.view.ViewGroup$LayoutParams r4 = r20.getLayoutParams()
+            int r6 = r6 - r11
+            int r6 = r6 - r3
+            int r10 = r27.getHeightWithTopView()
+            int r6 = r6 - r10
+            r4.height = r6
+            android.widget.FrameLayout$LayoutParams r4 = new android.widget.FrameLayout$LayoutParams
+            int r3 = r3 + r11
+            android.view.ViewGroup$LayoutParams r6 = r20.getLayoutParams()
+            int r6 = r6.height
+            int r3 = r3 + r6
+            int r3 = r3 + r8
+            r4.<init>(r7, r3)
+            r9.addView(r0, r4)
+            r3 = r11
+        L_0x039a:
+            r4 = 1048576000(0x3e800000, float:0.25)
+            r6 = 1090519040(0x41000000, float:8.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r7 = (float) r7
+            r8 = r15
+            r8.setPivotX(r7)
+            int r7 = r8.getMeasuredHeight()
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r7 = r7 - r6
+            float r6 = (float) r7
+            r8.setPivotY(r6)
+            r6 = r20
+            r7 = 0
+            r6.setPivotX(r7)
+            r6.setPivotY(r7)
+            r8.setScaleX(r4)
+            r8.setScaleY(r4)
+            r6.setAlpha(r4)
+            r0.setAlpha(r7)
+            float[] r1 = new float[r1]
+            r1 = {0, NUM} // fill-array
+            android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
+            r9 = 220(0xdc, double:1.087E-321)
+            android.animation.ValueAnimator r1 = r1.setDuration(r9)
+            org.telegram.ui.Components.CubicBezierInterpolator r7 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT
+            r1.setInterpolator(r7)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda1 r7 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda1
+            r7.<init>(r4, r8, r6, r0)
+            r1.addUpdateListener(r7)
+            r1.start()
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
+            r1 = 51
+            r12.popupX = r5
+            r12.popupY = r3
+            r4 = r29
+            r0.showAtLocation(r4, r1, r5, r3)
+            org.telegram.ui.Components.SenderSelectView r0 = r12.senderSelectView
+            r0.setProgress(r2)
+        L_0x03fa:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.lambda$new$14(org.telegram.ui.Components.SizeNotifierFrameLayout, android.view.View):void");
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$7() {
+        this.senderSelectView.callOnClick();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$8() {
+        this.senderSelectView.callOnClick();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$12(List list, TLRPC$ChatFull tLRPC$ChatFull, MessagesController messagesController, RecyclerListView recyclerListView, AtomicReference atomicReference, AtomicReference atomicReference2, AtomicReference atomicReference3, View view, int i) {
+        TLRPC$User user;
+        TLRPC$ChatFull tLRPC$ChatFull2 = tLRPC$ChatFull;
+        MessagesController messagesController2 = messagesController;
+        int i2 = i;
+        if (this.senderSelectPopupWindow != null) {
+            TLRPC$Peer tLRPC$Peer = (TLRPC$Peer) list.get(i2);
+            if (tLRPC$ChatFull2 != null) {
+                tLRPC$ChatFull2.default_send_as = tLRPC$Peer;
+                updateSendAsButton();
+            }
+            MessagesController messagesController3 = this.parentFragment.getMessagesController();
+            long j = this.dialog_id;
+            long j2 = tLRPC$Peer.user_id;
+            if (j2 == 0) {
+                j2 = -tLRPC$Peer.channel_id;
+            }
+            messagesController3.setDefaultSendAs(j, j2);
+            int[] iArr = new int[2];
+            final SimpleAvatarView simpleAvatarView = (SimpleAvatarView) ((ViewGroup) ((ViewGroup) view).getChildAt(0)).getChildAt(0);
+            boolean isSelected = simpleAvatarView.isSelected();
+            simpleAvatarView.getLocationInWindow(iArr);
+            simpleAvatarView.setSelected(true, true);
+            final SimpleAvatarView simpleAvatarView2 = new SimpleAvatarView(getContext());
+            long j3 = tLRPC$Peer.channel_id;
+            if (j3 != 0) {
+                TLRPC$Chat chat = messagesController2.getChat(Long.valueOf(j3));
+                if (chat != null) {
+                    simpleAvatarView2.setAvatar(chat);
+                }
+            } else {
+                long j4 = tLRPC$Peer.user_id;
+                if (!(j4 == 0 || (user = messagesController2.getUser(Long.valueOf(j4))) == null)) {
+                    simpleAvatarView2.setAvatar(user);
+                }
+            }
+            for (int i3 = 0; i3 < recyclerListView.getChildCount(); i3++) {
+                View childAt = recyclerListView.getChildAt(i3);
+                if (i3 != i2) {
+                    ((SimpleAvatarView) ((ViewGroup) ((ViewGroup) childAt).getChildAt(0)).getChildAt(0)).setSelected(false, true);
+                }
+            }
+            RecyclerListView recyclerListView2 = recyclerListView;
+            final Dialog dialog = new Dialog(getContext(), NUM);
+            FrameLayout frameLayout = new FrameLayout(getContext());
+            frameLayout.addView(simpleAvatarView2, LayoutHelper.createFrame(44, 44, 3));
+            dialog.setContentView(frameLayout);
+            dialog.getWindow().setLayout(-1, -1);
+            int i4 = Build.VERSION.SDK_INT;
+            if (i4 >= 21) {
+                dialog.getWindow().clearFlags(1024);
+                dialog.getWindow().clearFlags(67108864);
+                dialog.getWindow().clearFlags(NUM);
+                dialog.getWindow().addFlags(Integer.MIN_VALUE);
+                dialog.getWindow().addFlags(512);
+                dialog.getWindow().addFlags(131072);
+                dialog.getWindow().getAttributes().windowAnimations = 0;
+                dialog.getWindow().getDecorView().setSystemUiVisibility(1792);
+                dialog.getWindow().setStatusBarColor(0);
+                dialog.getWindow().setNavigationBarColor(0);
+                AndroidUtilities.setLightStatusBar(dialog.getWindow(), Theme.getColor("actionBarDefault", (boolean[]) null, true) == -1);
+                if (i4 >= 26) {
+                    AndroidUtilities.setLightNavigationBar(dialog.getWindow(), AndroidUtilities.computePerceivedBrightness(Theme.getColor("windowBackgroundGray", (boolean[]) null, true)) >= 0.721f);
+                }
+            }
+            if (AndroidUtilities.isTablet()) {
+                this.parentFragment.getFragmentView().getLocationInWindow(this.location);
+                this.popupX += this.location[0];
+            }
+            if (i4 >= 23) {
+                this.popupX += getRootWindowInsets().getSystemWindowInsetLeft();
+            }
+            this.senderSelectView.getLocationInWindow(this.location);
+            int[] iArr2 = this.location;
+            float f = (float) iArr2[0];
+            float f2 = (float) iArr2[1];
+            float dp = isSelected ? (float) AndroidUtilities.dp(5.0f) : 0.0f;
+            float dp2 = ((float) (iArr[0] + this.popupX)) + dp + ((float) AndroidUtilities.dp(4.0f)) + 0.0f;
+            float f3 = ((float) (iArr[1] + this.popupY)) + dp + 0.0f;
+            simpleAvatarView2.setTranslationX(dp2);
+            simpleAvatarView2.setTranslationY(f3);
+            float f4 = isSelected ? 0.77272725f : 1.0f;
+            simpleAvatarView2.setPivotX(0.0f);
+            simpleAvatarView2.setPivotY(0.0f);
+            simpleAvatarView2.setScaleX(f4);
+            simpleAvatarView2.setScaleY(f4);
+            atomicReference.set(new AnimatorListenerAdapter() {
+                public void onAnimationStart(Animator animator) {
+                    simpleAvatarView2.getViewTreeObserver().addOnDrawListener(new ViewTreeObserver.OnDrawListener() {
+                        public void onDraw() {
+                            AnonymousClass22 r0 = AnonymousClass22.this;
+                            SimpleAvatarView simpleAvatarView = simpleAvatarView2;
+                            simpleAvatarView.post(new ChatActivityEnterView$22$1$$ExternalSyntheticLambda0(this, simpleAvatarView, simpleAvatarView));
+                        }
+
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$onDraw$0(SimpleAvatarView simpleAvatarView, SimpleAvatarView simpleAvatarView2) {
+                            simpleAvatarView.getViewTreeObserver().removeOnDrawListener(this);
+                            simpleAvatarView2.setHideAvatar(true);
+                        }
+                    });
+                    dialog.show();
+                }
+
+                public void onAnimationEnd(Animator animator) {
+                    ChatActivityEnterView.this.senderSelectView.setProgress(0.0f, false);
+                    ChatActivityEnterView.this.senderSelectView.setScaleX(1.0f);
+                    ChatActivityEnterView.this.senderSelectView.setScaleY(1.0f);
+                    ChatActivityEnterView.this.senderSelectView.setAlpha(1.0f);
+                    ChatActivityEnterView.this.senderSelectView.getViewTreeObserver().addOnDrawListener(new ViewTreeObserver.OnDrawListener() {
+                        public void onDraw() {
+                            ChatActivityEnterView.this.senderSelectView.post(new ChatActivityEnterView$22$2$$ExternalSyntheticLambda0(this, dialog));
+                        }
+
+                        /* access modifiers changed from: private */
+                        public /* synthetic */ void lambda$onDraw$0(Dialog dialog) {
+                            ChatActivityEnterView.this.senderSelectView.getViewTreeObserver().removeOnDrawListener(this);
+                            dialog.dismiss();
+                        }
+                    });
+                }
+
+                public void onAnimationCancel(Animator animator) {
+                    onAnimationEnd(animator);
+                }
+            });
+            atomicReference2.set(new ChatActivityEnterView$$ExternalSyntheticLambda6(this));
+            ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(350);
+            float y = ((recyclerListView.getY() + ((float) recyclerListView.getMeasuredHeight())) - ((float) iArr[1])) / ((float) AndroidUtilities.dp(58.0f));
+            duration.setInterpolator(new ChatActivityEnterView$$ExternalSyntheticLambda0(0.18f - (0.009f * y), 5.7f - (y * 0.325f)));
+            duration.addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda11(simpleAvatarView2, dp2, f, f3, f2, f4, ((float) this.senderSelectView.getLayoutParams().width) / ((float) AndroidUtilities.dp(44.0f))));
+            atomicReference3.set(duration);
+            this.senderSelectPopupWindow.dismiss();
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$9(ValueAnimator valueAnimator) {
+        float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        float f = (floatValue * 0.5f) + 0.5f;
+        this.senderSelectView.setScaleX(f);
+        this.senderSelectView.setScaleY(f);
+        this.senderSelectView.setAlpha(floatValue);
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ float lambda$new$10(float f, float f2, float f3) {
+        return (float) ((Math.pow(2.718281828459045d, (double) ((-f3) / f)) * -1.0d * Math.cos((double) (f2 * f3))) + 1.0d);
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$new$11(SimpleAvatarView simpleAvatarView, float f, float f2, float f3, float f4, float f5, float f6, ValueAnimator valueAnimator) {
+        float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        simpleAvatarView.setTranslationX(f + ((f2 - f) * floatValue));
+        simpleAvatarView.setTranslationY(f3 + ((f4 - f3) * floatValue));
+        float f7 = f5 + ((f6 - f5) * floatValue);
+        simpleAvatarView.setScaleX(f7);
+        simpleAvatarView.setScaleY(f7);
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$new$13(float f, FrameLayout frameLayout, LinearLayout linearLayout, View view, ValueAnimator valueAnimator) {
+        float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        float f2 = f + ((1.0f - f) * floatValue);
+        frameLayout.setScaleX(f2);
+        frameLayout.setScaleY(f2);
+        float f3 = 1.0f / f2;
+        linearLayout.setScaleX(f3);
+        linearLayout.setScaleY(f3);
+        linearLayout.setAlpha(f2);
+        view.setAlpha(floatValue);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$15(View view) {
         AnimatorSet animatorSet = this.runningAnimationAudio;
         if (animatorSet == null || !animatorSet.isRunning()) {
             if (this.videoToSendMessageObject != null) {
@@ -4101,7 +4807,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$8(View view) {
+    public /* synthetic */ void lambda$new$16(View view) {
         if (this.audioToSend != null) {
             if (!MediaController.getInstance().isPlayingMessage(this.audioToSendMessageObject) || MediaController.getInstance().isMessagePaused()) {
                 this.playPauseDrawable.setIcon(1, true);
@@ -4116,7 +4822,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$16(Theme.ResourcesProvider resourcesProvider2, View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$new$24(Theme.ResourcesProvider resourcesProvider2, View view, MotionEvent motionEvent) {
         TLRPC$Chat currentChat;
         int i = 3;
         boolean z = false;
@@ -4169,7 +4875,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.startedDraggingX = -1.0f;
                         if (!z2 || this.videoSendButton.getTag() == null) {
                             if (this.recordingAudioVideo && isInScheduleMode()) {
-                                AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) ChatActivityEnterView$$ExternalSyntheticLambda40.INSTANCE, (Runnable) ChatActivityEnterView$$ExternalSyntheticLambda36.INSTANCE, resourcesProvider2);
+                                AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) ChatActivityEnterView$$ExternalSyntheticLambda49.INSTANCE, (Runnable) ChatActivityEnterView$$ExternalSyntheticLambda43.INSTANCE, resourcesProvider2);
                             }
                             this.delegate.needStartRecordAudio(0);
                             MediaController instance = MediaController.getInstance();
@@ -4183,9 +4889,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                         this.recordingAudioVideo = false;
                         this.messageTransitionIsRunning = false;
-                        ChatActivityEnterView$$ExternalSyntheticLambda27 chatActivityEnterView$$ExternalSyntheticLambda27 = new ChatActivityEnterView$$ExternalSyntheticLambda27(this);
-                        this.moveToSendStateRunnable = chatActivityEnterView$$ExternalSyntheticLambda27;
-                        AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda27, 500);
+                        ChatActivityEnterView$$ExternalSyntheticLambda39 chatActivityEnterView$$ExternalSyntheticLambda39 = new ChatActivityEnterView$$ExternalSyntheticLambda39(this);
+                        this.moveToSendStateRunnable = chatActivityEnterView$$ExternalSyntheticLambda39;
+                        AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda39, 500);
                     }
                 }
             } else if (motionEvent.getAction() == 2 && this.recordingAudioVideo) {
@@ -4238,7 +4944,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.startedDraggingX = -1.0f;
                 if (!z3 || this.videoSendButton.getTag() == null) {
                     if (this.recordingAudioVideo && isInScheduleMode()) {
-                        AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) ChatActivityEnterView$$ExternalSyntheticLambda41.INSTANCE, (Runnable) ChatActivityEnterView$$ExternalSyntheticLambda35.INSTANCE, resourcesProvider2);
+                        AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) ChatActivityEnterView$$ExternalSyntheticLambda48.INSTANCE, (Runnable) ChatActivityEnterView$$ExternalSyntheticLambda44.INSTANCE, resourcesProvider2);
                     }
                     MediaController instance2 = MediaController.getInstance();
                     if (!isInScheduleMode()) {
@@ -4251,9 +4957,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 this.recordingAudioVideo = false;
                 this.messageTransitionIsRunning = false;
-                ChatActivityEnterView$$ExternalSyntheticLambda30 chatActivityEnterView$$ExternalSyntheticLambda30 = new ChatActivityEnterView$$ExternalSyntheticLambda30(this);
-                this.moveToSendStateRunnable = chatActivityEnterView$$ExternalSyntheticLambda30;
-                AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda30, 200);
+                ChatActivityEnterView$$ExternalSyntheticLambda32 chatActivityEnterView$$ExternalSyntheticLambda32 = new ChatActivityEnterView$$ExternalSyntheticLambda32(this);
+                this.moveToSendStateRunnable = chatActivityEnterView$$ExternalSyntheticLambda32;
+                AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda32, 200);
             }
             return false;
         } else {
@@ -4274,19 +4980,19 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$12() {
+    public /* synthetic */ void lambda$new$20() {
         this.moveToSendStateRunnable = null;
         updateRecordIntefrace(1);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$15() {
+    public /* synthetic */ void lambda$new$23() {
         this.moveToSendStateRunnable = null;
         updateRecordIntefrace(1);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$17(View view) {
+    public /* synthetic */ void lambda$new$25(View view) {
         String obj = this.messageEditText.getText().toString();
         int indexOf = obj.indexOf(32);
         if (indexOf == -1 || indexOf == obj.length() - 1) {
@@ -4297,7 +5003,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$18(View view) {
+    public /* synthetic */ void lambda$new$26(View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow == null || !actionBarPopupWindow.isShowing()) {
             AnimatorSet animatorSet = this.runningAnimationAudio;
@@ -4308,7 +5014,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$19(View view) {
+    public /* synthetic */ void lambda$new$27(View view) {
         ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
         if (chatActivityEnterViewDelegate != null) {
             SimpleTextView simpleTextView = this.slowModeButton;
@@ -4317,7 +5023,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$20(View view) {
+    public /* synthetic */ boolean lambda$new$28(View view) {
         if (this.messageEditText.length() == 0) {
             return false;
         }
@@ -4325,7 +5031,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$21(View view) {
+    public /* synthetic */ void lambda$new$29(View view) {
         EmojiView emojiView2;
         if (this.expandStickersButton.getVisibility() != 0 || this.expandStickersButton.getAlpha() != 1.0f || this.waitingForKeyboardOpen) {
             return;
@@ -4352,7 +5058,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$22(View view) {
+    public /* synthetic */ void lambda$new$30(View view) {
         doneEditingMessage();
     }
 
@@ -4448,7 +5154,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         return false;
                     }
                 });
-                this.sendPopupLayout.setDispatchKeyEventListener(new ChatActivityEnterView$$ExternalSyntheticLambda37(this));
+                this.sendPopupLayout.setDispatchKeyEventListener(new ChatActivityEnterView$$ExternalSyntheticLambda45(this));
                 this.sendPopupLayout.setShownFromBotton(false);
                 int i2 = 0;
                 while (i2 < 2) {
@@ -4463,12 +5169,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                         actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
                         this.sendPopupLayout.addView(actionBarMenuSubItem, LayoutHelper.createLinear(-1, 48));
-                        actionBarMenuSubItem.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda20(this, i2));
+                        actionBarMenuSubItem.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda25(this, i2));
                     }
                     i2++;
                 }
                 this.sendPopupLayout.setupRadialSelectors(getThemedColor("dialogButtonSelector"));
-                AnonymousClass24 r0 = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2) {
+                AnonymousClass30 r0 = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2) {
                     public void dismiss() {
                         super.dismiss();
                         ChatActivityEnterView.this.sendButton.invalidate();
@@ -4512,7 +5218,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onSendLongClick$23(KeyEvent keyEvent) {
+    public /* synthetic */ void lambda$onSendLongClick$31(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.sendPopupWindow) != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -4520,13 +5226,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onSendLongClick$24(int i, View view) {
+    public /* synthetic */ void lambda$onSendLongClick$32(int i, View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
         }
         if (i == 0) {
-            AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$$ExternalSyntheticLambda38(this), this.resourcesProvider);
+            AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$$ExternalSyntheticLambda46(this), this.resourcesProvider);
         } else {
             sendMessageInternal(false, 0);
         }
@@ -4684,7 +5390,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r4[r1] = r12
             r13.playTogether(r4)
             android.animation.AnimatorSet r12 = r11.audioVideoButtonAnimation
-            org.telegram.ui.Components.ChatActivityEnterView$25 r13 = new org.telegram.ui.Components.ChatActivityEnterView$25
+            org.telegram.ui.Components.ChatActivityEnterView$31 r13 = new org.telegram.ui.Components.ChatActivityEnterView$31
             r13.<init>()
             r12.addListener(r13)
             android.animation.AnimatorSet r12 = r11.audioVideoButtonAnimation
@@ -4902,7 +5608,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             java.lang.CharSequence r2 = r1.getText()
             r0.onUpdateSlowModeButton(r1, r4, r2)
         L_0x009c:
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda26 r0 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda26
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda35 r0 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda35
             r0.<init>(r8)
             r8.updateSlowModeRunnable = r0
             r1 = 100
@@ -4981,7 +5687,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$25(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$new$33(ValueAnimator valueAnimator) {
         if (this.topView != null) {
             float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             this.topViewEnterProgress = floatValue;
@@ -5047,9 +5753,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (runnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(runnable);
             }
-            ChatActivityEnterView$$ExternalSyntheticLambda31 chatActivityEnterView$$ExternalSyntheticLambda31 = new ChatActivityEnterView$$ExternalSyntheticLambda31(this);
-            this.showTopViewRunnable = chatActivityEnterView$$ExternalSyntheticLambda31;
-            AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda31, 200);
+            ChatActivityEnterView$$ExternalSyntheticLambda37 chatActivityEnterView$$ExternalSyntheticLambda37 = new ChatActivityEnterView$$ExternalSyntheticLambda37(this);
+            this.showTopViewRunnable = chatActivityEnterView$$ExternalSyntheticLambda37;
+            AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda37, 200);
         } else if (this.recordedAudioPanel.getVisibility() == 0) {
         } else {
             if (!this.forceShowSendButton || z2) {
@@ -5059,7 +5765,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showTopView$26() {
+    public /* synthetic */ void lambda$showTopView$34() {
         showTopView(true, false, true);
         this.showTopViewRunnable = null;
     }
@@ -5183,6 +5889,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return view != null && view.getVisibility() == 0;
     }
 
+    public void onAdjustPanTransitionEnd() {
+        Runnable runnable = this.onKeyboardClosed;
+        if (runnable != null) {
+            runnable.run();
+            this.onKeyboardClosed = null;
+        }
+    }
+
     public void onAdjustPanTransitionStart(boolean z) {
         Runnable runnable;
         if (z && (runnable = this.showTopViewRunnable) != null) {
@@ -5288,6 +6002,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (sizeNotifierFrameLayout != null) {
             sizeNotifierFrameLayout.setDelegate((SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate) null);
         }
+        ActionBarPopupWindow actionBarPopupWindow = this.senderSelectPopupWindow;
+        if (actionBarPopupWindow != null) {
+            actionBarPopupWindow.setPauseNotifications(false);
+            this.senderSelectPopupWindow.dismiss();
+        }
     }
 
     public void checkChannelRights() {
@@ -5310,18 +6029,33 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
+    /* access modifiers changed from: protected */
+    public void onConfigurationChanged(Configuration configuration) {
+        super.onConfigurationChanged(configuration);
+        ActionBarPopupWindow actionBarPopupWindow = this.senderSelectPopupWindow;
+        if (actionBarPopupWindow != null) {
+            actionBarPopupWindow.setPauseNotifications(false);
+            this.senderSelectPopupWindow.dismiss();
+        }
+    }
+
     public void onPause() {
         this.isPaused = true;
+        ActionBarPopupWindow actionBarPopupWindow = this.senderSelectPopupWindow;
+        if (actionBarPopupWindow != null) {
+            actionBarPopupWindow.setPauseNotifications(false);
+            this.senderSelectPopupWindow.dismiss();
+        }
         if (this.keyboardVisible) {
             this.showKeyboardOnResume = true;
         }
-        ChatActivityEnterView$$ExternalSyntheticLambda32 chatActivityEnterView$$ExternalSyntheticLambda32 = new ChatActivityEnterView$$ExternalSyntheticLambda32(this);
-        this.hideKeyboardRunnable = chatActivityEnterView$$ExternalSyntheticLambda32;
-        AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda32, 500);
+        ChatActivityEnterView$$ExternalSyntheticLambda33 chatActivityEnterView$$ExternalSyntheticLambda33 = new ChatActivityEnterView$$ExternalSyntheticLambda33(this);
+        this.hideKeyboardRunnable = chatActivityEnterView$$ExternalSyntheticLambda33;
+        AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda33, 500);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onPause$27() {
+    public /* synthetic */ void lambda$onPause$35() {
         ChatActivity chatActivity = this.parentFragment;
         if (chatActivity == null || chatActivity.isLastFragment()) {
             closeKeyboard();
@@ -5415,6 +6149,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         updateScheduleButton(false);
         checkRoundVideo();
         updateFieldHint(false);
+        updateSendAsButton();
     }
 
     public void setChatInfo(TLRPC$ChatFull tLRPC$ChatFull) {
@@ -5470,7 +6205,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return this.hasRecordVideo;
     }
 
-    /* access modifiers changed from: private */
     public void updateFieldHint(boolean z) {
         boolean z2;
         MessageObject messageObject;
@@ -5485,12 +6219,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             boolean z3 = false;
             if (DialogObject.isChatDialog(this.dialog_id)) {
                 TLRPC$Chat chat = this.accountInstance.getMessagesController().getChat(Long.valueOf(-this.dialog_id));
-                if (ChatObject.isChannel(chat) && !chat.megagroup) {
+                TLRPC$ChatFull chatFull = this.accountInstance.getMessagesController().getChatFull(-this.dialog_id);
+                z2 = ChatObject.isChannel(chat) && !chat.megagroup;
+                if (ChatObject.getSendAsPeerId(chat, chatFull) == chat.id) {
                     z3 = true;
                 }
-                boolean z4 = z3;
-                z3 = ChatObject.shouldSendAnonymously(chat);
-                z2 = z4;
             } else {
                 z2 = false;
             }
@@ -5652,6 +6385,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.messageEditText.setAlpha(1.0f);
                         ChatActivityEnterView.this.messageEditText.setTranslationX(0.0f);
                         ChatActivityEnterView.this.messageEditText.requestFocus();
+                        ChatActivityEnterView.this.updateSendAsButton();
                     }
                 });
             }
@@ -5662,7 +6396,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     /* access modifiers changed from: private */
     public void sendMessage() {
         if (isInScheduleMode()) {
-            AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$$ExternalSyntheticLambda38(this), this.resourcesProvider);
+            AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$$ExternalSyntheticLambda46(this), this.resourcesProvider);
         } else {
             sendMessageInternal(true, 0);
         }
@@ -5730,9 +6464,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                     } else {
                         this.messageTransitionIsRunning = false;
-                        ChatActivityEnterView$$ExternalSyntheticLambda34 chatActivityEnterView$$ExternalSyntheticLambda34 = new ChatActivityEnterView$$ExternalSyntheticLambda34(this, text, z3, i3);
-                        this.moveToSendStateRunnable = chatActivityEnterView$$ExternalSyntheticLambda34;
-                        AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda34, 200);
+                        ChatActivityEnterView$$ExternalSyntheticLambda42 chatActivityEnterView$$ExternalSyntheticLambda42 = new ChatActivityEnterView$$ExternalSyntheticLambda42(this, text, z3, i3);
+                        this.moveToSendStateRunnable = chatActivityEnterView$$ExternalSyntheticLambda42;
+                        AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda42, 200);
                     }
                     this.lastTypingTimeSend = 0;
                 } else if (this.forceShowSendButton && (chatActivityEnterViewDelegate = this.delegate) != null) {
@@ -5748,7 +6482,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$sendMessageInternal$28(CharSequence charSequence, boolean z, int i) {
+    public /* synthetic */ void lambda$sendMessageInternal$36(CharSequence charSequence, boolean z, int i) {
         this.moveToSendStateRunnable = null;
         hideTopView(true);
         this.messageEditText.setText("");
@@ -5775,7 +6509,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (this.stickersExpanded) {
                     setStickersExpanded(false, true, false);
                     this.waitingForKeyboardOpenAfterAnimation = true;
-                    AndroidUtilities.runOnUIThread(new ChatActivityEnterView$$ExternalSyntheticLambda28(this), 200);
+                    AndroidUtilities.runOnUIThread(new ChatActivityEnterView$$ExternalSyntheticLambda36(this), 200);
                 }
             }
             CharSequence[] charSequenceArr = {AndroidUtilities.getTrimmedString(this.messageEditText.getText())};
@@ -5792,7 +6526,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$doneEditingMessage$29() {
+    public /* synthetic */ void lambda$doneEditingMessage$37() {
         this.waitingForKeyboardOpenAfterAnimation = false;
         openKeyboardInternal();
     }
@@ -6956,7 +7690,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r5[r14] = r0
             r3.playTogether(r5)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            org.telegram.ui.Components.ChatActivityEnterView$39 r2 = new org.telegram.ui.Components.ChatActivityEnterView$39
+            org.telegram.ui.Components.ChatActivityEnterView$45 r2 = new org.telegram.ui.Components.ChatActivityEnterView$45
             r2.<init>()
             r0.addListener(r2)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
@@ -7110,7 +7844,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             float[] r0 = new float[r14]
             r0 = {0, NUM} // fill-array
             android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda1 r15 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda1
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda7 r15 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda7
             r15.<init>(r1)
             r0.addUpdateListener(r15)
             boolean r15 = r23.isInVideoMode()
@@ -7346,7 +8080,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r7[r14] = r3
             r5.playTogether(r7)
         L_0x05f6:
-            org.telegram.ui.Components.ChatActivityEnterView$40 r3 = new org.telegram.ui.Components.ChatActivityEnterView$40
+            org.telegram.ui.Components.ChatActivityEnterView$46 r3 = new org.telegram.ui.Components.ChatActivityEnterView$46
             r3.<init>()
             r5.addListener(r3)
             r10 = 150(0x96, double:7.4E-322)
@@ -7395,7 +8129,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r7[r14] = r3
             r6.playTogether(r7)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            org.telegram.ui.Components.ChatActivityEnterView$41 r3 = new org.telegram.ui.Components.ChatActivityEnterView$41
+            org.telegram.ui.Components.ChatActivityEnterView$47 r3 = new org.telegram.ui.Components.ChatActivityEnterView$47
             r3.<init>(r15, r9)
             r0.addListener(r3)
             goto L_0x0e7b
@@ -8035,7 +8769,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r5.setDuration(r9)
             r11 = 110(0x6e, double:5.43E-322)
             r5.setStartDelay(r11)
-            org.telegram.ui.Components.ChatActivityEnterView$42 r7 = new org.telegram.ui.Components.ChatActivityEnterView$42
+            org.telegram.ui.Components.ChatActivityEnterView$48 r7 = new org.telegram.ui.Components.ChatActivityEnterView$48
             r7.<init>()
             r5.addListener(r7)
             android.animation.AnimatorSet r7 = r1.runningAnimationAudio
@@ -8356,7 +9090,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r0.setDuration(r3)
         L_0x0e7b:
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            org.telegram.ui.Components.ChatActivityEnterView$43 r3 = new org.telegram.ui.Components.ChatActivityEnterView$43
+            org.telegram.ui.Components.ChatActivityEnterView$49 r3 = new org.telegram.ui.Components.ChatActivityEnterView$49
             r3.<init>(r2)
             r0.addListener(r3)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
@@ -8366,13 +9100,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         L_0x0e8f:
             org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r0 = r1.delegate
             r0.onAudioVideoInterfaceUpdated()
+            r23.updateSendAsButton()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.updateRecordIntefrace(int):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateRecordIntefrace$30(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updateRecordIntefrace$38(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         if (!isInVideoMode()) {
             this.recordCircle.setTransformToSeekbar(floatValue);
@@ -8571,9 +9306,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 this.messageWebPageSearch = this.editingMessageObject.messageOwner.media instanceof TLRPC$TL_messageMediaWebPage;
                 if (!this.keyboardVisible) {
-                    ChatActivityEnterView$$ExternalSyntheticLambda33 chatActivityEnterView$$ExternalSyntheticLambda33 = new ChatActivityEnterView$$ExternalSyntheticLambda33(this, charSequence2);
-                    this.setTextFieldRunnable = chatActivityEnterView$$ExternalSyntheticLambda33;
-                    AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda33, 200);
+                    ChatActivityEnterView$$ExternalSyntheticLambda41 chatActivityEnterView$$ExternalSyntheticLambda41 = new ChatActivityEnterView$$ExternalSyntheticLambda41(this, charSequence2);
+                    this.setTextFieldRunnable = chatActivityEnterView$$ExternalSyntheticLambda41;
+                    AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda41, 200);
                 } else {
                     Runnable runnable = this.setTextFieldRunnable;
                     if (runnable != null) {
@@ -8671,11 +9406,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 updateFieldRight(1);
             }
             updateFieldHint(false);
+            updateSendAsButton();
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setEditingMessageObject$31(CharSequence charSequence) {
+    public /* synthetic */ void lambda$setEditingMessageObject$39(CharSequence charSequence) {
         setFieldText(charSequence);
         this.setTextFieldRunnable = null;
     }
@@ -8701,10 +9437,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     public void updateColors() {
-        EmojiView emojiView2 = this.emojiView;
-        if (emojiView2 != null) {
-            emojiView2.updateColors();
-        }
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.sendPopupLayout;
         if (actionBarPopupWindowLayout != null) {
             int childCount = actionBarPopupWindowLayout.getChildCount();
@@ -8748,6 +9480,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
         for (int i2 = 0; i2 < 2; i2++) {
             this.emojiButton[i2].setColorFilter(new PorterDuffColorFilter(getThemedColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
+            if (Build.VERSION.SDK_INT >= 21) {
+                this.emojiButton[i2].setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor("listSelectorSDK21")));
+            }
         }
     }
 
@@ -8847,15 +9582,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 }
             } else if (this.searchingType == 0 && !this.messageEditText.isFocused()) {
-                ChatActivityEnterView$$ExternalSyntheticLambda29 chatActivityEnterView$$ExternalSyntheticLambda29 = new ChatActivityEnterView$$ExternalSyntheticLambda29(this);
-                this.focusRunnable = chatActivityEnterView$$ExternalSyntheticLambda29;
-                AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda29, 600);
+                ChatActivityEnterView$$ExternalSyntheticLambda40 chatActivityEnterView$$ExternalSyntheticLambda40 = new ChatActivityEnterView$$ExternalSyntheticLambda40(this);
+                this.focusRunnable = chatActivityEnterView$$ExternalSyntheticLambda40;
+                AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda40, 600);
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setFieldFocused$32() {
+    public /* synthetic */ void lambda$setFieldFocused$40() {
         EditTextCaption editTextCaption;
         ActionBarLayout layersActionBarLayout;
         this.focusRunnable = null;
@@ -8956,7 +9691,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (r3 != 0) goto L_0x006d
             org.telegram.ui.Components.CrossOutDrawable r3 = new org.telegram.ui.Components.CrossOutDrawable
             android.content.Context r4 = r13.getContext()
-            r5 = 2131165547(0x7var_b, float:1.7945314E38)
+            r5 = 2131165562(0x7var_a, float:1.7945345E38)
             java.lang.String r6 = "chat_messagePanelIcons"
             r3.<init>(r4, r5, r6)
             r13.notifySilentDrawable = r3
@@ -9130,7 +9865,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r0 = 180(0xb4, double:8.9E-322)
             r14.setDuration(r0)
             android.animation.AnimatorSet r14 = r13.scheduledButtonAnimation
-            org.telegram.ui.Components.ChatActivityEnterView$44 r0 = new org.telegram.ui.Components.ChatActivityEnterView$44
+            org.telegram.ui.Components.ChatActivityEnterView$50 r0 = new org.telegram.ui.Components.ChatActivityEnterView$50
             r0.<init>(r4)
             r14.addListener(r0)
             android.animation.AnimatorSet r14 = r13.scheduledButtonAnimation
@@ -9197,6 +9932,129 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.updateScheduleButton(boolean):void");
+    }
+
+    public void updateSendAsButton() {
+        FrameLayout frameLayout;
+        ChatActivity chatActivity = this.parentFragment;
+        if (chatActivity != null) {
+            TLRPC$ChatFull chatFull = chatActivity.getMessagesController().getChatFull(-this.dialog_id);
+            TLRPC$Peer tLRPC$Peer = chatFull != null ? chatFull.default_send_as : null;
+            if (tLRPC$Peer == null && this.delegate.getSendAsPeers() != null && !this.delegate.getSendAsPeers().peers.isEmpty()) {
+                tLRPC$Peer = this.delegate.getSendAsPeers().peers.get(0);
+            }
+            if (tLRPC$Peer != null) {
+                if (tLRPC$Peer.channel_id != 0) {
+                    TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(tLRPC$Peer.channel_id));
+                    if (chat != null) {
+                        this.senderSelectView.setAvatar(chat);
+                    }
+                } else {
+                    TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(tLRPC$Peer.user_id));
+                    if (user != null) {
+                        this.senderSelectView.setAvatar(user);
+                    }
+                }
+            }
+            boolean z = this.senderSelectView.getVisibility() == 0;
+            int i = 8;
+            boolean z2 = this.delegate.getSendAsPeers() != null && tLRPC$Peer != null && this.delegate.getSendAsPeers().peers.size() > 1 && !isEditingMessage() && !isRecordingAudioVideo() && ((frameLayout = this.recordedAudioPanel) == null || frameLayout.getVisibility() == 8);
+            int dp = AndroidUtilities.dp(2.0f);
+            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.senderSelectView.getLayoutParams();
+            float f = 0.0f;
+            float f2 = z2 ? 0.0f : 1.0f;
+            float f3 = z2 ? (float) (((-this.senderSelectView.getLayoutParams().width) - marginLayoutParams.leftMargin) - dp) : 0.0f;
+            float f4 = z2 ? 1.0f : 0.0f;
+            if (!z2) {
+                f = (float) (((-this.senderSelectView.getLayoutParams().width) - marginLayoutParams.leftMargin) - dp);
+            }
+            if (z != z2) {
+                ValueAnimator valueAnimator = (ValueAnimator) this.senderSelectView.getTag();
+                if (valueAnimator != null) {
+                    valueAnimator.cancel();
+                    this.senderSelectView.setTag((Object) null);
+                }
+                if (this.parentFragment.getOtherSameChatsDiff() != 0 || !this.parentFragment.fragmentOpened) {
+                    SenderSelectView senderSelectView2 = this.senderSelectView;
+                    if (z2) {
+                        i = 0;
+                    }
+                    senderSelectView2.setVisibility(i);
+                    this.senderSelectView.setTranslationX(f);
+                    for (ImageView translationX : this.emojiButton) {
+                        translationX.setTranslationX(f);
+                    }
+                    this.messageEditText.setTranslationX(f);
+                    this.senderSelectView.setAlpha(f4);
+                    this.senderSelectView.setTag((Object) null);
+                    return;
+                }
+                ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(220);
+                duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                final float f5 = f3;
+                duration.addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda8(this, f2, f4, f5, f));
+                final boolean z3 = z2;
+                final float f6 = f2;
+                final float f7 = f4;
+                final float f8 = f;
+                duration.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationStart(Animator animator) {
+                        if (z3) {
+                            ChatActivityEnterView.this.senderSelectView.setVisibility(0);
+                        }
+                        ChatActivityEnterView.this.senderSelectView.setAlpha(f6);
+                        ChatActivityEnterView.this.senderSelectView.setTranslationX(f5);
+                        for (ImageView translationX : ChatActivityEnterView.this.emojiButton) {
+                            translationX.setTranslationX(ChatActivityEnterView.this.senderSelectView.getTranslationX());
+                        }
+                        ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
+                        chatActivityEnterView.messageEditText.setTranslationX(chatActivityEnterView.senderSelectView.getTranslationX());
+                        if (ChatActivityEnterView.this.botCommandsMenuButton.getTag() == null) {
+                            ChatActivityEnterView.this.animationParamsX.clear();
+                        }
+                    }
+
+                    public void onAnimationEnd(Animator animator) {
+                        if (!z3) {
+                            ChatActivityEnterView.this.senderSelectView.setVisibility(8);
+                            for (ImageView translationX : ChatActivityEnterView.this.emojiButton) {
+                                translationX.setTranslationX(0.0f);
+                            }
+                            ChatActivityEnterView.this.messageEditText.setTranslationX(0.0f);
+                        }
+                    }
+
+                    public void onAnimationCancel(Animator animator) {
+                        if (z3) {
+                            ChatActivityEnterView.this.senderSelectView.setVisibility(0);
+                        } else {
+                            ChatActivityEnterView.this.senderSelectView.setVisibility(8);
+                        }
+                        ChatActivityEnterView.this.senderSelectView.setAlpha(f7);
+                        ChatActivityEnterView.this.senderSelectView.setTranslationX(f8);
+                        for (ImageView translationX : ChatActivityEnterView.this.emojiButton) {
+                            translationX.setTranslationX(ChatActivityEnterView.this.senderSelectView.getTranslationX());
+                        }
+                        ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
+                        chatActivityEnterView.messageEditText.setTranslationX(chatActivityEnterView.senderSelectView.getTranslationX());
+                        ChatActivityEnterView.this.requestLayout();
+                    }
+                });
+                duration.start();
+                this.senderSelectView.setTag(duration);
+            }
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$updateSendAsButton$41(float f, float f2, float f3, float f4, ValueAnimator valueAnimator) {
+        float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        this.senderSelectView.setAlpha(f + ((f2 - f) * floatValue));
+        this.senderSelectView.setTranslationX(f3 + ((f4 - f3) * floatValue));
+        for (ImageView translationX : this.emojiButton) {
+            translationX.setTranslationX(this.senderSelectView.getTranslationX());
+        }
+        this.messageEditText.setTranslationX(this.senderSelectView.getTranslationX());
     }
 
     private void updateBotButton(boolean z) {
@@ -9297,7 +10155,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r1 = 0
             r2 = 1
             if (r0 != 0) goto L_0x004b
-            org.telegram.ui.Components.ChatActivityEnterView$45 r0 = new org.telegram.ui.Components.ChatActivityEnterView$45
+            org.telegram.ui.Components.ChatActivityEnterView$52 r0 = new org.telegram.ui.Components.ChatActivityEnterView$52
             android.app.Activity r3 = r6.parentActivity
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r4 = r6.resourcesProvider
             r0.<init>(r3, r4)
@@ -9306,7 +10164,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r0.setVisibility(r3)
             r6.botKeyboardViewVisible = r1
             org.telegram.ui.Components.BotKeyboardView r0 = r6.botKeyboardView
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda42 r3 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda42
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda50 r3 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda50
             r3.<init>(r6)
             r0.setDelegate(r3)
             org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r6.sizeNotifierLayout
@@ -9410,7 +10268,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setButtons$33(TLRPC$KeyboardButton tLRPC$KeyboardButton) {
+    public /* synthetic */ void lambda$setButtons$42(TLRPC$KeyboardButton tLRPC$KeyboardButton) {
         MessageObject messageObject = this.replyingMessageObject;
         if (messageObject == null) {
             messageObject = DialogObject.isChatDialog(this.dialog_id) ? this.botButtonsMessageObject : null;
@@ -9466,7 +10324,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentActivity);
                 builder.setTitle(LocaleController.getString("ShareYouLocationTitle", NUM));
                 builder.setMessage(LocaleController.getString("ShareYouLocationInfo", NUM));
-                builder.setPositiveButton(LocaleController.getString("OK", NUM), new ChatActivityEnterView$$ExternalSyntheticLambda7(this, messageObject3, tLRPC$KeyboardButton2));
+                builder.setPositiveButton(LocaleController.getString("OK", NUM), new ChatActivityEnterView$$ExternalSyntheticLambda12(this, messageObject3, tLRPC$KeyboardButton2));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 this.parentFragment.showDialog(builder.create());
             } else if ((tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonCallback) || (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonGame) || (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonBuy) || (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonUrlAuth)) {
@@ -9491,7 +10349,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     bundle.putBoolean("onlySelect", true);
                     bundle.putInt("dialogsType", 1);
                     DialogsActivity dialogsActivity = new DialogsActivity(bundle);
-                    dialogsActivity.setDelegate(new ChatActivityEnterView$$ExternalSyntheticLambda44(this, messageObject3, tLRPC$KeyboardButton2));
+                    dialogsActivity.setDelegate(new ChatActivityEnterView$$ExternalSyntheticLambda53(this, messageObject3, tLRPC$KeyboardButton2));
                     this.parentFragment.presentFragment(dialogsActivity);
                 }
             }
@@ -9500,7 +10358,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didPressedBotButton$34(MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$didPressedBotButton$43(MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, DialogInterface dialogInterface, int i) {
         if (Build.VERSION.SDK_INT < 23 || this.parentActivity.checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") == 0) {
             SendMessagesHelper.getInstance(this.currentAccount).sendCurrentLocation(messageObject, tLRPC$KeyboardButton);
             return;
@@ -9511,7 +10369,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didPressedBotButton$35(MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+    public /* synthetic */ void lambda$didPressedBotButton$44(MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
         TLRPC$Message tLRPC$Message = messageObject.messageOwner;
         long j = tLRPC$Message.from_id.user_id;
         long j2 = tLRPC$Message.via_bot_id;
@@ -9557,7 +10415,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void createEmojiView() {
         if (this.emojiView == null) {
-            AnonymousClass46 r1 = new EmojiView(this.allowStickers, this.allowGifs, getContext(), true, this.info, this.sizeNotifierLayout, this.resourcesProvider) {
+            AnonymousClass53 r1 = new EmojiView(this.allowStickers, this.allowGifs, getContext(), true, this.info, this.sizeNotifierLayout, this.resourcesProvider) {
                 public void setTranslationY(float f) {
                     super.setTranslationY(f);
                     if (ChatActivityEnterView.this.panelAnimation != null && ChatActivityEnterView.this.animatingContentType == 0) {
@@ -9612,7 +10470,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             }
                             ChatActivityEnterView.this.setStickersExpanded(false, true, false);
                         }
-                        ChatActivityEnterView.this.lambda$onStickerSelected$36(tLRPC$Document, str, obj, sendAnimationData, false, z, i);
+                        ChatActivityEnterView.this.lambda$onStickerSelected$45(tLRPC$Document, str, obj, sendAnimationData, false, z, i);
                         if (DialogObject.isEncryptedDialog(ChatActivityEnterView.this.dialog_id) && MessageObject.isGifDocument(tLRPC$Document)) {
                             TLRPC$Document tLRPC$Document2 = tLRPC$Document;
                             ChatActivityEnterView.this.accountInstance.getMessagesController().saveGif(obj, tLRPC$Document);
@@ -9634,7 +10492,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     Object obj4 = obj2;
                     int i2 = i;
                     if (isInScheduleMode() && i2 == 0) {
-                        AlertsCreator.createScheduleDatePickerDialog((Context) ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$47$$ExternalSyntheticLambda1(this, view, obj, str, obj2), ChatActivityEnterView.this.resourcesProvider);
+                        AlertsCreator.createScheduleDatePickerDialog((Context) ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$54$$ExternalSyntheticLambda1(this, view, obj, str, obj2), ChatActivityEnterView.this.resourcesProvider);
                     } else if (ChatActivityEnterView.this.slowModeTimer <= 0 || isInScheduleMode()) {
                         if (ChatActivityEnterView.this.stickersExpanded) {
                             if (ChatActivityEnterView.this.searchingType != 0) {
@@ -9688,7 +10546,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.resourcesProvider);
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setMessage(LocaleController.getString("ClearRecentEmoji", NUM));
-                        builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new ChatActivityEnterView$47$$ExternalSyntheticLambda0(this));
+                        builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new ChatActivityEnterView$54$$ExternalSyntheticLambda0(this));
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                         ChatActivityEnterView.this.parentFragment.showDialog(builder.create());
                     }
@@ -9877,10 +10735,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: onStickerSelected */
-    public void lambda$onStickerSelected$36(TLRPC$Document tLRPC$Document, String str, Object obj, MessageObject.SendAnimationData sendAnimationData, boolean z, boolean z2, int i) {
+    public void lambda$onStickerSelected$45(TLRPC$Document tLRPC$Document, String str, Object obj, MessageObject.SendAnimationData sendAnimationData, boolean z, boolean z2, int i) {
         int i2 = i;
         if (isInScheduleMode() && i2 == 0) {
-            AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$$ExternalSyntheticLambda39(this, tLRPC$Document, str, obj, sendAnimationData, z), this.resourcesProvider);
+            AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$$ExternalSyntheticLambda47(this, tLRPC$Document, str, obj, sendAnimationData, z), this.resourcesProvider);
         } else if (this.slowModeTimer <= 0 || isInScheduleMode()) {
             if (this.searchingType != 0) {
                 setSearchingTypeInternal(0, true);
@@ -10250,28 +11108,28 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (r11 != 0) goto L_0x0095
             android.widget.ImageView[] r5 = r10.emojiButton
             r5 = r5[r12]
-            r7 = 2131165543(0x7var_, float:1.7945306E38)
+            r7 = 2131165558(0x7var_, float:1.7945337E38)
             r5.setImageResource(r7)
             goto L_0x00bb
         L_0x0095:
             if (r11 != r2) goto L_0x00a2
             android.widget.ImageView[] r5 = r10.emojiButton
             r5 = r5[r12]
-            r7 = 2131165550(0x7var_e, float:1.794532E38)
+            r7 = 2131165565(0x7var_d, float:1.794535E38)
             r5.setImageResource(r7)
             goto L_0x00bb
         L_0x00a2:
             if (r11 != r4) goto L_0x00af
             android.widget.ImageView[] r5 = r10.emojiButton
             r5 = r5[r12]
-            r7 = 2131165551(0x7var_f, float:1.7945322E38)
+            r7 = 2131165566(0x7var_e, float:1.7945353E38)
             r5.setImageResource(r7)
             goto L_0x00bb
         L_0x00af:
             if (r11 != r0) goto L_0x00bb
             android.widget.ImageView[] r5 = r10.emojiButton
             r5 = r5[r12]
-            r7 = 2131165542(0x7var_, float:1.7945304E38)
+            r7 = 2131165557(0x7var_, float:1.7945334E38)
             r5.setImageResource(r7)
         L_0x00bb:
             android.widget.ImageView[] r5 = r10.emojiButton
@@ -10347,7 +11205,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r6[r0] = r1
             r12.playTogether(r6)
             android.animation.AnimatorSet r12 = r10.emojiButtonAnimation
-            org.telegram.ui.Components.ChatActivityEnterView$52 r0 = new org.telegram.ui.Components.ChatActivityEnterView$52
+            org.telegram.ui.Components.ChatActivityEnterView$59 r0 = new org.telegram.ui.Components.ChatActivityEnterView$59
             r0.<init>()
             r12.addListener(r0)
             android.animation.AnimatorSet r12 = r10.emojiButtonAnimation
@@ -10375,12 +11233,16 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     public void hidePopup(boolean z) {
+        hidePopup(z, false);
+    }
+
+    public void hidePopup(boolean z, boolean z2) {
         if (isPopupShowing()) {
             if (this.currentPopupContentType == 1 && z && this.botButtonsMessageObject != null) {
                 SharedPreferences.Editor edit = MessagesController.getMainSettings(this.currentAccount).edit();
                 edit.putInt("hidekeyboard_" + this.dialog_id, this.botButtonsMessageObject.getId()).commit();
             }
-            if (!z || this.searchingType == 0) {
+            if ((!z || this.searchingType == 0) && !z2) {
                 if (this.searchingType != 0) {
                     setSearchingTypeInternal(0, false);
                     this.emojiView.closeSearch(false);
@@ -10430,7 +11292,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 fArr[1] = f;
                 ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
                 this.searchAnimator = ofFloat;
-                ofFloat.addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda0(this));
+                ofFloat.addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda3(this));
                 this.searchAnimator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         float unused = ChatActivityEnterView.this.searchToOpenProgress = z2 ? 1.0f : 0.0f;
@@ -10448,7 +11310,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setSearchingTypeInternal$37(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setSearchingTypeInternal$46(ValueAnimator valueAnimator) {
         this.searchToOpenProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         EmojiView emojiView2 = this.emojiView;
         if (emojiView2 != null) {
@@ -10989,7 +11851,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (i2 > currentActionBarHeight) {
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)})});
-                    ((ObjectAnimator) animatorSet.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda4(this));
+                    ((ObjectAnimator) animatorSet.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda5(this));
                     animatorSet.setDuration(300);
                     animatorSet.setInterpolator(CubicBezierInterpolator.DEFAULT);
                     animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -11015,7 +11877,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.messageEditText.setSelection(selectionStart, selectionEnd);
                 AnimatorSet animatorSet2 = new AnimatorSet();
                 animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)})});
-                ((ObjectAnimator) animatorSet2.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda3(this));
+                ((ObjectAnimator) animatorSet2.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda2(this));
                 animatorSet2.setDuration(300);
                 animatorSet2.setInterpolator(CubicBezierInterpolator.DEFAULT);
                 animatorSet2.addListener(new AnimatorListenerAdapter() {
@@ -11032,12 +11894,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkStickresExpandHeight$38(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$checkStickresExpandHeight$47(ValueAnimator valueAnimator) {
         this.sizeNotifierLayout.invalidate();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkStickresExpandHeight$39(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$checkStickresExpandHeight$48(ValueAnimator valueAnimator) {
         this.sizeNotifierLayout.invalidate();
     }
 
@@ -11082,7 +11944,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     animatorSet.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofFloat(this.stickersArrow, "animationProgress", new float[]{1.0f})});
                     animatorSet.setDuration(300);
                     animatorSet.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                    ((ObjectAnimator) animatorSet.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda5(this, i));
+                    ((ObjectAnimator) animatorSet.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda9(this, i));
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             Animator unused = ChatActivityEnterView.this.stickersExpansionAnim = null;
@@ -11110,7 +11972,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{0}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{0}), ObjectAnimator.ofFloat(this.stickersArrow, "animationProgress", new float[]{0.0f})});
                     animatorSet2.setDuration(300);
                     animatorSet2.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                    ((ObjectAnimator) animatorSet2.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda6(this, i));
+                    ((ObjectAnimator) animatorSet2.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda10(this, i));
                     animatorSet2.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             boolean unused = ChatActivityEnterView.this.closeAnimationInProgress = false;
@@ -11127,6 +11989,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             if (ChatActivityEnterView.this.keyboardVisible && ChatActivityEnterView.this.isPopupShowing()) {
                                 ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
                                 chatActivityEnterView.showPopup(0, chatActivityEnterView.currentPopupContentType);
+                            }
+                            if (ChatActivityEnterView.this.onEmojiSearchClosed != null) {
+                                ChatActivityEnterView.this.onEmojiSearchClosed.run();
+                                Runnable unused3 = ChatActivityEnterView.this.onEmojiSearchClosed = null;
                             }
                             NotificationCenter.getInstance(ChatActivityEnterView.this.currentAccount).onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
                         }
@@ -11157,13 +12023,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setStickersExpanded$40(int i, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setStickersExpanded$49(int i, ValueAnimator valueAnimator) {
         this.stickersExpansionProgress = Math.abs(getTranslationY() / ((float) (-(this.stickersExpandedHeight - i))));
         this.sizeNotifierLayout.invalidate();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setStickersExpanded$41(int i, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setStickersExpanded$50(int i, ValueAnimator valueAnimator) {
         this.stickersExpansionProgress = getTranslationY() / ((float) (-(this.stickersExpandedHeight - i)));
         this.sizeNotifierLayout.invalidate();
     }
@@ -11686,7 +12552,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Code restructure failed: missing block: B:28:0x00dc, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:37:0x0128, code lost:
         r2 = (androidx.recyclerview.widget.LinearLayoutManager) r5.botCommandsMenuContainer.listView.getLayoutManager();
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -11695,9 +12561,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r5 = this;
             org.telegram.ui.Components.BotCommandsMenuView r0 = r5.botCommandsMenuButton
             r1 = 0
-            if (r0 == 0) goto L_0x0048
+            if (r0 == 0) goto L_0x0049
             java.lang.Object r0 = r0.getTag()
-            if (r0 == 0) goto L_0x0048
+            if (r0 == 0) goto L_0x0049
             org.telegram.ui.Components.BotCommandsMenuView r0 = r5.botCommandsMenuButton
             r0.measure(r6, r7)
             r0 = 0
@@ -11726,13 +12592,49 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             int r3 = r3.getMeasuredWidth()
             int r2 = r2 + r3
             r0.leftMargin = r2
-            goto L_0x0071
-        L_0x0048:
-            r0 = 0
+            goto L_0x00bd
         L_0x0049:
+            org.telegram.ui.Components.SenderSelectView r0 = r5.senderSelectView
+            if (r0 == 0) goto L_0x0094
+            int r0 = r0.getVisibility()
+            if (r0 != 0) goto L_0x0094
+            org.telegram.ui.Components.SenderSelectView r0 = r5.senderSelectView
+            r0.measure(r6, r7)
+            r0 = 0
+        L_0x0059:
             android.widget.ImageView[] r2 = r5.emojiButton
             int r3 = r2.length
-            if (r0 >= r3) goto L_0x0061
+            if (r0 >= r3) goto L_0x007a
+            r2 = r2[r0]
+            android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
+            android.view.ViewGroup$MarginLayoutParams r2 = (android.view.ViewGroup.MarginLayoutParams) r2
+            r3 = 1098907648(0x41800000, float:16.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            org.telegram.ui.Components.SenderSelectView r4 = r5.senderSelectView
+            android.view.ViewGroup$LayoutParams r4 = r4.getLayoutParams()
+            int r4 = r4.width
+            int r3 = r3 + r4
+            r2.leftMargin = r3
+            int r0 = r0 + 1
+            goto L_0x0059
+        L_0x007a:
+            org.telegram.ui.Components.EditTextCaption r0 = r5.messageEditText
+            android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
+            android.view.ViewGroup$MarginLayoutParams r0 = (android.view.ViewGroup.MarginLayoutParams) r0
+            r2 = 1115422720(0x427CLASSNAME, float:63.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            org.telegram.ui.Components.SenderSelectView r3 = r5.senderSelectView
+            android.view.ViewGroup$LayoutParams r3 = r3.getLayoutParams()
+            int r3 = r3.width
+            int r2 = r2 + r3
+            r0.leftMargin = r2
+            goto L_0x00bd
+        L_0x0094:
+            r0 = 0
+        L_0x0095:
+            android.widget.ImageView[] r2 = r5.emojiButton
+            int r3 = r2.length
+            if (r0 >= r3) goto L_0x00ad
             r2 = r2[r0]
             android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
             android.view.ViewGroup$MarginLayoutParams r2 = (android.view.ViewGroup.MarginLayoutParams) r2
@@ -11740,29 +12642,29 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r2.leftMargin = r3
             int r0 = r0 + 1
-            goto L_0x0049
-        L_0x0061:
+            goto L_0x0095
+        L_0x00ad:
             org.telegram.ui.Components.EditTextCaption r0 = r5.messageEditText
             android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
             android.view.ViewGroup$MarginLayoutParams r0 = (android.view.ViewGroup.MarginLayoutParams) r0
             r2 = 1112014848(0x42480000, float:50.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r0.leftMargin = r2
-        L_0x0071:
+        L_0x00bd:
             org.telegram.ui.Components.BotCommandsMenuContainer r0 = r5.botCommandsMenuContainer
-            if (r0 == 0) goto L_0x0110
+            if (r0 == 0) goto L_0x015c
             org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter r0 = r5.botCommandsAdapter
             int r0 = r0.getItemCount()
             r2 = 4
-            if (r0 <= r2) goto L_0x0091
+            if (r0 <= r2) goto L_0x00dd
             org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r5.sizeNotifierLayout
             int r0 = r0.getMeasuredHeight()
             r2 = 1126354125(0x4322cccd, float:162.8)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 - r2
             int r0 = java.lang.Math.max(r1, r0)
-            goto L_0x00b4
-        L_0x0091:
+            goto L_0x0100
+        L_0x00dd:
             org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r5.sizeNotifierLayout
             int r0 = r0.getMeasuredHeight()
             org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter r3 = r5.botCommandsAdapter
@@ -11776,32 +12678,32 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 - r2
             int r0 = java.lang.Math.max(r1, r0)
-        L_0x00b4:
+        L_0x0100:
             org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             int r2 = r2.getPaddingTop()
-            if (r2 == r0) goto L_0x0110
+            if (r2 == r0) goto L_0x015c
             org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             r2.setTopGlowOffset(r0)
             int r2 = r5.botCommandLastPosition
             r3 = -1
-            if (r2 != r3) goto L_0x0103
+            if (r2 != r3) goto L_0x014f
             org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
             int r2 = r2.getVisibility()
-            if (r2 != 0) goto L_0x0103
+            if (r2 != 0) goto L_0x014f
             org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             androidx.recyclerview.widget.RecyclerView$LayoutManager r2 = r2.getLayoutManager()
-            if (r2 == 0) goto L_0x0103
+            if (r2 == 0) goto L_0x014f
             org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             androidx.recyclerview.widget.RecyclerView$LayoutManager r2 = r2.getLayoutManager()
             androidx.recyclerview.widget.LinearLayoutManager r2 = (androidx.recyclerview.widget.LinearLayoutManager) r2
             int r3 = r2.findFirstVisibleItemPosition()
-            if (r3 < 0) goto L_0x0103
+            if (r3 < 0) goto L_0x014f
             android.view.View r2 = r2.findViewByPosition(r3)
-            if (r2 == 0) goto L_0x0103
+            if (r2 == 0) goto L_0x014f
             r5.botCommandLastPosition = r3
             int r2 = r2.getTop()
             org.telegram.ui.Components.BotCommandsMenuContainer r3 = r5.botCommandsMenuContainer
@@ -11809,13 +12711,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             int r3 = r3.getPaddingTop()
             int r2 = r2 - r3
             r5.botCommandLastTop = r2
-        L_0x0103:
+        L_0x014f:
             org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             r3 = 1090519040(0x41000000, float:8.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r2.setPadding(r1, r0, r1, r3)
-        L_0x0110:
+        L_0x015c:
             super.onMeasure(r6, r7)
             return
         */

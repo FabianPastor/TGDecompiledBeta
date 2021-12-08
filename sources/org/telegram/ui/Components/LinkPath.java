@@ -3,13 +3,13 @@ package org.telegram.ui.Components;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Build;
-import android.text.StaticLayout;
+import android.text.Layout;
 import org.telegram.messenger.AndroidUtilities;
 
 public class LinkPath extends Path {
     private boolean allowReset = true;
     private int baselineShift;
-    private StaticLayout currentLayout;
+    private Layout currentLayout;
     private int currentLine;
     private float heightOffset;
     private float lastTop = -1.0f;
@@ -24,15 +24,15 @@ public class LinkPath extends Path {
         this.useRoundRect = z;
     }
 
-    public void setCurrentLayout(StaticLayout staticLayout, int i, float f) {
+    public void setCurrentLayout(Layout layout, int i, float f) {
         int lineCount;
-        this.currentLayout = staticLayout;
-        this.currentLine = staticLayout.getLineForOffset(i);
+        this.currentLayout = layout;
+        this.currentLine = layout.getLineForOffset(i);
         this.lastTop = -1.0f;
         this.heightOffset = f;
-        if (Build.VERSION.SDK_INT >= 28 && (lineCount = staticLayout.getLineCount()) > 0) {
+        if (Build.VERSION.SDK_INT >= 28 && (lineCount = layout.getLineCount()) > 0) {
             int i2 = lineCount - 1;
-            this.lineHeight = staticLayout.getLineBottom(i2) - staticLayout.getLineTop(i2);
+            this.lineHeight = layout.getLineBottom(i2) - layout.getLineTop(i2);
         }
     }
 

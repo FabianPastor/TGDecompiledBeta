@@ -16,7 +16,7 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
             z2 = true;
         }
         this.video_calls_available = z2;
-        this.user = TLRPC$User.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        this.id = abstractSerializedData.readInt64(z);
         if ((this.flags & 2) != 0) {
             this.about = abstractSerializedData.readString(z);
         }
@@ -41,6 +41,9 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         if ((this.flags & 32768) != 0) {
             this.theme_emoticon = abstractSerializedData.readString(z);
         }
+        if ((this.flags & 65536) != 0) {
+            this.private_forward_name = abstractSerializedData.readString(z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -58,7 +61,7 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         int i6 = this.video_calls_available ? i5 | 8192 : i5 & -8193;
         this.flags = i6;
         abstractSerializedData.writeInt32(i6);
-        this.user.serializeToStream(abstractSerializedData);
+        abstractSerializedData.writeInt64(this.id);
         if ((this.flags & 2) != 0) {
             abstractSerializedData.writeString(this.about);
         }
@@ -82,6 +85,9 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         }
         if ((this.flags & 32768) != 0) {
             abstractSerializedData.writeString(this.theme_emoticon);
+        }
+        if ((this.flags & 65536) != 0) {
+            abstractSerializedData.writeString(this.private_forward_name);
         }
     }
 }

@@ -707,7 +707,7 @@ public class ActionBarMenuItem extends FrameLayout {
             android.view.ViewPropertyAnimator r3 = r3.setDuration(r4)
             r3.start()
             android.content.Context r3 = r9.getContext()
-            r4 = 2131165990(0x7var_, float:1.7946213E38)
+            r4 = 2131166009(0x7var_, float:1.7946251E38)
             android.graphics.drawable.Drawable r3 = androidx.core.content.ContextCompat.getDrawable(r3, r4)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
@@ -1719,6 +1719,29 @@ public class ActionBarMenuItem extends FrameLayout {
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
         if (actionBarPopupWindowLayout != null && (findViewWithTag = actionBarPopupWindowLayout.findViewWithTag(Integer.valueOf(i))) != null && findViewWithTag.getVisibility() != 8) {
             findViewWithTag.setVisibility(8);
+        }
+    }
+
+    public void checkHideMenuItem() {
+        boolean z;
+        int i = 0;
+        int i2 = 0;
+        while (true) {
+            if (i2 >= this.popupLayout.getItemsCount()) {
+                z = false;
+                break;
+            } else if (this.popupLayout.getItemAt(i2).getVisibility() == 0) {
+                z = true;
+                break;
+            } else {
+                i2++;
+            }
+        }
+        if (!z) {
+            i = 8;
+        }
+        if (i != getVisibility()) {
+            setVisibility(i);
         }
     }
 

@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.KeyEvent;
-import android.widget.TextView;
-import org.telegram.messenger.AndroidUtilities;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda66 implements TextView.OnEditorActionListener {
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda66 implements View.OnTouchListener {
     public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda66 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda66();
 
     private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda66() {
     }
 
-    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return AndroidUtilities.hideKeyboard(textView);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return AlertsCreator.lambda$createDatePickerDialog$49(view, motionEvent);
     }
 }

@@ -28,6 +28,7 @@ public abstract class TLRPC$Chat extends TLObject {
     public TLRPC$InputChannel migrated_to;
     public boolean min;
     public boolean moderator;
+    public boolean noforwards;
     public int participants_count;
     public TLRPC$ChatPhoto photo;
     public boolean restricted;

@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadAdminedChannels$11(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadAdminedChannels$12(tLObject, tLRPC$TL_error);
     }
 }

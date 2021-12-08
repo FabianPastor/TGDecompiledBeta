@@ -630,7 +630,7 @@ public class ImageLoader {
                 if (r4 == 0) goto L_0x0122
                 r7.canRetry = r0     // Catch:{ all -> 0x013e }
             L_0x0122:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x013e }
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r1, (boolean) r0)     // Catch:{ all -> 0x013e }
                 java.net.HttpURLConnection r0 = r7.httpConnection     // Catch:{ all -> 0x012d }
                 if (r0 == 0) goto L_0x012e
                 r0.disconnect()     // Catch:{ all -> 0x012d }
@@ -759,48 +759,48 @@ public class ImageLoader {
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Code restructure failed: missing block: B:89:0x015b, code lost:
-            if (r5 != -1) goto L_0x016f;
+        /* JADX WARNING: Code restructure failed: missing block: B:100:0x0172, code lost:
+            r1 = false;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:91:?, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:91:0x015e, code lost:
+            if (r5 != -1) goto L_0x0172;
+         */
+        /* JADX WARNING: Code restructure failed: missing block: B:93:?, code lost:
             r2 = r11.imageSize;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:92:0x015f, code lost:
-            if (r2 == 0) goto L_0x0176;
+        /* JADX WARNING: Code restructure failed: missing block: B:94:0x0162, code lost:
+            if (r2 == 0) goto L_0x0179;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:93:0x0161, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:95:0x0164, code lost:
             reportProgress((long) r2, (long) r2);
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:94:0x0167, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:96:0x016a, code lost:
             r2 = move-exception;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:95:0x0168, code lost:
-            r0 = r2;
+        /* JADX WARNING: Code restructure failed: missing block: B:97:0x016b, code lost:
+            r1 = r2;
             r2 = true;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:96:0x016b, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:98:0x016e, code lost:
             r2 = move-exception;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:97:0x016c, code lost:
-            r0 = r2;
+        /* JADX WARNING: Code restructure failed: missing block: B:99:0x016f, code lost:
+            r1 = r2;
             r2 = true;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:98:0x016f, code lost:
-            r0 = false;
-         */
-        /* JADX WARNING: Removed duplicated region for block: B:109:0x0180 A[Catch:{ all -> 0x0186 }] */
-        /* JADX WARNING: Removed duplicated region for block: B:115:0x018e A[Catch:{ all -> 0x0192 }] */
-        /* JADX WARNING: Removed duplicated region for block: B:118:0x0195 A[SYNTHETIC, Splitter:B:118:0x0195] */
-        /* JADX WARNING: Removed duplicated region for block: B:48:0x00e6 A[SYNTHETIC, Splitter:B:48:0x00e6] */
+        /* JADX WARNING: Removed duplicated region for block: B:111:0x0183 A[Catch:{ all -> 0x0189 }] */
+        /* JADX WARNING: Removed duplicated region for block: B:117:0x0191 A[Catch:{ all -> 0x0195 }] */
+        /* JADX WARNING: Removed duplicated region for block: B:120:0x0198 A[SYNTHETIC, Splitter:B:120:0x0198] */
+        /* JADX WARNING: Removed duplicated region for block: B:50:0x00e9 A[SYNTHETIC, Splitter:B:50:0x00e9] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public java.lang.Boolean doInBackground(java.lang.Void... r12) {
             /*
                 r11 = this;
                 boolean r12 = r11.isCancelled()
-                r0 = 1
-                r1 = 0
+                r0 = 0
+                r1 = 1
                 r2 = 0
-                if (r12 != 0) goto L_0x00df
+                if (r12 != 0) goto L_0x00e2
                 org.telegram.messenger.ImageLoader$CacheImage r12 = r11.cacheImage     // Catch:{ all -> 0x00a5 }
                 org.telegram.messenger.ImageLocation r12 = r12.imageLocation     // Catch:{ all -> 0x00a5 }
                 java.lang.String r12 = r12.path     // Catch:{ all -> 0x00a5 }
@@ -855,9 +855,9 @@ public class ImageLoader {
                 java.net.HttpURLConnection r12 = r11.httpConnection     // Catch:{ all -> 0x00a5 }
                 r12.setReadTimeout(r3)     // Catch:{ all -> 0x00a5 }
                 java.net.HttpURLConnection r12 = r11.httpConnection     // Catch:{ all -> 0x00a5 }
-                r12.setInstanceFollowRedirects(r0)     // Catch:{ all -> 0x00a5 }
+                r12.setInstanceFollowRedirects(r1)     // Catch:{ all -> 0x00a5 }
                 boolean r12 = r11.isCancelled()     // Catch:{ all -> 0x00a5 }
-                if (r12 != 0) goto L_0x00df
+                if (r12 != 0) goto L_0x00e2
                 java.net.HttpURLConnection r12 = r11.httpConnection     // Catch:{ all -> 0x00a5 }
                 r12.connect()     // Catch:{ all -> 0x00a5 }
                 java.net.HttpURLConnection r12 = r11.httpConnection     // Catch:{ all -> 0x00a5 }
@@ -868,7 +868,7 @@ public class ImageLoader {
                 java.lang.String r5 = "rws"
                 r3.<init>(r4, r5)     // Catch:{ all -> 0x00a0 }
                 r11.fileOutputStream = r3     // Catch:{ all -> 0x00a0 }
-                goto L_0x00e0
+                goto L_0x00e3
             L_0x00a0:
                 r3 = move-exception
                 r10 = r3
@@ -877,169 +877,174 @@ public class ImageLoader {
                 goto L_0x00a7
             L_0x00a5:
                 r12 = move-exception
-                r3 = r1
+                r3 = r0
             L_0x00a7:
                 boolean r4 = r12 instanceof java.net.SocketTimeoutException
                 if (r4 == 0) goto L_0x00b4
                 boolean r4 = org.telegram.messenger.ApplicationLoader.isNetworkOnline()
-                if (r4 == 0) goto L_0x00da
+                if (r4 == 0) goto L_0x00ba
                 r11.canRetry = r2
-                goto L_0x00da
+                goto L_0x00ba
             L_0x00b4:
                 boolean r4 = r12 instanceof java.net.UnknownHostException
-                if (r4 == 0) goto L_0x00bb
+                if (r4 == 0) goto L_0x00bc
                 r11.canRetry = r2
-                goto L_0x00da
-            L_0x00bb:
+            L_0x00ba:
+                r4 = 0
+                goto L_0x00dd
+            L_0x00bc:
                 boolean r4 = r12 instanceof java.net.SocketException
-                if (r4 == 0) goto L_0x00d4
+                if (r4 == 0) goto L_0x00d5
                 java.lang.String r4 = r12.getMessage()
-                if (r4 == 0) goto L_0x00da
+                if (r4 == 0) goto L_0x00ba
                 java.lang.String r4 = r12.getMessage()
                 java.lang.String r5 = "ECONNRESET"
                 boolean r4 = r4.contains(r5)
-                if (r4 == 0) goto L_0x00da
+                if (r4 == 0) goto L_0x00ba
                 r11.canRetry = r2
-                goto L_0x00da
-            L_0x00d4:
+                goto L_0x00ba
+            L_0x00d5:
                 boolean r4 = r12 instanceof java.io.FileNotFoundException
-                if (r4 == 0) goto L_0x00da
+                if (r4 == 0) goto L_0x00dc
                 r11.canRetry = r2
-            L_0x00da:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)
+                goto L_0x00ba
+            L_0x00dc:
+                r4 = 1
+            L_0x00dd:
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r12, (boolean) r4)
                 r12 = r3
-                goto L_0x00e0
-            L_0x00df:
-                r12 = r1
-            L_0x00e0:
+                goto L_0x00e3
+            L_0x00e2:
+                r12 = r0
+            L_0x00e3:
                 boolean r3 = r11.isCancelled()
-                if (r3 != 0) goto L_0x017c
-                java.net.HttpURLConnection r3 = r11.httpConnection     // Catch:{ Exception -> 0x00fd }
-                if (r3 == 0) goto L_0x0101
-                int r3 = r3.getResponseCode()     // Catch:{ Exception -> 0x00fd }
+                if (r3 != 0) goto L_0x017f
+                java.net.HttpURLConnection r3 = r11.httpConnection     // Catch:{ Exception -> 0x0100 }
+                if (r3 == 0) goto L_0x0104
+                int r3 = r3.getResponseCode()     // Catch:{ Exception -> 0x0100 }
                 r4 = 200(0xc8, float:2.8E-43)
-                if (r3 == r4) goto L_0x0101
+                if (r3 == r4) goto L_0x0104
                 r4 = 202(0xca, float:2.83E-43)
-                if (r3 == r4) goto L_0x0101
+                if (r3 == r4) goto L_0x0104
                 r4 = 304(0x130, float:4.26E-43)
-                if (r3 == r4) goto L_0x0101
-                r11.canRetry = r2     // Catch:{ Exception -> 0x00fd }
-                goto L_0x0101
-            L_0x00fd:
+                if (r3 == r4) goto L_0x0104
+                r11.canRetry = r2     // Catch:{ Exception -> 0x0100 }
+                goto L_0x0104
+            L_0x0100:
                 r3 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
-            L_0x0101:
+            L_0x0104:
                 int r3 = r11.imageSize
-                if (r3 != 0) goto L_0x0136
+                if (r3 != 0) goto L_0x0139
                 java.net.HttpURLConnection r3 = r11.httpConnection
-                if (r3 == 0) goto L_0x0136
-                java.util.Map r3 = r3.getHeaderFields()     // Catch:{ Exception -> 0x0132 }
-                if (r3 == 0) goto L_0x0136
+                if (r3 == 0) goto L_0x0139
+                java.util.Map r3 = r3.getHeaderFields()     // Catch:{ Exception -> 0x0135 }
+                if (r3 == 0) goto L_0x0139
                 java.lang.String r4 = "content-Length"
-                java.lang.Object r3 = r3.get(r4)     // Catch:{ Exception -> 0x0132 }
-                java.util.List r3 = (java.util.List) r3     // Catch:{ Exception -> 0x0132 }
-                if (r3 == 0) goto L_0x0136
-                boolean r4 = r3.isEmpty()     // Catch:{ Exception -> 0x0132 }
-                if (r4 != 0) goto L_0x0136
-                java.lang.Object r3 = r3.get(r2)     // Catch:{ Exception -> 0x0132 }
-                java.lang.String r3 = (java.lang.String) r3     // Catch:{ Exception -> 0x0132 }
-                if (r3 == 0) goto L_0x0136
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ Exception -> 0x0132 }
-                int r3 = r3.intValue()     // Catch:{ Exception -> 0x0132 }
-                r11.imageSize = r3     // Catch:{ Exception -> 0x0132 }
-                goto L_0x0136
-            L_0x0132:
+                java.lang.Object r3 = r3.get(r4)     // Catch:{ Exception -> 0x0135 }
+                java.util.List r3 = (java.util.List) r3     // Catch:{ Exception -> 0x0135 }
+                if (r3 == 0) goto L_0x0139
+                boolean r4 = r3.isEmpty()     // Catch:{ Exception -> 0x0135 }
+                if (r4 != 0) goto L_0x0139
+                java.lang.Object r3 = r3.get(r2)     // Catch:{ Exception -> 0x0135 }
+                java.lang.String r3 = (java.lang.String) r3     // Catch:{ Exception -> 0x0135 }
+                if (r3 == 0) goto L_0x0139
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ Exception -> 0x0135 }
+                int r3 = r3.intValue()     // Catch:{ Exception -> 0x0135 }
+                r11.imageSize = r3     // Catch:{ Exception -> 0x0135 }
+                goto L_0x0139
+            L_0x0135:
                 r3 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
-            L_0x0136:
-                if (r12 == 0) goto L_0x017c
+            L_0x0139:
+                if (r12 == 0) goto L_0x017f
                 r3 = 8192(0x2000, float:1.14794E-41)
-                byte[] r3 = new byte[r3]     // Catch:{ all -> 0x0178 }
+                byte[] r3 = new byte[r3]     // Catch:{ all -> 0x017b }
                 r4 = 0
-            L_0x013d:
-                boolean r5 = r11.isCancelled()     // Catch:{ all -> 0x0178 }
-                if (r5 == 0) goto L_0x0144
-                goto L_0x016f
-            L_0x0144:
-                int r5 = r12.read(r3)     // Catch:{ Exception -> 0x0171 }
-                if (r5 <= 0) goto L_0x015a
-                int r4 = r4 + r5
-                java.io.RandomAccessFile r6 = r11.fileOutputStream     // Catch:{ Exception -> 0x0171 }
-                r6.write(r3, r2, r5)     // Catch:{ Exception -> 0x0171 }
-                int r5 = r11.imageSize     // Catch:{ Exception -> 0x0171 }
-                if (r5 == 0) goto L_0x013d
-                long r6 = (long) r4     // Catch:{ Exception -> 0x0171 }
-                long r8 = (long) r5     // Catch:{ Exception -> 0x0171 }
-                r11.reportProgress(r6, r8)     // Catch:{ Exception -> 0x0171 }
-                goto L_0x013d
-            L_0x015a:
-                r3 = -1
-                if (r5 != r3) goto L_0x016f
-                int r2 = r11.imageSize     // Catch:{ Exception -> 0x016b, all -> 0x0167 }
-                if (r2 == 0) goto L_0x0176
-                long r3 = (long) r2     // Catch:{ Exception -> 0x016b, all -> 0x0167 }
-                long r5 = (long) r2     // Catch:{ Exception -> 0x016b, all -> 0x0167 }
-                r11.reportProgress(r3, r5)     // Catch:{ Exception -> 0x016b, all -> 0x0167 }
-                goto L_0x0176
-            L_0x0167:
-                r2 = move-exception
-                r0 = r2
-                r2 = 1
-                goto L_0x0179
-            L_0x016b:
-                r2 = move-exception
-                r0 = r2
-                r2 = 1
+            L_0x0140:
+                boolean r5 = r11.isCancelled()     // Catch:{ all -> 0x017b }
+                if (r5 == 0) goto L_0x0147
                 goto L_0x0172
-            L_0x016f:
-                r0 = 0
-                goto L_0x0176
-            L_0x0171:
-                r0 = move-exception
-            L_0x0172:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0178 }
-                r0 = r2
-            L_0x0176:
-                r2 = r0
+            L_0x0147:
+                int r5 = r12.read(r3)     // Catch:{ Exception -> 0x0174 }
+                if (r5 <= 0) goto L_0x015d
+                int r4 = r4 + r5
+                java.io.RandomAccessFile r6 = r11.fileOutputStream     // Catch:{ Exception -> 0x0174 }
+                r6.write(r3, r2, r5)     // Catch:{ Exception -> 0x0174 }
+                int r5 = r11.imageSize     // Catch:{ Exception -> 0x0174 }
+                if (r5 == 0) goto L_0x0140
+                long r6 = (long) r4     // Catch:{ Exception -> 0x0174 }
+                long r8 = (long) r5     // Catch:{ Exception -> 0x0174 }
+                r11.reportProgress(r6, r8)     // Catch:{ Exception -> 0x0174 }
+                goto L_0x0140
+            L_0x015d:
+                r3 = -1
+                if (r5 != r3) goto L_0x0172
+                int r2 = r11.imageSize     // Catch:{ Exception -> 0x016e, all -> 0x016a }
+                if (r2 == 0) goto L_0x0179
+                long r3 = (long) r2     // Catch:{ Exception -> 0x016e, all -> 0x016a }
+                long r5 = (long) r2     // Catch:{ Exception -> 0x016e, all -> 0x016a }
+                r11.reportProgress(r3, r5)     // Catch:{ Exception -> 0x016e, all -> 0x016a }
+                goto L_0x0179
+            L_0x016a:
+                r2 = move-exception
+                r1 = r2
+                r2 = 1
                 goto L_0x017c
-            L_0x0178:
-                r0 = move-exception
+            L_0x016e:
+                r2 = move-exception
+                r1 = r2
+                r2 = 1
+                goto L_0x0175
+            L_0x0172:
+                r1 = 0
+                goto L_0x0179
+            L_0x0174:
+                r1 = move-exception
+            L_0x0175:
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x017b }
+                r1 = r2
             L_0x0179:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+                r2 = r1
+                goto L_0x017f
+            L_0x017b:
+                r1 = move-exception
             L_0x017c:
-                java.io.RandomAccessFile r0 = r11.fileOutputStream     // Catch:{ all -> 0x0186 }
-                if (r0 == 0) goto L_0x018a
-                r0.close()     // Catch:{ all -> 0x0186 }
-                r11.fileOutputStream = r1     // Catch:{ all -> 0x0186 }
-                goto L_0x018a
-            L_0x0186:
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
+            L_0x017f:
+                java.io.RandomAccessFile r1 = r11.fileOutputStream     // Catch:{ all -> 0x0189 }
+                if (r1 == 0) goto L_0x018d
+                r1.close()     // Catch:{ all -> 0x0189 }
+                r11.fileOutputStream = r0     // Catch:{ all -> 0x0189 }
+                goto L_0x018d
+            L_0x0189:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x018a:
-                java.net.HttpURLConnection r0 = r11.httpConnection     // Catch:{ all -> 0x0192 }
-                if (r0 == 0) goto L_0x0193
-                r0.disconnect()     // Catch:{ all -> 0x0192 }
-                goto L_0x0193
-            L_0x0192:
-            L_0x0193:
-                if (r12 == 0) goto L_0x019d
-                r12.close()     // Catch:{ all -> 0x0199 }
-                goto L_0x019d
-            L_0x0199:
+            L_0x018d:
+                java.net.HttpURLConnection r0 = r11.httpConnection     // Catch:{ all -> 0x0195 }
+                if (r0 == 0) goto L_0x0196
+                r0.disconnect()     // Catch:{ all -> 0x0195 }
+                goto L_0x0196
+            L_0x0195:
+            L_0x0196:
+                if (r12 == 0) goto L_0x01a0
+                r12.close()     // Catch:{ all -> 0x019c }
+                goto L_0x01a0
+            L_0x019c:
                 r12 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)
-            L_0x019d:
-                if (r2 == 0) goto L_0x01b3
+            L_0x01a0:
+                if (r2 == 0) goto L_0x01b6
                 org.telegram.messenger.ImageLoader$CacheImage r12 = r11.cacheImage
                 java.io.File r0 = r12.tempFilePath
-                if (r0 == 0) goto L_0x01b3
+                if (r0 == 0) goto L_0x01b6
                 java.io.File r12 = r12.finalFilePath
                 boolean r12 = r0.renameTo(r12)
-                if (r12 != 0) goto L_0x01b3
+                if (r12 != 0) goto L_0x01b6
                 org.telegram.messenger.ImageLoader$CacheImage r12 = r11.cacheImage
                 java.io.File r0 = r12.tempFilePath
                 r12.finalFilePath = r0
-            L_0x01b3:
+            L_0x01b6:
                 java.lang.Boolean r12 = java.lang.Boolean.valueOf(r2)
                 return r12
             */
@@ -1293,6 +1298,12 @@ public class ImageLoader {
             	at jadx.core.dex.visitors.regions.RegionMaker.processMonitorEnter(RegionMaker.java:561)
             	at jadx.core.dex.visitors.regions.RegionMaker.traverse(RegionMaker.java:133)
             	at jadx.core.dex.visitors.regions.RegionMaker.makeRegion(RegionMaker.java:86)
+            	at jadx.core.dex.visitors.regions.RegionMaker.processIf(RegionMaker.java:693)
+            	at jadx.core.dex.visitors.regions.RegionMaker.traverse(RegionMaker.java:123)
+            	at jadx.core.dex.visitors.regions.RegionMaker.makeRegion(RegionMaker.java:86)
+            	at jadx.core.dex.visitors.regions.RegionMaker.processIf(RegionMaker.java:693)
+            	at jadx.core.dex.visitors.regions.RegionMaker.traverse(RegionMaker.java:123)
+            	at jadx.core.dex.visitors.regions.RegionMaker.makeRegion(RegionMaker.java:86)
             	at jadx.core.dex.visitors.regions.RegionMaker.processIf(RegionMaker.java:698)
             	at jadx.core.dex.visitors.regions.RegionMaker.traverse(RegionMaker.java:123)
             	at jadx.core.dex.visitors.regions.RegionMaker.makeRegion(RegionMaker.java:86)
@@ -1306,15 +1317,15 @@ public class ImageLoader {
                 r1 = r35
                 java.lang.Object r2 = r1.sync
                 monitor-enter(r2)
-                java.lang.Thread r0 = java.lang.Thread.currentThread()     // Catch:{ all -> 0x0b4e }
-                r1.runningThread = r0     // Catch:{ all -> 0x0b4e }
-                java.lang.Thread.interrupted()     // Catch:{ all -> 0x0b4e }
-                boolean r0 = r1.isCancelled     // Catch:{ all -> 0x0b4e }
+                java.lang.Thread r0 = java.lang.Thread.currentThread()     // Catch:{ all -> 0x0b44 }
+                r1.runningThread = r0     // Catch:{ all -> 0x0b44 }
+                java.lang.Thread.interrupted()     // Catch:{ all -> 0x0b44 }
+                boolean r0 = r1.isCancelled     // Catch:{ all -> 0x0b44 }
                 if (r0 == 0) goto L_0x0014
-                monitor-exit(r2)     // Catch:{ all -> 0x0b4e }
+                monitor-exit(r2)     // Catch:{ all -> 0x0b44 }
                 return
             L_0x0014:
-                monitor-exit(r2)     // Catch:{ all -> 0x0b4e }
+                monitor-exit(r2)     // Catch:{ all -> 0x0b44 }
                 org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage
                 org.telegram.messenger.ImageLocation r2 = r0.imageLocation
                 org.telegram.tgnet.TLRPC$PhotoSize r3 = r2.photoSize
@@ -1332,7 +1343,7 @@ public class ImageLoader {
                 r5 = 0
             L_0x0032:
                 r1.onPostExecute(r5)
-                goto L_0x0b4d
+                goto L_0x0b43
             L_0x0037:
                 int r3 = r0.imageType
                 r4 = 5
@@ -1352,19 +1363,18 @@ public class ImageLoader {
                 r5 = 0
             L_0x0052:
                 r1.onPostExecute(r5)
-                goto L_0x0b4d
+                goto L_0x0b43
             L_0x0057:
                 r6 = 4
                 r7 = 3
                 r8 = 2
                 r9 = 1
                 r10 = 0
-                if (r3 == r7) goto L_0x0af5
+                if (r3 == r7) goto L_0x0aeb
                 if (r3 != r6) goto L_0x0062
-                goto L_0x0af5
+                goto L_0x0aeb
             L_0x0062:
-                r11 = 8
-                if (r3 != r9) goto L_0x021a
+                if (r3 != r9) goto L_0x0217
                 r0 = 1126865306(0x432a999a, float:170.6)
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r0)
                 r3 = 512(0x200, float:7.175E-43)
@@ -1373,11 +1383,11 @@ public class ImageLoader {
                 int r0 = java.lang.Math.min(r3, r0)
                 org.telegram.messenger.ImageLoader$CacheImage r12 = r1.cacheImage
                 java.lang.String r12 = r12.filter
-                if (r12 == 0) goto L_0x015d
+                if (r12 == 0) goto L_0x0153
                 java.lang.String r13 = "_"
                 java.lang.String[] r12 = r12.split(r13)
                 int r13 = r12.length
-                if (r13 < r8) goto L_0x00d7
+                if (r13 < r8) goto L_0x00d5
                 r0 = r12[r10]
                 float r0 = java.lang.Float.parseFloat(r0)
                 r2 = r12[r9]
@@ -1392,301 +1402,302 @@ public class ImageLoader {
                 int r3 = java.lang.Math.min(r3, r14)
                 r14 = 1119092736(0x42b40000, float:90.0)
                 int r0 = (r0 > r14 ? 1 : (r0 == r14 ? 0 : -1))
-                if (r0 > 0) goto L_0x00be
+                if (r0 > 0) goto L_0x00bc
                 int r0 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1))
-                if (r0 > 0) goto L_0x00be
+                if (r0 > 0) goto L_0x00bc
                 r0 = 160(0xa0, float:2.24E-43)
                 int r2 = java.lang.Math.min(r13, r0)
                 int r0 = java.lang.Math.min(r3, r0)
                 r3 = 1
-                goto L_0x00c1
-            L_0x00be:
+                goto L_0x00bf
+            L_0x00bc:
                 r0 = r3
                 r2 = r13
                 r3 = 0
-            L_0x00c1:
+            L_0x00bf:
                 int r13 = r12.length
-                if (r13 < r7) goto L_0x00d0
+                if (r13 < r7) goto L_0x00ce
                 java.lang.String r13 = "pcache"
                 r14 = r12[r8]
                 boolean r13 = r13.equals(r14)
-                if (r13 == 0) goto L_0x00d0
-            L_0x00ce:
+                if (r13 == 0) goto L_0x00ce
+            L_0x00cc:
                 r13 = 1
-                goto L_0x00d9
-            L_0x00d0:
+                goto L_0x00d7
+            L_0x00ce:
                 int r13 = org.telegram.messenger.SharedConfig.getDevicePerformanceClass()
-                if (r13 == r8) goto L_0x00d8
-                goto L_0x00ce
-            L_0x00d7:
+                if (r13 == r8) goto L_0x00d6
+                goto L_0x00cc
+            L_0x00d5:
                 r3 = 0
-            L_0x00d8:
+            L_0x00d6:
                 r13 = 0
-            L_0x00d9:
+            L_0x00d7:
                 int r14 = r12.length
-                if (r14 < r7) goto L_0x0102
+                if (r14 < r7) goto L_0x0101
                 java.lang.String r14 = "nr"
                 r15 = r12[r8]
                 boolean r14 = r14.equals(r15)
-                if (r14 == 0) goto L_0x00e8
-                r7 = 2
+                if (r14 == 0) goto L_0x00e7
+                r14 = 0
+            L_0x00e5:
+                r15 = 2
                 goto L_0x0103
-            L_0x00e8:
+            L_0x00e7:
                 java.lang.String r14 = "nrs"
                 r15 = r12[r8]
                 boolean r14 = r14.equals(r15)
-                if (r14 == 0) goto L_0x00f3
+                if (r14 == 0) goto L_0x00f4
+                r14 = 0
+                r15 = 3
                 goto L_0x0103
-            L_0x00f3:
+            L_0x00f4:
                 java.lang.String r14 = "dice"
                 r15 = r12[r8]
                 boolean r14 = r14.equals(r15)
-                if (r14 == 0) goto L_0x0102
-                r7 = r12[r7]
-                r14 = r7
-                r7 = 2
-                goto L_0x0104
-            L_0x0102:
-                r7 = 1
-            L_0x0103:
+                if (r14 == 0) goto L_0x0101
+                r14 = r12[r7]
+                goto L_0x00e5
+            L_0x0101:
                 r14 = 0
-            L_0x0104:
-                int r15 = r12.length
-                if (r15 < r4) goto L_0x0159
-                java.lang.String r4 = "c1"
-                r15 = r12[r6]
-                boolean r4 = r4.equals(r15)
-                if (r4 == 0) goto L_0x0119
-                int[] r4 = new int[r11]
-                r4 = {16219713, 13335381, 16757049, 16168585, 16765248, 16764327, 16768889, 16768965} // fill-array
-            L_0x0116:
-                r6 = r4
+                r15 = 1
+            L_0x0103:
+                int r11 = r12.length
+                if (r11 < r4) goto L_0x014e
+                java.lang.String r11 = "c1"
+                r4 = r12[r6]
+                boolean r4 = r11.equals(r4)
+                if (r4 == 0) goto L_0x0116
+                r4 = 12
                 r4 = r3
-                goto L_0x015b
-            L_0x0119:
+                r16 = 12
+                goto L_0x0151
+            L_0x0116:
                 java.lang.String r4 = "c2"
-                r15 = r12[r6]
-                boolean r4 = r4.equals(r15)
-                if (r4 == 0) goto L_0x0129
-                int[] r4 = new int[r11]
-                r4 = {16219713, 10771000, 16757049, 14653547, 16765248, 15577475, 16768889, 16040864} // fill-array
-                goto L_0x0116
-            L_0x0129:
+                r11 = r12[r6]
+                boolean r4 = r4.equals(r11)
+                if (r4 == 0) goto L_0x0124
+                r4 = r3
+                r16 = 3
+                goto L_0x0151
+            L_0x0124:
                 java.lang.String r4 = "c3"
-                r15 = r12[r6]
-                boolean r4 = r4.equals(r15)
-                if (r4 == 0) goto L_0x0139
-                int[] r4 = new int[r11]
-                r4 = {16219713, 7354903, 16757049, 11233085, 16765248, 12812110, 16768889, 14194279} // fill-array
-                goto L_0x0116
-            L_0x0139:
+                r7 = r12[r6]
+                boolean r4 = r4.equals(r7)
+                if (r4 == 0) goto L_0x0132
+                r4 = r3
+                r16 = 4
+                goto L_0x0151
+            L_0x0132:
                 java.lang.String r4 = "c4"
-                r15 = r12[r6]
-                boolean r4 = r4.equals(r15)
-                if (r4 == 0) goto L_0x0149
-                int[] r4 = new int[r11]
-                r4 = {16219713, 4858889, 16757049, 8207886, 16765248, 9852201, 16768889, 11100983} // fill-array
-                goto L_0x0116
-            L_0x0149:
+                r7 = r12[r6]
+                boolean r4 = r4.equals(r7)
+                if (r4 == 0) goto L_0x0140
+                r4 = r3
+                r16 = 5
+                goto L_0x0151
+            L_0x0140:
                 java.lang.String r4 = "c5"
                 r6 = r12[r6]
                 boolean r4 = r4.equals(r6)
-                if (r4 == 0) goto L_0x0159
-                int[] r4 = new int[r11]
-                r4 = {16219713, 2101002, 16757049, 4270372, 16765248, 5848375, 16768889, 6505791} // fill-array
-                goto L_0x0116
-            L_0x0159:
+                if (r4 == 0) goto L_0x014e
                 r4 = r3
-                r6 = 0
-            L_0x015b:
+                r16 = 6
+                goto L_0x0151
+            L_0x014e:
+                r4 = r3
+                r16 = 0
+            L_0x0151:
                 r3 = r2
-                goto L_0x0163
-            L_0x015d:
+                goto L_0x015a
+            L_0x0153:
                 r3 = r2
                 r4 = 0
-                r6 = 0
-                r7 = 1
                 r13 = 0
                 r14 = 0
-            L_0x0163:
+                r15 = 1
+                r16 = 0
+            L_0x015a:
                 r2 = r0
-                if (r14 == 0) goto L_0x017c
+                if (r14 == 0) goto L_0x0173
                 java.lang.String r0 = "🎰"
                 boolean r0 = r0.equals(r14)
-                if (r0 == 0) goto L_0x0175
+                if (r0 == 0) goto L_0x016c
                 org.telegram.ui.Components.SlotsDrawable r0 = new org.telegram.ui.Components.SlotsDrawable
                 r0.<init>(r14, r3, r2)
-                goto L_0x0204
-            L_0x0175:
+                goto L_0x0201
+            L_0x016c:
                 org.telegram.ui.Components.RLottieDrawable r0 = new org.telegram.ui.Components.RLottieDrawable
                 r0.<init>(r14, r3, r2)
-                goto L_0x0204
-            L_0x017c:
+                goto L_0x0201
+            L_0x0173:
                 org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage
                 java.io.File r0 = r0.finalFilePath
-                java.io.RandomAccessFile r11 = new java.io.RandomAccessFile     // Catch:{ Exception -> 0x01c1, all -> 0x01bd }
-                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ Exception -> 0x01c1, all -> 0x01bd }
-                java.io.File r0 = r0.finalFilePath     // Catch:{ Exception -> 0x01c1, all -> 0x01bd }
-                java.lang.String r12 = "r"
-                r11.<init>(r0, r12)     // Catch:{ Exception -> 0x01c1, all -> 0x01bd }
-                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ Exception -> 0x01ba, all -> 0x01b6 }
-                int r0 = r0.type     // Catch:{ Exception -> 0x01ba, all -> 0x01b6 }
-                if (r0 != r9) goto L_0x0196
-                byte[] r0 = org.telegram.messenger.ImageLoader.headerThumb     // Catch:{ Exception -> 0x01ba, all -> 0x01b6 }
-                goto L_0x019a
-            L_0x0196:
-                byte[] r0 = org.telegram.messenger.ImageLoader.header     // Catch:{ Exception -> 0x01ba, all -> 0x01b6 }
-            L_0x019a:
-                r11.readFully(r0, r10, r8)     // Catch:{ Exception -> 0x01ba, all -> 0x01b6 }
-                byte r5 = r0[r10]     // Catch:{ Exception -> 0x01ba, all -> 0x01b6 }
-                r8 = 31
-                if (r5 != r8) goto L_0x01aa
-                byte r0 = r0[r9]     // Catch:{ Exception -> 0x01ba, all -> 0x01b6 }
+                java.io.RandomAccessFile r6 = new java.io.RandomAccessFile     // Catch:{ Exception -> 0x01b8, all -> 0x01b4 }
+                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ Exception -> 0x01b8, all -> 0x01b4 }
+                java.io.File r0 = r0.finalFilePath     // Catch:{ Exception -> 0x01b8, all -> 0x01b4 }
+                java.lang.String r7 = "r"
+                r6.<init>(r0, r7)     // Catch:{ Exception -> 0x01b8, all -> 0x01b4 }
+                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ Exception -> 0x01b1, all -> 0x01ad }
+                int r0 = r0.type     // Catch:{ Exception -> 0x01b1, all -> 0x01ad }
+                if (r0 != r9) goto L_0x018d
+                byte[] r0 = org.telegram.messenger.ImageLoader.headerThumb     // Catch:{ Exception -> 0x01b1, all -> 0x01ad }
+                goto L_0x0191
+            L_0x018d:
+                byte[] r0 = org.telegram.messenger.ImageLoader.header     // Catch:{ Exception -> 0x01b1, all -> 0x01ad }
+            L_0x0191:
+                r6.readFully(r0, r10, r8)     // Catch:{ Exception -> 0x01b1, all -> 0x01ad }
+                byte r5 = r0[r10]     // Catch:{ Exception -> 0x01b1, all -> 0x01ad }
+                r7 = 31
+                if (r5 != r7) goto L_0x01a1
+                byte r0 = r0[r9]     // Catch:{ Exception -> 0x01b1, all -> 0x01ad }
                 r5 = -117(0xffffffffffffff8b, float:NaN)
-                if (r0 != r5) goto L_0x01aa
-                goto L_0x01ab
-            L_0x01aa:
+                if (r0 != r5) goto L_0x01a1
+                goto L_0x01a2
+            L_0x01a1:
                 r9 = 0
+            L_0x01a2:
+                r6.close()     // Catch:{ Exception -> 0x01a6 }
+                goto L_0x01ab
+            L_0x01a6:
+                r0 = move-exception
+                r5 = r0
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)
             L_0x01ab:
-                r11.close()     // Catch:{ Exception -> 0x01af }
-                goto L_0x01b4
-            L_0x01af:
-                r0 = move-exception
-                r5 = r0
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)
-            L_0x01b4:
                 r10 = r9
-                goto L_0x01d1
-            L_0x01b6:
+                goto L_0x01c8
+            L_0x01ad:
                 r0 = move-exception
                 r2 = r0
-                r5 = r11
-                goto L_0x020e
+                r5 = r6
+                goto L_0x020b
+            L_0x01b1:
+                r0 = move-exception
+                r5 = r6
+                goto L_0x01ba
+            L_0x01b4:
+                r0 = move-exception
+                r2 = r0
+                r5 = 0
+                goto L_0x020b
+            L_0x01b8:
+                r0 = move-exception
+                r5 = 0
             L_0x01ba:
-                r0 = move-exception
-                r5 = r11
-                goto L_0x01c3
-            L_0x01bd:
-                r0 = move-exception
-                r2 = r0
-                r5 = 0
-                goto L_0x020e
-            L_0x01c1:
-                r0 = move-exception
-                r5 = 0
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0209 }
+                if (r5 == 0) goto L_0x01c8
+                r5.close()     // Catch:{ Exception -> 0x01c3 }
+                goto L_0x01c8
             L_0x01c3:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x020c }
-                if (r5 == 0) goto L_0x01d1
-                r5.close()     // Catch:{ Exception -> 0x01cc }
-                goto L_0x01d1
-            L_0x01cc:
                 r0 = move-exception
                 r5 = r0
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)
-            L_0x01d1:
-                if (r10 == 0) goto L_0x01ee
+            L_0x01c8:
+                if (r10 == 0) goto L_0x01e8
                 org.telegram.ui.Components.RLottieDrawable r0 = new org.telegram.ui.Components.RLottieDrawable
                 org.telegram.messenger.ImageLoader$CacheImage r5 = r1.cacheImage
                 java.io.File r5 = r5.finalFilePath
-                java.lang.String r17 = org.telegram.messenger.ImageLoader.decompressGzip(r5)
-                r15 = r0
-                r16 = r5
-                r18 = r3
-                r19 = r2
-                r20 = r13
-                r21 = r4
-                r22 = r6
-                r15.<init>(r16, r17, r18, r19, r20, r21, r22)
-                goto L_0x0204
-            L_0x01ee:
+                java.lang.String r19 = org.telegram.messenger.ImageLoader.decompressGzip(r5)
+                r24 = 0
+                r17 = r0
+                r18 = r5
+                r20 = r3
+                r21 = r2
+                r22 = r13
+                r23 = r4
+                r25 = r16
+                r17.<init>(r18, r19, r20, r21, r22, r23, r24, r25)
+                goto L_0x0201
+            L_0x01e8:
                 org.telegram.ui.Components.RLottieDrawable r0 = new org.telegram.ui.Components.RLottieDrawable
                 org.telegram.messenger.ImageLoader$CacheImage r5 = r1.cacheImage
                 java.io.File r5 = r5.finalFilePath
-                r15 = r0
-                r16 = r5
-                r17 = r3
-                r18 = r2
-                r19 = r13
-                r20 = r4
-                r21 = r6
-                r15.<init>((java.io.File) r16, (int) r17, (int) r18, (boolean) r19, (boolean) r20, (int[]) r21)
-            L_0x0204:
-                r0.setAutoRepeat(r7)
+                r23 = 0
+                r17 = r0
+                r18 = r5
+                r19 = r3
+                r20 = r2
+                r21 = r13
+                r22 = r4
+                r24 = r16
+                r17.<init>(r18, r19, r20, r21, r22, r23, r24)
+            L_0x0201:
+                r0.setAutoRepeat(r15)
                 r1.onPostExecute(r0)
-                goto L_0x0b4d
-            L_0x020c:
+                goto L_0x0b43
+            L_0x0209:
                 r0 = move-exception
                 r2 = r0
-            L_0x020e:
-                if (r5 == 0) goto L_0x0219
-                r5.close()     // Catch:{ Exception -> 0x0214 }
-                goto L_0x0219
-            L_0x0214:
+            L_0x020b:
+                if (r5 == 0) goto L_0x0216
+                r5.close()     // Catch:{ Exception -> 0x0211 }
+                goto L_0x0216
+            L_0x0211:
                 r0 = move-exception
                 r3 = r0
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
-            L_0x0219:
+            L_0x0216:
                 throw r2
-            L_0x021a:
-                if (r3 != r8) goto L_0x02c2
-                if (r2 == 0) goto L_0x0223
-                long r12 = r2.videoSeekTo
-                r22 = r12
-                goto L_0x0225
-            L_0x0223:
-                r22 = 0
-            L_0x0225:
+            L_0x0217:
+                if (r3 != r8) goto L_0x02be
+                if (r2 == 0) goto L_0x0220
+                long r11 = r2.videoSeekTo
+                r21 = r11
+                goto L_0x0222
+            L_0x0220:
+                r21 = 0
+            L_0x0222:
                 java.lang.String r2 = "g"
                 java.lang.String r0 = r0.filter
                 boolean r0 = r2.equals(r0)
-                if (r0 == 0) goto L_0x026c
+                if (r0 == 0) goto L_0x0268
                 org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage
                 org.telegram.messenger.ImageLocation r2 = r0.imageLocation
                 org.telegram.tgnet.TLRPC$Document r3 = r2.document
                 boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_documentEncrypted
-                if (r4 != 0) goto L_0x026c
+                if (r4 != 0) goto L_0x0268
                 boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$Document
-                if (r4 == 0) goto L_0x0240
-                r19 = r3
-                goto L_0x0242
-            L_0x0240:
-                r19 = 0
-            L_0x0242:
-                if (r19 == 0) goto L_0x0247
+                if (r4 == 0) goto L_0x023d
+                r18 = r3
+                goto L_0x023f
+            L_0x023d:
+                r18 = 0
+            L_0x023f:
+                if (r18 == 0) goto L_0x0244
                 int r0 = r0.size
-                goto L_0x0249
-            L_0x0247:
+                goto L_0x0246
+            L_0x0244:
                 int r0 = r2.currentSize
-            L_0x0249:
+            L_0x0246:
                 org.telegram.ui.Components.AnimatedFileDrawable r2 = new org.telegram.ui.Components.AnimatedFileDrawable
                 org.telegram.messenger.ImageLoader$CacheImage r3 = r1.cacheImage
-                java.io.File r15 = r3.finalFilePath
-                r16 = 0
+                java.io.File r14 = r3.finalFilePath
+                r15 = 0
                 long r6 = (long) r0
-                if (r19 != 0) goto L_0x0259
+                if (r18 != 0) goto L_0x0255
                 org.telegram.messenger.ImageLocation r5 = r3.imageLocation
-                r20 = r5
-                goto L_0x025b
-            L_0x0259:
-                r20 = 0
-            L_0x025b:
+                r19 = r5
+                goto L_0x0257
+            L_0x0255:
+                r19 = 0
+            L_0x0257:
                 java.lang.Object r0 = r3.parentObject
                 int r3 = r3.currentAccount
-                r25 = 0
-                r14 = r2
-                r17 = r6
-                r21 = r0
-                r24 = r3
-                r14.<init>(r15, r16, r17, r19, r20, r21, r22, r24, r25)
-                goto L_0x02ba
-            L_0x026c:
+                r24 = 0
+                r13 = r2
+                r16 = r6
+                r20 = r0
+                r23 = r3
+                r13.<init>(r14, r15, r16, r18, r19, r20, r21, r23, r24)
+                goto L_0x02b6
+            L_0x0268:
                 org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage
                 java.lang.String r0 = r0.filter
-                if (r0 == 0) goto L_0x0294
+                if (r0 == 0) goto L_0x0290
                 java.lang.String r2 = "_"
                 java.lang.String[] r0 = r0.split(r2)
                 int r2 = r0.length
-                if (r2 < r8) goto L_0x0294
+                if (r2 < r8) goto L_0x0290
                 r2 = r0[r10]
                 float r2 = java.lang.Float.parseFloat(r2)
                 r0 = r0[r9]
@@ -1696,292 +1707,295 @@ public class ImageLoader {
                 int r10 = (int) r2
                 float r0 = r0 * r3
                 int r0 = (int) r0
-                r27 = r0
-                r26 = r10
-                goto L_0x0298
-            L_0x0294:
+                r26 = r0
+                r25 = r10
+                goto L_0x0294
+            L_0x0290:
+                r25 = 0
                 r26 = 0
-                r27 = 0
-            L_0x0298:
+            L_0x0294:
                 org.telegram.ui.Components.AnimatedFileDrawable r2 = new org.telegram.ui.Components.AnimatedFileDrawable
                 org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage
-                java.io.File r15 = r0.finalFilePath
+                java.io.File r14 = r0.finalFilePath
                 java.lang.String r3 = "d"
                 java.lang.String r0 = r0.filter
-                boolean r16 = r3.equals(r0)
-                r17 = 0
+                boolean r15 = r3.equals(r0)
+                r16 = 0
+                r18 = 0
                 r19 = 0
                 r20 = 0
-                r21 = 0
                 org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage
                 int r0 = r0.currentAccount
-                r25 = 0
-                r14 = r2
-                r24 = r0
-                r14.<init>(r15, r16, r17, r19, r20, r21, r22, r24, r25, r26, r27)
-            L_0x02ba:
+                r24 = 0
+                r13 = r2
+                r23 = r0
+                r13.<init>(r14, r15, r16, r18, r19, r20, r21, r23, r24, r25, r26)
+            L_0x02b6:
                 java.lang.Thread.interrupted()
                 r1.onPostExecute(r2)
-                goto L_0x0b4d
-            L_0x02c2:
+                goto L_0x0b43
+            L_0x02be:
                 java.io.File r2 = r0.finalFilePath
                 org.telegram.messenger.SecureDocument r3 = r0.secureDocument
-                if (r3 != 0) goto L_0x02dd
+                if (r3 != 0) goto L_0x02d9
                 java.io.File r0 = r0.encryptionKeyPath
-                if (r0 == 0) goto L_0x02db
-                if (r2 == 0) goto L_0x02db
+                if (r0 == 0) goto L_0x02d7
+                if (r2 == 0) goto L_0x02d7
                 java.lang.String r0 = r2.getAbsolutePath()
                 java.lang.String r3 = ".enc"
                 boolean r0 = r0.endsWith(r3)
-                if (r0 == 0) goto L_0x02db
-                goto L_0x02dd
-            L_0x02db:
+                if (r0 == 0) goto L_0x02d7
+                goto L_0x02d9
+            L_0x02d7:
                 r3 = 0
-                goto L_0x02de
-            L_0x02dd:
+                goto L_0x02da
+            L_0x02d9:
                 r3 = 1
-            L_0x02de:
+            L_0x02da:
                 org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage
                 org.telegram.messenger.SecureDocument r0 = r0.secureDocument
-                if (r0 == 0) goto L_0x02f2
+                if (r0 == 0) goto L_0x02ee
                 org.telegram.messenger.SecureDocumentKey r4 = r0.secureDocumentKey
                 org.telegram.tgnet.TLRPC$TL_secureFile r6 = r0.secureFile
-                if (r6 == 0) goto L_0x02ef
+                if (r6 == 0) goto L_0x02eb
                 byte[] r6 = r6.file_hash
-                if (r6 == 0) goto L_0x02ef
-                goto L_0x02f4
-            L_0x02ef:
+                if (r6 == 0) goto L_0x02eb
+                goto L_0x02f0
+            L_0x02eb:
                 byte[] r6 = r0.fileHash
-                goto L_0x02f4
-            L_0x02f2:
+                goto L_0x02f0
+            L_0x02ee:
                 r4 = 0
                 r6 = 0
-            L_0x02f4:
+            L_0x02f0:
                 int r0 = android.os.Build.VERSION.SDK_INT
-                r14 = 19
-                if (r0 >= r14) goto L_0x0364
-                java.io.RandomAccessFile r14 = new java.io.RandomAccessFile     // Catch:{ Exception -> 0x0344, all -> 0x0340 }
+                r13 = 19
+                if (r0 >= r13) goto L_0x0360
+                java.io.RandomAccessFile r13 = new java.io.RandomAccessFile     // Catch:{ Exception -> 0x0340, all -> 0x033c }
                 java.lang.String r0 = "r"
-                r14.<init>(r2, r0)     // Catch:{ Exception -> 0x0344, all -> 0x0340 }
-                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ Exception -> 0x033e }
-                int r0 = r0.type     // Catch:{ Exception -> 0x033e }
-                if (r0 != r9) goto L_0x030c
-                byte[] r0 = org.telegram.messenger.ImageLoader.headerThumb     // Catch:{ Exception -> 0x033e }
-                goto L_0x0310
+                r13.<init>(r2, r0)     // Catch:{ Exception -> 0x0340, all -> 0x033c }
+                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ Exception -> 0x033a }
+                int r0 = r0.type     // Catch:{ Exception -> 0x033a }
+                if (r0 != r9) goto L_0x0308
+                byte[] r0 = org.telegram.messenger.ImageLoader.headerThumb     // Catch:{ Exception -> 0x033a }
+                goto L_0x030c
+            L_0x0308:
+                byte[] r0 = org.telegram.messenger.ImageLoader.header     // Catch:{ Exception -> 0x033a }
             L_0x030c:
-                byte[] r0 = org.telegram.messenger.ImageLoader.header     // Catch:{ Exception -> 0x033e }
-            L_0x0310:
-                int r15 = r0.length     // Catch:{ Exception -> 0x033e }
-                r14.readFully(r0, r10, r15)     // Catch:{ Exception -> 0x033e }
-                java.lang.String r15 = new java.lang.String     // Catch:{ Exception -> 0x033e }
-                r15.<init>(r0)     // Catch:{ Exception -> 0x033e }
-                java.lang.String r0 = r15.toLowerCase()     // Catch:{ Exception -> 0x033e }
-                java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x033e }
-                java.lang.String r15 = "riff"
-                boolean r15 = r0.startsWith(r15)     // Catch:{ Exception -> 0x033e }
-                if (r15 == 0) goto L_0x0333
-                java.lang.String r15 = "webp"
-                boolean r0 = r0.endsWith(r15)     // Catch:{ Exception -> 0x033e }
-                if (r0 == 0) goto L_0x0333
-                r15 = 1
-                goto L_0x0334
-            L_0x0333:
-                r15 = 0
+                int r14 = r0.length     // Catch:{ Exception -> 0x033a }
+                r13.readFully(r0, r10, r14)     // Catch:{ Exception -> 0x033a }
+                java.lang.String r14 = new java.lang.String     // Catch:{ Exception -> 0x033a }
+                r14.<init>(r0)     // Catch:{ Exception -> 0x033a }
+                java.lang.String r0 = r14.toLowerCase()     // Catch:{ Exception -> 0x033a }
+                java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x033a }
+                java.lang.String r14 = "riff"
+                boolean r14 = r0.startsWith(r14)     // Catch:{ Exception -> 0x033a }
+                if (r14 == 0) goto L_0x032f
+                java.lang.String r14 = "webp"
+                boolean r0 = r0.endsWith(r14)     // Catch:{ Exception -> 0x033a }
+                if (r0 == 0) goto L_0x032f
+                r14 = 1
+                goto L_0x0330
+            L_0x032f:
+                r14 = 0
+            L_0x0330:
+                r13.close()     // Catch:{ Exception -> 0x0334 }
+                goto L_0x0361
             L_0x0334:
-                r14.close()     // Catch:{ Exception -> 0x0338 }
-                goto L_0x0365
-            L_0x0338:
                 r0 = move-exception
-                r14 = r0
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r14)
-                goto L_0x0365
-            L_0x033e:
+                r13 = r0
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
+                goto L_0x0361
+            L_0x033a:
                 r0 = move-exception
-                goto L_0x0346
-            L_0x0340:
+                goto L_0x0342
+            L_0x033c:
                 r0 = move-exception
                 r2 = r0
                 r5 = 0
-                goto L_0x0358
-            L_0x0344:
+                goto L_0x0354
+            L_0x0340:
                 r0 = move-exception
-                r14 = 0
-            L_0x0346:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0355 }
-                if (r14 == 0) goto L_0x0364
-                r14.close()     // Catch:{ Exception -> 0x034f }
-                goto L_0x0364
-            L_0x034f:
+                r13 = 0
+            L_0x0342:
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0351 }
+                if (r13 == 0) goto L_0x0360
+                r13.close()     // Catch:{ Exception -> 0x034b }
+                goto L_0x0360
+            L_0x034b:
                 r0 = move-exception
-                r14 = r0
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r14)
-                goto L_0x0364
-            L_0x0355:
+                r13 = r0
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
+                goto L_0x0360
+            L_0x0351:
                 r0 = move-exception
                 r2 = r0
-                r5 = r14
-            L_0x0358:
-                if (r5 == 0) goto L_0x0363
-                r5.close()     // Catch:{ Exception -> 0x035e }
-                goto L_0x0363
-            L_0x035e:
+                r5 = r13
+            L_0x0354:
+                if (r5 == 0) goto L_0x035f
+                r5.close()     // Catch:{ Exception -> 0x035a }
+                goto L_0x035f
+            L_0x035a:
                 r0 = move-exception
                 r3 = r0
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
-            L_0x0363:
+            L_0x035f:
                 throw r2
-            L_0x0364:
-                r15 = 0
-            L_0x0365:
+            L_0x0360:
+                r14 = 0
+            L_0x0361:
                 org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage
                 org.telegram.messenger.ImageLocation r0 = r0.imageLocation
                 java.lang.String r0 = r0.path
-                if (r0 == 0) goto L_0x03cd
-                java.lang.String r14 = "thumb://"
-                boolean r14 = r0.startsWith(r14)
-                if (r14 == 0) goto L_0x0399
-                java.lang.String r14 = ":"
-                int r14 = r0.indexOf(r14, r11)
-                if (r14 < 0) goto L_0x038f
-                java.lang.String r16 = r0.substring(r11, r14)
-                long r16 = java.lang.Long.parseLong(r16)
-                java.lang.Long r16 = java.lang.Long.valueOf(r16)
-                int r14 = r14 + r9
-                java.lang.String r0 = r0.substring(r14)
-                goto L_0x0392
-            L_0x038f:
+                r13 = 8
+                if (r0 == 0) goto L_0x03cb
+                java.lang.String r15 = "thumb://"
+                boolean r15 = r0.startsWith(r15)
+                if (r15 == 0) goto L_0x0397
+                java.lang.String r15 = ":"
+                int r15 = r0.indexOf(r15, r13)
+                if (r15 < 0) goto L_0x038d
+                java.lang.String r17 = r0.substring(r13, r15)
+                long r17 = java.lang.Long.parseLong(r17)
+                java.lang.Long r17 = java.lang.Long.valueOf(r17)
+                int r15 = r15 + r9
+                java.lang.String r0 = r0.substring(r15)
+                goto L_0x0390
+            L_0x038d:
                 r0 = 0
-                r16 = 0
-            L_0x0392:
-                r11 = r0
-                r17 = r16
-                r14 = 0
-            L_0x0396:
-                r18 = 0
-                goto L_0x03d3
-            L_0x0399:
-                java.lang.String r14 = "vthumb://"
-                boolean r14 = r0.startsWith(r14)
-                if (r14 == 0) goto L_0x03c0
-                java.lang.String r14 = ":"
-                r11 = 9
-                int r14 = r0.indexOf(r14, r11)
-                if (r14 < 0) goto L_0x03b9
-                java.lang.String r0 = r0.substring(r11, r14)
-                long r17 = java.lang.Long.parseLong(r0)
-                java.lang.Long r0 = java.lang.Long.valueOf(r17)
-                r11 = 1
-                goto L_0x03bb
+                r17 = 0
+            L_0x0390:
+                r13 = r0
+                r18 = r17
+                r15 = 0
+            L_0x0394:
+                r19 = 0
+                goto L_0x03d1
+            L_0x0397:
+                java.lang.String r15 = "vthumb://"
+                boolean r15 = r0.startsWith(r15)
+                if (r15 == 0) goto L_0x03be
+                java.lang.String r15 = ":"
+                r13 = 9
+                int r15 = r0.indexOf(r15, r13)
+                if (r15 < 0) goto L_0x03b7
+                java.lang.String r0 = r0.substring(r13, r15)
+                long r18 = java.lang.Long.parseLong(r0)
+                java.lang.Long r0 = java.lang.Long.valueOf(r18)
+                r13 = 1
+                goto L_0x03b9
+            L_0x03b7:
+                r0 = 0
+                r13 = 0
             L_0x03b9:
-                r0 = 0
-                r11 = 0
-            L_0x03bb:
-                r17 = r0
-                r14 = r11
-                r11 = 0
-                goto L_0x0396
-            L_0x03c0:
-                java.lang.String r11 = "http"
-                boolean r0 = r0.startsWith(r11)
-                if (r0 != 0) goto L_0x03cd
-                r11 = 0
-                r14 = 0
-                r17 = 0
-                goto L_0x0396
-            L_0x03cd:
-                r11 = 0
-                r14 = 0
-                r17 = 0
-                r18 = 1
-            L_0x03d3:
+                r18 = r0
+                r15 = r13
+                r13 = 0
+                goto L_0x0394
+            L_0x03be:
+                java.lang.String r13 = "http"
+                boolean r0 = r0.startsWith(r13)
+                if (r0 != 0) goto L_0x03cb
+                r13 = 0
+                r15 = 0
+                r18 = 0
+                goto L_0x0394
+            L_0x03cb:
+                r13 = 0
+                r15 = 0
+                r18 = 0
+                r19 = 1
+            L_0x03d1:
                 android.graphics.BitmapFactory$Options r7 = new android.graphics.BitmapFactory$Options
                 r7.<init>()
                 r7.inSampleSize = r9
                 int r0 = android.os.Build.VERSION.SDK_INT
-                r12 = 21
-                if (r0 >= r12) goto L_0x03e2
+                r11 = 21
+                if (r0 >= r11) goto L_0x03e0
                 r7.inPurgeable = r9
-            L_0x03e2:
+            L_0x03e0:
                 org.telegram.messenger.ImageLoader r0 = org.telegram.messenger.ImageLoader.this
-                boolean r13 = r0.canForce8888
-                r22 = 0
-                r23 = 1065353216(0x3var_, float:1.0)
-                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x0602 }
-                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x0602 }
-                if (r0 == 0) goto L_0x0591
-                java.lang.String r12 = "_"
-                java.lang.String[] r0 = r0.split(r12)     // Catch:{ all -> 0x0602 }
-                int r12 = r0.length     // Catch:{ all -> 0x0602 }
-                if (r12 < r8) goto L_0x0418
-                r12 = r0[r10]     // Catch:{ all -> 0x0602 }
-                float r12 = java.lang.Float.parseFloat(r12)     // Catch:{ all -> 0x0602 }
-                float r25 = org.telegram.messenger.AndroidUtilities.density     // Catch:{ all -> 0x0602 }
-                float r12 = r12 * r25
-                r0 = r0[r9]     // Catch:{ all -> 0x0413 }
-                float r0 = java.lang.Float.parseFloat(r0)     // Catch:{ all -> 0x0413 }
-                float r25 = org.telegram.messenger.AndroidUtilities.density     // Catch:{ all -> 0x0413 }
-                float r0 = r0 * r25
-                r25 = r12
-                r12 = r0
+                boolean r12 = r0.canForce8888
+                r23 = 0
+                r24 = 1065353216(0x3var_, float:1.0)
+                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x05fb }
+                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x05fb }
+                if (r0 == 0) goto L_0x0588
+                java.lang.String r11 = "_"
+                java.lang.String[] r0 = r0.split(r11)     // Catch:{ all -> 0x05fb }
+                int r11 = r0.length     // Catch:{ all -> 0x05fb }
+                if (r11 < r8) goto L_0x0418
+                r11 = r0[r10]     // Catch:{ all -> 0x05fb }
+                float r11 = java.lang.Float.parseFloat(r11)     // Catch:{ all -> 0x05fb }
+                float r26 = org.telegram.messenger.AndroidUtilities.density     // Catch:{ all -> 0x05fb }
+                float r11 = r11 * r26
+                r0 = r0[r9]     // Catch:{ all -> 0x0411 }
+                float r0 = java.lang.Float.parseFloat(r0)     // Catch:{ all -> 0x0411 }
+                float r26 = org.telegram.messenger.AndroidUtilities.density     // Catch:{ all -> 0x0411 }
+                float r0 = r0 * r26
+                r26 = r11
+                r11 = r0
                 goto L_0x041b
-            L_0x0413:
+            L_0x0411:
                 r0 = move-exception
                 r10 = r0
-                r0 = 0
-                goto L_0x058c
+                r5 = 0
+                r8 = 0
+                r9 = 0
+                goto L_0x0601
             L_0x0418:
-                r12 = 0
-                r25 = 0
+                r11 = 0
+                r26 = 0
             L_0x041b:
-                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x0587 }
-                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x0587 }
+                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x057b }
+                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x057b }
                 java.lang.String r8 = "b2"
-                boolean r0 = r0.contains(r8)     // Catch:{ all -> 0x0587 }
+                boolean r0 = r0.contains(r8)     // Catch:{ all -> 0x057b }
                 if (r0 == 0) goto L_0x0429
                 r8 = 3
                 goto L_0x0446
             L_0x0429:
-                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x0587 }
-                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x0587 }
+                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x057b }
+                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x057b }
                 java.lang.String r8 = "b1"
-                boolean r0 = r0.contains(r8)     // Catch:{ all -> 0x0587 }
+                boolean r0 = r0.contains(r8)     // Catch:{ all -> 0x057b }
                 if (r0 == 0) goto L_0x0437
                 r8 = 2
                 goto L_0x0446
             L_0x0437:
-                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x0587 }
-                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x0587 }
+                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x057b }
+                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x057b }
                 java.lang.String r8 = "b"
-                boolean r0 = r0.contains(r8)     // Catch:{ all -> 0x0587 }
+                boolean r0 = r0.contains(r8)     // Catch:{ all -> 0x057b }
                 if (r0 == 0) goto L_0x0445
                 r8 = 1
                 goto L_0x0446
             L_0x0445:
                 r8 = 0
             L_0x0446:
-                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x057e }
-                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x057e }
+                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x0575 }
+                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x0575 }
                 java.lang.String r5 = "i"
-                boolean r5 = r0.contains(r5)     // Catch:{ all -> 0x057e }
-                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x0574 }
-                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x0574 }
+                boolean r5 = r0.contains(r5)     // Catch:{ all -> 0x0575 }
+                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x056e }
+                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x056e }
                 java.lang.String r10 = "f"
-                boolean r0 = r0.contains(r10)     // Catch:{ all -> 0x0574 }
+                boolean r0 = r0.contains(r10)     // Catch:{ all -> 0x056e }
                 if (r0 == 0) goto L_0x045d
-                r13 = 1
+                r12 = 1
             L_0x045d:
-                if (r15 != 0) goto L_0x0569
-                int r0 = (r25 > r22 ? 1 : (r25 == r22 ? 0 : -1))
-                if (r0 == 0) goto L_0x0569
-                int r0 = (r12 > r22 ? 1 : (r12 == r22 ? 0 : -1))
-                if (r0 == 0) goto L_0x0569
-                r7.inJustDecodeBounds = r9     // Catch:{ all -> 0x0574 }
-                if (r17 == 0) goto L_0x049b
-                if (r11 != 0) goto L_0x049b
-                if (r14 == 0) goto L_0x0485
+                if (r14 != 0) goto L_0x0563
+                int r0 = (r26 > r23 ? 1 : (r26 == r23 ? 0 : -1))
+                if (r0 == 0) goto L_0x0563
+                int r0 = (r11 > r23 ? 1 : (r11 == r23 ? 0 : -1))
+                if (r0 == 0) goto L_0x0563
+                r7.inJustDecodeBounds = r9     // Catch:{ all -> 0x056e }
+                if (r18 == 0) goto L_0x049b
+                if (r13 != 0) goto L_0x049b
+                if (r15 == 0) goto L_0x0485
                 android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0480 }
                 android.content.ContentResolver r0 = r0.getContentResolver()     // Catch:{ all -> 0x0480 }
-                long r9 = r17.longValue()     // Catch:{ all -> 0x0480 }
+                long r9 = r18.longValue()     // Catch:{ all -> 0x0480 }
                 r29 = r5
                 r5 = 1
                 android.provider.MediaStore.Video.Thumbnails.getThumbnail(r0, r9, r5, r7)     // Catch:{ all -> 0x0499 }
@@ -1989,23 +2003,23 @@ public class ImageLoader {
             L_0x0480:
                 r0 = move-exception
                 r29 = r5
-                goto L_0x0579
+                goto L_0x0573
             L_0x0485:
                 r29 = r5
                 android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0499 }
                 android.content.ContentResolver r0 = r0.getContentResolver()     // Catch:{ all -> 0x0499 }
-                long r9 = r17.longValue()     // Catch:{ all -> 0x0499 }
+                long r9 = r18.longValue()     // Catch:{ all -> 0x0499 }
                 r5 = 1
                 android.provider.MediaStore.Images.Thumbnails.getThumbnail(r0, r9, r5, r7)     // Catch:{ all -> 0x0499 }
             L_0x0495:
                 r30 = r8
-                goto L_0x0516
+                goto L_0x0513
             L_0x0499:
                 r0 = move-exception
                 goto L_0x04f4
             L_0x049b:
                 r29 = r5
-                if (r4 == 0) goto L_0x04fc
+                if (r4 == 0) goto L_0x04f9
                 java.io.RandomAccessFile r0 = new java.io.RandomAccessFile     // Catch:{ all -> 0x04f1 }
                 java.lang.String r5 = "r"
                 r0.<init>(r2, r5)     // Catch:{ all -> 0x04f1 }
@@ -2044,969 +2058,960 @@ public class ImageLoader {
                 r0 = 1
             L_0x04e5:
                 r10 = 0
-                byte r8 = r9[r10]     // Catch:{ all -> 0x055f }
+                byte r8 = r9[r10]     // Catch:{ all -> 0x055c }
                 r8 = r8 & 255(0xff, float:3.57E-43)
                 int r5 = r5 - r8
-                if (r0 != 0) goto L_0x0516
-                android.graphics.BitmapFactory.decodeByteArray(r9, r8, r5, r7)     // Catch:{ all -> 0x055f }
-                goto L_0x0516
+                if (r0 != 0) goto L_0x0513
+                android.graphics.BitmapFactory.decodeByteArray(r9, r8, r5, r7)     // Catch:{ all -> 0x055c }
+                goto L_0x0513
             L_0x04f1:
                 r0 = move-exception
                 r30 = r8
             L_0x04f4:
                 r10 = r0
-                r0 = r12
-                r12 = r25
                 r5 = r29
-                goto L_0x058e
-            L_0x04fc:
+                goto L_0x057f
+            L_0x04f9:
                 r30 = r8
-                if (r3 == 0) goto L_0x050a
-                org.telegram.messenger.secretmedia.EncryptedFileInputStream r0 = new org.telegram.messenger.secretmedia.EncryptedFileInputStream     // Catch:{ all -> 0x055f }
-                org.telegram.messenger.ImageLoader$CacheImage r5 = r1.cacheImage     // Catch:{ all -> 0x055f }
-                java.io.File r5 = r5.encryptionKeyPath     // Catch:{ all -> 0x055f }
-                r0.<init>((java.io.File) r2, (java.io.File) r5)     // Catch:{ all -> 0x055f }
-                goto L_0x050f
-            L_0x050a:
-                java.io.FileInputStream r0 = new java.io.FileInputStream     // Catch:{ all -> 0x055f }
-                r0.<init>(r2)     // Catch:{ all -> 0x055f }
-            L_0x050f:
+                if (r3 == 0) goto L_0x0507
+                org.telegram.messenger.secretmedia.EncryptedFileInputStream r0 = new org.telegram.messenger.secretmedia.EncryptedFileInputStream     // Catch:{ all -> 0x055c }
+                org.telegram.messenger.ImageLoader$CacheImage r5 = r1.cacheImage     // Catch:{ all -> 0x055c }
+                java.io.File r5 = r5.encryptionKeyPath     // Catch:{ all -> 0x055c }
+                r0.<init>((java.io.File) r2, (java.io.File) r5)     // Catch:{ all -> 0x055c }
+                goto L_0x050c
+            L_0x0507:
+                java.io.FileInputStream r0 = new java.io.FileInputStream     // Catch:{ all -> 0x055c }
+                r0.<init>(r2)     // Catch:{ all -> 0x055c }
+            L_0x050c:
                 r5 = 0
-                android.graphics.BitmapFactory.decodeStream(r0, r5, r7)     // Catch:{ all -> 0x055f }
-                r0.close()     // Catch:{ all -> 0x055f }
-            L_0x0516:
-                int r0 = r7.outWidth     // Catch:{ all -> 0x055f }
-                float r0 = (float) r0     // Catch:{ all -> 0x055f }
-                int r5 = r7.outHeight     // Catch:{ all -> 0x055f }
-                float r5 = (float) r5     // Catch:{ all -> 0x055f }
-                int r8 = (r25 > r12 ? 1 : (r25 == r12 ? 0 : -1))
-                if (r8 < 0) goto L_0x052d
+                android.graphics.BitmapFactory.decodeStream(r0, r5, r7)     // Catch:{ all -> 0x055c }
+                r0.close()     // Catch:{ all -> 0x055c }
+            L_0x0513:
+                int r0 = r7.outWidth     // Catch:{ all -> 0x055c }
+                float r0 = (float) r0     // Catch:{ all -> 0x055c }
+                int r5 = r7.outHeight     // Catch:{ all -> 0x055c }
+                float r5 = (float) r5     // Catch:{ all -> 0x055c }
+                int r8 = (r26 > r11 ? 1 : (r26 == r11 ? 0 : -1))
+                if (r8 < 0) goto L_0x052a
                 int r8 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-                if (r8 <= 0) goto L_0x052d
-                float r8 = r0 / r25
-                float r9 = r5 / r12
-                float r8 = java.lang.Math.max(r8, r9)     // Catch:{ all -> 0x055f }
-                goto L_0x0535
-            L_0x052d:
-                float r8 = r0 / r25
-                float r9 = r5 / r12
-                float r8 = java.lang.Math.min(r8, r9)     // Catch:{ all -> 0x055f }
-            L_0x0535:
+                if (r8 <= 0) goto L_0x052a
+                float r8 = r0 / r26
+                float r9 = r5 / r11
+                float r8 = java.lang.Math.max(r8, r9)     // Catch:{ all -> 0x055c }
+                goto L_0x0532
+            L_0x052a:
+                float r8 = r0 / r26
+                float r9 = r5 / r11
+                float r8 = java.lang.Math.min(r8, r9)     // Catch:{ all -> 0x055c }
+            L_0x0532:
                 r9 = 1067030938(0x3var_a, float:1.2)
                 int r9 = (r8 > r9 ? 1 : (r8 == r9 ? 0 : -1))
-                if (r9 >= 0) goto L_0x053e
+                if (r9 >= 0) goto L_0x053b
                 r8 = 1065353216(0x3var_, float:1.0)
-            L_0x053e:
+            L_0x053b:
                 r9 = 0
-                r7.inJustDecodeBounds = r9     // Catch:{ all -> 0x055f }
-                int r9 = (r8 > r23 ? 1 : (r8 == r23 ? 0 : -1))
-                if (r9 <= 0) goto L_0x055b
-                int r0 = (r0 > r25 ? 1 : (r0 == r25 ? 0 : -1))
-                if (r0 > 0) goto L_0x054d
-                int r0 = (r5 > r12 ? 1 : (r5 == r12 ? 0 : -1))
-                if (r0 <= 0) goto L_0x055b
-            L_0x054d:
+                r7.inJustDecodeBounds = r9     // Catch:{ all -> 0x055c }
+                int r9 = (r8 > r24 ? 1 : (r8 == r24 ? 0 : -1))
+                if (r9 <= 0) goto L_0x0558
+                int r0 = (r0 > r26 ? 1 : (r0 == r26 ? 0 : -1))
+                if (r0 > 0) goto L_0x054a
+                int r0 = (r5 > r11 ? 1 : (r5 == r11 ? 0 : -1))
+                if (r0 <= 0) goto L_0x0558
+            L_0x054a:
                 r0 = 1
-            L_0x054e:
+            L_0x054b:
                 r5 = 2
                 int r0 = r0 * 2
                 int r5 = r0 * 2
-                float r5 = (float) r5     // Catch:{ all -> 0x055f }
+                float r5 = (float) r5     // Catch:{ all -> 0x055c }
                 int r5 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
-                if (r5 < 0) goto L_0x054e
-                r7.inSampleSize = r0     // Catch:{ all -> 0x055f }
-                goto L_0x056d
-            L_0x055b:
-                int r0 = (int) r8     // Catch:{ all -> 0x055f }
-                r7.inSampleSize = r0     // Catch:{ all -> 0x055f }
-                goto L_0x056d
-            L_0x055f:
+                if (r5 < 0) goto L_0x054b
+                r7.inSampleSize = r0     // Catch:{ all -> 0x055c }
+                goto L_0x0567
+            L_0x0558:
+                int r0 = (int) r8     // Catch:{ all -> 0x055c }
+                r7.inSampleSize = r0     // Catch:{ all -> 0x055c }
+                goto L_0x0567
+            L_0x055c:
                 r0 = move-exception
                 r10 = r0
-                r0 = r12
-                r12 = r25
                 r5 = r29
                 r8 = r30
-                goto L_0x058e
-            L_0x0569:
+                goto L_0x057f
+            L_0x0563:
                 r29 = r5
                 r30 = r8
-            L_0x056d:
+            L_0x0567:
                 r5 = r29
                 r8 = r30
                 r0 = 0
-                goto L_0x05fe
-            L_0x0574:
+                goto L_0x05f4
+            L_0x056e:
                 r0 = move-exception
                 r29 = r5
                 r30 = r8
-            L_0x0579:
+            L_0x0573:
                 r10 = r0
-                r0 = r12
-                r12 = r25
-                goto L_0x058e
-            L_0x057e:
+                goto L_0x057f
+            L_0x0575:
                 r0 = move-exception
                 r30 = r8
                 r10 = r0
-                r0 = r12
-                r12 = r25
                 r5 = 0
-                goto L_0x058e
-            L_0x0587:
+                goto L_0x057f
+            L_0x057b:
                 r0 = move-exception
                 r10 = r0
-                r0 = r12
-                r12 = r25
-            L_0x058c:
                 r5 = 0
                 r8 = 0
-            L_0x058e:
+            L_0x057f:
                 r9 = 0
-                goto L_0x0609
-            L_0x0591:
-                if (r11 == 0) goto L_0x05f8
+                r34 = r26
+                r26 = r11
+                r11 = r34
+                goto L_0x0603
+            L_0x0588:
+                if (r13 == 0) goto L_0x05ee
                 r5 = 1
-                r7.inJustDecodeBounds = r5     // Catch:{ all -> 0x0602 }
-                if (r13 == 0) goto L_0x059b
-                android.graphics.Bitmap$Config r0 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0602 }
-                goto L_0x059d
-            L_0x059b:
-                android.graphics.Bitmap$Config r0 = android.graphics.Bitmap.Config.RGB_565     // Catch:{ all -> 0x0602 }
-            L_0x059d:
-                r7.inPreferredConfig = r0     // Catch:{ all -> 0x0602 }
-                java.io.FileInputStream r0 = new java.io.FileInputStream     // Catch:{ all -> 0x0602 }
-                r0.<init>(r2)     // Catch:{ all -> 0x0602 }
+                r7.inJustDecodeBounds = r5     // Catch:{ all -> 0x05fb }
+                if (r12 == 0) goto L_0x0592
+                android.graphics.Bitmap$Config r0 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x05fb }
+                goto L_0x0594
+            L_0x0592:
+                android.graphics.Bitmap$Config r0 = android.graphics.Bitmap.Config.RGB_565     // Catch:{ all -> 0x05fb }
+            L_0x0594:
+                r7.inPreferredConfig = r0     // Catch:{ all -> 0x05fb }
+                java.io.FileInputStream r0 = new java.io.FileInputStream     // Catch:{ all -> 0x05fb }
+                r0.<init>(r2)     // Catch:{ all -> 0x05fb }
                 r5 = 0
-                android.graphics.Bitmap r8 = android.graphics.BitmapFactory.decodeStream(r0, r5, r7)     // Catch:{ all -> 0x0602 }
-                r0.close()     // Catch:{ all -> 0x05f1 }
-                int r0 = r7.outWidth     // Catch:{ all -> 0x05f1 }
-                int r5 = r7.outHeight     // Catch:{ all -> 0x05f1 }
+                android.graphics.Bitmap r8 = android.graphics.BitmapFactory.decodeStream(r0, r5, r7)     // Catch:{ all -> 0x05fb }
+                r0.close()     // Catch:{ all -> 0x05e8 }
+                int r0 = r7.outWidth     // Catch:{ all -> 0x05e8 }
+                int r5 = r7.outHeight     // Catch:{ all -> 0x05e8 }
                 r9 = 0
-                r7.inJustDecodeBounds = r9     // Catch:{ all -> 0x05f1 }
+                r7.inJustDecodeBounds = r9     // Catch:{ all -> 0x05e8 }
                 r9 = 66
-                android.graphics.Point r10 = org.telegram.messenger.AndroidUtilities.getRealScreenSize()     // Catch:{ all -> 0x05f1 }
-                int r10 = r10.x     // Catch:{ all -> 0x05f1 }
-                android.graphics.Point r12 = org.telegram.messenger.AndroidUtilities.getRealScreenSize()     // Catch:{ all -> 0x05f1 }
-                int r12 = r12.y     // Catch:{ all -> 0x05f1 }
-                int r10 = java.lang.Math.min(r10, r12)     // Catch:{ all -> 0x05f1 }
-                int r9 = java.lang.Math.max(r9, r10)     // Catch:{ all -> 0x05f1 }
-                int r0 = java.lang.Math.min(r5, r0)     // Catch:{ all -> 0x05f1 }
-                float r0 = (float) r0     // Catch:{ all -> 0x05f1 }
-                float r5 = (float) r9     // Catch:{ all -> 0x05f1 }
+                android.graphics.Point r10 = org.telegram.messenger.AndroidUtilities.getRealScreenSize()     // Catch:{ all -> 0x05e8 }
+                int r10 = r10.x     // Catch:{ all -> 0x05e8 }
+                android.graphics.Point r11 = org.telegram.messenger.AndroidUtilities.getRealScreenSize()     // Catch:{ all -> 0x05e8 }
+                int r11 = r11.y     // Catch:{ all -> 0x05e8 }
+                int r10 = java.lang.Math.min(r10, r11)     // Catch:{ all -> 0x05e8 }
+                int r9 = java.lang.Math.max(r9, r10)     // Catch:{ all -> 0x05e8 }
+                int r0 = java.lang.Math.min(r5, r0)     // Catch:{ all -> 0x05e8 }
+                float r0 = (float) r0     // Catch:{ all -> 0x05e8 }
+                float r5 = (float) r9     // Catch:{ all -> 0x05e8 }
                 float r0 = r0 / r5
                 r5 = 1086324736(0x40CLASSNAME, float:6.0)
                 float r0 = r0 * r5
-                int r5 = (r0 > r23 ? 1 : (r0 == r23 ? 0 : -1))
-                if (r5 >= 0) goto L_0x05da
+                int r5 = (r0 > r24 ? 1 : (r0 == r24 ? 0 : -1))
+                if (r5 >= 0) goto L_0x05d1
                 r0 = 1065353216(0x3var_, float:1.0)
-            L_0x05da:
-                int r5 = (r0 > r23 ? 1 : (r0 == r23 ? 0 : -1))
-                if (r5 <= 0) goto L_0x05ec
+            L_0x05d1:
+                int r5 = (r0 > r24 ? 1 : (r0 == r24 ? 0 : -1))
+                if (r5 <= 0) goto L_0x05e3
                 r5 = 1
-            L_0x05df:
+            L_0x05d6:
                 r9 = 2
                 int r5 = r5 * 2
                 int r9 = r5 * 2
-                float r9 = (float) r9     // Catch:{ all -> 0x05f1 }
+                float r9 = (float) r9     // Catch:{ all -> 0x05e8 }
                 int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-                if (r9 <= 0) goto L_0x05df
-                r7.inSampleSize = r5     // Catch:{ all -> 0x05f1 }
-                goto L_0x05ef
-            L_0x05ec:
-                int r0 = (int) r0     // Catch:{ all -> 0x05f1 }
-                r7.inSampleSize = r0     // Catch:{ all -> 0x05f1 }
-            L_0x05ef:
+                if (r9 <= 0) goto L_0x05d6
+                r7.inSampleSize = r5     // Catch:{ all -> 0x05e8 }
+                goto L_0x05e6
+            L_0x05e3:
+                int r0 = (int) r0     // Catch:{ all -> 0x05e8 }
+                r7.inSampleSize = r0     // Catch:{ all -> 0x05e8 }
+            L_0x05e6:
                 r0 = r8
-                goto L_0x05f9
-            L_0x05f1:
+                goto L_0x05ef
+            L_0x05e8:
                 r0 = move-exception
                 r10 = r0
                 r9 = r8
-                r0 = 0
                 r5 = 0
                 r8 = 0
-                goto L_0x0608
-            L_0x05f8:
+                goto L_0x0600
+            L_0x05ee:
                 r0 = 0
-            L_0x05f9:
+            L_0x05ef:
                 r5 = 0
                 r8 = 0
-                r12 = 0
-                r25 = 0
-            L_0x05fe:
+                r11 = 0
+                r26 = 0
+            L_0x05f4:
                 r9 = r0
-                r0 = r25
-                goto L_0x0611
-            L_0x0602:
+                r29 = r5
+                r0 = r26
+                r5 = 1
+                goto L_0x060f
+            L_0x05fb:
                 r0 = move-exception
                 r10 = r0
-                r0 = 0
                 r5 = 0
                 r8 = 0
                 r9 = 0
-            L_0x0608:
-                r12 = 0
-            L_0x0609:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)
-                r34 = r12
-                r12 = r0
-                r0 = r34
-            L_0x0611:
+            L_0x0600:
+                r11 = 0
+            L_0x0601:
+                r26 = 0
+            L_0x0603:
+                boolean r0 = r10 instanceof java.io.FileNotFoundException
+                r29 = r5
+                r5 = 1
+                r0 = r0 ^ r5
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r10, (boolean) r0)
+                r0 = r11
+                r11 = r26
+            L_0x060f:
                 org.telegram.messenger.ImageLoader$CacheImage r10 = r1.cacheImage
                 int r10 = r10.type
-                r25 = 1101004800(0x41a00000, float:20.0)
-                r29 = r9
-                r9 = 1
-                if (r10 != r9) goto L_0x081d
-                org.telegram.messenger.ImageLoader r9 = org.telegram.messenger.ImageLoader.this     // Catch:{ all -> 0x0812 }
-                long r10 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x0812 }
-                long unused = r9.lastCacheOutTime = r10     // Catch:{ all -> 0x0812 }
-                java.lang.Object r9 = r1.sync     // Catch:{ all -> 0x0812 }
-                monitor-enter(r9)     // Catch:{ all -> 0x0812 }
-                boolean r10 = r1.isCancelled     // Catch:{ all -> 0x080f }
-                if (r10 == 0) goto L_0x062e
-                monitor-exit(r9)     // Catch:{ all -> 0x080f }
+                r26 = 1101004800(0x41a00000, float:20.0)
+                if (r10 != r5) goto L_0x0810
+                org.telegram.messenger.ImageLoader r5 = org.telegram.messenger.ImageLoader.this     // Catch:{ all -> 0x0807 }
+                long r10 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x0807 }
+                long unused = r5.lastCacheOutTime = r10     // Catch:{ all -> 0x0807 }
+                java.lang.Object r5 = r1.sync     // Catch:{ all -> 0x0807 }
+                monitor-enter(r5)     // Catch:{ all -> 0x0807 }
+                boolean r10 = r1.isCancelled     // Catch:{ all -> 0x0804 }
+                if (r10 == 0) goto L_0x0629
+                monitor-exit(r5)     // Catch:{ all -> 0x0804 }
                 return
-            L_0x062e:
-                monitor-exit(r9)     // Catch:{ all -> 0x080f }
-                if (r15 == 0) goto L_0x0676
-                java.io.RandomAccessFile r3 = new java.io.RandomAccessFile     // Catch:{ all -> 0x0812 }
+            L_0x0629:
+                monitor-exit(r5)     // Catch:{ all -> 0x0804 }
+                if (r14 == 0) goto L_0x0671
+                java.io.RandomAccessFile r3 = new java.io.RandomAccessFile     // Catch:{ all -> 0x0807 }
                 java.lang.String r4 = "r"
-                r3.<init>(r2, r4)     // Catch:{ all -> 0x0812 }
-                java.nio.channels.FileChannel r9 = r3.getChannel()     // Catch:{ all -> 0x0812 }
-                java.nio.channels.FileChannel$MapMode r10 = java.nio.channels.FileChannel.MapMode.READ_ONLY     // Catch:{ all -> 0x0812 }
-                r11 = 0
-                long r13 = r2.length()     // Catch:{ all -> 0x0812 }
-                java.nio.MappedByteBuffer r4 = r9.map(r10, r11, r13)     // Catch:{ all -> 0x0812 }
-                android.graphics.BitmapFactory$Options r6 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0812 }
-                r6.<init>()     // Catch:{ all -> 0x0812 }
-                r9 = 1
-                r6.inJustDecodeBounds = r9     // Catch:{ all -> 0x0812 }
-                int r10 = r4.limit()     // Catch:{ all -> 0x0812 }
-                r11 = 0
-                org.telegram.messenger.Utilities.loadWebpImage(r11, r4, r10, r6, r9)     // Catch:{ all -> 0x0812 }
-                int r9 = r6.outWidth     // Catch:{ all -> 0x0812 }
-                int r6 = r6.outHeight     // Catch:{ all -> 0x0812 }
-                android.graphics.Bitmap$Config r10 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0812 }
-                android.graphics.Bitmap r9 = org.telegram.messenger.Bitmaps.createBitmap(r9, r6, r10)     // Catch:{ all -> 0x0812 }
-                int r6 = r4.limit()     // Catch:{ all -> 0x0697 }
-                boolean r10 = r7.inPurgeable     // Catch:{ all -> 0x0697 }
-                if (r10 != 0) goto L_0x066c
-                r10 = 1
-                goto L_0x066d
-            L_0x066c:
-                r10 = 0
-            L_0x066d:
-                r11 = 0
-                org.telegram.messenger.Utilities.loadWebpImage(r9, r4, r6, r11, r10)     // Catch:{ all -> 0x0697 }
-                r3.close()     // Catch:{ all -> 0x0697 }
-                goto L_0x06fa
-            L_0x0676:
-                boolean r9 = r7.inPurgeable     // Catch:{ all -> 0x0812 }
-                if (r9 != 0) goto L_0x069a
-                if (r4 == 0) goto L_0x067d
-                goto L_0x069a
-            L_0x067d:
-                if (r3 == 0) goto L_0x0689
-                org.telegram.messenger.secretmedia.EncryptedFileInputStream r3 = new org.telegram.messenger.secretmedia.EncryptedFileInputStream     // Catch:{ all -> 0x0812 }
-                org.telegram.messenger.ImageLoader$CacheImage r4 = r1.cacheImage     // Catch:{ all -> 0x0812 }
-                java.io.File r4 = r4.encryptionKeyPath     // Catch:{ all -> 0x0812 }
-                r3.<init>((java.io.File) r2, (java.io.File) r4)     // Catch:{ all -> 0x0812 }
-                goto L_0x068e
-            L_0x0689:
-                java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ all -> 0x0812 }
-                r3.<init>(r2)     // Catch:{ all -> 0x0812 }
-            L_0x068e:
-                r4 = 0
-                android.graphics.Bitmap r9 = android.graphics.BitmapFactory.decodeStream(r3, r4, r7)     // Catch:{ all -> 0x0812 }
-                r3.close()     // Catch:{ all -> 0x0697 }
-                goto L_0x06fa
-            L_0x0697:
-                r0 = move-exception
-                goto L_0x0815
-            L_0x069a:
-                java.io.RandomAccessFile r9 = new java.io.RandomAccessFile     // Catch:{ all -> 0x0812 }
-                java.lang.String r10 = "r"
-                r9.<init>(r2, r10)     // Catch:{ all -> 0x0812 }
-                long r10 = r9.length()     // Catch:{ all -> 0x0812 }
-                int r11 = (int) r10     // Catch:{ all -> 0x0812 }
-                java.lang.ThreadLocal r10 = org.telegram.messenger.ImageLoader.bytesThumbLocal     // Catch:{ all -> 0x0812 }
-                java.lang.Object r10 = r10.get()     // Catch:{ all -> 0x0812 }
-                byte[] r10 = (byte[]) r10     // Catch:{ all -> 0x0812 }
-                if (r10 == 0) goto L_0x06b6
-                int r12 = r10.length     // Catch:{ all -> 0x0812 }
-                if (r12 < r11) goto L_0x06b6
-                goto L_0x06b7
-            L_0x06b6:
-                r10 = 0
-            L_0x06b7:
-                if (r10 != 0) goto L_0x06c2
-                byte[] r10 = new byte[r11]     // Catch:{ all -> 0x0812 }
-                java.lang.ThreadLocal r12 = org.telegram.messenger.ImageLoader.bytesThumbLocal     // Catch:{ all -> 0x0812 }
-                r12.set(r10)     // Catch:{ all -> 0x0812 }
-            L_0x06c2:
+                r3.<init>(r2, r4)     // Catch:{ all -> 0x0807 }
+                java.nio.channels.FileChannel r10 = r3.getChannel()     // Catch:{ all -> 0x0807 }
+                java.nio.channels.FileChannel$MapMode r11 = java.nio.channels.FileChannel.MapMode.READ_ONLY     // Catch:{ all -> 0x0807 }
                 r12 = 0
-                r9.readFully(r10, r12, r11)     // Catch:{ all -> 0x0812 }
-                r9.close()     // Catch:{ all -> 0x0812 }
-                if (r4 == 0) goto L_0x06e5
-                org.telegram.messenger.secretmedia.EncryptedFileInputStream.decryptBytesWithKeyFile((byte[]) r10, (int) r12, (int) r11, (org.telegram.messenger.SecureDocumentKey) r4)     // Catch:{ all -> 0x0812 }
-                byte[] r3 = org.telegram.messenger.Utilities.computeSHA256(r10, r12, r11)     // Catch:{ all -> 0x0812 }
-                if (r6 == 0) goto L_0x06dd
-                boolean r3 = java.util.Arrays.equals(r3, r6)     // Catch:{ all -> 0x0812 }
-                if (r3 != 0) goto L_0x06db
-                goto L_0x06dd
-            L_0x06db:
+                long r14 = r2.length()     // Catch:{ all -> 0x0807 }
+                java.nio.MappedByteBuffer r4 = r10.map(r11, r12, r14)     // Catch:{ all -> 0x0807 }
+                android.graphics.BitmapFactory$Options r5 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0807 }
+                r5.<init>()     // Catch:{ all -> 0x0807 }
+                r6 = 1
+                r5.inJustDecodeBounds = r6     // Catch:{ all -> 0x0807 }
+                int r10 = r4.limit()     // Catch:{ all -> 0x0807 }
+                r11 = 0
+                org.telegram.messenger.Utilities.loadWebpImage(r11, r4, r10, r5, r6)     // Catch:{ all -> 0x0807 }
+                int r6 = r5.outWidth     // Catch:{ all -> 0x0807 }
+                int r5 = r5.outHeight     // Catch:{ all -> 0x0807 }
+                android.graphics.Bitmap$Config r10 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0807 }
+                android.graphics.Bitmap r9 = org.telegram.messenger.Bitmaps.createBitmap(r6, r5, r10)     // Catch:{ all -> 0x0807 }
+                int r5 = r4.limit()     // Catch:{ all -> 0x0807 }
+                boolean r6 = r7.inPurgeable     // Catch:{ all -> 0x0807 }
+                if (r6 != 0) goto L_0x0667
+                r6 = 1
+                goto L_0x0668
+            L_0x0667:
+                r6 = 0
+            L_0x0668:
+                r10 = 0
+                org.telegram.messenger.Utilities.loadWebpImage(r9, r4, r5, r10, r6)     // Catch:{ all -> 0x0807 }
+                r3.close()     // Catch:{ all -> 0x0807 }
+                goto L_0x06ef
+            L_0x0671:
+                boolean r5 = r7.inPurgeable     // Catch:{ all -> 0x0807 }
+                if (r5 != 0) goto L_0x0692
+                if (r4 == 0) goto L_0x0678
+                goto L_0x0692
+            L_0x0678:
+                if (r3 == 0) goto L_0x0684
+                org.telegram.messenger.secretmedia.EncryptedFileInputStream r3 = new org.telegram.messenger.secretmedia.EncryptedFileInputStream     // Catch:{ all -> 0x0807 }
+                org.telegram.messenger.ImageLoader$CacheImage r4 = r1.cacheImage     // Catch:{ all -> 0x0807 }
+                java.io.File r4 = r4.encryptionKeyPath     // Catch:{ all -> 0x0807 }
+                r3.<init>((java.io.File) r2, (java.io.File) r4)     // Catch:{ all -> 0x0807 }
+                goto L_0x0689
+            L_0x0684:
+                java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ all -> 0x0807 }
+                r3.<init>(r2)     // Catch:{ all -> 0x0807 }
+            L_0x0689:
+                r4 = 0
+                android.graphics.Bitmap r9 = android.graphics.BitmapFactory.decodeStream(r3, r4, r7)     // Catch:{ all -> 0x0807 }
+                r3.close()     // Catch:{ all -> 0x0807 }
+                goto L_0x06ef
+            L_0x0692:
+                java.io.RandomAccessFile r5 = new java.io.RandomAccessFile     // Catch:{ all -> 0x0807 }
+                java.lang.String r10 = "r"
+                r5.<init>(r2, r10)     // Catch:{ all -> 0x0807 }
+                long r10 = r5.length()     // Catch:{ all -> 0x0807 }
+                int r11 = (int) r10     // Catch:{ all -> 0x0807 }
+                java.lang.ThreadLocal r10 = org.telegram.messenger.ImageLoader.bytesThumbLocal     // Catch:{ all -> 0x0807 }
+                java.lang.Object r10 = r10.get()     // Catch:{ all -> 0x0807 }
+                byte[] r10 = (byte[]) r10     // Catch:{ all -> 0x0807 }
+                if (r10 == 0) goto L_0x06ae
+                int r12 = r10.length     // Catch:{ all -> 0x0807 }
+                if (r12 < r11) goto L_0x06ae
+                goto L_0x06af
+            L_0x06ae:
+                r10 = 0
+            L_0x06af:
+                if (r10 != 0) goto L_0x06ba
+                byte[] r10 = new byte[r11]     // Catch:{ all -> 0x0807 }
+                java.lang.ThreadLocal r12 = org.telegram.messenger.ImageLoader.bytesThumbLocal     // Catch:{ all -> 0x0807 }
+                r12.set(r10)     // Catch:{ all -> 0x0807 }
+            L_0x06ba:
+                r12 = 0
+                r5.readFully(r10, r12, r11)     // Catch:{ all -> 0x0807 }
+                r5.close()     // Catch:{ all -> 0x0807 }
+                if (r4 == 0) goto L_0x06dd
+                org.telegram.messenger.secretmedia.EncryptedFileInputStream.decryptBytesWithKeyFile((byte[]) r10, (int) r12, (int) r11, (org.telegram.messenger.SecureDocumentKey) r4)     // Catch:{ all -> 0x0807 }
+                byte[] r3 = org.telegram.messenger.Utilities.computeSHA256(r10, r12, r11)     // Catch:{ all -> 0x0807 }
+                if (r6 == 0) goto L_0x06d5
+                boolean r3 = java.util.Arrays.equals(r3, r6)     // Catch:{ all -> 0x0807 }
+                if (r3 != 0) goto L_0x06d3
+                goto L_0x06d5
+            L_0x06d3:
                 r3 = 0
-                goto L_0x06de
-            L_0x06dd:
+                goto L_0x06d6
+            L_0x06d5:
                 r3 = 1
-            L_0x06de:
+            L_0x06d6:
                 r4 = 0
-                byte r6 = r10[r4]     // Catch:{ all -> 0x0812 }
-                r4 = r6 & 255(0xff, float:3.57E-43)
+                byte r5 = r10[r4]     // Catch:{ all -> 0x0807 }
+                r4 = r5 & 255(0xff, float:3.57E-43)
                 int r11 = r11 - r4
-                goto L_0x06f1
-            L_0x06e5:
-                if (r3 == 0) goto L_0x06ef
-                org.telegram.messenger.ImageLoader$CacheImage r3 = r1.cacheImage     // Catch:{ all -> 0x0812 }
-                java.io.File r3 = r3.encryptionKeyPath     // Catch:{ all -> 0x0812 }
+                goto L_0x06e9
+            L_0x06dd:
+                if (r3 == 0) goto L_0x06e7
+                org.telegram.messenger.ImageLoader$CacheImage r3 = r1.cacheImage     // Catch:{ all -> 0x0807 }
+                java.io.File r3 = r3.encryptionKeyPath     // Catch:{ all -> 0x0807 }
                 r4 = 0
-                org.telegram.messenger.secretmedia.EncryptedFileInputStream.decryptBytesWithKeyFile((byte[]) r10, (int) r4, (int) r11, (java.io.File) r3)     // Catch:{ all -> 0x0812 }
-            L_0x06ef:
+                org.telegram.messenger.secretmedia.EncryptedFileInputStream.decryptBytesWithKeyFile((byte[]) r10, (int) r4, (int) r11, (java.io.File) r3)     // Catch:{ all -> 0x0807 }
+            L_0x06e7:
                 r3 = 0
                 r4 = 0
-            L_0x06f1:
-                if (r3 != 0) goto L_0x06f8
-                android.graphics.Bitmap r9 = android.graphics.BitmapFactory.decodeByteArray(r10, r4, r11, r7)     // Catch:{ all -> 0x0812 }
-                goto L_0x06fa
-            L_0x06f8:
-                r9 = r29
-            L_0x06fa:
-                if (r9 != 0) goto L_0x0712
-                long r3 = r2.length()     // Catch:{ all -> 0x0697 }
+            L_0x06e9:
+                if (r3 != 0) goto L_0x06ef
+                android.graphics.Bitmap r9 = android.graphics.BitmapFactory.decodeByteArray(r10, r4, r11, r7)     // Catch:{ all -> 0x0807 }
+            L_0x06ef:
+                if (r9 != 0) goto L_0x0707
+                long r3 = r2.length()     // Catch:{ all -> 0x0807 }
                 r5 = 0
                 int r0 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-                if (r0 == 0) goto L_0x070c
-                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x0697 }
-                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x0697 }
-                if (r0 != 0) goto L_0x070f
-            L_0x070c:
-                r2.delete()     // Catch:{ all -> 0x0697 }
-            L_0x070f:
+                if (r0 == 0) goto L_0x0701
+                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x0807 }
+                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x0807 }
+                if (r0 != 0) goto L_0x0704
+            L_0x0701:
+                r2.delete()     // Catch:{ all -> 0x0807 }
+            L_0x0704:
                 r2 = 0
-                goto L_0x0819
-            L_0x0712:
-                org.telegram.messenger.ImageLoader$CacheImage r2 = r1.cacheImage     // Catch:{ all -> 0x0697 }
-                java.lang.String r2 = r2.filter     // Catch:{ all -> 0x0697 }
-                if (r2 == 0) goto L_0x0743
-                int r2 = r9.getWidth()     // Catch:{ all -> 0x0697 }
-                float r2 = (float) r2     // Catch:{ all -> 0x0697 }
-                int r3 = r9.getHeight()     // Catch:{ all -> 0x0697 }
-                float r3 = (float) r3     // Catch:{ all -> 0x0697 }
-                boolean r4 = r7.inPurgeable     // Catch:{ all -> 0x0697 }
-                if (r4 != 0) goto L_0x0743
-                int r4 = (r0 > r22 ? 1 : (r0 == r22 ? 0 : -1))
-                if (r4 == 0) goto L_0x0743
+                goto L_0x080c
+            L_0x0707:
+                org.telegram.messenger.ImageLoader$CacheImage r2 = r1.cacheImage     // Catch:{ all -> 0x0807 }
+                java.lang.String r2 = r2.filter     // Catch:{ all -> 0x0807 }
+                if (r2 == 0) goto L_0x0738
+                int r2 = r9.getWidth()     // Catch:{ all -> 0x0807 }
+                float r2 = (float) r2     // Catch:{ all -> 0x0807 }
+                int r3 = r9.getHeight()     // Catch:{ all -> 0x0807 }
+                float r3 = (float) r3     // Catch:{ all -> 0x0807 }
+                boolean r4 = r7.inPurgeable     // Catch:{ all -> 0x0807 }
+                if (r4 != 0) goto L_0x0738
+                int r4 = (r0 > r23 ? 1 : (r0 == r23 ? 0 : -1))
+                if (r4 == 0) goto L_0x0738
                 int r4 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                if (r4 == 0) goto L_0x0743
-                float r25 = r0 + r25
-                int r4 = (r2 > r25 ? 1 : (r2 == r25 ? 0 : -1))
-                if (r4 <= 0) goto L_0x0743
+                if (r4 == 0) goto L_0x0738
+                float r26 = r0 + r26
+                int r4 = (r2 > r26 ? 1 : (r2 == r26 ? 0 : -1))
+                if (r4 <= 0) goto L_0x0738
                 float r2 = r2 / r0
-                int r0 = (int) r0     // Catch:{ all -> 0x0697 }
+                int r0 = (int) r0     // Catch:{ all -> 0x0807 }
                 float r3 = r3 / r2
-                int r2 = (int) r3     // Catch:{ all -> 0x0697 }
+                int r2 = (int) r3     // Catch:{ all -> 0x0807 }
                 r3 = 1
-                android.graphics.Bitmap r0 = org.telegram.messenger.Bitmaps.createScaledBitmap(r9, r0, r2, r3)     // Catch:{ all -> 0x0697 }
-                if (r9 == r0) goto L_0x0743
-                r9.recycle()     // Catch:{ all -> 0x0697 }
+                android.graphics.Bitmap r0 = org.telegram.messenger.Bitmaps.createScaledBitmap(r9, r0, r2, r3)     // Catch:{ all -> 0x0807 }
+                if (r9 == r0) goto L_0x0738
+                r9.recycle()     // Catch:{ all -> 0x0807 }
                 r9 = r0
-            L_0x0743:
-                if (r5 == 0) goto L_0x0763
-                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x0697 }
-                if (r0 == 0) goto L_0x074b
+            L_0x0738:
+                if (r29 == 0) goto L_0x0758
+                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x0807 }
+                if (r0 == 0) goto L_0x0740
                 r0 = 0
-                goto L_0x074c
-            L_0x074b:
+                goto L_0x0741
+            L_0x0740:
                 r0 = 1
-            L_0x074c:
-                int r2 = r9.getWidth()     // Catch:{ all -> 0x0697 }
-                int r3 = r9.getHeight()     // Catch:{ all -> 0x0697 }
-                int r4 = r9.getRowBytes()     // Catch:{ all -> 0x0697 }
-                int r0 = org.telegram.messenger.Utilities.needInvert(r9, r0, r2, r3, r4)     // Catch:{ all -> 0x0697 }
-                if (r0 == 0) goto L_0x0760
+            L_0x0741:
+                int r2 = r9.getWidth()     // Catch:{ all -> 0x0807 }
+                int r3 = r9.getHeight()     // Catch:{ all -> 0x0807 }
+                int r4 = r9.getRowBytes()     // Catch:{ all -> 0x0807 }
+                int r0 = org.telegram.messenger.Utilities.needInvert(r9, r0, r2, r3, r4)     // Catch:{ all -> 0x0807 }
+                if (r0 == 0) goto L_0x0755
                 r0 = 1
-                goto L_0x0761
-            L_0x0760:
+                goto L_0x0756
+            L_0x0755:
                 r0 = 0
-            L_0x0761:
+            L_0x0756:
                 r2 = r0
-                goto L_0x0764
-            L_0x0763:
+                goto L_0x0759
+            L_0x0758:
                 r2 = 0
-            L_0x0764:
+            L_0x0759:
                 r3 = 1
-                if (r8 != r3) goto L_0x078c
-                android.graphics.Bitmap$Config r0 = r9.getConfig()     // Catch:{ all -> 0x0789 }
-                android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0789 }
-                if (r0 != r3) goto L_0x0819
+                if (r8 != r3) goto L_0x0781
+                android.graphics.Bitmap$Config r0 = r9.getConfig()     // Catch:{ all -> 0x077e }
+                android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x077e }
+                if (r0 != r3) goto L_0x080c
                 r11 = 3
-                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x0789 }
-                if (r0 == 0) goto L_0x0776
+                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x077e }
+                if (r0 == 0) goto L_0x076b
                 r12 = 0
-                goto L_0x0777
-            L_0x0776:
+                goto L_0x076c
+            L_0x076b:
                 r12 = 1
-            L_0x0777:
-                int r13 = r9.getWidth()     // Catch:{ all -> 0x0789 }
-                int r14 = r9.getHeight()     // Catch:{ all -> 0x0789 }
-                int r15 = r9.getRowBytes()     // Catch:{ all -> 0x0789 }
+            L_0x076c:
+                int r13 = r9.getWidth()     // Catch:{ all -> 0x077e }
+                int r14 = r9.getHeight()     // Catch:{ all -> 0x077e }
+                int r15 = r9.getRowBytes()     // Catch:{ all -> 0x077e }
                 r10 = r9
-                org.telegram.messenger.Utilities.blurBitmap(r10, r11, r12, r13, r14, r15)     // Catch:{ all -> 0x0789 }
-                goto L_0x0819
-            L_0x0789:
+                org.telegram.messenger.Utilities.blurBitmap(r10, r11, r12, r13, r14, r15)     // Catch:{ all -> 0x077e }
+                goto L_0x080c
+            L_0x077e:
                 r0 = move-exception
-                goto L_0x0816
-            L_0x078c:
+                goto L_0x0809
+            L_0x0781:
                 r3 = 2
-                if (r8 != r3) goto L_0x07b1
-                android.graphics.Bitmap$Config r0 = r9.getConfig()     // Catch:{ all -> 0x0789 }
-                android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0789 }
-                if (r0 != r3) goto L_0x0819
+                if (r8 != r3) goto L_0x07a6
+                android.graphics.Bitmap$Config r0 = r9.getConfig()     // Catch:{ all -> 0x077e }
+                android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x077e }
+                if (r0 != r3) goto L_0x080c
                 r11 = 1
-                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x0789 }
-                if (r0 == 0) goto L_0x079e
+                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x077e }
+                if (r0 == 0) goto L_0x0793
                 r12 = 0
-                goto L_0x079f
-            L_0x079e:
+                goto L_0x0794
+            L_0x0793:
                 r12 = 1
-            L_0x079f:
-                int r13 = r9.getWidth()     // Catch:{ all -> 0x0789 }
-                int r14 = r9.getHeight()     // Catch:{ all -> 0x0789 }
-                int r15 = r9.getRowBytes()     // Catch:{ all -> 0x0789 }
+            L_0x0794:
+                int r13 = r9.getWidth()     // Catch:{ all -> 0x077e }
+                int r14 = r9.getHeight()     // Catch:{ all -> 0x077e }
+                int r15 = r9.getRowBytes()     // Catch:{ all -> 0x077e }
                 r10 = r9
-                org.telegram.messenger.Utilities.blurBitmap(r10, r11, r12, r13, r14, r15)     // Catch:{ all -> 0x0789 }
-                goto L_0x0819
-            L_0x07b1:
+                org.telegram.messenger.Utilities.blurBitmap(r10, r11, r12, r13, r14, r15)     // Catch:{ all -> 0x077e }
+                goto L_0x080c
+            L_0x07a6:
                 r3 = 3
-                if (r8 != r3) goto L_0x0805
-                android.graphics.Bitmap$Config r0 = r9.getConfig()     // Catch:{ all -> 0x0789 }
-                android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0789 }
-                if (r0 != r3) goto L_0x0819
+                if (r8 != r3) goto L_0x07fa
+                android.graphics.Bitmap$Config r0 = r9.getConfig()     // Catch:{ all -> 0x077e }
+                android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x077e }
+                if (r0 != r3) goto L_0x080c
                 r11 = 7
-                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x0789 }
-                if (r0 == 0) goto L_0x07c3
+                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x077e }
+                if (r0 == 0) goto L_0x07b8
                 r12 = 0
-                goto L_0x07c4
-            L_0x07c3:
+                goto L_0x07b9
+            L_0x07b8:
                 r12 = 1
-            L_0x07c4:
-                int r13 = r9.getWidth()     // Catch:{ all -> 0x0789 }
-                int r14 = r9.getHeight()     // Catch:{ all -> 0x0789 }
-                int r15 = r9.getRowBytes()     // Catch:{ all -> 0x0789 }
+            L_0x07b9:
+                int r13 = r9.getWidth()     // Catch:{ all -> 0x077e }
+                int r14 = r9.getHeight()     // Catch:{ all -> 0x077e }
+                int r15 = r9.getRowBytes()     // Catch:{ all -> 0x077e }
                 r10 = r9
-                org.telegram.messenger.Utilities.blurBitmap(r10, r11, r12, r13, r14, r15)     // Catch:{ all -> 0x0789 }
+                org.telegram.messenger.Utilities.blurBitmap(r10, r11, r12, r13, r14, r15)     // Catch:{ all -> 0x077e }
                 r11 = 7
-                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x0789 }
-                if (r0 == 0) goto L_0x07db
+                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x077e }
+                if (r0 == 0) goto L_0x07d0
                 r12 = 0
-                goto L_0x07dc
-            L_0x07db:
+                goto L_0x07d1
+            L_0x07d0:
                 r12 = 1
-            L_0x07dc:
-                int r13 = r9.getWidth()     // Catch:{ all -> 0x0789 }
-                int r14 = r9.getHeight()     // Catch:{ all -> 0x0789 }
-                int r15 = r9.getRowBytes()     // Catch:{ all -> 0x0789 }
+            L_0x07d1:
+                int r13 = r9.getWidth()     // Catch:{ all -> 0x077e }
+                int r14 = r9.getHeight()     // Catch:{ all -> 0x077e }
+                int r15 = r9.getRowBytes()     // Catch:{ all -> 0x077e }
                 r10 = r9
-                org.telegram.messenger.Utilities.blurBitmap(r10, r11, r12, r13, r14, r15)     // Catch:{ all -> 0x0789 }
+                org.telegram.messenger.Utilities.blurBitmap(r10, r11, r12, r13, r14, r15)     // Catch:{ all -> 0x077e }
                 r11 = 7
-                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x0789 }
-                if (r0 == 0) goto L_0x07f3
+                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x077e }
+                if (r0 == 0) goto L_0x07e8
                 r12 = 0
-                goto L_0x07f4
-            L_0x07f3:
+                goto L_0x07e9
+            L_0x07e8:
                 r12 = 1
-            L_0x07f4:
-                int r13 = r9.getWidth()     // Catch:{ all -> 0x0789 }
-                int r14 = r9.getHeight()     // Catch:{ all -> 0x0789 }
-                int r15 = r9.getRowBytes()     // Catch:{ all -> 0x0789 }
+            L_0x07e9:
+                int r13 = r9.getWidth()     // Catch:{ all -> 0x077e }
+                int r14 = r9.getHeight()     // Catch:{ all -> 0x077e }
+                int r15 = r9.getRowBytes()     // Catch:{ all -> 0x077e }
                 r10 = r9
-                org.telegram.messenger.Utilities.blurBitmap(r10, r11, r12, r13, r14, r15)     // Catch:{ all -> 0x0789 }
-                goto L_0x0819
-            L_0x0805:
-                if (r8 != 0) goto L_0x0819
-                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x0789 }
-                if (r0 == 0) goto L_0x0819
-                org.telegram.messenger.Utilities.pinBitmap(r9)     // Catch:{ all -> 0x0789 }
-                goto L_0x0819
-            L_0x080f:
+                org.telegram.messenger.Utilities.blurBitmap(r10, r11, r12, r13, r14, r15)     // Catch:{ all -> 0x077e }
+                goto L_0x080c
+            L_0x07fa:
+                if (r8 != 0) goto L_0x080c
+                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x077e }
+                if (r0 == 0) goto L_0x080c
+                org.telegram.messenger.Utilities.pinBitmap(r9)     // Catch:{ all -> 0x077e }
+                goto L_0x080c
+            L_0x0804:
                 r0 = move-exception
-                monitor-exit(r9)     // Catch:{ all -> 0x080f }
-                throw r0     // Catch:{ all -> 0x0812 }
-            L_0x0812:
+                monitor-exit(r5)     // Catch:{ all -> 0x0804 }
+                throw r0     // Catch:{ all -> 0x0807 }
+            L_0x0807:
                 r0 = move-exception
-                r9 = r29
-            L_0x0815:
                 r2 = 0
-            L_0x0816:
+            L_0x0809:
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0819:
+            L_0x080c:
                 r4 = 0
                 r10 = 0
-                goto L_0x0ad2
-            L_0x081d:
-                r9 = 20
-                if (r17 == 0) goto L_0x0822
-                r9 = 0
-            L_0x0822:
-                if (r9 == 0) goto L_0x0855
-                org.telegram.messenger.ImageLoader r10 = org.telegram.messenger.ImageLoader.this     // Catch:{ all -> 0x084f }
-                long r30 = r10.lastCacheOutTime     // Catch:{ all -> 0x084f }
-                r20 = 0
-                int r10 = (r30 > r20 ? 1 : (r30 == r20 ? 0 : -1))
-                if (r10 == 0) goto L_0x0855
-                org.telegram.messenger.ImageLoader r10 = org.telegram.messenger.ImageLoader.this     // Catch:{ all -> 0x084f }
-                long r30 = r10.lastCacheOutTime     // Catch:{ all -> 0x084f }
-                long r32 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x084f }
-                long r9 = (long) r9     // Catch:{ all -> 0x084f }
-                long r32 = r32 - r9
-                int r26 = (r30 > r32 ? 1 : (r30 == r32 ? 0 : -1))
-                if (r26 <= 0) goto L_0x0855
-                r26 = r5
-                int r5 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x084f }
-                r30 = r12
-                r12 = 21
-                if (r5 >= r12) goto L_0x0859
-                java.lang.Thread.sleep(r9)     // Catch:{ all -> 0x084f }
-                goto L_0x0859
-            L_0x084f:
-                r9 = r29
-            L_0x0851:
-                r4 = 0
-            L_0x0852:
-                r10 = 0
-                goto L_0x0ace
-            L_0x0855:
-                r26 = r5
-                r30 = r12
-            L_0x0859:
-                org.telegram.messenger.ImageLoader r5 = org.telegram.messenger.ImageLoader.this     // Catch:{ all -> 0x0aca }
-                long r9 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x0aca }
-                long unused = r5.lastCacheOutTime = r9     // Catch:{ all -> 0x0aca }
-                java.lang.Object r5 = r1.sync     // Catch:{ all -> 0x0aca }
-                monitor-enter(r5)     // Catch:{ all -> 0x0aca }
-                boolean r9 = r1.isCancelled     // Catch:{ all -> 0x0ac4 }
-                if (r9 == 0) goto L_0x086b
-                monitor-exit(r5)     // Catch:{ all -> 0x0ac4 }
-                return
-            L_0x086b:
-                monitor-exit(r5)     // Catch:{ all -> 0x0ac4 }
-                if (r13 != 0) goto L_0x0882
-                org.telegram.messenger.ImageLoader$CacheImage r5 = r1.cacheImage     // Catch:{ all -> 0x084f }
-                java.lang.String r9 = r5.filter     // Catch:{ all -> 0x084f }
-                if (r9 == 0) goto L_0x0882
-                if (r8 != 0) goto L_0x0882
-                org.telegram.messenger.ImageLocation r5 = r5.imageLocation     // Catch:{ all -> 0x084f }
-                java.lang.String r5 = r5.path     // Catch:{ all -> 0x084f }
-                if (r5 == 0) goto L_0x087d
-                goto L_0x0882
-            L_0x087d:
-                android.graphics.Bitmap$Config r5 = android.graphics.Bitmap.Config.RGB_565     // Catch:{ all -> 0x084f }
-                r7.inPreferredConfig = r5     // Catch:{ all -> 0x084f }
-                goto L_0x0886
-            L_0x0882:
-                android.graphics.Bitmap$Config r5 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0aca }
-                r7.inPreferredConfig = r5     // Catch:{ all -> 0x0aca }
-            L_0x0886:
+                goto L_0x0ac8
+            L_0x0810:
+                r5 = 20
+                if (r18 == 0) goto L_0x0815
                 r5 = 0
-                r7.inDither = r5     // Catch:{ all -> 0x0aca }
-                if (r17 == 0) goto L_0x08af
-                if (r11 != 0) goto L_0x08af
-                if (r14 == 0) goto L_0x089f
-                android.content.Context r5 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x084f }
-                android.content.ContentResolver r5 = r5.getContentResolver()     // Catch:{ all -> 0x084f }
-                long r9 = r17.longValue()     // Catch:{ all -> 0x084f }
-                r11 = 1
-                android.graphics.Bitmap r9 = android.provider.MediaStore.Video.Thumbnails.getThumbnail(r5, r9, r11, r7)     // Catch:{ all -> 0x084f }
-                goto L_0x08b1
-            L_0x089f:
-                android.content.Context r5 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x084f }
-                android.content.ContentResolver r5 = r5.getContentResolver()     // Catch:{ all -> 0x084f }
-                long r9 = r17.longValue()     // Catch:{ all -> 0x084f }
-                r11 = 1
-                android.graphics.Bitmap r9 = android.provider.MediaStore.Images.Thumbnails.getThumbnail(r5, r9, r11, r7)     // Catch:{ all -> 0x084f }
-                goto L_0x08b1
-            L_0x08af:
-                r9 = r29
-            L_0x08b1:
-                if (r9 != 0) goto L_0x09b8
-                if (r15 == 0) goto L_0x08ff
-                java.io.RandomAccessFile r3 = new java.io.RandomAccessFile     // Catch:{ all -> 0x0851 }
-                java.lang.String r4 = "r"
-                r3.<init>(r2, r4)     // Catch:{ all -> 0x0851 }
-                java.nio.channels.FileChannel r10 = r3.getChannel()     // Catch:{ all -> 0x0851 }
-                java.nio.channels.FileChannel$MapMode r11 = java.nio.channels.FileChannel.MapMode.READ_ONLY     // Catch:{ all -> 0x0851 }
-                r12 = 0
-                long r14 = r2.length()     // Catch:{ all -> 0x0851 }
-                java.nio.MappedByteBuffer r4 = r10.map(r11, r12, r14)     // Catch:{ all -> 0x0851 }
-                android.graphics.BitmapFactory$Options r5 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0851 }
-                r5.<init>()     // Catch:{ all -> 0x0851 }
-                r6 = 1
-                r5.inJustDecodeBounds = r6     // Catch:{ all -> 0x0851 }
-                int r10 = r4.limit()     // Catch:{ all -> 0x0851 }
-                r11 = 0
-                org.telegram.messenger.Utilities.loadWebpImage(r11, r4, r10, r5, r6)     // Catch:{ all -> 0x08fc }
-                int r6 = r5.outWidth     // Catch:{ all -> 0x0851 }
-                int r5 = r5.outHeight     // Catch:{ all -> 0x0851 }
-                android.graphics.Bitmap$Config r10 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0851 }
-                android.graphics.Bitmap r9 = org.telegram.messenger.Bitmaps.createBitmap(r6, r5, r10)     // Catch:{ all -> 0x0851 }
-                int r5 = r4.limit()     // Catch:{ all -> 0x0851 }
-                boolean r6 = r7.inPurgeable     // Catch:{ all -> 0x0851 }
-                if (r6 != 0) goto L_0x08f0
-                r6 = 1
-                goto L_0x08f1
-            L_0x08f0:
-                r6 = 0
-            L_0x08f1:
+            L_0x0815:
+                if (r5 == 0) goto L_0x084b
+                org.telegram.messenger.ImageLoader r10 = org.telegram.messenger.ImageLoader.this     // Catch:{ all -> 0x0845 }
+                long r30 = r10.lastCacheOutTime     // Catch:{ all -> 0x0845 }
+                r21 = 0
+                int r10 = (r30 > r21 ? 1 : (r30 == r21 ? 0 : -1))
+                if (r10 == 0) goto L_0x084b
+                org.telegram.messenger.ImageLoader r10 = org.telegram.messenger.ImageLoader.this     // Catch:{ all -> 0x0845 }
+                long r30 = r10.lastCacheOutTime     // Catch:{ all -> 0x0845 }
+                long r32 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x0845 }
+                r27 = r9
+                long r9 = (long) r5
+                long r32 = r32 - r9
+                int r5 = (r30 > r32 ? 1 : (r30 == r32 ? 0 : -1))
+                if (r5 <= 0) goto L_0x084d
+                int r5 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x0842 }
+                r30 = r11
+                r11 = 21
+                if (r5 >= r11) goto L_0x084f
+                java.lang.Thread.sleep(r9)     // Catch:{ all -> 0x0842 }
+                goto L_0x084f
+            L_0x0842:
+                r9 = r27
+                goto L_0x0847
+            L_0x0845:
+                r27 = r9
+            L_0x0847:
+                r4 = 0
+            L_0x0848:
                 r10 = 0
-                org.telegram.messenger.Utilities.loadWebpImage(r9, r4, r5, r10, r6)     // Catch:{ all -> 0x0acd }
-                r3.close()     // Catch:{ all -> 0x0851 }
+                goto L_0x0ac4
+            L_0x084b:
+                r27 = r9
+            L_0x084d:
+                r30 = r11
+            L_0x084f:
+                org.telegram.messenger.ImageLoader r5 = org.telegram.messenger.ImageLoader.this     // Catch:{ all -> 0x0ac0 }
+                long r9 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x0ac0 }
+                long unused = r5.lastCacheOutTime = r9     // Catch:{ all -> 0x0ac0 }
+                java.lang.Object r5 = r1.sync     // Catch:{ all -> 0x0ac0 }
+                monitor-enter(r5)     // Catch:{ all -> 0x0ac0 }
+                boolean r9 = r1.isCancelled     // Catch:{ all -> 0x0aba }
+                if (r9 == 0) goto L_0x0861
+                monitor-exit(r5)     // Catch:{ all -> 0x0aba }
+                return
+            L_0x0861:
+                monitor-exit(r5)     // Catch:{ all -> 0x0aba }
+                if (r12 != 0) goto L_0x0878
+                org.telegram.messenger.ImageLoader$CacheImage r5 = r1.cacheImage     // Catch:{ all -> 0x0842 }
+                java.lang.String r9 = r5.filter     // Catch:{ all -> 0x0842 }
+                if (r9 == 0) goto L_0x0878
+                if (r8 != 0) goto L_0x0878
+                org.telegram.messenger.ImageLocation r5 = r5.imageLocation     // Catch:{ all -> 0x0842 }
+                java.lang.String r5 = r5.path     // Catch:{ all -> 0x0842 }
+                if (r5 == 0) goto L_0x0873
+                goto L_0x0878
+            L_0x0873:
+                android.graphics.Bitmap$Config r5 = android.graphics.Bitmap.Config.RGB_565     // Catch:{ all -> 0x0842 }
+                r7.inPreferredConfig = r5     // Catch:{ all -> 0x0842 }
+                goto L_0x087c
+            L_0x0878:
+                android.graphics.Bitmap$Config r5 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0ac0 }
+                r7.inPreferredConfig = r5     // Catch:{ all -> 0x0ac0 }
+            L_0x087c:
+                r5 = 0
+                r7.inDither = r5     // Catch:{ all -> 0x0ac0 }
+                if (r18 == 0) goto L_0x08a5
+                if (r13 != 0) goto L_0x08a5
+                if (r15 == 0) goto L_0x0895
+                android.content.Context r5 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0842 }
+                android.content.ContentResolver r5 = r5.getContentResolver()     // Catch:{ all -> 0x0842 }
+                long r9 = r18.longValue()     // Catch:{ all -> 0x0842 }
+                r11 = 1
+                android.graphics.Bitmap r9 = android.provider.MediaStore.Video.Thumbnails.getThumbnail(r5, r9, r11, r7)     // Catch:{ all -> 0x0842 }
+                goto L_0x08a7
+            L_0x0895:
+                android.content.Context r5 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0842 }
+                android.content.ContentResolver r5 = r5.getContentResolver()     // Catch:{ all -> 0x0842 }
+                long r9 = r18.longValue()     // Catch:{ all -> 0x0842 }
+                r11 = 1
+                android.graphics.Bitmap r9 = android.provider.MediaStore.Images.Thumbnails.getThumbnail(r5, r9, r11, r7)     // Catch:{ all -> 0x0842 }
+                goto L_0x08a7
+            L_0x08a5:
+                r9 = r27
+            L_0x08a7:
+                if (r9 != 0) goto L_0x09ae
+                if (r14 == 0) goto L_0x08f5
+                java.io.RandomAccessFile r3 = new java.io.RandomAccessFile     // Catch:{ all -> 0x0847 }
+                java.lang.String r4 = "r"
+                r3.<init>(r2, r4)     // Catch:{ all -> 0x0847 }
+                java.nio.channels.FileChannel r10 = r3.getChannel()     // Catch:{ all -> 0x0847 }
+                java.nio.channels.FileChannel$MapMode r11 = java.nio.channels.FileChannel.MapMode.READ_ONLY     // Catch:{ all -> 0x0847 }
+                r12 = 0
+                long r14 = r2.length()     // Catch:{ all -> 0x0847 }
+                java.nio.MappedByteBuffer r4 = r10.map(r11, r12, r14)     // Catch:{ all -> 0x0847 }
+                android.graphics.BitmapFactory$Options r5 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0847 }
+                r5.<init>()     // Catch:{ all -> 0x0847 }
+                r6 = 1
+                r5.inJustDecodeBounds = r6     // Catch:{ all -> 0x0847 }
+                int r10 = r4.limit()     // Catch:{ all -> 0x0847 }
+                r11 = 0
+                org.telegram.messenger.Utilities.loadWebpImage(r11, r4, r10, r5, r6)     // Catch:{ all -> 0x08f2 }
+                int r6 = r5.outWidth     // Catch:{ all -> 0x0847 }
+                int r5 = r5.outHeight     // Catch:{ all -> 0x0847 }
+                android.graphics.Bitmap$Config r10 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0847 }
+                android.graphics.Bitmap r9 = org.telegram.messenger.Bitmaps.createBitmap(r6, r5, r10)     // Catch:{ all -> 0x0847 }
+                int r5 = r4.limit()     // Catch:{ all -> 0x0847 }
+                boolean r6 = r7.inPurgeable     // Catch:{ all -> 0x0847 }
+                if (r6 != 0) goto L_0x08e6
+                r6 = 1
+                goto L_0x08e7
+            L_0x08e6:
+                r6 = 0
+            L_0x08e7:
+                r10 = 0
+                org.telegram.messenger.Utilities.loadWebpImage(r9, r4, r5, r10, r6)     // Catch:{ all -> 0x0ac3 }
+                r3.close()     // Catch:{ all -> 0x0847 }
                 r4 = 0
                 r10 = 0
-                goto L_0x09ba
-            L_0x08fc:
+                goto L_0x09b0
+            L_0x08f2:
                 r10 = r11
-                goto L_0x0acd
-            L_0x08ff:
-                boolean r5 = r7.inPurgeable     // Catch:{ all -> 0x09b5 }
-                if (r5 != 0) goto L_0x0956
-                if (r4 == 0) goto L_0x0906
-                goto L_0x0956
-            L_0x0906:
-                if (r3 == 0) goto L_0x0912
-                org.telegram.messenger.secretmedia.EncryptedFileInputStream r3 = new org.telegram.messenger.secretmedia.EncryptedFileInputStream     // Catch:{ all -> 0x0851 }
-                org.telegram.messenger.ImageLoader$CacheImage r4 = r1.cacheImage     // Catch:{ all -> 0x0851 }
-                java.io.File r4 = r4.encryptionKeyPath     // Catch:{ all -> 0x0851 }
-                r3.<init>((java.io.File) r2, (java.io.File) r4)     // Catch:{ all -> 0x0851 }
-                goto L_0x0917
-            L_0x0912:
-                java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ all -> 0x09b5 }
-                r3.<init>(r2)     // Catch:{ all -> 0x09b5 }
-            L_0x0917:
-                org.telegram.messenger.ImageLoader$CacheImage r4 = r1.cacheImage     // Catch:{ all -> 0x09b5 }
-                org.telegram.messenger.ImageLocation r4 = r4.imageLocation     // Catch:{ all -> 0x09b5 }
-                org.telegram.tgnet.TLRPC$Document r4 = r4.document     // Catch:{ all -> 0x09b5 }
-                boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_document     // Catch:{ all -> 0x09b5 }
-                if (r4 == 0) goto L_0x094c
-                androidx.exifinterface.media.ExifInterface r4 = new androidx.exifinterface.media.ExifInterface     // Catch:{ all -> 0x0941 }
-                r4.<init>((java.io.InputStream) r3)     // Catch:{ all -> 0x0941 }
+                goto L_0x0ac3
+            L_0x08f5:
+                boolean r5 = r7.inPurgeable     // Catch:{ all -> 0x09ab }
+                if (r5 != 0) goto L_0x094c
+                if (r4 == 0) goto L_0x08fc
+                goto L_0x094c
+            L_0x08fc:
+                if (r3 == 0) goto L_0x0908
+                org.telegram.messenger.secretmedia.EncryptedFileInputStream r3 = new org.telegram.messenger.secretmedia.EncryptedFileInputStream     // Catch:{ all -> 0x0847 }
+                org.telegram.messenger.ImageLoader$CacheImage r4 = r1.cacheImage     // Catch:{ all -> 0x0847 }
+                java.io.File r4 = r4.encryptionKeyPath     // Catch:{ all -> 0x0847 }
+                r3.<init>((java.io.File) r2, (java.io.File) r4)     // Catch:{ all -> 0x0847 }
+                goto L_0x090d
+            L_0x0908:
+                java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ all -> 0x09ab }
+                r3.<init>(r2)     // Catch:{ all -> 0x09ab }
+            L_0x090d:
+                org.telegram.messenger.ImageLoader$CacheImage r4 = r1.cacheImage     // Catch:{ all -> 0x09ab }
+                org.telegram.messenger.ImageLocation r4 = r4.imageLocation     // Catch:{ all -> 0x09ab }
+                org.telegram.tgnet.TLRPC$Document r4 = r4.document     // Catch:{ all -> 0x09ab }
+                boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_document     // Catch:{ all -> 0x09ab }
+                if (r4 == 0) goto L_0x0942
+                androidx.exifinterface.media.ExifInterface r4 = new androidx.exifinterface.media.ExifInterface     // Catch:{ all -> 0x0937 }
+                r4.<init>((java.io.InputStream) r3)     // Catch:{ all -> 0x0937 }
                 java.lang.String r5 = "Orientation"
                 r6 = 1
-                int r4 = r4.getAttributeInt(r5, r6)     // Catch:{ all -> 0x0941 }
+                int r4 = r4.getAttributeInt(r5, r6)     // Catch:{ all -> 0x0937 }
                 r5 = 3
-                if (r4 == r5) goto L_0x093e
+                if (r4 == r5) goto L_0x0934
                 r5 = 6
-                if (r4 == r5) goto L_0x093b
+                if (r4 == r5) goto L_0x0931
                 r5 = 8
-                if (r4 == r5) goto L_0x0938
-                goto L_0x0941
-            L_0x0938:
+                if (r4 == r5) goto L_0x092e
+                goto L_0x0937
+            L_0x092e:
                 r4 = 270(0x10e, float:3.78E-43)
-                goto L_0x0942
-            L_0x093b:
+                goto L_0x0938
+            L_0x0931:
                 r4 = 90
-                goto L_0x0942
-            L_0x093e:
+                goto L_0x0938
+            L_0x0934:
                 r4 = 180(0xb4, float:2.52E-43)
-                goto L_0x0942
-            L_0x0941:
+                goto L_0x0938
+            L_0x0937:
                 r4 = 0
+            L_0x0938:
+                java.nio.channels.FileChannel r5 = r3.getChannel()     // Catch:{ all -> 0x0848 }
+                r10 = 0
+                r5.position(r10)     // Catch:{ all -> 0x0848 }
+                goto L_0x0943
             L_0x0942:
-                java.nio.channels.FileChannel r5 = r3.getChannel()     // Catch:{ all -> 0x0852 }
+                r4 = 0
+            L_0x0943:
                 r10 = 0
-                r5.position(r10)     // Catch:{ all -> 0x0852 }
-                goto L_0x094d
+                android.graphics.Bitmap r9 = android.graphics.BitmapFactory.decodeStream(r3, r10, r7)     // Catch:{ all -> 0x0ac4 }
+                r3.close()     // Catch:{ all -> 0x0ac4 }
+                goto L_0x09b0
             L_0x094c:
-                r4 = 0
-            L_0x094d:
                 r10 = 0
-                android.graphics.Bitmap r9 = android.graphics.BitmapFactory.decodeStream(r3, r10, r7)     // Catch:{ all -> 0x0ace }
-                r3.close()     // Catch:{ all -> 0x0ace }
-                goto L_0x09ba
-            L_0x0956:
-                r10 = 0
-                java.io.RandomAccessFile r5 = new java.io.RandomAccessFile     // Catch:{ all -> 0x0acd }
+                java.io.RandomAccessFile r5 = new java.io.RandomAccessFile     // Catch:{ all -> 0x0ac3 }
                 java.lang.String r11 = "r"
-                r5.<init>(r2, r11)     // Catch:{ all -> 0x0acd }
-                long r11 = r5.length()     // Catch:{ all -> 0x0acd }
-                int r12 = (int) r11     // Catch:{ all -> 0x0acd }
-                java.lang.ThreadLocal r11 = org.telegram.messenger.ImageLoader.bytesLocal     // Catch:{ all -> 0x0acd }
-                java.lang.Object r11 = r11.get()     // Catch:{ all -> 0x0acd }
-                byte[] r11 = (byte[]) r11     // Catch:{ all -> 0x0acd }
-                if (r11 == 0) goto L_0x0973
-                int r13 = r11.length     // Catch:{ all -> 0x0acd }
-                if (r13 < r12) goto L_0x0973
-                goto L_0x0974
-            L_0x0973:
+                r5.<init>(r2, r11)     // Catch:{ all -> 0x0ac3 }
+                long r11 = r5.length()     // Catch:{ all -> 0x0ac3 }
+                int r12 = (int) r11     // Catch:{ all -> 0x0ac3 }
+                java.lang.ThreadLocal r11 = org.telegram.messenger.ImageLoader.bytesLocal     // Catch:{ all -> 0x0ac3 }
+                java.lang.Object r11 = r11.get()     // Catch:{ all -> 0x0ac3 }
+                byte[] r11 = (byte[]) r11     // Catch:{ all -> 0x0ac3 }
+                if (r11 == 0) goto L_0x0969
+                int r13 = r11.length     // Catch:{ all -> 0x0ac3 }
+                if (r13 < r12) goto L_0x0969
+                goto L_0x096a
+            L_0x0969:
                 r11 = r10
-            L_0x0974:
-                if (r11 != 0) goto L_0x097f
-                byte[] r11 = new byte[r12]     // Catch:{ all -> 0x0acd }
-                java.lang.ThreadLocal r13 = org.telegram.messenger.ImageLoader.bytesLocal     // Catch:{ all -> 0x0acd }
-                r13.set(r11)     // Catch:{ all -> 0x0acd }
-            L_0x097f:
+            L_0x096a:
+                if (r11 != 0) goto L_0x0975
+                byte[] r11 = new byte[r12]     // Catch:{ all -> 0x0ac3 }
+                java.lang.ThreadLocal r13 = org.telegram.messenger.ImageLoader.bytesLocal     // Catch:{ all -> 0x0ac3 }
+                r13.set(r11)     // Catch:{ all -> 0x0ac3 }
+            L_0x0975:
                 r13 = 0
-                r5.readFully(r11, r13, r12)     // Catch:{ all -> 0x0acd }
-                r5.close()     // Catch:{ all -> 0x0acd }
-                if (r4 == 0) goto L_0x09a2
-                org.telegram.messenger.secretmedia.EncryptedFileInputStream.decryptBytesWithKeyFile((byte[]) r11, (int) r13, (int) r12, (org.telegram.messenger.SecureDocumentKey) r4)     // Catch:{ all -> 0x0acd }
-                byte[] r3 = org.telegram.messenger.Utilities.computeSHA256(r11, r13, r12)     // Catch:{ all -> 0x0acd }
-                if (r6 == 0) goto L_0x099a
-                boolean r3 = java.util.Arrays.equals(r3, r6)     // Catch:{ all -> 0x0acd }
-                if (r3 != 0) goto L_0x0998
-                goto L_0x099a
-            L_0x0998:
+                r5.readFully(r11, r13, r12)     // Catch:{ all -> 0x0ac3 }
+                r5.close()     // Catch:{ all -> 0x0ac3 }
+                if (r4 == 0) goto L_0x0998
+                org.telegram.messenger.secretmedia.EncryptedFileInputStream.decryptBytesWithKeyFile((byte[]) r11, (int) r13, (int) r12, (org.telegram.messenger.SecureDocumentKey) r4)     // Catch:{ all -> 0x0ac3 }
+                byte[] r3 = org.telegram.messenger.Utilities.computeSHA256(r11, r13, r12)     // Catch:{ all -> 0x0ac3 }
+                if (r6 == 0) goto L_0x0990
+                boolean r3 = java.util.Arrays.equals(r3, r6)     // Catch:{ all -> 0x0ac3 }
+                if (r3 != 0) goto L_0x098e
+                goto L_0x0990
+            L_0x098e:
                 r3 = 0
-                goto L_0x099b
-            L_0x099a:
+                goto L_0x0991
+            L_0x0990:
                 r3 = 1
-            L_0x099b:
+            L_0x0991:
                 r4 = 0
-                byte r5 = r11[r4]     // Catch:{ all -> 0x0acd }
+                byte r5 = r11[r4]     // Catch:{ all -> 0x0ac3 }
                 r4 = r5 & 255(0xff, float:3.57E-43)
                 int r12 = r12 - r4
-                goto L_0x09ae
-            L_0x09a2:
-                if (r3 == 0) goto L_0x09ac
-                org.telegram.messenger.ImageLoader$CacheImage r3 = r1.cacheImage     // Catch:{ all -> 0x0acd }
-                java.io.File r3 = r3.encryptionKeyPath     // Catch:{ all -> 0x0acd }
+                goto L_0x09a4
+            L_0x0998:
+                if (r3 == 0) goto L_0x09a2
+                org.telegram.messenger.ImageLoader$CacheImage r3 = r1.cacheImage     // Catch:{ all -> 0x0ac3 }
+                java.io.File r3 = r3.encryptionKeyPath     // Catch:{ all -> 0x0ac3 }
                 r4 = 0
-                org.telegram.messenger.secretmedia.EncryptedFileInputStream.decryptBytesWithKeyFile((byte[]) r11, (int) r4, (int) r12, (java.io.File) r3)     // Catch:{ all -> 0x0acd }
-            L_0x09ac:
+                org.telegram.messenger.secretmedia.EncryptedFileInputStream.decryptBytesWithKeyFile((byte[]) r11, (int) r4, (int) r12, (java.io.File) r3)     // Catch:{ all -> 0x0ac3 }
+            L_0x09a2:
                 r3 = 0
                 r4 = 0
+            L_0x09a4:
+                if (r3 != 0) goto L_0x09af
+                android.graphics.Bitmap r9 = android.graphics.BitmapFactory.decodeByteArray(r11, r4, r12, r7)     // Catch:{ all -> 0x0ac3 }
+                goto L_0x09af
+            L_0x09ab:
+                r10 = 0
+                goto L_0x0ac3
             L_0x09ae:
-                if (r3 != 0) goto L_0x09b9
-                android.graphics.Bitmap r9 = android.graphics.BitmapFactory.decodeByteArray(r11, r4, r12, r7)     // Catch:{ all -> 0x0acd }
-                goto L_0x09b9
-            L_0x09b5:
                 r10 = 0
-                goto L_0x0acd
-            L_0x09b8:
-                r10 = 0
-            L_0x09b9:
+            L_0x09af:
                 r4 = 0
-            L_0x09ba:
-                if (r9 != 0) goto L_0x09d4
-                if (r18 == 0) goto L_0x09d1
-                long r5 = r2.length()     // Catch:{ all -> 0x0ace }
+            L_0x09b0:
+                if (r9 != 0) goto L_0x09ca
+                if (r19 == 0) goto L_0x09c7
+                long r5 = r2.length()     // Catch:{ all -> 0x0ac4 }
                 r7 = 0
                 int r0 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-                if (r0 == 0) goto L_0x09ce
-                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x0ace }
-                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x0ace }
-                if (r0 != 0) goto L_0x09d1
-            L_0x09ce:
-                r2.delete()     // Catch:{ all -> 0x0ace }
-            L_0x09d1:
+                if (r0 == 0) goto L_0x09c4
+                org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage     // Catch:{ all -> 0x0ac4 }
+                java.lang.String r0 = r0.filter     // Catch:{ all -> 0x0ac4 }
+                if (r0 != 0) goto L_0x09c7
+            L_0x09c4:
+                r2.delete()     // Catch:{ all -> 0x0ac4 }
+            L_0x09c7:
                 r5 = 0
-                goto L_0x0ac2
-            L_0x09d4:
-                org.telegram.messenger.ImageLoader$CacheImage r2 = r1.cacheImage     // Catch:{ all -> 0x0ace }
-                java.lang.String r2 = r2.filter     // Catch:{ all -> 0x0ace }
-                if (r2 == 0) goto L_0x0ab0
-                int r2 = r9.getWidth()     // Catch:{ all -> 0x0ace }
-                float r2 = (float) r2     // Catch:{ all -> 0x0ace }
-                int r3 = r9.getHeight()     // Catch:{ all -> 0x0ace }
-                float r3 = (float) r3     // Catch:{ all -> 0x0ace }
-                boolean r5 = r7.inPurgeable     // Catch:{ all -> 0x0ace }
-                if (r5 != 0) goto L_0x0a27
-                int r5 = (r0 > r22 ? 1 : (r0 == r22 ? 0 : -1))
-                if (r5 == 0) goto L_0x0a27
-                int r5 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                if (r5 == 0) goto L_0x0a27
-                float r25 = r0 + r25
-                int r5 = (r2 > r25 ? 1 : (r2 == r25 ? 0 : -1))
-                if (r5 <= 0) goto L_0x0a27
-                int r5 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r5 <= 0) goto L_0x0a0e
-                int r5 = (r0 > r30 ? 1 : (r0 == r30 ? 0 : -1))
-                if (r5 <= 0) goto L_0x0a0e
-                float r5 = r2 / r0
-                int r6 = (r5 > r23 ? 1 : (r5 == r23 ? 0 : -1))
-                if (r6 <= 0) goto L_0x0a20
-                int r0 = (int) r0     // Catch:{ all -> 0x0ace }
-                float r5 = r3 / r5
-                int r5 = (int) r5     // Catch:{ all -> 0x0ace }
-                r6 = 1
-                android.graphics.Bitmap r0 = org.telegram.messenger.Bitmaps.createScaledBitmap(r9, r0, r5, r6)     // Catch:{ all -> 0x0ace }
-                goto L_0x0a21
-            L_0x0a0e:
-                float r0 = r3 / r30
+                goto L_0x0ab8
+            L_0x09ca:
+                org.telegram.messenger.ImageLoader$CacheImage r2 = r1.cacheImage     // Catch:{ all -> 0x0ac4 }
+                java.lang.String r2 = r2.filter     // Catch:{ all -> 0x0ac4 }
+                if (r2 == 0) goto L_0x0aa6
+                int r2 = r9.getWidth()     // Catch:{ all -> 0x0ac4 }
+                float r2 = (float) r2     // Catch:{ all -> 0x0ac4 }
+                int r3 = r9.getHeight()     // Catch:{ all -> 0x0ac4 }
+                float r3 = (float) r3     // Catch:{ all -> 0x0ac4 }
+                boolean r5 = r7.inPurgeable     // Catch:{ all -> 0x0ac4 }
+                if (r5 != 0) goto L_0x0a1d
                 int r5 = (r0 > r23 ? 1 : (r0 == r23 ? 0 : -1))
-                if (r5 <= 0) goto L_0x0a20
-                float r0 = r2 / r0
-                int r0 = (int) r0     // Catch:{ all -> 0x0ace }
-                r12 = r30
-                int r5 = (int) r12     // Catch:{ all -> 0x0ace }
+                if (r5 == 0) goto L_0x0a1d
+                int r5 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
+                if (r5 == 0) goto L_0x0a1d
+                float r26 = r0 + r26
+                int r5 = (r2 > r26 ? 1 : (r2 == r26 ? 0 : -1))
+                if (r5 <= 0) goto L_0x0a1d
+                int r5 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
+                if (r5 <= 0) goto L_0x0a04
+                int r5 = (r0 > r30 ? 1 : (r0 == r30 ? 0 : -1))
+                if (r5 <= 0) goto L_0x0a04
+                float r5 = r2 / r0
+                int r6 = (r5 > r24 ? 1 : (r5 == r24 ? 0 : -1))
+                if (r6 <= 0) goto L_0x0a16
+                int r0 = (int) r0     // Catch:{ all -> 0x0ac4 }
+                float r5 = r3 / r5
+                int r5 = (int) r5     // Catch:{ all -> 0x0ac4 }
                 r6 = 1
-                android.graphics.Bitmap r0 = org.telegram.messenger.Bitmaps.createScaledBitmap(r9, r0, r5, r6)     // Catch:{ all -> 0x0ace }
-                goto L_0x0a21
-            L_0x0a20:
+                android.graphics.Bitmap r0 = org.telegram.messenger.Bitmaps.createScaledBitmap(r9, r0, r5, r6)     // Catch:{ all -> 0x0ac4 }
+                goto L_0x0a17
+            L_0x0a04:
+                float r0 = r3 / r30
+                int r5 = (r0 > r24 ? 1 : (r0 == r24 ? 0 : -1))
+                if (r5 <= 0) goto L_0x0a16
+                float r0 = r2 / r0
+                int r0 = (int) r0     // Catch:{ all -> 0x0ac4 }
+                r11 = r30
+                int r5 = (int) r11     // Catch:{ all -> 0x0ac4 }
+                r6 = 1
+                android.graphics.Bitmap r0 = org.telegram.messenger.Bitmaps.createScaledBitmap(r9, r0, r5, r6)     // Catch:{ all -> 0x0ac4 }
+                goto L_0x0a17
+            L_0x0a16:
                 r0 = r9
-            L_0x0a21:
-                if (r9 == r0) goto L_0x0a27
-                r9.recycle()     // Catch:{ all -> 0x0ace }
+            L_0x0a17:
+                if (r9 == r0) goto L_0x0a1d
+                r9.recycle()     // Catch:{ all -> 0x0ac4 }
                 r9 = r0
-            L_0x0a27:
-                if (r9 == 0) goto L_0x0ab0
-                if (r26 == 0) goto L_0x0a66
-                int r0 = r9.getWidth()     // Catch:{ all -> 0x0ace }
-                int r5 = r9.getHeight()     // Catch:{ all -> 0x0ace }
+            L_0x0a1d:
+                if (r9 == 0) goto L_0x0aa6
+                if (r29 == 0) goto L_0x0a5c
+                int r0 = r9.getWidth()     // Catch:{ all -> 0x0ac4 }
+                int r5 = r9.getHeight()     // Catch:{ all -> 0x0ac4 }
                 int r0 = r0 * r5
                 r5 = 22500(0x57e4, float:3.1529E-41)
-                if (r0 <= r5) goto L_0x0a43
+                if (r0 <= r5) goto L_0x0a39
                 r0 = 100
                 r5 = 100
                 r6 = 0
-                android.graphics.Bitmap r0 = org.telegram.messenger.Bitmaps.createScaledBitmap(r9, r0, r5, r6)     // Catch:{ all -> 0x0ace }
-                goto L_0x0a44
-            L_0x0a43:
+                android.graphics.Bitmap r0 = org.telegram.messenger.Bitmaps.createScaledBitmap(r9, r0, r5, r6)     // Catch:{ all -> 0x0ac4 }
+                goto L_0x0a3a
+            L_0x0a39:
                 r0 = r9
-            L_0x0a44:
-                boolean r5 = r7.inPurgeable     // Catch:{ all -> 0x0ace }
-                if (r5 == 0) goto L_0x0a4a
+            L_0x0a3a:
+                boolean r5 = r7.inPurgeable     // Catch:{ all -> 0x0ac4 }
+                if (r5 == 0) goto L_0x0a40
                 r5 = 0
-                goto L_0x0a4b
-            L_0x0a4a:
+                goto L_0x0a41
+            L_0x0a40:
                 r5 = 1
-            L_0x0a4b:
-                int r6 = r0.getWidth()     // Catch:{ all -> 0x0ace }
-                int r11 = r0.getHeight()     // Catch:{ all -> 0x0ace }
-                int r12 = r0.getRowBytes()     // Catch:{ all -> 0x0ace }
-                int r5 = org.telegram.messenger.Utilities.needInvert(r0, r5, r6, r11, r12)     // Catch:{ all -> 0x0ace }
-                if (r5 == 0) goto L_0x0a5f
+            L_0x0a41:
+                int r6 = r0.getWidth()     // Catch:{ all -> 0x0ac4 }
+                int r11 = r0.getHeight()     // Catch:{ all -> 0x0ac4 }
+                int r12 = r0.getRowBytes()     // Catch:{ all -> 0x0ac4 }
+                int r5 = org.telegram.messenger.Utilities.needInvert(r0, r5, r6, r11, r12)     // Catch:{ all -> 0x0ac4 }
+                if (r5 == 0) goto L_0x0a55
                 r5 = 1
-                goto L_0x0a60
-            L_0x0a5f:
+                goto L_0x0a56
+            L_0x0a55:
                 r5 = 0
-            L_0x0a60:
-                if (r0 == r9) goto L_0x0a67
-                r0.recycle()     // Catch:{ all -> 0x0abe }
-                goto L_0x0a67
-            L_0x0a66:
+            L_0x0a56:
+                if (r0 == r9) goto L_0x0a5d
+                r0.recycle()     // Catch:{ all -> 0x0ab4 }
+                goto L_0x0a5d
+            L_0x0a5c:
                 r5 = 0
-            L_0x0a67:
-                r0 = 1117782016(0x42a00000, float:80.0)
-                r6 = 1120403456(0x42CLASSNAME, float:100.0)
-                if (r8 == 0) goto L_0x0a81
-                int r11 = (r3 > r6 ? 1 : (r3 == r6 ? 0 : -1))
-                if (r11 > 0) goto L_0x0a75
-                int r11 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-                if (r11 <= 0) goto L_0x0a81
-            L_0x0a75:
+            L_0x0a5d:
+                r0 = 1120403456(0x42CLASSNAME, float:100.0)
+                if (r8 == 0) goto L_0x0a77
+                int r6 = (r3 > r0 ? 1 : (r3 == r0 ? 0 : -1))
+                if (r6 > 0) goto L_0x0a69
+                int r6 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
+                if (r6 <= 0) goto L_0x0a77
+            L_0x0a69:
                 r2 = 80
                 r3 = 0
-                android.graphics.Bitmap r2 = org.telegram.messenger.Bitmaps.createScaledBitmap(r9, r2, r2, r3)     // Catch:{ all -> 0x0abe }
+                android.graphics.Bitmap r2 = org.telegram.messenger.Bitmaps.createScaledBitmap(r9, r2, r2, r3)     // Catch:{ all -> 0x0ab4 }
+                r3 = 1117782016(0x42a00000, float:80.0)
+                r6 = 1117782016(0x42a00000, float:80.0)
                 r9 = r2
                 r2 = 1117782016(0x42a00000, float:80.0)
-                r3 = 1117782016(0x42a00000, float:80.0)
-            L_0x0a81:
-                if (r8 == 0) goto L_0x0aae
-                int r0 = (r3 > r6 ? 1 : (r3 == r6 ? 0 : -1))
-                if (r0 >= 0) goto L_0x0aae
-                int r0 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-                if (r0 >= 0) goto L_0x0aae
-                android.graphics.Bitmap$Config r0 = r9.getConfig()     // Catch:{ all -> 0x0abe }
-                android.graphics.Bitmap$Config r2 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0abe }
-                if (r0 != r2) goto L_0x0aab
+            L_0x0a77:
+                if (r8 == 0) goto L_0x0aa4
+                int r3 = (r3 > r0 ? 1 : (r3 == r0 ? 0 : -1))
+                if (r3 >= 0) goto L_0x0aa4
+                int r0 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
+                if (r0 >= 0) goto L_0x0aa4
+                android.graphics.Bitmap$Config r0 = r9.getConfig()     // Catch:{ all -> 0x0ab4 }
+                android.graphics.Bitmap$Config r2 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0ab4 }
+                if (r0 != r2) goto L_0x0aa1
                 r12 = 3
-                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x0abe }
-                if (r0 == 0) goto L_0x0a9a
+                boolean r0 = r7.inPurgeable     // Catch:{ all -> 0x0ab4 }
+                if (r0 == 0) goto L_0x0a90
                 r13 = 0
-                goto L_0x0a9b
-            L_0x0a9a:
+                goto L_0x0a91
+            L_0x0a90:
                 r13 = 1
-            L_0x0a9b:
-                int r14 = r9.getWidth()     // Catch:{ all -> 0x0abe }
-                int r15 = r9.getHeight()     // Catch:{ all -> 0x0abe }
-                int r16 = r9.getRowBytes()     // Catch:{ all -> 0x0abe }
+            L_0x0a91:
+                int r14 = r9.getWidth()     // Catch:{ all -> 0x0ab4 }
+                int r15 = r9.getHeight()     // Catch:{ all -> 0x0ab4 }
+                int r16 = r9.getRowBytes()     // Catch:{ all -> 0x0ab4 }
                 r11 = r9
-                org.telegram.messenger.Utilities.blurBitmap(r11, r12, r13, r14, r15, r16)     // Catch:{ all -> 0x0abe }
-            L_0x0aab:
+                org.telegram.messenger.Utilities.blurBitmap(r11, r12, r13, r14, r15, r16)     // Catch:{ all -> 0x0ab4 }
+            L_0x0aa1:
                 r0 = r9
                 r9 = 1
-                goto L_0x0ab3
-            L_0x0aae:
+                goto L_0x0aa9
+            L_0x0aa4:
                 r0 = r9
-                goto L_0x0ab2
-            L_0x0ab0:
+                goto L_0x0aa8
+            L_0x0aa6:
                 r0 = r9
                 r5 = 0
-            L_0x0ab2:
+            L_0x0aa8:
                 r9 = 0
+            L_0x0aa9:
+                if (r9 != 0) goto L_0x0ab7
+                boolean r2 = r7.inPurgeable     // Catch:{ all -> 0x0ab3 }
+                if (r2 == 0) goto L_0x0ab7
+                org.telegram.messenger.Utilities.pinBitmap(r0)     // Catch:{ all -> 0x0ab3 }
+                goto L_0x0ab7
             L_0x0ab3:
-                if (r9 != 0) goto L_0x0ac1
-                boolean r2 = r7.inPurgeable     // Catch:{ all -> 0x0abd }
-                if (r2 == 0) goto L_0x0ac1
-                org.telegram.messenger.Utilities.pinBitmap(r0)     // Catch:{ all -> 0x0abd }
-                goto L_0x0ac1
-            L_0x0abd:
                 r9 = r0
-            L_0x0abe:
+            L_0x0ab4:
                 r28 = r5
-                goto L_0x0ad0
-            L_0x0ac1:
-                r9 = r0
-            L_0x0ac2:
-                r2 = r5
-                goto L_0x0ad2
-            L_0x0ac4:
-                r0 = move-exception
-                r10 = 0
-            L_0x0ac6:
-                monitor-exit(r5)     // Catch:{ all -> 0x0ac8 }
-                throw r0     // Catch:{ all -> 0x0acb }
-            L_0x0ac8:
-                r0 = move-exception
                 goto L_0x0ac6
-            L_0x0aca:
+            L_0x0ab7:
+                r9 = r0
+            L_0x0ab8:
+                r2 = r5
+                goto L_0x0ac8
+            L_0x0aba:
+                r0 = move-exception
                 r10 = 0
-            L_0x0acb:
-                r9 = r29
-            L_0x0acd:
+            L_0x0abc:
+                monitor-exit(r5)     // Catch:{ all -> 0x0abe }
+                throw r0     // Catch:{ all -> 0x0ac1 }
+            L_0x0abe:
+                r0 = move-exception
+                goto L_0x0abc
+            L_0x0ac0:
+                r10 = 0
+            L_0x0ac1:
+                r9 = r27
+            L_0x0ac3:
                 r4 = 0
-            L_0x0ace:
+            L_0x0ac4:
                 r28 = 0
-            L_0x0ad0:
+            L_0x0ac6:
                 r2 = r28
-            L_0x0ad2:
+            L_0x0ac8:
                 java.lang.Thread.interrupted()
-                if (r2 != 0) goto L_0x0ae8
-                if (r4 == 0) goto L_0x0ada
-                goto L_0x0ae8
-            L_0x0ada:
-                if (r9 == 0) goto L_0x0ae2
+                if (r2 != 0) goto L_0x0ade
+                if (r4 == 0) goto L_0x0ad0
+                goto L_0x0ade
+            L_0x0ad0:
+                if (r9 == 0) goto L_0x0ad8
                 android.graphics.drawable.BitmapDrawable r5 = new android.graphics.drawable.BitmapDrawable
                 r5.<init>(r9)
-                goto L_0x0ae3
-            L_0x0ae2:
+                goto L_0x0ad9
+            L_0x0ad8:
                 r5 = r10
-            L_0x0ae3:
+            L_0x0ad9:
                 r1.onPostExecute(r5)
-                goto L_0x0b4d
-            L_0x0ae8:
-                if (r9 == 0) goto L_0x0af0
+                goto L_0x0b43
+            L_0x0ade:
+                if (r9 == 0) goto L_0x0ae6
                 org.telegram.messenger.ExtendedBitmapDrawable r5 = new org.telegram.messenger.ExtendedBitmapDrawable
                 r5.<init>(r9, r2, r4)
-                goto L_0x0af1
-            L_0x0af0:
+                goto L_0x0ae7
+            L_0x0ae6:
                 r5 = r10
-            L_0x0af1:
+            L_0x0ae7:
                 r1.onPostExecute(r5)
-                goto L_0x0b4d
-            L_0x0af5:
+                goto L_0x0b43
+            L_0x0aeb:
                 r10 = 0
                 r0 = 1135869952(0x43b40000, float:360.0)
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
@@ -3014,12 +3019,12 @@ public class ImageLoader {
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
                 org.telegram.messenger.ImageLoader$CacheImage r3 = r1.cacheImage
                 java.lang.String r3 = r3.filter
-                if (r3 == 0) goto L_0x0b29
+                if (r3 == 0) goto L_0x0b1f
                 java.lang.String r4 = "_"
                 java.lang.String[] r3 = r3.split(r4)
                 int r4 = r3.length
                 r5 = 2
-                if (r4 < r5) goto L_0x0b29
+                if (r4 < r5) goto L_0x0b1f
                 r4 = 0
                 r0 = r3[r4]
                 float r0 = java.lang.Float.parseFloat(r0)
@@ -3031,46 +3036,46 @@ public class ImageLoader {
                 int r0 = (int) r0
                 float r2 = r2 * r3
                 int r2 = (int) r2
-                goto L_0x0b2b
-            L_0x0b29:
+                goto L_0x0b21
+            L_0x0b1f:
                 r4 = 0
                 r5 = 1
-            L_0x0b2b:
-                org.telegram.messenger.ImageLoader$CacheImage r3 = r1.cacheImage     // Catch:{ all -> 0x0b3b }
-                java.io.File r7 = r3.finalFilePath     // Catch:{ all -> 0x0b3b }
-                int r3 = r3.imageType     // Catch:{ all -> 0x0b3b }
-                if (r3 != r6) goto L_0x0b35
+            L_0x0b21:
+                org.telegram.messenger.ImageLoader$CacheImage r3 = r1.cacheImage     // Catch:{ all -> 0x0b31 }
+                java.io.File r7 = r3.finalFilePath     // Catch:{ all -> 0x0b31 }
+                int r3 = r3.imageType     // Catch:{ all -> 0x0b31 }
+                if (r3 != r6) goto L_0x0b2b
                 r9 = 1
-                goto L_0x0b36
-            L_0x0b35:
+                goto L_0x0b2c
+            L_0x0b2b:
                 r9 = 0
-            L_0x0b36:
-                android.graphics.Bitmap r5 = org.telegram.messenger.SvgHelper.getBitmap((java.io.File) r7, (int) r0, (int) r2, (boolean) r9)     // Catch:{ all -> 0x0b3b }
-                goto L_0x0b40
-            L_0x0b3b:
+            L_0x0b2c:
+                android.graphics.Bitmap r5 = org.telegram.messenger.SvgHelper.getBitmap((java.io.File) r7, (int) r0, (int) r2, (boolean) r9)     // Catch:{ all -> 0x0b31 }
+                goto L_0x0b36
+            L_0x0b31:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
                 r5 = r10
-            L_0x0b40:
-                if (r5 == 0) goto L_0x0b49
+            L_0x0b36:
+                if (r5 == 0) goto L_0x0b3f
                 android.graphics.drawable.BitmapDrawable r0 = new android.graphics.drawable.BitmapDrawable
                 r0.<init>(r5)
                 r5 = r0
-                goto L_0x0b4a
-            L_0x0b49:
+                goto L_0x0b40
+            L_0x0b3f:
                 r5 = r10
-            L_0x0b4a:
+            L_0x0b40:
                 r1.onPostExecute(r5)
-            L_0x0b4d:
+            L_0x0b43:
                 return
-            L_0x0b4e:
+            L_0x0b44:
                 r0 = move-exception
-                monitor-exit(r2)     // Catch:{ all -> 0x0b4e }
-                goto L_0x0b52
-            L_0x0b51:
+                monitor-exit(r2)     // Catch:{ all -> 0x0b44 }
+                goto L_0x0b48
+            L_0x0b47:
                 throw r0
-            L_0x0b52:
-                goto L_0x0b51
+            L_0x0b48:
+                goto L_0x0b47
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.CacheOutTask.run():void");
         }

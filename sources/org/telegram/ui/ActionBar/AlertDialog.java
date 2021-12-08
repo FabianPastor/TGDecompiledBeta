@@ -135,7 +135,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public FrameLayout titleContainer;
     /* access modifiers changed from: private */
     public TextView titleTextView;
-    private int topAnimationId;
+    /* access modifiers changed from: private */
+    public boolean topAnimationAutoRepeat;
+    /* access modifiers changed from: private */
+    public int topAnimationId;
+    /* access modifiers changed from: private */
+    public int topAnimationSize;
     /* access modifiers changed from: private */
     public int topBackgroundColor;
     /* access modifiers changed from: private */
@@ -247,6 +252,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         this.showRunnable = new AlertDialog$$ExternalSyntheticLambda7(this);
         this.itemViews = new ArrayList<>();
         this.dimEnabled = true;
+        this.topAnimationAutoRepeat = true;
         this.resourcesProvider = resourcesProvider2;
         this.backgroundPaddings = new Rect();
         if (i != 3) {
@@ -805,8 +811,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 if (i4 != 0) {
                     rLottieImageView.setImageResource(i4);
                 } else {
-                    rLottieImageView.setAutoRepeat(true);
-                    this.topImageView.setAnimation(this.topAnimationId, 94, 94);
+                    rLottieImageView.setAutoRepeat(this.topAnimationAutoRepeat);
+                    RLottieImageView rLottieImageView2 = this.topImageView;
+                    int i5 = this.topAnimationId;
+                    int i6 = this.topAnimationSize;
+                    rLottieImageView2.setAnimation(i5, i6, i6);
                     this.topImageView.playAnimation();
                 }
             }
@@ -889,8 +898,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.messageTextView.setEnabled(false);
         }
         this.messageTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        int i5 = this.progressViewStyle;
-        if (i5 == 1) {
+        int i7 = this.progressViewStyle;
+        if (i7 == 1) {
             FrameLayout frameLayout2 = new FrameLayout(getContext());
             this.progressViewContainer = frameLayout2;
             r1.addView(frameLayout2, LayoutHelper.createLinear(-1, 44, 51, 23, this.title == null ? 24 : 0, 23, 24));
@@ -903,7 +912,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             TextView textView5 = this.messageTextView;
             boolean z2 = LocaleController.isRTL;
             frameLayout3.addView(textView5, LayoutHelper.createFrame(-2, -2.0f, (z2 ? 5 : 3) | 16, (float) (z2 ? 0 : 62), 0.0f, (float) (z2 ? 62 : 0), 0.0f));
-        } else if (i5 == 2) {
+        } else if (i7 == 2) {
             r1.addView(this.messageTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, this.title == null ? 19 : 0, 24, 20));
             LineProgressView lineProgressView2 = new LineProgressView(getContext());
             this.lineProgressView = lineProgressView2;
@@ -919,7 +928,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.lineProgressViewPercent.setTextSize(1, 14.0f);
             r1.addView(this.lineProgressViewPercent, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 23, 4, 23, 24));
             updateLineProgressTextView();
-        } else if (i5 == 3) {
+        } else if (i7 == 3) {
             setCanceledOnTouchOutside(false);
             setCancelable(false);
             FrameLayout frameLayout4 = new FrameLayout(getContext());
@@ -939,23 +948,23 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.messageTextView.setVisibility(8);
         }
         if (this.items != null) {
-            int i6 = 0;
+            int i8 = 0;
             while (true) {
                 CharSequence[] charSequenceArr = this.items;
-                if (i6 >= charSequenceArr.length) {
+                if (i8 >= charSequenceArr.length) {
                     break;
                 }
-                if (charSequenceArr[i6] != null) {
+                if (charSequenceArr[i8] != null) {
                     AlertDialogCell alertDialogCell = new AlertDialogCell(getContext(), this.resourcesProvider);
-                    CharSequence charSequence = this.items[i6];
+                    CharSequence charSequence = this.items[i8];
                     int[] iArr = this.itemIcons;
-                    alertDialogCell.setTextAndIcon(charSequence, iArr != null ? iArr[i6] : 0);
-                    alertDialogCell.setTag(Integer.valueOf(i6));
+                    alertDialogCell.setTextAndIcon(charSequence, iArr != null ? iArr[i8] : 0);
+                    alertDialogCell.setTag(Integer.valueOf(i8));
                     this.itemViews.add(alertDialogCell);
                     this.scrollContainer.addView(alertDialogCell, LayoutHelper.createLinear(-1, 50));
                     alertDialogCell.setOnClickListener(new AlertDialog$$ExternalSyntheticLambda2(this));
                 }
-                i6++;
+                i8++;
             }
         }
         View view2 = this.customView;
@@ -1166,8 +1175,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 r14.setOnClickListener(new AlertDialog$$ExternalSyntheticLambda3(this));
             }
             if (this.verticalButtons) {
-                for (int i7 = 1; i7 < this.buttonsLayout.getChildCount(); i7++) {
-                    ((ViewGroup.MarginLayoutParams) this.buttonsLayout.getChildAt(i7).getLayoutParams()).topMargin = AndroidUtilities.dp(6.0f);
+                for (int i9 = 1; i9 < this.buttonsLayout.getChildCount(); i9++) {
+                    ((ViewGroup.MarginLayoutParams) this.buttonsLayout.getChildAt(i9).getLayoutParams()).topMargin = AndroidUtilities.dp(6.0f);
                 }
             }
         }
@@ -1181,9 +1190,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 layoutParams.dimAmount = 0.6f;
                 layoutParams.flags |= 2;
             }
-            int i8 = AndroidUtilities.displaySize.x;
-            this.lastScreenWidth = i8;
-            int dp = i8 - AndroidUtilities.dp(48.0f);
+            int i10 = AndroidUtilities.displaySize.x;
+            this.lastScreenWidth = i10;
+            int dp = i10 - AndroidUtilities.dp(48.0f);
             if (!AndroidUtilities.isTablet()) {
                 i = AndroidUtilities.dp(356.0f);
             } else if (AndroidUtilities.isSmallTablet()) {
@@ -1574,6 +1583,14 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
         public Builder setDialogButtonColorKey(String str) {
             String unused = this.alertDialog.dialogButtonColorKey = str;
+            return this;
+        }
+
+        public Builder setTopAnimation(int i, int i2, boolean z, int i3) {
+            int unused = this.alertDialog.topAnimationId = i;
+            int unused2 = this.alertDialog.topAnimationSize = i2;
+            boolean unused3 = this.alertDialog.topAnimationAutoRepeat = z;
+            int unused4 = this.alertDialog.topBackgroundColor = i3;
             return this;
         }
 

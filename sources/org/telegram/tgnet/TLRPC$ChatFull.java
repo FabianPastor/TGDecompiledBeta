@@ -17,6 +17,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public boolean can_view_participants;
     public boolean can_view_stats;
     public TLRPC$Photo chat_photo;
+    public TLRPC$Peer default_send_as;
     public TLRPC$TL_chatInviteExported exported_invite;
     public int flags;
     public int folder_id;
@@ -141,8 +142,11 @@ public abstract class TLRPC$ChatFull extends TLObject {
             case 1418477459:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer131();
                 break;
-            case 1506802019:
+            case 1449537070:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull();
+                break;
+            case 1506802019:
+                tLRPC$ChatFull = new TLRPC$TL_channelFull_layer134();
                 break;
             case 1991201921:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer72();

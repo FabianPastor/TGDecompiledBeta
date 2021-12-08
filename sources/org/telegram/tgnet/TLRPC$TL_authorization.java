@@ -5,11 +5,13 @@ public class TLRPC$TL_authorization extends TLObject {
     public int api_id;
     public String app_name;
     public String app_version;
+    public boolean call_requests_disabled;
     public String country;
     public boolean current;
     public int date_active;
     public int date_created;
     public String device_model;
+    public boolean encrypted_requests_disabled;
     public int flags;
     public long hash;
     public String ip;
@@ -37,10 +39,12 @@ public class TLRPC$TL_authorization extends TLObject {
         boolean z2 = false;
         this.current = (readInt32 & 1) != 0;
         this.official_app = (readInt32 & 2) != 0;
-        if ((readInt32 & 4) != 0) {
+        this.password_pending = (readInt32 & 4) != 0;
+        this.encrypted_requests_disabled = (readInt32 & 8) != 0;
+        if ((readInt32 & 16) != 0) {
             z2 = true;
         }
-        this.password_pending = z2;
+        this.call_requests_disabled = z2;
         this.hash = abstractSerializedData.readInt64(z);
         this.device_model = abstractSerializedData.readString(z);
         this.platform = abstractSerializedData.readString(z);
@@ -63,7 +67,11 @@ public class TLRPC$TL_authorization extends TLObject {
         this.flags = i2;
         int i3 = this.password_pending ? i2 | 4 : i2 & -5;
         this.flags = i3;
-        abstractSerializedData.writeInt32(i3);
+        int i4 = this.encrypted_requests_disabled ? i3 | 8 : i3 & -9;
+        this.flags = i4;
+        int i5 = this.call_requests_disabled ? i4 | 16 : i4 & -17;
+        this.flags = i5;
+        abstractSerializedData.writeInt32(i5);
         abstractSerializedData.writeInt64(this.hash);
         abstractSerializedData.writeString(this.device_model);
         abstractSerializedData.writeString(this.platform);

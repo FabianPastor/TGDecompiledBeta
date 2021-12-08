@@ -59,6 +59,7 @@ public abstract class BaseFragment {
     protected boolean hasOwnBackground;
     /* access modifiers changed from: protected */
     public boolean inBubbleMode;
+    protected boolean inMenuMode;
     /* access modifiers changed from: protected */
     public boolean inPreviewMode;
     private boolean isFinished;
@@ -68,6 +69,11 @@ public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
     protected Dialog visibleDialog;
+
+    /* access modifiers changed from: protected */
+    public boolean allowPresentFragment() {
+        return true;
+    }
 
     public boolean canBeginSlide() {
         return true;
@@ -244,6 +250,11 @@ public abstract class BaseFragment {
             }
             actionBar2.setOccupyStatusBar(z2);
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public void setInMenuMode(boolean z) {
+        this.inMenuMode = z;
     }
 
     /* access modifiers changed from: protected */
@@ -460,24 +471,125 @@ public abstract class BaseFragment {
         return null;
     }
 
-    public boolean presentFragmentAsPreview(BaseFragment baseFragment) {
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        return actionBarLayout != null && actionBarLayout.presentFragmentAsPreview(baseFragment);
+    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
+        r0 = r1.parentLayout;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean presentFragmentAsPreview(org.telegram.ui.ActionBar.BaseFragment r2) {
+        /*
+            r1 = this;
+            boolean r0 = r1.allowPresentFragment()
+            if (r0 == 0) goto L_0x0012
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r1.parentLayout
+            if (r0 == 0) goto L_0x0012
+            boolean r2 = r0.presentFragmentAsPreview(r2)
+            if (r2 == 0) goto L_0x0012
+            r2 = 1
+            goto L_0x0013
+        L_0x0012:
+            r2 = 0
+        L_0x0013:
+            return r2
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BaseFragment.presentFragmentAsPreview(org.telegram.ui.ActionBar.BaseFragment):boolean");
     }
 
-    public boolean presentFragment(BaseFragment baseFragment) {
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        return actionBarLayout != null && actionBarLayout.presentFragment(baseFragment);
+    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
+        r0 = r1.parentLayout;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean presentFragmentAsPreviewWithMenu(org.telegram.ui.ActionBar.BaseFragment r2, android.view.View r3) {
+        /*
+            r1 = this;
+            boolean r0 = r1.allowPresentFragment()
+            if (r0 == 0) goto L_0x0012
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r1.parentLayout
+            if (r0 == 0) goto L_0x0012
+            boolean r2 = r0.presentFragmentAsPreviewWithMenu(r2, r3)
+            if (r2 == 0) goto L_0x0012
+            r2 = 1
+            goto L_0x0013
+        L_0x0012:
+            r2 = 0
+        L_0x0013:
+            return r2
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BaseFragment.presentFragmentAsPreviewWithMenu(org.telegram.ui.ActionBar.BaseFragment, android.view.View):boolean");
     }
 
-    public boolean presentFragment(BaseFragment baseFragment, boolean z) {
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        return actionBarLayout != null && actionBarLayout.presentFragment(baseFragment, z);
+    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
+        r0 = r1.parentLayout;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean presentFragment(org.telegram.ui.ActionBar.BaseFragment r2) {
+        /*
+            r1 = this;
+            boolean r0 = r1.allowPresentFragment()
+            if (r0 == 0) goto L_0x0012
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r1.parentLayout
+            if (r0 == 0) goto L_0x0012
+            boolean r2 = r0.presentFragment(r2)
+            if (r2 == 0) goto L_0x0012
+            r2 = 1
+            goto L_0x0013
+        L_0x0012:
+            r2 = 0
+        L_0x0013:
+            return r2
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BaseFragment.presentFragment(org.telegram.ui.ActionBar.BaseFragment):boolean");
     }
 
-    public boolean presentFragment(BaseFragment baseFragment, boolean z, boolean z2) {
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        return actionBarLayout != null && actionBarLayout.presentFragment(baseFragment, z, z2, true, false);
+    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
+        r0 = r1.parentLayout;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean presentFragment(org.telegram.ui.ActionBar.BaseFragment r2, boolean r3) {
+        /*
+            r1 = this;
+            boolean r0 = r1.allowPresentFragment()
+            if (r0 == 0) goto L_0x0012
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r1.parentLayout
+            if (r0 == 0) goto L_0x0012
+            boolean r2 = r0.presentFragment(r2, r3)
+            if (r2 == 0) goto L_0x0012
+            r2 = 1
+            goto L_0x0013
+        L_0x0012:
+            r2 = 0
+        L_0x0013:
+            return r2
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BaseFragment.presentFragment(org.telegram.ui.ActionBar.BaseFragment, boolean):boolean");
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
+        r1 = r8.parentLayout;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean presentFragment(org.telegram.ui.ActionBar.BaseFragment r9, boolean r10, boolean r11) {
+        /*
+            r8 = this;
+            boolean r0 = r8.allowPresentFragment()
+            if (r0 == 0) goto L_0x0018
+            org.telegram.ui.ActionBar.ActionBarLayout r1 = r8.parentLayout
+            if (r1 == 0) goto L_0x0018
+            r5 = 1
+            r6 = 0
+            r7 = 0
+            r2 = r9
+            r3 = r10
+            r4 = r11
+            boolean r9 = r1.presentFragment(r2, r3, r4, r5, r6, r7)
+            if (r9 == 0) goto L_0x0018
+            r9 = 1
+            goto L_0x0019
+        L_0x0018:
+            r9 = 0
+        L_0x0019:
+            return r9
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BaseFragment.presentFragment(org.telegram.ui.ActionBar.BaseFragment, boolean, boolean):boolean");
     }
 
     public Activity getParentActivity() {

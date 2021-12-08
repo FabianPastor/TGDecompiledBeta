@@ -228,7 +228,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
                         audioManager.setMode(0);
                     } catch (SecurityException e) {
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.e("Error setting audio more to normal", e);
+                            FileLog.e("Error setting audio more to normal", (Throwable) e);
                         }
                     }
                 }
@@ -2134,7 +2134,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             PendingIntent.getActivity(this, 0, new Intent(this, VoIPFeedbackActivity.class).putExtra("call_id", this.privateCall.id).putExtra("call_access_hash", this.privateCall.access_hash).putExtra("call_video", this.privateCall.video).putExtra("account", this.currentAccount).addFlags(NUM), 0).send();
         } catch (Exception e) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("Error starting incall activity", e);
+                FileLog.e("Error starting incall activity", (Throwable) e);
             }
         }
     }
@@ -3449,7 +3449,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
             if (r2 == 0) goto L_0x033f
             java.lang.String r2 = "error starting call"
-            org.telegram.messenger.FileLog.e(r2, r0)
+            org.telegram.messenger.FileLog.e((java.lang.String) r2, (java.lang.Throwable) r0)
         L_0x033f:
             r37.callFailed()
         L_0x0342:
@@ -4216,7 +4216,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
                     audioManager.setMode(0);
                 } catch (SecurityException e) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.e("Error setting audio more to normal", e);
+                        FileLog.e("Error setting audio more to normal", (Throwable) e);
                     }
                 }
             }
@@ -4473,7 +4473,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
                     PendingIntent.getActivity(this, 12345, new Intent(this, LaunchActivity.class).setAction("voip"), 0).send();
                 } catch (Exception e) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.e("Error starting incall activity", e);
+                        FileLog.e("Error starting incall activity", (Throwable) e);
                     }
                 }
             } else {
@@ -4619,7 +4619,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             }
         } catch (Exception e) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("error initializing voip controller", e);
+                FileLog.e("error initializing voip controller", (Throwable) e);
             }
             callFailed();
         }
@@ -4724,7 +4724,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
                 sensorManager.registerListener(this, defaultSensor, 3);
             } catch (Exception e) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("Error initializing proximity sensor", e);
+                    FileLog.e("Error initializing proximity sensor", (Throwable) e);
                 }
             }
         }
@@ -5097,7 +5097,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v6, resolved type: java.lang.String} */
     /* JADX WARNING: type inference failed for: r7v11 */
     /* JADX WARNING: type inference failed for: r7v12 */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v4, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v4, types: [int, boolean] */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x00ea  */
     /* JADX WARNING: Removed duplicated region for block: B:32:0x013a  */
@@ -5116,9 +5116,9 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r4.setAction(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r1)
-            r6 = 2131628514(0x7f0e11e2, float:1.8884323E38)
+            r6 = 2131628588(0x7f0e122c, float:1.8884473E38)
             java.lang.String r7 = "VoipInVideoCallBranding"
-            r8 = 2131628512(0x7f0e11e0, float:1.8884319E38)
+            r8 = 2131628586(0x7f0e122a, float:1.8884469E38)
             java.lang.String r9 = "VoipInCallBranding"
             if (r22 == 0) goto L_0x002a
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -5128,7 +5128,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x002e:
             android.app.Notification$Builder r5 = r5.setContentTitle(r10)
             android.app.Notification$Builder r5 = r5.setContentText(r0)
-            r10 = 2131165897(0x7var_c9, float:1.7946024E38)
+            r10 = 2131165916(0x7var_dc, float:1.7946063E38)
             android.app.Notification$Builder r5 = r5.setSmallIcon(r10)
             android.app.Notification$Builder r5 = r5.setSubText(r2)
             r10 = 0
@@ -5212,7 +5212,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r10.append(r15)
             r10.append(r14)
             java.lang.String r10 = r10.toString()
-            r13 = 2131625941(0x7f0e07d5, float:1.8879104E38)
+            r13 = 2131625983(0x7f0e07ff, float:1.887919E38)
             r17 = r7
             java.lang.String r7 = "IncomingCalls"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r13)
@@ -5264,7 +5264,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             java.lang.String r8 = "call_id"
             r2.putExtra(r8, r6)
             java.lang.String r6 = "VoipDeclineCall"
-            r7 = 2131628394(0x7f0e116a, float:1.888408E38)
+            r7 = 2131628468(0x7f0e11b4, float:1.888423E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10 = 24
             if (r12 < r10) goto L_0x01a7
@@ -5283,7 +5283,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x01a8:
             r11 = 268435456(0x10000000, float:2.5243549E-29)
             android.app.PendingIntent r2 = android.app.PendingIntent.getBroadcast(r1, r14, r2, r11)
-            r13 = 2131165491(0x7var_, float:1.79452E38)
+            r13 = 2131165506(0x7var_, float:1.7945231E38)
             r5.addAction(r13, r9, r2)
             android.content.Intent r9 = new android.content.Intent
             java.lang.Class<org.telegram.messenger.voip.VoIPActionsReceiver> r13 = org.telegram.messenger.voip.VoIPActionsReceiver.class
@@ -5299,7 +5299,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             long r13 = r18.getCallID()
             r9.putExtra(r8, r13)
             java.lang.String r8 = "VoipAnswerCall"
-            r13 = 2131628335(0x7f0e112f, float:1.888396E38)
+            r13 = 2131628409(0x7f0e1179, float:1.888411E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r8, r13)
             if (r12 < r10) goto L_0x01fc
             android.text.SpannableString r10 = new android.text.SpannableString
@@ -5316,7 +5316,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r7 = 0
         L_0x01fd:
             android.app.PendingIntent r9 = android.app.PendingIntent.getBroadcast(r1, r7, r9, r11)
-            r10 = 2131165490(0x7var_, float:1.7945199E38)
+            r10 = 2131165505(0x7var_, float:1.794523E38)
             r5.addAction(r10, r14, r9)
             r10 = 2
             r5.setPriority(r10)
@@ -5379,7 +5379,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             if (r22 == 0) goto L_0x02af
-            r12 = 2131628515(0x7f0e11e3, float:1.8884325E38)
+            r12 = 2131628589(0x7f0e122d, float:1.8884475E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r14 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5391,7 +5391,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             goto L_0x02c5
         L_0x02af:
             r14 = 0
-            r12 = 2131628513(0x7f0e11e1, float:1.888432E38)
+            r12 = 2131628587(0x7f0e122b, float:1.888447E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5405,11 +5405,11 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x02c9:
             if (r22 == 0) goto L_0x02d1
             r10 = r17
-            r0 = 2131628514(0x7f0e11e2, float:1.8884323E38)
+            r0 = 2131628588(0x7f0e122c, float:1.8884473E38)
             goto L_0x02d6
         L_0x02d1:
             r10 = r16
-            r0 = 2131628512(0x7f0e11e0, float:1.8884319E38)
+            r0 = 2131628586(0x7f0e122a, float:1.8884469E38)
         L_0x02d6:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r10, r0)
             r7.setTextViewText(r11, r0)
@@ -5421,7 +5421,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             int r0 = r1.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
-            r10 = 2131628336(0x7f0e1130, float:1.8883962E38)
+            r10 = 2131628410(0x7f0e117a, float:1.8884112E38)
             java.lang.Object[] r14 = new java.lang.Object[r14]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5443,7 +5443,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r13)
             r7.setTextViewText(r3, r8)
             r3 = 2131230803(0x7var_, float:1.807767E38)
-            r8 = 2131628394(0x7f0e116a, float:1.888408E38)
+            r8 = 2131628468(0x7f0e11b4, float:1.888423E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r8)
             r7.setTextViewText(r3, r6)
             r3 = 2131230883(0x7var_a3, float:1.8077831E38)
@@ -5771,7 +5771,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
                 PendingIntent.getActivity(this, 0, new Intent(this, getUIActivityClass()).setAction("voip"), 0).send();
             } catch (Exception e) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("Error starting incall activity", e);
+                    FileLog.e("Error starting incall activity", (Throwable) e);
                 }
             }
         } else {
@@ -5779,7 +5779,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
                 PendingIntent.getActivity(this, 0, new Intent(this, VoIPPermissionActivity.class).addFlags(NUM), NUM).send();
             } catch (Exception e2) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("Error starting permission activity", e2);
+                    FileLog.e("Error starting permission activity", (Throwable) e2);
                 }
             }
         }

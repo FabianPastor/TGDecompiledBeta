@@ -153,7 +153,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
                 if (i == 1) {
-                    CancelAccountDeletionActivity.this.views[CancelAccountDeletionActivity.this.currentViewNum].onNextPressed();
+                    CancelAccountDeletionActivity.this.views[CancelAccountDeletionActivity.this.currentViewNum].onNextPressed((String) null);
                 } else if (i == -1) {
                     CancelAccountDeletionActivity.this.finishFragment();
                 }
@@ -344,7 +344,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             frameLayout.addView(radialProgressView, LayoutHelper.createFrame(-2, -2, 17));
         }
 
-        public void onNextPressed() {
+        public void onNextPressed(String str) {
             if (CancelAccountDeletionActivity.this.getParentActivity() != null && !this.nextPressed) {
                 TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
                 TLRPC$TL_account_sendConfirmPhoneCode tLRPC$TL_account_sendConfirmPhoneCode = new TLRPC$TL_account_sendConfirmPhoneCode();
@@ -405,7 +405,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
 
         public void onShow() {
             super.onShow();
-            onNextPressed();
+            onNextPressed((String) null);
         }
     }
 
@@ -586,7 +586,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165940(0x7var_f4, float:1.7946111E38)
+                r14 = 2131165959(0x7var_, float:1.794615E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
                 if (r14 == 0) goto L_0x010f
@@ -654,7 +654,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131166087(0x7var_, float:1.794641E38)
+                r11 = 2131166106(0x7var_a, float:1.7946448E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -675,7 +675,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166085(0x7var_, float:1.7946405E38)
+                r10 = 2131166104(0x7var_, float:1.7946444E38)
                 r8.setImageResource(r10)
                 org.telegram.ui.Components.RLottieImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -687,7 +687,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627673(0x7f0e0e99, float:1.8882617E38)
+                r8 = 2131627739(0x7f0e0edb, float:1.888275E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -697,7 +697,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r8.<init>(r2)
                 r0.blueImageView = r8
                 org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
-                r18 = 2131558483(0x7f0d0053, float:1.8742283E38)
+                r18 = 2131558494(0x7f0d005e, float:1.8742305E38)
                 r10 = 1111490560(0x42400000, float:48.0)
                 int r20 = org.telegram.messenger.AndroidUtilities.dp(r10)
                 int r21 = org.telegram.messenger.AndroidUtilities.dp(r10)
@@ -705,7 +705,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r23 = 0
                 java.lang.String r19 = "NUM"
                 r17 = r8
-                r17.<init>((int) r18, (java.lang.String) r19, (int) r20, (int) r21, (boolean) r22, (int[]) r23)
+                r17.<init>(r18, r19, r20, r21, r22, r23)
                 r0.hintDrawable = r8
                 int r10 = org.telegram.ui.ActionBar.Theme.getColor(r15)
                 java.lang.String r11 = "Bubble.**"
@@ -728,7 +728,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627677(0x7f0e0e9d, float:1.8882625E38)
+                r8 = 2131627743(0x7f0e0edf, float:1.888276E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -846,14 +846,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 int r1 = r0.currentType
                 if (r1 != r3) goto L_0x032c
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625249(0x7f0e0521, float:1.88777E38)
+                r2 = 2131625277(0x7f0e053d, float:1.8877757E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
                 goto L_0x033a
             L_0x032c:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625248(0x7f0e0520, float:1.8877699E38)
+                r2 = 2131625275(0x7f0e053b, float:1.8877753E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -884,7 +884,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     String format = String.format(Locale.US, "%s (%d)", new Object[]{packageInfo.versionName, Integer.valueOf(packageInfo.versionCode)});
                     Intent intent = new Intent("android.intent.action.SENDTO");
                     intent.setData(Uri.parse("mailto:"));
-                    intent.putExtra("android.intent.extra.EMAIL", new String[]{"reports@stel.com"});
+                    intent.putExtra("android.intent.extra.EMAIL", new String[]{"sms@telegram.org"});
                     intent.putExtra("android.intent.extra.SUBJECT", "Android cancel account deletion issue " + format + " " + this.phone);
                     intent.putExtra("android.intent.extra.TEXT", "Phone: " + this.phone + "\nApp version: " + format + "\nOS version: SDK " + Build.VERSION.SDK_INT + "\nDevice Name: " + Build.MANUFACTURER + Build.MODEL + "\nLocale: " + Locale.getDefault() + "\nError: " + this.lastError);
                     getContext().startActivity(Intent.createChooser(intent, "Send email..."));
@@ -1073,7 +1073,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         LoginActivitySmsView.this.codeField[i8 + 1].requestFocus();
                                     }
                                     if ((i8 == LoginActivitySmsView.this.length - 1 || (i8 == LoginActivitySmsView.this.length - 2 && length >= 2)) && LoginActivitySmsView.this.getCode().length() == LoginActivitySmsView.this.length) {
-                                        LoginActivitySmsView.this.onNextPressed();
+                                        LoginActivitySmsView.this.onNextPressed((String) null);
                                     }
                                 }
                             }
@@ -1168,7 +1168,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             if (i != 5) {
                 return false;
             }
-            onNextPressed();
+            onNextPressed((String) null);
             return true;
         }
 
@@ -1327,10 +1327,12 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             }
         }
 
-        public void onNextPressed() {
+        public void onNextPressed(String str) {
             if (!this.nextPressed) {
-                String code = getCode();
-                if (TextUtils.isEmpty(code)) {
+                if (str == null) {
+                    str = getCode();
+                }
+                if (TextUtils.isEmpty(str)) {
                     AndroidUtilities.shakeView(this.codeFieldContainer, 2.0f, 0);
                     return;
                 }
@@ -1345,7 +1347,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 }
                 this.waitingForEvent = false;
                 TLRPC$TL_account_confirmPhone tLRPC$TL_account_confirmPhone = new TLRPC$TL_account_confirmPhone();
-                tLRPC$TL_account_confirmPhone.phone_code = code;
+                tLRPC$TL_account_confirmPhone.phone_code = str;
                 tLRPC$TL_account_confirmPhone.phone_code_hash = this.phoneHash;
                 destroyTimer();
                 this.this$0.needShowProgress();
@@ -1464,14 +1466,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             if (this.waitingForEvent && (editTextBoldCursorArr = this.codeField) != null) {
                 if (i == NotificationCenter.didReceiveSmsCode) {
                     editTextBoldCursorArr[0].setText("" + objArr[0]);
-                    onNextPressed();
+                    onNextPressed((String) null);
                 } else if (i == NotificationCenter.didReceiveCall) {
                     String str = "" + objArr[0];
                     if (AndroidUtilities.checkPhonePattern(this.pattern, str)) {
                         this.ignoreOnTextChange = true;
                         this.codeField[0].setText(str);
                         this.ignoreOnTextChange = false;
-                        onNextPressed();
+                        onNextPressed((String) null);
                     }
                 }
             }

@@ -12,6 +12,6 @@ public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyn
     }
 
     public final void run() {
-        this.f$0.lambda$setNewPassword$28(this.f$1);
+        this.f$0.lambda$createView$10(this.f$1);
     }
 }

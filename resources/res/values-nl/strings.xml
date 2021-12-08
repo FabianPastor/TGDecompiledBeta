@@ -2380,7 +2380,7 @@
     <string name="NoGroupsInCommon">Nog geen gedeelde groepen</string>
     <string name="NoHandleAppInstalled">Je hebt geen apps die bestandstype \'%1$s\' kunnen verwerken, gelieve een compatibele app te installeren</string>
     <string name="NoLimit">Geen limiet</string>
-    <string name="NoMailInstalled">E-mail ons op reports@stel.com en vertel ons wat het probleem is.</string>
+    <string name="NoMailInstalled">E-mail ons op sms@telegram.org en vertel ons wat het probleem is.</string>
     <string name="NoMasks">Nog geen maskers</string>
     <string name="NoMedia">Deel foto\'s en video\'s in deze chat om ze op al je apparaten te kunnen benaderen.</string>
     <string name="NoMediaAutoDownload">Geen media</string>
@@ -3782,7 +3782,6 @@
     <string name="Terminate">Beëindigen</string>
     <string name="TerminateAllSessions">Beëindig alle andere sessies</string>
     <string name="TerminateAllWebSessions">Verbinding met alle websites verbreken</string>
-    <string name="TerminateSessionInfo">Tik op een sessie om deze te beëindigen.</string>
     <string name="TerminateSessionQuestion">Deze sessie beëindigen?</string>
     <string name="TerminateSessionText">Deze sessie echt beëindigen?</string>
     <string name="TerminateWebSessionInfo">Tik om de verbinding met je Telegram-account te verbreken.</string>

@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda31
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$hidePeerSettingsBar$47(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$unregistedPush$236(tLObject, tLRPC$TL_error);
     }
 }

@@ -264,7 +264,7 @@ public class ConnectionsManager extends BaseController {
         }
         String str9 = str4.trim().length() == 0 ? "SDK Unknown" : str4;
         getUserConfig().loadConfig();
-        init(BuildVars.BUILD_VERSION, 134, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), getRegId(), AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
+        init(BuildVars.BUILD_VERSION, 135, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), getRegId(), AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
     }
 
     private String getRegId() {
@@ -1233,7 +1233,7 @@ public class ConnectionsManager extends BaseController {
                 r4 = r2
                 r2 = r12
             L_0x0144:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)     // Catch:{ all -> 0x015a }
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r4, (boolean) r0)     // Catch:{ all -> 0x015a }
                 if (r3 == 0) goto L_0x0151
                 r3.close()     // Catch:{ all -> 0x014d }
                 goto L_0x0151

@@ -1,13 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheticLambda9 implements Runnable {
+import android.view.KeyEvent;
+import android.widget.TextView;
+
+public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheticLambda9 implements TextView.OnEditorActionListener {
     public final /* synthetic */ TwoStepVerificationActivity f$0;
 
     public /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda9(TwoStepVerificationActivity twoStepVerificationActivity) {
         this.f$0 = twoStepVerificationActivity;
     }
 
-    public final void run() {
-        this.f$0.updateBottomButton();
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.f$0.lambda$createView$0(textView, i, keyEvent);
     }
 }

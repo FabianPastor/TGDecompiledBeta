@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda52
     }
 
     public final void run() {
-        this.f$0.lambda$setParticipantBannedRole$63(this.f$1);
+        this.f$0.lambda$deleteDialog$102(this.f$1);
     }
 }

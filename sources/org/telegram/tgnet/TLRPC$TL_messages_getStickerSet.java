@@ -5,7 +5,7 @@ public class TLRPC$TL_messages_getStickerSet extends TLObject {
     public TLRPC$InputStickerSet stickerset;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        return TLRPC$TL_messages_stickerSet.TLdeserialize(abstractSerializedData, i, z);
+        return TLRPC$messages_StickerSet.TLdeserialize(abstractSerializedData, i, z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {

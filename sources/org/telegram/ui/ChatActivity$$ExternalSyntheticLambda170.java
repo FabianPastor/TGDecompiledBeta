@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.ui.Components.ChatGreetingsView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda170 implements RecyclerListView.OnItemLongClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda170 implements ChatGreetingsView.Listener {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda170(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$createView$33(view, i);
+    public final void onGreetings(TLRPC$Document tLRPC$Document) {
+        this.f$0.lambda$createView$20(tLRPC$Document);
     }
 }

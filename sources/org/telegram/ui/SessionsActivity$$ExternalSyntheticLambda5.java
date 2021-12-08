@@ -15,6 +15,6 @@ public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda5 im
     }
 
     public final void run() {
-        this.f$0.lambda$createView$4(this.f$1, this.f$2);
+        this.f$0.lambda$createView$2(this.f$1, this.f$2);
     }
 }

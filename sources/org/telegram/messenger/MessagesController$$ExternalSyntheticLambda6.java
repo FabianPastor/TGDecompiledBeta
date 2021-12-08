@@ -1,13 +1,13 @@
 package org.telegram.messenger;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda6 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ Runnable f$0;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda6(MessagesController messagesController) {
-        this.f$0 = messagesController;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda6(Runnable runnable) {
+        this.f$0 = runnable;
     }
 
     public final void run() {
-        this.f$0.lambda$loadRemoteFilters$12();
+        this.f$0.run();
     }
 }

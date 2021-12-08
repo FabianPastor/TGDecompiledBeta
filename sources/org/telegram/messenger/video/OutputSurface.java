@@ -144,4 +144,8 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
             throw new RuntimeException("EGL error encountered (see log)");
         }
     }
+
+    public void changeFragmentShader(String str) {
+        this.mTextureRender.changeFragmentShader(str);
+    }
 }

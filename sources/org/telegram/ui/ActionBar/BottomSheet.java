@@ -122,6 +122,7 @@ public class BottomSheet extends Dialog {
     public DialogInterface.OnClickListener onClickListener;
     private DialogInterface.OnDismissListener onHideListener;
     protected Interpolator openInterpolator;
+    private boolean openNoDelay;
     /* access modifiers changed from: private */
     public int overlayDrawNavBarColor;
     protected Theme.ResourcesProvider resourcesProvider;
@@ -1473,7 +1474,7 @@ public class BottomSheet extends Dialog {
                 }
             };
             this.startAnimationRunnable = r0;
-            AndroidUtilities.runOnUIThread(r0, 150);
+            AndroidUtilities.runOnUIThread(r0, this.openNoDelay ? 0 : 150);
             return;
         }
         startOpenAnimation();
@@ -1928,5 +1929,9 @@ public class BottomSheet extends Dialog {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
         Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
+    }
+
+    public void setOpenNoDelay(boolean z) {
+        this.openNoDelay = z;
     }
 }

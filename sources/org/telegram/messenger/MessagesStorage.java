@@ -168,6 +168,24 @@ public class MessagesStorage extends BaseController {
         void run(String str);
     }
 
+    public ArrayList<Integer> getCachedMessagesInRange(long j, int i, int i2) {
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        try {
+            SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM messages_v2 WHERE uid = %d AND date >= %d AND date <= %d", new Object[]{Long.valueOf(j), Integer.valueOf(i), Integer.valueOf(i2)}), new Object[0]);
+            while (queryFinalized.next()) {
+                try {
+                    arrayList.add(Integer.valueOf(queryFinalized.intValue(0)));
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
+                }
+            }
+            queryFinalized.dispose();
+        } catch (Exception e2) {
+            FileLog.e((Throwable) e2);
+        }
+        return arrayList;
+    }
+
     public static MessagesStorage getInstance(int i) {
         MessagesStorage messagesStorage = Instance[i];
         if (messagesStorage == null) {
@@ -20383,12 +20401,12 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX WARNING: type inference failed for: r6v0 */
-    /* JADX WARNING: type inference failed for: r6v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r6v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r15v5 */
     /* JADX WARNING: type inference failed for: r15v10 */
     /* JADX WARNING: type inference failed for: r6v24 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r15v2, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r15v2, types: [int, boolean] */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x0109 A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:53:0x01d8 A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x01dd A[Catch:{ Exception -> 0x0286 }] */
@@ -20710,12 +20728,12 @@ public class MessagesStorage extends BaseController {
             TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
             if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported_old) {
                 if (tLRPC$MessageMedia.bytes.length == 0) {
-                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(134);
+                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(135);
                 }
             } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported) {
                 TLRPC$TL_messageMediaUnsupported_old tLRPC$TL_messageMediaUnsupported_old = new TLRPC$TL_messageMediaUnsupported_old();
                 tLRPC$Message.media = tLRPC$TL_messageMediaUnsupported_old;
-                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(134);
+                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(135);
                 tLRPC$Message.flags |= 512;
             }
         }
@@ -20845,7 +20863,7 @@ public class MessagesStorage extends BaseController {
                         try {
                             this.database.executeFast(String.format(Locale.US, "UPDATE media_holes_v2 SET end = %d WHERE uid = %d AND type = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(i), Long.valueOf(j), Integer.valueOf(hole.type), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                         } catch (Exception e2) {
-                            FileLog.e((Throwable) e2);
+                            FileLog.e((Throwable) e2, false);
                         }
                     }
                     i6 = 4;
@@ -20857,7 +20875,7 @@ public class MessagesStorage extends BaseController {
                             try {
                                 this.database.executeFast(String.format(Locale.US, "UPDATE media_holes_v2 SET start = %d WHERE uid = %d AND type = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(i2), Long.valueOf(j), Integer.valueOf(hole.type), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                             } catch (Exception e3) {
-                                FileLog.e((Throwable) e3);
+                                FileLog.e((Throwable) e3, false);
                             }
                         }
                         i6 = 4;
@@ -20929,7 +20947,7 @@ public class MessagesStorage extends BaseController {
                                 Locale locale3 = Locale.US;
                                 sQLiteDatabase3.executeFast(String.format(locale3, "UPDATE " + str2 + " SET end = %d WHERE uid = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(i), Long.valueOf(j), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                             } catch (Exception e) {
-                                FileLog.e((Throwable) e);
+                                FileLog.e((Throwable) e, false);
                             }
                         }
                         i6++;
@@ -20943,7 +20961,7 @@ public class MessagesStorage extends BaseController {
                                     Locale locale4 = Locale.US;
                                     sQLiteDatabase4.executeFast(String.format(locale4, "UPDATE " + str2 + " SET start = %d WHERE uid = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(i2), Long.valueOf(j), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                                 } catch (Exception e2) {
-                                    FileLog.e((Throwable) e2);
+                                    FileLog.e((Throwable) e2, false);
                                 }
                             }
                             i6++;
@@ -24132,7 +24150,7 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0021:
             java.lang.String r7 = "SavedMessages"
-            r8 = 2131627537(0x7f0e0e11, float:1.8882341E38)
+            r8 = 2131627598(0x7f0e0e4e, float:1.8882465E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)     // Catch:{ Exception -> 0x0654 }
             java.lang.String r7 = r7.toLowerCase()     // Catch:{ Exception -> 0x0654 }
             java.lang.String r8 = "saved messages"

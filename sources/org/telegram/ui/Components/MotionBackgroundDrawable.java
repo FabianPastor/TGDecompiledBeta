@@ -18,6 +18,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Xfermode;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.View;
 import androidx.core.graphics.ColorUtils;
@@ -32,18 +33,19 @@ public class MotionBackgroundDrawable extends Drawable {
     private static float legacyBitmapScale = 0.7f;
     private static final boolean useLegacyBitmap;
     private static final boolean useSoftLight;
-    private int alpha = 255;
+    private int alpha;
     private BitmapShader bitmapShader;
-    private int[] colors = {-12423849, -531317, -7888252, -133430};
+    private int[] colors;
     private Bitmap currentBitmap;
     private boolean fastAnimation;
     private Canvas gradientCanvas;
+    private GradientDrawable gradientDrawable;
     private Bitmap gradientFromBitmap;
     private Canvas gradientFromCanvas;
     private BitmapShader gradientShader;
-    private Bitmap[] gradientToBitmap = new Bitmap[3];
-    private int intensity = 100;
-    private final CubicBezierInterpolator interpolator = new CubicBezierInterpolator(0.33d, 0.0d, 0.0d, 1.0d);
+    private Bitmap[] gradientToBitmap;
+    private int intensity;
+    private final CubicBezierInterpolator interpolator;
     private boolean invalidateLegacy;
     private boolean isPreview;
     private long lastUpdateTime;
@@ -54,23 +56,23 @@ public class MotionBackgroundDrawable extends Drawable {
     private Canvas legacyCanvas;
     private Canvas legacyCanvas2;
     private Matrix matrix;
-    private Paint paint = new Paint(2);
-    private Paint paint2 = new Paint(2);
-    private Paint paint3 = new Paint();
+    private Paint paint;
+    private Paint paint2;
+    private Paint paint3;
     private WeakReference<View> parentView;
-    private float patternAlpha = 1.0f;
+    private float patternAlpha;
     private Bitmap patternBitmap;
-    private Rect patternBounds = new Rect();
+    private Rect patternBounds;
     private ColorFilter patternColorFilter;
     private int phase;
-    private float posAnimationProgress = 1.0f;
+    private float posAnimationProgress;
     private boolean postInvalidateParent;
-    private RectF rect = new RectF();
+    private RectF rect;
     private boolean rotatingPreview;
     private boolean rotationBack;
     private int roundRadius;
     private int translationY;
-    private Runnable updateAnimationRunnable = new MotionBackgroundDrawable$$ExternalSyntheticLambda0(this);
+    private Runnable updateAnimationRunnable;
 
     public int getOpacity() {
         return -2;
@@ -90,16 +92,44 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     public MotionBackgroundDrawable() {
+        this.colors = new int[]{-12423849, -531317, -7888252, -133430};
+        this.interpolator = new CubicBezierInterpolator(0.33d, 0.0d, 0.0d, 1.0d);
+        this.posAnimationProgress = 1.0f;
+        this.rect = new RectF();
+        this.gradientToBitmap = new Bitmap[3];
+        this.paint = new Paint(2);
+        this.paint2 = new Paint(2);
+        this.paint3 = new Paint();
+        this.intensity = 100;
+        this.gradientDrawable = new GradientDrawable();
+        this.updateAnimationRunnable = new MotionBackgroundDrawable$$ExternalSyntheticLambda0(this);
+        this.patternBounds = new Rect();
+        this.patternAlpha = 1.0f;
+        this.alpha = 255;
         init();
     }
 
     public MotionBackgroundDrawable(int i, int i2, int i3, int i4, boolean z) {
-        int[] iArr = this.colors;
-        iArr[0] = i;
-        iArr[1] = i2;
-        iArr[2] = i3;
-        iArr[3] = i4;
+        this(i, i2, i3, i4, 0, z);
+    }
+
+    public MotionBackgroundDrawable(int i, int i2, int i3, int i4, int i5, boolean z) {
+        this.colors = new int[]{-12423849, -531317, -7888252, -133430};
+        this.interpolator = new CubicBezierInterpolator(0.33d, 0.0d, 0.0d, 1.0d);
+        this.posAnimationProgress = 1.0f;
+        this.rect = new RectF();
+        this.gradientToBitmap = new Bitmap[3];
+        this.paint = new Paint(2);
+        this.paint2 = new Paint(2);
+        this.paint3 = new Paint();
+        this.intensity = 100;
+        this.gradientDrawable = new GradientDrawable();
+        this.updateAnimationRunnable = new MotionBackgroundDrawable$$ExternalSyntheticLambda0(this);
+        this.patternBounds = new Rect();
+        this.patternAlpha = 1.0f;
+        this.alpha = 255;
         this.isPreview = z;
+        setColors(i, i2, i3, i4, i5, false);
         init();
     }
 
@@ -284,7 +314,7 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     public void setColors(int i, int i2, int i3, int i4) {
-        setColors(i, i2, i3, i4, true);
+        setColors(i, i2, i3, i4, 0, true);
     }
 
     public void setColors(int i, int i2, int i3, int i4, Bitmap bitmap) {
@@ -296,15 +326,23 @@ public class MotionBackgroundDrawable extends Drawable {
         Utilities.generateGradient(bitmap, true, this.phase, this.interpolator.getInterpolation(this.posAnimationProgress), this.currentBitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
     }
 
-    public void setColors(int i, int i2, int i3, int i4, boolean z) {
+    public void setColors(int i, int i2, int i3, int i4, int i5, boolean z) {
+        if (this.isPreview && i3 == 0 && i4 == 0) {
+            this.gradientDrawable = new GradientDrawable(BackgroundGradientDrawable.getGradientOrientation(i5), new int[]{i, i2});
+        } else {
+            this.gradientDrawable = null;
+        }
         int[] iArr = this.colors;
         iArr[0] = i;
         iArr[1] = i2;
         iArr[2] = i3;
         iArr[3] = i4;
-        Utilities.generateGradient(this.currentBitmap, true, this.phase, this.interpolator.getInterpolation(this.posAnimationProgress), this.currentBitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
-        if (z) {
-            invalidateParent();
+        Bitmap bitmap = this.currentBitmap;
+        if (bitmap != null) {
+            Utilities.generateGradient(bitmap, true, this.phase, this.interpolator.getInterpolation(this.posAnimationProgress), this.currentBitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
+            if (z) {
+                invalidateParent();
+            }
         }
     }
 
@@ -564,8 +602,14 @@ public class MotionBackgroundDrawable extends Drawable {
                 canvas.drawRoundRect(rectF2, (float) i4, (float) i4, this.paint);
             } else {
                 canvas.translate(0.0f, f);
-                this.rect.set(f6, f7, f4 + f6, f5 + f7);
-                canvas.drawBitmap(this.currentBitmap, (Rect) null, this.rect, this.paint);
+                GradientDrawable gradientDrawable2 = this.gradientDrawable;
+                if (gradientDrawable2 != null) {
+                    gradientDrawable2.setBounds((int) f6, (int) f7, (int) (f6 + f4), (int) (f7 + f5));
+                    this.gradientDrawable.draw(canvas);
+                } else {
+                    this.rect.set(f6, f7, f4 + f6, f5 + f7);
+                    canvas.drawBitmap(this.currentBitmap, (Rect) null, this.rect, this.paint);
+                }
             }
             Bitmap bitmap3 = this.patternBitmap;
             if (bitmap3 != null) {
@@ -833,5 +877,10 @@ public class MotionBackgroundDrawable extends Drawable {
         this.alpha = i;
         this.paint.setAlpha(i);
         this.paint2.setAlpha(i);
+    }
+
+    public boolean isOneColor() {
+        int[] iArr = this.colors;
+        return iArr[0] == iArr[1] && iArr[0] == iArr[2] && iArr[0] == iArr[3];
     }
 }

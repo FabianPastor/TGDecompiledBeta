@@ -5,7 +5,7 @@ public class TLRPC$TL_users_getFullUser extends TLObject {
     public TLRPC$InputUser id;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        return TLRPC$UserFull.TLdeserialize(abstractSerializedData, i, z);
+        return TLRPC$TL_users_userFull.TLdeserialize(abstractSerializedData, i, z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {

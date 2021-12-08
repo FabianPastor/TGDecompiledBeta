@@ -1,28 +1,26 @@
 package org.telegram.ui.Components;
 
 import android.view.View;
-import java.util.Calendar;
-import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda44 implements View.OnClickListener {
-    public final /* synthetic */ NumberPicker f$0;
-    public final /* synthetic */ NumberPicker f$1;
-    public final /* synthetic */ NumberPicker f$2;
-    public final /* synthetic */ Calendar f$3;
-    public final /* synthetic */ AlertsCreator.ScheduleDatePickerDelegate f$4;
-    public final /* synthetic */ BottomSheet.Builder f$5;
+    public final /* synthetic */ BaseFragment f$0;
+    public final /* synthetic */ EditTextBoldCursor f$1;
+    public final /* synthetic */ Theme.ThemeAccent f$2;
+    public final /* synthetic */ Theme.ThemeInfo f$3;
+    public final /* synthetic */ AlertDialog f$4;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda44(NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, AlertsCreator.ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder) {
-        this.f$0 = numberPicker;
-        this.f$1 = numberPicker2;
-        this.f$2 = numberPicker3;
-        this.f$3 = calendar;
-        this.f$4 = scheduleDatePickerDelegate;
-        this.f$5 = builder;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda44(BaseFragment baseFragment, EditTextBoldCursor editTextBoldCursor, Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, AlertDialog alertDialog) {
+        this.f$0 = baseFragment;
+        this.f$1 = editTextBoldCursor;
+        this.f$2 = themeAccent;
+        this.f$3 = themeInfo;
+        this.f$4 = alertDialog;
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createDatePickerDialog$51(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
+        AlertsCreator.lambda$createThemeCreateDialog$103(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, view);
     }
 }

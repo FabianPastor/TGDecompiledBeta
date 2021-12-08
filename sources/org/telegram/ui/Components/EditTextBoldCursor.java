@@ -66,7 +66,6 @@ public class EditTextBoldCursor extends EditText {
     private TextPaint errorPaint;
     private CharSequence errorText;
     private boolean fixed;
-    /* access modifiers changed from: private */
     public FloatingActionMode floatingActionMode;
     private FloatingToolbar floatingToolbar;
     private ViewTreeObserver.OnPreDrawListener floatingToolbarPreDrawListener;
@@ -147,7 +146,7 @@ public class EditTextBoldCursor extends EditText {
         public void onDestroyActionMode(ActionMode actionMode) {
             this.mWrapped.onDestroyActionMode(actionMode);
             EditTextBoldCursor.this.cleanupFloatingActionModeViews();
-            FloatingActionMode unused = EditTextBoldCursor.this.floatingActionMode = null;
+            EditTextBoldCursor.this.floatingActionMode = null;
         }
 
         public void onGetContentRect(ActionMode actionMode, View view, Rect rect) {
@@ -294,7 +293,7 @@ public class EditTextBoldCursor extends EditText {
         L_0x00d3:
             java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00e1 }
             if (r0 == 0) goto L_0x00e1
-            r1 = 2131165402(0x7var_da, float:1.794502E38)
+            r1 = 2131165417(0x7var_e9, float:1.794505E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00e1 }
             r0.set(r8, r1)     // Catch:{ all -> 0x00e1 }
         L_0x00e1:

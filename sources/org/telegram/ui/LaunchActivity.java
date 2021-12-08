@@ -357,7 +357,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0118:
         L_0x0119:
             android.view.Window r1 = r13.getWindow()
-            r6 = 2131166131(0x7var_b3, float:1.7946499E38)
+            r6 = 2131166150(0x7var_c6, float:1.7946537E38)
             r1.setBackgroundDrawableResource(r6)
             java.lang.String r1 = org.telegram.messenger.SharedConfig.passcodeHash
             int r1 = r1.length()
@@ -2644,7 +2644,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v65, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v66, resolved type: boolean} */
     /* JADX WARNING: type inference failed for: r10v2, types: [android.os.Bundle, java.lang.String] */
-    /* JADX WARNING: type inference failed for: r6v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r6v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r10v6 */
     /* JADX WARNING: type inference failed for: r10v8 */
     /* JADX WARNING: type inference failed for: r10v9 */
@@ -6725,11 +6725,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.AlertDialog$Builder r2 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r4 = r1.getParentActivity()
             r2.<init>((android.content.Context) r4)
-            r4 = 2131626404(0x7f0e09a4, float:1.8880043E38)
+            r4 = 2131626461(0x7f0e09dd, float:1.8880159E38)
             java.lang.String r5 = "NewContactAlertTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             org.telegram.ui.ActionBar.AlertDialog$Builder r2 = r2.setTitle(r4)
-            r4 = 2131626403(0x7f0e09a3, float:1.8880041E38)
+            r4 = 2131626460(0x7f0e09dc, float:1.8880157E38)
             java.lang.Object[] r5 = new java.lang.Object[r8]
             org.telegram.PhoneFormat.PhoneFormat r6 = org.telegram.PhoneFormat.PhoneFormat.getInstance()
             java.lang.String r6 = r6.format(r0)
@@ -6739,13 +6739,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r6, r4, r5)
             android.text.SpannableStringBuilder r4 = org.telegram.messenger.AndroidUtilities.replaceTags(r4)
             org.telegram.ui.ActionBar.AlertDialog$Builder r2 = r2.setMessage(r4)
-            r4 = 2131626402(0x7f0e09a2, float:1.888004E38)
+            r4 = 2131626459(0x7f0e09db, float:1.8880155E38)
             java.lang.String r5 = "NewContactAlertButton"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda7 r5 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda7
             r5.<init>(r0, r3, r1)
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r2.setPositiveButton(r4, r5)
-            r2 = 2131624679(0x7f0e02e7, float:1.8876545E38)
+            r2 = 2131624692(0x7f0e02f4, float:1.887657E38)
             java.lang.String r3 = "Cancel"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r0.setNegativeButton(r2, r10)
@@ -7047,7 +7047,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0.putBoolean(r1, r2)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r1 = r10.contactsToSend
             java.lang.String r3 = "selectAlertStringGroup"
-            r4 = 2131627656(0x7f0e0e88, float:1.8882583E38)
+            r4 = 2131627722(0x7f0e0eca, float:1.8882716E38)
             java.lang.String r5 = "selectAlertString"
             if (r1 == 0) goto L_0x003d
             int r1 = r1.size()
@@ -7055,7 +7055,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r1 = "SendContactToText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r4)
             r0.putString(r5, r1)
-            r1 = 2131627633(0x7f0e0e71, float:1.8882536E38)
+            r1 = 2131627698(0x7f0e0eb2, float:1.8882668E38)
             java.lang.String r4 = "SendContactToGroupText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.putString(r3, r1)
@@ -7064,7 +7064,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r1 = "SendMessagesToText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r4)
             r0.putString(r5, r1)
-            r1 = 2131627655(0x7f0e0e87, float:1.888258E38)
+            r1 = 2131627721(0x7f0e0ec9, float:1.8882714E38)
             java.lang.String r4 = "SendMessagesToGroupText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.putString(r3, r1)
@@ -7260,7 +7260,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0     // Catch:{ Exception -> 0x00be }
             org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r0)     // Catch:{ Exception -> 0x00be }
             java.lang.String r2 = "ChannelPostDeleted"
-            r3 = 2131624797(0x7f0e035d, float:1.8876784E38)
+            r3 = 2131624810(0x7f0e036a, float:1.887681E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x00be }
             org.telegram.ui.Components.Bulletin r0 = r0.createErrorBulletin(r2)     // Catch:{ Exception -> 0x00be }
             r0.show()     // Catch:{ Exception -> 0x00be }
@@ -7636,7 +7636,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             return
         L_0x0066:
             r3 = r7
-            r4 = 2131626688(0x7f0e0ac0, float:1.888062E38)
+            r4 = 2131626746(0x7f0e0afa, float:1.8880737E38)
             java.lang.String r7 = "OK"
             r13 = 0
             r8 = 1
@@ -7654,11 +7654,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0089:
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r0.<init>((android.content.Context) r15)
-            r1 = 2131624291(0x7f0e0163, float:1.8875758E38)
+            r1 = 2131624300(0x7f0e016c, float:1.8875776E38)
             java.lang.String r2 = "AppName"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131626733(0x7f0e0aed, float:1.888071E38)
+            r1 = 2131626791(0x7f0e0b27, float:1.8880828E38)
             java.lang.Object[] r2 = new java.lang.Object[r8]
             r2[r11] = r42
             java.lang.String r3 = "OtherLoginCode"
@@ -7674,11 +7674,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r43 == 0) goto L_0x00e3
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r0.<init>((android.content.Context) r15)
-            r1 = 2131624433(0x7f0e01f1, float:1.8876046E38)
+            r1 = 2131624443(0x7f0e01fb, float:1.8876066E38)
             java.lang.String r2 = "AuthAnotherClient"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131624442(0x7f0e01fa, float:1.8876064E38)
+            r1 = 2131624454(0x7f0e0206, float:1.8876088E38)
             java.lang.String r2 = "AuthAnotherClientUrl"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
@@ -8194,12 +8194,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r4 = "cantSendToChannels"
             r2.putBoolean(r4, r9)
             r2.putInt(r0, r9)
-            r0 = 2131627639(0x7f0e0e77, float:1.8882548E38)
+            r0 = 2131627704(0x7f0e0eb8, float:1.888268E38)
             java.lang.String r4 = "SendGameToText"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
             java.lang.String r4 = "selectAlertString"
             r2.putString(r4, r0)
-            r0 = 2131627638(0x7f0e0e76, float:1.8882546E38)
+            r0 = 2131627703(0x7f0e0eb7, float:1.8882678E38)
             java.lang.String r4 = "SendGameToGroupText"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
             java.lang.String r4 = "selectAlertStringGroup"
@@ -8318,7 +8318,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2.putBoolean(r11, r9)
             r5 = 2
             r2.putInt(r0, r5)
-            r0 = 2131624237(0x7f0e012d, float:1.8875648E38)
+            r0 = 2131624245(0x7f0e0135, float:1.8875664E38)
             java.lang.Object[] r5 = new java.lang.Object[r5]
             java.lang.String r6 = org.telegram.messenger.UserObject.getUserName(r1)
             r5[r10] = r6
@@ -8346,7 +8346,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0     // Catch:{ Exception -> 0x0205 }
             org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r0)     // Catch:{ Exception -> 0x0205 }
             java.lang.String r1 = "BotCantJoinGroups"
-            r2 = 2131624598(0x7f0e0296, float:1.887638E38)
+            r2 = 2131624611(0x7f0e02a3, float:1.8876407E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x0205 }
             org.telegram.ui.Components.Bulletin r0 = r0.createErrorBulletin(r1)     // Catch:{ Exception -> 0x0205 }
             r0.show()     // Catch:{ Exception -> 0x0205 }
@@ -8472,7 +8472,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r0 == 0) goto L_0x030d
             org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r1)     // Catch:{ Exception -> 0x0322 }
             java.lang.String r1 = "FloodWait"
-            r2 = 2131625650(0x7f0e06b2, float:1.8878514E38)
+            r2 = 2131625680(0x7f0e06d0, float:1.8878575E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x0322 }
             org.telegram.ui.Components.Bulletin r0 = r0.createErrorBulletin(r1)     // Catch:{ Exception -> 0x0322 }
             r0.show()     // Catch:{ Exception -> 0x0322 }
@@ -8480,7 +8480,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x030d:
             org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r1)     // Catch:{ Exception -> 0x0322 }
             java.lang.String r1 = "NoUsernameFound"
-            r2 = 2131626499(0x7f0e0a03, float:1.8880236E38)
+            r2 = 2131626557(0x7f0e0a3d, float:1.8880354E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x0322 }
             org.telegram.ui.Components.Bulletin r0 = r0.createErrorBulletin(r1)     // Catch:{ Exception -> 0x0322 }
             r0.show()     // Catch:{ Exception -> 0x0322 }
@@ -8646,7 +8646,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00b2:
             org.telegram.ui.ActionBar.AlertDialog$Builder r11 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r11.<init>((android.content.Context) r9)
-            r12 = 2131624291(0x7f0e0163, float:1.8875758E38)
+            r12 = 2131624300(0x7f0e016c, float:1.8875776E38)
             java.lang.String r14 = "AppName"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r14, r12)
             r11.setTitle(r12)
@@ -8654,7 +8654,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r14 = "FLOOD_WAIT"
             boolean r12 = r12.startsWith(r14)
             if (r12 == 0) goto L_0x00da
-            r10 = 2131625650(0x7f0e06b2, float:1.8878514E38)
+            r10 = 2131625680(0x7f0e06d0, float:1.8878575E38)
             java.lang.String r12 = "FloodWait"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setMessage(r10)
@@ -8664,22 +8664,22 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r12 = "INVITE_HASH_EXPIRED"
             boolean r10 = r10.startsWith(r12)
             if (r10 == 0) goto L_0x00fd
-            r10 = 2131625535(0x7f0e063f, float:1.887828E38)
+            r10 = 2131625565(0x7f0e065d, float:1.8878342E38)
             java.lang.String r12 = "ExpiredLink"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setTitle(r10)
-            r10 = 2131625969(0x7f0e07f1, float:1.887916E38)
+            r10 = 2131626011(0x7f0e081b, float:1.8879246E38)
             java.lang.String r12 = "InviteExpired"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setMessage(r10)
             goto L_0x0109
         L_0x00fd:
-            r10 = 2131626025(0x7f0e0829, float:1.8879275E38)
+            r10 = 2131626068(0x7f0e0854, float:1.8879362E38)
             java.lang.String r12 = "JoinToGroupErrorNotExist"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setMessage(r10)
         L_0x0109:
-            r10 = 2131626688(0x7f0e0ac0, float:1.888062E38)
+            r10 = 2131626746(0x7f0e0afa, float:1.8880737E38)
             java.lang.String r12 = "OK"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setPositiveButton(r10, r0)
@@ -8926,7 +8926,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x004d:
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
             r11.<init>()
-            r12 = 2131625407(0x7f0e05bf, float:1.8878021E38)
+            r12 = 2131625436(0x7f0e05dc, float:1.887808E38)
             java.lang.String r13 = "ErrorOccurred"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             r11.append(r12)
@@ -9052,11 +9052,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r6 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)
         L_0x009d:
-            r6 = 2131628012(0x7f0e0fec, float:1.8883305E38)
+            r6 = 2131628083(0x7f0e1033, float:1.8883449E38)
             java.lang.String r7 = "Theme"
             if (r2 != r1) goto L_0x00b9
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r7 = 2131628034(0x7f0e1002, float:1.888335E38)
+            r7 = 2131628105(0x7f0e1049, float:1.8883493E38)
             java.lang.String r8 = "ThemeNotSupported"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.ui.ActionBar.AlertDialog$Builder r6 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r5, r6, r7)
@@ -9064,7 +9064,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             goto L_0x00cd
         L_0x00b9:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r7 = 2131628033(0x7f0e1001, float:1.8883347E38)
+            r7 = 2131628104(0x7f0e1048, float:1.8883491E38)
             java.lang.String r8 = "ThemeNotFound"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.ui.ActionBar.AlertDialog$Builder r6 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r5, r6, r7)
@@ -9124,7 +9124,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r1 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
         L_0x0040:
-            r0 = 2131626112(0x7f0e0880, float:1.887945E38)
+            r0 = 2131626156(0x7f0e08ac, float:1.887954E38)
             java.lang.String r1 = "LinkNotFound"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r10, r0)
@@ -9288,7 +9288,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00de:
             boolean r13 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r12)
             if (r13 == 0) goto L_0x00f4
-            r13 = 2131627407(0x7f0e0d8f, float:1.8882078E38)
+            r13 = 2131627465(0x7f0e0dc9, float:1.8882195E38)
             java.lang.String r15 = "RepliesTitle"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             java.lang.String r13 = r13.toLowerCase()
@@ -9297,7 +9297,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00f4:
             boolean r13 = r12.self
             if (r13 == 0) goto L_0x0107
-            r13 = 2131627537(0x7f0e0e11, float:1.8882341E38)
+            r13 = 2131627598(0x7f0e0e4e, float:1.8882465E38)
             java.lang.String r15 = "SavedMessages"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             java.lang.String r13 = r13.toLowerCase()
@@ -9486,7 +9486,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r6 = 15
             r0.setIcon(r6, r7, r13)
             org.telegram.ui.ActionBar.SimpleTextView r0 = r12.updateTextView
-            r6 = 2131624297(0x7f0e0169, float:1.887577E38)
+            r6 = 2131624306(0x7f0e0172, float:1.8875788E38)
             java.lang.String r9 = "AppUpdateNow"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r0.setText(r6)
@@ -9504,7 +9504,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.messenger.ImageLoader r6 = org.telegram.messenger.ImageLoader.getInstance()
             java.lang.Float r0 = r6.getFileProgress(r0)
             org.telegram.ui.ActionBar.SimpleTextView r6 = r12.updateTextView
-            r9 = 2131624296(0x7f0e0168, float:1.8875768E38)
+            r9 = 2131624305(0x7f0e0171, float:1.8875786E38)
             java.lang.Object[] r10 = new java.lang.Object[r7]
             if (r0 == 0) goto L_0x007b
             float r0 = r0.floatValue()
@@ -9526,7 +9526,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r6 = 2
             r0.setIcon(r6, r7, r13)
             org.telegram.ui.ActionBar.SimpleTextView r0 = r12.updateTextView
-            r6 = 2131624293(0x7f0e0165, float:1.8875762E38)
+            r6 = 2131624302(0x7f0e016e, float:1.887578E38)
             java.lang.String r9 = "AppUpdate"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r0.setText(r6)
@@ -10493,11 +10493,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int r3 = org.telegram.messenger.NotificationCenter.needShowAlert
             java.lang.String r6 = "Cancel"
             r7 = 5
-            r9 = 2131624291(0x7f0e0163, float:1.8875758E38)
+            r9 = 2131624300(0x7f0e016c, float:1.8875776E38)
             java.lang.String r10 = "AppName"
             r11 = 4
             r12 = 3
-            r13 = 2131626688(0x7f0e0ac0, float:1.888062E38)
+            r13 = 2131626746(0x7f0e0afa, float:1.8880737E38)
             java.lang.String r14 = "OK"
             r15 = 2
             r5 = 1
@@ -10528,7 +10528,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r4 == r15) goto L_0x00bf
             int r4 = r0.intValue()
             if (r4 == r12) goto L_0x00bf
-            r4 = 2131626372(0x7f0e0984, float:1.8879978E38)
+            r4 = 2131626429(0x7f0e09bd, float:1.8880094E38)
             java.lang.String r9 = "MoreInfo"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
             org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda3 r9 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda3
@@ -10537,7 +10537,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00bf:
             int r1 = r0.intValue()
             if (r1 != r7) goto L_0x00db
-            r0 = 2131626504(0x7f0e0a08, float:1.8880246E38)
+            r0 = 2131626562(0x7f0e0a42, float:1.8880364E38)
             java.lang.String r1 = "NobodyLikesSpam3"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r3.setMessage(r0)
@@ -10549,7 +10549,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r1 = 0
             int r4 = r0.intValue()
             if (r4 != 0) goto L_0x00f7
-            r0 = 2131626502(0x7f0e0a06, float:1.8880242E38)
+            r0 = 2131626560(0x7f0e0a40, float:1.888036E38)
             java.lang.String r2 = "NobodyLikesSpam1"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r3.setMessage(r0)
@@ -10559,7 +10559,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00f7:
             int r4 = r0.intValue()
             if (r4 != r5) goto L_0x0111
-            r0 = 2131626503(0x7f0e0a07, float:1.8880244E38)
+            r0 = 2131626561(0x7f0e0a41, float:1.8880362E38)
             java.lang.String r2 = "NobodyLikesSpam2"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r3.setMessage(r0)
@@ -10577,11 +10577,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r1 = "AUTH_KEY_DROP_"
             boolean r0 = r0.startsWith(r1)
             if (r0 == 0) goto L_0x0147
-            r0 = 2131624679(0x7f0e02e7, float:1.8876545E38)
+            r0 = 2131624692(0x7f0e02f4, float:1.887657E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
             r1 = 0
             r3.setPositiveButton(r0, r1)
-            r0 = 2131626153(0x7f0e08a9, float:1.8879534E38)
+            r0 = 2131626198(0x7f0e08d6, float:1.8879625E38)
             java.lang.String r1 = "LogOut"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda9 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda9
@@ -10596,11 +10596,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0150:
             int r0 = r0.intValue()
             if (r0 != r12) goto L_0x017d
-            r0 = 2131627307(0x7f0e0d2b, float:1.8881875E38)
+            r0 = 2131627365(0x7f0e0d65, float:1.8881992E38)
             java.lang.String r1 = "Proxy"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r3.setTitle(r0)
-            r0 = 2131628187(0x7f0e109b, float:1.888366E38)
+            r0 = 2131628261(0x7f0e10e5, float:1.888381E38)
             java.lang.String r1 = "UseProxyTelegramError"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r3.setMessage(r0)
@@ -10636,13 +10636,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r4 = 0
             r2.setPositiveButton(r3, r4)
-            r3 = 2131627737(0x7f0e0ed9, float:1.8882747E38)
+            r3 = 2131627806(0x7f0e0f1e, float:1.8882887E38)
             java.lang.String r4 = "ShareYouLocationUnableManually"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda10 r4 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda10
             r4.<init>(r8, r0, r1)
             r2.setNegativeButton(r3, r4)
-            r0 = 2131627736(0x7f0e0ed8, float:1.8882745E38)
+            r0 = 2131627805(0x7f0e0f1d, float:1.8882885E38)
             java.lang.String r1 = "ShareYouLocationUnable"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r2.setMessage(r0)
@@ -10785,11 +10785,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r5 = (org.telegram.ui.ActionBar.BaseFragment) r5
             org.telegram.ui.ActionBar.AlertDialog$Builder r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r7.<init>((android.content.Context) r8)
-            r9 = 2131628155(0x7f0e107b, float:1.8883595E38)
+            r9 = 2131628228(0x7f0e10c4, float:1.8883743E38)
             java.lang.String r10 = "UpdateContactsTitle"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r7.setTitle(r9)
-            r9 = 2131628154(0x7f0e107a, float:1.8883593E38)
+            r9 = 2131628227(0x7f0e10c3, float:1.888374E38)
             java.lang.String r10 = "UpdateContactsMessage"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r7.setMessage(r9)
@@ -10797,7 +10797,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda6 r10 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda6
             r10.<init>(r1, r0, r3, r2)
             r7.setPositiveButton(r9, r10)
-            r9 = 2131624679(0x7f0e02e7, float:1.8876545E38)
+            r9 = 2131624692(0x7f0e02f4, float:1.887657E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r9)
             org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda4 r9 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda4
             r9.<init>(r1, r0, r3, r2)
@@ -11324,11 +11324,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             long r0 = r0.longValue()
             int r2 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
             if (r2 <= 0) goto L_0x076a
-            r0 = 2131628661(0x7f0e1275, float:1.888462E38)
+            r0 = 2131628736(0x7f0e12c0, float:1.8884773E38)
             java.lang.String r1 = "YourNameChanged"
             goto L_0x076f
         L_0x076a:
-            r0 = 2131624816(0x7f0e0370, float:1.8876822E38)
+            r0 = 2131624829(0x7f0e037d, float:1.8876849E38)
             java.lang.String r1 = "CannelTitleChanged"
         L_0x076f:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
@@ -11349,11 +11349,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             long r0 = r0.longValue()
             int r2 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
             if (r2 <= 0) goto L_0x079c
-            r0 = 2131628644(0x7f0e1264, float:1.8884586E38)
+            r0 = 2131628719(0x7f0e12af, float:1.8884739E38)
             java.lang.String r1 = "YourBioChanged"
             goto L_0x07a1
         L_0x079c:
-            r0 = 2131624755(0x7f0e0333, float:1.8876699E38)
+            r0 = 2131624768(0x7f0e0340, float:1.8876725E38)
             java.lang.String r1 = "CannelDescriptionChanged"
         L_0x07a1:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
@@ -11439,7 +11439,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.Components.RadialProgress2 r1 = r8.updateLayoutIcon
             r1.setProgress(r0, r5)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r8.updateTextView
-            r2 = 2131624296(0x7f0e0168, float:1.8875768E38)
+            r2 = 2131624305(0x7f0e0171, float:1.8875786E38)
             java.lang.Object[] r3 = new java.lang.Object[r5]
             r5 = 1120403456(0x42CLASSNAME, float:100.0)
             float r0 = r0 * r5
@@ -11709,7 +11709,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.AlertDialog$Builder r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder     // Catch:{ Exception -> 0x0115 }
             r7.<init>((android.content.Context) r1)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
-            r9 = 2131624959(0x7f0e03ff, float:1.8877112E38)
+            r9 = 2131624977(0x7f0e0411, float:1.8877149E38)
             java.lang.String r8 = r1.getStringForLanguageAlert(r8, r2, r9)     // Catch:{ Exception -> 0x0115 }
             r7.setTitle(r8)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0115 }
@@ -11724,7 +11724,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.messenger.LocaleController$LocaleInfo[] r11 = new org.telegram.messenger.LocaleController.LocaleInfo[r8]     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r12 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
             java.lang.String r13 = "English"
-            r14 = 2131625393(0x7f0e05b1, float:1.8877993E38)
+            r14 = 2131625422(0x7f0e05ce, float:1.8878052E38)
             java.lang.String r12 = r1.getStringForLanguageAlert(r12, r13, r14)     // Catch:{ Exception -> 0x0115 }
             if (r5 == 0) goto L_0x0056
             r13 = r4
@@ -11795,7 +11795,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.Cells.LanguageCell r3 = new org.telegram.ui.Cells.LanguageCell     // Catch:{ Exception -> 0x0115 }
             r3.<init>(r1, r6)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r4 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
-            r5 = 2131624960(0x7f0e0400, float:1.8877114E38)
+            r5 = 2131624978(0x7f0e0412, float:1.887715E38)
             java.lang.String r4 = r1.getStringForLanguageAlert(r4, r0, r5)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0115 }
             java.lang.String r0 = r1.getStringForLanguageAlert(r6, r0, r5)     // Catch:{ Exception -> 0x0115 }
@@ -11808,7 +11808,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2.addView(r3, r0)     // Catch:{ Exception -> 0x0115 }
             r7.setView(r2)     // Catch:{ Exception -> 0x0115 }
             java.lang.String r0 = "OK"
-            r2 = 2131626688(0x7f0e0ac0, float:1.888062E38)
+            r2 = 2131626746(0x7f0e0afa, float:1.8880737E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x0115 }
             org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda11 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda11     // Catch:{ Exception -> 0x0115 }
             r2.<init>(r1, r10)     // Catch:{ Exception -> 0x0115 }

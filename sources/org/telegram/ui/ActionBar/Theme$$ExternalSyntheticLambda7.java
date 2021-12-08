@@ -10,6 +10,6 @@ public final /* synthetic */ class Theme$$ExternalSyntheticLambda7 implements Co
     }
 
     public final int compare(Object obj, Object obj2) {
-        return Theme.lambda$static$0((Theme.ThemeAccent) obj, (Theme.ThemeAccent) obj2);
+        return Theme.lambda$sortAccents$0((Theme.ThemeAccent) obj, (Theme.ThemeAccent) obj2);
     }
 }
