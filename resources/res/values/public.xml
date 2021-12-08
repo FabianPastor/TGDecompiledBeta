@@ -4118,6 +4118,11 @@
     <public type="string" name="Meters_zero" id="NUM" />
     <public type="string" name="Mi" id="NUM" />
     <public type="string" name="MigrateOldFolder" id="NUM" />
+    <public type="string" name="MigrateOldFolderButton" id="NUM" />
+    <public type="string" name="MigrateOldFolderDescription" id="NUM" />
+    <public type="string" name="MigrateOldFolderTitle" id="NUM" />
+    <public type="string" name="MigratingFiles" id="NUM" />
+    <public type="string" name="MigrationNotification" id="NUM" />
     <public type="string" name="MilesAway" id="NUM" />
     <public type="string" name="MilesFromYou" id="NUM" />
     <public type="string" name="MilesShort" id="NUM" />

@@ -80,11 +80,11 @@ public class DialogsEmptyCell extends LinearLayout {
             return
         L_0x0005:
             r5.currentType = r6
-            r0 = 2131626495(0x7f0e09ff, float:1.8880228E38)
+            r0 = 2131626500(0x7f0e0a04, float:1.8880238E38)
             java.lang.String r1 = "NoChats"
             r2 = 0
             if (r6 != 0) goto L_0x0024
-            r6 = 2131626497(0x7f0e0a01, float:1.8880232E38)
+            r6 = 2131626502(0x7f0e0a06, float:1.8880242E38)
             java.lang.String r3 = "NoChatsHelp"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r3, r6)
             android.widget.TextView r3 = r5.emptyTextView1
@@ -97,7 +97,7 @@ public class DialogsEmptyCell extends LinearLayout {
         L_0x0024:
             r3 = 1
             if (r6 != r3) goto L_0x003a
-            r6 = 2131626496(0x7f0e0a00, float:1.888023E38)
+            r6 = 2131626501(0x7f0e0a05, float:1.888024E38)
             java.lang.String r3 = "NoChatsContactsHelp"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r3, r6)
             android.widget.TextView r3 = r5.emptyTextView1

@@ -159,7 +159,7 @@ public class FileLog {
 
     public static void e(Throwable th, boolean z) {
         if (BuildVars.LOGS_ENABLED) {
-            if (BuildVars.DEBUG_VERSION && needSent(th)) {
+            if (BuildVars.DEBUG_VERSION && needSent(th) && z) {
                 AndroidUtilities.appCenterLog(th);
             }
             ensureInitied();

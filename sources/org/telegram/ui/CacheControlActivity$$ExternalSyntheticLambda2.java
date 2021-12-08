@@ -1,14 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.view.View;
 
-public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda2 implements DialogInterface.OnClickListener {
-    public static final /* synthetic */ CacheControlActivity$$ExternalSyntheticLambda2 INSTANCE = new CacheControlActivity$$ExternalSyntheticLambda2();
+public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda2 implements View.OnClickListener {
+    public final /* synthetic */ CacheControlActivity f$0;
 
-    private /* synthetic */ CacheControlActivity$$ExternalSyntheticLambda2() {
+    public /* synthetic */ CacheControlActivity$$ExternalSyntheticLambda2(CacheControlActivity cacheControlActivity) {
+        this.f$0 = cacheControlActivity;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        CacheControlActivity.lambda$migrateOldFolder$8(dialogInterface, i);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$5(view);
     }
 }

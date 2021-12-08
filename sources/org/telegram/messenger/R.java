@@ -4257,6 +4257,11 @@ public final class R {
         public static final int Meters_zero = NUM;
         public static final int Mi = NUM;
         public static final int MigrateOldFolder = NUM;
+        public static final int MigrateOldFolderButton = NUM;
+        public static final int MigrateOldFolderDescription = NUM;
+        public static final int MigrateOldFolderTitle = NUM;
+        public static final int MigratingFiles = NUM;
+        public static final int MigrationNotification = NUM;
         public static final int MilesAway = NUM;
         public static final int MilesFromYou = NUM;
         public static final int MilesShort = NUM;

@@ -410,6 +410,7 @@ public class RecyclerListView extends RecyclerView {
         };
         private int inactiveColor;
         boolean isMoving;
+        boolean isRtl;
         boolean isVisible;
         private long lastUpdateTime;
         private float lastY;
@@ -442,7 +443,9 @@ public class RecyclerListView extends RecyclerView {
             this.type = i;
             if (i == 0) {
                 this.letterPaint.setTextSize((float) AndroidUtilities.dp(45.0f));
+                this.isRtl = LocaleController.isRTL;
             } else {
+                this.isRtl = false;
                 this.letterPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
                 this.letterPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.paint2.setColor(Theme.getColor("windowBackgroundWhite"));
@@ -453,7 +456,7 @@ public class RecyclerListView extends RecyclerView {
             for (int i2 = 0; i2 < 8; i2++) {
                 this.radii[i2] = (float) AndroidUtilities.dp(44.0f);
             }
-            if (LocaleController.isRTL) {
+            if (this.isRtl) {
                 f = 10.0f;
             } else {
                 f = (float) ((i == 0 ? 132 : 240) - 15);
@@ -615,7 +618,7 @@ public class RecyclerListView extends RecyclerView {
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
                 float r2 = (float) r2
                 float r8 = r8 + r2
-                boolean r2 = org.telegram.messenger.LocaleController.isRTL
+                boolean r2 = r7.isRtl
                 r3 = 1103626240(0x41CLASSNAME, float:25.0)
                 if (r2 == 0) goto L_0x0103
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r3)
@@ -623,7 +626,7 @@ public class RecyclerListView extends RecyclerView {
                 int r2 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
                 if (r2 > 0) goto L_0x0188
             L_0x0103:
-                boolean r2 = org.telegram.messenger.LocaleController.isRTL
+                boolean r2 = r7.isRtl
                 if (r2 != 0) goto L_0x0112
                 r2 = 1121320960(0x42d60000, float:107.0)
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
@@ -646,14 +649,14 @@ public class RecyclerListView extends RecyclerView {
                 if (r2 != r4) goto L_0x015d
                 boolean r2 = r7.floatingDateVisible
                 if (r2 != 0) goto L_0x015d
-                boolean r2 = org.telegram.messenger.LocaleController.isRTL
+                boolean r2 = r7.isRtl
                 if (r2 == 0) goto L_0x013a
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r3)
                 float r2 = (float) r2
                 int r2 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
                 if (r2 > 0) goto L_0x015c
             L_0x013a:
-                boolean r2 = org.telegram.messenger.LocaleController.isRTL
+                boolean r2 = r7.isRtl
                 if (r2 != 0) goto L_0x014c
                 int r2 = r7.getMeasuredWidth()
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
@@ -729,7 +732,7 @@ public class RecyclerListView extends RecyclerView {
                             if (this.letterLayout.getLineCount() > 0) {
                                 this.letterLayout.getLineWidth(0);
                                 this.letterLayout.getLineLeft(0);
-                                if (LocaleController.isRTL) {
+                                if (this.isRtl) {
                                     this.textX = (((float) AndroidUtilities.dp(10.0f)) + ((((float) AndroidUtilities.dp(88.0f)) - this.letterLayout.getLineWidth(0)) / 2.0f)) - this.letterLayout.getLineLeft(0);
                                 } else {
                                     this.textX = ((((float) AndroidUtilities.dp(88.0f)) - this.letterLayout.getLineWidth(0)) / 2.0f) - this.letterLayout.getLineLeft(0);
@@ -992,7 +995,7 @@ public class RecyclerListView extends RecyclerView {
                 r6 = r9
                 r9 = r4
             L_0x01ce:
-                boolean r4 = org.telegram.messenger.LocaleController.isRTL
+                boolean r4 = r0.isRtl
                 r7 = 4
                 r11 = 6
                 r14 = 0
@@ -1034,7 +1037,7 @@ public class RecyclerListView extends RecyclerView {
                 android.graphics.Path r4 = r0.path
                 r4.reset()
                 android.graphics.RectF r4 = r0.rect
-                boolean r6 = org.telegram.messenger.LocaleController.isRTL
+                boolean r6 = r0.isRtl
                 if (r6 == 0) goto L_0x021e
                 int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
                 float r5 = (float) r5
@@ -1042,7 +1045,7 @@ public class RecyclerListView extends RecyclerView {
             L_0x021e:
                 r5 = 0
             L_0x021f:
-                boolean r6 = org.telegram.messenger.LocaleController.isRTL
+                boolean r6 = r0.isRtl
                 r7 = 1118830592(0x42b00000, float:88.0)
                 if (r6 == 0) goto L_0x0228
                 r6 = 1120141312(0x42CLASSNAME, float:98.0)
@@ -1820,8 +1823,8 @@ public class RecyclerListView extends RecyclerView {
         if (this.fastScroll != null) {
             this.selfOnLayout = true;
             int paddingTop = i2 + getPaddingTop();
-            if (LocaleController.isRTL) {
-                FastScroll fastScroll2 = this.fastScroll;
+            FastScroll fastScroll2 = this.fastScroll;
+            if (fastScroll2.isRtl) {
                 fastScroll2.layout(0, paddingTop, fastScroll2.getMeasuredWidth(), this.fastScroll.getMeasuredHeight() + paddingTop);
             } else {
                 int measuredWidth = getMeasuredWidth() - this.fastScroll.getMeasuredWidth();

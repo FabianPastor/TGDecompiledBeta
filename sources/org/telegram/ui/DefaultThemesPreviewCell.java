@@ -268,7 +268,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
                         if (r11 == 0) goto L_0x0155
                         org.telegram.ui.DefaultThemesPreviewCell r11 = org.telegram.ui.DefaultThemesPreviewCell.this
                         org.telegram.ui.Cells.TextCell r11 = r11.dayNightCell
-                        r0 = 2131627783(0x7f0e0var_, float:1.888284E38)
+                        r0 = 2131627788(0x7f0e0f0c, float:1.888285E38)
                         java.lang.String r2 = "SettingsSwitchToNightMode"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
                         org.telegram.ui.DefaultThemesPreviewCell r2 = org.telegram.ui.DefaultThemesPreviewCell.this
@@ -278,7 +278,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
                     L_0x0155:
                         org.telegram.ui.DefaultThemesPreviewCell r11 = org.telegram.ui.DefaultThemesPreviewCell.this
                         org.telegram.ui.Cells.TextCell r11 = r11.dayNightCell
-                        r0 = 2131627782(0x7f0e0var_, float:1.8882838E38)
+                        r0 = 2131627787(0x7f0e0f0b, float:1.8882848E38)
                         java.lang.String r2 = "SettingsSwitchToDayMode"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
                         org.telegram.ui.DefaultThemesPreviewCell r2 = org.telegram.ui.DefaultThemesPreviewCell.this
@@ -295,7 +295,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
             if (!Theme.isCurrentThemeDay()) {
                 RLottieDrawable rLottieDrawable2 = this.darkThemeDrawable;
                 rLottieDrawable2.setCurrentFrame(rLottieDrawable2.getFramesCount() - 1);
-                this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToDaytMode", NUM), (Drawable) this.darkThemeDrawable, true);
+                this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToDayMode", NUM), (Drawable) this.darkThemeDrawable, true);
             } else {
                 this.dayNightCell.setTextAndIcon(LocaleController.getString("SettingsSwitchToNightMode", NUM), (Drawable) this.darkThemeDrawable, true);
             }

@@ -1,6 +1,5 @@
 package org.telegram.ui.Cells;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -29,7 +28,6 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.DotDividerSpan;
 import org.telegram.ui.Components.FlickerLoadingView;
-import org.telegram.ui.Components.LayoutHelper;
 
 public class SessionCell extends FrameLayout {
     private AvatarDrawable avatarDrawable;
@@ -45,82 +43,372 @@ public class SessionCell extends FrameLayout {
     private boolean showStub;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public SessionCell(Context context, int i) {
-        super(context);
-        Context context2 = context;
-        int i2 = i;
-        LinearLayout linearLayout2 = new LinearLayout(context2);
-        this.linearLayout = linearLayout2;
-        int i3 = 0;
-        linearLayout2.setOrientation(0);
-        this.linearLayout.setWeightSum(1.0f);
-        int i4 = 15;
-        int i5 = 5;
-        if (i2 == 1) {
-            LinearLayout linearLayout3 = this.linearLayout;
-            boolean z = LocaleController.isRTL;
-            addView(linearLayout3, LayoutHelper.createFrame(-1, 30.0f, (z ? 5 : 3) | 48, (float) (z ? 15 : 49), 11.0f, (float) (z ? 49 : i4), 0.0f));
-            AvatarDrawable avatarDrawable2 = new AvatarDrawable();
-            this.avatarDrawable = avatarDrawable2;
-            avatarDrawable2.setTextSize(AndroidUtilities.dp(10.0f));
-            BackupImageView backupImageView = new BackupImageView(context2);
-            this.imageView = backupImageView;
-            backupImageView.setRoundRadius(AndroidUtilities.dp(10.0f));
-            BackupImageView backupImageView2 = this.imageView;
-            boolean z2 = LocaleController.isRTL;
-            addView(backupImageView2, LayoutHelper.createFrame(20, 20.0f, (z2 ? 5 : 3) | 48, (float) (z2 ? 0 : 21), 13.0f, (float) (z2 ? 21 : i3), 0.0f));
-        } else {
-            BackupImageView backupImageView3 = new BackupImageView(context2);
-            this.imageView = backupImageView3;
-            backupImageView3.setRoundRadius(AndroidUtilities.dp(10.0f));
-            BackupImageView backupImageView4 = this.imageView;
-            boolean z3 = LocaleController.isRTL;
-            addView(backupImageView4, LayoutHelper.createFrame(42, 42.0f, (z3 ? 5 : 3) | 48, (float) (z3 ? 0 : 16), 13.0f, (float) (z3 ? 16 : i3), 0.0f));
-            LinearLayout linearLayout4 = this.linearLayout;
-            boolean z4 = LocaleController.isRTL;
-            addView(linearLayout4, LayoutHelper.createFrame(-1, 30.0f, (z4 ? 5 : 3) | 48, (float) (z4 ? 15 : 72), 11.0f, (float) (z4 ? 72 : i4), 0.0f));
-        }
-        TextView textView = new TextView(context2);
-        this.nameTextView = textView;
-        textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.nameTextView.setTextSize(1, 16.0f);
-        this.nameTextView.setLines(1);
-        this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.nameTextView.setMaxLines(1);
-        this.nameTextView.setSingleLine(true);
-        this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
-        this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        TextView textView2 = new TextView(context2);
-        this.onlineTextView = textView2;
-        textView2.setTextSize(1, 14.0f);
-        this.onlineTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
-        if (LocaleController.isRTL) {
-            this.linearLayout.addView(this.onlineTextView, LayoutHelper.createLinear(-2, -1, 51, 0, 2, 0, 0));
-            this.linearLayout.addView(this.nameTextView, LayoutHelper.createLinear(0, -1, 1.0f, 53, 10, 0, 0, 0));
-        } else {
-            this.linearLayout.addView(this.nameTextView, LayoutHelper.createLinear(0, -1, 1.0f, 51, 0, 0, 10, 0));
-            this.linearLayout.addView(this.onlineTextView, LayoutHelper.createLinear(-2, -1, 53, 0, 2, 0, 0));
-        }
-        TextView textView3 = new TextView(context2);
-        this.detailTextView = textView3;
-        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.detailTextView.setTextSize(1, 14.0f);
-        this.detailTextView.setLines(1);
-        this.detailTextView.setMaxLines(1);
-        this.detailTextView.setSingleLine(true);
-        this.detailTextView.setEllipsize(TextUtils.TruncateAt.END);
-        this.detailTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(this.detailTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, i2 == 0 ? 72.0f : 21.0f, 36.0f, 21.0f, 0.0f));
-        TextView textView4 = new TextView(context2);
-        this.detailExTextView = textView4;
-        textView4.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
-        this.detailExTextView.setTextSize(1, 14.0f);
-        this.detailExTextView.setLines(1);
-        this.detailExTextView.setMaxLines(1);
-        this.detailExTextView.setSingleLine(true);
-        this.detailExTextView.setEllipsize(TextUtils.TruncateAt.END);
-        this.detailExTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(this.detailExTextView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i5) | 48, i2 == 0 ? 72.0f : 21.0f, 59.0f, 21.0f, 0.0f));
+    /* JADX WARNING: Code restructure failed: missing block: B:64:0x01c5, code lost:
+        if (r2 == 0) goto L_0x01d0;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public SessionCell(android.content.Context r22, int r23) {
+        /*
+            r21 = this;
+            r0 = r21
+            r1 = r22
+            r2 = r23
+            r21.<init>(r22)
+            int r3 = org.telegram.messenger.UserConfig.selectedAccount
+            r0.currentAccount = r3
+            android.widget.LinearLayout r3 = new android.widget.LinearLayout
+            r3.<init>(r1)
+            r0.linearLayout = r3
+            r4 = 0
+            r3.setOrientation(r4)
+            android.widget.LinearLayout r3 = r0.linearLayout
+            r5 = 1065353216(0x3var_, float:1.0)
+            r3.setWeightSum(r5)
+            r3 = 1092616192(0x41200000, float:10.0)
+            r5 = 72
+            r6 = 15
+            r7 = 21
+            r8 = 5
+            r9 = 3
+            r10 = 1
+            if (r2 != r10) goto L_0x00a1
+            android.widget.LinearLayout r11 = r0.linearLayout
+            r12 = -1
+            r13 = 1106247680(0x41var_, float:30.0)
+            boolean r14 = org.telegram.messenger.LocaleController.isRTL
+            if (r14 == 0) goto L_0x0037
+            r15 = 5
+            goto L_0x0038
+        L_0x0037:
+            r15 = 3
+        L_0x0038:
+            r15 = r15 | 48
+            r16 = 49
+            if (r14 == 0) goto L_0x0041
+            r4 = 15
+            goto L_0x0043
+        L_0x0041:
+            r4 = 49
+        L_0x0043:
+            float r4 = (float) r4
+            r17 = 1093664768(0x41300000, float:11.0)
+            if (r14 == 0) goto L_0x004a
+            r6 = 49
+        L_0x004a:
+            float r6 = (float) r6
+            r18 = 0
+            r14 = r15
+            r15 = r4
+            r16 = r17
+            r17 = r6
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
+            r0.addView(r11, r4)
+            org.telegram.ui.Components.AvatarDrawable r4 = new org.telegram.ui.Components.AvatarDrawable
+            r4.<init>()
+            r0.avatarDrawable = r4
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r4.setTextSize(r6)
+            org.telegram.ui.Components.BackupImageView r4 = new org.telegram.ui.Components.BackupImageView
+            r4.<init>(r1)
+            r0.imageView = r4
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r4.setRoundRadius(r3)
+            org.telegram.ui.Components.BackupImageView r3 = r0.imageView
+            r11 = 20
+            r12 = 1101004800(0x41a00000, float:20.0)
+            boolean r4 = org.telegram.messenger.LocaleController.isRTL
+            if (r4 == 0) goto L_0x0082
+            r6 = 5
+            goto L_0x0083
+        L_0x0082:
+            r6 = 3
+        L_0x0083:
+            r13 = r6 | 48
+            if (r4 == 0) goto L_0x0089
+            r6 = 0
+            goto L_0x008b
+        L_0x0089:
+            r6 = 21
+        L_0x008b:
+            float r14 = (float) r6
+            r15 = 1095761920(0x41500000, float:13.0)
+            if (r4 == 0) goto L_0x0093
+            r4 = 21
+            goto L_0x0094
+        L_0x0093:
+            r4 = 0
+        L_0x0094:
+            float r4 = (float) r4
+            r17 = 0
+            r16 = r4
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r0.addView(r3, r4)
+            goto L_0x0106
+        L_0x00a1:
+            org.telegram.ui.Components.BackupImageView r4 = new org.telegram.ui.Components.BackupImageView
+            r4.<init>(r1)
+            r0.imageView = r4
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r4.setRoundRadius(r3)
+            org.telegram.ui.Components.BackupImageView r3 = r0.imageView
+            r11 = 42
+            r12 = 1109917696(0x42280000, float:42.0)
+            boolean r4 = org.telegram.messenger.LocaleController.isRTL
+            if (r4 == 0) goto L_0x00bb
+            r13 = 5
+            goto L_0x00bc
+        L_0x00bb:
+            r13 = 3
+        L_0x00bc:
+            r13 = r13 | 48
+            r14 = 16
+            if (r4 == 0) goto L_0x00c4
+            r15 = 0
+            goto L_0x00c6
+        L_0x00c4:
+            r15 = 16
+        L_0x00c6:
+            float r15 = (float) r15
+            r16 = 1095761920(0x41500000, float:13.0)
+            if (r4 == 0) goto L_0x00ce
+            r4 = 16
+            goto L_0x00cf
+        L_0x00ce:
+            r4 = 0
+        L_0x00cf:
+            float r4 = (float) r4
+            r17 = 0
+            r14 = r15
+            r15 = r16
+            r16 = r4
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r0.addView(r3, r4)
+            android.widget.LinearLayout r3 = r0.linearLayout
+            r11 = -1
+            r12 = 1106247680(0x41var_, float:30.0)
+            boolean r4 = org.telegram.messenger.LocaleController.isRTL
+            if (r4 == 0) goto L_0x00e9
+            r13 = 5
+            goto L_0x00ea
+        L_0x00e9:
+            r13 = 3
+        L_0x00ea:
+            r13 = r13 | 48
+            if (r4 == 0) goto L_0x00f1
+            r14 = 15
+            goto L_0x00f3
+        L_0x00f1:
+            r14 = 72
+        L_0x00f3:
+            float r14 = (float) r14
+            r15 = 1093664768(0x41300000, float:11.0)
+            if (r4 == 0) goto L_0x00fa
+            r6 = 72
+        L_0x00fa:
+            float r4 = (float) r6
+            r17 = 0
+            r16 = r4
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r0.addView(r3, r4)
+        L_0x0106:
+            android.widget.TextView r3 = new android.widget.TextView
+            r3.<init>(r1)
+            r0.nameTextView = r3
+            java.lang.String r4 = "windowBackgroundWhiteBlackText"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            r3.setTextColor(r6)
+            android.widget.TextView r3 = r0.nameTextView
+            r6 = 1098907648(0x41800000, float:16.0)
+            r3.setTextSize(r10, r6)
+            android.widget.TextView r3 = r0.nameTextView
+            r3.setLines(r10)
+            android.widget.TextView r3 = r0.nameTextView
+            java.lang.String r6 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r6 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
+            r3.setTypeface(r6)
+            android.widget.TextView r3 = r0.nameTextView
+            r3.setMaxLines(r10)
+            android.widget.TextView r3 = r0.nameTextView
+            r3.setSingleLine(r10)
+            android.widget.TextView r3 = r0.nameTextView
+            android.text.TextUtils$TruncateAt r6 = android.text.TextUtils.TruncateAt.END
+            r3.setEllipsize(r6)
+            android.widget.TextView r3 = r0.nameTextView
+            boolean r6 = org.telegram.messenger.LocaleController.isRTL
+            if (r6 == 0) goto L_0x0146
+            r6 = 5
+            goto L_0x0147
+        L_0x0146:
+            r6 = 3
+        L_0x0147:
+            r6 = r6 | 48
+            r3.setGravity(r6)
+            android.widget.TextView r3 = new android.widget.TextView
+            r3.<init>(r1)
+            r0.onlineTextView = r3
+            r6 = 1096810496(0x41600000, float:14.0)
+            r3.setTextSize(r10, r6)
+            android.widget.TextView r3 = r0.onlineTextView
+            boolean r11 = org.telegram.messenger.LocaleController.isRTL
+            if (r11 == 0) goto L_0x0160
+            r11 = 3
+            goto L_0x0161
+        L_0x0160:
+            r11 = 5
+        L_0x0161:
+            r11 = r11 | 48
+            r3.setGravity(r11)
+            boolean r3 = org.telegram.messenger.LocaleController.isRTL
+            if (r3 == 0) goto L_0x0195
+            android.widget.LinearLayout r3 = r0.linearLayout
+            android.widget.TextView r11 = r0.onlineTextView
+            r12 = -2
+            r13 = -1
+            r14 = 51
+            r15 = 0
+            r16 = 2
+            r17 = 0
+            r18 = 0
+            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17, (int) r18)
+            r3.addView(r11, r12)
+            android.widget.LinearLayout r3 = r0.linearLayout
+            android.widget.TextView r11 = r0.nameTextView
+            r12 = 0
+            r14 = 1065353216(0x3var_, float:1.0)
+            r15 = 53
+            r16 = 10
+            r19 = 0
+            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r12, r13, r14, r15, r16, r17, r18, r19)
+            r3.addView(r11, r12)
+            goto L_0x01c1
+        L_0x0195:
+            android.widget.LinearLayout r3 = r0.linearLayout
+            android.widget.TextView r11 = r0.nameTextView
+            r12 = 0
+            r13 = -1
+            r14 = 1065353216(0x3var_, float:1.0)
+            r15 = 51
+            r16 = 0
+            r17 = 0
+            r18 = 10
+            r19 = 0
+            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r12, r13, r14, r15, r16, r17, r18, r19)
+            r3.addView(r11, r12)
+            android.widget.LinearLayout r3 = r0.linearLayout
+            android.widget.TextView r11 = r0.onlineTextView
+            r12 = -2
+            r14 = 53
+            r15 = 0
+            r16 = 2
+            r18 = 0
+            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17, (int) r18)
+            r3.addView(r11, r12)
+        L_0x01c1:
+            boolean r3 = org.telegram.messenger.LocaleController.isRTL
+            if (r3 == 0) goto L_0x01c8
+            if (r2 != 0) goto L_0x01ce
+            goto L_0x01d0
+        L_0x01c8:
+            if (r2 != 0) goto L_0x01cb
+            goto L_0x01cd
+        L_0x01cb:
+            r5 = 21
+        L_0x01cd:
+            r7 = r5
+        L_0x01ce:
+            r5 = 21
+        L_0x01d0:
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r1)
+            r0.detailTextView = r2
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            r2.setTextColor(r3)
+            android.widget.TextView r2 = r0.detailTextView
+            r2.setTextSize(r10, r6)
+            android.widget.TextView r2 = r0.detailTextView
+            r2.setLines(r10)
+            android.widget.TextView r2 = r0.detailTextView
+            r2.setMaxLines(r10)
+            android.widget.TextView r2 = r0.detailTextView
+            r2.setSingleLine(r10)
+            android.widget.TextView r2 = r0.detailTextView
+            android.text.TextUtils$TruncateAt r3 = android.text.TextUtils.TruncateAt.END
+            r2.setEllipsize(r3)
+            android.widget.TextView r2 = r0.detailTextView
+            boolean r3 = org.telegram.messenger.LocaleController.isRTL
+            if (r3 == 0) goto L_0x0201
+            r3 = 5
+            goto L_0x0202
+        L_0x0201:
+            r3 = 3
+        L_0x0202:
+            r3 = r3 | 48
+            r2.setGravity(r3)
+            android.widget.TextView r2 = r0.detailTextView
+            r11 = -1
+            r12 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            boolean r3 = org.telegram.messenger.LocaleController.isRTL
+            if (r3 == 0) goto L_0x0212
+            r3 = 5
+            goto L_0x0213
+        L_0x0212:
+            r3 = 3
+        L_0x0213:
+            r13 = r3 | 48
+            float r3 = (float) r7
+            r15 = 1108344832(0x42100000, float:36.0)
+            float r4 = (float) r5
+            r17 = 0
+            r14 = r3
+            r16 = r4
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r0.addView(r2, r5)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r1)
+            r0.detailExTextView = r2
+            java.lang.String r1 = "windowBackgroundWhiteGrayText3"
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r2.setTextColor(r1)
+            android.widget.TextView r1 = r0.detailExTextView
+            r1.setTextSize(r10, r6)
+            android.widget.TextView r1 = r0.detailExTextView
+            r1.setLines(r10)
+            android.widget.TextView r1 = r0.detailExTextView
+            r1.setMaxLines(r10)
+            android.widget.TextView r1 = r0.detailExTextView
+            r1.setSingleLine(r10)
+            android.widget.TextView r1 = r0.detailExTextView
+            android.text.TextUtils$TruncateAt r2 = android.text.TextUtils.TruncateAt.END
+            r1.setEllipsize(r2)
+            android.widget.TextView r1 = r0.detailExTextView
+            boolean r2 = org.telegram.messenger.LocaleController.isRTL
+            if (r2 == 0) goto L_0x0258
+            r2 = 5
+            goto L_0x0259
+        L_0x0258:
+            r2 = 3
+        L_0x0259:
+            r2 = r2 | 48
+            r1.setGravity(r2)
+            android.widget.TextView r1 = r0.detailExTextView
+            r14 = -1
+            r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            boolean r2 = org.telegram.messenger.LocaleController.isRTL
+            if (r2 == 0) goto L_0x0268
+            goto L_0x0269
+        L_0x0268:
+            r8 = 3
+        L_0x0269:
+            r16 = r8 | 48
+            r18 = 1114374144(0x426CLASSNAME, float:59.0)
+            r20 = 0
+            r17 = r3
+            r19 = r4
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
+            r0.addView(r1, r2)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.SessionCell.<init>(android.content.Context, int):void");
     }
 
     /* access modifiers changed from: protected */

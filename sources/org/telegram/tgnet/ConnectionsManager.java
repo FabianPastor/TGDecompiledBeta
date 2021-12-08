@@ -1222,7 +1222,7 @@ public class ConnectionsManager extends BaseController {
                 goto L_0x013c
             L_0x0138:
                 r14 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r14)
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r14, (boolean) r0)
             L_0x013c:
                 r4.close()     // Catch:{ Exception -> 0x013f }
             L_0x013f:
@@ -1239,7 +1239,7 @@ public class ConnectionsManager extends BaseController {
                 goto L_0x0151
             L_0x014d:
                 r4 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r4, (boolean) r0)
             L_0x0151:
                 if (r2 == 0) goto L_0x0156
                 r2.close()     // Catch:{ Exception -> 0x0156 }
@@ -1252,8 +1252,8 @@ public class ConnectionsManager extends BaseController {
                 r3.close()     // Catch:{ all -> 0x0161 }
                 goto L_0x0165
             L_0x0161:
-                r0 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+                r1 = move-exception
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r1, (boolean) r0)
             L_0x0165:
                 if (r2 == 0) goto L_0x016a
                 r2.close()     // Catch:{ Exception -> 0x016a }

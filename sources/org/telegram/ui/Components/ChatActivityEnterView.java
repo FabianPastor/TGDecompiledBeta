@@ -4232,7 +4232,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r2.setTextColor(r0)
             r0 = 1097859072(0x41700000, float:15.0)
             r2.setTextSize(r14, r0)
-            r0 = 2131627715(0x7f0e0ec3, float:1.8882702E38)
+            r0 = 2131627720(0x7f0e0ec8, float:1.8882712E38)
             java.lang.String r1 = "SendMessageAsTitle"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r2.setText(r0)
@@ -6385,7 +6385,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.messageEditText.setAlpha(1.0f);
                         ChatActivityEnterView.this.messageEditText.setTranslationX(0.0f);
                         ChatActivityEnterView.this.messageEditText.requestFocus();
-                        ChatActivityEnterView.this.updateSendAsButton();
                     }
                 });
             }
@@ -9935,7 +9934,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     public void updateSendAsButton() {
-        FrameLayout frameLayout;
         ChatActivity chatActivity = this.parentFragment;
         if (chatActivity != null) {
             TLRPC$ChatFull chatFull = chatActivity.getMessagesController().getChatFull(-this.dialog_id);
@@ -9957,8 +9955,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             }
             boolean z = this.senderSelectView.getVisibility() == 0;
-            int i = 8;
-            boolean z2 = this.delegate.getSendAsPeers() != null && tLRPC$Peer != null && this.delegate.getSendAsPeers().peers.size() > 1 && !isEditingMessage() && !isRecordingAudioVideo() && ((frameLayout = this.recordedAudioPanel) == null || frameLayout.getVisibility() == 8);
+            boolean z2 = this.delegate.getSendAsPeers() != null && tLRPC$Peer != null && this.delegate.getSendAsPeers().peers.size() > 1 && !isEditingMessage() && !isRecordingAudioVideo();
             int dp = AndroidUtilities.dp(2.0f);
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.senderSelectView.getLayoutParams();
             float f = 0.0f;
@@ -9975,11 +9972,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.senderSelectView.setTag((Object) null);
                 }
                 if (this.parentFragment.getOtherSameChatsDiff() != 0 || !this.parentFragment.fragmentOpened) {
-                    SenderSelectView senderSelectView2 = this.senderSelectView;
-                    if (z2) {
-                        i = 0;
-                    }
-                    senderSelectView2.setVisibility(i);
+                    this.senderSelectView.setVisibility(z2 ? 0 : 8);
                     this.senderSelectView.setTranslationX(f);
                     for (ImageView translationX : this.emojiButton) {
                         translationX.setTranslationX(f);
@@ -9989,8 +9982,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.senderSelectView.setTag((Object) null);
                     return;
                 }
-                ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(220);
-                duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(150);
                 final float f5 = f3;
                 duration.addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda8(this, f2, f4, f5, f));
                 final boolean z3 = z2;

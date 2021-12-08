@@ -1,16 +1,15 @@
-package org.telegram.ui;
+package org.telegram.messenger;
 
 import j$.util.function.Consumer;
 import java.io.File;
 import java.nio.file.Path;
-import org.telegram.ui.CacheControlActivity;
 
-public final /* synthetic */ class CacheControlActivity$3$$ExternalSyntheticLambda0 implements Consumer {
-    public final /* synthetic */ CacheControlActivity.AnonymousClass3 f$0;
+public final /* synthetic */ class FilesMigrationService$$ExternalSyntheticLambda1 implements Consumer {
+    public final /* synthetic */ FilesMigrationService f$0;
     public final /* synthetic */ File f$1;
 
-    public /* synthetic */ CacheControlActivity$3$$ExternalSyntheticLambda0(CacheControlActivity.AnonymousClass3 r1, File file) {
-        this.f$0 = r1;
+    public /* synthetic */ FilesMigrationService$$ExternalSyntheticLambda1(FilesMigrationService filesMigrationService, File file) {
+        this.f$0 = filesMigrationService;
         this.f$1 = file;
     }
 

@@ -6819,23 +6819,29 @@ public class MessagesController extends BaseController implements NotificationCe
         }
     }
 
-    public void deleteUserChannelHistory(TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, int i) {
+    public void deleteUserChannelHistory(TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat2, int i) {
+        long j;
+        if (tLRPC$User != null) {
+            j = tLRPC$User.id;
+        } else {
+            j = tLRPC$Chat2 != null ? tLRPC$Chat2.id : 0;
+        }
         if (i == 0) {
-            getMessagesStorage().deleteUserChatHistory(-tLRPC$Chat.id, tLRPC$User.id);
+            getMessagesStorage().deleteUserChatHistory(-tLRPC$Chat.id, j);
         }
         TLRPC$TL_channels_deleteParticipantHistory tLRPC$TL_channels_deleteParticipantHistory = new TLRPC$TL_channels_deleteParticipantHistory();
         tLRPC$TL_channels_deleteParticipantHistory.channel = getInputChannel(tLRPC$Chat);
-        tLRPC$TL_channels_deleteParticipantHistory.participant = getInputPeer(tLRPC$User);
-        getConnectionsManager().sendRequest(tLRPC$TL_channels_deleteParticipantHistory, new MessagesController$$ExternalSyntheticLambda297(this, tLRPC$Chat, tLRPC$User));
+        tLRPC$TL_channels_deleteParticipantHistory.participant = tLRPC$User != null ? getInputPeer(tLRPC$User) : getInputPeer(tLRPC$Chat2);
+        getConnectionsManager().sendRequest(tLRPC$TL_channels_deleteParticipantHistory, new MessagesController$$ExternalSyntheticLambda297(this, tLRPC$Chat, tLRPC$User, tLRPC$Chat2));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$deleteUserChannelHistory$96(TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$deleteUserChannelHistory$96(TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_affectedHistory tLRPC$TL_messages_affectedHistory = (TLRPC$TL_messages_affectedHistory) tLObject;
             int i = tLRPC$TL_messages_affectedHistory.offset;
             if (i > 0) {
-                deleteUserChannelHistory(tLRPC$Chat, tLRPC$User, i);
+                deleteUserChannelHistory(tLRPC$Chat, tLRPC$User, tLRPC$Chat2, i);
             }
             processNewChannelDifferenceParams(tLRPC$TL_messages_affectedHistory.pts, tLRPC$TL_messages_affectedHistory.pts_count, tLRPC$Chat.id);
         }
@@ -26438,10 +26444,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void markSponsoredAsRead(long j, MessageObject messageObject) {
-        ArrayList<MessageObject> sponsoredMessages2 = getSponsoredMessages(j);
-        if (sponsoredMessages2 != null) {
-            sponsoredMessages2.remove(messageObject);
-        }
+        this.sponsoredMessages.remove(j);
     }
 
     public void deleteMessagesRange(long j, long j2, int i, int i2, boolean z, Runnable runnable) {

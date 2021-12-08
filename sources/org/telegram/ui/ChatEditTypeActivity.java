@@ -165,37 +165,28 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             r10.isPrivate = r0
             org.telegram.tgnet.TLRPC$Chat r0 = r10.currentChat
             boolean r0 = org.telegram.messenger.ChatObject.isChannel(r0)
-            if (r0 == 0) goto L_0x006e
+            if (r0 == 0) goto L_0x006d
             org.telegram.tgnet.TLRPC$Chat r0 = r10.currentChat
             boolean r0 = r0.megagroup
-            if (r0 != 0) goto L_0x006e
-            r0 = 1
-            goto L_0x006f
-        L_0x006e:
-            r0 = 0
-        L_0x006f:
-            r10.isChannel = r0
-            boolean r0 = r10.isPrivate
-            if (r0 == 0) goto L_0x007c
-            org.telegram.tgnet.TLRPC$Chat r0 = r10.currentChat
-            boolean r0 = r0.noforwards
-            if (r0 == 0) goto L_0x007c
+            if (r0 != 0) goto L_0x006d
             r1 = 1
-        L_0x007c:
-            r10.isSaveRestricted = r1
-            boolean r0 = r10.isForcePublic
-            if (r0 == 0) goto L_0x008c
+        L_0x006d:
+            r10.isChannel = r1
             org.telegram.tgnet.TLRPC$Chat r0 = r10.currentChat
+            boolean r1 = r0.noforwards
+            r10.isSaveRestricted = r1
+            boolean r1 = r10.isForcePublic
+            if (r1 == 0) goto L_0x0081
             java.lang.String r0 = r0.username
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x0096
-        L_0x008c:
+            if (r0 != 0) goto L_0x008b
+        L_0x0081:
             boolean r0 = r10.isPrivate
-            if (r0 == 0) goto L_0x00b2
+            if (r0 == 0) goto L_0x00a7
             org.telegram.tgnet.TLRPC$Chat r0 = r10.currentChat
             boolean r0 = r0.creator
-            if (r0 == 0) goto L_0x00b2
-        L_0x0096:
+            if (r0 == 0) goto L_0x00a7
+        L_0x008b:
             org.telegram.tgnet.TLRPC$TL_channels_checkUsername r0 = new org.telegram.tgnet.TLRPC$TL_channels_checkUsername
             r0.<init>()
             java.lang.String r1 = "1"
@@ -207,16 +198,16 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             org.telegram.ui.ChatEditTypeActivity$$ExternalSyntheticLambda14 r3 = new org.telegram.ui.ChatEditTypeActivity$$ExternalSyntheticLambda14
             r3.<init>(r10)
             r1.sendRequest(r0, r3)
-        L_0x00b2:
+        L_0x00a7:
             boolean r0 = r10.isPrivate
-            if (r0 == 0) goto L_0x00c5
+            if (r0 == 0) goto L_0x00ba
             org.telegram.tgnet.TLRPC$ChatFull r0 = r10.info
-            if (r0 == 0) goto L_0x00c5
+            if (r0 == 0) goto L_0x00ba
             org.telegram.messenger.MessagesController r0 = r10.getMessagesController()
             long r3 = r10.chatId
             int r1 = r10.classGuid
             r0.loadFullChat(r3, r1, r2)
-        L_0x00c5:
+        L_0x00ba:
             org.telegram.messenger.NotificationCenter r0 = r10.getNotificationCenter()
             int r1 = org.telegram.messenger.NotificationCenter.chatInfoDidLoad
             r0.addObserver(r10, r1)
@@ -562,7 +553,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
     /* access modifiers changed from: private */
     public void processDone() {
-        if (this.isPrivate && this.currentChat.noforwards != this.isSaveRestricted) {
+        if (this.currentChat.noforwards != this.isSaveRestricted) {
             MessagesController messagesController = getMessagesController();
             long j = this.chatId;
             TLRPC$Chat tLRPC$Chat = this.currentChat;
@@ -740,7 +731,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                 }
                 this.publicContainer.setVisibility(this.isPrivate ? 8 : 0);
                 this.privateContainer.setVisibility(this.isPrivate ? 0 : 8);
-                this.saveContainer.setVisibility(this.isPrivate ? 0 : 8);
+                this.saveContainer.setVisibility(0);
                 this.manageLinksTextView.setVisibility(0);
                 this.manageLinksInfoCell.setVisibility(0);
                 this.linkContainer.setPadding(0, 0, 0, this.isPrivate ? 0 : AndroidUtilities.dp(7.0f));

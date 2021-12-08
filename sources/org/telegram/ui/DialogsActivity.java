@@ -50,6 +50,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.FilesMigrationService;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -2217,6 +2218,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     /* JADX WARNING: Removed duplicated region for block: B:204:0x0942  */
     /* JADX WARNING: Removed duplicated region for block: B:212:0x09c3  */
     /* JADX WARNING: Removed duplicated region for block: B:213:0x09cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:221:0x09fa  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r36) {
         /*
@@ -2292,7 +2294,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r10.proxyDrawable = r0
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.addItem((int) r8, (android.graphics.drawable.Drawable) r0)
             r10.proxyItem = r0
-            r1 = 2131627368(0x7f0e0d68, float:1.8881998E38)
+            r1 = 2131627373(0x7f0e0d6d, float:1.8882009E38)
             java.lang.String r2 = "ProxySettings"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -2329,7 +2331,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setActionBarMenuItemSearchListener(r1)
             r10.searchItem = r0
             java.lang.String r1 = "Search"
-            r2 = 2131627611(0x7f0e0e5b, float:1.8882491E38)
+            r2 = 2131627616(0x7f0e0e60, float:1.8882501E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setSearchFieldHint(r3)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r10.searchItem
@@ -2356,14 +2358,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x013a:
             if (r0 != r5) goto L_0x014b
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131627677(0x7f0e0e9d, float:1.8882625E38)
+            r1 = 2131627682(0x7f0e0ea2, float:1.8882635E38)
             java.lang.String r2 = "SelectChats"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x0159
         L_0x014b:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131627676(0x7f0e0e9c, float:1.8882623E38)
+            r1 = 2131627681(0x7f0e0ea1, float:1.8882633E38)
             java.lang.String r2 = "SelectChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -2957,7 +2959,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r4 = 52
             r0.setAnimation(r1, r3, r4)
             android.widget.FrameLayout r0 = r10.floatingButtonContainer
-            r1 = 2131626467(0x7f0e09e3, float:1.8880171E38)
+            r1 = 2131626472(0x7f0e09e8, float:1.8880181E38)
             java.lang.String r3 = "NewMessageTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setContentDescription(r1)
@@ -3378,6 +3380,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x09f1:
             r10.showSearch(r0, r0)
         L_0x09f4:
+            int r1 = android.os.Build.VERSION.SDK_INT
+            r2 = 30
+            if (r1 < r2) goto L_0x09fd
+            org.telegram.messenger.FilesMigrationService.checkBottomSheet(r35)
+        L_0x09fd:
             r10.updateMenuButton(r0)
             android.view.View r0 = r10.fragmentView
             return r0
@@ -4262,11 +4269,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0.<init>((android.content.Context) r6)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r4)
-            r4 = 2131627134(0x7f0e0c7e, float:1.8881524E38)
+            r4 = 2131627139(0x7f0e0CLASSNAME, float:1.8881534E38)
             java.lang.String r5 = "PermissionStorage"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setMessage(r4)
-            r4 = 2131626746(0x7f0e0afa, float:1.8880737E38)
+            r4 = 2131626751(0x7f0e0aff, float:1.8880747E38)
             java.lang.String r5 = "OK"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setPositiveButton(r4, r1)
@@ -4303,11 +4310,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r0.setTitle(r1)
-            r1 = 2131627135(0x7f0e0c7f, float:1.8881526E38)
+            r1 = 2131627140(0x7f0e0CLASSNAME, float:1.8881536E38)
             java.lang.String r4 = "PermissionXiaomiLockscreen"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r0.setMessage(r1)
-            r1 = 2131627133(0x7f0e0c7d, float:1.8881522E38)
+            r1 = 2131627138(0x7f0e0CLASSNAME, float:1.8881532E38)
             java.lang.String r4 = "PermissionOpenSettings"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda9 r4 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda9
@@ -6518,7 +6525,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             java.lang.String r4 = "AppName"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setTitle(r3)
-            r3 = 2131627183(0x7f0e0caf, float:1.8881623E38)
+            r3 = 2131627188(0x7f0e0cb4, float:1.8881633E38)
             java.lang.Object[] r4 = new java.lang.Object[r12]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r2, r0)
             r2 = 0
@@ -6532,7 +6539,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda8 r2 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda8
             r2.<init>(r13)
             r1.setNegativeButton(r0, r2)
-            r0 = 2131626746(0x7f0e0afa, float:1.8880737E38)
+            r0 = 2131626751(0x7f0e0aff, float:1.8880747E38)
             java.lang.String r2 = "OK"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r2 = 0
@@ -6542,7 +6549,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r2 = 0
             goto L_0x01aa
         L_0x0195:
-            r1 = 2131627173(0x7f0e0ca5, float:1.8881603E38)
+            r1 = 2131627178(0x7f0e0caa, float:1.8881613E38)
             java.lang.Object[] r3 = new java.lang.Object[r12]
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r2, r0)
             r2 = 0
@@ -6941,15 +6948,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r39.getParentActivity()
             r0.<init>((android.content.Context) r1)
-            r1 = 2131627371(0x7f0e0d6b, float:1.8882005E38)
+            r1 = 2131627376(0x7f0e0d70, float:1.8882015E38)
             java.lang.String r2 = "PsaHideChatAlertTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131627370(0x7f0e0d6a, float:1.8882003E38)
+            r1 = 2131627375(0x7f0e0d6f, float:1.8882013E38)
             java.lang.String r2 = "PsaHideChatAlertText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
-            r1 = 2131627369(0x7f0e0d69, float:1.8882E38)
+            r1 = 2131627374(0x7f0e0d6e, float:1.888201E38)
             java.lang.String r2 = "PsaHide"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda10 r2 = new org.telegram.ui.DialogsActivity$$ExternalSyntheticLambda10
@@ -8274,6 +8281,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
+        FilesMigrationService.FilesMigrationBottomSheet filesMigrationBottomSheet;
+        boolean z = true;
         if (i == 1) {
             for (int i2 = 0; i2 < strArr.length; i2++) {
                 if (iArr.length > i2) {
@@ -8297,6 +8306,21 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (this.askingForPermissions) {
                 this.askingForPermissions = false;
                 showFiltersHint();
+            }
+        } else if (i == 4) {
+            int i3 = 0;
+            while (true) {
+                if (i3 >= iArr.length) {
+                    break;
+                } else if (iArr[i3] != 0) {
+                    z = false;
+                    break;
+                } else {
+                    i3++;
+                }
+            }
+            if (z && Build.VERSION.SDK_INT >= 30 && (filesMigrationBottomSheet = FilesMigrationService.filesMigrationBottomSheet) != null) {
+                filesMigrationBottomSheet.migrateOldFolder();
             }
         }
     }

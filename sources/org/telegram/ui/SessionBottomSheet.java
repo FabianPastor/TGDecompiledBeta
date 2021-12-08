@@ -432,15 +432,17 @@ public class SessionBottomSheet extends BottomSheet {
             addView(imageView, LayoutHelper.createFrame(28, 28.0f, 0, 16.0f, 8.0f, 0.0f, 0.0f));
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(1);
-            addView(linearLayout, LayoutHelper.createLinear(-1, -2, 64.0f, 4.0f, 0.0f, 4.0f));
+            addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 0, 64.0f, 4.0f, 0.0f, 4.0f));
             TextView textView = new TextView(context);
             this.valueText = textView;
             textView.setTextSize(2, 16.0f);
+            this.valueText.setGravity(3);
             this.valueText.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             linearLayout.addView(this.valueText, LayoutHelper.createLinear(-1, -2, 0, 0, 0, 0, 0));
             TextView textView2 = new TextView(context);
             this.descriptionText = textView2;
             textView2.setTextSize(2, 13.0f);
+            this.descriptionText.setGravity(3);
             this.descriptionText.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
             linearLayout.addView(this.descriptionText, LayoutHelper.createLinear(-1, -2, 0, 0, 4, 0, 0));
             setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));

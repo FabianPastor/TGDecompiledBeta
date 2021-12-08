@@ -96,6 +96,7 @@ public class BottomSheet extends Dialog {
     public boolean dismissed;
     protected boolean drawNavigationBar;
     private boolean focusable;
+    private boolean fullHeight;
     protected boolean fullWidth;
     /* access modifiers changed from: protected */
     public boolean isFullscreen;
@@ -136,6 +137,8 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: protected */
     public int statusBarHeight;
     /* access modifiers changed from: private */
+    public int tag;
+    /* access modifiers changed from: private */
     public CharSequence title;
     private TextView titleView;
     /* access modifiers changed from: private */
@@ -167,6 +170,11 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: protected */
     public boolean canDismissWithTouchOutside() {
         return true;
+    }
+
+    /* access modifiers changed from: protected */
+    public int getTargetOpenTranslationY() {
+        return 0;
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
@@ -1412,6 +1420,10 @@ public class BottomSheet extends Dialog {
         }
     }
 
+    public boolean isFocusable() {
+        return this.focusable;
+    }
+
     public void setFocusable(boolean z) {
         if (this.focusable != z) {
             this.focusable = z;
@@ -1617,12 +1629,22 @@ public class BottomSheet extends Dialog {
         return this.containerView;
     }
 
+    public int getTag() {
+        return this.tag;
+    }
+
     public void setDimBehind(boolean z) {
         this.dimBehind = z;
     }
 
     public void setDimBehindAlpha(int i) {
         this.dimBehindAlpha = i;
+    }
+
+    public void setItemText(int i, CharSequence charSequence) {
+        if (i >= 0 && i < this.itemViews.size()) {
+            this.itemViews.get(i).textView.setText(charSequence);
+        }
     }
 
     public void setItemColor(int i, int i2, int i3) {

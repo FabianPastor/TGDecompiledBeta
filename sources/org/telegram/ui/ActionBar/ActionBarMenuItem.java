@@ -1719,6 +1719,7 @@ public class ActionBarMenuItem extends FrameLayout {
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
         if (actionBarPopupWindowLayout != null && (findViewWithTag = actionBarPopupWindowLayout.findViewWithTag(Integer.valueOf(i))) != null && findViewWithTag.getVisibility() != 8) {
             findViewWithTag.setVisibility(8);
+            checkHideMenuItem();
         }
     }
 
@@ -1759,6 +1760,7 @@ public class ActionBarMenuItem extends FrameLayout {
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
         if (actionBarPopupWindowLayout != null && (findViewWithTag = actionBarPopupWindowLayout.findViewWithTag(Integer.valueOf(i))) != null && findViewWithTag.getVisibility() != 0) {
             findViewWithTag.setVisibility(0);
+            checkHideMenuItem();
         }
     }
 
