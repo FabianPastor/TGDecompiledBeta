@@ -1,17 +1,18 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda11 implements Runnable {
-    public final /* synthetic */ AccountInstance f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
+import android.content.DialogInterface;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ChatActivity;
+import org.telegram.ui.TwoStepVerificationSetupActivity;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda11(AccountInstance accountInstance, long j, int i) {
-        this.f$0 = accountInstance;
-        this.f$1 = j;
-        this.f$2 = i;
+public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda11 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ ChatActivity f$0;
+
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda11(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        SendMessagesHelper.lambda$finishGroup$76(this.f$0, this.f$1, this.f$2);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.presentFragment(new TwoStepVerificationSetupActivity(6, (TLRPC.TL_account_password) null));
     }
 }

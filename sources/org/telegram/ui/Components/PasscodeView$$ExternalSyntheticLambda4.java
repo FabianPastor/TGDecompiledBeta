@@ -10,6 +10,6 @@ public final /* synthetic */ class PasscodeView$$ExternalSyntheticLambda4 implem
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.lambda$new$3(view);
+        return this.f$0.m2440lambda$new$3$orgtelegramuiComponentsPasscodeView(view);
     }
 }

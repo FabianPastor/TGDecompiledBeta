@@ -11,6 +11,6 @@ public final /* synthetic */ class ProfileNotificationsActivity$3$$ExternalSynth
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onItemClick$4(dialogInterface, i);
+        this.f$0.m3826x9a03ec2e(dialogInterface, i);
     }
 }

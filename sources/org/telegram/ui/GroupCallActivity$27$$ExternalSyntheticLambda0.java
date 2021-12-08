@@ -11,6 +11,6 @@ public final /* synthetic */ class GroupCallActivity$27$$ExternalSyntheticLambda
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onUiVisibilityChanged$0(valueAnimator);
+        this.f$0.m2998x64102039(valueAnimator);
     }
 }

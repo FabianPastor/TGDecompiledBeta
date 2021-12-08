@@ -12,6 +12,6 @@ public final /* synthetic */ class DialogsItemAnimator$$ExternalSyntheticLambda1
     }
 
     public final void run() {
-        this.f$0.lambda$runPendingAnimations$2(this.f$1);
+        this.f$0.m2227x5c1CLASSNAMEe3(this.f$1);
     }
 }

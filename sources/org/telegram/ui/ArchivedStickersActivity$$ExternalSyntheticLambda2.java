@@ -2,7 +2,7 @@ package org.telegram.ui;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class ArchivedStickersActivity$$ExternalSyntheticLambda2 implements RequestDelegate {
     public final /* synthetic */ ArchivedStickersActivity f$0;
@@ -11,7 +11,7 @@ public final /* synthetic */ class ArchivedStickersActivity$$ExternalSyntheticLa
         this.f$0 = archivedStickersActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$getStickers$2(tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m1408lambda$getStickers$2$orgtelegramuiArchivedStickersActivity(tLObject, tL_error);
     }
 }

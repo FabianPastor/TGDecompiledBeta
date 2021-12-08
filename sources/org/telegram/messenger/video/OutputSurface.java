@@ -24,8 +24,8 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
     private SurfaceTexture mSurfaceTexture;
     private TextureRenderer mTextureRender;
 
-    public OutputSurface(MediaController.SavedFilterState savedFilterState, String str, String str2, ArrayList<VideoEditedInfo.MediaEntity> arrayList, MediaController.CropState cropState, int i, int i2, int i3, float f, boolean z) {
-        TextureRenderer textureRenderer = new TextureRenderer(savedFilterState, str, str2, arrayList, cropState, i, i2, i3, f, z);
+    public OutputSurface(MediaController.SavedFilterState savedFilterState, String imagePath, String paintPath, ArrayList<VideoEditedInfo.MediaEntity> mediaEntities, MediaController.CropState cropState, int w, int h, int rotation, float fps, boolean photo) {
+        TextureRenderer textureRenderer = new TextureRenderer(savedFilterState, imagePath, paintPath, mediaEntities, cropState, w, h, rotation, fps, photo);
         this.mTextureRender = textureRenderer;
         textureRenderer.surfaceCreated();
         SurfaceTexture surfaceTexture = new SurfaceTexture(this.mTextureRender.getTextureId());
@@ -34,20 +34,20 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
         this.mSurface = new Surface(this.mSurfaceTexture);
     }
 
-    private void eglSetup(int i, int i2) {
+    private void eglSetup(int width, int height) {
         EGL10 egl10 = (EGL10) EGLContext.getEGL();
         this.mEGL = egl10;
         EGLDisplay eglGetDisplay = egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
         this.mEGLDisplay = eglGetDisplay;
         if (eglGetDisplay == EGL10.EGL_NO_DISPLAY) {
             throw new RuntimeException("unable to get EGL10 display");
-        } else if (this.mEGL.eglInitialize(eglGetDisplay, (int[]) null)) {
-            EGLConfig[] eGLConfigArr = new EGLConfig[1];
-            if (this.mEGL.eglChooseConfig(this.mEGLDisplay, new int[]{12324, 8, 12323, 8, 12322, 8, 12321, 8, 12339, 1, 12352, 4, 12344}, eGLConfigArr, 1, new int[1])) {
-                this.mEGLContext = this.mEGL.eglCreateContext(this.mEGLDisplay, eGLConfigArr[0], EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
+        } else if (this.mEGL.eglInitialize(this.mEGLDisplay, (int[]) null)) {
+            EGLConfig[] configs = new EGLConfig[1];
+            if (this.mEGL.eglChooseConfig(this.mEGLDisplay, new int[]{12324, 8, 12323, 8, 12322, 8, 12321, 8, 12339, 1, 12352, 4, 12344}, configs, configs.length, new int[1])) {
+                this.mEGLContext = this.mEGL.eglCreateContext(this.mEGLDisplay, configs[0], EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
                 checkEglError("eglCreateContext");
                 if (this.mEGLContext != null) {
-                    this.mEGLSurface = this.mEGL.eglCreatePbufferSurface(this.mEGLDisplay, eGLConfigArr[0], new int[]{12375, i, 12374, i2, 12344});
+                    this.mEGLSurface = this.mEGL.eglCreatePbufferSurface(this.mEGLDisplay, configs[0], new int[]{12375, width, 12374, height, 12344});
                     checkEglError("eglCreatePbufferSurface");
                     if (this.mEGLSurface == null) {
                         throw new RuntimeException("surface was null");
@@ -67,10 +67,7 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
         EGL10 egl10 = this.mEGL;
         if (egl10 != null) {
             if (egl10.eglGetCurrentContext().equals(this.mEGLContext)) {
-                EGL10 egl102 = this.mEGL;
-                EGLDisplay eGLDisplay = this.mEGLDisplay;
-                EGLSurface eGLSurface = EGL10.EGL_NO_SURFACE;
-                egl102.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT);
+                this.mEGL.eglMakeCurrent(this.mEGLDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
             }
             this.mEGL.eglDestroySurface(this.mEGLDisplay, this.mEGLSurface);
             this.mEGL.eglDestroyContext(this.mEGLDisplay, this.mEGLContext);
@@ -115,8 +112,8 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
                     if (!this.mFrameAvailable) {
                         throw new RuntimeException("Surface frame wait timed out");
                     }
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                } catch (InterruptedException ie) {
+                    throw new RuntimeException(ie);
                 }
             }
             this.mFrameAvailable = false;
@@ -128,7 +125,7 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
         this.mTextureRender.drawFrame(this.mSurfaceTexture);
     }
 
-    public void onFrameAvailable(SurfaceTexture surfaceTexture) {
+    public void onFrameAvailable(SurfaceTexture st) {
         synchronized (this.mFrameSyncObject) {
             if (!this.mFrameAvailable) {
                 this.mFrameAvailable = true;
@@ -139,13 +136,13 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
         }
     }
 
-    private void checkEglError(String str) {
+    private void checkEglError(String msg) {
         if (this.mEGL.eglGetError() != 12288) {
             throw new RuntimeException("EGL error encountered (see log)");
         }
     }
 
-    public void changeFragmentShader(String str) {
-        this.mTextureRender.changeFragmentShader(str);
+    public void changeFragmentShader(String fragmentShader) {
+        this.mTextureRender.changeFragmentShader(fragmentShader);
     }
 }

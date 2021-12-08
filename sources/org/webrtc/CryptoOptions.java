@@ -9,23 +9,20 @@ public final class CryptoOptions {
         private final boolean enableEncryptedRtpHeaderExtensions;
         private final boolean enableGcmCryptoSuites;
 
-        private Srtp(boolean z, boolean z2, boolean z3) {
-            this.enableGcmCryptoSuites = z;
-            this.enableAes128Sha1_32CryptoCipher = z2;
-            this.enableEncryptedRtpHeaderExtensions = z3;
+        private Srtp(boolean enableGcmCryptoSuites2, boolean enableAes128Sha1_32CryptoCipher2, boolean enableEncryptedRtpHeaderExtensions2) {
+            this.enableGcmCryptoSuites = enableGcmCryptoSuites2;
+            this.enableAes128Sha1_32CryptoCipher = enableAes128Sha1_32CryptoCipher2;
+            this.enableEncryptedRtpHeaderExtensions = enableEncryptedRtpHeaderExtensions2;
         }
 
-        @CalledByNative("Srtp")
         public boolean getEnableGcmCryptoSuites() {
             return this.enableGcmCryptoSuites;
         }
 
-        @CalledByNative("Srtp")
         public boolean getEnableAes128Sha1_32CryptoCipher() {
             return this.enableAes128Sha1_32CryptoCipher;
         }
 
-        @CalledByNative("Srtp")
         public boolean getEnableEncryptedRtpHeaderExtensions() {
             return this.enableEncryptedRtpHeaderExtensions;
         }
@@ -34,31 +31,28 @@ public final class CryptoOptions {
     public final class SFrame {
         private final boolean requireFrameEncryption;
 
-        private SFrame(boolean z) {
-            this.requireFrameEncryption = z;
+        private SFrame(boolean requireFrameEncryption2) {
+            this.requireFrameEncryption = requireFrameEncryption2;
         }
 
-        @CalledByNative("SFrame")
         public boolean getRequireFrameEncryption() {
             return this.requireFrameEncryption;
         }
     }
 
-    private CryptoOptions(boolean z, boolean z2, boolean z3, boolean z4) {
-        this.srtp = new Srtp(z, z2, z3);
-        this.sframe = new SFrame(z4);
+    private CryptoOptions(boolean enableGcmCryptoSuites, boolean enableAes128Sha1_32CryptoCipher, boolean enableEncryptedRtpHeaderExtensions, boolean requireFrameEncryption) {
+        this.srtp = new Srtp(enableGcmCryptoSuites, enableAes128Sha1_32CryptoCipher, enableEncryptedRtpHeaderExtensions);
+        this.sframe = new SFrame(requireFrameEncryption);
     }
 
     public static Builder builder() {
         return new Builder();
     }
 
-    @CalledByNative
     public Srtp getSrtp() {
         return this.srtp;
     }
 
-    @CalledByNative
     public SFrame getSFrame() {
         return this.sframe;
     }
@@ -72,23 +66,23 @@ public final class CryptoOptions {
         private Builder() {
         }
 
-        public Builder setEnableGcmCryptoSuites(boolean z) {
-            this.enableGcmCryptoSuites = z;
+        public Builder setEnableGcmCryptoSuites(boolean enableGcmCryptoSuites2) {
+            this.enableGcmCryptoSuites = enableGcmCryptoSuites2;
             return this;
         }
 
-        public Builder setEnableAes128Sha1_32CryptoCipher(boolean z) {
-            this.enableAes128Sha1_32CryptoCipher = z;
+        public Builder setEnableAes128Sha1_32CryptoCipher(boolean enableAes128Sha1_32CryptoCipher2) {
+            this.enableAes128Sha1_32CryptoCipher = enableAes128Sha1_32CryptoCipher2;
             return this;
         }
 
-        public Builder setEnableEncryptedRtpHeaderExtensions(boolean z) {
-            this.enableEncryptedRtpHeaderExtensions = z;
+        public Builder setEnableEncryptedRtpHeaderExtensions(boolean enableEncryptedRtpHeaderExtensions2) {
+            this.enableEncryptedRtpHeaderExtensions = enableEncryptedRtpHeaderExtensions2;
             return this;
         }
 
-        public Builder setRequireFrameEncryption(boolean z) {
-            this.requireFrameEncryption = z;
+        public Builder setRequireFrameEncryption(boolean requireFrameEncryption2) {
+            this.requireFrameEncryption = requireFrameEncryption2;
             return this;
         }
 

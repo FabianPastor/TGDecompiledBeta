@@ -1,15 +1,20 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import org.telegram.messenger.MessagesStorage;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda4 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda4 implements MessagesStorage.LongCallback {
     public final /* synthetic */ ChatRightsEditActivity f$0;
+    public final /* synthetic */ TLRPC.InputCheckPasswordSRP f$1;
+    public final /* synthetic */ TwoStepVerificationActivity f$2;
 
-    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda4(ChatRightsEditActivity chatRightsEditActivity) {
+    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda4(ChatRightsEditActivity chatRightsEditActivity, TLRPC.InputCheckPasswordSRP inputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity) {
         this.f$0 = chatRightsEditActivity;
+        this.f$1 = inputCheckPasswordSRP;
+        this.f$2 = twoStepVerificationActivity;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$initTransfer$10(dialogInterface, i);
+    public final void run(long j) {
+        this.f$0.m1954lambda$initTransfer$7$orgtelegramuiChatRightsEditActivity(this.f$1, this.f$2, j);
     }
 }

@@ -1,14 +1,20 @@
 package org.telegram.messenger.voip;
 
-import org.telegram.messenger.NotificationCenter;
+import java.util.ArrayList;
+import org.telegram.messenger.ChatObject;
 
-public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda59 implements Runnable {
-    public static final /* synthetic */ VoIPService$$ExternalSyntheticLambda59 INSTANCE = new VoIPService$$ExternalSyntheticLambda59();
+public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda59 implements ChatObject.Call.OnParticipantsLoad {
+    public final /* synthetic */ VoIPService f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ int[] f$2;
 
-    private /* synthetic */ VoIPService$$ExternalSyntheticLambda59() {
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda59(VoIPService voIPService, long j, int[] iArr) {
+        this.f$0 = voIPService;
+        this.f$1 = j;
+        this.f$2 = iArr;
     }
 
-    public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didEndCall, new Object[0]);
+    public final void onLoad(ArrayList arrayList) {
+        this.f$0.m1211xa5a6fd50(this.f$1, this.f$2, arrayList);
     }
 }

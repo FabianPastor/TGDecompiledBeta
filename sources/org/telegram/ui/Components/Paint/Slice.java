@@ -16,15 +16,15 @@ public class Slice {
     private RectF bounds;
     private File file;
 
-    public Slice(ByteBuffer byteBuffer, RectF rectF, DispatchQueue dispatchQueue) {
-        this.bounds = rectF;
+    public Slice(ByteBuffer data, RectF rect, DispatchQueue queue) {
+        this.bounds = rect;
         try {
             this.file = File.createTempFile("paint", ".bin", ApplicationLoader.applicationContext.getCacheDir());
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
         if (this.file != null) {
-            storeData(byteBuffer);
+            storeData(data);
         }
     }
 
@@ -36,19 +36,19 @@ public class Slice {
         }
     }
 
-    private void storeData(ByteBuffer byteBuffer) {
+    private void storeData(ByteBuffer data) {
         try {
-            byte[] array = byteBuffer.array();
-            FileOutputStream fileOutputStream = new FileOutputStream(this.file);
+            byte[] input = data.array();
+            FileOutputStream fos = new FileOutputStream(this.file);
             Deflater deflater = new Deflater(1, true);
-            deflater.setInput(array, byteBuffer.arrayOffset(), byteBuffer.remaining());
+            deflater.setInput(input, data.arrayOffset(), data.remaining());
             deflater.finish();
-            byte[] bArr = new byte[1024];
+            byte[] buf = new byte[1024];
             while (!deflater.finished()) {
-                fileOutputStream.write(bArr, 0, deflater.deflate(bArr));
+                fos.write(buf, 0, deflater.deflate(buf));
             }
             deflater.end();
-            fileOutputStream.close();
+            fos.close();
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
@@ -56,29 +56,30 @@ public class Slice {
 
     public ByteBuffer getData() {
         try {
-            byte[] bArr = new byte[1024];
-            byte[] bArr2 = new byte[1024];
-            FileInputStream fileInputStream = new FileInputStream(this.file);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] input = new byte[1024];
+            byte[] output = new byte[1024];
+            FileInputStream fin = new FileInputStream(this.file);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
             Inflater inflater = new Inflater(true);
             while (true) {
-                int read = fileInputStream.read(bArr);
-                if (read != -1) {
-                    inflater.setInput(bArr, 0, read);
+                int numRead = fin.read(input);
+                if (numRead != -1) {
+                    inflater.setInput(input, 0, numRead);
                 }
                 while (true) {
-                    int inflate = inflater.inflate(bArr2, 0, 1024);
+                    int inflate = inflater.inflate(output, 0, output.length);
+                    int numDecompressed = inflate;
                     if (inflate == 0) {
                         break;
                     }
-                    byteArrayOutputStream.write(bArr2, 0, inflate);
+                    bos.write(output, 0, numDecompressed);
                 }
                 if (inflater.finished()) {
                     inflater.end();
-                    ByteBuffer wrap = ByteBuffer.wrap(byteArrayOutputStream.toByteArray(), 0, byteArrayOutputStream.size());
-                    byteArrayOutputStream.close();
-                    fileInputStream.close();
-                    return wrap;
+                    ByteBuffer result = ByteBuffer.wrap(bos.toByteArray(), 0, bos.size());
+                    bos.close();
+                    fin.close();
+                    return result;
                 }
                 inflater.needsInput();
             }
@@ -102,5 +103,9 @@ public class Slice {
 
     public int getHeight() {
         return (int) this.bounds.height();
+    }
+
+    public RectF getBounds() {
+        return new RectF(this.bounds);
     }
 }

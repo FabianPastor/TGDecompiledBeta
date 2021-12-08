@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPPendingCall$$ExternalSyntheticLambda1 imp
     }
 
     public final void didReceivedNotification(int i, int i2, Object[] objArr) {
-        this.f$0.lambda$new$0(i, i2, objArr);
+        this.f$0.m1194lambda$new$0$orgtelegrammessengervoipVoIPPendingCall(i, i2, objArr);
     }
 }

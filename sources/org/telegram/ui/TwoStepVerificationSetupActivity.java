@@ -45,24 +45,9 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SRPHelper;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$PasswordKdfAlgo;
-import org.telegram.tgnet.TLRPC$SecurePasswordKdfAlgo;
-import org.telegram.tgnet.TLRPC$TL_account_confirmPasswordEmail;
-import org.telegram.tgnet.TLRPC$TL_account_getPassword;
-import org.telegram.tgnet.TLRPC$TL_account_getPasswordSettings;
-import org.telegram.tgnet.TLRPC$TL_account_password;
-import org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings;
-import org.telegram.tgnet.TLRPC$TL_account_resendPasswordEmail;
-import org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings;
-import org.telegram.tgnet.TLRPC$TL_auth_checkRecoveryPassword;
-import org.telegram.tgnet.TLRPC$TL_auth_recoverPassword;
-import org.telegram.tgnet.TLRPC$TL_boolTrue;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_inputCheckPasswordSRP;
-import org.telegram.tgnet.TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow;
-import org.telegram.tgnet.TLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000;
-import org.telegram.tgnet.TLRPC$TL_secureSecretSettings;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -77,6 +62,18 @@ import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 
 public class TwoStepVerificationSetupActivity extends BaseFragment {
+    public static final int TYPE_EMAIL_CONFIRM = 5;
+    public static final int TYPE_EMAIL_RECOVERY = 4;
+    public static final int TYPE_ENTER_EMAIL = 3;
+    public static final int TYPE_ENTER_FIRST = 0;
+    public static final int TYPE_ENTER_HINT = 2;
+    public static final int TYPE_ENTER_SECOND = 1;
+    public static final int TYPE_INTRO = 6;
+    public static final int TYPE_PASSWORD_SET = 7;
+    public static final int TYPE_VERIFY = 8;
+    public static final int TYPE_VERIFY_OK = 9;
+    private static final int item_abort = 1;
+    private static final int item_resend = 2;
     /* access modifiers changed from: private */
     public AnimatorSet actionBarAnimator;
     /* access modifiers changed from: private */
@@ -89,7 +86,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     public TextView buttonTextView;
     private boolean closeAfterSet;
     /* access modifiers changed from: private */
-    public TLRPC$TL_account_password currentPassword;
+    public TLRPC.TL_account_password currentPassword;
     private byte[] currentPasswordHash = new byte[0];
     private byte[] currentSecret;
     private long currentSecretId;
@@ -106,7 +103,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public int emailCodeLength = 6;
     private boolean emailOnly;
-    private Runnable finishCallback = new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda16(this);
+    private Runnable finishCallback = new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda5(this);
     private String firstPassword;
     private ArrayList<BaseFragment> fragmentsToClose = new ArrayList<>();
     private String hint;
@@ -130,21 +127,8 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     public TextView topButton;
     private boolean waitingForEmail;
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$createView$19(View view, MotionEvent motionEvent) {
-        return true;
-    }
-
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showSetForcePasswordAlert$36(DialogInterface dialogInterface, int i) {
-    }
-
-    /* access modifiers changed from: protected */
-    public void onReset() {
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0() {
+    /* renamed from: lambda$new$0$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4030lambda$new$0$orgtelegramuiTwoStepVerificationSetupActivity() {
         EditTextBoldCursor editTextBoldCursor = this.passwordEditText;
         if (editTextBoldCursor != null) {
             if (editTextBoldCursor.length() != 0) {
@@ -157,47 +141,46 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         }
     }
 
-    public TwoStepVerificationSetupActivity(int i, TLRPC$TL_account_password tLRPC$TL_account_password) {
-        this.currentType = i;
-        this.currentPassword = tLRPC$TL_account_password;
-        if (tLRPC$TL_account_password == null && (i == 6 || i == 8)) {
+    public TwoStepVerificationSetupActivity(int type, TLRPC.TL_account_password password) {
+        this.currentType = type;
+        this.currentPassword = password;
+        if (password == null && (type == 6 || type == 8)) {
             loadPasswordInfo();
         } else {
-            this.waitingForEmail = !TextUtils.isEmpty(tLRPC$TL_account_password.email_unconfirmed_pattern);
+            this.waitingForEmail = !TextUtils.isEmpty(password.email_unconfirmed_pattern);
         }
     }
 
-    public TwoStepVerificationSetupActivity(int i, int i2, TLRPC$TL_account_password tLRPC$TL_account_password) {
-        this.currentAccount = i;
-        this.currentType = i2;
-        this.currentPassword = tLRPC$TL_account_password;
-        this.waitingForEmail = !TextUtils.isEmpty(tLRPC$TL_account_password.email_unconfirmed_pattern);
+    public TwoStepVerificationSetupActivity(int account, int type, TLRPC.TL_account_password password) {
+        this.currentAccount = account;
+        this.currentType = type;
+        this.currentPassword = password;
+        this.waitingForEmail = !TextUtils.isEmpty(password.email_unconfirmed_pattern);
         if (this.currentPassword == null) {
-            int i3 = this.currentType;
-            if (i3 == 6 || i3 == 8) {
+            int i = this.currentType;
+            if (i == 6 || i == 8) {
                 loadPasswordInfo();
             }
         }
     }
 
-    public void setCurrentPasswordParams(byte[] bArr, long j, byte[] bArr2, boolean z) {
-        this.currentPasswordHash = bArr;
-        this.currentSecret = bArr2;
-        this.currentSecretId = j;
-        this.emailOnly = z;
+    public void setCurrentPasswordParams(byte[] passwordHash, long secretId, byte[] secret, boolean email2) {
+        this.currentPasswordHash = passwordHash;
+        this.currentSecret = secret;
+        this.currentSecretId = secretId;
+        this.emailOnly = email2;
     }
 
-    public void setCurrentEmailCode(String str) {
-        this.emailCode = str;
+    public void setCurrentEmailCode(String code) {
+        this.emailCode = code;
     }
 
-    public void addFragmentToClose(BaseFragment baseFragment) {
-        this.fragmentsToClose.add(baseFragment);
+    public void addFragmentToClose(BaseFragment fragment) {
+        this.fragmentsToClose.add(fragment);
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        int i = 0;
         this.doneAfterPasswordLoad = false;
         Runnable runnable = this.setAnimationRunnable;
         if (runnable != null) {
@@ -205,13 +188,14 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             this.setAnimationRunnable = null;
         }
         if (this.animationDrawables != null) {
+            int a = 0;
             while (true) {
                 RLottieDrawable[] rLottieDrawableArr = this.animationDrawables;
-                if (i >= rLottieDrawableArr.length) {
+                if (a >= rLottieDrawableArr.length) {
                     break;
                 }
-                rLottieDrawableArr[i].recycle();
-                i++;
+                rLottieDrawableArr[a].recycle();
+                a++;
             }
             this.animationDrawables = null;
         }
@@ -241,56 +225,55 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             this.actionBar.showActionModeTop();
         }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            /* access modifiers changed from: private */
-            public static /* synthetic */ void lambda$onItemClick$0(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-            }
-
-            public void onItemClick(int i) {
-                String str;
-                if (i == -1) {
+            public void onItemClick(int id) {
+                String text;
+                if (id == -1) {
                     if (TwoStepVerificationSetupActivity.this.otherwiseReloginDays < 0 || TwoStepVerificationSetupActivity.this.parentLayout.fragmentsStack.size() != 1) {
                         TwoStepVerificationSetupActivity.this.finishFragment();
                     } else {
                         TwoStepVerificationSetupActivity.this.showSetForcePasswordAlert();
                     }
-                } else if (i == 2) {
-                    ConnectionsManager.getInstance(TwoStepVerificationSetupActivity.this.currentAccount).sendRequest(new TLRPC$TL_account_resendPasswordEmail(), TwoStepVerificationSetupActivity$1$$ExternalSyntheticLambda1.INSTANCE);
+                } else if (id == 2) {
+                    ConnectionsManager.getInstance(TwoStepVerificationSetupActivity.this.currentAccount).sendRequest(new TLRPC.TL_account_resendPasswordEmail(), TwoStepVerificationSetupActivity$1$$ExternalSyntheticLambda1.INSTANCE);
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) TwoStepVerificationSetupActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("ResendCodeInfo", NUM));
                     builder.setTitle(LocaleController.getString("TwoStepVerificationTitle", NUM));
                     builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
                     TwoStepVerificationSetupActivity.this.showDialog(builder.create());
-                } else if (i == 1) {
+                } else if (id == 1) {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) TwoStepVerificationSetupActivity.this.getParentActivity());
                     if (TwoStepVerificationSetupActivity.this.currentPassword == null || !TwoStepVerificationSetupActivity.this.currentPassword.has_password) {
-                        str = LocaleController.getString("CancelPasswordQuestion", NUM);
+                        text = LocaleController.getString("CancelPasswordQuestion", NUM);
                     } else {
-                        str = LocaleController.getString("CancelEmailQuestion", NUM);
+                        text = LocaleController.getString("CancelEmailQuestion", NUM);
                     }
-                    String string = LocaleController.getString("CancelEmailQuestionTitle", NUM);
-                    String string2 = LocaleController.getString("Abort", NUM);
-                    builder2.setMessage(str);
-                    builder2.setTitle(string);
-                    builder2.setPositiveButton(string2, new TwoStepVerificationSetupActivity$1$$ExternalSyntheticLambda0(this));
+                    String title = LocaleController.getString("CancelEmailQuestionTitle", NUM);
+                    String buttonText = LocaleController.getString("Abort", NUM);
+                    builder2.setMessage(text);
+                    builder2.setTitle(title);
+                    builder2.setPositiveButton(buttonText, new TwoStepVerificationSetupActivity$1$$ExternalSyntheticLambda0(this));
                     builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-                    AlertDialog create = builder2.create();
-                    TwoStepVerificationSetupActivity.this.showDialog(create);
-                    TextView textView = (TextView) create.getButton(-1);
-                    if (textView != null) {
-                        textView.setTextColor(Theme.getColor("dialogTextRed2"));
+                    AlertDialog alertDialog = builder2.create();
+                    TwoStepVerificationSetupActivity.this.showDialog(alertDialog);
+                    TextView button = (TextView) alertDialog.getButton(-1);
+                    if (button != null) {
+                        button.setTextColor(Theme.getColor("dialogTextRed2"));
                     }
                 }
             }
 
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$onItemClick$1(DialogInterface dialogInterface, int i) {
+            static /* synthetic */ void lambda$onItemClick$0(TLObject response, TLRPC.TL_error error) {
+            }
+
+            /* renamed from: lambda$onItemClick$1$org-telegram-ui-TwoStepVerificationSetupActivity$1  reason: not valid java name */
+            public /* synthetic */ void m4042xced081da(DialogInterface dialogInterface, int i) {
                 TwoStepVerificationSetupActivity.this.setNewPassword(true);
             }
         });
         if (this.currentType == 5) {
-            ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, NUM);
-            addItem.addSubItem(2, LocaleController.getString("ResendCode", NUM));
-            addItem.addSubItem(1, LocaleController.getString("AbortPasswordMenu", NUM));
+            ActionBarMenuItem item = this.actionBar.createMenu().addItem(0, NUM);
+            item.addSubItem(2, LocaleController.getString("ResendCode", NUM));
+            item.addSubItem(1, LocaleController.getString("AbortPasswordMenu", NUM));
         }
         TextView textView = new TextView(context2);
         this.topButton = textView;
@@ -299,7 +282,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         this.topButton.setGravity(16);
         this.topButton.setVisibility(8);
         this.actionBar.addView(this.topButton, LayoutHelper.createFrame(-2, -1.0f, 53, 0.0f, 0.0f, 22.0f, 0.0f));
-        this.topButton.setOnClickListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda8(this));
+        this.topButton.setOnClickListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda1(this));
         RLottieImageView rLottieImageView = new RLottieImageView(context2);
         this.imageView = rLottieImageView;
         rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -325,7 +308,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         this.descriptionText2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
         this.descriptionText2.setPadding(AndroidUtilities.dp(32.0f), 0, AndroidUtilities.dp(32.0f), 0);
         this.descriptionText2.setVisibility(8);
-        this.descriptionText2.setOnClickListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda7(this));
+        this.descriptionText2.setOnClickListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda2(this));
         TextView textView5 = new TextView(context2);
         this.buttonTextView = textView5;
         textView5.setMinWidth(AndroidUtilities.dp(220.0f));
@@ -335,7 +318,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         this.buttonTextView.setTextSize(1, 14.0f);
         this.buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.buttonTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
-        this.buttonTextView.setOnClickListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda10(this));
+        this.buttonTextView.setOnClickListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda35(this));
         switch (this.currentType) {
             case 0:
             case 1:
@@ -344,22 +327,22 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             case 4:
             case 5:
             case 8:
-                AnonymousClass3 r2 = new ViewGroup(context2) {
+                ViewGroup container = new ViewGroup(context2) {
                     /* access modifiers changed from: protected */
-                    public void onMeasure(int i, int i2) {
-                        int size = View.MeasureSpec.getSize(i);
-                        int size2 = View.MeasureSpec.getSize(i2);
+                    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                        int width = View.MeasureSpec.getSize(widthMeasureSpec);
+                        int height = View.MeasureSpec.getSize(heightMeasureSpec);
                         if (TwoStepVerificationSetupActivity.this.topButton != null) {
                             ((FrameLayout.LayoutParams) TwoStepVerificationSetupActivity.this.topButton.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
                         }
-                        TwoStepVerificationSetupActivity.this.actionBar.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), i2);
-                        TwoStepVerificationSetupActivity.this.actionBarBackground.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(TwoStepVerificationSetupActivity.this.actionBar.getMeasuredHeight() + AndroidUtilities.dp(3.0f), NUM));
-                        TwoStepVerificationSetupActivity.this.scrollView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), i2);
-                        setMeasuredDimension(size, size2);
+                        TwoStepVerificationSetupActivity.this.actionBar.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), heightMeasureSpec);
+                        TwoStepVerificationSetupActivity.this.actionBarBackground.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(TwoStepVerificationSetupActivity.this.actionBar.getMeasuredHeight() + AndroidUtilities.dp(3.0f), NUM));
+                        TwoStepVerificationSetupActivity.this.scrollView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), heightMeasureSpec);
+                        setMeasuredDimension(width, height);
                     }
 
                     /* access modifiers changed from: protected */
-                    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                    public void onLayout(boolean changed, int l, int t, int r, int b) {
                         TwoStepVerificationSetupActivity.this.actionBar.layout(0, 0, TwoStepVerificationSetupActivity.this.actionBar.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.actionBar.getMeasuredHeight());
                         TwoStepVerificationSetupActivity.this.actionBarBackground.layout(0, 0, TwoStepVerificationSetupActivity.this.actionBarBackground.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.actionBarBackground.getMeasuredHeight());
                         TwoStepVerificationSetupActivity.this.scrollView.layout(0, 0, TwoStepVerificationSetupActivity.this.scrollView.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.scrollView.getMeasuredHeight());
@@ -372,13 +355,13 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     private Rect tempRect = new Rect();
 
                     /* access modifiers changed from: protected */
-                    public void onScrollChanged(int i, int i2, int i3, int i4) {
-                        super.onScrollChanged(i, i2, i3, i4);
+                    public void onScrollChanged(int l, int t, int oldl, int oldt) {
+                        super.onScrollChanged(l, t, oldl, oldt);
                         if (TwoStepVerificationSetupActivity.this.titleTextView != null) {
                             TwoStepVerificationSetupActivity.this.titleTextView.getLocationOnScreen(this.location);
-                            boolean z = this.location[1] + TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredHeight() < TwoStepVerificationSetupActivity.this.actionBar.getBottom();
-                            if (z != (TwoStepVerificationSetupActivity.this.titleTextView.getTag() == null)) {
-                                TwoStepVerificationSetupActivity.this.titleTextView.setTag(z ? null : 1);
+                            boolean show = this.location[1] + TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredHeight() < TwoStepVerificationSetupActivity.this.actionBar.getBottom();
+                            if (show != (TwoStepVerificationSetupActivity.this.titleTextView.getTag() == null)) {
+                                TwoStepVerificationSetupActivity.this.titleTextView.setTag(show ? null : 1);
                                 if (TwoStepVerificationSetupActivity.this.actionBarAnimator != null) {
                                     TwoStepVerificationSetupActivity.this.actionBarAnimator.cancel();
                                     AnimatorSet unused = TwoStepVerificationSetupActivity.this.actionBarAnimator = null;
@@ -390,12 +373,12 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                                 Property property = View.ALPHA;
                                 float[] fArr = new float[1];
                                 float f = 1.0f;
-                                fArr[0] = z ? 1.0f : 0.0f;
+                                fArr[0] = show ? 1.0f : 0.0f;
                                 animatorArr[0] = ObjectAnimator.ofFloat(access$1700, property, fArr);
                                 SimpleTextView titleTextView = TwoStepVerificationSetupActivity.this.actionBar.getTitleTextView();
                                 Property property2 = View.ALPHA;
                                 float[] fArr2 = new float[1];
-                                if (!z) {
+                                if (!show) {
                                     f = 0.0f;
                                 }
                                 fArr2[0] = f;
@@ -403,8 +386,8 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                                 access$2300.playTogether(animatorArr);
                                 TwoStepVerificationSetupActivity.this.actionBarAnimator.setDuration(150);
                                 TwoStepVerificationSetupActivity.this.actionBarAnimator.addListener(new AnimatorListenerAdapter() {
-                                    public void onAnimationEnd(Animator animator) {
-                                        if (animator.equals(TwoStepVerificationSetupActivity.this.actionBarAnimator)) {
+                                    public void onAnimationEnd(Animator animation) {
+                                        if (animation.equals(TwoStepVerificationSetupActivity.this.actionBarAnimator)) {
                                             AnimatorSet unused = TwoStepVerificationSetupActivity.this.actionBarAnimator = null;
                                         }
                                     }
@@ -414,42 +397,40 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         }
                     }
 
-                    public void scrollToDescendant(View view) {
-                        view.getDrawingRect(this.tempRect);
-                        offsetDescendantRectToMyCoords(view, this.tempRect);
+                    public void scrollToDescendant(View child) {
+                        child.getDrawingRect(this.tempRect);
+                        offsetDescendantRectToMyCoords(child, this.tempRect);
                         this.tempRect.bottom += AndroidUtilities.dp(120.0f);
-                        int computeScrollDeltaToGetChildRectOnScreen = computeScrollDeltaToGetChildRectOnScreen(this.tempRect);
-                        if (computeScrollDeltaToGetChildRectOnScreen < 0) {
-                            int measuredHeight = (getMeasuredHeight() - view.getMeasuredHeight()) / 2;
+                        int scrollDelta = computeScrollDeltaToGetChildRectOnScreen(this.tempRect);
+                        if (scrollDelta < 0) {
+                            int measuredHeight = (getMeasuredHeight() - child.getMeasuredHeight()) / 2;
                             this.scrollingUp = measuredHeight;
-                            computeScrollDeltaToGetChildRectOnScreen -= measuredHeight;
+                            scrollDelta -= measuredHeight;
                         } else {
                             this.scrollingUp = 0;
                         }
-                        if (computeScrollDeltaToGetChildRectOnScreen != 0) {
-                            smoothScrollBy(0, computeScrollDeltaToGetChildRectOnScreen);
+                        if (scrollDelta != 0) {
+                            smoothScrollBy(0, scrollDelta);
                         }
                     }
 
-                    public void requestChildFocus(View view, View view2) {
-                        if (Build.VERSION.SDK_INT < 29 && view2 != null && !this.isLayoutDirty) {
-                            scrollToDescendant(view2);
+                    public void requestChildFocus(View child, View focused) {
+                        if (Build.VERSION.SDK_INT < 29 && focused != null && !this.isLayoutDirty) {
+                            scrollToDescendant(focused);
                         }
-                        super.requestChildFocus(view, view2);
+                        super.requestChildFocus(child, focused);
                     }
 
-                    public boolean requestChildRectangleOnScreen(View view, Rect rect, boolean z) {
+                    public boolean requestChildRectangleOnScreen(View child, Rect rectangle, boolean immediate) {
                         if (Build.VERSION.SDK_INT < 23) {
-                            int dp = rect.bottom + AndroidUtilities.dp(120.0f);
-                            rect.bottom = dp;
-                            int i = this.scrollingUp;
-                            if (i != 0) {
-                                rect.top -= i;
-                                rect.bottom = dp - i;
+                            rectangle.bottom += AndroidUtilities.dp(120.0f);
+                            if (this.scrollingUp != 0) {
+                                rectangle.top -= this.scrollingUp;
+                                rectangle.bottom -= this.scrollingUp;
                                 this.scrollingUp = 0;
                             }
                         }
-                        return super.requestChildRectangleOnScreen(view, rect, z);
+                        return super.requestChildRectangleOnScreen(child, rectangle, immediate);
                     }
 
                     public void requestLayout() {
@@ -458,22 +439,22 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     }
 
                     /* access modifiers changed from: protected */
-                    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                    public void onLayout(boolean changed, int l, int t, int r, int b) {
                         this.isLayoutDirty = false;
-                        super.onLayout(z, i, i2, i3, i4);
+                        super.onLayout(changed, l, t, r, b);
                     }
                 };
                 this.scrollView = r15;
                 r15.setVerticalScrollBarEnabled(false);
-                r2.addView(this.scrollView);
-                LinearLayout linearLayout = new LinearLayout(context2);
-                linearLayout.setOrientation(1);
-                this.scrollView.addView(linearLayout, LayoutHelper.createScroll(-1, -1, 51));
-                linearLayout.addView(this.imageView, LayoutHelper.createLinear(-2, -2, 49, 0, 69, 0, 0));
-                linearLayout.addView(this.titleTextView, LayoutHelper.createLinear(-2, -2, 49, 0, 8, 0, 0));
-                linearLayout.addView(this.descriptionText, LayoutHelper.createLinear(-2, -2, 49, 0, 9, 0, 0));
+                container.addView(this.scrollView);
+                LinearLayout scrollViewLinearLayout = new LinearLayout(context2);
+                scrollViewLinearLayout.setOrientation(1);
+                this.scrollView.addView(scrollViewLinearLayout, LayoutHelper.createScroll(-1, -1, 51));
+                scrollViewLinearLayout.addView(this.imageView, LayoutHelper.createLinear(-2, -2, 49, 0, 69, 0, 0));
+                scrollViewLinearLayout.addView(this.titleTextView, LayoutHelper.createLinear(-2, -2, 49, 0, 8, 0, 0));
+                scrollViewLinearLayout.addView(this.descriptionText, LayoutHelper.createLinear(-2, -2, 49, 0, 9, 0, 0));
                 FrameLayout frameLayout = new FrameLayout(context2);
-                linearLayout.addView(frameLayout, LayoutHelper.createLinear(220, 36, 49, 40, 32, 40, 0));
+                scrollViewLinearLayout.addView(frameLayout, LayoutHelper.createLinear(220, 36, 49, 40, 32, 40, 0));
                 EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
                 this.passwordEditText = editTextBoldCursor;
                 editTextBoldCursor.setTextSize(1, 17.0f);
@@ -490,32 +471,32 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 this.passwordEditText.setSingleLine(true);
                 this.passwordEditText.setCursorWidth(1.5f);
                 frameLayout.addView(this.passwordEditText, LayoutHelper.createFrame(220, 36, 49));
-                this.passwordEditText.setOnEditorActionListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda13(this));
-                this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
-                    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                this.passwordEditText.setOnEditorActionListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda4(this));
+                this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                         return false;
                     }
 
-                    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                    public void onDestroyActionMode(ActionMode mode) {
+                    }
+
+                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                         return false;
                     }
 
-                    public void onDestroyActionMode(ActionMode actionMode) {
-                    }
-
-                    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                         return false;
                     }
                 });
                 AnonymousClass6 r4 = new ImageView(context2) {
-                    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-                        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+                    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+                        super.onInitializeAccessibilityNodeInfo(info);
                         boolean z = true;
-                        accessibilityNodeInfo.setCheckable(true);
+                        info.setCheckable(true);
                         if (TwoStepVerificationSetupActivity.this.passwordEditText.getTransformationMethod() != null) {
                             z = false;
                         }
-                        accessibilityNodeInfo.setChecked(z);
+                        info.setChecked(z);
                     }
                 };
                 this.showPasswordButton = r4;
@@ -528,9 +509,9 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 this.showPasswordButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
                 this.showPasswordButton.setVisibility(8);
                 frameLayout.addView(this.showPasswordButton, LayoutHelper.createFrame(36, 36.0f, 53, 0.0f, -5.0f, 0.0f, 0.0f));
-                this.showPasswordButton.setOnClickListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda9(this));
+                this.showPasswordButton.setOnClickListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda36(this));
                 FrameLayout frameLayout2 = new FrameLayout(context2);
-                linearLayout.addView(frameLayout2, LayoutHelper.createLinear(-1, -2, 51, 0, 36, 0, 22));
+                scrollViewLinearLayout.addView(frameLayout2, LayoutHelper.createLinear(-1, -2, 51, 0, 36, 0, 22));
                 frameLayout2.addView(this.buttonTextView, LayoutHelper.createFrame(-2, 42, 49));
                 frameLayout2.addView(this.descriptionText2, LayoutHelper.createFrame(-2, -2, 49));
                 if (this.currentType == 4) {
@@ -542,93 +523,88 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     this.descriptionText3.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
                     this.descriptionText3.setPadding(AndroidUtilities.dp(32.0f), 0, AndroidUtilities.dp(32.0f), 0);
                     this.descriptionText3.setText(LocaleController.getString("RestoreEmailTroubleNoEmail", NUM));
-                    linearLayout.addView(this.descriptionText3, LayoutHelper.createLinear(-2, -2, 49, 0, 0, 0, 25));
-                    this.descriptionText3.setOnClickListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda11(this));
+                    scrollViewLinearLayout.addView(this.descriptionText3, LayoutHelper.createLinear(-2, -2, 49, 0, 0, 0, 25));
+                    this.descriptionText3.setOnClickListener(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda37(this));
                 }
-                this.fragmentView = r2;
-                AnonymousClass7 r42 = new View(context2) {
+                this.fragmentView = container;
+                AnonymousClass7 r5 = new View(context2) {
                     private Paint paint = new Paint();
 
                     /* access modifiers changed from: protected */
                     public void onDraw(Canvas canvas) {
                         this.paint.setColor(Theme.getColor("windowBackgroundWhite"));
-                        int measuredHeight = getMeasuredHeight() - AndroidUtilities.dp(3.0f);
-                        canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) measuredHeight, this.paint);
-                        TwoStepVerificationSetupActivity.this.parentLayout.drawHeaderShadow(canvas, measuredHeight);
+                        int h = getMeasuredHeight() - AndroidUtilities.dp(3.0f);
+                        canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) h, this.paint);
+                        TwoStepVerificationSetupActivity.this.parentLayout.drawHeaderShadow(canvas, h);
                     }
                 };
-                this.actionBarBackground = r42;
-                r42.setAlpha(0.0f);
-                r2.addView(this.actionBarBackground);
-                r2.addView(this.actionBar);
+                this.actionBarBackground = r5;
+                r5.setAlpha(0.0f);
+                container.addView(this.actionBarBackground);
+                container.addView(this.actionBar);
                 break;
             case 6:
             case 7:
             case 9:
-                AnonymousClass2 r22 = new ViewGroup(context2) {
+                ViewGroup container2 = new ViewGroup(context2) {
                     /* access modifiers changed from: protected */
-                    public void onMeasure(int i, int i2) {
-                        int size = View.MeasureSpec.getSize(i);
-                        int size2 = View.MeasureSpec.getSize(i2);
-                        TwoStepVerificationSetupActivity.this.actionBar.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), i2);
-                        if (size > size2) {
-                            float f = (float) size;
-                            TwoStepVerificationSetupActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec((int) (0.45f * f), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size2) * 0.68f), NUM));
-                            int i3 = (int) (f * 0.6f);
-                            TwoStepVerificationSetupActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(i3, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            TwoStepVerificationSetupActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(i3, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            TwoStepVerificationSetupActivity.this.descriptionText2.measure(View.MeasureSpec.makeMeasureSpec(i3, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            TwoStepVerificationSetupActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(i3, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                        int width = View.MeasureSpec.getSize(widthMeasureSpec);
+                        int height = View.MeasureSpec.getSize(heightMeasureSpec);
+                        TwoStepVerificationSetupActivity.this.actionBar.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), heightMeasureSpec);
+                        if (width > height) {
+                            TwoStepVerificationSetupActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.45f), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.68f), NUM));
+                            TwoStepVerificationSetupActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            TwoStepVerificationSetupActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            TwoStepVerificationSetupActivity.this.descriptionText2.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            TwoStepVerificationSetupActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
                         } else {
-                            TwoStepVerificationSetupActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size2) * 0.399f), NUM));
-                            TwoStepVerificationSetupActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            TwoStepVerificationSetupActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            TwoStepVerificationSetupActivity.this.descriptionText2.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            TwoStepVerificationSetupActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                            TwoStepVerificationSetupActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.399f), NUM));
+                            TwoStepVerificationSetupActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            TwoStepVerificationSetupActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            TwoStepVerificationSetupActivity.this.descriptionText2.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            TwoStepVerificationSetupActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
                         }
-                        setMeasuredDimension(size, size2);
+                        setMeasuredDimension(width, height);
                     }
 
                     /* access modifiers changed from: protected */
-                    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-                        TwoStepVerificationSetupActivity.this.actionBar.layout(0, 0, i3, TwoStepVerificationSetupActivity.this.actionBar.getMeasuredHeight());
-                        int i5 = i3 - i;
-                        int i6 = i4 - i2;
-                        if (i3 > i4) {
-                            int measuredHeight = (i6 - TwoStepVerificationSetupActivity.this.imageView.getMeasuredHeight()) / 2;
-                            TwoStepVerificationSetupActivity.this.imageView.layout(0, measuredHeight, TwoStepVerificationSetupActivity.this.imageView.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.imageView.getMeasuredHeight() + measuredHeight);
-                            float f = (float) i5;
-                            float f2 = 0.4f * f;
-                            int i7 = (int) f2;
-                            float f3 = (float) i6;
-                            int i8 = (int) (0.22f * f3);
-                            TwoStepVerificationSetupActivity.this.titleTextView.layout(i7, i8, TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredWidth() + i7, TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredHeight() + i8);
-                            int i9 = (int) (0.39f * f3);
-                            TwoStepVerificationSetupActivity.this.descriptionText.layout(i7, i9, TwoStepVerificationSetupActivity.this.descriptionText.getMeasuredWidth() + i7, TwoStepVerificationSetupActivity.this.descriptionText.getMeasuredHeight() + i9);
-                            int measuredWidth = (int) (f2 + (((f * 0.6f) - ((float) TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredWidth())) / 2.0f));
-                            int i10 = (int) (f3 * 0.64f);
-                            TwoStepVerificationSetupActivity.this.buttonTextView.layout(measuredWidth, i10, TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth, TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredHeight() + i10);
+                    public void onLayout(boolean changed, int l, int t, int r, int b) {
+                        TwoStepVerificationSetupActivity.this.actionBar.layout(0, 0, r, TwoStepVerificationSetupActivity.this.actionBar.getMeasuredHeight());
+                        int width = r - l;
+                        int height = b - t;
+                        if (r > b) {
+                            int y = (height - TwoStepVerificationSetupActivity.this.imageView.getMeasuredHeight()) / 2;
+                            TwoStepVerificationSetupActivity.this.imageView.layout(0, y, TwoStepVerificationSetupActivity.this.imageView.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.imageView.getMeasuredHeight() + y);
+                            int x = (int) (((float) width) * 0.4f);
+                            int y2 = (int) (((float) height) * 0.22f);
+                            TwoStepVerificationSetupActivity.this.titleTextView.layout(x, y2, TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredWidth() + x, TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredHeight() + y2);
+                            int x2 = (int) (((float) width) * 0.4f);
+                            int y3 = (int) (((float) height) * 0.39f);
+                            TwoStepVerificationSetupActivity.this.descriptionText.layout(x2, y3, TwoStepVerificationSetupActivity.this.descriptionText.getMeasuredWidth() + x2, TwoStepVerificationSetupActivity.this.descriptionText.getMeasuredHeight() + y3);
+                            int x3 = (int) ((((float) width) * 0.4f) + (((((float) width) * 0.6f) - ((float) TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredWidth())) / 2.0f));
+                            int y4 = (int) (((float) height) * 0.64f);
+                            TwoStepVerificationSetupActivity.this.buttonTextView.layout(x3, y4, TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredWidth() + x3, TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredHeight() + y4);
                             return;
                         }
-                        float f4 = (float) i6;
-                        int i11 = (int) (0.148f * f4);
-                        TwoStepVerificationSetupActivity.this.imageView.layout(0, i11, TwoStepVerificationSetupActivity.this.imageView.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.imageView.getMeasuredHeight() + i11);
-                        int i12 = (int) (0.458f * f4);
-                        TwoStepVerificationSetupActivity.this.titleTextView.layout(0, i12, TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredHeight() + i12);
-                        int measuredHeight2 = i12 + TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredHeight() + AndroidUtilities.dp(12.0f);
-                        TwoStepVerificationSetupActivity.this.descriptionText.layout(0, measuredHeight2, TwoStepVerificationSetupActivity.this.descriptionText.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.descriptionText.getMeasuredHeight() + measuredHeight2);
-                        int measuredWidth2 = (i5 - TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredWidth()) / 2;
-                        int i13 = (int) (f4 * 0.791f);
-                        TwoStepVerificationSetupActivity.this.buttonTextView.layout(measuredWidth2, i13, TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth2, TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredHeight() + i13);
+                        int y5 = (int) (((float) height) * 0.148f);
+                        TwoStepVerificationSetupActivity.this.imageView.layout(0, y5, TwoStepVerificationSetupActivity.this.imageView.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.imageView.getMeasuredHeight() + y5);
+                        int y6 = (int) (((float) height) * 0.458f);
+                        TwoStepVerificationSetupActivity.this.titleTextView.layout(0, y6, TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredHeight() + y6);
+                        int y7 = y6 + TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredHeight() + AndroidUtilities.dp(12.0f);
+                        TwoStepVerificationSetupActivity.this.descriptionText.layout(0, y7, TwoStepVerificationSetupActivity.this.descriptionText.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.descriptionText.getMeasuredHeight() + y7);
+                        int x4 = (width - TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredWidth()) / 2;
+                        int y8 = (int) (((float) height) * 0.791f);
+                        TwoStepVerificationSetupActivity.this.buttonTextView.layout(x4, y8, TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredWidth() + x4, TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredHeight() + y8);
                     }
                 };
-                r22.setOnTouchListener(TwoStepVerificationSetupActivity$$ExternalSyntheticLambda12.INSTANCE);
-                r22.addView(this.actionBar);
-                r22.addView(this.imageView);
-                r22.addView(this.titleTextView);
-                r22.addView(this.descriptionText);
-                r22.addView(this.buttonTextView);
-                this.fragmentView = r22;
+                container2.setOnTouchListener(TwoStepVerificationSetupActivity$$ExternalSyntheticLambda3.INSTANCE);
+                container2.addView(this.actionBar);
+                container2.addView(this.imageView);
+                container2.addView(this.titleTextView);
+                container2.addView(this.descriptionText);
+                container2.addView(this.buttonTextView);
+                this.fragmentView = container2;
                 break;
         }
         this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
@@ -722,11 +698,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 this.passwordEditText.setImeOptions(NUM);
                 TextView textView7 = this.descriptionText2;
                 Object[] objArr = new Object[1];
-                String str = this.currentPassword.email_unconfirmed_pattern;
-                if (str == null) {
-                    str = "";
-                }
-                objArr[0] = str;
+                objArr[0] = this.currentPassword.email_unconfirmed_pattern != null ? this.currentPassword.email_unconfirmed_pattern : "";
                 textView7.setText(LocaleController.formatString("RestoreEmailSent", NUM, objArr));
                 this.descriptionText2.setVisibility(0);
                 this.buttonTextView.setVisibility(4);
@@ -746,11 +718,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 this.passwordEditText.setImeOptions(NUM);
                 TextView textView8 = this.descriptionText2;
                 Object[] objArr2 = new Object[1];
-                String str2 = this.currentPassword.email_unconfirmed_pattern;
-                if (str2 == null) {
-                    str2 = "";
-                }
-                objArr2[0] = str2;
+                objArr2[0] = this.currentPassword.email_unconfirmed_pattern != null ? this.currentPassword.email_unconfirmed_pattern : "";
                 textView8.setText(LocaleController.formatString("EmailPasswordConfirmText2", NUM, objArr2));
                 this.descriptionText2.setVisibility(0);
                 this.buttonTextView.setVisibility(4);
@@ -810,27 +778,27 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         EditTextBoldCursor editTextBoldCursor2 = this.passwordEditText;
         if (editTextBoldCursor2 != null) {
             editTextBoldCursor2.addTextChangedListener(new TextWatcher() {
-                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
 
-                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
                 }
 
-                public void afterTextChanged(Editable editable) {
+                public void afterTextChanged(Editable s) {
                     if (!TwoStepVerificationSetupActivity.this.ignoreTextChange) {
                         boolean z = false;
                         if (TwoStepVerificationSetupActivity.this.currentType == 0) {
-                            RLottieDrawable animatedDrawable = TwoStepVerificationSetupActivity.this.imageView.getAnimatedDrawable();
+                            RLottieDrawable currentDrawable = TwoStepVerificationSetupActivity.this.imageView.getAnimatedDrawable();
                             if (TwoStepVerificationSetupActivity.this.passwordEditText.length() > 0) {
                                 if (TwoStepVerificationSetupActivity.this.passwordEditText.getTransformationMethod() == null) {
-                                    if (animatedDrawable != TwoStepVerificationSetupActivity.this.animationDrawables[3] && animatedDrawable != TwoStepVerificationSetupActivity.this.animationDrawables[5]) {
+                                    if (currentDrawable != TwoStepVerificationSetupActivity.this.animationDrawables[3] && currentDrawable != TwoStepVerificationSetupActivity.this.animationDrawables[5]) {
                                         TwoStepVerificationSetupActivity.this.imageView.setAnimation(TwoStepVerificationSetupActivity.this.animationDrawables[5]);
                                         TwoStepVerificationSetupActivity.this.animationDrawables[5].setProgress(0.0f, false);
                                         TwoStepVerificationSetupActivity.this.imageView.playAnimation();
                                     }
-                                } else if (animatedDrawable == TwoStepVerificationSetupActivity.this.animationDrawables[3]) {
+                                } else if (currentDrawable == TwoStepVerificationSetupActivity.this.animationDrawables[3]) {
                                 } else {
-                                    if (animatedDrawable != TwoStepVerificationSetupActivity.this.animationDrawables[2]) {
+                                    if (currentDrawable != TwoStepVerificationSetupActivity.this.animationDrawables[2]) {
                                         TwoStepVerificationSetupActivity.this.imageView.setAnimation(TwoStepVerificationSetupActivity.this.animationDrawables[2]);
                                         TwoStepVerificationSetupActivity.this.animationDrawables[2].setCustomEndFrame(49);
                                         TwoStepVerificationSetupActivity.this.animationDrawables[2].setProgress(0.0f, false);
@@ -839,13 +807,13 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                                         TwoStepVerificationSetupActivity.this.animationDrawables[2].setCustomEndFrame(49);
                                     }
                                 }
-                            } else if ((animatedDrawable == TwoStepVerificationSetupActivity.this.animationDrawables[3] && TwoStepVerificationSetupActivity.this.passwordEditText.getTransformationMethod() == null) || animatedDrawable == TwoStepVerificationSetupActivity.this.animationDrawables[5]) {
+                            } else if ((currentDrawable == TwoStepVerificationSetupActivity.this.animationDrawables[3] && TwoStepVerificationSetupActivity.this.passwordEditText.getTransformationMethod() == null) || currentDrawable == TwoStepVerificationSetupActivity.this.animationDrawables[5]) {
                                 TwoStepVerificationSetupActivity.this.imageView.setAnimation(TwoStepVerificationSetupActivity.this.animationDrawables[4]);
                                 TwoStepVerificationSetupActivity.this.animationDrawables[4].setProgress(0.0f, false);
                                 TwoStepVerificationSetupActivity.this.imageView.playAnimation();
                             } else {
                                 TwoStepVerificationSetupActivity.this.animationDrawables[2].setCustomEndFrame(-1);
-                                if (animatedDrawable != TwoStepVerificationSetupActivity.this.animationDrawables[2]) {
+                                if (currentDrawable != TwoStepVerificationSetupActivity.this.animationDrawables[2]) {
                                     TwoStepVerificationSetupActivity.this.imageView.setAnimation(TwoStepVerificationSetupActivity.this.animationDrawables[2]);
                                     TwoStepVerificationSetupActivity.this.animationDrawables[2].setCurrentFrame(49, false);
                                 }
@@ -853,21 +821,21 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                             }
                         } else if (TwoStepVerificationSetupActivity.this.currentType == 1) {
                             try {
-                                TwoStepVerificationSetupActivity.this.animationDrawables[0].setCustomEndFrame((int) ((Math.min(1.0f, TwoStepVerificationSetupActivity.this.passwordEditText.getLayout().getLineWidth(0) / ((float) TwoStepVerificationSetupActivity.this.passwordEditText.getWidth())) * 142.0f) + 18.0f));
+                                TwoStepVerificationSetupActivity.this.animationDrawables[0].setCustomEndFrame((int) ((142.0f * Math.min(1.0f, TwoStepVerificationSetupActivity.this.passwordEditText.getLayout().getLineWidth(0) / ((float) TwoStepVerificationSetupActivity.this.passwordEditText.getWidth()))) + 18.0f));
                                 TwoStepVerificationSetupActivity.this.imageView.playAnimation();
                             } catch (Exception e) {
                                 FileLog.e((Throwable) e);
                             }
                         } else if (TwoStepVerificationSetupActivity.this.currentType == 5 || TwoStepVerificationSetupActivity.this.currentType == 4) {
-                            if (TwoStepVerificationSetupActivity.this.emailCodeLength != 0 && editable.length() == TwoStepVerificationSetupActivity.this.emailCodeLength) {
+                            if (TwoStepVerificationSetupActivity.this.emailCodeLength != 0 && s.length() == TwoStepVerificationSetupActivity.this.emailCodeLength) {
                                 TwoStepVerificationSetupActivity.this.buttonTextView.callOnClick();
                             }
                             TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = TwoStepVerificationSetupActivity.this;
-                            if (editable.length() > 0) {
+                            if (s.length() > 0) {
                                 z = true;
                             }
                             twoStepVerificationSetupActivity.showDoneButton(z);
-                        } else if (TwoStepVerificationSetupActivity.this.currentType == 8 && editable.length() > 0) {
+                        } else if (TwoStepVerificationSetupActivity.this.currentType == 8 && s.length() > 0) {
                             TwoStepVerificationSetupActivity.this.showDoneButton(true);
                         }
                     }
@@ -877,93 +845,93 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$5(View view) {
+    /* renamed from: lambda$createView$5$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4023xdeCLASSNAMEe4(View v) {
         int i = this.currentType;
         if (i == 0) {
             needShowProgress();
-            TLRPC$TL_auth_recoverPassword tLRPC$TL_auth_recoverPassword = new TLRPC$TL_auth_recoverPassword();
-            tLRPC$TL_auth_recoverPassword.code = this.emailCode;
-            getConnectionsManager().sendRequest(tLRPC$TL_auth_recoverPassword, new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda30(this));
+            TLRPC.TL_auth_recoverPassword req = new TLRPC.TL_auth_recoverPassword();
+            req.code = this.emailCode;
+            getConnectionsManager().sendRequest(req, new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda23(this));
         } else if (i == 3) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setMessage(LocaleController.getString("YourEmailSkipWarningText", NUM));
             builder.setTitle(LocaleController.getString("YourEmailSkipWarning", NUM));
-            builder.setPositiveButton(LocaleController.getString("YourEmailSkip", NUM), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda2(this));
+            builder.setPositiveButton(LocaleController.getString("YourEmailSkip", NUM), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda31(this));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-            AlertDialog create = builder.create();
-            showDialog(create);
-            TextView textView = (TextView) create.getButton(-1);
-            if (textView != null) {
-                textView.setTextColor(Theme.getColor("dialogTextRed2"));
+            AlertDialog alertDialog = builder.create();
+            showDialog(alertDialog);
+            TextView button = (TextView) alertDialog.getButton(-1);
+            if (button != null) {
+                button.setTextColor(Theme.getColor("dialogTextRed2"));
             }
         } else if (i == 2) {
             onHintDone();
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda20(this, tLRPC$TL_error));
+    /* renamed from: lambda$createView$3$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4021xfb75dba6(TLObject response, TLRPC.TL_error error) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda13(this, error));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$2(TLRPC$TL_error tLRPC$TL_error) {
-        String str;
+    /* renamed from: lambda$createView$2$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4016x9cCLASSNAME(TLRPC.TL_error error) {
+        String timeString;
         needHideProgress();
-        if (tLRPC$TL_error == null) {
+        if (error == null) {
             getMessagesController().removeSuggestion(0, "VALIDATE_PASSWORD");
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda4(this));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda0(this));
             builder.setMessage(LocaleController.getString("PasswordReset", NUM));
             builder.setTitle(LocaleController.getString("TwoStepVerificationTitle", NUM));
-            Dialog showDialog = showDialog(builder.create());
-            if (showDialog != null) {
-                showDialog.setCanceledOnTouchOutside(false);
-                showDialog.setCancelable(false);
+            Dialog dialog = showDialog(builder.create());
+            if (dialog != null) {
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.setCancelable(false);
             }
-        } else if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
-            int intValue = Utilities.parseInt(tLRPC$TL_error.text).intValue();
-            if (intValue < 60) {
-                str = LocaleController.formatPluralString("Seconds", intValue);
+        } else if (error.text.startsWith("FLOOD_WAIT")) {
+            int time = Utilities.parseInt(error.text).intValue();
+            if (time < 60) {
+                timeString = LocaleController.formatPluralString("Seconds", time);
             } else {
-                str = LocaleController.formatPluralString("Minutes", intValue / 60);
+                timeString = LocaleController.formatPluralString("Minutes", time / 60);
             }
-            showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", NUM), LocaleController.formatString("FloodWaitTime", NUM, str));
+            showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", NUM), LocaleController.formatString("FloodWaitTime", NUM, timeString));
         } else {
-            showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", NUM), tLRPC$TL_error.text);
+            showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", NUM), error.text);
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$1(DialogInterface dialogInterface, int i) {
-        int size = this.fragmentsToClose.size();
-        for (int i2 = 0; i2 < size; i2++) {
-            this.fragmentsToClose.get(i2).removeSelfFromStack();
+    /* renamed from: lambda$createView$1$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4006x18228var_(DialogInterface dialogInterface, int i) {
+        int N = this.fragmentsToClose.size();
+        for (int a = 0; a < N; a++) {
+            this.fragmentsToClose.get(a).removeSelfFromStack();
         }
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.twoStepPasswordChanged, new Object[0]);
         finishFragment();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$4(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$4$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4022xed1var_c5(DialogInterface dialogInterface, int i) {
         this.email = "";
         setNewPassword(false);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$6(View view) {
+    /* renamed from: lambda$createView$6$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4024xd072ce03(View v) {
         if (this.currentType == 8) {
-            TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
-            twoStepVerificationActivity.setForgotPasswordOnShow();
-            twoStepVerificationActivity.setPassword(this.currentPassword);
-            twoStepVerificationActivity.setBlockingAlert(this.otherwiseReloginDays);
-            presentFragment(twoStepVerificationActivity, true);
+            TwoStepVerificationActivity fragment = new TwoStepVerificationActivity();
+            fragment.setForgotPasswordOnShow();
+            fragment.setPassword(this.currentPassword);
+            fragment.setBlockingAlert(this.otherwiseReloginDays);
+            presentFragment(fragment, true);
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$18(View view) {
+    /* renamed from: lambda$createView$18$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4015xcCLASSNAMEa6(View v) {
         if (getParentActivity() != null) {
             switch (this.currentType) {
                 case 0:
@@ -971,15 +939,15 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         onFieldError(this.passwordEditText, false);
                         return;
                     }
-                    TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(this.currentAccount, 1, this.currentPassword);
-                    twoStepVerificationSetupActivity.setCurrentPasswordParams(this.currentPasswordHash, this.currentSecretId, this.currentSecret, this.emailOnly);
-                    twoStepVerificationSetupActivity.setCurrentEmailCode(this.emailCode);
-                    twoStepVerificationSetupActivity.firstPassword = this.passwordEditText.getText().toString();
-                    twoStepVerificationSetupActivity.fragmentsToClose.addAll(this.fragmentsToClose);
-                    twoStepVerificationSetupActivity.fragmentsToClose.add(this);
-                    twoStepVerificationSetupActivity.closeAfterSet = this.closeAfterSet;
-                    twoStepVerificationSetupActivity.setBlockingAlert(this.otherwiseReloginDays);
-                    presentFragment(twoStepVerificationSetupActivity);
+                    TwoStepVerificationSetupActivity fragment = new TwoStepVerificationSetupActivity(this.currentAccount, 1, this.currentPassword);
+                    fragment.setCurrentPasswordParams(this.currentPasswordHash, this.currentSecretId, this.currentSecret, this.emailOnly);
+                    fragment.setCurrentEmailCode(this.emailCode);
+                    fragment.firstPassword = this.passwordEditText.getText().toString();
+                    fragment.fragmentsToClose.addAll(this.fragmentsToClose);
+                    fragment.fragmentsToClose.add(this);
+                    fragment.closeAfterSet = this.closeAfterSet;
+                    fragment.setBlockingAlert(this.otherwiseReloginDays);
+                    presentFragment(fragment);
                     return;
                 case 1:
                     if (!this.firstPassword.equals(this.passwordEditText.getText().toString())) {
@@ -991,15 +959,15 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         onFieldError(this.passwordEditText, false);
                         return;
                     }
-                    TwoStepVerificationSetupActivity twoStepVerificationSetupActivity2 = new TwoStepVerificationSetupActivity(this.currentAccount, 2, this.currentPassword);
-                    twoStepVerificationSetupActivity2.setCurrentPasswordParams(this.currentPasswordHash, this.currentSecretId, this.currentSecret, this.emailOnly);
-                    twoStepVerificationSetupActivity2.setCurrentEmailCode(this.emailCode);
-                    twoStepVerificationSetupActivity2.firstPassword = this.firstPassword;
-                    twoStepVerificationSetupActivity2.fragmentsToClose.addAll(this.fragmentsToClose);
-                    twoStepVerificationSetupActivity2.fragmentsToClose.add(this);
-                    twoStepVerificationSetupActivity2.closeAfterSet = this.closeAfterSet;
-                    twoStepVerificationSetupActivity2.setBlockingAlert(this.otherwiseReloginDays);
-                    presentFragment(twoStepVerificationSetupActivity2);
+                    TwoStepVerificationSetupActivity fragment2 = new TwoStepVerificationSetupActivity(this.currentAccount, 2, this.currentPassword);
+                    fragment2.setCurrentPasswordParams(this.currentPasswordHash, this.currentSecretId, this.currentSecret, this.emailOnly);
+                    fragment2.setCurrentEmailCode(this.emailCode);
+                    fragment2.firstPassword = this.firstPassword;
+                    fragment2.fragmentsToClose.addAll(this.fragmentsToClose);
+                    fragment2.fragmentsToClose.add(this);
+                    fragment2.closeAfterSet = this.closeAfterSet;
+                    fragment2.setBlockingAlert(this.otherwiseReloginDays);
+                    presentFragment(fragment2);
                     return;
                 case 2:
                     if (this.passwordEditText.getText().toString().toLowerCase().equals(this.firstPassword.toLowerCase())) {
@@ -1024,46 +992,45 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         return;
                     }
                 case 4:
-                    String obj2 = this.passwordEditText.getText().toString();
-                    if (obj2.length() == 0) {
+                    String code = this.passwordEditText.getText().toString();
+                    if (code.length() == 0) {
                         onFieldError(this.passwordEditText, false);
                         return;
                     }
-                    TLRPC$TL_auth_checkRecoveryPassword tLRPC$TL_auth_checkRecoveryPassword = new TLRPC$TL_auth_checkRecoveryPassword();
-                    tLRPC$TL_auth_checkRecoveryPassword.code = obj2;
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_auth_checkRecoveryPassword, new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda34(this, obj2), 10);
+                    TLRPC.TL_auth_checkRecoveryPassword req = new TLRPC.TL_auth_checkRecoveryPassword();
+                    req.code = code;
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda27(this, code), 10);
                     return;
                 case 5:
                     if (this.passwordEditText.length() == 0) {
                         onFieldError(this.passwordEditText, false);
                         return;
                     }
-                    TLRPC$TL_account_confirmPasswordEmail tLRPC$TL_account_confirmPasswordEmail = new TLRPC$TL_account_confirmPasswordEmail();
-                    tLRPC$TL_account_confirmPasswordEmail.code = this.passwordEditText.getText().toString();
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_confirmPasswordEmail, new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda33(this), 10);
+                    TLRPC.TL_account_confirmPasswordEmail req2 = new TLRPC.TL_account_confirmPasswordEmail();
+                    req2.code = this.passwordEditText.getText().toString();
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda21(this), 10);
                     needShowProgress();
                     return;
                 case 6:
-                    TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-                    if (tLRPC$TL_account_password == null) {
+                    if (this.currentPassword == null) {
                         needShowProgress();
                         this.doneAfterPasswordLoad = true;
                         return;
                     }
-                    TwoStepVerificationSetupActivity twoStepVerificationSetupActivity3 = new TwoStepVerificationSetupActivity(this.currentAccount, 0, tLRPC$TL_account_password);
-                    twoStepVerificationSetupActivity3.closeAfterSet = this.closeAfterSet;
-                    twoStepVerificationSetupActivity3.setBlockingAlert(this.otherwiseReloginDays);
-                    presentFragment(twoStepVerificationSetupActivity3, true);
+                    TwoStepVerificationSetupActivity fragment3 = new TwoStepVerificationSetupActivity(this.currentAccount, 0, this.currentPassword);
+                    fragment3.closeAfterSet = this.closeAfterSet;
+                    fragment3.setBlockingAlert(this.otherwiseReloginDays);
+                    presentFragment(fragment3, true);
                     return;
                 case 7:
                     if (this.closeAfterSet) {
                         finishFragment();
                         return;
                     }
-                    TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
-                    twoStepVerificationActivity.setCurrentPasswordParams(this.currentPassword, this.currentPasswordHash, this.currentSecretId, this.currentSecret);
-                    twoStepVerificationActivity.setBlockingAlert(this.otherwiseReloginDays);
-                    presentFragment(twoStepVerificationActivity, true);
+                    TwoStepVerificationActivity fragment4 = new TwoStepVerificationActivity();
+                    fragment4.setCurrentPasswordParams(this.currentPassword, this.currentPasswordHash, this.currentSecretId, this.currentSecret);
+                    fragment4.setBlockingAlert(this.otherwiseReloginDays);
+                    presentFragment(fragment4, true);
                     return;
                 case 8:
                     if (this.currentPassword == null) {
@@ -1071,14 +1038,14 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         this.doneAfterPasswordLoad = true;
                         return;
                     }
-                    String obj3 = this.passwordEditText.getText().toString();
-                    if (obj3.length() == 0) {
+                    String oldPassword = this.passwordEditText.getText().toString();
+                    if (oldPassword.length() == 0) {
                         onFieldError(this.passwordEditText, false);
                         return;
                     }
-                    byte[] stringBytes = AndroidUtilities.getStringBytes(obj3);
+                    byte[] oldPasswordBytes = AndroidUtilities.getStringBytes(oldPassword);
                     needShowProgress();
-                    Utilities.globalQueue.postRunnable(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda27(this, stringBytes));
+                    Utilities.globalQueue.postRunnable(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda19(this, oldPasswordBytes));
                     return;
                 case 9:
                     finishFragment();
@@ -1089,208 +1056,205 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$12(byte[] bArr) {
-        TLRPC$TL_account_getPasswordSettings tLRPC$TL_account_getPasswordSettings = new TLRPC$TL_account_getPasswordSettings();
-        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = this.currentPassword.current_algo;
-        byte[] x = tLRPC$PasswordKdfAlgo instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow ? SRPHelper.getX(bArr, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo) : null;
-        TwoStepVerificationSetupActivity$$ExternalSyntheticLambda37 twoStepVerificationSetupActivity$$ExternalSyntheticLambda37 = new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda37(this, x);
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo2 = tLRPC$TL_account_password.current_algo;
-        if (tLRPC$PasswordKdfAlgo2 instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
-            TLRPC$TL_inputCheckPasswordSRP startCheck = SRPHelper.startCheck(x, tLRPC$TL_account_password.srp_id, tLRPC$TL_account_password.srp_B, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo2);
-            tLRPC$TL_account_getPasswordSettings.password = startCheck;
-            if (startCheck == null) {
-                TLRPC$TL_error tLRPC$TL_error = new TLRPC$TL_error();
-                tLRPC$TL_error.text = "ALGO_INVALID";
-                twoStepVerificationSetupActivity$$ExternalSyntheticLambda37.run((TLObject) null, tLRPC$TL_error);
+    /* renamed from: lambda$createView$12$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4009x226d34ec(byte[] oldPasswordBytes) {
+        byte[] x_bytes;
+        TLRPC.TL_account_getPasswordSettings req = new TLRPC.TL_account_getPasswordSettings();
+        if (this.currentPassword.current_algo instanceof TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
+            x_bytes = SRPHelper.getX(oldPasswordBytes, (TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) this.currentPassword.current_algo);
+        } else {
+            x_bytes = null;
+        }
+        RequestDelegate requestDelegate = new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda30(this, x_bytes);
+        if (this.currentPassword.current_algo instanceof TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
+            req.password = SRPHelper.startCheck(x_bytes, this.currentPassword.srp_id, this.currentPassword.srp_B, (TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) this.currentPassword.current_algo);
+            if (req.password == null) {
+                TLRPC.TL_error error = new TLRPC.TL_error();
+                error.text = "ALGO_INVALID";
+                requestDelegate.run((TLObject) null, error);
                 return;
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_getPasswordSettings, twoStepVerificationSetupActivity$$ExternalSyntheticLambda37, 10);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, requestDelegate, 10);
             return;
         }
-        TLRPC$TL_error tLRPC$TL_error2 = new TLRPC$TL_error();
-        tLRPC$TL_error2.text = "PASSWORD_HASH_INVALID";
-        twoStepVerificationSetupActivity$$ExternalSyntheticLambda37.run((TLObject) null, tLRPC$TL_error2);
+        TLRPC.TL_error error2 = new TLRPC.TL_error();
+        error2.text = "PASSWORD_HASH_INVALID";
+        requestDelegate.run((TLObject) null, error2);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$11(byte[] bArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        if (tLRPC$TL_error == null) {
-            AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda28(this, bArr));
+    /* renamed from: lambda$createView$11$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4008x30CLASSNAMEecd(byte[] x_bytes, TLObject response, TLRPC.TL_error error) {
+        if (error == null) {
+            AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda20(this, x_bytes));
         } else {
-            AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda19(this, tLRPC$TL_error));
+            AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda10(this, error));
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$7(byte[] bArr) {
+    /* renamed from: lambda$createView$7$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4025xCLASSNAMECLASSNAME(byte[] x_bytes) {
         needHideProgress();
-        this.currentPasswordHash = bArr;
+        this.currentPasswordHash = x_bytes;
         getMessagesController().removeSuggestion(0, "VALIDATE_PASSWORD");
-        TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(9, this.currentPassword);
-        twoStepVerificationSetupActivity.setBlockingAlert(this.otherwiseReloginDays);
-        presentFragment(twoStepVerificationSetupActivity, true);
+        TwoStepVerificationSetupActivity fragment = new TwoStepVerificationSetupActivity(9, this.currentPassword);
+        fragment.setBlockingAlert(this.otherwiseReloginDays);
+        presentFragment(fragment, true);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$10(TLRPC$TL_error tLRPC$TL_error) {
-        String str;
-        if ("SRP_ID_INVALID".equals(tLRPC$TL_error.text)) {
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getPassword(), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda29(this), 8);
+    /* renamed from: lambda$createView$10$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4007x3var_e8ae(TLRPC.TL_error error) {
+        String timeString;
+        if ("SRP_ID_INVALID".equals(error.text)) {
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC.TL_account_getPassword(), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda24(this), 8);
             return;
         }
         needHideProgress();
-        if ("PASSWORD_HASH_INVALID".equals(tLRPC$TL_error.text)) {
+        if ("PASSWORD_HASH_INVALID".equals(error.text)) {
             this.descriptionText.setText(LocaleController.getString("CheckPasswordWrong", NUM));
             this.descriptionText.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
             onFieldError(this.passwordEditText, true);
             showDoneButton(false);
-        } else if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
-            int intValue = Utilities.parseInt(tLRPC$TL_error.text).intValue();
-            if (intValue < 60) {
-                str = LocaleController.formatPluralString("Seconds", intValue);
+        } else if (error.text.startsWith("FLOOD_WAIT")) {
+            int time = Utilities.parseInt(error.text).intValue();
+            if (time < 60) {
+                timeString = LocaleController.formatPluralString("Seconds", time);
             } else {
-                str = LocaleController.formatPluralString("Minutes", intValue / 60);
+                timeString = LocaleController.formatPluralString("Minutes", time / 60);
             }
-            showAlertWithText(LocaleController.getString("AppName", NUM), LocaleController.formatString("FloodWaitTime", NUM, str));
+            showAlertWithText(LocaleController.getString("AppName", NUM), LocaleController.formatString("FloodWaitTime", NUM, timeString));
         } else {
-            showAlertWithText(LocaleController.getString("AppName", NUM), tLRPC$TL_error.text);
+            showAlertWithText(LocaleController.getString("AppName", NUM), error.text);
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$9(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda24(this, tLRPC$TL_error, tLObject));
+    /* renamed from: lambda$createView$9$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4027xa56fCLASSNAME(TLObject response2, TLRPC.TL_error error2) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda15(this, error2, response2));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$8(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
-        if (tLRPC$TL_error == null) {
-            TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-            this.currentPassword = tLRPC$TL_account_password;
-            TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$TL_account_password);
+    /* renamed from: lambda$createView$8$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4026xb3CLASSNAMEa41(TLRPC.TL_error error2, TLObject response2) {
+        if (error2 == null) {
+            TLRPC.TL_account_password tL_account_password = (TLRPC.TL_account_password) response2;
+            this.currentPassword = tL_account_password;
+            TwoStepVerificationActivity.initPasswordNewAlgo(tL_account_password);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
             this.buttonTextView.callOnClick();
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$14(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda17(this, tLObject, str, tLRPC$TL_error));
+    /* renamed from: lambda$createView$14$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4011x5CLASSNAMEa(String code, TLObject response, TLRPC.TL_error error) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda8(this, response, code, error));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$13(TLObject tLObject, String str, TLRPC$TL_error tLRPC$TL_error) {
-        String str2;
-        if (tLObject instanceof TLRPC$TL_boolTrue) {
-            TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(this.currentAccount, 0, this.currentPassword);
-            twoStepVerificationSetupActivity.fragmentsToClose.addAll(this.fragmentsToClose);
-            twoStepVerificationSetupActivity.addFragmentToClose(this);
-            twoStepVerificationSetupActivity.setCurrentEmailCode(str);
-            twoStepVerificationSetupActivity.setBlockingAlert(this.otherwiseReloginDays);
-            presentFragment(twoStepVerificationSetupActivity, true);
-        } else if (tLRPC$TL_error == null || tLRPC$TL_error.text.startsWith("CODE_INVALID")) {
+    /* renamed from: lambda$createView$13$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4010x1416db0b(TLObject response, String code, TLRPC.TL_error error) {
+        String timeString;
+        if (response instanceof TLRPC.TL_boolTrue) {
+            TwoStepVerificationSetupActivity fragment = new TwoStepVerificationSetupActivity(this.currentAccount, 0, this.currentPassword);
+            fragment.fragmentsToClose.addAll(this.fragmentsToClose);
+            fragment.addFragmentToClose(this);
+            fragment.setCurrentEmailCode(code);
+            fragment.setBlockingAlert(this.otherwiseReloginDays);
+            presentFragment(fragment, true);
+        } else if (error == null || error.text.startsWith("CODE_INVALID")) {
             onFieldError(this.passwordEditText, true);
-        } else if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
-            int intValue = Utilities.parseInt(tLRPC$TL_error.text).intValue();
-            if (intValue < 60) {
-                str2 = LocaleController.formatPluralString("Seconds", intValue);
+        } else if (error.text.startsWith("FLOOD_WAIT")) {
+            int time = Utilities.parseInt(error.text).intValue();
+            if (time < 60) {
+                timeString = LocaleController.formatPluralString("Seconds", time);
             } else {
-                str2 = LocaleController.formatPluralString("Minutes", intValue / 60);
+                timeString = LocaleController.formatPluralString("Minutes", time / 60);
             }
-            showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", NUM), LocaleController.formatString("FloodWaitTime", NUM, str2));
+            showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", NUM), LocaleController.formatString("FloodWaitTime", NUM, timeString));
         } else {
-            showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", NUM), tLRPC$TL_error.text);
+            showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", NUM), error.text);
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$17(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda22(this, tLRPC$TL_error));
+    /* renamed from: lambda$createView$17$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4014xdabd7387(TLObject response, TLRPC.TL_error error) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda12(this, error));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$16(TLRPC$TL_error tLRPC$TL_error) {
-        String str;
+    /* renamed from: lambda$createView$16$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4013xe913cd68(TLRPC.TL_error error) {
+        String timeString;
         needHideProgress();
-        if (tLRPC$TL_error == null) {
+        if (error == null) {
             if (getParentActivity() != null) {
                 if (this.currentPassword.has_password) {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda1(this));
+                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda11(this));
                     if (this.currentPassword.has_recovery) {
                         builder.setMessage(LocaleController.getString("YourEmailSuccessChangedText", NUM));
                     } else {
                         builder.setMessage(LocaleController.getString("YourEmailSuccessText", NUM));
                     }
                     builder.setTitle(LocaleController.getString("YourPasswordSuccess", NUM));
-                    Dialog showDialog = showDialog(builder.create());
-                    if (showDialog != null) {
-                        showDialog.setCanceledOnTouchOutside(false);
-                        showDialog.setCancelable(false);
+                    Dialog dialog = showDialog(builder.create());
+                    if (dialog != null) {
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.setCancelable(false);
                         return;
                     }
                     return;
                 }
-                int size = this.fragmentsToClose.size();
-                for (int i = 0; i < size; i++) {
-                    this.fragmentsToClose.get(i).removeSelfFromStack();
+                int N = this.fragmentsToClose.size();
+                for (int a = 0; a < N; a++) {
+                    this.fragmentsToClose.get(a).removeSelfFromStack();
                 }
-                TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-                tLRPC$TL_account_password.has_password = true;
-                tLRPC$TL_account_password.has_recovery = true;
-                tLRPC$TL_account_password.email_unconfirmed_pattern = "";
-                TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(7, tLRPC$TL_account_password);
-                twoStepVerificationSetupActivity.setCurrentPasswordParams(this.currentPasswordHash, this.currentSecretId, this.currentSecret, this.emailOnly);
-                twoStepVerificationSetupActivity.fragmentsToClose.addAll(this.fragmentsToClose);
-                twoStepVerificationSetupActivity.closeAfterSet = this.closeAfterSet;
-                twoStepVerificationSetupActivity.setBlockingAlert(this.otherwiseReloginDays);
-                presentFragment(twoStepVerificationSetupActivity, true);
-                NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
-                int i2 = NotificationCenter.twoStepPasswordChanged;
-                TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
-                instance.postNotificationName(i2, this.currentPasswordHash, tLRPC$TL_account_password2.new_algo, tLRPC$TL_account_password2.new_secure_algo, tLRPC$TL_account_password2.secure_random, this.email, this.hint, null, this.firstPassword);
+                this.currentPassword.has_password = true;
+                this.currentPassword.has_recovery = true;
+                this.currentPassword.email_unconfirmed_pattern = "";
+                TwoStepVerificationSetupActivity fragment = new TwoStepVerificationSetupActivity(7, this.currentPassword);
+                fragment.setCurrentPasswordParams(this.currentPasswordHash, this.currentSecretId, this.currentSecret, this.emailOnly);
+                fragment.fragmentsToClose.addAll(this.fragmentsToClose);
+                fragment.closeAfterSet = this.closeAfterSet;
+                fragment.setBlockingAlert(this.otherwiseReloginDays);
+                presentFragment(fragment, true);
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.twoStepPasswordChanged, this.currentPasswordHash, this.currentPassword.new_algo, this.currentPassword.new_secure_algo, this.currentPassword.secure_random, this.email, this.hint, null, this.firstPassword);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
             }
-        } else if (tLRPC$TL_error.text.startsWith("CODE_INVALID")) {
+        } else if (error.text.startsWith("CODE_INVALID")) {
             onFieldError(this.passwordEditText, true);
-        } else if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
-            int intValue = Utilities.parseInt(tLRPC$TL_error.text).intValue();
-            if (intValue < 60) {
-                str = LocaleController.formatPluralString("Seconds", intValue);
+        } else if (error.text.startsWith("FLOOD_WAIT")) {
+            int time = Utilities.parseInt(error.text).intValue();
+            if (time < 60) {
+                timeString = LocaleController.formatPluralString("Seconds", time);
             } else {
-                str = LocaleController.formatPluralString("Minutes", intValue / 60);
+                timeString = LocaleController.formatPluralString("Minutes", time / 60);
             }
-            showAlertWithText(LocaleController.getString("AppName", NUM), LocaleController.formatString("FloodWaitTime", NUM, str));
+            showAlertWithText(LocaleController.getString("AppName", NUM), LocaleController.formatString("FloodWaitTime", NUM, timeString));
         } else {
-            showAlertWithText(LocaleController.getString("AppName", NUM), tLRPC$TL_error.text);
+            showAlertWithText(LocaleController.getString("AppName", NUM), error.text);
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$15(DialogInterface dialogInterface, int i) {
-        int size = this.fragmentsToClose.size();
-        for (int i2 = 0; i2 < size; i2++) {
-            this.fragmentsToClose.get(i2).removeSelfFromStack();
+    /* renamed from: lambda$createView$15$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4012xvar_a2749(DialogInterface dialogInterface, int i) {
+        int N = this.fragmentsToClose.size();
+        for (int a = 0; a < N; a++) {
+            this.fragmentsToClose.get(a).removeSelfFromStack();
         }
-        NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
-        int i3 = NotificationCenter.twoStepPasswordChanged;
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        instance.postNotificationName(i3, this.currentPasswordHash, tLRPC$TL_account_password.new_algo, tLRPC$TL_account_password.new_secure_algo, tLRPC$TL_account_password.secure_random, this.email, this.hint, null, this.firstPassword);
-        TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
-        TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
-        tLRPC$TL_account_password2.has_password = true;
-        tLRPC$TL_account_password2.has_recovery = true;
-        tLRPC$TL_account_password2.email_unconfirmed_pattern = "";
-        twoStepVerificationActivity.setCurrentPasswordParams(tLRPC$TL_account_password2, this.currentPasswordHash, this.currentSecretId, this.currentSecret);
-        twoStepVerificationActivity.setBlockingAlert(this.otherwiseReloginDays);
-        presentFragment(twoStepVerificationActivity, true);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.twoStepPasswordChanged, this.currentPasswordHash, this.currentPassword.new_algo, this.currentPassword.new_secure_algo, this.currentPassword.secure_random, this.email, this.hint, null, this.firstPassword);
+        TwoStepVerificationActivity fragment = new TwoStepVerificationActivity();
+        this.currentPassword.has_password = true;
+        this.currentPassword.has_recovery = true;
+        this.currentPassword.email_unconfirmed_pattern = "";
+        fragment.setCurrentPasswordParams(this.currentPassword, this.currentPasswordHash, this.currentSecretId, this.currentSecret);
+        fragment.setBlockingAlert(this.otherwiseReloginDays);
+        presentFragment(fragment, true);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$createView$20(TextView textView, int i, KeyEvent keyEvent) {
+    static /* synthetic */ boolean lambda$createView$19(View v, MotionEvent event) {
+        return true;
+    }
+
+    /* renamed from: lambda$createView$20$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ boolean m4017x82a5066f(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5 && i != 6) {
             return false;
         }
@@ -1298,8 +1262,8 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         return true;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$21(View view) {
+    /* renamed from: lambda$createView$21$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4018x744eac8e(View v) {
         this.ignoreTextChange = true;
         if (this.passwordEditText.getTransformationMethod() == null) {
             this.passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -1333,18 +1297,18 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         this.ignoreTextChange = false;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$23(View view) {
+    /* renamed from: lambda$createView$23$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4020x57a1f8cc(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-        builder.setPositiveButton(LocaleController.getString("Reset", NUM), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda3(this));
+        builder.setPositiveButton(LocaleController.getString("Reset", NUM), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda22(this));
         builder.setTitle(LocaleController.getString("ResetPassword", NUM));
         builder.setMessage(LocaleController.getString("RestoreEmailTroubleText2", NUM));
         showDialog(builder.create());
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$22(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$22$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4019x65var_ad(DialogInterface dialog, int which) {
         onReset();
         finishFragment();
     }
@@ -1359,13 +1323,13 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         this.paused = false;
         EditTextBoldCursor editTextBoldCursor = this.passwordEditText;
         if (editTextBoldCursor != null && editTextBoldCursor.getVisibility() == 0) {
-            AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda15(this), 200);
+            AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda6(this), 200);
         }
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onResume$24() {
+    /* renamed from: lambda$onResume$24$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4031x68aa17d6() {
         EditTextBoldCursor editTextBoldCursor = this.passwordEditText;
         if (editTextBoldCursor != null) {
             editTextBoldCursor.requestFocus();
@@ -1380,17 +1344,16 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     }
 
     private void onHintDone() {
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        if (!tLRPC$TL_account_password.has_recovery) {
-            TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(this.currentAccount, 3, tLRPC$TL_account_password);
-            twoStepVerificationSetupActivity.setCurrentPasswordParams(this.currentPasswordHash, this.currentSecretId, this.currentSecret, this.emailOnly);
-            twoStepVerificationSetupActivity.firstPassword = this.firstPassword;
-            twoStepVerificationSetupActivity.hint = this.hint;
-            twoStepVerificationSetupActivity.fragmentsToClose.addAll(this.fragmentsToClose);
-            twoStepVerificationSetupActivity.fragmentsToClose.add(this);
-            twoStepVerificationSetupActivity.closeAfterSet = this.closeAfterSet;
-            twoStepVerificationSetupActivity.setBlockingAlert(this.otherwiseReloginDays);
-            presentFragment(twoStepVerificationSetupActivity);
+        if (!this.currentPassword.has_recovery) {
+            TwoStepVerificationSetupActivity fragment = new TwoStepVerificationSetupActivity(this.currentAccount, 3, this.currentPassword);
+            fragment.setCurrentPasswordParams(this.currentPasswordHash, this.currentSecretId, this.currentSecret, this.emailOnly);
+            fragment.firstPassword = this.firstPassword;
+            fragment.hint = this.hint;
+            fragment.fragmentsToClose.addAll(this.fragmentsToClose);
+            fragment.fragmentsToClose.add(this);
+            fragment.closeAfterSet = this.closeAfterSet;
+            fragment.setBlockingAlert(this.otherwiseReloginDays);
+            presentFragment(fragment);
             return;
         }
         this.email = "";
@@ -1398,15 +1361,15 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public void showDoneButton(final boolean z) {
-        if (z != (this.buttonTextView.getTag() != null)) {
+    public void showDoneButton(final boolean show) {
+        if (show != (this.buttonTextView.getTag() != null)) {
             AnimatorSet animatorSet = this.buttonAnimation;
             if (animatorSet != null) {
                 animatorSet.cancel();
             }
-            this.buttonTextView.setTag(z ? 1 : null);
+            this.buttonTextView.setTag(show ? 1 : null);
             this.buttonAnimation = new AnimatorSet();
-            if (z) {
+            if (show) {
                 this.buttonTextView.setVisibility(0);
                 this.buttonAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.descriptionText2, View.SCALE_X, new float[]{0.9f}), ObjectAnimator.ofFloat(this.descriptionText2, View.SCALE_Y, new float[]{0.9f}), ObjectAnimator.ofFloat(this.descriptionText2, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.buttonTextView, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.buttonTextView, View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.buttonTextView, View.ALPHA, new float[]{1.0f})});
             } else {
@@ -1414,9 +1377,9 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 this.buttonAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.buttonTextView, View.SCALE_X, new float[]{0.9f}), ObjectAnimator.ofFloat(this.buttonTextView, View.SCALE_Y, new float[]{0.9f}), ObjectAnimator.ofFloat(this.buttonTextView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.descriptionText2, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.descriptionText2, View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.descriptionText2, View.ALPHA, new float[]{1.0f})});
             }
             this.buttonAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    if (TwoStepVerificationSetupActivity.this.buttonAnimation != null && TwoStepVerificationSetupActivity.this.buttonAnimation.equals(animator)) {
-                        if (z) {
+                public void onAnimationEnd(Animator animation) {
+                    if (TwoStepVerificationSetupActivity.this.buttonAnimation != null && TwoStepVerificationSetupActivity.this.buttonAnimation.equals(animation)) {
+                        if (show) {
                             TwoStepVerificationSetupActivity.this.descriptionText2.setVisibility(4);
                         } else {
                             TwoStepVerificationSetupActivity.this.buttonTextView.setVisibility(4);
@@ -1424,8 +1387,8 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     }
                 }
 
-                public void onAnimationCancel(Animator animator) {
-                    if (TwoStepVerificationSetupActivity.this.buttonAnimation != null && TwoStepVerificationSetupActivity.this.buttonAnimation.equals(animator)) {
+                public void onAnimationCancel(Animator animation) {
+                    if (TwoStepVerificationSetupActivity.this.buttonAnimation != null && TwoStepVerificationSetupActivity.this.buttonAnimation.equals(animation)) {
                         AnimatorSet unused = TwoStepVerificationSetupActivity.this.buttonAnimation = null;
                     }
                 }
@@ -1464,102 +1427,96 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             int r3 = r3.length()
             if (r3 != 0) goto L_0x0063
             if (r0 == 0) goto L_0x0030
-            boolean r0 = r0.isRunning()
-            if (r0 != 0) goto L_0x0063
+            boolean r3 = r0.isRunning()
+            if (r3 != 0) goto L_0x0063
         L_0x0030:
-            java.security.SecureRandom r0 = org.telegram.messenger.Utilities.random
-            int r0 = r0.nextInt()
-            int r0 = r0 % 2
-            r3 = 0
-            if (r0 != 0) goto L_0x004c
-            org.telegram.ui.Components.RLottieImageView r0 = r5.imageView
+            java.security.SecureRandom r3 = org.telegram.messenger.Utilities.random
+            int r3 = r3.nextInt()
+            int r3 = r3 % 2
+            r4 = 0
+            if (r3 != 0) goto L_0x004c
+            org.telegram.ui.Components.RLottieImageView r1 = r5.imageView
+            org.telegram.ui.Components.RLottieDrawable[] r3 = r5.animationDrawables
+            r3 = r3[r2]
+            r1.setAnimation(r3)
             org.telegram.ui.Components.RLottieDrawable[] r1 = r5.animationDrawables
             r1 = r1[r2]
-            r0.setAnimation(r1)
-            org.telegram.ui.Components.RLottieDrawable[] r0 = r5.animationDrawables
-            r0 = r0[r2]
-            r0.setProgress(r3)
+            r1.setProgress(r4)
             goto L_0x005c
         L_0x004c:
-            org.telegram.ui.Components.RLottieImageView r0 = r5.imageView
+            org.telegram.ui.Components.RLottieImageView r2 = r5.imageView
+            org.telegram.ui.Components.RLottieDrawable[] r3 = r5.animationDrawables
+            r3 = r3[r1]
+            r2.setAnimation(r3)
             org.telegram.ui.Components.RLottieDrawable[] r2 = r5.animationDrawables
-            r2 = r2[r1]
-            r0.setAnimation(r2)
-            org.telegram.ui.Components.RLottieDrawable[] r0 = r5.animationDrawables
-            r0 = r0[r1]
-            r0.setProgress(r3)
+            r1 = r2[r1]
+            r1.setProgress(r4)
         L_0x005c:
             if (r6 != 0) goto L_0x0063
-            org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
-            r6.playAnimation()
+            org.telegram.ui.Components.RLottieImageView r1 = r5.imageView
+            r1.playAnimation()
         L_0x0063:
-            org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda14 r6 = new org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda14
-            r6.<init>(r5)
-            r5.setAnimationRunnable = r6
-            java.security.SecureRandom r0 = org.telegram.messenger.Utilities.random
-            r1 = 2000(0x7d0, float:2.803E-42)
-            int r0 = r0.nextInt(r1)
-            int r0 = r0 + 5000
-            long r0 = (long) r0
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r6, r0)
+            org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda7 r1 = new org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda7
+            r1.<init>(r5)
+            r5.setAnimationRunnable = r1
+            java.security.SecureRandom r2 = org.telegram.messenger.Utilities.random
+            r3 = 2000(0x7d0, float:2.803E-42)
+            int r2 = r2.nextInt(r3)
+            int r2 = r2 + 5000
+            long r2 = (long) r2
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r2)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.TwoStepVerificationSetupActivity.setRandomMonkeyIdleAnimation(boolean):void");
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setRandomMonkeyIdleAnimation$25() {
+    /* renamed from: lambda$setRandomMonkeyIdleAnimation$25$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4040xaCLASSNAME() {
         if (this.setAnimationRunnable != null) {
             setRandomMonkeyIdleAnimation(false);
         }
     }
 
-    public void setCloseAfterSet(boolean z) {
-        this.closeAfterSet = z;
+    public void setCloseAfterSet(boolean value) {
+        this.closeAfterSet = value;
     }
 
-    public void onTransitionAnimationEnd(boolean z, boolean z2) {
+    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         EditTextBoldCursor editTextBoldCursor;
-        if (z && (editTextBoldCursor = this.passwordEditText) != null && editTextBoldCursor.getVisibility() == 0) {
+        if (isOpen && (editTextBoldCursor = this.passwordEditText) != null && editTextBoldCursor.getVisibility() == 0) {
             AndroidUtilities.showKeyboard(this.passwordEditText);
         }
     }
 
     private void loadPasswordInfo() {
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getPassword(), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda31(this), 10);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC.TL_account_getPassword(), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda25(this), 10);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPasswordInfo$27(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda23(this, tLRPC$TL_error, tLObject));
+    /* renamed from: lambda$loadPasswordInfo$27$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4029x2b7db0b6(TLObject response, TLRPC.TL_error error) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda16(this, error, response));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadPasswordInfo$26(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
-        if (tLRPC$TL_error == null) {
-            TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-            this.currentPassword = tLRPC$TL_account_password;
-            if (!TwoStepVerificationActivity.canHandleCurrentPassword(tLRPC$TL_account_password, false)) {
+    /* renamed from: lambda$loadPasswordInfo$26$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4028x39d40a97(TLRPC.TL_error error, TLObject response) {
+        if (error == null) {
+            TLRPC.TL_account_password tL_account_password = (TLRPC.TL_account_password) response;
+            this.currentPassword = tL_account_password;
+            if (!TwoStepVerificationActivity.canHandleCurrentPassword(tL_account_password, false)) {
                 AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", NUM), true);
                 return;
             }
             this.waitingForEmail = !TextUtils.isEmpty(this.currentPassword.email_unconfirmed_pattern);
             TwoStepVerificationActivity.initPasswordNewAlgo(this.currentPassword);
-            if (!this.paused && this.closeAfterSet) {
-                TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
-                if (tLRPC$TL_account_password2.has_password) {
-                    Object obj = tLRPC$TL_account_password2.current_algo;
-                    Object obj2 = tLRPC$TL_account_password2.new_secure_algo;
-                    Object obj3 = tLRPC$TL_account_password2.secure_random;
-                    String str = tLRPC$TL_account_password2.has_recovery ? "1" : null;
-                    String str2 = tLRPC$TL_account_password2.hint;
-                    if (str2 == null) {
-                        str2 = "";
-                    }
-                    if (!this.waitingForEmail && obj != null) {
-                        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.twoStepPasswordChanged, null, obj, obj2, obj3, str, str2, null, null);
-                        finishFragment();
-                    }
+            if (!this.paused && this.closeAfterSet && this.currentPassword.has_password) {
+                TLRPC.PasswordKdfAlgo pendingCurrentAlgo = this.currentPassword.current_algo;
+                TLRPC.SecurePasswordKdfAlgo pendingNewSecureAlgo = this.currentPassword.new_secure_algo;
+                byte[] pendingSecureRandom = this.currentPassword.secure_random;
+                String pendingEmail = this.currentPassword.has_recovery ? "1" : null;
+                String pendingHint = this.currentPassword.hint != null ? this.currentPassword.hint : "";
+                if (!this.waitingForEmail && pendingCurrentAlgo != null) {
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.twoStepPasswordChanged, null, pendingCurrentAlgo, pendingNewSecureAlgo, pendingSecureRandom, pendingEmail, pendingHint, null, null);
+                    finishFragment();
                 }
             }
             if (this.doneAfterPasswordLoad) {
@@ -1592,634 +1549,637 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         }
     }
 
-    private boolean isValidEmail(String str) {
-        if (str == null || str.length() < 3) {
+    private boolean isValidEmail(String text) {
+        if (text == null || text.length() < 3) {
             return false;
         }
-        int lastIndexOf = str.lastIndexOf(46);
-        int lastIndexOf2 = str.lastIndexOf(64);
-        if (lastIndexOf2 < 0 || lastIndexOf < lastIndexOf2) {
+        int dot = text.lastIndexOf(46);
+        int dog = text.lastIndexOf(64);
+        if (dog < 0 || dot < dog) {
             return false;
         }
         return true;
     }
 
-    private void showAlertWithText(String str, String str2) {
+    private void showAlertWithText(String title, String text) {
         if (getParentActivity() != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-            builder.setTitle(str);
-            builder.setMessage(str2);
+            builder.setTitle(title);
+            builder.setMessage(text);
             showDialog(builder.create());
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v3, resolved type: org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v5, resolved type: org.telegram.tgnet.TLRPC$TL_auth_recoverPassword} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v18, resolved type: org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v19, resolved type: org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v2, resolved type: org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v4, resolved type: org.telegram.tgnet.TLRPC$TL_auth_recoverPassword} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v13, resolved type: org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v14, resolved type: org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings} */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setNewPassword(boolean r9) {
+    public void setNewPassword(boolean r12) {
         /*
-            r8 = this;
-            if (r9 == 0) goto L_0x0023
-            boolean r0 = r8.waitingForEmail
+            r11 = this;
+            if (r12 == 0) goto L_0x0023
+            boolean r0 = r11.waitingForEmail
             if (r0 == 0) goto L_0x0023
-            org.telegram.tgnet.TLRPC$TL_account_password r0 = r8.currentPassword
+            org.telegram.tgnet.TLRPC$TL_account_password r0 = r11.currentPassword
             boolean r0 = r0.has_password
             if (r0 == 0) goto L_0x0023
-            r8.needShowProgress()
-            org.telegram.tgnet.TLRPC$TL_account_cancelPasswordEmail r9 = new org.telegram.tgnet.TLRPC$TL_account_cancelPasswordEmail
-            r9.<init>()
-            int r0 = r8.currentAccount
-            org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
-            org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda32 r1 = new org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda32
-            r1.<init>(r8)
-            r0.sendRequest(r9, r1)
+            r11.needShowProgress()
+            org.telegram.tgnet.TLRPC$TL_account_cancelPasswordEmail r0 = new org.telegram.tgnet.TLRPC$TL_account_cancelPasswordEmail
+            r0.<init>()
+            int r1 = r11.currentAccount
+            org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
+            org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda26 r2 = new org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda26
+            r2.<init>(r11)
+            r1.sendRequest(r0, r2)
             return
         L_0x0023:
-            java.lang.String r6 = r8.firstPassword
-            org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings r7 = new org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings
-            r7.<init>()
-            r0 = 2
-            java.lang.String r1 = ""
-            if (r9 == 0) goto L_0x0058
-            int r2 = r8.currentAccount
-            org.telegram.messenger.UserConfig r2 = org.telegram.messenger.UserConfig.getInstance(r2)
-            r2.resetSavedPassword()
-            r2 = 0
-            r8.currentSecret = r2
-            boolean r2 = r8.waitingForEmail
-            if (r2 == 0) goto L_0x0044
-            r7.flags = r0
-            r7.email = r1
+            java.lang.String r0 = r11.firstPassword
+            org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings r1 = new org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings
+            r1.<init>()
+            r2 = 2
+            java.lang.String r3 = ""
+            if (r12 == 0) goto L_0x0058
+            int r4 = r11.currentAccount
+            org.telegram.messenger.UserConfig r4 = org.telegram.messenger.UserConfig.getInstance(r4)
+            r4.resetSavedPassword()
+            r4 = 0
+            r11.currentSecret = r4
+            boolean r4 = r11.waitingForEmail
+            if (r4 == 0) goto L_0x0044
+            r1.flags = r2
+            r1.email = r3
             goto L_0x0091
         L_0x0044:
-            r0 = 3
-            r7.flags = r0
-            r7.hint = r1
-            r0 = 0
-            byte[] r0 = new byte[r0]
-            r7.new_password_hash = r0
-            org.telegram.tgnet.TLRPC$TL_passwordKdfAlgoUnknown r0 = new org.telegram.tgnet.TLRPC$TL_passwordKdfAlgoUnknown
-            r0.<init>()
-            r7.new_algo = r0
-            r7.email = r1
+            r2 = 3
+            r1.flags = r2
+            r1.hint = r3
+            r2 = 0
+            byte[] r2 = new byte[r2]
+            r1.new_password_hash = r2
+            org.telegram.tgnet.TLRPC$TL_passwordKdfAlgoUnknown r2 = new org.telegram.tgnet.TLRPC$TL_passwordKdfAlgoUnknown
+            r2.<init>()
+            r1.new_algo = r2
+            r1.email = r3
             goto L_0x0091
         L_0x0058:
-            java.lang.String r2 = r8.hint
-            if (r2 != 0) goto L_0x0064
-            org.telegram.tgnet.TLRPC$TL_account_password r2 = r8.currentPassword
-            if (r2 == 0) goto L_0x0064
-            java.lang.String r2 = r2.hint
-            r8.hint = r2
+            java.lang.String r4 = r11.hint
+            if (r4 != 0) goto L_0x0064
+            org.telegram.tgnet.TLRPC$TL_account_password r4 = r11.currentPassword
+            if (r4 == 0) goto L_0x0064
+            java.lang.String r4 = r4.hint
+            r11.hint = r4
         L_0x0064:
-            java.lang.String r2 = r8.hint
-            if (r2 != 0) goto L_0x006a
-            r8.hint = r1
+            java.lang.String r4 = r11.hint
+            if (r4 != 0) goto L_0x006a
+            r11.hint = r3
         L_0x006a:
-            if (r6 == 0) goto L_0x007c
-            int r1 = r7.flags
-            r1 = r1 | 1
-            r7.flags = r1
-            java.lang.String r1 = r8.hint
-            r7.hint = r1
-            org.telegram.tgnet.TLRPC$TL_account_password r1 = r8.currentPassword
-            org.telegram.tgnet.TLRPC$PasswordKdfAlgo r1 = r1.new_algo
-            r7.new_algo = r1
+            if (r0 == 0) goto L_0x007c
+            int r3 = r1.flags
+            r3 = r3 | 1
+            r1.flags = r3
+            java.lang.String r3 = r11.hint
+            r1.hint = r3
+            org.telegram.tgnet.TLRPC$TL_account_password r3 = r11.currentPassword
+            org.telegram.tgnet.TLRPC$PasswordKdfAlgo r3 = r3.new_algo
+            r1.new_algo = r3
         L_0x007c:
-            java.lang.String r1 = r8.email
-            int r1 = r1.length()
-            if (r1 <= 0) goto L_0x0091
-            int r1 = r7.flags
-            r0 = r0 | r1
-            r7.flags = r0
-            java.lang.String r0 = r8.email
-            java.lang.String r0 = r0.trim()
-            r7.email = r0
+            java.lang.String r3 = r11.email
+            int r3 = r3.length()
+            if (r3 <= 0) goto L_0x0091
+            int r3 = r1.flags
+            r2 = r2 | r3
+            r1.flags = r2
+            java.lang.String r2 = r11.email
+            java.lang.String r2 = r2.trim()
+            r1.email = r2
         L_0x0091:
-            java.lang.String r0 = r8.emailCode
-            if (r0 == 0) goto L_0x00a8
-            org.telegram.tgnet.TLRPC$TL_auth_recoverPassword r0 = new org.telegram.tgnet.TLRPC$TL_auth_recoverPassword
-            r0.<init>()
-            java.lang.String r1 = r8.emailCode
-            r0.code = r1
-            r0.new_settings = r7
-            int r1 = r0.flags
-            r1 = r1 | 1
-            r0.flags = r1
-        L_0x00a6:
-            r4 = r0
+            java.lang.String r2 = r11.emailCode
+            if (r2 == 0) goto L_0x00a8
+            org.telegram.tgnet.TLRPC$TL_auth_recoverPassword r2 = new org.telegram.tgnet.TLRPC$TL_auth_recoverPassword
+            r2.<init>()
+            java.lang.String r3 = r11.emailCode
+            r2.code = r3
+            r2.new_settings = r1
+            int r3 = r2.flags
+            r3 = r3 | 1
+            r2.flags = r3
             goto L_0x00c4
         L_0x00a8:
-            org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings r0 = new org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings
-            r0.<init>()
-            byte[] r1 = r8.currentPasswordHash
-            if (r1 == 0) goto L_0x00ba
-            int r1 = r1.length
-            if (r1 == 0) goto L_0x00ba
-            if (r9 == 0) goto L_0x00c1
-            boolean r1 = r8.waitingForEmail
-            if (r1 == 0) goto L_0x00c1
+            org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings r2 = new org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings
+            r2.<init>()
+            byte[] r3 = r11.currentPasswordHash
+            if (r3 == 0) goto L_0x00ba
+            int r3 = r3.length
+            if (r3 == 0) goto L_0x00ba
+            if (r12 == 0) goto L_0x00c1
+            boolean r3 = r11.waitingForEmail
+            if (r3 == 0) goto L_0x00c1
         L_0x00ba:
-            org.telegram.tgnet.TLRPC$TL_inputCheckPasswordEmpty r1 = new org.telegram.tgnet.TLRPC$TL_inputCheckPasswordEmpty
-            r1.<init>()
-            r0.password = r1
+            org.telegram.tgnet.TLRPC$TL_inputCheckPasswordEmpty r3 = new org.telegram.tgnet.TLRPC$TL_inputCheckPasswordEmpty
+            r3.<init>()
+            r2.password = r3
         L_0x00c1:
-            r0.new_settings = r7
-            goto L_0x00a6
+            r2.new_settings = r1
+            r3 = r2
         L_0x00c4:
-            r8.needShowProgress()
-            org.telegram.messenger.DispatchQueue r0 = org.telegram.messenger.Utilities.globalQueue
-            org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda18 r1 = new org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda18
-            r2 = r1
-            r3 = r8
-            r5 = r9
-            r2.<init>(r3, r4, r5, r6, r7)
-            r0.postRunnable(r1)
+            r11.needShowProgress()
+            org.telegram.messenger.DispatchQueue r9 = org.telegram.messenger.Utilities.globalQueue
+            org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda9 r10 = new org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda9
+            r3 = r10
+            r4 = r11
+            r5 = r2
+            r6 = r12
+            r7 = r0
+            r8 = r1
+            r3.<init>(r4, r5, r6, r7, r8)
+            r9.postRunnable(r10)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.TwoStepVerificationSetupActivity.setNewPassword(boolean):void");
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setNewPassword$29(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda21(this, tLRPC$TL_error));
+    /* renamed from: lambda$setNewPassword$29$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4033x1d078bde(TLObject response, TLRPC.TL_error error) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda14(this, error));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setNewPassword$28(TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$setNewPassword$28$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4032x2b5de5bf(TLRPC.TL_error error) {
         needHideProgress();
-        if (tLRPC$TL_error == null) {
-            TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
-            TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-            tLRPC$TL_account_password.has_recovery = false;
-            tLRPC$TL_account_password.email_unconfirmed_pattern = "";
-            twoStepVerificationActivity.setCurrentPasswordParams(tLRPC$TL_account_password, this.currentPasswordHash, this.currentSecretId, this.currentSecret);
-            twoStepVerificationActivity.setBlockingAlert(this.otherwiseReloginDays);
-            presentFragment(twoStepVerificationActivity, true);
+        if (error == null) {
+            TwoStepVerificationActivity fragment = new TwoStepVerificationActivity();
+            this.currentPassword.has_recovery = false;
+            this.currentPassword.email_unconfirmed_pattern = "";
+            fragment.setCurrentPasswordParams(this.currentPassword, this.currentPasswordHash, this.currentSecretId, this.currentSecret);
+            fragment.setBlockingAlert(this.otherwiseReloginDays);
+            presentFragment(fragment, true);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didRemoveTwoStepPassword, new Object[0]);
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setNewPassword$35(TLObject tLObject, boolean z, String str, TLRPC$TL_account_passwordInputSettings tLRPC$TL_account_passwordInputSettings) {
+    /* renamed from: lambda$setNewPassword$35$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4039x99eCLASSNAME(TLObject request, boolean clear, String password, TLRPC.TL_account_passwordInputSettings new_settings) {
+        byte[] newPasswordHash;
+        byte[] newPasswordBytes;
         byte[] bArr;
-        byte[] bArr2;
-        byte[] bArr3;
-        TLObject tLObject2 = tLObject;
-        TLRPC$TL_account_passwordInputSettings tLRPC$TL_account_passwordInputSettings2 = tLRPC$TL_account_passwordInputSettings;
-        if (tLObject2 instanceof TLRPC$TL_account_updatePasswordSettings) {
-            TLRPC$TL_account_updatePasswordSettings tLRPC$TL_account_updatePasswordSettings = (TLRPC$TL_account_updatePasswordSettings) tLObject2;
-            if (tLRPC$TL_account_updatePasswordSettings.password == null) {
-                tLRPC$TL_account_updatePasswordSettings.password = getNewSrpPassword();
+        TLObject tLObject = request;
+        TLRPC.TL_account_passwordInputSettings tL_account_passwordInputSettings = new_settings;
+        if (tLObject instanceof TLRPC.TL_account_updatePasswordSettings) {
+            TLRPC.TL_account_updatePasswordSettings req = (TLRPC.TL_account_updatePasswordSettings) tLObject;
+            if (req.password == null) {
+                req.password = getNewSrpPassword();
             }
         }
-        if (z || str == null) {
-            bArr2 = null;
-            bArr = null;
+        if (clear || password == null) {
+            newPasswordBytes = null;
+            newPasswordHash = null;
         } else {
-            byte[] stringBytes = AndroidUtilities.getStringBytes(str);
-            TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = this.currentPassword.new_algo;
-            if (tLRPC$PasswordKdfAlgo instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
-                bArr = stringBytes;
-                bArr2 = SRPHelper.getX(stringBytes, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo);
+            byte[] newPasswordBytes2 = AndroidUtilities.getStringBytes(password);
+            if (this.currentPassword.new_algo instanceof TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
+                newPasswordBytes = newPasswordBytes2;
+                newPasswordHash = SRPHelper.getX(newPasswordBytes2, (TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) this.currentPassword.new_algo);
             } else {
-                bArr = stringBytes;
-                bArr2 = null;
+                newPasswordBytes = newPasswordBytes2;
+                newPasswordHash = null;
             }
         }
-        TwoStepVerificationSetupActivity$$ExternalSyntheticLambda36 twoStepVerificationSetupActivity$$ExternalSyntheticLambda36 = new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda36(this, z, bArr2, str, tLRPC$TL_account_passwordInputSettings);
-        if (!z) {
-            if (!(str == null || (bArr3 = this.currentSecret) == null || bArr3.length != 32)) {
-                TLRPC$SecurePasswordKdfAlgo tLRPC$SecurePasswordKdfAlgo = this.currentPassword.new_secure_algo;
-                if (tLRPC$SecurePasswordKdfAlgo instanceof TLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000) {
-                    TLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000 tLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000 = (TLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000) tLRPC$SecurePasswordKdfAlgo;
-                    byte[] computePBKDF2 = Utilities.computePBKDF2(bArr, tLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000.salt);
-                    byte[] bArr4 = new byte[32];
-                    System.arraycopy(computePBKDF2, 0, bArr4, 0, 32);
-                    byte[] bArr5 = new byte[16];
-                    System.arraycopy(computePBKDF2, 32, bArr5, 0, 16);
-                    byte[] bArr6 = new byte[32];
-                    System.arraycopy(this.currentSecret, 0, bArr6, 0, 32);
-                    Utilities.aesCbcEncryptionByteArraySafe(bArr6, bArr4, bArr5, 0, 32, 0, 1);
-                    TLRPC$TL_secureSecretSettings tLRPC$TL_secureSecretSettings = new TLRPC$TL_secureSecretSettings();
-                    tLRPC$TL_account_passwordInputSettings2.new_secure_settings = tLRPC$TL_secureSecretSettings;
-                    tLRPC$TL_secureSecretSettings.secure_algo = tLRPC$TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000;
-                    tLRPC$TL_secureSecretSettings.secure_secret = bArr6;
-                    tLRPC$TL_secureSecretSettings.secure_secret_id = this.currentSecretId;
-                    tLRPC$TL_account_passwordInputSettings2.flags |= 4;
-                }
+        RequestDelegate requestDelegate = new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda29(this, clear, newPasswordHash, password, new_settings);
+        if (!clear) {
+            if (password != null && (bArr = this.currentSecret) != null && bArr.length == 32 && (this.currentPassword.new_secure_algo instanceof TLRPC.TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000)) {
+                TLRPC.TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000 newAlgo = (TLRPC.TL_securePasswordKdfAlgoPBKDF2HMACSHA512iter100000) this.currentPassword.new_secure_algo;
+                byte[] passwordHash = Utilities.computePBKDF2(newPasswordBytes, newAlgo.salt);
+                byte[] key = new byte[32];
+                System.arraycopy(passwordHash, 0, key, 0, 32);
+                byte[] iv = new byte[16];
+                System.arraycopy(passwordHash, 32, iv, 0, 16);
+                byte[] encryptedSecret = new byte[32];
+                System.arraycopy(this.currentSecret, 0, encryptedSecret, 0, 32);
+                byte[] bArr2 = iv;
+                Utilities.aesCbcEncryptionByteArraySafe(encryptedSecret, key, iv, 0, encryptedSecret.length, 0, 1);
+                tL_account_passwordInputSettings.new_secure_settings = new TLRPC.TL_secureSecretSettings();
+                tL_account_passwordInputSettings.new_secure_settings.secure_algo = newAlgo;
+                tL_account_passwordInputSettings.new_secure_settings.secure_secret = encryptedSecret;
+                tL_account_passwordInputSettings.new_secure_settings.secure_secret_id = this.currentSecretId;
+                tL_account_passwordInputSettings.flags |= 4;
             }
-            TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo2 = this.currentPassword.new_algo;
-            if (tLRPC$PasswordKdfAlgo2 instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
-                if (str != null) {
-                    byte[] vBytes = SRPHelper.getVBytes(bArr, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo2);
-                    tLRPC$TL_account_passwordInputSettings2.new_password_hash = vBytes;
-                    if (vBytes == null) {
-                        TLRPC$TL_error tLRPC$TL_error = new TLRPC$TL_error();
-                        tLRPC$TL_error.text = "ALGO_INVALID";
-                        twoStepVerificationSetupActivity$$ExternalSyntheticLambda36.run((TLObject) null, tLRPC$TL_error);
+            if (this.currentPassword.new_algo instanceof TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) {
+                if (password != null) {
+                    tL_account_passwordInputSettings.new_password_hash = SRPHelper.getVBytes(newPasswordBytes, (TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) this.currentPassword.new_algo);
+                    if (tL_account_passwordInputSettings.new_password_hash == null) {
+                        TLRPC.TL_error error = new TLRPC.TL_error();
+                        error.text = "ALGO_INVALID";
+                        requestDelegate.run((TLObject) null, error);
                     }
                 }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLObject2, twoStepVerificationSetupActivity$$ExternalSyntheticLambda36, 10);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLObject, requestDelegate, 10);
                 return;
             }
-            TLRPC$TL_error tLRPC$TL_error2 = new TLRPC$TL_error();
-            tLRPC$TL_error2.text = "PASSWORD_HASH_INVALID";
-            twoStepVerificationSetupActivity$$ExternalSyntheticLambda36.run((TLObject) null, tLRPC$TL_error2);
+            TLRPC.TL_error error2 = new TLRPC.TL_error();
+            error2.text = "PASSWORD_HASH_INVALID";
+            requestDelegate.run((TLObject) null, error2);
             return;
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLObject2, twoStepVerificationSetupActivity$$ExternalSyntheticLambda36, 10);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLObject, requestDelegate, 10);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setNewPassword$34(boolean z, byte[] bArr, String str, TLRPC$TL_account_passwordInputSettings tLRPC$TL_account_passwordInputSettings, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda26(this, tLRPC$TL_error, z, tLObject, bArr, str, tLRPC$TL_account_passwordInputSettings));
+    /* renamed from: lambda$setNewPassword$34$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4038xa8426b04(boolean clear, byte[] newPasswordHash, String password, TLRPC.TL_account_passwordInputSettings new_settings, TLObject response, TLRPC.TL_error error) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda18(this, error, clear, response, newPasswordHash, password, new_settings));
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v3, resolved type: java.lang.Object[]} */
-    /* access modifiers changed from: private */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v1, resolved type: java.lang.Object[]} */
     /* JADX WARNING: Multi-variable type inference failed */
+    /* renamed from: lambda$setNewPassword$33$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$setNewPassword$33(org.telegram.tgnet.TLRPC$TL_error r12, boolean r13, org.telegram.tgnet.TLObject r14, byte[] r15, java.lang.String r16, org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings r17) {
+    public /* synthetic */ void m4037xb698c4e5(org.telegram.tgnet.TLRPC.TL_error r21, boolean r22, org.telegram.tgnet.TLObject r23, byte[] r24, java.lang.String r25, org.telegram.tgnet.TLRPC.TL_account_passwordInputSettings r26) {
         /*
-            r11 = this;
-            r0 = r11
-            r1 = r12
-            r2 = r13
-            r3 = r14
-            r4 = r15
+            r20 = this;
+            r0 = r20
+            r1 = r21
+            r2 = r22
+            r3 = r23
+            r4 = r24
             r5 = 8
-            if (r1 == 0) goto L_0x0027
+            if (r1 == 0) goto L_0x002c
             java.lang.String r6 = r1.text
             java.lang.String r7 = "SRP_ID_INVALID"
             boolean r6 = r7.equals(r6)
-            if (r6 == 0) goto L_0x0027
-            org.telegram.tgnet.TLRPC$TL_account_getPassword r1 = new org.telegram.tgnet.TLRPC$TL_account_getPassword
-            r1.<init>()
-            int r3 = r0.currentAccount
-            org.telegram.tgnet.ConnectionsManager r3 = org.telegram.tgnet.ConnectionsManager.getInstance(r3)
-            org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda35 r4 = new org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda35
-            r4.<init>(r11, r13)
-            r3.sendRequest(r1, r4, r5)
+            if (r6 == 0) goto L_0x002c
+            org.telegram.tgnet.TLRPC$TL_account_getPassword r6 = new org.telegram.tgnet.TLRPC$TL_account_getPassword
+            r6.<init>()
+            int r7 = r0.currentAccount
+            org.telegram.tgnet.ConnectionsManager r7 = org.telegram.tgnet.ConnectionsManager.getInstance(r7)
+            org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda28 r8 = new org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda28
+            r8.<init>(r0, r2)
+            r7.sendRequest(r6, r8, r5)
             return
-        L_0x0027:
-            r11.needHideProgress()
+        L_0x002c:
+            r20.needHideProgress()
             r6 = 7
-            r7 = 1
-            r8 = 0
-            if (r1 != 0) goto L_0x0157
-            boolean r9 = r3 instanceof org.telegram.tgnet.TLRPC$TL_boolTrue
-            if (r9 != 0) goto L_0x0037
-            boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$auth_Authorization
-            if (r3 == 0) goto L_0x0157
-        L_0x0037:
-            org.telegram.messenger.MessagesController r1 = r11.getMessagesController()
+            r7 = 0
+            r8 = 1
+            if (r1 != 0) goto L_0x0161
+            boolean r9 = r3 instanceof org.telegram.tgnet.TLRPC.TL_boolTrue
+            if (r9 != 0) goto L_0x003c
+            boolean r9 = r3 instanceof org.telegram.tgnet.TLRPC.auth_Authorization
+            if (r9 == 0) goto L_0x0161
+        L_0x003c:
+            org.telegram.messenger.MessagesController r5 = r20.getMessagesController()
             r9 = 0
-            java.lang.String r3 = "VALIDATE_PASSWORD"
-            r1.removeSuggestion(r9, r3)
-            if (r2 == 0) goto L_0x007a
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r0.fragmentsToClose
-            int r1 = r1.size()
-            r2 = 0
-        L_0x004b:
-            if (r2 >= r1) goto L_0x005b
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r0.fragmentsToClose
-            java.lang.Object r3 = r3.get(r2)
-            org.telegram.ui.ActionBar.BaseFragment r3 = (org.telegram.ui.ActionBar.BaseFragment) r3
-            r3.removeSelfFromStack()
-            int r2 = r2 + 1
-            goto L_0x004b
-        L_0x005b:
-            int r1 = r0.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.didRemoveTwoStepPassword
-            java.lang.Object[] r3 = new java.lang.Object[r8]
-            r1.postNotificationName(r2, r3)
-            int r1 = r0.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.didSetOrRemoveTwoStepPassword
-            java.lang.Object[] r3 = new java.lang.Object[r8]
-            r1.postNotificationName(r2, r3)
-            r11.finishFragment()
-            goto L_0x0259
-        L_0x007a:
-            android.app.Activity r1 = r11.getParentActivity()
-            if (r1 != 0) goto L_0x0081
-            return
+            java.lang.String r11 = "VALIDATE_PASSWORD"
+            r5.removeSuggestion(r9, r11)
+            if (r2 == 0) goto L_0x0081
+            r5 = 0
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r6 = r0.fragmentsToClose
+            int r6 = r6.size()
+        L_0x0050:
+            if (r5 >= r6) goto L_0x0060
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = r0.fragmentsToClose
+            java.lang.Object r8 = r8.get(r5)
+            org.telegram.ui.ActionBar.BaseFragment r8 = (org.telegram.ui.ActionBar.BaseFragment) r8
+            r8.removeSelfFromStack()
+            int r5 = r5 + 1
+            goto L_0x0050
+        L_0x0060:
+            int r5 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r5 = org.telegram.messenger.NotificationCenter.getInstance(r5)
+            int r6 = org.telegram.messenger.NotificationCenter.didRemoveTwoStepPassword
+            java.lang.Object[] r8 = new java.lang.Object[r7]
+            r5.postNotificationName(r6, r8)
+            int r5 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r5 = org.telegram.messenger.NotificationCenter.getInstance(r5)
+            int r6 = org.telegram.messenger.NotificationCenter.didSetOrRemoveTwoStepPassword
+            java.lang.Object[] r7 = new java.lang.Object[r7]
+            r5.postNotificationName(r6, r7)
+            r20.finishFragment()
+            r7 = r26
+            goto L_0x0272
         L_0x0081:
-            org.telegram.tgnet.TLRPC$TL_account_password r1 = r0.currentPassword
-            boolean r1 = r1.has_password
-            if (r1 == 0) goto L_0x00e2
-            org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            android.app.Activity r2 = r11.getParentActivity()
-            r1.<init>((android.content.Context) r2)
-            r2 = 2131626751(0x7f0e0aff, float:1.8880747E38)
-            java.lang.String r3 = "OK"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda5 r3 = new org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda5
-            r3.<init>(r11, r15)
-            r1.setPositiveButton(r2, r3)
-            if (r16 != 0) goto L_0x00b8
-            org.telegram.tgnet.TLRPC$TL_account_password r2 = r0.currentPassword
-            if (r2 == 0) goto L_0x00b8
-            boolean r2 = r2.has_password
-            if (r2 == 0) goto L_0x00b8
-            r2 = 2131628738(0x7f0e12c2, float:1.8884777E38)
-            java.lang.String r3 = "YourEmailSuccessText"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            r1.setMessage(r2)
-            goto L_0x00c4
-        L_0x00b8:
-            r2 = 2131628743(0x7f0e12c7, float:1.8884787E38)
-            java.lang.String r3 = "YourPasswordChangedSuccessText"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            r1.setMessage(r2)
-        L_0x00c4:
-            r2 = 2131628748(0x7f0e12cc, float:1.8884797E38)
-            java.lang.String r3 = "YourPasswordSuccess"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            r1.setTitle(r2)
-            org.telegram.ui.ActionBar.AlertDialog r1 = r1.create()
-            android.app.Dialog r1 = r11.showDialog(r1)
-            if (r1 == 0) goto L_0x0259
-            r1.setCanceledOnTouchOutside(r8)
-            r1.setCancelable(r8)
-            goto L_0x0259
-        L_0x00e2:
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r0.fragmentsToClose
-            int r1 = r1.size()
-            r2 = 0
-        L_0x00e9:
-            if (r2 >= r1) goto L_0x00f9
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r0.fragmentsToClose
-            java.lang.Object r3 = r3.get(r2)
-            org.telegram.ui.ActionBar.BaseFragment r3 = (org.telegram.ui.ActionBar.BaseFragment) r3
-            r3.removeSelfFromStack()
-            int r2 = r2 + 1
-            goto L_0x00e9
-        L_0x00f9:
-            org.telegram.tgnet.TLRPC$TL_account_password r1 = r0.currentPassword
-            r1.has_password = r7
-            boolean r2 = r1.has_recovery
-            if (r2 != 0) goto L_0x010a
-            java.lang.String r2 = r1.email_unconfirmed_pattern
-            boolean r2 = android.text.TextUtils.isEmpty(r2)
-            r2 = r2 ^ r7
-            r1.has_recovery = r2
-        L_0x010a:
-            boolean r1 = r0.closeAfterSet
-            if (r1 == 0) goto L_0x011b
-            int r1 = r0.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.twoStepPasswordChanged
-            java.lang.Object[] r3 = new java.lang.Object[r8]
-            r1.postNotificationName(r2, r3)
-        L_0x011b:
-            org.telegram.ui.TwoStepVerificationSetupActivity r1 = new org.telegram.ui.TwoStepVerificationSetupActivity
-            org.telegram.tgnet.TLRPC$TL_account_password r2 = r0.currentPassword
-            r1.<init>(r6, r2)
-            if (r4 == 0) goto L_0x0126
-            r2 = r4
-            goto L_0x0128
-        L_0x0126:
-            byte[] r2 = r0.currentPasswordHash
+            android.app.Activity r5 = r20.getParentActivity()
+            if (r5 != 0) goto L_0x0088
+            return
+        L_0x0088:
+            org.telegram.tgnet.TLRPC$TL_account_password r5 = r0.currentPassword
+            boolean r5 = r5.has_password
+            if (r5 == 0) goto L_0x00eb
+            org.telegram.ui.ActionBar.AlertDialog$Builder r5 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            android.app.Activity r6 = r20.getParentActivity()
+            r5.<init>((android.content.Context) r6)
+            r6 = 2131626751(0x7f0e0aff, float:1.8880747E38)
+            java.lang.String r8 = "OK"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
+            org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda33 r8 = new org.telegram.ui.TwoStepVerificationSetupActivity$$ExternalSyntheticLambda33
+            r8.<init>(r0, r4)
+            r5.setPositiveButton(r6, r8)
+            if (r25 != 0) goto L_0x00bf
+            org.telegram.tgnet.TLRPC$TL_account_password r6 = r0.currentPassword
+            if (r6 == 0) goto L_0x00bf
+            boolean r6 = r6.has_password
+            if (r6 == 0) goto L_0x00bf
+            r6 = 2131628738(0x7f0e12c2, float:1.8884777E38)
+            java.lang.String r8 = "YourEmailSuccessText"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
+            r5.setMessage(r6)
+            goto L_0x00cb
+        L_0x00bf:
+            r6 = 2131628743(0x7f0e12c7, float:1.8884787E38)
+            java.lang.String r8 = "YourPasswordChangedSuccessText"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
+            r5.setMessage(r6)
+        L_0x00cb:
+            r6 = 2131628748(0x7f0e12cc, float:1.8884797E38)
+            java.lang.String r8 = "YourPasswordSuccess"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
+            r5.setTitle(r6)
+            org.telegram.ui.ActionBar.AlertDialog r6 = r5.create()
+            android.app.Dialog r6 = r0.showDialog(r6)
+            if (r6 == 0) goto L_0x00e7
+            r6.setCanceledOnTouchOutside(r7)
+            r6.setCancelable(r7)
+        L_0x00e7:
+            r7 = r26
+            goto L_0x0272
+        L_0x00eb:
+            r5 = 0
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r9 = r0.fragmentsToClose
+            int r9 = r9.size()
+        L_0x00f2:
+            if (r5 >= r9) goto L_0x0102
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r10 = r0.fragmentsToClose
+            java.lang.Object r10 = r10.get(r5)
+            org.telegram.ui.ActionBar.BaseFragment r10 = (org.telegram.ui.ActionBar.BaseFragment) r10
+            r10.removeSelfFromStack()
+            int r5 = r5 + 1
+            goto L_0x00f2
+        L_0x0102:
+            org.telegram.tgnet.TLRPC$TL_account_password r5 = r0.currentPassword
+            r5.has_password = r8
+            org.telegram.tgnet.TLRPC$TL_account_password r5 = r0.currentPassword
+            boolean r5 = r5.has_recovery
+            if (r5 != 0) goto L_0x0117
+            org.telegram.tgnet.TLRPC$TL_account_password r5 = r0.currentPassword
+            java.lang.String r9 = r5.email_unconfirmed_pattern
+            boolean r9 = android.text.TextUtils.isEmpty(r9)
+            r9 = r9 ^ r8
+            r5.has_recovery = r9
+        L_0x0117:
+            boolean r5 = r0.closeAfterSet
+            if (r5 == 0) goto L_0x0128
+            int r5 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r5 = org.telegram.messenger.NotificationCenter.getInstance(r5)
+            int r9 = org.telegram.messenger.NotificationCenter.twoStepPasswordChanged
+            java.lang.Object[] r10 = new java.lang.Object[r7]
+            r5.postNotificationName(r9, r10)
         L_0x0128:
-            long r3 = r0.currentSecretId
-            byte[] r5 = r0.currentSecret
-            boolean r6 = r0.emailOnly
-            r12 = r1
-            r13 = r2
-            r14 = r3
-            r16 = r5
-            r17 = r6
-            r12.setCurrentPasswordParams(r13, r14, r16, r17)
-            boolean r2 = r0.closeAfterSet
-            r1.closeAfterSet = r2
-            int r2 = r0.otherwiseReloginDays
-            r1.setBlockingAlert(r2)
-            r11.presentFragment(r1, r7)
-            int r1 = r0.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.didSetOrRemoveTwoStepPassword
-            java.lang.Object[] r3 = new java.lang.Object[r7]
-            org.telegram.tgnet.TLRPC$TL_account_password r4 = r0.currentPassword
-            r3[r8] = r4
-            r1.postNotificationName(r2, r3)
-            goto L_0x0259
-        L_0x0157:
-            if (r1 == 0) goto L_0x0259
-            java.lang.String r2 = r1.text
-            java.lang.String r3 = "EMAIL_UNCONFIRMED"
-            boolean r2 = r3.equals(r2)
-            if (r2 != 0) goto L_0x01d6
-            java.lang.String r2 = r1.text
-            java.lang.String r3 = "EMAIL_UNCONFIRMED_"
-            boolean r2 = r2.startsWith(r3)
-            if (r2 == 0) goto L_0x016e
-            goto L_0x01d6
-        L_0x016e:
-            java.lang.String r2 = r1.text
-            java.lang.String r3 = "EMAIL_INVALID"
-            boolean r2 = r3.equals(r2)
-            r3 = 2131624300(0x7f0e016c, float:1.8875776E38)
-            java.lang.String r4 = "AppName"
-            if (r2 == 0) goto L_0x018f
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r2 = 2131627025(0x7f0e0CLASSNAME, float:1.8881303E38)
-            java.lang.String r3 = "PasswordEmailInvalid"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            r11.showAlertWithText(r1, r2)
-            goto L_0x0259
-        L_0x018f:
-            java.lang.String r2 = r1.text
-            java.lang.String r5 = "FLOOD_WAIT"
-            boolean r2 = r2.startsWith(r5)
-            if (r2 == 0) goto L_0x01cb
-            java.lang.String r1 = r1.text
-            java.lang.Integer r1 = org.telegram.messenger.Utilities.parseInt(r1)
-            int r1 = r1.intValue()
-            r2 = 60
-            if (r1 >= r2) goto L_0x01ae
-            java.lang.String r2 = "Seconds"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1)
-            goto L_0x01b5
-        L_0x01ae:
-            int r1 = r1 / r2
-            java.lang.String r2 = "Minutes"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1)
-        L_0x01b5:
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r3 = 2131625681(0x7f0e06d1, float:1.8878577E38)
-            java.lang.Object[] r4 = new java.lang.Object[r7]
-            r4[r8] = r1
-            java.lang.String r1 = "FloodWaitTime"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4)
-            r11.showAlertWithText(r2, r1)
-            goto L_0x0259
-        L_0x01cb:
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            java.lang.String r1 = r1.text
-            r11.showAlertWithText(r2, r1)
-            goto L_0x0259
-        L_0x01d6:
-            int r1 = r0.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.twoStepPasswordChanged
-            java.lang.Object[] r3 = new java.lang.Object[r8]
-            r1.postNotificationName(r2, r3)
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r0.fragmentsToClose
-            int r1 = r1.size()
-            r2 = 0
-        L_0x01ea:
-            if (r2 >= r1) goto L_0x01fa
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r0.fragmentsToClose
-            java.lang.Object r3 = r3.get(r2)
-            org.telegram.ui.ActionBar.BaseFragment r3 = (org.telegram.ui.ActionBar.BaseFragment) r3
-            r3.removeSelfFromStack()
-            int r2 = r2 + 1
-            goto L_0x01ea
-        L_0x01fa:
-            int r1 = r0.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.twoStepPasswordChanged
-            java.lang.Object[] r3 = new java.lang.Object[r5]
-            r3[r8] = r4
-            r5 = r17
-            org.telegram.tgnet.TLRPC$PasswordKdfAlgo r5 = r5.new_algo
-            r3[r7] = r5
-            r5 = 2
-            org.telegram.tgnet.TLRPC$TL_account_password r8 = r0.currentPassword
-            org.telegram.tgnet.TLRPC$SecurePasswordKdfAlgo r9 = r8.new_secure_algo
-            r3[r5] = r9
-            r5 = 3
-            byte[] r8 = r8.secure_random
-            r3[r5] = r8
-            r5 = 4
-            java.lang.String r8 = r0.email
-            r3[r5] = r8
-            java.lang.String r5 = r0.hint
-            r9 = 5
-            r3[r9] = r5
-            r5 = 6
-            r3[r5] = r8
-            java.lang.String r5 = r0.firstPassword
-            r3[r6] = r5
-            r1.postNotificationName(r2, r3)
-            org.telegram.tgnet.TLRPC$TL_account_password r1 = r0.currentPassword
-            java.lang.String r2 = r0.email
-            r1.email_unconfirmed_pattern = r2
-            org.telegram.ui.TwoStepVerificationSetupActivity r2 = new org.telegram.ui.TwoStepVerificationSetupActivity
-            r2.<init>(r9, r1)
-            if (r4 == 0) goto L_0x023b
-            r1 = r4
-            goto L_0x023d
-        L_0x023b:
-            byte[] r1 = r0.currentPasswordHash
-        L_0x023d:
-            long r3 = r0.currentSecretId
-            byte[] r5 = r0.currentSecret
-            boolean r6 = r0.emailOnly
-            r12 = r2
-            r13 = r1
-            r14 = r3
-            r16 = r5
-            r17 = r6
-            r12.setCurrentPasswordParams(r13, r14, r16, r17)
-            boolean r1 = r0.closeAfterSet
-            r2.closeAfterSet = r1
-            int r1 = r0.otherwiseReloginDays
-            r2.setBlockingAlert(r1)
-            r11.presentFragment(r2, r7)
-        L_0x0259:
+            org.telegram.ui.TwoStepVerificationSetupActivity r5 = new org.telegram.ui.TwoStepVerificationSetupActivity
+            org.telegram.tgnet.TLRPC$TL_account_password r9 = r0.currentPassword
+            r5.<init>(r6, r9)
+            if (r4 == 0) goto L_0x0133
+            r11 = r4
+            goto L_0x0136
+        L_0x0133:
+            byte[] r6 = r0.currentPasswordHash
+            r11 = r6
+        L_0x0136:
+            long r12 = r0.currentSecretId
+            byte[] r14 = r0.currentSecret
+            boolean r15 = r0.emailOnly
+            r10 = r5
+            r10.setCurrentPasswordParams(r11, r12, r14, r15)
+            boolean r6 = r0.closeAfterSet
+            r5.closeAfterSet = r6
+            int r6 = r0.otherwiseReloginDays
+            r5.setBlockingAlert(r6)
+            r0.presentFragment(r5, r8)
+            int r6 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r6 = org.telegram.messenger.NotificationCenter.getInstance(r6)
+            int r9 = org.telegram.messenger.NotificationCenter.didSetOrRemoveTwoStepPassword
+            java.lang.Object[] r8 = new java.lang.Object[r8]
+            org.telegram.tgnet.TLRPC$TL_account_password r10 = r0.currentPassword
+            r8[r7] = r10
+            r6.postNotificationName(r9, r8)
+            r7 = r26
+            goto L_0x0272
+        L_0x0161:
+            if (r1 == 0) goto L_0x0270
+            java.lang.String r9 = r1.text
+            java.lang.String r10 = "EMAIL_UNCONFIRMED"
+            boolean r9 = r10.equals(r9)
+            if (r9 != 0) goto L_0x01e7
+            java.lang.String r9 = r1.text
+            java.lang.String r10 = "EMAIL_UNCONFIRMED_"
+            boolean r9 = r9.startsWith(r10)
+            if (r9 == 0) goto L_0x0178
+            goto L_0x01e7
+        L_0x0178:
+            java.lang.String r5 = r1.text
+            java.lang.String r6 = "EMAIL_INVALID"
+            boolean r5 = r6.equals(r5)
+            r6 = 2131624300(0x7f0e016c, float:1.8875776E38)
+            java.lang.String r9 = "AppName"
+            if (r5 == 0) goto L_0x019b
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r6 = 2131627025(0x7f0e0CLASSNAME, float:1.8881303E38)
+            java.lang.String r7 = "PasswordEmailInvalid"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
+            r0.showAlertWithText(r5, r6)
+            r7 = r26
+            goto L_0x0272
+        L_0x019b:
+            java.lang.String r5 = r1.text
+            java.lang.String r10 = "FLOOD_WAIT"
+            boolean r5 = r5.startsWith(r10)
+            if (r5 == 0) goto L_0x01da
+            java.lang.String r5 = r1.text
+            java.lang.Integer r5 = org.telegram.messenger.Utilities.parseInt(r5)
+            int r5 = r5.intValue()
+            r10 = 60
+            if (r5 >= r10) goto L_0x01ba
+            java.lang.String r10 = "Seconds"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.formatPluralString(r10, r5)
+            goto L_0x01c2
+        L_0x01ba:
+            int r10 = r5 / 60
+            java.lang.String r11 = "Minutes"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.formatPluralString(r11, r10)
+        L_0x01c2:
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r9 = 2131625681(0x7f0e06d1, float:1.8878577E38)
+            java.lang.Object[] r8 = new java.lang.Object[r8]
+            r8[r7] = r10
+            java.lang.String r7 = "FloodWaitTime"
+            java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r7, r9, r8)
+            r0.showAlertWithText(r6, r7)
+            r7 = r26
+            goto L_0x0272
+        L_0x01da:
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            java.lang.String r6 = r1.text
+            r0.showAlertWithText(r5, r6)
+            r7 = r26
+            goto L_0x0272
+        L_0x01e7:
+            int r9 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r9 = org.telegram.messenger.NotificationCenter.getInstance(r9)
+            int r10 = org.telegram.messenger.NotificationCenter.twoStepPasswordChanged
+            java.lang.Object[] r11 = new java.lang.Object[r7]
+            r9.postNotificationName(r10, r11)
+            r9 = 0
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r10 = r0.fragmentsToClose
+            int r10 = r10.size()
+        L_0x01fb:
+            if (r9 >= r10) goto L_0x020b
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r11 = r0.fragmentsToClose
+            java.lang.Object r11 = r11.get(r9)
+            org.telegram.ui.ActionBar.BaseFragment r11 = (org.telegram.ui.ActionBar.BaseFragment) r11
+            r11.removeSelfFromStack()
+            int r9 = r9 + 1
+            goto L_0x01fb
+        L_0x020b:
+            int r9 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r9 = org.telegram.messenger.NotificationCenter.getInstance(r9)
+            int r10 = org.telegram.messenger.NotificationCenter.twoStepPasswordChanged
+            java.lang.Object[] r5 = new java.lang.Object[r5]
+            r5[r7] = r4
+            r7 = r26
+            org.telegram.tgnet.TLRPC$PasswordKdfAlgo r11 = r7.new_algo
+            r5[r8] = r11
+            r11 = 2
+            org.telegram.tgnet.TLRPC$TL_account_password r12 = r0.currentPassword
+            org.telegram.tgnet.TLRPC$SecurePasswordKdfAlgo r12 = r12.new_secure_algo
+            r5[r11] = r12
+            r11 = 3
+            org.telegram.tgnet.TLRPC$TL_account_password r12 = r0.currentPassword
+            byte[] r12 = r12.secure_random
+            r5[r11] = r12
+            r11 = 4
+            java.lang.String r12 = r0.email
+            r5[r11] = r12
+            java.lang.String r11 = r0.hint
+            r13 = 5
+            r5[r13] = r11
+            r11 = 6
+            r5[r11] = r12
+            java.lang.String r11 = r0.firstPassword
+            r5[r6] = r11
+            r9.postNotificationName(r10, r5)
+            org.telegram.tgnet.TLRPC$TL_account_password r5 = r0.currentPassword
+            java.lang.String r6 = r0.email
+            r5.email_unconfirmed_pattern = r6
+            org.telegram.ui.TwoStepVerificationSetupActivity r5 = new org.telegram.ui.TwoStepVerificationSetupActivity
+            org.telegram.tgnet.TLRPC$TL_account_password r6 = r0.currentPassword
+            r5.<init>(r13, r6)
+            if (r4 == 0) goto L_0x0250
+            r15 = r4
+            goto L_0x0253
+        L_0x0250:
+            byte[] r6 = r0.currentPasswordHash
+            r15 = r6
+        L_0x0253:
+            long r9 = r0.currentSecretId
+            byte[] r6 = r0.currentSecret
+            boolean r11 = r0.emailOnly
+            r14 = r5
+            r16 = r9
+            r18 = r6
+            r19 = r11
+            r14.setCurrentPasswordParams(r15, r16, r18, r19)
+            boolean r6 = r0.closeAfterSet
+            r5.closeAfterSet = r6
+            int r6 = r0.otherwiseReloginDays
+            r5.setBlockingAlert(r6)
+            r0.presentFragment(r5, r8)
+            goto L_0x0272
+        L_0x0270:
+            r7 = r26
+        L_0x0272:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.TwoStepVerificationSetupActivity.lambda$setNewPassword$33(org.telegram.tgnet.TLRPC$TL_error, boolean, org.telegram.tgnet.TLObject, byte[], java.lang.String, org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.TwoStepVerificationSetupActivity.m4037xb698c4e5(org.telegram.tgnet.TLRPC$TL_error, boolean, org.telegram.tgnet.TLObject, byte[], java.lang.String, org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings):void");
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setNewPassword$31(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda25(this, tLRPC$TL_error, tLObject, z));
+    /* renamed from: lambda$setNewPassword$31$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4035xd34578a7(boolean clear, TLObject response2, TLRPC.TL_error error2) {
+        AndroidUtilities.runOnUIThread(new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda17(this, error2, response2, clear));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setNewPassword$30(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
-        if (tLRPC$TL_error == null) {
-            TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
-            this.currentPassword = tLRPC$TL_account_password;
-            TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$TL_account_password);
-            setNewPassword(z);
+    /* renamed from: lambda$setNewPassword$30$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4034xe19bd288(TLRPC.TL_error error2, TLObject response2, boolean clear) {
+        if (error2 == null) {
+            TLRPC.TL_account_password tL_account_password = (TLRPC.TL_account_password) response2;
+            this.currentPassword = tL_account_password;
+            TwoStepVerificationActivity.initPasswordNewAlgo(tL_account_password);
+            setNewPassword(clear);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setNewPassword$32(byte[] bArr, DialogInterface dialogInterface, int i) {
-        int size = this.fragmentsToClose.size();
-        for (int i2 = 0; i2 < size; i2++) {
-            this.fragmentsToClose.get(i2).removeSelfFromStack();
+    /* renamed from: lambda$setNewPassword$32$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4036xc4ef1ec6(byte[] newPasswordHash, DialogInterface dialogInterface, int i) {
+        int N = this.fragmentsToClose.size();
+        for (int a = 0; a < N; a++) {
+            this.fragmentsToClose.get(a).removeSelfFromStack();
         }
-        TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        tLRPC$TL_account_password.has_password = true;
-        if (!tLRPC$TL_account_password.has_recovery) {
-            tLRPC$TL_account_password.has_recovery = !TextUtils.isEmpty(tLRPC$TL_account_password.email_unconfirmed_pattern);
+        TwoStepVerificationActivity fragment = new TwoStepVerificationActivity();
+        this.currentPassword.has_password = true;
+        if (!this.currentPassword.has_recovery) {
+            TLRPC.TL_account_password tL_account_password = this.currentPassword;
+            tL_account_password.has_recovery = !TextUtils.isEmpty(tL_account_password.email_unconfirmed_pattern);
         }
-        TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
-        if (bArr == null) {
-            bArr = this.currentPasswordHash;
-        }
-        twoStepVerificationActivity.setCurrentPasswordParams(tLRPC$TL_account_password2, bArr, this.currentSecretId, this.currentSecret);
-        twoStepVerificationActivity.setBlockingAlert(this.otherwiseReloginDays);
-        presentFragment(twoStepVerificationActivity, true);
+        fragment.setCurrentPasswordParams(this.currentPassword, newPasswordHash != null ? newPasswordHash : this.currentPasswordHash, this.currentSecretId, this.currentSecret);
+        fragment.setBlockingAlert(this.otherwiseReloginDays);
+        presentFragment(fragment, true);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
     }
 
     /* access modifiers changed from: protected */
-    public TLRPC$TL_inputCheckPasswordSRP getNewSrpPassword() {
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = tLRPC$TL_account_password.current_algo;
-        if (!(tLRPC$PasswordKdfAlgo instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow)) {
+    public TLRPC.TL_inputCheckPasswordSRP getNewSrpPassword() {
+        if (!(this.currentPassword.current_algo instanceof TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow)) {
             return null;
         }
-        return SRPHelper.startCheck(this.currentPasswordHash, tLRPC$TL_account_password.srp_id, tLRPC$TL_account_password.srp_B, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo);
+        return SRPHelper.startCheck(this.currentPasswordHash, this.currentPassword.srp_id, this.currentPassword.srp_B, (TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) this.currentPassword.current_algo);
     }
 
-    private void onFieldError(TextView textView, boolean z) {
+    /* access modifiers changed from: protected */
+    public void onReset() {
+    }
+
+    private void onFieldError(TextView field, boolean clear) {
         if (getParentActivity() != null) {
-            Vibrator vibrator = (Vibrator) getParentActivity().getSystemService("vibrator");
-            if (vibrator != null) {
-                vibrator.vibrate(200);
+            Vibrator v = (Vibrator) getParentActivity().getSystemService("vibrator");
+            if (v != null) {
+                v.vibrate(200);
             }
-            if (z) {
-                textView.setText("");
+            if (clear) {
+                field.setText("");
             }
-            AndroidUtilities.shakeView(textView, 2.0f, 0);
+            AndroidUtilities.shakeView(field, 2.0f, 0);
         }
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
-        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
-        arrayList.add(new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
-        arrayList.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
-        arrayList.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
-        arrayList.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
-        return arrayList;
+        ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
+        themeDescriptions.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+        themeDescriptions.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
+        themeDescriptions.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
+        themeDescriptions.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
+        themeDescriptions.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
+        themeDescriptions.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
+        themeDescriptions.add(new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+        themeDescriptions.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        themeDescriptions.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
+        themeDescriptions.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
+        themeDescriptions.add(new ThemeDescription(this.passwordEditText, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+        return themeDescriptions;
     }
 
-    public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
+    public boolean isSwipeBackEnabled(MotionEvent event) {
         if (this.otherwiseReloginDays < 0 || this.parentLayout.fragmentsStack.size() != 1) {
-            return super.isSwipeBackEnabled(motionEvent);
+            return super.isSwipeBackEnabled(event);
         }
         return false;
     }
@@ -2237,18 +2197,21 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("Warning", NUM));
         builder.setMessage(LocaleController.formatPluralString("ForceSetPasswordAlertMessage", this.otherwiseReloginDays));
-        builder.setPositiveButton(LocaleController.getString("ForceSetPasswordContinue", NUM), TwoStepVerificationSetupActivity$$ExternalSyntheticLambda6.INSTANCE);
-        builder.setNegativeButton(LocaleController.getString("ForceSetPasswordCancel", NUM), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda0(this));
+        builder.setPositiveButton(LocaleController.getString("ForceSetPasswordContinue", NUM), TwoStepVerificationSetupActivity$$ExternalSyntheticLambda34.INSTANCE);
+        builder.setNegativeButton(LocaleController.getString("ForceSetPasswordCancel", NUM), new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda32(this));
         ((TextView) builder.show().getButton(-2)).setTextColor(Theme.getColor("dialogTextRed2"));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showSetForcePasswordAlert$37(DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$showSetForcePasswordAlert$36(DialogInterface a1, int a2) {
+    }
+
+    /* renamed from: lambda$showSetForcePasswordAlert$37$org-telegram-ui-TwoStepVerificationSetupActivity  reason: not valid java name */
+    public /* synthetic */ void m4041x8c5CLASSNAME(DialogInterface a1, int a2) {
         finishFragment();
     }
 
-    public void setBlockingAlert(int i) {
-        this.otherwiseReloginDays = i;
+    public void setBlockingAlert(int otherwiseRelogin) {
+        this.otherwiseReloginDays = otherwiseRelogin;
     }
 
     public void finishFragment() {
@@ -2256,8 +2219,8 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             super.finishFragment();
             return;
         }
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("afterSignup", true);
-        presentFragment(new DialogsActivity(bundle), true);
+        Bundle args = new Bundle();
+        args.putBoolean("afterSignup", true);
+        presentFragment(new DialogsActivity(args), true);
     }
 }

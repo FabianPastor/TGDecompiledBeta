@@ -5,40 +5,40 @@ import android.os.Bundle;
 import android.widget.LinearLayout;
 
 public class SlideView extends LinearLayout {
+    public SlideView(Context context) {
+        super(context);
+    }
+
     public String getHeaderName() {
         return "";
     }
 
-    public boolean needBackButton() {
-        return false;
+    public void setParams(Bundle params, boolean restore) {
     }
 
-    public boolean onBackPressed(boolean z) {
+    public boolean onBackPressed(boolean force) {
         return true;
-    }
-
-    public void onCancelPressed() {
-    }
-
-    public void onDestroyActivity() {
-    }
-
-    public void onNextPressed(String str) {
     }
 
     public void onShow() {
     }
 
-    public void restoreStateParams(Bundle bundle) {
+    public void onDestroyActivity() {
+    }
+
+    public void onNextPressed(String code) {
+    }
+
+    public void onCancelPressed() {
     }
 
     public void saveStateParams(Bundle bundle) {
     }
 
-    public void setParams(Bundle bundle, boolean z) {
+    public void restoreStateParams(Bundle bundle) {
     }
 
-    public SlideView(Context context) {
-        super(context);
+    public boolean needBackButton() {
+        return false;
     }
 }

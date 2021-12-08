@@ -12,6 +12,6 @@ public final /* synthetic */ class UsersAlertBase$SearchField$$ExternalSynthetic
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$new$1(textView, i, keyEvent);
+        return this.f$0.m2713x45CLASSNAMEc0(textView, i, keyEvent);
     }
 }

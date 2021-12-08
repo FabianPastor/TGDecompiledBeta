@@ -12,6 +12,6 @@ public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$cleanupFolders$3(this.f$1);
+        this.f$0.m1467lambda$cleanupFolders$3$orgtelegramuiCacheControlActivity(this.f$1);
     }
 }

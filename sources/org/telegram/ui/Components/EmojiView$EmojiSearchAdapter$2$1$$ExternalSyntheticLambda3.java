@@ -2,7 +2,7 @@ package org.telegram.ui.Components;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.Components.EmojiView;
@@ -18,7 +18,7 @@ public final /* synthetic */ class EmojiView$EmojiSearchAdapter$2$1$$ExternalSyn
         this.f$2 = builder;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$onClick$1(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m2253x6d790acb(this.f$1, this.f$2, tLObject, tL_error);
     }
 }

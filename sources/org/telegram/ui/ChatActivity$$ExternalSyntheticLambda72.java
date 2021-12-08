@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+import android.net.Uri;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda72 implements View.OnTouchListener {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda72 INSTANCE = new ChatActivity$$ExternalSyntheticLambda72();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda72 implements AlertsCreator.ScheduleDatePickerDelegate {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ Uri f$1;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda72() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda72(ChatActivity chatActivity, Uri uri) {
+        this.f$0 = chatActivity;
+        this.f$1 = uri;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ChatActivity.lambda$createView$18(view, motionEvent);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.m1740lambda$onActivityResultFragment$93$orgtelegramuiChatActivity(this.f$1, z, i);
     }
 }

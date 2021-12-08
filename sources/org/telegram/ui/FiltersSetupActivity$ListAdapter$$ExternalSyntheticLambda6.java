@@ -16,6 +16,6 @@ public final /* synthetic */ class FiltersSetupActivity$ListAdapter$$ExternalSyn
     }
 
     public final void run() {
-        this.f$0.lambda$onCreateViewHolder$1(this.f$1, this.f$2);
+        this.f$0.m2938x74var_(this.f$1, this.f$2);
     }
 }

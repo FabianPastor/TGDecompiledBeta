@@ -10,6 +10,14 @@ import android.view.animation.Interpolator;
 import org.telegram.messenger.AndroidUtilities;
 
 public class ReorderingHintDrawable extends Drawable {
+    public static final int DURATION = 1500;
+    private static final int DURATION_DELAY1 = 300;
+    private static final int DURATION_DELAY2 = 300;
+    private static final int DURATION_DELAY3 = 300;
+    private static final int DURATION_DELAY4 = 100;
+    private static final int DURATION_STAGE1 = 150;
+    private static final int DURATION_STAGE2 = 200;
+    private static final int DURATION_STAGE3 = 150;
     private final Interpolator interpolator = Easings.easeInOutSine;
     private final int intrinsicHeight = AndroidUtilities.dp(24.0f);
     private final int intrinsicWidth = AndroidUtilities.dp(24.0f);
@@ -19,13 +27,6 @@ public class ReorderingHintDrawable extends Drawable {
     private final RectDrawable secondaryRectDrawable;
     private long startedTime = -1;
     private final Rect tempRect = new Rect();
-
-    public int getOpacity() {
-        return -3;
-    }
-
-    public void setAlpha(int i) {
-    }
 
     public ReorderingHintDrawable() {
         RectDrawable rectDrawable = new RectDrawable();
@@ -47,33 +48,33 @@ public class ReorderingHintDrawable extends Drawable {
     }
 
     /* access modifiers changed from: protected */
-    public void onBoundsChange(Rect rect) {
-        this.scaleX = ((float) rect.width()) / ((float) this.intrinsicWidth);
-        this.scaleY = ((float) rect.height()) / ((float) this.intrinsicHeight);
+    public void onBoundsChange(Rect bounds) {
+        this.scaleX = ((float) bounds.width()) / ((float) this.intrinsicWidth);
+        this.scaleY = ((float) bounds.height()) / ((float) this.intrinsicHeight);
     }
 
     public void draw(Canvas canvas) {
         if (this.startedTime > 0) {
-            int currentTimeMillis = ((int) (System.currentTimeMillis() - this.startedTime)) - 300;
-            if (currentTimeMillis < 0) {
+            int passedTime = ((int) (System.currentTimeMillis() - this.startedTime)) - 300;
+            if (passedTime < 0) {
                 drawStage1(canvas, 0.0f);
-            } else if (currentTimeMillis < 150) {
-                drawStage1(canvas, ((float) currentTimeMillis) / 150.0f);
+            } else if (passedTime < 150) {
+                drawStage1(canvas, ((float) passedTime) / 150.0f);
             } else {
-                int i = currentTimeMillis - 450;
-                if (i < 0) {
+                int passedTime2 = passedTime - 450;
+                if (passedTime2 < 0) {
                     drawStage1(canvas, 1.0f);
-                } else if (i < 200) {
-                    drawStage2(canvas, ((float) i) / 200.0f);
+                } else if (passedTime2 < 200) {
+                    drawStage2(canvas, ((float) passedTime2) / 200.0f);
                 } else {
-                    int i2 = i - 500;
-                    if (i2 < 0) {
+                    int passedTime3 = passedTime2 - 500;
+                    if (passedTime3 < 0) {
                         drawStage2(canvas, 1.0f);
-                    } else if (i2 < 150) {
-                        drawStage3(canvas, ((float) i2) / 150.0f);
+                    } else if (passedTime3 < 150) {
+                        drawStage3(canvas, ((float) passedTime3) / 150.0f);
                     } else {
                         drawStage3(canvas, 1.0f);
-                        if (i2 - 150 >= 100) {
+                        if (passedTime3 - 150 >= 100) {
                             this.startedTime = System.currentTimeMillis();
                         }
                     }
@@ -85,13 +86,13 @@ public class ReorderingHintDrawable extends Drawable {
         drawStage1(canvas, 0.0f);
     }
 
-    private void drawStage1(Canvas canvas, float f) {
+    private void drawStage1(Canvas canvas, float progress) {
         Rect bounds = getBounds();
-        float interpolation = this.interpolator.getInterpolation(f);
+        float progress2 = this.interpolator.getInterpolation(progress);
         this.tempRect.left = (int) (((float) AndroidUtilities.dp(2.0f)) * this.scaleX);
         this.tempRect.bottom = bounds.bottom - ((int) (((float) AndroidUtilities.dp(6.0f)) * this.scaleY));
+        this.tempRect.right = bounds.right - this.tempRect.left;
         Rect rect = this.tempRect;
-        rect.right = bounds.right - rect.left;
         rect.top = rect.bottom - ((int) (((float) AndroidUtilities.dp(4.0f)) * this.scaleY));
         this.secondaryRectDrawable.setBounds(this.tempRect);
         this.secondaryRectDrawable.draw(canvas);
@@ -103,60 +104,67 @@ public class ReorderingHintDrawable extends Drawable {
         int dp2 = AndroidUtilities.dp(8.0f);
         rect3.bottom = dp2;
         rect3.top = dp2;
-        this.tempRect.inset(-AndroidUtilities.dp(AndroidUtilities.lerp(10.0f, 11.0f, interpolation)), -AndroidUtilities.dp(AndroidUtilities.lerp(2.0f, 3.0f, interpolation)));
+        this.tempRect.inset(-AndroidUtilities.dp(AndroidUtilities.lerp(10.0f, 11.0f, progress2)), -AndroidUtilities.dp(AndroidUtilities.lerp(2.0f, 3.0f, progress2)));
         this.primaryRectDrawable.setBounds(this.tempRect);
-        this.primaryRectDrawable.setAlpha((int) AndroidUtilities.lerp(128.0f, 255.0f, interpolation));
+        this.primaryRectDrawable.setAlpha((int) AndroidUtilities.lerp(128.0f, 255.0f, progress2));
         this.primaryRectDrawable.draw(canvas);
     }
 
-    private void drawStage2(Canvas canvas, float f) {
+    private void drawStage2(Canvas canvas, float progress) {
         Rect bounds = getBounds();
-        float interpolation = this.interpolator.getInterpolation(f);
+        float progress2 = this.interpolator.getInterpolation(progress);
         this.tempRect.left = (int) (((float) AndroidUtilities.dp(2.0f)) * this.scaleX);
         this.tempRect.bottom = bounds.bottom - ((int) (((float) AndroidUtilities.dp(6.0f)) * this.scaleY));
+        this.tempRect.right = bounds.right - this.tempRect.left;
         Rect rect = this.tempRect;
-        rect.right = bounds.right - rect.left;
         rect.top = rect.bottom - ((int) (((float) AndroidUtilities.dp(4.0f)) * this.scaleY));
-        this.tempRect.offset(0, AndroidUtilities.dp(AndroidUtilities.lerp(0.0f, -8.0f, interpolation)));
+        this.tempRect.offset(0, AndroidUtilities.dp(AndroidUtilities.lerp(0.0f, -8.0f, progress2)));
         this.secondaryRectDrawable.setBounds(this.tempRect);
         this.secondaryRectDrawable.draw(canvas);
-        this.tempRect.left = (int) (AndroidUtilities.dpf2(AndroidUtilities.lerp(1.0f, 2.0f, interpolation)) * this.scaleX);
-        this.tempRect.top = (int) (AndroidUtilities.dpf2(AndroidUtilities.lerp(5.0f, 6.0f, interpolation)) * this.scaleY);
+        this.tempRect.left = (int) (AndroidUtilities.dpf2(AndroidUtilities.lerp(1.0f, 2.0f, progress2)) * this.scaleX);
+        this.tempRect.top = (int) (AndroidUtilities.dpf2(AndroidUtilities.lerp(5.0f, 6.0f, progress2)) * this.scaleY);
+        this.tempRect.right = bounds.right - this.tempRect.left;
         Rect rect2 = this.tempRect;
-        rect2.right = bounds.right - rect2.left;
-        rect2.bottom = rect2.top + ((int) (AndroidUtilities.dpf2(AndroidUtilities.lerp(6.0f, 4.0f, interpolation)) * this.scaleY));
-        this.tempRect.offset(0, AndroidUtilities.dp(AndroidUtilities.lerp(0.0f, 8.0f, interpolation)));
+        rect2.bottom = rect2.top + ((int) (AndroidUtilities.dpf2(AndroidUtilities.lerp(6.0f, 4.0f, progress2)) * this.scaleY));
+        this.tempRect.offset(0, AndroidUtilities.dp(AndroidUtilities.lerp(0.0f, 8.0f, progress2)));
         this.primaryRectDrawable.setBounds(this.tempRect);
         this.primaryRectDrawable.setAlpha(255);
         this.primaryRectDrawable.draw(canvas);
     }
 
-    private void drawStage3(Canvas canvas, float f) {
+    private void drawStage3(Canvas canvas, float progress) {
         Rect bounds = getBounds();
-        float interpolation = this.interpolator.getInterpolation(f);
+        float progress2 = this.interpolator.getInterpolation(progress);
         this.tempRect.left = (int) (((float) AndroidUtilities.dp(2.0f)) * this.scaleX);
         this.tempRect.bottom = bounds.bottom - ((int) (((float) AndroidUtilities.dp(6.0f)) * this.scaleY));
+        this.tempRect.right = bounds.right - this.tempRect.left;
         Rect rect = this.tempRect;
-        rect.right = bounds.right - rect.left;
         rect.top = rect.bottom - ((int) (((float) AndroidUtilities.dp(4.0f)) * this.scaleY));
         this.tempRect.offset(0, AndroidUtilities.dp(-8.0f));
         this.secondaryRectDrawable.setBounds(this.tempRect);
         this.secondaryRectDrawable.draw(canvas);
         this.tempRect.left = (int) (AndroidUtilities.dpf2(2.0f) * this.scaleX);
         this.tempRect.top = (int) (AndroidUtilities.dpf2(6.0f) * this.scaleY);
+        this.tempRect.right = bounds.right - this.tempRect.left;
         Rect rect2 = this.tempRect;
-        rect2.right = bounds.right - rect2.left;
         rect2.bottom = rect2.top + ((int) (AndroidUtilities.dpf2(4.0f) * this.scaleY));
         this.tempRect.offset(0, AndroidUtilities.dp(8.0f));
         this.primaryRectDrawable.setBounds(this.tempRect);
-        this.primaryRectDrawable.setAlpha((int) AndroidUtilities.lerp(255.0f, 128.0f, interpolation));
+        this.primaryRectDrawable.setAlpha((int) AndroidUtilities.lerp(255.0f, 128.0f, progress2));
         this.primaryRectDrawable.draw(canvas);
+    }
+
+    public void setAlpha(int alpha) {
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
         this.primaryRectDrawable.setColorFilter(colorFilter);
         this.secondaryRectDrawable.setColorFilter(colorFilter);
         invalidateSelf();
+    }
+
+    public int getOpacity() {
+        return -3;
     }
 
     public int getIntrinsicWidth() {
@@ -171,29 +179,29 @@ public class ReorderingHintDrawable extends Drawable {
         private final Paint paint = new Paint(1);
         private final RectF tempRect = new RectF();
 
-        public int getOpacity() {
-            return -3;
-        }
-
         protected RectDrawable() {
         }
 
         public void draw(Canvas canvas) {
             this.tempRect.set(getBounds());
-            float height = this.tempRect.height() * 0.2f;
-            canvas.drawRoundRect(this.tempRect, height, height, this.paint);
+            float radius = this.tempRect.height() * 0.2f;
+            canvas.drawRoundRect(this.tempRect, radius, radius, this.paint);
         }
 
-        public void setColor(int i) {
-            this.paint.setColor(i);
+        public void setColor(int color) {
+            this.paint.setColor(color);
         }
 
-        public void setAlpha(int i) {
-            this.paint.setAlpha(i);
+        public void setAlpha(int alpha) {
+            this.paint.setAlpha(alpha);
         }
 
         public void setColorFilter(ColorFilter colorFilter) {
             this.paint.setColorFilter(colorFilter);
+        }
+
+        public int getOpacity() {
+            return -3;
         }
     }
 }

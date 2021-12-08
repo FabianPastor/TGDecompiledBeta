@@ -11,6 +11,6 @@ public final /* synthetic */ class GroupVoipInviteAlert$$ExternalSyntheticLambda
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$0(view, i);
+        this.f$0.m2329lambda$new$0$orgtelegramuiComponentsGroupVoipInviteAlert(view, i);
     }
 }

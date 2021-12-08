@@ -11,6 +11,6 @@ public final /* synthetic */ class TextSelectionHelper$$ExternalSyntheticLambda2
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$showActions$1(view, motionEvent);
+        return this.f$0.m1556lambda$showActions$1$orgtelegramuiCellsTextSelectionHelper(view, motionEvent);
     }
 }

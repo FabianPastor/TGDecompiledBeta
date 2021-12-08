@@ -1,17 +1,17 @@
 package org.telegram.messenger.voip;
 
-import org.telegram.messenger.voip.NativeInstance;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda74 implements NativeInstance.VideoSourcesCallback {
+public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda74 implements RequestDelegate {
     public final /* synthetic */ VoIPService f$0;
-    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda74(VoIPService voIPService, int i) {
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda74(VoIPService voIPService) {
         this.f$0 = voIPService;
-        this.f$1 = i;
     }
 
-    public final void run(long j, int[] iArr) {
-        this.f$0.lambda$createGroupInstance$40(this.f$1, j, iArr);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m1222x9CLASSNAMECLASSNAME(tLObject, tL_error);
     }
 }

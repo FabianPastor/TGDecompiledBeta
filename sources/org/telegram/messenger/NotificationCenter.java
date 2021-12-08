@@ -87,7 +87,7 @@ public class NotificationCenter {
     public static final int fileUploaded;
     public static final int filterSettingsUpdated;
     public static final int folderBecomeEmpty;
-    private static volatile NotificationCenter globalInstance = null;
+    private static volatile NotificationCenter globalInstance;
     public static final int goingToPreviewTheme;
     public static final int groupCallScreencastStateChanged;
     public static final int groupCallSpeakingUsersUpdated;
@@ -185,7 +185,7 @@ public class NotificationCenter {
     public static final int themeUploadError;
     public static final int themeUploadedToServer;
     public static final int threadMessagesRead;
-    private static int totalEvents = 1;
+    private static int totalEvents;
     public static final int twoStepPasswordChanged;
     public static final int updateDefaultSendAsPeer;
     public static final int updateInterfaces;
@@ -227,6 +227,7 @@ public class NotificationCenter {
     }
 
     static {
+        totalEvents = 1;
         int i = 1 + 1;
         totalEvents = i;
         int i2 = i + 1;
@@ -803,64 +804,65 @@ public class NotificationCenter {
         /* access modifiers changed from: private */
         public int id;
 
-        private DelayedPost(int i, Object[] objArr) {
-            this.id = i;
-            this.args = objArr;
+        private DelayedPost(int id2, Object[] args2) {
+            this.id = id2;
+            this.args = args2;
         }
     }
 
-    public static NotificationCenter getInstance(int i) {
-        NotificationCenter notificationCenter = Instance[i];
-        if (notificationCenter == null) {
+    public static NotificationCenter getInstance(int num) {
+        NotificationCenter localInstance = Instance[num];
+        if (localInstance == null) {
             synchronized (NotificationCenter.class) {
-                notificationCenter = Instance[i];
-                if (notificationCenter == null) {
+                localInstance = Instance[num];
+                if (localInstance == null) {
                     NotificationCenter[] notificationCenterArr = Instance;
-                    NotificationCenter notificationCenter2 = new NotificationCenter(i);
-                    notificationCenterArr[i] = notificationCenter2;
-                    notificationCenter = notificationCenter2;
+                    NotificationCenter notificationCenter = new NotificationCenter(num);
+                    localInstance = notificationCenter;
+                    notificationCenterArr[num] = notificationCenter;
                 }
             }
         }
-        return notificationCenter;
+        return localInstance;
     }
 
     public static NotificationCenter getGlobalInstance() {
-        NotificationCenter notificationCenter = globalInstance;
-        if (notificationCenter == null) {
+        NotificationCenter localInstance = globalInstance;
+        if (localInstance == null) {
             synchronized (NotificationCenter.class) {
-                notificationCenter = globalInstance;
-                if (notificationCenter == null) {
-                    notificationCenter = new NotificationCenter(-1);
+                localInstance = globalInstance;
+                if (localInstance == null) {
+                    NotificationCenter notificationCenter = new NotificationCenter(-1);
+                    localInstance = notificationCenter;
                     globalInstance = notificationCenter;
                 }
             }
         }
-        return notificationCenter;
+        return localInstance;
     }
 
-    public NotificationCenter(int i) {
-        this.currentAccount = i;
+    public NotificationCenter(int account) {
+        this.currentAccount = account;
     }
 
-    public int setAnimationInProgress(int i, int[] iArr) {
-        return setAnimationInProgress(i, iArr, true);
+    public int setAnimationInProgress(int oldIndex, int[] allowedNotifications2) {
+        return setAnimationInProgress(oldIndex, allowedNotifications2, true);
     }
 
-    public int setAnimationInProgress(int i, int[] iArr, boolean z) {
-        onAnimationFinish(i);
-        if (this.heavyOperationsCounter.isEmpty() && z) {
+    public int setAnimationInProgress(int oldIndex, int[] allowedNotifications2, boolean stopHeavyOperations) {
+        onAnimationFinish(oldIndex);
+        if (this.heavyOperationsCounter.isEmpty() && stopHeavyOperations) {
             getGlobalInstance().postNotificationName(stopAllHeavyOperations, 512);
         }
         this.animationInProgressCount++;
-        int i2 = this.animationInProgressPointer + 1;
-        this.animationInProgressPointer = i2;
-        if (z) {
-            this.heavyOperationsCounter.add(Integer.valueOf(i2));
+        int i = this.animationInProgressPointer + 1;
+        this.animationInProgressPointer = i;
+        if (stopHeavyOperations) {
+            this.heavyOperationsCounter.add(Integer.valueOf(i));
         }
-        AllowedNotifications allowedNotifications2 = new AllowedNotifications();
-        allowedNotifications2.allowedIds = iArr;
-        this.allowedNotifications.put(Integer.valueOf(this.animationInProgressPointer), allowedNotifications2);
+        AllowedNotifications notifications = new AllowedNotifications();
+        notifications.allowedIds = allowedNotifications2;
+        this.allowedNotifications.put(Integer.valueOf(this.animationInProgressPointer), notifications);
         if (this.checkForExpiredNotifications == null) {
             NotificationCenter$$ExternalSyntheticLambda1 notificationCenter$$ExternalSyntheticLambda1 = new NotificationCenter$$ExternalSyntheticLambda1(this);
             this.checkForExpiredNotifications = notificationCenter$$ExternalSyntheticLambda1;
@@ -871,50 +873,50 @@ public class NotificationCenter {
 
     /* access modifiers changed from: private */
     public void checkForExpiredNotifications() {
-        ArrayList arrayList = null;
         this.checkForExpiredNotifications = null;
         if (!this.allowedNotifications.isEmpty()) {
-            long elapsedRealtime = SystemClock.elapsedRealtime();
-            long j = Long.MAX_VALUE;
-            for (Map.Entry next : this.allowedNotifications.entrySet()) {
-                long j2 = ((AllowedNotifications) next.getValue()).time;
-                if (elapsedRealtime - j2 > 1000) {
-                    if (arrayList == null) {
-                        arrayList = new ArrayList();
+            long minTime = Long.MAX_VALUE;
+            long currentTime = SystemClock.elapsedRealtime();
+            ArrayList<Integer> expiredIndices = null;
+            for (Map.Entry<Integer, AllowedNotifications> entry : this.allowedNotifications.entrySet()) {
+                AllowedNotifications allowedNotification = entry.getValue();
+                if (currentTime - allowedNotification.time > 1000) {
+                    if (expiredIndices == null) {
+                        expiredIndices = new ArrayList<>();
                     }
-                    arrayList.add((Integer) next.getKey());
+                    expiredIndices.add(entry.getKey());
                 } else {
-                    j = Math.min(j2, j);
+                    minTime = Math.min(allowedNotification.time, minTime);
                 }
             }
-            if (arrayList != null) {
-                for (int i = 0; i < arrayList.size(); i++) {
-                    onAnimationFinish(((Integer) arrayList.get(i)).intValue());
+            if (expiredIndices != null) {
+                for (int i = 0; i < expiredIndices.size(); i++) {
+                    onAnimationFinish(expiredIndices.get(i).intValue());
                 }
             }
-            if (j != Long.MAX_VALUE) {
-                AndroidUtilities.runOnUIThread(new NotificationCenter$$ExternalSyntheticLambda0(this), Math.max(17, 1017 - (elapsedRealtime - j)));
+            if (minTime != Long.MAX_VALUE) {
+                AndroidUtilities.runOnUIThread(new NotificationCenter$$ExternalSyntheticLambda0(this), Math.max(17, 1017 - (currentTime - minTime)));
             }
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkForExpiredNotifications$0() {
+    /* renamed from: lambda$checkForExpiredNotifications$0$org-telegram-messenger-NotificationCenter  reason: not valid java name */
+    public /* synthetic */ void m1094xb7818d86() {
         this.checkForExpiredNotifications = new NotificationCenter$$ExternalSyntheticLambda1(this);
     }
 
-    public void updateAllowedNotifications(int i, int[] iArr) {
-        AllowedNotifications allowedNotifications2 = this.allowedNotifications.get(Integer.valueOf(i));
-        if (allowedNotifications2 != null) {
-            allowedNotifications2.allowedIds = iArr;
+    public void updateAllowedNotifications(int transitionAnimationIndex, int[] allowedNotifications2) {
+        AllowedNotifications notifications = this.allowedNotifications.get(Integer.valueOf(transitionAnimationIndex));
+        if (notifications != null) {
+            notifications.allowedIds = allowedNotifications2;
         }
     }
 
-    public void onAnimationFinish(int i) {
-        if (this.allowedNotifications.remove(Integer.valueOf(i)) != null) {
+    public void onAnimationFinish(int index) {
+        if (this.allowedNotifications.remove(Integer.valueOf(index)) != null) {
             this.animationInProgressCount--;
             if (!this.heavyOperationsCounter.isEmpty()) {
-                this.heavyOperationsCounter.remove(Integer.valueOf(i));
+                this.heavyOperationsCounter.remove(Integer.valueOf(index));
                 if (this.heavyOperationsCounter.isEmpty()) {
                     getGlobalInstance().postNotificationName(startAllHeavyOperations, 512);
                 }
@@ -934,8 +936,8 @@ public class NotificationCenter {
             this.delayedPostsTmp.clear();
             this.delayedPostsTmp.addAll(this.delayedPosts);
             this.delayedPosts.clear();
-            for (int i = 0; i < this.delayedPostsTmp.size(); i++) {
-                DelayedPost delayedPost = this.delayedPostsTmp.get(i);
+            for (int a = 0; a < this.delayedPostsTmp.size(); a++) {
+                DelayedPost delayedPost = this.delayedPostsTmp.get(a);
                 postNotificationNameInternal(delayedPost.id, true, delayedPost.args);
             }
             this.delayedPostsTmp.clear();
@@ -944,8 +946,8 @@ public class NotificationCenter {
             this.delayedRunnablesTmp.clear();
             this.delayedRunnablesTmp.addAll(this.delayedRunnables);
             this.delayedRunnables.clear();
-            for (int i2 = 0; i2 < this.delayedRunnablesTmp.size(); i2++) {
-                this.delayedRunnablesTmp.get(i2).run();
+            for (int a2 = 0; a2 < this.delayedRunnablesTmp.size(); a2++) {
+                this.delayedRunnablesTmp.get(a2).run();
             }
             this.delayedRunnablesTmp.clear();
         }
@@ -959,171 +961,167 @@ public class NotificationCenter {
         return this.currentHeavyOperationFlags;
     }
 
-    public ArrayList<NotificationCenterDelegate> getObservers(int i) {
-        return this.observers.get(i);
+    public ArrayList<NotificationCenterDelegate> getObservers(int id) {
+        return this.observers.get(id);
     }
 
-    public void postNotificationName(int i, Object... objArr) {
-        int i2 = i;
-        Object[] objArr2 = objArr;
-        boolean z = true;
-        boolean z2 = i2 == startAllHeavyOperations || i2 == stopAllHeavyOperations || i2 == didReplacedPhotoInMemCache || i2 == closeChats || i2 == invalidateMotionBackground;
-        ArrayList arrayList = null;
-        if (!z2 && !this.allowedNotifications.isEmpty()) {
+    public void postNotificationName(int id, Object... args) {
+        int i = id;
+        Object[] objArr = args;
+        boolean allowDuringAnimation = i == startAllHeavyOperations || i == stopAllHeavyOperations || i == didReplacedPhotoInMemCache || i == closeChats || i == invalidateMotionBackground;
+        ArrayList<Integer> expiredIndices = null;
+        if (!allowDuringAnimation && !this.allowedNotifications.isEmpty()) {
             int size = this.allowedNotifications.size();
-            long elapsedRealtime = SystemClock.elapsedRealtime();
-            int i3 = 0;
-            for (Map.Entry next : this.allowedNotifications.entrySet()) {
-                AllowedNotifications allowedNotifications2 = (AllowedNotifications) next.getValue();
-                if (elapsedRealtime - allowedNotifications2.time > 1000) {
-                    if (arrayList == null) {
-                        arrayList = new ArrayList();
+            int allowedCount = 0;
+            long currentTime = SystemClock.elapsedRealtime();
+            for (Map.Entry<Integer, AllowedNotifications> entry : this.allowedNotifications.entrySet()) {
+                AllowedNotifications allowedNotification = entry.getValue();
+                if (currentTime - allowedNotification.time > 1000) {
+                    if (expiredIndices == null) {
+                        expiredIndices = new ArrayList<>();
                     }
-                    arrayList.add((Integer) next.getKey());
+                    expiredIndices.add(entry.getKey());
                 }
-                int[] iArr = allowedNotifications2.allowedIds;
-                if (iArr == null) {
+                int[] allowed = allowedNotification.allowedIds;
+                if (allowed == null) {
                     break;
                 }
-                int i4 = 0;
+                int a = 0;
                 while (true) {
-                    if (i4 >= iArr.length) {
+                    if (a >= allowed.length) {
                         break;
-                    } else if (iArr[i4] == i2) {
-                        i3++;
+                    } else if (allowed[a] == i) {
+                        allowedCount++;
                         break;
                     } else {
-                        i4++;
+                        a++;
                     }
                 }
             }
-            if (size != i3) {
-                z = false;
-            }
-            z2 = z;
+            allowDuringAnimation = size == allowedCount;
         }
-        if (i2 == startAllHeavyOperations) {
-            this.currentHeavyOperationFlags = (((Integer) objArr2[0]).intValue() ^ -1) & this.currentHeavyOperationFlags;
-        } else if (i2 == stopAllHeavyOperations) {
-            this.currentHeavyOperationFlags = ((Integer) objArr2[0]).intValue() | this.currentHeavyOperationFlags;
+        if (i == startAllHeavyOperations) {
+            this.currentHeavyOperationFlags &= ((Integer) objArr[0]).intValue() ^ -1;
+        } else if (i == stopAllHeavyOperations) {
+            this.currentHeavyOperationFlags |= ((Integer) objArr[0]).intValue();
         }
-        postNotificationNameInternal(i2, z2, objArr2);
-        if (arrayList != null) {
-            for (int i5 = 0; i5 < arrayList.size(); i5++) {
-                onAnimationFinish(((Integer) arrayList.get(i5)).intValue());
+        postNotificationNameInternal(i, allowDuringAnimation, objArr);
+        if (expiredIndices != null) {
+            for (int i2 = 0; i2 < expiredIndices.size(); i2++) {
+                onAnimationFinish(expiredIndices.get(i2).intValue());
             }
         }
     }
 
-    public void postNotificationNameInternal(int i, boolean z, Object... objArr) {
+    public void postNotificationNameInternal(int id, boolean allowDuringAnimation, Object... args) {
         if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
             throw new RuntimeException("postNotificationName allowed only from MAIN thread");
-        } else if (z || !isAnimationInProgress()) {
+        } else if (allowDuringAnimation || !isAnimationInProgress()) {
             if (!this.postponeCallbackList.isEmpty()) {
-                for (int i2 = 0; i2 < this.postponeCallbackList.size(); i2++) {
-                    if (this.postponeCallbackList.get(i2).needPostpone(i, this.currentAccount, objArr)) {
-                        this.delayedPosts.add(new DelayedPost(i, objArr));
+                for (int i = 0; i < this.postponeCallbackList.size(); i++) {
+                    if (this.postponeCallbackList.get(i).needPostpone(id, this.currentAccount, args)) {
+                        this.delayedPosts.add(new DelayedPost(id, args));
                         return;
                     }
                 }
             }
             this.broadcasting++;
-            ArrayList arrayList = this.observers.get(i);
-            if (arrayList != null && !arrayList.isEmpty()) {
-                for (int i3 = 0; i3 < arrayList.size(); i3++) {
-                    ((NotificationCenterDelegate) arrayList.get(i3)).didReceivedNotification(i, this.currentAccount, objArr);
+            ArrayList<NotificationCenterDelegate> objects = this.observers.get(id);
+            if (objects != null && !objects.isEmpty()) {
+                for (int a = 0; a < objects.size(); a++) {
+                    objects.get(a).didReceivedNotification(id, this.currentAccount, args);
                 }
             }
-            int i4 = this.broadcasting - 1;
-            this.broadcasting = i4;
-            if (i4 == 0) {
+            int i2 = this.broadcasting - 1;
+            this.broadcasting = i2;
+            if (i2 == 0) {
                 if (this.removeAfterBroadcast.size() != 0) {
-                    for (int i5 = 0; i5 < this.removeAfterBroadcast.size(); i5++) {
-                        int keyAt = this.removeAfterBroadcast.keyAt(i5);
-                        ArrayList arrayList2 = this.removeAfterBroadcast.get(keyAt);
-                        for (int i6 = 0; i6 < arrayList2.size(); i6++) {
-                            removeObserver((NotificationCenterDelegate) arrayList2.get(i6), keyAt);
+                    for (int a2 = 0; a2 < this.removeAfterBroadcast.size(); a2++) {
+                        int key = this.removeAfterBroadcast.keyAt(a2);
+                        ArrayList<NotificationCenterDelegate> arrayList = this.removeAfterBroadcast.get(key);
+                        for (int b = 0; b < arrayList.size(); b++) {
+                            removeObserver(arrayList.get(b), key);
                         }
                     }
                     this.removeAfterBroadcast.clear();
                 }
                 if (this.addAfterBroadcast.size() != 0) {
-                    for (int i7 = 0; i7 < this.addAfterBroadcast.size(); i7++) {
-                        int keyAt2 = this.addAfterBroadcast.keyAt(i7);
-                        ArrayList arrayList3 = this.addAfterBroadcast.get(keyAt2);
-                        for (int i8 = 0; i8 < arrayList3.size(); i8++) {
-                            addObserver((NotificationCenterDelegate) arrayList3.get(i8), keyAt2);
+                    for (int a3 = 0; a3 < this.addAfterBroadcast.size(); a3++) {
+                        int key2 = this.addAfterBroadcast.keyAt(a3);
+                        ArrayList<NotificationCenterDelegate> arrayList2 = this.addAfterBroadcast.get(key2);
+                        for (int b2 = 0; b2 < arrayList2.size(); b2++) {
+                            addObserver(arrayList2.get(b2), key2);
                         }
                     }
                     this.addAfterBroadcast.clear();
                 }
             }
         } else {
-            this.delayedPosts.add(new DelayedPost(i, objArr));
+            this.delayedPosts.add(new DelayedPost(id, args));
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("delay post notification " + i + " with args count = " + objArr.length);
+                FileLog.e("delay post notification " + id + " with args count = " + args.length);
             }
         }
     }
 
-    public void addObserver(NotificationCenterDelegate notificationCenterDelegate, int i) {
+    public void addObserver(NotificationCenterDelegate observer, int id) {
         if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
             throw new RuntimeException("addObserver allowed only from MAIN thread");
         } else if (this.broadcasting != 0) {
-            ArrayList arrayList = this.addAfterBroadcast.get(i);
+            ArrayList<NotificationCenterDelegate> arrayList = this.addAfterBroadcast.get(id);
             if (arrayList == null) {
-                arrayList = new ArrayList();
-                this.addAfterBroadcast.put(i, arrayList);
+                arrayList = new ArrayList<>();
+                this.addAfterBroadcast.put(id, arrayList);
             }
-            arrayList.add(notificationCenterDelegate);
+            arrayList.add(observer);
         } else {
-            ArrayList arrayList2 = this.observers.get(i);
-            if (arrayList2 == null) {
+            ArrayList<NotificationCenterDelegate> objects = this.observers.get(id);
+            if (objects == null) {
                 SparseArray<ArrayList<NotificationCenterDelegate>> sparseArray = this.observers;
-                ArrayList arrayList3 = new ArrayList();
-                sparseArray.put(i, arrayList3);
-                arrayList2 = arrayList3;
+                ArrayList<NotificationCenterDelegate> arrayList2 = new ArrayList<>();
+                objects = arrayList2;
+                sparseArray.put(id, arrayList2);
             }
-            if (!arrayList2.contains(notificationCenterDelegate)) {
-                arrayList2.add(notificationCenterDelegate);
+            if (!objects.contains(observer)) {
+                objects.add(observer);
             }
         }
     }
 
-    public void removeObserver(NotificationCenterDelegate notificationCenterDelegate, int i) {
+    public void removeObserver(NotificationCenterDelegate observer, int id) {
         if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
             throw new RuntimeException("removeObserver allowed only from MAIN thread");
         } else if (this.broadcasting != 0) {
-            ArrayList arrayList = this.removeAfterBroadcast.get(i);
+            ArrayList<NotificationCenterDelegate> arrayList = this.removeAfterBroadcast.get(id);
             if (arrayList == null) {
-                arrayList = new ArrayList();
-                this.removeAfterBroadcast.put(i, arrayList);
+                arrayList = new ArrayList<>();
+                this.removeAfterBroadcast.put(id, arrayList);
             }
-            arrayList.add(notificationCenterDelegate);
+            arrayList.add(observer);
         } else {
-            ArrayList arrayList2 = this.observers.get(i);
-            if (arrayList2 != null) {
-                arrayList2.remove(notificationCenterDelegate);
+            ArrayList<NotificationCenterDelegate> objects = this.observers.get(id);
+            if (objects != null) {
+                objects.remove(observer);
             }
         }
     }
 
-    public boolean hasObservers(int i) {
-        return this.observers.indexOfKey(i) >= 0;
+    public boolean hasObservers(int id) {
+        return this.observers.indexOfKey(id) >= 0;
     }
 
-    public void addPostponeNotificationsCallback(PostponeNotificationCallback postponeNotificationCallback) {
+    public void addPostponeNotificationsCallback(PostponeNotificationCallback callback) {
         if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
             throw new RuntimeException("PostponeNotificationsCallback allowed only from MAIN thread");
-        } else if (!this.postponeCallbackList.contains(postponeNotificationCallback)) {
-            this.postponeCallbackList.add(postponeNotificationCallback);
+        } else if (!this.postponeCallbackList.contains(callback)) {
+            this.postponeCallbackList.add(callback);
         }
     }
 
-    public void removePostponeNotificationsCallback(PostponeNotificationCallback postponeNotificationCallback) {
+    public void removePostponeNotificationsCallback(PostponeNotificationCallback callback) {
         if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
             throw new RuntimeException("removePostponeNotificationsCallback allowed only from MAIN thread");
-        } else if (this.postponeCallbackList.remove(postponeNotificationCallback)) {
+        } else if (this.postponeCallbackList.remove(callback)) {
             runDelayedNotifications();
         }
     }

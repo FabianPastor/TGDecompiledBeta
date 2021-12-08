@@ -2,9 +2,9 @@ package org.telegram.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -26,6 +26,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
+import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
@@ -37,11 +38,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$LangPackString;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_langPackString;
-import org.telegram.tgnet.TLRPC$TL_langpack_getStrings;
-import org.telegram.tgnet.TLRPC$Vector;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BottomPagesView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -84,66 +81,62 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
     public ViewPager viewPager;
 
     /* access modifiers changed from: protected */
-    public void onCreate(Bundle bundle) {
+    public void onCreate(Bundle savedInstanceState) {
         setTheme(NUM);
-        super.onCreate(bundle);
+        super.onCreate(savedInstanceState);
         requestWindowFeature(1);
         MessagesController.getGlobalMainSettings().edit().putLong("intro_crashed_time", System.currentTimeMillis()).commit();
         this.titles = new String[]{LocaleController.getString("Page1Title", NUM), LocaleController.getString("Page2Title", NUM), LocaleController.getString("Page3Title", NUM), LocaleController.getString("Page5Title", NUM), LocaleController.getString("Page4Title", NUM), LocaleController.getString("Page6Title", NUM)};
         this.messages = new String[]{LocaleController.getString("Page1Message", NUM), LocaleController.getString("Page2Message", NUM), LocaleController.getString("Page3Message", NUM), LocaleController.getString("Page5Message", NUM), LocaleController.getString("Page4Message", NUM), LocaleController.getString("Page6Message", NUM)};
         ScrollView scrollView = new ScrollView(this);
         scrollView.setFillViewport(true);
-        AnonymousClass1 r4 = new FrameLayout(this) {
+        FrameLayout frameLayout = new FrameLayout(this) {
             /* access modifiers changed from: protected */
-            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-                super.onLayout(z, i, i2, i3, i4);
-                int i5 = (i4 - i2) / 4;
-                int i6 = i5 * 3;
-                int dp = (i6 - AndroidUtilities.dp(275.0f)) / 2;
-                IntroActivity.this.frameLayout2.layout(0, dp, IntroActivity.this.frameLayout2.getMeasuredWidth(), IntroActivity.this.frameLayout2.getMeasuredHeight() + dp);
-                int dp2 = dp + AndroidUtilities.dp(272.0f);
-                int measuredWidth = (getMeasuredWidth() - IntroActivity.this.bottomPages.getMeasuredWidth()) / 2;
-                IntroActivity.this.bottomPages.layout(measuredWidth, dp2, IntroActivity.this.bottomPages.getMeasuredWidth() + measuredWidth, IntroActivity.this.bottomPages.getMeasuredHeight() + dp2);
+            public void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                super.onLayout(changed, left, top, right, bottom);
+                int oneFourth = (bottom - top) / 4;
+                int y = ((oneFourth * 3) - AndroidUtilities.dp(275.0f)) / 2;
+                IntroActivity.this.frameLayout2.layout(0, y, IntroActivity.this.frameLayout2.getMeasuredWidth(), IntroActivity.this.frameLayout2.getMeasuredHeight() + y);
+                int y2 = y + AndroidUtilities.dp(272.0f);
+                int x = (getMeasuredWidth() - IntroActivity.this.bottomPages.getMeasuredWidth()) / 2;
+                IntroActivity.this.bottomPages.layout(x, y2, IntroActivity.this.bottomPages.getMeasuredWidth() + x, IntroActivity.this.bottomPages.getMeasuredHeight() + y2);
                 IntroActivity.this.viewPager.layout(0, 0, IntroActivity.this.viewPager.getMeasuredWidth(), IntroActivity.this.viewPager.getMeasuredHeight());
-                int measuredHeight = i6 + ((i5 - IntroActivity.this.startMessagingButton.getMeasuredHeight()) / 2);
-                int measuredWidth2 = (getMeasuredWidth() - IntroActivity.this.startMessagingButton.getMeasuredWidth()) / 2;
-                IntroActivity.this.startMessagingButton.layout(measuredWidth2, measuredHeight, IntroActivity.this.startMessagingButton.getMeasuredWidth() + measuredWidth2, IntroActivity.this.startMessagingButton.getMeasuredHeight() + measuredHeight);
-                int dp3 = measuredHeight - AndroidUtilities.dp(30.0f);
-                int measuredWidth3 = (getMeasuredWidth() - IntroActivity.this.textView.getMeasuredWidth()) / 2;
-                IntroActivity.this.textView.layout(measuredWidth3, dp3 - IntroActivity.this.textView.getMeasuredHeight(), IntroActivity.this.textView.getMeasuredWidth() + measuredWidth3, dp3);
+                int y3 = (oneFourth * 3) + ((oneFourth - IntroActivity.this.startMessagingButton.getMeasuredHeight()) / 2);
+                int x2 = (getMeasuredWidth() - IntroActivity.this.startMessagingButton.getMeasuredWidth()) / 2;
+                IntroActivity.this.startMessagingButton.layout(x2, y3, IntroActivity.this.startMessagingButton.getMeasuredWidth() + x2, IntroActivity.this.startMessagingButton.getMeasuredHeight() + y3);
+                int y4 = y3 - AndroidUtilities.dp(30.0f);
+                int x3 = (getMeasuredWidth() - IntroActivity.this.textView.getMeasuredWidth()) / 2;
+                IntroActivity.this.textView.layout(x3, y4 - IntroActivity.this.textView.getMeasuredHeight(), IntroActivity.this.textView.getMeasuredWidth() + x3, y4);
             }
         };
-        r4.setBackgroundColor(-1);
-        scrollView.addView(r4, LayoutHelper.createScroll(-1, -2, 51));
-        FrameLayout frameLayout = new FrameLayout(this);
-        this.frameLayout2 = frameLayout;
-        r4.addView(frameLayout, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
+        frameLayout.setBackgroundColor(-1);
+        scrollView.addView(frameLayout, LayoutHelper.createScroll(-1, -2, 51));
+        FrameLayout frameLayout3 = new FrameLayout(this);
+        this.frameLayout2 = frameLayout3;
+        frameLayout.addView(frameLayout3, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 78.0f, 0.0f, 0.0f));
         TextureView textureView = new TextureView(this);
         this.frameLayout2.addView(textureView, LayoutHelper.createFrame(200, 150, 17));
         textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-            }
-
-            public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
-                if (IntroActivity.this.eglThread == null && surfaceTexture != null) {
-                    EGLThread unused = IntroActivity.this.eglThread = new EGLThread(surfaceTexture);
-                    IntroActivity.this.eglThread.setSurfaceTextureSize(i, i2);
+            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                if (IntroActivity.this.eglThread == null && surface != null) {
+                    EGLThread unused = IntroActivity.this.eglThread = new EGLThread(surface);
+                    IntroActivity.this.eglThread.setSurfaceTextureSize(width, height);
                     IntroActivity.this.eglThread.postRunnable(new IntroActivity$2$$ExternalSyntheticLambda0(this));
                 }
             }
 
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$onSurfaceTextureAvailable$0() {
+            /* renamed from: lambda$onSurfaceTextureAvailable$0$org-telegram-ui-IntroActivity$2  reason: not valid java name */
+            public /* synthetic */ void m3049x770CLASSNAMEa() {
                 IntroActivity.this.eglThread.drawRunnable.run();
             }
 
-            public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
                 if (IntroActivity.this.eglThread != null) {
-                    IntroActivity.this.eglThread.setSurfaceTextureSize(i, i2);
+                    IntroActivity.this.eglThread.setSurfaceTextureSize(width, height);
                 }
             }
 
-            public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
                 if (IntroActivity.this.eglThread == null) {
                     return true;
                 }
@@ -151,19 +144,22 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 EGLThread unused = IntroActivity.this.eglThread = null;
                 return true;
             }
+
+            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+            }
         });
         ViewPager viewPager2 = new ViewPager(this);
         this.viewPager = viewPager2;
         viewPager2.setAdapter(new IntroAdapter());
         this.viewPager.setPageMargin(0);
         this.viewPager.setOffscreenPageLimit(1);
-        r4.addView(this.viewPager, LayoutHelper.createFrame(-1, -1.0f));
+        frameLayout.addView(this.viewPager, LayoutHelper.createFrame(-1, -1.0f));
         this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            public void onPageScrolled(int i, float f, int i2) {
-                IntroActivity.this.bottomPages.setPageOffset(i, f);
-                float measuredWidth = (float) IntroActivity.this.viewPager.getMeasuredWidth();
-                if (measuredWidth != 0.0f) {
-                    Intro.setScrollOffset((((((float) i) * measuredWidth) + ((float) i2)) - (((float) IntroActivity.this.currentViewPagerPage) * measuredWidth)) / measuredWidth);
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                IntroActivity.this.bottomPages.setPageOffset(position, positionOffset);
+                float width = (float) IntroActivity.this.viewPager.getMeasuredWidth();
+                if (width != 0.0f) {
+                    Intro.setScrollOffset((((((float) position) * width) + ((float) positionOffsetPixels)) - (((float) IntroActivity.this.currentViewPagerPage) * width)) / width);
                 }
             }
 
@@ -188,7 +184,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 }
             }
         });
-        AnonymousClass4 r7 = new TextView(this, this) {
+        AnonymousClass4 r9 = new TextView(this) {
             CellFlickerDrawable cellFlickerDrawable;
 
             /* access modifiers changed from: protected */
@@ -198,60 +194,59 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                     CellFlickerDrawable cellFlickerDrawable2 = new CellFlickerDrawable();
                     this.cellFlickerDrawable = cellFlickerDrawable2;
                     cellFlickerDrawable2.drawFrame = false;
-                    cellFlickerDrawable2.repeatProgress = 2.0f;
+                    this.cellFlickerDrawable.repeatProgress = 2.0f;
                 }
                 this.cellFlickerDrawable.setParentWidth(getMeasuredWidth());
-                RectF rectF = AndroidUtilities.rectTmp;
-                rectF.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
-                this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(4.0f));
+                AndroidUtilities.rectTmp.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+                this.cellFlickerDrawable.draw(canvas, AndroidUtilities.rectTmp, (float) AndroidUtilities.dp(4.0f));
                 invalidate();
             }
 
             /* access modifiers changed from: protected */
-            public void onMeasure(int i, int i2) {
-                if (View.MeasureSpec.getSize(i) > AndroidUtilities.dp(260.0f)) {
-                    super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(320.0f), NUM), i2);
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                if (View.MeasureSpec.getSize(widthMeasureSpec) > AndroidUtilities.dp(260.0f)) {
+                    super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(320.0f), NUM), heightMeasureSpec);
                 } else {
-                    super.onMeasure(i, i2);
+                    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 }
             }
         };
-        this.startMessagingButton = r7;
-        r7.setText(LocaleController.getString("StartMessaging", NUM));
+        this.startMessagingButton = r9;
+        r9.setText(LocaleController.getString("StartMessaging", NUM));
         this.startMessagingButton.setGravity(17);
         this.startMessagingButton.setTextColor(-1);
         this.startMessagingButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.startMessagingButton.setTextSize(1, 15.0f);
         this.startMessagingButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), -11491093, -12346402));
         this.startMessagingButton.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-        r4.addView(this.startMessagingButton, LayoutHelper.createFrame(-1, 42.0f, 81, 36.0f, 0.0f, 36.0f, 76.0f));
-        this.startMessagingButton.setOnClickListener(new IntroActivity$$ExternalSyntheticLambda1(this));
+        frameLayout.addView(this.startMessagingButton, LayoutHelper.createFrame(-1, 42.0f, 81, 36.0f, 0.0f, 36.0f, 76.0f));
+        this.startMessagingButton.setOnClickListener(new IntroActivity$$ExternalSyntheticLambda0(this));
         BottomPagesView bottomPagesView = new BottomPagesView(this, this.viewPager, 6);
         this.bottomPages = bottomPagesView;
-        r4.addView(bottomPagesView, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
+        frameLayout.addView(bottomPagesView, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
         TextView textView2 = new TextView(this);
         this.textView = textView2;
         textView2.setTextColor(-15494190);
         this.textView.setGravity(17);
         this.textView.setTextSize(1, 16.0f);
-        r4.addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
-        this.textView.setOnClickListener(new IntroActivity$$ExternalSyntheticLambda0(this));
+        frameLayout.addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
+        this.textView.setOnClickListener(new IntroActivity$$ExternalSyntheticLambda1(this));
         if (AndroidUtilities.isTablet()) {
-            FrameLayout frameLayout3 = new FrameLayout(this);
-            setContentView(frameLayout3);
-            AnonymousClass5 r42 = new SizeNotifierFrameLayout(this, this) {
+            FrameLayout frameLayout32 = new FrameLayout(this);
+            setContentView(frameLayout32);
+            SizeNotifierFrameLayout backgroundTablet = new SizeNotifierFrameLayout(this) {
                 /* access modifiers changed from: protected */
                 public boolean isActionBarVisible() {
                     return false;
                 }
             };
-            r42.setOccupyStatusBar(false);
-            r42.setBackgroundImage(Theme.getCachedWallpaper(), Theme.isWallpaperMotion());
-            frameLayout3.addView(r42, LayoutHelper.createFrame(-1, -1.0f));
+            backgroundTablet.setOccupyStatusBar(false);
+            backgroundTablet.setBackgroundImage(Theme.getCachedWallpaper(), Theme.isWallpaperMotion());
+            frameLayout32.addView(backgroundTablet, LayoutHelper.createFrame(-1, -1.0f));
             FrameLayout frameLayout4 = new FrameLayout(this);
             frameLayout4.setBackgroundResource(NUM);
             frameLayout4.addView(scrollView, LayoutHelper.createFrame(-1, -1.0f));
-            frameLayout3.addView(frameLayout4, LayoutHelper.createFrame(498, 528, 17));
+            frameLayout32.addView(frameLayout4, LayoutHelper.createFrame(498, 528, 17));
         } else {
             setRequestedOrientation(1);
             setContentView(scrollView);
@@ -264,26 +259,26 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         AndroidUtilities.startAppCenter(this);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onCreate$0(View view) {
+    /* renamed from: lambda$onCreate$0$org-telegram-ui-IntroActivity  reason: not valid java name */
+    public /* synthetic */ void m3047lambda$onCreate$0$orgtelegramuiIntroActivity(View view) {
         if (!this.startPressed) {
             this.startPressed = true;
-            Intent intent = new Intent(this, LaunchActivity.class);
-            intent.putExtra("fromIntro", true);
-            startActivity(intent);
+            Intent intent2 = new Intent(this, LaunchActivity.class);
+            intent2.putExtra("fromIntro", true);
+            startActivity(intent2);
             this.destroyed = true;
             finish();
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onCreate$1(View view) {
+    /* renamed from: lambda$onCreate$1$org-telegram-ui-IntroActivity  reason: not valid java name */
+    public /* synthetic */ void m3048lambda$onCreate$1$orgtelegramuiIntroActivity(View v) {
         if (!this.startPressed && this.localeInfo != null) {
             LocaleController.getInstance().applyLanguage(this.localeInfo, true, false, this.currentAccount);
             this.startPressed = true;
-            Intent intent = new Intent(this, LaunchActivity.class);
-            intent.putExtra("fromIntro", true);
-            startActivity(intent);
+            Intent intent2 = new Intent(this, LaunchActivity.class);
+            intent2.putExtra("fromIntro", true);
+            startActivity(intent2);
             this.destroyed = true;
             finish();
         }
@@ -320,73 +315,66 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
     }
 
     private void checkContinueText() {
+        LocaleController.LocaleInfo englishInfo = null;
+        LocaleController.LocaleInfo systemInfo = null;
         LocaleController.LocaleInfo currentLocaleInfo = LocaleController.getInstance().getCurrentLocaleInfo();
-        String str = MessagesController.getInstance(this.currentAccount).suggestedLangCode;
-        String str2 = str.contains("-") ? str.split("-")[0] : str;
-        String localeAlias = LocaleController.getLocaleAlias(str2);
-        LocaleController.LocaleInfo localeInfo2 = null;
-        LocaleController.LocaleInfo localeInfo3 = null;
-        for (int i = 0; i < LocaleController.getInstance().languages.size(); i++) {
-            LocaleController.LocaleInfo localeInfo4 = LocaleController.getInstance().languages.get(i);
-            if (localeInfo4.shortName.equals("en")) {
-                localeInfo2 = localeInfo4;
+        String systemLang = MessagesController.getInstance(this.currentAccount).suggestedLangCode;
+        String arg = systemLang.contains("-") ? systemLang.split("-")[0] : systemLang;
+        String alias = LocaleController.getLocaleAlias(arg);
+        for (int a = 0; a < LocaleController.getInstance().languages.size(); a++) {
+            LocaleController.LocaleInfo info = LocaleController.getInstance().languages.get(a);
+            if (info.shortName.equals("en")) {
+                englishInfo = info;
             }
-            if (localeInfo4.shortName.replace("_", "-").equals(str) || localeInfo4.shortName.equals(str2) || localeInfo4.shortName.equals(localeAlias)) {
-                localeInfo3 = localeInfo4;
+            if (info.shortName.replace("_", "-").equals(systemLang) || info.shortName.equals(arg) || info.shortName.equals(alias)) {
+                systemInfo = info;
             }
-            if (localeInfo2 != null && localeInfo3 != null) {
+            if (englishInfo != null && systemInfo != null) {
                 break;
             }
         }
-        if (localeInfo2 != null && localeInfo3 != null && localeInfo2 != localeInfo3) {
-            TLRPC$TL_langpack_getStrings tLRPC$TL_langpack_getStrings = new TLRPC$TL_langpack_getStrings();
-            if (localeInfo3 != currentLocaleInfo) {
-                tLRPC$TL_langpack_getStrings.lang_code = localeInfo3.getLangCode();
-                this.localeInfo = localeInfo3;
+        if (englishInfo != null && systemInfo != null && englishInfo != systemInfo) {
+            TLRPC.TL_langpack_getStrings req = new TLRPC.TL_langpack_getStrings();
+            if (systemInfo != currentLocaleInfo) {
+                req.lang_code = systemInfo.getLangCode();
+                this.localeInfo = systemInfo;
             } else {
-                tLRPC$TL_langpack_getStrings.lang_code = localeInfo2.getLangCode();
-                this.localeInfo = localeInfo2;
+                req.lang_code = englishInfo.getLangCode();
+                this.localeInfo = englishInfo;
             }
-            tLRPC$TL_langpack_getStrings.keys.add("ContinueOnThisLanguage");
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_langpack_getStrings, new IntroActivity$$ExternalSyntheticLambda3(this, str), 8);
+            req.keys.add("ContinueOnThisLanguage");
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new IntroActivity$$ExternalSyntheticLambda3(this, systemLang), 8);
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkContinueText$3(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        if (tLObject != null) {
-            TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
-            if (!tLRPC$Vector.objects.isEmpty()) {
-                TLRPC$LangPackString tLRPC$LangPackString = (TLRPC$LangPackString) tLRPC$Vector.objects.get(0);
-                if (tLRPC$LangPackString instanceof TLRPC$TL_langPackString) {
-                    AndroidUtilities.runOnUIThread(new IntroActivity$$ExternalSyntheticLambda2(this, tLRPC$LangPackString, str));
+    /* renamed from: lambda$checkContinueText$3$org-telegram-ui-IntroActivity  reason: not valid java name */
+    public /* synthetic */ void m3046lambda$checkContinueText$3$orgtelegramuiIntroActivity(String systemLang, TLObject response, TLRPC.TL_error error) {
+        if (response != null) {
+            TLRPC.Vector vector = (TLRPC.Vector) response;
+            if (!vector.objects.isEmpty()) {
+                TLRPC.LangPackString string = (TLRPC.LangPackString) vector.objects.get(0);
+                if (string instanceof TLRPC.TL_langPackString) {
+                    AndroidUtilities.runOnUIThread(new IntroActivity$$ExternalSyntheticLambda2(this, string, systemLang));
                 }
             }
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkContinueText$2(TLRPC$LangPackString tLRPC$LangPackString, String str) {
+    /* renamed from: lambda$checkContinueText$2$org-telegram-ui-IntroActivity  reason: not valid java name */
+    public /* synthetic */ void m3045lambda$checkContinueText$2$orgtelegramuiIntroActivity(TLRPC.LangPackString string, String systemLang) {
         if (!this.destroyed) {
-            this.textView.setText(tLRPC$LangPackString.value);
-            MessagesController.getGlobalMainSettings().edit().putString("language_showed2", str.toLowerCase()).commit();
+            this.textView.setText(string.value);
+            MessagesController.getGlobalMainSettings().edit().putString("language_showed2", systemLang.toLowerCase()).commit();
         }
     }
 
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.suggestedLangpack) {
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.suggestedLangpack) {
             checkContinueText();
         }
     }
 
     private class IntroAdapter extends PagerAdapter {
-        public void restoreState(Parcelable parcelable, ClassLoader classLoader) {
-        }
-
-        public Parcelable saveState() {
-            return null;
-        }
-
         private IntroAdapter() {
         }
 
@@ -394,52 +382,67 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             return IntroActivity.this.titles.length;
         }
 
-        public Object instantiateItem(ViewGroup viewGroup, int i) {
-            final TextView textView = new TextView(viewGroup.getContext());
-            final TextView textView2 = new TextView(viewGroup.getContext());
-            AnonymousClass1 r2 = new FrameLayout(this, viewGroup.getContext()) {
+        public Object instantiateItem(ViewGroup container, int position) {
+            final TextView headerTextView = new TextView(container.getContext());
+            final TextView messageTextView = new TextView(container.getContext());
+            FrameLayout frameLayout = new FrameLayout(container.getContext()) {
                 /* access modifiers changed from: protected */
-                public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-                    int dp = (((((i4 - i2) / 4) * 3) - AndroidUtilities.dp(275.0f)) / 2) + AndroidUtilities.dp(166.0f);
-                    int dp2 = AndroidUtilities.dp(18.0f);
-                    TextView textView = textView;
-                    textView.layout(dp2, dp, textView.getMeasuredWidth() + dp2, textView.getMeasuredHeight() + dp);
-                    int dp3 = dp + AndroidUtilities.dp(42.0f);
-                    int dp4 = AndroidUtilities.dp(16.0f);
-                    TextView textView2 = textView2;
-                    textView2.layout(dp4, dp3, textView2.getMeasuredWidth() + dp4, textView2.getMeasuredHeight() + dp3);
+                public void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                    int y = (((((bottom - top) / 4) * 3) - AndroidUtilities.dp(275.0f)) / 2) + AndroidUtilities.dp(166.0f);
+                    int x = AndroidUtilities.dp(18.0f);
+                    TextView textView = headerTextView;
+                    textView.layout(x, y, textView.getMeasuredWidth() + x, headerTextView.getMeasuredHeight() + y);
+                    int y2 = y + AndroidUtilities.dp(42.0f);
+                    int x2 = AndroidUtilities.dp(16.0f);
+                    TextView textView2 = messageTextView;
+                    textView2.layout(x2, y2, textView2.getMeasuredWidth() + x2, messageTextView.getMeasuredHeight() + y2);
                 }
             };
-            textView.setTextColor(-14606047);
-            textView.setTextSize(1, 26.0f);
-            textView.setGravity(17);
-            r2.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 244.0f, 18.0f, 0.0f));
-            textView2.setTextColor(-8355712);
-            textView2.setTextSize(1, 15.0f);
-            textView2.setGravity(17);
-            r2.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 286.0f, 16.0f, 0.0f));
-            viewGroup.addView(r2, 0);
-            textView.setText(IntroActivity.this.titles[i]);
-            textView2.setText(AndroidUtilities.replaceTags(IntroActivity.this.messages[i]));
-            return r2;
+            headerTextView.setTextColor(-14606047);
+            headerTextView.setTextSize(1, 26.0f);
+            headerTextView.setGravity(17);
+            frameLayout.addView(headerTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 18.0f, 244.0f, 18.0f, 0.0f));
+            messageTextView.setTextColor(-8355712);
+            messageTextView.setTextSize(1, 15.0f);
+            messageTextView.setGravity(17);
+            frameLayout.addView(messageTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 16.0f, 286.0f, 16.0f, 0.0f));
+            container.addView(frameLayout, 0);
+            headerTextView.setText(IntroActivity.this.titles[position]);
+            messageTextView.setText(AndroidUtilities.replaceTags(IntroActivity.this.messages[position]));
+            return frameLayout;
         }
 
-        public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
-            viewGroup.removeView((View) obj);
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
         }
 
-        public void setPrimaryItem(ViewGroup viewGroup, int i, Object obj) {
-            super.setPrimaryItem(viewGroup, i, obj);
-            IntroActivity.this.bottomPages.setCurrentPage(i);
-            int unused = IntroActivity.this.currentViewPagerPage = i;
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            super.setPrimaryItem(container, position, object);
+            IntroActivity.this.bottomPages.setCurrentPage(position);
+            int unused = IntroActivity.this.currentViewPagerPage = position;
         }
 
-        public boolean isViewFromObject(View view, Object obj) {
-            return view.equals(obj);
+        public boolean isViewFromObject(View view, Object object) {
+            return view.equals(object);
+        }
+
+        public void restoreState(Parcelable arg0, ClassLoader arg1) {
+        }
+
+        public Parcelable saveState() {
+            return null;
+        }
+
+        public void unregisterDataSetObserver(DataSetObserver observer) {
+            if (observer != null) {
+                super.unregisterDataSetObserver(observer);
+            }
         }
     }
 
     public class EGLThread extends DispatchQueue {
+        private static final int EGL_CONTEXT_CLIENT_VERSION = 12440;
+        private static final int EGL_OPENGL_ES2_BIT = 4;
         /* access modifiers changed from: private */
         public Runnable drawRunnable = new Runnable() {
             public void run() {
@@ -456,8 +459,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 }
             }
 
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$run$0() {
+            /* renamed from: lambda$run$0$org-telegram-ui-IntroActivity$EGLThread$1  reason: not valid java name */
+            public /* synthetic */ void m3051lambda$run$0$orgtelegramuiIntroActivity$EGLThread$1() {
                 EGLThread.this.drawRunnable.run();
             }
         };
@@ -470,14 +473,16 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         public EGLDisplay eglDisplay;
         /* access modifiers changed from: private */
         public EGLSurface eglSurface;
+        private GL gl;
         /* access modifiers changed from: private */
         public boolean initied;
+        private long lastRenderCallTime;
         private SurfaceTexture surfaceTexture;
         private int[] textures = new int[23];
 
-        public EGLThread(SurfaceTexture surfaceTexture2) {
+        public EGLThread(SurfaceTexture surface) {
             super("EGLThread");
-            this.surfaceTexture = surfaceTexture2;
+            this.surfaceTexture = surface;
         }
 
         private boolean initGL() {
@@ -492,23 +497,23 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 finish();
                 return false;
             }
-            if (!this.egl10.eglInitialize(eglGetDisplay, new int[2])) {
+            if (!this.egl10.eglInitialize(this.eglDisplay, new int[2])) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("eglInitialize failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
                 finish();
                 return false;
             }
-            int[] iArr = new int[1];
-            EGLConfig[] eGLConfigArr = new EGLConfig[1];
-            if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 24, 12326, 0, 12338, 1, 12337, 2, 12344}, eGLConfigArr, 1, iArr)) {
+            int[] configsCount = new int[1];
+            EGLConfig[] configs = new EGLConfig[1];
+            if (!this.egl10.eglChooseConfig(this.eglDisplay, new int[]{12352, 4, 12324, 8, 12323, 8, 12322, 8, 12321, 8, 12325, 24, 12326, 0, 12338, 1, 12337, 2, 12344}, configs, 1, configsCount)) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("eglChooseConfig failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
                 finish();
                 return false;
-            } else if (iArr[0] > 0) {
-                EGLConfig eGLConfig = eGLConfigArr[0];
+            } else if (configsCount[0] > 0) {
+                EGLConfig eGLConfig = configs[0];
                 this.eglConfig = eGLConfig;
                 EGLContext eglCreateContext = this.egl10.eglCreateContext(this.eglDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
                 this.eglContext = eglCreateContext;
@@ -529,58 +534,60 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                         }
                         finish();
                         return false;
-                    } else if (!this.egl10.eglMakeCurrent(this.eglDisplay, eglCreateWindowSurface, eglCreateWindowSurface, this.eglContext)) {
+                    }
+                    EGL10 egl103 = this.egl10;
+                    EGLDisplay eGLDisplay = this.eglDisplay;
+                    EGLSurface eGLSurface = this.eglSurface;
+                    if (!egl103.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, this.eglContext)) {
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                         }
                         finish();
                         return false;
-                    } else {
-                        this.eglContext.getGL();
-                        GLES20.glGenTextures(23, this.textures, 0);
-                        loadTexture(NUM, 0);
-                        loadTexture(NUM, 1);
-                        loadTexture(NUM, 2);
-                        loadTexture(NUM, 3);
-                        loadTexture(NUM, 4);
-                        loadTexture(NUM, 5);
-                        loadTexture(NUM, 6);
-                        loadTexture(NUM, 7);
-                        loadTexture(NUM, 8);
-                        loadTexture(NUM, 9);
-                        loadTexture(NUM, 10);
-                        loadTexture(NUM, 11);
-                        loadTexture(NUM, 12);
-                        loadTexture(NUM, 13);
-                        loadTexture(NUM, 14);
-                        loadTexture(NUM, 15);
-                        loadTexture(NUM, 16);
-                        loadTexture(NUM, 17);
-                        loadTexture(NUM, 18);
-                        loadTexture(NUM, 19);
-                        loadTexture(NUM, 20);
-                        loadTexture(NUM, 21);
-                        loadTexture(NUM, 22);
-                        int[] iArr2 = this.textures;
-                        Intro.setTelegramTextures(iArr2[22], iArr2[21]);
-                        int[] iArr3 = this.textures;
-                        Intro.setPowerfulTextures(iArr3[17], iArr3[18], iArr3[16], iArr3[15]);
-                        int[] iArr4 = this.textures;
-                        Intro.setPrivateTextures(iArr4[19], iArr4[20]);
-                        int[] iArr5 = this.textures;
-                        Intro.setFreeTextures(iArr5[14], iArr5[13]);
-                        int[] iArr6 = this.textures;
-                        Intro.setFastTextures(iArr6[2], iArr6[3], iArr6[1], iArr6[0]);
-                        int[] iArr7 = this.textures;
-                        Intro.setIcTextures(iArr7[4], iArr7[5], iArr7[6], iArr7[7], iArr7[8], iArr7[9], iArr7[10], iArr7[11], iArr7[12]);
-                        Intro.onSurfaceCreated();
-                        long unused = IntroActivity.this.currentDate = System.currentTimeMillis() - 1000;
-                        return true;
                     }
-                } else {
-                    finish();
-                    return false;
+                    this.gl = this.eglContext.getGL();
+                    GLES20.glGenTextures(23, this.textures, 0);
+                    loadTexture(NUM, 0);
+                    loadTexture(NUM, 1);
+                    loadTexture(NUM, 2);
+                    loadTexture(NUM, 3);
+                    loadTexture(NUM, 4);
+                    loadTexture(NUM, 5);
+                    loadTexture(NUM, 6);
+                    loadTexture(NUM, 7);
+                    loadTexture(NUM, 8);
+                    loadTexture(NUM, 9);
+                    loadTexture(NUM, 10);
+                    loadTexture(NUM, 11);
+                    loadTexture(NUM, 12);
+                    loadTexture(NUM, 13);
+                    loadTexture(NUM, 14);
+                    loadTexture(NUM, 15);
+                    loadTexture(NUM, 16);
+                    loadTexture(NUM, 17);
+                    loadTexture(NUM, 18);
+                    loadTexture(NUM, 19);
+                    loadTexture(NUM, 20);
+                    loadTexture(NUM, 21);
+                    loadTexture(NUM, 22);
+                    int[] iArr = this.textures;
+                    Intro.setTelegramTextures(iArr[22], iArr[21]);
+                    int[] iArr2 = this.textures;
+                    Intro.setPowerfulTextures(iArr2[17], iArr2[18], iArr2[16], iArr2[15]);
+                    int[] iArr3 = this.textures;
+                    Intro.setPrivateTextures(iArr3[19], iArr3[20]);
+                    int[] iArr4 = this.textures;
+                    Intro.setFreeTextures(iArr4[14], iArr4[13]);
+                    int[] iArr5 = this.textures;
+                    Intro.setFastTextures(iArr5[2], iArr5[3], iArr5[1], iArr5[0]);
+                    int[] iArr6 = this.textures;
+                    Intro.setIcTextures(iArr6[4], iArr6[5], iArr6[6], iArr6[7], iArr6[8], iArr6[9], iArr6[10], iArr6[11], iArr6[12]);
+                    Intro.onSurfaceCreated();
+                    long unused = IntroActivity.this.currentDate = System.currentTimeMillis() - 1000;
+                    return true;
                 }
+                finish();
+                return false;
             } else {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("eglConfig not initialized");
@@ -592,10 +599,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
 
         public void finish() {
             if (this.eglSurface != null) {
-                EGL10 egl102 = this.egl10;
-                EGLDisplay eGLDisplay = this.eglDisplay;
-                EGLSurface eGLSurface = EGL10.EGL_NO_SURFACE;
-                egl102.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT);
+                this.egl10.eglMakeCurrent(this.eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
                 this.egl10.eglDestroySurface(this.eglDisplay, this.eglSurface);
                 this.eglSurface = null;
             }
@@ -604,18 +608,18 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 this.egl10.eglDestroyContext(this.eglDisplay, eGLContext);
                 this.eglContext = null;
             }
-            EGLDisplay eGLDisplay2 = this.eglDisplay;
-            if (eGLDisplay2 != null) {
-                this.egl10.eglTerminate(eGLDisplay2);
+            EGLDisplay eGLDisplay = this.eglDisplay;
+            if (eGLDisplay != null) {
+                this.egl10.eglTerminate(eGLDisplay);
                 this.eglDisplay = null;
             }
         }
 
-        private void loadTexture(int i, int i2) {
-            Drawable drawable = IntroActivity.this.getResources().getDrawable(i);
+        private void loadTexture(int resId, int index) {
+            Drawable drawable = IntroActivity.this.getResources().getDrawable(resId);
             if (drawable instanceof BitmapDrawable) {
                 Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-                GLES20.glBindTexture(3553, this.textures[i2]);
+                GLES20.glBindTexture(3553, this.textures[index]);
                 GLES20.glTexParameteri(3553, 10241, 9729);
                 GLES20.glTexParameteri(3553, 10240, 9729);
                 GLES20.glTexParameteri(3553, 10242, 33071);
@@ -628,17 +632,17 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             postRunnable(new IntroActivity$EGLThread$$ExternalSyntheticLambda0(this));
         }
 
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$shutdown$0() {
+        /* renamed from: lambda$shutdown$0$org-telegram-ui-IntroActivity$EGLThread  reason: not valid java name */
+        public /* synthetic */ void m3050lambda$shutdown$0$orgtelegramuiIntroActivity$EGLThread() {
             finish();
-            Looper myLooper = Looper.myLooper();
-            if (myLooper != null) {
-                myLooper.quit();
+            Looper looper = Looper.myLooper();
+            if (looper != null) {
+                looper.quit();
             }
         }
 
-        public void setSurfaceTextureSize(int i, int i2) {
-            Intro.onSurfaceChanged(i, i2, Math.min(((float) i) / 150.0f, ((float) i2) / 150.0f), 0);
+        public void setSurfaceTextureSize(int width, int height) {
+            Intro.onSurfaceChanged(width, height, Math.min(((float) width) / 150.0f, ((float) height) / 150.0f), 0);
         }
 
         public void run() {

@@ -1,6 +1,6 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ContactsActivity;
 
 public final /* synthetic */ class DialogOrContactPickerActivity$$ExternalSyntheticLambda2 implements ContactsActivity.ContactsActivityDelegate {
@@ -10,7 +10,7 @@ public final /* synthetic */ class DialogOrContactPickerActivity$$ExternalSynthe
         this.f$0 = dialogOrContactPickerActivity;
     }
 
-    public final void didSelectContact(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
-        this.f$0.lambda$new$2(tLRPC$User, str, contactsActivity);
+    public final void didSelectContact(TLRPC.User user, String str, ContactsActivity contactsActivity) {
+        this.f$0.m2834lambda$new$2$orgtelegramuiDialogOrContactPickerActivity(user, str, contactsActivity);
     }
 }

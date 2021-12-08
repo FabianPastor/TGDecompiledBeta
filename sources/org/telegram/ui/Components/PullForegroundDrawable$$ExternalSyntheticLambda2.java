@@ -10,6 +10,6 @@ public final /* synthetic */ class PullForegroundDrawable$$ExternalSyntheticLamb
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateTextProgress$2(valueAnimator);
+        this.f$0.m2520lambda$new$0$orgtelegramuiComponentsPullForegroundDrawable(valueAnimator);
     }
 }

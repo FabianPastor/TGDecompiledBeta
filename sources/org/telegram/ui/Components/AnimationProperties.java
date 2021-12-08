@@ -10,57 +10,57 @@ import org.telegram.ui.PhotoViewer;
 
 public class AnimationProperties {
     public static final Property<ClippingImageView, Float> CLIPPING_IMAGE_VIEW_PROGRESS = new FloatProperty<ClippingImageView>("animationProgress") {
-        public void setValue(ClippingImageView clippingImageView, float f) {
-            clippingImageView.setAnimationProgress(f);
+        public void setValue(ClippingImageView object, float value) {
+            object.setAnimationProgress(value);
         }
 
-        public Float get(ClippingImageView clippingImageView) {
-            return Float.valueOf(clippingImageView.getAnimationProgress());
+        public Float get(ClippingImageView object) {
+            return Float.valueOf(object.getAnimationProgress());
         }
     };
     public static final Property<DialogCell, Float> CLIP_DIALOG_CELL_PROGRESS = new FloatProperty<DialogCell>("clipProgress") {
-        public void setValue(DialogCell dialogCell, float f) {
-            dialogCell.setClipProgress(f);
+        public void setValue(DialogCell object, float value) {
+            object.setClipProgress(value);
         }
 
-        public Float get(DialogCell dialogCell) {
-            return Float.valueOf(dialogCell.getClipProgress());
+        public Float get(DialogCell object) {
+            return Float.valueOf(object.getClipProgress());
         }
     };
     public static final Property<ColorDrawable, Integer> COLOR_DRAWABLE_ALPHA = new IntProperty<ColorDrawable>("alpha") {
-        public void setValue(ColorDrawable colorDrawable, int i) {
-            colorDrawable.setAlpha(i);
+        public void setValue(ColorDrawable object, int value) {
+            object.setAlpha(value);
         }
 
-        public Integer get(ColorDrawable colorDrawable) {
-            return Integer.valueOf(colorDrawable.getAlpha());
+        public Integer get(ColorDrawable object) {
+            return Integer.valueOf(object.getAlpha());
         }
     };
     public static final Property<Paint, Integer> PAINT_ALPHA = new IntProperty<Paint>("alpha") {
-        public void setValue(Paint paint, int i) {
-            paint.setAlpha(i);
+        public void setValue(Paint object, int value) {
+            object.setAlpha(value);
         }
 
-        public Integer get(Paint paint) {
-            return Integer.valueOf(paint.getAlpha());
+        public Integer get(Paint object) {
+            return Integer.valueOf(object.getAlpha());
         }
     };
     public static final Property<PhotoViewer, Float> PHOTO_VIEWER_ANIMATION_VALUE = new FloatProperty<PhotoViewer>("animationValue") {
-        public void setValue(PhotoViewer photoViewer, float f) {
-            photoViewer.setAnimationValue(f);
+        public void setValue(PhotoViewer object, float value) {
+            object.setAnimationValue(value);
         }
 
-        public Float get(PhotoViewer photoViewer) {
-            return Float.valueOf(photoViewer.getAnimationValue());
+        public Float get(PhotoViewer object) {
+            return Float.valueOf(object.getAnimationValue());
         }
     };
     public static final Property<ShapeDrawable, Integer> SHAPE_DRAWABLE_ALPHA = new IntProperty<ShapeDrawable>("alpha") {
-        public void setValue(ShapeDrawable shapeDrawable, int i) {
-            shapeDrawable.getPaint().setAlpha(i);
+        public void setValue(ShapeDrawable object, int value) {
+            object.getPaint().setAlpha(value);
         }
 
-        public Integer get(ShapeDrawable shapeDrawable) {
-            return Integer.valueOf(shapeDrawable.getPaint().getAlpha());
+        public Integer get(ShapeDrawable object) {
+            return Integer.valueOf(object.getPaint().getAlpha());
         }
     };
     public static OvershootInterpolator overshootInterpolator = new OvershootInterpolator(1.9f);
@@ -68,24 +68,24 @@ public class AnimationProperties {
     public static abstract class FloatProperty<T> extends Property<T, Float> {
         public abstract void setValue(T t, float f);
 
-        public FloatProperty(String str) {
-            super(Float.class, str);
+        public FloatProperty(String name) {
+            super(Float.class, name);
         }
 
-        public final void set(T t, Float f) {
-            setValue(t, f.floatValue());
+        public final void set(T object, Float value) {
+            setValue(object, value.floatValue());
         }
     }
 
     public static abstract class IntProperty<T> extends Property<T, Integer> {
         public abstract void setValue(T t, int i);
 
-        public IntProperty(String str) {
-            super(Integer.class, str);
+        public IntProperty(String name) {
+            super(Integer.class, name);
         }
 
-        public final void set(T t, Integer num) {
-            setValue(t, num.intValue());
+        public final void set(T object, Integer value) {
+            setValue(object, value.intValue());
         }
     }
 }

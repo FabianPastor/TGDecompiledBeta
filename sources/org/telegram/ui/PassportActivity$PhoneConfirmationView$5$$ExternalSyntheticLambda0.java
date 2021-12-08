@@ -10,6 +10,6 @@ public final /* synthetic */ class PassportActivity$PhoneConfirmationView$5$$Ext
     }
 
     public final void run() {
-        this.f$0.lambda$run$2();
+        this.f$0.m3465xbb45434();
     }
 }

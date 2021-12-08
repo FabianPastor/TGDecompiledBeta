@@ -10,6 +10,6 @@ public final /* synthetic */ class DataSettingsActivity$$ExternalSyntheticLambda
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createView$5(dialogInterface, i);
+        this.f$0.m2812lambda$createView$5$orgtelegramuiDataSettingsActivity(dialogInterface, i);
     }
 }

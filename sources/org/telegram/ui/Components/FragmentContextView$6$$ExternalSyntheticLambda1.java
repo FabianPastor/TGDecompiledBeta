@@ -10,6 +10,6 @@ public final /* synthetic */ class FragmentContextView$6$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$$0();
+        this.f$0.m2312lambda$$1$orgtelegramuiComponentsFragmentContextView$6();
     }
 }

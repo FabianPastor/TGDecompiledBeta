@@ -13,6 +13,6 @@ public final /* synthetic */ class ChannelAdminLogActivity$ChatActivityAdapter$1
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$didPressUrl$1(this.f$1, dialogInterface, i);
+        this.f$0.m1621x8aea75b9(this.f$1, dialogInterface, i);
     }
 }

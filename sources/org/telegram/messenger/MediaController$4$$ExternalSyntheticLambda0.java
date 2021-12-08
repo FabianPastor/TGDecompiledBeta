@@ -12,6 +12,6 @@ public final /* synthetic */ class MediaController$4$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.lambda$onCallStateChanged$0(this.f$1);
+        this.f$0.m755x5CLASSNAMEee(this.f$1);
     }
 }

@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda30 implements RequestDelegate {
+public final /* synthetic */ class FileRefController$$ExternalSyntheticLambda30 implements Runnable {
     public final /* synthetic */ FileRefController f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ TLRPC.TL_messages_stickerSet f$1;
 
-    public /* synthetic */ FileRefController$$ExternalSyntheticLambda30(FileRefController fileRefController, String str, String str2) {
+    public /* synthetic */ FileRefController$$ExternalSyntheticLambda30(FileRefController fileRefController, TLRPC.TL_messages_stickerSet tL_messages_stickerSet) {
         this.f$0 = fileRefController;
-        this.f$1 = str;
-        this.f$2 = str2;
+        this.f$1 = tL_messages_stickerSet;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$requestReferenceFromServer$4(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m647x97cCLASSNAME(this.f$1);
     }
 }

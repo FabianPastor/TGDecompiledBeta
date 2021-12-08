@@ -1,25 +1,14 @@
 package org.telegram.ui.Components.voip;
 
-import org.telegram.messenger.AccountInstance;
-import org.telegram.messenger.MessagesStorage;
-import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$InputPeer;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class VoIPHelper$$ExternalSyntheticLambda17 implements MessagesStorage.BooleanCallback {
-    public final /* synthetic */ TLRPC$Chat f$0;
-    public final /* synthetic */ TLRPC$InputPeer f$1;
-    public final /* synthetic */ BaseFragment f$2;
-    public final /* synthetic */ AccountInstance f$3;
+public final /* synthetic */ class VoIPHelper$$ExternalSyntheticLambda17 implements DialogInterface.OnClickListener {
+    public static final /* synthetic */ VoIPHelper$$ExternalSyntheticLambda17 INSTANCE = new VoIPHelper$$ExternalSyntheticLambda17();
 
-    public /* synthetic */ VoIPHelper$$ExternalSyntheticLambda17(TLRPC$Chat tLRPC$Chat, TLRPC$InputPeer tLRPC$InputPeer, BaseFragment baseFragment, AccountInstance accountInstance) {
-        this.f$0 = tLRPC$Chat;
-        this.f$1 = tLRPC$InputPeer;
-        this.f$2 = baseFragment;
-        this.f$3 = accountInstance;
+    private /* synthetic */ VoIPHelper$$ExternalSyntheticLambda17() {
     }
 
-    public final void run(boolean z) {
-        VoIPHelper.startCall(this.f$0, this.f$1, (String) null, true, this.f$2.getParentActivity(), this.f$2, this.f$3);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        VoIPHelper.lambda$showRateAlert$11(dialogInterface, i);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatUsersActivity$SearchAdapter$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.lambda$searchUsers$1(this.f$1);
+        this.f$0.m1983xvar_e43d8(this.f$1);
     }
 }

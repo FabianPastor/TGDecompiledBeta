@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesStorage;
-
 public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda19 implements Runnable {
-    public final /* synthetic */ MessagesStorage.StringCallback f$0;
+    public final /* synthetic */ SendMessagesHelper f$0;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda19(MessagesStorage.StringCallback stringCallback) {
-        this.f$0 = stringCallback;
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda19(SendMessagesHelper sendMessagesHelper, String str) {
+        this.f$0 = sendMessagesHelper;
+        this.f$1 = str;
     }
 
     public final void run() {
-        this.f$0.run((String) null);
+        this.f$0.m484x4642b66a(this.f$1);
     }
 }

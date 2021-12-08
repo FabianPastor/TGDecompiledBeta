@@ -14,6 +14,6 @@ public final /* synthetic */ class MusicBrowserService$$ExternalSyntheticLambda0
     }
 
     public final void run() {
-        this.f$0.lambda$onLoadChildren$0(this.f$1, this.f$2);
+        this.f$0.m1090xc2d09b0c(this.f$1, this.f$2);
     }
 }

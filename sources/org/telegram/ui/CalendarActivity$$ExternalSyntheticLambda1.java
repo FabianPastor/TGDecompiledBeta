@@ -10,6 +10,6 @@ public final /* synthetic */ class CalendarActivity$$ExternalSyntheticLambda1 im
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$1(view);
+        this.f$0.m1478lambda$createView$0$orgtelegramuiCalendarActivity(view);
     }
 }

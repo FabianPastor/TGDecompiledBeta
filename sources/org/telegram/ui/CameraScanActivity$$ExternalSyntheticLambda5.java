@@ -8,6 +8,6 @@ public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda5 
     }
 
     public final void run() {
-        this.f$0.lambda$onNoQrFound$5();
+        this.f$0.m1505lambda$onNoQrFound$5$orgtelegramuiCameraScanActivity();
     }
 }

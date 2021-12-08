@@ -46,9 +46,15 @@ public class VideoPlayerSeekBar {
         void onSeekBarContinuousDrag(float f);
 
         void onSeekBarDrag(float f);
+
+        /* renamed from: org.telegram.ui.Components.VideoPlayerSeekBar$SeekBarDelegate$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static void $default$onSeekBarContinuousDrag(SeekBarDelegate _this, float progress) {
+            }
+        }
     }
 
-    public VideoPlayerSeekBar(View view) {
+    public VideoPlayerSeekBar(View parent) {
         if (paint == null) {
             paint = new Paint(1);
             Paint paint2 = new Paint(1);
@@ -57,7 +63,7 @@ public class VideoPlayerSeekBar {
             strokePaint.setColor(-16777216);
             strokePaint.setStrokeWidth(1.0f);
         }
-        this.parentView = view;
+        this.parentView = parent;
         thumbWidth = AndroidUtilities.dp(24.0f);
         this.currentRadius = (float) AndroidUtilities.dp(6.0f);
     }
@@ -66,55 +72,55 @@ public class VideoPlayerSeekBar {
         this.delegate = seekBarDelegate;
     }
 
-    public boolean onTouch(int i, float f, float f2) {
+    public boolean onTouch(int action, float x, float y) {
         SeekBarDelegate seekBarDelegate;
-        if (i == 0) {
+        if (action == 0) {
             if (this.transitionProgress > 0.0f) {
                 return false;
             }
-            int i2 = this.height;
-            int i3 = thumbWidth;
-            int i4 = (i2 - i3) / 2;
-            if (f >= ((float) (-i4))) {
-                int i5 = this.width;
-                if (f <= ((float) (i5 + i4)) && f2 >= 0.0f && f2 <= ((float) i2)) {
-                    int i6 = this.thumbX;
-                    if (((float) (i6 - i4)) > f || f > ((float) (i6 + i3 + i4))) {
-                        int i7 = ((int) f) - (i3 / 2);
-                        this.thumbX = i7;
-                        if (i7 < 0) {
+            int i = this.height;
+            int i2 = thumbWidth;
+            int additionWidth = (i - i2) / 2;
+            if (x >= ((float) (-additionWidth))) {
+                int i3 = this.width;
+                if (x <= ((float) (i3 + additionWidth)) && y >= 0.0f && y <= ((float) i)) {
+                    int i4 = this.thumbX;
+                    if (((float) (i4 - additionWidth)) > x || x > ((float) (i4 + i2 + additionWidth))) {
+                        int i5 = ((int) x) - (i2 / 2);
+                        this.thumbX = i5;
+                        if (i5 < 0) {
                             this.thumbX = 0;
-                        } else if (i7 > i5 - i3) {
-                            this.thumbX = i3 - i5;
+                        } else if (i5 > i3 - i2) {
+                            this.thumbX = i2 - i3;
                         }
                     }
                     this.pressed = true;
-                    int i8 = this.thumbX;
-                    this.draggingThumbX = i8;
-                    this.thumbDX = (int) (f - ((float) i8));
+                    int i6 = this.thumbX;
+                    this.draggingThumbX = i6;
+                    this.thumbDX = (int) (x - ((float) i6));
                     return true;
                 }
             }
-        } else if (i == 1 || i == 3) {
+        } else if (action == 1 || action == 3) {
             if (this.pressed) {
-                int i9 = this.draggingThumbX;
-                this.thumbX = i9;
-                if (i == 1 && (seekBarDelegate = this.delegate) != null) {
-                    seekBarDelegate.onSeekBarDrag(((float) i9) / ((float) (this.width - thumbWidth)));
+                int i7 = this.draggingThumbX;
+                this.thumbX = i7;
+                if (action == 1 && (seekBarDelegate = this.delegate) != null) {
+                    seekBarDelegate.onSeekBarDrag(((float) i7) / ((float) (this.width - thumbWidth)));
                 }
                 this.pressed = false;
                 return true;
             }
-        } else if (i == 2 && this.pressed) {
-            int i10 = (int) (f - ((float) this.thumbDX));
-            this.draggingThumbX = i10;
-            if (i10 < 0) {
+        } else if (action == 2 && this.pressed) {
+            int i8 = (int) (x - ((float) this.thumbDX));
+            this.draggingThumbX = i8;
+            if (i8 < 0) {
                 this.draggingThumbX = 0;
             } else {
-                int i11 = this.width;
-                int i12 = thumbWidth;
-                if (i10 > i11 - i12) {
-                    this.draggingThumbX = i11 - i12;
+                int i9 = this.width;
+                int i10 = thumbWidth;
+                if (i8 > i9 - i10) {
+                    this.draggingThumbX = i9 - i10;
                 }
             }
             SeekBarDelegate seekBarDelegate2 = this.delegate;
@@ -126,49 +132,49 @@ public class VideoPlayerSeekBar {
         return false;
     }
 
-    public void setColors(int i, int i2, int i3, int i4, int i5, int i6) {
-        this.backgroundColor = i;
-        this.cacheColor = i2;
-        this.circleColor = i4;
-        this.progressColor = i3;
-        this.backgroundSelectedColor = i5;
-        this.smallLineColor = i6;
+    public void setColors(int background, int cache, int progress, int circle, int selected2, int smallLineColor2) {
+        this.backgroundColor = background;
+        this.cacheColor = cache;
+        this.circleColor = circle;
+        this.progressColor = progress;
+        this.backgroundSelectedColor = selected2;
+        this.smallLineColor = smallLineColor2;
     }
 
-    public void setProgress(float f, boolean z) {
-        int ceil = (int) Math.ceil((double) (((float) (this.width - thumbWidth)) * f));
-        if (z) {
-            if (Math.abs(ceil - this.thumbX) > AndroidUtilities.dp(10.0f)) {
-                float interpolation = CubicBezierInterpolator.DEFAULT.getInterpolation(this.animateThumbProgress);
-                this.fromThumbX = (int) ((((float) this.thumbX) * interpolation) + (((float) this.fromThumbX) * (1.0f - interpolation)));
+    public void setProgress(float progress, boolean animated) {
+        int newThumb = (int) Math.ceil((double) (((float) (this.width - thumbWidth)) * progress));
+        if (animated) {
+            if (Math.abs(newThumb - this.thumbX) > AndroidUtilities.dp(10.0f)) {
+                float progressInterpolated = CubicBezierInterpolator.DEFAULT.getInterpolation(this.animateThumbProgress);
+                this.fromThumbX = (int) ((((float) this.thumbX) * progressInterpolated) + (((float) this.fromThumbX) * (1.0f - progressInterpolated)));
                 this.animateThumbProgress = 0.0f;
             } else if (this.animateThumbProgress == 1.0f) {
                 this.animateThumbProgress = 0.0f;
                 this.fromThumbX = this.thumbX;
             }
         }
-        this.thumbX = ceil;
-        if (ceil < 0) {
+        this.thumbX = newThumb;
+        if (newThumb < 0) {
             this.thumbX = 0;
             return;
         }
         int i = this.width;
         int i2 = thumbWidth;
-        if (ceil > i - i2) {
+        if (newThumb > i - i2) {
             this.thumbX = i - i2;
         }
     }
 
-    public void setProgress(float f) {
-        setProgress(f, false);
+    public void setProgress(float progress) {
+        setProgress(progress, false);
     }
 
-    public void setBufferedProgress(float f) {
-        float f2 = this.bufferedProgress;
-        if (f != f2) {
-            this.animateFromBufferedProgress = f2;
-            this.animateResetBuffering = f < f2;
-            this.bufferedProgress = f;
+    public void setBufferedProgress(float value) {
+        float f = this.bufferedProgress;
+        if (value != f) {
+            this.animateFromBufferedProgress = f;
+            this.animateResetBuffering = value < f;
+            this.bufferedProgress = value;
             this.bufferedAnimationValue = 0.0f;
         }
     }
@@ -181,28 +187,44 @@ public class VideoPlayerSeekBar {
         return (this.pressed ? this.draggingThumbX : this.thumbX) + (thumbWidth / 2);
     }
 
-    public void setSize(int i, int i2) {
-        this.width = i;
-        this.height = i2;
+    public boolean isDragging() {
+        return this.pressed;
+    }
+
+    public void setSelected(boolean value) {
+        this.selected = value;
+    }
+
+    public void setSize(int w, int h) {
+        this.width = w;
+        this.height = h;
     }
 
     public int getWidth() {
         return this.width - thumbWidth;
     }
 
-    public void setTransitionProgress(float f) {
-        if (this.transitionProgress != f) {
-            this.transitionProgress = f;
+    public float getTransitionProgress() {
+        return this.transitionProgress;
+    }
+
+    public void setTransitionProgress(float transitionProgress2) {
+        if (this.transitionProgress != transitionProgress2) {
+            this.transitionProgress = transitionProgress2;
             this.parentView.invalidate();
         }
     }
 
-    public void setHorizontalPadding(int i) {
-        this.horizontalPadding = i;
+    public int getHorizontalPadding() {
+        return this.horizontalPadding;
+    }
+
+    public void setHorizontalPadding(int horizontalPadding2) {
+        this.horizontalPadding = horizontalPadding2;
     }
 
     public void draw(Canvas canvas, View view) {
-        float lerp = AndroidUtilities.lerp(((float) thumbWidth) / 2.0f, ((float) this.smallLineHeight) / 2.0f, this.transitionProgress);
+        float radius = AndroidUtilities.lerp(((float) thumbWidth) / 2.0f, ((float) this.smallLineHeight) / 2.0f, this.transitionProgress);
         this.rect.left = ((float) this.horizontalPadding) + AndroidUtilities.lerp(((float) thumbWidth) / 2.0f, 0.0f, this.transitionProgress);
         RectF rectF = this.rect;
         int i = this.height;
@@ -210,95 +232,89 @@ public class VideoPlayerSeekBar {
         RectF rectF2 = this.rect;
         int i2 = this.height;
         rectF2.bottom = AndroidUtilities.lerp(((float) (this.lineHeight + i2)) / 2.0f, (float) (i2 - AndroidUtilities.dp(3.0f)), this.transitionProgress);
-        float f = (float) this.thumbX;
-        float f2 = this.animateThumbProgress;
-        if (f2 != 1.0f) {
-            float f3 = f2 + 0.07272727f;
-            this.animateThumbProgress = f3;
-            if (f3 >= 1.0f) {
+        float currentThumbX = (float) this.thumbX;
+        float f = this.animateThumbProgress;
+        if (f != 1.0f) {
+            float f2 = f + 0.07272727f;
+            this.animateThumbProgress = f2;
+            if (f2 >= 1.0f) {
                 this.animateThumbProgress = 1.0f;
             } else {
                 view.invalidate();
-                float interpolation = CubicBezierInterpolator.DEFAULT.getInterpolation(this.animateThumbProgress);
-                f = (((float) this.fromThumbX) * (1.0f - interpolation)) + (((float) this.thumbX) * interpolation);
+                float progressInterpolated = CubicBezierInterpolator.DEFAULT.getInterpolation(this.animateThumbProgress);
+                currentThumbX = (((float) this.fromThumbX) * (1.0f - progressInterpolated)) + (((float) this.thumbX) * progressInterpolated);
             }
         }
         this.rect.right = ((float) this.horizontalPadding) + AndroidUtilities.lerp(((float) this.width) - (((float) thumbWidth) / 2.0f), ((float) this.parentView.getWidth()) - (((float) this.horizontalPadding) * 2.0f), this.transitionProgress);
         setPaintColor(this.selected ? this.backgroundSelectedColor : this.backgroundColor, 1.0f - this.transitionProgress);
-        canvas.drawRoundRect(this.rect, lerp, lerp, paint);
-        float f4 = this.bufferedAnimationValue;
-        if (f4 != 1.0f) {
-            float f5 = f4 + 0.16f;
-            this.bufferedAnimationValue = f5;
-            if (f5 > 1.0f) {
+        canvas.drawRoundRect(this.rect, radius, radius, paint);
+        float f3 = this.bufferedAnimationValue;
+        if (f3 != 1.0f) {
+            float f4 = f3 + 0.16f;
+            this.bufferedAnimationValue = f4;
+            if (f4 > 1.0f) {
                 this.bufferedAnimationValue = 1.0f;
             } else {
                 this.parentView.invalidate();
             }
         }
         if (this.animateResetBuffering) {
-            float f6 = this.animateFromBufferedProgress;
-            if (f6 > 0.0f) {
+            float f5 = this.animateFromBufferedProgress;
+            if (f5 > 0.0f) {
                 RectF rectF3 = this.rect;
                 int i3 = thumbWidth;
-                rectF3.right = ((float) this.horizontalPadding) + AndroidUtilities.lerp((((float) i3) / 2.0f) + (f6 * ((float) (this.width - i3))), ((float) this.parentView.getWidth()) - (((float) this.horizontalPadding) * 2.0f), this.transitionProgress);
+                rectF3.right = ((float) this.horizontalPadding) + AndroidUtilities.lerp((((float) i3) / 2.0f) + (f5 * ((float) (this.width - i3))), ((float) this.parentView.getWidth()) - (((float) this.horizontalPadding) * 2.0f), this.transitionProgress);
                 setPaintColor(this.selected ? this.backgroundSelectedColor : this.cacheColor, (1.0f - this.transitionProgress) * (1.0f - this.bufferedAnimationValue));
-                canvas.drawRoundRect(this.rect, lerp, lerp, paint);
+                canvas.drawRoundRect(this.rect, radius, radius, paint);
             }
-            float f7 = this.bufferedProgress;
-            if (f7 > 0.0f) {
+            float f6 = this.bufferedProgress;
+            if (f6 > 0.0f) {
                 RectF rectF4 = this.rect;
                 int i4 = thumbWidth;
-                rectF4.right = ((float) this.horizontalPadding) + AndroidUtilities.lerp((((float) i4) / 2.0f) + (f7 * ((float) (this.width - i4))), ((float) this.parentView.getWidth()) - (((float) this.horizontalPadding) * 2.0f), this.transitionProgress);
+                rectF4.right = ((float) this.horizontalPadding) + AndroidUtilities.lerp((((float) i4) / 2.0f) + (f6 * ((float) (this.width - i4))), ((float) this.parentView.getWidth()) - (((float) this.horizontalPadding) * 2.0f), this.transitionProgress);
                 setPaintColor(this.selected ? this.backgroundSelectedColor : this.cacheColor, 1.0f - this.transitionProgress);
-                canvas.drawRoundRect(this.rect, lerp, lerp, paint);
+                canvas.drawRoundRect(this.rect, radius, radius, paint);
             }
         } else {
-            float f8 = this.animateFromBufferedProgress;
-            float f9 = this.bufferedAnimationValue;
-            float var_ = (f8 * (1.0f - f9)) + (this.bufferedProgress * f9);
-            if (var_ > 0.0f) {
+            float f7 = this.animateFromBufferedProgress;
+            float f8 = this.bufferedAnimationValue;
+            float currentBufferedProgress = (f7 * (1.0f - f8)) + (this.bufferedProgress * f8);
+            if (currentBufferedProgress > 0.0f) {
                 RectF rectF5 = this.rect;
                 int i5 = thumbWidth;
-                rectF5.right = ((float) this.horizontalPadding) + AndroidUtilities.lerp((((float) i5) / 2.0f) + (var_ * ((float) (this.width - i5))), ((float) this.parentView.getWidth()) - (((float) this.horizontalPadding) * 2.0f), this.transitionProgress);
+                rectF5.right = ((float) this.horizontalPadding) + AndroidUtilities.lerp((((float) i5) / 2.0f) + (((float) (this.width - i5)) * currentBufferedProgress), ((float) this.parentView.getWidth()) - (((float) this.horizontalPadding) * 2.0f), this.transitionProgress);
                 setPaintColor(this.selected ? this.backgroundSelectedColor : this.cacheColor, 1.0f - this.transitionProgress);
-                canvas.drawRoundRect(this.rect, lerp, lerp, paint);
+                canvas.drawRoundRect(this.rect, radius, radius, paint);
             }
         }
-        RectF rectF6 = this.rect;
-        float var_ = (float) this.horizontalPadding;
-        float var_ = ((float) thumbWidth) / 2.0f;
-        if (this.pressed) {
-            f = (float) this.draggingThumbX;
-        }
-        rectF6.right = var_ + AndroidUtilities.lerp(var_ + f, (((float) this.parentView.getWidth()) - (((float) this.horizontalPadding) * 2.0f)) * getProgress(), this.transitionProgress);
+        this.rect.right = ((float) this.horizontalPadding) + AndroidUtilities.lerp((((float) thumbWidth) / 2.0f) + (this.pressed ? (float) this.draggingThumbX : currentThumbX), (((float) this.parentView.getWidth()) - (((float) this.horizontalPadding) * 2.0f)) * getProgress(), this.transitionProgress);
         if (this.transitionProgress > 0.0f && this.rect.width() > 0.0f) {
             strokePaint.setAlpha((int) (this.transitionProgress * 255.0f * 0.2f));
-            canvas.drawRoundRect(this.rect, lerp, lerp, strokePaint);
+            canvas.drawRoundRect(this.rect, radius, radius, strokePaint);
         }
         setPaintColor(ColorUtils.blendARGB(this.progressColor, this.smallLineColor, this.transitionProgress), 1.0f);
-        canvas.drawRoundRect(this.rect, lerp, lerp, paint);
+        canvas.drawRoundRect(this.rect, radius, radius, paint);
         setPaintColor(ColorUtils.blendARGB(this.circleColor, getProgress() == 0.0f ? 0 : this.smallLineColor, this.transitionProgress), 1.0f - this.transitionProgress);
-        float dp = (float) AndroidUtilities.dp(this.pressed ? 8.0f : 6.0f);
-        if (this.currentRadius != dp) {
-            long elapsedRealtime = SystemClock.elapsedRealtime();
-            long j = elapsedRealtime - this.lastUpdateTime;
-            this.lastUpdateTime = elapsedRealtime;
-            if (j > 18) {
-                j = 16;
+        int newRad = AndroidUtilities.dp(this.pressed ? 8.0f : 6.0f);
+        if (this.currentRadius != ((float) newRad)) {
+            long newUpdateTime = SystemClock.elapsedRealtime();
+            long dt = newUpdateTime - this.lastUpdateTime;
+            this.lastUpdateTime = newUpdateTime;
+            if (dt > 18) {
+                dt = 16;
             }
-            float var_ = this.currentRadius;
-            if (var_ < dp) {
-                float dp2 = var_ + (((float) AndroidUtilities.dp(1.0f)) * (((float) j) / 60.0f));
-                this.currentRadius = dp2;
-                if (dp2 > dp) {
-                    this.currentRadius = dp;
+            float f9 = this.currentRadius;
+            if (f9 < ((float) newRad)) {
+                float dp = f9 + (((float) AndroidUtilities.dp(1.0f)) * (((float) dt) / 60.0f));
+                this.currentRadius = dp;
+                if (dp > ((float) newRad)) {
+                    this.currentRadius = (float) newRad;
                 }
             } else {
-                float dp3 = var_ - (((float) AndroidUtilities.dp(1.0f)) * (((float) j) / 60.0f));
-                this.currentRadius = dp3;
-                if (dp3 < dp) {
-                    this.currentRadius = dp;
+                float dp2 = f9 - (((float) AndroidUtilities.dp(1.0f)) * (((float) dt) / 60.0f));
+                this.currentRadius = dp2;
+                if (dp2 < ((float) newRad)) {
+                    this.currentRadius = (float) newRad;
                 }
             }
             View view2 = this.parentView;
@@ -306,15 +322,13 @@ public class VideoPlayerSeekBar {
                 view2.invalidate();
             }
         }
-        float lerp2 = AndroidUtilities.lerp(this.currentRadius, 0.0f, this.transitionProgress);
-        RectF rectF7 = this.rect;
-        canvas.drawCircle(rectF7.right, rectF7.centerY(), lerp2, paint);
+        canvas.drawCircle(this.rect.right, this.rect.centerY(), AndroidUtilities.lerp(this.currentRadius, 0.0f, this.transitionProgress), paint);
     }
 
-    private void setPaintColor(int i, float f) {
-        if (f < 1.0f) {
-            i = ColorUtils.setAlphaComponent(i, (int) (((float) Color.alpha(i)) * f));
+    private void setPaintColor(int color, float alpha) {
+        if (alpha < 1.0f) {
+            color = ColorUtils.setAlphaComponent(color, (int) (((float) Color.alpha(color)) * alpha));
         }
-        paint.setColor(i);
+        paint.setColor(color);
     }
 }

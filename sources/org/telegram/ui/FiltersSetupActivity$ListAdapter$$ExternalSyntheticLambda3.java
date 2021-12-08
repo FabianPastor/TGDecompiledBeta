@@ -13,6 +13,6 @@ public final /* synthetic */ class FiltersSetupActivity$ListAdapter$$ExternalSyn
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$onCreateViewHolder$7(this.f$1, view);
+        this.f$0.m2944x1evar_c(this.f$1, view);
     }
 }

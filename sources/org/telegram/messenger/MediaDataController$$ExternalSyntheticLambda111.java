@@ -1,15 +1,23 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$MessageEntity;
+import java.util.ArrayList;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda111 implements Comparator {
-    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda111 INSTANCE = new MediaDataController$$ExternalSyntheticLambda111();
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda111 implements Runnable {
+    public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ long f$4;
 
-    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda111() {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda111(MediaDataController mediaDataController, ArrayList arrayList, ArrayList arrayList2, int i, long j) {
+        this.f$0 = mediaDataController;
+        this.f$1 = arrayList;
+        this.f$2 = arrayList2;
+        this.f$3 = i;
+        this.f$4 = j;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MediaDataController.lambda$getTextStyleRuns$120((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
+    public final void run() {
+        this.f$0.m876xe4a4CLASSNAME(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

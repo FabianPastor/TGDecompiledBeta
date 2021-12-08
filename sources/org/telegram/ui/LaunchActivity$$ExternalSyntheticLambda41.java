@@ -1,19 +1,20 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$TL_help_appUpdate;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda41 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ TLRPC$TL_help_appUpdate f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ AlertDialog f$1;
+    public final /* synthetic */ TLRPC.TL_error f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda41(LaunchActivity launchActivity, TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate, int i) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda41(LaunchActivity launchActivity, AlertDialog alertDialog, TLRPC.TL_error tL_error) {
         this.f$0 = launchActivity;
-        this.f$1 = tLRPC$TL_help_appUpdate;
-        this.f$2 = i;
+        this.f$1 = alertDialog;
+        this.f$2 = tL_error;
     }
 
     public final void run() {
-        this.f$0.lambda$checkAppUpdate$56(this.f$1, this.f$2);
+        this.f$0.m3103lambda$runLinkRequest$37$orgtelegramuiLaunchActivity(this.f$1, this.f$2);
     }
 }

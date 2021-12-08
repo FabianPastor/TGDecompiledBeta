@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.KeyEvent;
+import android.widget.TextView;
 
-public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda38 implements View.OnTouchListener {
+public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda38 implements TextView.OnEditorActionListener {
     public final /* synthetic */ PassportActivity f$0;
-    public final /* synthetic */ Context f$1;
 
-    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda38(PassportActivity passportActivity, Context context) {
+    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda38(PassportActivity passportActivity) {
         this.f$0 = passportActivity;
-        this.f$1 = context;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$createIdentityInterface$49(this.f$1, view, motionEvent);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.f$0.m3399x89d32563(textView, i, keyEvent);
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class PhotoViewerCaptionEnterView$$ExternalSyntheti
     }
 
     public final void run() {
-        this.f$0.lambda$setFieldFocused$6();
+        this.f$0.m2497xe6dccb0a();
     }
 }

@@ -1,23 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.concurrent.CountDownLatch;
-
 public final /* synthetic */ class FileLoadOperation$$ExternalSyntheticLambda8 implements Runnable {
     public final /* synthetic */ FileLoadOperation f$0;
-    public final /* synthetic */ int[] f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ CountDownLatch f$4;
+    public final /* synthetic */ FileLoadOperationStream f$1;
 
-    public /* synthetic */ FileLoadOperation$$ExternalSyntheticLambda8(FileLoadOperation fileLoadOperation, int[] iArr, int i, int i2, CountDownLatch countDownLatch) {
+    public /* synthetic */ FileLoadOperation$$ExternalSyntheticLambda8(FileLoadOperation fileLoadOperation, FileLoadOperationStream fileLoadOperationStream) {
         this.f$0 = fileLoadOperation;
-        this.f$1 = iArr;
-        this.f$2 = i;
-        this.f$3 = i2;
-        this.f$4 = countDownLatch;
+        this.f$1 = fileLoadOperationStream;
     }
 
     public final void run() {
-        this.f$0.lambda$getDownloadedLengthFromOffset$2(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.m623xc3d0b3c8(this.f$1);
     }
 }

@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.view.View;
 
-public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda10 implements Runnable {
+public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda10 implements View.OnClickListener {
     public final /* synthetic */ ChatEditTypeActivity f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
 
-    public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda10(ChatEditTypeActivity chatEditTypeActivity, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda10(ChatEditTypeActivity chatEditTypeActivity) {
         this.f$0 = chatEditTypeActivity;
-        this.f$1 = tLRPC$TL_error;
     }
 
-    public final void run() {
-        this.f$0.lambda$onFragmentCreate$0(this.f$1);
+    public final void onClick(View view) {
+        this.f$0.m1896lambda$createView$2$orgtelegramuiChatEditTypeActivity(view);
     }
 }

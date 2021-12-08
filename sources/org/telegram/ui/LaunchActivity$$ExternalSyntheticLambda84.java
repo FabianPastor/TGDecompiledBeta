@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.tgnet.TLRPC$MessageMedia;
-import org.telegram.ui.LocationActivity;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda84 implements LocationActivity.LocationActivityDelegate {
-    public final /* synthetic */ HashMap f$0;
-    public final /* synthetic */ int f$1;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda84 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ LaunchActivity f$0;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda84(HashMap hashMap, int i) {
-        this.f$0 = hashMap;
-        this.f$1 = i;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda84(LaunchActivity launchActivity) {
+        this.f$0 = launchActivity;
     }
 
-    public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-        LaunchActivity.lambda$didReceivedNotification$67(this.f$0, this.f$1, tLRPC$MessageMedia, i, z, i2);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m3068lambda$didReceivedNotification$66$orgtelegramuiLaunchActivity(dialogInterface, i);
     }
 }

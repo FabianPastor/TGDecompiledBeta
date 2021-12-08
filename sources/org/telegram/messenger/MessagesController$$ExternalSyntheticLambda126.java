@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda126 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda126 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ Runnable f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda126(MessagesController messagesController, TLObject tLObject, long j, Runnable runnable) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda126(MessagesController messagesController) {
         this.f$0 = messagesController;
-        this.f$1 = tLObject;
-        this.f$2 = j;
-        this.f$3 = runnable;
     }
 
-    public final void run() {
-        this.f$0.lambda$getGroupCall$34(this.f$1, this.f$2, this.f$3);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m126xaa095282(tLObject, tL_error);
     }
 }

@@ -40,12 +40,12 @@ public class PhotoAttachPermissionCell extends FrameLayout {
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 17, 5.0f, 13.0f, 5.0f, 0.0f));
     }
 
-    public void setItemSize(int i) {
-        this.itemSize = i;
+    public void setItemSize(int size) {
+        this.itemSize = size;
     }
 
-    public void setType(int i) {
-        if (i == 0) {
+    public void setType(int type) {
+        if (type == 0) {
             this.imageView.setImageResource(NUM);
             this.imageView2.setImageResource(NUM);
             this.textView.setText(LocaleController.getString("CameraPermissionText", NUM));
@@ -61,13 +61,13 @@ public class PhotoAttachPermissionCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(this.itemSize, NUM), View.MeasureSpec.makeMeasureSpec(this.itemSize + AndroidUtilities.dp(5.0f), NUM));
     }
 
-    private int getThemedColor(String str) {
+    private int getThemedColor(String key) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
-        return color != null ? color.intValue() : Theme.getColor(str);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
+        return color != null ? color.intValue() : Theme.getColor(key);
     }
 }

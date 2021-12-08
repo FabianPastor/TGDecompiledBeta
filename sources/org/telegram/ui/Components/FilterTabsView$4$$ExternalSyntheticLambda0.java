@@ -11,6 +11,6 @@ public final /* synthetic */ class FilterTabsView$4$$ExternalSyntheticLambda0 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$runPendingAnimations$0(valueAnimator);
+        this.f$0.m2283xd36768ec(valueAnimator);
     }
 }

@@ -68,64 +68,71 @@ public interface EglBase {
             return new ConfigBuilder();
         }
 
-        public static int getOpenGlesVersionFromConfig(int[] iArr) {
-            for (int i = 0; i < iArr.length - 1; i++) {
-                if (iArr[i] == 12352) {
-                    int i2 = iArr[i + 1];
-                    if (i2 == 4) {
-                        return 2;
+        public static int getOpenGlesVersionFromConfig(int[] configAttributes) {
+            int i = 0;
+            while (i < configAttributes.length - 1) {
+                if (configAttributes[i] == 12352) {
+                    switch (configAttributes[i + 1]) {
+                        case 4:
+                            return 2;
+                        case 64:
+                            return 3;
+                        default:
+                            return 1;
                     }
-                    if (i2 != 64) {
-                        return 1;
-                    }
-                    return 3;
+                } else {
+                    i++;
                 }
             }
             return 1;
         }
 
-        public static EglBase create(Context context, int[] iArr) {
-            if (context == null) {
+        public static EglBase create(Context sharedContext, int[] configAttributes) {
+            if (sharedContext == null) {
                 if (EglBase14Impl.isEGL14Supported()) {
-                    return createEgl14(iArr);
+                    return createEgl14(configAttributes);
                 }
-                return createEgl10(iArr);
-            } else if (context instanceof EglBase14.Context) {
-                return createEgl14((EglBase14.Context) context, iArr);
+                return createEgl10(configAttributes);
+            } else if (sharedContext instanceof EglBase14.Context) {
+                return createEgl14((EglBase14.Context) sharedContext, configAttributes);
             } else {
-                if (context instanceof EglBase10.Context) {
-                    return createEgl10((EglBase10.Context) context, iArr);
+                if (sharedContext instanceof EglBase10.Context) {
+                    return createEgl10((EglBase10.Context) sharedContext, configAttributes);
                 }
                 throw new IllegalArgumentException("Unrecognized Context");
             }
         }
 
-        public static EglBase10 createEgl10(int[] iArr) {
-            return new EglBase10Impl((EGLContext) null, iArr);
+        public static EglBase create() {
+            return create((Context) null, EglBase.CONFIG_PLAIN);
         }
 
-        public static EglBase10 createEgl10(EglBase10.Context context, int[] iArr) {
-            EGLContext eGLContext;
-            if (context == null) {
-                eGLContext = null;
-            } else {
-                eGLContext = context.getRawContext();
-            }
-            return new EglBase10Impl(eGLContext, iArr);
+        public static EglBase create(Context sharedContext) {
+            return create(sharedContext, EglBase.CONFIG_PLAIN);
         }
 
-        public static EglBase14 createEgl14(int[] iArr) {
-            return new EglBase14Impl((android.opengl.EGLContext) null, iArr);
+        public static EglBase10 createEgl10(int[] configAttributes) {
+            return new EglBase10Impl((EGLContext) null, configAttributes);
         }
 
-        public static EglBase14 createEgl14(EglBase14.Context context, int[] iArr) {
-            android.opengl.EGLContext eGLContext;
-            if (context == null) {
-                eGLContext = null;
-            } else {
-                eGLContext = context.getRawContext();
-            }
-            return new EglBase14Impl(eGLContext, iArr);
+        public static EglBase10 createEgl10(EglBase10.Context sharedContext, int[] configAttributes) {
+            return new EglBase10Impl(sharedContext == null ? null : sharedContext.getRawContext(), configAttributes);
+        }
+
+        public static EglBase10 createEgl10(EGLContext sharedContext, int[] configAttributes) {
+            return new EglBase10Impl(sharedContext, configAttributes);
+        }
+
+        public static EglBase14 createEgl14(int[] configAttributes) {
+            return new EglBase14Impl((android.opengl.EGLContext) null, configAttributes);
+        }
+
+        public static EglBase14 createEgl14(EglBase14.Context sharedContext, int[] configAttributes) {
+            return new EglBase14Impl(sharedContext == null ? null : sharedContext.getRawContext(), configAttributes);
+        }
+
+        public static EglBase14 createEgl14(android.opengl.EGLContext sharedContext, int[] configAttributes) {
+            return new EglBase14Impl(sharedContext, configAttributes);
         }
     }
 
@@ -135,60 +142,60 @@ public interface EglBase {
         private int openGlesVersion = 2;
         private boolean supportsPixelBuffer;
 
-        public ConfigBuilder setOpenGlesVersion(int i) {
-            if (i < 1 || i > 3) {
-                throw new IllegalArgumentException("OpenGL ES version " + i + " not supported");
+        public ConfigBuilder setOpenGlesVersion(int version) {
+            if (version < 1 || version > 3) {
+                throw new IllegalArgumentException("OpenGL ES version " + version + " not supported");
             }
-            this.openGlesVersion = i;
+            this.openGlesVersion = version;
             return this;
         }
 
-        public ConfigBuilder setHasAlphaChannel(boolean z) {
-            this.hasAlphaChannel = z;
+        public ConfigBuilder setHasAlphaChannel(boolean hasAlphaChannel2) {
+            this.hasAlphaChannel = hasAlphaChannel2;
             return this;
         }
 
-        public ConfigBuilder setSupportsPixelBuffer(boolean z) {
-            this.supportsPixelBuffer = z;
+        public ConfigBuilder setSupportsPixelBuffer(boolean supportsPixelBuffer2) {
+            this.supportsPixelBuffer = supportsPixelBuffer2;
             return this;
         }
 
-        public ConfigBuilder setIsRecordable(boolean z) {
-            this.isRecordable = z;
+        public ConfigBuilder setIsRecordable(boolean isRecordable2) {
+            this.isRecordable = isRecordable2;
             return this;
         }
 
         public int[] createConfigAttributes() {
-            ArrayList arrayList = new ArrayList();
-            arrayList.add(12324);
-            arrayList.add(8);
-            arrayList.add(12323);
-            arrayList.add(8);
-            arrayList.add(12322);
-            arrayList.add(8);
+            ArrayList<Integer> list = new ArrayList<>();
+            list.add(12324);
+            list.add(8);
+            list.add(12323);
+            list.add(8);
+            list.add(12322);
+            list.add(8);
             if (this.hasAlphaChannel) {
-                arrayList.add(12321);
-                arrayList.add(8);
+                list.add(12321);
+                list.add(8);
             }
             int i = this.openGlesVersion;
             if (i == 2 || i == 3) {
-                arrayList.add(12352);
-                arrayList.add(Integer.valueOf(this.openGlesVersion == 3 ? 64 : 4));
+                list.add(12352);
+                list.add(Integer.valueOf(this.openGlesVersion == 3 ? 64 : 4));
             }
             if (this.supportsPixelBuffer) {
-                arrayList.add(12339);
-                arrayList.add(1);
+                list.add(12339);
+                list.add(1);
             }
             if (this.isRecordable) {
-                arrayList.add(12610);
-                arrayList.add(1);
+                list.add(12610);
+                list.add(1);
             }
-            arrayList.add(12344);
-            int[] iArr = new int[arrayList.size()];
-            for (int i2 = 0; i2 < arrayList.size(); i2++) {
-                iArr[i2] = ((Integer) arrayList.get(i2)).intValue();
+            list.add(12344);
+            int[] res = new int[list.size()];
+            for (int i2 = 0; i2 < list.size(); i2++) {
+                res[i2] = list.get(i2).intValue();
             }
-            return iArr;
+            return res;
         }
     }
 }

@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
+import java.util.Comparator;
 import org.telegram.messenger.FileLoadOperation;
 
-public final /* synthetic */ class FileLoadOperation$$ExternalSyntheticLambda2 implements Runnable {
-    public final /* synthetic */ FileLoadOperation f$0;
-    public final /* synthetic */ FileLoadOperation.RequestInfo f$1;
+public final /* synthetic */ class FileLoadOperation$$ExternalSyntheticLambda2 implements Comparator {
+    public static final /* synthetic */ FileLoadOperation$$ExternalSyntheticLambda2 INSTANCE = new FileLoadOperation$$ExternalSyntheticLambda2();
 
-    public /* synthetic */ FileLoadOperation$$ExternalSyntheticLambda2(FileLoadOperation fileLoadOperation, FileLoadOperation.RequestInfo requestInfo) {
-        this.f$0 = fileLoadOperation;
-        this.f$1 = requestInfo;
+    private /* synthetic */ FileLoadOperation$$ExternalSyntheticLambda2() {
     }
 
-    public final void run() {
-        this.f$0.lambda$startDownloadRequest$11(this.f$1);
+    public final int compare(Object obj, Object obj2) {
+        return FileLoadOperation.lambda$removePart$0((FileLoadOperation.Range) obj, (FileLoadOperation.Range) obj2);
     }
 }

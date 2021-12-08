@@ -4,9 +4,17 @@ import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.tgnet.TLRPC$MessageEntity;
+import org.telegram.tgnet.TLRPC;
 
 public class TextStyleSpan extends MetricAffectingSpan {
+    public static final int FLAG_STYLE_BOLD = 1;
+    public static final int FLAG_STYLE_ITALIC = 2;
+    public static final int FLAG_STYLE_MENTION = 64;
+    public static final int FLAG_STYLE_MONO = 4;
+    public static final int FLAG_STYLE_QUOTE = 32;
+    public static final int FLAG_STYLE_STRIKE = 8;
+    public static final int FLAG_STYLE_UNDERLINE = 16;
+    public static final int FLAG_STYLE_URL = 128;
     private int color;
     private TextStyleRun style;
     private int textSize;
@@ -15,45 +23,45 @@ public class TextStyleSpan extends MetricAffectingSpan {
         public int end;
         public int flags;
         public int start;
-        public TLRPC$MessageEntity urlEntity;
+        public TLRPC.MessageEntity urlEntity;
 
         public TextStyleRun() {
         }
 
-        public TextStyleRun(TextStyleRun textStyleRun) {
-            this.flags = textStyleRun.flags;
-            this.start = textStyleRun.start;
-            this.end = textStyleRun.end;
-            this.urlEntity = textStyleRun.urlEntity;
+        public TextStyleRun(TextStyleRun run) {
+            this.flags = run.flags;
+            this.start = run.start;
+            this.end = run.end;
+            this.urlEntity = run.urlEntity;
         }
 
-        public void merge(TextStyleRun textStyleRun) {
-            TLRPC$MessageEntity tLRPC$MessageEntity;
-            this.flags |= textStyleRun.flags;
-            if (this.urlEntity == null && (tLRPC$MessageEntity = textStyleRun.urlEntity) != null) {
-                this.urlEntity = tLRPC$MessageEntity;
+        public void merge(TextStyleRun run) {
+            TLRPC.MessageEntity messageEntity;
+            this.flags |= run.flags;
+            if (this.urlEntity == null && (messageEntity = run.urlEntity) != null) {
+                this.urlEntity = messageEntity;
             }
         }
 
-        public void replace(TextStyleRun textStyleRun) {
-            this.flags = textStyleRun.flags;
-            this.urlEntity = textStyleRun.urlEntity;
+        public void replace(TextStyleRun run) {
+            this.flags = run.flags;
+            this.urlEntity = run.urlEntity;
         }
 
-        public void applyStyle(TextPaint textPaint) {
+        public void applyStyle(TextPaint p) {
             Typeface typeface = getTypeface();
             if (typeface != null) {
-                textPaint.setTypeface(typeface);
+                p.setTypeface(typeface);
             }
             if ((this.flags & 16) != 0) {
-                textPaint.setFlags(textPaint.getFlags() | 8);
+                p.setFlags(p.getFlags() | 8);
             } else {
-                textPaint.setFlags(textPaint.getFlags() & -9);
+                p.setFlags(p.getFlags() & -9);
             }
             if ((this.flags & 8) != 0) {
-                textPaint.setFlags(textPaint.getFlags() | 16);
+                p.setFlags(p.getFlags() | 16);
             } else {
-                textPaint.setFlags(textPaint.getFlags() & -17);
+                p.setFlags(p.getFlags() & -17);
             }
         }
 
@@ -75,16 +83,20 @@ public class TextStyleSpan extends MetricAffectingSpan {
         }
     }
 
-    public TextStyleSpan(TextStyleRun textStyleRun) {
-        this(textStyleRun, 0, 0);
+    public TextStyleSpan(TextStyleRun run) {
+        this(run, 0, 0);
     }
 
-    public TextStyleSpan(TextStyleRun textStyleRun, int i, int i2) {
-        this.style = textStyleRun;
-        if (i > 0) {
-            this.textSize = i;
+    public TextStyleSpan(TextStyleRun run, int size) {
+        this(run, size, 0);
+    }
+
+    public TextStyleSpan(TextStyleRun run, int size, int textColor) {
+        this.style = run;
+        if (size > 0) {
+            this.textSize = size;
         }
-        this.color = i2;
+        this.color = textColor;
     }
 
     public int getStyleFlags() {
@@ -95,25 +107,49 @@ public class TextStyleSpan extends MetricAffectingSpan {
         return this.style;
     }
 
-    public void updateMeasureState(TextPaint textPaint) {
-        int i = this.textSize;
-        if (i != 0) {
-            textPaint.setTextSize((float) i);
-        }
-        textPaint.setFlags(textPaint.getFlags() | 128);
-        this.style.applyStyle(textPaint);
+    public Typeface getTypeface() {
+        return this.style.getTypeface();
     }
 
-    public void updateDrawState(TextPaint textPaint) {
+    public void setColor(int value) {
+        this.color = value;
+    }
+
+    public boolean isMono() {
+        return this.style.getTypeface() == Typeface.MONOSPACE;
+    }
+
+    public boolean isBold() {
+        return this.style.getTypeface() == AndroidUtilities.getTypeface("fonts/rmedium.ttf");
+    }
+
+    public boolean isItalic() {
+        return this.style.getTypeface() == AndroidUtilities.getTypeface("fonts/ritalic.ttf");
+    }
+
+    public boolean isBoldItalic() {
+        return this.style.getTypeface() == AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf");
+    }
+
+    public void updateMeasureState(TextPaint p) {
         int i = this.textSize;
         if (i != 0) {
-            textPaint.setTextSize((float) i);
+            p.setTextSize((float) i);
+        }
+        p.setFlags(p.getFlags() | 128);
+        this.style.applyStyle(p);
+    }
+
+    public void updateDrawState(TextPaint p) {
+        int i = this.textSize;
+        if (i != 0) {
+            p.setTextSize((float) i);
         }
         int i2 = this.color;
         if (i2 != 0) {
-            textPaint.setColor(i2);
+            p.setColor(i2);
         }
-        textPaint.setFlags(textPaint.getFlags() | 128);
-        this.style.applyStyle(textPaint);
+        p.setFlags(p.getFlags() | 128);
+        this.style.applyStyle(p);
     }
 }

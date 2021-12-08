@@ -8,6 +8,6 @@ public final /* synthetic */ class VoIPNotificationsLayout$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$lock$0();
+        this.f$0.m2763x22e335d6();
     }
 }

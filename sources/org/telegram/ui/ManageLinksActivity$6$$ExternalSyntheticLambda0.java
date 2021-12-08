@@ -13,6 +13,6 @@ public final /* synthetic */ class ManageLinksActivity$6$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$onLinkCreated$0(this.f$1);
+        this.f$0.m3288lambda$onLinkCreated$0$orgtelegramuiManageLinksActivity$6(this.f$1);
     }
 }

@@ -1,14 +1,18 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import java.util.ArrayList;
+import org.telegram.ui.DialogsActivity;
 
-public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda3 implements View.OnClickListener {
-    public static final /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda3 INSTANCE = new AudioPlayerAlert$$ExternalSyntheticLambda3();
+public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda3 implements DialogsActivity.DialogsActivityDelegate {
+    public final /* synthetic */ AudioPlayerAlert f$0;
+    public final /* synthetic */ ArrayList f$1;
 
-    private /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda3() {
+    public /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda3(AudioPlayerAlert audioPlayerAlert, ArrayList arrayList) {
+        this.f$0 = audioPlayerAlert;
+        this.f$1 = arrayList;
     }
 
-    public final void onClick(View view) {
-        AudioPlayerAlert.lambda$new$5(view);
+    public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+        this.f$0.m2001x38var_a48(this.f$1, dialogsActivity, arrayList, charSequence, z);
     }
 }

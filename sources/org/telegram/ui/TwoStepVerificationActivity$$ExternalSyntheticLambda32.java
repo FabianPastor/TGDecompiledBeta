@@ -1,21 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheticLambda32 implements RequestDelegate {
+public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheticLambda32 implements DialogInterface.OnDismissListener {
     public final /* synthetic */ TwoStepVerificationActivity f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda32(TwoStepVerificationActivity twoStepVerificationActivity, boolean z, boolean z2) {
+    public /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda32(TwoStepVerificationActivity twoStepVerificationActivity) {
         this.f$0 = twoStepVerificationActivity;
-        this.f$1 = z;
-        this.f$2 = z2;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadPasswordInfo$16(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.m4002xe34e49(dialogInterface);
     }
 }

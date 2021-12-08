@@ -1,14 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.NumberPicker;
+import android.app.Activity;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda94 implements NumberPicker.Formatter {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda94 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda94();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda94 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ Activity f$0;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda94() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda94(Activity activity) {
+        this.f$0 = activity;
     }
 
-    public final String format(int i) {
-        return AlertsCreator.lambda$createTTLAlert$85(i);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        AlertsCreator.lambda$createDrawOverlayPermissionDialog$75(this.f$0, dialogInterface, i);
     }
 }

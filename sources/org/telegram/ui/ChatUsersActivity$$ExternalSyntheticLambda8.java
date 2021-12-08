@@ -1,17 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$Updates;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ChatUsersActivity$$ExternalSyntheticLambda8 implements Runnable {
+public final /* synthetic */ class ChatUsersActivity$$ExternalSyntheticLambda8 implements RecyclerListView.OnItemLongClickListener {
     public final /* synthetic */ ChatUsersActivity f$0;
-    public final /* synthetic */ TLRPC$Updates f$1;
 
-    public /* synthetic */ ChatUsersActivity$$ExternalSyntheticLambda8(ChatUsersActivity chatUsersActivity, TLRPC$Updates tLRPC$Updates) {
+    public /* synthetic */ ChatUsersActivity$$ExternalSyntheticLambda8(ChatUsersActivity chatUsersActivity) {
         this.f$0 = chatUsersActivity;
-        this.f$1 = tLRPC$Updates;
     }
 
-    public final void run() {
-        this.f$0.lambda$createMenuForParticipant$7(this.f$1);
+    public final boolean onItemClick(View view, int i) {
+        return this.f$0.m1967lambda$createView$2$orgtelegramuiChatUsersActivity(view, i);
     }
 }

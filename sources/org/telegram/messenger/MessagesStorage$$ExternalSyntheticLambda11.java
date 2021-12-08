@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda11 im
     }
 
     public final void run() {
-        this.f$0.lambda$loadUnreadMessages$47();
+        this.f$0.m967lambda$getWallpapers$51$orgtelegrammessengerMessagesStorage();
     }
 }

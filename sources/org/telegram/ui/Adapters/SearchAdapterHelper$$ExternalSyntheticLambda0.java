@@ -8,6 +8,6 @@ public final /* synthetic */ class SearchAdapterHelper$$ExternalSyntheticLambda0
     }
 
     public final void run() {
-        this.f$0.lambda$loadRecentHashtags$6();
+        this.f$0.m1390x6a670640();
     }
 }

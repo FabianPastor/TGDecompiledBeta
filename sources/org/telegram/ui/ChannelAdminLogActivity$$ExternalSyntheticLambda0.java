@@ -12,6 +12,6 @@ public final /* synthetic */ class ChannelAdminLogActivity$$ExternalSyntheticLam
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$showOpenUrlAlert$12(this.f$1, dialogInterface, i);
+        this.f$0.m1618xd8caeae1(this.f$1, dialogInterface, i);
     }
 }

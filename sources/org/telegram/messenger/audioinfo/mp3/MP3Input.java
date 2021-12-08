@@ -6,28 +6,32 @@ import java.io.InputStream;
 import org.telegram.messenger.audioinfo.util.PositionInputStream;
 
 public class MP3Input extends PositionInputStream {
-    public MP3Input(InputStream inputStream) throws IOException {
-        super(inputStream);
+    public MP3Input(InputStream delegate) throws IOException {
+        super(delegate);
     }
 
-    public final void readFully(byte[] bArr, int i, int i2) throws IOException {
-        int i3 = 0;
-        while (i3 < i2) {
-            int read = read(bArr, i + i3, i2 - i3);
-            if (read > 0) {
-                i3 += read;
+    public MP3Input(InputStream delegate, long position) {
+        super(delegate, position);
+    }
+
+    public final void readFully(byte[] b, int off, int len) throws IOException {
+        int total = 0;
+        while (total < len) {
+            int current = read(b, off + total, len - total);
+            if (current > 0) {
+                total += current;
             } else {
                 throw new EOFException();
             }
         }
     }
 
-    public void skipFully(long j) throws IOException {
-        long j2 = 0;
-        while (j2 < j) {
-            long skip = skip(j - j2);
-            if (skip > 0) {
-                j2 += skip;
+    public void skipFully(long len) throws IOException {
+        long total = 0;
+        while (total < len) {
+            long current = skip(len - total);
+            if (current > 0) {
+                total += current;
             } else {
                 throw new EOFException();
             }

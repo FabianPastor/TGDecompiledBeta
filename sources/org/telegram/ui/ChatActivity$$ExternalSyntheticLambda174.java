@@ -1,16 +1,13 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
-
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda174 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda174 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda174(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$42(view, i);
+    public final void run() {
+        this.f$0.m1799lambda$showFieldPanel$84$orgtelegramuiChatActivity();
     }
 }

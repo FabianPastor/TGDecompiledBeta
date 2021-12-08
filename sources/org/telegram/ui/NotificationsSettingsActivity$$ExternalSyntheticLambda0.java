@@ -10,6 +10,6 @@ public final /* synthetic */ class NotificationsSettingsActivity$$ExternalSynthe
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createView$4(dialogInterface, i);
+        this.f$0.m3343xe800150e(dialogInterface, i);
     }
 }

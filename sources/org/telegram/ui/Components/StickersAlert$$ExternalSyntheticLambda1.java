@@ -1,14 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
+import android.view.View;
 
-public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
-    public static final /* synthetic */ StickersAlert$$ExternalSyntheticLambda1 INSTANCE = new StickersAlert$$ExternalSyntheticLambda1();
+public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda1 implements View.OnClickListener {
+    public final /* synthetic */ StickersAlert f$0;
 
-    private /* synthetic */ StickersAlert$$ExternalSyntheticLambda1() {
+    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda1(StickersAlert stickersAlert) {
+        this.f$0 = stickersAlert;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        StickersAlert.lambda$showNameEnterAlert$20(dialogInterface, i);
+    public final void onClick(View view) {
+        this.f$0.m2656lambda$updateFields$19$orgtelegramuiComponentsStickersAlert(view);
     }
 }

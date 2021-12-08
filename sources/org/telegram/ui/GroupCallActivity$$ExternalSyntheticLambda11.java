@@ -1,14 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda11 implements DialogInterface.OnDismissListener {
-    public static final /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda11 INSTANCE = new GroupCallActivity$$ExternalSyntheticLambda11();
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda11 implements ValueAnimator.AnimatorUpdateListener {
+    public final /* synthetic */ GroupCallActivity f$0;
 
-    private /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda11() {
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda11(GroupCallActivity groupCallActivity) {
+        this.f$0 = groupCallActivity;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        GroupCallActivity.lambda$processSelectedOption$56(dialogInterface);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.m2992lambda$updateMuteButton$49$orgtelegramuiGroupCallActivity(valueAnimator);
     }
 }

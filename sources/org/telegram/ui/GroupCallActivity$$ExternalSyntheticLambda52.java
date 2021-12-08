@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda52 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda52 implements RecyclerListView.OnItemClickListener {
     public final /* synthetic */ GroupCallActivity f$0;
 
     public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda52(GroupCallActivity groupCallActivity) {
         this.f$0 = groupCallActivity;
     }
 
-    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.lambda$showMenuForCell$57(keyEvent);
+    public final void onItemClick(View view, int i) {
+        this.f$0.m2962lambda$new$14$orgtelegramuiGroupCallActivity(view, i);
     }
 }

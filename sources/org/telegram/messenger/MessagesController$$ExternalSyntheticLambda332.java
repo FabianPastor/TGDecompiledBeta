@@ -1,16 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.ArrayList;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda332 implements RequestDelegate {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda332 INSTANCE = new MessagesController$$ExternalSyntheticLambda332();
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda332 implements Runnable {
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ ArrayList f$1;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda332() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda332(MessagesController messagesController, ArrayList arrayList) {
+        this.f$0 = messagesController;
+        this.f$1 = arrayList;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$deleteParticipantFromChat$230(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m328xCLASSNAMEbed(this.f$1);
     }
 }

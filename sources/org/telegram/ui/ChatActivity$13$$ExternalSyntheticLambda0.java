@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatActivity$13$$ExternalSyntheticLambda0 imp
     }
 
     public final void run() {
-        this.f$0.lambda$onMeasure$0(this.f$1);
+        this.f$0.m1831lambda$onMeasure$0$orgtelegramuiChatActivity$13(this.f$1);
     }
 }

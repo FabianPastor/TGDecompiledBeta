@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewer$10$$ExternalSyntheticLambda0 impl
     }
 
     public final void run() {
-        this.f$0.lambda$onLayout$0();
+        this.f$0.m3615lambda$onLayout$0$orgtelegramuiPhotoViewer$10();
     }
 }

@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MediaController;
-import org.telegram.ui.Components.FilterGLThread;
-import org.telegram.ui.Components.FilterShaders;
-import org.telegram.ui.Components.VideoEditTextureView;
+import android.view.View;
+import org.telegram.ui.ActionBar.BottomSheet;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda68 implements VideoEditTextureView.VideoEditTextureViewDelegate {
-    public final /* synthetic */ MediaController.SavedFilterState f$0;
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda68 implements View.OnClickListener {
+    public final /* synthetic */ BottomSheet f$0;
 
-    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda68(MediaController.SavedFilterState savedFilterState) {
-        this.f$0 = savedFilterState;
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda68(BottomSheet bottomSheet) {
+        this.f$0 = bottomSheet;
     }
 
-    public final void onEGLThreadAvailable(FilterGLThread filterGLThread) {
-        filterGLThread.setFilterGLThreadDelegate(FilterShaders.getFilterShadersDelegate(this.f$0));
+    public final void onClick(View view) {
+        this.f$0.dismiss();
     }
 }

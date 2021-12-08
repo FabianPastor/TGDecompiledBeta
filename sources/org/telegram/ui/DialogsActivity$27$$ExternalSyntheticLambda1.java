@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$27$$ExternalSyntheticLambda1 
     }
 
     public final void run() {
-        this.f$0.lambda$onItemClick$0();
+        this.f$0.m2881lambda$onItemClick$1$orgtelegramuiDialogsActivity$27();
     }
 }

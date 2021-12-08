@@ -2,32 +2,33 @@ package org.telegram.ui.Charts.data;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.telegram.ui.Charts.data.ChartData;
 
 public class DoubleLinearChartData extends ChartData {
     public float[] linesK;
 
-    public DoubleLinearChartData(JSONObject jSONObject) throws JSONException {
-        super(jSONObject);
+    public DoubleLinearChartData(JSONObject jsonObject) throws JSONException {
+        super(jsonObject);
     }
 
     /* access modifiers changed from: protected */
     public void measure() {
         super.measure();
-        int size = this.lines.size();
-        int i = 0;
-        for (int i2 = 0; i2 < size; i2++) {
-            int i3 = this.lines.get(i2).maxValue;
-            if (i3 > i) {
-                i = i3;
+        int n = this.lines.size();
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            int m = ((ChartData.Line) this.lines.get(i)).maxValue;
+            if (m > max) {
+                max = m;
             }
         }
-        this.linesK = new float[size];
-        for (int i4 = 0; i4 < size; i4++) {
-            int i5 = this.lines.get(i4).maxValue;
-            if (i == i5) {
-                this.linesK[i4] = 1.0f;
+        this.linesK = new float[n];
+        for (int i2 = 0; i2 < n; i2++) {
+            int m2 = ((ChartData.Line) this.lines.get(i2)).maxValue;
+            if (max == m2) {
+                this.linesK[i2] = 1.0f;
             } else {
-                this.linesK[i4] = (float) (i / i5);
+                this.linesK[i2] = (float) (max / m2);
             }
         }
     }

@@ -30,6 +30,6 @@ public final /* synthetic */ class FilteredSearchView$$ExternalSyntheticLambda2 
     }
 
     public final void run() {
-        this.f$0.lambda$search$4(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10);
+        this.f$0.m2933lambda$search$4$orgtelegramuiFilteredSearchView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10);
     }
 }

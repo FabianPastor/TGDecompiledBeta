@@ -21,6 +21,6 @@ public final /* synthetic */ class BackgroundGradientDrawable$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.lambda$startDitheringInternal$1(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.m2012xd47CLASSNAMEba(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

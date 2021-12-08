@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSynthetic
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$3(view);
+        this.f$0.m2172x62CLASSNAME(view);
     }
 }

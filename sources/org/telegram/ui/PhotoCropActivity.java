@@ -2,8 +2,8 @@ package org.telegram.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +20,7 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 
 public class PhotoCropActivity extends BaseFragment {
+    private static final int done_button = 1;
     private String bitmapKey;
     /* access modifiers changed from: private */
     public PhotoEditActivityDelegate delegate = null;
@@ -36,10 +37,6 @@ public class PhotoCropActivity extends BaseFragment {
 
     public interface PhotoEditActivityDelegate {
         void didFinishEdit(Bitmap bitmap);
-    }
-
-    public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
-        return false;
     }
 
     private class PhotoCropView extends FrameLayout {
@@ -82,495 +79,519 @@ public class PhotoCropActivity extends BaseFragment {
             setOnTouchListener(new PhotoCropActivity$PhotoCropView$$ExternalSyntheticLambda0(this));
         }
 
-        /* access modifiers changed from: private */
-        /* JADX WARNING: Removed duplicated region for block: B:50:0x00bb  */
+        /* JADX WARNING: Removed duplicated region for block: B:50:0x00c8  */
+        /* renamed from: lambda$init$0$org-telegram-ui-PhotoCropActivity$PhotoCropView  reason: not valid java name */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ boolean lambda$init$0(android.view.View r13, android.view.MotionEvent r14) {
+        public /* synthetic */ boolean m3541lambda$init$0$orgtelegramuiPhotoCropActivity$PhotoCropView(android.view.View r17, android.view.MotionEvent r18) {
             /*
-                r12 = this;
-                float r13 = r14.getX()
-                float r0 = r14.getY()
-                r1 = 1096810496(0x41600000, float:14.0)
-                int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                int r2 = r14.getAction()
-                r3 = 4
-                r4 = 3
-                r5 = 5
-                r6 = 0
-                r7 = 2
-                r8 = 1
-                if (r2 != 0) goto L_0x00c4
-                float r14 = r12.rectX
-                float r1 = (float) r1
-                float r2 = r14 - r1
-                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
-                if (r2 >= 0) goto L_0x003a
-                float r2 = r14 + r1
-                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
-                if (r2 <= 0) goto L_0x003a
-                float r2 = r12.rectY
-                float r9 = r2 - r1
-                int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-                if (r9 >= 0) goto L_0x003a
-                float r2 = r2 + r1
-                int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                if (r2 <= 0) goto L_0x003a
-                r12.draggingState = r8
-                goto L_0x00b7
-            L_0x003a:
-                float r2 = r14 - r1
-                float r9 = r12.rectSizeX
-                float r2 = r2 + r9
-                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
-                if (r2 >= 0) goto L_0x005a
-                float r2 = r14 + r1
-                float r2 = r2 + r9
-                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
-                if (r2 <= 0) goto L_0x005a
-                float r2 = r12.rectY
-                float r10 = r2 - r1
-                int r10 = (r10 > r0 ? 1 : (r10 == r0 ? 0 : -1))
-                if (r10 >= 0) goto L_0x005a
-                float r2 = r2 + r1
-                int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                if (r2 <= 0) goto L_0x005a
-                r12.draggingState = r7
-                goto L_0x00b7
-            L_0x005a:
-                float r2 = r14 - r1
-                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
-                if (r2 >= 0) goto L_0x007a
-                float r2 = r14 + r1
-                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
-                if (r2 <= 0) goto L_0x007a
-                float r2 = r12.rectY
-                float r7 = r2 - r1
-                float r10 = r12.rectSizeY
-                float r7 = r7 + r10
-                int r7 = (r7 > r0 ? 1 : (r7 == r0 ? 0 : -1))
-                if (r7 >= 0) goto L_0x007a
-                float r2 = r2 + r1
-                float r2 = r2 + r10
-                int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                if (r2 <= 0) goto L_0x007a
-                r12.draggingState = r4
-                goto L_0x00b7
-            L_0x007a:
-                float r2 = r14 - r1
-                float r2 = r2 + r9
-                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
-                if (r2 >= 0) goto L_0x009c
-                float r2 = r14 + r1
-                float r2 = r2 + r9
-                int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
-                if (r2 <= 0) goto L_0x009c
-                float r2 = r12.rectY
-                float r4 = r2 - r1
-                float r7 = r12.rectSizeY
-                float r4 = r4 + r7
-                int r4 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1))
-                if (r4 >= 0) goto L_0x009c
-                float r2 = r2 + r1
-                float r2 = r2 + r7
-                int r1 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                if (r1 <= 0) goto L_0x009c
-                r12.draggingState = r3
-                goto L_0x00b7
-            L_0x009c:
-                int r1 = (r14 > r13 ? 1 : (r14 == r13 ? 0 : -1))
-                if (r1 >= 0) goto L_0x00b5
-                float r14 = r14 + r9
-                int r14 = (r14 > r13 ? 1 : (r14 == r13 ? 0 : -1))
-                if (r14 <= 0) goto L_0x00b5
-                float r14 = r12.rectY
-                int r1 = (r14 > r0 ? 1 : (r14 == r0 ? 0 : -1))
-                if (r1 >= 0) goto L_0x00b5
-                float r1 = r12.rectSizeY
-                float r14 = r14 + r1
-                int r14 = (r14 > r0 ? 1 : (r14 == r0 ? 0 : -1))
-                if (r14 <= 0) goto L_0x00b5
-                r12.draggingState = r5
-                goto L_0x00b7
-            L_0x00b5:
-                r12.draggingState = r6
-            L_0x00b7:
-                int r14 = r12.draggingState
-                if (r14 == 0) goto L_0x00be
-                r12.requestDisallowInterceptTouchEvent(r8)
-            L_0x00be:
-                r12.oldX = r13
-                r12.oldY = r0
-                goto L_0x02bc
+                r16 = this;
+                r0 = r16
+                float r1 = r18.getX()
+                float r2 = r18.getY()
+                r3 = 1096810496(0x41600000, float:14.0)
+                int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+                int r4 = r18.getAction()
+                r5 = 4
+                r6 = 3
+                r7 = 5
+                r8 = 0
+                r9 = 2
+                r10 = 1
+                if (r4 != 0) goto L_0x00d1
+                float r4 = r0.rectX
+                float r11 = (float) r3
+                float r11 = r4 - r11
+                int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
+                if (r11 >= 0) goto L_0x003e
+                float r11 = (float) r3
+                float r11 = r11 + r4
+                int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
+                if (r11 <= 0) goto L_0x003e
+                float r11 = r0.rectY
+                float r12 = (float) r3
+                float r12 = r11 - r12
+                int r12 = (r12 > r2 ? 1 : (r12 == r2 ? 0 : -1))
+                if (r12 >= 0) goto L_0x003e
+                float r12 = (float) r3
+                float r11 = r11 + r12
+                int r11 = (r11 > r2 ? 1 : (r11 == r2 ? 0 : -1))
+                if (r11 <= 0) goto L_0x003e
+                r0.draggingState = r10
+                goto L_0x00c4
+            L_0x003e:
+                float r11 = (float) r3
+                float r11 = r4 - r11
+                float r12 = r0.rectSizeX
+                float r11 = r11 + r12
+                int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
+                if (r11 >= 0) goto L_0x0061
+                float r11 = (float) r3
+                float r11 = r11 + r4
+                float r11 = r11 + r12
+                int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
+                if (r11 <= 0) goto L_0x0061
+                float r11 = r0.rectY
+                float r13 = (float) r3
+                float r13 = r11 - r13
+                int r13 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1))
+                if (r13 >= 0) goto L_0x0061
+                float r13 = (float) r3
+                float r11 = r11 + r13
+                int r11 = (r11 > r2 ? 1 : (r11 == r2 ? 0 : -1))
+                if (r11 <= 0) goto L_0x0061
+                r0.draggingState = r9
+                goto L_0x00c4
+            L_0x0061:
+                float r9 = (float) r3
+                float r9 = r4 - r9
+                int r9 = (r9 > r1 ? 1 : (r9 == r1 ? 0 : -1))
+                if (r9 >= 0) goto L_0x0084
+                float r9 = (float) r3
+                float r9 = r9 + r4
+                int r9 = (r9 > r1 ? 1 : (r9 == r1 ? 0 : -1))
+                if (r9 <= 0) goto L_0x0084
+                float r9 = r0.rectY
+                float r11 = (float) r3
+                float r11 = r9 - r11
+                float r13 = r0.rectSizeY
+                float r11 = r11 + r13
+                int r11 = (r11 > r2 ? 1 : (r11 == r2 ? 0 : -1))
+                if (r11 >= 0) goto L_0x0084
+                float r11 = (float) r3
+                float r9 = r9 + r11
+                float r9 = r9 + r13
+                int r9 = (r9 > r2 ? 1 : (r9 == r2 ? 0 : -1))
+                if (r9 <= 0) goto L_0x0084
+                r0.draggingState = r6
+                goto L_0x00c4
+            L_0x0084:
+                float r6 = (float) r3
+                float r6 = r4 - r6
+                float r6 = r6 + r12
+                int r6 = (r6 > r1 ? 1 : (r6 == r1 ? 0 : -1))
+                if (r6 >= 0) goto L_0x00a9
+                float r6 = (float) r3
+                float r6 = r6 + r4
+                float r6 = r6 + r12
+                int r6 = (r6 > r1 ? 1 : (r6 == r1 ? 0 : -1))
+                if (r6 <= 0) goto L_0x00a9
+                float r6 = r0.rectY
+                float r9 = (float) r3
+                float r9 = r6 - r9
+                float r11 = r0.rectSizeY
+                float r9 = r9 + r11
+                int r9 = (r9 > r2 ? 1 : (r9 == r2 ? 0 : -1))
+                if (r9 >= 0) goto L_0x00a9
+                float r9 = (float) r3
+                float r6 = r6 + r9
+                float r6 = r6 + r11
+                int r6 = (r6 > r2 ? 1 : (r6 == r2 ? 0 : -1))
+                if (r6 <= 0) goto L_0x00a9
+                r0.draggingState = r5
+                goto L_0x00c4
+            L_0x00a9:
+                int r5 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+                if (r5 >= 0) goto L_0x00c2
+                float r4 = r4 + r12
+                int r4 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+                if (r4 <= 0) goto L_0x00c2
+                float r4 = r0.rectY
+                int r5 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
+                if (r5 >= 0) goto L_0x00c2
+                float r5 = r0.rectSizeY
+                float r4 = r4 + r5
+                int r4 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
+                if (r4 <= 0) goto L_0x00c2
+                r0.draggingState = r7
+                goto L_0x00c4
+            L_0x00c2:
+                r0.draggingState = r8
             L_0x00c4:
-                int r1 = r14.getAction()
-                if (r1 != r8) goto L_0x00ce
-                r12.draggingState = r6
-                goto L_0x02bc
-            L_0x00ce:
-                int r14 = r14.getAction()
-                if (r14 != r7) goto L_0x02bc
-                int r14 = r12.draggingState
-                if (r14 == 0) goto L_0x02bc
-                float r1 = r12.oldX
-                float r1 = r13 - r1
-                float r2 = r12.oldY
-                float r2 = r0 - r2
-                if (r14 != r5) goto L_0x0127
-                float r14 = r12.rectX
-                float r14 = r14 + r1
-                r12.rectX = r14
-                float r1 = r12.rectY
-                float r1 = r1 + r2
-                r12.rectY = r1
-                int r2 = r12.bitmapX
-                float r3 = (float) r2
-                int r3 = (r14 > r3 ? 1 : (r14 == r3 ? 0 : -1))
-                if (r3 >= 0) goto L_0x00f7
-                float r14 = (float) r2
-                r12.rectX = r14
-                goto L_0x0108
-            L_0x00f7:
-                float r3 = r12.rectSizeX
-                float r14 = r14 + r3
-                int r4 = r12.bitmapWidth
-                int r5 = r2 + r4
-                float r5 = (float) r5
-                int r14 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1))
-                if (r14 <= 0) goto L_0x0108
-                int r2 = r2 + r4
-                float r14 = (float) r2
-                float r14 = r14 - r3
-                r12.rectX = r14
-            L_0x0108:
-                int r14 = r12.bitmapY
-                float r2 = (float) r14
-                int r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r2 >= 0) goto L_0x0114
-                float r14 = (float) r14
-                r12.rectY = r14
-                goto L_0x02b5
-            L_0x0114:
-                float r2 = r12.rectSizeY
-                float r1 = r1 + r2
-                int r3 = r12.bitmapHeight
-                int r4 = r14 + r3
-                float r4 = (float) r4
-                int r1 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-                if (r1 <= 0) goto L_0x02b5
-                int r14 = r14 + r3
-                float r14 = (float) r14
-                float r14 = r14 - r2
-                r12.rectY = r14
-                goto L_0x02b5
-            L_0x0127:
-                r5 = 1126170624(0x43200000, float:160.0)
-                if (r14 != r8) goto L_0x0188
-                float r14 = r12.rectSizeX
-                float r3 = r14 - r1
-                int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-                if (r3 >= 0) goto L_0x0135
-                float r1 = r14 - r5
-            L_0x0135:
-                float r3 = r12.rectX
-                float r4 = r3 + r1
-                int r6 = r12.bitmapX
+                int r4 = r0.draggingState
+                if (r4 == 0) goto L_0x00cb
+                r0.requestDisallowInterceptTouchEvent(r10)
+            L_0x00cb:
+                r0.oldX = r1
+                r0.oldY = r2
+                goto L_0x02d4
+            L_0x00d1:
+                int r4 = r18.getAction()
+                if (r4 != r10) goto L_0x00db
+                r0.draggingState = r8
+                goto L_0x02d4
+            L_0x00db:
+                int r4 = r18.getAction()
+                if (r4 != r9) goto L_0x02d4
+                int r4 = r0.draggingState
+                if (r4 == 0) goto L_0x02d4
+                float r8 = r0.oldX
+                float r8 = r1 - r8
+                float r11 = r0.oldY
+                float r11 = r2 - r11
+                if (r4 != r7) goto L_0x0134
+                float r4 = r0.rectX
+                float r4 = r4 + r8
+                r0.rectX = r4
+                float r5 = r0.rectY
+                float r5 = r5 + r11
+                r0.rectY = r5
+                int r6 = r0.bitmapX
                 float r7 = (float) r6
-                int r4 = (r4 > r7 ? 1 : (r4 == r7 ? 0 : -1))
-                if (r4 >= 0) goto L_0x0142
-                float r1 = (float) r6
-                float r1 = r1 - r3
+                int r7 = (r4 > r7 ? 1 : (r4 == r7 ? 0 : -1))
+                if (r7 >= 0) goto L_0x0104
+                float r4 = (float) r6
+                r0.rectX = r4
+                goto L_0x0115
+            L_0x0104:
+                float r7 = r0.rectSizeX
+                float r4 = r4 + r7
+                int r9 = r0.bitmapWidth
+                int r12 = r6 + r9
+                float r12 = (float) r12
+                int r4 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
+                if (r4 <= 0) goto L_0x0115
+                int r6 = r6 + r9
+                float r4 = (float) r6
+                float r4 = r4 - r7
+                r0.rectX = r4
+            L_0x0115:
+                int r4 = r0.bitmapY
+                float r6 = (float) r4
+                int r6 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
+                if (r6 >= 0) goto L_0x0121
+                float r4 = (float) r4
+                r0.rectY = r4
+                goto L_0x02cd
+            L_0x0121:
+                float r6 = r0.rectSizeY
+                float r5 = r5 + r6
+                int r7 = r0.bitmapHeight
+                int r9 = r4 + r7
+                float r9 = (float) r9
+                int r5 = (r5 > r9 ? 1 : (r5 == r9 ? 0 : -1))
+                if (r5 <= 0) goto L_0x02cd
+                int r4 = r4 + r7
+                float r4 = (float) r4
+                float r4 = r4 - r6
+                r0.rectY = r4
+                goto L_0x02cd
+            L_0x0134:
+                r7 = 1126170624(0x43200000, float:160.0)
+                if (r4 != r10) goto L_0x0198
+                float r4 = r0.rectSizeX
+                float r5 = r4 - r8
+                int r5 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+                if (r5 >= 0) goto L_0x0142
+                float r8 = r4 - r7
             L_0x0142:
-                boolean r4 = r12.freeform
-                if (r4 != 0) goto L_0x0163
-                float r2 = r12.rectY
-                float r4 = r2 + r1
-                int r5 = r12.bitmapY
-                float r6 = (float) r5
-                int r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-                if (r4 >= 0) goto L_0x0153
-                float r1 = (float) r5
-                float r1 = r1 - r2
-            L_0x0153:
-                float r3 = r3 + r1
-                r12.rectX = r3
-                float r2 = r2 + r1
-                r12.rectY = r2
-                float r14 = r14 - r1
-                r12.rectSizeX = r14
-                float r14 = r12.rectSizeY
-                float r14 = r14 - r1
-                r12.rectSizeY = r14
-                goto L_0x02b5
-            L_0x0163:
-                float r4 = r12.rectSizeY
-                float r6 = r4 - r2
-                int r6 = (r6 > r5 ? 1 : (r6 == r5 ? 0 : -1))
-                if (r6 >= 0) goto L_0x016d
-                float r2 = r4 - r5
-            L_0x016d:
-                float r5 = r12.rectY
-                float r6 = r5 + r2
-                int r7 = r12.bitmapY
+                float r5 = r0.rectX
+                float r6 = r5 + r8
+                int r9 = r0.bitmapX
+                float r12 = (float) r9
+                int r6 = (r6 > r12 ? 1 : (r6 == r12 ? 0 : -1))
+                if (r6 >= 0) goto L_0x0150
+                float r6 = (float) r9
+                float r6 = r6 - r5
+                r8 = r6
+            L_0x0150:
+                boolean r6 = r0.freeform
+                if (r6 != 0) goto L_0x0172
+                float r6 = r0.rectY
+                float r7 = r6 + r8
+                int r9 = r0.bitmapY
+                float r12 = (float) r9
+                int r7 = (r7 > r12 ? 1 : (r7 == r12 ? 0 : -1))
+                if (r7 >= 0) goto L_0x0162
+                float r7 = (float) r9
+                float r7 = r7 - r6
+                r8 = r7
+            L_0x0162:
+                float r5 = r5 + r8
+                r0.rectX = r5
+                float r6 = r6 + r8
+                r0.rectY = r6
+                float r4 = r4 - r8
+                r0.rectSizeX = r4
+                float r4 = r0.rectSizeY
+                float r4 = r4 - r8
+                r0.rectSizeY = r4
+                goto L_0x02cd
+            L_0x0172:
+                float r6 = r0.rectSizeY
+                float r9 = r6 - r11
+                int r9 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
+                if (r9 >= 0) goto L_0x017c
+                float r11 = r6 - r7
+            L_0x017c:
+                float r7 = r0.rectY
+                float r9 = r7 + r11
+                int r12 = r0.bitmapY
+                float r13 = (float) r12
+                int r9 = (r9 > r13 ? 1 : (r9 == r13 ? 0 : -1))
+                if (r9 >= 0) goto L_0x018a
+                float r9 = (float) r12
+                float r9 = r9 - r7
+                r11 = r9
+            L_0x018a:
+                float r5 = r5 + r8
+                r0.rectX = r5
+                float r7 = r7 + r11
+                r0.rectY = r7
+                float r4 = r4 - r8
+                r0.rectSizeX = r4
+                float r6 = r6 - r11
+                r0.rectSizeY = r6
+                goto L_0x02cd
+            L_0x0198:
+                if (r4 != r9) goto L_0x01fd
+                float r4 = r0.rectSizeX
+                float r5 = r4 + r8
+                int r5 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+                if (r5 >= 0) goto L_0x01a5
+                float r5 = r4 - r7
+                float r8 = -r5
+            L_0x01a5:
+                float r5 = r0.rectX
+                float r6 = r5 + r4
+                float r6 = r6 + r8
+                int r9 = r0.bitmapX
+                int r12 = r0.bitmapWidth
+                int r13 = r9 + r12
+                float r13 = (float) r13
+                int r6 = (r6 > r13 ? 1 : (r6 == r13 ? 0 : -1))
+                if (r6 <= 0) goto L_0x01ba
+                int r9 = r9 + r12
+                float r6 = (float) r9
+                float r6 = r6 - r5
+                float r6 = r6 - r4
+                r8 = r6
+            L_0x01ba:
+                boolean r5 = r0.freeform
+                if (r5 != 0) goto L_0x01da
+                float r5 = r0.rectY
+                float r6 = r5 - r8
+                int r7 = r0.bitmapY
                 float r9 = (float) r7
                 int r6 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
-                if (r6 >= 0) goto L_0x017a
-                float r2 = (float) r7
-                float r2 = r2 - r5
-            L_0x017a:
-                float r3 = r3 + r1
-                r12.rectX = r3
-                float r5 = r5 + r2
-                r12.rectY = r5
-                float r14 = r14 - r1
-                r12.rectSizeX = r14
-                float r4 = r4 - r2
-                r12.rectSizeY = r4
-                goto L_0x02b5
-            L_0x0188:
-                if (r14 != r7) goto L_0x01ea
-                float r14 = r12.rectSizeX
-                float r3 = r14 + r1
-                int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-                if (r3 >= 0) goto L_0x0195
-                float r1 = r14 - r5
-                float r1 = -r1
-            L_0x0195:
-                float r3 = r12.rectX
-                float r4 = r3 + r14
-                float r4 = r4 + r1
-                int r6 = r12.bitmapX
-                int r7 = r12.bitmapWidth
-                int r9 = r6 + r7
-                float r9 = (float) r9
-                int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
-                if (r4 <= 0) goto L_0x01a9
-                int r6 = r6 + r7
-                float r1 = (float) r6
-                float r1 = r1 - r3
-                float r1 = r1 - r14
-            L_0x01a9:
-                boolean r3 = r12.freeform
-                if (r3 != 0) goto L_0x01c8
-                float r2 = r12.rectY
-                float r3 = r2 - r1
-                int r4 = r12.bitmapY
-                float r5 = (float) r4
-                int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-                if (r3 >= 0) goto L_0x01bb
-                float r1 = (float) r4
-                float r1 = r2 - r1
-            L_0x01bb:
-                float r2 = r2 - r1
-                r12.rectY = r2
-                float r14 = r14 + r1
-                r12.rectSizeX = r14
-                float r14 = r12.rectSizeY
-                float r14 = r14 + r1
-                r12.rectSizeY = r14
-                goto L_0x02b5
-            L_0x01c8:
-                float r3 = r12.rectSizeY
-                float r4 = r3 - r2
-                int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-                if (r4 >= 0) goto L_0x01d2
-                float r2 = r3 - r5
-            L_0x01d2:
-                float r4 = r12.rectY
-                float r5 = r4 + r2
-                int r6 = r12.bitmapY
-                float r7 = (float) r6
+                if (r6 >= 0) goto L_0x01cd
+                float r6 = (float) r7
+                float r6 = r5 - r6
+                r8 = r6
+            L_0x01cd:
+                float r5 = r5 - r8
+                r0.rectY = r5
+                float r4 = r4 + r8
+                r0.rectSizeX = r4
+                float r4 = r0.rectSizeY
+                float r4 = r4 + r8
+                r0.rectSizeY = r4
+                goto L_0x02cd
+            L_0x01da:
+                float r5 = r0.rectSizeY
+                float r6 = r5 - r11
+                int r6 = (r6 > r7 ? 1 : (r6 == r7 ? 0 : -1))
+                if (r6 >= 0) goto L_0x01e4
+                float r11 = r5 - r7
+            L_0x01e4:
+                float r6 = r0.rectY
+                float r7 = r6 + r11
+                int r9 = r0.bitmapY
+                float r12 = (float) r9
+                int r7 = (r7 > r12 ? 1 : (r7 == r12 ? 0 : -1))
+                if (r7 >= 0) goto L_0x01f2
+                float r7 = (float) r9
+                float r7 = r7 - r6
+                r11 = r7
+            L_0x01f2:
+                float r6 = r6 + r11
+                r0.rectY = r6
+                float r4 = r4 + r8
+                r0.rectSizeX = r4
+                float r5 = r5 - r11
+                r0.rectSizeY = r5
+                goto L_0x02cd
+            L_0x01fd:
+                if (r4 != r6) goto L_0x0265
+                float r4 = r0.rectSizeX
+                float r5 = r4 - r8
                 int r5 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-                if (r5 >= 0) goto L_0x01df
-                float r2 = (float) r6
-                float r2 = r2 - r4
-            L_0x01df:
-                float r4 = r4 + r2
-                r12.rectY = r4
-                float r14 = r14 + r1
-                r12.rectSizeX = r14
-                float r3 = r3 - r2
-                r12.rectSizeY = r3
-                goto L_0x02b5
-            L_0x01ea:
-                if (r14 != r4) goto L_0x0250
-                float r14 = r12.rectSizeX
-                float r3 = r14 - r1
-                int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-                if (r3 >= 0) goto L_0x01f6
-                float r1 = r14 - r5
-            L_0x01f6:
-                float r3 = r12.rectX
-                float r4 = r3 + r1
-                int r6 = r12.bitmapX
-                float r7 = (float) r6
+                if (r5 >= 0) goto L_0x0209
+                float r8 = r4 - r7
+            L_0x0209:
+                float r5 = r0.rectX
+                float r6 = r5 + r8
+                int r9 = r0.bitmapX
+                float r12 = (float) r9
+                int r6 = (r6 > r12 ? 1 : (r6 == r12 ? 0 : -1))
+                if (r6 >= 0) goto L_0x0217
+                float r6 = (float) r9
+                float r6 = r6 - r5
+                r8 = r6
+            L_0x0217:
+                boolean r6 = r0.freeform
+                if (r6 != 0) goto L_0x023e
+                float r6 = r0.rectY
+                float r7 = r6 + r4
+                float r7 = r7 - r8
+                int r9 = r0.bitmapY
+                int r12 = r0.bitmapHeight
+                int r13 = r9 + r12
+                float r13 = (float) r13
+                int r7 = (r7 > r13 ? 1 : (r7 == r13 ? 0 : -1))
+                if (r7 <= 0) goto L_0x0231
+                float r6 = r6 + r4
+                float r7 = (float) r9
+                float r6 = r6 - r7
+                float r7 = (float) r12
+                float r6 = r6 - r7
+                r8 = r6
+            L_0x0231:
+                float r5 = r5 + r8
+                r0.rectX = r5
+                float r4 = r4 - r8
+                r0.rectSizeX = r4
+                float r4 = r0.rectSizeY
+                float r4 = r4 - r8
+                r0.rectSizeY = r4
+                goto L_0x02cd
+            L_0x023e:
+                float r6 = r0.rectY
+                float r9 = r0.rectSizeY
+                float r12 = r6 + r9
+                float r12 = r12 + r11
+                int r13 = r0.bitmapY
+                int r14 = r0.bitmapHeight
+                int r15 = r13 + r14
+                float r15 = (float) r15
+                int r12 = (r12 > r15 ? 1 : (r12 == r15 ? 0 : -1))
+                if (r12 <= 0) goto L_0x0255
+                int r13 = r13 + r14
+                float r12 = (float) r13
+                float r12 = r12 - r6
+                float r11 = r12 - r9
+            L_0x0255:
+                float r5 = r5 + r8
+                r0.rectX = r5
+                float r4 = r4 - r8
+                r0.rectSizeX = r4
+                float r9 = r9 + r11
+                r0.rectSizeY = r9
+                int r4 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
+                if (r4 >= 0) goto L_0x02cd
+                r0.rectSizeY = r7
+                goto L_0x02cd
+            L_0x0265:
+                if (r4 != r5) goto L_0x02cd
+                float r4 = r0.rectX
+                float r5 = r0.rectSizeX
+                float r6 = r4 + r5
+                float r6 = r6 + r8
+                int r9 = r0.bitmapX
+                int r12 = r0.bitmapWidth
+                int r13 = r9 + r12
+                float r13 = (float) r13
+                int r6 = (r6 > r13 ? 1 : (r6 == r13 ? 0 : -1))
+                if (r6 <= 0) goto L_0x027e
+                int r9 = r9 + r12
+                float r6 = (float) r9
+                float r6 = r6 - r4
+                float r8 = r6 - r5
+            L_0x027e:
+                boolean r4 = r0.freeform
+                if (r4 != 0) goto L_0x02a0
+                float r4 = r0.rectY
+                float r6 = r4 + r5
+                float r6 = r6 + r8
+                int r9 = r0.bitmapY
+                int r12 = r0.bitmapHeight
+                int r13 = r9 + r12
+                float r13 = (float) r13
+                int r6 = (r6 > r13 ? 1 : (r6 == r13 ? 0 : -1))
+                if (r6 <= 0) goto L_0x0297
+                int r9 = r9 + r12
+                float r6 = (float) r9
+                float r6 = r6 - r4
+                float r8 = r6 - r5
+            L_0x0297:
+                float r5 = r5 + r8
+                r0.rectSizeX = r5
+                float r4 = r0.rectSizeY
+                float r4 = r4 + r8
+                r0.rectSizeY = r4
+                goto L_0x02bd
+            L_0x02a0:
+                float r4 = r0.rectY
+                float r6 = r0.rectSizeY
+                float r9 = r4 + r6
+                float r9 = r9 + r11
+                int r12 = r0.bitmapY
+                int r13 = r0.bitmapHeight
+                int r14 = r12 + r13
+                float r14 = (float) r14
+                int r9 = (r9 > r14 ? 1 : (r9 == r14 ? 0 : -1))
+                if (r9 <= 0) goto L_0x02b7
+                int r12 = r12 + r13
+                float r9 = (float) r12
+                float r9 = r9 - r4
+                float r11 = r9 - r6
+            L_0x02b7:
+                float r5 = r5 + r8
+                r0.rectSizeX = r5
+                float r6 = r6 + r11
+                r0.rectSizeY = r6
+            L_0x02bd:
+                float r4 = r0.rectSizeX
                 int r4 = (r4 > r7 ? 1 : (r4 == r7 ? 0 : -1))
-                if (r4 >= 0) goto L_0x0203
-                float r1 = (float) r6
-                float r1 = r1 - r3
-            L_0x0203:
-                boolean r4 = r12.freeform
-                if (r4 != 0) goto L_0x022a
-                float r2 = r12.rectY
-                float r4 = r2 + r14
-                float r4 = r4 - r1
-                int r5 = r12.bitmapY
-                int r6 = r12.bitmapHeight
-                int r7 = r5 + r6
-                float r7 = (float) r7
+                if (r4 >= 0) goto L_0x02c5
+                r0.rectSizeX = r7
+            L_0x02c5:
+                float r4 = r0.rectSizeY
                 int r4 = (r4 > r7 ? 1 : (r4 == r7 ? 0 : -1))
-                if (r4 <= 0) goto L_0x021d
-                float r2 = r2 + r14
-                float r1 = (float) r5
-                float r2 = r2 - r1
-                float r1 = (float) r6
-                float r1 = r2 - r1
-            L_0x021d:
-                float r3 = r3 + r1
-                r12.rectX = r3
-                float r14 = r14 - r1
-                r12.rectSizeX = r14
-                float r14 = r12.rectSizeY
-                float r14 = r14 - r1
-                r12.rectSizeY = r14
-                goto L_0x02b5
-            L_0x022a:
-                float r4 = r12.rectY
-                float r6 = r12.rectSizeY
-                float r7 = r4 + r6
-                float r7 = r7 + r2
-                int r9 = r12.bitmapY
-                int r10 = r12.bitmapHeight
-                int r11 = r9 + r10
-                float r11 = (float) r11
-                int r7 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1))
-                if (r7 <= 0) goto L_0x0240
-                int r9 = r9 + r10
-                float r2 = (float) r9
-                float r2 = r2 - r4
-                float r2 = r2 - r6
-            L_0x0240:
-                float r3 = r3 + r1
-                r12.rectX = r3
-                float r14 = r14 - r1
-                r12.rectSizeX = r14
-                float r6 = r6 + r2
-                r12.rectSizeY = r6
-                int r14 = (r6 > r5 ? 1 : (r6 == r5 ? 0 : -1))
-                if (r14 >= 0) goto L_0x02b5
-                r12.rectSizeY = r5
-                goto L_0x02b5
-            L_0x0250:
-                if (r14 != r3) goto L_0x02b5
-                float r14 = r12.rectX
-                float r3 = r12.rectSizeX
-                float r4 = r14 + r3
-                float r4 = r4 + r1
-                int r6 = r12.bitmapX
-                int r7 = r12.bitmapWidth
-                int r9 = r6 + r7
-                float r9 = (float) r9
-                int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
-                if (r4 <= 0) goto L_0x0268
-                int r6 = r6 + r7
-                float r1 = (float) r6
-                float r1 = r1 - r14
-                float r1 = r1 - r3
-            L_0x0268:
-                boolean r14 = r12.freeform
-                if (r14 != 0) goto L_0x0289
-                float r14 = r12.rectY
-                float r2 = r14 + r3
-                float r2 = r2 + r1
-                int r4 = r12.bitmapY
-                int r6 = r12.bitmapHeight
-                int r7 = r4 + r6
-                float r7 = (float) r7
-                int r2 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-                if (r2 <= 0) goto L_0x0280
-                int r4 = r4 + r6
-                float r1 = (float) r4
-                float r1 = r1 - r14
-                float r1 = r1 - r3
-            L_0x0280:
-                float r3 = r3 + r1
-                r12.rectSizeX = r3
-                float r14 = r12.rectSizeY
-                float r14 = r14 + r1
-                r12.rectSizeY = r14
-                goto L_0x02a5
-            L_0x0289:
-                float r14 = r12.rectY
-                float r4 = r12.rectSizeY
-                float r6 = r14 + r4
-                float r6 = r6 + r2
-                int r7 = r12.bitmapY
-                int r9 = r12.bitmapHeight
-                int r10 = r7 + r9
-                float r10 = (float) r10
-                int r6 = (r6 > r10 ? 1 : (r6 == r10 ? 0 : -1))
-                if (r6 <= 0) goto L_0x029f
-                int r7 = r7 + r9
-                float r2 = (float) r7
-                float r2 = r2 - r14
-                float r2 = r2 - r4
-            L_0x029f:
-                float r3 = r3 + r1
-                r12.rectSizeX = r3
-                float r4 = r4 + r2
-                r12.rectSizeY = r4
-            L_0x02a5:
-                float r14 = r12.rectSizeX
-                int r14 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1))
-                if (r14 >= 0) goto L_0x02ad
-                r12.rectSizeX = r5
-            L_0x02ad:
-                float r14 = r12.rectSizeY
-                int r14 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1))
-                if (r14 >= 0) goto L_0x02b5
-                r12.rectSizeY = r5
-            L_0x02b5:
-                r12.oldX = r13
-                r12.oldY = r0
-                r12.invalidate()
-            L_0x02bc:
-                return r8
+                if (r4 >= 0) goto L_0x02cd
+                r0.rectSizeY = r7
+            L_0x02cd:
+                r0.oldX = r1
+                r0.oldY = r2
+                r16.invalidate()
+            L_0x02d4:
+                return r10
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoCropActivity.PhotoCropView.lambda$init$0(android.view.View, android.view.MotionEvent):boolean");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoCropActivity.PhotoCropView.m3541lambda$init$0$orgtelegramuiPhotoCropActivity$PhotoCropView(android.view.View, android.view.MotionEvent):boolean");
         }
 
         private void updateBitmapSize() {
             if (this.viewWidth != 0 && this.viewHeight != 0 && PhotoCropActivity.this.imageToCrop != null) {
                 float f = this.rectX - ((float) this.bitmapX);
                 int i = this.bitmapWidth;
-                float f2 = f / ((float) i);
-                float f3 = this.rectY - ((float) this.bitmapY);
+                float percX = f / ((float) i);
+                float f2 = this.rectY - ((float) this.bitmapY);
                 int i2 = this.bitmapHeight;
-                float f4 = f3 / ((float) i2);
-                float f5 = this.rectSizeX / ((float) i);
-                float f6 = this.rectSizeY / ((float) i2);
-                float width = (float) PhotoCropActivity.this.imageToCrop.getWidth();
-                float height = (float) PhotoCropActivity.this.imageToCrop.getHeight();
+                float percY = f2 / ((float) i2);
+                float percSizeX = this.rectSizeX / ((float) i);
+                float percSizeY = this.rectSizeY / ((float) i2);
+                float w = (float) PhotoCropActivity.this.imageToCrop.getWidth();
+                float h = (float) PhotoCropActivity.this.imageToCrop.getHeight();
                 int i3 = this.viewWidth;
-                float f7 = ((float) i3) / width;
+                float scaleX = ((float) i3) / w;
                 int i4 = this.viewHeight;
-                float f8 = ((float) i4) / height;
-                if (f7 > f8) {
+                float scaleY = ((float) i4) / h;
+                if (scaleX > scaleY) {
                     this.bitmapHeight = i4;
-                    this.bitmapWidth = (int) Math.ceil((double) (width * f8));
+                    this.bitmapWidth = (int) Math.ceil((double) (w * scaleY));
                 } else {
                     this.bitmapWidth = i3;
-                    this.bitmapHeight = (int) Math.ceil((double) (height * f7));
+                    this.bitmapHeight = (int) Math.ceil((double) (h * scaleX));
                 }
                 this.bitmapX = ((this.viewWidth - this.bitmapWidth) / 2) + AndroidUtilities.dp(14.0f);
                 int dp = ((this.viewHeight - this.bitmapHeight) / 2) + AndroidUtilities.dp(14.0f);
                 this.bitmapY = dp;
                 if (this.rectX != -1.0f || this.rectY != -1.0f) {
                     int i5 = this.bitmapWidth;
-                    this.rectX = (f2 * ((float) i5)) + ((float) this.bitmapX);
+                    this.rectX = (((float) i5) * percX) + ((float) this.bitmapX);
                     int i6 = this.bitmapHeight;
-                    this.rectY = (f4 * ((float) i6)) + ((float) dp);
-                    this.rectSizeX = f5 * ((float) i5);
-                    this.rectSizeY = f6 * ((float) i6);
+                    this.rectY = (((float) i6) * percY) + ((float) dp);
+                    this.rectSizeX = ((float) i5) * percSizeX;
+                    this.rectSizeY = ((float) i6) * percSizeY;
                 } else if (this.freeform) {
                     this.rectY = (float) dp;
                     this.rectX = (float) this.bitmapX;
@@ -598,368 +619,129 @@ public class PhotoCropActivity extends BaseFragment {
         }
 
         /* access modifiers changed from: protected */
-        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-            super.onLayout(z, i, i2, i3, i4);
-            this.viewWidth = (i3 - i) - AndroidUtilities.dp(28.0f);
-            this.viewHeight = (i4 - i2) - AndroidUtilities.dp(28.0f);
+        public void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            super.onLayout(changed, left, top, right, bottom);
+            this.viewWidth = (right - left) - AndroidUtilities.dp(28.0f);
+            this.viewHeight = (bottom - top) - AndroidUtilities.dp(28.0f);
             updateBitmapSize();
         }
 
         public Bitmap getBitmap() {
             float f = this.rectX - ((float) this.bitmapX);
             int i = this.bitmapWidth;
-            float f2 = (this.rectY - ((float) this.bitmapY)) / ((float) this.bitmapHeight);
-            float f3 = this.rectSizeX / ((float) i);
-            float f4 = this.rectSizeY / ((float) i);
-            int width = (int) ((f / ((float) i)) * ((float) PhotoCropActivity.this.imageToCrop.getWidth()));
-            int height = (int) (f2 * ((float) PhotoCropActivity.this.imageToCrop.getHeight()));
-            int width2 = (int) (f3 * ((float) PhotoCropActivity.this.imageToCrop.getWidth()));
-            int width3 = (int) (f4 * ((float) PhotoCropActivity.this.imageToCrop.getWidth()));
-            if (width < 0) {
-                width = 0;
+            float percY = (this.rectY - ((float) this.bitmapY)) / ((float) this.bitmapHeight);
+            float percSizeX = this.rectSizeX / ((float) i);
+            float percSizeY = this.rectSizeY / ((float) i);
+            int x = (int) (((float) PhotoCropActivity.this.imageToCrop.getWidth()) * (f / ((float) i)));
+            int y = (int) (((float) PhotoCropActivity.this.imageToCrop.getHeight()) * percY);
+            int sizeX = (int) (((float) PhotoCropActivity.this.imageToCrop.getWidth()) * percSizeX);
+            int sizeY = (int) (((float) PhotoCropActivity.this.imageToCrop.getWidth()) * percSizeY);
+            if (x < 0) {
+                x = 0;
             }
-            if (height < 0) {
-                height = 0;
+            if (y < 0) {
+                y = 0;
             }
-            if (width + width2 > PhotoCropActivity.this.imageToCrop.getWidth()) {
-                width2 = PhotoCropActivity.this.imageToCrop.getWidth() - width;
+            if (x + sizeX > PhotoCropActivity.this.imageToCrop.getWidth()) {
+                sizeX = PhotoCropActivity.this.imageToCrop.getWidth() - x;
             }
-            if (height + width3 > PhotoCropActivity.this.imageToCrop.getHeight()) {
-                width3 = PhotoCropActivity.this.imageToCrop.getHeight() - height;
+            if (y + sizeY > PhotoCropActivity.this.imageToCrop.getHeight()) {
+                sizeY = PhotoCropActivity.this.imageToCrop.getHeight() - y;
             }
             try {
-                return Bitmaps.createBitmap(PhotoCropActivity.this.imageToCrop, width, height, width2, width3);
-            } catch (Throwable th) {
-                FileLog.e(th);
+                return Bitmaps.createBitmap(PhotoCropActivity.this.imageToCrop, x, y, sizeX, sizeY);
+            } catch (Throwable e2) {
+                FileLog.e(e2);
                 return null;
             }
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:14:0x01b4 A[LOOP:0: B:13:0x01b2->B:14:0x01b4, LOOP_END] */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void onDraw(android.graphics.Canvas r16) {
-            /*
-                r15 = this;
-                r1 = r15
-                org.telegram.ui.PhotoCropActivity r0 = org.telegram.ui.PhotoCropActivity.this
-                android.graphics.drawable.BitmapDrawable r0 = r0.drawable
-                if (r0 == 0) goto L_0x0031
-                org.telegram.ui.PhotoCropActivity r0 = org.telegram.ui.PhotoCropActivity.this     // Catch:{ all -> 0x002a }
-                android.graphics.drawable.BitmapDrawable r0 = r0.drawable     // Catch:{ all -> 0x002a }
-                int r2 = r1.bitmapX     // Catch:{ all -> 0x002a }
-                int r3 = r1.bitmapY     // Catch:{ all -> 0x002a }
-                int r4 = r1.bitmapWidth     // Catch:{ all -> 0x002a }
-                int r4 = r4 + r2
-                int r5 = r1.bitmapHeight     // Catch:{ all -> 0x002a }
-                int r5 = r5 + r3
-                r0.setBounds(r2, r3, r4, r5)     // Catch:{ all -> 0x002a }
-                org.telegram.ui.PhotoCropActivity r0 = org.telegram.ui.PhotoCropActivity.this     // Catch:{ all -> 0x002a }
-                android.graphics.drawable.BitmapDrawable r0 = r0.drawable     // Catch:{ all -> 0x002a }
-                r8 = r16
-                r0.draw(r8)     // Catch:{ all -> 0x0028 }
-                goto L_0x0033
-            L_0x0028:
-                r0 = move-exception
-                goto L_0x002d
-            L_0x002a:
-                r0 = move-exception
-                r8 = r16
-            L_0x002d:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-                goto L_0x0033
-            L_0x0031:
-                r8 = r16
-            L_0x0033:
-                int r0 = r1.bitmapX
-                float r3 = (float) r0
-                int r2 = r1.bitmapY
-                float r4 = (float) r2
-                int r2 = r1.bitmapWidth
-                int r0 = r0 + r2
-                float r5 = (float) r0
-                float r6 = r1.rectY
-                android.graphics.Paint r7 = r1.halfPaint
-                r2 = r16
-                r2.drawRect(r3, r4, r5, r6, r7)
-                int r0 = r1.bitmapX
-                float r3 = (float) r0
-                float r4 = r1.rectY
-                float r5 = r1.rectX
-                float r0 = r1.rectSizeY
-                float r6 = r4 + r0
-                android.graphics.Paint r7 = r1.halfPaint
-                r2.drawRect(r3, r4, r5, r6, r7)
-                float r0 = r1.rectX
-                float r2 = r1.rectSizeX
-                float r3 = r0 + r2
-                float r4 = r1.rectY
-                int r0 = r1.bitmapX
-                int r2 = r1.bitmapWidth
-                int r0 = r0 + r2
-                float r5 = (float) r0
-                float r0 = r1.rectSizeY
-                float r6 = r4 + r0
-                android.graphics.Paint r7 = r1.halfPaint
-                r2 = r16
-                r2.drawRect(r3, r4, r5, r6, r7)
-                int r0 = r1.bitmapX
-                float r3 = (float) r0
-                float r2 = r1.rectY
-                float r4 = r1.rectSizeY
-                float r4 = r4 + r2
-                int r2 = r1.bitmapWidth
-                int r0 = r0 + r2
-                float r5 = (float) r0
-                int r0 = r1.bitmapY
-                int r2 = r1.bitmapHeight
-                int r0 = r0 + r2
-                float r6 = (float) r0
-                android.graphics.Paint r7 = r1.halfPaint
-                r2 = r16
-                r2.drawRect(r3, r4, r5, r6, r7)
-                float r3 = r1.rectX
-                float r4 = r1.rectY
-                float r0 = r1.rectSizeX
-                float r5 = r3 + r0
-                float r0 = r1.rectSizeY
-                float r6 = r4 + r0
-                android.graphics.Paint r7 = r1.rectPaint
-                r2.drawRect(r3, r4, r5, r6, r7)
-                r0 = 1065353216(0x3var_, float:1.0)
-                int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-                float r2 = r1.rectX
-                float r9 = (float) r0
-                float r3 = r2 + r9
-                float r4 = r1.rectY
-                float r4 = r4 + r9
-                float r2 = r2 + r9
-                r10 = 1101004800(0x41a00000, float:20.0)
-                int r5 = org.telegram.messenger.AndroidUtilities.dp(r10)
-                float r5 = (float) r5
-                float r5 = r5 + r2
-                float r2 = r1.rectY
-                r11 = 3
-                int r0 = r0 * 3
-                float r0 = (float) r0
-                float r6 = r2 + r0
-                android.graphics.Paint r7 = r1.circlePaint
-                r2 = r16
-                r2.drawRect(r3, r4, r5, r6, r7)
-                float r2 = r1.rectX
-                float r3 = r2 + r9
-                float r4 = r1.rectY
-                float r5 = r4 + r9
-                float r6 = r2 + r0
-                float r4 = r4 + r9
-                int r2 = org.telegram.messenger.AndroidUtilities.dp(r10)
-                float r2 = (float) r2
-                float r7 = r4 + r2
-                android.graphics.Paint r12 = r1.circlePaint
-                r2 = r16
-                r4 = r5
-                r5 = r6
-                r6 = r7
-                r7 = r12
-                r2.drawRect(r3, r4, r5, r6, r7)
-                float r2 = r1.rectX
-                float r3 = r1.rectSizeX
-                float r2 = r2 + r3
-                float r2 = r2 - r9
-                int r3 = org.telegram.messenger.AndroidUtilities.dp(r10)
-                float r3 = (float) r3
-                float r3 = r2 - r3
-                float r2 = r1.rectY
-                float r4 = r2 + r9
-                float r5 = r1.rectX
-                float r6 = r1.rectSizeX
-                float r5 = r5 + r6
-                float r5 = r5 - r9
-                float r6 = r2 + r0
-                android.graphics.Paint r7 = r1.circlePaint
-                r2 = r16
-                r2.drawRect(r3, r4, r5, r6, r7)
-                float r2 = r1.rectX
-                float r3 = r1.rectSizeX
-                float r4 = r2 + r3
-                float r4 = r4 - r0
-                float r5 = r1.rectY
-                float r6 = r5 + r9
-                float r2 = r2 + r3
-                float r7 = r2 - r9
-                float r5 = r5 + r9
-                int r2 = org.telegram.messenger.AndroidUtilities.dp(r10)
-                float r2 = (float) r2
-                float r12 = r5 + r2
-                android.graphics.Paint r13 = r1.circlePaint
-                r2 = r16
-                r3 = r4
-                r4 = r6
-                r5 = r7
-                r6 = r12
-                r7 = r13
-                r2.drawRect(r3, r4, r5, r6, r7)
-                float r2 = r1.rectX
-                float r3 = r2 + r9
-                float r2 = r1.rectY
-                float r4 = r1.rectSizeY
-                float r2 = r2 + r4
-                float r2 = r2 - r9
-                int r4 = org.telegram.messenger.AndroidUtilities.dp(r10)
-                float r4 = (float) r4
-                float r4 = r2 - r4
-                float r2 = r1.rectX
-                float r5 = r2 + r0
-                float r2 = r1.rectY
-                float r6 = r1.rectSizeY
-                float r2 = r2 + r6
-                float r6 = r2 - r9
-                android.graphics.Paint r7 = r1.circlePaint
-                r2 = r16
-                r2.drawRect(r3, r4, r5, r6, r7)
-                float r2 = r1.rectX
-                float r3 = r2 + r9
-                float r4 = r1.rectY
-                float r5 = r1.rectSizeY
-                float r4 = r4 + r5
-                float r4 = r4 - r0
-                float r2 = r2 + r9
-                int r5 = org.telegram.messenger.AndroidUtilities.dp(r10)
-                float r5 = (float) r5
-                float r5 = r5 + r2
-                float r2 = r1.rectY
-                float r6 = r1.rectSizeY
-                float r2 = r2 + r6
-                float r6 = r2 - r9
-                android.graphics.Paint r7 = r1.circlePaint
-                r2 = r16
-                r2.drawRect(r3, r4, r5, r6, r7)
-                float r2 = r1.rectX
-                float r3 = r1.rectSizeX
-                float r2 = r2 + r3
-                float r2 = r2 - r9
-                int r3 = org.telegram.messenger.AndroidUtilities.dp(r10)
-                float r3 = (float) r3
-                float r3 = r2 - r3
-                float r2 = r1.rectY
-                float r4 = r1.rectSizeY
-                float r5 = r2 + r4
-                float r5 = r5 - r0
-                float r6 = r1.rectX
-                float r7 = r1.rectSizeX
-                float r6 = r6 + r7
-                float r6 = r6 - r9
-                float r2 = r2 + r4
-                float r7 = r2 - r9
-                android.graphics.Paint r12 = r1.circlePaint
-                r2 = r16
-                r4 = r5
-                r5 = r6
-                r6 = r7
-                r7 = r12
-                r2.drawRect(r3, r4, r5, r6, r7)
-                float r2 = r1.rectX
-                float r3 = r1.rectSizeX
-                float r2 = r2 + r3
-                float r3 = r2 - r0
-                float r0 = r1.rectY
-                float r2 = r1.rectSizeY
-                float r0 = r0 + r2
-                float r0 = r0 - r9
-                int r2 = org.telegram.messenger.AndroidUtilities.dp(r10)
-                float r2 = (float) r2
-                float r4 = r0 - r2
-                float r0 = r1.rectX
-                float r2 = r1.rectSizeX
-                float r0 = r0 + r2
-                float r5 = r0 - r9
-                float r0 = r1.rectY
-                float r2 = r1.rectSizeY
-                float r0 = r0 + r2
-                float r6 = r0 - r9
-                android.graphics.Paint r7 = r1.circlePaint
-                r2 = r16
-                r2.drawRect(r3, r4, r5, r6, r7)
-                r0 = 1
-            L_0x01b2:
-                if (r0 >= r11) goto L_0x0200
-                float r2 = r1.rectX
-                float r3 = r1.rectSizeX
-                r10 = 1077936128(0x40400000, float:3.0)
-                float r4 = r3 / r10
-                float r12 = (float) r0
-                float r4 = r4 * r12
-                float r4 = r4 + r2
-                float r5 = r1.rectY
-                float r6 = r5 + r9
-                float r2 = r2 + r9
-                float r3 = r3 / r10
-                float r3 = r3 * r12
-                float r7 = r2 + r3
-                float r2 = r1.rectSizeY
-                float r5 = r5 + r2
-                float r13 = r5 - r9
-                android.graphics.Paint r14 = r1.circlePaint
-                r2 = r16
-                r3 = r4
-                r4 = r6
-                r5 = r7
-                r6 = r13
-                r7 = r14
-                r2.drawRect(r3, r4, r5, r6, r7)
-                float r2 = r1.rectX
-                float r3 = r2 + r9
-                float r4 = r1.rectY
-                float r5 = r1.rectSizeY
-                float r6 = r5 / r10
-                float r6 = r6 * r12
-                float r6 = r6 + r4
-                float r2 = r2 - r9
-                float r7 = r1.rectSizeX
-                float r7 = r7 + r2
-                float r5 = r5 / r10
-                float r5 = r5 * r12
-                float r4 = r4 + r5
-                float r10 = r4 + r9
-                android.graphics.Paint r12 = r1.circlePaint
-                r2 = r16
-                r4 = r6
-                r5 = r7
-                r6 = r10
-                r7 = r12
-                r2.drawRect(r3, r4, r5, r6, r7)
-                int r0 = r0 + 1
-                goto L_0x01b2
-            L_0x0200:
-                return
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoCropActivity.PhotoCropView.onDraw(android.graphics.Canvas):void");
+        public void onDraw(Canvas canvas) {
+            if (PhotoCropActivity.this.drawable != null) {
+                try {
+                    BitmapDrawable access$100 = PhotoCropActivity.this.drawable;
+                    int i = this.bitmapX;
+                    int i2 = this.bitmapY;
+                    access$100.setBounds(i, i2, this.bitmapWidth + i, this.bitmapHeight + i2);
+                    PhotoCropActivity.this.drawable.draw(canvas);
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            }
+            int i3 = this.bitmapX;
+            Canvas canvas2 = canvas;
+            canvas2.drawRect((float) i3, (float) this.bitmapY, (float) (i3 + this.bitmapWidth), this.rectY, this.halfPaint);
+            float f = this.rectY;
+            canvas2.drawRect((float) this.bitmapX, f, this.rectX, f + this.rectSizeY, this.halfPaint);
+            float f2 = this.rectY;
+            canvas.drawRect(this.rectX + this.rectSizeX, f2, (float) (this.bitmapX + this.bitmapWidth), f2 + this.rectSizeY, this.halfPaint);
+            int i4 = this.bitmapX;
+            Canvas canvas3 = canvas;
+            canvas3.drawRect((float) i4, this.rectSizeY + this.rectY, (float) (i4 + this.bitmapWidth), (float) (this.bitmapY + this.bitmapHeight), this.halfPaint);
+            float f3 = this.rectX;
+            float f4 = this.rectY;
+            canvas.drawRect(f3, f4, f3 + this.rectSizeX, f4 + this.rectSizeY, this.rectPaint);
+            int side = AndroidUtilities.dp(1.0f);
+            float f5 = this.rectX;
+            canvas.drawRect(f5 + ((float) side), this.rectY + ((float) side), f5 + ((float) side) + ((float) AndroidUtilities.dp(20.0f)), this.rectY + ((float) (side * 3)), this.circlePaint);
+            float f6 = this.rectX;
+            float f7 = this.rectY;
+            Canvas canvas4 = canvas;
+            canvas4.drawRect(f6 + ((float) side), f7 + ((float) side), f6 + ((float) (side * 3)), f7 + ((float) side) + ((float) AndroidUtilities.dp(20.0f)), this.circlePaint);
+            float dp = ((this.rectX + this.rectSizeX) - ((float) side)) - ((float) AndroidUtilities.dp(20.0f));
+            float f8 = this.rectY;
+            canvas.drawRect(dp, f8 + ((float) side), (this.rectX + this.rectSizeX) - ((float) side), f8 + ((float) (side * 3)), this.circlePaint);
+            float f9 = this.rectX;
+            float var_ = this.rectSizeX;
+            float var_ = this.rectY;
+            Canvas canvas5 = canvas;
+            canvas5.drawRect((f9 + var_) - ((float) (side * 3)), var_ + ((float) side), (f9 + var_) - ((float) side), var_ + ((float) side) + ((float) AndroidUtilities.dp(20.0f)), this.circlePaint);
+            canvas.drawRect(this.rectX + ((float) side), ((this.rectY + this.rectSizeY) - ((float) side)) - ((float) AndroidUtilities.dp(20.0f)), this.rectX + ((float) (side * 3)), (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
+            float var_ = this.rectX;
+            canvas.drawRect(var_ + ((float) side), (this.rectY + this.rectSizeY) - ((float) (side * 3)), var_ + ((float) side) + ((float) AndroidUtilities.dp(20.0f)), (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
+            float dp2 = ((this.rectX + this.rectSizeX) - ((float) side)) - ((float) AndroidUtilities.dp(20.0f));
+            float var_ = this.rectY;
+            float var_ = this.rectSizeY;
+            Canvas canvas6 = canvas;
+            canvas6.drawRect(dp2, (var_ + var_) - ((float) (side * 3)), (this.rectX + this.rectSizeX) - ((float) side), (var_ + var_) - ((float) side), this.circlePaint);
+            canvas6.drawRect((this.rectX + this.rectSizeX) - ((float) (side * 3)), ((this.rectY + this.rectSizeY) - ((float) side)) - ((float) AndroidUtilities.dp(20.0f)), (this.rectX + this.rectSizeX) - ((float) side), (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
+            for (int a = 1; a < 3; a++) {
+                float var_ = this.rectX;
+                float var_ = this.rectSizeX;
+                float var_ = this.rectY;
+                Canvas canvas7 = canvas;
+                canvas7.drawRect(var_ + ((var_ / 3.0f) * ((float) a)), var_ + ((float) side), var_ + ((float) side) + ((var_ / 3.0f) * ((float) a)), (var_ + this.rectSizeY) - ((float) side), this.circlePaint);
+                float var_ = this.rectX;
+                float var_ = this.rectY;
+                float var_ = this.rectSizeY;
+                Canvas canvas8 = canvas;
+                canvas8.drawRect(var_ + ((float) side), ((var_ / 3.0f) * ((float) a)) + var_, this.rectSizeX + (var_ - ((float) side)), var_ + ((var_ / 3.0f) * ((float) a)) + ((float) side), this.circlePaint);
+            }
         }
     }
 
-    public PhotoCropActivity(Bundle bundle) {
-        super(bundle);
+    public PhotoCropActivity(Bundle args) {
+        super(args);
     }
 
     public boolean onFragmentCreate() {
-        int i;
+        int size;
         if (this.imageToCrop == null) {
-            String string = getArguments().getString("photoPath");
-            Uri uri = (Uri) getArguments().getParcelable("photoUri");
-            if (string == null && uri == null) {
+            String photoPath = getArguments().getString("photoPath");
+            Uri photoUri = (Uri) getArguments().getParcelable("photoUri");
+            if (photoPath == null && photoUri == null) {
                 return false;
             }
-            if (string != null && !new File(string).exists()) {
+            if (photoPath != null && !new File(photoPath).exists()) {
                 return false;
             }
             if (AndroidUtilities.isTablet()) {
-                i = AndroidUtilities.dp(520.0f);
+                size = AndroidUtilities.dp(520.0f);
             } else {
-                Point point = AndroidUtilities.displaySize;
-                i = Math.max(point.x, point.y);
+                size = Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
             }
-            float f = (float) i;
-            Bitmap loadBitmap = ImageLoader.loadBitmap(string, uri, f, f, true);
+            Bitmap loadBitmap = ImageLoader.loadBitmap(photoPath, photoUri, (float) size, (float) size, true);
             this.imageToCrop = loadBitmap;
             if (loadBitmap == null) {
                 return false;
@@ -992,10 +774,10 @@ public class PhotoCropActivity extends BaseFragment {
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("CropImage", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            public void onItemClick(int i) {
-                if (i == -1) {
+            public void onItemClick(int id) {
+                if (id == -1) {
                     PhotoCropActivity.this.finishFragment();
-                } else if (i == 1) {
+                } else if (id == 1) {
                     if (PhotoCropActivity.this.delegate != null && !PhotoCropActivity.this.doneButtonPressed) {
                         Bitmap bitmap = PhotoCropActivity.this.view.getBitmap();
                         if (bitmap == PhotoCropActivity.this.imageToCrop) {
@@ -1012,12 +794,16 @@ public class PhotoCropActivity extends BaseFragment {
         PhotoCropView photoCropView = new PhotoCropView(context);
         this.view = photoCropView;
         this.fragmentView = photoCropView;
-        photoCropView.freeform = getArguments().getBoolean("freeform", false);
+        ((PhotoCropView) this.fragmentView).freeform = getArguments().getBoolean("freeform", false);
         this.fragmentView.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
         return this.fragmentView;
     }
 
-    public void setDelegate(PhotoEditActivityDelegate photoEditActivityDelegate) {
-        this.delegate = photoEditActivityDelegate;
+    public boolean isSwipeBackEnabled(MotionEvent event) {
+        return false;
+    }
+
+    public void setDelegate(PhotoEditActivityDelegate delegate2) {
+        this.delegate = delegate2;
     }
 }

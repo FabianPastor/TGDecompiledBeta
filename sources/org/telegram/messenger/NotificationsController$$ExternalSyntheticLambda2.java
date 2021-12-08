@@ -1,14 +1,13 @@
 package org.telegram.messenger;
 
-import android.media.SoundPool;
+public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda2 implements Runnable {
+    public final /* synthetic */ NotificationsController f$0;
 
-public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda2 implements SoundPool.OnLoadCompleteListener {
-    public static final /* synthetic */ NotificationsController$$ExternalSyntheticLambda2 INSTANCE = new NotificationsController$$ExternalSyntheticLambda2();
-
-    private /* synthetic */ NotificationsController$$ExternalSyntheticLambda2() {
+    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda2(NotificationsController notificationsController) {
+        this.f$0 = notificationsController;
     }
 
-    public final void onLoadComplete(SoundPool soundPool, int i, int i2) {
-        NotificationsController.lambda$playOutChatSound$37(soundPool, i, i2);
+    public final void run() {
+        this.f$0.m1104x9var_e1fc();
     }
 }

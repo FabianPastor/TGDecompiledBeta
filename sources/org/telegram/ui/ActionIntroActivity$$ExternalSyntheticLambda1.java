@@ -10,6 +10,6 @@ public final /* synthetic */ class ActionIntroActivity$$ExternalSyntheticLambda1
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onRequestPermissionsResultFragment$6(dialogInterface, i);
+        this.f$0.m1341xedf1var_(dialogInterface, i);
     }
 }

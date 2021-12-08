@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda113 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ MessageObject f$1;
+import org.telegram.tgnet.TLObject;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda113(MessagesController messagesController, MessageObject messageObject) {
-        this.f$0 = messagesController;
-        this.f$1 = messageObject;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda113 implements Runnable {
+    public final /* synthetic */ TLObject f$0;
+
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda113(TLObject tLObject) {
+        this.f$0 = tLObject;
     }
 
     public final void run() {
-        this.f$0.lambda$addToViewsQueue$179(this.f$1);
+        MessagesController.lambda$performLogout$237(this.f$0);
     }
 }

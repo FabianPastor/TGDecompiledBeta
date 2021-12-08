@@ -10,6 +10,6 @@ public final /* synthetic */ class RLottieDrawable$5$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.lambda$run$0();
+        this.f$0.m2532lambda$run$0$orgtelegramuiComponentsRLottieDrawable$5();
     }
 }

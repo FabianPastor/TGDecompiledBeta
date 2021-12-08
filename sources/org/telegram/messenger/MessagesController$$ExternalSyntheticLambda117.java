@@ -1,19 +1,16 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.support.LongSparseIntArray;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda117 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda117 implements Comparator {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ LongSparseIntArray f$1;
-    public final /* synthetic */ LongSparseIntArray f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda117(MessagesController messagesController, LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda117(MessagesController messagesController) {
         this.f$0 = messagesController;
-        this.f$1 = longSparseIntArray;
-        this.f$2 = longSparseIntArray2;
     }
 
-    public final void run() {
-        this.f$0.lambda$processDialogsUpdateRead$172(this.f$1, this.f$2);
+    public final int compare(Object obj, Object obj2) {
+        return this.f$0.m292lambda$new$3$orgtelegrammessengerMessagesController((TLRPC.Update) obj, (TLRPC.Update) obj2);
     }
 }

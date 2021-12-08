@@ -11,6 +11,6 @@ public final /* synthetic */ class StickersActivity$$ExternalSyntheticLambda5 im
     }
 
     public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$createView$3(view, i);
+        return this.f$0.m3900lambda$createView$3$orgtelegramuiStickersActivity(view, i);
     }
 }

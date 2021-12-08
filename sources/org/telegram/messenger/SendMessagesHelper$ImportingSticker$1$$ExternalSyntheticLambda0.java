@@ -15,6 +15,6 @@ public final /* synthetic */ class SendMessagesHelper$ImportingSticker$1$$Extern
     }
 
     public final void run() {
-        this.f$0.lambda$run$0(this.f$1, this.f$2);
+        this.f$0.m1160x170488fc(this.f$1, this.f$2);
     }
 }

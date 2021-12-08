@@ -22,6 +22,6 @@ public final /* synthetic */ class InviteMembersBottomSheet$$ExternalSyntheticLa
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$0(this.f$1, this.f$2, this.f$3, this.f$4, view, i);
+        this.f$0.m2370lambda$new$0$orgtelegramuiComponentsInviteMembersBottomSheet(this.f$1, this.f$2, this.f$3, this.f$4, view, i);
     }
 }

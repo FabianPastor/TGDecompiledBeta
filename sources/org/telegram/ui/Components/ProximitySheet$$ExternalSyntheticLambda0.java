@@ -13,6 +13,6 @@ public final /* synthetic */ class ProximitySheet$$ExternalSyntheticLambda0 impl
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$4(this.f$1, view);
+        this.f$0.m2516lambda$new$4$orgtelegramuiComponentsProximitySheet(this.f$1, view);
     }
 }

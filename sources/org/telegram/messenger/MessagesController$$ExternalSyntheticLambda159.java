@@ -1,24 +1,25 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
-import org.telegram.tgnet.TLRPC$TL_messages_messageViews;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda159 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda159 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$TL_messages_messageViews f$1;
-    public final /* synthetic */ LongSparseArray f$2;
-    public final /* synthetic */ LongSparseArray f$3;
-    public final /* synthetic */ LongSparseArray f$4;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ int f$4;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda159(MessagesController messagesController, TLRPC$TL_messages_messageViews tLRPC$TL_messages_messageViews, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, LongSparseArray longSparseArray3) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda159(MessagesController messagesController, int i, int i2, int i3, int i4) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$TL_messages_messageViews;
-        this.f$2 = longSparseArray;
-        this.f$3 = longSparseArray2;
-        this.f$4 = longSparseArray3;
+        this.f$1 = i;
+        this.f$2 = i2;
+        this.f$3 = i3;
+        this.f$4 = i4;
     }
 
-    public final void run() {
-        this.f$0.lambda$updateTimerProc$114(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m365x3a34892b(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tL_error);
     }
 }

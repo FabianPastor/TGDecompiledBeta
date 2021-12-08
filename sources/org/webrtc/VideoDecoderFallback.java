@@ -6,9 +6,9 @@ public class VideoDecoderFallback extends WrappedNativeVideoDecoder {
 
     private static native long nativeCreateDecoder(VideoDecoder videoDecoder, VideoDecoder videoDecoder2);
 
-    public VideoDecoderFallback(VideoDecoder videoDecoder, VideoDecoder videoDecoder2) {
-        this.fallback = videoDecoder;
-        this.primary = videoDecoder2;
+    public VideoDecoderFallback(VideoDecoder fallback2, VideoDecoder primary2) {
+        this.fallback = fallback2;
+        this.primary = primary2;
     }
 
     public long createNativeVideoDecoder() {

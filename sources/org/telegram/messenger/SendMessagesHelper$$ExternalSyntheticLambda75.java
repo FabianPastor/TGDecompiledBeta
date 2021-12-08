@@ -1,12 +1,17 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda75 implements Runnable {
-    public static final /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda75 INSTANCE = new SendMessagesHelper$$ExternalSyntheticLambda75();
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    private /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda75() {
+public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda75 implements RequestDelegate {
+    public final /* synthetic */ SendMessagesHelper f$0;
+
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda75(SendMessagesHelper sendMessagesHelper) {
+        this.f$0 = sendMessagesHelper;
     }
 
-    public final void run() {
-        SendMessagesHelper.lambda$prepareSendingDocuments$77();
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m478lambda$sendReaction$22$orgtelegrammessengerSendMessagesHelper(tLObject, tL_error);
     }
 }

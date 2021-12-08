@@ -15,17 +15,17 @@ public class LoadingCell extends FrameLayout {
         this(context, AndroidUtilities.dp(40.0f), AndroidUtilities.dp(54.0f));
     }
 
-    public LoadingCell(Context context, int i, int i2) {
+    public LoadingCell(Context context, int size, int h) {
         super(context);
-        this.height = i2;
+        this.height = h;
         RadialProgressView radialProgressView = new RadialProgressView(context);
         this.progressBar = radialProgressView;
-        radialProgressView.setSize(i);
+        radialProgressView.setSize(size);
         addView(this.progressBar, LayoutHelper.createFrame(-2, -2, 17));
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(this.height, NUM));
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(this.height, NUM));
     }
 }

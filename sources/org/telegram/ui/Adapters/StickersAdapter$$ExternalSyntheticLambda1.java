@@ -13,6 +13,6 @@ public final /* synthetic */ class StickersAdapter$$ExternalSyntheticLambda1 imp
     }
 
     public final void run(ArrayList arrayList, String str) {
-        this.f$0.lambda$searchEmojiByKeyword$0(this.f$1, arrayList, str);
+        this.f$0.m1398xvar_a6d(this.f$1, arrayList, str);
     }
 }

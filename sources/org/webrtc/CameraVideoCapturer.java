@@ -44,12 +44,12 @@ public interface CameraVideoCapturer extends VideoCapturer {
     /* renamed from: org.webrtc.CameraVideoCapturer$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {
         @Deprecated
-        public static void $default$addMediaRecorderToCamera(CameraVideoCapturer _this, MediaRecorder mediaRecorder, MediaRecorderHandler mediaRecorderHandler) {
+        public static void $default$addMediaRecorderToCamera(CameraVideoCapturer _this, MediaRecorder mediaRecorder, MediaRecorderHandler resultHandler) {
             throw new UnsupportedOperationException("Deprecated and not implemented.");
         }
 
         @Deprecated
-        public static void $default$removeMediaRecorderFromCamera(CameraVideoCapturer _this, MediaRecorderHandler mediaRecorderHandler) {
+        public static void $default$removeMediaRecorderFromCamera(CameraVideoCapturer _this, MediaRecorderHandler resultHandler) {
             throw new UnsupportedOperationException("Deprecated and not implemented.");
         }
     }
@@ -68,17 +68,17 @@ public interface CameraVideoCapturer extends VideoCapturer {
         /* access modifiers changed from: private */
         public final SurfaceTextureHelper surfaceTextureHelper;
 
-        static /* synthetic */ int access$104(CameraStatistics cameraStatistics) {
-            int i = cameraStatistics.freezePeriodCount + 1;
-            cameraStatistics.freezePeriodCount = i;
+        static /* synthetic */ int access$104(CameraStatistics x0) {
+            int i = x0.freezePeriodCount + 1;
+            x0.freezePeriodCount = i;
             return i;
         }
 
-        public CameraStatistics(SurfaceTextureHelper surfaceTextureHelper2, CameraEventsHandler cameraEventsHandler) {
+        public CameraStatistics(SurfaceTextureHelper surfaceTextureHelper2, CameraEventsHandler eventsHandler2) {
             AnonymousClass1 r0 = new Runnable() {
                 public void run() {
-                    int round = Math.round((((float) CameraStatistics.this.frameCount) * 1000.0f) / 2000.0f);
-                    Logging.d("CameraStatistics", "Camera fps: " + round + ".");
+                    int cameraFps = Math.round((((float) CameraStatistics.this.frameCount) * 1000.0f) / 2000.0f);
+                    Logging.d("CameraStatistics", "Camera fps: " + cameraFps + ".");
                     if (CameraStatistics.this.frameCount == 0) {
                         CameraStatistics.access$104(CameraStatistics.this);
                         if (CameraStatistics.this.freezePeriodCount * 2000 >= 4000 && CameraStatistics.this.eventsHandler != null) {
@@ -101,7 +101,7 @@ public interface CameraVideoCapturer extends VideoCapturer {
             this.cameraObserver = r0;
             if (surfaceTextureHelper2 != null) {
                 this.surfaceTextureHelper = surfaceTextureHelper2;
-                this.eventsHandler = cameraEventsHandler;
+                this.eventsHandler = eventsHandler2;
                 this.frameCount = 0;
                 this.freezePeriodCount = 0;
                 surfaceTextureHelper2.getHandler().postDelayed(r0, 2000);

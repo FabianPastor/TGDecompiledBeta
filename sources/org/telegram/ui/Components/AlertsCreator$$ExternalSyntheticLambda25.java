@@ -1,21 +1,17 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.CacheControlActivity;
+import org.telegram.ui.LaunchActivity;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda25 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ BaseFragment f$0;
-    public final /* synthetic */ TLRPC$User f$1;
-    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ LaunchActivity f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda25(BaseFragment baseFragment, TLRPC$User tLRPC$User, boolean z) {
-        this.f$0 = baseFragment;
-        this.f$1 = tLRPC$User;
-        this.f$2 = z;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda25(LaunchActivity launchActivity) {
+        this.f$0 = launchActivity;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createCallDialogAlert$21(this.f$0, this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.m3109lambda$runLinkRequest$43$orgtelegramuiLaunchActivity(new CacheControlActivity());
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class PipVideoView$MiniControlsView$$ExternalSynthe
     }
 
     public final void run() {
-        this.f$0.lambda$new$0();
+        this.f$0.m2503xd1abb901();
     }
 }

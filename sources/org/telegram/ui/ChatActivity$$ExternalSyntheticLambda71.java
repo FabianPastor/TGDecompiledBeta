@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+import org.telegram.ui.Adapters.StickersAdapter;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda71 implements View.OnTouchListener {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda71 INSTANCE = new ChatActivity$$ExternalSyntheticLambda71();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda71 implements StickersAdapter.StickersAdapterDelegate {
+    public final /* synthetic */ ChatActivity f$0;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda71() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda71(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ChatActivity.lambda$createView$19(view, motionEvent);
+    public final void needChangePanelVisibility(boolean z) {
+        this.f$0.m1734lambda$initStickers$72$orgtelegramuiChatActivity(z);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda8 implemen
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$3(view, i);
+        this.f$0.m2560lambda$new$3$orgtelegramuiComponentsShareAlert(view, i);
     }
 }

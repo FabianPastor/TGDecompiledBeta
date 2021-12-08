@@ -14,6 +14,6 @@ public final /* synthetic */ class FiltersSetupActivity$ListAdapter$$ExternalSyn
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$onCreateViewHolder$0(this.f$1, view, motionEvent);
+        return this.f$0.m2937x834c8a63(this.f$1, view, motionEvent);
     }
 }

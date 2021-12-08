@@ -10,6 +10,6 @@ public final /* synthetic */ class StickerSetCell$$ExternalSyntheticLambda1 impl
     }
 
     public final void run() {
-        this.f$0.lambda$setReorderable$0(this.f$1);
+        this.f$0.m1555lambda$setReorderable$1$orgtelegramuiCellsStickerSetCell(this.f$1);
     }
 }

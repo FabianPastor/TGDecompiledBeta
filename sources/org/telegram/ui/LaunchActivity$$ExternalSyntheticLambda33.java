@@ -1,22 +1,15 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.messenger.LocaleController;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda33 implements Runnable {
-    public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ HashMap f$1;
-    public final /* synthetic */ LocaleController.LocaleInfo[] f$2;
-    public final /* synthetic */ String f$3;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda33 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ int f$0;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda33(LaunchActivity launchActivity, HashMap hashMap, LocaleController.LocaleInfo[] localeInfoArr, String str) {
-        this.f$0 = launchActivity;
-        this.f$1 = hashMap;
-        this.f$2 = localeInfoArr;
-        this.f$3 = str;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda33(int i) {
+        this.f$0 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$showLanguageAlert$81(this.f$1, this.f$2, this.f$3);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        LaunchActivity.lambda$didReceivedNotification$65(this.f$0, dialogInterface, i);
     }
 }

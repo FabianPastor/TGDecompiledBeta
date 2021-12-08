@@ -2,18 +2,18 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda79 implements RequestDelegate {
     public final /* synthetic */ SendMessagesHelper f$0;
-    public final /* synthetic */ long f$1;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda79(SendMessagesHelper sendMessagesHelper, long j) {
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda79(SendMessagesHelper sendMessagesHelper, String str) {
         this.f$0 = sendMessagesHelper;
-        this.f$1 = j;
+        this.f$1 = str;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$sendGame$31(this.f$1, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m476xcd8f7dd1(this.f$1, tLObject, tL_error);
     }
 }

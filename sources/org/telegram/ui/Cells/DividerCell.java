@@ -18,8 +18,8 @@ public class DividerCell extends View {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        setMeasuredDimension(View.MeasureSpec.getSize(i), getPaddingTop() + getPaddingBottom() + 1);
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), getPaddingTop() + getPaddingBottom() + 1);
     }
 
     /* access modifiers changed from: protected */
@@ -32,7 +32,7 @@ public class DividerCell extends View {
         canvas.drawLine((float) getPaddingLeft(), (float) getPaddingTop(), (float) (getWidth() - getPaddingRight()), (float) getPaddingTop(), this.paint);
     }
 
-    public void setForceDarkTheme(boolean z) {
-        this.forceDarkTheme = z;
+    public void setForceDarkTheme(boolean forceDarkTheme2) {
+        this.forceDarkTheme = forceDarkTheme2;
     }
 }

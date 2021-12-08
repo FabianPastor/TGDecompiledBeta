@@ -12,6 +12,6 @@ public final /* synthetic */ class ContactsActivity$$ExternalSyntheticLambda1 im
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createView$0(this.f$1, dialogInterface, i);
+        this.f$0.m2783lambda$createView$0$orgtelegramuiContactsActivity(this.f$1, dialogInterface, i);
     }
 }

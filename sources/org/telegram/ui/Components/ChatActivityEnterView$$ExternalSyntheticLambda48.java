@@ -1,15 +1,22 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.MediaController;
-import org.telegram.ui.Components.AlertsCreator;
+import java.util.ArrayList;
+import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.DialogsActivity;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda48 implements AlertsCreator.ScheduleDatePickerDelegate {
-    public static final /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda48 INSTANCE = new ChatActivityEnterView$$ExternalSyntheticLambda48();
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda48 implements DialogsActivity.DialogsActivityDelegate {
+    public final /* synthetic */ ChatActivityEnterView f$0;
+    public final /* synthetic */ MessageObject f$1;
+    public final /* synthetic */ TLRPC.KeyboardButton f$2;
 
-    private /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda48() {
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda48(ChatActivityEnterView chatActivityEnterView, MessageObject messageObject, TLRPC.KeyboardButton keyboardButton) {
+        this.f$0 = chatActivityEnterView;
+        this.f$1 = messageObject;
+        this.f$2 = keyboardButton;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        MediaController.getInstance().stopRecording(1, z, i);
+    public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+        this.f$0.m2039x4CLASSNAMECLASSNAMEe(this.f$1, this.f$2, dialogsActivity, arrayList, charSequence, z);
     }
 }

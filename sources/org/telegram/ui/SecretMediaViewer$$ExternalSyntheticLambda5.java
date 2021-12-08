@@ -12,6 +12,6 @@ public final /* synthetic */ class SecretMediaViewer$$ExternalSyntheticLambda5 i
     }
 
     public final void run() {
-        this.f$0.lambda$closePhoto$3(this.f$1);
+        this.f$0.m3843lambda$openMedia$2$orgtelegramuiSecretMediaViewer(this.f$1);
     }
 }

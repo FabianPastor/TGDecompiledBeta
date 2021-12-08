@@ -10,6 +10,6 @@ public final /* synthetic */ class UserConfig$$ExternalSyntheticLambda0 implemen
     }
 
     public final void run() {
-        this.f$0.lambda$saveConfig$0(this.f$1);
+        this.f$0.m487lambda$saveConfig$0$orgtelegrammessengerUserConfig(this.f$1);
     }
 }

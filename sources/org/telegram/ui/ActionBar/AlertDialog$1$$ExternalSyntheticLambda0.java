@@ -11,6 +11,6 @@ public final /* synthetic */ class AlertDialog$1$$ExternalSyntheticLambda0 imple
     }
 
     public final void onScrollChanged() {
-        this.f$0.lambda$onLayout$1();
+        this.f$0.m1316lambda$onLayout$1$orgtelegramuiActionBarAlertDialog$1();
     }
 }

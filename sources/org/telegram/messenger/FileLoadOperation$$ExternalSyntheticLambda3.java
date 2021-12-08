@@ -1,15 +1,17 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class FileLoadOperation$$ExternalSyntheticLambda3 implements Runnable {
-    public final /* synthetic */ FileLoadOperation f$0;
-    public final /* synthetic */ FileLoadOperationStream f$1;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    public /* synthetic */ FileLoadOperation$$ExternalSyntheticLambda3(FileLoadOperation fileLoadOperation, FileLoadOperationStream fileLoadOperationStream) {
+public final /* synthetic */ class FileLoadOperation$$ExternalSyntheticLambda3 implements RequestDelegate {
+    public final /* synthetic */ FileLoadOperation f$0;
+
+    public /* synthetic */ FileLoadOperation$$ExternalSyntheticLambda3(FileLoadOperation fileLoadOperation) {
         this.f$0 = fileLoadOperation;
-        this.f$1 = fileLoadOperationStream;
     }
 
-    public final void run() {
-        this.f$0.lambda$removeStreamListener$3(this.f$1);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m624x6ac3var_(tLObject, tL_error);
     }
 }

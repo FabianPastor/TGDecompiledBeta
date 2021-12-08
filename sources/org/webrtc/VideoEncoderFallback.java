@@ -6,9 +6,9 @@ public class VideoEncoderFallback extends WrappedNativeVideoEncoder {
 
     private static native long nativeCreateEncoder(VideoEncoder videoEncoder, VideoEncoder videoEncoder2);
 
-    public VideoEncoderFallback(VideoEncoder videoEncoder, VideoEncoder videoEncoder2) {
-        this.fallback = videoEncoder;
-        this.primary = videoEncoder2;
+    public VideoEncoderFallback(VideoEncoder fallback2, VideoEncoder primary2) {
+        this.fallback = fallback2;
+        this.primary = primary2;
     }
 
     public long createNativeVideoEncoder() {

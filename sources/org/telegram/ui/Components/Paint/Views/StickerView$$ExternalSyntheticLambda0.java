@@ -10,7 +10,7 @@ public final /* synthetic */ class StickerView$$ExternalSyntheticLambda0 impleme
     }
 
     public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        this.f$0.lambda$new$0(imageReceiver, z, z2, z3);
+        this.f$0.m2434lambda$new$0$orgtelegramuiComponentsPaintViewsStickerView(imageReceiver, z, z2, z3);
     }
 
     public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {

@@ -12,6 +12,6 @@ public final /* synthetic */ class CancelAccountDeletionActivity$LoginActivitySm
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$setParams$5(textView, i, keyEvent);
+        return this.f$0.m1518x690599d8(textView, i, keyEvent);
     }
 }

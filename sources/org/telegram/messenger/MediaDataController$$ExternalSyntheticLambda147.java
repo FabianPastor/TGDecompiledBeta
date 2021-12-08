@@ -1,16 +1,25 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.ArrayList;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda147 implements RequestDelegate {
-    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda147 INSTANCE = new MediaDataController$$ExternalSyntheticLambda147();
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda147 implements Runnable {
+    public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ boolean f$4;
+    public final /* synthetic */ int f$5;
 
-    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda147() {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda147(MediaDataController mediaDataController, boolean z, int i, ArrayList arrayList, boolean z2, int i2) {
+        this.f$0 = mediaDataController;
+        this.f$1 = z;
+        this.f$2 = i;
+        this.f$3 = arrayList;
+        this.f$4 = z2;
+        this.f$5 = i2;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MediaDataController.lambda$removeInline$96(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m864x24204c2c(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

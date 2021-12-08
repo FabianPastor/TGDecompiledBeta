@@ -1,19 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.animation.ValueAnimator;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda138 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda138 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ AlertDialog[] f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ View f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda138(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda138(ChatActivity chatActivity, View view) {
         this.f$0 = chatActivity;
-        this.f$1 = alertDialogArr;
-        this.f$2 = i;
+        this.f$1 = view;
     }
 
-    public final void run() {
-        this.f$0.lambda$didPressMessageUrl$167(this.f$1, this.f$2);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.m1820lambda$updateInfoTopView$65$orgtelegramuiChatActivity(this.f$1, valueAnimator);
     }
 }

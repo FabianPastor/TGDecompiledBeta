@@ -7,9 +7,9 @@ public class ChartBottomSignatureData {
     public final int stepMax;
     public final int stepMin;
 
-    public ChartBottomSignatureData(int i, int i2, int i3) {
-        this.step = i;
-        this.stepMax = i2;
-        this.stepMin = i3;
+    public ChartBottomSignatureData(int step2, int stepMax2, int stepMin2) {
+        this.step = step2;
+        this.stepMax = stepMax2;
+        this.stepMin = stepMin2;
     }
 }

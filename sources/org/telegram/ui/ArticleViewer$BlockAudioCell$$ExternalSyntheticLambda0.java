@@ -15,6 +15,6 @@ public final /* synthetic */ class ArticleViewer$BlockAudioCell$$ExternalSynthet
     }
 
     public final void onSeekBarDrag(float f) {
-        this.f$0.lambda$new$0(f);
+        this.f$0.m1452lambda$new$0$orgtelegramuiArticleViewer$BlockAudioCell(f);
     }
 }

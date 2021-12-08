@@ -12,6 +12,6 @@ public final /* synthetic */ class PrivacyUsersActivity$$ExternalSyntheticLambda
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$showUnblockAlert$3(this.f$1, dialogInterface, i);
+        this.f$0.m3683lambda$showUnblockAlert$3$orgtelegramuiPrivacyUsersActivity(this.f$1, dialogInterface, i);
     }
 }

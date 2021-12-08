@@ -12,6 +12,6 @@ public final /* synthetic */ class CountrySelectActivity$CountrySearchAdapter$$E
     }
 
     public final void run() {
-        this.f$0.lambda$processSearch$0(this.f$1);
+        this.f$0.m2801xf9a8c8c8(this.f$1);
     }
 }

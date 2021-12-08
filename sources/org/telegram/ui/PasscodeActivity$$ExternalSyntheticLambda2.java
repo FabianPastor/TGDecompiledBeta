@@ -11,6 +11,6 @@ public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda2 im
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$createView$0(textView, i, keyEvent);
+        return this.f$0.m3350lambda$createView$0$orgtelegramuiPasscodeActivity(textView, i, keyEvent);
     }
 }

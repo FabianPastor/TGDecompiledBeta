@@ -23,67 +23,66 @@ public class SubstringLayoutAnimator {
     ValueAnimator valueAnimator;
     private float xOffset;
 
-    public SubstringLayoutAnimator(View view) {
-        this.parentView = view;
+    public SubstringLayoutAnimator(View parentView2) {
+        this.parentView = parentView2;
     }
 
-    public void create(StaticLayout staticLayout, CharSequence charSequence, CharSequence charSequence2, TextPaint textPaint) {
-        boolean z;
-        String str;
-        String str2;
+    public void create(StaticLayout hintLayout, CharSequence hint, CharSequence text, TextPaint paint) {
+        String substring;
+        String maxStr;
+        boolean animateOut;
         float f;
-        if (staticLayout != null && !charSequence.equals(charSequence2)) {
+        if (hintLayout != null && !hint.equals(text)) {
             ValueAnimator valueAnimator2 = this.valueAnimator;
             if (valueAnimator2 != null) {
                 valueAnimator2.cancel();
             }
-            if (charSequence.length() > charSequence2.length()) {
-                str2 = charSequence.toString();
-                str = charSequence2.toString();
-                z = true;
+            if (hint.length() > text.length()) {
+                animateOut = true;
+                maxStr = hint.toString();
+                substring = text.toString();
             } else {
-                str2 = charSequence2.toString();
-                str = charSequence.toString();
-                z = false;
+                animateOut = false;
+                maxStr = text.toString();
+                substring = hint.toString();
             }
-            int indexOf = str2.indexOf(str);
-            if (indexOf >= 0) {
-                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str2);
-                SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder(str2);
-                if (indexOf != 0) {
-                    spannableStringBuilder2.setSpan(new EmptyStubSpan(), 0, indexOf, 0);
+            int startFrom = maxStr.indexOf(substring);
+            if (startFrom >= 0) {
+                SpannableStringBuilder inStr = new SpannableStringBuilder(maxStr);
+                SpannableStringBuilder stabeStr = new SpannableStringBuilder(maxStr);
+                if (startFrom != 0) {
+                    stabeStr.setSpan(new EmptyStubSpan(), 0, startFrom, 0);
                 }
-                if (str.length() + indexOf != str2.length()) {
-                    spannableStringBuilder2.setSpan(new EmptyStubSpan(), str.length() + indexOf, str2.length(), 0);
+                if (substring.length() + startFrom != maxStr.length()) {
+                    stabeStr.setSpan(new EmptyStubSpan(), substring.length() + startFrom, maxStr.length(), 0);
                 }
-                spannableStringBuilder.setSpan(new EmptyStubSpan(), indexOf, str.length() + indexOf, 0);
-                this.animateInLayout = new StaticLayout(spannableStringBuilder, textPaint, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                StaticLayout staticLayout2 = new StaticLayout(spannableStringBuilder2, textPaint, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                this.animateStableLayout = staticLayout2;
+                inStr.setSpan(new EmptyStubSpan(), startFrom, substring.length() + startFrom, 0);
+                StaticLayout staticLayout = r10;
+                StaticLayout staticLayout2 = new StaticLayout(inStr, paint, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.animateInLayout = staticLayout;
+                StaticLayout staticLayout3 = new StaticLayout(stabeStr, paint, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.animateStableLayout = staticLayout3;
                 this.animateTextChange = true;
-                this.animateTextChangeOut = z;
-                if (indexOf == 0) {
-                    f = 0.0f;
-                } else {
-                    f = -staticLayout2.getPrimaryHorizontal(indexOf);
-                }
-                this.xOffset = f;
+                this.animateTextChangeOut = animateOut;
+                this.xOffset = startFrom == 0 ? 0.0f : -staticLayout3.getPrimaryHorizontal(startFrom);
                 this.animateOutLayout = null;
                 this.replaceAnimation = false;
+                f = 0.0f;
             } else {
-                this.animateInLayout = new StaticLayout(charSequence2, textPaint, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                this.animateOutLayout = new StaticLayout(charSequence, textPaint, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.animateInLayout = new StaticLayout(text, paint, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.animateOutLayout = new StaticLayout(hint, paint, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 this.animateStableLayout = null;
                 this.animateTextChange = true;
                 this.replaceAnimation = true;
+                f = 0.0f;
                 this.xOffset = 0.0f;
             }
-            this.hintProgress = 0.0f;
+            this.hintProgress = f;
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.valueAnimator = ofFloat;
             ofFloat.addUpdateListener(new SubstringLayoutAnimator$$ExternalSyntheticLambda0(this));
             this.valueAnimator.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
+                public void onAnimationEnd(Animator animation) {
                     SubstringLayoutAnimator.this.animateTextChange = false;
                 }
             });
@@ -93,47 +92,47 @@ public class SubstringLayoutAnimator {
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$create$0(ValueAnimator valueAnimator2) {
-        this.hintProgress = ((Float) valueAnimator2.getAnimatedValue()).floatValue();
+    /* renamed from: lambda$create$0$org-telegram-ui-Components-SubstringLayoutAnimator  reason: not valid java name */
+    public /* synthetic */ void m2662xebd39380(ValueAnimator valueAnimator1) {
+        this.hintProgress = ((Float) valueAnimator1.getAnimatedValue()).floatValue();
         this.parentView.invalidate();
     }
 
-    public void draw(Canvas canvas, TextPaint textPaint) {
+    public void draw(Canvas canvas, TextPaint paint) {
         if (this.animateTextChange) {
-            float f = this.xOffset * (this.animateTextChangeOut ? this.hintProgress : 1.0f - this.hintProgress);
-            int alpha = textPaint.getAlpha();
+            float titleOffsetX = this.xOffset * (this.animateTextChangeOut ? this.hintProgress : 1.0f - this.hintProgress);
+            int alpha = paint.getAlpha();
             if (this.animateStableLayout != null) {
                 canvas.save();
-                canvas.translate(f, 0.0f);
+                canvas.translate(titleOffsetX, 0.0f);
                 this.animateStableLayout.draw(canvas);
                 canvas.restore();
             }
             if (this.animateInLayout != null) {
-                float f2 = this.animateTextChangeOut ? 1.0f - this.hintProgress : this.hintProgress;
+                float p = this.animateTextChangeOut ? 1.0f - this.hintProgress : this.hintProgress;
                 canvas.save();
-                textPaint.setAlpha((int) (((float) alpha) * f2));
-                canvas.translate(f, 0.0f);
+                paint.setAlpha((int) (((float) alpha) * p));
+                canvas.translate(titleOffsetX, 0.0f);
                 if (this.replaceAnimation) {
-                    float f3 = (f2 * 0.1f) + 0.9f;
-                    canvas.scale(f3, f3, f, ((float) this.parentView.getMeasuredHeight()) / 2.0f);
+                    float s = (p * 0.1f) + 0.9f;
+                    canvas.scale(s, s, titleOffsetX, ((float) this.parentView.getMeasuredHeight()) / 2.0f);
                 }
                 this.animateInLayout.draw(canvas);
                 canvas.restore();
-                textPaint.setAlpha(alpha);
+                paint.setAlpha(alpha);
             }
             if (this.animateOutLayout != null) {
-                float f4 = this.animateTextChangeOut ? this.hintProgress : 1.0f - this.hintProgress;
+                float p2 = this.animateTextChangeOut ? this.hintProgress : 1.0f - this.hintProgress;
                 canvas.save();
-                textPaint.setAlpha((int) (((float) alpha) * (this.animateTextChangeOut ? this.hintProgress : 1.0f - this.hintProgress)));
-                canvas.translate(f, 0.0f);
+                paint.setAlpha((int) (((float) alpha) * (this.animateTextChangeOut ? this.hintProgress : 1.0f - this.hintProgress)));
+                canvas.translate(titleOffsetX, 0.0f);
                 if (this.replaceAnimation) {
-                    float f5 = (f4 * 0.1f) + 0.9f;
-                    canvas.scale(f5, f5, f, ((float) this.parentView.getMeasuredHeight()) / 2.0f);
+                    float s2 = (0.1f * p2) + 0.9f;
+                    canvas.scale(s2, s2, titleOffsetX, ((float) this.parentView.getMeasuredHeight()) / 2.0f);
                 }
                 this.animateOutLayout.draw(canvas);
                 canvas.restore();
-                textPaint.setAlpha(alpha);
+                paint.setAlpha(alpha);
             }
         }
     }

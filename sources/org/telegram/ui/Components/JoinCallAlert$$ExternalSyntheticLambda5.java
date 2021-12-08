@@ -3,7 +3,7 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$Peer;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.JoinCallAlert;
@@ -17,9 +17,9 @@ public final /* synthetic */ class JoinCallAlert$$ExternalSyntheticLambda5 imple
     public final /* synthetic */ Context f$5;
     public final /* synthetic */ BaseFragment f$6;
     public final /* synthetic */ int f$7;
-    public final /* synthetic */ TLRPC$Peer f$8;
+    public final /* synthetic */ TLRPC.Peer f$8;
 
-    public /* synthetic */ JoinCallAlert$$ExternalSyntheticLambda5(AlertDialog alertDialog, TLObject tLObject, AccountInstance accountInstance, JoinCallAlert.JoinCallAlertDelegate joinCallAlertDelegate, long j, Context context, BaseFragment baseFragment, int i, TLRPC$Peer tLRPC$Peer) {
+    public /* synthetic */ JoinCallAlert$$ExternalSyntheticLambda5(AlertDialog alertDialog, TLObject tLObject, AccountInstance accountInstance, JoinCallAlert.JoinCallAlertDelegate joinCallAlertDelegate, long j, Context context, BaseFragment baseFragment, int i, TLRPC.Peer peer) {
         this.f$0 = alertDialog;
         this.f$1 = tLObject;
         this.f$2 = accountInstance;
@@ -28,7 +28,7 @@ public final /* synthetic */ class JoinCallAlert$$ExternalSyntheticLambda5 imple
         this.f$5 = context;
         this.f$6 = baseFragment;
         this.f$7 = i;
-        this.f$8 = tLRPC$Peer;
+        this.f$8 = peer;
     }
 
     public final void run() {

@@ -10,6 +10,6 @@ public final /* synthetic */ class TermsOfServiceView$$ExternalSyntheticLambda0 
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$new$2(dialogInterface, i);
+        this.f$0.m2668lambda$new$2$orgtelegramuiComponentsTermsOfServiceView(dialogInterface, i);
     }
 }

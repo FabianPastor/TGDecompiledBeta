@@ -11,6 +11,6 @@ public final /* synthetic */ class ChangeNameActivity$$ExternalSyntheticLambda2 
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$createView$2(textView, i, keyEvent);
+        return this.f$0.m1574lambda$createView$2$orgtelegramuiChangeNameActivity(textView, i, keyEvent);
     }
 }

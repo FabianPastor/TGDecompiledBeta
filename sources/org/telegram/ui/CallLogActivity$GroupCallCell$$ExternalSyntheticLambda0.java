@@ -11,6 +11,6 @@ public final /* synthetic */ class CallLogActivity$GroupCallCell$$ExternalSynthe
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$0(view);
+        this.f$0.m1501lambda$new$0$orgtelegramuiCallLogActivity$GroupCallCell(view);
     }
 }

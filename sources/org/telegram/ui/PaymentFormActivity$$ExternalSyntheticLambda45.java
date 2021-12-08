@@ -1,23 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda45 implements Runnable {
+public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda45 implements RequestDelegate {
     public final /* synthetic */ PaymentFormActivity f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ String f$3;
-    public final /* synthetic */ TLRPC$TL_account_updatePasswordSettings f$4;
+    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda45(PaymentFormActivity paymentFormActivity, boolean z, String str, String str2, TLRPC$TL_account_updatePasswordSettings tLRPC$TL_account_updatePasswordSettings) {
+    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda45(PaymentFormActivity paymentFormActivity, TLObject tLObject) {
         this.f$0 = paymentFormActivity;
-        this.f$1 = z;
-        this.f$2 = str;
-        this.f$3 = str2;
-        this.f$4 = tLRPC$TL_account_updatePasswordSettings;
+        this.f$1 = tLObject;
     }
 
-    public final void run() {
-        this.f$0.lambda$sendSavePassword$45(this.f$1, this.f$2, this.f$3, this.f$4);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m3511lambda$sendForm$49$orgtelegramuiPaymentFormActivity(this.f$1, tLObject, tL_error);
     }
 }

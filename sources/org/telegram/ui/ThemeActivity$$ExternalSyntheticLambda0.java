@@ -1,21 +1,16 @@
 package org.telegram.ui;
 
-import android.app.TimePickerDialog;
-import android.widget.TimePicker;
-import org.telegram.ui.Cells.TextSettingsCell;
+import com.google.android.gms.internal.icing.zzby$$ExternalSyntheticBackport0;
+import java.util.Comparator;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda0 implements TimePickerDialog.OnTimeSetListener {
-    public final /* synthetic */ ThemeActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ TextSettingsCell f$2;
+public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda0 implements Comparator {
+    public static final /* synthetic */ ThemeActivity$$ExternalSyntheticLambda0 INSTANCE = new ThemeActivity$$ExternalSyntheticLambda0();
 
-    public /* synthetic */ ThemeActivity$$ExternalSyntheticLambda0(ThemeActivity themeActivity, int i, TextSettingsCell textSettingsCell) {
-        this.f$0 = themeActivity;
-        this.f$1 = i;
-        this.f$2 = textSettingsCell;
+    private /* synthetic */ ThemeActivity$$ExternalSyntheticLambda0() {
     }
 
-    public final void onTimeSet(TimePicker timePicker, int i, int i2) {
-        this.f$0.lambda$createView$4(this.f$1, this.f$2, timePicker, i, i2);
+    public final int compare(Object obj, Object obj2) {
+        return zzby$$ExternalSyntheticBackport0.m(((Theme.ThemeInfo) obj).sortIndex, ((Theme.ThemeInfo) obj2).sortIndex);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda1 
     }
 
     public final void run() {
-        this.f$0.lambda$loadAutoDownloadConfig$1(this.f$1);
+        this.f$0.m65xe1b1dda6(this.f$1);
     }
 }

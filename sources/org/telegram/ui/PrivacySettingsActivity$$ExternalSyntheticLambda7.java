@@ -1,13 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda7 implements Runnable {
-    public final /* synthetic */ PrivacySettingsActivity f$0;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    public /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda7(PrivacySettingsActivity privacySettingsActivity) {
-        this.f$0 = privacySettingsActivity;
+public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda7 implements RequestDelegate {
+    public static final /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda7 INSTANCE = new PrivacySettingsActivity$$ExternalSyntheticLambda7();
+
+    private /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda7() {
     }
 
-    public final void run() {
-        this.f$0.lambda$createView$10();
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        PrivacySettingsActivity.lambda$onFragmentDestroy$1(tLObject, tL_error);
     }
 }

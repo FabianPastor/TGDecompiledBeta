@@ -11,6 +11,6 @@ public final /* synthetic */ class ThemesHorizontalListCell$$ExternalSyntheticLa
     }
 
     public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$new$1(view, i);
+        return this.f$0.m1563lambda$new$1$orgtelegramuiCellsThemesHorizontalListCell(view, i);
     }
 }

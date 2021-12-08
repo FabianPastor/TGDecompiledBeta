@@ -10,6 +10,6 @@ public final /* synthetic */ class ImageLoader$$ExternalSyntheticLambda7 impleme
     }
 
     public final void run() {
-        this.f$0.lambda$preloadArtwork$7(this.f$1);
+        this.f$0.m685lambda$artworkLoadError$9$orgtelegrammessengerImageLoader(this.f$1);
     }
 }

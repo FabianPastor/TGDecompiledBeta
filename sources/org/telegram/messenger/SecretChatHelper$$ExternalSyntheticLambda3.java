@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$EncryptedChat;
+import java.util.ArrayList;
 
 public final /* synthetic */ class SecretChatHelper$$ExternalSyntheticLambda3 implements Runnable {
     public final /* synthetic */ SecretChatHelper f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ TLRPC$EncryptedChat f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ SecretChatHelper$$ExternalSyntheticLambda3(SecretChatHelper secretChatHelper, int i, TLRPC$EncryptedChat tLRPC$EncryptedChat, int i2) {
+    public /* synthetic */ SecretChatHelper$$ExternalSyntheticLambda3(SecretChatHelper secretChatHelper, ArrayList arrayList) {
         this.f$0 = secretChatHelper;
-        this.f$1 = i;
-        this.f$2 = tLRPC$EncryptedChat;
-        this.f$3 = i2;
+        this.f$1 = arrayList;
     }
 
     public final void run() {
-        this.f$0.lambda$resendMessages$15(this.f$1, this.f$2, this.f$3);
+        this.f$0.m1148lambda$resendMessages$14$orgtelegrammessengerSecretChatHelper(this.f$1);
     }
 }

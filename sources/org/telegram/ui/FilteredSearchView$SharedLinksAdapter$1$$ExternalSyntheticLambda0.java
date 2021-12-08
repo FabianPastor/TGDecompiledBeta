@@ -13,6 +13,6 @@ public final /* synthetic */ class FilteredSearchView$SharedLinksAdapter$1$$Exte
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onLinkPress$0(this.f$1, dialogInterface, i);
+        this.f$0.m2934xd2f1fe27(this.f$1, dialogInterface, i);
     }
 }

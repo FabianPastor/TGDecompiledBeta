@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatActivityEnterView$22$2$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.lambda$onDraw$0(this.f$1);
+        this.f$0.m2087x96d83e45(this.f$1);
     }
 }

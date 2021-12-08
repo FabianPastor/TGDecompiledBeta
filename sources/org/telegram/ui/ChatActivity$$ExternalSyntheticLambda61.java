@@ -1,16 +1,23 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Cells.CheckBoxCell;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda61 implements View.OnClickListener {
-    public final /* synthetic */ CheckBoxCell[] f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda61 implements RequestDelegate {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ String f$1;
+    public final /* synthetic */ TLRPC.TL_messages_requestUrlAuth f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda61(CheckBoxCell[] checkBoxCellArr) {
-        this.f$0 = checkBoxCellArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda61(ChatActivity chatActivity, String str, TLRPC.TL_messages_requestUrlAuth tL_messages_requestUrlAuth, boolean z) {
+        this.f$0 = chatActivity;
+        this.f$1 = str;
+        this.f$2 = tL_messages_requestUrlAuth;
+        this.f$3 = z;
     }
 
-    public final void onClick(View view) {
-        ChatActivity.lambda$showRequestUrlAlert$157(this.f$0, view);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m1808lambda$showRequestUrlAlert$159$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
     }
 }

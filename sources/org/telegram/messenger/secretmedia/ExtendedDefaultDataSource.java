@@ -41,36 +41,36 @@ public final class ExtendedDefaultDataSource implements DataSource {
     private DataSource rtmpDataSource;
     private final List<TransferListener> transferListeners;
 
-    public ExtendedDefaultDataSource(Context context2, String str, boolean z) {
-        this(context2, str, 8000, 8000, z);
+    public ExtendedDefaultDataSource(Context context2, String userAgent, boolean allowCrossProtocolRedirects) {
+        this(context2, userAgent, 8000, 8000, allowCrossProtocolRedirects);
     }
 
-    public ExtendedDefaultDataSource(Context context2, String str, int i, int i2, boolean z) {
-        this(context2, new DefaultHttpDataSource(str, (Predicate<String>) null, i, i2, z, (HttpDataSource.RequestProperties) null));
+    public ExtendedDefaultDataSource(Context context2, String userAgent, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+        this(context2, new DefaultHttpDataSource(userAgent, (Predicate<String>) null, connectTimeoutMillis, readTimeoutMillis, allowCrossProtocolRedirects, (HttpDataSource.RequestProperties) null));
     }
 
-    public ExtendedDefaultDataSource(Context context2, DataSource dataSource2) {
+    public ExtendedDefaultDataSource(Context context2, DataSource baseDataSource2) {
         this.context = context2.getApplicationContext();
-        this.baseDataSource = (DataSource) Assertions.checkNotNull(dataSource2);
+        this.baseDataSource = (DataSource) Assertions.checkNotNull(baseDataSource2);
         this.transferListeners = new ArrayList();
     }
 
     @Deprecated
-    public ExtendedDefaultDataSource(Context context2, TransferListener transferListener, String str, boolean z) {
-        this(context2, transferListener, str, 8000, 8000, z);
+    public ExtendedDefaultDataSource(Context context2, TransferListener listener, String userAgent, boolean allowCrossProtocolRedirects) {
+        this(context2, listener, userAgent, 8000, 8000, allowCrossProtocolRedirects);
     }
 
     @Deprecated
-    public ExtendedDefaultDataSource(Context context2, TransferListener transferListener, String str, int i, int i2, boolean z) {
-        this(context2, transferListener, (DataSource) new DefaultHttpDataSource(str, i, i2, z, (HttpDataSource.RequestProperties) null));
+    public ExtendedDefaultDataSource(Context context2, TransferListener listener, String userAgent, int connectTimeoutMillis, int readTimeoutMillis, boolean allowCrossProtocolRedirects) {
+        this(context2, listener, (DataSource) new DefaultHttpDataSource(userAgent, connectTimeoutMillis, readTimeoutMillis, allowCrossProtocolRedirects, (HttpDataSource.RequestProperties) null));
     }
 
     @Deprecated
-    public ExtendedDefaultDataSource(Context context2, TransferListener transferListener, DataSource dataSource2) {
-        this(context2, dataSource2);
-        if (transferListener != null) {
-            this.transferListeners.add(transferListener);
-            dataSource2.addTransferListener(transferListener);
+    public ExtendedDefaultDataSource(Context context2, TransferListener listener, DataSource baseDataSource2) {
+        this(context2, baseDataSource2);
+        if (listener != null) {
+            this.transferListeners.add(listener);
+            baseDataSource2.addTransferListener(listener);
         }
     }
 
@@ -89,8 +89,8 @@ public final class ExtendedDefaultDataSource implements DataSource {
         Assertions.checkState(this.dataSource == null);
         String scheme = dataSpec.uri.getScheme();
         if (Util.isLocalFileUri(dataSpec.uri)) {
-            String path = dataSpec.uri.getPath();
-            if (path != null && path.startsWith("/android_asset/")) {
+            String uriPath = dataSpec.uri.getPath();
+            if (uriPath != null && uriPath.startsWith("/android_asset/")) {
                 this.dataSource = getAssetDataSource();
             } else if (dataSpec.uri.getPath().endsWith(".enc")) {
                 this.dataSource = getEncryptedFileDataSource();
@@ -115,8 +115,8 @@ public final class ExtendedDefaultDataSource implements DataSource {
         return this.dataSource.open(dataSpec);
     }
 
-    public int read(byte[] bArr, int i, int i2) throws IOException {
-        return ((DataSource) Assertions.checkNotNull(this.dataSource)).read(bArr, i, i2);
+    public int read(byte[] buffer, int offset, int readLength) throws IOException {
+        return ((DataSource) Assertions.checkNotNull(this.dataSource)).read(buffer, offset, readLength);
     }
 
     public Uri getUri() {
@@ -171,9 +171,9 @@ public final class ExtendedDefaultDataSource implements DataSource {
     }
 
     private DataSource getStreamDataSource() {
-        FileStreamLoadOperation fileStreamLoadOperation = new FileStreamLoadOperation();
-        addListenersToDataSource(fileStreamLoadOperation);
-        return fileStreamLoadOperation;
+        FileStreamLoadOperation streamLoadOperation = new FileStreamLoadOperation();
+        addListenersToDataSource(streamLoadOperation);
+        return streamLoadOperation;
     }
 
     private DataSource getContentDataSource() {
@@ -191,10 +191,10 @@ public final class ExtendedDefaultDataSource implements DataSource {
                 DataSource dataSource2 = (DataSource) Class.forName("com.google.android.exoplayer2.ext.rtmp.RtmpDataSource").getConstructor(new Class[0]).newInstance(new Object[0]);
                 this.rtmpDataSource = dataSource2;
                 addListenersToDataSource(dataSource2);
-            } catch (ClassNotFoundException unused) {
+            } catch (ClassNotFoundException e) {
                 Log.w("ExtendedDefaultDataSource", "Attempting to play RTMP stream without depending on the RTMP extension");
-            } catch (Exception e) {
-                throw new RuntimeException("Error instantiating RTMP extension", e);
+            } catch (Exception e2) {
+                throw new RuntimeException("Error instantiating RTMP extension", e2);
             }
             if (this.rtmpDataSource == null) {
                 this.rtmpDataSource = this.baseDataSource;
@@ -227,9 +227,9 @@ public final class ExtendedDefaultDataSource implements DataSource {
         }
     }
 
-    private void maybeAddListenerToDataSource(DataSource dataSource2, TransferListener transferListener) {
+    private void maybeAddListenerToDataSource(DataSource dataSource2, TransferListener listener) {
         if (dataSource2 != null) {
-            dataSource2.addTransferListener(transferListener);
+            dataSource2.addTransferListener(listener);
         }
     }
 }

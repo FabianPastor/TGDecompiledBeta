@@ -9,10 +9,10 @@ public class Rect {
     public Rect() {
     }
 
-    public Rect(float f, float f2, float f3, float f4) {
-        this.x = f;
-        this.y = f2;
-        this.width = f3;
-        this.height = f4;
+    public Rect(float x2, float y2, float width2, float height2) {
+        this.x = x2;
+        this.y = y2;
+        this.width = width2;
+        this.height = height2;
     }
 }

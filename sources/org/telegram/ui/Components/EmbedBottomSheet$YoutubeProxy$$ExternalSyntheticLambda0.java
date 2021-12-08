@@ -10,6 +10,6 @@ public final /* synthetic */ class EmbedBottomSheet$YoutubeProxy$$ExternalSynthe
     }
 
     public final void run() {
-        this.f$0.lambda$postEvent$0();
+        this.f$0.m2240x10d0a2ae();
     }
 }

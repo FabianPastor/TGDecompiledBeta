@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallMiniTextureView$$ExternalSyntheticLa
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$startFlipAnimation$6(valueAnimator);
+        this.f$0.m2744x7CLASSNAMEa8(valueAnimator);
     }
 }

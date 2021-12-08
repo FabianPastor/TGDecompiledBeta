@@ -1,16 +1,19 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.messenger.MessagesStorage;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.LaunchActivity;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda16 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ MessagesStorage.IntCallback f$0;
+    public final /* synthetic */ TLRPC.TL_langPackLanguage f$0;
+    public final /* synthetic */ LaunchActivity f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda16(MessagesStorage.IntCallback intCallback) {
-        this.f$0 = intCallback;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda16(TLRPC.TL_langPackLanguage tL_langPackLanguage, LaunchActivity launchActivity) {
+        this.f$0 = tL_langPackLanguage;
+        this.f$1 = launchActivity;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.run(1);
+        AlertsCreator.lambda$createLanguageAlert$2(this.f$0, this.f$1, dialogInterface, i);
     }
 }

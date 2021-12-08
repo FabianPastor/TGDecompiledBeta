@@ -1,23 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_wallPaperSettings;
-import org.telegram.ui.ActionBar.Theme;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda309 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda309 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ Theme.OverrideWallpaperInfo f$1;
-    public final /* synthetic */ TLRPC$TL_wallPaperSettings f$2;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ TLRPC.TL_help_promoData f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda309(MessagesController messagesController, Theme.OverrideWallpaperInfo overrideWallpaperInfo, TLRPC$TL_wallPaperSettings tLRPC$TL_wallPaperSettings) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda309(MessagesController messagesController, long j, TLRPC.TL_help_promoData tL_help_promoData, int i) {
         this.f$0 = messagesController;
-        this.f$1 = overrideWallpaperInfo;
-        this.f$2 = tLRPC$TL_wallPaperSettings;
+        this.f$1 = j;
+        this.f$2 = tL_help_promoData;
+        this.f$3 = i;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$didReceivedNotification$21(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m145xaa61c3c3(this.f$1, this.f$2, this.f$3);
     }
 }

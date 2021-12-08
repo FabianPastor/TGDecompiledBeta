@@ -8,6 +8,6 @@ public final /* synthetic */ class MemberRequestsDelegate$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.lambda$loadMembers$2();
+        this.f$0.loadMembers();
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class AvatarPreviewer$Layout$$ExternalSyntheticLamb
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$showBottomSheet$1(dialogInterface, i);
+        this.f$0.m1462lambda$showBottomSheet$1$orgtelegramuiAvatarPreviewer$Layout(dialogInterface, i);
     }
 }

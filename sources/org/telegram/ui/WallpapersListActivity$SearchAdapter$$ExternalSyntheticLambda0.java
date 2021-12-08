@@ -15,6 +15,6 @@ public final /* synthetic */ class WallpapersListActivity$SearchAdapter$$Externa
     }
 
     public final void run() {
-        this.f$0.lambda$searchImages$3(this.f$1, this.f$2);
+        this.f$0.m4090xce11646f(this.f$1, this.f$2);
     }
 }

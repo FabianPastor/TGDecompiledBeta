@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda106 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ int f$1;
+import android.content.DialogInterface;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda106(ChatActivity chatActivity, int i) {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda106 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ boolean f$1;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda106(ChatActivity chatActivity, boolean z) {
         this.f$0 = chatActivity;
-        this.f$1 = i;
+        this.f$1 = z;
     }
 
-    public final void run() {
-        this.f$0.lambda$showInfoHint$106(this.f$1);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m1663lambda$checkRecordLocked$147$orgtelegramuiChatActivity(this.f$1, dialogInterface, i);
     }
 }

@@ -2,18 +2,15 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda262 implements RequestDelegate {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda262 INSTANCE = new MessagesController$$ExternalSyntheticLambda262();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda262(MessagesController messagesController, long j) {
-        this.f$0 = messagesController;
-        this.f$1 = j;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda262() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$setChannelSlowMode$67(this.f$1, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        MessagesController.lambda$unregistedPush$236(tLObject, tL_error);
     }
 }

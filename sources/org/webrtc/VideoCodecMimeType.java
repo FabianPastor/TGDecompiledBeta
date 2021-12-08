@@ -9,8 +9,8 @@ enum VideoCodecMimeType {
     
     private final String mimeType;
 
-    private VideoCodecMimeType(String str) {
-        this.mimeType = str;
+    private VideoCodecMimeType(String mimeType2) {
+        this.mimeType = mimeType2;
     }
 
     /* access modifiers changed from: package-private */

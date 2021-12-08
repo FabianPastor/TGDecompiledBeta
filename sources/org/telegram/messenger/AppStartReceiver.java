@@ -11,8 +11,7 @@ public class AppStartReceiver extends BroadcastReceiver {
         }
     }
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$onReceive$0() {
+    static /* synthetic */ void lambda$onReceive$0() {
         SharedConfig.loadConfig();
         if (SharedConfig.passcodeHash.length() > 0) {
             SharedConfig.appLocked = true;

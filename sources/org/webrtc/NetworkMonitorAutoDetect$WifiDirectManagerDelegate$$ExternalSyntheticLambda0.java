@@ -12,6 +12,6 @@ public final /* synthetic */ class NetworkMonitorAutoDetect$WifiDirectManagerDel
     }
 
     public final void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {
-        this.f$0.lambda$new$0(wifiP2pGroup);
+        this.f$0.m4109x61cecCLASSNAME(wifiP2pGroup);
     }
 }

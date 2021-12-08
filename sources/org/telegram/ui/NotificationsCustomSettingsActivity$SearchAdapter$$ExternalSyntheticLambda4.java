@@ -26,7 +26,7 @@ public final /* synthetic */ class NotificationsCustomSettingsActivity$SearchAda
     }
 
     public final void onDataSetChanged(int i) {
-        this.f$0.lambda$new$0(i);
+        this.f$0.m3336x1bdfa523(i);
     }
 
     public /* synthetic */ void onSetHashtags(ArrayList arrayList, HashMap hashMap) {

@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.KeyEvent;
-import android.view.View;
+import org.telegram.ui.Components.ScrollSlidingTabStrip;
 
-public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda1 implements View.OnKeyListener {
+public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda1 implements ScrollSlidingTabStrip.ScrollSlidingTabStripDelegate {
     public final /* synthetic */ EmojiView f$0;
 
     public /* synthetic */ EmojiView$$ExternalSyntheticLambda1(EmojiView emojiView) {
         this.f$0 = emojiView;
     }
 
-    public final boolean onKey(View view, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$new$7(view, i, keyEvent);
+    public final void onPageSelected(int i) {
+        this.f$0.m2247lambda$new$6$orgtelegramuiComponentsEmojiView(i);
     }
 }

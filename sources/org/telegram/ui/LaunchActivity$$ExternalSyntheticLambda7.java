@@ -1,20 +1,14 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.view.View;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda7 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ String f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ BaseFragment f$2;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda7 implements View.OnClickListener {
+    public static final /* synthetic */ LaunchActivity$$ExternalSyntheticLambda7 INSTANCE = new LaunchActivity$$ExternalSyntheticLambda7();
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda7(String str, String str2, BaseFragment baseFragment) {
-        this.f$0 = str;
-        this.f$1 = str2;
-        this.f$2 = baseFragment;
+    private /* synthetic */ LaunchActivity$$ExternalSyntheticLambda7() {
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        LaunchActivity.lambda$handleIntent$18(this.f$0, this.f$1, this.f$2, dialogInterface, i);
+    public final void onClick(View view) {
+        LaunchActivity.lambda$onCreate$1(view);
     }
 }

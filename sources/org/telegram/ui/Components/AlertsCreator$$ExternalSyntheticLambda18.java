@@ -1,18 +1,33 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC$EncryptedChat;
+import org.telegram.messenger.AccountInstance;
+import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.CheckBoxCell;
+import org.telegram.ui.ChatActivity;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda18 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ TLRPC$EncryptedChat f$0;
-    public final /* synthetic */ NumberPicker f$1;
+    public final /* synthetic */ TLRPC.User f$0;
+    public final /* synthetic */ AccountInstance f$1;
+    public final /* synthetic */ ChatActivity f$2;
+    public final /* synthetic */ TLRPC.Chat f$3;
+    public final /* synthetic */ MessageObject f$4;
+    public final /* synthetic */ CheckBoxCell[] f$5;
+    public final /* synthetic */ Theme.ResourcesProvider f$6;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda18(TLRPC$EncryptedChat tLRPC$EncryptedChat, NumberPicker numberPicker) {
-        this.f$0 = tLRPC$EncryptedChat;
-        this.f$1 = numberPicker;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda18(TLRPC.User user, AccountInstance accountInstance, ChatActivity chatActivity, TLRPC.Chat chat, MessageObject messageObject, CheckBoxCell[] checkBoxCellArr, Theme.ResourcesProvider resourcesProvider) {
+        this.f$0 = user;
+        this.f$1 = accountInstance;
+        this.f$2 = chatActivity;
+        this.f$3 = chat;
+        this.f$4 = messageObject;
+        this.f$5 = checkBoxCellArr;
+        this.f$6 = resourcesProvider;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createTTLAlert$86(this.f$0, this.f$1, dialogInterface, i);
+        AlertsCreator.lambda$showBlockReportSpamReplyAlert$5(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, dialogInterface, i);
     }
 }

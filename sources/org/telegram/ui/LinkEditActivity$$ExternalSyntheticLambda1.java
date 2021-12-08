@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda1 implements View.OnClickListener {
+public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda1 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ LinkEditActivity f$0;
 
     public /* synthetic */ LinkEditActivity$$ExternalSyntheticLambda1(LinkEditActivity linkEditActivity) {
         this.f$0 = linkEditActivity;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$0(view);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.m3133lambda$createView$1$orgtelegramuiLinkEditActivity(z, i);
     }
 }

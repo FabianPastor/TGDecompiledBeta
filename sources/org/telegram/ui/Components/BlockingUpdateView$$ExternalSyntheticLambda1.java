@@ -10,6 +10,6 @@ public final /* synthetic */ class BlockingUpdateView$$ExternalSyntheticLambda1 
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$0(view);
+        this.f$0.m2015lambda$new$0$orgtelegramuiComponentsBlockingUpdateView(view);
     }
 }

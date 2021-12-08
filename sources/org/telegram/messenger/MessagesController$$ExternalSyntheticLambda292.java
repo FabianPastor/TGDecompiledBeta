@@ -1,19 +1,18 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.content.Context;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda292 implements RequestDelegate {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ String f$1;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda292 implements Runnable {
+    public final /* synthetic */ Context f$0;
+    public final /* synthetic */ AlertDialog f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda292(MessagesController messagesController, String str) {
-        this.f$0 = messagesController;
-        this.f$1 = str;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda292(Context context, AlertDialog alertDialog) {
+        this.f$0 = context;
+        this.f$1 = alertDialog;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$registerForPush$241(this.f$1, tLObject, tLRPC$TL_error);
+    public final void run() {
+        MessagesController.lambda$convertToMegaGroup$202(this.f$0, this.f$1);
     }
 }

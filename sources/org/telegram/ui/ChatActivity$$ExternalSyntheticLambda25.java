@@ -1,28 +1,22 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import android.text.style.CharacterStyle;
-import org.telegram.messenger.MessageObject;
-import org.telegram.ui.Cells.ChatMessageCell;
+import java.util.concurrent.CountDownLatch;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda25 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda25 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ CharacterStyle f$2;
-    public final /* synthetic */ MessageObject f$3;
-    public final /* synthetic */ ChatMessageCell f$4;
-    public final /* synthetic */ int f$5;
+    public final /* synthetic */ MessagesStorage f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ CountDownLatch f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda25(ChatActivity chatActivity, String str, CharacterStyle characterStyle, MessageObject messageObject, ChatMessageCell chatMessageCell, int i) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda25(ChatActivity chatActivity, MessagesStorage messagesStorage, long j, CountDownLatch countDownLatch) {
         this.f$0 = chatActivity;
-        this.f$1 = str;
-        this.f$2 = characterStyle;
-        this.f$3 = messageObject;
-        this.f$4 = chatMessageCell;
-        this.f$5 = i;
+        this.f$1 = messagesStorage;
+        this.f$2 = j;
+        this.f$3 = countDownLatch;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$didPressMessageUrl$168(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, dialogInterface, i);
+    public final void run() {
+        this.f$0.m1745lambda$onFragmentCreate$5$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3);
     }
 }

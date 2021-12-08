@@ -1,15 +1,13 @@
 package org.telegram.ui;
 
-import android.view.View;
-
-public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda7 implements View.OnClickListener {
+public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda7 implements Runnable {
     public final /* synthetic */ TwoStepVerificationSetupActivity f$0;
 
     public /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda7(TwoStepVerificationSetupActivity twoStepVerificationSetupActivity) {
         this.f$0 = twoStepVerificationSetupActivity;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$6(view);
+    public final void run() {
+        this.f$0.m4040xaCLASSNAME();
     }
 }

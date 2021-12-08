@@ -11,6 +11,6 @@ public final /* synthetic */ class ProfileActivity$OverlaysView$$ExternalSynthet
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$new$0(valueAnimator);
+        this.f$0.m3731lambda$new$0$orgtelegramuiProfileActivity$OverlaysView(valueAnimator);
     }
 }

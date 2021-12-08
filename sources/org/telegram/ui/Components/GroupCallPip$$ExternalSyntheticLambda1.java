@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallPip$$ExternalSyntheticLambda1 implem
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$1(view);
+        this.f$0.m2318lambda$new$1$orgtelegramuiComponentsGroupCallPip(view);
     }
 }

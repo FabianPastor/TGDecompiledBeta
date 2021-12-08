@@ -10,6 +10,6 @@ public final /* synthetic */ class PhonebookShareAlert$$ExternalSyntheticLambda5
     }
 
     public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$new$4(z, i);
+        this.f$0.m2456lambda$new$4$orgtelegramuiComponentsPhonebookShareAlert(z, i);
     }
 }

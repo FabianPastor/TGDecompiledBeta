@@ -1,19 +1,13 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-
-public final /* synthetic */ class LocationController$$ExternalSyntheticLambda29 implements RequestDelegate {
+public final /* synthetic */ class LocationController$$ExternalSyntheticLambda29 implements Runnable {
     public final /* synthetic */ LocationController f$0;
-    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ LocationController$$ExternalSyntheticLambda29(LocationController locationController, long j) {
+    public /* synthetic */ LocationController$$ExternalSyntheticLambda29(LocationController locationController) {
         this.f$0 = locationController;
-        this.f$1 = j;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadLiveLocations$28(this.f$1, tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m739x4c8CLASSNAME();
     }
 }

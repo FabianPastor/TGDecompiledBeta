@@ -16,6 +16,6 @@ public final /* synthetic */ class EglRenderer$$ExternalSyntheticLambda1 impleme
     }
 
     public final void run() {
-        this.f$0.lambda$clearImage$6(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.m4101lambda$clearImage$6$orgwebrtcEglRenderer(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

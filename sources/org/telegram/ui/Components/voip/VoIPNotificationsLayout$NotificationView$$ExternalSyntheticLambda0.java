@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPNotificationsLayout$NotificationView$$Ext
     }
 
     public final void run() {
-        this.f$0.lambda$startAnimation$0();
+        this.f$0.m2764x4CLASSNAMEb27();
     }
 }

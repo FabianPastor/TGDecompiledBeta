@@ -1,20 +1,16 @@
 package org.telegram.ui.Components;
 
-import java.util.Calendar;
-import org.telegram.ui.Components.NumberPicker;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda87 implements NumberPicker.Formatter {
-    public final /* synthetic */ long f$0;
-    public final /* synthetic */ Calendar f$1;
-    public final /* synthetic */ int f$2;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda87 implements RequestDelegate {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda87 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda87();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda87(long j, Calendar calendar, int i) {
-        this.f$0 = j;
-        this.f$1 = calendar;
-        this.f$2 = i;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda87() {
     }
 
-    public final String format(int i) {
-        return AlertsCreator.lambda$createScheduleDatePickerDialog$43(this.f$0, this.f$1, this.f$2, i);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        AlertsCreator.lambda$createDeleteMessagesAlert$95(tLObject, tL_error);
     }
 }

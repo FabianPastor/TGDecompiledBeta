@@ -10,7 +10,7 @@ public final /* synthetic */ class CancelAccountDeletionActivity$$ExternalSynthe
     }
 
     public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$0();
+        this.f$0.m1509xvar_bc9();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

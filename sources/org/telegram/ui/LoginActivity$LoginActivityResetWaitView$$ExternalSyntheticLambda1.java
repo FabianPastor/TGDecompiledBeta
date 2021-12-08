@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityResetWaitView$$Ext
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$3(view);
+        this.f$0.m3238xa1ae125(view);
     }
 }

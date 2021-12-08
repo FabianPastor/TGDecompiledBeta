@@ -41,30 +41,30 @@ public class TextPriceCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(40.0f));
-        int measuredWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
-        this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(measuredWidth / 2, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
-        this.textView.measure(View.MeasureSpec.makeMeasureSpec((measuredWidth - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(40.0f));
+        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
+        this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(availableWidth / 2, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        this.textView.measure(View.MeasureSpec.makeMeasureSpec((availableWidth - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
 
-    public void setTextColor(int i) {
-        this.textView.setTextColor(i);
+    public void setTextColor(int color) {
+        this.textView.setTextColor(color);
     }
 
-    public void setTextValueColor(int i) {
-        this.valueTextView.setTextColor(i);
+    public void setTextValueColor(int color) {
+        this.valueTextView.setTextColor(color);
     }
 
-    public void setTextAndValue(String str, String str2, boolean z) {
-        this.textView.setText(str);
-        if (str2 != null) {
-            this.valueTextView.setText(str2);
+    public void setTextAndValue(String text, String value, boolean bold) {
+        this.textView.setText(text);
+        if (value != null) {
+            this.valueTextView.setText(value);
             this.valueTextView.setVisibility(0);
         } else {
             this.valueTextView.setVisibility(4);
         }
-        if (z) {
+        if (bold) {
             setTag("windowBackgroundWhiteBlackText");
             this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));

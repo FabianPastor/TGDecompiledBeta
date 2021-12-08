@@ -2,18 +2,15 @@ package org.telegram.messenger.voip;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 
 public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda91 implements RequestDelegate {
-    public final /* synthetic */ VoIPService f$0;
-    public final /* synthetic */ byte[] f$1;
+    public static final /* synthetic */ VoIPService$$ExternalSyntheticLambda91 INSTANCE = new VoIPService$$ExternalSyntheticLambda91();
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda91(VoIPService voIPService, byte[] bArr) {
-        this.f$0 = voIPService;
-        this.f$1 = bArr;
+    private /* synthetic */ VoIPService$$ExternalSyntheticLambda91() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$startOutgoingCall$9(this.f$1, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        VoIPService.lambda$callFailed$78(tLObject, tL_error);
     }
 }

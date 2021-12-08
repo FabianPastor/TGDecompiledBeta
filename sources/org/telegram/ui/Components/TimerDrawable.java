@@ -22,16 +22,6 @@ public class TimerDrawable extends Drawable {
     private TextPaint timePaint = new TextPaint(1);
     private float timeWidth = 0.0f;
 
-    public int getOpacity() {
-        return -2;
-    }
-
-    public void setAlpha(int i) {
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
     public TimerDrawable(Context context) {
         this.timePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.timePaint.setTextSize((float) AndroidUtilities.dp(11.0f));
@@ -39,46 +29,45 @@ public class TimerDrawable extends Drawable {
         this.linePaint.setStyle(Paint.Style.STROKE);
     }
 
-    public void setTime(int i) {
-        String str;
-        this.time = i;
-        if (i >= 1 && i < 60) {
-            str = "" + i;
-            if (str.length() < 2) {
-                str = str + LocaleController.getString("SecretChatTimerSeconds", NUM);
+    public void setTime(int value) {
+        String timeString;
+        this.time = value;
+        if (value >= 1 && value < 60) {
+            timeString = "" + value;
+            if (timeString.length() < 2) {
+                timeString = timeString + LocaleController.getString("SecretChatTimerSeconds", NUM);
             }
-        } else if (i >= 60 && i < 3600) {
-            str = "" + (i / 60);
-            if (str.length() < 2) {
-                str = str + LocaleController.getString("SecretChatTimerMinutes", NUM);
+        } else if (value >= 60 && value < 3600) {
+            timeString = "" + (value / 60);
+            if (timeString.length() < 2) {
+                timeString = timeString + LocaleController.getString("SecretChatTimerMinutes", NUM);
             }
-        } else if (i >= 3600 && i < 86400) {
-            str = "" + ((i / 60) / 60);
-            if (str.length() < 2) {
-                str = str + LocaleController.getString("SecretChatTimerHours", NUM);
+        } else if (value >= 3600 && value < 86400) {
+            timeString = "" + ((value / 60) / 60);
+            if (timeString.length() < 2) {
+                timeString = timeString + LocaleController.getString("SecretChatTimerHours", NUM);
             }
-        } else if (i >= 86400 && i < 604800) {
-            str = "" + (((i / 60) / 60) / 24);
-            if (str.length() < 2) {
-                str = str + LocaleController.getString("SecretChatTimerDays", NUM);
+        } else if (value >= 86400 && value < 604800) {
+            timeString = "" + (((value / 60) / 60) / 24);
+            if (timeString.length() < 2) {
+                timeString = timeString + LocaleController.getString("SecretChatTimerDays", NUM);
             }
-        } else if (i < 2592000 || i > 2678400) {
-            str = "" + ((((i / 60) / 60) / 24) / 7);
-            if (str.length() < 2) {
-                str = str + LocaleController.getString("SecretChatTimerWeeks", NUM);
-            } else if (str.length() > 2) {
-                str = "c";
+        } else if (value < 2592000 || value > 2678400) {
+            timeString = "" + ((((value / 60) / 60) / 24) / 7);
+            if (timeString.length() < 2) {
+                timeString = timeString + LocaleController.getString("SecretChatTimerWeeks", NUM);
+            } else if (timeString.length() > 2) {
+                timeString = "c";
             }
         } else {
-            str = "" + ((((i / 60) / 60) / 24) / 30);
-            if (str.length() < 2) {
-                str = str + LocaleController.getString("SecretChatTimerMonths", NUM);
+            timeString = "" + ((((value / 60) / 60) / 24) / 30);
+            if (timeString.length() < 2) {
+                timeString = timeString + LocaleController.getString("SecretChatTimerMonths", NUM);
             }
         }
-        String str2 = str;
-        this.timeWidth = this.timePaint.measureText(str2);
+        this.timeWidth = this.timePaint.measureText(timeString);
         try {
-            StaticLayout staticLayout = new StaticLayout(str2, this.timePaint, (int) Math.ceil((double) this.timeWidth), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            StaticLayout staticLayout = new StaticLayout(timeString, this.timePaint, (int) Math.ceil((double) this.timeWidth), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             this.timeLayout = staticLayout;
             this.timeHeight = staticLayout.getHeight();
         } catch (Exception e) {
@@ -89,8 +78,8 @@ public class TimerDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        int intrinsicWidth = getIntrinsicWidth();
-        int intrinsicHeight = getIntrinsicHeight();
+        int width = getIntrinsicWidth();
+        int height = getIntrinsicHeight();
         if (this.time == 0) {
             this.paint.setColor(Theme.getColor("chat_secretTimerBackground"));
             this.linePaint.setColor(Theme.getColor("chat_secretTimerText"));
@@ -107,16 +96,26 @@ public class TimerDrawable extends Drawable {
             canvas.drawCircle((float) AndroidUtilities.dp(9.5f), (float) AndroidUtilities.dp(9.5f), (float) AndroidUtilities.dp(9.5f), this.paint);
         }
         if (this.time != 0 && this.timeLayout != null) {
-            int i = 0;
+            int xOffxet = 0;
             if (AndroidUtilities.density == 3.0f) {
-                i = -1;
+                xOffxet = -1;
             }
-            double d = (double) (intrinsicWidth / 2);
+            double d = (double) (width / 2);
             double ceil = Math.ceil((double) (this.timeWidth / 2.0f));
             Double.isNaN(d);
-            canvas.translate((float) (((int) (d - ceil)) + i), (float) ((intrinsicHeight - this.timeHeight) / 2));
+            canvas.translate((float) (((int) (d - ceil)) + xOffxet), (float) ((height - this.timeHeight) / 2));
             this.timeLayout.draw(canvas);
         }
+    }
+
+    public void setAlpha(int alpha) {
+    }
+
+    public void setColorFilter(ColorFilter cf) {
+    }
+
+    public int getOpacity() {
+        return -2;
     }
 
     public int getIntrinsicWidth() {

@@ -8,6 +8,6 @@ public final /* synthetic */ class GroupCallPip$$ExternalSyntheticLambda2 implem
     }
 
     public final void run() {
-        this.f$0.lambda$new$0();
+        this.f$0.m2317lambda$new$0$orgtelegramuiComponentsGroupCallPip();
     }
 }

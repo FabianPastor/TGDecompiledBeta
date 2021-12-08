@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoAlbumPickerActivity$$ExternalSyntheticLa
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.lambda$createView$7(view);
+        return this.f$0.m3539lambda$createView$7$orgtelegramuiPhotoAlbumPickerActivity(view);
     }
 }

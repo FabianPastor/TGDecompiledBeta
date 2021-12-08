@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlertDocumentLayout$$ExternalSynthe
     }
 
     public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$new$4(view, i);
+        return this.f$0.m2131xCLASSNAMEeCLASSNAME(view, i);
     }
 }

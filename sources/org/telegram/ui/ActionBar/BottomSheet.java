@@ -13,7 +13,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Insets;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -59,7 +58,8 @@ public class BottomSheet extends Dialog {
     public boolean applyBottomPadding;
     /* access modifiers changed from: private */
     public boolean applyTopPadding;
-    protected ColorDrawable backDrawable;
+    /* access modifiers changed from: protected */
+    public ColorDrawable backDrawable;
     /* access modifiers changed from: protected */
     public int backgroundPaddingLeft;
     /* access modifiers changed from: protected */
@@ -72,7 +72,8 @@ public class BottomSheet extends Dialog {
     public int bottomInset;
     protected boolean calcMandatoryInsets;
     private boolean canDismissWithSwipe;
-    protected ContainerView container;
+    /* access modifiers changed from: protected */
+    public ContainerView container;
     /* access modifiers changed from: protected */
     public ViewGroup containerView;
     /* access modifiers changed from: protected */
@@ -151,91 +152,34 @@ public class BottomSheet extends Dialog {
     protected boolean useLightStatusBar;
     protected boolean useSmoothKeyboard;
 
-    public static class BottomSheetDelegate implements BottomSheetDelegateInterface {
-        public void onOpenAnimationEnd() {
-        }
-    }
-
     public interface BottomSheetDelegateInterface {
         boolean canDismiss();
 
         void onOpenAnimationEnd();
+
+        void onOpenAnimationStart();
     }
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$onCreate$1(View view, MotionEvent motionEvent) {
-        return true;
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean canDismissWithTouchOutside() {
-        return true;
-    }
-
-    /* access modifiers changed from: protected */
-    public int getTargetOpenTranslationY() {
-        return 0;
-    }
-
-    public ArrayList<ThemeDescription> getThemeDescriptions() {
-        return null;
-    }
-
-    public void onConfigurationChanged(Configuration configuration) {
-    }
-
-    public void onContainerDraw(Canvas canvas) {
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean onContainerTouchEvent(MotionEvent motionEvent) {
-        return false;
-    }
-
-    /* access modifiers changed from: protected */
-    public void onContainerTranslationYChanged(float f) {
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean onCustomCloseAnimation() {
-        return false;
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean onCustomLayout(View view, int i, int i2, int i3, int i4) {
-        return false;
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean onCustomMeasure(View view, int i, int i2) {
-        return false;
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean onCustomOpenAnimation() {
-        return false;
-    }
-
-    static /* synthetic */ int access$1110(BottomSheet bottomSheet) {
-        int i = bottomSheet.layoutCount;
-        bottomSheet.layoutCount = i - 1;
+    static /* synthetic */ int access$1110(BottomSheet x0) {
+        int i = x0.layoutCount;
+        x0.layoutCount = i - 1;
         return i;
     }
 
-    static /* synthetic */ int access$612(BottomSheet bottomSheet, int i) {
-        int i2 = bottomSheet.bottomInset + i;
-        bottomSheet.bottomInset = i2;
-        return i2;
+    static /* synthetic */ int access$612(BottomSheet x0, int x1) {
+        int i = x0.bottomInset + x1;
+        x0.bottomInset = i;
+        return i;
     }
 
-    static /* synthetic */ int access$620(BottomSheet bottomSheet, int i) {
-        int i2 = bottomSheet.bottomInset - i;
-        bottomSheet.bottomInset = i2;
-        return i2;
+    static /* synthetic */ int access$620(BottomSheet x0, int x1) {
+        int i = x0.bottomInset - x1;
+        x0.bottomInset = i;
+        return i;
     }
 
-    public void setDisableScroll(boolean z) {
-        this.disableScroll = z;
+    public void setDisableScroll(boolean b) {
+        this.disableScroll = b;
     }
 
     protected class ContainerView extends FrameLayout implements NestedScrollingParent {
@@ -254,93 +198,80 @@ public class BottomSheet extends Dialog {
         private int startedTrackingY;
         private VelocityTracker velocityTracker = null;
 
-        public boolean hasOverlappingRendering() {
-            return false;
-        }
-
-        public boolean onNestedFling(View view, float f, float f2, boolean z) {
-            return false;
-        }
-
-        public boolean onNestedPreFling(View view, float f, float f2) {
-            return false;
-        }
-
         public ContainerView(Context context) {
             super(context);
             setWillNotDraw(false);
         }
 
-        public boolean onStartNestedScroll(View view, View view2, int i) {
-            BottomSheet bottomSheet = BottomSheet.this;
-            View view3 = bottomSheet.nestedScrollChild;
-            if ((view3 == null || view == view3) && !bottomSheet.dismissed) {
-                BottomSheet bottomSheet2 = BottomSheet.this;
-                return bottomSheet2.allowNestedScroll && i == 2 && !bottomSheet2.canDismissWithSwipe();
-            }
+        public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
+            return (BottomSheet.this.nestedScrollChild == null || child == BottomSheet.this.nestedScrollChild) && !BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll && nestedScrollAxes == 2 && !BottomSheet.this.canDismissWithSwipe();
         }
 
-        public void onNestedScrollAccepted(View view, View view2, int i) {
-            this.nestedScrollingParentHelper.onNestedScrollAccepted(view, view2, i);
+        public void onNestedScrollAccepted(View child, View target, int nestedScrollAxes) {
+            this.nestedScrollingParentHelper.onNestedScrollAccepted(child, target, nestedScrollAxes);
             if (!BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll) {
                 cancelCurrentAnimation();
             }
         }
 
-        public void onStopNestedScroll(View view) {
-            this.nestedScrollingParentHelper.onStopNestedScroll(view);
-            if (!BottomSheet.this.dismissed) {
-                BottomSheet bottomSheet = BottomSheet.this;
-                if (bottomSheet.allowNestedScroll) {
-                    bottomSheet.containerView.getTranslationY();
-                    checkDismiss(0.0f, 0.0f);
-                }
-            }
-        }
-
-        public void onNestedScroll(View view, int i, int i2, int i3, int i4) {
+        public void onStopNestedScroll(View target) {
+            this.nestedScrollingParentHelper.onStopNestedScroll(target);
             if (!BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll) {
-                cancelCurrentAnimation();
-                if (i4 != 0) {
-                    float translationY = BottomSheet.this.containerView.getTranslationY() - ((float) i4);
-                    if (translationY < 0.0f) {
-                        translationY = 0.0f;
-                    }
-                    BottomSheet.this.containerView.setTranslationY(translationY);
-                    BottomSheet.this.container.invalidate();
-                }
-            }
-        }
-
-        public void onNestedPreScroll(View view, int i, int i2, int[] iArr) {
-            if (!BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll) {
-                cancelCurrentAnimation();
                 float translationY = BottomSheet.this.containerView.getTranslationY();
-                float f = 0.0f;
-                if (translationY > 0.0f && i2 > 0) {
-                    float f2 = translationY - ((float) i2);
-                    iArr[1] = i2;
-                    if (f2 >= 0.0f) {
-                        f = f2;
+                checkDismiss(0.0f, 0.0f);
+            }
+        }
+
+        public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
+            if (!BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll) {
+                cancelCurrentAnimation();
+                if (dyUnconsumed != 0) {
+                    float currentTranslation = BottomSheet.this.containerView.getTranslationY() - ((float) dyUnconsumed);
+                    if (currentTranslation < 0.0f) {
+                        currentTranslation = 0.0f;
                     }
-                    BottomSheet.this.containerView.setTranslationY(f);
+                    BottomSheet.this.containerView.setTranslationY(currentTranslation);
                     BottomSheet.this.container.invalidate();
                 }
             }
+        }
+
+        public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
+            if (!BottomSheet.this.dismissed && BottomSheet.this.allowNestedScroll) {
+                cancelCurrentAnimation();
+                float currentTranslation = BottomSheet.this.containerView.getTranslationY();
+                if (currentTranslation > 0.0f && dy > 0) {
+                    float currentTranslation2 = currentTranslation - ((float) dy);
+                    consumed[1] = dy;
+                    if (currentTranslation2 < 0.0f) {
+                        currentTranslation2 = 0.0f;
+                    }
+                    BottomSheet.this.containerView.setTranslationY(currentTranslation2);
+                    BottomSheet.this.container.invalidate();
+                }
+            }
+        }
+
+        public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
+            return false;
+        }
+
+        public boolean onNestedPreFling(View target, float velocityX, float velocityY) {
+            return false;
         }
 
         public int getNestedScrollAxes() {
             return this.nestedScrollingParentHelper.getNestedScrollAxes();
         }
 
-        private void checkDismiss(float f, float f2) {
+        private void checkDismiss(float velX, float velY) {
             float translationY = BottomSheet.this.containerView.getTranslationY();
-            if (!((translationY < AndroidUtilities.getPixelsInCM(0.8f, false) && (f2 < 3500.0f || Math.abs(f2) < Math.abs(f))) || (f2 < 0.0f && Math.abs(f2) >= 3500.0f))) {
-                boolean access$100 = BottomSheet.this.allowCustomAnimation;
+            if (!((translationY < AndroidUtilities.getPixelsInCM(0.8f, false) && (velY < 3500.0f || Math.abs(velY) < Math.abs(velX))) || (velY < 0.0f && Math.abs(velY) >= 3500.0f))) {
+                boolean allowOld = BottomSheet.this.allowCustomAnimation;
                 boolean unused = BottomSheet.this.allowCustomAnimation = false;
                 boolean unused2 = BottomSheet.this.useFastDismiss = true;
                 BottomSheet.this.dismiss();
-                boolean unused3 = BottomSheet.this.allowCustomAnimation = access$100;
+                boolean unused3 = BottomSheet.this.allowCustomAnimation = allowOld;
                 return;
             }
             AnimatorSet animatorSet = new AnimatorSet();
@@ -349,8 +280,8 @@ public class BottomSheet extends Dialog {
             this.currentAnimation.setDuration((long) ((int) ((Math.max(0.0f, translationY) / AndroidUtilities.getPixelsInCM(0.8f, false)) * 150.0f)));
             this.currentAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
             this.currentAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    if (ContainerView.this.currentAnimation != null && ContainerView.this.currentAnimation.equals(animator)) {
+                public void onAnimationEnd(Animator animation) {
+                    if (ContainerView.this.currentAnimation != null && ContainerView.this.currentAnimation.equals(animation)) {
                         AnimatorSet unused = ContainerView.this.currentAnimation = null;
                     }
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
@@ -369,310 +300,344 @@ public class BottomSheet extends Dialog {
         }
 
         /* access modifiers changed from: package-private */
-        public boolean processTouchEvent(MotionEvent motionEvent, boolean z) {
+        public boolean processTouchEvent(MotionEvent ev, boolean intercept) {
             if (BottomSheet.this.dismissed) {
                 return false;
             }
-            if (BottomSheet.this.onContainerTouchEvent(motionEvent)) {
+            if (BottomSheet.this.onContainerTouchEvent(ev)) {
                 return true;
             }
-            if (!BottomSheet.this.canDismissWithTouchOutside() || motionEvent == null || (!(motionEvent.getAction() == 0 || motionEvent.getAction() == 2) || this.startedTracking || this.maybeStartTracking || motionEvent.getPointerCount() != 1)) {
-                float f = 0.0f;
-                if (motionEvent != null && motionEvent.getAction() == 2 && motionEvent.getPointerId(0) == this.startedTrackingPointerId) {
-                    if (this.velocityTracker == null) {
-                        this.velocityTracker = VelocityTracker.obtain();
-                    }
-                    float abs = (float) Math.abs((int) (motionEvent.getX() - ((float) this.startedTrackingX)));
-                    float y = (float) (((int) motionEvent.getY()) - this.startedTrackingY);
-                    this.velocityTracker.addMovement(motionEvent);
-                    if (!BottomSheet.this.disableScroll && this.maybeStartTracking && !this.startedTracking && y > 0.0f && y / 3.0f > Math.abs(abs) && Math.abs(y) >= ((float) BottomSheet.this.touchSlop)) {
-                        this.startedTrackingY = (int) motionEvent.getY();
-                        this.maybeStartTracking = false;
-                        this.startedTracking = true;
-                        requestDisallowInterceptTouchEvent(true);
-                    } else if (this.startedTracking) {
-                        float translationY = BottomSheet.this.containerView.getTranslationY() + y;
-                        if (translationY >= 0.0f) {
-                            f = translationY;
-                        }
-                        BottomSheet.this.containerView.setTranslationY(f);
-                        this.startedTrackingY = (int) motionEvent.getY();
-                        BottomSheet.this.container.invalidate();
-                    }
-                } else if (motionEvent == null || (motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6))) {
-                    if (this.velocityTracker == null) {
-                        this.velocityTracker = VelocityTracker.obtain();
-                    }
-                    this.velocityTracker.computeCurrentVelocity(1000);
-                    float translationY2 = BottomSheet.this.containerView.getTranslationY();
-                    if (this.startedTracking || translationY2 != 0.0f) {
-                        checkDismiss(this.velocityTracker.getXVelocity(), this.velocityTracker.getYVelocity());
-                        this.startedTracking = false;
-                    } else {
-                        this.maybeStartTracking = false;
-                        this.startedTracking = false;
-                    }
-                    VelocityTracker velocityTracker2 = this.velocityTracker;
-                    if (velocityTracker2 != null) {
-                        velocityTracker2.recycle();
-                        this.velocityTracker = null;
-                    }
-                    this.startedTrackingPointerId = -1;
-                }
-            } else {
-                this.startedTrackingX = (int) motionEvent.getX();
-                int y2 = (int) motionEvent.getY();
-                this.startedTrackingY = y2;
-                if (y2 < BottomSheet.this.containerView.getTop() || this.startedTrackingX < BottomSheet.this.containerView.getLeft() || this.startedTrackingX > BottomSheet.this.containerView.getRight()) {
+            if (BottomSheet.this.canDismissWithTouchOutside() && ev != null && ((ev.getAction() == 0 || ev.getAction() == 2) && !this.startedTracking && !this.maybeStartTracking && ev.getPointerCount() == 1)) {
+                this.startedTrackingX = (int) ev.getX();
+                int y = (int) ev.getY();
+                this.startedTrackingY = y;
+                if (y < BottomSheet.this.containerView.getTop() || this.startedTrackingX < BottomSheet.this.containerView.getLeft() || this.startedTrackingX > BottomSheet.this.containerView.getRight()) {
                     BottomSheet.this.dismiss();
                     return true;
                 }
-                this.startedTrackingPointerId = motionEvent.getPointerId(0);
+                this.startedTrackingPointerId = ev.getPointerId(0);
                 this.maybeStartTracking = true;
                 cancelCurrentAnimation();
+                VelocityTracker velocityTracker2 = this.velocityTracker;
+                if (velocityTracker2 != null) {
+                    velocityTracker2.clear();
+                }
+            } else if (ev != null && ev.getAction() == 2 && ev.getPointerId(0) == this.startedTrackingPointerId) {
+                if (this.velocityTracker == null) {
+                    this.velocityTracker = VelocityTracker.obtain();
+                }
+                float dx = (float) Math.abs((int) (ev.getX() - ((float) this.startedTrackingX)));
+                float dy = (float) (((int) ev.getY()) - this.startedTrackingY);
+                this.velocityTracker.addMovement(ev);
+                if (!BottomSheet.this.disableScroll && this.maybeStartTracking && !this.startedTracking && dy > 0.0f && dy / 3.0f > Math.abs(dx) && Math.abs(dy) >= ((float) BottomSheet.this.touchSlop)) {
+                    this.startedTrackingY = (int) ev.getY();
+                    this.maybeStartTracking = false;
+                    this.startedTracking = true;
+                    requestDisallowInterceptTouchEvent(true);
+                } else if (this.startedTracking) {
+                    float translationY = BottomSheet.this.containerView.getTranslationY() + dy;
+                    if (translationY < 0.0f) {
+                        translationY = 0.0f;
+                    }
+                    BottomSheet.this.containerView.setTranslationY(translationY);
+                    this.startedTrackingY = (int) ev.getY();
+                    BottomSheet.this.container.invalidate();
+                }
+            } else if (ev == null || (ev.getPointerId(0) == this.startedTrackingPointerId && (ev.getAction() == 3 || ev.getAction() == 1 || ev.getAction() == 6))) {
+                if (this.velocityTracker == null) {
+                    this.velocityTracker = VelocityTracker.obtain();
+                }
+                this.velocityTracker.computeCurrentVelocity(1000);
+                float translationY2 = BottomSheet.this.containerView.getTranslationY();
+                if (this.startedTracking || translationY2 != 0.0f) {
+                    checkDismiss(this.velocityTracker.getXVelocity(), this.velocityTracker.getYVelocity());
+                    this.startedTracking = false;
+                } else {
+                    this.maybeStartTracking = false;
+                    this.startedTracking = false;
+                }
                 VelocityTracker velocityTracker3 = this.velocityTracker;
                 if (velocityTracker3 != null) {
-                    velocityTracker3.clear();
+                    velocityTracker3.recycle();
+                    this.velocityTracker = null;
                 }
+                this.startedTrackingPointerId = -1;
             }
-            if ((z || !this.maybeStartTracking) && !this.startedTracking && BottomSheet.this.canDismissWithSwipe()) {
+            if ((intercept || !this.maybeStartTracking) && !this.startedTracking && BottomSheet.this.canDismissWithSwipe()) {
                 return false;
             }
             return true;
         }
 
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            return processTouchEvent(motionEvent, false);
+        public boolean onTouchEvent(MotionEvent ev) {
+            return processTouchEvent(ev, false);
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:44:0x00e8  */
-        /* JADX WARNING: Removed duplicated region for block: B:52:0x0115  */
-        /* JADX WARNING: Removed duplicated region for block: B:55:0x011e  */
-        /* JADX WARNING: Removed duplicated region for block: B:68:0x0191  */
+        /* JADX WARNING: Removed duplicated region for block: B:42:0x00ec  */
+        /* JADX WARNING: Removed duplicated region for block: B:46:0x0104  */
+        /* JADX WARNING: Removed duplicated region for block: B:51:0x0111  */
+        /* JADX WARNING: Removed duplicated region for block: B:52:0x0129  */
+        /* JADX WARNING: Removed duplicated region for block: B:54:0x012c  */
+        /* JADX WARNING: Removed duplicated region for block: B:57:0x0136  */
+        /* JADX WARNING: Removed duplicated region for block: B:70:0x01b5  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void onMeasure(int r13, int r14) {
+        public void onMeasure(int r19, int r20) {
             /*
-                r12 = this;
-                int r13 = android.view.View.MeasureSpec.getSize(r13)
-                int r14 = android.view.View.MeasureSpec.getSize(r14)
-                android.view.View r0 = r12.getRootView()
-                android.graphics.Rect r1 = r12.rect
-                r12.getWindowVisibleDisplayFrame(r1)
-                int r1 = r12.keyboardHeight
-                android.graphics.Rect r2 = r12.rect
-                int r3 = r2.bottom
+                r18 = this;
+                r6 = r18
+                int r0 = android.view.View.MeasureSpec.getSize(r19)
+                int r1 = android.view.View.MeasureSpec.getSize(r20)
+                r2 = r1
+                android.view.View r7 = r18.getRootView()
+                android.graphics.Rect r3 = r6.rect
+                r6.getWindowVisibleDisplayFrame(r3)
+                int r8 = r6.keyboardHeight
+                android.graphics.Rect r3 = r6.rect
+                int r3 = r3.bottom
                 r4 = 1101004800(0x41a00000, float:20.0)
                 r5 = 0
-                if (r3 == 0) goto L_0x0052
-                int r2 = r2.top
-                if (r2 == 0) goto L_0x0052
-                int r2 = r0.getHeight()
-                android.graphics.Rect r3 = r12.rect
+                if (r3 == 0) goto L_0x005a
+                android.graphics.Rect r3 = r6.rect
                 int r3 = r3.top
-                if (r3 == 0) goto L_0x002d
-                int r3 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-                goto L_0x002e
-            L_0x002d:
-                r3 = 0
-            L_0x002e:
-                int r2 = r2 - r3
-                int r0 = org.telegram.messenger.AndroidUtilities.getViewInset(r0)
-                int r2 = r2 - r0
-                android.graphics.Rect r0 = r12.rect
-                int r3 = r0.bottom
-                int r0 = r0.top
-                int r3 = r3 - r0
-                int r2 = r2 - r3
-                int r0 = java.lang.Math.max(r5, r2)
-                r12.keyboardHeight = r0
-                int r2 = org.telegram.messenger.AndroidUtilities.dp(r4)
-                if (r0 >= r2) goto L_0x004a
-                r12.keyboardHeight = r5
-            L_0x004a:
-                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
-                int r2 = r12.keyboardHeight
-                org.telegram.ui.ActionBar.BottomSheet.access$620(r0, r2)
-                goto L_0x0054
+                if (r3 == 0) goto L_0x005a
+                int r3 = r7.getHeight()
+                android.graphics.Rect r9 = r6.rect
+                int r9 = r9.top
+                if (r9 == 0) goto L_0x0032
+                int r9 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+                goto L_0x0033
+            L_0x0032:
+                r9 = 0
+            L_0x0033:
+                int r3 = r3 - r9
+                int r9 = org.telegram.messenger.AndroidUtilities.getViewInset(r7)
+                int r3 = r3 - r9
+                android.graphics.Rect r9 = r6.rect
+                int r9 = r9.bottom
+                android.graphics.Rect r10 = r6.rect
+                int r10 = r10.top
+                int r9 = r9 - r10
+                int r9 = r3 - r9
+                int r9 = java.lang.Math.max(r5, r9)
+                r6.keyboardHeight = r9
+                int r10 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                if (r9 >= r10) goto L_0x0052
+                r6.keyboardHeight = r5
             L_0x0052:
-                r12.keyboardHeight = r5
-            L_0x0054:
-                int r0 = r12.keyboardHeight
-                r2 = 1
-                if (r1 == r0) goto L_0x005b
-                r12.keyboardChanged = r2
-            L_0x005b:
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
-                if (r0 <= r3) goto L_0x0065
-                r0 = 1
-                goto L_0x0066
-            L_0x0065:
-                r0 = 0
-            L_0x0066:
-                r1.keyboardVisible = r0
-                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r0 = r0.lastInsets
-                r1 = 29
-                r3 = 21
-                if (r0 == 0) goto L_0x00cc
-                int r0 = android.os.Build.VERSION.SDK_INT
-                if (r0 < r3) goto L_0x00cc
-                org.telegram.ui.ActionBar.BottomSheet r4 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r6 = r4.lastInsets
-                int r6 = r6.getSystemWindowInsetBottom()
-                int unused = r4.bottomInset = r6
-                org.telegram.ui.ActionBar.BottomSheet r4 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r6 = r4.lastInsets
-                int r6 = r6.getSystemWindowInsetLeft()
-                int unused = r4.leftInset = r6
-                org.telegram.ui.ActionBar.BottomSheet r4 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r6 = r4.lastInsets
-                int r6 = r6.getSystemWindowInsetRight()
-                int unused = r4.rightInset = r6
-                if (r0 < r1) goto L_0x00aa
-                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
-                int r4 = r0.getAdditionalMandatoryOffsets()
-                org.telegram.ui.ActionBar.BottomSheet.access$612(r0, r4)
-            L_0x00aa:
-                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
-                boolean r4 = r0.keyboardVisible
-                if (r4 == 0) goto L_0x00bf
-                android.graphics.Rect r4 = r12.rect
-                int r6 = r4.bottom
-                if (r6 == 0) goto L_0x00bf
-                int r4 = r4.top
-                if (r4 == 0) goto L_0x00bf
-                int r4 = r12.keyboardHeight
-                org.telegram.ui.ActionBar.BottomSheet.access$620(r0, r4)
-            L_0x00bf:
-                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
-                boolean r4 = r0.drawNavigationBar
-                if (r4 != 0) goto L_0x00cc
-                int r0 = r0.bottomInset
-                int r0 = r14 - r0
-                goto L_0x00cd
-            L_0x00cc:
-                r0 = r14
+                org.telegram.ui.ActionBar.BottomSheet r9 = org.telegram.ui.ActionBar.BottomSheet.this
+                int r10 = r6.keyboardHeight
+                org.telegram.ui.ActionBar.BottomSheet.access$620(r9, r10)
+                goto L_0x005c
+            L_0x005a:
+                r6.keyboardHeight = r5
+            L_0x005c:
+                int r3 = r6.keyboardHeight
+                r9 = 1
+                if (r8 == r3) goto L_0x0063
+                r6.keyboardChanged = r9
+            L_0x0063:
+                org.telegram.ui.ActionBar.BottomSheet r10 = org.telegram.ui.ActionBar.BottomSheet.this
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                if (r3 <= r4) goto L_0x006d
+                r3 = 1
+                goto L_0x006e
+            L_0x006d:
+                r3 = 0
+            L_0x006e:
+                r10.keyboardVisible = r3
+                org.telegram.ui.ActionBar.BottomSheet r3 = org.telegram.ui.ActionBar.BottomSheet.this
+                android.view.WindowInsets r3 = r3.lastInsets
+                r4 = 29
+                r10 = 21
+                if (r3 == 0) goto L_0x00dc
+                int r3 = android.os.Build.VERSION.SDK_INT
+                if (r3 < r10) goto L_0x00dc
+                org.telegram.ui.ActionBar.BottomSheet r3 = org.telegram.ui.ActionBar.BottomSheet.this
+                android.view.WindowInsets r11 = r3.lastInsets
+                int r11 = r11.getSystemWindowInsetBottom()
+                int unused = r3.bottomInset = r11
+                org.telegram.ui.ActionBar.BottomSheet r3 = org.telegram.ui.ActionBar.BottomSheet.this
+                android.view.WindowInsets r11 = r3.lastInsets
+                int r11 = r11.getSystemWindowInsetLeft()
+                int unused = r3.leftInset = r11
+                org.telegram.ui.ActionBar.BottomSheet r3 = org.telegram.ui.ActionBar.BottomSheet.this
+                android.view.WindowInsets r11 = r3.lastInsets
+                int r11 = r11.getSystemWindowInsetRight()
+                int unused = r3.rightInset = r11
+                int r3 = android.os.Build.VERSION.SDK_INT
+                if (r3 < r4) goto L_0x00b4
+                org.telegram.ui.ActionBar.BottomSheet r3 = org.telegram.ui.ActionBar.BottomSheet.this
+                int r11 = r3.getAdditionalMandatoryOffsets()
+                org.telegram.ui.ActionBar.BottomSheet.access$612(r3, r11)
+            L_0x00b4:
+                org.telegram.ui.ActionBar.BottomSheet r3 = org.telegram.ui.ActionBar.BottomSheet.this
+                boolean r3 = r3.keyboardVisible
+                if (r3 == 0) goto L_0x00cd
+                android.graphics.Rect r3 = r6.rect
+                int r3 = r3.bottom
+                if (r3 == 0) goto L_0x00cd
+                android.graphics.Rect r3 = r6.rect
+                int r3 = r3.top
+                if (r3 == 0) goto L_0x00cd
+                org.telegram.ui.ActionBar.BottomSheet r3 = org.telegram.ui.ActionBar.BottomSheet.this
+                int r11 = r6.keyboardHeight
+                org.telegram.ui.ActionBar.BottomSheet.access$620(r3, r11)
             L_0x00cd:
-                r12.setMeasuredDimension(r13, r0)
-                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r0 = r0.lastInsets
-                if (r0 == 0) goto L_0x00f0
-                int r0 = android.os.Build.VERSION.SDK_INT
-                if (r0 < r3) goto L_0x00f0
-                org.telegram.ui.ActionBar.BottomSheet r4 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r4 = r4.lastInsets
-                int r4 = r4.getSystemWindowInsetBottom()
-                if (r0 < r1) goto L_0x00ef
-                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
-                int r0 = r0.getAdditionalMandatoryOffsets()
-                int r4 = r4 + r0
-            L_0x00ef:
-                int r14 = r14 - r4
-            L_0x00f0:
-                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r0 = r0.lastInsets
-                if (r0 == 0) goto L_0x0112
-                int r0 = android.os.Build.VERSION.SDK_INT
-                if (r0 < r3) goto L_0x0112
-                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r0 = r0.lastInsets
-                int r0 = r0.getSystemWindowInsetRight()
+                org.telegram.ui.ActionBar.BottomSheet r3 = org.telegram.ui.ActionBar.BottomSheet.this
+                boolean r3 = r3.drawNavigationBar
+                if (r3 != 0) goto L_0x00dc
+                org.telegram.ui.ActionBar.BottomSheet r3 = org.telegram.ui.ActionBar.BottomSheet.this
+                int r3 = r3.bottomInset
+                int r2 = r2 - r3
+                r11 = r2
+                goto L_0x00dd
+            L_0x00dc:
+                r11 = r2
+            L_0x00dd:
+                r6.setMeasuredDimension(r0, r11)
+                org.telegram.ui.ActionBar.BottomSheet r2 = org.telegram.ui.ActionBar.BottomSheet.this
+                android.view.WindowInsets r2 = r2.lastInsets
+                if (r2 == 0) goto L_0x0104
+                int r2 = android.os.Build.VERSION.SDK_INT
+                if (r2 < r10) goto L_0x0104
+                org.telegram.ui.ActionBar.BottomSheet r2 = org.telegram.ui.ActionBar.BottomSheet.this
+                android.view.WindowInsets r2 = r2.lastInsets
+                int r2 = r2.getSystemWindowInsetBottom()
+                int r3 = android.os.Build.VERSION.SDK_INT
+                if (r3 < r4) goto L_0x0101
+                org.telegram.ui.ActionBar.BottomSheet r3 = org.telegram.ui.ActionBar.BottomSheet.this
+                int r3 = r3.getAdditionalMandatoryOffsets()
+                int r2 = r2 + r3
+            L_0x0101:
+                int r1 = r1 - r2
+                r12 = r1
+                goto L_0x0105
+            L_0x0104:
+                r12 = r1
+            L_0x0105:
                 org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
                 android.view.WindowInsets r1 = r1.lastInsets
-                int r1 = r1.getSystemWindowInsetLeft()
-                int r0 = r0 + r1
-                int r13 = r13 - r0
-            L_0x0112:
-                if (r13 >= r14) goto L_0x0115
-                goto L_0x0116
-            L_0x0115:
-                r2 = 0
-            L_0x0116:
+                if (r1 == 0) goto L_0x0129
+                int r1 = android.os.Build.VERSION.SDK_INT
+                if (r1 < r10) goto L_0x0129
+                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
+                android.view.WindowInsets r1 = r1.lastInsets
+                int r1 = r1.getSystemWindowInsetRight()
+                org.telegram.ui.ActionBar.BottomSheet r2 = org.telegram.ui.ActionBar.BottomSheet.this
+                android.view.WindowInsets r2 = r2.lastInsets
+                int r2 = r2.getSystemWindowInsetLeft()
+                int r1 = r1 + r2
+                int r0 = r0 - r1
+                r10 = r0
+                goto L_0x012a
+            L_0x0129:
+                r10 = r0
+            L_0x012a:
+                if (r10 >= r12) goto L_0x012d
+                r5 = 1
+            L_0x012d:
+                r9 = r5
                 org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.ViewGroup r1 = r0.containerView
-                r3 = 1073741824(0x40000000, float:2.0)
-                if (r1 == 0) goto L_0x018b
-                boolean r4 = r0.fullWidth
-                r6 = -2147483648(0xfffffffvar_, float:-0.0)
-                if (r4 != 0) goto L_0x017b
+                android.view.ViewGroup r0 = r0.containerView
+                r13 = 1073741824(0x40000000, float:2.0)
+                if (r0 == 0) goto L_0x01ad
+                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
+                boolean r0 = r0.fullWidth
+                r1 = -2147483648(0xfffffffvar_, float:-0.0)
+                if (r0 != 0) goto L_0x0197
                 boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-                r1 = 1061997773(0x3f4ccccd, float:0.8)
-                if (r0 == 0) goto L_0x0147
+                r2 = 1061997773(0x3f4ccccd, float:0.8)
+                if (r0 == 0) goto L_0x0163
                 android.graphics.Point r0 = org.telegram.messenger.AndroidUtilities.displaySize
-                int r2 = r0.x
-                int r0 = r0.y
-                int r0 = java.lang.Math.min(r2, r0)
+                int r0 = r0.x
+                android.graphics.Point r3 = org.telegram.messenger.AndroidUtilities.displaySize
+                int r3 = r3.y
+                int r0 = java.lang.Math.min(r0, r3)
                 float r0 = (float) r0
-                float r0 = r0 * r1
+                float r0 = r0 * r2
                 int r0 = (int) r0
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                int r1 = r1.backgroundPaddingLeft
-                int r1 = r1 * 2
-                int r0 = r0 + r1
-                int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r3)
-                goto L_0x016f
-            L_0x0147:
-                if (r2 == 0) goto L_0x0151
+                org.telegram.ui.ActionBar.BottomSheet r2 = org.telegram.ui.ActionBar.BottomSheet.this
+                int r2 = r2.backgroundPaddingLeft
+                int r2 = r2 * 2
+                int r0 = r0 + r2
+                int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r13)
+                goto L_0x018b
+            L_0x0163:
+                if (r9 == 0) goto L_0x016d
                 org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
                 int r0 = r0.backgroundPaddingLeft
                 int r0 = r0 * 2
-                int r0 = r0 + r13
-                goto L_0x016b
-            L_0x0151:
-                float r0 = (float) r13
-                float r0 = r0 * r1
-                r1 = 1139802112(0x43var_, float:480.0)
-                int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                int r1 = java.lang.Math.min(r1, r13)
-                float r1 = (float) r1
-                float r0 = java.lang.Math.max(r0, r1)
+                int r0 = r0 + r10
+                goto L_0x0187
+            L_0x016d:
+                float r0 = (float) r10
+                float r0 = r0 * r2
+                r2 = 1139802112(0x43var_, float:480.0)
+                int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+                int r2 = java.lang.Math.min(r2, r10)
+                float r2 = (float) r2
+                float r0 = java.lang.Math.max(r0, r2)
                 int r0 = (int) r0
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                int r1 = r1.backgroundPaddingLeft
-                int r1 = r1 * 2
-                int r0 = r0 + r1
-            L_0x016b:
-                int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r3)
-            L_0x016f:
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.ViewGroup r1 = r1.containerView
-                int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r14, r6)
-                r1.measure(r0, r2)
-                goto L_0x018b
-            L_0x017b:
-                int r0 = r0.backgroundPaddingLeft
-                int r0 = r0 * 2
-                int r0 = r0 + r13
-                int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r3)
-                int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r14, r6)
-                r1.measure(r0, r2)
+                org.telegram.ui.ActionBar.BottomSheet r2 = org.telegram.ui.ActionBar.BottomSheet.this
+                int r2 = r2.backgroundPaddingLeft
+                int r2 = r2 * 2
+                int r0 = r0 + r2
+            L_0x0187:
+                int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r13)
             L_0x018b:
-                int r0 = r12.getChildCount()
-            L_0x018f:
-                if (r5 >= r0) goto L_0x01bb
-                android.view.View r7 = r12.getChildAt(r5)
-                int r1 = r7.getVisibility()
-                r2 = 8
-                if (r1 == r2) goto L_0x01b8
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.ViewGroup r2 = r1.containerView
-                if (r7 != r2) goto L_0x01a4
-                goto L_0x01b8
-            L_0x01a4:
-                boolean r1 = r1.onCustomMeasure(r7, r13, r14)
-                if (r1 != 0) goto L_0x01b8
-                int r8 = android.view.View.MeasureSpec.makeMeasureSpec(r13, r3)
-                r9 = 0
-                int r10 = android.view.View.MeasureSpec.makeMeasureSpec(r14, r3)
-                r11 = 0
-                r6 = r12
-                r6.measureChildWithMargins(r7, r8, r9, r10, r11)
-            L_0x01b8:
-                int r5 = r5 + 1
-                goto L_0x018f
-            L_0x01bb:
+                org.telegram.ui.ActionBar.BottomSheet r2 = org.telegram.ui.ActionBar.BottomSheet.this
+                android.view.ViewGroup r2 = r2.containerView
+                int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r12, r1)
+                r2.measure(r0, r1)
+                goto L_0x01ad
+            L_0x0197:
+                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
+                android.view.ViewGroup r0 = r0.containerView
+                org.telegram.ui.ActionBar.BottomSheet r2 = org.telegram.ui.ActionBar.BottomSheet.this
+                int r2 = r2.backgroundPaddingLeft
+                int r2 = r2 * 2
+                int r2 = r2 + r10
+                int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r13)
+                int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r12, r1)
+                r0.measure(r2, r1)
+            L_0x01ad:
+                int r14 = r18.getChildCount()
+                r0 = 0
+                r15 = r0
+            L_0x01b3:
+                if (r15 >= r14) goto L_0x01ee
+                android.view.View r5 = r6.getChildAt(r15)
+                int r0 = r5.getVisibility()
+                r1 = 8
+                if (r0 == r1) goto L_0x01e9
+                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
+                android.view.ViewGroup r0 = r0.containerView
+                if (r5 != r0) goto L_0x01c8
+                goto L_0x01eb
+            L_0x01c8:
+                org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.ActionBar.BottomSheet.this
+                boolean r0 = r0.onCustomMeasure(r5, r10, r12)
+                if (r0 != 0) goto L_0x01e6
+                int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r10, r13)
+                r3 = 0
+                int r4 = android.view.View.MeasureSpec.makeMeasureSpec(r12, r13)
+                r16 = 0
+                r0 = r18
+                r1 = r5
+                r17 = r5
+                r5 = r16
+                r0.measureChildWithMargins(r1, r2, r3, r4, r5)
+                goto L_0x01eb
+            L_0x01e6:
+                r17 = r5
+                goto L_0x01eb
+            L_0x01e9:
+                r17 = r5
+            L_0x01eb:
+                int r15 = r15 + 1
+                goto L_0x01b3
+            L_0x01ee:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BottomSheet.ContainerView.onMeasure(int, int):void");
@@ -683,374 +648,206 @@ public class BottomSheet extends Dialog {
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:63:0x019a  */
-        /* JADX WARNING: Removed duplicated region for block: B:67:0x01a7  */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void onLayout(boolean r17, int r18, int r19, int r20, int r21) {
-            /*
-                r16 = this;
-                r0 = r16
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                org.telegram.ui.ActionBar.BottomSheet.access$1110(r1)
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.ViewGroup r1 = r1.containerView
-                r7 = 1
-                r8 = 21
-                r9 = 2
-                r10 = 0
-                if (r1 == 0) goto L_0x012e
-                int r2 = r21 - r19
-                int r1 = r1.getMeasuredHeight()
-                int r2 = r2 - r1
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r1 = r1.lastInsets
-                if (r1 == 0) goto L_0x0067
-                int r1 = android.os.Build.VERSION.SDK_INT
-                if (r1 < r8) goto L_0x0067
-                org.telegram.ui.ActionBar.BottomSheet r3 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r3 = r3.lastInsets
-                int r3 = r3.getSystemWindowInsetLeft()
-                int r3 = r18 + r3
-                org.telegram.ui.ActionBar.BottomSheet r4 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r4 = r4.lastInsets
-                int r4 = r4.getSystemWindowInsetRight()
-                int r4 = r20 - r4
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                boolean r6 = r5.useSmoothKeyboard
-                if (r6 == 0) goto L_0x0045
-                r2 = 0
-                goto L_0x006b
-            L_0x0045:
-                android.view.WindowInsets r5 = r5.lastInsets
-                int r5 = r5.getSystemWindowInsetBottom()
-                org.telegram.ui.ActionBar.BottomSheet r6 = org.telegram.ui.ActionBar.BottomSheet.this
-                boolean r11 = r6.drawNavigationBar
-                if (r11 == 0) goto L_0x0055
-                r6 = 0
-                goto L_0x0059
-            L_0x0055:
-                int r6 = r6.bottomInset
-            L_0x0059:
-                int r5 = r5 - r6
-                int r2 = r2 - r5
-                r5 = 29
-                if (r1 < r5) goto L_0x006b
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                int r1 = r1.getAdditionalMandatoryOffsets()
-                int r2 = r2 - r1
-                goto L_0x006b
-            L_0x0067:
-                r3 = r18
-                r4 = r20
-            L_0x006b:
-                int r1 = r4 - r3
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.ViewGroup r5 = r5.containerView
-                int r5 = r5.getMeasuredWidth()
-                int r1 = r1 - r5
-                int r1 = r1 / r9
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r5 = r5.lastInsets
-                if (r5 == 0) goto L_0x008e
-                int r5 = android.os.Build.VERSION.SDK_INT
-                if (r5 < r8) goto L_0x008e
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r5 = r5.lastInsets
-                int r5 = r5.getSystemWindowInsetLeft()
-                int r1 = r1 + r5
-            L_0x008e:
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                boolean r6 = r5.smoothKeyboardAnimationEnabled
-                if (r6 == 0) goto L_0x0116
-                java.lang.Runnable r6 = r5.startAnimationRunnable
-                if (r6 != 0) goto L_0x0116
-                boolean r6 = r0.keyboardChanged
-                if (r6 == 0) goto L_0x0116
-                boolean r5 = r5.dismissed
-                if (r5 != 0) goto L_0x0116
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.ViewGroup r5 = r5.containerView
-                int r5 = r5.getTop()
-                if (r5 == r2) goto L_0x0116
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.ViewGroup r5 = r5.containerView
-                int r6 = r5.getTop()
-                int r6 = r6 - r2
-                float r6 = (float) r6
-                r5.setTranslationY(r6)
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.animation.ValueAnimator r5 = r5.keyboardContentAnimator
-                if (r5 == 0) goto L_0x00ca
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.animation.ValueAnimator r5 = r5.keyboardContentAnimator
-                r5.cancel()
-            L_0x00ca:
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                float[] r6 = new float[r9]
-                android.view.ViewGroup r11 = r5.containerView
-                float r11 = r11.getTranslationY()
-                r6[r10] = r11
-                r11 = 0
-                r6[r7] = r11
-                android.animation.ValueAnimator r6 = android.animation.ValueAnimator.ofFloat(r6)
-                android.animation.ValueAnimator unused = r5.keyboardContentAnimator = r6
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.animation.ValueAnimator r5 = r5.keyboardContentAnimator
-                org.telegram.ui.ActionBar.BottomSheet$ContainerView$$ExternalSyntheticLambda0 r6 = new org.telegram.ui.ActionBar.BottomSheet$ContainerView$$ExternalSyntheticLambda0
-                r6.<init>(r0)
-                r5.addUpdateListener(r6)
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.animation.ValueAnimator r5 = r5.keyboardContentAnimator
-                org.telegram.ui.ActionBar.BottomSheet$ContainerView$2 r6 = new org.telegram.ui.ActionBar.BottomSheet$ContainerView$2
-                r6.<init>()
-                r5.addListener(r6)
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.animation.ValueAnimator r5 = r5.keyboardContentAnimator
-                r11 = 250(0xfa, double:1.235E-321)
-                android.animation.ValueAnimator r5 = r5.setDuration(r11)
-                android.view.animation.Interpolator r6 = org.telegram.ui.ActionBar.AdjustPanLayoutHelper.keyboardInterpolator
-                r5.setInterpolator(r6)
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.animation.ValueAnimator r5 = r5.keyboardContentAnimator
-                r5.start()
-            L_0x0116:
-                org.telegram.ui.ActionBar.BottomSheet r5 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.ViewGroup r5 = r5.containerView
-                int r6 = r5.getMeasuredWidth()
-                int r6 = r6 + r1
-                org.telegram.ui.ActionBar.BottomSheet r11 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.ViewGroup r11 = r11.containerView
-                int r11 = r11.getMeasuredHeight()
-                int r11 = r11 + r2
-                r5.layout(r1, r2, r6, r11)
-                r11 = r3
-                r12 = r4
-                goto L_0x0132
-            L_0x012e:
-                r11 = r18
-                r12 = r20
-            L_0x0132:
-                int r13 = r16.getChildCount()
-                r14 = 0
-            L_0x0137:
-                if (r14 >= r13) goto L_0x01d2
-                android.view.View r15 = r0.getChildAt(r14)
-                int r1 = r15.getVisibility()
-                r2 = 8
-                if (r1 == r2) goto L_0x01ce
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.ViewGroup r2 = r1.containerView
-                if (r15 != r2) goto L_0x014d
-                goto L_0x01ce
-            L_0x014d:
-                boolean r2 = r1.drawNavigationBar
-                if (r2 == 0) goto L_0x0156
-                int r2 = r1.bottomInset
-                goto L_0x0157
-            L_0x0156:
-                r2 = 0
-            L_0x0157:
-                int r6 = r21 - r2
-                r2 = r15
-                r3 = r11
-                r4 = r19
-                r5 = r12
-                boolean r1 = r1.onCustomLayout(r2, r3, r4, r5, r6)
-                if (r1 != 0) goto L_0x01ce
-                android.view.ViewGroup$LayoutParams r1 = r15.getLayoutParams()
-                android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
-                int r2 = r15.getMeasuredWidth()
-                int r3 = r15.getMeasuredHeight()
-                int r4 = r1.gravity
-                r5 = -1
-                if (r4 != r5) goto L_0x0179
-                r4 = 51
-            L_0x0179:
-                r5 = r4 & 7
-                r4 = r4 & 112(0x70, float:1.57E-43)
-                r5 = r5 & 7
-                if (r5 == r7) goto L_0x018c
-                r6 = 5
-                if (r5 == r6) goto L_0x0187
-                int r5 = r1.leftMargin
-                goto L_0x0196
-            L_0x0187:
-                int r5 = r12 - r2
-                int r6 = r1.rightMargin
-                goto L_0x0195
-            L_0x018c:
-                int r5 = r12 - r11
-                int r5 = r5 - r2
-                int r5 = r5 / r9
-                int r6 = r1.leftMargin
-                int r5 = r5 + r6
-                int r6 = r1.rightMargin
-            L_0x0195:
-                int r5 = r5 - r6
-            L_0x0196:
-                r6 = 16
-                if (r4 == r6) goto L_0x01a7
-                r6 = 80
-                if (r4 == r6) goto L_0x01a1
-                int r1 = r1.topMargin
-                goto L_0x01b2
-            L_0x01a1:
-                int r4 = r21 - r19
-                int r4 = r4 - r3
-                int r1 = r1.bottomMargin
-                goto L_0x01b0
-            L_0x01a7:
-                int r4 = r21 - r19
-                int r4 = r4 - r3
-                int r4 = r4 / r9
-                int r6 = r1.topMargin
-                int r4 = r4 + r6
-                int r1 = r1.bottomMargin
-            L_0x01b0:
-                int r1 = r4 - r1
-            L_0x01b2:
-                org.telegram.ui.ActionBar.BottomSheet r4 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r4 = r4.lastInsets
-                if (r4 == 0) goto L_0x01c9
-                int r4 = android.os.Build.VERSION.SDK_INT
-                if (r4 < r8) goto L_0x01c9
-                org.telegram.ui.ActionBar.BottomSheet r4 = org.telegram.ui.ActionBar.BottomSheet.this
-                android.view.WindowInsets r4 = r4.lastInsets
-                int r4 = r4.getSystemWindowInsetLeft()
-                int r5 = r5 + r4
-            L_0x01c9:
-                int r2 = r2 + r5
-                int r3 = r3 + r1
-                r15.layout(r5, r1, r2, r3)
-            L_0x01ce:
-                int r14 = r14 + 1
-                goto L_0x0137
-            L_0x01d2:
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                int r1 = r1.layoutCount
-                if (r1 != 0) goto L_0x01ef
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                java.lang.Runnable r1 = r1.startAnimationRunnable
-                if (r1 == 0) goto L_0x01ef
-                org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r1)
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                java.lang.Runnable r1 = r1.startAnimationRunnable
-                r1.run()
-                org.telegram.ui.ActionBar.BottomSheet r1 = org.telegram.ui.ActionBar.BottomSheet.this
-                r2 = 0
-                r1.startAnimationRunnable = r2
-            L_0x01ef:
-                r0.keyboardChanged = r10
-                return
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.BottomSheet.ContainerView.onLayout(boolean, int, int, int, int):void");
+        public void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            int right2;
+            int left2;
+            int childLeft;
+            int childTop;
+            int right3;
+            int left3;
+            BottomSheet.access$1110(BottomSheet.this);
+            int i = 2;
+            if (BottomSheet.this.containerView != null) {
+                int t = (bottom - top) - BottomSheet.this.containerView.getMeasuredHeight();
+                if (BottomSheet.this.lastInsets == null || Build.VERSION.SDK_INT < 21) {
+                    left3 = left;
+                    right3 = right;
+                } else {
+                    left3 = left + BottomSheet.this.lastInsets.getSystemWindowInsetLeft();
+                    right3 = right - BottomSheet.this.lastInsets.getSystemWindowInsetRight();
+                    if (BottomSheet.this.useSmoothKeyboard) {
+                        t = 0;
+                    } else {
+                        t -= BottomSheet.this.lastInsets.getSystemWindowInsetBottom() - (BottomSheet.this.drawNavigationBar ? 0 : BottomSheet.this.bottomInset);
+                        if (Build.VERSION.SDK_INT >= 29) {
+                            t -= BottomSheet.this.getAdditionalMandatoryOffsets();
+                        }
+                    }
+                }
+                int l = ((right3 - left3) - BottomSheet.this.containerView.getMeasuredWidth()) / 2;
+                if (BottomSheet.this.lastInsets != null && Build.VERSION.SDK_INT >= 21) {
+                    l += BottomSheet.this.lastInsets.getSystemWindowInsetLeft();
+                }
+                if (BottomSheet.this.smoothKeyboardAnimationEnabled && BottomSheet.this.startAnimationRunnable == null && this.keyboardChanged && !BottomSheet.this.dismissed && BottomSheet.this.containerView.getTop() != t) {
+                    BottomSheet.this.containerView.setTranslationY((float) (BottomSheet.this.containerView.getTop() - t));
+                    if (BottomSheet.this.keyboardContentAnimator != null) {
+                        BottomSheet.this.keyboardContentAnimator.cancel();
+                    }
+                    BottomSheet bottomSheet = BottomSheet.this;
+                    ValueAnimator unused = bottomSheet.keyboardContentAnimator = ValueAnimator.ofFloat(new float[]{bottomSheet.containerView.getTranslationY(), 0.0f});
+                    BottomSheet.this.keyboardContentAnimator.addUpdateListener(new BottomSheet$ContainerView$$ExternalSyntheticLambda0(this));
+                    BottomSheet.this.keyboardContentAnimator.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animation) {
+                            BottomSheet.this.containerView.setTranslationY(0.0f);
+                            ContainerView.this.invalidate();
+                        }
+                    });
+                    BottomSheet.this.keyboardContentAnimator.setDuration(250).setInterpolator(AdjustPanLayoutHelper.keyboardInterpolator);
+                    BottomSheet.this.keyboardContentAnimator.start();
+                }
+                BottomSheet.this.containerView.layout(l, t, BottomSheet.this.containerView.getMeasuredWidth() + l, BottomSheet.this.containerView.getMeasuredHeight() + t);
+                left2 = left3;
+                right2 = right3;
+            } else {
+                left2 = left;
+                right2 = right;
+            }
+            int count = getChildCount();
+            int i2 = 0;
+            while (i2 < count) {
+                View child = getChildAt(i2);
+                if (!(child.getVisibility() == 8 || child == BottomSheet.this.containerView)) {
+                    BottomSheet bottomSheet2 = BottomSheet.this;
+                    if (!bottomSheet2.onCustomLayout(child, left2, top, right2, bottom - (bottomSheet2.drawNavigationBar ? BottomSheet.this.bottomInset : 0))) {
+                        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) child.getLayoutParams();
+                        int width = child.getMeasuredWidth();
+                        int height = child.getMeasuredHeight();
+                        int gravity = lp.gravity;
+                        if (gravity == -1) {
+                            gravity = 51;
+                        }
+                        int verticalGravity = gravity & 112;
+                        switch (gravity & 7 & 7) {
+                            case 1:
+                                childLeft = ((((right2 - left2) - width) / i) + lp.leftMargin) - lp.rightMargin;
+                                break;
+                            case 5:
+                                childLeft = (right2 - width) - lp.rightMargin;
+                                break;
+                            default:
+                                childLeft = lp.leftMargin;
+                                break;
+                        }
+                        switch (verticalGravity) {
+                            case 16:
+                                childTop = ((((bottom - top) - height) / i) + lp.topMargin) - lp.bottomMargin;
+                                break;
+                            case 80:
+                                childTop = ((bottom - top) - height) - lp.bottomMargin;
+                                break;
+                            default:
+                                childTop = lp.topMargin;
+                                break;
+                        }
+                        if (BottomSheet.this.lastInsets != null) {
+                            if (Build.VERSION.SDK_INT >= 21) {
+                                childLeft += BottomSheet.this.lastInsets.getSystemWindowInsetLeft();
+                            }
+                        }
+                        child.layout(childLeft, childTop, childLeft + width, childTop + height);
+                    }
+                }
+                i2++;
+                i = 2;
+            }
+            if (BottomSheet.this.layoutCount == 0 && BottomSheet.this.startAnimationRunnable != null) {
+                AndroidUtilities.cancelRunOnUIThread(BottomSheet.this.startAnimationRunnable);
+                BottomSheet.this.startAnimationRunnable.run();
+                BottomSheet.this.startAnimationRunnable = null;
+            }
+            this.keyboardChanged = false;
         }
 
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$onLayout$0(ValueAnimator valueAnimator) {
+        /* renamed from: lambda$onLayout$0$org-telegram-ui-ActionBar-BottomSheet$ContainerView  reason: not valid java name */
+        public /* synthetic */ void m1323xf4dvar_e(ValueAnimator valueAnimator) {
             BottomSheet.this.containerView.setTranslationY(((Float) valueAnimator.getAnimatedValue()).floatValue());
             invalidate();
         }
 
-        public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        public boolean onInterceptTouchEvent(MotionEvent event) {
             if (BottomSheet.this.canDismissWithSwipe()) {
-                return processTouchEvent(motionEvent, true);
+                return processTouchEvent(event, true);
             }
-            return super.onInterceptTouchEvent(motionEvent);
+            return super.onInterceptTouchEvent(event);
         }
 
-        public void requestDisallowInterceptTouchEvent(boolean z) {
+        public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
             if (this.maybeStartTracking && !this.startedTracking) {
                 onTouchEvent((MotionEvent) null);
             }
-            super.requestDisallowInterceptTouchEvent(z);
+            super.requestDisallowInterceptTouchEvent(disallowIntercept);
+        }
+
+        public boolean hasOverlappingRendering() {
+            return false;
         }
 
         /* access modifiers changed from: protected */
         public void dispatchDraw(Canvas canvas) {
-            float f;
+            int i;
             super.dispatchDraw(canvas);
-            int i = Build.VERSION.SDK_INT;
-            if (i >= 26) {
-                BottomSheet bottomSheet = BottomSheet.this;
-                String str = bottomSheet.navBarColorKey;
-                if (str != null) {
-                    this.backgroundPaint.setColor(bottomSheet.getThemedColor(str));
-                } else {
-                    this.backgroundPaint.setColor(bottomSheet.navBarColor);
-                }
-            } else {
+            if (Build.VERSION.SDK_INT < 26) {
                 this.backgroundPaint.setColor(-16777216);
+            } else if (BottomSheet.this.navBarColorKey != null) {
+                Paint paint = this.backgroundPaint;
+                BottomSheet bottomSheet = BottomSheet.this;
+                paint.setColor(bottomSheet.getThemedColor(bottomSheet.navBarColorKey));
+            } else {
+                this.backgroundPaint.setColor(BottomSheet.this.navBarColor);
             }
-            BottomSheet bottomSheet2 = BottomSheet.this;
-            if ((bottomSheet2.drawNavigationBar && bottomSheet2.bottomInset != 0) || BottomSheet.this.currentPanTranslationY != 0.0f) {
-                BottomSheet bottomSheet3 = BottomSheet.this;
-                if (bottomSheet3.scrollNavBar || (i >= 29 && bottomSheet3.getAdditionalMandatoryOffsets() > 0)) {
-                    f = Math.max(0.0f, ((float) BottomSheet.this.bottomInset) - (((float) BottomSheet.this.containerView.getMeasuredHeight()) - BottomSheet.this.containerView.getTranslationY()));
-                } else {
-                    f = 0.0f;
+            if ((BottomSheet.this.drawNavigationBar && BottomSheet.this.bottomInset != 0) || BottomSheet.this.currentPanTranslationY != 0.0f) {
+                float translation = 0.0f;
+                if (BottomSheet.this.scrollNavBar || (Build.VERSION.SDK_INT >= 29 && BottomSheet.this.getAdditionalMandatoryOffsets() > 0)) {
+                    translation = Math.max(0.0f, ((float) BottomSheet.this.bottomInset) - (((float) BottomSheet.this.containerView.getMeasuredHeight()) - BottomSheet.this.containerView.getTranslationY()));
                 }
-                BottomSheet bottomSheet4 = BottomSheet.this;
-                int access$600 = bottomSheet4.drawNavigationBar ? bottomSheet4.bottomInset : 0;
-                canvas.drawRect((float) (BottomSheet.this.containerView.getLeft() + BottomSheet.this.backgroundPaddingLeft), (((float) (getMeasuredHeight() - access$600)) + f) - BottomSheet.this.currentPanTranslationY, (float) (BottomSheet.this.containerView.getRight() - BottomSheet.this.backgroundPaddingLeft), ((float) getMeasuredHeight()) + f, this.backgroundPaint);
+                int navBarHeight = BottomSheet.this.drawNavigationBar ? BottomSheet.this.bottomInset : 0;
+                canvas.drawRect((float) (BottomSheet.this.containerView.getLeft() + BottomSheet.this.backgroundPaddingLeft), (((float) (getMeasuredHeight() - navBarHeight)) + translation) - BottomSheet.this.currentPanTranslationY, (float) (BottomSheet.this.containerView.getRight() - BottomSheet.this.backgroundPaddingLeft), ((float) getMeasuredHeight()) + translation, this.backgroundPaint);
                 if (BottomSheet.this.overlayDrawNavBarColor != 0) {
                     this.backgroundPaint.setColor(BottomSheet.this.overlayDrawNavBarColor);
-                    canvas.drawRect((float) (BottomSheet.this.containerView.getLeft() + BottomSheet.this.backgroundPaddingLeft), (((float) (getMeasuredHeight() - access$600)) + f) - BottomSheet.this.currentPanTranslationY, (float) (BottomSheet.this.containerView.getRight() - BottomSheet.this.backgroundPaddingLeft), ((float) getMeasuredHeight()) + f, this.backgroundPaint);
+                    canvas.drawRect((float) (BottomSheet.this.containerView.getLeft() + BottomSheet.this.backgroundPaddingLeft), (((float) (getMeasuredHeight() - navBarHeight)) + translation) - BottomSheet.this.currentPanTranslationY, (float) (BottomSheet.this.containerView.getRight() - BottomSheet.this.backgroundPaddingLeft), ((float) getMeasuredHeight()) + translation, this.backgroundPaint);
                 }
             }
-            BottomSheet bottomSheet5 = BottomSheet.this;
-            if (bottomSheet5.drawNavigationBar && bottomSheet5.rightInset != 0 && BottomSheet.this.rightInset > BottomSheet.this.leftInset) {
-                BottomSheet bottomSheet6 = BottomSheet.this;
-                if (bottomSheet6.fullWidth) {
-                    Point point = AndroidUtilities.displaySize;
-                    if (point.x > point.y) {
-                        int right = bottomSheet6.containerView.getRight();
-                        BottomSheet bottomSheet7 = BottomSheet.this;
-                        canvas.drawRect((float) (right - bottomSheet7.backgroundPaddingLeft), bottomSheet7.containerView.getTranslationY(), (float) (BottomSheet.this.containerView.getRight() + BottomSheet.this.rightInset), (float) getMeasuredHeight(), this.backgroundPaint);
-                    }
-                }
+            if (BottomSheet.this.drawNavigationBar && BottomSheet.this.rightInset != 0 && BottomSheet.this.rightInset > BottomSheet.this.leftInset && BottomSheet.this.fullWidth && AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y) {
+                canvas.drawRect((float) (BottomSheet.this.containerView.getRight() - BottomSheet.this.backgroundPaddingLeft), BottomSheet.this.containerView.getTranslationY(), (float) (BottomSheet.this.containerView.getRight() + BottomSheet.this.rightInset), (float) getMeasuredHeight(), this.backgroundPaint);
             }
-            BottomSheet bottomSheet8 = BottomSheet.this;
-            if (bottomSheet8.drawNavigationBar && bottomSheet8.leftInset != 0 && BottomSheet.this.leftInset > BottomSheet.this.rightInset) {
-                BottomSheet bottomSheet9 = BottomSheet.this;
-                if (bottomSheet9.fullWidth) {
-                    Point point2 = AndroidUtilities.displaySize;
-                    if (point2.x > point2.y) {
-                        canvas.drawRect(0.0f, bottomSheet9.containerView.getTranslationY(), (float) (BottomSheet.this.containerView.getLeft() + BottomSheet.this.backgroundPaddingLeft), (float) getMeasuredHeight(), this.backgroundPaint);
-                    }
-                }
+            if (BottomSheet.this.drawNavigationBar && BottomSheet.this.leftInset != 0 && BottomSheet.this.leftInset > BottomSheet.this.rightInset && BottomSheet.this.fullWidth && AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y) {
+                canvas.drawRect(0.0f, BottomSheet.this.containerView.getTranslationY(), (float) (BottomSheet.this.containerView.getLeft() + BottomSheet.this.backgroundPaddingLeft), (float) getMeasuredHeight(), this.backgroundPaint);
             }
             if (BottomSheet.this.containerView.getTranslationY() < 0.0f) {
-                Paint paint = this.backgroundPaint;
-                BottomSheet bottomSheet10 = BottomSheet.this;
-                String str2 = bottomSheet10.behindKeyboardColorKey;
-                paint.setColor(str2 != null ? bottomSheet10.getThemedColor(str2) : bottomSheet10.behindKeyboardColor);
-                int left = BottomSheet.this.containerView.getLeft();
-                BottomSheet bottomSheet11 = BottomSheet.this;
-                canvas.drawRect((float) (left + bottomSheet11.backgroundPaddingLeft), bottomSheet11.containerView.getY() + ((float) BottomSheet.this.containerView.getMeasuredHeight()), (float) (BottomSheet.this.containerView.getRight() - BottomSheet.this.backgroundPaddingLeft), (float) getMeasuredHeight(), this.backgroundPaint);
+                Paint paint2 = this.backgroundPaint;
+                if (BottomSheet.this.behindKeyboardColorKey != null) {
+                    BottomSheet bottomSheet2 = BottomSheet.this;
+                    i = bottomSheet2.getThemedColor(bottomSheet2.behindKeyboardColorKey);
+                } else {
+                    i = BottomSheet.this.behindKeyboardColor;
+                }
+                paint2.setColor(i);
+                canvas.drawRect((float) (BottomSheet.this.containerView.getLeft() + BottomSheet.this.backgroundPaddingLeft), BottomSheet.this.containerView.getY() + ((float) BottomSheet.this.containerView.getMeasuredHeight()), (float) (BottomSheet.this.containerView.getRight() - BottomSheet.this.backgroundPaddingLeft), (float) getMeasuredHeight(), this.backgroundPaint);
             }
         }
 
         /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
+            int i;
             super.onDraw(canvas);
             if (!(BottomSheet.this.lastInsets == null || this.keyboardHeight == 0)) {
                 Paint paint = this.backgroundPaint;
-                BottomSheet bottomSheet = BottomSheet.this;
-                String str = bottomSheet.behindKeyboardColorKey;
-                paint.setColor(str != null ? bottomSheet.getThemedColor(str) : bottomSheet.behindKeyboardColor);
+                if (BottomSheet.this.behindKeyboardColorKey != null) {
+                    BottomSheet bottomSheet = BottomSheet.this;
+                    i = bottomSheet.getThemedColor(bottomSheet.behindKeyboardColorKey);
+                } else {
+                    i = BottomSheet.this.behindKeyboardColor;
+                }
+                paint.setColor(i);
                 float left = (float) (BottomSheet.this.containerView.getLeft() + BottomSheet.this.backgroundPaddingLeft);
-                int measuredHeight = getMeasuredHeight() - this.keyboardHeight;
-                BottomSheet bottomSheet2 = BottomSheet.this;
-                int i = 0;
-                float access$600 = (float) (measuredHeight - (bottomSheet2.drawNavigationBar ? bottomSheet2.bottomInset : 0));
+                int i2 = 0;
+                float measuredHeight = (float) ((getMeasuredHeight() - this.keyboardHeight) - (BottomSheet.this.drawNavigationBar ? BottomSheet.this.bottomInset : 0));
                 float right = (float) (BottomSheet.this.containerView.getRight() - BottomSheet.this.backgroundPaddingLeft);
                 int measuredHeight2 = getMeasuredHeight();
-                BottomSheet bottomSheet3 = BottomSheet.this;
-                if (bottomSheet3.drawNavigationBar) {
-                    i = bottomSheet3.bottomInset;
+                if (BottomSheet.this.drawNavigationBar) {
+                    i2 = BottomSheet.this.bottomInset;
                 }
-                canvas.drawRect(left, access$600, right, (float) (measuredHeight2 - i), this.backgroundPaint);
+                canvas.drawRect(left, measuredHeight, right, (float) (measuredHeight2 - i2), this.backgroundPaint);
             }
             BottomSheet.this.onContainerDraw(canvas);
         }
@@ -1061,19 +858,31 @@ public class BottomSheet extends Dialog {
         if (!this.calcMandatoryInsets) {
             return 0;
         }
-        Insets systemGestureInsets = this.lastInsets.getSystemGestureInsets();
-        if (this.keyboardVisible || !this.drawNavigationBar || systemGestureInsets == null) {
+        Insets insets = this.lastInsets.getSystemGestureInsets();
+        if (this.keyboardVisible || !this.drawNavigationBar || insets == null) {
             return 0;
         }
-        if (systemGestureInsets.left == 0 && systemGestureInsets.right == 0) {
+        if (insets.left == 0 && insets.right == 0) {
             return 0;
         }
-        return systemGestureInsets.bottom;
+        return insets.bottom;
     }
 
-    public void setCalcMandatoryInsets(boolean z) {
-        this.calcMandatoryInsets = z;
-        this.drawNavigationBar = z;
+    public void setCalcMandatoryInsets(boolean value) {
+        this.calcMandatoryInsets = value;
+        this.drawNavigationBar = value;
+    }
+
+    public static class BottomSheetDelegate implements BottomSheetDelegateInterface {
+        public void onOpenAnimationStart() {
+        }
+
+        public void onOpenAnimationEnd() {
+        }
+
+        public boolean canDismiss() {
+            return true;
+        }
     }
 
     public static class BottomSheetCell extends FrameLayout {
@@ -1084,20 +893,20 @@ public class BottomSheet extends Dialog {
         /* access modifiers changed from: private */
         public TextView textView;
 
-        public BottomSheetCell(Context context, int i) {
-            this(context, i, (Theme.ResourcesProvider) null);
+        public BottomSheetCell(Context context, int type) {
+            this(context, type, (Theme.ResourcesProvider) null);
         }
 
-        public BottomSheetCell(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
+        public BottomSheetCell(Context context, int type, Theme.ResourcesProvider resourcesProvider2) {
             super(context);
             this.resourcesProvider = resourcesProvider2;
-            this.currentType = i;
+            this.currentType = type;
             setBackgroundDrawable(Theme.getSelectorDrawable(false));
             ImageView imageView2 = new ImageView(context);
             this.imageView = imageView2;
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
             this.imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogIcon"), PorterDuff.Mode.MULTIPLY));
-            int i2 = 5;
+            int i = 5;
             addView(this.imageView, LayoutHelper.createFrame(56, 48, (LocaleController.isRTL ? 5 : 3) | 16));
             TextView textView2 = new TextView(context);
             this.textView = textView2;
@@ -1105,17 +914,17 @@ public class BottomSheet extends Dialog {
             this.textView.setSingleLine(true);
             this.textView.setGravity(1);
             this.textView.setEllipsize(TextUtils.TruncateAt.END);
-            if (i == 0) {
+            if (type == 0) {
                 this.textView.setTextColor(getThemedColor("dialogTextBlack"));
                 this.textView.setTextSize(1, 16.0f);
-                addView(this.textView, LayoutHelper.createFrame(-2, -2, (!LocaleController.isRTL ? 3 : i2) | 16));
-            } else if (i == 1) {
+                addView(this.textView, LayoutHelper.createFrame(-2, -2, (!LocaleController.isRTL ? 3 : i) | 16));
+            } else if (type == 1) {
                 this.textView.setGravity(17);
                 this.textView.setTextColor(getThemedColor("dialogTextBlack"));
                 this.textView.setTextSize(1, 14.0f);
                 this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 addView(this.textView, LayoutHelper.createFrame(-1, -1.0f));
-            } else if (i == 2) {
+            } else if (type == 2) {
                 this.textView.setGravity(17);
                 this.textView.setTextColor(getThemedColor("featuredStickers_buttonText"));
                 this.textView.setTextSize(1, 14.0f);
@@ -1126,44 +935,44 @@ public class BottomSheet extends Dialog {
         }
 
         /* access modifiers changed from: protected */
-        public void onMeasure(int i, int i2) {
-            int i3 = this.currentType;
-            int i4 = i3 == 2 ? 80 : 48;
-            if (i3 == 0) {
-                i = View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM);
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            int i = this.currentType;
+            int height = i == 2 ? 80 : 48;
+            if (i == 0) {
+                widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM);
             }
-            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) i4), NUM));
+            super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) height), NUM));
         }
 
-        public void setTextColor(int i) {
-            this.textView.setTextColor(i);
+        public void setTextColor(int color) {
+            this.textView.setTextColor(color);
         }
 
-        public void setIconColor(int i) {
-            this.imageView.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+        public void setIconColor(int color) {
+            this.imageView.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
         }
 
-        public void setGravity(int i) {
-            this.textView.setGravity(i);
+        public void setGravity(int gravity) {
+            this.textView.setGravity(gravity);
         }
 
-        public void setTextAndIcon(CharSequence charSequence, int i) {
-            setTextAndIcon(charSequence, i, (Drawable) null, false);
+        public void setTextAndIcon(CharSequence text, int icon) {
+            setTextAndIcon(text, icon, (Drawable) null, false);
         }
 
-        public void setTextAndIcon(CharSequence charSequence, Drawable drawable) {
-            setTextAndIcon(charSequence, 0, drawable, false);
+        public void setTextAndIcon(CharSequence text, Drawable icon) {
+            setTextAndIcon(text, 0, icon, false);
         }
 
-        public void setTextAndIcon(CharSequence charSequence, int i, Drawable drawable, boolean z) {
-            this.textView.setText(charSequence);
+        public void setTextAndIcon(CharSequence text, int icon, Drawable drawable, boolean bigTitle) {
+            this.textView.setText(text);
             float f = 21.0f;
             float f2 = 16.0f;
-            if (i == 0 && drawable == null) {
+            if (icon == 0 && drawable == null) {
                 this.imageView.setVisibility(4);
                 TextView textView2 = this.textView;
-                int dp = AndroidUtilities.dp(z ? 21.0f : 16.0f);
-                if (!z) {
+                int dp = AndroidUtilities.dp(bigTitle ? 21.0f : 16.0f);
+                if (!bigTitle) {
                     f = 16.0f;
                 }
                 textView2.setPadding(dp, 0, AndroidUtilities.dp(f), 0);
@@ -1172,10 +981,10 @@ public class BottomSheet extends Dialog {
             if (drawable != null) {
                 this.imageView.setImageDrawable(drawable);
             } else {
-                this.imageView.setImageResource(i);
+                this.imageView.setImageResource(icon);
             }
             this.imageView.setVisibility(0);
-            if (z) {
+            if (bigTitle) {
                 TextView textView3 = this.textView;
                 int dp2 = AndroidUtilities.dp(LocaleController.isRTL ? 21.0f : 72.0f);
                 if (LocaleController.isRTL) {
@@ -1202,32 +1011,32 @@ public class BottomSheet extends Dialog {
             return this.imageView;
         }
 
-        private int getThemedColor(String str) {
+        private int getThemedColor(String key) {
             Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
-            return color != null ? color.intValue() : Theme.getColor(str);
+            Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
+            return color != null ? color.intValue() : Theme.getColor(key);
         }
     }
 
-    public void setAllowNestedScroll(boolean z) {
-        this.allowNestedScroll = z;
-        if (!z) {
+    public void setAllowNestedScroll(boolean value) {
+        this.allowNestedScroll = value;
+        if (!value) {
             this.containerView.setTranslationY(0.0f);
         }
     }
 
-    public BottomSheet(Context context, boolean z) {
-        this(context, z, (Theme.ResourcesProvider) null);
+    public BottomSheet(Context context, boolean needFocus) {
+        this(context, needFocus, (Theme.ResourcesProvider) null);
     }
 
-    public BottomSheet(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
+    public BottomSheet(Context context, boolean needFocus, Theme.ResourcesProvider resourcesProvider2) {
         super(context, NUM);
         this.currentAccount = UserConfig.selectedAccount;
         this.allowDrawContent = true;
         this.useHardwareLayer = true;
         this.backDrawable = new ColorDrawable(-16777216) {
-            public void setAlpha(int i) {
-                super.setAlpha(i);
+            public void setAlpha(int alpha) {
+                super.setAlpha(alpha);
                 BottomSheet.this.container.invalidate();
             }
         };
@@ -1246,37 +1055,36 @@ public class BottomSheet extends Dialog {
         this.dismissRunnable = new BottomSheet$$ExternalSyntheticLambda3(this);
         this.navBarColorKey = "windowBackgroundGray";
         this.resourcesProvider = resourcesProvider2;
-        int i = Build.VERSION.SDK_INT;
-        if (i >= 30) {
+        if (Build.VERSION.SDK_INT >= 30) {
             getWindow().addFlags(-NUM);
-        } else if (i >= 21) {
+        } else if (Build.VERSION.SDK_INT >= 21) {
             getWindow().addFlags(-NUM);
         }
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-        Rect rect = new Rect();
+        Rect padding = new Rect();
         Drawable mutate = context.getResources().getDrawable(NUM).mutate();
         this.shadowDrawable = mutate;
         mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
-        this.shadowDrawable.getPadding(rect);
-        this.backgroundPaddingLeft = rect.left;
-        this.backgroundPaddingTop = rect.top;
-        AnonymousClass2 r8 = new ContainerView(getContext()) {
-            public boolean drawChild(Canvas canvas, View view, long j) {
+        this.shadowDrawable.getPadding(padding);
+        this.backgroundPaddingLeft = padding.left;
+        this.backgroundPaddingTop = padding.top;
+        AnonymousClass2 r1 = new ContainerView(getContext()) {
+            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 try {
-                    return BottomSheet.this.allowDrawContent && super.drawChild(canvas, view, j);
+                    return BottomSheet.this.allowDrawContent && super.drawChild(canvas, child, drawingTime);
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                     return true;
                 }
             }
         };
-        this.container = r8;
-        r8.setBackgroundDrawable(this.backDrawable);
-        this.focusable = z;
-        if (i >= 21) {
+        this.container = r1;
+        r1.setBackgroundDrawable(this.backDrawable);
+        this.focusable = needFocus;
+        if (Build.VERSION.SDK_INT >= 21) {
             this.container.setFitsSystemWindows(true);
             this.container.setOnApplyWindowInsetsListener(new BottomSheet$$ExternalSyntheticLambda0(this));
-            if (i >= 30) {
+            if (Build.VERSION.SDK_INT >= 30) {
                 this.container.setSystemUiVisibility(1792);
             } else {
                 this.container.setSystemUiVisibility(1280);
@@ -1285,32 +1093,32 @@ public class BottomSheet extends Dialog {
         this.backDrawable.setAlpha(0);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ WindowInsets lambda$new$0(View view, WindowInsets windowInsets) {
+    /* renamed from: lambda$new$0$org-telegram-ui-ActionBar-BottomSheet  reason: not valid java name */
+    public /* synthetic */ WindowInsets m1319lambda$new$0$orgtelegramuiActionBarBottomSheet(View v, WindowInsets insets) {
         int i;
-        int systemWindowInsetTop = windowInsets.getSystemWindowInsetTop();
-        if (!((systemWindowInsetTop == 0 && !AndroidUtilities.isInMultiwindow) || (i = this.statusBarHeight) == 0 || i == systemWindowInsetTop)) {
-            this.statusBarHeight = systemWindowInsetTop;
+        int newTopInset = insets.getSystemWindowInsetTop();
+        if (!((newTopInset == 0 && !AndroidUtilities.isInMultiwindow) || (i = this.statusBarHeight) == 0 || i == newTopInset)) {
+            this.statusBarHeight = newTopInset;
         }
-        this.lastInsets = windowInsets;
-        view.requestLayout();
+        this.lastInsets = insets;
+        v.requestLayout();
         if (Build.VERSION.SDK_INT >= 30) {
             return WindowInsets.CONSUMED;
         }
-        return windowInsets.consumeSystemWindowInsets();
+        return insets.consumeSystemWindowInsets();
     }
 
     /* access modifiers changed from: protected */
-    public void onCreate(Bundle bundle) {
-        int i;
-        super.onCreate(bundle);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         Window window = getWindow();
         window.setWindowAnimations(NUM);
         setContentView(this.container, new ViewGroup.LayoutParams(-1, -1));
+        Drawable drawable = null;
         if (this.useLightStatusBar && Build.VERSION.SDK_INT >= 23 && Theme.getColor("actionBarDefault", (boolean[]) null, true) == -1) {
             this.container.setSystemUiVisibility(this.container.getSystemUiVisibility() | 8192);
         }
-        if (this.useLightNavBar && Build.VERSION.SDK_INT >= 26) {
+        if (this.useLightNavBar != 0 && Build.VERSION.SDK_INT >= 26) {
             AndroidUtilities.setLightNavigationBar(getWindow(), false);
         }
         if (this.containerView == null) {
@@ -1319,9 +1127,9 @@ public class BottomSheet extends Dialog {
                     return false;
                 }
 
-                public void setTranslationY(float f) {
-                    super.setTranslationY(f);
-                    BottomSheet.this.onContainerTranslationYChanged(f);
+                public void setTranslationY(float translationY) {
+                    super.setTranslationY(translationY);
+                    BottomSheet.this.onContainerTranslationYChanged(translationY);
                 }
             };
             this.containerView = r2;
@@ -1330,6 +1138,7 @@ public class BottomSheet extends Dialog {
         }
         this.containerView.setVisibility(4);
         this.container.addView(this.containerView, 0, LayoutHelper.createFrame(-1, -2, 80));
+        int topOffset = 0;
         if (this.title != null) {
             TextView textView = new TextView(getContext());
             this.titleView = textView;
@@ -1350,73 +1159,81 @@ public class BottomSheet extends Dialog {
             this.titleView.setGravity(16);
             this.containerView.addView(this.titleView, LayoutHelper.createFrame(-1, 48.0f));
             this.titleView.setOnTouchListener(BottomSheet$$ExternalSyntheticLambda2.INSTANCE);
-            i = 48;
-        } else {
-            i = 0;
+            topOffset = 0 + 48;
         }
         View view = this.customView;
         if (view != null) {
             if (view.getParent() != null) {
                 ((ViewGroup) this.customView.getParent()).removeView(this.customView);
             }
-            this.containerView.addView(this.customView, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, (float) i, 0.0f, 0.0f));
+            this.containerView.addView(this.customView, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, (float) topOffset, 0.0f, 0.0f));
         } else if (this.items != null) {
-            int i2 = 0;
+            int a = 0;
             while (true) {
                 CharSequence[] charSequenceArr = this.items;
-                if (i2 >= charSequenceArr.length) {
+                if (a >= charSequenceArr.length) {
                     break;
                 }
-                if (charSequenceArr[i2] != null) {
-                    BottomSheetCell bottomSheetCell = new BottomSheetCell(getContext(), 0, this.resourcesProvider);
-                    CharSequence charSequence = this.items[i2];
+                if (charSequenceArr[a] != null) {
+                    BottomSheetCell cell = new BottomSheetCell(getContext(), 0, this.resourcesProvider);
+                    CharSequence charSequence = this.items[a];
                     int[] iArr = this.itemIcons;
-                    bottomSheetCell.setTextAndIcon(charSequence, iArr != null ? iArr[i2] : 0, (Drawable) null, this.bigTitle);
-                    this.containerView.addView(bottomSheetCell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) i, 0.0f, 0.0f));
-                    i += 48;
-                    bottomSheetCell.setTag(Integer.valueOf(i2));
-                    bottomSheetCell.setOnClickListener(new BottomSheet$$ExternalSyntheticLambda1(this));
-                    this.itemViews.add(bottomSheetCell);
+                    cell.setTextAndIcon(charSequence, iArr != null ? iArr[a] : 0, drawable, this.bigTitle);
+                    this.containerView.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, (float) topOffset, 0.0f, 0.0f));
+                    topOffset += 48;
+                    cell.setTag(Integer.valueOf(a));
+                    cell.setOnClickListener(new BottomSheet$$ExternalSyntheticLambda1(this));
+                    this.itemViews.add(cell);
                 }
-                i2++;
+                a++;
+                drawable = null;
             }
         }
-        WindowManager.LayoutParams attributes = window.getAttributes();
-        attributes.width = -1;
-        attributes.gravity = 51;
-        attributes.dimAmount = 0.0f;
-        int i3 = attributes.flags & -3;
-        attributes.flags = i3;
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = -1;
+        params.gravity = 51;
+        params.dimAmount = 0.0f;
+        params.flags &= -3;
         if (this.focusable) {
-            attributes.softInputMode = 16;
+            params.softInputMode = 16;
         } else {
-            attributes.flags = i3 | 131072;
+            params.flags |= 131072;
         }
         if (this.isFullscreen) {
             if (Build.VERSION.SDK_INT >= 21) {
-                attributes.flags |= -NUM;
+                params.flags |= -NUM;
             }
-            attributes.flags |= 1024;
+            params.flags |= 1024;
             this.container.setSystemUiVisibility(1284);
         }
-        attributes.height = -1;
+        params.height = -1;
         if (Build.VERSION.SDK_INT >= 28) {
-            attributes.layoutInDisplayCutoutMode = 1;
+            params.layoutInDisplayCutoutMode = 1;
         }
-        window.setAttributes(attributes);
+        window.setAttributes(params);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onCreate$2(View view) {
-        dismissWithButtonClick(((Integer) view.getTag()).intValue());
+    static /* synthetic */ boolean lambda$onCreate$1(View v, MotionEvent event) {
+        return true;
     }
 
-    public void setUseLightStatusBar(boolean z) {
-        this.useLightStatusBar = z;
+    /* renamed from: lambda$onCreate$2$org-telegram-ui-ActionBar-BottomSheet  reason: not valid java name */
+    public /* synthetic */ void m1320lambda$onCreate$2$orgtelegramuiActionBarBottomSheet(View v) {
+        dismissWithButtonClick(((Integer) v.getTag()).intValue());
+    }
+
+    public void setUseLightStatusBar(boolean value) {
+        int flags;
+        this.useLightStatusBar = value;
         if (Build.VERSION.SDK_INT >= 23) {
             int color = Theme.getColor("actionBarDefault", (boolean[]) null, true);
-            int systemUiVisibility = this.container.getSystemUiVisibility();
-            this.container.setSystemUiVisibility((!this.useLightStatusBar || color != -1) ? systemUiVisibility & -8193 : systemUiVisibility | 8192);
+            int flags2 = this.container.getSystemUiVisibility();
+            if (!this.useLightStatusBar || color != -1) {
+                flags = flags2 & -8193;
+            } else {
+                flags = flags2 | 8192;
+            }
+            this.container.setSystemUiVisibility(flags);
         }
     }
 
@@ -1424,28 +1241,28 @@ public class BottomSheet extends Dialog {
         return this.focusable;
     }
 
-    public void setFocusable(boolean z) {
-        if (this.focusable != z) {
-            this.focusable = z;
+    public void setFocusable(boolean value) {
+        if (this.focusable != value) {
+            this.focusable = value;
             Window window = getWindow();
-            WindowManager.LayoutParams attributes = window.getAttributes();
+            WindowManager.LayoutParams params = window.getAttributes();
             if (this.focusable) {
-                attributes.softInputMode = 16;
-                attributes.flags &= -131073;
+                params.softInputMode = 16;
+                params.flags &= -131073;
             } else {
-                attributes.softInputMode = 48;
-                attributes.flags |= 131072;
+                params.softInputMode = 48;
+                params.flags |= 131072;
             }
-            window.setAttributes(attributes);
+            window.setAttributes(params);
         }
     }
 
-    public void setShowWithoutAnimation(boolean z) {
-        this.showWithoutAnimation = z;
+    public void setShowWithoutAnimation(boolean value) {
+        this.showWithoutAnimation = value;
     }
 
-    public void setBackgroundColor(int i) {
-        this.shadowDrawable.setColorFilter(i, PorterDuff.Mode.MULTIPLY);
+    public void setBackgroundColor(int color) {
+        this.shadowDrawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
     }
 
     public void show() {
@@ -1467,21 +1284,18 @@ public class BottomSheet extends Dialog {
             return;
         }
         this.backDrawable.setAlpha(0);
-        int i2 = Build.VERSION.SDK_INT;
-        if (i2 >= 18) {
+        if (Build.VERSION.SDK_INT >= 18) {
             this.layoutCount = 2;
             ViewGroup viewGroup = this.containerView;
-            if (i2 >= 21) {
+            if (Build.VERSION.SDK_INT >= 21) {
                 i = AndroidUtilities.statusBarHeight;
             }
-            viewGroup.setTranslationY((float) (i + viewGroup.getMeasuredHeight()));
+            viewGroup.setTranslationY((float) (i + this.containerView.getMeasuredHeight()));
             AnonymousClass4 r0 = new Runnable() {
                 public void run() {
-                    BottomSheet bottomSheet = BottomSheet.this;
-                    if (bottomSheet.startAnimationRunnable == this && !bottomSheet.dismissed) {
-                        BottomSheet bottomSheet2 = BottomSheet.this;
-                        bottomSheet2.startAnimationRunnable = null;
-                        bottomSheet2.startOpenAnimation();
+                    if (BottomSheet.this.startAnimationRunnable == this && !BottomSheet.this.dismissed) {
+                        BottomSheet.this.startAnimationRunnable = null;
+                        BottomSheet.this.startOpenAnimation();
                     }
                 }
             };
@@ -1500,10 +1314,10 @@ public class BottomSheet extends Dialog {
         return this.backgroundPaddingTop;
     }
 
-    public void setAllowDrawContent(boolean z) {
-        if (this.allowDrawContent != z) {
-            this.allowDrawContent = z;
-            this.container.setBackgroundDrawable(z ? this.backDrawable : null);
+    public void setAllowDrawContent(boolean value) {
+        if (this.allowDrawContent != value) {
+            this.allowDrawContent = value;
+            this.container.setBackgroundDrawable(value ? this.backDrawable : null);
             this.container.invalidate();
         }
     }
@@ -1513,33 +1327,57 @@ public class BottomSheet extends Dialog {
         return this.canDismissWithSwipe;
     }
 
-    public void setCanDismissWithSwipe(boolean z) {
-        this.canDismissWithSwipe = z;
+    public void setCanDismissWithSwipe(boolean value) {
+        this.canDismissWithSwipe = value;
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean onContainerTouchEvent(MotionEvent event) {
+        return false;
     }
 
     public void setCustomView(View view) {
         this.customView = view;
     }
 
-    public void setTitle(CharSequence charSequence) {
-        setTitle(charSequence, false);
+    public void setTitle(CharSequence value) {
+        setTitle(value, false);
     }
 
-    public void setTitle(CharSequence charSequence, boolean z) {
-        this.title = charSequence;
-        this.bigTitle = z;
+    public void setTitle(CharSequence value, boolean big) {
+        this.title = value;
+        this.bigTitle = big;
     }
 
-    public void setApplyTopPadding(boolean z) {
-        this.applyTopPadding = z;
+    public void setApplyTopPadding(boolean value) {
+        this.applyTopPadding = value;
     }
 
-    public void setApplyBottomPadding(boolean z) {
-        this.applyBottomPadding = z;
+    public void setApplyBottomPadding(boolean value) {
+        this.applyBottomPadding = value;
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean onCustomMeasure(View view, int width, int height) {
+        return false;
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean onCustomLayout(View view, int left, int top, int right, int bottom) {
+        return false;
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean canDismissWithTouchOutside() {
+        return true;
     }
 
     public TextView getTitleView() {
         return this.titleView;
+    }
+
+    /* access modifiers changed from: protected */
+    public void onContainerTranslationYChanged(float translationY) {
     }
 
     private void cancelSheetAnimation() {
@@ -1551,8 +1389,13 @@ public class BottomSheet extends Dialog {
         }
     }
 
-    public void setOnHideListener(DialogInterface.OnDismissListener onDismissListener) {
-        this.onHideListener = onDismissListener;
+    public void setOnHideListener(DialogInterface.OnDismissListener listener) {
+        this.onHideListener = listener;
+    }
+
+    /* access modifiers changed from: protected */
+    public int getTargetOpenTranslationY() {
+        return 0;
     }
 
     /* access modifiers changed from: private */
@@ -1580,34 +1423,29 @@ public class BottomSheet extends Dialog {
                 this.currentSheetAnimation.setStartDelay(20);
                 this.currentSheetAnimation.setInterpolator(this.openInterpolator);
                 this.currentSheetAnimation.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        AnimatorSet animatorSet = BottomSheet.this.currentSheetAnimation;
-                        if (animatorSet != null && animatorSet.equals(animator)) {
-                            BottomSheet bottomSheet = BottomSheet.this;
-                            bottomSheet.currentSheetAnimation = null;
-                            bottomSheet.currentSheetAnimationType = 0;
-                            if (bottomSheet.delegate != null) {
+                    public void onAnimationEnd(Animator animation) {
+                        if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
+                            BottomSheet.this.currentSheetAnimation = null;
+                            BottomSheet.this.currentSheetAnimationType = 0;
+                            if (BottomSheet.this.delegate != null) {
                                 BottomSheet.this.delegate.onOpenAnimationEnd();
                             }
                             if (BottomSheet.this.useHardwareLayer) {
                                 BottomSheet.this.container.setLayerType(0, (Paint) null);
                             }
-                            BottomSheet bottomSheet2 = BottomSheet.this;
-                            if (bottomSheet2.isFullscreen) {
-                                WindowManager.LayoutParams attributes = bottomSheet2.getWindow().getAttributes();
-                                attributes.flags &= -1025;
-                                BottomSheet.this.getWindow().setAttributes(attributes);
+                            if (BottomSheet.this.isFullscreen) {
+                                WindowManager.LayoutParams params = BottomSheet.this.getWindow().getAttributes();
+                                params.flags &= -1025;
+                                BottomSheet.this.getWindow().setAttributes(params);
                             }
                         }
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
                     }
 
-                    public void onAnimationCancel(Animator animator) {
-                        AnimatorSet animatorSet = BottomSheet.this.currentSheetAnimation;
-                        if (animatorSet != null && animatorSet.equals(animator)) {
-                            BottomSheet bottomSheet = BottomSheet.this;
-                            bottomSheet.currentSheetAnimation = null;
-                            bottomSheet.currentSheetAnimationType = 0;
+                    public void onAnimationCancel(Animator animation) {
+                        if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
+                            BottomSheet.this.currentSheetAnimation = null;
+                            BottomSheet.this.currentSheetAnimationType = 0;
                         }
                     }
                 });
@@ -1617,8 +1455,8 @@ public class BottomSheet extends Dialog {
         }
     }
 
-    public void setDelegate(BottomSheetDelegateInterface bottomSheetDelegateInterface) {
-        this.delegate = bottomSheetDelegateInterface;
+    public void setDelegate(BottomSheetDelegateInterface bottomSheetDelegate) {
+        this.delegate = bottomSheetDelegate;
     }
 
     public FrameLayout getContainer() {
@@ -1633,25 +1471,25 @@ public class BottomSheet extends Dialog {
         return this.tag;
     }
 
-    public void setDimBehind(boolean z) {
-        this.dimBehind = z;
+    public void setDimBehind(boolean value) {
+        this.dimBehind = value;
     }
 
-    public void setDimBehindAlpha(int i) {
-        this.dimBehindAlpha = i;
+    public void setDimBehindAlpha(int value) {
+        this.dimBehindAlpha = value;
     }
 
-    public void setItemText(int i, CharSequence charSequence) {
-        if (i >= 0 && i < this.itemViews.size()) {
-            this.itemViews.get(i).textView.setText(charSequence);
+    public void setItemText(int item, CharSequence text) {
+        if (item >= 0 && item < this.itemViews.size()) {
+            this.itemViews.get(item).textView.setText(text);
         }
     }
 
-    public void setItemColor(int i, int i2, int i3) {
-        if (i >= 0 && i < this.itemViews.size()) {
-            BottomSheetCell bottomSheetCell = this.itemViews.get(i);
-            bottomSheetCell.textView.setTextColor(i2);
-            bottomSheetCell.imageView.setColorFilter(new PorterDuffColorFilter(i3, PorterDuff.Mode.MULTIPLY));
+    public void setItemColor(int item, int color, int icon) {
+        if (item >= 0 && item < this.itemViews.size()) {
+            BottomSheetCell cell = this.itemViews.get(item);
+            cell.textView.setTextColor(color);
+            cell.imageView.setColorFilter(new PorterDuffColorFilter(icon, PorterDuff.Mode.MULTIPLY));
         }
     }
 
@@ -1659,16 +1497,16 @@ public class BottomSheet extends Dialog {
         return this.itemViews;
     }
 
-    public void setItems(CharSequence[] charSequenceArr, int[] iArr, DialogInterface.OnClickListener onClickListener2) {
-        this.items = charSequenceArr;
-        this.itemIcons = iArr;
-        this.onClickListener = onClickListener2;
+    public void setItems(CharSequence[] i, int[] icons, DialogInterface.OnClickListener listener) {
+        this.items = i;
+        this.itemIcons = icons;
+        this.onClickListener = listener;
     }
 
-    public void setTitleColor(int i) {
+    public void setTitleColor(int color) {
         TextView textView = this.titleView;
         if (textView != null) {
-            textView.setTextColor(i);
+            textView.setTextColor(color);
         }
     }
 
@@ -1676,34 +1514,31 @@ public class BottomSheet extends Dialog {
         return this.dismissed;
     }
 
-    public void dismissWithButtonClick(final int i) {
+    public void dismissWithButtonClick(final int item) {
         if (!this.dismissed) {
             this.dismissed = true;
             cancelSheetAnimation();
             this.currentSheetAnimationType = 2;
             AnimatorSet animatorSet = new AnimatorSet();
             this.currentSheetAnimation = animatorSet;
-            ViewGroup viewGroup = this.containerView;
-            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(viewGroup, View.TRANSLATION_Y, new float[]{(float) (viewGroup.getMeasuredHeight() + AndroidUtilities.dp(10.0f))}), ObjectAnimator.ofInt(this.backDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0})});
+            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.containerView, View.TRANSLATION_Y, new float[]{(float) (this.containerView.getMeasuredHeight() + AndroidUtilities.dp(10.0f))}), ObjectAnimator.ofInt(this.backDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0})});
             this.currentSheetAnimation.setDuration(180);
             this.currentSheetAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
             this.currentSheetAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    AnimatorSet animatorSet = BottomSheet.this.currentSheetAnimation;
-                    if (animatorSet != null && animatorSet.equals(animator)) {
-                        BottomSheet bottomSheet = BottomSheet.this;
-                        bottomSheet.currentSheetAnimation = null;
-                        bottomSheet.currentSheetAnimationType = 0;
-                        if (bottomSheet.onClickListener != null) {
-                            BottomSheet.this.onClickListener.onClick(BottomSheet.this, i);
+                public void onAnimationEnd(Animator animation) {
+                    if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
+                        BottomSheet.this.currentSheetAnimation = null;
+                        BottomSheet.this.currentSheetAnimationType = 0;
+                        if (BottomSheet.this.onClickListener != null) {
+                            BottomSheet.this.onClickListener.onClick(BottomSheet.this, item);
                         }
                         AndroidUtilities.runOnUIThread(new BottomSheet$6$$ExternalSyntheticLambda0(this));
                     }
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
                 }
 
-                /* access modifiers changed from: private */
-                public /* synthetic */ void lambda$onAnimationEnd$0() {
+                /* renamed from: lambda$onAnimationEnd$0$org-telegram-ui-ActionBar-BottomSheet$6  reason: not valid java name */
+                public /* synthetic */ void m1321lambda$onAnimationEnd$0$orgtelegramuiActionBarBottomSheet$6() {
                     try {
                         BottomSheet.super.dismiss();
                     } catch (Exception e) {
@@ -1711,12 +1546,10 @@ public class BottomSheet extends Dialog {
                     }
                 }
 
-                public void onAnimationCancel(Animator animator) {
-                    AnimatorSet animatorSet = BottomSheet.this.currentSheetAnimation;
-                    if (animatorSet != null && animatorSet.equals(animator)) {
-                        BottomSheet bottomSheet = BottomSheet.this;
-                        bottomSheet.currentSheetAnimation = null;
-                        bottomSheet.currentSheetAnimationType = 0;
+                public void onAnimationCancel(Animator animation) {
+                    if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
+                        BottomSheet.this.currentSheetAnimation = null;
+                        BottomSheet.this.currentSheetAnimationType = 0;
                     }
                 }
             });
@@ -1725,15 +1558,14 @@ public class BottomSheet extends Dialog {
         }
     }
 
-    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+    public boolean dispatchTouchEvent(MotionEvent ev) {
         if (this.dismissed) {
             return false;
         }
-        return super.dispatchTouchEvent(motionEvent);
+        return super.dispatchTouchEvent(ev);
     }
 
     public void dismiss() {
-        long j;
         BottomSheetDelegateInterface bottomSheetDelegateInterface = this.delegate;
         if ((bottomSheetDelegateInterface == null || bottomSheetDelegateInterface.canDismiss()) && !this.dismissed) {
             this.dismissed = true;
@@ -1742,36 +1574,34 @@ public class BottomSheet extends Dialog {
                 onDismissListener.onDismiss(this);
             }
             cancelSheetAnimation();
+            long duration = 0;
             if (!this.allowCustomAnimation || !onCustomCloseAnimation()) {
                 this.currentSheetAnimationType = 2;
                 AnimatorSet animatorSet = new AnimatorSet();
                 this.currentSheetAnimation = animatorSet;
-                ViewGroup viewGroup = this.containerView;
-                animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(viewGroup, View.TRANSLATION_Y, new float[]{(float) (viewGroup.getMeasuredHeight() + this.container.keyboardHeight + AndroidUtilities.dp(10.0f))}), ObjectAnimator.ofInt(this.backDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0})});
+                animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.containerView, View.TRANSLATION_Y, new float[]{(float) (this.containerView.getMeasuredHeight() + this.container.keyboardHeight + AndroidUtilities.dp(10.0f))}), ObjectAnimator.ofInt(this.backDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0})});
                 if (this.useFastDismiss) {
-                    float measuredHeight = (float) this.containerView.getMeasuredHeight();
-                    j = (long) Math.max(60, (int) (((measuredHeight - this.containerView.getTranslationY()) * 250.0f) / measuredHeight));
-                    this.currentSheetAnimation.setDuration(j);
+                    int height = this.containerView.getMeasuredHeight();
+                    duration = (long) Math.max(60, (int) (((((float) height) - this.containerView.getTranslationY()) * 250.0f) / ((float) height)));
+                    this.currentSheetAnimation.setDuration(duration);
                     this.useFastDismiss = false;
                 } else {
-                    j = 250;
+                    duration = 250;
                     this.currentSheetAnimation.setDuration(250);
                 }
                 this.currentSheetAnimation.setInterpolator(CubicBezierInterpolator.DEFAULT);
                 this.currentSheetAnimation.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        AnimatorSet animatorSet = BottomSheet.this.currentSheetAnimation;
-                        if (animatorSet != null && animatorSet.equals(animator)) {
-                            BottomSheet bottomSheet = BottomSheet.this;
-                            bottomSheet.currentSheetAnimation = null;
-                            bottomSheet.currentSheetAnimationType = 0;
+                    public void onAnimationEnd(Animator animation) {
+                        if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
+                            BottomSheet.this.currentSheetAnimation = null;
+                            BottomSheet.this.currentSheetAnimationType = 0;
                             AndroidUtilities.runOnUIThread(new BottomSheet$7$$ExternalSyntheticLambda0(this));
                         }
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 512);
                     }
 
-                    /* access modifiers changed from: private */
-                    public /* synthetic */ void lambda$onAnimationEnd$0() {
+                    /* renamed from: lambda$onAnimationEnd$0$org-telegram-ui-ActionBar-BottomSheet$7  reason: not valid java name */
+                    public /* synthetic */ void m1322lambda$onAnimationEnd$0$orgtelegramuiActionBarBottomSheet$7() {
                         try {
                             BottomSheet.this.dismissInternal();
                         } catch (Exception e) {
@@ -1779,26 +1609,22 @@ public class BottomSheet extends Dialog {
                         }
                     }
 
-                    public void onAnimationCancel(Animator animator) {
-                        AnimatorSet animatorSet = BottomSheet.this.currentSheetAnimation;
-                        if (animatorSet != null && animatorSet.equals(animator)) {
-                            BottomSheet bottomSheet = BottomSheet.this;
-                            bottomSheet.currentSheetAnimation = null;
-                            bottomSheet.currentSheetAnimationType = 0;
+                    public void onAnimationCancel(Animator animation) {
+                        if (BottomSheet.this.currentSheetAnimation != null && BottomSheet.this.currentSheetAnimation.equals(animation)) {
+                            BottomSheet.this.currentSheetAnimation = null;
+                            BottomSheet.this.currentSheetAnimationType = 0;
                         }
                     }
                 });
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 512);
                 this.currentSheetAnimation.start();
-            } else {
-                j = 0;
             }
-            Bulletin visibleBulletin = Bulletin.getVisibleBulletin();
-            if (visibleBulletin != null && visibleBulletin.isShowing()) {
-                if (j > 0) {
-                    visibleBulletin.hide((long) (((float) j) * 0.6f));
+            Bulletin bulletin = Bulletin.getVisibleBulletin();
+            if (bulletin != null && bulletin.isShowing()) {
+                if (duration > 0) {
+                    bulletin.hide((long) (((float) duration) * 0.6f));
                 } else {
-                    visibleBulletin.hide();
+                    bulletin.hide();
                 }
             }
         }
@@ -1816,6 +1642,16 @@ public class BottomSheet extends Dialog {
         }
     }
 
+    /* access modifiers changed from: protected */
+    public boolean onCustomCloseAnimation() {
+        return false;
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean onCustomOpenAnimation() {
+        return false;
+    }
+
     public static class Builder {
         private BottomSheet bottomSheet;
 
@@ -1823,23 +1659,23 @@ public class BottomSheet extends Dialog {
             this(context, false);
         }
 
-        public Builder(Context context, boolean z) {
-            this(context, z, (Theme.ResourcesProvider) null);
+        public Builder(Context context, boolean needFocus) {
+            this(context, needFocus, (Theme.ResourcesProvider) null);
         }
 
-        public Builder(Context context, boolean z, Theme.ResourcesProvider resourcesProvider) {
-            this.bottomSheet = new BottomSheet(context, z, resourcesProvider);
+        public Builder(Context context, boolean needFocus, Theme.ResourcesProvider resourcesProvider) {
+            this.bottomSheet = new BottomSheet(context, needFocus, resourcesProvider);
         }
 
-        public Builder setItems(CharSequence[] charSequenceArr, DialogInterface.OnClickListener onClickListener) {
-            CharSequence[] unused = this.bottomSheet.items = charSequenceArr;
+        public Builder setItems(CharSequence[] items, DialogInterface.OnClickListener onClickListener) {
+            CharSequence[] unused = this.bottomSheet.items = items;
             DialogInterface.OnClickListener unused2 = this.bottomSheet.onClickListener = onClickListener;
             return this;
         }
 
-        public Builder setItems(CharSequence[] charSequenceArr, int[] iArr, DialogInterface.OnClickListener onClickListener) {
-            CharSequence[] unused = this.bottomSheet.items = charSequenceArr;
-            int[] unused2 = this.bottomSheet.itemIcons = iArr;
+        public Builder setItems(CharSequence[] items, int[] icons, DialogInterface.OnClickListener onClickListener) {
+            CharSequence[] unused = this.bottomSheet.items = items;
+            int[] unused2 = this.bottomSheet.itemIcons = icons;
             DialogInterface.OnClickListener unused3 = this.bottomSheet.onClickListener = onClickListener;
             return this;
         }
@@ -1849,13 +1685,17 @@ public class BottomSheet extends Dialog {
             return this;
         }
 
-        public Builder setTitle(CharSequence charSequence) {
-            return setTitle(charSequence, false);
+        public View getCustomView() {
+            return this.bottomSheet.customView;
         }
 
-        public Builder setTitle(CharSequence charSequence, boolean z) {
-            CharSequence unused = this.bottomSheet.title = charSequence;
-            boolean unused2 = this.bottomSheet.bigTitle = z;
+        public Builder setTitle(CharSequence title) {
+            return setTitle(title, false);
+        }
+
+        public Builder setTitle(CharSequence title, boolean big) {
+            CharSequence unused = this.bottomSheet.title = title;
+            boolean unused2 = this.bottomSheet.bigTitle = big;
             return this;
         }
 
@@ -1863,8 +1703,8 @@ public class BottomSheet extends Dialog {
             return this.bottomSheet;
         }
 
-        public BottomSheet setDimBehind(boolean z) {
-            boolean unused = this.bottomSheet.dimBehind = z;
+        public BottomSheet setDimBehind(boolean value) {
+            boolean unused = this.bottomSheet.dimBehind = value;
             return this.bottomSheet;
         }
 
@@ -1873,63 +1713,86 @@ public class BottomSheet extends Dialog {
             return this.bottomSheet;
         }
 
-        public Builder setUseHardwareLayer(boolean z) {
-            boolean unused = this.bottomSheet.useHardwareLayer = z;
+        public Builder setTag(int tag) {
+            int unused = this.bottomSheet.tag = tag;
             return this;
         }
 
-        public Builder setDelegate(BottomSheetDelegate bottomSheetDelegate) {
-            this.bottomSheet.setDelegate(bottomSheetDelegate);
+        public Builder setUseHardwareLayer(boolean value) {
+            boolean unused = this.bottomSheet.useHardwareLayer = value;
             return this;
         }
 
-        public Builder setApplyTopPadding(boolean z) {
-            boolean unused = this.bottomSheet.applyTopPadding = z;
+        public Builder setDelegate(BottomSheetDelegate delegate) {
+            this.bottomSheet.setDelegate(delegate);
             return this;
         }
 
-        public Builder setApplyBottomPadding(boolean z) {
-            boolean unused = this.bottomSheet.applyBottomPadding = z;
+        public Builder setApplyTopPadding(boolean value) {
+            boolean unused = this.bottomSheet.applyTopPadding = value;
+            return this;
+        }
+
+        public Builder setApplyBottomPadding(boolean value) {
+            boolean unused = this.bottomSheet.applyBottomPadding = value;
             return this;
         }
 
         public Runnable getDismissRunnable() {
             return this.bottomSheet.dismissRunnable;
         }
+
+        public BottomSheet setUseFullWidth(boolean value) {
+            this.bottomSheet.fullWidth = value;
+            return this.bottomSheet;
+        }
+
+        public BottomSheet setUseFullscreen(boolean value) {
+            this.bottomSheet.isFullscreen = value;
+            return this.bottomSheet;
+        }
     }
 
     public int getLeftInset() {
-        WindowInsets windowInsets = this.lastInsets;
-        if (windowInsets == null || Build.VERSION.SDK_INT < 21) {
+        if (this.lastInsets == null || Build.VERSION.SDK_INT < 21) {
             return 0;
         }
-        return windowInsets.getSystemWindowInsetLeft();
+        return this.lastInsets.getSystemWindowInsetLeft();
     }
 
     public int getRightInset() {
-        WindowInsets windowInsets = this.lastInsets;
-        if (windowInsets == null || Build.VERSION.SDK_INT < 21) {
+        if (this.lastInsets == null || Build.VERSION.SDK_INT < 21) {
             return 0;
         }
-        return windowInsets.getSystemWindowInsetRight();
+        return this.lastInsets.getSystemWindowInsetRight();
     }
 
     public int getBottomInset() {
         return this.bottomInset;
     }
 
-    public void setCurrentPanTranslationY(float f) {
-        this.currentPanTranslationY = f;
+    public void onConfigurationChanged(Configuration newConfig) {
+    }
+
+    public void onContainerDraw(Canvas canvas) {
+    }
+
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
+        return null;
+    }
+
+    public void setCurrentPanTranslationY(float currentPanTranslationY2) {
+        this.currentPanTranslationY = currentPanTranslationY2;
         this.container.invalidate();
     }
 
-    public void setOverlayNavBarColor(int i) {
-        this.overlayDrawNavBarColor = i;
+    public void setOverlayNavBarColor(int color) {
+        this.overlayDrawNavBarColor = color;
         ContainerView containerView2 = this.container;
         if (containerView2 != null) {
             containerView2.invalidate();
         }
-        if (Color.alpha(i) > 120) {
+        if (Color.alpha(color) > 120) {
             AndroidUtilities.setLightStatusBar(getWindow(), false);
             AndroidUtilities.setLightNavigationBar(getWindow(), false);
             return;
@@ -1947,13 +1810,13 @@ public class BottomSheet extends Dialog {
     }
 
     /* access modifiers changed from: protected */
-    public int getThemedColor(String str) {
+    public int getThemedColor(String key) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
-        return color != null ? color.intValue() : Theme.getColor(str);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
+        return color != null ? color.intValue() : Theme.getColor(key);
     }
 
-    public void setOpenNoDelay(boolean z) {
-        this.openNoDelay = z;
+    public void setOpenNoDelay(boolean openNoDelay2) {
+        this.openNoDelay = openNoDelay2;
     }
 }

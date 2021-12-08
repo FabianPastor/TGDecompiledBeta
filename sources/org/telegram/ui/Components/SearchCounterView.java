@@ -17,7 +17,8 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SearchCounterView extends View {
-    int animationType;
+    private static final int ANIMATION_TYPE_REPLACE = 2;
+    int animationType = -1;
     /* access modifiers changed from: private */
     public StaticLayout countAnimationInLayout;
     private boolean countAnimationIncrement;
@@ -54,48 +55,53 @@ public class SearchCounterView extends View {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(i, i2);
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (getMeasuredHeight() != this.lastH) {
-            int i3 = this.currentCount;
+            int count = this.currentCount;
             String str = this.currentString;
             this.currentString = null;
-            setCount(str, i3, false);
+            setCount(str, count, false);
             this.lastH = getMeasuredHeight();
         }
     }
 
-    public void setCount(String str, int i, boolean z) {
-        String str2 = str;
-        int i2 = i;
-        String str3 = this.currentString;
-        if (str3 == null || !str3.equals(str2)) {
+    public void setCount(String newStr, int count, boolean animated) {
+        boolean animated2;
+        String newStr2 = newStr;
+        int i = count;
+        String str = this.currentString;
+        if (str == null || !str.equals(newStr2)) {
             ValueAnimator valueAnimator = this.countAnimator;
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             }
-            boolean z2 = (this.currentCount == 0 || i2 <= 0 || str2 == null || LocaleController.isRTL || TextUtils.isEmpty(str)) ? false : z;
-            if (z2 && str2 != null && !str2.contains("**")) {
-                z2 = false;
+            if (this.currentCount == 0 || i <= 0 || newStr2 == null || LocaleController.isRTL || TextUtils.isEmpty(newStr)) {
+                animated2 = false;
+            } else {
+                animated2 = animated;
             }
-            if (!z2) {
-                if (str2 != null) {
-                    str2 = str2.replaceAll("\\*\\*", "");
+            if (animated2 && newStr2 != null && !newStr2.contains("**")) {
+                animated2 = false;
+            }
+            if (!animated2) {
+                if (newStr2 != null) {
+                    newStr2 = newStr2.replaceAll("\\*\\*", "");
                 }
-                this.currentCount = i2;
-                if (str2 == null) {
+                this.currentCount = i;
+                if (newStr2 == null) {
                     this.countWidth = 0;
                     this.countLayout = null;
                 } else {
-                    this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(str2)));
+                    this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(newStr2)));
                     StaticLayout staticLayout = r10;
-                    StaticLayout staticLayout2 = new StaticLayout(str2, this.textPaint, this.countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                    StaticLayout staticLayout2 = new StaticLayout(newStr2, this.textPaint, this.countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                     this.countLayout = staticLayout;
                 }
                 invalidate();
             }
             this.dx = 0.0f;
-            if (z2) {
+            if (animated2) {
                 ValueAnimator valueAnimator2 = this.countAnimator;
                 if (valueAnimator2 != null) {
                     valueAnimator2.cancel();
@@ -105,164 +111,173 @@ public class SearchCounterView extends View {
                 this.countAnimator = ofFloat;
                 ofFloat.addUpdateListener(new SearchCounterView$$ExternalSyntheticLambda0(this));
                 this.countAnimator.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        SearchCounterView searchCounterView = SearchCounterView.this;
-                        searchCounterView.animationType = -1;
-                        float unused = searchCounterView.countChangeProgress = 1.0f;
+                    public void onAnimationEnd(Animator animation) {
+                        SearchCounterView.this.animationType = -1;
+                        float unused = SearchCounterView.this.countChangeProgress = 1.0f;
                         StaticLayout unused2 = SearchCounterView.this.countOldLayout = null;
                         StaticLayout unused3 = SearchCounterView.this.countAnimationStableLayout = null;
                         StaticLayout unused4 = SearchCounterView.this.countAnimationInLayout = null;
                         SearchCounterView.this.invalidate();
                     }
                 });
+                this.animationType = 2;
                 this.countAnimator.setDuration(200);
                 this.countAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
                 if (this.countLayout != null) {
-                    String str4 = this.currentString;
-                    int indexOf = str2.indexOf("**");
-                    if (indexOf >= 0) {
-                        str2 = str2.replaceAll("\\*\\*", "");
+                    String oldStr = this.currentString;
+                    int countStartIndex = newStr2.indexOf("**");
+                    if (countStartIndex >= 0) {
+                        newStr2 = newStr2.replaceAll("\\*\\*", "");
                     } else {
-                        indexOf = 0;
+                        countStartIndex = 0;
                     }
-                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str4);
-                    SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder(str2);
-                    SpannableStringBuilder spannableStringBuilder3 = new SpannableStringBuilder(str2);
-                    boolean z3 = Integer.toString(this.currentCount).length() != Integer.toString(i).length();
-                    int min = Math.min(str4.length(), str2.length());
-                    if (indexOf > 0) {
-                        spannableStringBuilder.setSpan(new EmptyStubSpan(), 0, indexOf, 33);
-                        spannableStringBuilder2.setSpan(new EmptyStubSpan(), 0, indexOf, 33);
-                        spannableStringBuilder3.setSpan(new EmptyStubSpan(), 0, indexOf, 33);
+                    SpannableStringBuilder oldSpannableStr = new SpannableStringBuilder(oldStr);
+                    SpannableStringBuilder newSpannableStr = new SpannableStringBuilder(newStr2);
+                    SpannableStringBuilder stableStr = new SpannableStringBuilder(newStr2);
+                    boolean replaceAllDigits = Integer.toString(this.currentCount).length() != Integer.toString(count).length();
+                    int n = Math.min(oldStr.length(), newStr2.length());
+                    int cutIndexNew = 0;
+                    if (countStartIndex > 0) {
+                        oldSpannableStr.setSpan(new EmptyStubSpan(), 0, countStartIndex, 33);
+                        newSpannableStr.setSpan(new EmptyStubSpan(), 0, countStartIndex, 33);
+                        stableStr.setSpan(new EmptyStubSpan(), 0, countStartIndex, 33);
                     }
-                    int i3 = 0;
-                    boolean z4 = false;
-                    boolean z5 = false;
-                    int i4 = 0;
-                    for (int i5 = indexOf; i5 < min; i5++) {
-                        if (!z4 && !z5) {
-                            if (z3) {
-                                spannableStringBuilder3.setSpan(new EmptyStubSpan(), i5, i5 + 1, 33);
-                            } else if (str4.charAt(i5) == str2.charAt(i5)) {
-                                int i6 = i5 + 1;
-                                spannableStringBuilder.setSpan(new EmptyStubSpan(), i5, i6, 33);
-                                spannableStringBuilder2.setSpan(new EmptyStubSpan(), i5, i6, 33);
+                    boolean newEndReached = false;
+                    boolean oldEndReached = false;
+                    int cutIndexOld = 0;
+                    for (int i2 = countStartIndex; i2 < n; i2++) {
+                        if (!newEndReached && !oldEndReached) {
+                            if (replaceAllDigits) {
+                                stableStr.setSpan(new EmptyStubSpan(), i2, i2 + 1, 33);
+                            } else if (oldStr.charAt(i2) == newStr2.charAt(i2)) {
+                                oldSpannableStr.setSpan(new EmptyStubSpan(), i2, i2 + 1, 33);
+                                newSpannableStr.setSpan(new EmptyStubSpan(), i2, i2 + 1, 33);
                             } else {
-                                spannableStringBuilder3.setSpan(new EmptyStubSpan(), i5, i5 + 1, 33);
+                                stableStr.setSpan(new EmptyStubSpan(), i2, i2 + 1, 33);
                             }
                         }
-                        if (!Character.isDigit(str2.charAt(i5))) {
-                            spannableStringBuilder2.setSpan(new EmptyStubSpan(), i5, str2.length(), 33);
-                            i4 = i5;
-                            z4 = true;
+                        if (!Character.isDigit(newStr2.charAt(i2))) {
+                            newSpannableStr.setSpan(new EmptyStubSpan(), i2, newStr2.length(), 33);
+                            newEndReached = true;
+                            cutIndexNew = i2;
                         }
-                        if (!Character.isDigit(str4.charAt(i5))) {
-                            spannableStringBuilder.setSpan(new EmptyStubSpan(), i5, str4.length(), 33);
-                            i3 = i5;
-                            z5 = true;
+                        if (!Character.isDigit(oldStr.charAt(i2))) {
+                            oldSpannableStr.setSpan(new EmptyStubSpan(), i2, oldStr.length(), 33);
+                            oldEndReached = true;
+                            cutIndexOld = i2;
                         }
                     }
-                    int max = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(str4)));
-                    int max2 = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(str2)));
-                    this.countOldLayout = new StaticLayout(spannableStringBuilder, this.textPaint, max, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-                    int i7 = max2;
-                    this.countAnimationStableLayout = new StaticLayout(spannableStringBuilder3, this.textPaint, i7, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-                    this.countAnimationInLayout = new StaticLayout(spannableStringBuilder2, this.textPaint, i7, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-                    if (indexOf > 0) {
-                        SpannableStringBuilder spannableStringBuilder4 = new SpannableStringBuilder(str2);
-                        spannableStringBuilder4.setSpan(new EmptyStubSpan(), indexOf, str2.length(), 0);
-                        this.countAnimationStableLayout2 = new StaticLayout(spannableStringBuilder4, this.textPaint, max2, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                    int countOldWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(oldStr)));
+                    int countNewWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(newStr2)));
+                    boolean z = animated2;
+                    int cutIndexOld2 = cutIndexOld;
+                    String str2 = oldStr;
+                    int cutIndexNew2 = cutIndexNew;
+                    int i3 = n;
+                    this.countOldLayout = new StaticLayout(oldSpannableStr, this.textPaint, countOldWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                    this.countAnimationStableLayout = new StaticLayout(stableStr, this.textPaint, countNewWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                    this.countAnimationInLayout = new StaticLayout(newSpannableStr, this.textPaint, countNewWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                    if (countStartIndex > 0) {
+                        SpannableStringBuilder stableString2 = new SpannableStringBuilder(newStr2);
+                        stableString2.setSpan(new EmptyStubSpan(), countStartIndex, newStr2.length(), 0);
+                        this.countAnimationStableLayout2 = new StaticLayout(stableString2, this.textPaint, countNewWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                     } else {
                         this.countAnimationStableLayout2 = null;
                     }
-                    this.dx = this.countOldLayout.getPrimaryHorizontal(i3) - this.countAnimationStableLayout.getPrimaryHorizontal(i4);
+                    this.dx = this.countOldLayout.getPrimaryHorizontal(cutIndexOld2) - this.countAnimationStableLayout.getPrimaryHorizontal(cutIndexNew2);
                 }
                 this.countWidthOld = this.countWidth;
-                this.countAnimationIncrement = i2 < this.currentCount;
+                this.countAnimationIncrement = i < this.currentCount;
                 this.countAnimator.start();
             }
-            if (i2 > 0) {
-                this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(str2)));
-                this.countLayout = new StaticLayout(str2, this.textPaint, this.countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+            if (i > 0) {
+                this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(newStr2)));
+                this.countLayout = new StaticLayout(newStr2, this.textPaint, this.countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
             }
-            this.currentCount = i2;
+            this.currentCount = i;
             invalidate();
-            this.currentString = str2;
+            this.currentString = newStr2;
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setCount$0(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$setCount$0$org-telegram-ui-Components-SearchCounterView  reason: not valid java name */
+    public /* synthetic */ void m2551lambda$setCount$0$orgtelegramuiComponentsSearchCounterView(ValueAnimator valueAnimator) {
         this.countChangeProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        float f;
+        float countWidth2;
         super.onDraw(canvas);
-        int color = Theme.getColor(this.textColorKey, this.resourcesProvider);
-        if (this.textColor != color) {
-            this.textColor = color;
-            this.textPaint.setColor(color);
+        int textColor2 = Theme.getColor(this.textColorKey, this.resourcesProvider);
+        if (this.textColor != textColor2) {
+            this.textColor = textColor2;
+            this.textPaint.setColor(textColor2);
         }
         if (this.countChangeProgress != 1.0f) {
-            float measuredHeight = ((float) (getMeasuredHeight() - AndroidUtilities.dp(23.0f))) / 2.0f;
+            float countTop = ((float) (getMeasuredHeight() - AndroidUtilities.dp(23.0f))) / 2.0f;
             int i = this.countWidth;
             int i2 = this.countWidthOld;
             if (i == i2) {
-                f = (float) i;
+                countWidth2 = (float) i;
             } else {
-                float f2 = this.countChangeProgress;
-                f = (((float) i) * f2) + (((float) i2) * (1.0f - f2));
+                float f = this.countChangeProgress;
+                countWidth2 = (((float) i) * f) + (((float) i2) * (1.0f - f));
             }
-            updateX(f);
+            updateX(countWidth2);
             RectF rectF2 = this.rectF;
-            float f3 = this.x;
-            rectF2.set(f3, measuredHeight, f + f3 + ((float) AndroidUtilities.dp(11.0f)), ((float) AndroidUtilities.dp(23.0f)) + measuredHeight);
-            boolean z = this.countAnimationIncrement;
+            float f2 = this.x;
+            rectF2.set(f2, countTop, f2 + countWidth2 + ((float) AndroidUtilities.dp(11.0f)), ((float) AndroidUtilities.dp(23.0f)) + countTop);
+            boolean increment = this.countAnimationIncrement;
             if (this.countAnimationInLayout != null) {
                 canvas.save();
-                float f4 = this.countLeft;
-                float dp = ((float) AndroidUtilities.dp(2.0f)) + measuredHeight;
+                float f3 = this.countLeft;
+                float dp = ((float) AndroidUtilities.dp(2.0f)) + countTop;
                 int dp2 = AndroidUtilities.dp(13.0f);
-                if (!z) {
+                if (!increment) {
                     dp2 = -dp2;
                 }
-                canvas.translate(f4, dp + (((float) dp2) * (1.0f - this.countChangeProgress)));
+                canvas.translate(f3, dp + (((float) dp2) * (1.0f - this.countChangeProgress)));
                 this.textPaint.setAlpha((int) (this.countChangeProgress * 255.0f));
                 this.countAnimationInLayout.draw(canvas);
                 canvas.restore();
             } else if (this.countLayout != null) {
                 canvas.save();
-                float f5 = this.countLeft;
-                float dp3 = ((float) AndroidUtilities.dp(2.0f)) + measuredHeight;
+                float f4 = this.countLeft;
+                float dp3 = ((float) AndroidUtilities.dp(2.0f)) + countTop;
                 int dp4 = AndroidUtilities.dp(13.0f);
-                if (!z) {
+                if (!increment) {
                     dp4 = -dp4;
                 }
-                canvas.translate(f5, dp3 + (((float) dp4) * (1.0f - this.countChangeProgress)));
+                canvas.translate(f4, dp3 + (((float) dp4) * (1.0f - this.countChangeProgress)));
                 this.textPaint.setAlpha((int) (this.countChangeProgress * 255.0f));
                 this.countLayout.draw(canvas);
                 canvas.restore();
             }
             if (this.countOldLayout != null) {
                 canvas.save();
-                canvas.translate(this.countLeft, ((float) AndroidUtilities.dp(2.0f)) + measuredHeight + (((float) (z ? -AndroidUtilities.dp(13.0f) : AndroidUtilities.dp(13.0f))) * this.countChangeProgress));
+                float f5 = this.countLeft;
+                float dp5 = ((float) AndroidUtilities.dp(2.0f)) + countTop;
+                int dp6 = AndroidUtilities.dp(13.0f);
+                if (increment) {
+                    dp6 = -dp6;
+                }
+                canvas.translate(f5, dp5 + (((float) dp6) * this.countChangeProgress));
                 this.textPaint.setAlpha((int) ((1.0f - this.countChangeProgress) * 255.0f));
                 this.countOldLayout.draw(canvas);
                 canvas.restore();
             }
             if (this.countAnimationStableLayout != null) {
                 canvas.save();
-                canvas.translate(this.countLeft + (this.dx * (1.0f - this.countChangeProgress)), ((float) AndroidUtilities.dp(2.0f)) + measuredHeight);
+                canvas.translate(this.countLeft + (this.dx * (1.0f - this.countChangeProgress)), ((float) AndroidUtilities.dp(2.0f)) + countTop);
                 this.textPaint.setAlpha(255);
                 this.countAnimationStableLayout.draw(canvas);
                 canvas.restore();
             }
             if (this.countAnimationStableLayout2 != null) {
                 canvas.save();
-                canvas.translate(this.countLeft, measuredHeight + ((float) AndroidUtilities.dp(2.0f)));
+                canvas.translate(this.countLeft, ((float) AndroidUtilities.dp(2.0f)) + countTop);
                 this.textPaint.setAlpha(255);
                 this.countAnimationStableLayout2.draw(canvas);
                 canvas.restore();
@@ -273,37 +288,37 @@ public class SearchCounterView extends View {
         drawInternal(canvas);
     }
 
-    private void updateX(float f) {
+    private void updateX(float countWidth2) {
         int i = this.gravity;
         if (i == 5) {
             float measuredWidth = (float) (getMeasuredWidth() - AndroidUtilities.dp(5.5f));
             this.countLeft = measuredWidth;
-            float f2 = this.horizontalPadding;
-            if (f2 != 0.0f) {
-                this.countLeft = measuredWidth - Math.max(f2 + (f / 2.0f), f);
+            float f = this.horizontalPadding;
+            if (f != 0.0f) {
+                this.countLeft = measuredWidth - Math.max(f + (countWidth2 / 2.0f), countWidth2);
             } else {
-                this.countLeft = measuredWidth - f;
+                this.countLeft = measuredWidth - countWidth2;
             }
         } else if (i == 3) {
             this.countLeft = (float) AndroidUtilities.dp(5.5f);
         } else {
-            this.countLeft = (float) ((int) ((((float) getMeasuredWidth()) - f) / 2.0f));
+            this.countLeft = (float) ((int) ((((float) getMeasuredWidth()) - countWidth2) / 2.0f));
         }
         this.x = this.countLeft - ((float) AndroidUtilities.dp(5.5f));
     }
 
     private void drawInternal(Canvas canvas) {
-        float measuredHeight = ((float) (getMeasuredHeight() - AndroidUtilities.dp(23.0f))) / 2.0f;
+        float countTop = ((float) (getMeasuredHeight() - AndroidUtilities.dp(23.0f))) / 2.0f;
         updateX((float) this.countWidth);
         if (this.countLayout != null) {
             canvas.save();
-            canvas.translate(this.countLeft, measuredHeight + ((float) AndroidUtilities.dp(2.0f)));
+            canvas.translate(this.countLeft, ((float) AndroidUtilities.dp(2.0f)) + countTop);
             this.countLayout.draw(canvas);
             canvas.restore();
         }
     }
 
-    public void setGravity(int i) {
-        this.gravity = i;
+    public void setGravity(int gravity2) {
+        this.gravity = gravity2;
     }
 }

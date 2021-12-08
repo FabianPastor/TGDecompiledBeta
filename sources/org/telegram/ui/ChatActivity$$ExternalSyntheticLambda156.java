@@ -1,19 +1,13 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda156 implements RequestDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda156 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda156(ChatActivity chatActivity, TLObject tLObject) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda156(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = tLObject;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$createView$16(this.f$1, tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m1662lambda$checkListViewPaddings$113$orgtelegramuiChatActivity();
     }
 }

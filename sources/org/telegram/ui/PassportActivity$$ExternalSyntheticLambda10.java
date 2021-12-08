@@ -1,18 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.ui.Components.EditTextBoldCursor;
+import android.view.View;
 
-public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda10 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda10 implements View.OnClickListener {
     public final /* synthetic */ PassportActivity f$0;
-    public final /* synthetic */ EditTextBoldCursor f$1;
 
-    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda10(PassportActivity passportActivity, EditTextBoldCursor editTextBoldCursor) {
+    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda10(PassportActivity passportActivity) {
         this.f$0 = passportActivity;
-        this.f$1 = editTextBoldCursor;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createIdentityInterface$48(this.f$1, dialogInterface, i);
+    public final void onClick(View view) {
+        this.f$0.m3377x741b537a(view);
     }
 }

@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
-import org.telegram.ui.ContentPreviewViewer;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda68 implements View.OnTouchListener {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ ContentPreviewViewer.ContentPreviewViewerDelegate f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda68 implements RequestDelegate {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda68 INSTANCE = new ChatActivity$$ExternalSyntheticLambda68();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda68(ChatActivity chatActivity, ContentPreviewViewer.ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
-        this.f$0 = chatActivity;
-        this.f$1 = contentPreviewViewerDelegate;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda68() {
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$createView$49(this.f$1, view, motionEvent);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        ChatActivity.lambda$markSponsoredAsRead$170(tLObject, tL_error);
     }
 }

@@ -1,19 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import android.view.View;
 
-public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda33 implements ThemeDescription.ThemeDescriptionDelegate {
+public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda33 implements View.OnClickListener {
     public final /* synthetic */ StickersAlert f$0;
 
     public /* synthetic */ StickersAlert$$ExternalSyntheticLambda33(StickersAlert stickersAlert) {
         this.f$0 = stickersAlert;
     }
 
-    public final void didSetColor() {
-        this.f$0.updateColors();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final void onClick(View view) {
+        this.f$0.m2654lambda$updateFields$17$orgtelegramuiComponentsStickersAlert(view);
     }
 }

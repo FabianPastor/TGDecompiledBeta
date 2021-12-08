@@ -1,21 +1,19 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda6 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ long f$0;
-    public final /* synthetic */ int[] f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ Runnable f$3;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda6 implements NumberPicker.OnValueChangeListener {
+    public final /* synthetic */ NumberPicker f$0;
+    public final /* synthetic */ NumberPicker f$1;
+    public final /* synthetic */ NumberPicker f$2;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda6(long j, int[] iArr, int i, Runnable runnable) {
-        this.f$0 = j;
-        this.f$1 = iArr;
-        this.f$2 = i;
-        this.f$3 = runnable;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda6(NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3) {
+        this.f$0 = numberPicker;
+        this.f$1 = numberPicker2;
+        this.f$2 = numberPicker3;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createColorSelectDialog$67(this.f$0, this.f$1, this.f$2, this.f$3, dialogInterface, i);
+    public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
+        AlertsCreator.updateDayPicker(this.f$0, this.f$1, this.f$2);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class VideoPlayer$VisualizerBufferSink$$ExternalSyn
     }
 
     public final void run() {
-        this.f$0.lambda$handleBuffer$0();
+        this.f$0.m2716xfa955ae7();
     }
 }

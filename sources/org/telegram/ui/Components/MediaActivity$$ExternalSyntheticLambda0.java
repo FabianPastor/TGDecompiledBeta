@@ -10,7 +10,7 @@ public final /* synthetic */ class MediaActivity$$ExternalSyntheticLambda0 imple
     }
 
     public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$0();
+        this.f$0.m2410x87fdda83();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

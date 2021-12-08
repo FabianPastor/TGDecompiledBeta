@@ -8,6 +8,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda3 imple
     }
 
     public final void run() {
-        this.f$0.lambda$onDialogDismiss$1();
+        this.f$0.m3186lambda$onDialogDismiss$1$orgtelegramuiLoginActivity();
     }
 }

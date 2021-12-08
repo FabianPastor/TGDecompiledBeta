@@ -10,6 +10,6 @@ public final /* synthetic */ class ActionBarLayout$$ExternalSyntheticLambda2 imp
     }
 
     public final void run() {
-        this.f$0.lambda$closeLastFragment$5(this.f$1);
+        this.f$0.m1291x4316224f(this.f$1);
     }
 }

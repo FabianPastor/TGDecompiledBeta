@@ -11,6 +11,6 @@ public final /* synthetic */ class LanguageSelectActivity$$ExternalSyntheticLamb
     }
 
     public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$createView$2(view, i);
+        return this.f$0.m3060lambda$createView$2$orgtelegramuiLanguageSelectActivity(view, i);
     }
 }

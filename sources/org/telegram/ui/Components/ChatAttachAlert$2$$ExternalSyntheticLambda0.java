@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatAttachAlert$2$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.lambda$onMeasure$0();
+        this.f$0.m2113lambda$onMeasure$0$orgtelegramuiComponentsChatAttachAlert$2();
     }
 }

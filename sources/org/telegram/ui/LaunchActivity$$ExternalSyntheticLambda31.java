@@ -1,15 +1,20 @@
 package org.telegram.ui;
 
+import org.telegram.tgnet.TLObject;
+import org.telegram.ui.ActionBar.Theme;
+
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda31 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ Runnable f$1;
+    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ Theme.ThemeInfo f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda31(LaunchActivity launchActivity, Runnable runnable) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda31(LaunchActivity launchActivity, TLObject tLObject, Theme.ThemeInfo themeInfo) {
         this.f$0 = launchActivity;
-        this.f$1 = runnable;
+        this.f$1 = tLObject;
+        this.f$2 = themeInfo;
     }
 
     public final void run() {
-        this.f$0.lambda$showPasscodeActivity$5(this.f$1);
+        this.f$0.m3070lambda$didReceivedNotification$72$orgtelegramuiLaunchActivity(this.f$1, this.f$2);
     }
 }

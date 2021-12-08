@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPOverlayBackground$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setShowBlackout$2(valueAnimator);
+        this.f$0.m2767x593fed8d(valueAnimator);
     }
 }

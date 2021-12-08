@@ -12,6 +12,6 @@ public final /* synthetic */ class InviteMembersBottomSheet$SearchAdapter$$Exter
     }
 
     public final void run() {
-        this.f$0.lambda$searchDialogs$3(this.f$1);
+        this.f$0.m2377x2CLASSNAMEf6f9(this.f$1);
     }
 }

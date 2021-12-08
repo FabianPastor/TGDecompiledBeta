@@ -14,6 +14,6 @@ public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda8 
     }
 
     public final void run() {
-        this.f$0.lambda$onPreviewFrame$8(this.f$1, this.f$2);
+        this.f$0.m1508lambda$onPreviewFrame$8$orgtelegramuiCameraScanActivity(this.f$1, this.f$2);
     }
 }

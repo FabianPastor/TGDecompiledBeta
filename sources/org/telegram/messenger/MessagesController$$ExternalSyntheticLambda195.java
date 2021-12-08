@@ -1,36 +1,21 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.tgnet.TLRPC$UserFull;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda195 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda195 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ TLRPC$User f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ boolean f$4;
-    public final /* synthetic */ TLRPC$UserFull f$5;
-    public final /* synthetic */ ArrayList f$6;
-    public final /* synthetic */ HashMap f$7;
-    public final /* synthetic */ int f$8;
-    public final /* synthetic */ boolean f$9;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ Runnable f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda195(MessagesController messagesController, boolean z, TLRPC$User tLRPC$User, int i, boolean z2, TLRPC$UserFull tLRPC$UserFull, ArrayList arrayList, HashMap hashMap, int i2, boolean z3) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda195(MessagesController messagesController, long j, Runnable runnable) {
         this.f$0 = messagesController;
-        this.f$1 = z;
-        this.f$2 = tLRPC$User;
-        this.f$3 = i;
-        this.f$4 = z2;
-        this.f$5 = tLRPC$UserFull;
-        this.f$6 = arrayList;
-        this.f$7 = hashMap;
-        this.f$8 = i2;
-        this.f$9 = z3;
+        this.f$1 = j;
+        this.f$2 = runnable;
     }
 
-    public final void run() {
-        this.f$0.lambda$processUserInfo$111(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m223lambda$getGroupCall$35$orgtelegrammessengerMessagesController(this.f$1, this.f$2, tLObject, tL_error);
     }
 }

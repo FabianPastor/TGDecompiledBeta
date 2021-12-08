@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.view.View;
+import android.view.ViewTreeObserver;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda9 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ LaunchActivity f$0;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda9 implements ViewTreeObserver.OnGlobalLayoutListener {
+    public final /* synthetic */ View f$0;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda9(LaunchActivity launchActivity) {
-        this.f$0 = launchActivity;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda9(View view) {
+        this.f$0 = view;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$didReceivedNotification$66(dialogInterface, i);
+    public final void onGlobalLayout() {
+        LaunchActivity.lambda$onCreate$4(this.f$0);
     }
 }

@@ -1,17 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ManageLinksActivity$$ExternalSyntheticLambda3 implements Runnable {
+public final /* synthetic */ class ManageLinksActivity$$ExternalSyntheticLambda3 implements RequestDelegate {
     public final /* synthetic */ ManageLinksActivity f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
+    public final /* synthetic */ TLRPC.TL_chatInviteExported f$1;
 
-    public /* synthetic */ ManageLinksActivity$$ExternalSyntheticLambda3(ManageLinksActivity manageLinksActivity, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ ManageLinksActivity$$ExternalSyntheticLambda3(ManageLinksActivity manageLinksActivity, TLRPC.TL_chatInviteExported tL_chatInviteExported) {
         this.f$0 = manageLinksActivity;
-        this.f$1 = tLRPC$TL_error;
+        this.f$1 = tL_chatInviteExported;
     }
 
-    public final void run() {
-        this.f$0.lambda$createView$6(this.f$1);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m3285lambda$revokeLink$16$orgtelegramuiManageLinksActivity(this.f$1, tLObject, tL_error);
     }
 }

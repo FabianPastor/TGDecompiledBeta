@@ -12,6 +12,6 @@ public final /* synthetic */ class DialogsActivity$6$$ExternalSyntheticLambda4 i
     }
 
     public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.lambda$didSelectTab$3(keyEvent);
+        this.f$0.m2883lambda$didSelectTab$3$orgtelegramuiDialogsActivity$6(keyEvent);
     }
 }

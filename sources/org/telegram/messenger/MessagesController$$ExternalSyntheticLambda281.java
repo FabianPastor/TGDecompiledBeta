@@ -1,22 +1,18 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_getMessagesViews;
+import android.content.Context;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda281 implements RequestDelegate {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ TLRPC$TL_messages_getMessagesViews f$2;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda281 implements Runnable {
+    public final /* synthetic */ Context f$0;
+    public final /* synthetic */ AlertDialog f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda281(MessagesController messagesController, long j, TLRPC$TL_messages_getMessagesViews tLRPC$TL_messages_getMessagesViews) {
-        this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = tLRPC$TL_messages_getMessagesViews;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda281(Context context, AlertDialog alertDialog) {
+        this.f$0 = context;
+        this.f$1 = alertDialog;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$updateTimerProc$115(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void run() {
+        MessagesController.lambda$convertToGigaGroup$207(this.f$0, this.f$1);
     }
 }

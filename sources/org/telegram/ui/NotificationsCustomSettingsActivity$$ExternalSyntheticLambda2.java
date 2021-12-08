@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class NotificationsCustomSettingsActivity$$ExternalSyntheticLambda2 implements Runnable {
-    public final /* synthetic */ NotificationsCustomSettingsActivity f$0;
-    public final /* synthetic */ int f$1;
+import java.util.ArrayList;
+import org.telegram.ui.DialogsActivity;
 
-    public /* synthetic */ NotificationsCustomSettingsActivity$$ExternalSyntheticLambda2(NotificationsCustomSettingsActivity notificationsCustomSettingsActivity, int i) {
+public final /* synthetic */ class NotificationsCustomSettingsActivity$$ExternalSyntheticLambda2 implements DialogsActivity.DialogsActivityDelegate {
+    public final /* synthetic */ NotificationsCustomSettingsActivity f$0;
+
+    public /* synthetic */ NotificationsCustomSettingsActivity$$ExternalSyntheticLambda2(NotificationsCustomSettingsActivity notificationsCustomSettingsActivity) {
         this.f$0 = notificationsCustomSettingsActivity;
-        this.f$1 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$createView$5(this.f$1);
+    public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+        this.f$0.m3325x424var_d(dialogsActivity, arrayList, charSequence, z);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class VideoSeekPreviewImage$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.lambda$setProgress$0(this.f$1);
+        this.f$0.m2721xevar_a4b(this.f$1);
     }
 }

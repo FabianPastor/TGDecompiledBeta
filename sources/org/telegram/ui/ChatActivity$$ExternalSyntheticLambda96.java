@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda96 implements Runnable {
+import android.content.DialogInterface;
+
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda96 implements DialogInterface.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda96(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        this.f$0.lambda$checkSecretMessageForLocation$99();
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.m1802x27067ae1(dialogInterface, i);
     }
 }

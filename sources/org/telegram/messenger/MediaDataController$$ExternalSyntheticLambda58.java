@@ -1,23 +1,26 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.TLObject;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda58 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ long f$4;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ TLObject f$2;
+    public final /* synthetic */ BaseFragment f$3;
+    public final /* synthetic */ boolean f$4;
+    public final /* synthetic */ int f$5;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda58(MediaDataController mediaDataController, ArrayList arrayList, int i, int i2, long j) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda58(MediaDataController mediaDataController, int i, TLObject tLObject, BaseFragment baseFragment, boolean z, int i2) {
         this.f$0 = mediaDataController;
-        this.f$1 = arrayList;
-        this.f$2 = i;
-        this.f$3 = i2;
-        this.f$4 = j;
+        this.f$1 = i;
+        this.f$2 = tLObject;
+        this.f$3 = baseFragment;
+        this.f$4 = z;
+        this.f$5 = i2;
     }
 
     public final void run() {
-        this.f$0.lambda$putStickersToCache$53(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.m901x2e10var_b(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

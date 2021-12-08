@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlertPhotoLayout$10$$ExternalSynthe
     }
 
     public final void onFinishVideoRecording(String str, long j) {
-        this.f$0.lambda$shutterLongPressed$1(str, j);
+        this.f$0.m2185x6abafvar_(str, j);
     }
 }

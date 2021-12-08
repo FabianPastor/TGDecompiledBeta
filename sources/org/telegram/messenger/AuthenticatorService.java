@@ -11,43 +11,43 @@ import android.os.Bundle;
 import android.os.IBinder;
 
 public class AuthenticatorService extends Service {
-    private static Authenticator authenticator;
+    private static Authenticator authenticator = null;
 
     private static class Authenticator extends AbstractAccountAuthenticator {
-        public Bundle addAccount(AccountAuthenticatorResponse accountAuthenticatorResponse, String str, String str2, String[] strArr, Bundle bundle) throws NetworkErrorException {
-            return null;
-        }
-
-        public Bundle confirmCredentials(AccountAuthenticatorResponse accountAuthenticatorResponse, Account account, Bundle bundle) throws NetworkErrorException {
-            return null;
-        }
-
-        public Bundle editProperties(AccountAuthenticatorResponse accountAuthenticatorResponse, String str) {
-            return null;
-        }
-
-        public Bundle getAuthToken(AccountAuthenticatorResponse accountAuthenticatorResponse, Account account, String str, Bundle bundle) throws NetworkErrorException {
-            return null;
-        }
-
-        public String getAuthTokenLabel(String str) {
-            return null;
-        }
-
-        public Bundle hasFeatures(AccountAuthenticatorResponse accountAuthenticatorResponse, Account account, String[] strArr) throws NetworkErrorException {
-            return null;
-        }
-
-        public Bundle updateCredentials(AccountAuthenticatorResponse accountAuthenticatorResponse, Account account, String str, Bundle bundle) throws NetworkErrorException {
-            return null;
-        }
-
         public Authenticator(Context context) {
             super(context);
         }
 
-        public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse accountAuthenticatorResponse, Account account) throws NetworkErrorException {
-            return super.getAccountRemovalAllowed(accountAuthenticatorResponse, account);
+        public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+            return null;
+        }
+
+        public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account) throws NetworkErrorException {
+            return super.getAccountRemovalAllowed(response, account);
+        }
+
+        public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) throws NetworkErrorException {
+            return null;
+        }
+
+        public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
+            return null;
+        }
+
+        public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
+            return null;
+        }
+
+        public String getAuthTokenLabel(String authTokenType) {
+            return null;
+        }
+
+        public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
+            return null;
+        }
+
+        public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
+            return null;
         }
     }
 

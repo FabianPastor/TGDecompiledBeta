@@ -11,6 +11,6 @@ public final /* synthetic */ class PollCreateActivity$$ExternalSyntheticLambda1 
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$0(view, i);
+        this.f$0.m3643lambda$createView$0$orgtelegramuiPollCreateActivity(view, i);
     }
 }

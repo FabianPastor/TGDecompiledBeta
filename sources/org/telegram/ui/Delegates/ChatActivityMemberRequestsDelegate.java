@@ -17,9 +17,7 @@ import android.widget.TextView;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$ChatFull;
-import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -32,11 +30,11 @@ public class ChatActivityMemberRequestsDelegate {
     /* access modifiers changed from: private */
     public MemberRequestsBottomSheet bottomSheet;
     private final Callback callback;
-    private TLRPC$ChatFull chatInfo;
+    private TLRPC.ChatFull chatInfo;
     private int closePendingRequestsCount = -1;
     private ImageView closeView;
     private final int currentAccount;
-    private final TLRPC$Chat currentChat;
+    private final TLRPC.Chat currentChat;
     private final BaseFragment fragment;
     private ValueAnimator pendingRequestsAnimator;
     private int pendingRequestsCount;
@@ -49,10 +47,10 @@ public class ChatActivityMemberRequestsDelegate {
         void onEnterOffsetChanged();
     }
 
-    public ChatActivityMemberRequestsDelegate(BaseFragment baseFragment, TLRPC$Chat tLRPC$Chat, Callback callback2) {
-        this.fragment = baseFragment;
-        this.currentChat = tLRPC$Chat;
-        this.currentAccount = baseFragment.getCurrentAccount();
+    public ChatActivityMemberRequestsDelegate(BaseFragment fragment2, TLRPC.Chat currentChat2, Callback callback2) {
+        this.fragment = fragment2;
+        this.currentChat = currentChat2;
+        this.currentAccount = fragment2.getCurrentAccount();
         this.callback = callback2;
     }
 
@@ -64,23 +62,22 @@ public class ChatActivityMemberRequestsDelegate {
             this.root.getBackground().mutate().setColorFilter(new PorterDuffColorFilter(this.fragment.getThemedColor("chat_topPanelBackground"), PorterDuff.Mode.MULTIPLY));
             this.root.setVisibility(8);
             this.pendingRequestsEnterOffset = (float) (-getViewHeight());
-            View view = new View(this.fragment.getParentActivity());
-            view.setBackground(Theme.getSelectorDrawable(false));
-            view.setOnClickListener(new ChatActivityMemberRequestsDelegate$$ExternalSyntheticLambda2(this));
-            this.root.addView(view, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 2.0f));
-            LinearLayout linearLayout = new LinearLayout(this.fragment.getParentActivity());
-            linearLayout.setOrientation(0);
-            this.root.addView(linearLayout, LayoutHelper.createFrame(-1, -1.0f, 48, 0.0f, 0.0f, 36.0f, 0.0f));
-            AnonymousClass1 r2 = new AvatarsImageView(this, this.fragment.getParentActivity(), false) {
+            View pendingRequestsSelector = new View(this.fragment.getParentActivity());
+            pendingRequestsSelector.setBackground(Theme.getSelectorDrawable(false));
+            pendingRequestsSelector.setOnClickListener(new ChatActivityMemberRequestsDelegate$$ExternalSyntheticLambda1(this));
+            this.root.addView(pendingRequestsSelector, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 2.0f));
+            LinearLayout requestsDataLayout = new LinearLayout(this.fragment.getParentActivity());
+            requestsDataLayout.setOrientation(0);
+            this.root.addView(requestsDataLayout, LayoutHelper.createFrame(-1, -1.0f, 48, 0.0f, 0.0f, 36.0f, 0.0f));
+            AnonymousClass1 r3 = new AvatarsImageView(this.fragment.getParentActivity(), false) {
                 /* access modifiers changed from: protected */
-                public void onMeasure(int i, int i2) {
-                    int i3 = this.count;
-                    super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (i3 == 0 ? 0 : ((i3 - 1) * 20) + 24)), NUM), i2);
+                public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (this.count == 0 ? 0 : ((this.count - 1) * 20) + 24)), NUM), heightMeasureSpec);
                 }
             };
-            this.avatarsView = r2;
-            r2.reset();
-            linearLayout.addView(this.avatarsView, LayoutHelper.createFrame(-2, -1.0f, 48, 8.0f, 0.0f, 10.0f, 0.0f));
+            this.avatarsView = r3;
+            r3.reset();
+            requestsDataLayout.addView(this.avatarsView, LayoutHelper.createFrame(-2, -1.0f, 48, 8.0f, 0.0f, 10.0f, 0.0f));
             TextView textView = new TextView(this.fragment.getParentActivity());
             this.requestsCountTextView = textView;
             textView.setEllipsize(TextUtils.TruncateAt.END);
@@ -89,42 +86,41 @@ public class ChatActivityMemberRequestsDelegate {
             this.requestsCountTextView.setText((CharSequence) null);
             this.requestsCountTextView.setTextColor(this.fragment.getThemedColor("chat_topPanelTitle"));
             this.requestsCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            linearLayout.addView(this.requestsCountTextView, LayoutHelper.createFrame(-1, -1.0f, 48, 0.0f, 0.0f, 0.0f, 0.0f));
-            ImageView imageView = new ImageView(this.fragment.getParentActivity());
-            this.closeView = imageView;
+            requestsDataLayout.addView(this.requestsCountTextView, LayoutHelper.createFrame(-1, -1.0f, 48, 0.0f, 0.0f, 0.0f, 0.0f));
+            this.closeView = new ImageView(this.fragment.getParentActivity());
             if (Build.VERSION.SDK_INT >= 21) {
-                imageView.setBackground(Theme.createSelectorDrawable(this.fragment.getThemedColor("inappPlayerClose") & NUM, 1, AndroidUtilities.dp(14.0f)));
+                this.closeView.setBackground(Theme.createSelectorDrawable(this.fragment.getThemedColor("inappPlayerClose") & NUM, 1, AndroidUtilities.dp(14.0f)));
             }
             this.closeView.setColorFilter(new PorterDuffColorFilter(this.fragment.getThemedColor("chat_topPanelClose"), PorterDuff.Mode.MULTIPLY));
             this.closeView.setContentDescription(LocaleController.getString("Close", NUM));
             this.closeView.setImageResource(NUM);
             this.closeView.setScaleType(ImageView.ScaleType.CENTER);
-            this.closeView.setOnClickListener(new ChatActivityMemberRequestsDelegate$$ExternalSyntheticLambda1(this));
+            this.closeView.setOnClickListener(new ChatActivityMemberRequestsDelegate$$ExternalSyntheticLambda2(this));
             this.root.addView(this.closeView, LayoutHelper.createFrame(36, -1.0f, 53, 0.0f, 0.0f, 2.0f, 0.0f));
-            TLRPC$ChatFull tLRPC$ChatFull = this.chatInfo;
-            if (tLRPC$ChatFull != null) {
-                setPendingRequests(tLRPC$ChatFull.requests_pending, tLRPC$ChatFull.recent_requesters, false);
+            TLRPC.ChatFull chatFull = this.chatInfo;
+            if (chatFull != null) {
+                setPendingRequests(chatFull.requests_pending, this.chatInfo.recent_requesters, false);
             }
         }
         return this.root;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getView$0(View view) {
+    /* renamed from: lambda$getView$0$org-telegram-ui-Delegates-ChatActivityMemberRequestsDelegate  reason: not valid java name */
+    public /* synthetic */ void m2818x24bd3119(View v) {
         showBottomSheet();
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getView$1(View view) {
+    /* renamed from: lambda$getView$1$org-telegram-ui-Delegates-ChatActivityMemberRequestsDelegate  reason: not valid java name */
+    public /* synthetic */ void m2819xb8fba0b8(View v) {
         this.fragment.getMessagesController().setChatPendingRequestsOnClose(this.currentChat.id, this.pendingRequestsCount);
         this.closePendingRequestsCount = this.pendingRequestsCount;
         animatePendingRequests(false, true);
     }
 
-    public void setChatInfo(TLRPC$ChatFull tLRPC$ChatFull, boolean z) {
-        this.chatInfo = tLRPC$ChatFull;
-        if (tLRPC$ChatFull != null) {
-            setPendingRequests(tLRPC$ChatFull.requests_pending, tLRPC$ChatFull.recent_requesters, z);
+    public void setChatInfo(TLRPC.ChatFull chatInfo2, boolean animated) {
+        this.chatInfo = chatInfo2;
+        if (chatInfo2 != null) {
+            setPendingRequests(chatInfo2.requests_pending, chatInfo2.recent_requesters, animated);
         }
     }
 
@@ -157,38 +153,38 @@ public class ChatActivityMemberRequestsDelegate {
         this.fragment.showDialog(this.bottomSheet);
     }
 
-    private void setPendingRequests(int i, List<Long> list, boolean z) {
+    private void setPendingRequests(int count, List<Long> recentRequestersIdList, boolean animated) {
         if (this.root != null) {
-            if (i <= 0) {
+            if (count <= 0) {
                 if (this.currentChat != null) {
                     this.fragment.getMessagesController().setChatPendingRequestsOnClose(this.currentChat.id, 0);
                     this.closePendingRequestsCount = 0;
                 }
-                animatePendingRequests(false, z);
+                animatePendingRequests(false, animated);
                 this.pendingRequestsCount = 0;
-            } else if (this.pendingRequestsCount != i) {
-                this.pendingRequestsCount = i;
-                this.requestsCountTextView.setText(LocaleController.formatPluralString("JoinUsersRequests", i));
-                animatePendingRequests(true, z);
-                if (list != null && !list.isEmpty()) {
-                    int min = Math.min(3, list.size());
-                    for (int i2 = 0; i2 < min; i2++) {
-                        TLRPC$User user = this.fragment.getMessagesController().getUser(list.get(i2));
+            } else if (this.pendingRequestsCount != count) {
+                this.pendingRequestsCount = count;
+                this.requestsCountTextView.setText(LocaleController.formatPluralString("JoinUsersRequests", count));
+                animatePendingRequests(true, animated);
+                if (recentRequestersIdList != null && !recentRequestersIdList.isEmpty()) {
+                    int usersCount = Math.min(3, recentRequestersIdList.size());
+                    for (int i = 0; i < usersCount; i++) {
+                        TLRPC.User user = this.fragment.getMessagesController().getUser(recentRequestersIdList.get(i));
                         if (user != null) {
-                            this.avatarsView.setObject(i2, this.currentAccount, user);
+                            this.avatarsView.setObject(i, this.currentAccount, user);
                         }
                     }
-                    this.avatarsView.setCount(min);
+                    this.avatarsView.setCount(usersCount);
                     this.avatarsView.commitTransition(true);
                 }
             }
         }
     }
 
-    private void animatePendingRequests(final boolean z, boolean z2) {
+    private void animatePendingRequests(final boolean appear, boolean animated) {
         int i = 0;
-        if (z != (this.root.getVisibility() == 0)) {
-            if (z) {
+        if (appear != (this.root.getVisibility() == 0)) {
+            if (appear) {
                 if (this.closePendingRequestsCount == -1 && this.currentChat != null) {
                     this.closePendingRequestsCount = this.fragment.getMessagesController().getChatPendingRequestsOnClosed(this.currentChat.id);
                 }
@@ -207,10 +203,10 @@ public class ChatActivityMemberRequestsDelegate {
                 valueAnimator.cancel();
             }
             float f = 0.0f;
-            if (z2) {
+            if (animated) {
                 float[] fArr = new float[2];
-                fArr[0] = z ? 0.0f : 1.0f;
-                if (z) {
+                fArr[0] = appear ? 0.0f : 1.0f;
+                if (appear) {
                     f = 1.0f;
                 }
                 fArr[1] = f;
@@ -218,14 +214,14 @@ public class ChatActivityMemberRequestsDelegate {
                 this.pendingRequestsAnimator = ofFloat;
                 ofFloat.addUpdateListener(new ChatActivityMemberRequestsDelegate$$ExternalSyntheticLambda0(this));
                 this.pendingRequestsAnimator.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationStart(Animator animator) {
-                        if (z) {
+                    public void onAnimationStart(Animator animation) {
+                        if (appear) {
                             ChatActivityMemberRequestsDelegate.this.root.setVisibility(0);
                         }
                     }
 
-                    public void onAnimationEnd(Animator animator) {
-                        if (!z) {
+                    public void onAnimationEnd(Animator animation) {
+                        if (!appear) {
                             ChatActivityMemberRequestsDelegate.this.root.setVisibility(8);
                         }
                     }
@@ -235,11 +231,11 @@ public class ChatActivityMemberRequestsDelegate {
                 return;
             }
             FrameLayout frameLayout = this.root;
-            if (!z) {
+            if (!appear) {
                 i = 8;
             }
             frameLayout.setVisibility(i);
-            if (!z) {
+            if (!appear) {
                 f = (float) (-getViewHeight());
             }
             this.pendingRequestsEnterOffset = f;
@@ -250,19 +246,19 @@ public class ChatActivityMemberRequestsDelegate {
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$animatePendingRequests$2(ValueAnimator valueAnimator) {
-        this.pendingRequestsEnterOffset = ((float) (-getViewHeight())) * (1.0f - ((Float) valueAnimator.getAnimatedValue()).floatValue());
+    /* renamed from: lambda$animatePendingRequests$2$org-telegram-ui-Delegates-ChatActivityMemberRequestsDelegate  reason: not valid java name */
+    public /* synthetic */ void m2817x95fe199e(ValueAnimator animation) {
+        this.pendingRequestsEnterOffset = ((float) (-getViewHeight())) * (1.0f - ((Float) animation.getAnimatedValue()).floatValue());
         Callback callback2 = this.callback;
         if (callback2 != null) {
             callback2.onEnterOffsetChanged();
         }
     }
 
-    public void fillThemeDescriptions(List<ThemeDescription> list) {
-        List<ThemeDescription> list2 = list;
-        list2.add(new ThemeDescription(this.root, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_topPanelBackground"));
-        list2.add(new ThemeDescription(this.requestsCountTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_topPanelTitle"));
-        list2.add(new ThemeDescription(this.closeView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_topPanelClose"));
+    public void fillThemeDescriptions(List<ThemeDescription> themeDescriptions) {
+        List<ThemeDescription> list = themeDescriptions;
+        list.add(new ThemeDescription(this.root, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_topPanelBackground"));
+        list.add(new ThemeDescription(this.requestsCountTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_topPanelTitle"));
+        list.add(new ThemeDescription(this.closeView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_topPanelClose"));
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class SharedMediaLayout$GroupUsersSearchAdapter$$Ex
     }
 
     public final boolean onOptionsButtonCheck(ManageChatUserCell manageChatUserCell, boolean z) {
-        return this.f$0.lambda$onCreateViewHolder$5(manageChatUserCell, z);
+        return this.f$0.m2594xfCLASSNAMEe4ec(manageChatUserCell, z);
     }
 }

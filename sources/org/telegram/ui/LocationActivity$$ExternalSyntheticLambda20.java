@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import com.google.android.gms.maps.MapView;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 
-public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda20 implements Runnable {
+public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda20 implements ActionBarMenuItem.ActionBarMenuItemDelegate {
     public final /* synthetic */ LocationActivity f$0;
-    public final /* synthetic */ MapView f$1;
 
-    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda20(LocationActivity locationActivity, MapView mapView) {
+    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda20(LocationActivity locationActivity) {
         this.f$0 = locationActivity;
-        this.f$1 = mapView;
     }
 
-    public final void run() {
-        this.f$0.lambda$createView$17(this.f$1);
+    public final void onItemClick(int i) {
+        this.f$0.m3157lambda$createView$2$orgtelegramuiLocationActivity(i);
     }
 }

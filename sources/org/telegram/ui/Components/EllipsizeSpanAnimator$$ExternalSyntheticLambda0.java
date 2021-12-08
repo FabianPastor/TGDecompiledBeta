@@ -13,6 +13,6 @@ public final /* synthetic */ class EllipsizeSpanAnimator$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$createEllipsizeAnimator$0(this.f$1, valueAnimator);
+        this.f$0.m2235x871035ba(this.f$1, valueAnimator);
     }
 }

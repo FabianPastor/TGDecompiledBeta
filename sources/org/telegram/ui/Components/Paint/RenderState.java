@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class RenderState {
+    private static final int DEFAULT_STATE_SIZE = 256;
     private int allocatedCount;
     public float alpha;
     public float angle;
@@ -35,19 +36,19 @@ public class RenderState {
         return this.buffer.getFloat();
     }
 
-    public void setPosition(int i) {
+    public void setPosition(int position) {
         ByteBuffer byteBuffer = this.buffer;
-        if (byteBuffer != null && i >= 0 && i < this.allocatedCount) {
-            byteBuffer.position(i * 5 * 4);
+        if (byteBuffer != null && position >= 0 && position < this.allocatedCount) {
+            byteBuffer.position(position * 5 * 4);
         }
     }
 
-    public void appendValuesCount(int i) {
-        int i2 = this.count + i;
-        if (i2 > this.allocatedCount || this.buffer == null) {
+    public void appendValuesCount(int count2) {
+        int newTotalCount = this.count + count2;
+        if (newTotalCount > this.allocatedCount || this.buffer == null) {
             resizeBuffer();
         }
-        this.count = i2;
+        this.count = newTotalCount;
     }
 
     public void resizeBuffer() {
@@ -62,16 +63,16 @@ public class RenderState {
         this.buffer.position(0);
     }
 
-    public boolean addPoint(PointF pointF, float f, float f2, float f3, int i) {
-        if ((i == -1 || i < this.allocatedCount) && this.buffer.position() != this.buffer.limit()) {
-            if (i != -1) {
-                this.buffer.position(i * 5 * 4);
+    public boolean addPoint(PointF point, float size, float angle2, float alpha2, int index) {
+        if ((index == -1 || index < this.allocatedCount) && this.buffer.position() != this.buffer.limit()) {
+            if (index != -1) {
+                this.buffer.position(index * 5 * 4);
             }
-            this.buffer.putFloat(pointF.x);
-            this.buffer.putFloat(pointF.y);
-            this.buffer.putFloat(f);
-            this.buffer.putFloat(f2);
-            this.buffer.putFloat(f3);
+            this.buffer.putFloat(point.x);
+            this.buffer.putFloat(point.y);
+            this.buffer.putFloat(size);
+            this.buffer.putFloat(angle2);
+            this.buffer.putFloat(alpha2);
             return true;
         }
         resizeBuffer();

@@ -10,6 +10,6 @@ public final /* synthetic */ class PopupNotificationActivity$$ExternalSyntheticL
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onRequestPermissionsResult$0(dialogInterface, i);
+        this.f$0.m3650xac2d2ac6(dialogInterface, i);
     }
 }

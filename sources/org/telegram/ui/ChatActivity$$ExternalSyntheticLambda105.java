@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda105 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ int f$1;
+import android.animation.ValueAnimator;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda105(ChatActivity chatActivity, int i) {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda105 implements ValueAnimator.AnimatorUpdateListener {
+    public final /* synthetic */ ChatActivity f$0;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda105(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$processNewMessages$103(this.f$1);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.m1822lambda$updateTopPanel$111$orgtelegramuiChatActivity(valueAnimator);
     }
 }

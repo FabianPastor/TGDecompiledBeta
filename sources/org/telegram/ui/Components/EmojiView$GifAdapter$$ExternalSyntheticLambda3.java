@@ -2,7 +2,7 @@ package org.telegram.ui.Components;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.EmojiView;
 
 public final /* synthetic */ class EmojiView$GifAdapter$$ExternalSyntheticLambda3 implements RequestDelegate {
@@ -24,7 +24,7 @@ public final /* synthetic */ class EmojiView$GifAdapter$$ExternalSyntheticLambda
         this.f$6 = str3;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$search$3(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tLRPC$TL_error);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m2257lambda$search$3$orgtelegramuiComponentsEmojiView$GifAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tL_error);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$10$1$$ExternalSyntheticLambda0 i
     }
 
     public final void run(boolean z) {
-        this.f$0.lambda$onClearHistory$0(z);
+        this.f$0.m1827lambda$onClearHistory$0$orgtelegramuiChatActivity$10$1(z);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class ManageLinksActivity$LinkCell$$ExternalSynthet
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$3(view);
+        this.f$0.m3292lambda$new$3$orgtelegramuiManageLinksActivity$LinkCell(view);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class GroupCallMiniTextureView$$ExternalSyntheticLa
     }
 
     public final void run(Bitmap bitmap, int i) {
-        this.f$0.lambda$saveThumb$4(bitmap, i);
+        this.f$0.m2741xd04var_(bitmap, i);
     }
 }

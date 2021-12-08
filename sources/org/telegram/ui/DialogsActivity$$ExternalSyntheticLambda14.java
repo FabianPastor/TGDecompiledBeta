@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.messenger.MessagesController;
+import android.content.Context;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda14 implements DialogInterface.OnClickListener {
-    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda14 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda14();
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda14 implements Runnable {
+    public final /* synthetic */ Context f$0;
 
-    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda14() {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda14(Context context) {
+        this.f$0 = context;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askedAboutMiuiLockscreen", true).commit();
+    public final void run() {
+        Theme.createChatResources(this.f$0, false);
     }
 }

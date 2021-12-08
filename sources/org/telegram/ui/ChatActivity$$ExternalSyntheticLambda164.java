@@ -1,15 +1,13 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Adapters.StickersAdapter;
-
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda164 implements StickersAdapter.StickersAdapterDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda164 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda164(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void needChangePanelVisibility(boolean z) {
-        this.f$0.lambda$initStickers$72(z);
+    public final void run() {
+        this.f$0.m1739lambda$new$4$orgtelegramuiChatActivity();
     }
 }

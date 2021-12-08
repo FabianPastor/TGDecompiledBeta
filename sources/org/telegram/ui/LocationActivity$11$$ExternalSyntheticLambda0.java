@@ -10,6 +10,6 @@ public final /* synthetic */ class LocationActivity$11$$ExternalSyntheticLambda0
     }
 
     public final void run() {
-        this.f$0.lambda$onLayout$0();
+        this.f$0.m3181lambda$onLayout$0$orgtelegramuiLocationActivity$11();
     }
 }

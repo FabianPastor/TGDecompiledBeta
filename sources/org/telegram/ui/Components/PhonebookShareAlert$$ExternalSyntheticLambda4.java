@@ -10,6 +10,6 @@ public final /* synthetic */ class PhonebookShareAlert$$ExternalSyntheticLambda4
     }
 
     public final void onScrollChange(NestedScrollView nestedScrollView, int i, int i2, int i3, int i4) {
-        this.f$0.lambda$new$0(nestedScrollView, i, i2, i3, i4);
+        this.f$0.m2452lambda$new$0$orgtelegramuiComponentsPhonebookShareAlert(nestedScrollView, i, i2, i3, i4);
     }
 }

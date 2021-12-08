@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatAttachAlertDocumentLayout$$ExternalSynthe
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$new$2(this.f$1, dialogInterface, i);
+        this.f$0.m2129xaCLASSNAMEf6(this.f$1, dialogInterface, i);
     }
 }

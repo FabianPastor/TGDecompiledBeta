@@ -18,6 +18,6 @@ public final /* synthetic */ class GroupCallMiniTextureView$$ExternalSyntheticLa
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateIconColor$5(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
+        this.f$0.m2745x9fCLASSNAMEa7(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
     }
 }

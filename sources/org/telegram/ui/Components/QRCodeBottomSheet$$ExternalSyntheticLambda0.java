@@ -13,6 +13,6 @@ public final /* synthetic */ class QRCodeBottomSheet$$ExternalSyntheticLambda0 i
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$0(this.f$1, view);
+        this.f$0.m2526lambda$new$0$orgtelegramuiComponentsQRCodeBottomSheet(this.f$1, view);
     }
 }

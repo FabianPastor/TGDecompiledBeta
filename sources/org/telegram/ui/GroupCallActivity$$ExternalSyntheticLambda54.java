@@ -1,14 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.NumberPicker;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda54 implements NumberPicker.Formatter {
-    public static final /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda54 INSTANCE = new GroupCallActivity$$ExternalSyntheticLambda54();
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda54 implements RecyclerListView.OnItemClickListenerExtended {
+    public final /* synthetic */ GroupCallActivity f$0;
 
-    private /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda54() {
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda54(GroupCallActivity groupCallActivity) {
+        this.f$0 = groupCallActivity;
     }
 
-    public final String format(int i) {
-        return String.format("%02d", new Object[]{Integer.valueOf(i)});
+    public final void onItemClick(View view, int i, float f, float f2) {
+        this.f$0.m2960lambda$new$12$orgtelegramuiGroupCallActivity(view, i, f, f2);
     }
 }

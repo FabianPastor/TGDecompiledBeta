@@ -1,16 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.app.Activity;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda83 implements RequestDelegate {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda83 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda83();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda83 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ Activity f$0;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda83() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda83(Activity activity) {
+        this.f$0 = activity;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AlertsCreator.lambda$createChangeNameAlert$26(tLObject, tLRPC$TL_error);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        AlertsCreator.lambda$createBackgroundLocationPermissionDialog$73(this.f$0, dialogInterface, i);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class EmbedBottomSheet$$ExternalSyntheticLambda0 im
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$3(view);
+        this.f$0.m2236lambda$new$2$orgtelegramuiComponentsEmbedBottomSheet(view);
     }
 }

@@ -8,21 +8,22 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.Property;
+import android.view.MotionEvent;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.AnimationProperties;
 
 public class ZoomControlView extends View {
     public final Property<ZoomControlView, Float> ZOOM_PROPERTY = new AnimationProperties.FloatProperty<ZoomControlView>("clipProgress") {
-        public void setValue(ZoomControlView zoomControlView, float f) {
-            float unused = ZoomControlView.this.zoom = f;
+        public void setValue(ZoomControlView object, float value) {
+            float unused = ZoomControlView.this.zoom = value;
             if (ZoomControlView.this.delegate != null) {
                 ZoomControlView.this.delegate.didSetZoom(ZoomControlView.this.zoom);
             }
             ZoomControlView.this.invalidate();
         }
 
-        public Float get(ZoomControlView zoomControlView) {
+        public Float get(ZoomControlView object) {
             return Float.valueOf(ZoomControlView.this.zoom);
         }
     };
@@ -73,17 +74,17 @@ public class ZoomControlView extends View {
         return this.zoom;
     }
 
-    public void setZoom(float f, boolean z) {
+    public void setZoom(float value, boolean notify) {
         ZoomControlViewDelegate zoomControlViewDelegate;
-        if (f != this.zoom) {
-            if (f < 0.0f) {
-                f = 0.0f;
-            } else if (f > 1.0f) {
-                f = 1.0f;
+        if (value != this.zoom) {
+            if (value < 0.0f) {
+                value = 0.0f;
+            } else if (value > 1.0f) {
+                value = 1.0f;
             }
-            this.zoom = f;
-            if (z && (zoomControlViewDelegate = this.delegate) != null) {
-                zoomControlViewDelegate.didSetZoom(f);
+            this.zoom = value;
+            if (notify && (zoomControlViewDelegate = this.delegate) != null) {
+                zoomControlViewDelegate.didSetZoom(value);
             }
             invalidate();
         }
@@ -93,318 +94,119 @@ public class ZoomControlView extends View {
         this.delegate = zoomControlViewDelegate;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:89:0x01da  */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x01f1 A[ORIG_RETURN, RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:98:? A[RETURN, SYNTHETIC] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean onTouchEvent(android.view.MotionEvent r15) {
-        /*
-            r14 = this;
-            float r0 = r15.getX()
-            float r1 = r15.getY()
-            int r2 = r15.getAction()
-            int r3 = r14.getMeasuredWidth()
-            int r4 = r14.getMeasuredHeight()
-            r5 = 0
-            r6 = 1
-            if (r3 <= r4) goto L_0x001a
-            r3 = 1
-            goto L_0x001b
-        L_0x001a:
-            r3 = 0
-        L_0x001b:
-            int r4 = r14.progressStartX
-            float r7 = (float) r4
-            int r8 = r14.progressEndX
-            int r9 = r8 - r4
-            float r9 = (float) r9
-            float r10 = r14.zoom
-            float r9 = r9 * r10
-            float r7 = r7 + r9
-            int r7 = (int) r7
-            int r9 = r14.progressStartY
-            float r11 = (float) r9
-            int r12 = r14.progressEndY
-            int r13 = r12 - r9
-            float r13 = (float) r13
-            float r13 = r13 * r10
-            float r11 = r11 + r13
-            int r10 = (int) r11
-            if (r2 == r6) goto L_0x0078
-            if (r2 != 0) goto L_0x003a
-            goto L_0x0078
-        L_0x003a:
-            r7 = 2
-            if (r2 != r7) goto L_0x01d7
-            boolean r7 = r14.knobPressed
-            if (r7 == 0) goto L_0x01d7
-            if (r3 == 0) goto L_0x004e
-            float r1 = r14.knobStartX
-            float r0 = r0 + r1
-            float r1 = (float) r4
-            float r0 = r0 - r1
-            int r8 = r8 - r4
-            float r1 = (float) r8
-            float r0 = r0 / r1
-            r14.zoom = r0
-            goto L_0x0058
-        L_0x004e:
-            float r0 = r14.knobStartY
-            float r1 = r1 + r0
-            float r0 = (float) r9
-            float r1 = r1 - r0
-            int r12 = r12 - r9
-            float r0 = (float) r12
-            float r1 = r1 / r0
-            r14.zoom = r1
-        L_0x0058:
-            float r0 = r14.zoom
-            r1 = 0
-            int r3 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r3 >= 0) goto L_0x0062
-            r14.zoom = r1
-            goto L_0x006a
-        L_0x0062:
-            r1 = 1065353216(0x3var_, float:1.0)
-            int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 <= 0) goto L_0x006a
-            r14.zoom = r1
-        L_0x006a:
-            org.telegram.ui.Components.ZoomControlView$ZoomControlViewDelegate r0 = r14.delegate
-            if (r0 == 0) goto L_0x0073
-            float r1 = r14.zoom
-            r0.didSetZoom(r1)
-        L_0x0073:
-            r14.invalidate()
-            goto L_0x01d7
-        L_0x0078:
-            r4 = 1101004800(0x41a00000, float:20.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r8 = r7 - r8
-            float r8 = (float) r8
-            int r8 = (r0 > r8 ? 1 : (r0 == r8 ? 0 : -1))
-            if (r8 < 0) goto L_0x00b8
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r4 = r4 + r7
-            float r4 = (float) r4
-            int r4 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r4 > 0) goto L_0x00b8
-            r4 = 1103626240(0x41CLASSNAME, float:25.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r8 = r10 - r8
-            float r8 = (float) r8
-            int r8 = (r1 > r8 ? 1 : (r1 == r8 ? 0 : -1))
-            if (r8 < 0) goto L_0x00b8
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r4 = r4 + r10
-            float r4 = (float) r4
-            int r4 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r4 > 0) goto L_0x00b8
-            if (r2 != 0) goto L_0x00b5
-            r14.knobPressed = r6
-            float r3 = (float) r7
-            float r0 = r0 - r3
-            r14.knobStartX = r0
-            float r0 = (float) r10
-            float r1 = r1 - r0
-            r14.knobStartY = r1
-            r14.invalidate()
-        L_0x00b5:
-            r0 = 1
-            goto L_0x01d8
-        L_0x00b8:
-            int r4 = r14.minusCx
-            r7 = 1098907648(0x41800000, float:16.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r4 = r4 - r8
-            float r4 = (float) r4
-            r8 = 3
-            r9 = 1048576000(0x3e800000, float:0.25)
-            int r4 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r4 < 0) goto L_0x010a
-            int r4 = r14.minusCx
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r4 = r4 + r10
-            float r4 = (float) r4
-            int r4 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r4 > 0) goto L_0x010a
-            int r4 = r14.minusCy
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r4 = r4 - r10
-            float r4 = (float) r4
-            int r4 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r4 < 0) goto L_0x010a
-            int r4 = r14.minusCy
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r4 = r4 + r10
-            float r4 = (float) r4
-            int r4 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r4 > 0) goto L_0x010a
-            if (r2 != r6) goto L_0x0107
-            float r0 = r14.getZoom()
-            float r0 = r0 / r9
-            double r0 = (double) r0
-            double r0 = java.lang.Math.floor(r0)
-            float r0 = (float) r0
-            float r0 = r0 * r9
-            float r0 = r0 - r9
-            boolean r0 = r14.animateToZoom(r0)
-            if (r0 == 0) goto L_0x0107
-            r14.performHapticFeedback(r8)
-            goto L_0x00b5
-        L_0x0107:
-            r14.pressed = r6
-            goto L_0x00b5
-        L_0x010a:
-            int r4 = r14.plusCx
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r4 = r4 - r10
-            float r4 = (float) r4
-            int r4 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r4 < 0) goto L_0x0159
-            int r4 = r14.plusCx
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r4 = r4 + r10
-            float r4 = (float) r4
-            int r4 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r4 > 0) goto L_0x0159
-            int r4 = r14.plusCy
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r4 = r4 - r10
-            float r4 = (float) r4
-            int r4 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r4 < 0) goto L_0x0159
-            int r4 = r14.plusCy
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r4 = r4 + r7
-            float r4 = (float) r4
-            int r4 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r4 > 0) goto L_0x0159
-            if (r2 != r6) goto L_0x0155
-            float r0 = r14.getZoom()
-            float r0 = r0 / r9
-            double r0 = (double) r0
-            double r0 = java.lang.Math.floor(r0)
-            float r0 = (float) r0
-            float r0 = r0 * r9
-            float r0 = r0 + r9
-            boolean r0 = r14.animateToZoom(r0)
-            if (r0 == 0) goto L_0x0155
-            r14.performHapticFeedback(r8)
-            goto L_0x00b5
-        L_0x0155:
-            r14.pressed = r6
-            goto L_0x00b5
-        L_0x0159:
-            r4 = 1092616192(0x41200000, float:10.0)
-            if (r3 == 0) goto L_0x019a
-            int r1 = r14.progressStartX
-            float r1 = (float) r1
-            int r1 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r1 < 0) goto L_0x01d7
-            int r1 = r14.progressEndX
-            float r1 = (float) r1
-            int r1 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r1 > 0) goto L_0x01d7
-            if (r2 != 0) goto L_0x0173
-            r14.knobStartX = r0
-            r14.pressed = r6
-            goto L_0x00b5
-        L_0x0173:
-            float r1 = r14.knobStartX
-            float r1 = r1 - r0
-            float r1 = java.lang.Math.abs(r1)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r3 = (float) r3
-            int r1 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r1 > 0) goto L_0x00b5
-            int r1 = r14.progressStartX
-            float r3 = (float) r1
-            float r0 = r0 - r3
-            int r3 = r14.progressEndX
-            int r3 = r3 - r1
-            float r1 = (float) r3
-            float r0 = r0 / r1
-            r14.zoom = r0
-            org.telegram.ui.Components.ZoomControlView$ZoomControlViewDelegate r1 = r14.delegate
-            if (r1 == 0) goto L_0x0195
-            r1.didSetZoom(r0)
-        L_0x0195:
-            r14.invalidate()
-            goto L_0x00b5
-        L_0x019a:
-            int r0 = r14.progressStartY
-            float r0 = (float) r0
-            int r0 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
-            if (r0 < 0) goto L_0x01d7
-            int r0 = r14.progressEndY
-            float r0 = (float) r0
-            int r0 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
-            if (r0 > 0) goto L_0x01d7
-            if (r2 != r6) goto L_0x01b0
-            r14.knobStartY = r1
-            r14.pressed = r6
-            goto L_0x00b5
-        L_0x01b0:
-            float r0 = r14.knobStartY
-            float r0 = r0 - r1
-            float r0 = java.lang.Math.abs(r0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r3 = (float) r3
-            int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r0 > 0) goto L_0x00b5
-            int r0 = r14.progressStartY
-            float r3 = (float) r0
-            float r1 = r1 - r3
-            int r3 = r14.progressEndY
-            int r3 = r3 - r0
-            float r0 = (float) r3
-            float r1 = r1 / r0
-            r14.zoom = r1
-            org.telegram.ui.Components.ZoomControlView$ZoomControlViewDelegate r0 = r14.delegate
-            if (r0 == 0) goto L_0x01d2
-            r0.didSetZoom(r1)
-        L_0x01d2:
-            r14.invalidate()
-            goto L_0x00b5
-        L_0x01d7:
-            r0 = 0
-        L_0x01d8:
-            if (r2 != r6) goto L_0x01e1
-            r14.pressed = r5
-            r14.knobPressed = r5
-            r14.invalidate()
-        L_0x01e1:
-            if (r0 != 0) goto L_0x01f1
-            boolean r0 = r14.pressed
-            if (r0 != 0) goto L_0x01f1
-            boolean r0 = r14.knobPressed
-            if (r0 != 0) goto L_0x01f1
-            boolean r15 = super.onTouchEvent(r15)
-            if (r15 == 0) goto L_0x01f2
-        L_0x01f1:
-            r5 = 1
-        L_0x01f2:
-            return r5
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ZoomControlView.onTouchEvent(android.view.MotionEvent):boolean");
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+        int action = event.getAction();
+        boolean handled = false;
+        boolean isPortrait = getMeasuredWidth() > getMeasuredHeight();
+        int i = this.progressStartX;
+        int i2 = this.progressEndX;
+        float f = this.zoom;
+        int knobX = (int) (((float) i) + (((float) (i2 - i)) * f));
+        int i3 = this.progressStartY;
+        int i4 = this.progressEndY;
+        int knobY = (int) (((float) i3) + (((float) (i4 - i3)) * f));
+        if (action == 1 || action == 0) {
+            if (x >= ((float) (knobX - AndroidUtilities.dp(20.0f))) && x <= ((float) (AndroidUtilities.dp(20.0f) + knobX)) && y >= ((float) (knobY - AndroidUtilities.dp(25.0f))) && y <= ((float) (AndroidUtilities.dp(25.0f) + knobY))) {
+                if (action == 0) {
+                    this.knobPressed = true;
+                    this.knobStartX = x - ((float) knobX);
+                    this.knobStartY = y - ((float) knobY);
+                    invalidate();
+                }
+                handled = true;
+            } else if (x >= ((float) (this.minusCx - AndroidUtilities.dp(16.0f))) && x <= ((float) (this.minusCx + AndroidUtilities.dp(16.0f))) && y >= ((float) (this.minusCy - AndroidUtilities.dp(16.0f))) && y <= ((float) (this.minusCy + AndroidUtilities.dp(16.0f)))) {
+                if (action != 1 || !animateToZoom((((float) Math.floor((double) (getZoom() / 0.25f))) * 0.25f) - 0.25f)) {
+                    this.pressed = true;
+                } else {
+                    performHapticFeedback(3);
+                }
+                handled = true;
+            } else if (x >= ((float) (this.plusCx - AndroidUtilities.dp(16.0f))) && x <= ((float) (this.plusCx + AndroidUtilities.dp(16.0f))) && y >= ((float) (this.plusCy - AndroidUtilities.dp(16.0f))) && y <= ((float) (this.plusCy + AndroidUtilities.dp(16.0f)))) {
+                if (action != 1 || !animateToZoom((((float) Math.floor((double) (getZoom() / 0.25f))) * 0.25f) + 0.25f)) {
+                    this.pressed = true;
+                } else {
+                    performHapticFeedback(3);
+                }
+                handled = true;
+            } else if (isPortrait) {
+                if (x >= ((float) this.progressStartX) && x <= ((float) this.progressEndX)) {
+                    if (action == 0) {
+                        this.knobStartX = x;
+                        this.pressed = true;
+                    } else if (Math.abs(this.knobStartX - x) <= ((float) AndroidUtilities.dp(10.0f))) {
+                        int i5 = this.progressStartX;
+                        float f2 = (x - ((float) i5)) / ((float) (this.progressEndX - i5));
+                        this.zoom = f2;
+                        ZoomControlViewDelegate zoomControlViewDelegate = this.delegate;
+                        if (zoomControlViewDelegate != null) {
+                            zoomControlViewDelegate.didSetZoom(f2);
+                        }
+                        invalidate();
+                    }
+                    handled = true;
+                }
+            } else if (y >= ((float) this.progressStartY) && y <= ((float) this.progressEndY)) {
+                if (action == 1) {
+                    this.knobStartY = y;
+                    this.pressed = true;
+                } else if (Math.abs(this.knobStartY - y) <= ((float) AndroidUtilities.dp(10.0f))) {
+                    int i6 = this.progressStartY;
+                    float f3 = (y - ((float) i6)) / ((float) (this.progressEndY - i6));
+                    this.zoom = f3;
+                    ZoomControlViewDelegate zoomControlViewDelegate2 = this.delegate;
+                    if (zoomControlViewDelegate2 != null) {
+                        zoomControlViewDelegate2.didSetZoom(f3);
+                    }
+                    invalidate();
+                }
+                handled = true;
+            }
+        } else if (action == 2 && this.knobPressed) {
+            if (isPortrait) {
+                this.zoom = ((this.knobStartX + x) - ((float) i)) / ((float) (i2 - i));
+            } else {
+                this.zoom = ((this.knobStartY + y) - ((float) i3)) / ((float) (i4 - i3));
+            }
+            float f4 = this.zoom;
+            if (f4 < 0.0f) {
+                this.zoom = 0.0f;
+            } else if (f4 > 1.0f) {
+                this.zoom = 1.0f;
+            }
+            ZoomControlViewDelegate zoomControlViewDelegate3 = this.delegate;
+            if (zoomControlViewDelegate3 != null) {
+                zoomControlViewDelegate3.didSetZoom(this.zoom);
+            }
+            invalidate();
+        }
+        if (action == 1) {
+            this.pressed = false;
+            this.knobPressed = false;
+            invalidate();
+        }
+        if (handled || this.pressed || this.knobPressed || super.onTouchEvent(event)) {
+            return true;
+        }
+        return false;
     }
 
-    private boolean animateToZoom(float f) {
-        if (f < 0.0f || f > 1.0f) {
+    private boolean animateToZoom(float zoom2) {
+        if (zoom2 < 0.0f || zoom2 > 1.0f) {
             return false;
         }
         AnimatorSet animatorSet2 = this.animatorSet;
         if (animatorSet2 != null) {
             animatorSet2.cancel();
         }
-        this.animatingToZoom = f;
+        this.animatingToZoom = zoom2;
         AnimatorSet animatorSet3 = new AnimatorSet();
         this.animatorSet = animatorSet3;
-        animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, this.ZOOM_PROPERTY, new float[]{f})});
+        animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, this.ZOOM_PROPERTY, new float[]{zoom2})});
         this.animatorSet.setDuration(180);
         this.animatorSet.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
+            public void onAnimationEnd(Animator animation) {
                 AnimatorSet unused = ZoomControlView.this.animatorSet = null;
             }
         });
@@ -414,26 +216,26 @@ public class ZoomControlView extends View {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        int measuredWidth = getMeasuredWidth() / 2;
-        int measuredHeight = getMeasuredHeight() / 2;
-        boolean z = getMeasuredWidth() > getMeasuredHeight();
-        if (z) {
+        int cx = getMeasuredWidth() / 2;
+        int cy = getMeasuredHeight() / 2;
+        boolean isPortrait = getMeasuredWidth() > getMeasuredHeight();
+        if (isPortrait) {
             this.minusCx = AndroidUtilities.dp(41.0f);
-            this.minusCy = measuredHeight;
+            this.minusCy = cy;
             this.plusCx = getMeasuredWidth() - AndroidUtilities.dp(41.0f);
-            this.plusCy = measuredHeight;
+            this.plusCy = cy;
             this.progressStartX = this.minusCx + AndroidUtilities.dp(18.0f);
-            this.progressStartY = measuredHeight;
+            this.progressStartY = cy;
             this.progressEndX = this.plusCx - AndroidUtilities.dp(18.0f);
-            this.progressEndY = measuredHeight;
+            this.progressEndY = cy;
         } else {
-            this.minusCx = measuredWidth;
+            this.minusCx = cx;
             this.minusCy = AndroidUtilities.dp(41.0f);
-            this.plusCx = measuredWidth;
+            this.plusCx = cx;
             this.plusCy = getMeasuredHeight() - AndroidUtilities.dp(41.0f);
-            this.progressStartX = measuredWidth;
+            this.progressStartX = cx;
             this.progressStartY = this.minusCy + AndroidUtilities.dp(18.0f);
-            this.progressEndX = measuredWidth;
+            this.progressEndX = cx;
             this.progressEndY = this.plusCy - AndroidUtilities.dp(18.0f);
         }
         this.minusDrawable.setBounds(this.minusCx - AndroidUtilities.dp(7.0f), this.minusCy - AndroidUtilities.dp(7.0f), this.minusCx + AndroidUtilities.dp(7.0f), this.minusCy + AndroidUtilities.dp(7.0f));
@@ -445,26 +247,26 @@ public class ZoomControlView extends View {
         int i3 = this.progressEndY;
         int i4 = this.progressStartY;
         float f = this.zoom;
-        int i5 = (int) (((float) i2) + (((float) (i - i2)) * f));
-        int i6 = (int) (((float) i4) + (((float) (i3 - i4)) * f));
-        if (z) {
+        int knobX = (int) (((float) i2) + (((float) (i - i2)) * f));
+        int knobY = (int) (((float) i4) + (((float) (i3 - i4)) * f));
+        if (isPortrait) {
             this.progressDrawable.setBounds(i2, i4 - AndroidUtilities.dp(3.0f), this.progressEndX, this.progressStartY + AndroidUtilities.dp(3.0f));
-            this.filledProgressDrawable.setBounds(this.progressStartX, this.progressStartY - AndroidUtilities.dp(3.0f), i5, this.progressStartY + AndroidUtilities.dp(3.0f));
+            this.filledProgressDrawable.setBounds(this.progressStartX, this.progressStartY - AndroidUtilities.dp(3.0f), knobX, this.progressStartY + AndroidUtilities.dp(3.0f));
         } else {
             this.progressDrawable.setBounds(i4, 0, i3, AndroidUtilities.dp(6.0f));
-            this.filledProgressDrawable.setBounds(this.progressStartY, 0, i6, AndroidUtilities.dp(6.0f));
+            this.filledProgressDrawable.setBounds(this.progressStartY, 0, knobY, AndroidUtilities.dp(6.0f));
             canvas.save();
             canvas.rotate(90.0f);
             canvas.translate(0.0f, (float) ((-this.progressStartX) - AndroidUtilities.dp(3.0f)));
         }
         this.progressDrawable.draw(canvas);
         this.filledProgressDrawable.draw(canvas);
-        if (!z) {
+        if (!isPortrait) {
             canvas.restore();
         }
         Drawable drawable = this.knobPressed ? this.pressedKnobDrawable : this.knobDrawable;
-        int intrinsicWidth = drawable.getIntrinsicWidth() / 2;
-        drawable.setBounds(i5 - intrinsicWidth, i6 - intrinsicWidth, i5 + intrinsicWidth, i6 + intrinsicWidth);
+        int size = drawable.getIntrinsicWidth();
+        drawable.setBounds(knobX - (size / 2), knobY - (size / 2), (size / 2) + knobX, (size / 2) + knobY);
         drawable.draw(canvas);
     }
 }

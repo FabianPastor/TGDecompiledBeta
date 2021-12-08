@@ -12,6 +12,6 @@ public final /* synthetic */ class NativeInstance$$ExternalSyntheticLambda2 impl
     }
 
     public final void run() {
-        this.f$0.lambda$onNetworkStateUpdated$0(this.f$1, this.f$2);
+        this.f$0.m1192xvar_(this.f$1, this.f$2);
     }
 }

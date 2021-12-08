@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.KeyEvent;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import android.view.View;
 
-public final /* synthetic */ class PhotoPaintView$$ExternalSyntheticLambda19 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
+public final /* synthetic */ class PhotoPaintView$$ExternalSyntheticLambda19 implements View.OnClickListener {
     public final /* synthetic */ PhotoPaintView f$0;
 
     public /* synthetic */ PhotoPaintView$$ExternalSyntheticLambda19(PhotoPaintView photoPaintView) {
         this.f$0 = photoPaintView;
     }
 
-    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-        this.f$0.lambda$showPopup$19(keyEvent);
+    public final void onClick(View view) {
+        this.f$0.m2485xd6dfdb40(view);
     }
 }

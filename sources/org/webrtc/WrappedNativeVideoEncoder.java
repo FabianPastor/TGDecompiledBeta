@@ -11,7 +11,7 @@ public abstract class WrappedNativeVideoEncoder implements VideoEncoder {
 
     public abstract boolean isHardwareEncoder();
 
-    public final VideoCodecStatus initEncode(VideoEncoder.Settings settings, VideoEncoder.Callback callback) {
+    public final VideoCodecStatus initEncode(VideoEncoder.Settings settings, VideoEncoder.Callback encodeCallback) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
@@ -19,11 +19,11 @@ public abstract class WrappedNativeVideoEncoder implements VideoEncoder {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
-    public final VideoCodecStatus encode(VideoFrame videoFrame, VideoEncoder.EncodeInfo encodeInfo) {
+    public final VideoCodecStatus encode(VideoFrame frame, VideoEncoder.EncodeInfo info) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
-    public final VideoCodecStatus setRateAllocation(VideoEncoder.BitrateAllocation bitrateAllocation, int i) {
+    public final VideoCodecStatus setRateAllocation(VideoEncoder.BitrateAllocation allocation, int framerate) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 

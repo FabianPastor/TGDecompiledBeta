@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda6 implements View.OnTouchListener {
-    public static final /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda6 INSTANCE = new ChannelCreateActivity$$ExternalSyntheticLambda6();
+public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda6 implements Runnable {
+    public final /* synthetic */ ChannelCreateActivity f$0;
+    public final /* synthetic */ TLRPC.TL_error f$1;
 
-    private /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda6() {
+    public /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda6(ChannelCreateActivity channelCreateActivity, TLRPC.TL_error tL_error) {
+        this.f$0 = channelCreateActivity;
+        this.f$1 = tL_error;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ChannelCreateActivity.lambda$createView$2(view, motionEvent);
+    public final void run() {
+        this.f$0.m1645lambda$new$0$orgtelegramuiChannelCreateActivity(this.f$1);
     }
 }

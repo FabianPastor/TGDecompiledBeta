@@ -8,6 +8,6 @@ public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda3 im
     }
 
     public final void run() {
-        this.f$0.lambda$onResume$5();
+        this.f$0.m3354lambda$onResume$5$orgtelegramuiPasscodeActivity();
     }
 }

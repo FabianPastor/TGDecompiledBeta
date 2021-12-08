@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsEmptyCell$$ExternalSyntheticLambda0 im
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$1(view);
+        this.f$0.m1531lambda$new$1$orgtelegramuiCellsDialogsEmptyCell(view);
     }
 }

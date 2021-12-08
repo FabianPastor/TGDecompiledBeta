@@ -1,17 +1,28 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import androidx.collection.LongSparseArray;
+import java.util.ArrayList;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda114 implements RequestDelegate {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda114 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ ArrayList f$4;
+    public final /* synthetic */ LongSparseArray f$5;
+    public final /* synthetic */ long f$6;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda114(MediaDataController mediaDataController) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda114(MediaDataController mediaDataController, ArrayList arrayList, boolean z, ArrayList arrayList2, ArrayList arrayList3, LongSparseArray longSparseArray, long j) {
         this.f$0 = mediaDataController;
+        this.f$1 = arrayList;
+        this.f$2 = z;
+        this.f$3 = arrayList2;
+        this.f$4 = arrayList3;
+        this.f$5 = longSparseArray;
+        this.f$6 = j;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadGroupStickerSet$12(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.m779x7887470a(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
     }
 }

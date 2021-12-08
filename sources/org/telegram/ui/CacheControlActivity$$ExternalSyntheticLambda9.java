@@ -1,19 +1,21 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda9 implements ThemeDescription.ThemeDescriptionDelegate {
+public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda9 implements Runnable {
     public final /* synthetic */ CacheControlActivity f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ AlertDialog f$2;
+    public final /* synthetic */ long f$3;
 
-    public /* synthetic */ CacheControlActivity$$ExternalSyntheticLambda9(CacheControlActivity cacheControlActivity) {
+    public /* synthetic */ CacheControlActivity$$ExternalSyntheticLambda9(CacheControlActivity cacheControlActivity, boolean z, AlertDialog alertDialog, long j) {
         this.f$0 = cacheControlActivity;
+        this.f$1 = z;
+        this.f$2 = alertDialog;
+        this.f$3 = j;
     }
 
-    public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$10();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final void run() {
+        this.f$0.m1466lambda$cleanupFolders$2$orgtelegramuiCacheControlActivity(this.f$1, this.f$2, this.f$3);
     }
 }

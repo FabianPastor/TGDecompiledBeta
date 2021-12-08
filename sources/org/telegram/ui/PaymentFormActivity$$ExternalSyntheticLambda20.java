@@ -1,17 +1,16 @@
 package org.telegram.ui;
 
-import android.view.View;
+import android.view.KeyEvent;
+import android.widget.TextView;
 
-public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda20 implements View.OnClickListener {
+public final /* synthetic */ class PaymentFormActivity$$ExternalSyntheticLambda20 implements TextView.OnEditorActionListener {
     public final /* synthetic */ PaymentFormActivity f$0;
-    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda20(PaymentFormActivity paymentFormActivity, String str) {
+    public /* synthetic */ PaymentFormActivity$$ExternalSyntheticLambda20(PaymentFormActivity paymentFormActivity) {
         this.f$0 = paymentFormActivity;
-        this.f$1 = str;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$createView$23(this.f$1, view);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.f$0.m3496lambda$createView$7$orgtelegramuiPaymentFormActivity(textView, i, keyEvent);
     }
 }

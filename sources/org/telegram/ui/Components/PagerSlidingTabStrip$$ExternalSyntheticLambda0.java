@@ -12,6 +12,6 @@ public final /* synthetic */ class PagerSlidingTabStrip$$ExternalSyntheticLambda
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$addIconTab$0(this.f$1, view);
+        this.f$0.m2413x6var_ef(this.f$1, view);
     }
 }

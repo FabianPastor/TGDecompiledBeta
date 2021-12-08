@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessageObject;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda116 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda116 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessageObject f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda116(ChatActivity chatActivity, MessageObject messageObject) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda116(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = messageObject;
     }
 
-    public final void run() {
-        this.f$0.lambda$sendSecretMessageRead$86(this.f$1);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.m1823lambda$updateTopPanel$112$orgtelegramuiChatActivity(valueAnimator);
     }
 }

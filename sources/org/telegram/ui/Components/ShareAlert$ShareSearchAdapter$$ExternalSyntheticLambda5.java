@@ -12,6 +12,6 @@ public final /* synthetic */ class ShareAlert$ShareSearchAdapter$$ExternalSynthe
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$onCreateViewHolder$5(view, i);
+        this.f$0.m2567x933a65b8(view, i);
     }
 }

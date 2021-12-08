@@ -45,27 +45,27 @@ public class TextDetailCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f) + (this.needDivider ? 1 : 0), NUM));
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
-    public void setTextAndValue(String str, String str2, boolean z) {
-        this.textView.setText(str);
-        this.valueTextView.setText(str2);
-        this.needDivider = z;
-        setWillNotDraw(!z);
+    public void setTextAndValue(String text, String value, boolean divider) {
+        this.textView.setText(text);
+        this.valueTextView.setText(value);
+        this.needDivider = divider;
+        setWillNotDraw(!divider);
     }
 
-    public void setTextWithEmojiAndValue(String str, CharSequence charSequence, boolean z) {
+    public void setTextWithEmojiAndValue(String text, CharSequence value, boolean divider) {
         TextView textView2 = this.textView;
-        textView2.setText(Emoji.replaceEmoji(str, textView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
-        this.valueTextView.setText(charSequence);
-        this.needDivider = z;
-        setWillNotDraw(!z);
+        textView2.setText(Emoji.replaceEmoji(text, textView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
+        this.valueTextView.setText(value);
+        this.needDivider = divider;
+        setWillNotDraw(!divider);
     }
 
-    public void setContentDescriptionValueFirst(boolean z) {
-        this.contentDescriptionValueFirst = z;
+    public void setContentDescriptionValueFirst(boolean contentDescriptionValueFirst2) {
+        this.contentDescriptionValueFirst = contentDescriptionValueFirst2;
     }
 
     public void invalidate() {
@@ -80,19 +80,16 @@ public class TextDetailCell extends FrameLayout {
         }
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
         CharSequence text = this.textView.getText();
-        CharSequence text2 = this.valueTextView.getText();
-        if (!TextUtils.isEmpty(text) && !TextUtils.isEmpty(text2)) {
+        CharSequence valueText = this.valueTextView.getText();
+        if (!TextUtils.isEmpty(text) && !TextUtils.isEmpty(valueText)) {
             StringBuilder sb = new StringBuilder();
-            sb.append(this.contentDescriptionValueFirst ? text2 : text);
+            sb.append(this.contentDescriptionValueFirst ? valueText : text);
             sb.append(": ");
-            if (!this.contentDescriptionValueFirst) {
-                text = text2;
-            }
-            sb.append(text);
-            accessibilityNodeInfo.setText(sb.toString());
+            sb.append(this.contentDescriptionValueFirst ? text : valueText);
+            info.setText(sb.toString());
         }
     }
 }

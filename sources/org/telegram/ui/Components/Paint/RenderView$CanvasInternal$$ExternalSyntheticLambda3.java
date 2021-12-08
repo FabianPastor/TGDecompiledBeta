@@ -16,6 +16,6 @@ public final /* synthetic */ class RenderView$CanvasInternal$$ExternalSyntheticL
     }
 
     public final void run() {
-        this.f$0.lambda$getTexture$3(this.f$1, this.f$2);
+        this.f$0.m2426x889307e1(this.f$1, this.f$2);
     }
 }

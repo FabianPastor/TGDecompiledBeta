@@ -1,25 +1,27 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_requestUrlAuth;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ChatActivity;
+import org.telegram.ui.TwoStepVerificationActivity;
 
-public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda90 implements RequestDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLRPC$TL_messages_requestUrlAuth f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ boolean f$3;
+public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda90 implements TwoStepVerificationActivity.TwoStepVerificationActivityDelegate {
+    public final /* synthetic */ SendMessagesHelper f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ MessageObject f$2;
+    public final /* synthetic */ TLRPC.KeyboardButton f$3;
+    public final /* synthetic */ TwoStepVerificationActivity f$4;
+    public final /* synthetic */ ChatActivity f$5;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda90(ChatActivity chatActivity, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, String str, boolean z) {
-        this.f$0 = chatActivity;
-        this.f$1 = tLRPC$TL_messages_requestUrlAuth;
-        this.f$2 = str;
-        this.f$3 = z;
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda90(SendMessagesHelper sendMessagesHelper, boolean z, MessageObject messageObject, TLRPC.KeyboardButton keyboardButton, TwoStepVerificationActivity twoStepVerificationActivity, ChatActivity chatActivity) {
+        this.f$0 = sendMessagesHelper;
+        this.f$1 = z;
+        this.f$2 = messageObject;
+        this.f$3 = keyboardButton;
+        this.f$4 = twoStepVerificationActivity;
+        this.f$5 = chatActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        SendMessagesHelper.lambda$requestUrlAuth$23(this.f$0, this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+    public final void didEnterPassword(TLRPC.InputCheckPasswordSRP inputCheckPasswordSRP) {
+        this.f$0.m460lambda$sendCallback$24$orgtelegrammessengerSendMessagesHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, inputCheckPasswordSRP);
     }
 }

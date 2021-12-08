@@ -12,6 +12,6 @@ public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda4 implemen
     }
 
     public final Object apply(Object obj) {
-        return this.f$0.lambda$copyLink$8(this.f$1, (BulletinFactory) obj);
+        return this.f$0.m2556lambda$copyLink$8$orgtelegramuiComponentsShareAlert(this.f$1, (BulletinFactory) obj);
     }
 }

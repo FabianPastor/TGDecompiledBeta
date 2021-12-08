@@ -1,30 +1,25 @@
 package org.telegram.ui;
 
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda39 implements Runnable {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ int[] f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ AlertDialog f$4;
-    public final /* synthetic */ Integer f$5;
-    public final /* synthetic */ Integer f$6;
-    public final /* synthetic */ Integer f$7;
+    public final /* synthetic */ AlertDialog f$1;
+    public final /* synthetic */ TLObject f$2;
+    public final /* synthetic */ TLRPC.TL_wallPaper f$3;
+    public final /* synthetic */ TLRPC.TL_error f$4;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda39(LaunchActivity launchActivity, TLObject tLObject, int[] iArr, int i, AlertDialog alertDialog, Integer num, Integer num2, Integer num3) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda39(LaunchActivity launchActivity, AlertDialog alertDialog, TLObject tLObject, TLRPC.TL_wallPaper tL_wallPaper, TLRPC.TL_error tL_error) {
         this.f$0 = launchActivity;
-        this.f$1 = tLObject;
-        this.f$2 = iArr;
-        this.f$3 = i;
-        this.f$4 = alertDialog;
-        this.f$5 = num;
-        this.f$6 = num2;
-        this.f$7 = num3;
+        this.f$1 = alertDialog;
+        this.f$2 = tLObject;
+        this.f$3 = tL_wallPaper;
+        this.f$4 = tL_error;
     }
 
     public final void run() {
-        this.f$0.lambda$runLinkRequest$49(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+        this.f$0.m3110lambda$runLinkRequest$44$orgtelegramuiLaunchActivity(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

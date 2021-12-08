@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatAttachAlertDocumentLayout$$ExternalSynthe
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$3(this.f$1, view, i);
+        this.f$0.m2130x3961ae15(this.f$1, view, i);
     }
 }

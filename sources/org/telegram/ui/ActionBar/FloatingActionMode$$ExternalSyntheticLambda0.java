@@ -10,6 +10,6 @@ public final /* synthetic */ class FloatingActionMode$$ExternalSyntheticLambda0 
     }
 
     public final boolean onMenuItemClick(MenuItem menuItem) {
-        return this.f$0.lambda$setFloatingToolbar$1(menuItem);
+        return this.f$0.m1326x15cc3d2c(menuItem);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ThemeSmallPreviewView$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setSelected$4(valueAnimator);
+        this.f$0.m2694x9e27f2e2(valueAnimator);
     }
 }

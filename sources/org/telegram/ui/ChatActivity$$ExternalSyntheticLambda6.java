@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
-
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda6 implements ValueAnimator.AnimatorUpdateListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda6 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ ChatActivity f$1;
-    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda6(ChatActivity chatActivity, ChatActivity chatActivity2, boolean z) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda6(ChatActivity chatActivity, int i) {
         this.f$0 = chatActivity;
-        this.f$1 = chatActivity2;
-        this.f$2 = z;
+        this.f$1 = i;
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onCustomTransitionAnimation$172(this.f$1, this.f$2, valueAnimator);
+    public final void run() {
+        this.f$0.m1766lambda$processNewMessages$103$orgtelegramuiChatActivity(this.f$1);
     }
 }

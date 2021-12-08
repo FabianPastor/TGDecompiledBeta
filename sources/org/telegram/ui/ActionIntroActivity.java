@@ -1,6 +1,5 @@
 package org.telegram.ui;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -33,7 +31,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MrzRecognizer;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -47,8 +45,14 @@ import org.telegram.ui.Components.ShareLocationDrawable;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
-@TargetApi(23)
 public class ActionIntroActivity extends BaseFragment implements LocationController.LocationFetchCallback {
+    public static final int ACTION_TYPE_CHANGE_PHONE_NUMBER = 3;
+    public static final int ACTION_TYPE_CHANNEL_CREATE = 0;
+    public static final int ACTION_TYPE_NEARBY_GROUP_CREATE = 2;
+    public static final int ACTION_TYPE_NEARBY_LOCATION_ACCESS = 1;
+    public static final int ACTION_TYPE_NEARBY_LOCATION_ENABLED = 4;
+    public static final int ACTION_TYPE_QR_LOGIN = 5;
+    public static final int CAMERA_PERMISSION_REQUEST_CODE = 34;
     /* access modifiers changed from: private */
     public TextView buttonTextView;
     private int[] colors;
@@ -83,22 +87,15 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         void didFindQRCode(String str);
     }
 
-    /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
-        return true;
-    }
-
-    public ActionIntroActivity(int i) {
-        this.currentType = i;
+    public ActionIntroActivity(int type) {
+        this.currentType = type;
     }
 
     public View createView(Context context) {
-        int i;
         Context context2 = context;
-        ActionBar actionBar = this.actionBar;
-        int i2 = 0;
-        if (actionBar != null) {
-            actionBar.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+        int i = 0;
+        if (this.actionBar != null) {
+            this.actionBar.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             this.actionBar.setBackButtonImage(NUM);
             this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteGrayText2"), false);
             this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarWhiteSelector"), false);
@@ -108,317 +105,294 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 this.actionBar.showActionModeTop();
             }
             this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-                public void onItemClick(int i) {
-                    if (i == -1) {
+                public void onItemClick(int id) {
+                    if (id == -1) {
                         ActionIntroActivity.this.finishFragment();
                     }
                 }
             });
         }
-        AnonymousClass2 r2 = new ViewGroup(context2) {
+        this.fragmentView = new ViewGroup(context2) {
             /* access modifiers changed from: protected */
-            public void onMeasure(int i, int i2) {
-                int size = View.MeasureSpec.getSize(i);
-                int size2 = View.MeasureSpec.getSize(i2);
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                int width = View.MeasureSpec.getSize(widthMeasureSpec);
+                int height = View.MeasureSpec.getSize(heightMeasureSpec);
                 if (ActionIntroActivity.this.actionBar != null) {
-                    ActionIntroActivity.this.actionBar.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), i2);
+                    ActionIntroActivity.this.actionBar.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), heightMeasureSpec);
                 }
-                int access$200 = ActionIntroActivity.this.currentType;
-                if (access$200 != 0) {
-                    if (access$200 != 1) {
-                        if (access$200 != 2) {
-                            if (access$200 != 3) {
-                                if (access$200 != 4) {
-                                    if (access$200 == 5) {
-                                        if (ActionIntroActivity.this.showingAsBottomSheet) {
-                                            ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size2) * 0.32f), NUM));
-                                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                                            ActionIntroActivity.this.descriptionLayout.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
-                                            size2 = ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + ActionIntroActivity.this.imageView.getMeasuredHeight() + ActionIntroActivity.this.titleTextView.getMeasuredHeight() + AndroidUtilities.dp(20.0f) + ActionIntroActivity.this.titleTextView.getMeasuredHeight() + ActionIntroActivity.this.descriptionLayout.getMeasuredHeight();
-                                        } else if (size > size2) {
-                                            float f = (float) size;
-                                            ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec((int) (0.45f * f), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size2) * 0.68f), NUM));
-                                            int i3 = (int) (f * 0.6f);
-                                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(i3, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                                            ActionIntroActivity.this.descriptionLayout.measure(View.MeasureSpec.makeMeasureSpec(i3, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(i3, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
-                                        } else {
-                                            ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size2) * 0.399f), NUM));
-                                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                                            ActionIntroActivity.this.descriptionLayout.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
-                                        }
-                                    }
-                                }
-                            } else if (size > size2) {
-                                float f2 = (float) size;
-                                int i4 = (int) (0.45f * f2);
-                                ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(i4, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size2) * 0.78f), Integer.MIN_VALUE));
-                                ActionIntroActivity.this.subtitleTextView.measure(View.MeasureSpec.makeMeasureSpec(i4, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                                int i5 = (int) (f2 * 0.6f);
-                                ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(i5, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                                ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(i5, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                                ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(i5, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
-                            } else {
-                                ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size2) * 0.44f), Integer.MIN_VALUE));
-                                ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                                ActionIntroActivity.this.subtitleTextView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                                ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                                ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
-                            }
-                        } else if (size > size2) {
-                            float f3 = (float) size;
-                            int i6 = (int) (0.45f * f3);
-                            ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(i6, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size2) * 0.78f), Integer.MIN_VALUE));
-                            ActionIntroActivity.this.subtitleTextView.measure(View.MeasureSpec.makeMeasureSpec(i6, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            int i7 = (int) (f3 * 0.6f);
-                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(i7, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(i7, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            ActionIntroActivity.this.descriptionText2.measure(View.MeasureSpec.makeMeasureSpec(i7, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(i7, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                switch (ActionIntroActivity.this.currentType) {
+                    case 0:
+                        if (width <= height) {
+                            ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.399f), NUM));
+                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(width - AndroidUtilities.dp(86.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                            break;
                         } else {
-                            ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size2) * 0.44f), Integer.MIN_VALUE));
-                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            ActionIntroActivity.this.subtitleTextView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            ActionIntroActivity.this.descriptionText2.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                            ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.45f), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.68f), NUM));
+                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                            break;
                         }
-                    }
-                    ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM));
-                    if (size > size2) {
-                        int i8 = (int) (((float) size) * 0.6f);
-                        ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(i8, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                        ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(i8, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                        ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(i8, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
-                    } else {
-                        ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                        ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                        ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
-                    }
-                } else if (size > size2) {
-                    float f4 = (float) size;
-                    ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec((int) (0.45f * f4), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size2) * 0.68f), NUM));
-                    int i9 = (int) (f4 * 0.6f);
-                    ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(i9, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                    ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(i9, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                    ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(i9, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
-                } else {
-                    ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size2) * 0.399f), NUM));
-                    ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                    ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                    ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(86.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                    case 1:
+                    case 4:
+                        ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM));
+                        if (width <= height) {
+                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                            break;
+                        } else {
+                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                            break;
+                        }
+                    case 2:
+                        if (width <= height) {
+                            ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.44f), Integer.MIN_VALUE));
+                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.subtitleTextView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.descriptionText2.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                            break;
+                        } else {
+                            ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.45f), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.78f), Integer.MIN_VALUE));
+                            ActionIntroActivity.this.subtitleTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.45f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.descriptionText2.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                            break;
+                        }
+                    case 3:
+                        if (width <= height) {
+                            ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.44f), Integer.MIN_VALUE));
+                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.subtitleTextView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                            break;
+                        } else {
+                            ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.45f), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.78f), Integer.MIN_VALUE));
+                            ActionIntroActivity.this.subtitleTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.45f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                            break;
+                        }
+                    case 5:
+                        if (!ActionIntroActivity.this.showingAsBottomSheet) {
+                            if (width <= height) {
+                                ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.399f), NUM));
+                                ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                                ActionIntroActivity.this.descriptionLayout.measure(View.MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(height, 0));
+                                ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                                break;
+                            } else {
+                                ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.45f), NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.68f), NUM));
+                                ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                                ActionIntroActivity.this.descriptionLayout.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(height, 0));
+                                ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.6f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                                break;
+                            }
+                        } else {
+                            ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) height) * 0.32f), NUM));
+                            ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.descriptionLayout.measure(View.MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(height, 0));
+                            ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(width, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                            height = ActionIntroActivity.this.imageView.getMeasuredHeight() + ActionIntroActivity.this.titleTextView.getMeasuredHeight() + AndroidUtilities.dp(20.0f) + ActionIntroActivity.this.titleTextView.getMeasuredHeight() + ActionIntroActivity.this.descriptionLayout.getMeasuredHeight() + ActionIntroActivity.this.buttonTextView.getMeasuredHeight();
+                            break;
+                        }
                 }
-                setMeasuredDimension(size, size2);
+                setMeasuredDimension(width, height);
             }
 
             /* access modifiers changed from: protected */
-            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-                float f;
-                int i5 = i3;
-                int i6 = i4;
+            public void onLayout(boolean changed, int l, int t, int r, int b) {
+                int y;
+                int i = r;
+                int i2 = b;
                 if (ActionIntroActivity.this.actionBar != null) {
-                    ActionIntroActivity.this.actionBar.layout(0, 0, i5, ActionIntroActivity.this.actionBar.getMeasuredHeight());
+                    ActionIntroActivity.this.actionBar.layout(0, 0, i, ActionIntroActivity.this.actionBar.getMeasuredHeight());
                 }
-                int i7 = i5 - i;
-                int i8 = i6 - i2;
-                int access$200 = ActionIntroActivity.this.currentType;
-                if (access$200 != 0) {
-                    if (access$200 != 1) {
-                        if (access$200 != 2) {
-                            if (access$200 != 3) {
-                                if (access$200 != 4) {
-                                    if (access$200 == 5) {
-                                        if (ActionIntroActivity.this.showingAsBottomSheet) {
-                                            ActionIntroActivity.this.imageView.layout(0, 0, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + 0);
-                                            float f2 = (float) i8;
-                                            int i9 = (int) (0.403f * f2);
-                                            ActionIntroActivity.this.titleTextView.layout(0, i9, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + i9);
-                                            int i10 = (int) (0.631f * f2);
-                                            int measuredWidth = (getMeasuredWidth() - ActionIntroActivity.this.descriptionLayout.getMeasuredWidth()) / 2;
-                                            ActionIntroActivity.this.descriptionLayout.layout(measuredWidth, i10, ActionIntroActivity.this.descriptionLayout.getMeasuredWidth() + measuredWidth, ActionIntroActivity.this.descriptionLayout.getMeasuredHeight() + i10);
-                                            int measuredWidth2 = (i7 - ActionIntroActivity.this.buttonTextView.getMeasuredWidth()) / 2;
-                                            int i11 = (int) (f2 * 0.853f);
-                                            ActionIntroActivity.this.buttonTextView.layout(measuredWidth2, i11, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth2, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + i11);
-                                            return;
-                                        } else if (i5 > i6) {
-                                            int measuredHeight = (i8 - ActionIntroActivity.this.imageView.getMeasuredHeight()) / 2;
-                                            ActionIntroActivity.this.imageView.layout(0, measuredHeight, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + measuredHeight);
-                                            float f3 = (float) i7;
-                                            float f4 = 0.4f * f3;
-                                            int i12 = (int) f4;
-                                            float f5 = (float) i8;
-                                            int i13 = (int) (0.08f * f5);
-                                            ActionIntroActivity.this.titleTextView.layout(i12, i13, ActionIntroActivity.this.titleTextView.getMeasuredWidth() + i12, ActionIntroActivity.this.titleTextView.getMeasuredHeight() + i13);
-                                            float f6 = f3 * 0.6f;
-                                            int measuredWidth3 = (int) (((f6 - ((float) ActionIntroActivity.this.descriptionLayout.getMeasuredWidth())) / 2.0f) + f4);
-                                            int i14 = (int) (0.25f * f5);
-                                            ActionIntroActivity.this.descriptionLayout.layout(measuredWidth3, i14, ActionIntroActivity.this.descriptionLayout.getMeasuredWidth() + measuredWidth3, ActionIntroActivity.this.descriptionLayout.getMeasuredHeight() + i14);
-                                            int measuredWidth4 = (int) (f4 + ((f6 - ((float) ActionIntroActivity.this.buttonTextView.getMeasuredWidth())) / 2.0f));
-                                            int i15 = (int) (f5 * 0.78f);
-                                            ActionIntroActivity.this.buttonTextView.layout(measuredWidth4, i15, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth4, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + i15);
-                                            return;
-                                        } else {
-                                            if (AndroidUtilities.displaySize.y < 1800) {
-                                                float f7 = (float) i8;
-                                                int i16 = (int) (0.06f * f7);
-                                                ActionIntroActivity.this.imageView.layout(0, i16, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + i16);
-                                                int i17 = (int) (0.463f * f7);
-                                                ActionIntroActivity.this.titleTextView.layout(0, i17, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + i17);
-                                                f = f7 * 0.543f;
-                                            } else {
-                                                float f8 = (float) i8;
-                                                int i18 = (int) (0.148f * f8);
-                                                ActionIntroActivity.this.imageView.layout(0, i18, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + i18);
-                                                int i19 = (int) (0.551f * f8);
-                                                ActionIntroActivity.this.titleTextView.layout(0, i19, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + i19);
-                                                f = f8 * 0.631f;
-                                            }
-                                            int i20 = (int) f;
-                                            int measuredWidth5 = (getMeasuredWidth() - ActionIntroActivity.this.descriptionLayout.getMeasuredWidth()) / 2;
-                                            ActionIntroActivity.this.descriptionLayout.layout(measuredWidth5, i20, ActionIntroActivity.this.descriptionLayout.getMeasuredWidth() + measuredWidth5, ActionIntroActivity.this.descriptionLayout.getMeasuredHeight() + i20);
-                                            int measuredWidth6 = (i7 - ActionIntroActivity.this.buttonTextView.getMeasuredWidth()) / 2;
-                                            int i21 = (int) (((float) i8) * 0.853f);
-                                            ActionIntroActivity.this.buttonTextView.layout(measuredWidth6, i21, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth6, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + i21);
-                                            return;
-                                        }
-                                    } else {
-                                        return;
-                                    }
-                                }
-                            } else if (i5 > i6) {
-                                float f9 = (float) i8;
-                                int measuredHeight2 = ((int) ((0.95f * f9) - ((float) ActionIntroActivity.this.imageView.getMeasuredHeight()))) / 2;
-                                ActionIntroActivity.this.imageView.layout(0, measuredHeight2, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + measuredHeight2);
-                                int measuredHeight3 = measuredHeight2 + ActionIntroActivity.this.imageView.getMeasuredHeight() + AndroidUtilities.dp(10.0f);
-                                ActionIntroActivity.this.subtitleTextView.layout(0, measuredHeight3, ActionIntroActivity.this.subtitleTextView.getMeasuredWidth(), ActionIntroActivity.this.subtitleTextView.getMeasuredHeight() + measuredHeight3);
-                                float var_ = (float) i7;
-                                float var_ = 0.4f * var_;
-                                int i22 = (int) var_;
-                                int i23 = (int) (0.12f * f9);
-                                ActionIntroActivity.this.titleTextView.layout(i22, i23, ActionIntroActivity.this.titleTextView.getMeasuredWidth() + i22, ActionIntroActivity.this.titleTextView.getMeasuredHeight() + i23);
-                                int i24 = (int) (0.24f * f9);
-                                ActionIntroActivity.this.descriptionText.layout(i22, i24, ActionIntroActivity.this.descriptionText.getMeasuredWidth() + i22, ActionIntroActivity.this.descriptionText.getMeasuredHeight() + i24);
-                                int measuredWidth7 = (int) (var_ + (((var_ * 0.6f) - ((float) ActionIntroActivity.this.buttonTextView.getMeasuredWidth())) / 2.0f));
-                                int i25 = (int) (f9 * 0.8f);
-                                ActionIntroActivity.this.buttonTextView.layout(measuredWidth7, i25, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth7, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + i25);
-                                return;
-                            } else {
-                                float var_ = (float) i8;
-                                int i26 = (int) (0.2229f * var_);
-                                ActionIntroActivity.this.imageView.layout(0, i26, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + i26);
-                                int i27 = (int) (0.352f * var_);
-                                ActionIntroActivity.this.titleTextView.layout(0, i27, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + i27);
-                                int i28 = (int) (0.409f * var_);
-                                ActionIntroActivity.this.subtitleTextView.layout(0, i28, ActionIntroActivity.this.subtitleTextView.getMeasuredWidth(), ActionIntroActivity.this.subtitleTextView.getMeasuredHeight() + i28);
-                                int i29 = (int) (0.468f * var_);
-                                ActionIntroActivity.this.descriptionText.layout(0, i29, ActionIntroActivity.this.descriptionText.getMeasuredWidth(), ActionIntroActivity.this.descriptionText.getMeasuredHeight() + i29);
-                                int measuredWidth8 = (i7 - ActionIntroActivity.this.buttonTextView.getMeasuredWidth()) / 2;
-                                int i30 = (int) (var_ * 0.805f);
-                                ActionIntroActivity.this.buttonTextView.layout(measuredWidth8, i30, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth8, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + i30);
-                                return;
-                            }
-                        } else if (i5 > i6) {
-                            float var_ = (float) i8;
-                            int measuredHeight4 = ((int) ((0.9f * var_) - ((float) ActionIntroActivity.this.imageView.getMeasuredHeight()))) / 2;
-                            ActionIntroActivity.this.imageView.layout(0, measuredHeight4, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + measuredHeight4);
-                            int measuredHeight5 = measuredHeight4 + ActionIntroActivity.this.imageView.getMeasuredHeight() + AndroidUtilities.dp(10.0f);
-                            ActionIntroActivity.this.subtitleTextView.layout(0, measuredHeight5, ActionIntroActivity.this.subtitleTextView.getMeasuredWidth(), ActionIntroActivity.this.subtitleTextView.getMeasuredHeight() + measuredHeight5);
-                            float var_ = (float) i7;
-                            float var_ = 0.4f * var_;
-                            int i31 = (int) var_;
-                            int i32 = (int) (0.12f * var_);
-                            ActionIntroActivity.this.titleTextView.layout(i31, i32, ActionIntroActivity.this.titleTextView.getMeasuredWidth() + i31, ActionIntroActivity.this.titleTextView.getMeasuredHeight() + i32);
-                            int i33 = (int) (0.26f * var_);
-                            ActionIntroActivity.this.descriptionText.layout(i31, i33, ActionIntroActivity.this.descriptionText.getMeasuredWidth() + i31, ActionIntroActivity.this.descriptionText.getMeasuredHeight() + i33);
-                            int measuredWidth9 = (int) (var_ + (((var_ * 0.6f) - ((float) ActionIntroActivity.this.buttonTextView.getMeasuredWidth())) / 2.0f));
-                            int i34 = (int) (var_ * 0.6f);
-                            ActionIntroActivity.this.buttonTextView.layout(measuredWidth9, i34, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth9, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + i34);
-                            int measuredHeight6 = (getMeasuredHeight() - ActionIntroActivity.this.descriptionText2.getMeasuredHeight()) - AndroidUtilities.dp(20.0f);
-                            ActionIntroActivity.this.descriptionText2.layout(i31, measuredHeight6, ActionIntroActivity.this.descriptionText2.getMeasuredWidth() + i31, ActionIntroActivity.this.descriptionText2.getMeasuredHeight() + measuredHeight6);
-                            return;
-                        } else {
-                            float var_ = (float) i8;
-                            int i35 = (int) (0.197f * var_);
-                            ActionIntroActivity.this.imageView.layout(0, i35, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + i35);
-                            int i36 = (int) (0.421f * var_);
-                            ActionIntroActivity.this.titleTextView.layout(0, i36, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + i36);
-                            int i37 = (int) (0.477f * var_);
-                            ActionIntroActivity.this.subtitleTextView.layout(0, i37, ActionIntroActivity.this.subtitleTextView.getMeasuredWidth(), ActionIntroActivity.this.subtitleTextView.getMeasuredHeight() + i37);
-                            int i38 = (int) (0.537f * var_);
-                            ActionIntroActivity.this.descriptionText.layout(0, i38, ActionIntroActivity.this.descriptionText.getMeasuredWidth(), ActionIntroActivity.this.descriptionText.getMeasuredHeight() + i38);
-                            int measuredWidth10 = (i7 - ActionIntroActivity.this.buttonTextView.getMeasuredWidth()) / 2;
-                            int i39 = (int) (var_ * 0.71f);
-                            ActionIntroActivity.this.buttonTextView.layout(measuredWidth10, i39, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth10, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + i39);
-                            int measuredHeight7 = (getMeasuredHeight() - ActionIntroActivity.this.descriptionText2.getMeasuredHeight()) - AndroidUtilities.dp(20.0f);
-                            ActionIntroActivity.this.descriptionText2.layout(0, measuredHeight7, ActionIntroActivity.this.descriptionText2.getMeasuredWidth(), ActionIntroActivity.this.descriptionText2.getMeasuredHeight() + measuredHeight7);
+                int width = i - l;
+                int height = i2 - t;
+                switch (ActionIntroActivity.this.currentType) {
+                    case 0:
+                        if (i > i2) {
+                            int y2 = (height - ActionIntroActivity.this.imageView.getMeasuredHeight()) / 2;
+                            ActionIntroActivity.this.imageView.layout(0, y2, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + y2);
+                            int x = (int) (((float) width) * 0.4f);
+                            int y3 = (int) (((float) height) * 0.22f);
+                            ActionIntroActivity.this.titleTextView.layout(x, y3, ActionIntroActivity.this.titleTextView.getMeasuredWidth() + x, ActionIntroActivity.this.titleTextView.getMeasuredHeight() + y3);
+                            int x2 = (int) (((float) width) * 0.4f);
+                            int y4 = (int) (((float) height) * 0.39f);
+                            ActionIntroActivity.this.descriptionText.layout(x2, y4, ActionIntroActivity.this.descriptionText.getMeasuredWidth() + x2, ActionIntroActivity.this.descriptionText.getMeasuredHeight() + y4);
+                            int x3 = (int) ((((float) width) * 0.4f) + (((((float) width) * 0.6f) - ((float) ActionIntroActivity.this.buttonTextView.getMeasuredWidth())) / 2.0f));
+                            int y5 = (int) (((float) height) * 0.69f);
+                            ActionIntroActivity.this.buttonTextView.layout(x3, y5, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + x3, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + y5);
                             return;
                         }
-                    }
-                    if (i5 > i6) {
-                        int measuredHeight8 = (i8 - ActionIntroActivity.this.imageView.getMeasuredHeight()) / 2;
-                        float var_ = (float) i7;
-                        int measuredWidth11 = ((int) ((0.5f * var_) - ((float) ActionIntroActivity.this.imageView.getMeasuredWidth()))) / 2;
-                        ActionIntroActivity.this.imageView.layout(measuredWidth11, measuredHeight8, ActionIntroActivity.this.imageView.getMeasuredWidth() + measuredWidth11, ActionIntroActivity.this.imageView.getMeasuredHeight() + measuredHeight8);
-                        float var_ = 0.4f * var_;
-                        int i40 = (int) var_;
-                        float var_ = (float) i8;
-                        int i41 = (int) (0.14f * var_);
-                        ActionIntroActivity.this.titleTextView.layout(i40, i41, ActionIntroActivity.this.titleTextView.getMeasuredWidth() + i40, ActionIntroActivity.this.titleTextView.getMeasuredHeight() + i41);
-                        int i42 = (int) (0.31f * var_);
-                        ActionIntroActivity.this.descriptionText.layout(i40, i42, ActionIntroActivity.this.descriptionText.getMeasuredWidth() + i40, ActionIntroActivity.this.descriptionText.getMeasuredHeight() + i42);
-                        int measuredWidth12 = (int) (var_ + (((var_ * 0.6f) - ((float) ActionIntroActivity.this.buttonTextView.getMeasuredWidth())) / 2.0f));
-                        int i43 = (int) (var_ * 0.78f);
-                        ActionIntroActivity.this.buttonTextView.layout(measuredWidth12, i43, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth12, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + i43);
+                        int y6 = (int) (((float) height) * 0.188f);
+                        ActionIntroActivity.this.imageView.layout(0, y6, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + y6);
+                        int y7 = (int) (((float) height) * 0.651f);
+                        ActionIntroActivity.this.titleTextView.layout(0, y7, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + y7);
+                        int y8 = (int) (((float) height) * 0.731f);
+                        ActionIntroActivity.this.descriptionText.layout(0, y8, ActionIntroActivity.this.descriptionText.getMeasuredWidth(), ActionIntroActivity.this.descriptionText.getMeasuredHeight() + y8);
+                        int x4 = (width - ActionIntroActivity.this.buttonTextView.getMeasuredWidth()) / 2;
+                        int y9 = (int) (((float) height) * 0.853f);
+                        ActionIntroActivity.this.buttonTextView.layout(x4, y9, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + x4, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + y9);
                         return;
-                    }
-                    float var_ = (float) i8;
-                    int i44 = (int) (0.214f * var_);
-                    int measuredWidth13 = (i7 - ActionIntroActivity.this.imageView.getMeasuredWidth()) / 2;
-                    ActionIntroActivity.this.imageView.layout(measuredWidth13, i44, ActionIntroActivity.this.imageView.getMeasuredWidth() + measuredWidth13, ActionIntroActivity.this.imageView.getMeasuredHeight() + i44);
-                    int i45 = (int) (0.414f * var_);
-                    ActionIntroActivity.this.titleTextView.layout(0, i45, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + i45);
-                    int i46 = (int) (0.493f * var_);
-                    ActionIntroActivity.this.descriptionText.layout(0, i46, ActionIntroActivity.this.descriptionText.getMeasuredWidth(), ActionIntroActivity.this.descriptionText.getMeasuredHeight() + i46);
-                    int measuredWidth14 = (i7 - ActionIntroActivity.this.buttonTextView.getMeasuredWidth()) / 2;
-                    int i47 = (int) (var_ * 0.71f);
-                    ActionIntroActivity.this.buttonTextView.layout(measuredWidth14, i47, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth14, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + i47);
-                } else if (i5 > i6) {
-                    int measuredHeight9 = (i8 - ActionIntroActivity.this.imageView.getMeasuredHeight()) / 2;
-                    ActionIntroActivity.this.imageView.layout(0, measuredHeight9, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + measuredHeight9);
-                    float var_ = (float) i7;
-                    float var_ = 0.4f * var_;
-                    int i48 = (int) var_;
-                    float var_ = (float) i8;
-                    int i49 = (int) (0.22f * var_);
-                    ActionIntroActivity.this.titleTextView.layout(i48, i49, ActionIntroActivity.this.titleTextView.getMeasuredWidth() + i48, ActionIntroActivity.this.titleTextView.getMeasuredHeight() + i49);
-                    int i50 = (int) (0.39f * var_);
-                    ActionIntroActivity.this.descriptionText.layout(i48, i50, ActionIntroActivity.this.descriptionText.getMeasuredWidth() + i48, ActionIntroActivity.this.descriptionText.getMeasuredHeight() + i50);
-                    int measuredWidth15 = (int) (var_ + (((var_ * 0.6f) - ((float) ActionIntroActivity.this.buttonTextView.getMeasuredWidth())) / 2.0f));
-                    int i51 = (int) (var_ * 0.69f);
-                    ActionIntroActivity.this.buttonTextView.layout(measuredWidth15, i51, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth15, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + i51);
-                } else {
-                    float var_ = (float) i8;
-                    int i52 = (int) (0.188f * var_);
-                    ActionIntroActivity.this.imageView.layout(0, i52, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + i52);
-                    int i53 = (int) (0.651f * var_);
-                    ActionIntroActivity.this.titleTextView.layout(0, i53, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + i53);
-                    int i54 = (int) (0.731f * var_);
-                    ActionIntroActivity.this.descriptionText.layout(0, i54, ActionIntroActivity.this.descriptionText.getMeasuredWidth(), ActionIntroActivity.this.descriptionText.getMeasuredHeight() + i54);
-                    int measuredWidth16 = (i7 - ActionIntroActivity.this.buttonTextView.getMeasuredWidth()) / 2;
-                    int i55 = (int) (var_ * 0.853f);
-                    ActionIntroActivity.this.buttonTextView.layout(measuredWidth16, i55, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth16, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + i55);
+                    case 1:
+                    case 4:
+                        if (i > i2) {
+                            int y10 = (height - ActionIntroActivity.this.imageView.getMeasuredHeight()) / 2;
+                            int x5 = ((int) ((((float) width) * 0.5f) - ((float) ActionIntroActivity.this.imageView.getMeasuredWidth()))) / 2;
+                            ActionIntroActivity.this.imageView.layout(x5, y10, ActionIntroActivity.this.imageView.getMeasuredWidth() + x5, ActionIntroActivity.this.imageView.getMeasuredHeight() + y10);
+                            int x6 = (int) (((float) width) * 0.4f);
+                            int y11 = (int) (((float) height) * 0.14f);
+                            ActionIntroActivity.this.titleTextView.layout(x6, y11, ActionIntroActivity.this.titleTextView.getMeasuredWidth() + x6, ActionIntroActivity.this.titleTextView.getMeasuredHeight() + y11);
+                            int x7 = (int) (((float) width) * 0.4f);
+                            int y12 = (int) (((float) height) * 0.31f);
+                            ActionIntroActivity.this.descriptionText.layout(x7, y12, ActionIntroActivity.this.descriptionText.getMeasuredWidth() + x7, ActionIntroActivity.this.descriptionText.getMeasuredHeight() + y12);
+                            int x8 = (int) ((((float) width) * 0.4f) + (((((float) width) * 0.6f) - ((float) ActionIntroActivity.this.buttonTextView.getMeasuredWidth())) / 2.0f));
+                            int y13 = (int) (((float) height) * 0.78f);
+                            ActionIntroActivity.this.buttonTextView.layout(x8, y13, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + x8, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + y13);
+                            return;
+                        }
+                        int y14 = (int) (((float) height) * 0.214f);
+                        int x9 = (width - ActionIntroActivity.this.imageView.getMeasuredWidth()) / 2;
+                        ActionIntroActivity.this.imageView.layout(x9, y14, ActionIntroActivity.this.imageView.getMeasuredWidth() + x9, ActionIntroActivity.this.imageView.getMeasuredHeight() + y14);
+                        int y15 = (int) (((float) height) * 0.414f);
+                        ActionIntroActivity.this.titleTextView.layout(0, y15, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + y15);
+                        int y16 = (int) (((float) height) * 0.493f);
+                        ActionIntroActivity.this.descriptionText.layout(0, y16, ActionIntroActivity.this.descriptionText.getMeasuredWidth(), ActionIntroActivity.this.descriptionText.getMeasuredHeight() + y16);
+                        int x10 = (width - ActionIntroActivity.this.buttonTextView.getMeasuredWidth()) / 2;
+                        int y17 = (int) (((float) height) * 0.71f);
+                        ActionIntroActivity.this.buttonTextView.layout(x10, y17, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + x10, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + y17);
+                        return;
+                    case 2:
+                        if (i > i2) {
+                            int y18 = ((int) ((((float) height) * 0.9f) - ((float) ActionIntroActivity.this.imageView.getMeasuredHeight()))) / 2;
+                            ActionIntroActivity.this.imageView.layout(0, y18, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + y18);
+                            int y19 = y18 + ActionIntroActivity.this.imageView.getMeasuredHeight() + AndroidUtilities.dp(10.0f);
+                            ActionIntroActivity.this.subtitleTextView.layout(0, y19, ActionIntroActivity.this.subtitleTextView.getMeasuredWidth(), ActionIntroActivity.this.subtitleTextView.getMeasuredHeight() + y19);
+                            int x11 = (int) (((float) width) * 0.4f);
+                            int y20 = (int) (((float) height) * 0.12f);
+                            ActionIntroActivity.this.titleTextView.layout(x11, y20, ActionIntroActivity.this.titleTextView.getMeasuredWidth() + x11, ActionIntroActivity.this.titleTextView.getMeasuredHeight() + y20);
+                            int x12 = (int) (((float) width) * 0.4f);
+                            int y21 = (int) (((float) height) * 0.26f);
+                            ActionIntroActivity.this.descriptionText.layout(x12, y21, ActionIntroActivity.this.descriptionText.getMeasuredWidth() + x12, ActionIntroActivity.this.descriptionText.getMeasuredHeight() + y21);
+                            int x13 = (int) ((((float) width) * 0.4f) + (((((float) width) * 0.6f) - ((float) ActionIntroActivity.this.buttonTextView.getMeasuredWidth())) / 2.0f));
+                            int y22 = (int) (((float) height) * 0.6f);
+                            ActionIntroActivity.this.buttonTextView.layout(x13, y22, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + x13, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + y22);
+                            int x14 = (int) (((float) width) * 0.4f);
+                            int y23 = (getMeasuredHeight() - ActionIntroActivity.this.descriptionText2.getMeasuredHeight()) - AndroidUtilities.dp(20.0f);
+                            ActionIntroActivity.this.descriptionText2.layout(x14, y23, ActionIntroActivity.this.descriptionText2.getMeasuredWidth() + x14, ActionIntroActivity.this.descriptionText2.getMeasuredHeight() + y23);
+                            return;
+                        }
+                        int y24 = (int) (((float) height) * 0.197f);
+                        ActionIntroActivity.this.imageView.layout(0, y24, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + y24);
+                        int y25 = (int) (((float) height) * 0.421f);
+                        ActionIntroActivity.this.titleTextView.layout(0, y25, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + y25);
+                        int y26 = (int) (((float) height) * 0.477f);
+                        ActionIntroActivity.this.subtitleTextView.layout(0, y26, ActionIntroActivity.this.subtitleTextView.getMeasuredWidth(), ActionIntroActivity.this.subtitleTextView.getMeasuredHeight() + y26);
+                        int y27 = (int) (((float) height) * 0.537f);
+                        ActionIntroActivity.this.descriptionText.layout(0, y27, ActionIntroActivity.this.descriptionText.getMeasuredWidth(), ActionIntroActivity.this.descriptionText.getMeasuredHeight() + y27);
+                        int x15 = (width - ActionIntroActivity.this.buttonTextView.getMeasuredWidth()) / 2;
+                        int y28 = (int) (((float) height) * 0.71f);
+                        ActionIntroActivity.this.buttonTextView.layout(x15, y28, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + x15, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + y28);
+                        int y29 = (getMeasuredHeight() - ActionIntroActivity.this.descriptionText2.getMeasuredHeight()) - AndroidUtilities.dp(20.0f);
+                        ActionIntroActivity.this.descriptionText2.layout(0, y29, ActionIntroActivity.this.descriptionText2.getMeasuredWidth(), ActionIntroActivity.this.descriptionText2.getMeasuredHeight() + y29);
+                        return;
+                    case 3:
+                        if (i > i2) {
+                            int y30 = ((int) ((((float) height) * 0.95f) - ((float) ActionIntroActivity.this.imageView.getMeasuredHeight()))) / 2;
+                            ActionIntroActivity.this.imageView.layout(0, y30, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + y30);
+                            int y31 = y30 + ActionIntroActivity.this.imageView.getMeasuredHeight() + AndroidUtilities.dp(10.0f);
+                            ActionIntroActivity.this.subtitleTextView.layout(0, y31, ActionIntroActivity.this.subtitleTextView.getMeasuredWidth(), ActionIntroActivity.this.subtitleTextView.getMeasuredHeight() + y31);
+                            int x16 = (int) (((float) width) * 0.4f);
+                            int y32 = (int) (((float) height) * 0.12f);
+                            ActionIntroActivity.this.titleTextView.layout(x16, y32, ActionIntroActivity.this.titleTextView.getMeasuredWidth() + x16, ActionIntroActivity.this.titleTextView.getMeasuredHeight() + y32);
+                            int x17 = (int) (((float) width) * 0.4f);
+                            int y33 = (int) (((float) height) * 0.24f);
+                            ActionIntroActivity.this.descriptionText.layout(x17, y33, ActionIntroActivity.this.descriptionText.getMeasuredWidth() + x17, ActionIntroActivity.this.descriptionText.getMeasuredHeight() + y33);
+                            int x18 = (int) ((((float) width) * 0.4f) + (((((float) width) * 0.6f) - ((float) ActionIntroActivity.this.buttonTextView.getMeasuredWidth())) / 2.0f));
+                            int y34 = (int) (((float) height) * 0.8f);
+                            ActionIntroActivity.this.buttonTextView.layout(x18, y34, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + x18, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + y34);
+                            return;
+                        }
+                        int y35 = (int) (((float) height) * 0.2229f);
+                        ActionIntroActivity.this.imageView.layout(0, y35, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + y35);
+                        int y36 = (int) (((float) height) * 0.352f);
+                        ActionIntroActivity.this.titleTextView.layout(0, y36, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + y36);
+                        int y37 = (int) (((float) height) * 0.409f);
+                        ActionIntroActivity.this.subtitleTextView.layout(0, y37, ActionIntroActivity.this.subtitleTextView.getMeasuredWidth(), ActionIntroActivity.this.subtitleTextView.getMeasuredHeight() + y37);
+                        int y38 = (int) (((float) height) * 0.468f);
+                        ActionIntroActivity.this.descriptionText.layout(0, y38, ActionIntroActivity.this.descriptionText.getMeasuredWidth(), ActionIntroActivity.this.descriptionText.getMeasuredHeight() + y38);
+                        int x19 = (width - ActionIntroActivity.this.buttonTextView.getMeasuredWidth()) / 2;
+                        int y39 = (int) (((float) height) * 0.805f);
+                        ActionIntroActivity.this.buttonTextView.layout(x19, y39, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + x19, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + y39);
+                        return;
+                    case 5:
+                        if (ActionIntroActivity.this.showingAsBottomSheet) {
+                            ActionIntroActivity.this.imageView.layout(0, 0, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + 0);
+                            int y40 = (int) (((float) height) * 0.403f);
+                            ActionIntroActivity.this.titleTextView.layout(0, y40, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + y40);
+                            int y41 = (int) (((float) height) * 0.631f);
+                            int x20 = (getMeasuredWidth() - ActionIntroActivity.this.descriptionLayout.getMeasuredWidth()) / 2;
+                            ActionIntroActivity.this.descriptionLayout.layout(x20, y41, ActionIntroActivity.this.descriptionLayout.getMeasuredWidth() + x20, ActionIntroActivity.this.descriptionLayout.getMeasuredHeight() + y41);
+                            int x21 = (width - ActionIntroActivity.this.buttonTextView.getMeasuredWidth()) / 2;
+                            int y42 = (int) (((float) height) * 0.853f);
+                            ActionIntroActivity.this.buttonTextView.layout(x21, y42, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + x21, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + y42);
+                            return;
+                        } else if (i > i2) {
+                            int y43 = (height - ActionIntroActivity.this.imageView.getMeasuredHeight()) / 2;
+                            ActionIntroActivity.this.imageView.layout(0, y43, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + y43);
+                            int x22 = (int) (((float) width) * 0.4f);
+                            int y44 = (int) (((float) height) * 0.08f);
+                            ActionIntroActivity.this.titleTextView.layout(x22, y44, ActionIntroActivity.this.titleTextView.getMeasuredWidth() + x22, ActionIntroActivity.this.titleTextView.getMeasuredHeight() + y44);
+                            int x23 = (int) ((((float) width) * 0.4f) + (((((float) width) * 0.6f) - ((float) ActionIntroActivity.this.descriptionLayout.getMeasuredWidth())) / 2.0f));
+                            int y45 = (int) (((float) height) * 0.25f);
+                            ActionIntroActivity.this.descriptionLayout.layout(x23, y45, ActionIntroActivity.this.descriptionLayout.getMeasuredWidth() + x23, ActionIntroActivity.this.descriptionLayout.getMeasuredHeight() + y45);
+                            int x24 = (int) ((((float) width) * 0.4f) + (((((float) width) * 0.6f) - ((float) ActionIntroActivity.this.buttonTextView.getMeasuredWidth())) / 2.0f));
+                            int y46 = (int) (((float) height) * 0.78f);
+                            ActionIntroActivity.this.buttonTextView.layout(x24, y46, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + x24, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + y46);
+                            return;
+                        } else {
+                            if (AndroidUtilities.displaySize.y < 1800) {
+                                int y47 = (int) (((float) height) * 0.06f);
+                                ActionIntroActivity.this.imageView.layout(0, y47, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + y47);
+                                int y48 = (int) (((float) height) * 0.463f);
+                                ActionIntroActivity.this.titleTextView.layout(0, y48, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + y48);
+                                y = (int) (((float) height) * 0.543f);
+                            } else {
+                                int y49 = (int) (((float) height) * 0.148f);
+                                ActionIntroActivity.this.imageView.layout(0, y49, ActionIntroActivity.this.imageView.getMeasuredWidth(), ActionIntroActivity.this.imageView.getMeasuredHeight() + y49);
+                                int y50 = (int) (((float) height) * 0.551f);
+                                ActionIntroActivity.this.titleTextView.layout(0, y50, ActionIntroActivity.this.titleTextView.getMeasuredWidth(), ActionIntroActivity.this.titleTextView.getMeasuredHeight() + y50);
+                                y = (int) (((float) height) * 0.631f);
+                            }
+                            int x25 = (getMeasuredWidth() - ActionIntroActivity.this.descriptionLayout.getMeasuredWidth()) / 2;
+                            ActionIntroActivity.this.descriptionLayout.layout(x25, y, ActionIntroActivity.this.descriptionLayout.getMeasuredWidth() + x25, ActionIntroActivity.this.descriptionLayout.getMeasuredHeight() + y);
+                            int x26 = (width - ActionIntroActivity.this.buttonTextView.getMeasuredWidth()) / 2;
+                            int y51 = (int) (((float) height) * 0.853f);
+                            ActionIntroActivity.this.buttonTextView.layout(x26, y51, ActionIntroActivity.this.buttonTextView.getMeasuredWidth() + x26, ActionIntroActivity.this.buttonTextView.getMeasuredHeight() + y51);
+                            return;
+                        }
+                    default:
+                        return;
                 }
             }
         };
-        this.fragmentView = r2;
-        r2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+        this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         ViewGroup viewGroup = (ViewGroup) this.fragmentView;
-        viewGroup.setOnTouchListener(ActionIntroActivity$$ExternalSyntheticLambda4.INSTANCE);
-        ActionBar actionBar2 = this.actionBar;
-        if (actionBar2 != null) {
-            viewGroup.addView(actionBar2);
+        viewGroup.setOnTouchListener(ActionIntroActivity$$ExternalSyntheticLambda5.INSTANCE);
+        if (this.actionBar != null) {
+            viewGroup.addView(this.actionBar);
         }
         RLottieImageView rLottieImageView = new RLottieImageView(context2);
         this.imageView = rLottieImageView;
@@ -426,7 +400,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         TextView textView = new TextView(context2);
         this.titleTextView = textView;
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        int i3 = 1;
+        int i2 = 1;
         this.titleTextView.setGravity(1);
         this.titleTextView.setPadding(AndroidUtilities.dp(32.0f), 0, AndroidUtilities.dp(32.0f), 0);
         this.titleTextView.setTextSize(1, 24.0f);
@@ -439,7 +413,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         this.subtitleTextView.setTextSize(1, 15.0f);
         this.subtitleTextView.setSingleLine(true);
         this.subtitleTextView.setEllipsize(TextUtils.TruncateAt.END);
-        int i4 = 2;
+        int i3 = 2;
         if (this.currentType == 2) {
             this.subtitleTextView.setPadding(AndroidUtilities.dp(24.0f), 0, AndroidUtilities.dp(24.0f), 0);
         } else {
@@ -467,60 +441,57 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             this.descriptionLayout.setPadding(AndroidUtilities.dp(24.0f), 0, AndroidUtilities.dp(24.0f), 0);
             this.descriptionLayout.setGravity(LocaleController.isRTL ? 5 : 3);
             viewGroup.addView(this.descriptionLayout);
-            int i5 = 0;
-            for (int i6 = 3; i5 < i6; i6 = 3) {
+            int a = 0;
+            for (int i4 = 3; a < i4; i4 = 3) {
                 LinearLayout linearLayout2 = new LinearLayout(context2);
-                linearLayout2.setOrientation(i2);
-                this.descriptionLayout.addView(linearLayout2, LayoutHelper.createLinear(-2, -2, 0.0f, 0.0f, 0.0f, i5 != i4 ? 7.0f : 0.0f));
-                int i7 = i5 * 2;
-                this.desctiptionLines[i7] = new TextView(context2);
-                this.desctiptionLines[i7].setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-                this.desctiptionLines[i7].setGravity(LocaleController.isRTL ? 5 : 3);
-                this.desctiptionLines[i7].setTextSize(i3, f);
-                TextView textView4 = this.desctiptionLines[i7];
+                linearLayout2.setOrientation(i);
+                this.descriptionLayout.addView(linearLayout2, LayoutHelper.createLinear(-2, -2, 0.0f, 0.0f, 0.0f, a != i3 ? 7.0f : 0.0f));
+                this.desctiptionLines[a * 2] = new TextView(context2);
+                this.desctiptionLines[a * 2].setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                this.desctiptionLines[a * 2].setGravity(LocaleController.isRTL ? 5 : 3);
+                this.desctiptionLines[a * 2].setTextSize(i2, f);
+                TextView textView4 = this.desctiptionLines[a * 2];
                 String str2 = LocaleController.isRTL ? ".%d" : "%d.";
-                Object[] objArr = new Object[i3];
-                int i8 = i5 + 1;
-                objArr[i2] = Integer.valueOf(i8);
+                Object[] objArr = new Object[i2];
+                objArr[i] = Integer.valueOf(a + 1);
                 textView4.setText(String.format(str2, objArr));
-                this.desctiptionLines[i7].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                int i9 = i7 + 1;
-                this.desctiptionLines[i9] = new TextView(context2);
-                this.desctiptionLines[i9].setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-                this.desctiptionLines[i9].setGravity(LocaleController.isRTL ? 5 : 3);
-                this.desctiptionLines[i9].setTextSize(i3, f);
-                if (i5 == 0) {
-                    this.desctiptionLines[i9].setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
-                    this.desctiptionLines[i9].setHighlightColor(Theme.getColor("windowBackgroundWhiteLinkSelection"));
-                    String string = LocaleController.getString("AuthAnotherClientInfo1", NUM);
-                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(string);
-                    int indexOf = string.indexOf(42);
-                    int lastIndexOf = string.lastIndexOf(42);
-                    if (!(indexOf == -1 || lastIndexOf == -1 || indexOf == lastIndexOf)) {
-                        this.desctiptionLines[i9].setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
-                        spannableStringBuilder.replace(lastIndexOf, lastIndexOf + 1, str);
-                        spannableStringBuilder.replace(indexOf, indexOf + 1, str);
-                        spannableStringBuilder.setSpan(new URLSpanNoUnderline(LocaleController.getString("AuthAnotherClientDownloadClientUrl", NUM)), indexOf, lastIndexOf - 1, 33);
+                this.desctiptionLines[a * 2].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                this.desctiptionLines[(a * 2) + i2] = new TextView(context2);
+                this.desctiptionLines[(a * 2) + i2].setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+                this.desctiptionLines[(a * 2) + i2].setGravity(LocaleController.isRTL ? 5 : 3);
+                this.desctiptionLines[(a * 2) + i2].setTextSize(i2, f);
+                if (a == 0) {
+                    this.desctiptionLines[(a * 2) + i2].setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
+                    this.desctiptionLines[(a * 2) + i2].setHighlightColor(Theme.getColor("windowBackgroundWhiteLinkSelection"));
+                    String text = LocaleController.getString("AuthAnotherClientInfo1", NUM);
+                    SpannableStringBuilder spanned = new SpannableStringBuilder(text);
+                    int index1 = text.indexOf(42);
+                    int index2 = text.lastIndexOf(42);
+                    if (!(index1 == -1 || index2 == -1 || index1 == index2)) {
+                        this.desctiptionLines[(a * 2) + 1].setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
+                        spanned.replace(index2, index2 + 1, str);
+                        spanned.replace(index1, index1 + 1, str);
+                        spanned.setSpan(new URLSpanNoUnderline(LocaleController.getString("AuthAnotherClientDownloadClientUrl", NUM)), index1, index2 - 1, 33);
                     }
-                    this.desctiptionLines[i9].setText(spannableStringBuilder);
-                } else if (i5 == 1) {
-                    this.desctiptionLines[i9].setText(LocaleController.getString("AuthAnotherClientInfo2", NUM));
+                    this.desctiptionLines[(a * 2) + 1].setText(spanned);
+                } else if (a == 1) {
+                    this.desctiptionLines[(a * 2) + 1].setText(LocaleController.getString("AuthAnotherClientInfo2", NUM));
                 } else {
-                    this.desctiptionLines[i9].setText(LocaleController.getString("AuthAnotherClientInfo3", NUM));
+                    this.desctiptionLines[(a * 2) + 1].setText(LocaleController.getString("AuthAnotherClientInfo3", NUM));
                 }
                 if (LocaleController.isRTL) {
                     linearLayout2.setGravity(5);
-                    linearLayout2.addView(this.desctiptionLines[i9], LayoutHelper.createLinear(0, -2, 1.0f));
-                    linearLayout2.addView(this.desctiptionLines[i7], LayoutHelper.createLinear(-2, -2, 4.0f, 0.0f, 0.0f, 0.0f));
+                    linearLayout2.addView(this.desctiptionLines[(a * 2) + 1], LayoutHelper.createLinear(0, -2, 1.0f));
+                    linearLayout2.addView(this.desctiptionLines[a * 2], LayoutHelper.createLinear(-2, -2, 4.0f, 0.0f, 0.0f, 0.0f));
                 } else {
-                    linearLayout2.addView(this.desctiptionLines[i7], LayoutHelper.createLinear(-2, -2, 0.0f, 0.0f, 4.0f, 0.0f));
-                    linearLayout2.addView(this.desctiptionLines[i9], LayoutHelper.createLinear(-2, -2));
+                    linearLayout2.addView(this.desctiptionLines[a * 2], LayoutHelper.createLinear(-2, -2, 0.0f, 0.0f, 4.0f, 0.0f));
+                    linearLayout2.addView(this.desctiptionLines[(a * 2) + 1], LayoutHelper.createLinear(-2, -2));
                 }
-                i5 = i8;
-                i2 = 0;
-                i3 = 1;
+                a++;
+                i = 0;
+                i2 = 1;
                 f = 15.0f;
-                i4 = 2;
+                i3 = 2;
             }
             this.descriptionText.setVisibility(8);
         }
@@ -532,10 +503,8 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         this.descriptionText2.setTextSize(1, 13.0f);
         this.descriptionText2.setVisibility(8);
         if (this.currentType == 2) {
-            i = 0;
             this.descriptionText2.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         } else {
-            i = 0;
             this.descriptionText2.setPadding(AndroidUtilities.dp(32.0f), 0, AndroidUtilities.dp(32.0f), 0);
         }
         viewGroup.addView(this.descriptionText2);
@@ -550,92 +519,97 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                         CellFlickerDrawable cellFlickerDrawable2 = new CellFlickerDrawable();
                         this.cellFlickerDrawable = cellFlickerDrawable2;
                         cellFlickerDrawable2.drawFrame = false;
-                        cellFlickerDrawable2.repeatProgress = 2.0f;
+                        this.cellFlickerDrawable.repeatProgress = 2.0f;
                     }
                     this.cellFlickerDrawable.setParentWidth(getMeasuredWidth());
-                    RectF rectF = AndroidUtilities.rectTmp;
-                    rectF.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
-                    this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(4.0f));
+                    AndroidUtilities.rectTmp.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+                    this.cellFlickerDrawable.draw(canvas, AndroidUtilities.rectTmp, (float) AndroidUtilities.dp(4.0f));
                     invalidate();
                 }
             }
         };
         this.buttonTextView = r3;
-        r3.setPadding(AndroidUtilities.dp(34.0f), i, AndroidUtilities.dp(34.0f), i);
+        r3.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
         this.buttonTextView.setGravity(17);
         this.buttonTextView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         this.buttonTextView.setTextSize(1, 14.0f);
         this.buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.buttonTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
         viewGroup.addView(this.buttonTextView);
-        this.buttonTextView.setOnClickListener(new ActionIntroActivity$$ExternalSyntheticLambda3(this));
-        int i10 = this.currentType;
-        if (i10 == 0) {
-            this.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            this.imageView.setAnimation(NUM, 200, 200);
-            this.titleTextView.setText(LocaleController.getString("ChannelAlertTitle", NUM));
-            this.descriptionText.setText(LocaleController.getString("ChannelAlertText", NUM));
-            this.buttonTextView.setText(LocaleController.getString("ChannelAlertCreate2", NUM));
-            this.imageView.playAnimation();
-            this.flickerButton = true;
-        } else if (i10 == 1) {
-            this.imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(100.0f), Theme.getColor("chats_archiveBackground")));
-            this.imageView.setImageDrawable(new ShareLocationDrawable(context2, 3));
-            this.imageView.setScaleType(ImageView.ScaleType.CENTER);
-            this.titleTextView.setText(LocaleController.getString("PeopleNearby", NUM));
-            this.descriptionText.setText(LocaleController.getString("PeopleNearbyAccessInfo", NUM));
-            this.buttonTextView.setText(LocaleController.getString("PeopleNearbyAllowAccess", NUM));
-        } else if (i10 == 2) {
-            this.subtitleTextView.setVisibility(0);
-            this.descriptionText2.setVisibility(0);
-            this.imageView.setImageResource(Theme.getCurrentTheme().isDark() ? NUM : NUM);
-            this.imageView.setScaleType(ImageView.ScaleType.CENTER);
-            TextView textView6 = this.subtitleTextView;
-            String str3 = this.currentGroupCreateDisplayAddress;
-            if (str3 != null) {
-                str = str3;
-            }
-            textView6.setText(str);
-            this.titleTextView.setText(LocaleController.getString("NearbyCreateGroup", NUM));
-            this.descriptionText.setText(LocaleController.getString("NearbyCreateGroupInfo", NUM));
-            this.descriptionText2.setText(LocaleController.getString("NearbyCreateGroupInfo2", NUM));
-            this.buttonTextView.setText(LocaleController.getString("NearbyStartGroup", NUM));
-        } else if (i10 == 3) {
-            this.subtitleTextView.setVisibility(0);
-            this.drawable1 = context.getResources().getDrawable(NUM);
-            this.drawable2 = context.getResources().getDrawable(NUM);
-            this.drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor("changephoneinfo_image"), PorterDuff.Mode.MULTIPLY));
-            this.drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("changephoneinfo_image2"), PorterDuff.Mode.MULTIPLY));
-            this.imageView.setImageDrawable(new CombinedDrawable(this.drawable1, this.drawable2));
-            this.imageView.setScaleType(ImageView.ScaleType.CENTER);
-            UserConfig userConfig = getUserConfig();
-            TLRPC$User user = getMessagesController().getUser(Long.valueOf(userConfig.clientUserId));
-            if (user == null) {
-                user = userConfig.getCurrentUser();
-            }
-            if (user != null) {
-                TextView textView7 = this.subtitleTextView;
-                PhoneFormat instance = PhoneFormat.getInstance();
-                textView7.setText(instance.format("+" + user.phone));
-            }
-            this.titleTextView.setText(LocaleController.getString("PhoneNumberChange2", NUM));
-            this.descriptionText.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", NUM)));
-            this.buttonTextView.setText(LocaleController.getString("PhoneNumberChange2", NUM));
-        } else if (i10 == 4) {
-            this.imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(100.0f), Theme.getColor("chats_archiveBackground")));
-            this.imageView.setImageDrawable(new ShareLocationDrawable(context2, 3));
-            this.imageView.setScaleType(ImageView.ScaleType.CENTER);
-            this.titleTextView.setText(LocaleController.getString("PeopleNearby", NUM));
-            this.descriptionText.setText(LocaleController.getString("PeopleNearbyGpsInfo", NUM));
-            this.buttonTextView.setText(LocaleController.getString("PeopleNearbyGps", NUM));
-        } else if (i10 == 5) {
-            this.colors = new int[8];
-            updateColors();
-            this.imageView.setAnimation(NUM, 334, 334, this.colors);
-            this.imageView.setScaleType(ImageView.ScaleType.CENTER);
-            this.titleTextView.setText(LocaleController.getString("AuthAnotherClient", NUM));
-            this.buttonTextView.setText(LocaleController.getString("AuthAnotherClientScan", NUM));
-            this.imageView.playAnimation();
+        this.buttonTextView.setOnClickListener(new ActionIntroActivity$$ExternalSyntheticLambda4(this));
+        switch (this.currentType) {
+            case 0:
+                this.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                this.imageView.setAnimation(NUM, 200, 200);
+                this.titleTextView.setText(LocaleController.getString("ChannelAlertTitle", NUM));
+                this.descriptionText.setText(LocaleController.getString("ChannelAlertText", NUM));
+                this.buttonTextView.setText(LocaleController.getString("ChannelAlertCreate2", NUM));
+                this.imageView.playAnimation();
+                this.flickerButton = true;
+                break;
+            case 1:
+                this.imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(100.0f), Theme.getColor("chats_archiveBackground")));
+                this.imageView.setImageDrawable(new ShareLocationDrawable(context2, 3));
+                this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+                this.titleTextView.setText(LocaleController.getString("PeopleNearby", NUM));
+                this.descriptionText.setText(LocaleController.getString("PeopleNearbyAccessInfo", NUM));
+                this.buttonTextView.setText(LocaleController.getString("PeopleNearbyAllowAccess", NUM));
+                break;
+            case 2:
+                this.subtitleTextView.setVisibility(0);
+                this.descriptionText2.setVisibility(0);
+                this.imageView.setImageResource(Theme.getCurrentTheme().isDark() ? NUM : NUM);
+                this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+                TextView textView6 = this.subtitleTextView;
+                String str3 = this.currentGroupCreateDisplayAddress;
+                if (str3 != null) {
+                    str = str3;
+                }
+                textView6.setText(str);
+                this.titleTextView.setText(LocaleController.getString("NearbyCreateGroup", NUM));
+                this.descriptionText.setText(LocaleController.getString("NearbyCreateGroupInfo", NUM));
+                this.descriptionText2.setText(LocaleController.getString("NearbyCreateGroupInfo2", NUM));
+                this.buttonTextView.setText(LocaleController.getString("NearbyStartGroup", NUM));
+                break;
+            case 3:
+                this.subtitleTextView.setVisibility(0);
+                this.drawable1 = context.getResources().getDrawable(NUM);
+                this.drawable2 = context.getResources().getDrawable(NUM);
+                this.drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor("changephoneinfo_image"), PorterDuff.Mode.MULTIPLY));
+                this.drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("changephoneinfo_image2"), PorterDuff.Mode.MULTIPLY));
+                this.imageView.setImageDrawable(new CombinedDrawable(this.drawable1, this.drawable2));
+                this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+                UserConfig userConfig = getUserConfig();
+                TLRPC.User user = getMessagesController().getUser(Long.valueOf(userConfig.clientUserId));
+                if (user == null) {
+                    user = userConfig.getCurrentUser();
+                }
+                if (user != null) {
+                    TextView textView7 = this.subtitleTextView;
+                    PhoneFormat instance = PhoneFormat.getInstance();
+                    textView7.setText(instance.format("+" + user.phone));
+                }
+                this.titleTextView.setText(LocaleController.getString("PhoneNumberChange2", NUM));
+                this.descriptionText.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", NUM)));
+                this.buttonTextView.setText(LocaleController.getString("PhoneNumberChange2", NUM));
+                break;
+            case 4:
+                this.imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(100.0f), Theme.getColor("chats_archiveBackground")));
+                this.imageView.setImageDrawable(new ShareLocationDrawable(context2, 3));
+                this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+                this.titleTextView.setText(LocaleController.getString("PeopleNearby", NUM));
+                this.descriptionText.setText(LocaleController.getString("PeopleNearbyGpsInfo", NUM));
+                this.buttonTextView.setText(LocaleController.getString("PeopleNearbyGps", NUM));
+                break;
+            case 5:
+                this.colors = new int[8];
+                updateColors();
+                this.imageView.setAnimation(NUM, 334, 334, this.colors);
+                this.imageView.setScaleType(ImageView.ScaleType.CENTER);
+                this.titleTextView.setText(LocaleController.getString("AuthAnotherClient", NUM));
+                this.buttonTextView.setText(LocaleController.getString("AuthAnotherClientScan", NUM));
+                this.imageView.playAnimation();
+                break;
         }
         if (this.flickerButton) {
             this.buttonTextView.setPadding(AndroidUtilities.dp(34.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(34.0f), AndroidUtilities.dp(8.0f));
@@ -644,85 +618,123 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         return this.fragmentView;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$2(View view) {
+    static /* synthetic */ boolean lambda$createView$0(View v, MotionEvent event) {
+        return true;
+    }
+
+    /* renamed from: lambda$createView$2$org-telegram-ui-ActionIntroActivity  reason: not valid java name */
+    public /* synthetic */ void m1340lambda$createView$2$orgtelegramuiActionIntroActivity(View v) {
         if (getParentActivity() != null) {
-            int i = this.currentType;
-            if (i == 0) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("step", 0);
-                presentFragment(new ChannelCreateActivity(bundle), true);
-            } else if (i == 1) {
-                getParentActivity().requestPermissions(new String[]{"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, 2);
-            } else if (i != 2) {
-                if (i == 3) {
+            switch (this.currentType) {
+                case 0:
+                    Bundle args = new Bundle();
+                    args.putInt("step", 0);
+                    presentFragment(new ChannelCreateActivity(args), true);
+                    return;
+                case 1:
+                    getParentActivity().requestPermissions(new String[]{"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, 2);
+                    return;
+                case 2:
+                    if (this.currentGroupCreateAddress != null && this.currentGroupCreateLocation != null) {
+                        Bundle args2 = new Bundle();
+                        args2.putLongArray("result", new long[]{getUserConfig().getClientUserId()});
+                        args2.putInt("chatType", 4);
+                        args2.putString("address", this.currentGroupCreateAddress);
+                        args2.putParcelable("location", this.currentGroupCreateLocation);
+                        presentFragment(new GroupCreateFinalActivity(args2), true);
+                        return;
+                    }
+                    return;
+                case 3:
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     builder.setTitle(LocaleController.getString("PhoneNumberChangeTitle", NUM));
                     builder.setMessage(LocaleController.getString("PhoneNumberAlert", NUM));
-                    builder.setPositiveButton(LocaleController.getString("Change", NUM), new ActionIntroActivity$$ExternalSyntheticLambda2(this));
+                    builder.setPositiveButton(LocaleController.getString("Change", NUM), new ActionIntroActivity$$ExternalSyntheticLambda0(this));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     showDialog(builder.create());
-                } else if (i == 4) {
+                    return;
+                case 4:
                     try {
                         getParentActivity().startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
+                        return;
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);
-                    }
-                } else if (i != 5 || getParentActivity() == null) {
-                } else {
-                    if (Build.VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.CAMERA") == 0) {
-                        processOpenQrReader();
                         return;
                     }
-                    getParentActivity().requestPermissions(new String[]{"android.permission.CAMERA"}, 34);
-                }
-            } else if (this.currentGroupCreateAddress != null && this.currentGroupCreateLocation != null) {
-                Bundle bundle2 = new Bundle();
-                bundle2.putLongArray("result", new long[]{getUserConfig().getClientUserId()});
-                bundle2.putInt("chatType", 4);
-                bundle2.putString("address", this.currentGroupCreateAddress);
-                bundle2.putParcelable("location", this.currentGroupCreateLocation);
-                presentFragment(new GroupCreateFinalActivity(bundle2), true);
+                case 5:
+                    if (getParentActivity() != null) {
+                        if (Build.VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.CAMERA") == 0) {
+                            processOpenQrReader();
+                            return;
+                        }
+                        getParentActivity().requestPermissions(new String[]{"android.permission.CAMERA"}, 34);
+                        return;
+                    }
+                    return;
+                default:
+                    return;
             }
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$1(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$1$org-telegram-ui-ActionIntroActivity  reason: not valid java name */
+    public /* synthetic */ void m1339lambda$createView$1$orgtelegramuiActionIntroActivity(DialogInterface dialogInterface, int i) {
         presentFragment(new ChangePhoneActivity(), true);
     }
 
-    public void onLocationAddressAvailable(String str, String str2, Location location) {
+    public void onLocationAddressAvailable(String address, String displayAddress, Location location) {
         TextView textView = this.subtitleTextView;
         if (textView != null) {
-            textView.setText(str);
-            this.currentGroupCreateAddress = str;
-            this.currentGroupCreateDisplayAddress = str2;
+            textView.setText(address);
+            this.currentGroupCreateAddress = address;
+            this.currentGroupCreateDisplayAddress = displayAddress;
             this.currentGroupCreateLocation = location;
         }
     }
 
     public void onResume() {
-        boolean z;
         super.onResume();
         if (this.currentType == 4) {
-            int i = Build.VERSION.SDK_INT;
-            if (i >= 28) {
-                z = ((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isLocationEnabled();
-            } else {
-                if (i >= 19) {
-                    try {
-                        if (Settings.Secure.getInt(ApplicationLoader.applicationContext.getContentResolver(), "location_mode", 0) == 0) {
-                            z = false;
-                        }
-                    } catch (Throwable th) {
-                        FileLog.e(th);
+            boolean enabled = true;
+            if (Build.VERSION.SDK_INT >= 28) {
+                enabled = ((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isLocationEnabled();
+            } else if (Build.VERSION.SDK_INT >= 19) {
+                try {
+                    boolean z = false;
+                    if (Settings.Secure.getInt(ApplicationLoader.applicationContext.getContentResolver(), "location_mode", 0) != 0) {
+                        z = true;
                     }
+                    enabled = z;
+                } catch (Throwable e) {
+                    FileLog.e(e);
                 }
-                z = true;
             }
-            if (z) {
+            if (enabled) {
                 presentFragment(new PeopleNearbyActivity(), true);
+            }
+        }
+    }
+
+    private void showPermissionAlert(boolean byButton) {
+        if (getParentActivity() != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            builder.setTitle(LocaleController.getString("AppName", NUM));
+            builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", NUM));
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new ActionIntroActivity$$ExternalSyntheticLambda3(this));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+            showDialog(builder.create());
+        }
+    }
+
+    /* renamed from: lambda$showPermissionAlert$3$org-telegram-ui-ActionIntroActivity  reason: not valid java name */
+    public /* synthetic */ void m1344lambda$showPermissionAlert$3$orgtelegramuiActionIntroActivity(DialogInterface dialog, int which) {
+        if (getParentActivity() != null) {
+            try {
+                Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+                intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
+                getParentActivity().startActivity(intent);
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
             }
         }
     }
@@ -746,37 +758,37 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         }
     }
 
-    public void setGroupCreateAddress(String str, String str2, Location location) {
-        this.currentGroupCreateAddress = str;
-        this.currentGroupCreateDisplayAddress = str2;
+    public void setGroupCreateAddress(String address, String displayAddress, Location location) {
+        this.currentGroupCreateAddress = address;
+        this.currentGroupCreateDisplayAddress = displayAddress;
         this.currentGroupCreateLocation = location;
-        if (location != null && str == null) {
+        if (location != null && address == null) {
             LocationController.fetchLocationAddress(location, this);
         }
     }
 
-    public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
+    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
         if (getParentActivity() != null) {
-            if (i == 2) {
-                if (iArr != null && iArr.length != 0) {
-                    if (iArr[0] != 0) {
+            if (requestCode == 2) {
+                if (grantResults != null && grantResults.length != 0) {
+                    if (grantResults[0] != 0) {
                         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", NUM));
-                        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new ActionIntroActivity$$ExternalSyntheticLambda0(this));
+                        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new ActionIntroActivity$$ExternalSyntheticLambda1(this));
                         builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
                         showDialog(builder.create());
                         return;
                     }
-                    AndroidUtilities.runOnUIThread(new ActionIntroActivity$$ExternalSyntheticLambda5(this));
+                    AndroidUtilities.runOnUIThread(new ActionIntroActivity$$ExternalSyntheticLambda6(this));
                 }
-            } else if (i != 34) {
+            } else if (requestCode != 34) {
             } else {
-                if (iArr.length <= 0 || iArr[0] != 0) {
+                if (grantResults.length <= 0 || grantResults[0] != 0) {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
                     builder2.setTitle(LocaleController.getString("AppName", NUM));
                     builder2.setMessage(LocaleController.getString("QRCodePermissionNoCamera", NUM));
-                    builder2.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new ActionIntroActivity$$ExternalSyntheticLambda1(this));
+                    builder2.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new ActionIntroActivity$$ExternalSyntheticLambda2(this));
                     builder2.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
                     builder2.show();
                     return;
@@ -786,8 +798,8 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$4(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$onRequestPermissionsResultFragment$4$org-telegram-ui-ActionIntroActivity  reason: not valid java name */
+    public /* synthetic */ void m1341xedf1var_(DialogInterface dialog, int which) {
         if (getParentActivity() != null) {
             try {
                 Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
@@ -799,13 +811,13 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$5() {
+    /* renamed from: lambda$onRequestPermissionsResultFragment$5$org-telegram-ui-ActionIntroActivity  reason: not valid java name */
+    public /* synthetic */ void m1342x199c7da() {
         presentFragment(new PeopleNearbyActivity(), true);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$6(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$onRequestPermissionsResultFragment$6$org-telegram-ui-ActionIntroActivity  reason: not valid java name */
+    public /* synthetic */ void m1343x15419b5b(DialogInterface dialog, int which) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -825,38 +837,45 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 CameraScanActivity.CameraScanActivityDelegate.CC.$default$didFindMrzInfo(this, result);
             }
 
-            public void didFindQr(String str) {
+            public void didFindQr(String text) {
                 ActionIntroActivity.this.finishFragment(false);
-                ActionIntroActivity.this.qrLoginDelegate.didFindQRCode(str);
+                ActionIntroActivity.this.qrLoginDelegate.didFindQRCode(text);
             }
         });
     }
 
+    public int getType() {
+        return this.currentType;
+    }
+
+    public void setShowingAsBottomSheet(boolean showingAsBottomSheet2) {
+        this.showingAsBottomSheet = showingAsBottomSheet2;
+    }
+
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        ActionIntroActivity$$ExternalSyntheticLambda6 actionIntroActivity$$ExternalSyntheticLambda6 = new ActionIntroActivity$$ExternalSyntheticLambda6(this);
-        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, actionIntroActivity$$ExternalSyntheticLambda6, "windowBackgroundWhite"));
+        ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
+        ThemeDescription.ThemeDescriptionDelegate delegate = new ActionIntroActivity$$ExternalSyntheticLambda7(this);
+        themeDescriptions.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, delegate, "windowBackgroundWhite"));
         if (this.actionBar != null) {
-            arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
-            arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
-            arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarWhiteSelector"));
+            themeDescriptions.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
+            themeDescriptions.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+            themeDescriptions.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarWhiteSelector"));
         }
-        ActionIntroActivity$$ExternalSyntheticLambda6 actionIntroActivity$$ExternalSyntheticLambda62 = actionIntroActivity$$ExternalSyntheticLambda6;
-        arrayList.add(new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, actionIntroActivity$$ExternalSyntheticLambda62, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(this.subtitleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(this.descriptionText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
-        arrayList.add(new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_buttonText"));
-        arrayList.add(new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, (Class[]) null, (Paint) null, (Drawable[]) null, actionIntroActivity$$ExternalSyntheticLambda62, "featuredStickers_addButton"));
-        arrayList.add(new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addButtonPressed"));
-        arrayList.add(new ThemeDescription(this.desctiptionLines[0], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(this.desctiptionLines[1], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(this.desctiptionLines[1], ThemeDescription.FLAG_LINKCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteLinkText"));
-        arrayList.add(new ThemeDescription(this.desctiptionLines[2], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(this.desctiptionLines[3], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(this.desctiptionLines[4], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription(this.desctiptionLines[5], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, new Drawable[]{this.drawable1}, (ThemeDescription.ThemeDescriptionDelegate) null, "changephoneinfo_image"));
-        arrayList.add(new ThemeDescription((View) null, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, new Drawable[]{this.drawable2}, (ThemeDescription.ThemeDescriptionDelegate) null, "changephoneinfo_image2"));
-        return arrayList;
+        themeDescriptions.add(new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, delegate, "windowBackgroundWhiteBlackText"));
+        themeDescriptions.add(new ThemeDescription(this.subtitleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        themeDescriptions.add(new ThemeDescription(this.descriptionText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+        themeDescriptions.add(new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_buttonText"));
+        themeDescriptions.add(new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, (Class[]) null, (Paint) null, (Drawable[]) null, delegate, "featuredStickers_addButton"));
+        themeDescriptions.add(new ThemeDescription(this.buttonTextView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addButtonPressed"));
+        themeDescriptions.add(new ThemeDescription(this.desctiptionLines[0], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        themeDescriptions.add(new ThemeDescription(this.desctiptionLines[1], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        themeDescriptions.add(new ThemeDescription(this.desctiptionLines[1], ThemeDescription.FLAG_LINKCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteLinkText"));
+        themeDescriptions.add(new ThemeDescription(this.desctiptionLines[2], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        themeDescriptions.add(new ThemeDescription(this.desctiptionLines[3], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        themeDescriptions.add(new ThemeDescription(this.desctiptionLines[4], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        themeDescriptions.add(new ThemeDescription(this.desctiptionLines[5], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        themeDescriptions.add(new ThemeDescription((View) null, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, new Drawable[]{this.drawable1}, (ThemeDescription.ThemeDescriptionDelegate) null, "changephoneinfo_image"));
+        themeDescriptions.add(new ThemeDescription((View) null, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, new Drawable[]{this.drawable2}, (ThemeDescription.ThemeDescriptionDelegate) null, "changephoneinfo_image2"));
+        return themeDescriptions;
     }
 }

@@ -1,23 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_editMessage;
-import org.telegram.ui.ActionBar.BaseFragment;
+public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda88 implements Runnable {
+    public final /* synthetic */ String f$0;
+    public final /* synthetic */ AccountInstance f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ int f$4;
 
-public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda88 implements RequestDelegate {
-    public final /* synthetic */ SendMessagesHelper f$0;
-    public final /* synthetic */ BaseFragment f$1;
-    public final /* synthetic */ TLRPC$TL_messages_editMessage f$2;
-
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda88(SendMessagesHelper sendMessagesHelper, BaseFragment baseFragment, TLRPC$TL_messages_editMessage tLRPC$TL_messages_editMessage) {
-        this.f$0 = sendMessagesHelper;
-        this.f$1 = baseFragment;
-        this.f$2 = tLRPC$TL_messages_editMessage;
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda88(String str, AccountInstance accountInstance, long j, boolean z, int i) {
+        this.f$0 = str;
+        this.f$1 = accountInstance;
+        this.f$2 = j;
+        this.f$3 = z;
+        this.f$4 = i;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$editMessage$16(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+    public final void run() {
+        Utilities.stageQueue.postRunnable(new SendMessagesHelper$$ExternalSyntheticLambda77(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4));
     }
 }

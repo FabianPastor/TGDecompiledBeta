@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPStatusTextView$1$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$onAnimationEnd$0();
+        this.f$0.m2773x82fvar_c2();
     }
 }

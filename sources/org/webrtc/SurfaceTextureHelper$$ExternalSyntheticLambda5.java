@@ -10,6 +10,6 @@ public final /* synthetic */ class SurfaceTextureHelper$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$setFrameRotation$4(this.f$1);
+        this.f$0.m4116lambda$setFrameRotation$4$orgwebrtcSurfaceTextureHelper(this.f$1);
     }
 }

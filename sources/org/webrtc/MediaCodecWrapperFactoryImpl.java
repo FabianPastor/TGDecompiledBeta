@@ -1,6 +1,5 @@
 package org.webrtc;
 
-import android.annotation.TargetApi;
 import android.media.MediaCodec;
 import android.media.MediaCrypto;
 import android.media.MediaFormat;
@@ -20,8 +19,8 @@ class MediaCodecWrapperFactoryImpl implements MediaCodecWrapperFactory {
             this.mediaCodec = mediaCodec2;
         }
 
-        public void configure(MediaFormat mediaFormat, Surface surface, MediaCrypto mediaCrypto, int i) {
-            this.mediaCodec.configure(mediaFormat, surface, mediaCrypto, i);
+        public void configure(MediaFormat format, Surface surface, MediaCrypto crypto, int flags) {
+            this.mediaCodec.configure(format, surface, crypto, flags);
         }
 
         public void start() {
@@ -40,20 +39,20 @@ class MediaCodecWrapperFactoryImpl implements MediaCodecWrapperFactory {
             this.mediaCodec.release();
         }
 
-        public int dequeueInputBuffer(long j) {
-            return this.mediaCodec.dequeueInputBuffer(j);
+        public int dequeueInputBuffer(long timeoutUs) {
+            return this.mediaCodec.dequeueInputBuffer(timeoutUs);
         }
 
-        public void queueInputBuffer(int i, int i2, int i3, long j, int i4) {
-            this.mediaCodec.queueInputBuffer(i, i2, i3, j, i4);
+        public void queueInputBuffer(int index, int offset, int size, long presentationTimeUs, int flags) {
+            this.mediaCodec.queueInputBuffer(index, offset, size, presentationTimeUs, flags);
         }
 
-        public int dequeueOutputBuffer(MediaCodec.BufferInfo bufferInfo, long j) {
-            return this.mediaCodec.dequeueOutputBuffer(bufferInfo, j);
+        public int dequeueOutputBuffer(MediaCodec.BufferInfo info, long timeoutUs) {
+            return this.mediaCodec.dequeueOutputBuffer(info, timeoutUs);
         }
 
-        public void releaseOutputBuffer(int i, boolean z) {
-            this.mediaCodec.releaseOutputBuffer(i, z);
+        public void releaseOutputBuffer(int index, boolean render) {
+            this.mediaCodec.releaseOutputBuffer(index, render);
         }
 
         public MediaFormat getOutputFormat() {
@@ -68,18 +67,16 @@ class MediaCodecWrapperFactoryImpl implements MediaCodecWrapperFactory {
             return this.mediaCodec.getOutputBuffers();
         }
 
-        @TargetApi(18)
         public Surface createInputSurface() {
             return this.mediaCodec.createInputSurface();
         }
 
-        @TargetApi(19)
-        public void setParameters(Bundle bundle) {
-            this.mediaCodec.setParameters(bundle);
+        public void setParameters(Bundle params) {
+            this.mediaCodec.setParameters(params);
         }
     }
 
-    public MediaCodecWrapper createByCodecName(String str) throws IOException {
-        return new MediaCodecWrapperImpl(MediaCodec.createByCodecName(str));
+    public MediaCodecWrapper createByCodecName(String name) throws IOException {
+        return new MediaCodecWrapperImpl(MediaCodec.createByCodecName(name));
     }
 }

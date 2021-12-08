@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import androidx.collection.LongSparseArray;
-import org.telegram.tgnet.TLRPC$TL_channelAdminLogEventsFilter;
-import org.telegram.ui.Components.AdminLogFilterAlert;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class ChannelAdminLogActivity$$ExternalSyntheticLambda11 implements AdminLogFilterAlert.AdminLogFilterAlertDelegate {
+public final /* synthetic */ class ChannelAdminLogActivity$$ExternalSyntheticLambda11 implements MessagesStorage.IntCallback {
     public final /* synthetic */ ChannelAdminLogActivity f$0;
 
     public /* synthetic */ ChannelAdminLogActivity$$ExternalSyntheticLambda11(ChannelAdminLogActivity channelAdminLogActivity) {
         this.f$0 = channelAdminLogActivity;
     }
 
-    public final void didSelectRights(TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter, LongSparseArray longSparseArray) {
-        this.f$0.lambda$createView$4(tLRPC$TL_channelAdminLogEventsFilter, longSparseArray);
+    public final void run(int i) {
+        this.f$0.m1612lambda$createView$7$orgtelegramuiChannelAdminLogActivity(i);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class Bulletin$ParentLayout$1$$ExternalSyntheticLam
     }
 
     public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.lambda$onFling$0(dynamicAnimation, z, f, f2);
+        this.f$0.m2030x7bd22355(dynamicAnimation, z, f, f2);
     }
 }

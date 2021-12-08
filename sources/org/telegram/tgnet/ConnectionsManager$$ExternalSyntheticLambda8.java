@@ -1,15 +1,18 @@
 package org.telegram.tgnet;
 
-public final /* synthetic */ class ConnectionsManager$$ExternalSyntheticLambda8 implements Runnable {
-    public final /* synthetic */ String f$0;
-    public final /* synthetic */ long f$1;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.Utilities;
 
-    public /* synthetic */ ConnectionsManager$$ExternalSyntheticLambda8(String str, long j) {
-        this.f$0 = str;
-        this.f$1 = j;
+public final /* synthetic */ class ConnectionsManager$$ExternalSyntheticLambda8 implements Runnable {
+    public final /* synthetic */ int f$0;
+    public final /* synthetic */ int f$1;
+
+    public /* synthetic */ ConnectionsManager$$ExternalSyntheticLambda8(int i, int i2) {
+        this.f$0 = i;
+        this.f$1 = i2;
     }
 
     public final void run() {
-        ConnectionsManager.lambda$getHostByName$11(this.f$0, this.f$1);
+        Utilities.stageQueue.postRunnable(new ConnectionsManager$$ExternalSyntheticLambda11(this.f$0, ApplicationLoader.isNetworkOnline(), this.f$1));
     }
 }

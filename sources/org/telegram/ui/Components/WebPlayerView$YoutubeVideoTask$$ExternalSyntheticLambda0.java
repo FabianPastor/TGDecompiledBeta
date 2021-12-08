@@ -11,6 +11,6 @@ public final /* synthetic */ class WebPlayerView$YoutubeVideoTask$$ExternalSynth
     }
 
     public final void onReceiveValue(Object obj) {
-        this.f$0.lambda$doInBackground$0((String) obj);
+        this.f$0.m2735x71466fab((String) obj);
     }
 }

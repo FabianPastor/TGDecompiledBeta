@@ -12,6 +12,6 @@ public final /* synthetic */ class MentionsAdapter$$ExternalSyntheticLambda2 imp
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$processFoundUser$4(this.f$1, dialogInterface);
+        this.f$0.m1376xecfbcccc(this.f$1, dialogInterface);
     }
 }

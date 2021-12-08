@@ -1,19 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.ActionBar.ActionBarMenuItem;
-import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda86 implements ActionBarMenuItem.ActionBarMenuItemDelegate {
-    public final /* synthetic */ AlertsCreator.ScheduleDatePickerDelegate f$0;
-    public final /* synthetic */ BottomSheet.Builder f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda86 implements RequestDelegate {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda86 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda86();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda86(AlertsCreator.ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder) {
-        this.f$0 = scheduleDatePickerDelegate;
-        this.f$1 = builder;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda86() {
     }
 
-    public final void onItemClick(int i) {
-        AlertsCreator.lambda$createScheduleDatePickerDialog$42(this.f$0, this.f$1, i);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        AlertsCreator.lambda$createChangeNameAlert$26(tLObject, tL_error);
     }
 }

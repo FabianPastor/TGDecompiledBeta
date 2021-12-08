@@ -1,22 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_help_promoData;
-import org.telegram.tgnet.TLRPC$TL_messages_peerDialogs;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda156 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda156 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$TL_help_promoData f$1;
-    public final /* synthetic */ TLRPC$TL_messages_peerDialogs f$2;
-    public final /* synthetic */ long f$3;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda156(MessagesController messagesController, TLRPC$TL_help_promoData tLRPC$TL_help_promoData, TLRPC$TL_messages_peerDialogs tLRPC$TL_messages_peerDialogs, long j) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda156(MessagesController messagesController, int i) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$TL_help_promoData;
-        this.f$2 = tLRPC$TL_messages_peerDialogs;
-        this.f$3 = j;
+        this.f$1 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$checkPromoInfoInternal$125(this.f$1, this.f$2, this.f$3);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m288xd631356a(this.f$1, tLObject, tL_error);
     }
 }

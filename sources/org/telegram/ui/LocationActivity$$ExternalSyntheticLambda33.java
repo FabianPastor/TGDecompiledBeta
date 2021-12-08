@@ -1,18 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$TL_messageMediaGeo;
-import org.telegram.ui.Components.AlertsCreator;
+import android.view.View;
 
-public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda33 implements AlertsCreator.ScheduleDatePickerDelegate {
+public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda33 implements View.OnClickListener {
     public final /* synthetic */ LocationActivity f$0;
-    public final /* synthetic */ TLRPC$TL_messageMediaGeo f$1;
 
-    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda33(LocationActivity locationActivity, TLRPC$TL_messageMediaGeo tLRPC$TL_messageMediaGeo) {
+    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda33(LocationActivity locationActivity) {
         this.f$0 = locationActivity;
-        this.f$1 = tLRPC$TL_messageMediaGeo;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$createView$12(this.f$1, z, i);
+    public final void onClick(View view) {
+        this.f$0.m3145lambda$createView$0$orgtelegramuiLocationActivity(view);
     }
 }

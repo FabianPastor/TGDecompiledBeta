@@ -1,17 +1,25 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
+import androidx.collection.LongSparseArray;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda88 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
+    public final /* synthetic */ LongSparseArray f$1;
+    public final /* synthetic */ LongSparseArray f$2;
+    public final /* synthetic */ long f$3;
+    public final /* synthetic */ boolean f$4;
+    public final /* synthetic */ Runnable f$5;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda88(MediaDataController mediaDataController, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda88(MediaDataController mediaDataController, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, long j, boolean z, Runnable runnable) {
         this.f$0 = mediaDataController;
-        this.f$1 = tLRPC$TL_messages_stickerSet;
+        this.f$1 = longSparseArray;
+        this.f$2 = longSparseArray2;
+        this.f$3 = j;
+        this.f$4 = z;
+        this.f$5 = runnable;
     }
 
     public final void run() {
-        this.f$0.lambda$putSetToCache$13(this.f$1);
+        this.f$0.m840x1CLASSNAMEf1c(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

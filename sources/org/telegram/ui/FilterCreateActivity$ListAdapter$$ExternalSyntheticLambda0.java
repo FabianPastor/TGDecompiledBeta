@@ -14,6 +14,6 @@ public final /* synthetic */ class FilterCreateActivity$ListAdapter$$ExternalSyn
     }
 
     public final void onFocusChange(View view, boolean z) {
-        this.f$0.lambda$onCreateViewHolder$0(this.f$1, view, z);
+        this.f$0.m2919x999fa0b5(this.f$1, view, z);
     }
 }

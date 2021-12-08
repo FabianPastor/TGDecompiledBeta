@@ -11,6 +11,6 @@ public final /* synthetic */ class LocationActivityAdapter$1$$ExternalSyntheticL
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$animate$0(valueAnimator);
+        this.f$0.m1372xea544fb9(valueAnimator);
     }
 }

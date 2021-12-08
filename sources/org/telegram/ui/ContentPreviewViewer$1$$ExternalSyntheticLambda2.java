@@ -11,6 +11,6 @@ public final /* synthetic */ class ContentPreviewViewer$1$$ExternalSyntheticLamb
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$run$5(dialogInterface);
+        this.f$0.m2797lambda$run$2$orgtelegramuiContentPreviewViewer$1(dialogInterface);
     }
 }

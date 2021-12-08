@@ -14,6 +14,6 @@ public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda3 implement
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$new$4(this.f$1, view, motionEvent);
+        return this.f$0.m2242lambda$new$1$orgtelegramuiComponentsEmojiView(this.f$1, view, motionEvent);
     }
 }

@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda16 implements Runnable {
-    public final /* synthetic */ ThemePreviewActivity f$0;
-    public final /* synthetic */ TLObject f$1;
+public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda16 implements RecyclerListView.OnItemClickListener {
+    public static final /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda16 INSTANCE = new ThemePreviewActivity$$ExternalSyntheticLambda16();
 
-    public /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda16(ThemePreviewActivity themePreviewActivity, TLObject tLObject) {
-        this.f$0 = themePreviewActivity;
-        this.f$1 = tLObject;
+    private /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda16() {
     }
 
-    public final void run() {
-        this.f$0.lambda$didReceivedNotification$23(this.f$1);
+    public final void onItemClick(View view, int i) {
+        ThemePreviewActivity.lambda$createView$1(view, i);
     }
 }

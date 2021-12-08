@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda0 implem
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$new$1(valueAnimator);
+        this.f$0.m4052lambda$new$0$orgtelegramuiVoIPFragment(valueAnimator);
     }
 }

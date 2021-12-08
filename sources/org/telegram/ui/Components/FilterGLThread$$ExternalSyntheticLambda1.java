@@ -8,6 +8,6 @@ public final /* synthetic */ class FilterGLThread$$ExternalSyntheticLambda1 impl
     }
 
     public final void run() {
-        this.f$0.lambda$initGL$2();
+        this.f$0.m2275lambda$initGL$2$orgtelegramuiComponentsFilterGLThread();
     }
 }

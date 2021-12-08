@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatActivityEnterView$22$1$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.lambda$onDraw$0(this.f$1, this.f$2);
+        this.f$0.m2086x96d83e44(this.f$1, this.f$2);
     }
 }

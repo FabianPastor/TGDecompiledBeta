@@ -1,17 +1,17 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda61 implements Runnable {
-    public final /* synthetic */ PassportActivity f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ String f$2;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda61(PassportActivity passportActivity, boolean z, String str) {
+public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda61 implements RequestDelegate {
+    public final /* synthetic */ PassportActivity f$0;
+
+    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda61(PassportActivity passportActivity) {
         this.f$0 = passportActivity;
-        this.f$1 = z;
-        this.f$2 = str;
     }
 
-    public final void run() {
-        this.f$0.lambda$onPasswordDone$13(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m3414lambda$loadPasswordInfo$4$orgtelegramuiPassportActivity(tLObject, tL_error);
     }
 }

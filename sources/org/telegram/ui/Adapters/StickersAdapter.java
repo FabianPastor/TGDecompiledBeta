@@ -13,8 +13,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.EmojiReplacementCell;
 import org.telegram.ui.Components.RecyclerListView;
@@ -34,19 +33,11 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         void needChangePanelVisibility(boolean z);
     }
 
-    public int getItemViewType(int i) {
-        return 0;
-    }
-
-    public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-        return false;
-    }
-
-    public StickersAdapter(Context context, StickersAdapterDelegate stickersAdapterDelegate, Theme.ResourcesProvider resourcesProvider2) {
+    public StickersAdapter(Context context, StickersAdapterDelegate delegate2, Theme.ResourcesProvider resourcesProvider2) {
         int i = UserConfig.selectedAccount;
         this.currentAccount = i;
         this.mContext = context;
-        this.delegate = stickersAdapterDelegate;
+        this.delegate = delegate2;
         this.resourcesProvider = resourcesProvider2;
         MediaDataController.getInstance(i).checkStickers(0);
         MediaDataController.getInstance(this.currentAccount).checkStickers(1);
@@ -57,8 +48,8 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.newEmojiSuggestionsAvailable);
     }
 
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.newEmojiSuggestionsAvailable) {
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.newEmojiSuggestionsAvailable) {
             ArrayList<MediaDataController.KeywordResult> arrayList = this.keywordResults;
             if ((arrayList == null || arrayList.isEmpty()) && !TextUtils.isEmpty(this.lastSearch) && getItemCount() == 0) {
                 searchEmojiByKeyword();
@@ -83,14 +74,14 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
     }
 
     private void searchEmojiByKeyword() {
-        String[] currentKeyboardLanguage = AndroidUtilities.getCurrentKeyboardLanguage();
-        if (!Arrays.equals(currentKeyboardLanguage, this.lastSearchKeyboardLanguage)) {
-            MediaDataController.getInstance(this.currentAccount).fetchNewEmojiKeywords(currentKeyboardLanguage);
+        String[] newLanguage = AndroidUtilities.getCurrentKeyboardLanguage();
+        if (!Arrays.equals(newLanguage, this.lastSearchKeyboardLanguage)) {
+            MediaDataController.getInstance(this.currentAccount).fetchNewEmojiKeywords(newLanguage);
         }
-        this.lastSearchKeyboardLanguage = currentKeyboardLanguage;
-        String str = this.lastSearch;
+        this.lastSearchKeyboardLanguage = newLanguage;
+        String query = this.lastSearch;
         cancelEmojiSearch();
-        this.searchRunnable = new StickersAdapter$$ExternalSyntheticLambda0(this, str);
+        this.searchRunnable = new StickersAdapter$$ExternalSyntheticLambda0(this, query);
         ArrayList<MediaDataController.KeywordResult> arrayList = this.keywordResults;
         if (arrayList == null || arrayList.isEmpty()) {
             AndroidUtilities.runOnUIThread(this.searchRunnable, 1000);
@@ -99,59 +90,55 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$searchEmojiByKeyword$1(String str) {
-        MediaDataController.getInstance(this.currentAccount).getEmojiSuggestions(this.lastSearchKeyboardLanguage, str, true, new StickersAdapter$$ExternalSyntheticLambda1(this, str));
+    /* renamed from: lambda$searchEmojiByKeyword$1$org-telegram-ui-Adapters-StickersAdapter  reason: not valid java name */
+    public /* synthetic */ void m1399xf9CLASSNAMEf8c(String query) {
+        MediaDataController.getInstance(this.currentAccount).getEmojiSuggestions(this.lastSearchKeyboardLanguage, query, true, new StickersAdapter$$ExternalSyntheticLambda1(this, query));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$searchEmojiByKeyword$0(String str, ArrayList arrayList, String str2) {
-        if (str.equals(this.lastSearch)) {
-            if (!arrayList.isEmpty()) {
-                this.keywordResults = arrayList;
+    /* renamed from: lambda$searchEmojiByKeyword$0$org-telegram-ui-Adapters-StickersAdapter  reason: not valid java name */
+    public /* synthetic */ void m1398xvar_a6d(String query, ArrayList param, String alias) {
+        if (query.equals(this.lastSearch)) {
+            if (!param.isEmpty()) {
+                this.keywordResults = param;
             }
             notifyDataSetChanged();
             StickersAdapterDelegate stickersAdapterDelegate = this.delegate;
-            boolean z = !arrayList.isEmpty();
+            boolean z = !param.isEmpty();
             this.visible = z;
             stickersAdapterDelegate.needChangePanelVisibility(z);
         }
     }
 
-    public void searchEmojiByKeyword(CharSequence charSequence) {
-        String str;
+    public void searchEmojiByKeyword(CharSequence emoji) {
         ArrayList<MediaDataController.KeywordResult> arrayList;
-        TLRPC$Document emojiAnimatedSticker;
-        boolean z = charSequence != null && charSequence.length() > 0 && charSequence.length() <= 14;
-        if (z) {
-            str = charSequence.toString();
-            int length = charSequence.length();
-            int i = 0;
-            while (i < length) {
-                char charAt = charSequence.charAt(i);
-                int i2 = length - 1;
-                char charAt2 = i < i2 ? charSequence.charAt(i + 1) : 0;
-                if (i < i2 && charAt == 55356 && charAt2 >= 57339 && charAt2 <= 57343) {
-                    charSequence = TextUtils.concat(new CharSequence[]{charSequence.subSequence(0, i), charSequence.subSequence(i + 2, charSequence.length())});
+        TLRPC.Document animatedSticker;
+        boolean searchEmoji = emoji != null && emoji.length() > 0 && emoji.length() <= 14;
+        String originalEmoji = "";
+        if (searchEmoji) {
+            originalEmoji = emoji.toString();
+            int length = emoji.length();
+            int a = 0;
+            while (a < length) {
+                char ch = emoji.charAt(a);
+                char nch = a < length + -1 ? emoji.charAt(a + 1) : 0;
+                if (a < length - 1 && ch == 55356 && nch >= 57339 && nch <= 57343) {
+                    emoji = TextUtils.concat(new CharSequence[]{emoji.subSequence(0, a), emoji.subSequence(a + 2, emoji.length())});
                     length -= 2;
-                } else if (charAt == 65039) {
-                    charSequence = TextUtils.concat(new CharSequence[]{charSequence.subSequence(0, i), charSequence.subSequence(i + 1, charSequence.length())});
+                    a--;
+                } else if (ch == 65039) {
+                    emoji = TextUtils.concat(new CharSequence[]{emoji.subSequence(0, a), emoji.subSequence(a + 1, emoji.length())});
                     length--;
-                } else {
-                    i++;
+                    a--;
                 }
-                i--;
-                i++;
+                a++;
             }
-        } else {
-            str = "";
         }
-        this.lastSearch = charSequence.toString().trim();
-        boolean z2 = z && (Emoji.isValidEmoji(str) || Emoji.isValidEmoji(this.lastSearch));
-        if (z2 && (emojiAnimatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(charSequence)) != null) {
-            ArrayList<TLRPC$TL_messages_stickerSet> stickerSets = MediaDataController.getInstance(this.currentAccount).getStickerSets(4);
-            if (!FileLoader.getPathToAttach(emojiAnimatedSticker, true).exists()) {
-                FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForDocument(emojiAnimatedSticker), stickerSets.get(0), (String) null, 1, 1);
+        this.lastSearch = emoji.toString().trim();
+        boolean isValidEmoji = searchEmoji && (Emoji.isValidEmoji(originalEmoji) || Emoji.isValidEmoji(this.lastSearch));
+        if (isValidEmoji && (animatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(emoji)) != null) {
+            ArrayList<TLRPC.TL_messages_stickerSet> sets = MediaDataController.getInstance(this.currentAccount).getStickerSets(4);
+            if (!FileLoader.getPathToAttach(animatedSticker, true).exists()) {
+                FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForDocument(animatedSticker), sets.get(0), (String) null, 1, 1);
             }
         }
         if (this.visible && ((arrayList = this.keywordResults) == null || arrayList.isEmpty())) {
@@ -159,7 +146,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
             this.delegate.needChangePanelVisibility(false);
             notifyDataSetChanged();
         }
-        if (!z2) {
+        if (!isValidEmoji) {
             searchEmojiByKeyword();
             return;
         }
@@ -198,17 +185,29 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         return this.keywordResults.get(i).emoji;
     }
 
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public boolean isEnabled(RecyclerView.ViewHolder holder) {
+        return false;
+    }
+
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         return new RecyclerListView.Holder(new EmojiReplacementCell(this.mContext, this.resourcesProvider));
     }
 
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-        int i2 = 1;
-        if (i == 0) {
-            i2 = this.keywordResults.size() == 1 ? 2 : -1;
-        } else if (i != this.keywordResults.size() - 1) {
-            i2 = 0;
+    public int getItemViewType(int position) {
+        return 0;
+    }
+
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        int side = 0;
+        if (position == 0) {
+            if (this.keywordResults.size() == 1) {
+                side = 2;
+            } else {
+                side = -1;
+            }
+        } else if (position == this.keywordResults.size() - 1) {
+            side = 1;
         }
-        ((EmojiReplacementCell) viewHolder.itemView).setEmoji(this.keywordResults.get(i).emoji, i2);
+        ((EmojiReplacementCell) holder.itemView).setEmoji(this.keywordResults.get(position).emoji, side);
     }
 }

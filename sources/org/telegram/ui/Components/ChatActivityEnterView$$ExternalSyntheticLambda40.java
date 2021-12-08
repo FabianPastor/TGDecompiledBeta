@@ -1,13 +1,15 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda40 implements Runnable {
+import org.telegram.ui.Components.AlertsCreator;
+
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda40 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ ChatActivityEnterView f$0;
 
     public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda40(ChatActivityEnterView chatActivityEnterView) {
         this.f$0 = chatActivityEnterView;
     }
 
-    public final void run() {
-        this.f$0.lambda$setFieldFocused$40();
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.sendMessageInternal(z, i);
     }
 }

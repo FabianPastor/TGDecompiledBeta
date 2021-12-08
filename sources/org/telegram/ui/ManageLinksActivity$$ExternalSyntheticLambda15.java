@@ -1,19 +1,22 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ManageLinksActivity$$ExternalSyntheticLambda15 implements ThemeDescription.ThemeDescriptionDelegate {
+public final /* synthetic */ class ManageLinksActivity$$ExternalSyntheticLambda15 implements Runnable {
     public final /* synthetic */ ManageLinksActivity f$0;
+    public final /* synthetic */ TLRPC.TL_error f$1;
+    public final /* synthetic */ TLObject f$2;
+    public final /* synthetic */ TLRPC.TL_chatInviteExported f$3;
 
-    public /* synthetic */ ManageLinksActivity$$ExternalSyntheticLambda15(ManageLinksActivity manageLinksActivity) {
+    public /* synthetic */ ManageLinksActivity$$ExternalSyntheticLambda15(ManageLinksActivity manageLinksActivity, TLRPC.TL_error tL_error, TLObject tLObject, TLRPC.TL_chatInviteExported tL_chatInviteExported) {
         this.f$0 = manageLinksActivity;
+        this.f$1 = tL_error;
+        this.f$2 = tLObject;
+        this.f$3 = tL_chatInviteExported;
     }
 
-    public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$17();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final void run() {
+        this.f$0.m3286lambda$revokePermanent$11$orgtelegramuiManageLinksActivity(this.f$1, this.f$2, this.f$3);
     }
 }

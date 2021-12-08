@@ -8,6 +8,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda24 implem
     }
 
     public final void run() {
-        this.f$0.lambda$callFailed$79();
+        this.f$0.m1264x93d45183();
     }
 }

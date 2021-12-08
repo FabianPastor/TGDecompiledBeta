@@ -12,6 +12,6 @@ public final /* synthetic */ class LocationController$$ExternalSyntheticLambda0 
     }
 
     public final void onResult(Result result) {
-        this.f$0.lambda$onConnected$4((LocationSettingsResult) result);
+        this.f$0.m737lambda$onConnected$4$orgtelegrammessengerLocationController((LocationSettingsResult) result);
     }
 }

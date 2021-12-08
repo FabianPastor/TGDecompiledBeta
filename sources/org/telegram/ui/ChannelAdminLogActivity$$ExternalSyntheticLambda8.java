@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesStorage;
+import android.view.MotionEvent;
+import android.view.View;
 
-public final /* synthetic */ class ChannelAdminLogActivity$$ExternalSyntheticLambda8 implements MessagesStorage.IntCallback {
-    public final /* synthetic */ ChannelAdminLogActivity f$0;
+public final /* synthetic */ class ChannelAdminLogActivity$$ExternalSyntheticLambda8 implements View.OnTouchListener {
+    public static final /* synthetic */ ChannelAdminLogActivity$$ExternalSyntheticLambda8 INSTANCE = new ChannelAdminLogActivity$$ExternalSyntheticLambda8();
 
-    public /* synthetic */ ChannelAdminLogActivity$$ExternalSyntheticLambda8(ChannelAdminLogActivity channelAdminLogActivity) {
-        this.f$0 = channelAdminLogActivity;
+    private /* synthetic */ ChannelAdminLogActivity$$ExternalSyntheticLambda8() {
     }
 
-    public final void run(int i) {
-        this.f$0.lambda$createView$7(i);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ChannelAdminLogActivity.lambda$createView$2(view, motionEvent);
     }
 }

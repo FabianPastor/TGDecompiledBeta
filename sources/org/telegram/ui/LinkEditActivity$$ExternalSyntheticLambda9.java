@@ -1,19 +1,20 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda9 implements ThemeDescription.ThemeDescriptionDelegate {
+public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda9 implements Runnable {
     public final /* synthetic */ LinkEditActivity f$0;
+    public final /* synthetic */ TLRPC.TL_error f$1;
+    public final /* synthetic */ TLObject f$2;
 
-    public /* synthetic */ LinkEditActivity$$ExternalSyntheticLambda9(LinkEditActivity linkEditActivity) {
+    public /* synthetic */ LinkEditActivity$$ExternalSyntheticLambda9(LinkEditActivity linkEditActivity, TLRPC.TL_error tL_error, TLObject tLObject) {
         this.f$0 = linkEditActivity;
+        this.f$1 = tL_error;
+        this.f$2 = tLObject;
     }
 
-    public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$11();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final void run() {
+        this.f$0.m3143lambda$onCreateClicked$9$orgtelegramuiLinkEditActivity(this.f$1, this.f$2);
     }
 }

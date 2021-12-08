@@ -14,6 +14,6 @@ public final /* synthetic */ class NativeInstance$$ExternalSyntheticLambda3 impl
     }
 
     public final void run() {
-        this.f$0.lambda$onAudioLevelsUpdated$1(this.f$1, this.f$2, this.f$3);
+        this.f$0.m1190xCLASSNAMEa3e1(this.f$1, this.f$2, this.f$3);
     }
 }

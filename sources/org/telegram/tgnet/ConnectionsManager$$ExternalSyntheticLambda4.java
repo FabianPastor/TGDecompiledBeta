@@ -1,18 +1,17 @@
 package org.telegram.tgnet;
 
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.Utilities;
+public final /* synthetic */ class ConnectionsManager$$ExternalSyntheticLambda4 implements RequestDelegateInternal {
+    public final /* synthetic */ TLObject f$0;
+    public final /* synthetic */ RequestDelegate f$1;
+    public final /* synthetic */ RequestDelegateTimestamp f$2;
 
-public final /* synthetic */ class ConnectionsManager$$ExternalSyntheticLambda4 implements Runnable {
-    public final /* synthetic */ int f$0;
-    public final /* synthetic */ int f$1;
-
-    public /* synthetic */ ConnectionsManager$$ExternalSyntheticLambda4(int i, int i2) {
-        this.f$0 = i;
-        this.f$1 = i2;
+    public /* synthetic */ ConnectionsManager$$ExternalSyntheticLambda4(TLObject tLObject, RequestDelegate requestDelegate, RequestDelegateTimestamp requestDelegateTimestamp) {
+        this.f$0 = tLObject;
+        this.f$1 = requestDelegate;
+        this.f$2 = requestDelegateTimestamp;
     }
 
-    public final void run() {
-        Utilities.stageQueue.postRunnable(new ConnectionsManager$$ExternalSyntheticLambda7(this.f$0, ApplicationLoader.isNetworkOnline(), this.f$1));
+    public final void run(long j, int i, String str, int i2, long j2) {
+        ConnectionsManager.lambda$sendRequest$1(this.f$0, this.f$1, this.f$2, j, i, str, i2, j2);
     }
 }

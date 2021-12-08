@@ -1,19 +1,20 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.Theme;
+import org.telegram.messenger.MessageObject;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda74 implements Runnable {
-    public final /* synthetic */ Theme.ThemeAccent f$0;
-    public final /* synthetic */ Theme.ThemeInfo f$1;
-    public final /* synthetic */ boolean f$2;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda74 implements AlertsCreator.ScheduleDatePickerDelegate {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ MessageObject.GroupedMessages f$1;
+    public final /* synthetic */ MessageObject f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda74(Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, boolean z) {
-        this.f$0 = themeAccent;
-        this.f$1 = themeInfo;
-        this.f$2 = z;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda74(ChatActivity chatActivity, MessageObject.GroupedMessages groupedMessages, MessageObject messageObject) {
+        this.f$0 = chatActivity;
+        this.f$1 = groupedMessages;
+        this.f$2 = messageObject;
     }
 
-    public final void run() {
-        ChatActivity.lambda$didReceivedNotification$98(this.f$0, this.f$1, this.f$2);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.m1782lambda$processSelectedOption$146$orgtelegramuiChatActivity(this.f$1, this.f$2, z, i);
     }
 }

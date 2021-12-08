@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$ChatActivityAdapter$1$$ExternalS
     }
 
     public final void run() {
-        this.f$0.lambda$appendMention$1();
+        this.f$0.m1854x32941312();
     }
 }

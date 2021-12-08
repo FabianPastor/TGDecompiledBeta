@@ -1,15 +1,16 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda51 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ String f$1;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda51(MediaDataController mediaDataController, String str) {
-        this.f$0 = mediaDataController;
-        this.f$1 = str;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda51 implements RequestDelegate {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda51 INSTANCE = new MediaDataController$$ExternalSyntheticLambda51();
+
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda51() {
     }
 
-    public final void run() {
-        this.f$0.lambda$putEmojiKeywords$143(this.f$1);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        MediaDataController.lambda$markFaturedStickersByIdAsRead$31(tLObject, tL_error);
     }
 }

@@ -12,7 +12,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC$RecentMeUrl;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -24,11 +24,6 @@ public class DialogsEmptyCell extends LinearLayout {
     private TextView emptyTextView1;
     private TextView emptyTextView2;
     private RLottieImageView imageView;
-
-    /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
-        return true;
-    }
 
     public DialogsEmptyCell(Context context) {
         super(context);
@@ -49,11 +44,11 @@ public class DialogsEmptyCell extends LinearLayout {
         this.emptyTextView1.setGravity(17);
         addView(this.emptyTextView1, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 10.0f, 52.0f, 0.0f));
         this.emptyTextView2 = new TextView(context);
-        String string = LocaleController.getString("NoChatsHelp", NUM);
+        String help = LocaleController.getString("NoChatsHelp", NUM);
         if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
-            string = string.replace(10, ' ');
+            help = help.replace(10, ' ');
         }
-        this.emptyTextView2.setText(string);
+        this.emptyTextView2.setText(help);
         this.emptyTextView2.setTextColor(Theme.getColor("chats_message"));
         this.emptyTextView2.setTextSize(1, 14.0f);
         this.emptyTextView2.setGravity(17);
@@ -61,114 +56,64 @@ public class DialogsEmptyCell extends LinearLayout {
         addView(this.emptyTextView2, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 7.0f, 52.0f, 0.0f));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(View view) {
+    static /* synthetic */ boolean lambda$new$0(View v, MotionEvent event) {
+        return true;
+    }
+
+    /* renamed from: lambda$new$1$org-telegram-ui-Cells-DialogsEmptyCell  reason: not valid java name */
+    public /* synthetic */ void m1531lambda$new$1$orgtelegramuiCellsDialogsEmptyCell(View v) {
         if (!this.imageView.isPlaying()) {
             this.imageView.setProgress(0.0f);
             this.imageView.playAnimation();
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x007e  */
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x0090  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setType(int r6) {
-        /*
-            r5 = this;
-            int r0 = r5.currentType
-            if (r0 != r6) goto L_0x0005
-            return
-        L_0x0005:
-            r5.currentType = r6
-            r0 = 2131626500(0x7f0e0a04, float:1.8880238E38)
-            java.lang.String r1 = "NoChats"
-            r2 = 0
-            if (r6 != 0) goto L_0x0024
-            r6 = 2131626502(0x7f0e0a06, float:1.8880242E38)
-            java.lang.String r3 = "NoChatsHelp"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r3, r6)
-            android.widget.TextView r3 = r5.emptyTextView1
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r3.setText(r0)
-        L_0x0021:
-            r0 = r6
-            r6 = 0
-            goto L_0x007c
-        L_0x0024:
-            r3 = 1
-            if (r6 != r3) goto L_0x003a
-            r6 = 2131626501(0x7f0e0a05, float:1.888024E38)
-            java.lang.String r3 = "NoChatsContactsHelp"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r3, r6)
-            android.widget.TextView r3 = r5.emptyTextView1
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r3.setText(r0)
-            goto L_0x0021
-        L_0x003a:
-            r0 = 2
-            if (r6 != r0) goto L_0x005d
-            org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
-            r6.setAutoRepeat(r2)
-            r6 = 2131558437(0x7f0d0025, float:1.874219E38)
-            r0 = 2131625645(0x7f0e06ad, float:1.8878504E38)
-            java.lang.String r1 = "FilterNoChatsToDisplayInfo"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            android.widget.TextView r1 = r5.emptyTextView1
-            r3 = 2131625644(0x7f0e06ac, float:1.8878502E38)
-            java.lang.String r4 = "FilterNoChatsToDisplay"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r1.setText(r3)
-            goto L_0x007c
-        L_0x005d:
-            org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
-            r6.setAutoRepeat(r3)
-            r6 = 2131558436(0x7f0d0024, float:1.8742188E38)
-            r0 = 2131625600(0x7f0e0680, float:1.8878413E38)
-            java.lang.String r1 = "FilterAddingChatsInfo"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            android.widget.TextView r1 = r5.emptyTextView1
-            r3 = 2131625599(0x7f0e067f, float:1.887841E38)
-            java.lang.String r4 = "FilterAddingChats"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r1.setText(r3)
-        L_0x007c:
-            if (r6 == 0) goto L_0x0090
-            org.telegram.ui.Components.RLottieImageView r1 = r5.imageView
-            r1.setVisibility(r2)
-            org.telegram.ui.Components.RLottieImageView r1 = r5.imageView
-            r2 = 100
-            r1.setAnimation(r6, r2, r2)
-            org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
-            r6.playAnimation()
-            goto L_0x0097
-        L_0x0090:
-            org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
-            r1 = 8
-            r6.setVisibility(r1)
-        L_0x0097:
-            boolean r6 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r6 == 0) goto L_0x00ab
-            boolean r6 = org.telegram.messenger.AndroidUtilities.isSmallTablet()
-            if (r6 != 0) goto L_0x00ab
-            r6 = 10
-            r1 = 32
-            java.lang.String r0 = r0.replace(r6, r1)
-        L_0x00ab:
-            android.widget.TextView r6 = r5.emptyTextView2
-            r6.setText(r0)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DialogsEmptyCell.setType(int):void");
+    public void setType(int value) {
+        String help;
+        int icon;
+        if (this.currentType != value) {
+            this.currentType = value;
+            if (value == 0) {
+                icon = 0;
+                help = LocaleController.getString("NoChatsHelp", NUM);
+                this.emptyTextView1.setText(LocaleController.getString("NoChats", NUM));
+            } else if (value == 1) {
+                icon = 0;
+                help = LocaleController.getString("NoChatsContactsHelp", NUM);
+                this.emptyTextView1.setText(LocaleController.getString("NoChats", NUM));
+            } else if (value == 2) {
+                this.imageView.setAutoRepeat(false);
+                icon = NUM;
+                help = LocaleController.getString("FilterNoChatsToDisplayInfo", NUM);
+                this.emptyTextView1.setText(LocaleController.getString("FilterNoChatsToDisplay", NUM));
+            } else {
+                this.imageView.setAutoRepeat(true);
+                icon = NUM;
+                help = LocaleController.getString("FilterAddingChatsInfo", NUM);
+                this.emptyTextView1.setText(LocaleController.getString("FilterAddingChats", NUM));
+            }
+            if (icon != 0) {
+                this.imageView.setVisibility(0);
+                this.imageView.setAnimation(icon, 100, 100);
+                this.imageView.playAnimation();
+            } else {
+                this.imageView.setVisibility(8);
+            }
+            if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
+                help = help.replace(10, ' ');
+            }
+            this.emptyTextView2.setText(help);
+        }
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        super.onLayout(z, i, i2, i3, i4);
+    public void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
         updateLayout();
     }
 
-    public void offsetTopAndBottom(int i) {
-        super.offsetTopAndBottom(i);
+    public void offsetTopAndBottom(int offset) {
+        super.offsetTopAndBottom(offset);
         updateLayout();
     }
 
@@ -176,38 +121,38 @@ public class DialogsEmptyCell extends LinearLayout {
         if (getParent() instanceof View) {
             int i = this.currentType;
             if ((i == 2 || i == 3) && ((View) getParent()).getPaddingTop() != 0) {
-                float f = (float) (-(getTop() / 2));
-                this.imageView.setTranslationY(f);
-                this.emptyTextView1.setTranslationY(f);
-                this.emptyTextView2.setTranslationY(f);
+                int offset = -(getTop() / 2);
+                this.imageView.setTranslationY((float) offset);
+                this.emptyTextView1.setTranslationY((float) offset);
+                this.emptyTextView2.setTranslationY((float) offset);
             }
         }
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        int i3;
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int totalHeight;
         if (getParent() instanceof View) {
             View view = (View) getParent();
-            i3 = view.getMeasuredHeight();
+            totalHeight = view.getMeasuredHeight();
             if (view.getPaddingTop() != 0 && Build.VERSION.SDK_INT >= 21) {
-                i3 -= AndroidUtilities.statusBarHeight;
+                totalHeight -= AndroidUtilities.statusBarHeight;
             }
         } else {
-            i3 = View.MeasureSpec.getSize(i2);
+            totalHeight = View.MeasureSpec.getSize(heightMeasureSpec);
         }
-        if (i3 == 0) {
-            i3 = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+        if (totalHeight == 0) {
+            totalHeight = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
         }
-        int i4 = this.currentType;
-        if (i4 == 0 || i4 == 2 || i4 == 3) {
-            ArrayList<TLRPC$RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
+        int i = this.currentType;
+        if (i == 0 || i == 2 || i == 3) {
+            ArrayList<TLRPC.RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
             if (!arrayList.isEmpty()) {
-                i3 -= (((AndroidUtilities.dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.dp(50.0f);
+                totalHeight -= (((AndroidUtilities.dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.dp(50.0f);
             }
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(i3, NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(totalHeight, NUM));
             return;
         }
-        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(166.0f), NUM));
+        super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(166.0f), NUM));
     }
 }

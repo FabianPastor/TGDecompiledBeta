@@ -29,44 +29,36 @@ public class SearchField extends FrameLayout {
     public EditTextBoldCursor searchEditText;
     private ImageView searchIconImageView;
 
-    /* access modifiers changed from: protected */
-    public void onFieldTouchUp(EditTextBoldCursor editTextBoldCursor) {
-    }
-
-    public void onTextChange(String str) {
-    }
-
-    public void processTouchEvent(MotionEvent motionEvent) {
-    }
-
-    public SearchField(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public SearchField(Context context, boolean supportRtl, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
-        FrameLayout.LayoutParams layoutParams;
-        FrameLayout.LayoutParams layoutParams2;
-        FrameLayout.LayoutParams layoutParams3;
-        FrameLayout.LayoutParams layoutParams4;
+        FrameLayout.LayoutParams lp;
+        FrameLayout.LayoutParams lp2;
+        FrameLayout.LayoutParams lp3;
+        FrameLayout.LayoutParams lp4;
+        Context context2 = context;
         this.resourcesProvider = resourcesProvider2;
-        View view = new View(context);
+        View view = new View(context2);
         this.searchBackground = view;
         view.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), getThemedColor("dialogSearchBackground")));
-        if (z) {
-            layoutParams = LayoutHelper.createFrameRelatively(-1.0f, 36.0f, 8388659, 14.0f, 11.0f, 14.0f, 0.0f);
+        if (supportRtl) {
+            lp = LayoutHelper.createFrameRelatively(-1.0f, 36.0f, 8388659, 14.0f, 11.0f, 14.0f, 0.0f);
         } else {
-            layoutParams = LayoutHelper.createFrame(-1, 36.0f, 51, 14.0f, 11.0f, 14.0f, 0.0f);
+            lp = LayoutHelper.createFrame(-1, 36.0f, 51, 14.0f, 11.0f, 14.0f, 0.0f);
         }
-        addView(this.searchBackground, layoutParams);
-        ImageView imageView = new ImageView(context);
+        addView(this.searchBackground, lp);
+        ImageView imageView = new ImageView(context2);
         this.searchIconImageView = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.searchIconImageView.setImageResource(NUM);
         this.searchIconImageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogSearchIcon"), PorterDuff.Mode.MULTIPLY));
-        if (z) {
-            layoutParams2 = LayoutHelper.createFrameRelatively(36.0f, 36.0f, 8388659, 16.0f, 11.0f, 0.0f, 0.0f);
+        if (supportRtl) {
+            lp2 = LayoutHelper.createFrameRelatively(36.0f, 36.0f, 8388659, 16.0f, 11.0f, 0.0f, 0.0f);
         } else {
-            layoutParams2 = LayoutHelper.createFrame(36, 36.0f, 51, 16.0f, 11.0f, 0.0f, 0.0f);
+            lp2 = LayoutHelper.createFrame(36, 36.0f, 51, 16.0f, 11.0f, 0.0f, 0.0f);
         }
-        addView(this.searchIconImageView, layoutParams2);
-        ImageView imageView2 = new ImageView(context);
+        addView(this.searchIconImageView, lp2);
+        ImageView imageView2 = new ImageView(context2);
         this.clearSearchImageView = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
         ImageView imageView3 = this.clearSearchImageView;
@@ -78,31 +70,31 @@ public class SearchField extends FrameLayout {
         this.clearSearchImageView.setScaleY(0.1f);
         this.clearSearchImageView.setAlpha(0.0f);
         this.clearSearchImageView.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogSearchIcon"), PorterDuff.Mode.MULTIPLY));
-        if (z) {
-            layoutParams3 = LayoutHelper.createFrameRelatively(36.0f, 36.0f, 8388661, 14.0f, 11.0f, 14.0f, 0.0f);
+        if (supportRtl) {
+            lp3 = LayoutHelper.createFrameRelatively(36.0f, 36.0f, 8388661, 14.0f, 11.0f, 14.0f, 0.0f);
         } else {
-            layoutParams3 = LayoutHelper.createFrame(36, 36.0f, 53, 14.0f, 11.0f, 14.0f, 0.0f);
+            lp3 = LayoutHelper.createFrame(36, 36.0f, 53, 14.0f, 11.0f, 14.0f, 0.0f);
         }
-        addView(this.clearSearchImageView, layoutParams3);
+        addView(this.clearSearchImageView, lp3);
         this.clearSearchImageView.setOnClickListener(new SearchField$$ExternalSyntheticLambda0(this));
-        AnonymousClass1 r14 = new EditTextBoldCursor(context) {
-            public boolean dispatchTouchEvent(MotionEvent motionEvent) {
-                SearchField.this.processTouchEvent(motionEvent);
-                return super.dispatchTouchEvent(motionEvent);
+        AnonymousClass1 r4 = new EditTextBoldCursor(context2) {
+            public boolean dispatchTouchEvent(MotionEvent event) {
+                SearchField.this.processTouchEvent(event);
+                return super.dispatchTouchEvent(event);
             }
 
-            public boolean onTouchEvent(MotionEvent motionEvent) {
+            public boolean onTouchEvent(MotionEvent event) {
                 if (!isEnabled()) {
                     return false;
                 }
-                if (motionEvent.getAction() == 1) {
+                if (event.getAction() == 1) {
                     SearchField.this.onFieldTouchUp(this);
                 }
-                return super.onTouchEvent(motionEvent);
+                return super.onTouchEvent(event);
             }
         };
-        this.searchEditText = r14;
-        r14.setTextSize(1, 16.0f);
+        this.searchEditText = r4;
+        r4.setTextSize(1, 16.0f);
         this.searchEditText.setHintTextColor(getThemedColor("dialogSearchHint"));
         this.searchEditText.setTextColor(getThemedColor("dialogSearchText"));
         this.searchEditText.setBackgroundDrawable((Drawable) null);
@@ -110,39 +102,39 @@ public class SearchField extends FrameLayout {
         this.searchEditText.setMaxLines(1);
         this.searchEditText.setLines(1);
         this.searchEditText.setSingleLine(true);
-        this.searchEditText.setGravity((z ? LayoutHelper.getAbsoluteGravityStart() : 3) | 16);
+        this.searchEditText.setGravity((supportRtl ? LayoutHelper.getAbsoluteGravityStart() : 3) | 16);
         this.searchEditText.setImeOptions(NUM);
         this.searchEditText.setCursorColor(getThemedColor("featuredStickers_addedIcon"));
         this.searchEditText.setCursorSize(AndroidUtilities.dp(20.0f));
         this.searchEditText.setCursorWidth(1.5f);
-        if (z) {
-            layoutParams4 = LayoutHelper.createFrameRelatively(-1.0f, 40.0f, 8388659, 54.0f, 9.0f, 46.0f, 0.0f);
+        if (supportRtl) {
+            lp4 = LayoutHelper.createFrameRelatively(-1.0f, 40.0f, 8388659, 54.0f, 9.0f, 46.0f, 0.0f);
         } else {
-            layoutParams4 = LayoutHelper.createFrame(-1, 40.0f, 51, 54.0f, 9.0f, 46.0f, 0.0f);
+            lp4 = LayoutHelper.createFrame(-1, 40.0f, 51, 54.0f, 9.0f, 46.0f, 0.0f);
         }
-        addView(this.searchEditText, layoutParams4);
+        addView(this.searchEditText, lp4);
         this.searchEditText.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
-            public void afterTextChanged(Editable editable) {
-                boolean z = true;
-                boolean z2 = SearchField.this.searchEditText.length() > 0;
+            public void afterTextChanged(Editable s) {
+                boolean showed = true;
+                boolean show = SearchField.this.searchEditText.length() > 0;
                 float f = 0.0f;
                 if (SearchField.this.clearSearchImageView.getAlpha() == 0.0f) {
-                    z = false;
+                    showed = false;
                 }
-                if (z2 != z) {
+                if (show != showed) {
                     ViewPropertyAnimator animate = SearchField.this.clearSearchImageView.animate();
                     float f2 = 1.0f;
-                    if (z2) {
+                    if (show) {
                         f = 1.0f;
                     }
-                    ViewPropertyAnimator scaleX = animate.alpha(f).setDuration(150).scaleX(z2 ? 1.0f : 0.1f);
-                    if (!z2) {
+                    ViewPropertyAnimator scaleX = animate.alpha(f).setDuration(150).scaleX(show ? 1.0f : 0.1f);
+                    if (!show) {
                         f2 = 0.1f;
                     }
                     scaleX.scaleY(f2).start();
@@ -154,18 +146,18 @@ public class SearchField extends FrameLayout {
         this.searchEditText.setOnEditorActionListener(new SearchField$$ExternalSyntheticLambda1(this));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(View view) {
+    /* renamed from: lambda$new$0$org-telegram-ui-Components-SearchField  reason: not valid java name */
+    public /* synthetic */ void m2552lambda$new$0$orgtelegramuiComponentsSearchField(View v) {
         this.searchEditText.setText("");
         AndroidUtilities.showKeyboard(this.searchEditText);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$1(TextView textView, int i, KeyEvent keyEvent) {
-        if (keyEvent == null) {
+    /* renamed from: lambda$new$1$org-telegram-ui-Components-SearchField  reason: not valid java name */
+    public /* synthetic */ boolean m2553lambda$new$1$orgtelegramuiComponentsSearchField(TextView v, int actionId, KeyEvent event) {
+        if (event == null) {
             return false;
         }
-        if ((keyEvent.getAction() != 1 || keyEvent.getKeyCode() != 84) && (keyEvent.getAction() != 0 || keyEvent.getKeyCode() != 66)) {
+        if ((event.getAction() != 1 || event.getKeyCode() != 84) && (event.getAction() != 0 || event.getKeyCode() != 66)) {
             return false;
         }
         this.searchEditText.hideActionMode();
@@ -173,12 +165,26 @@ public class SearchField extends FrameLayout {
         return false;
     }
 
-    public void setHint(String str) {
-        this.searchEditText.setHint(str);
+    public void hideKeyboard() {
+        AndroidUtilities.hideKeyboard(this.searchEditText);
     }
 
-    public void requestDisallowInterceptTouchEvent(boolean z) {
-        super.requestDisallowInterceptTouchEvent(z);
+    public void setHint(String text) {
+        this.searchEditText.setHint(text);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onFieldTouchUp(EditTextBoldCursor editText) {
+    }
+
+    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        super.requestDisallowInterceptTouchEvent(disallowIntercept);
+    }
+
+    public void processTouchEvent(MotionEvent event) {
+    }
+
+    public void onTextChange(String text) {
     }
 
     public View getSearchBackground() {
@@ -193,19 +199,19 @@ public class SearchField extends FrameLayout {
         return this.progressDrawable;
     }
 
-    public void getThemeDescriptions(List<ThemeDescription> list) {
-        List<ThemeDescription> list2 = list;
-        list2.add(new ThemeDescription(this.searchBackground, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogSearchBackground"));
-        list2.add(new ThemeDescription(this.searchIconImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogSearchIcon"));
-        list2.add(new ThemeDescription(this.clearSearchImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogSearchIcon"));
-        list2.add(new ThemeDescription(this.searchEditText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogSearchText"));
-        list2.add(new ThemeDescription(this.searchEditText, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogSearchHint"));
-        list2.add(new ThemeDescription(this.searchEditText, ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addedIcon"));
+    public void getThemeDescriptions(List<ThemeDescription> descriptions) {
+        List<ThemeDescription> list = descriptions;
+        list.add(new ThemeDescription(this.searchBackground, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogSearchBackground"));
+        list.add(new ThemeDescription(this.searchIconImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogSearchIcon"));
+        list.add(new ThemeDescription(this.clearSearchImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogSearchIcon"));
+        list.add(new ThemeDescription(this.searchEditText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogSearchText"));
+        list.add(new ThemeDescription(this.searchEditText, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogSearchHint"));
+        list.add(new ThemeDescription(this.searchEditText, ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_addedIcon"));
     }
 
-    private int getThemedColor(String str) {
+    private int getThemedColor(String key) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
-        return color != null ? color.intValue() : Theme.getColor(str);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
+        return color != null ? color.intValue() : Theme.getColor(key);
     }
 }

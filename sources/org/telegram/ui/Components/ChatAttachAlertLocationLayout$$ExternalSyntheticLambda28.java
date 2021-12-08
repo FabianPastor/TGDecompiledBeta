@@ -1,22 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.RecyclerListView;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
 
-public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSyntheticLambda28 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSyntheticLambda28 implements GoogleMap.OnMarkerClickListener {
     public final /* synthetic */ ChatAttachAlertLocationLayout f$0;
-    public final /* synthetic */ ChatActivity f$1;
-    public final /* synthetic */ Theme.ResourcesProvider f$2;
 
-    public /* synthetic */ ChatAttachAlertLocationLayout$$ExternalSyntheticLambda28(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout, ChatActivity chatActivity, Theme.ResourcesProvider resourcesProvider) {
+    public /* synthetic */ ChatAttachAlertLocationLayout$$ExternalSyntheticLambda28(ChatAttachAlertLocationLayout chatAttachAlertLocationLayout) {
         this.f$0 = chatAttachAlertLocationLayout;
-        this.f$1 = chatActivity;
-        this.f$2 = resourcesProvider;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$15(this.f$1, this.f$2, view, i);
+    public final boolean onMarkerClick(Marker marker) {
+        return this.f$0.m2160x57ed945(marker);
     }
 }

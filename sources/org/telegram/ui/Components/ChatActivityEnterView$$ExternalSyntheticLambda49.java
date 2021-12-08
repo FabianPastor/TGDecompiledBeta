@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.MediaController;
-import org.telegram.ui.Components.AlertsCreator;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda49 implements AlertsCreator.ScheduleDatePickerDelegate {
-    public static final /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda49 INSTANCE = new ChatActivityEnterView$$ExternalSyntheticLambda49();
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda49 implements ValueAnimator.AnimatorUpdateListener {
+    public final /* synthetic */ ChatActivityEnterView f$0;
 
-    private /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda49() {
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda49(ChatActivityEnterView chatActivityEnterView) {
+        this.f$0 = chatActivityEnterView;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        MediaController.getInstance().stopRecording(1, z, i);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.m2064lambda$new$9$orgtelegramuiComponentsChatActivityEnterView(valueAnimator);
     }
 }

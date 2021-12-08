@@ -10,6 +10,6 @@ public final /* synthetic */ class Painting$$ExternalSyntheticLambda5 implements
     }
 
     public final void run() {
-        this.f$0.lambda$restoreSlice$4(this.f$1);
+        this.f$0.m2421lambda$restoreSlice$4$orgtelegramuiComponentsPaintPainting(this.f$1);
     }
 }

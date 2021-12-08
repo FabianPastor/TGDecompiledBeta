@@ -1,18 +1,22 @@
 package org.telegram.ui;
 
-import android.content.Intent;
-import org.telegram.messenger.ContactsLoadingObserver;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda53 implements ContactsLoadingObserver.Callback {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda53 implements RequestDelegate {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ Intent f$1;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ AlertDialog f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda53(LaunchActivity launchActivity, Intent intent) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda53(LaunchActivity launchActivity, int i, AlertDialog alertDialog) {
         this.f$0 = launchActivity;
-        this.f$1 = intent;
+        this.f$1 = i;
+        this.f$2 = alertDialog;
     }
 
-    public final void onResult(boolean z) {
-        this.f$0.lambda$handleIntent$7(this.f$1, z);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m3099lambda$runLinkRequest$33$orgtelegramuiLaunchActivity(this.f$1, this.f$2, tLObject, tL_error);
     }
 }

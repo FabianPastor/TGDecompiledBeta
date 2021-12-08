@@ -1,13 +1,21 @@
 package org.telegram.messenger;
 
+import java.util.concurrent.CountDownLatch;
+
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda10 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ boolean[] f$2;
+    public final /* synthetic */ CountDownLatch f$3;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda10(MessagesStorage messagesStorage) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda10(MessagesStorage messagesStorage, long j, boolean[] zArr, CountDownLatch countDownLatch) {
         this.f$0 = messagesStorage;
+        this.f$1 = j;
+        this.f$2 = zArr;
+        this.f$3 = countDownLatch;
     }
 
     public final void run() {
-        this.f$0.lambda$getWallpapers$51();
+        this.f$0.m973lambda$isMigratedChat$100$orgtelegrammessengerMessagesStorage(this.f$1, this.f$2, this.f$3);
     }
 }

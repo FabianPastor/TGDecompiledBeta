@@ -1,15 +1,16 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda50 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ String f$1;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda50(MediaDataController mediaDataController, String str) {
-        this.f$0 = mediaDataController;
-        this.f$1 = str;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda50 implements RequestDelegate {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda50 INSTANCE = new MediaDataController$$ExternalSyntheticLambda50();
+
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda50() {
     }
 
-    public final void run() {
-        this.f$0.lambda$processLoadedDiceStickers$43(this.f$1);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        MediaDataController.lambda$markFaturedStickersAsRead$30(tLObject, tL_error);
     }
 }

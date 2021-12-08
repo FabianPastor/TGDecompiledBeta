@@ -8,6 +8,6 @@ public final /* synthetic */ class Painting$$ExternalSyntheticLambda0 implements
     }
 
     public final void run() {
-        this.f$0.lambda$clearStroke$2();
+        this.f$0.m2416lambda$clearStroke$2$orgtelegramuiComponentsPaintPainting();
     }
 }

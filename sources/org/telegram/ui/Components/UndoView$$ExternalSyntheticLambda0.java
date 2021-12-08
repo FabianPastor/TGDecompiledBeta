@@ -10,6 +10,6 @@ public final /* synthetic */ class UndoView$$ExternalSyntheticLambda0 implements
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$0(view);
+        this.f$0.m2703lambda$new$0$orgtelegramuiComponentsUndoView(view);
     }
 }

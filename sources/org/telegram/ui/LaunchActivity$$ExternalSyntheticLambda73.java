@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionIntroActivity;
+import org.telegram.ui.Components.PasscodeView;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda73 implements ActionIntroActivity.ActionIntroQRLoginDelegate {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda73 implements PasscodeView.PasscodeViewDelegate {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ ActionIntroActivity f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda73(LaunchActivity launchActivity, ActionIntroActivity actionIntroActivity) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda73(LaunchActivity launchActivity) {
         this.f$0 = launchActivity;
-        this.f$1 = actionIntroActivity;
     }
 
-    public final void didFindQRCode(String str) {
-        this.f$0.lambda$handleIntent$17(this.f$1, str);
+    public final void didAcceptedPassword() {
+        this.f$0.m3128lambda$showPasscodeActivity$6$orgtelegramuiLaunchActivity();
     }
 }

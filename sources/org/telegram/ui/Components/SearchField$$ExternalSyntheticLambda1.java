@@ -11,6 +11,6 @@ public final /* synthetic */ class SearchField$$ExternalSyntheticLambda1 impleme
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$new$1(textView, i, keyEvent);
+        return this.f$0.m2553lambda$new$1$orgtelegramuiComponentsSearchField(textView, i, keyEvent);
     }
 }

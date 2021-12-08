@@ -11,6 +11,6 @@ public final /* synthetic */ class ProxySettingsActivity$$ExternalSyntheticLambd
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$createView$1(textView, i, keyEvent);
+        return this.f$0.m3833lambda$createView$1$orgtelegramuiProxySettingsActivity(textView, i, keyEvent);
     }
 }

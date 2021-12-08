@@ -1,15 +1,13 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesStorage;
-
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda199 implements Runnable {
-    public final /* synthetic */ MessagesStorage.BooleanCallback f$0;
+    public final /* synthetic */ MessagesController f$0;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda199(MessagesStorage.BooleanCallback booleanCallback) {
-        this.f$0 = booleanCallback;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda199(MessagesController messagesController) {
+        this.f$0 = messagesController;
     }
 
     public final void run() {
-        MessagesController.lambda$convertToGigaGroup$208(this.f$0);
+        this.f$0.m400x5621CLASSNAMEa();
     }
 }

@@ -13,6 +13,6 @@ public final /* synthetic */ class ForwardingPreviewView$$ExternalSyntheticLambd
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$3(this.f$1, view);
+        this.f$0.m2287lambda$new$0$orgtelegramuiComponentsForwardingPreviewView(this.f$1, view);
     }
 }

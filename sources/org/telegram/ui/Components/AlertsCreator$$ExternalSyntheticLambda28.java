@@ -1,17 +1,20 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.ui.LanguageSelectActivity;
-import org.telegram.ui.LaunchActivity;
+import android.widget.EditText;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda28 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ long f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ EditText f$2;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda28(LaunchActivity launchActivity) {
-        this.f$0 = launchActivity;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda28(long j, int i, EditText editText) {
+        this.f$0 = j;
+        this.f$1 = i;
+        this.f$2 = editText;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$runLinkRequest$43(new LanguageSelectActivity());
+        AlertsCreator.lambda$createChangeBioAlert$23(this.f$0, this.f$1, this.f$2, dialogInterface, i);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class PeopleNearbyActivity$$ExternalSyntheticLambda
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$createView$0(dialogInterface);
+        this.f$0.m3526lambda$createView$0$orgtelegramuiPeopleNearbyActivity(dialogInterface);
     }
 }

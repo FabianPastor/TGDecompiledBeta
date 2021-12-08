@@ -1,19 +1,14 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda15 implements RequestDelegate {
-    public final /* synthetic */ ChatRightsEditActivity f$0;
-    public final /* synthetic */ TwoStepVerificationActivity f$1;
+public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda15 implements DialogInterface.OnClickListener {
+    public static final /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda15 INSTANCE = new ChatRightsEditActivity$$ExternalSyntheticLambda15();
 
-    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda15(ChatRightsEditActivity chatRightsEditActivity, TwoStepVerificationActivity twoStepVerificationActivity) {
-        this.f$0 = chatRightsEditActivity;
-        this.f$1 = twoStepVerificationActivity;
+    private /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda15() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$initTransfer$12(this.f$1, tLObject, tLRPC$TL_error);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        ChatRightsEditActivity.lambda$createView$1(dialogInterface, i);
     }
 }

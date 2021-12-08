@@ -1,20 +1,16 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.messenger.support.LongSparseIntArray;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda34 implements Runnable {
-    public final /* synthetic */ NotificationsController f$0;
-    public final /* synthetic */ LongSparseIntArray f$1;
-    public final /* synthetic */ ArrayList f$2;
+public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda34 implements RequestDelegate {
+    public static final /* synthetic */ NotificationsController$$ExternalSyntheticLambda34 INSTANCE = new NotificationsController$$ExternalSyntheticLambda34();
 
-    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda34(NotificationsController notificationsController, LongSparseIntArray longSparseIntArray, ArrayList arrayList) {
-        this.f$0 = notificationsController;
-        this.f$1 = longSparseIntArray;
-        this.f$2 = arrayList;
+    private /* synthetic */ NotificationsController$$ExternalSyntheticLambda34() {
     }
 
-    public final void run() {
-        this.f$0.lambda$processDialogsUpdateRead$21(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        NotificationsController.lambda$updateServerNotificationsSettings$40(tLObject, tL_error);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda1 im
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$1(view);
+        this.f$0.m3351lambda$createView$1$orgtelegramuiPasscodeActivity(view);
     }
 }

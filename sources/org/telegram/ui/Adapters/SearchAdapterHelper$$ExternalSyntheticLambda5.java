@@ -15,6 +15,6 @@ public final /* synthetic */ class SearchAdapterHelper$$ExternalSyntheticLambda5
     }
 
     public final void run() {
-        this.f$0.lambda$loadRecentHashtags$5(this.f$1, this.f$2);
+        this.f$0.m1391xaCLASSNAMEdd0(this.f$1, this.f$2);
     }
 }

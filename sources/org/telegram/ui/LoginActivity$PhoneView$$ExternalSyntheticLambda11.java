@@ -1,23 +1,17 @@
 package org.telegram.ui;
 
-import j$.util.function.Function;
-import org.telegram.ui.CountrySelectActivity;
+import android.view.KeyEvent;
+import android.widget.TextView;
+import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda11 implements Function {
-    public static final /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda11 INSTANCE = new LoginActivity$PhoneView$$ExternalSyntheticLambda11();
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda11 implements TextView.OnEditorActionListener {
+    public final /* synthetic */ LoginActivity.PhoneView f$0;
 
-    private /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda11() {
+    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda11(LoginActivity.PhoneView phoneView) {
+        this.f$0 = phoneView;
     }
 
-    public /* synthetic */ Function andThen(Function function) {
-        return Function.CC.$default$andThen(this, function);
-    }
-
-    public final Object apply(Object obj) {
-        return ((CountrySelectActivity.Country) obj).name;
-    }
-
-    public /* synthetic */ Function compose(Function function) {
-        return Function.CC.$default$compose(this, function);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.f$0.m3257lambda$new$4$orgtelegramuiLoginActivity$PhoneView(textView, i, keyEvent);
     }
 }

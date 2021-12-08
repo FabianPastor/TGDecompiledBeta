@@ -1,6 +1,6 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
 
 public final /* synthetic */ class ChatAttachAlertContactsLayout$$ExternalSyntheticLambda1 implements ChatAttachAlertContactsLayout.PhonebookShareAlertDelegate {
@@ -10,7 +10,7 @@ public final /* synthetic */ class ChatAttachAlertContactsLayout$$ExternalSynthe
         this.f$0 = chatAttachAlertContactsLayout;
     }
 
-    public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
-        this.f$0.lambda$new$0(tLRPC$User, z, i);
+    public final void didSelectContact(TLRPC.User user, boolean z, int i) {
+        this.f$0.m2123xee0adf0(user, z, i);
     }
 }

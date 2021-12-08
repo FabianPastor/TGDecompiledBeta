@@ -1,23 +1,19 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC$TL_contacts_resolvedPeer;
-import org.telegram.ui.DialogsActivity;
+import java.util.HashMap;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.LocationActivity;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda82 implements DialogsActivity.DialogsActivityDelegate {
-    public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ TLRPC$TL_contacts_resolvedPeer f$3;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda82 implements LocationActivity.LocationActivityDelegate {
+    public final /* synthetic */ HashMap f$0;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda82(LaunchActivity launchActivity, String str, int i, TLRPC$TL_contacts_resolvedPeer tLRPC$TL_contacts_resolvedPeer) {
-        this.f$0 = launchActivity;
-        this.f$1 = str;
-        this.f$2 = i;
-        this.f$3 = tLRPC$TL_contacts_resolvedPeer;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda82(HashMap hashMap, int i) {
+        this.f$0 = hashMap;
+        this.f$1 = i;
     }
 
-    public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-        this.f$0.lambda$runLinkRequest$25(this.f$1, this.f$2, this.f$3, dialogsActivity, arrayList, charSequence, z);
+    public final void didSelectLocation(TLRPC.MessageMedia messageMedia, int i, boolean z, int i2) {
+        LaunchActivity.lambda$didReceivedNotification$67(this.f$0, this.f$1, messageMedia, i, z, i2);
     }
 }

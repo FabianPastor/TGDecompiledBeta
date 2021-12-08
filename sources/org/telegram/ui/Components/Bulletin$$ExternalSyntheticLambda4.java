@@ -8,6 +8,6 @@ public final /* synthetic */ class Bulletin$$ExternalSyntheticLambda4 implements
     }
 
     public final void run() {
-        this.f$0.lambda$hide$2();
+        this.f$0.m2026lambda$hide$2$orgtelegramuiComponentsBulletin();
     }
 }

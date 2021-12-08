@@ -1,8 +1,8 @@
 package org.telegram.ui;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -103,42 +103,20 @@ public class CacheControlActivity extends BaseFragment {
     private long videoSize = -1;
 
     public boolean onFragmentCreate() {
-        ArrayList<File> rootDirs;
         super.onFragmentCreate();
         this.databaseSize = MessagesStorage.getInstance(this.currentAccount).getDatabaseSize();
-        Utilities.globalQueue.postRunnable(new CacheControlActivity$$ExternalSyntheticLambda3(this));
+        Utilities.globalQueue.postRunnable(new CacheControlActivity$$ExternalSyntheticLambda5(this));
         this.fragmentCreateTime = System.currentTimeMillis();
-        int i = Build.VERSION.SDK_INT;
-        if (i >= 30) {
-            File externalStorageDirectory = Environment.getExternalStorageDirectory();
-            if (i >= 19 && !TextUtils.isEmpty(SharedConfig.storageCacheDir) && (rootDirs = AndroidUtilities.getRootDirs()) != null) {
-                int i2 = 0;
-                int size = rootDirs.size();
-                while (true) {
-                    if (i2 >= size) {
-                        break;
-                    }
-                    File file = rootDirs.get(i2);
-                    if (file.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
-                        externalStorageDirectory = file;
-                        break;
-                    }
-                    i2++;
-                }
-            }
-            new File(externalStorageDirectory, "Telegram").exists();
-        }
         updateRows();
         return true;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onFragmentCreate$1() {
-        File file;
-        long j;
-        long j2;
-        long j3;
-        int i = 0;
+    /* renamed from: lambda$onFragmentCreate$1$org-telegram-ui-CacheControlActivity  reason: not valid java name */
+    public /* synthetic */ void m1476lambda$onFragmentCreate$1$orgtelegramuiCacheControlActivity() {
+        File path;
+        long blockSize;
+        long availableBlocks;
+        long blocksTotal;
         this.cacheSize = getDirectorySize(FileLoader.checkDirectory(4), 0);
         if (!this.canceled) {
             this.photoSize = getDirectorySize(FileLoader.checkDirectory(0), 0);
@@ -155,45 +133,46 @@ public class CacheControlActivity extends BaseFragment {
                                 this.audioSize = directorySize;
                                 this.totalSize = this.cacheSize + this.videoSize + directorySize + this.photoSize + this.documentsSize + this.musicSize + this.stickersSize;
                                 if (Build.VERSION.SDK_INT >= 19) {
-                                    ArrayList<File> rootDirs = AndroidUtilities.getRootDirs();
-                                    file = rootDirs.get(0);
-                                    file.getAbsolutePath();
+                                    ArrayList<File> storageDirs = AndroidUtilities.getRootDirs();
+                                    File file = storageDirs.get(0);
+                                    path = file;
+                                    String absolutePath = file.getAbsolutePath();
                                     if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
-                                        int size = rootDirs.size();
+                                        int a = 0;
+                                        int N = storageDirs.size();
                                         while (true) {
-                                            if (i < size) {
-                                                File file2 = rootDirs.get(i);
+                                            if (a < N) {
+                                                File file2 = storageDirs.get(a);
                                                 if (file2.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
-                                                    file = file2;
+                                                    path = file2;
                                                     break;
                                                 }
-                                                i++;
+                                                a++;
                                             }
                                         }
                                     }
                                 } else {
-                                    file = new File(SharedConfig.storageCacheDir);
+                                    path = new File(SharedConfig.storageCacheDir);
                                 }
                                 try {
-                                    StatFs statFs = new StatFs(file.getPath());
-                                    int i2 = Build.VERSION.SDK_INT;
-                                    if (i2 >= 18) {
-                                        j = statFs.getBlockSizeLong();
+                                    StatFs stat = new StatFs(path.getPath());
+                                    if (Build.VERSION.SDK_INT >= 18) {
+                                        blockSize = stat.getBlockSizeLong();
                                     } else {
-                                        j = (long) statFs.getBlockSize();
+                                        blockSize = (long) stat.getBlockSize();
                                     }
-                                    if (i2 >= 18) {
-                                        j2 = statFs.getAvailableBlocksLong();
+                                    if (Build.VERSION.SDK_INT >= 18) {
+                                        availableBlocks = stat.getAvailableBlocksLong();
                                     } else {
-                                        j2 = (long) statFs.getAvailableBlocks();
+                                        availableBlocks = (long) stat.getAvailableBlocks();
                                     }
-                                    if (i2 >= 18) {
-                                        j3 = statFs.getBlockCountLong();
+                                    if (Build.VERSION.SDK_INT >= 18) {
+                                        blocksTotal = stat.getBlockCountLong();
                                     } else {
-                                        j3 = (long) statFs.getBlockCount();
+                                        blocksTotal = (long) stat.getBlockCount();
                                     }
-                                    this.totalDeviceSize = j3 * j;
-                                    this.totalDeviceFreeSize = j2 * j;
+                                    this.totalDeviceSize = blocksTotal * blockSize;
+                                    this.totalDeviceFreeSize = availableBlocks * blockSize;
                                 } catch (Exception e) {
                                     FileLog.e((Throwable) e);
                                 }
@@ -206,8 +185,8 @@ public class CacheControlActivity extends BaseFragment {
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onFragmentCreate$0() {
+    /* renamed from: lambda$onFragmentCreate$0$org-telegram-ui-CacheControlActivity  reason: not valid java name */
+    public /* synthetic */ void m1475lambda$onFragmentCreate$0$orgtelegramuiCacheControlActivity() {
         this.calculating = false;
         updateStorageUsageRow();
     }
@@ -235,34 +214,31 @@ public class CacheControlActivity extends BaseFragment {
         int i7 = i6 + 1;
         this.rowCount = i7;
         this.databaseRow = i6;
-        int i8 = i7 + 1;
-        this.rowCount = i8;
+        this.rowCount = i7 + 1;
         this.databaseInfoRow = i7;
-        this.rowCount = i8 + 1;
-        this.migrateOldFolderRow = (long) i8;
     }
 
     private void updateStorageUsageRow() {
-        View findViewByPosition = this.layoutManager.findViewByPosition(this.storageUsageRow);
-        if (findViewByPosition instanceof StroageUsageView) {
-            StroageUsageView stroageUsageView = (StroageUsageView) findViewByPosition;
-            long currentTimeMillis = System.currentTimeMillis();
-            if (Build.VERSION.SDK_INT >= 19 && currentTimeMillis - this.fragmentCreateTime > 250) {
-                TransitionSet transitionSet = new TransitionSet();
+        View view = this.layoutManager.findViewByPosition(this.storageUsageRow);
+        if (view instanceof StroageUsageView) {
+            StroageUsageView stroageUsageView = (StroageUsageView) view;
+            long currentTime = System.currentTimeMillis();
+            if (Build.VERSION.SDK_INT >= 19 && currentTime - this.fragmentCreateTime > 250) {
+                TransitionSet transition = new TransitionSet();
                 ChangeBounds changeBounds = new ChangeBounds();
                 changeBounds.setDuration(250);
                 changeBounds.excludeTarget(stroageUsageView.legendLayout, true);
-                Fade fade = new Fade(1);
-                fade.setDuration(290);
-                transitionSet.addTransition(new Fade(2).setDuration(250)).addTransition(changeBounds).addTransition(fade);
-                transitionSet.setOrdering(0);
-                transitionSet.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-                TransitionManager.beginDelayedTransition(this.listView, transitionSet);
+                Fade in = new Fade(1);
+                in.setDuration(290);
+                transition.addTransition(new Fade(2).setDuration(250)).addTransition(changeBounds).addTransition(in);
+                transition.setOrdering(0);
+                transition.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+                TransitionManager.beginDelayedTransition(this.listView, transition);
             }
             stroageUsageView.setStorageUsage(this.calculating, this.databaseSize, this.totalSize, this.totalDeviceFreeSize, this.totalDeviceSize);
-            RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.storageUsageRow);
-            if (findViewHolderForAdapterPosition != null) {
-                stroageUsageView.setEnabled(this.listAdapter.isEnabled(findViewHolderForAdapterPosition));
+            RecyclerView.ViewHolder holder = this.listView.findViewHolderForAdapterPosition(this.storageUsageRow);
+            if (holder != null) {
+                stroageUsageView.setEnabled(this.listAdapter.isEnabled(holder));
                 return;
             }
             return;
@@ -275,245 +251,133 @@ public class CacheControlActivity extends BaseFragment {
         this.canceled = true;
     }
 
-    private long getDirectorySize(File file, int i) {
-        if (file == null || this.canceled) {
+    private long getDirectorySize(File dir, int documentsMusicType) {
+        if (dir == null || this.canceled) {
             return 0;
         }
-        if (file.isDirectory()) {
-            return Utilities.getDirSize(file.getAbsolutePath(), i, false);
+        if (dir.isDirectory()) {
+            return Utilities.getDirSize(dir.getAbsolutePath(), documentsMusicType, false);
         }
-        if (file.isFile()) {
-            return 0 + file.length();
+        if (dir.isFile()) {
+            return 0 + dir.length();
         }
         return 0;
     }
 
     private void cleanupFolders() {
-        AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
-        alertDialog.setCanCacnel(false);
-        alertDialog.showDelayed(500);
-        Utilities.globalQueue.postRunnable(new CacheControlActivity$$ExternalSyntheticLambda6(this, alertDialog));
+        AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+        progressDialog.setCanCacnel(false);
+        progressDialog.showDelayed(500);
+        Utilities.globalQueue.postRunnable(new CacheControlActivity$$ExternalSyntheticLambda6(this, progressDialog));
     }
 
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x005d  */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00e1 A[SYNTHETIC] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$cleanupFolders$3(org.telegram.ui.ActionBar.AlertDialog r17) {
-        /*
-            r16 = this;
-            r6 = r16
-            r0 = 0
-            r1 = 0
-            r4 = r1
-            r1 = 0
-            r2 = 0
-        L_0x0008:
-            r3 = 7
-            if (r1 >= r3) goto L_0x00e5
-            org.telegram.ui.Components.StorageDiagramView$ClearViewData[] r3 = r6.clearViewData
-            r7 = r3[r1]
-            r8 = 1
-            if (r7 == 0) goto L_0x00e1
-            r3 = r3[r1]
-            boolean r3 = r3.clear
-            if (r3 != 0) goto L_0x001a
-            goto L_0x00e1
-        L_0x001a:
-            r3 = -1
-            r7 = 100
-            r9 = 2
-            r10 = 4
-            r11 = 3
-            if (r1 != 0) goto L_0x0028
-            long r12 = r6.photoSize
-            long r4 = r4 + r12
-            r12 = 0
-        L_0x0026:
-            r13 = 0
-            goto L_0x0059
-        L_0x0028:
-            if (r1 != r8) goto L_0x002f
-            long r12 = r6.videoSize
-            long r4 = r4 + r12
-            r12 = 2
-            goto L_0x0026
-        L_0x002f:
-            if (r1 != r9) goto L_0x0037
-            long r12 = r6.documentsSize
-            long r4 = r4 + r12
-            r12 = 3
-            r13 = 1
-            goto L_0x0059
-        L_0x0037:
-            if (r1 != r11) goto L_0x003f
-            long r12 = r6.musicSize
-            long r4 = r4 + r12
-            r12 = 3
-            r13 = 2
-            goto L_0x0059
-        L_0x003f:
-            if (r1 != r10) goto L_0x0046
-            long r12 = r6.audioSize
-            long r4 = r4 + r12
-            r12 = 1
-            goto L_0x0026
-        L_0x0046:
-            r12 = 5
-            if (r1 != r12) goto L_0x004f
-            long r12 = r6.stickersSize
-            long r4 = r4 + r12
-            r12 = 100
-            goto L_0x0026
-        L_0x004f:
-            r12 = 6
-            if (r1 != r12) goto L_0x0057
-            long r12 = r6.cacheSize
-            long r4 = r4 + r12
-            r12 = 4
-            goto L_0x0026
-        L_0x0057:
-            r12 = -1
-            goto L_0x0026
-        L_0x0059:
-            if (r12 != r3) goto L_0x005d
-            goto L_0x00e1
-        L_0x005d:
-            java.lang.String r3 = "acache"
-            if (r12 != r7) goto L_0x006b
-            java.io.File r14 = new java.io.File
-            java.io.File r15 = org.telegram.messenger.FileLoader.checkDirectory(r10)
-            r14.<init>(r15, r3)
-            goto L_0x006f
-        L_0x006b:
-            java.io.File r14 = org.telegram.messenger.FileLoader.checkDirectory(r12)
-        L_0x006f:
-            if (r14 == 0) goto L_0x007d
-            java.lang.String r14 = r14.getAbsolutePath()
-            r7 = 9223372036854775807(0x7fffffffffffffff, double:NaN)
-            org.telegram.messenger.Utilities.clearDir(r14, r13, r7, r0)
-        L_0x007d:
-            if (r12 != r10) goto L_0x008b
-            java.io.File r2 = org.telegram.messenger.FileLoader.checkDirectory(r10)
-            long r2 = r6.getDirectorySize(r2, r13)
-            r6.cacheSize = r2
-        L_0x0089:
-            r2 = 1
-            goto L_0x00e1
-        L_0x008b:
-            r7 = 1
-            if (r12 != r7) goto L_0x0099
-            java.io.File r3 = org.telegram.messenger.FileLoader.checkDirectory(r7)
-            long r7 = r6.getDirectorySize(r3, r13)
-            r6.audioSize = r7
-            goto L_0x00e1
-        L_0x0099:
-            if (r12 != r11) goto L_0x00b3
-            if (r13 != r7) goto L_0x00a8
-            java.io.File r3 = org.telegram.messenger.FileLoader.checkDirectory(r11)
-            long r7 = r6.getDirectorySize(r3, r13)
-            r6.documentsSize = r7
-            goto L_0x00e1
-        L_0x00a8:
-            java.io.File r3 = org.telegram.messenger.FileLoader.checkDirectory(r11)
-            long r7 = r6.getDirectorySize(r3, r13)
-            r6.musicSize = r7
-            goto L_0x00e1
-        L_0x00b3:
-            if (r12 != 0) goto L_0x00c0
-            java.io.File r2 = org.telegram.messenger.FileLoader.checkDirectory(r0)
-            long r2 = r6.getDirectorySize(r2, r13)
-            r6.photoSize = r2
-            goto L_0x0089
-        L_0x00c0:
-            if (r12 != r9) goto L_0x00cd
-            java.io.File r3 = org.telegram.messenger.FileLoader.checkDirectory(r9)
-            long r7 = r6.getDirectorySize(r3, r13)
-            r6.videoSize = r7
-            goto L_0x00e1
-        L_0x00cd:
-            r8 = 100
-            if (r12 != r8) goto L_0x00e1
-            java.io.File r2 = new java.io.File
-            java.io.File r8 = org.telegram.messenger.FileLoader.checkDirectory(r10)
-            r2.<init>(r8, r3)
-            long r2 = r6.getDirectorySize(r2, r13)
-            r6.stickersSize = r2
-            goto L_0x0089
-        L_0x00e1:
-            int r1 = r1 + 1
-            goto L_0x0008
-        L_0x00e5:
-            long r0 = r6.cacheSize
-            long r7 = r6.videoSize
-            long r0 = r0 + r7
-            long r7 = r6.audioSize
-            long r0 = r0 + r7
-            long r7 = r6.photoSize
-            long r0 = r0 + r7
-            long r7 = r6.documentsSize
-            long r0 = r0 + r7
-            long r7 = r6.musicSize
-            long r0 = r0 + r7
-            long r7 = r6.stickersSize
-            long r0 = r0 + r7
-            r6.totalSize = r0
-            java.io.File r0 = android.os.Environment.getDataDirectory()
-            android.os.StatFs r1 = new android.os.StatFs
-            java.lang.String r0 = r0.getPath()
-            r1.<init>(r0)
-            int r0 = android.os.Build.VERSION.SDK_INT
-            r3 = 18
-            if (r0 < r3) goto L_0x0113
-            long r7 = r1.getBlockSizeLong()
-            goto L_0x0118
-        L_0x0113:
-            int r7 = r1.getBlockSize()
-            long r7 = (long) r7
-        L_0x0118:
-            if (r0 < r3) goto L_0x011f
-            long r9 = r1.getAvailableBlocksLong()
-            goto L_0x0124
-        L_0x011f:
-            int r9 = r1.getAvailableBlocks()
-            long r9 = (long) r9
-        L_0x0124:
-            if (r0 < r3) goto L_0x012b
-            long r0 = r1.getBlockCountLong()
-            goto L_0x0130
-        L_0x012b:
-            int r0 = r1.getBlockCount()
-            long r0 = (long) r0
-        L_0x0130:
-            long r0 = r0 * r7
-            r6.totalDeviceSize = r0
-            long r9 = r9 * r7
-            r6.totalDeviceFreeSize = r9
-            org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda8 r7 = new org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda8
-            r0 = r7
-            r1 = r16
-            r3 = r17
-            r0.<init>(r1, r2, r3, r4)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CacheControlActivity.lambda$cleanupFolders$3(org.telegram.ui.ActionBar.AlertDialog):void");
+    /* renamed from: lambda$cleanupFolders$3$org-telegram-ui-CacheControlActivity  reason: not valid java name */
+    public /* synthetic */ void m1467lambda$cleanupFolders$3$orgtelegramuiCacheControlActivity(AlertDialog progressDialog) {
+        long blockSize;
+        long availableBlocks;
+        long blocksTotal;
+        File file;
+        boolean imagesCleared = false;
+        long clearedSize = 0;
+        for (int a = 0; a < 7; a++) {
+            StorageDiagramView.ClearViewData[] clearViewDataArr = this.clearViewData;
+            if (clearViewDataArr[a] != null && clearViewDataArr[a].clear) {
+                int type = -1;
+                int documentsMusicType = 0;
+                if (a == 0) {
+                    type = 0;
+                    clearedSize += this.photoSize;
+                } else if (a == 1) {
+                    type = 2;
+                    clearedSize += this.videoSize;
+                } else if (a == 2) {
+                    type = 3;
+                    documentsMusicType = 1;
+                    clearedSize += this.documentsSize;
+                } else if (a == 3) {
+                    type = 3;
+                    documentsMusicType = 2;
+                    clearedSize += this.musicSize;
+                } else if (a == 4) {
+                    type = 1;
+                    clearedSize += this.audioSize;
+                } else if (a == 5) {
+                    type = 100;
+                    clearedSize += this.stickersSize;
+                } else if (a == 6) {
+                    clearedSize += this.cacheSize;
+                    type = 4;
+                }
+                if (type != -1) {
+                    if (type == 100) {
+                        file = new File(FileLoader.checkDirectory(4), "acache");
+                    } else {
+                        file = FileLoader.checkDirectory(type);
+                    }
+                    if (file != null) {
+                        File file2 = file;
+                        Utilities.clearDir(file.getAbsolutePath(), documentsMusicType, Long.MAX_VALUE, false);
+                    }
+                    if (type == 4) {
+                        this.cacheSize = getDirectorySize(FileLoader.checkDirectory(4), documentsMusicType);
+                        imagesCleared = true;
+                    } else if (type == 1) {
+                        this.audioSize = getDirectorySize(FileLoader.checkDirectory(1), documentsMusicType);
+                    } else if (type == 3) {
+                        if (documentsMusicType == 1) {
+                            this.documentsSize = getDirectorySize(FileLoader.checkDirectory(3), documentsMusicType);
+                        } else {
+                            this.musicSize = getDirectorySize(FileLoader.checkDirectory(3), documentsMusicType);
+                        }
+                    } else if (type == 0) {
+                        this.photoSize = getDirectorySize(FileLoader.checkDirectory(0), documentsMusicType);
+                        imagesCleared = true;
+                    } else if (type == 2) {
+                        this.videoSize = getDirectorySize(FileLoader.checkDirectory(2), documentsMusicType);
+                    } else if (type == 100) {
+                        this.stickersSize = getDirectorySize(new File(FileLoader.checkDirectory(4), "acache"), documentsMusicType);
+                        imagesCleared = true;
+                    }
+                }
+            }
+        }
+        boolean imagesClearedFinal = imagesCleared;
+        this.totalSize = this.cacheSize + this.videoSize + this.audioSize + this.photoSize + this.documentsSize + this.musicSize + this.stickersSize;
+        StatFs stat = new StatFs(Environment.getDataDirectory().getPath());
+        if (Build.VERSION.SDK_INT >= 18) {
+            blockSize = stat.getBlockSizeLong();
+        } else {
+            blockSize = (long) stat.getBlockSize();
+        }
+        if (Build.VERSION.SDK_INT >= 18) {
+            availableBlocks = stat.getAvailableBlocksLong();
+        } else {
+            availableBlocks = (long) stat.getAvailableBlocks();
+        }
+        if (Build.VERSION.SDK_INT >= 18) {
+            blocksTotal = stat.getBlockCountLong();
+        } else {
+            blocksTotal = (long) stat.getBlockCount();
+        }
+        this.totalDeviceSize = blocksTotal * blockSize;
+        this.totalDeviceFreeSize = availableBlocks * blockSize;
+        AndroidUtilities.runOnUIThread(new CacheControlActivity$$ExternalSyntheticLambda9(this, imagesClearedFinal, progressDialog, clearedSize));
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$cleanupFolders$2(boolean z, AlertDialog alertDialog, long j) {
-        if (z) {
+    /* renamed from: lambda$cleanupFolders$2$org-telegram-ui-CacheControlActivity  reason: not valid java name */
+    public /* synthetic */ void m1466lambda$cleanupFolders$2$orgtelegramuiCacheControlActivity(boolean imagesClearedFinal, AlertDialog progressDialog, long finalClearedSize) {
+        if (imagesClearedFinal) {
             ImageLoader.getInstance().clearMemory();
         }
         if (this.listAdapter != null) {
             updateStorageUsageRow();
         }
         try {
-            alertDialog.dismiss();
+            progressDialog.dismiss();
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        this.cacheRemovedTooltip.setInfoText(LocaleController.formatString("CacheWasCleared", NUM, AndroidUtilities.formatFileSize(j)));
+        this.cacheRemovedTooltip.setInfoText(LocaleController.formatString("CacheWasCleared", NUM, AndroidUtilities.formatFileSize(finalClearedSize)));
         this.cacheRemovedTooltip.showWithAction(0, 19, (Runnable) null, (Runnable) null);
     }
 
@@ -522,17 +386,16 @@ public class CacheControlActivity extends BaseFragment {
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("StorageUsage", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            public void onItemClick(int i) {
-                if (i == -1) {
+            public void onItemClick(int id) {
+                if (id == -1) {
                     CacheControlActivity.this.finishFragment();
                 }
             }
         });
         this.listAdapter = new ListAdapter(context);
-        FrameLayout frameLayout = new FrameLayout(context);
-        this.fragmentView = frameLayout;
-        FrameLayout frameLayout2 = frameLayout;
-        frameLayout2.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+        this.fragmentView = new FrameLayout(context);
+        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
+        frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
         RecyclerListView recyclerListView = new RecyclerListView(context);
         this.listView = recyclerListView;
         recyclerListView.setVerticalScrollBarEnabled(false);
@@ -540,145 +403,147 @@ public class CacheControlActivity extends BaseFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.layoutManager = linearLayoutManager;
         recyclerListView2.setLayoutManager(linearLayoutManager);
-        frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
+        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new CacheControlActivity$$ExternalSyntheticLambda10(this, context));
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new CacheControlActivity$$ExternalSyntheticLambda1(this, context));
         UndoView undoView = new UndoView(context);
         this.cacheRemovedTooltip = undoView;
-        frameLayout2.addView(undoView, LayoutHelper.createFrame(-1, -2.0f, 83, 8.0f, 0.0f, 8.0f, 8.0f));
+        frameLayout.addView(undoView, LayoutHelper.createFrame(-1, -2.0f, 83, 8.0f, 0.0f, 8.0f, 8.0f));
         return this.fragmentView;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$6(Context context, View view, int i) {
-        long j;
-        String str;
-        String str2;
+    /* renamed from: lambda$createView$6$org-telegram-ui-CacheControlActivity  reason: not valid java name */
+    public /* synthetic */ void m1473lambda$createView$6$orgtelegramuiCacheControlActivity(Context context, View view, int position) {
+        long size;
+        String color;
+        String name;
         Context context2 = context;
-        int i2 = i;
+        int i = position;
         if (getParentActivity() != null) {
-            if (((long) i2) == this.migrateOldFolderRow) {
+            if (((long) i) == this.migrateOldFolderRow) {
                 migrateOldFolder();
-            } else if (i2 == this.databaseRow) {
+            } else if (i == this.databaseRow) {
                 clearDatabase();
-            } else if (i2 == this.storageUsageRow) {
-                long j2 = 0;
+            } else if (i == this.storageUsageRow) {
+                long j = 0;
                 if (this.totalSize > 0 && getParentActivity() != null) {
-                    AnonymousClass2 r2 = new BottomSheet(this, getParentActivity(), false) {
+                    AnonymousClass2 r3 = new BottomSheet(getParentActivity(), false) {
                         /* access modifiers changed from: protected */
                         public boolean canDismissWithSwipe() {
                             return false;
                         }
                     };
-                    this.bottomSheet = r2;
-                    r2.setAllowNestedScroll(true);
+                    this.bottomSheet = r3;
+                    int i2 = 1;
+                    r3.setAllowNestedScroll(true);
                     this.bottomSheet.setApplyBottomPadding(false);
                     LinearLayout linearLayout = new LinearLayout(getParentActivity());
                     this.bottomSheetView = linearLayout;
                     linearLayout.setOrientation(1);
-                    StorageDiagramView storageDiagramView = new StorageDiagramView(context2);
-                    linearLayout.addView(storageDiagramView, LayoutHelper.createLinear(-2, -2, 1, 0, 16, 0, 16));
-                    CheckBoxCell checkBoxCell = null;
-                    int i3 = 0;
-                    while (i3 < 7) {
-                        if (i3 == 0) {
-                            j = this.photoSize;
-                            str2 = LocaleController.getString("LocalPhotoCache", NUM);
-                            str = "statisticChartLine_blue";
-                        } else if (i3 == 1) {
-                            j = this.videoSize;
-                            str2 = LocaleController.getString("LocalVideoCache", NUM);
-                            str = "statisticChartLine_golden";
-                        } else if (i3 == 2) {
-                            j = this.documentsSize;
-                            str2 = LocaleController.getString("LocalDocumentCache", NUM);
-                            str = "statisticChartLine_green";
-                        } else if (i3 == 3) {
-                            j = this.musicSize;
-                            str2 = LocaleController.getString("LocalMusicCache", NUM);
-                            str = "statisticChartLine_indigo";
-                        } else if (i3 == 4) {
-                            j = this.audioSize;
-                            str2 = LocaleController.getString("LocalAudioCache", NUM);
-                            str = "statisticChartLine_red";
-                        } else if (i3 == 5) {
-                            j = this.stickersSize;
-                            str2 = LocaleController.getString("AnimatedStickers", NUM);
-                            str = "statisticChartLine_lightgreen";
+                    StorageDiagramView circleDiagramView = new StorageDiagramView(context2);
+                    linearLayout.addView(circleDiagramView, LayoutHelper.createLinear(-2, -2, 1, 0, 16, 0, 16));
+                    CheckBoxCell lastCreatedCheckbox = null;
+                    int a = 0;
+                    while (a < 7) {
+                        if (a == 0) {
+                            size = this.photoSize;
+                            name = LocaleController.getString("LocalPhotoCache", NUM);
+                            color = "statisticChartLine_blue";
+                        } else if (a == i2) {
+                            size = this.videoSize;
+                            name = LocaleController.getString("LocalVideoCache", NUM);
+                            color = "statisticChartLine_golden";
+                        } else if (a == 2) {
+                            size = this.documentsSize;
+                            name = LocaleController.getString("LocalDocumentCache", NUM);
+                            color = "statisticChartLine_green";
+                        } else if (a == 3) {
+                            size = this.musicSize;
+                            name = LocaleController.getString("LocalMusicCache", NUM);
+                            color = "statisticChartLine_indigo";
+                        } else if (a == 4) {
+                            size = this.audioSize;
+                            name = LocaleController.getString("LocalAudioCache", NUM);
+                            color = "statisticChartLine_red";
+                        } else if (a == 5) {
+                            size = this.stickersSize;
+                            name = LocaleController.getString("AnimatedStickers", NUM);
+                            color = "statisticChartLine_lightgreen";
                         } else {
-                            j = this.cacheSize;
-                            str2 = LocaleController.getString("LocalCache", NUM);
-                            str = "statisticChartLine_lightblue";
+                            size = this.cacheSize;
+                            name = LocaleController.getString("LocalCache", NUM);
+                            color = "statisticChartLine_lightblue";
                         }
-                        if (j > j2) {
-                            this.clearViewData[i3] = new StorageDiagramView.ClearViewData(storageDiagramView);
-                            StorageDiagramView.ClearViewData[] clearViewDataArr = this.clearViewData;
-                            clearViewDataArr[i3].size = j;
-                            clearViewDataArr[i3].color = str;
-                            checkBoxCell = new CheckBoxCell(getParentActivity(), 4, 21, (Theme.ResourcesProvider) null);
-                            checkBoxCell.setTag(Integer.valueOf(i3));
+                        if (size > j) {
+                            this.clearViewData[a] = new StorageDiagramView.ClearViewData(circleDiagramView);
+                            this.clearViewData[a].size = size;
+                            this.clearViewData[a].color = color;
+                            CheckBoxCell lastCreatedCheckbox2 = new CheckBoxCell(getParentActivity(), 4, 21, (Theme.ResourcesProvider) null);
+                            CheckBoxCell checkBoxCell = lastCreatedCheckbox2;
+                            checkBoxCell.setTag(Integer.valueOf(a));
                             checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                             linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(-1, 50));
-                            checkBoxCell.setText(str2, AndroidUtilities.formatFileSize(j), true, true);
+                            checkBoxCell.setText(name, AndroidUtilities.formatFileSize(size), true, true);
                             checkBoxCell.setTextColor(Theme.getColor("dialogTextBlack"));
-                            checkBoxCell.setCheckBoxColor(str, "windowBackgroundWhiteGrayIcon", "checkboxCheck");
-                            checkBoxCell.setOnClickListener(new CacheControlActivity$$ExternalSyntheticLambda1(this));
+                            checkBoxCell.setCheckBoxColor(color, "windowBackgroundWhiteGrayIcon", "checkboxCheck");
+                            checkBoxCell.setOnClickListener(new CacheControlActivity$$ExternalSyntheticLambda2(this));
+                            lastCreatedCheckbox = lastCreatedCheckbox2;
                         } else {
-                            this.clearViewData[i3] = null;
+                            this.clearViewData[a] = null;
                         }
-                        i3++;
-                        j2 = 0;
+                        a++;
+                        i2 = 1;
+                        j = 0;
                     }
-                    if (checkBoxCell != null) {
-                        checkBoxCell.setNeedDivider(false);
+                    if (lastCreatedCheckbox != null) {
+                        lastCreatedCheckbox.setNeedDivider(false);
                     }
-                    storageDiagramView.setData(this.clearViewData);
-                    BottomSheet.BottomSheetCell bottomSheetCell = new BottomSheet.BottomSheetCell(getParentActivity(), 2);
-                    bottomSheetCell.setTextAndIcon((CharSequence) LocaleController.getString("ClearMediaCache", NUM), 0);
-                    this.actionTextView = bottomSheetCell.getTextView();
-                    bottomSheetCell.getTextView().setOnClickListener(new CacheControlActivity$$ExternalSyntheticLambda2(this));
-                    linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 50));
-                    NestedScrollView nestedScrollView = new NestedScrollView(context2);
-                    nestedScrollView.setVerticalScrollBarEnabled(false);
-                    nestedScrollView.addView(linearLayout);
-                    this.bottomSheet.setCustomView(nestedScrollView);
+                    circleDiagramView.setData(this.clearViewData);
+                    BottomSheet.BottomSheetCell cell = new BottomSheet.BottomSheetCell(getParentActivity(), 2);
+                    cell.setTextAndIcon((CharSequence) LocaleController.getString("ClearMediaCache", NUM), 0);
+                    this.actionTextView = cell.getTextView();
+                    cell.getTextView().setOnClickListener(new CacheControlActivity$$ExternalSyntheticLambda3(this));
+                    linearLayout.addView(cell, LayoutHelper.createLinear(-1, 50));
+                    NestedScrollView scrollView = new NestedScrollView(context2);
+                    scrollView.setVerticalScrollBarEnabled(false);
+                    scrollView.addView(linearLayout);
+                    this.bottomSheet.setCustomView(scrollView);
                     showDialog(this.bottomSheet);
                 }
             }
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$4(View view) {
+    /* renamed from: lambda$createView$4$org-telegram-ui-CacheControlActivity  reason: not valid java name */
+    public /* synthetic */ void m1471lambda$createView$4$orgtelegramuiCacheControlActivity(View v) {
+        int enabledCount = 0;
         int i = 0;
-        int i2 = 0;
         while (true) {
             StorageDiagramView.ClearViewData[] clearViewDataArr = this.clearViewData;
             if (i >= clearViewDataArr.length) {
                 break;
             }
             if (clearViewDataArr[i] != null && clearViewDataArr[i].clear) {
-                i2++;
+                enabledCount++;
             }
             i++;
         }
-        CheckBoxCell checkBoxCell = (CheckBoxCell) view;
-        int intValue = ((Integer) checkBoxCell.getTag()).intValue();
-        if (i2 != 1 || !this.clearViewData[intValue].clear) {
+        CheckBoxCell cell = (CheckBoxCell) v;
+        int num = ((Integer) cell.getTag()).intValue();
+        if (enabledCount != 1 || !this.clearViewData[num].clear) {
             StorageDiagramView.ClearViewData[] clearViewDataArr2 = this.clearViewData;
-            clearViewDataArr2[intValue].setClear(!clearViewDataArr2[intValue].clear);
-            checkBoxCell.setChecked(this.clearViewData[intValue].clear, true);
+            clearViewDataArr2[num].setClear(!clearViewDataArr2[num].clear);
+            cell.setChecked(this.clearViewData[num].clear, true);
             return;
         }
-        AndroidUtilities.shakeView(checkBoxCell.getCheckBoxView(), 2.0f, 0);
+        AndroidUtilities.shakeView(((CheckBoxCell) v).getCheckBoxView(), 2.0f, 0);
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$5(View view) {
+    /* renamed from: lambda$createView$5$org-telegram-ui-CacheControlActivity  reason: not valid java name */
+    public /* synthetic */ void m1472lambda$createView$5$orgtelegramuiCacheControlActivity(View v) {
         try {
-            Dialog dialog = this.visibleDialog;
-            if (dialog != null) {
-                dialog.dismiss();
+            if (this.visibleDialog != null) {
+                this.visibleDialog.dismiss();
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -687,23 +552,7 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     private void migrateOldFolder() {
-        boolean z = true;
-        boolean z2 = getParentActivity().checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == 0;
-        if (getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") != 0) {
-            z = false;
-        }
-        if (!z || !z2) {
-            ArrayList arrayList = new ArrayList();
-            if (!z) {
-                arrayList.add("android.permission.READ_EXTERNAL_STORAGE");
-            }
-            if (!z2) {
-                arrayList.add("android.permission.WRITE_EXTERNAL_STORAGE");
-            }
-            getParentActivity().requestPermissions((String[]) arrayList.toArray(new String[arrayList.size()]), 4);
-            return;
-        }
-        FilesMigrationService.start();
+        FilesMigrationService.checkBottomSheet(this);
     }
 
     private void clearDatabase() {
@@ -712,319 +561,327 @@ public class CacheControlActivity extends BaseFragment {
         builder.setMessage(LocaleController.getString("LocalDatabaseClearText", NUM));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setPositiveButton(LocaleController.getString("CacheClear", NUM), new CacheControlActivity$$ExternalSyntheticLambda0(this));
-        AlertDialog create = builder.create();
-        showDialog(create);
-        TextView textView = (TextView) create.getButton(-1);
-        if (textView != null) {
-            textView.setTextColor(Theme.getColor("dialogTextRed2"));
+        AlertDialog alertDialog = builder.create();
+        showDialog(alertDialog);
+        TextView button = (TextView) alertDialog.getButton(-1);
+        if (button != null) {
+            button.setTextColor(Theme.getColor("dialogTextRed2"));
         }
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearDatabase$9(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$clearDatabase$9$org-telegram-ui-CacheControlActivity  reason: not valid java name */
+    public /* synthetic */ void m1470lambda$clearDatabase$9$orgtelegramuiCacheControlActivity(DialogInterface dialogInterface, int i) {
         if (getParentActivity() != null) {
-            AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
-            alertDialog.setCanCacnel(false);
-            alertDialog.showDelayed(500);
+            AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+            progressDialog.setCanCacnel(false);
+            progressDialog.showDelayed(500);
             MessagesController.getInstance(this.currentAccount).clearQueryTime();
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new CacheControlActivity$$ExternalSyntheticLambda5(this, alertDialog));
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new CacheControlActivity$$ExternalSyntheticLambda8(this, progressDialog));
         }
     }
 
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:42:0x0116, code lost:
-        r0 = e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:43:0x0117, code lost:
-        r18 = r7;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:55:0x023c, code lost:
-        r0 = th;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:56:0x023d, code lost:
-        r2 = r20;
-     */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x01e6 A[Catch:{ Exception -> 0x0240, all -> 0x023c }] */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x01f0 A[Catch:{ Exception -> 0x0240, all -> 0x023c }] */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x023c A[ExcHandler: all (th java.lang.Throwable), Splitter:B:17:0x0079] */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x0214 A[Catch:{ Exception -> 0x0279, all -> 0x0277 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x0220 A[Catch:{ Exception -> 0x0279, all -> 0x0277 }] */
+    /* renamed from: lambda$clearDatabase$8$org-telegram-ui-CacheControlActivity  reason: not valid java name */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$clearDatabase$8(org.telegram.ui.ActionBar.AlertDialog r20) {
+    public /* synthetic */ void m1469lambda$clearDatabase$8$orgtelegramuiCacheControlActivity(org.telegram.ui.ActionBar.AlertDialog r25) {
         /*
-            r19 = this;
-            r1 = r19
-            r2 = r20
+            r24 = this;
+            r1 = r24
+            r2 = r25
             java.lang.String r3 = " AND mid != "
-            int r0 = r1.currentAccount     // Catch:{ Exception -> 0x0246 }
-            org.telegram.messenger.MessagesStorage r0 = org.telegram.messenger.MessagesStorage.getInstance(r0)     // Catch:{ Exception -> 0x0246 }
-            org.telegram.SQLite.SQLiteDatabase r4 = r0.getDatabase()     // Catch:{ Exception -> 0x0246 }
-            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x0246 }
-            r5.<init>()     // Catch:{ Exception -> 0x0246 }
+            int r0 = r1.currentAccount     // Catch:{ Exception -> 0x0279 }
+            org.telegram.messenger.MessagesStorage r0 = org.telegram.messenger.MessagesStorage.getInstance(r0)     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLiteDatabase r0 = r0.getDatabase()     // Catch:{ Exception -> 0x0279 }
+            r4 = r0
+            java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x0279 }
+            r0.<init>()     // Catch:{ Exception -> 0x0279 }
+            r5 = r0
             java.lang.String r0 = "SELECT did FROM dialogs WHERE 1"
             r6 = 0
-            java.lang.Object[] r7 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0246 }
-            org.telegram.SQLite.SQLiteCursor r0 = r4.queryFinalized(r0, r7)     // Catch:{ Exception -> 0x0246 }
-        L_0x001e:
-            boolean r7 = r0.next()     // Catch:{ Exception -> 0x0246 }
-            if (r7 == 0) goto L_0x0036
-            long r7 = r0.longValue(r6)     // Catch:{ Exception -> 0x0246 }
-            boolean r9 = org.telegram.messenger.DialogObject.isEncryptedDialog(r7)     // Catch:{ Exception -> 0x0246 }
-            if (r9 != 0) goto L_0x001e
-            java.lang.Long r7 = java.lang.Long.valueOf(r7)     // Catch:{ Exception -> 0x0246 }
-            r5.add(r7)     // Catch:{ Exception -> 0x0246 }
-            goto L_0x001e
-        L_0x0036:
-            r0.dispose()     // Catch:{ Exception -> 0x0246 }
-            java.lang.String r0 = "REPLACE INTO messages_holes VALUES(?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r7 = r4.executeFast(r0)     // Catch:{ Exception -> 0x0246 }
-            java.lang.String r0 = "REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)"
-            org.telegram.SQLite.SQLitePreparedStatement r8 = r4.executeFast(r0)     // Catch:{ Exception -> 0x0246 }
-            r4.beginTransaction()     // Catch:{ Exception -> 0x0246 }
-            r9 = 0
-        L_0x0049:
-            int r0 = r5.size()     // Catch:{ Exception -> 0x0246 }
-            if (r9 >= r0) goto L_0x0203
-            java.lang.Object r0 = r5.get(r9)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r10 = r0
-            java.lang.Long r10 = (java.lang.Long) r10     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0.<init>()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r11 = "SELECT COUNT(mid) FROM messages_v2 WHERE uid = "
-            r0.append(r11)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0.append(r10)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.Object[] r11 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLiteCursor r0 = r4.queryFinalized(r0, r11)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            boolean r11 = r0.next()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            if (r11 == 0) goto L_0x0078
-            int r11 = r0.intValue(r6)     // Catch:{ Exception -> 0x0246 }
-            goto L_0x0079
-        L_0x0078:
-            r11 = 0
-        L_0x0079:
-            r0.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0 = 2
-            if (r11 > r0) goto L_0x0084
-            r16 = r5
-            r2 = r7
-            goto L_0x01f9
-        L_0x0084:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0.<init>()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r11 = "SELECT last_mid_i, last_mid FROM dialogs WHERE did = "
-            r0.append(r11)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0.append(r10)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.Object[] r11 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLiteCursor r11 = r4.queryFinalized(r0, r11)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            boolean r0 = r11.next()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            if (r0 == 0) goto L_0x01f3
-            long r12 = r11.longValue(r6)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0 = 1
-            long r14 = r11.longValue(r0)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0.<init>()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r6 = "SELECT data FROM messages_v2 WHERE uid = "
-            r0.append(r6)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0.append(r10)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r6 = " AND mid IN ("
-            r0.append(r6)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0.append(r12)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r6 = ","
-            r0.append(r6)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0.append(r14)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r6 = ")"
-            r0.append(r6)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r16 = r5
+            java.lang.Object[] r7 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLiteCursor r0 = r4.queryFinalized(r0, r7)     // Catch:{ Exception -> 0x0279 }
+            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0279 }
+            r7.<init>()     // Catch:{ Exception -> 0x0279 }
+        L_0x0025:
+            boolean r8 = r0.next()     // Catch:{ Exception -> 0x0279 }
+            if (r8 == 0) goto L_0x003d
+            long r8 = r0.longValue(r6)     // Catch:{ Exception -> 0x0279 }
+            boolean r10 = org.telegram.messenger.DialogObject.isEncryptedDialog(r8)     // Catch:{ Exception -> 0x0279 }
+            if (r10 != 0) goto L_0x003c
+            java.lang.Long r10 = java.lang.Long.valueOf(r8)     // Catch:{ Exception -> 0x0279 }
+            r5.add(r10)     // Catch:{ Exception -> 0x0279 }
+        L_0x003c:
+            goto L_0x0025
+        L_0x003d:
+            r0.dispose()     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r8 = "REPLACE INTO messages_holes VALUES(?, ?, ?)"
+            org.telegram.SQLite.SQLitePreparedStatement r8 = r4.executeFast(r8)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r9 = "REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)"
+            org.telegram.SQLite.SQLitePreparedStatement r9 = r4.executeFast(r9)     // Catch:{ Exception -> 0x0279 }
+            r4.beginTransaction()     // Catch:{ Exception -> 0x0279 }
+            r10 = 0
+        L_0x0050:
+            int r11 = r5.size()     // Catch:{ Exception -> 0x0279 }
+            if (r10 >= r11) goto L_0x023d
+            java.lang.Object r11 = r5.get(r10)     // Catch:{ Exception -> 0x0279 }
+            java.lang.Long r11 = (java.lang.Long) r11     // Catch:{ Exception -> 0x0279 }
+            r12 = 0
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0279 }
+            r13.<init>()     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r14 = "SELECT COUNT(mid) FROM messages_v2 WHERE uid = "
+            r13.append(r14)     // Catch:{ Exception -> 0x0279 }
+            r13.append(r11)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0279 }
+            java.lang.Object[] r14 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLiteCursor r13 = r4.queryFinalized(r13, r14)     // Catch:{ Exception -> 0x0279 }
+            r0 = r13
+            boolean r13 = r0.next()     // Catch:{ Exception -> 0x0279 }
+            if (r13 == 0) goto L_0x0080
+            int r13 = r0.intValue(r6)     // Catch:{ Exception -> 0x0279 }
+            r12 = r13
+        L_0x0080:
+            r0.dispose()     // Catch:{ Exception -> 0x0279 }
+            r13 = 2
+            if (r12 > r13) goto L_0x008c
+            r19 = r5
+            r16 = r7
+            goto L_0x0234
+        L_0x008c:
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0279 }
+            r13.<init>()     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r14 = "SELECT last_mid_i, last_mid FROM dialogs WHERE did = "
+            r13.append(r14)     // Catch:{ Exception -> 0x0279 }
+            r13.append(r11)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0279 }
+            java.lang.Object[] r14 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLiteCursor r13 = r4.queryFinalized(r13, r14)     // Catch:{ Exception -> 0x0279 }
+            r0 = -1
+            boolean r14 = r13.next()     // Catch:{ Exception -> 0x0279 }
+            if (r14 == 0) goto L_0x0225
+            long r14 = r13.longValue(r6)     // Catch:{ Exception -> 0x0279 }
+            r6 = 1
+            long r17 = r13.longValue(r6)     // Catch:{ Exception -> 0x0279 }
+            r19 = r17
+            java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0279 }
+            r6.<init>()     // Catch:{ Exception -> 0x0279 }
+            r17 = r0
+            java.lang.String r0 = "SELECT data FROM messages_v2 WHERE uid = "
+            r6.append(r0)     // Catch:{ Exception -> 0x0279 }
+            r6.append(r11)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r0 = " AND mid IN ("
+            r6.append(r0)     // Catch:{ Exception -> 0x0279 }
+            r6.append(r14)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r0 = ","
+            r6.append(r0)     // Catch:{ Exception -> 0x0279 }
+            r18 = r12
+            r21 = r13
+            r12 = r19
+            r6.append(r12)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r0 = ")"
+            r6.append(r0)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r0 = r6.toString()     // Catch:{ Exception -> 0x0279 }
+            r19 = r5
             r6 = 0
-            java.lang.Object[] r5 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLiteCursor r5 = r4.queryFinalized(r0, r5)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r17 = -1
-        L_0x00db:
-            boolean r0 = r5.next()     // Catch:{ Exception -> 0x0116, all -> 0x023c }
-            if (r0 == 0) goto L_0x0113
+            java.lang.Object[] r5 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLiteCursor r0 = r4.queryFinalized(r0, r5)     // Catch:{ Exception -> 0x0279 }
+            r5 = r0
+        L_0x00ed:
+            boolean r0 = r5.next()     // Catch:{ Exception -> 0x0140 }
+            if (r0 == 0) goto L_0x0137
             r6 = 0
-            org.telegram.tgnet.NativeByteBuffer r0 = r5.byteBufferValue(r6)     // Catch:{ Exception -> 0x0116, all -> 0x023c }
-            if (r0 == 0) goto L_0x010c
-            int r2 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0116, all -> 0x023c }
-            org.telegram.tgnet.TLRPC$Message r2 = org.telegram.tgnet.TLRPC$Message.TLdeserialize(r0, r2, r6)     // Catch:{ Exception -> 0x0116, all -> 0x023c }
-            if (r2 == 0) goto L_0x0104
-            int r6 = r2.id     // Catch:{ Exception -> 0x0116, all -> 0x023c }
+            org.telegram.tgnet.NativeByteBuffer r0 = r5.byteBufferValue(r6)     // Catch:{ Exception -> 0x0140 }
+            if (r0 == 0) goto L_0x012a
+            r16 = r7
+            int r7 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0124 }
+            org.telegram.tgnet.TLRPC$Message r7 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r0, r7, r6)     // Catch:{ Exception -> 0x0124 }
+            if (r7 == 0) goto L_0x011a
+            int r6 = r7.id     // Catch:{ Exception -> 0x0124 }
             r17 = r6
-            int r6 = r1.currentAccount     // Catch:{ Exception -> 0x0116, all -> 0x023c }
-            org.telegram.messenger.UserConfig r6 = org.telegram.messenger.UserConfig.getInstance(r6)     // Catch:{ Exception -> 0x0116, all -> 0x023c }
-            r18 = r7
-            long r6 = r6.clientUserId     // Catch:{ Exception -> 0x010a, all -> 0x023c }
-            r2.readAttachPath(r0, r6)     // Catch:{ Exception -> 0x010a, all -> 0x023c }
-            goto L_0x0106
-        L_0x0104:
-            r18 = r7
-        L_0x0106:
-            r0.reuse()     // Catch:{ Exception -> 0x010a, all -> 0x023c }
-            goto L_0x010e
-        L_0x010a:
+            int r6 = r1.currentAccount     // Catch:{ Exception -> 0x0124 }
+            org.telegram.messenger.UserConfig r6 = org.telegram.messenger.UserConfig.getInstance(r6)     // Catch:{ Exception -> 0x0124 }
+            r22 = r8
+            r23 = r9
+            long r8 = r6.clientUserId     // Catch:{ Exception -> 0x0122 }
+            r7.readAttachPath(r0, r8)     // Catch:{ Exception -> 0x0122 }
+            goto L_0x011e
+        L_0x011a:
+            r22 = r8
+            r23 = r9
+        L_0x011e:
+            r0.reuse()     // Catch:{ Exception -> 0x0122 }
+            goto L_0x0130
+        L_0x0122:
             r0 = move-exception
-            goto L_0x0119
-        L_0x010c:
-            r18 = r7
-        L_0x010e:
-            r2 = r20
-            r7 = r18
-            goto L_0x00db
-        L_0x0113:
-            r18 = r7
-            goto L_0x011c
-        L_0x0116:
+            goto L_0x0147
+        L_0x0124:
             r0 = move-exception
-            r18 = r7
-        L_0x0119:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-        L_0x011c:
+            r22 = r8
+            r23 = r9
+            goto L_0x0147
+        L_0x012a:
+            r16 = r7
+            r22 = r8
+            r23 = r9
+        L_0x0130:
+            r7 = r16
+            r8 = r22
+            r9 = r23
+            goto L_0x00ed
+        L_0x0137:
+            r16 = r7
+            r22 = r8
+            r23 = r9
             r0 = r17
-            r5.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.<init>()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r5 = "DELETE FROM messages_v2 WHERE uid = "
-            r2.append(r5)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.append(r10)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.append(r3)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.append(r12)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.append(r3)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.append(r14)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r4.executeFast(r2)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.<init>()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r5 = "DELETE FROM messages_holes WHERE uid = "
-            r2.append(r5)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.append(r10)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r4.executeFast(r2)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.<init>()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r5 = "DELETE FROM bot_keyboard WHERE uid = "
-            r2.append(r5)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.append(r10)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r4.executeFast(r2)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.<init>()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r5 = "DELETE FROM media_counts_v2 WHERE uid = "
-            r2.append(r5)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.append(r10)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r4.executeFast(r2)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.<init>()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r5 = "DELETE FROM media_v4 WHERE uid = "
-            r2.append(r5)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.append(r10)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r4.executeFast(r2)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.<init>()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r5 = "DELETE FROM media_holes_v2 WHERE uid = "
-            r2.append(r5)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.append(r10)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r4.executeFast(r2)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r2 = r2.stepThis()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            int r2 = r1.currentAccount     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.messenger.MediaDataController r2 = org.telegram.messenger.MediaDataController.getInstance(r2)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            long r5 = r10.longValue()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r7 = 0
-            r2.clearBotKeyboard(r5, r7)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2 = -1
-            if (r0 == r2) goto L_0x01f0
-            long r5 = r10.longValue()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r2 = r18
-            org.telegram.messenger.MessagesStorage.createFirstHoles(r5, r2, r8, r0)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            goto L_0x01f6
-        L_0x01f0:
-            r2 = r18
-            goto L_0x01f6
-        L_0x01f3:
-            r16 = r5
-            r2 = r7
-        L_0x01f6:
-            r11.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-        L_0x01f9:
-            int r9 = r9 + 1
-            r7 = r2
-            r5 = r16
+            goto L_0x014c
+        L_0x0140:
+            r0 = move-exception
+            r16 = r7
+            r22 = r8
+            r23 = r9
+        L_0x0147:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x0279 }
+            r0 = r17
+        L_0x014c:
+            r5.dispose()     // Catch:{ Exception -> 0x0279 }
+            java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0279 }
+            r6.<init>()     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r7 = "DELETE FROM messages_v2 WHERE uid = "
+            r6.append(r7)     // Catch:{ Exception -> 0x0279 }
+            r6.append(r11)     // Catch:{ Exception -> 0x0279 }
+            r6.append(r3)     // Catch:{ Exception -> 0x0279 }
+            r6.append(r14)     // Catch:{ Exception -> 0x0279 }
+            r6.append(r3)     // Catch:{ Exception -> 0x0279 }
+            r6.append(r12)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r4.executeFast(r6)     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.stepThis()     // Catch:{ Exception -> 0x0279 }
+            r6.dispose()     // Catch:{ Exception -> 0x0279 }
+            java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0279 }
+            r6.<init>()     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r7 = "DELETE FROM messages_holes WHERE uid = "
+            r6.append(r7)     // Catch:{ Exception -> 0x0279 }
+            r6.append(r11)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r4.executeFast(r6)     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.stepThis()     // Catch:{ Exception -> 0x0279 }
+            r6.dispose()     // Catch:{ Exception -> 0x0279 }
+            java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0279 }
+            r6.<init>()     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r7 = "DELETE FROM bot_keyboard WHERE uid = "
+            r6.append(r7)     // Catch:{ Exception -> 0x0279 }
+            r6.append(r11)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r4.executeFast(r6)     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.stepThis()     // Catch:{ Exception -> 0x0279 }
+            r6.dispose()     // Catch:{ Exception -> 0x0279 }
+            java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0279 }
+            r6.<init>()     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r7 = "DELETE FROM media_counts_v2 WHERE uid = "
+            r6.append(r7)     // Catch:{ Exception -> 0x0279 }
+            r6.append(r11)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r4.executeFast(r6)     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.stepThis()     // Catch:{ Exception -> 0x0279 }
+            r6.dispose()     // Catch:{ Exception -> 0x0279 }
+            java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0279 }
+            r6.<init>()     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r7 = "DELETE FROM media_v4 WHERE uid = "
+            r6.append(r7)     // Catch:{ Exception -> 0x0279 }
+            r6.append(r11)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r4.executeFast(r6)     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.stepThis()     // Catch:{ Exception -> 0x0279 }
+            r6.dispose()     // Catch:{ Exception -> 0x0279 }
+            java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0279 }
+            r6.<init>()     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r7 = "DELETE FROM media_holes_v2 WHERE uid = "
+            r6.append(r7)     // Catch:{ Exception -> 0x0279 }
+            r6.append(r11)     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r4.executeFast(r6)     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r6 = r6.stepThis()     // Catch:{ Exception -> 0x0279 }
+            r6.dispose()     // Catch:{ Exception -> 0x0279 }
+            int r6 = r1.currentAccount     // Catch:{ Exception -> 0x0279 }
+            org.telegram.messenger.MediaDataController r6 = org.telegram.messenger.MediaDataController.getInstance(r6)     // Catch:{ Exception -> 0x0279 }
+            long r7 = r11.longValue()     // Catch:{ Exception -> 0x0279 }
+            r9 = 0
+            r6.clearBotKeyboard(r7, r9)     // Catch:{ Exception -> 0x0279 }
+            r6 = -1
+            if (r0 == r6) goto L_0x0220
+            long r6 = r11.longValue()     // Catch:{ Exception -> 0x0279 }
+            r8 = r22
+            r9 = r23
+            org.telegram.messenger.MessagesStorage.createFirstHoles(r6, r8, r9, r0)     // Catch:{ Exception -> 0x0279 }
+            goto L_0x022f
+        L_0x0220:
+            r8 = r22
+            r9 = r23
+            goto L_0x022f
+        L_0x0225:
+            r17 = r0
+            r19 = r5
+            r16 = r7
+            r18 = r12
+            r21 = r13
+        L_0x022f:
+            r21.dispose()     // Catch:{ Exception -> 0x0279 }
+            r0 = r21
+        L_0x0234:
+            int r10 = r10 + 1
+            r7 = r16
+            r5 = r19
             r6 = 0
-            r2 = r20
-            goto L_0x0049
-        L_0x0203:
-            r2 = r7
-            r2.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r8.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r4.commitTransaction()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r0 = "PRAGMA journal_size_limit = 0"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r4.executeFast(r0)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r0 = "VACUUM"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r4.executeFast(r0)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            java.lang.String r0 = "PRAGMA journal_size_limit = -1"
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r4.executeFast(r0)     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.SQLite.SQLitePreparedStatement r0 = r0.stepThis()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            r0.dispose()     // Catch:{ Exception -> 0x0240, all -> 0x023c }
-            org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda7 r0 = new org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda7
-            r2 = r20
-            r0.<init>(r1, r2)
-            goto L_0x024f
-        L_0x023c:
-            r0 = move-exception
-            r2 = r20
-            goto L_0x0253
-        L_0x0240:
-            r0 = move-exception
-            r2 = r20
-            goto L_0x0247
-        L_0x0244:
-            r0 = move-exception
-            goto L_0x0253
-        L_0x0246:
-            r0 = move-exception
-        L_0x0247:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0244 }
+            goto L_0x0050
+        L_0x023d:
+            r19 = r5
+            r16 = r7
+            r8.dispose()     // Catch:{ Exception -> 0x0279 }
+            r9.dispose()     // Catch:{ Exception -> 0x0279 }
+            r4.commitTransaction()     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r3 = "PRAGMA journal_size_limit = 0"
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r4.executeFast(r3)     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.stepThis()     // Catch:{ Exception -> 0x0279 }
+            r3.dispose()     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r3 = "VACUUM"
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r4.executeFast(r3)     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.stepThis()     // Catch:{ Exception -> 0x0279 }
+            r3.dispose()     // Catch:{ Exception -> 0x0279 }
+            java.lang.String r3 = "PRAGMA journal_size_limit = -1"
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r4.executeFast(r3)     // Catch:{ Exception -> 0x0279 }
+            org.telegram.SQLite.SQLitePreparedStatement r3 = r3.stepThis()     // Catch:{ Exception -> 0x0279 }
+            r3.dispose()     // Catch:{ Exception -> 0x0279 }
             org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda7 r0 = new org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda7
             r0.<init>(r1, r2)
-        L_0x024f:
+            goto L_0x0282
+        L_0x0277:
+            r0 = move-exception
+            goto L_0x0287
+        L_0x0279:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0277 }
+            org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda7 r0 = new org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda7
+            r0.<init>(r1, r2)
+        L_0x0282:
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
-        L_0x0253:
+        L_0x0287:
             org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda7 r3 = new org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda7
             r3.<init>(r1, r2)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r3)
-            goto L_0x025d
-        L_0x025c:
+            goto L_0x0291
+        L_0x0290:
             throw r0
-        L_0x025d:
-            goto L_0x025c
+        L_0x0291:
+            goto L_0x0290
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CacheControlActivity.lambda$clearDatabase$8(org.telegram.ui.ActionBar.AlertDialog):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CacheControlActivity.m1469lambda$clearDatabase$8$orgtelegramuiCacheControlActivity(org.telegram.ui.ActionBar.AlertDialog):void");
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearDatabase$7(AlertDialog alertDialog) {
+    /* renamed from: lambda$clearDatabase$7$org-telegram-ui-CacheControlActivity  reason: not valid java name */
+    public /* synthetic */ void m1468lambda$clearDatabase$7$orgtelegramuiCacheControlActivity(AlertDialog progressDialog) {
         try {
-            alertDialog.dismiss();
+            progressDialog.dismiss();
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
@@ -1050,89 +907,110 @@ public class CacheControlActivity extends BaseFragment {
             this.mContext = context;
         }
 
-        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-            int adapterPosition = viewHolder.getAdapterPosition();
-            return ((long) adapterPosition) == CacheControlActivity.this.migrateOldFolderRow || adapterPosition == CacheControlActivity.this.databaseRow || (adapterPosition == CacheControlActivity.this.storageUsageRow && CacheControlActivity.this.totalSize > 0 && !CacheControlActivity.this.calculating);
+        public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            int position = holder.getAdapterPosition();
+            return ((long) position) == CacheControlActivity.this.migrateOldFolderRow || position == CacheControlActivity.this.databaseRow || (position == CacheControlActivity.this.storageUsageRow && CacheControlActivity.this.totalSize > 0 && !CacheControlActivity.this.calculating);
         }
 
         public int getItemCount() {
             return CacheControlActivity.this.rowCount;
         }
 
-        /* access modifiers changed from: private */
-        public static /* synthetic */ void lambda$onCreateViewHolder$0(int i) {
-            if (i == 0) {
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view;
+            int index;
+            switch (viewType) {
+                case 0:
+                    view = new TextSettingsCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                    break;
+                case 2:
+                    view = new StroageUsageView(this.mContext);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                    break;
+                case 3:
+                    view = new HeaderCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                    break;
+                case 4:
+                    SlideChooseView slideChooseView = new SlideChooseView(this.mContext);
+                    view = slideChooseView;
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                    SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+                    slideChooseView.setCallback(CacheControlActivity$ListAdapter$$ExternalSyntheticLambda0.INSTANCE);
+                    int keepMedia = SharedConfig.keepMedia;
+                    if (keepMedia == 3) {
+                        index = 0;
+                    } else {
+                        index = keepMedia + 1;
+                    }
+                    slideChooseView.setOptions(index, LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", NUM));
+                    break;
+                default:
+                    view = new TextInfoPrivacyCell(this.mContext);
+                    break;
+            }
+            return new RecyclerListView.Holder(view);
+        }
+
+        static /* synthetic */ void lambda$onCreateViewHolder$0(int index) {
+            if (index == 0) {
                 SharedConfig.setKeepMedia(3);
-            } else if (i == 1) {
+            } else if (index == 1) {
                 SharedConfig.setKeepMedia(0);
-            } else if (i == 2) {
+            } else if (index == 2) {
                 SharedConfig.setKeepMedia(1);
-            } else if (i == 3) {
+            } else if (index == 3) {
                 SharedConfig.setKeepMedia(2);
             }
         }
 
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View view;
-            SlideChooseView slideChooseView;
-            if (i == 0) {
-                TextSettingsCell textSettingsCell = new TextSettingsCell(this.mContext);
-                textSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                slideChooseView = textSettingsCell;
-            } else if (i == 2) {
-                StroageUsageView stroageUsageView = new StroageUsageView(this.mContext);
-                stroageUsageView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                slideChooseView = stroageUsageView;
-            } else if (i == 3) {
-                HeaderCell headerCell = new HeaderCell(this.mContext);
-                headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                slideChooseView = headerCell;
-            } else if (i != 4) {
-                view = new TextInfoPrivacyCell(this.mContext);
-                return new RecyclerListView.Holder(view);
-            } else {
-                SlideChooseView slideChooseView2 = new SlideChooseView(this.mContext);
-                slideChooseView2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                MessagesController.getGlobalMainSettings();
-                slideChooseView2.setCallback(CacheControlActivity$ListAdapter$$ExternalSyntheticLambda0.INSTANCE);
-                int i2 = SharedConfig.keepMedia;
-                slideChooseView2.setOptions(i2 == 3 ? 0 : i2 + 1, LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", NUM));
-                slideChooseView = slideChooseView2;
-            }
-            view = slideChooseView;
-            return new RecyclerListView.Holder(view);
-        }
-
-        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            int itemViewType = viewHolder.getItemViewType();
-            if (itemViewType == 0) {
-                TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
-                if (i == CacheControlActivity.this.databaseRow) {
-                    textSettingsCell.setTextAndValue(LocaleController.getString("ClearLocalDatabase", NUM), AndroidUtilities.formatFileSize(CacheControlActivity.this.databaseSize), false);
-                } else if (((long) i) == CacheControlActivity.this.migrateOldFolderRow) {
-                    textSettingsCell.setTextAndValue(LocaleController.getString("MigrateOldFolder", NUM), (String) null, false);
-                }
-            } else if (itemViewType == 1) {
-                TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
-                if (i == CacheControlActivity.this.databaseInfoRow) {
-                    textInfoPrivacyCell.setText(LocaleController.getString("LocalDatabaseInfo", NUM));
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                } else if (i == CacheControlActivity.this.cacheInfoRow) {
-                    textInfoPrivacyCell.setText("");
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                } else if (i == CacheControlActivity.this.keepMediaInfoRow) {
-                    textInfoPrivacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("KeepMediaInfo", NUM)));
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                }
-            } else if (itemViewType == 2) {
-                ((StroageUsageView) viewHolder.itemView).setStorageUsage(CacheControlActivity.this.calculating, CacheControlActivity.this.databaseSize, CacheControlActivity.this.totalSize, CacheControlActivity.this.totalDeviceFreeSize, CacheControlActivity.this.totalDeviceSize);
-            } else if (itemViewType == 3) {
-                HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
-                if (i == CacheControlActivity.this.keepMediaHeaderRow) {
-                    headerCell.setText(LocaleController.getString("KeepMedia", NUM));
-                } else if (i == CacheControlActivity.this.deviseStorageHeaderRow) {
-                    headerCell.setText(LocaleController.getString("DeviceStorage", NUM));
-                }
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            switch (holder.getItemViewType()) {
+                case 0:
+                    TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
+                    if (position == CacheControlActivity.this.databaseRow) {
+                        textCell.setTextAndValue(LocaleController.getString("ClearLocalDatabase", NUM), AndroidUtilities.formatFileSize(CacheControlActivity.this.databaseSize), false);
+                        return;
+                    } else if (((long) position) == CacheControlActivity.this.migrateOldFolderRow) {
+                        textCell.setTextAndValue(LocaleController.getString("MigrateOldFolder", NUM), (String) null, false);
+                        return;
+                    } else {
+                        return;
+                    }
+                case 1:
+                    TextInfoPrivacyCell privacyCell = (TextInfoPrivacyCell) holder.itemView;
+                    if (position == CacheControlActivity.this.databaseInfoRow) {
+                        privacyCell.setText(LocaleController.getString("LocalDatabaseInfo", NUM));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                        return;
+                    } else if (position == CacheControlActivity.this.cacheInfoRow) {
+                        privacyCell.setText("");
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                        return;
+                    } else if (position == CacheControlActivity.this.keepMediaInfoRow) {
+                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("KeepMediaInfo", NUM)));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                        return;
+                    } else {
+                        return;
+                    }
+                case 2:
+                    ((StroageUsageView) holder.itemView).setStorageUsage(CacheControlActivity.this.calculating, CacheControlActivity.this.databaseSize, CacheControlActivity.this.totalSize, CacheControlActivity.this.totalDeviceFreeSize, CacheControlActivity.this.totalDeviceSize);
+                    return;
+                case 3:
+                    HeaderCell headerCell = (HeaderCell) holder.itemView;
+                    if (position == CacheControlActivity.this.keepMediaHeaderRow) {
+                        headerCell.setText(LocaleController.getString("KeepMedia", NUM));
+                        return;
+                    } else if (position == CacheControlActivity.this.deviseStorageHeaderRow) {
+                        headerCell.setText(LocaleController.getString("DeviceStorage", NUM));
+                        return;
+                    } else {
+                        return;
+                    }
+                default:
+                    return;
             }
         }
 
@@ -1146,12 +1024,15 @@ public class CacheControlActivity extends BaseFragment {
             if (i == CacheControlActivity.this.keepMediaHeaderRow || i == CacheControlActivity.this.deviseStorageHeaderRow) {
                 return 3;
             }
-            return i == CacheControlActivity.this.keepMediaChooserRow ? 4 : 0;
+            if (i == CacheControlActivity.this.keepMediaChooserRow) {
+                return 4;
+            }
+            return 0;
         }
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        CacheControlActivity$$ExternalSyntheticLambda9 cacheControlActivity$$ExternalSyntheticLambda9 = new CacheControlActivity$$ExternalSyntheticLambda9(this);
+        ThemeDescription.ThemeDescriptionDelegate deldegagte = new CacheControlActivity$$ExternalSyntheticLambda10(this);
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, SlideChooseView.class, StroageUsageView.class, HeaderCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));
@@ -1181,7 +1062,7 @@ public class CacheControlActivity extends BaseFragment {
         arrayList.add(new ThemeDescription(this.bottomSheetView, 0, new Class[]{CheckBoxCell.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
         arrayList.add(new ThemeDescription(this.bottomSheetView, 0, new Class[]{StorageDiagramView.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) null, 0, new Class[]{TextCheckBoxCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, cacheControlActivity$$ExternalSyntheticLambda9, "dialogBackground"));
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, deldegagte, "dialogBackground"));
         arrayList.add(new ThemeDescription(this.bottomSheetView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "statisticChartLine_blue"));
         arrayList.add(new ThemeDescription(this.bottomSheetView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "statisticChartLine_green"));
         arrayList.add(new ThemeDescription(this.bottomSheetView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "statisticChartLine_red"));
@@ -1193,8 +1074,8 @@ public class CacheControlActivity extends BaseFragment {
         return arrayList;
     }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getThemeDescriptions$10() {
+    /* renamed from: lambda$getThemeDescriptions$10$org-telegram-ui-CacheControlActivity  reason: not valid java name */
+    public /* synthetic */ void m1474x2e159a88() {
         BottomSheet bottomSheet2 = this.bottomSheet;
         if (bottomSheet2 != null) {
             bottomSheet2.setBackgroundColor(Theme.getColor("dialogBackground"));
@@ -1205,23 +1086,22 @@ public class CacheControlActivity extends BaseFragment {
         }
     }
 
-    public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
-        super.onRequestPermissionsResultFragment(i, strArr, iArr);
-        if (i == 4) {
-            boolean z = false;
-            int i2 = 0;
+    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 4) {
+            boolean allGranted = true;
+            int a = 0;
             while (true) {
-                if (i2 >= iArr.length) {
-                    z = true;
+                if (a >= grantResults.length) {
                     break;
-                } else if (iArr[i2] != 0) {
+                } else if (grantResults[a] != 0) {
+                    allGranted = false;
                     break;
                 } else {
-                    i2++;
+                    a++;
                 }
             }
-            if (z && Build.VERSION.SDK_INT >= 30) {
-                migrateOldFolder();
+            if (allGranted && Build.VERSION.SDK_INT >= 30 && FilesMigrationService.filesMigrationBottomSheet != null) {
+                FilesMigrationService.filesMigrationBottomSheet.migrateOldFolder();
             }
         }
     }

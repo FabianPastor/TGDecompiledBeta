@@ -11,6 +11,6 @@ public final /* synthetic */ class CounterView$CounterDrawable$$ExternalSyntheti
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setCount$0(valueAnimator);
+        this.f$0.m2217x2var_de4(valueAnimator);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlertDocumentLayout$$ExternalSynthe
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$5(view, i);
+        this.f$0.m2132x533bdCLASSNAME(view, i);
     }
 }

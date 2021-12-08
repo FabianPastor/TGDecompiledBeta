@@ -1,18 +1,15 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import android.view.View;
+import org.telegram.ui.Components.EditTextBoldCursor;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda20 implements View.OnClickListener {
-    public final /* synthetic */ GroupCallActivity f$0;
-    public final /* synthetic */ Context f$1;
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda20 implements Runnable {
+    public final /* synthetic */ EditTextBoldCursor f$0;
 
-    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda20(GroupCallActivity groupCallActivity, Context context) {
-        this.f$0 = groupCallActivity;
-        this.f$1 = context;
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda20(EditTextBoldCursor editTextBoldCursor) {
+        this.f$0 = editTextBoldCursor;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$new$17(this.f$1, view);
+    public final void run() {
+        GroupCallActivity.lambda$makeFocusable$8(this.f$0);
     }
 }

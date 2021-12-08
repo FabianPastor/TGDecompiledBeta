@@ -8,6 +8,6 @@ public final /* synthetic */ class SurfaceTextureHelper$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$forceFrame$3();
+        this.f$0.m4113lambda$forceFrame$3$orgwebrtcSurfaceTextureHelper();
     }
 }

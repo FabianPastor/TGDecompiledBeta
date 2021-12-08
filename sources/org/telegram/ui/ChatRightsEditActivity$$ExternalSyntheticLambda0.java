@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLamb
     }
 
     public final void onDateSet(DatePicker datePicker, int i, int i2, int i3) {
-        this.f$0.lambda$createView$2(datePicker, i, i2, i3);
+        this.f$0.m1945lambda$createView$2$orgtelegramuiChatRightsEditActivity(datePicker, i, i2, i3);
     }
 }

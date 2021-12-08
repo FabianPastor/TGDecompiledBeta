@@ -1,16 +1,17 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC;
 
-public final /* synthetic */ class ManageLinksActivity$$ExternalSyntheticLambda17 implements RecyclerListView.OnItemLongClickListener {
+public final /* synthetic */ class ManageLinksActivity$$ExternalSyntheticLambda17 implements RequestDelegate {
     public final /* synthetic */ ManageLinksActivity f$0;
 
     public /* synthetic */ ManageLinksActivity$$ExternalSyntheticLambda17(ManageLinksActivity manageLinksActivity) {
         this.f$0 = manageLinksActivity;
     }
 
-    public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$createView$10(view, i);
+    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+        this.f$0.m3272lambda$createView$7$orgtelegramuiManageLinksActivity(tLObject, tL_error);
     }
 }

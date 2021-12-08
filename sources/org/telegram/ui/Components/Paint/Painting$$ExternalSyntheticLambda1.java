@@ -10,6 +10,6 @@ public final /* synthetic */ class Painting$$ExternalSyntheticLambda1 implements
     }
 
     public final void run() {
-        this.f$0.lambda$commitStroke$1(this.f$1);
+        this.f$0.m2417lambda$commitStroke$1$orgtelegramuiComponentsPaintPainting(this.f$1);
     }
 }

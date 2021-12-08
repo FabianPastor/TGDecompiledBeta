@@ -1,28 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$TL_channels_joinChannel;
-import org.telegram.tgnet.TLRPC$TL_error;
+import android.view.View;
 import org.telegram.ui.ArticleViewer;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda35 implements RequestDelegate {
+public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda35 implements RecyclerListView.OnItemClickListenerExtended {
     public final /* synthetic */ ArticleViewer f$0;
-    public final /* synthetic */ ArticleViewer.BlockChannelCell f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ TLRPC$TL_channels_joinChannel f$3;
-    public final /* synthetic */ TLRPC$Chat f$4;
+    public final /* synthetic */ ArticleViewer.WebpageAdapter f$1;
 
-    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda35(ArticleViewer articleViewer, ArticleViewer.BlockChannelCell blockChannelCell, int i, TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel, TLRPC$Chat tLRPC$Chat) {
+    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda35(ArticleViewer articleViewer, ArticleViewer.WebpageAdapter webpageAdapter) {
         this.f$0 = articleViewer;
-        this.f$1 = blockChannelCell;
-        this.f$2 = i;
-        this.f$3 = tLRPC$TL_channels_joinChannel;
-        this.f$4 = tLRPC$Chat;
+        this.f$1 = webpageAdapter;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$joinChannel$41(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
+    public final void onItemClick(View view, int i, float f, float f2) {
+        this.f$0.m1429lambda$setParentActivity$11$orgtelegramuiArticleViewer(this.f$1, view, i, f, f2);
     }
 }

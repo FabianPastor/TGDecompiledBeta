@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlert$15$$ExternalSyntheticLambda0 
     }
 
     public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.lambda$onAnimationEnd$1(dynamicAnimation, z, f, f2);
+        this.f$0.m2112x5a343266(dynamicAnimation, z, f, f2);
     }
 }
