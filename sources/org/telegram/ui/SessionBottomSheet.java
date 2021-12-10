@@ -425,29 +425,31 @@ public class SessionBottomSheet extends BottomSheet {
         Switch switchView;
         TextView valueText;
 
+        /* JADX INFO: super call moved to the top of the method (can break code semantics) */
         public ItemView(Context context, boolean z) {
             super(context);
-            ImageView imageView = new ImageView(context);
+            Context context2 = context;
+            ImageView imageView = new ImageView(context2);
             this.iconView = imageView;
             addView(imageView, LayoutHelper.createFrame(28, 28.0f, 0, 16.0f, 8.0f, 0.0f, 0.0f));
-            LinearLayout linearLayout = new LinearLayout(context);
+            LinearLayout linearLayout = new LinearLayout(context2);
             linearLayout.setOrientation(1);
             addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 0, 64.0f, 4.0f, 0.0f, 4.0f));
-            TextView textView = new TextView(context);
+            TextView textView = new TextView(context2);
             this.valueText = textView;
             textView.setTextSize(2, 16.0f);
             this.valueText.setGravity(3);
             this.valueText.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            linearLayout.addView(this.valueText, LayoutHelper.createLinear(-1, -2, 0, 0, 0, 0, 0));
-            TextView textView2 = new TextView(context);
+            linearLayout.addView(this.valueText, LayoutHelper.createLinear(-1, -2, 0, 0, 0, z ? 46 : 0, 0));
+            TextView textView2 = new TextView(context2);
             this.descriptionText = textView2;
             textView2.setTextSize(2, 13.0f);
             this.descriptionText.setGravity(3);
             this.descriptionText.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
-            linearLayout.addView(this.descriptionText, LayoutHelper.createLinear(-1, -2, 0, 0, 4, 0, 0));
+            linearLayout.addView(this.descriptionText, LayoutHelper.createLinear(-1, -2, 0, 0, 4, z ? 46 : 0, 0));
             setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
             if (z) {
-                Switch switchR = new Switch(context);
+                Switch switchR = new Switch(context2);
                 this.switchView = switchR;
                 switchR.setDrawIconType(1);
                 addView(this.switchView, LayoutHelper.createFrame(37, 40.0f, 21, 21.0f, 0.0f, 21.0f, 0.0f));
