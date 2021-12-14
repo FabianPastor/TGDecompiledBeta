@@ -1,20 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import java.util.ArrayList;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda4 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda4 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ DialogsActivity f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda4(DialogsActivity dialogsActivity, ArrayList arrayList, int i) {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda4(DialogsActivity dialogsActivity) {
         this.f$0 = dialogsActivity;
-        this.f$1 = arrayList;
-        this.f$2 = i;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2863xae284724(this.f$1, this.f$2, dialogInterface, i);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$hideActionMode$20(valueAnimator);
     }
 }

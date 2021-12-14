@@ -1,26 +1,15 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
-import java.util.ArrayList;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$MessageEntity;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda110 implements Runnable {
-    public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ LongSparseArray f$2;
-    public final /* synthetic */ ArrayList f$3;
-    public final /* synthetic */ long f$4;
-    public final /* synthetic */ int f$5;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda110 implements Comparator {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda110 INSTANCE = new MediaDataController$$ExternalSyntheticLambda110();
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda110(MediaDataController mediaDataController, ArrayList arrayList, LongSparseArray longSparseArray, ArrayList arrayList2, long j, int i) {
-        this.f$0 = mediaDataController;
-        this.f$1 = arrayList;
-        this.f$2 = longSparseArray;
-        this.f$3 = arrayList2;
-        this.f$4 = j;
-        this.f$5 = i;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda110() {
     }
 
-    public final void run() {
-        this.f$0.m858x99CLASSNAMEb44(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+    public final int compare(Object obj, Object obj2) {
+        return MediaDataController.lambda$static$103((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
     }
 }

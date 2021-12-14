@@ -1,17 +1,23 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_channels_inviteToChannel;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda152 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda152 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ TLRPC$TL_error f$1;
+    public final /* synthetic */ BaseFragment f$2;
+    public final /* synthetic */ TLRPC$TL_channels_inviteToChannel f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda152(MessagesController messagesController) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda152(MessagesController messagesController, TLRPC$TL_error tLRPC$TL_error, BaseFragment baseFragment, TLRPC$TL_channels_inviteToChannel tLRPC$TL_channels_inviteToChannel) {
         this.f$0 = messagesController;
+        this.f$1 = tLRPC$TL_error;
+        this.f$2 = baseFragment;
+        this.f$3 = tLRPC$TL_channels_inviteToChannel;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m411xa4682725(tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$addUsersToChannel$212(this.f$1, this.f$2, this.f$3);
     }
 }

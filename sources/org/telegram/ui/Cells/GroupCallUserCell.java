@@ -1,9 +1,6 @@
 package org.telegram.ui.Cells;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -14,15 +11,12 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
-import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Property;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import androidx.core.graphics.ColorUtils;
-import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -31,8 +25,10 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.voip.VoIPService;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$FileLocation;
+import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
@@ -54,12 +50,12 @@ public class GroupCallUserCell extends FrameLayout {
     /* access modifiers changed from: private */
     public RadialProgressView avatarProgressView;
     private AvatarWavesDrawable avatarWavesDrawable;
-    private Runnable checkRaiseRunnable = new GroupCallUserCell$$ExternalSyntheticLambda4(this);
+    private Runnable checkRaiseRunnable = new GroupCallUserCell$$ExternalSyntheticLambda3(this);
     private ChatObject.Call currentCall;
-    private TLRPC.Chat currentChat;
+    private TLRPC$Chat currentChat;
     private boolean currentIconGray;
     private int currentStatus;
-    private TLRPC.User currentUser;
+    private TLRPC$User currentUser;
     private Paint dividerPaint;
     private SimpleTextView fullAboutTextView;
     private String grayIconColor = "voipgroup_mutedIcon";
@@ -72,80 +68,86 @@ public class GroupCallUserCell extends FrameLayout {
     private RLottieDrawable muteDrawable;
     private SimpleTextView nameTextView;
     private boolean needDivider;
-    private TLRPC.TL_groupCallParticipant participant;
+    private TLRPC$TL_groupCallParticipant participant;
     /* access modifiers changed from: private */
     public float progressToAvatarPreview;
-    private Runnable raiseHandCallback = new GroupCallUserCell$$ExternalSyntheticLambda3(this);
+    private Runnable raiseHandCallback = new GroupCallUserCell$$ExternalSyntheticLambda2(this);
     private long selfId;
-    private Runnable shakeHandCallback = new GroupCallUserCell$$ExternalSyntheticLambda2(this);
+    private Runnable shakeHandCallback = new GroupCallUserCell$$ExternalSyntheticLambda4(this);
     private RLottieDrawable shakeHandDrawable;
     private Drawable speakingDrawable;
     /* access modifiers changed from: private */
     public SimpleTextView[] statusTextView = new SimpleTextView[5];
-    private Runnable updateRunnable = new GroupCallUserCell$$ExternalSyntheticLambda5(this);
+    private Runnable updateRunnable = new GroupCallUserCell$$ExternalSyntheticLambda6(this);
     private boolean updateRunnableScheduled;
-    private Runnable updateVoiceRunnable = new GroupCallUserCell$$ExternalSyntheticLambda6(this);
+    private Runnable updateVoiceRunnable = new GroupCallUserCell$$ExternalSyntheticLambda5(this);
     private boolean updateVoiceRunnableScheduled;
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Cells-GroupCallUserCell  reason: not valid java name */
-    public /* synthetic */ void m1534lambda$new$0$orgtelegramuiCellsGroupCallUserCell() {
+    public boolean hasOverlappingRendering() {
+        return false;
+    }
+
+    /* access modifiers changed from: protected */
+    /* renamed from: onMuteClick */
+    public void lambda$new$5(GroupCallUserCell groupCallUserCell) {
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0() {
         this.shakeHandDrawable.setOnFinishCallback((Runnable) null, 0);
         this.muteDrawable.setOnFinishCallback((Runnable) null, 0);
         this.muteButton.setAnimation(this.muteDrawable);
     }
 
-    /* renamed from: lambda$new$1$org-telegram-ui-Cells-GroupCallUserCell  reason: not valid java name */
-    public /* synthetic */ void m1535lambda$new$1$orgtelegramuiCellsGroupCallUserCell() {
-        int endFrame;
-        int startFrame;
-        int num = Utilities.random.nextInt(100);
-        if (num < 32) {
-            startFrame = 0;
-            endFrame = 120;
-        } else if (num < 64) {
-            startFrame = 120;
-            endFrame = 240;
-        } else if (num < 97) {
-            startFrame = 240;
-            endFrame = 420;
-        } else if (num == 98) {
-            startFrame = 420;
-            endFrame = 540;
-        } else {
-            startFrame = 540;
-            endFrame = 720;
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1() {
+        int nextInt = Utilities.random.nextInt(100);
+        int i = 540;
+        int i2 = 420;
+        if (nextInt < 32) {
+            i = 120;
+            i2 = 0;
+        } else if (nextInt < 64) {
+            i = 240;
+            i2 = 120;
+        } else if (nextInt < 97) {
+            i = 420;
+            i2 = 240;
+        } else if (nextInt != 98) {
+            i = 720;
+            i2 = 540;
         }
-        this.shakeHandDrawable.setCustomEndFrame(endFrame);
-        this.shakeHandDrawable.setOnFinishCallback(this.shakeHandCallback, endFrame - 1);
+        this.shakeHandDrawable.setCustomEndFrame(i);
+        this.shakeHandDrawable.setOnFinishCallback(this.shakeHandCallback, i - 1);
         this.muteButton.setAnimation(this.shakeHandDrawable);
-        this.shakeHandDrawable.setCurrentFrame(startFrame);
+        this.shakeHandDrawable.setCurrentFrame(i2);
         this.muteButton.playAnimation();
     }
 
-    /* renamed from: lambda$new$2$org-telegram-ui-Cells-GroupCallUserCell  reason: not valid java name */
-    public /* synthetic */ void m1536lambda$new$2$orgtelegramuiCellsGroupCallUserCell() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$2() {
         applyParticipantChanges(true, true);
     }
 
-    /* renamed from: lambda$new$3$org-telegram-ui-Cells-GroupCallUserCell  reason: not valid java name */
-    public /* synthetic */ void m1537lambda$new$3$orgtelegramuiCellsGroupCallUserCell() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$3() {
         this.isSpeaking = false;
         applyParticipantChanges(true, true);
         this.avatarWavesDrawable.setAmplitude(0.0d);
         this.updateRunnableScheduled = false;
     }
 
-    /* renamed from: lambda$new$4$org-telegram-ui-Cells-GroupCallUserCell  reason: not valid java name */
-    public /* synthetic */ void m1538lambda$new$4$orgtelegramuiCellsGroupCallUserCell() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$4() {
         applyParticipantChanges(true, true);
         this.updateVoiceRunnableScheduled = false;
     }
 
-    public void setProgressToAvatarPreview(float progressToAvatarPreview2) {
-        this.progressToAvatarPreview = progressToAvatarPreview2;
-        this.nameTextView.setTranslationX(((float) (LocaleController.isRTL ? AndroidUtilities.dp(53.0f) : -AndroidUtilities.dp(53.0f))) * progressToAvatarPreview2);
+    public void setProgressToAvatarPreview(float f) {
+        this.progressToAvatarPreview = f;
+        this.nameTextView.setTranslationX(((float) (LocaleController.isRTL ? AndroidUtilities.dp(53.0f) : -AndroidUtilities.dp(53.0f))) * f);
         boolean z = true;
-        if (!isSelfUser() || progressToAvatarPreview2 <= 0.0f) {
+        if (!isSelfUser() || f <= 0.0f) {
             this.fullAboutTextView.setVisibility(8);
             int i = 0;
             while (true) {
@@ -154,38 +156,41 @@ public class GroupCallUserCell extends FrameLayout {
                     break;
                 }
                 if (TextUtils.isEmpty(simpleTextViewArr[4].getText()) || this.statusTextView[4].getLineCount() <= 1) {
-                    this.statusTextView[i].setTranslationX(((float) (LocaleController.isRTL ? AndroidUtilities.dp(53.0f) : -AndroidUtilities.dp(53.0f))) * progressToAvatarPreview2);
+                    this.statusTextView[i].setTranslationX(((float) (LocaleController.isRTL ? AndroidUtilities.dp(53.0f) : -AndroidUtilities.dp(53.0f))) * f);
                     this.statusTextView[i].setFullLayoutAdditionalWidth(0, 0);
                 } else {
                     this.statusTextView[i].setFullLayoutAdditionalWidth(AndroidUtilities.dp(92.0f), LocaleController.isRTL ? AndroidUtilities.dp(48.0f) : AndroidUtilities.dp(53.0f));
-                    this.statusTextView[i].setFullAlpha(progressToAvatarPreview2);
+                    this.statusTextView[i].setFullAlpha(f);
                     this.statusTextView[i].setTranslationX(0.0f);
                     this.statusTextView[i].invalidate();
                 }
                 i++;
             }
         } else {
-            this.fullAboutTextView.setTranslationX(((float) (LocaleController.isRTL ? -AndroidUtilities.dp(53.0f) : AndroidUtilities.dp(53.0f))) * (1.0f - progressToAvatarPreview2));
+            float f2 = 1.0f - f;
+            this.fullAboutTextView.setTranslationX(((float) (LocaleController.isRTL ? -AndroidUtilities.dp(53.0f) : AndroidUtilities.dp(53.0f))) * f2);
             this.fullAboutTextView.setVisibility(0);
-            this.fullAboutTextView.setAlpha(progressToAvatarPreview2);
-            this.statusTextView[4].setAlpha(1.0f - progressToAvatarPreview2);
+            this.fullAboutTextView.setAlpha(f);
+            this.statusTextView[4].setAlpha(f2);
             SimpleTextView simpleTextView = this.statusTextView[4];
             boolean z2 = LocaleController.isRTL;
             int dp = AndroidUtilities.dp(53.0f);
             if (!z2) {
                 dp = -dp;
             }
-            simpleTextView.setTranslationX(((float) dp) * progressToAvatarPreview2);
+            simpleTextView.setTranslationX(((float) dp) * f);
         }
-        this.avatarImageView.setAlpha(progressToAvatarPreview2 == 0.0f ? 1.0f : 0.0f);
+        this.avatarImageView.setAlpha(f == 0.0f ? 1.0f : 0.0f);
         AvatarWavesDrawable avatarWavesDrawable2 = this.avatarWavesDrawable;
-        if (!this.isSpeaking || progressToAvatarPreview2 != 0.0f) {
+        if (!this.isSpeaking || f != 0.0f) {
             z = false;
         }
         avatarWavesDrawable2.setShowWaves(z, this);
-        this.muteButton.setAlpha(1.0f - progressToAvatarPreview2);
-        this.muteButton.setScaleX(((1.0f - progressToAvatarPreview2) * 0.4f) + 0.6f);
-        this.muteButton.setScaleY(((1.0f - progressToAvatarPreview2) * 0.4f) + 0.6f);
+        float f3 = 1.0f - f;
+        this.muteButton.setAlpha(f3);
+        float f4 = (f3 * 0.4f) + 0.6f;
+        this.muteButton.setScaleX(f4);
+        this.muteButton.setScaleY(f4);
         invalidate();
     }
 
@@ -193,23 +198,30 @@ public class GroupCallUserCell extends FrameLayout {
         return this.avatarWavesDrawable;
     }
 
-    public void setUploadProgress(float progress, boolean animated) {
-        this.avatarProgressView.setProgress(progress);
-        if (progress < 1.0f) {
-            AndroidUtilities.updateViewVisibilityAnimated(this.avatarProgressView, true, 1.0f, animated);
+    public void setUploadProgress(float f, boolean z) {
+        this.avatarProgressView.setProgress(f);
+        if (f < 1.0f) {
+            AndroidUtilities.updateViewVisibilityAnimated(this.avatarProgressView, true, 1.0f, z);
         } else {
-            AndroidUtilities.updateViewVisibilityAnimated(this.avatarProgressView, false, 1.0f, animated);
+            AndroidUtilities.updateViewVisibilityAnimated(this.avatarProgressView, false, 1.0f, z);
         }
     }
 
-    public void setDrawAvatar(boolean draw) {
-        if (this.avatarImageView.getImageReceiver().getVisible() != draw) {
-            this.avatarImageView.getImageReceiver().setVisible(draw, true);
+    public void setDrawAvatar(boolean z) {
+        if (this.avatarImageView.getImageReceiver().getVisible() != z) {
+            this.avatarImageView.getImageReceiver().setVisible(z, true);
         }
     }
 
     private static class VerifiedDrawable extends Drawable {
         private Drawable[] drawables;
+
+        public int getOpacity() {
+            return -2;
+        }
+
+        public void setColorFilter(ColorFilter colorFilter) {
+        }
 
         public VerifiedDrawable(Context context) {
             Drawable[] drawableArr = new Drawable[2];
@@ -228,37 +240,30 @@ public class GroupCallUserCell extends FrameLayout {
         }
 
         public void draw(Canvas canvas) {
-            int a = 0;
+            int i = 0;
             while (true) {
                 Drawable[] drawableArr = this.drawables;
-                if (a < drawableArr.length) {
-                    drawableArr[a].setBounds(getBounds());
-                    this.drawables[a].draw(canvas);
-                    a++;
+                if (i < drawableArr.length) {
+                    drawableArr[i].setBounds(getBounds());
+                    this.drawables[i].draw(canvas);
+                    i++;
                 } else {
                     return;
                 }
             }
         }
 
-        public void setAlpha(int alpha) {
-            int a = 0;
+        public void setAlpha(int i) {
+            int i2 = 0;
             while (true) {
                 Drawable[] drawableArr = this.drawables;
-                if (a < drawableArr.length) {
-                    drawableArr[a].setAlpha(alpha);
-                    a++;
+                if (i2 < drawableArr.length) {
+                    drawableArr[i2].setAlpha(i);
+                    i2++;
                 } else {
                     return;
                 }
             }
-        }
-
-        public void setColorFilter(ColorFilter colorFilter) {
-        }
-
-        public int getOpacity() {
-            return -2;
         }
     }
 
@@ -275,7 +280,10 @@ public class GroupCallUserCell extends FrameLayout {
         BackupImageView backupImageView = new BackupImageView(context2);
         this.avatarImageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
-        addView(this.avatarImageView, LayoutHelper.createFrame(46, 46.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 11.0f, 6.0f, LocaleController.isRTL ? 11.0f : 0.0f, 0.0f));
+        BackupImageView backupImageView2 = this.avatarImageView;
+        boolean z = LocaleController.isRTL;
+        float f = 11.0f;
+        addView(backupImageView2, LayoutHelper.createFrame(46, 46.0f, (z ? 5 : 3) | 48, z ? 0.0f : 11.0f, 6.0f, z ? 11.0f : 0.0f, 0.0f));
         AnonymousClass1 r5 = new RadialProgressView(context2) {
             private Paint paint;
 
@@ -299,7 +307,9 @@ public class GroupCallUserCell extends FrameLayout {
         r5.setSize(AndroidUtilities.dp(26.0f));
         this.avatarProgressView.setProgressColor(-1);
         this.avatarProgressView.setNoProgress(false);
-        addView(this.avatarProgressView, LayoutHelper.createFrame(46, 46.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 11.0f, 6.0f, LocaleController.isRTL ? 11.0f : 0.0f, 0.0f));
+        RadialProgressView radialProgressView = this.avatarProgressView;
+        boolean z2 = LocaleController.isRTL;
+        addView(radialProgressView, LayoutHelper.createFrame(46, 46.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 11.0f, 6.0f, !z2 ? 0.0f : f, 0.0f));
         AndroidUtilities.updateViewVisibilityAnimated(this.avatarProgressView, false, 1.0f, false);
         SimpleTextView simpleTextView = new SimpleTextView(context2);
         this.nameTextView = simpleTextView;
@@ -308,82 +318,87 @@ public class GroupCallUserCell extends FrameLayout {
         this.nameTextView.setTextSize(16);
         this.nameTextView.setDrawablePadding(AndroidUtilities.dp(6.0f));
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 54.0f : 67.0f, 10.0f, LocaleController.isRTL ? 67.0f : 54.0f, 0.0f));
+        SimpleTextView simpleTextView2 = this.nameTextView;
+        boolean z3 = LocaleController.isRTL;
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (z3 ? 5 : 3) | 48, z3 ? 54.0f : 67.0f, 10.0f, z3 ? 67.0f : 54.0f, 0.0f));
         Drawable drawable = context.getResources().getDrawable(NUM);
         this.speakingDrawable = drawable;
         drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("voipgroup_speakingText"), PorterDuff.Mode.MULTIPLY));
-        int a = 0;
+        final int i2 = 0;
         while (true) {
             SimpleTextView[] simpleTextViewArr = this.statusTextView;
-            if (a >= simpleTextViewArr.length) {
+            if (i2 >= simpleTextViewArr.length) {
                 break;
             }
-            final int num = a;
-            simpleTextViewArr[a] = new SimpleTextView(context2) {
+            simpleTextViewArr[i2] = new SimpleTextView(context2) {
                 float originalAlpha;
 
-                public void setAlpha(float alpha) {
-                    this.originalAlpha = alpha;
-                    if (num == 4) {
-                        float alphaOverride = GroupCallUserCell.this.statusTextView[4].getFullAlpha();
+                public void setAlpha(float f) {
+                    this.originalAlpha = f;
+                    if (i2 == 4) {
+                        float fullAlpha = GroupCallUserCell.this.statusTextView[4].getFullAlpha();
                         if (GroupCallUserCell.this.isSelfUser() && GroupCallUserCell.this.progressToAvatarPreview > 0.0f) {
                             super.setAlpha(1.0f - GroupCallUserCell.this.progressToAvatarPreview);
-                        } else if (alphaOverride > 0.0f) {
-                            super.setAlpha(Math.max(alpha, alphaOverride));
+                        } else if (fullAlpha > 0.0f) {
+                            super.setAlpha(Math.max(f, fullAlpha));
                         } else {
-                            super.setAlpha(alpha);
+                            super.setAlpha(f);
                         }
                     } else {
-                        super.setAlpha(alpha * (1.0f - GroupCallUserCell.this.statusTextView[4].getFullAlpha()));
+                        super.setAlpha(f * (1.0f - GroupCallUserCell.this.statusTextView[4].getFullAlpha()));
                     }
                 }
 
-                public void setTranslationY(float translationY) {
-                    if (num == 4 && getFullAlpha() > 0.0f) {
-                        translationY = 0.0f;
+                public void setTranslationY(float f) {
+                    if (i2 == 4 && getFullAlpha() > 0.0f) {
+                        f = 0.0f;
                     }
-                    super.setTranslationY(translationY);
+                    super.setTranslationY(f);
                 }
 
                 public float getAlpha() {
                     return this.originalAlpha;
                 }
 
-                public void setFullAlpha(float value) {
-                    super.setFullAlpha(value);
-                    for (int a = 0; a < GroupCallUserCell.this.statusTextView.length; a++) {
-                        GroupCallUserCell.this.statusTextView[a].setAlpha(GroupCallUserCell.this.statusTextView[a].getAlpha());
+                public void setFullAlpha(float f) {
+                    super.setFullAlpha(f);
+                    for (int i = 0; i < GroupCallUserCell.this.statusTextView.length; i++) {
+                        GroupCallUserCell.this.statusTextView[i].setAlpha(GroupCallUserCell.this.statusTextView[i].getAlpha());
                     }
                 }
             };
-            this.statusTextView[a].setTextSize(15);
-            this.statusTextView[a].setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            if (a == 4) {
-                this.statusTextView[a].setBuildFullLayout(true);
-                this.statusTextView[a].setTextColor(Theme.getColor("voipgroup_mutedIcon"));
-                addView(this.statusTextView[a], LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 54.0f : 67.0f, 32.0f, LocaleController.isRTL ? 67.0f : 54.0f, 0.0f));
+            this.statusTextView[i2].setTextSize(15);
+            this.statusTextView[i2].setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+            if (i2 == 4) {
+                this.statusTextView[i2].setBuildFullLayout(true);
+                this.statusTextView[i2].setTextColor(Theme.getColor("voipgroup_mutedIcon"));
+                SimpleTextView simpleTextView3 = this.statusTextView[i2];
+                boolean z4 = LocaleController.isRTL;
+                addView(simpleTextView3, LayoutHelper.createFrame(-1, -2.0f, (z4 ? 5 : 3) | 48, z4 ? 54.0f : 67.0f, 32.0f, z4 ? 67.0f : 54.0f, 0.0f));
             } else {
-                if (a == 0) {
-                    this.statusTextView[a].setTextColor(Theme.getColor("voipgroup_listeningText"));
-                    this.statusTextView[a].setText(LocaleController.getString("Listening", NUM));
-                } else if (a == 1) {
-                    this.statusTextView[a].setTextColor(Theme.getColor("voipgroup_speakingText"));
-                    this.statusTextView[a].setText(LocaleController.getString("Speaking", NUM));
-                    this.statusTextView[a].setDrawablePadding(AndroidUtilities.dp(2.0f));
-                } else if (a == 2) {
-                    this.statusTextView[a].setTextColor(Theme.getColor("voipgroup_mutedByAdminIcon"));
-                    this.statusTextView[a].setText(LocaleController.getString("VoipGroupMutedForMe", NUM));
-                } else if (a == 3) {
-                    this.statusTextView[a].setTextColor(Theme.getColor("voipgroup_listeningText"));
-                    this.statusTextView[a].setText(LocaleController.getString("WantsToSpeak", NUM));
+                if (i2 == 0) {
+                    this.statusTextView[i2].setTextColor(Theme.getColor("voipgroup_listeningText"));
+                    this.statusTextView[i2].setText(LocaleController.getString("Listening", NUM));
+                } else if (i2 == 1) {
+                    this.statusTextView[i2].setTextColor(Theme.getColor("voipgroup_speakingText"));
+                    this.statusTextView[i2].setText(LocaleController.getString("Speaking", NUM));
+                    this.statusTextView[i2].setDrawablePadding(AndroidUtilities.dp(2.0f));
+                } else if (i2 == 2) {
+                    this.statusTextView[i2].setTextColor(Theme.getColor("voipgroup_mutedByAdminIcon"));
+                    this.statusTextView[i2].setText(LocaleController.getString("VoipGroupMutedForMe", NUM));
+                } else if (i2 == 3) {
+                    this.statusTextView[i2].setTextColor(Theme.getColor("voipgroup_listeningText"));
+                    this.statusTextView[i2].setText(LocaleController.getString("WantsToSpeak", NUM));
                 }
-                addView(this.statusTextView[a], LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 54.0f : 67.0f, 32.0f, LocaleController.isRTL ? 67.0f : 54.0f, 0.0f));
+                SimpleTextView simpleTextView4 = this.statusTextView[i2];
+                boolean z5 = LocaleController.isRTL;
+                addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (z5 ? 5 : 3) | 48, z5 ? 54.0f : 67.0f, 32.0f, z5 ? 67.0f : 54.0f, 0.0f));
             }
-            a++;
+            i2++;
         }
-        SimpleTextView simpleTextView2 = new SimpleTextView(context2);
-        this.fullAboutTextView = simpleTextView2;
-        simpleTextView2.setMaxLines(3);
+        SimpleTextView simpleTextView5 = new SimpleTextView(context2);
+        this.fullAboutTextView = simpleTextView5;
+        simpleTextView5.setMaxLines(3);
         this.fullAboutTextView.setTextSize(15);
         this.fullAboutTextView.setTextColor(Theme.getColor("voipgroup_mutedIcon"));
         this.fullAboutTextView.setVisibility(8);
@@ -407,22 +422,17 @@ public class GroupCallUserCell extends FrameLayout {
         setFocusable(true);
     }
 
-    /* access modifiers changed from: protected */
-    /* renamed from: onMuteClick */
-    public void m1539lambda$new$5$orgtelegramuiCellsGroupCallUserCell(GroupCallUserCell cell) {
-    }
-
     public int getClipHeight() {
-        SimpleTextView aboutTextView;
+        SimpleTextView simpleTextView;
         if (TextUtils.isEmpty(this.fullAboutTextView.getText()) || !this.hasAvatar) {
-            aboutTextView = this.statusTextView[4];
+            simpleTextView = this.statusTextView[4];
         } else {
-            aboutTextView = this.fullAboutTextView;
+            simpleTextView = this.fullAboutTextView;
         }
-        if (aboutTextView.getLineCount() <= 1) {
+        if (simpleTextView.getLineCount() <= 1) {
             return getMeasuredHeight();
         }
-        return aboutTextView.getTop() + aboutTextView.getTextHeight() + AndroidUtilities.dp(8.0f);
+        return simpleTextView.getTop() + simpleTextView.getTextHeight() + AndroidUtilities.dp(8.0f);
     }
 
     /* access modifiers changed from: protected */
@@ -443,15 +453,16 @@ public class GroupCallUserCell extends FrameLayout {
     }
 
     public boolean isSelfUser() {
-        if (this.selfId > 0) {
-            TLRPC.User user = this.currentUser;
-            if (user == null || user.id != this.selfId) {
+        long j = this.selfId;
+        if (j > 0) {
+            TLRPC$User tLRPC$User = this.currentUser;
+            if (tLRPC$User == null || tLRPC$User.id != j) {
                 return false;
             }
             return true;
         }
-        TLRPC.Chat chat = this.currentChat;
-        if (chat == null || chat.id != (-this.selfId)) {
+        TLRPC$Chat tLRPC$Chat = this.currentChat;
+        if (tLRPC$Chat == null || tLRPC$Chat.id != (-j)) {
             return false;
         }
         return true;
@@ -469,63 +480,62 @@ public class GroupCallUserCell extends FrameLayout {
         return this.avatarImageView.getImageReceiver().hasNotThumb();
     }
 
-    public void setData(AccountInstance account, TLRPC.TL_groupCallParticipant groupCallParticipant, ChatObject.Call call, long self, TLRPC.FileLocation uploadingAvatar, boolean animated) {
-        TLRPC.TL_groupCallParticipant tL_groupCallParticipant = groupCallParticipant;
+    public void setData(AccountInstance accountInstance2, TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, ChatObject.Call call, long j, TLRPC$FileLocation tLRPC$FileLocation, boolean z) {
         this.currentCall = call;
-        this.accountInstance = account;
-        this.selfId = self;
-        this.participant = tL_groupCallParticipant;
-        long id = MessageObject.getPeerId(tL_groupCallParticipant.peer);
-        boolean z = false;
-        if (id > 0) {
-            TLRPC.User user = this.accountInstance.getMessagesController().getUser(Long.valueOf(id));
+        this.accountInstance = accountInstance2;
+        this.selfId = j;
+        this.participant = tLRPC$TL_groupCallParticipant;
+        long peerId = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
+        boolean z2 = false;
+        if (peerId > 0) {
+            TLRPC$User user = this.accountInstance.getMessagesController().getUser(Long.valueOf(peerId));
             this.currentUser = user;
             this.currentChat = null;
             this.avatarDrawable.setInfo(user);
             this.nameTextView.setText(UserObject.getUserName(this.currentUser));
             SimpleTextView simpleTextView = this.nameTextView;
-            TLRPC.User user2 = this.currentUser;
-            simpleTextView.setRightDrawable((Drawable) (user2 == null || !user2.verified) ? null : new VerifiedDrawable(getContext()));
-            this.avatarImageView.getImageReceiver().setCurrentAccount(account.getCurrentAccount());
-            if (uploadingAvatar != null) {
+            TLRPC$User tLRPC$User = this.currentUser;
+            simpleTextView.setRightDrawable((Drawable) (tLRPC$User == null || !tLRPC$User.verified) ? null : new VerifiedDrawable(getContext()));
+            this.avatarImageView.getImageReceiver().setCurrentAccount(accountInstance2.getCurrentAccount());
+            if (tLRPC$FileLocation != null) {
                 this.hasAvatar = true;
-                this.avatarImageView.setImage(ImageLocation.getForLocal(uploadingAvatar), "50_50", (Drawable) this.avatarDrawable, (Object) null);
+                this.avatarImageView.setImage(ImageLocation.getForLocal(tLRPC$FileLocation), "50_50", (Drawable) this.avatarDrawable, (Object) null);
             } else {
-                ImageLocation imageLocation = ImageLocation.getForUser(this.currentUser, 1);
-                if (imageLocation != null) {
-                    z = true;
+                ImageLocation forUser = ImageLocation.getForUser(this.currentUser, 1);
+                if (forUser != null) {
+                    z2 = true;
                 }
-                this.hasAvatar = z;
-                this.avatarImageView.setImage(imageLocation, "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
+                this.hasAvatar = z2;
+                this.avatarImageView.setImage(forUser, "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
             }
         } else {
-            TLRPC.Chat chat = this.accountInstance.getMessagesController().getChat(Long.valueOf(-id));
+            TLRPC$Chat chat = this.accountInstance.getMessagesController().getChat(Long.valueOf(-peerId));
             this.currentChat = chat;
             this.currentUser = null;
             this.avatarDrawable.setInfo(chat);
-            TLRPC.Chat chat2 = this.currentChat;
-            if (chat2 != null) {
-                this.nameTextView.setText(chat2.title);
+            TLRPC$Chat tLRPC$Chat = this.currentChat;
+            if (tLRPC$Chat != null) {
+                this.nameTextView.setText(tLRPC$Chat.title);
                 this.nameTextView.setRightDrawable((Drawable) this.currentChat.verified ? new VerifiedDrawable(getContext()) : null);
-                this.avatarImageView.getImageReceiver().setCurrentAccount(account.getCurrentAccount());
-                if (uploadingAvatar != null) {
+                this.avatarImageView.getImageReceiver().setCurrentAccount(accountInstance2.getCurrentAccount());
+                if (tLRPC$FileLocation != null) {
                     this.hasAvatar = true;
-                    this.avatarImageView.setImage(ImageLocation.getForLocal(uploadingAvatar), "50_50", (Drawable) this.avatarDrawable, (Object) null);
+                    this.avatarImageView.setImage(ImageLocation.getForLocal(tLRPC$FileLocation), "50_50", (Drawable) this.avatarDrawable, (Object) null);
                 } else {
-                    ImageLocation imageLocation2 = ImageLocation.getForChat(this.currentChat, 1);
-                    if (imageLocation2 != null) {
-                        z = true;
+                    ImageLocation forChat = ImageLocation.getForChat(this.currentChat, 1);
+                    if (forChat != null) {
+                        z2 = true;
                     }
-                    this.hasAvatar = z;
-                    this.avatarImageView.setImage(imageLocation2, "50_50", (Drawable) this.avatarDrawable, (Object) this.currentChat);
+                    this.hasAvatar = z2;
+                    this.avatarImageView.setImage(forChat, "50_50", (Drawable) this.avatarDrawable, (Object) this.currentChat);
                 }
             }
         }
-        applyParticipantChanges(animated);
+        applyParticipantChanges(z);
     }
 
-    public void setDrawDivider(boolean draw) {
-        this.needDivider = draw;
+    public void setDrawDivider(boolean z) {
+        this.needDivider = z;
         invalidate();
     }
 
@@ -535,12 +545,12 @@ public class GroupCallUserCell extends FrameLayout {
         applyParticipantChanges(false);
     }
 
-    public TLRPC.TL_groupCallParticipant getParticipant() {
+    public TLRPC$TL_groupCallParticipant getParticipant() {
         return this.participant;
     }
 
-    public void setAmplitude(double value) {
-        if (value > 1.5d) {
+    public void setAmplitude(double d) {
+        if (d > 1.5d) {
             if (this.updateRunnableScheduled) {
                 AndroidUtilities.cancelRunOnUIThread(this.updateRunnable);
             }
@@ -548,7 +558,7 @@ public class GroupCallUserCell extends FrameLayout {
                 this.isSpeaking = true;
                 applyParticipantChanges(true);
             }
-            this.avatarWavesDrawable.setAmplitude(value);
+            this.avatarWavesDrawable.setAmplitude(d);
             AndroidUtilities.runOnUIThread(this.updateRunnable, 500);
             this.updateRunnableScheduled = true;
             return;
@@ -565,38 +575,38 @@ public class GroupCallUserCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(58.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(58.0f), NUM));
     }
 
-    public void applyParticipantChanges(boolean animated) {
-        applyParticipantChanges(animated, false);
+    public void applyParticipantChanges(boolean z) {
+        applyParticipantChanges(z, false);
     }
 
-    public void setGrayIconColor(String key, int value) {
-        if (!this.grayIconColor.equals(key)) {
+    public void setGrayIconColor(String str, int i) {
+        if (!this.grayIconColor.equals(str)) {
             if (this.currentIconGray) {
-                this.lastMuteColor = Theme.getColor(key);
+                this.lastMuteColor = Theme.getColor(str);
             }
-            this.grayIconColor = key;
+            this.grayIconColor = str;
         }
         if (this.currentIconGray) {
-            this.muteButton.setColorFilter(new PorterDuffColorFilter(value, PorterDuff.Mode.MULTIPLY));
-            Theme.setSelectorDrawableColor(this.muteButton.getDrawable(), NUM & value, true);
+            this.muteButton.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+            Theme.setSelectorDrawableColor(this.muteButton.getDrawable(), i & NUM, true);
         }
     }
 
-    public void setAboutVisibleProgress(int color, float progress) {
+    public void setAboutVisibleProgress(int i, float f) {
         if (TextUtils.isEmpty(this.statusTextView[4].getText())) {
-            progress = 0.0f;
+            f = 0.0f;
         }
-        this.statusTextView[4].setFullAlpha(progress);
+        this.statusTextView[4].setFullAlpha(f);
         this.statusTextView[4].setFullLayoutAdditionalWidth(0, 0);
         invalidate();
     }
 
-    public void setAboutVisible(boolean visible) {
-        if (visible) {
+    public void setAboutVisible(boolean z) {
+        if (z) {
             this.statusTextView[4].setTranslationY(0.0f);
         } else {
             this.statusTextView[4].setFullAlpha(0.0f);
@@ -604,355 +614,745 @@ public class GroupCallUserCell extends FrameLayout {
         invalidate();
     }
 
-    private void applyParticipantChanges(boolean animated, boolean internal) {
-        boolean hasVoice;
-        boolean newMuted;
-        final int newStatus;
-        int newMuteColor;
-        int i;
-        boolean z;
-        boolean changed;
-        float f;
-        char c;
-        char c2;
-        int newStatus2;
-        boolean z2 = animated;
-        if (this.currentCall != null) {
-            this.muteButton.setEnabled(!isSelfUser() || this.participant.raise_hand_rating != 0);
-            if (SystemClock.elapsedRealtime() - this.participant.lastVoiceUpdateTime < 500) {
-                hasVoice = this.participant.hasVoiceDelayed;
-            } else {
-                hasVoice = this.participant.hasVoice;
-            }
-            if (!internal) {
-                long diff = SystemClock.uptimeMillis() - this.participant.lastSpeakTime;
-                boolean newSpeaking = diff < 500;
-                if (!this.isSpeaking || !newSpeaking || hasVoice) {
-                    this.isSpeaking = newSpeaking;
-                    if (this.updateRunnableScheduled) {
-                        AndroidUtilities.cancelRunOnUIThread(this.updateRunnable);
-                        this.updateRunnableScheduled = false;
-                    }
-                    if (this.isSpeaking) {
-                        AndroidUtilities.runOnUIThread(this.updateRunnable, 500 - diff);
-                        this.updateRunnableScheduled = true;
-                    }
-                }
-            }
-            TLRPC.TL_groupCallParticipant newParticipant = this.currentCall.participants.get(MessageObject.getPeerId(this.participant.peer));
-            if (newParticipant != null) {
-                this.participant = newParticipant;
-            }
-            ArrayList<Animator> animators = null;
-            boolean newRaisedHand = false;
-            boolean myted_by_me = this.participant.muted_by_you && !isSelfUser();
-            if (isSelfUser()) {
-                newMuted = VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().isMicMute() && (!this.isSpeaking || !hasVoice);
-            } else {
-                newMuted = (this.participant.muted && (!this.isSpeaking || !hasVoice)) || myted_by_me;
-            }
-            if (!newMuted || this.participant.can_self_unmute) {
-            }
-            boolean hasAbout = !TextUtils.isEmpty(this.participant.about);
-            this.currentIconGray = false;
-            AndroidUtilities.cancelRunOnUIThread(this.checkRaiseRunnable);
-            if ((!this.participant.muted || this.isSpeaking) && !myted_by_me) {
-                if (this.isSpeaking == 0 || !hasVoice) {
-                    newMuteColor = Theme.getColor(this.grayIconColor);
-                    newStatus = hasAbout ? 4 : 0;
-                    this.currentIconGray = true;
-                } else {
-                    newMuteColor = Theme.getColor("voipgroup_speakingText");
-                    newStatus = 1;
-                }
-            } else if (!this.participant.can_self_unmute || myted_by_me) {
-                boolean z3 = !this.participant.can_self_unmute && this.participant.raise_hand_rating != 0;
-                newRaisedHand = z3;
-                if (z3) {
-                    int newMuteColor2 = Theme.getColor("voipgroup_listeningText");
-                    long time = SystemClock.elapsedRealtime() - this.participant.lastRaiseHandDate;
-                    if (this.participant.lastRaiseHandDate == 0 || time > 5000) {
-                        newStatus2 = myted_by_me ? 2 : hasAbout ? 4 : 0;
-                    } else {
-                        AndroidUtilities.runOnUIThread(this.checkRaiseRunnable, 5000 - time);
-                        newStatus2 = 3;
-                    }
-                    newMuteColor = newMuteColor2;
-                } else {
-                    newMuteColor = Theme.getColor("voipgroup_mutedByAdminIcon");
-                    newStatus = myted_by_me ? 2 : hasAbout ? 4 : 0;
-                }
-            } else {
-                newMuteColor = Theme.getColor(this.grayIconColor);
-                this.currentIconGray = true;
-                newStatus = hasAbout ? 4 : 0;
-            }
-            if (!isSelfUser()) {
-                this.statusTextView[4].setTextColor(Theme.getColor(this.grayIconColor));
-            }
-            if (isSelfUser()) {
-                if (!hasAbout && !this.hasAvatar) {
-                    if (this.currentUser != null) {
-                        c2 = 4;
-                        this.statusTextView[4].setText(LocaleController.getString("TapToAddPhotoOrBio", NUM));
-                    } else {
-                        c2 = 4;
-                        this.statusTextView[4].setText(LocaleController.getString("TapToAddPhotoOrDescription", NUM));
-                    }
-                    this.statusTextView[c2].setTextColor(Theme.getColor(this.grayIconColor));
-                } else if (!hasAbout) {
-                    if (this.currentUser != null) {
-                        c = 4;
-                        this.statusTextView[4].setText(LocaleController.getString("TapToAddBio", NUM));
-                    } else {
-                        c = 4;
-                        this.statusTextView[4].setText(LocaleController.getString("TapToAddDescription", NUM));
-                    }
-                    this.statusTextView[c].setTextColor(Theme.getColor(this.grayIconColor));
-                } else if (!this.hasAvatar) {
-                    this.statusTextView[4].setText(LocaleController.getString("TapToAddPhoto", NUM));
-                    this.statusTextView[4].setTextColor(Theme.getColor(this.grayIconColor));
-                } else {
-                    this.statusTextView[4].setText(LocaleController.getString("ThisIsYou", NUM));
-                    this.statusTextView[4].setTextColor(Theme.getColor("voipgroup_listeningText"));
-                }
-                if (hasAbout) {
-                    this.fullAboutTextView.setText(AndroidUtilities.replaceNewLines(this.participant.about));
-                    this.fullAboutTextView.setTextColor(Theme.getColor("voipgroup_mutedIcon"));
-                } else {
-                    this.fullAboutTextView.setText(this.statusTextView[newStatus].getText());
-                    this.fullAboutTextView.setTextColor(this.statusTextView[newStatus].getTextColor());
-                }
-            } else if (hasAbout) {
-                this.statusTextView[4].setText(AndroidUtilities.replaceNewLines(this.participant.about));
-                this.fullAboutTextView.setText("");
-            } else {
-                this.statusTextView[4].setText("");
-                this.fullAboutTextView.setText("");
-            }
-            boolean somethingChanged = false;
-            AnimatorSet animatorSet2 = this.animatorSet;
-            if (!(animatorSet2 == null || (newStatus == this.currentStatus && this.lastMuteColor == newMuteColor))) {
-                somethingChanged = true;
-            }
-            if ((!z2 || somethingChanged) && animatorSet2 != null) {
-                animatorSet2.cancel();
-                this.animatorSet = null;
-            }
-            if (z2 && this.lastMuteColor == newMuteColor && !somethingChanged) {
-                i = 1;
-            } else if (z2) {
-                animators = new ArrayList<>();
-                int oldColor = this.lastMuteColor;
-                this.lastMuteColor = newMuteColor;
-                ValueAnimator animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                animator.addUpdateListener(new GroupCallUserCell$$ExternalSyntheticLambda0(this, oldColor, newMuteColor));
-                animators.add(animator);
-                i = 1;
-            } else {
-                RLottieImageView rLottieImageView = this.muteButton;
-                this.lastMuteColor = newMuteColor;
-                rLottieImageView.setColorFilter(new PorterDuffColorFilter(newMuteColor, PorterDuff.Mode.MULTIPLY));
-                i = 1;
-                Theme.setSelectorDrawableColor(this.muteButton.getDrawable(), NUM & newMuteColor, true);
-            }
-            if (newStatus == i) {
-                int vol = ChatObject.getParticipantVolume(this.participant);
-                int volume = vol / 100;
-                if (volume != 100) {
-                    boolean z4 = hasVoice;
-                    this.statusTextView[1].setLeftDrawable(this.speakingDrawable);
-                    SimpleTextView simpleTextView = this.statusTextView[1];
-                    TLRPC.TL_groupCallParticipant tL_groupCallParticipant = newParticipant;
-                    Object[] objArr = new Object[1];
-                    objArr[0] = Integer.valueOf(vol < 100 ? 1 : volume);
-                    int i2 = newMuteColor;
-                    simpleTextView.setText(LocaleController.formatString("SpeakingWithVolume", NUM, objArr));
-                } else {
-                    TLRPC.TL_groupCallParticipant tL_groupCallParticipant2 = newParticipant;
-                    int i3 = newMuteColor;
-                    this.statusTextView[1].setLeftDrawable((Drawable) null);
-                    this.statusTextView[1].setText(LocaleController.getString("Speaking", NUM));
-                }
-            } else {
-                TLRPC.TL_groupCallParticipant tL_groupCallParticipant3 = newParticipant;
-                int i4 = newMuteColor;
-            }
-            if (isSelfUser()) {
-                applyStatus(4);
-            } else if (!z2 || newStatus != this.currentStatus || somethingChanged) {
-                if (z2) {
-                    if (animators == null) {
-                        animators = new ArrayList<>();
-                    }
-                    if (newStatus != 0) {
-                        int a = 0;
-                        while (true) {
-                            SimpleTextView[] simpleTextViewArr = this.statusTextView;
-                            if (a >= simpleTextViewArr.length) {
-                                break;
-                            }
-                            SimpleTextView simpleTextView2 = simpleTextViewArr[a];
-                            Property property = View.TRANSLATION_Y;
-                            float[] fArr = new float[1];
-                            if (a == newStatus) {
-                                f = 0.0f;
-                            } else {
-                                f = (float) AndroidUtilities.dp(a == 0 ? 2.0f : -2.0f);
-                            }
-                            fArr[0] = f;
-                            animators.add(ObjectAnimator.ofFloat(simpleTextView2, property, fArr));
-                            SimpleTextView simpleTextView3 = this.statusTextView[a];
-                            Property property2 = View.ALPHA;
-                            float[] fArr2 = new float[1];
-                            fArr2[0] = a == newStatus ? 1.0f : 0.0f;
-                            animators.add(ObjectAnimator.ofFloat(simpleTextView3, property2, fArr2));
-                            a++;
-                        }
-                    } else {
-                        int a2 = 0;
-                        while (true) {
-                            SimpleTextView[] simpleTextViewArr2 = this.statusTextView;
-                            if (a2 >= simpleTextViewArr2.length) {
-                                break;
-                            }
-                            SimpleTextView simpleTextView4 = simpleTextViewArr2[a2];
-                            Property property3 = View.TRANSLATION_Y;
-                            float[] fArr3 = new float[1];
-                            fArr3[0] = a2 == newStatus ? 0.0f : (float) AndroidUtilities.dp(-2.0f);
-                            animators.add(ObjectAnimator.ofFloat(simpleTextView4, property3, fArr3));
-                            SimpleTextView simpleTextView5 = this.statusTextView[a2];
-                            Property property4 = View.ALPHA;
-                            float[] fArr4 = new float[1];
-                            fArr4[0] = a2 == newStatus ? 1.0f : 0.0f;
-                            animators.add(ObjectAnimator.ofFloat(simpleTextView5, property4, fArr4));
-                            a2++;
-                        }
-                    }
-                } else {
-                    applyStatus(newStatus);
-                }
-                this.currentStatus = newStatus;
-            }
-            this.avatarWavesDrawable.setMuted(newStatus, z2);
-            if (animators != null) {
-                AnimatorSet animatorSet3 = this.animatorSet;
-                if (animatorSet3 != null) {
-                    animatorSet3.cancel();
-                    this.animatorSet = null;
-                }
-                AnimatorSet animatorSet4 = new AnimatorSet();
-                this.animatorSet = animatorSet4;
-                animatorSet4.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        if (!GroupCallUserCell.this.isSelfUser()) {
-                            GroupCallUserCell.this.applyStatus(newStatus);
-                        }
-                        AnimatorSet unused = GroupCallUserCell.this.animatorSet = null;
-                    }
-                });
-                this.animatorSet.playTogether(animators);
-                this.animatorSet.setDuration(180);
-                this.animatorSet.start();
-            }
-            if (z2 && this.lastMuted == newMuted && this.lastRaisedHand == newRaisedHand) {
-                z = false;
-            } else {
-                if (newRaisedHand) {
-                    changed = this.muteDrawable.setCustomEndFrame(84);
-                    if (z2) {
-                        this.muteDrawable.setOnFinishCallback(this.raiseHandCallback, 83);
-                    } else {
-                        this.muteDrawable.setOnFinishCallback((Runnable) null, 0);
-                    }
-                } else {
-                    this.muteButton.setAnimation(this.muteDrawable);
-                    this.muteDrawable.setOnFinishCallback((Runnable) null, 0);
-                    if (!newMuted || !this.lastRaisedHand) {
-                        changed = this.muteDrawable.setCustomEndFrame(newMuted ? 64 : 42);
-                    } else {
-                        changed = this.muteDrawable.setCustomEndFrame(21);
-                    }
-                }
-                if (z2) {
-                    if (changed) {
-                        if (newStatus == 3) {
-                            this.muteDrawable.setCurrentFrame(63);
-                        } else if (newMuted && this.lastRaisedHand && !newRaisedHand) {
-                            this.muteDrawable.setCurrentFrame(0);
-                        } else if (newMuted) {
-                            this.muteDrawable.setCurrentFrame(43);
-                        } else {
-                            this.muteDrawable.setCurrentFrame(21);
-                        }
-                    }
-                    this.muteButton.playAnimation();
-                    z = false;
-                } else {
-                    RLottieDrawable rLottieDrawable = this.muteDrawable;
-                    z = false;
-                    rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame() - 1, false, true);
-                    this.muteButton.invalidate();
-                }
-                this.lastMuted = newMuted;
-                this.lastRaisedHand = newRaisedHand;
-            }
-            if (!this.isSpeaking) {
-                this.avatarWavesDrawable.setAmplitude(0.0d);
-            }
-            AvatarWavesDrawable avatarWavesDrawable2 = this.avatarWavesDrawable;
-            if (this.isSpeaking && this.progressToAvatarPreview == 0.0f) {
-                z = true;
-            }
-            avatarWavesDrawable2.setShowWaves(z, this);
-        }
-    }
-
-    /* renamed from: lambda$applyParticipantChanges$6$org-telegram-ui-Cells-GroupCallUserCell  reason: not valid java name */
-    public /* synthetic */ void m1533xvar_dd947(int oldColor, int newMuteColor, ValueAnimator animation) {
-        int color = AndroidUtilities.getOffsetColor(oldColor, newMuteColor, animation.getAnimatedFraction(), 1.0f);
-        this.muteButton.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-        Theme.setSelectorDrawableColor(this.muteButton.getDrawable(), NUM & color, true);
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x017a  */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x018d  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x026e  */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x029f  */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x02a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:151:0x02b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x02d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:155:0x02f4  */
+    /* JADX WARNING: Removed duplicated region for block: B:164:0x0343  */
+    /* JADX WARNING: Removed duplicated region for block: B:165:0x0349 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:205:0x03e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x0418  */
+    /* JADX WARNING: Removed duplicated region for block: B:220:0x0432  */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x045a  */
+    /* JADX WARNING: Removed duplicated region for block: B:244:0x048a  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x04a1  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private void applyParticipantChanges(boolean r21, boolean r22) {
+        /*
+            r20 = this;
+            r0 = r20
+            r1 = r21
+            org.telegram.messenger.ChatObject$Call r2 = r0.currentCall
+            if (r2 != 0) goto L_0x0009
+            return
+        L_0x0009:
+            org.telegram.ui.Components.RLottieImageView r2 = r0.muteButton
+            boolean r3 = r20.isSelfUser()
+            r4 = 0
+            r6 = 0
+            r7 = 1
+            if (r3 == 0) goto L_0x0020
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r0.participant
+            long r8 = r3.raise_hand_rating
+            int r3 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1))
+            if (r3 == 0) goto L_0x001e
+            goto L_0x0020
+        L_0x001e:
+            r3 = 0
+            goto L_0x0021
+        L_0x0020:
+            r3 = 1
+        L_0x0021:
+            r2.setEnabled(r3)
+            long r2 = android.os.SystemClock.elapsedRealtime()
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r8 = r0.participant
+            long r9 = r8.lastVoiceUpdateTime
+            long r2 = r2 - r9
+            r9 = 500(0x1f4, double:2.47E-321)
+            int r11 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1))
+            if (r11 >= 0) goto L_0x0036
+            boolean r2 = r8.hasVoiceDelayed
+            goto L_0x0038
+        L_0x0036:
+            boolean r2 = r8.hasVoice
+        L_0x0038:
+            if (r22 != 0) goto L_0x006b
+            long r11 = android.os.SystemClock.uptimeMillis()
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r0.participant
+            long r13 = r3.lastSpeakTime
+            long r11 = r11 - r13
+            int r3 = (r11 > r9 ? 1 : (r11 == r9 ? 0 : -1))
+            if (r3 >= 0) goto L_0x0049
+            r3 = 1
+            goto L_0x004a
+        L_0x0049:
+            r3 = 0
+        L_0x004a:
+            boolean r8 = r0.isSpeaking
+            if (r8 == 0) goto L_0x0052
+            if (r3 == 0) goto L_0x0052
+            if (r2 == 0) goto L_0x006b
+        L_0x0052:
+            r0.isSpeaking = r3
+            boolean r3 = r0.updateRunnableScheduled
+            if (r3 == 0) goto L_0x005f
+            java.lang.Runnable r3 = r0.updateRunnable
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r3)
+            r0.updateRunnableScheduled = r6
+        L_0x005f:
+            boolean r3 = r0.isSpeaking
+            if (r3 == 0) goto L_0x006b
+            java.lang.Runnable r3 = r0.updateRunnable
+            long r9 = r9 - r11
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r3, r9)
+            r0.updateRunnableScheduled = r7
+        L_0x006b:
+            org.telegram.messenger.ChatObject$Call r3 = r0.currentCall
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r3 = r3.participants
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r8 = r0.participant
+            org.telegram.tgnet.TLRPC$Peer r8 = r8.peer
+            long r8 = org.telegram.messenger.MessageObject.getPeerId(r8)
+            java.lang.Object r3 = r3.get(r8)
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = (org.telegram.tgnet.TLRPC$TL_groupCallParticipant) r3
+            if (r3 == 0) goto L_0x0081
+            r0.participant = r3
+        L_0x0081:
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r0.participant
+            boolean r3 = r3.muted_by_you
+            if (r3 == 0) goto L_0x008f
+            boolean r3 = r20.isSelfUser()
+            if (r3 != 0) goto L_0x008f
+            r3 = 1
+            goto L_0x0090
+        L_0x008f:
+            r3 = 0
+        L_0x0090:
+            boolean r8 = r20.isSelfUser()
+            if (r8 == 0) goto L_0x00b0
+            org.telegram.messenger.voip.VoIPService r8 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            if (r8 == 0) goto L_0x00ae
+            org.telegram.messenger.voip.VoIPService r8 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            boolean r8 = r8.isMicMute()
+            if (r8 == 0) goto L_0x00ae
+            boolean r8 = r0.isSpeaking
+            if (r8 == 0) goto L_0x00ac
+            if (r2 != 0) goto L_0x00ae
+        L_0x00ac:
+            r8 = 1
+            goto L_0x00bf
+        L_0x00ae:
+            r8 = 0
+            goto L_0x00bf
+        L_0x00b0:
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r8 = r0.participant
+            boolean r8 = r8.muted
+            if (r8 == 0) goto L_0x00bc
+            boolean r8 = r0.isSpeaking
+            if (r8 == 0) goto L_0x00ac
+            if (r2 == 0) goto L_0x00ac
+        L_0x00bc:
+            if (r3 == 0) goto L_0x00ae
+            goto L_0x00ac
+        L_0x00bf:
+            if (r8 == 0) goto L_0x00c5
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r9 = r0.participant
+            boolean r9 = r9.can_self_unmute
+        L_0x00c5:
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r9 = r0.participant
+            java.lang.String r9 = r9.about
+            boolean r9 = android.text.TextUtils.isEmpty(r9)
+            r9 = r9 ^ r7
+            r0.currentIconGray = r6
+            java.lang.Runnable r10 = r0.checkRaiseRunnable
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r10)
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r10 = r0.participant
+            boolean r11 = r10.muted
+            java.lang.String r13 = "voipgroup_listeningText"
+            r14 = 2
+            r15 = 4
+            if (r11 == 0) goto L_0x00e3
+            boolean r11 = r0.isSpeaking
+            if (r11 == 0) goto L_0x00e5
+        L_0x00e3:
+            if (r3 == 0) goto L_0x0154
+        L_0x00e5:
+            boolean r2 = r10.can_self_unmute
+            if (r2 == 0) goto L_0x00fe
+            if (r3 == 0) goto L_0x00ec
+            goto L_0x00fe
+        L_0x00ec:
+            java.lang.String r2 = r0.grayIconColor
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r0.currentIconGray = r7
+            if (r9 == 0) goto L_0x00f8
+            r3 = 4
+            goto L_0x00f9
+        L_0x00f8:
+            r3 = 0
+        L_0x00f9:
+            r4 = r3
+            r18 = r13
+            goto L_0x0173
+        L_0x00fe:
+            if (r2 != 0) goto L_0x0108
+            long r10 = r10.raise_hand_rating
+            int r2 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
+            if (r2 == 0) goto L_0x0108
+            r2 = 1
+            goto L_0x0109
+        L_0x0108:
+            r2 = 0
+        L_0x0109:
+            if (r2 == 0) goto L_0x013c
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r13)
+            long r16 = android.os.SystemClock.elapsedRealtime()
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r11 = r0.participant
+            r18 = r13
+            long r12 = r11.lastRaiseHandDate
+            long r16 = r16 - r12
+            int r11 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
+            if (r11 == 0) goto L_0x012f
+            r4 = 5000(0x1388, double:2.4703E-320)
+            int r11 = (r16 > r4 ? 1 : (r16 == r4 ? 0 : -1))
+            if (r11 <= 0) goto L_0x0126
+            goto L_0x012f
+        L_0x0126:
+            java.lang.Runnable r3 = r0.checkRaiseRunnable
+            long r4 = r4 - r16
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r3, r4)
+            r3 = 3
+            goto L_0x0138
+        L_0x012f:
+            if (r3 == 0) goto L_0x0133
+            r3 = 2
+            goto L_0x0138
+        L_0x0133:
+            if (r9 == 0) goto L_0x0137
+            r3 = 4
+            goto L_0x0138
+        L_0x0137:
+            r3 = 0
+        L_0x0138:
+            r4 = r3
+            r3 = r2
+            r2 = r10
+            goto L_0x0174
+        L_0x013c:
+            r18 = r13
+            java.lang.String r4 = "voipgroup_mutedByAdminIcon"
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            if (r3 == 0) goto L_0x0148
+            r3 = 2
+            goto L_0x014d
+        L_0x0148:
+            if (r9 == 0) goto L_0x014c
+            r3 = 4
+            goto L_0x014d
+        L_0x014c:
+            r3 = 0
+        L_0x014d:
+            r19 = r3
+            r3 = r2
+            r2 = r4
+            r4 = r19
+            goto L_0x0174
+        L_0x0154:
+            r18 = r13
+            boolean r3 = r0.isSpeaking
+            if (r3 == 0) goto L_0x0165
+            if (r2 == 0) goto L_0x0165
+            java.lang.String r2 = "voipgroup_speakingText"
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r3 = 0
+            r4 = 1
+            goto L_0x0174
+        L_0x0165:
+            java.lang.String r2 = r0.grayIconColor
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            if (r9 == 0) goto L_0x016f
+            r3 = 4
+            goto L_0x0170
+        L_0x016f:
+            r3 = 0
+        L_0x0170:
+            r0.currentIconGray = r7
+            r4 = r3
+        L_0x0173:
+            r3 = 0
+        L_0x0174:
+            boolean r5 = r20.isSelfUser()
+            if (r5 != 0) goto L_0x0187
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
+            r5 = r5[r15]
+            java.lang.String r10 = r0.grayIconColor
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+            r5.setTextColor(r10)
+        L_0x0187:
+            boolean r5 = r20.isSelfUser()
+            if (r5 == 0) goto L_0x026e
+            if (r9 != 0) goto L_0x01c6
+            boolean r5 = r0.hasAvatar
+            if (r5 != 0) goto L_0x01c6
+            org.telegram.tgnet.TLRPC$User r5 = r0.currentUser
+            if (r5 == 0) goto L_0x01a8
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
+            r5 = r5[r15]
+            r10 = 2131628040(0x7f0e1008, float:1.8883361E38)
+            java.lang.String r11 = "TapToAddPhotoOrBio"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r5.setText(r10)
+            goto L_0x01b8
+        L_0x01a8:
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
+            r5 = r5[r15]
+            r10 = 2131628041(0x7f0e1009, float:1.8883363E38)
+            java.lang.String r11 = "TapToAddPhotoOrDescription"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r5.setText(r10)
+        L_0x01b8:
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
+            r5 = r5[r15]
+            java.lang.String r10 = r0.grayIconColor
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+            r5.setTextColor(r10)
+            goto L_0x0238
+        L_0x01c6:
+            if (r9 != 0) goto L_0x01fb
+            org.telegram.tgnet.TLRPC$User r5 = r0.currentUser
+            if (r5 == 0) goto L_0x01dd
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
+            r5 = r5[r15]
+            r10 = 2131628037(0x7f0e1005, float:1.8883355E38)
+            java.lang.String r11 = "TapToAddBio"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r5.setText(r10)
+            goto L_0x01ed
+        L_0x01dd:
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
+            r5 = r5[r15]
+            r10 = 2131628038(0x7f0e1006, float:1.8883357E38)
+            java.lang.String r11 = "TapToAddDescription"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r5.setText(r10)
+        L_0x01ed:
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
+            r5 = r5[r15]
+            java.lang.String r10 = r0.grayIconColor
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+            r5.setTextColor(r10)
+            goto L_0x0238
+        L_0x01fb:
+            boolean r5 = r0.hasAvatar
+            if (r5 != 0) goto L_0x021d
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
+            r5 = r5[r15]
+            r10 = 2131628039(0x7f0e1007, float:1.888336E38)
+            java.lang.String r11 = "TapToAddPhoto"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r5.setText(r10)
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
+            r5 = r5[r15]
+            java.lang.String r10 = r0.grayIconColor
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+            r5.setTextColor(r10)
+            goto L_0x0238
+        L_0x021d:
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
+            r5 = r5[r15]
+            r10 = 2131628142(0x7f0e106e, float:1.8883568E38)
+            java.lang.String r11 = "ThisIsYou"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            r5.setText(r10)
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
+            r5 = r5[r15]
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r18)
+            r5.setTextColor(r10)
+        L_0x0238:
+            if (r9 == 0) goto L_0x0253
+            org.telegram.ui.ActionBar.SimpleTextView r5 = r0.fullAboutTextView
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r9 = r0.participant
+            java.lang.String r9 = r9.about
+            java.lang.CharSequence r9 = org.telegram.messenger.AndroidUtilities.replaceNewLines(r9)
+            r5.setText(r9)
+            org.telegram.ui.ActionBar.SimpleTextView r5 = r0.fullAboutTextView
+            java.lang.String r9 = "voipgroup_mutedIcon"
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
+            r5.setTextColor(r9)
+            goto L_0x0293
+        L_0x0253:
+            org.telegram.ui.ActionBar.SimpleTextView r5 = r0.fullAboutTextView
+            org.telegram.ui.ActionBar.SimpleTextView[] r9 = r0.statusTextView
+            r9 = r9[r4]
+            java.lang.CharSequence r9 = r9.getText()
+            r5.setText(r9)
+            org.telegram.ui.ActionBar.SimpleTextView r5 = r0.fullAboutTextView
+            org.telegram.ui.ActionBar.SimpleTextView[] r9 = r0.statusTextView
+            r9 = r9[r4]
+            int r9 = r9.getTextColor()
+            r5.setTextColor(r9)
+            goto L_0x0293
+        L_0x026e:
+            java.lang.String r5 = ""
+            if (r9 == 0) goto L_0x0287
+            org.telegram.ui.ActionBar.SimpleTextView[] r9 = r0.statusTextView
+            r9 = r9[r15]
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r10 = r0.participant
+            java.lang.String r10 = r10.about
+            java.lang.CharSequence r10 = org.telegram.messenger.AndroidUtilities.replaceNewLines(r10)
+            r9.setText(r10)
+            org.telegram.ui.ActionBar.SimpleTextView r9 = r0.fullAboutTextView
+            r9.setText(r5)
+            goto L_0x0293
+        L_0x0287:
+            org.telegram.ui.ActionBar.SimpleTextView[] r9 = r0.statusTextView
+            r9 = r9[r15]
+            r9.setText(r5)
+            org.telegram.ui.ActionBar.SimpleTextView r9 = r0.fullAboutTextView
+            r9.setText(r5)
+        L_0x0293:
+            android.animation.AnimatorSet r5 = r0.animatorSet
+            if (r5 == 0) goto L_0x02a1
+            int r9 = r0.currentStatus
+            if (r4 != r9) goto L_0x029f
+            int r9 = r0.lastMuteColor
+            if (r9 == r2) goto L_0x02a1
+        L_0x029f:
+            r9 = 1
+            goto L_0x02a2
+        L_0x02a1:
+            r9 = 0
+        L_0x02a2:
+            r10 = 0
+            if (r1 == 0) goto L_0x02a7
+            if (r9 == 0) goto L_0x02ae
+        L_0x02a7:
+            if (r5 == 0) goto L_0x02ae
+            r5.cancel()
+            r0.animatorSet = r10
+        L_0x02ae:
+            if (r1 == 0) goto L_0x02b6
+            int r5 = r0.lastMuteColor
+            if (r5 != r2) goto L_0x02b6
+            if (r9 == 0) goto L_0x02f1
+        L_0x02b6:
+            if (r1 == 0) goto L_0x02d6
+            java.util.ArrayList r5 = new java.util.ArrayList
+            r5.<init>()
+            int r11 = r0.lastMuteColor
+            r0.lastMuteColor = r2
+            float[] r12 = new float[r14]
+            r12 = {0, NUM} // fill-array
+            android.animation.ValueAnimator r12 = android.animation.ValueAnimator.ofFloat(r12)
+            org.telegram.ui.Cells.GroupCallUserCell$$ExternalSyntheticLambda0 r13 = new org.telegram.ui.Cells.GroupCallUserCell$$ExternalSyntheticLambda0
+            r13.<init>(r0, r11, r2)
+            r12.addUpdateListener(r13)
+            r5.add(r12)
+            goto L_0x02f2
+        L_0x02d6:
+            org.telegram.ui.Components.RLottieImageView r5 = r0.muteButton
+            android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
+            r0.lastMuteColor = r2
+            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r11.<init>(r2, r12)
+            r5.setColorFilter(r11)
+            org.telegram.ui.Components.RLottieImageView r5 = r0.muteButton
+            android.graphics.drawable.Drawable r5 = r5.getDrawable()
+            r11 = 620756991(0x24ffffff, float:1.11022296E-16)
+            r2 = r2 & r11
+            org.telegram.ui.ActionBar.Theme.setSelectorDrawableColor(r5, r2, r7)
+        L_0x02f1:
+            r5 = r10
+        L_0x02f2:
+            if (r4 != r7) goto L_0x033c
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r2 = r0.participant
+            int r2 = org.telegram.messenger.ChatObject.getParticipantVolume(r2)
+            int r11 = r2 / 100
+            r12 = 100
+            if (r11 == r12) goto L_0x0325
+            org.telegram.ui.ActionBar.SimpleTextView[] r13 = r0.statusTextView
+            r13 = r13[r7]
+            android.graphics.drawable.Drawable r14 = r0.speakingDrawable
+            r13.setLeftDrawable((android.graphics.drawable.Drawable) r14)
+            org.telegram.ui.ActionBar.SimpleTextView[] r13 = r0.statusTextView
+            r13 = r13[r7]
+            r14 = 2131627901(0x7f0e0f7d, float:1.888308E38)
+            java.lang.Object[] r15 = new java.lang.Object[r7]
+            if (r2 >= r12) goto L_0x0315
+            r11 = 1
+        L_0x0315:
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r11)
+            r15[r6] = r2
+            java.lang.String r2 = "SpeakingWithVolume"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r2, r14, r15)
+            r13.setText(r2)
+            goto L_0x033c
+        L_0x0325:
+            org.telegram.ui.ActionBar.SimpleTextView[] r2 = r0.statusTextView
+            r2 = r2[r7]
+            r2.setLeftDrawable((android.graphics.drawable.Drawable) r10)
+            org.telegram.ui.ActionBar.SimpleTextView[] r2 = r0.statusTextView
+            r2 = r2[r7]
+            r11 = 2131627900(0x7f0e0f7c, float:1.8883077E38)
+            java.lang.String r12 = "Speaking"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            r2.setText(r11)
+        L_0x033c:
+            boolean r2 = r20.isSelfUser()
+            r11 = 0
+            if (r2 == 0) goto L_0x0349
+            r2 = 4
+            r0.applyStatus(r2)
+            goto L_0x03da
+        L_0x0349:
+            if (r1 == 0) goto L_0x0351
+            int r2 = r0.currentStatus
+            if (r4 != r2) goto L_0x0351
+            if (r9 == 0) goto L_0x03da
+        L_0x0351:
+            if (r1 == 0) goto L_0x03d5
+            if (r5 != 0) goto L_0x035a
+            java.util.ArrayList r5 = new java.util.ArrayList
+            r5.<init>()
+        L_0x035a:
+            r9 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            if (r4 != 0) goto L_0x0396
+            r12 = 0
+        L_0x035f:
+            org.telegram.ui.ActionBar.SimpleTextView[] r13 = r0.statusTextView
+            int r14 = r13.length
+            if (r12 >= r14) goto L_0x03d8
+            r13 = r13[r12]
+            android.util.Property r14 = android.view.View.TRANSLATION_Y
+            float[] r15 = new float[r7]
+            if (r12 != r4) goto L_0x036e
+            r2 = 0
+            goto L_0x0373
+        L_0x036e:
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r2 = (float) r2
+        L_0x0373:
+            r15[r6] = r2
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r13, r14, r15)
+            r5.add(r2)
+            org.telegram.ui.ActionBar.SimpleTextView[] r2 = r0.statusTextView
+            r2 = r2[r12]
+            android.util.Property r13 = android.view.View.ALPHA
+            float[] r14 = new float[r7]
+            if (r12 != r4) goto L_0x0389
+            r15 = 1065353216(0x3var_, float:1.0)
+            goto L_0x038a
+        L_0x0389:
+            r15 = 0
+        L_0x038a:
+            r14[r6] = r15
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r13, r14)
+            r5.add(r2)
+            int r12 = r12 + 1
+            goto L_0x035f
+        L_0x0396:
+            r2 = 0
+        L_0x0397:
+            org.telegram.ui.ActionBar.SimpleTextView[] r12 = r0.statusTextView
+            int r13 = r12.length
+            if (r2 >= r13) goto L_0x03d8
+            r12 = r12[r2]
+            android.util.Property r13 = android.view.View.TRANSLATION_Y
+            float[] r14 = new float[r7]
+            if (r2 != r4) goto L_0x03a6
+            r15 = 0
+            goto L_0x03b2
+        L_0x03a6:
+            if (r2 != 0) goto L_0x03ab
+            r15 = 1073741824(0x40000000, float:2.0)
+            goto L_0x03ad
+        L_0x03ab:
+            r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+        L_0x03ad:
+            int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            float r15 = (float) r15
+        L_0x03b2:
+            r14[r6] = r15
+            android.animation.ObjectAnimator r12 = android.animation.ObjectAnimator.ofFloat(r12, r13, r14)
+            r5.add(r12)
+            org.telegram.ui.ActionBar.SimpleTextView[] r12 = r0.statusTextView
+            r12 = r12[r2]
+            android.util.Property r13 = android.view.View.ALPHA
+            float[] r14 = new float[r7]
+            if (r2 != r4) goto L_0x03c8
+            r15 = 1065353216(0x3var_, float:1.0)
+            goto L_0x03c9
+        L_0x03c8:
+            r15 = 0
+        L_0x03c9:
+            r14[r6] = r15
+            android.animation.ObjectAnimator r12 = android.animation.ObjectAnimator.ofFloat(r12, r13, r14)
+            r5.add(r12)
+            int r2 = r2 + 1
+            goto L_0x0397
+        L_0x03d5:
+            r0.applyStatus(r4)
+        L_0x03d8:
+            r0.currentStatus = r4
+        L_0x03da:
+            org.telegram.ui.Cells.GroupCallUserCell$AvatarWavesDrawable r2 = r0.avatarWavesDrawable
+            r2.setMuted(r4, r1)
+            if (r5 == 0) goto L_0x040a
+            android.animation.AnimatorSet r2 = r0.animatorSet
+            if (r2 == 0) goto L_0x03ea
+            r2.cancel()
+            r0.animatorSet = r10
+        L_0x03ea:
+            android.animation.AnimatorSet r2 = new android.animation.AnimatorSet
+            r2.<init>()
+            r0.animatorSet = r2
+            org.telegram.ui.Cells.GroupCallUserCell$3 r9 = new org.telegram.ui.Cells.GroupCallUserCell$3
+            r9.<init>(r4)
+            r2.addListener(r9)
+            android.animation.AnimatorSet r2 = r0.animatorSet
+            r2.playTogether(r5)
+            android.animation.AnimatorSet r2 = r0.animatorSet
+            r12 = 180(0xb4, double:8.9E-322)
+            r2.setDuration(r12)
+            android.animation.AnimatorSet r2 = r0.animatorSet
+            r2.start()
+        L_0x040a:
+            if (r1 == 0) goto L_0x0414
+            boolean r2 = r0.lastMuted
+            if (r2 != r8) goto L_0x0414
+            boolean r2 = r0.lastRaisedHand
+            if (r2 == r3) goto L_0x049d
+        L_0x0414:
+            r2 = 21
+            if (r3 == 0) goto L_0x0432
+            org.telegram.ui.Components.RLottieDrawable r5 = r0.muteDrawable
+            r9 = 84
+            boolean r5 = r5.setCustomEndFrame(r9)
+            if (r1 == 0) goto L_0x042c
+            org.telegram.ui.Components.RLottieDrawable r9 = r0.muteDrawable
+            java.lang.Runnable r10 = r0.raiseHandCallback
+            r12 = 83
+            r9.setOnFinishCallback(r10, r12)
+            goto L_0x0458
+        L_0x042c:
+            org.telegram.ui.Components.RLottieDrawable r9 = r0.muteDrawable
+            r9.setOnFinishCallback(r10, r6)
+            goto L_0x0458
+        L_0x0432:
+            org.telegram.ui.Components.RLottieImageView r5 = r0.muteButton
+            org.telegram.ui.Components.RLottieDrawable r9 = r0.muteDrawable
+            r5.setAnimation(r9)
+            org.telegram.ui.Components.RLottieDrawable r5 = r0.muteDrawable
+            r5.setOnFinishCallback(r10, r6)
+            if (r8 == 0) goto L_0x044b
+            boolean r5 = r0.lastRaisedHand
+            if (r5 == 0) goto L_0x044b
+            org.telegram.ui.Components.RLottieDrawable r5 = r0.muteDrawable
+            boolean r5 = r5.setCustomEndFrame(r2)
+            goto L_0x0458
+        L_0x044b:
+            org.telegram.ui.Components.RLottieDrawable r5 = r0.muteDrawable
+            if (r8 == 0) goto L_0x0452
+            r9 = 64
+            goto L_0x0454
+        L_0x0452:
+            r9 = 42
+        L_0x0454:
+            boolean r5 = r5.setCustomEndFrame(r9)
+        L_0x0458:
+            if (r1 == 0) goto L_0x048a
+            if (r5 == 0) goto L_0x0484
+            r1 = 3
+            if (r4 != r1) goto L_0x0467
+            org.telegram.ui.Components.RLottieDrawable r1 = r0.muteDrawable
+            r2 = 63
+            r1.setCurrentFrame(r2)
+            goto L_0x0484
+        L_0x0467:
+            if (r8 == 0) goto L_0x0475
+            boolean r1 = r0.lastRaisedHand
+            if (r1 == 0) goto L_0x0475
+            if (r3 != 0) goto L_0x0475
+            org.telegram.ui.Components.RLottieDrawable r1 = r0.muteDrawable
+            r1.setCurrentFrame(r6)
+            goto L_0x0484
+        L_0x0475:
+            if (r8 == 0) goto L_0x047f
+            org.telegram.ui.Components.RLottieDrawable r1 = r0.muteDrawable
+            r2 = 43
+            r1.setCurrentFrame(r2)
+            goto L_0x0484
+        L_0x047f:
+            org.telegram.ui.Components.RLottieDrawable r1 = r0.muteDrawable
+            r1.setCurrentFrame(r2)
+        L_0x0484:
+            org.telegram.ui.Components.RLottieImageView r1 = r0.muteButton
+            r1.playAnimation()
+            goto L_0x0499
+        L_0x048a:
+            org.telegram.ui.Components.RLottieDrawable r1 = r0.muteDrawable
+            int r2 = r1.getCustomEndFrame()
+            int r2 = r2 - r7
+            r1.setCurrentFrame(r2, r6, r7)
+            org.telegram.ui.Components.RLottieImageView r1 = r0.muteButton
+            r1.invalidate()
+        L_0x0499:
+            r0.lastMuted = r8
+            r0.lastRaisedHand = r3
+        L_0x049d:
+            boolean r1 = r0.isSpeaking
+            if (r1 != 0) goto L_0x04a8
+            org.telegram.ui.Cells.GroupCallUserCell$AvatarWavesDrawable r1 = r0.avatarWavesDrawable
+            r2 = 0
+            r1.setAmplitude(r2)
+        L_0x04a8:
+            org.telegram.ui.Cells.GroupCallUserCell$AvatarWavesDrawable r1 = r0.avatarWavesDrawable
+            boolean r2 = r0.isSpeaking
+            if (r2 == 0) goto L_0x04b5
+            float r2 = r0.progressToAvatarPreview
+            int r2 = (r2 > r11 ? 1 : (r2 == r11 ? 0 : -1))
+            if (r2 != 0) goto L_0x04b5
+            r6 = 1
+        L_0x04b5:
+            r1.setShowWaves(r6, r0)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.GroupCallUserCell.applyParticipantChanges(boolean, boolean):void");
     }
 
     /* access modifiers changed from: private */
-    public void applyStatus(int newStatus) {
+    public /* synthetic */ void lambda$applyParticipantChanges$6(int i, int i2, ValueAnimator valueAnimator) {
+        int offsetColor = AndroidUtilities.getOffsetColor(i, i2, valueAnimator.getAnimatedFraction(), 1.0f);
+        this.muteButton.setColorFilter(new PorterDuffColorFilter(offsetColor, PorterDuff.Mode.MULTIPLY));
+        Theme.setSelectorDrawableColor(this.muteButton.getDrawable(), offsetColor & NUM, true);
+    }
+
+    /* access modifiers changed from: private */
+    public void applyStatus(int i) {
         float f;
-        if (newStatus == 0) {
-            int a = 0;
+        int i2 = 0;
+        if (i == 0) {
             while (true) {
                 SimpleTextView[] simpleTextViewArr = this.statusTextView;
-                if (a < simpleTextViewArr.length) {
-                    simpleTextViewArr[a].setTranslationY(a == newStatus ? 0.0f : (float) AndroidUtilities.dp(-2.0f));
-                    this.statusTextView[a].setAlpha(a == newStatus ? 1.0f : 0.0f);
-                    a++;
+                if (i2 < simpleTextViewArr.length) {
+                    simpleTextViewArr[i2].setTranslationY(i2 == i ? 0.0f : (float) AndroidUtilities.dp(-2.0f));
+                    this.statusTextView[i2].setAlpha(i2 == i ? 1.0f : 0.0f);
+                    i2++;
                 } else {
                     return;
                 }
             }
         } else {
-            int a2 = 0;
             while (true) {
                 SimpleTextView[] simpleTextViewArr2 = this.statusTextView;
-                if (a2 < simpleTextViewArr2.length) {
-                    SimpleTextView simpleTextView = simpleTextViewArr2[a2];
-                    if (a2 == newStatus) {
+                if (i2 < simpleTextViewArr2.length) {
+                    SimpleTextView simpleTextView = simpleTextViewArr2[i2];
+                    if (i2 == i) {
                         f = 0.0f;
                     } else {
-                        f = (float) AndroidUtilities.dp(a2 == 0 ? 2.0f : -2.0f);
+                        f = (float) AndroidUtilities.dp(i2 == 0 ? 2.0f : -2.0f);
                     }
                     simpleTextView.setTranslationY(f);
-                    this.statusTextView[a2].setAlpha(a2 == newStatus ? 1.0f : 0.0f);
-                    a2++;
+                    this.statusTextView[i2].setAlpha(i2 == i ? 1.0f : 0.0f);
+                    i2++;
                 } else {
                     return;
                 }
             }
         }
-    }
-
-    public boolean hasOverlappingRendering() {
-        return false;
     }
 
     /* access modifiers changed from: protected */
@@ -966,11 +1366,11 @@ public class GroupCallUserCell extends FrameLayout {
             }
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(68.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(68.0f) : 0)), (float) (getMeasuredHeight() - 1), this.dividerPaint);
         }
-        int cx = this.avatarImageView.getLeft() + (this.avatarImageView.getMeasuredWidth() / 2);
-        int cy = this.avatarImageView.getTop() + (this.avatarImageView.getMeasuredHeight() / 2);
+        int left = this.avatarImageView.getLeft() + (this.avatarImageView.getMeasuredWidth() / 2);
+        int top = this.avatarImageView.getTop() + (this.avatarImageView.getMeasuredHeight() / 2);
         this.avatarWavesDrawable.update();
         if (this.progressToAvatarPreview == 0.0f) {
-            this.avatarWavesDrawable.draw(canvas, (float) cx, (float) cy, this);
+            this.avatarWavesDrawable.draw(canvas, (float) left, (float) top, this);
         }
         this.avatarImageView.setScaleX(this.avatarWavesDrawable.getAvatarScale());
         this.avatarImageView.setScaleY(this.avatarWavesDrawable.getAvatarScale());
@@ -979,16 +1379,12 @@ public class GroupCallUserCell extends FrameLayout {
         super.dispatchDraw(canvas);
     }
 
-    public void getAvatarPosition(int[] pos) {
-        this.avatarImageView.getLocationInWindow(pos);
-    }
-
     public static class AvatarWavesDrawable {
         float amplitude;
         float animateAmplitudeDiff;
         float animateToAmplitude;
         private BlobDrawable blobDrawable = new BlobDrawable(6);
-        private BlobDrawable blobDrawable2 = new BlobDrawable(8);
+        private BlobDrawable blobDrawable2;
         private boolean hasCustomColor;
         boolean invalidateColor = true;
         private int isMuted;
@@ -996,12 +1392,17 @@ public class GroupCallUserCell extends FrameLayout {
         boolean showWaves;
         float wavesEnter = 0.0f;
 
-        public AvatarWavesDrawable(int minRadius, int maxRadius) {
-            this.blobDrawable.minRadius = (float) minRadius;
-            this.blobDrawable.maxRadius = (float) maxRadius;
-            this.blobDrawable2.minRadius = (float) minRadius;
-            this.blobDrawable2.maxRadius = (float) maxRadius;
-            this.blobDrawable.generateBlob();
+        public AvatarWavesDrawable(int i, int i2) {
+            BlobDrawable blobDrawable3 = new BlobDrawable(8);
+            this.blobDrawable2 = blobDrawable3;
+            BlobDrawable blobDrawable4 = this.blobDrawable;
+            float f = (float) i;
+            blobDrawable4.minRadius = f;
+            float f2 = (float) i2;
+            blobDrawable4.maxRadius = f2;
+            blobDrawable3.minRadius = f;
+            blobDrawable3.maxRadius = f2;
+            blobDrawable4.generateBlob();
             this.blobDrawable2.generateBlob();
             this.blobDrawable.paint.setColor(ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_speakingText"), 38));
             this.blobDrawable2.paint.setColor(ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_speakingText"), 38));
@@ -1047,142 +1448,142 @@ public class GroupCallUserCell extends FrameLayout {
             }
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:23:0x005f  */
+        /* JADX WARNING: Removed duplicated region for block: B:23:0x005d  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void draw(android.graphics.Canvas r10, float r11, float r12, android.view.View r13) {
+        public void draw(android.graphics.Canvas r8, float r9, float r10, android.view.View r11) {
             /*
-                r9 = this;
-                float r0 = r9.amplitude
+                r7 = this;
+                float r0 = r7.amplitude
                 r1 = 1053609165(0x3ecccccd, float:0.4)
                 float r0 = r0 * r1
                 r1 = 1061997773(0x3f4ccccd, float:0.8)
                 float r0 = r0 + r1
-                boolean r1 = r9.showWaves
+                boolean r1 = r7.showWaves
                 r2 = 0
                 if (r1 != 0) goto L_0x0016
-                float r1 = r9.wavesEnter
+                float r1 = r7.wavesEnter
                 int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r1 == 0) goto L_0x00a7
+                if (r1 == 0) goto L_0x00a5
             L_0x0016:
-                r10.save()
+                r8.save()
                 org.telegram.ui.Components.CubicBezierInterpolator r1 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-                float r3 = r9.wavesEnter
+                float r3 = r7.wavesEnter
                 float r1 = r1.getInterpolation(r3)
-                float r3 = r0 * r1
-                float r4 = r0 * r1
-                r10.scale(r3, r4, r11, r12)
-                boolean r3 = r9.hasCustomColor
-                r4 = 1065353216(0x3var_, float:1.0)
-                if (r3 != 0) goto L_0x0086
-                int r3 = r9.isMuted
-                r5 = 1037726734(0x3dda740e, float:0.10666667)
-                r6 = 1
-                if (r3 == r6) goto L_0x0048
-                float r7 = r9.progressToMuted
-                int r8 = (r7 > r4 ? 1 : (r7 == r4 ? 0 : -1))
-                if (r8 == 0) goto L_0x0048
-                float r7 = r7 + r5
-                r9.progressToMuted = r7
-                int r3 = (r7 > r4 ? 1 : (r7 == r4 ? 0 : -1))
-                if (r3 <= 0) goto L_0x0045
-                r9.progressToMuted = r4
-            L_0x0045:
-                r9.invalidateColor = r6
-                goto L_0x005b
-            L_0x0048:
-                if (r3 != r6) goto L_0x005b
-                float r3 = r9.progressToMuted
-                int r7 = (r3 > r2 ? 1 : (r3 == r2 ? 0 : -1))
-                if (r7 == 0) goto L_0x005b
-                float r3 = r3 - r5
-                r9.progressToMuted = r3
-                int r3 = (r3 > r2 ? 1 : (r3 == r2 ? 0 : -1))
-                if (r3 >= 0) goto L_0x0059
-                r9.progressToMuted = r2
+                float r0 = r0 * r1
+                r8.scale(r0, r0, r9, r10)
+                boolean r0 = r7.hasCustomColor
+                r1 = 1065353216(0x3var_, float:1.0)
+                if (r0 != 0) goto L_0x0084
+                int r0 = r7.isMuted
+                r3 = 1037726734(0x3dda740e, float:0.10666667)
+                r4 = 1
+                if (r0 == r4) goto L_0x0046
+                float r5 = r7.progressToMuted
+                int r6 = (r5 > r1 ? 1 : (r5 == r1 ? 0 : -1))
+                if (r6 == 0) goto L_0x0046
+                float r5 = r5 + r3
+                r7.progressToMuted = r5
+                int r0 = (r5 > r1 ? 1 : (r5 == r1 ? 0 : -1))
+                if (r0 <= 0) goto L_0x0043
+                r7.progressToMuted = r1
+            L_0x0043:
+                r7.invalidateColor = r4
+                goto L_0x0059
+            L_0x0046:
+                if (r0 != r4) goto L_0x0059
+                float r0 = r7.progressToMuted
+                int r5 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+                if (r5 == 0) goto L_0x0059
+                float r0 = r0 - r3
+                r7.progressToMuted = r0
+                int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+                if (r0 >= 0) goto L_0x0057
+                r7.progressToMuted = r2
+            L_0x0057:
+                r7.invalidateColor = r4
             L_0x0059:
-                r9.invalidateColor = r6
-            L_0x005b:
-                boolean r3 = r9.invalidateColor
-                if (r3 == 0) goto L_0x0086
-                java.lang.String r3 = "voipgroup_speakingText"
-                int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-                int r5 = r9.isMuted
-                r6 = 2
-                if (r5 != r6) goto L_0x006d
-                java.lang.String r5 = "voipgroup_mutedByAdminIcon"
-                goto L_0x006f
+                boolean r0 = r7.invalidateColor
+                if (r0 == 0) goto L_0x0084
+                java.lang.String r0 = "voipgroup_speakingText"
+                int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+                int r3 = r7.isMuted
+                r4 = 2
+                if (r3 != r4) goto L_0x006b
+                java.lang.String r3 = "voipgroup_mutedByAdminIcon"
+                goto L_0x006d
+            L_0x006b:
+                java.lang.String r3 = "voipgroup_listeningText"
             L_0x006d:
-                java.lang.String r5 = "voipgroup_listeningText"
-            L_0x006f:
-                int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-                float r6 = r9.progressToMuted
-                int r3 = androidx.core.graphics.ColorUtils.blendARGB(r3, r5, r6)
-                org.telegram.ui.Components.BlobDrawable r5 = r9.blobDrawable
-                android.graphics.Paint r5 = r5.paint
-                r6 = 38
-                int r6 = androidx.core.graphics.ColorUtils.setAlphaComponent(r3, r6)
-                r5.setColor(r6)
-            L_0x0086:
-                org.telegram.ui.Components.BlobDrawable r3 = r9.blobDrawable
-                float r5 = r9.amplitude
-                r3.update(r5, r4)
-                org.telegram.ui.Components.BlobDrawable r3 = r9.blobDrawable
-                android.graphics.Paint r5 = r3.paint
-                r3.draw(r11, r12, r10, r5)
-                org.telegram.ui.Components.BlobDrawable r3 = r9.blobDrawable2
-                float r5 = r9.amplitude
-                r3.update(r5, r4)
-                org.telegram.ui.Components.BlobDrawable r3 = r9.blobDrawable2
-                org.telegram.ui.Components.BlobDrawable r4 = r9.blobDrawable
-                android.graphics.Paint r4 = r4.paint
-                r3.draw(r11, r12, r10, r4)
-                r10.restore()
-            L_0x00a7:
-                float r1 = r9.wavesEnter
-                int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r1 == 0) goto L_0x00b0
-                r13.invalidate()
-            L_0x00b0:
+                int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+                float r4 = r7.progressToMuted
+                int r0 = androidx.core.graphics.ColorUtils.blendARGB(r0, r3, r4)
+                org.telegram.ui.Components.BlobDrawable r3 = r7.blobDrawable
+                android.graphics.Paint r3 = r3.paint
+                r4 = 38
+                int r0 = androidx.core.graphics.ColorUtils.setAlphaComponent(r0, r4)
+                r3.setColor(r0)
+            L_0x0084:
+                org.telegram.ui.Components.BlobDrawable r0 = r7.blobDrawable
+                float r3 = r7.amplitude
+                r0.update(r3, r1)
+                org.telegram.ui.Components.BlobDrawable r0 = r7.blobDrawable
+                android.graphics.Paint r3 = r0.paint
+                r0.draw(r9, r10, r8, r3)
+                org.telegram.ui.Components.BlobDrawable r0 = r7.blobDrawable2
+                float r3 = r7.amplitude
+                r0.update(r3, r1)
+                org.telegram.ui.Components.BlobDrawable r0 = r7.blobDrawable2
+                org.telegram.ui.Components.BlobDrawable r1 = r7.blobDrawable
+                android.graphics.Paint r1 = r1.paint
+                r0.draw(r9, r10, r8, r1)
+                r8.restore()
+            L_0x00a5:
+                float r8 = r7.wavesEnter
+                int r8 = (r8 > r2 ? 1 : (r8 == r2 ? 0 : -1))
+                if (r8 == 0) goto L_0x00ae
+                r11.invalidate()
+            L_0x00ae:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.GroupCallUserCell.AvatarWavesDrawable.draw(android.graphics.Canvas, float, float, android.view.View):void");
         }
 
         public float getAvatarScale() {
-            float wavesEnter2 = CubicBezierInterpolator.EASE_OUT.getInterpolation(this.wavesEnter);
-            return (((this.amplitude * 0.2f) + 0.9f) * wavesEnter2) + ((1.0f - wavesEnter2) * 1.0f);
+            float interpolation = CubicBezierInterpolator.EASE_OUT.getInterpolation(this.wavesEnter);
+            return (((this.amplitude * 0.2f) + 0.9f) * interpolation) + ((1.0f - interpolation) * 1.0f);
         }
 
-        public void setShowWaves(boolean show, View parentView) {
-            if (this.showWaves != show) {
-                parentView.invalidate();
+        public void setShowWaves(boolean z, View view) {
+            if (this.showWaves != z) {
+                view.invalidate();
             }
-            this.showWaves = show;
+            this.showWaves = z;
         }
 
-        public void setAmplitude(double value) {
-            float amplitude2 = ((float) value) / 80.0f;
+        public void setAmplitude(double d) {
+            float f = ((float) d) / 80.0f;
+            float f2 = 0.0f;
             if (!this.showWaves) {
-                amplitude2 = 0.0f;
+                f = 0.0f;
             }
-            if (amplitude2 > 1.0f) {
-                amplitude2 = 1.0f;
-            } else if (amplitude2 < 0.0f) {
-                amplitude2 = 0.0f;
+            if (f > 1.0f) {
+                f2 = 1.0f;
+            } else if (f >= 0.0f) {
+                f2 = f;
             }
-            this.animateToAmplitude = amplitude2;
-            this.animateAmplitudeDiff = (amplitude2 - this.amplitude) / 200.0f;
+            this.animateToAmplitude = f2;
+            this.animateAmplitudeDiff = (f2 - this.amplitude) / 200.0f;
         }
 
-        public void setColor(int color) {
+        public void setColor(int i) {
             this.hasCustomColor = true;
-            this.blobDrawable.paint.setColor(color);
+            this.blobDrawable.paint.setColor(i);
         }
 
-        public void setMuted(int status, boolean animated) {
-            this.isMuted = status;
-            if (!animated) {
-                this.progressToMuted = status != 1 ? 1.0f : 0.0f;
+        public void setMuted(int i, boolean z) {
+            this.isMuted = i;
+            if (!z) {
+                this.progressToMuted = i != 1 ? 1.0f : 0.0f;
             }
             this.invalidateColor = true;
         }
@@ -1192,27 +1593,28 @@ public class GroupCallUserCell extends FrameLayout {
         return this.avatarImageView;
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         String str;
         int i;
-        super.onInitializeAccessibilityNodeInfo(info);
-        if (info.isEnabled() && Build.VERSION.SDK_INT >= 21) {
-            if (!this.participant.muted || this.participant.can_self_unmute) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        if (accessibilityNodeInfo.isEnabled() && Build.VERSION.SDK_INT >= 21) {
+            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.participant;
+            if (!tLRPC$TL_groupCallParticipant.muted || tLRPC$TL_groupCallParticipant.can_self_unmute) {
                 i = NUM;
                 str = "VoipMute";
             } else {
                 i = NUM;
                 str = "VoipUnmute";
             }
-            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, LocaleController.getString(str, i)));
+            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, LocaleController.getString(str, i)));
         }
     }
 
     public long getPeerId() {
-        TLRPC.TL_groupCallParticipant tL_groupCallParticipant = this.participant;
-        if (tL_groupCallParticipant == null) {
+        TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.participant;
+        if (tLRPC$TL_groupCallParticipant == null) {
             return 0;
         }
-        return MessageObject.getPeerId(tL_groupCallParticipant.peer);
+        return MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
     }
 }

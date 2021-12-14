@@ -1,16 +1,15 @@
 package org.telegram.ui.Adapters;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
-
-public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda9 implements RecyclerListView.OnItemLongClickListener {
+public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda9 implements Runnable {
     public final /* synthetic */ DialogsSearchAdapter f$0;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda9(DialogsSearchAdapter dialogsSearchAdapter) {
+    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda9(DialogsSearchAdapter dialogsSearchAdapter, long j) {
         this.f$0 = dialogsSearchAdapter;
+        this.f$1 = j;
     }
 
-    public final boolean onItemClick(View view, int i) {
-        return this.f$0.m1360x38f2dbab(view, i);
+    public final void run() {
+        this.f$0.lambda$removeRecentSearch$8(this.f$1);
     }
 }

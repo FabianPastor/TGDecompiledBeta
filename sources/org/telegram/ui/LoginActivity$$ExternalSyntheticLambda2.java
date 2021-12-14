@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda2 imple
     }
 
     public final void onClick(View view) {
-        this.f$0.m3184lambda$createView$0$orgtelegramuiLoginActivity(view);
+        this.f$0.lambda$createView$0(view);
     }
 }

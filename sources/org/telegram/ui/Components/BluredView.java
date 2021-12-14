@@ -8,9 +8,9 @@ import org.telegram.ui.ActionBar.Theme;
 public class BluredView extends View {
     public final BlurBehindDrawable drawable;
 
-    public BluredView(Context context, View parentView, Theme.ResourcesProvider resourcesProvider) {
+    public BluredView(Context context, View view, Theme.ResourcesProvider resourcesProvider) {
         super(context);
-        BlurBehindDrawable blurBehindDrawable = new BlurBehindDrawable(parentView, this, 1, resourcesProvider);
+        BlurBehindDrawable blurBehindDrawable = new BlurBehindDrawable(view, this, 1, resourcesProvider);
         this.drawable = blurBehindDrawable;
         blurBehindDrawable.setAnimateAlpha(false);
         blurBehindDrawable.show(true);
@@ -22,8 +22,8 @@ public class BluredView extends View {
     }
 
     /* access modifiers changed from: protected */
-    public void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    public void onSizeChanged(int i, int i2, int i3, int i4) {
+        super.onSizeChanged(i, i2, i3, i4);
         this.drawable.checkSizes();
     }
 

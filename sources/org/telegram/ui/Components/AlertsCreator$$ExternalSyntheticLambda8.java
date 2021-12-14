@@ -1,22 +1,16 @@
 package org.telegram.ui.Components;
 
+import android.app.Activity;
 import android.content.DialogInterface;
-import android.widget.EditText;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda8 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ EditText f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ EditText f$3;
+    public final /* synthetic */ Activity f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda8(EditText editText, long j, int i, EditText editText2) {
-        this.f$0 = editText;
-        this.f$1 = j;
-        this.f$2 = i;
-        this.f$3 = editText2;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda8(Activity activity) {
+        this.f$0 = activity;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createChangeNameAlert$27(this.f$0, this.f$1, this.f$2, this.f$3, dialogInterface, i);
+        AlertsCreator.lambda$createBackgroundLocationPermissionDialog$73(this.f$0, dialogInterface, i);
     }
 }

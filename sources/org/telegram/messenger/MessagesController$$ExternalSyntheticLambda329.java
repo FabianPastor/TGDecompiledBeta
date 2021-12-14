@@ -1,17 +1,16 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda329 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ ArrayList f$1;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda329 implements RequestDelegate {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda329 INSTANCE = new MessagesController$$ExternalSyntheticLambda329();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda329(MessagesController messagesController, ArrayList arrayList) {
-        this.f$0 = messagesController;
-        this.f$1 = arrayList;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda329() {
     }
 
-    public final void run() {
-        this.f$0.m198x61d480b8(this.f$1);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        MessagesController.lambda$hidePeerSettingsBar$47(tLObject, tLRPC$TL_error);
     }
 }

@@ -1,21 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.messenger.MessagesStorage;
+import org.telegram.tgnet.TLRPC$Dialog;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda212 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda212 implements MessagesStorage.IntCallback {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ Object f$1;
-    public final /* synthetic */ TLRPC.TL_messages_saveRecentSticker f$2;
+    public final /* synthetic */ TLRPC$Dialog f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ long f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda212(MessagesController messagesController, Object obj, TLRPC.TL_messages_saveRecentSticker tL_messages_saveRecentSticker) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda212(MessagesController messagesController, TLRPC$Dialog tLRPC$Dialog, int i, long j) {
         this.f$0 = messagesController;
-        this.f$1 = obj;
-        this.f$2 = tL_messages_saveRecentSticker;
+        this.f$1 = tLRPC$Dialog;
+        this.f$2 = i;
+        this.f$3 = j;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m367xb981d3d(this.f$1, this.f$2, tLObject, tL_error);
+    public final void run(int i) {
+        this.f$0.lambda$updateInterfaceWithMessages$321(this.f$1, this.f$2, this.f$3, i);
     }
 }

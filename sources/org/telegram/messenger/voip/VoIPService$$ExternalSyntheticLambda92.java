@@ -2,7 +2,7 @@ package org.telegram.messenger.voip;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda92 implements RequestDelegate {
     public static final /* synthetic */ VoIPService$$ExternalSyntheticLambda92 INSTANCE = new VoIPService$$ExternalSyntheticLambda92();
@@ -10,7 +10,7 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda92 implem
     private /* synthetic */ VoIPService$$ExternalSyntheticLambda92() {
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        VoIPService.lambda$createGroupInstance$37(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        VoIPService.lambda$onTgVoipStop$73(tLObject, tLRPC$TL_error);
     }
 }

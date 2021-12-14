@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatUsersActivity$SearchAdapter$$ExternalSynt
     }
 
     public final boolean onOptionsButtonCheck(ManageChatUserCell manageChatUserCell, boolean z) {
-        return this.f$0.m1980xcd403d42(manageChatUserCell, z);
+        return this.f$0.lambda$onCreateViewHolder$5(manageChatUserCell, z);
     }
 }

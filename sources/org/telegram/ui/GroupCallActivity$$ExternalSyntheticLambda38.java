@@ -1,12 +1,21 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda38 implements Runnable {
-    public static final /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda38 INSTANCE = new GroupCallActivity$$ExternalSyntheticLambda38();
+import org.telegram.tgnet.TLObject;
 
-    private /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda38() {
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda38 implements Runnable {
+    public final /* synthetic */ GroupCallActivity f$0;
+    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ boolean f$3;
+
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda38(GroupCallActivity groupCallActivity, TLObject tLObject, int i, boolean z) {
+        this.f$0 = groupCallActivity;
+        this.f$1 = tLObject;
+        this.f$2 = i;
+        this.f$3 = z;
     }
 
     public final void run() {
-        GroupCallActivity.lambda$new$0();
+        this.f$0.lambda$getLink$40(this.f$1, this.f$2, this.f$3);
     }
 }

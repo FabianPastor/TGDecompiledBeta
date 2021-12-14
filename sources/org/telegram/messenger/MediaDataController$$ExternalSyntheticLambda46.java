@@ -1,33 +1,15 @@
 package org.telegram.messenger;
 
-import android.content.Context;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.BaseFragment;
-
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda46 implements RequestDelegate {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda46 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC.StickerSet f$1;
-    public final /* synthetic */ BaseFragment f$2;
-    public final /* synthetic */ boolean f$3;
-    public final /* synthetic */ int f$4;
-    public final /* synthetic */ boolean f$5;
-    public final /* synthetic */ Context f$6;
-    public final /* synthetic */ TLObject f$7;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda46(MediaDataController mediaDataController, TLRPC.StickerSet stickerSet, BaseFragment baseFragment, boolean z, int i, boolean z2, Context context, TLObject tLObject) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda46(MediaDataController mediaDataController, String str) {
         this.f$0 = mediaDataController;
-        this.f$1 = stickerSet;
-        this.f$2 = baseFragment;
-        this.f$3 = z;
-        this.f$4 = i;
-        this.f$5 = z2;
-        this.f$6 = context;
-        this.f$7 = tLObject;
+        this.f$1 = str;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m898xeCLASSNAMEb1c4(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$fetchNewEmojiKeywords$139(this.f$1);
     }
 }

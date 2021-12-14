@@ -17,6 +17,6 @@ public final /* synthetic */ class StickerMasksAlert$StickersSearchGridAdapter$1
     }
 
     public final void run(ArrayList arrayList, String str) {
-        this.f$0.m2627x56aca32f(this.f$1, this.f$2, arrayList, str);
+        this.f$0.lambda$run$0(this.f$1, this.f$2, arrayList, str);
     }
 }

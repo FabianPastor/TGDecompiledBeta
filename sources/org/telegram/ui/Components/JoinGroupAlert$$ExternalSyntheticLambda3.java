@@ -10,6 +10,6 @@ public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda3 impl
     }
 
     public final void onClick(View view) {
-        this.f$0.m2396lambda$new$9$orgtelegramuiComponentsJoinGroupAlert(view);
+        this.f$0.lambda$new$6(view);
     }
 }

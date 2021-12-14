@@ -1,21 +1,20 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.AlertDialog;
+import java.io.File;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda50 implements RequestDelegate {
-    public final /* synthetic */ AlertDialog f$0;
-    public final /* synthetic */ ActionIntroActivity f$1;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda50 implements Runnable {
+    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ Theme.ThemeInfo f$1;
+    public final /* synthetic */ File f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda50(AlertDialog alertDialog, ActionIntroActivity actionIntroActivity) {
-        this.f$0 = alertDialog;
-        this.f$1 = actionIntroActivity;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda50(LaunchActivity launchActivity, Theme.ThemeInfo themeInfo, File file) {
+        this.f$0 = launchActivity;
+        this.f$1 = themeInfo;
+        this.f$2 = file;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda12(this.f$0, tLObject, this.f$1, tL_error));
+    public final void run() {
+        this.f$0.lambda$didReceivedNotification$75(this.f$1, this.f$2);
     }
 }

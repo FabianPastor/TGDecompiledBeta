@@ -5,16 +5,10 @@ import org.aspectj.lang.reflect.SourceLocation;
 class SourceLocationImpl implements SourceLocation {
     String fileName;
     int line;
-    Class withinType;
 
-    SourceLocationImpl(Class withinType2, String fileName2, int line2) {
-        this.withinType = withinType2;
-        this.fileName = fileName2;
-        this.line = line2;
-    }
-
-    public Class getWithinType() {
-        return this.withinType;
+    SourceLocationImpl(Class cls, String str, int i) {
+        this.fileName = str;
+        this.line = i;
     }
 
     public String getFileName() {
@@ -23,10 +17,6 @@ class SourceLocationImpl implements SourceLocation {
 
     public int getLine() {
         return this.line;
-    }
-
-    public int getColumn() {
-        return -1;
     }
 
     public String toString() {

@@ -1,16 +1,25 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.messenger.MessagesController;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda116 implements Comparator {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda116 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ MessagesStorage f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ long f$3;
+    public final /* synthetic */ int f$4;
+    public final /* synthetic */ MessagesController.MessagesLoadedCallback f$5;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda116(MessagesController messagesController) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda116(MessagesController messagesController, MessagesStorage messagesStorage, long j, long j2, int i, MessagesController.MessagesLoadedCallback messagesLoadedCallback) {
         this.f$0 = messagesController;
+        this.f$1 = messagesStorage;
+        this.f$2 = j;
+        this.f$3 = j2;
+        this.f$4 = i;
+        this.f$5 = messagesLoadedCallback;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return this.f$0.m291lambda$new$2$orgtelegrammessengerMessagesController((TLRPC.Dialog) obj, (TLRPC.Dialog) obj2);
+    public final void run() {
+        this.f$0.lambda$ensureMessagesLoaded$330(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

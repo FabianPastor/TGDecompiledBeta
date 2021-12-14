@@ -1,9 +1,9 @@
 package org.telegram.ui.Components;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -33,7 +33,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.TextStyleSpan;
 
 public class EditTextCaption extends EditTextBoldCursor {
-    private static final int ACCESSIBILITY_ACTION_SHARE = NUM;
     private boolean allowTextEntitiesIntersection;
     private String caption;
     private StaticLayout captionLayout;
@@ -49,7 +48,6 @@ public class EditTextCaption extends EditTextBoldCursor {
     private final Theme.ResourcesProvider resourcesProvider;
     private int selectionEnd = -1;
     private int selectionStart = -1;
-    private int triesCount = 0;
     private int userNameLength;
     private int xOffset;
     private int yOffset;
@@ -58,17 +56,21 @@ public class EditTextCaption extends EditTextBoldCursor {
         void onSpansChanged();
     }
 
+    /* access modifiers changed from: protected */
+    public void onLineCountChanged(int i, int i2) {
+    }
+
     public EditTextCaption(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.resourcesProvider = resourcesProvider2;
         addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
 
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
 
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable editable) {
                 if (EditTextCaption.this.lineCount != EditTextCaption.this.getLineCount()) {
                     if (!EditTextCaption.this.isInitLineCount && EditTextCaption.this.getMeasuredWidth() > 0) {
                         EditTextCaption editTextCaption = EditTextCaption.this;
@@ -81,18 +83,14 @@ public class EditTextCaption extends EditTextBoldCursor {
         });
     }
 
-    /* access modifiers changed from: protected */
-    public void onLineCountChanged(int oldLineCount, int newLineCount) {
-    }
-
-    public void setCaption(String value) {
-        String str = this.caption;
-        if ((str != null && str.length() != 0) || (value != null && value.length() != 0)) {
-            String str2 = this.caption;
-            if (str2 == null || !str2.equals(value)) {
-                this.caption = value;
-                if (value != null) {
-                    this.caption = value.replace(10, ' ');
+    public void setCaption(String str) {
+        String str2 = this.caption;
+        if ((str2 != null && str2.length() != 0) || (str != null && str.length() != 0)) {
+            String str3 = this.caption;
+            if (str3 == null || !str3.equals(str)) {
+                this.caption = str;
+                if (str != null) {
+                    this.caption = str.replace(10, ' ');
                 }
                 requestLayout();
             }
@@ -103,111 +101,109 @@ public class EditTextCaption extends EditTextBoldCursor {
         this.delegate = editTextCaptionDelegate;
     }
 
-    public void setAllowTextEntitiesIntersection(boolean value) {
-        this.allowTextEntitiesIntersection = value;
+    public void setAllowTextEntitiesIntersection(boolean z) {
+        this.allowTextEntitiesIntersection = z;
     }
 
     public void makeSelectedBold() {
-        TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
-        run.flags |= 1;
-        applyTextStyleToSelection(new TextStyleSpan(run));
+        TextStyleSpan.TextStyleRun textStyleRun = new TextStyleSpan.TextStyleRun();
+        textStyleRun.flags |= 1;
+        applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
     }
 
     public void makeSelectedItalic() {
-        TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
-        run.flags |= 2;
-        applyTextStyleToSelection(new TextStyleSpan(run));
+        TextStyleSpan.TextStyleRun textStyleRun = new TextStyleSpan.TextStyleRun();
+        textStyleRun.flags |= 2;
+        applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
     }
 
     public void makeSelectedMono() {
-        TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
-        run.flags |= 4;
-        applyTextStyleToSelection(new TextStyleSpan(run));
+        TextStyleSpan.TextStyleRun textStyleRun = new TextStyleSpan.TextStyleRun();
+        textStyleRun.flags |= 4;
+        applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
     }
 
     public void makeSelectedStrike() {
-        TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
-        run.flags |= 8;
-        applyTextStyleToSelection(new TextStyleSpan(run));
+        TextStyleSpan.TextStyleRun textStyleRun = new TextStyleSpan.TextStyleRun();
+        textStyleRun.flags |= 8;
+        applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
     }
 
     public void makeSelectedUnderline() {
-        TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
-        run.flags |= 16;
-        applyTextStyleToSelection(new TextStyleSpan(run));
+        TextStyleSpan.TextStyleRun textStyleRun = new TextStyleSpan.TextStyleRun();
+        textStyleRun.flags |= 16;
+        applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
     }
 
     public void makeSelectedUrl() {
-        int end;
-        int start;
+        int i;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), this.resourcesProvider);
         builder.setTitle(LocaleController.getString("CreateLink", NUM));
-        EditTextBoldCursor editText = new EditTextBoldCursor(getContext()) {
+        AnonymousClass2 r1 = new EditTextBoldCursor(this, getContext()) {
             /* access modifiers changed from: protected */
-            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f), NUM));
+            public void onMeasure(int i, int i2) {
+                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f), NUM));
             }
         };
-        editText.setTextSize(1, 18.0f);
-        editText.setText("http://");
-        editText.setTextColor(getThemedColor("dialogTextBlack"));
-        editText.setHintText(LocaleController.getString("URL", NUM));
-        editText.setHeaderHintColor(getThemedColor("windowBackgroundWhiteBlueHeader"));
-        editText.setSingleLine(true);
-        editText.setFocusable(true);
-        editText.setTransformHintToHeader(true);
-        editText.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
-        editText.setImeOptions(6);
-        editText.setBackgroundDrawable((Drawable) null);
-        editText.requestFocus();
-        editText.setPadding(0, 0, 0, 0);
-        builder.setView(editText);
-        if (this.selectionStart < 0 || this.selectionEnd < 0) {
-            start = getSelectionStart();
-            end = getSelectionEnd();
+        r1.setTextSize(1, 18.0f);
+        r1.setText("http://");
+        r1.setTextColor(getThemedColor("dialogTextBlack"));
+        r1.setHintText(LocaleController.getString("URL", NUM));
+        r1.setHeaderHintColor(getThemedColor("windowBackgroundWhiteBlueHeader"));
+        r1.setSingleLine(true);
+        r1.setFocusable(true);
+        r1.setTransformHintToHeader(true);
+        r1.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
+        r1.setImeOptions(6);
+        r1.setBackgroundDrawable((Drawable) null);
+        r1.requestFocus();
+        r1.setPadding(0, 0, 0, 0);
+        builder.setView(r1);
+        int i2 = this.selectionStart;
+        if (i2 < 0 || (i = this.selectionEnd) < 0) {
+            i2 = getSelectionStart();
+            i = getSelectionEnd();
         } else {
-            start = this.selectionStart;
-            end = this.selectionEnd;
             this.selectionEnd = -1;
             this.selectionStart = -1;
         }
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), new EditTextCaption$$ExternalSyntheticLambda0(this, start, end, editText));
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), new EditTextCaption$$ExternalSyntheticLambda0(this, i2, i, r1));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-        builder.show().setOnShowListener(new EditTextCaption$$ExternalSyntheticLambda1(editText));
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) editText.getLayoutParams();
-        if (layoutParams != null) {
-            if (layoutParams instanceof FrameLayout.LayoutParams) {
-                ((FrameLayout.LayoutParams) layoutParams).gravity = 1;
+        builder.show().setOnShowListener(new EditTextCaption$$ExternalSyntheticLambda1(r1));
+        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) r1.getLayoutParams();
+        if (marginLayoutParams != null) {
+            if (marginLayoutParams instanceof FrameLayout.LayoutParams) {
+                ((FrameLayout.LayoutParams) marginLayoutParams).gravity = 1;
             }
             int dp = AndroidUtilities.dp(24.0f);
-            layoutParams.leftMargin = dp;
-            layoutParams.rightMargin = dp;
-            layoutParams.height = AndroidUtilities.dp(36.0f);
-            editText.setLayoutParams(layoutParams);
+            marginLayoutParams.leftMargin = dp;
+            marginLayoutParams.rightMargin = dp;
+            marginLayoutParams.height = AndroidUtilities.dp(36.0f);
+            r1.setLayoutParams(marginLayoutParams);
         }
-        editText.setSelection(0, editText.getText().length());
+        r1.setSelection(0, r1.getText().length());
     }
 
-    /* renamed from: lambda$makeSelectedUrl$0$org-telegram-ui-Components-EditTextCaption  reason: not valid java name */
-    public /* synthetic */ void m2230x8e956f7d(int start, int end, EditTextBoldCursor editText, DialogInterface dialogInterface, int i) {
-        Editable editable = getText();
-        CharacterStyle[] spans = (CharacterStyle[]) editable.getSpans(start, end, CharacterStyle.class);
-        if (spans != null && spans.length > 0) {
-            for (CharacterStyle oldSpan : spans) {
-                int spanStart = editable.getSpanStart(oldSpan);
-                int spanEnd = editable.getSpanEnd(oldSpan);
-                editable.removeSpan(oldSpan);
-                if (spanStart < start) {
-                    editable.setSpan(oldSpan, spanStart, start, 33);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$makeSelectedUrl$0(int i, int i2, EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface, int i3) {
+        Editable text = getText();
+        CharacterStyle[] characterStyleArr = (CharacterStyle[]) text.getSpans(i, i2, CharacterStyle.class);
+        if (characterStyleArr != null && characterStyleArr.length > 0) {
+            for (CharacterStyle characterStyle : characterStyleArr) {
+                int spanStart = text.getSpanStart(characterStyle);
+                int spanEnd = text.getSpanEnd(characterStyle);
+                text.removeSpan(characterStyle);
+                if (spanStart < i) {
+                    text.setSpan(characterStyle, spanStart, i, 33);
                 }
-                if (spanEnd > end) {
-                    editable.setSpan(oldSpan, end, spanEnd, 33);
+                if (spanEnd > i2) {
+                    text.setSpan(characterStyle, i2, spanEnd, 33);
                 }
             }
         }
         try {
-            editable.setSpan(new URLSpanReplacement(editText.getText().toString()), start, end, 33);
-        } catch (Exception e) {
+            text.setSpan(new URLSpanReplacement(editTextBoldCursor.getText().toString()), i, i2, 33);
+        } catch (Exception unused) {
         }
         EditTextCaptionDelegate editTextCaptionDelegate = this.delegate;
         if (editTextCaptionDelegate != null) {
@@ -215,126 +211,125 @@ public class EditTextCaption extends EditTextBoldCursor {
         }
     }
 
-    static /* synthetic */ void lambda$makeSelectedUrl$1(EditTextBoldCursor editText, DialogInterface dialog) {
-        editText.requestFocus();
-        AndroidUtilities.showKeyboard(editText);
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$makeSelectedUrl$1(EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface) {
+        editTextBoldCursor.requestFocus();
+        AndroidUtilities.showKeyboard(editTextBoldCursor);
     }
 
     public void makeSelectedRegular() {
         applyTextStyleToSelection((TextStyleSpan) null);
     }
 
-    public void setSelectionOverride(int start, int end) {
-        this.selectionStart = start;
-        this.selectionEnd = end;
+    public void setSelectionOverride(int i, int i2) {
+        this.selectionStart = i;
+        this.selectionEnd = i2;
     }
 
-    private void applyTextStyleToSelection(TextStyleSpan span) {
-        int end;
-        int start;
-        if (this.selectionStart < 0 || this.selectionEnd < 0) {
-            start = getSelectionStart();
-            end = getSelectionEnd();
+    private void applyTextStyleToSelection(TextStyleSpan textStyleSpan) {
+        int i;
+        int i2 = this.selectionStart;
+        if (i2 < 0 || (i = this.selectionEnd) < 0) {
+            i2 = getSelectionStart();
+            i = getSelectionEnd();
         } else {
-            start = this.selectionStart;
-            end = this.selectionEnd;
             this.selectionEnd = -1;
             this.selectionStart = -1;
         }
-        MediaDataController.addStyleToText(span, start, end, getText(), this.allowTextEntitiesIntersection);
+        MediaDataController.addStyleToText(textStyleSpan, i2, i, getText(), this.allowTextEntitiesIntersection);
         EditTextCaptionDelegate editTextCaptionDelegate = this.delegate;
         if (editTextCaptionDelegate != null) {
             editTextCaptionDelegate.onSpansChanged();
         }
     }
 
-    public void onWindowFocusChanged(boolean hasWindowFocus) {
-        if (Build.VERSION.SDK_INT >= 23 || hasWindowFocus || !this.copyPasteShowed) {
+    public void onWindowFocusChanged(boolean z) {
+        if (Build.VERSION.SDK_INT >= 23 || z || !this.copyPasteShowed) {
             try {
-                super.onWindowFocusChanged(hasWindowFocus);
-            } catch (Throwable e) {
-                FileLog.e(e);
+                super.onWindowFocusChanged(z);
+            } catch (Throwable th) {
+                FileLog.e(th);
             }
         }
     }
 
     private ActionMode.Callback overrideCallback(final ActionMode.Callback callback) {
-        final ActionMode.Callback wrap = new ActionMode.Callback() {
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        final AnonymousClass3 r0 = new ActionMode.Callback() {
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 boolean unused = EditTextCaption.this.copyPasteShowed = true;
-                return callback.onCreateActionMode(mode, menu);
+                return callback.onCreateActionMode(actionMode, menu);
             }
 
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return callback.onPrepareActionMode(mode, menu);
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return callback.onPrepareActionMode(actionMode, menu);
             }
 
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                if (EditTextCaption.this.performMenuAction(item.getItemId())) {
-                    mode.finish();
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                if (EditTextCaption.this.performMenuAction(menuItem.getItemId())) {
+                    actionMode.finish();
                     return true;
                 }
                 try {
-                    return callback.onActionItemClicked(mode, item);
-                } catch (Exception e) {
+                    return callback.onActionItemClicked(actionMode, menuItem);
+                } catch (Exception unused) {
                     return true;
                 }
             }
 
-            public void onDestroyActionMode(ActionMode mode) {
+            public void onDestroyActionMode(ActionMode actionMode) {
                 boolean unused = EditTextCaption.this.copyPasteShowed = false;
-                callback.onDestroyActionMode(mode);
+                callback.onDestroyActionMode(actionMode);
             }
         };
-        return Build.VERSION.SDK_INT >= 23 ? new ActionMode.Callback2() {
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                return wrap.onCreateActionMode(mode, menu);
+        return Build.VERSION.SDK_INT >= 23 ? new ActionMode.Callback2(this) {
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                return r0.onCreateActionMode(actionMode, menu);
             }
 
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return wrap.onPrepareActionMode(mode, menu);
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return r0.onPrepareActionMode(actionMode, menu);
             }
 
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                return wrap.onActionItemClicked(mode, item);
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                return r0.onActionItemClicked(actionMode, menuItem);
             }
 
-            public void onDestroyActionMode(ActionMode mode) {
-                wrap.onDestroyActionMode(mode);
+            public void onDestroyActionMode(ActionMode actionMode) {
+                r0.onDestroyActionMode(actionMode);
             }
 
-            public void onGetContentRect(ActionMode mode, View view, Rect outRect) {
+            public void onGetContentRect(ActionMode actionMode, View view, Rect rect) {
                 ActionMode.Callback callback = callback;
                 if (callback instanceof ActionMode.Callback2) {
-                    ((ActionMode.Callback2) callback).onGetContentRect(mode, view, outRect);
+                    ((ActionMode.Callback2) callback).onGetContentRect(actionMode, view, rect);
                 } else {
-                    super.onGetContentRect(mode, view, outRect);
+                    super.onGetContentRect(actionMode, view, rect);
                 }
             }
-        } : wrap;
+        } : r0;
     }
 
     /* access modifiers changed from: private */
-    public boolean performMenuAction(int itemId) {
-        if (itemId == NUM) {
+    public boolean performMenuAction(int i) {
+        if (i == NUM) {
             makeSelectedRegular();
             return true;
-        } else if (itemId == NUM) {
+        } else if (i == NUM) {
             makeSelectedBold();
             return true;
-        } else if (itemId == NUM) {
+        } else if (i == NUM) {
             makeSelectedItalic();
             return true;
-        } else if (itemId == NUM) {
+        } else if (i == NUM) {
             makeSelectedMono();
             return true;
-        } else if (itemId == NUM) {
+        } else if (i == NUM) {
             makeSelectedUrl();
             return true;
-        } else if (itemId == NUM) {
+        } else if (i == NUM) {
             makeSelectedStrike();
             return true;
-        } else if (itemId != NUM) {
+        } else if (i != NUM) {
             return false;
         } else {
             makeSelectedUnderline();
@@ -342,8 +337,8 @@ public class EditTextCaption extends EditTextBoldCursor {
         }
     }
 
-    public ActionMode startActionMode(ActionMode.Callback callback, int type) {
-        return super.startActionMode(overrideCallback(callback), type);
+    public ActionMode startActionMode(ActionMode.Callback callback, int i) {
+        return super.startActionMode(overrideCallback(callback), i);
     }
 
     public ActionMode startActionMode(ActionMode.Callback callback) {
@@ -351,33 +346,35 @@ public class EditTextCaption extends EditTextBoldCursor {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int index;
+    @SuppressLint({"DrawAllocation"})
+    public void onMeasure(int i, int i2) {
+        int indexOf;
         try {
             this.isInitLineCount = getMeasuredWidth() == 0 && getMeasuredHeight() == 0;
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            super.onMeasure(i, i2);
             if (this.isInitLineCount) {
                 this.lineCount = getLineCount();
             }
             this.isInitLineCount = false;
         } catch (Exception e) {
-            setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(51.0f));
+            setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(51.0f));
             FileLog.e((Throwable) e);
         }
         this.captionLayout = null;
         String str = this.caption;
         if (str != null && str.length() > 0) {
-            CharSequence text = getText();
-            if (text.length() > 1 && text.charAt(0) == '@' && (index = TextUtils.indexOf(text, ' ')) != -1) {
+            Editable text = getText();
+            if (text.length() > 1 && text.charAt(0) == '@' && (indexOf = TextUtils.indexOf(text, ' ')) != -1) {
                 TextPaint paint = getPaint();
-                CharSequence str2 = text.subSequence(0, index + 1);
-                int size = (int) Math.ceil((double) paint.measureText(text, 0, index + 1));
-                int width = (getMeasuredWidth() - getPaddingLeft()) - getPaddingRight();
-                this.userNameLength = str2.length();
-                CharSequence captionFinal = TextUtils.ellipsize(this.caption, paint, (float) (width - size), TextUtils.TruncateAt.END);
-                this.xOffset = size;
+                int i3 = indexOf + 1;
+                CharSequence subSequence = text.subSequence(0, i3);
+                int ceil = (int) Math.ceil((double) paint.measureText(text, 0, i3));
+                this.userNameLength = subSequence.length();
+                int measuredWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - ceil;
+                CharSequence ellipsize = TextUtils.ellipsize(this.caption, paint, (float) measuredWidth, TextUtils.TruncateAt.END);
+                this.xOffset = ceil;
                 try {
-                    StaticLayout staticLayout = new StaticLayout(captionFinal, getPaint(), width - size, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    StaticLayout staticLayout = new StaticLayout(ellipsize, getPaint(), measuredWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     this.captionLayout = staticLayout;
                     if (staticLayout.getLineCount() > 0) {
                         this.xOffset = (int) (((float) this.xOffset) + (-this.captionLayout.getLineLeft(0)));
@@ -394,14 +391,14 @@ public class EditTextCaption extends EditTextBoldCursor {
         return this.caption;
     }
 
-    public void setHintColor(int value) {
-        super.setHintColor(value);
-        this.hintColor = value;
+    public void setHintColor(int i) {
+        super.setHintColor(i);
+        this.hintColor = i;
         invalidate();
     }
 
-    public void setOffsetY(float offset) {
-        this.offsetY = offset;
+    public void setOffsetY(float f) {
+        this.offsetY = f;
         invalidate();
     }
 
@@ -416,14 +413,14 @@ public class EditTextCaption extends EditTextBoldCursor {
         super.onDraw(canvas);
         try {
             if (this.captionLayout != null && this.userNameLength == length()) {
-                Paint paint = getPaint();
-                int oldColor = getPaint().getColor();
+                TextPaint paint = getPaint();
+                int color = getPaint().getColor();
                 paint.setColor(this.hintColor);
                 canvas.save();
                 canvas.translate((float) this.xOffset, (float) this.yOffset);
                 this.captionLayout.draw(canvas);
                 canvas.restore();
-                paint.setColor(oldColor);
+                paint.setColor(color);
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -431,44 +428,44 @@ public class EditTextCaption extends EditTextBoldCursor {
         canvas.restore();
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        AccessibilityNodeInfoCompat infoCompat = AccessibilityNodeInfoCompat.wrap(info);
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        AccessibilityNodeInfoCompat wrap = AccessibilityNodeInfoCompat.wrap(accessibilityNodeInfo);
         if (!TextUtils.isEmpty(this.caption)) {
-            infoCompat.setHintText(this.caption);
+            wrap.setHintText(this.caption);
         }
-        List<AccessibilityNodeInfoCompat.AccessibilityActionCompat> actions = infoCompat.getActionList();
+        List<AccessibilityNodeInfoCompat.AccessibilityActionCompat> actionList = wrap.getActionList();
         int i = 0;
-        int size = actions.size();
+        int size = actionList.size();
         while (true) {
             if (i >= size) {
                 break;
             }
-            AccessibilityNodeInfoCompat.AccessibilityActionCompat action = actions.get(i);
-            if (action.getId() == NUM) {
-                infoCompat.removeAction(action);
+            AccessibilityNodeInfoCompat.AccessibilityActionCompat accessibilityActionCompat = actionList.get(i);
+            if (accessibilityActionCompat.getId() == NUM) {
+                wrap.removeAction(accessibilityActionCompat);
                 break;
             }
             i++;
         }
-        if (hasSelection() != 0) {
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Bold", NUM)));
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Italic", NUM)));
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Mono", NUM)));
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Strike", NUM)));
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Underline", NUM)));
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("CreateLink", NUM)));
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Regular", NUM)));
+        if (hasSelection()) {
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Bold", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Italic", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Mono", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Strike", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Underline", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("CreateLink", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Regular", NUM)));
         }
     }
 
-    public boolean performAccessibilityAction(int action, Bundle arguments) {
-        return performMenuAction(action) || super.performAccessibilityAction(action, arguments);
+    public boolean performAccessibilityAction(int i, Bundle bundle) {
+        return performMenuAction(i) || super.performAccessibilityAction(i, bundle);
     }
 
-    private int getThemedColor(String key) {
+    private int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

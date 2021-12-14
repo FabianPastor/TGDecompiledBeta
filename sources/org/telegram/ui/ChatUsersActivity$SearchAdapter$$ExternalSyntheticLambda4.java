@@ -26,7 +26,7 @@ public final /* synthetic */ class ChatUsersActivity$SearchAdapter$$ExternalSynt
     }
 
     public final void onDataSetChanged(int i) {
-        this.f$0.m1979lambda$new$0$orgtelegramuiChatUsersActivity$SearchAdapter(i);
+        this.f$0.lambda$new$0(i);
     }
 
     public /* synthetic */ void onSetHashtags(ArrayList arrayList, HashMap hashMap) {

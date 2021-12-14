@@ -13,6 +13,6 @@ public final /* synthetic */ class LocationActivity$MapOverlayView$$ExternalSynt
     }
 
     public final void onClick(View view) {
-        this.f$0.m3183x40891783(this.f$1, view);
+        this.f$0.lambda$addInfoView$1(this.f$1, view);
     }
 }

@@ -1,19 +1,17 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SharedMediaLayout;
 
-public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda6 implements RecyclerListView.OnItemClickListener {
-    public final /* synthetic */ SharedMediaLayout f$0;
-    public final /* synthetic */ SharedMediaLayout.MediaPage f$1;
+public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda6 implements Runnable {
+    public final /* synthetic */ SharedMediaLayout.MediaPage f$0;
+    public final /* synthetic */ SharedMediaFastScrollTooltip f$1;
 
-    public /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda6(SharedMediaLayout sharedMediaLayout, SharedMediaLayout.MediaPage mediaPage) {
-        this.f$0 = sharedMediaLayout;
-        this.f$1 = mediaPage;
+    public /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda6(SharedMediaLayout.MediaPage mediaPage, SharedMediaFastScrollTooltip sharedMediaFastScrollTooltip) {
+        this.f$0 = mediaPage;
+        this.f$1 = sharedMediaFastScrollTooltip;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.m2583lambda$new$6$orgtelegramuiComponentsSharedMediaLayout(this.f$1, view, i);
+    public final void run() {
+        SharedMediaLayout.lambda$showFastScrollHint$14(this.f$0, this.f$1);
     }
 }

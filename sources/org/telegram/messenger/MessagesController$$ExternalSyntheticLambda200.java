@@ -1,21 +1,18 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.messenger.MessagesStorage;
+import org.telegram.tgnet.TLRPC$Updates;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda200 implements RequestDelegate {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ TLRPC.Chat f$2;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda200 implements Runnable {
+    public final /* synthetic */ MessagesStorage.LongCallback f$0;
+    public final /* synthetic */ TLRPC$Updates f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda200(MessagesController messagesController, long j, TLRPC.Chat chat) {
-        this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = chat;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda200(MessagesStorage.LongCallback longCallback, TLRPC$Updates tLRPC$Updates) {
+        this.f$0 = longCallback;
+        this.f$1 = tLRPC$Updates;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m270xcca0dce(this.f$1, this.f$2, tLObject, tL_error);
+    public final void run() {
+        MessagesController.lambda$convertToMegaGroup$203(this.f$0, this.f$1);
     }
 }

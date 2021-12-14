@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import androidx.collection.LongSparseArray;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda82 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC.messages_Dialogs f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ LongSparseArray f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda82(MessagesController messagesController, TLRPC.messages_Dialogs messages_dialogs, int i) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda82(MessagesController messagesController, LongSparseArray longSparseArray) {
         this.f$0 = messagesController;
-        this.f$1 = messages_dialogs;
-        this.f$2 = i;
+        this.f$1 = longSparseArray;
     }
 
     public final void run() {
-        this.f$0.m286xbae57e8(this.f$1, this.f$2);
+        this.f$0.lambda$getChannelDifference$251(this.f$1);
     }
 }

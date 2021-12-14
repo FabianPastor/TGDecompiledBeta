@@ -11,6 +11,6 @@ public final /* synthetic */ class ShareAlert$SwitchView$$ExternalSyntheticLambd
     }
 
     public final void onClick(View view) {
-        this.f$0.m2573lambda$new$1$orgtelegramuiComponentsShareAlert$SwitchView(view);
+        this.f$0.lambda$new$0(view);
     }
 }

@@ -1,15 +1,14 @@
 package org.telegram.messenger.voip;
 
-import org.telegram.messenger.voip.Instance;
+import org.telegram.messenger.NotificationCenter;
 
-public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda62 implements Instance.OnSignalingDataListener {
-    public final /* synthetic */ VoIPService f$0;
+public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda62 implements Runnable {
+    public static final /* synthetic */ VoIPService$$ExternalSyntheticLambda62 INSTANCE = new VoIPService$$ExternalSyntheticLambda62();
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda62(VoIPService voIPService) {
-        this.f$0 = voIPService;
+    private /* synthetic */ VoIPService$$ExternalSyntheticLambda62() {
     }
 
-    public final void onSignalingData(byte[] bArr) {
-        this.f$0.onSignalingData(bArr);
+    public final void run() {
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
     }
 }

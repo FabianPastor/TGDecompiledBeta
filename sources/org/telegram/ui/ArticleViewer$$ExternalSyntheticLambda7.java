@@ -1,18 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
 
-public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda7 implements Runnable {
-    public final /* synthetic */ int f$0;
-    public final /* synthetic */ TLRPC.Chat f$1;
+public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda7 implements View.OnClickListener {
+    public final /* synthetic */ ArticleViewer f$0;
 
-    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda7(int i, TLRPC.Chat chat) {
-        this.f$0 = i;
-        this.f$1 = chat;
+    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda7(ArticleViewer articleViewer) {
+        this.f$0 = articleViewer;
     }
 
-    public final void run() {
-        MessagesController.getInstance(this.f$0).loadFullChat(this.f$1.id, 0, true);
+    public final void onClick(View view) {
+        this.f$0.lambda$setParentActivity$21(view);
     }
 }

@@ -17,27 +17,27 @@ public class DefaultVideoEncoderFactory implements VideoEncoderFactory {
         return VideoEncoderFactory.CC.$default$getImplementations(this);
     }
 
-    public DefaultVideoEncoderFactory(EglBase.Context eglContext, boolean enableIntelVp8Encoder, boolean enableH264HighProfile) {
-        this.hardwareVideoEncoderFactory = new HardwareVideoEncoderFactory(eglContext, enableIntelVp8Encoder, enableH264HighProfile);
+    public DefaultVideoEncoderFactory(EglBase.Context context, boolean z, boolean z2) {
+        this.hardwareVideoEncoderFactory = new HardwareVideoEncoderFactory(context, z, z2);
     }
 
-    DefaultVideoEncoderFactory(VideoEncoderFactory hardwareVideoEncoderFactory2) {
-        this.hardwareVideoEncoderFactory = hardwareVideoEncoderFactory2;
+    DefaultVideoEncoderFactory(VideoEncoderFactory videoEncoderFactory) {
+        this.hardwareVideoEncoderFactory = videoEncoderFactory;
     }
 
-    public VideoEncoder createEncoder(VideoCodecInfo info) {
-        VideoEncoder softwareEncoder = this.softwareVideoEncoderFactory.createEncoder(info);
-        VideoEncoder hardwareEncoder = this.hardwareVideoEncoderFactory.createEncoder(info);
-        if (hardwareEncoder == null || softwareEncoder == null) {
-            return hardwareEncoder != null ? hardwareEncoder : softwareEncoder;
+    public VideoEncoder createEncoder(VideoCodecInfo videoCodecInfo) {
+        VideoEncoder createEncoder = this.softwareVideoEncoderFactory.createEncoder(videoCodecInfo);
+        VideoEncoder createEncoder2 = this.hardwareVideoEncoderFactory.createEncoder(videoCodecInfo);
+        if (createEncoder2 == null || createEncoder == null) {
+            return createEncoder2 != null ? createEncoder2 : createEncoder;
         }
-        return new VideoEncoderFallback(softwareEncoder, hardwareEncoder);
+        return new VideoEncoderFallback(createEncoder, createEncoder2);
     }
 
     public VideoCodecInfo[] getSupportedCodecs() {
-        LinkedHashSet<VideoCodecInfo> supportedCodecInfos = new LinkedHashSet<>();
-        supportedCodecInfos.addAll(Arrays.asList(this.softwareVideoEncoderFactory.getSupportedCodecs()));
-        supportedCodecInfos.addAll(Arrays.asList(this.hardwareVideoEncoderFactory.getSupportedCodecs()));
-        return (VideoCodecInfo[]) supportedCodecInfos.toArray(new VideoCodecInfo[supportedCodecInfos.size()]);
+        LinkedHashSet linkedHashSet = new LinkedHashSet();
+        linkedHashSet.addAll(Arrays.asList(this.softwareVideoEncoderFactory.getSupportedCodecs()));
+        linkedHashSet.addAll(Arrays.asList(this.hardwareVideoEncoderFactory.getSupportedCodecs()));
+        return (VideoCodecInfo[]) linkedHashSet.toArray(new VideoCodecInfo[linkedHashSet.size()]);
     }
 }

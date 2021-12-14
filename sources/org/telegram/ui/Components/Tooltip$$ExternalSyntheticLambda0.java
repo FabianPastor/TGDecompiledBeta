@@ -8,6 +8,6 @@ public final /* synthetic */ class Tooltip$$ExternalSyntheticLambda0 implements 
     }
 
     public final void run() {
-        this.f$0.m2695lambda$new$0$orgtelegramuiComponentsTooltip();
+        this.f$0.lambda$new$0();
     }
 }

@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
-import org.telegram.messenger.support.LongSparseIntArray;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class FilterCreateActivity$$ExternalSyntheticLambda13 implements Comparator {
-    public final /* synthetic */ LongSparseIntArray f$0;
+public final /* synthetic */ class FilterCreateActivity$$ExternalSyntheticLambda13 implements RecyclerListView.OnItemLongClickListener {
+    public final /* synthetic */ FilterCreateActivity f$0;
 
-    public /* synthetic */ FilterCreateActivity$$ExternalSyntheticLambda13(LongSparseIntArray longSparseIntArray) {
-        this.f$0 = longSparseIntArray;
+    public /* synthetic */ FilterCreateActivity$$ExternalSyntheticLambda13(FilterCreateActivity filterCreateActivity) {
+        this.f$0 = filterCreateActivity;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return FilterCreateActivity.lambda$saveFilterToServer$11(this.f$0, (Long) obj, (Long) obj2);
+    public final boolean onItemClick(View view, int i) {
+        return this.f$0.lambda$createView$5(view, i);
     }
 }

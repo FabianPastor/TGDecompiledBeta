@@ -12,6 +12,6 @@ public final /* synthetic */ class SurfaceTextureHelper$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.m4117lambda$setTextureSize$2$orgwebrtcSurfaceTextureHelper(this.f$1, this.f$2);
+        this.f$0.lambda$setTextureSize$2(this.f$1, this.f$2);
     }
 }

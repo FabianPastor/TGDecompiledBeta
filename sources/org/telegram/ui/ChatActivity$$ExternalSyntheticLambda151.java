@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda151 implements View.OnTouchListener {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda151 INSTANCE = new ChatActivity$$ExternalSyntheticLambda151();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda151 implements RequestDelegate {
+    public final /* synthetic */ ChatActivity f$0;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda151() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda151(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ChatActivity.lambda$createView$19(view, motionEvent);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$startEditingMessageObject$123(tLObject, tLRPC$TL_error);
     }
 }

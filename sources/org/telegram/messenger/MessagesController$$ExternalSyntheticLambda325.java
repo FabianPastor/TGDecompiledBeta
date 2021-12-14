@@ -1,13 +1,16 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda325 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda325(MessagesController messagesController) {
-        this.f$0 = messagesController;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda325 implements RequestDelegate {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda325 INSTANCE = new MessagesController$$ExternalSyntheticLambda325();
+
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda325() {
     }
 
-    public final void run() {
-        this.f$0.m149lambda$cleanup$28$orgtelegrammessengerMessagesController();
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        MessagesController.lambda$installTheme$87(tLObject, tLRPC$TL_error);
     }
 }

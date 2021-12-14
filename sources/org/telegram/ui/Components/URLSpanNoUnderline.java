@@ -12,38 +12,38 @@ public class URLSpanNoUnderline extends URLSpan {
     private TLObject object;
     private TextStyleSpan.TextStyleRun style;
 
-    public URLSpanNoUnderline(String url) {
-        this(url, (TextStyleSpan.TextStyleRun) null);
+    public URLSpanNoUnderline(String str) {
+        this(str, (TextStyleSpan.TextStyleRun) null);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public URLSpanNoUnderline(String url, TextStyleSpan.TextStyleRun run) {
-        super(url != null ? url.replace(8238, ' ') : url);
-        this.style = run;
+    public URLSpanNoUnderline(String str, TextStyleSpan.TextStyleRun textStyleRun) {
+        super(str != null ? str.replace(8238, ' ') : str);
+        this.style = textStyleRun;
     }
 
-    public void onClick(View widget) {
+    public void onClick(View view) {
         String url = getURL();
         if (url.startsWith("@")) {
-            Browser.openUrl(widget.getContext(), Uri.parse("https://t.me/" + url.substring(1)));
+            Browser.openUrl(view.getContext(), Uri.parse("https://t.me/" + url.substring(1)));
             return;
         }
-        Browser.openUrl(widget.getContext(), url);
+        Browser.openUrl(view.getContext(), url);
     }
 
-    public void updateDrawState(TextPaint p) {
-        int l = p.linkColor;
-        int c = p.getColor();
-        super.updateDrawState(p);
+    public void updateDrawState(TextPaint textPaint) {
+        int i = textPaint.linkColor;
+        int color = textPaint.getColor();
+        super.updateDrawState(textPaint);
         TextStyleSpan.TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
-            textStyleRun.applyStyle(p);
+            textStyleRun.applyStyle(textPaint);
         }
-        p.setUnderlineText(l == c);
+        textPaint.setUnderlineText(i == color);
     }
 
-    public void setObject(TLObject spanObject) {
-        this.object = spanObject;
+    public void setObject(TLObject tLObject) {
+        this.object = tLObject;
     }
 
     public TLObject getObject() {

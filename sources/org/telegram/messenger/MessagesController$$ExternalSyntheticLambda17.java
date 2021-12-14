@@ -1,31 +1,13 @@
 package org.telegram.messenger;
 
-import android.content.Context;
-import org.telegram.messenger.MessagesStorage;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
-
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda17 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ MessagesStorage.LongCallback f$1;
-    public final /* synthetic */ Context f$2;
-    public final /* synthetic */ AlertDialog f$3;
-    public final /* synthetic */ TLRPC.TL_error f$4;
-    public final /* synthetic */ BaseFragment f$5;
-    public final /* synthetic */ TLRPC.TL_messages_migrateChat f$6;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda17(MessagesController messagesController, MessagesStorage.LongCallback longCallback, Context context, AlertDialog alertDialog, TLRPC.TL_error tL_error, BaseFragment baseFragment, TLRPC.TL_messages_migrateChat tL_messages_migrateChat) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda17(MessagesController messagesController) {
         this.f$0 = messagesController;
-        this.f$1 = longCallback;
-        this.f$2 = context;
-        this.f$3 = alertDialog;
-        this.f$4 = tL_error;
-        this.f$5 = baseFragment;
-        this.f$6 = tL_messages_migrateChat;
     }
 
     public final void run() {
-        this.f$0.m157x8ee5ed6f(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        this.f$0.lambda$processUpdateArray$304();
     }
 }

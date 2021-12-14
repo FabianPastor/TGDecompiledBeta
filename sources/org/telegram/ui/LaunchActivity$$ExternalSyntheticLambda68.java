@@ -1,22 +1,20 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.LocaleController;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda68 implements RequestDelegate {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ LocaleController.LocaleInfo[] f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ Theme.ThemeInfo f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda68(LaunchActivity launchActivity, LocaleController.LocaleInfo[] localeInfoArr, String str) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda68(LaunchActivity launchActivity, Theme.ThemeInfo themeInfo) {
         this.f$0 = launchActivity;
-        this.f$1 = localeInfoArr;
-        this.f$2 = str;
+        this.f$1 = themeInfo;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m3122lambda$showLanguageAlert$82$orgtelegramuiLaunchActivity(this.f$1, this.f$2, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$didReceivedNotification$73(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

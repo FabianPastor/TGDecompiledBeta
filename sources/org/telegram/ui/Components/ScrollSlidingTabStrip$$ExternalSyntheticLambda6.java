@@ -10,6 +10,6 @@ public final /* synthetic */ class ScrollSlidingTabStrip$$ExternalSyntheticLambd
     }
 
     public final void onClick(View view) {
-        this.f$0.m2544x80889fdc(view);
+        this.f$0.lambda$addStickerTab$3(view);
     }
 }

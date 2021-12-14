@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.AlertsCreator;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda73 implements AlertsCreator.ScheduleDatePickerDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ Object f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda73 implements Runnable {
+    public final /* synthetic */ View f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda73(ChatActivity chatActivity, Object obj) {
-        this.f$0 = chatActivity;
-        this.f$1 = obj;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda73(View view) {
+        this.f$0 = view;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.m1693lambda$createView$37$orgtelegramuiChatActivity(this.f$1, z, i);
+    public final void run() {
+        this.f$0.performHapticFeedback(3, 2);
     }
 }

@@ -1,19 +1,23 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.messenger.LocaleController;
-import org.telegram.ui.Cells.LanguageCell;
+import android.content.DialogInterface;
+import java.util.HashMap;
+import org.telegram.messenger.ContactsController;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda6 implements View.OnClickListener {
-    public final /* synthetic */ LocaleController.LocaleInfo[] f$0;
-    public final /* synthetic */ LanguageCell[] f$1;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda6 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ int f$0;
+    public final /* synthetic */ HashMap f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda6(LocaleController.LocaleInfo[] localeInfoArr, LanguageCell[] languageCellArr) {
-        this.f$0 = localeInfoArr;
-        this.f$1 = languageCellArr;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda6(int i, HashMap hashMap, boolean z, boolean z2) {
+        this.f$0 = i;
+        this.f$1 = hashMap;
+        this.f$2 = z;
+        this.f$3 = z2;
     }
 
-    public final void onClick(View view) {
-        LaunchActivity.lambda$showLanguageAlertInternal$78(this.f$0, this.f$1, view);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        ContactsController.getInstance(this.f$0).syncPhoneBookByAlert(this.f$1, this.f$2, this.f$3, false);
     }
 }

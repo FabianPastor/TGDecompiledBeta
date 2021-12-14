@@ -8,6 +8,6 @@ public final /* synthetic */ class JoinGroupAlert$$ExternalSyntheticLambda5 impl
     }
 
     public final void run() {
-        this.f$0.m2388lambda$new$1$orgtelegramuiComponentsJoinGroupAlert();
+        this.f$0.lambda$new$1();
     }
 }

@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesStorage;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda125 implements Runnable {
-    public final /* synthetic */ MessagesStorage.IntCallback f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ MessagesStorage f$0;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda125(MessagesStorage.IntCallback intCallback, int i) {
-        this.f$0 = intCallback;
-        this.f$1 = i;
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda125(MessagesStorage messagesStorage, ArrayList arrayList) {
+        this.f$0 = messagesStorage;
+        this.f$1 = arrayList;
     }
 
     public final void run() {
-        this.f$0.run(this.f$1);
+        this.f$0.lambda$putWebPages$142(this.f$1);
     }
 }

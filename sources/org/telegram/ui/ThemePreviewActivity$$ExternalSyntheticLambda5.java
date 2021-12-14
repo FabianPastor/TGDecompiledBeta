@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda5 implements Runnable {
+import android.view.View;
+
+public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda5 implements View.OnClickListener {
     public final /* synthetic */ ThemePreviewActivity f$0;
 
     public /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda5(ThemePreviewActivity themePreviewActivity) {
         this.f$0 = themePreviewActivity;
     }
 
-    public final void run() {
-        this.f$0.m3945lambda$new$0$orgtelegramuiThemePreviewActivity();
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$13(view);
     }
 }

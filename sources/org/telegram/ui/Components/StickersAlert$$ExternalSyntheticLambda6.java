@@ -1,13 +1,15 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda6 implements Runnable {
-    public final /* synthetic */ EditTextBoldCursor f$0;
+import android.view.View;
 
-    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda6(EditTextBoldCursor editTextBoldCursor) {
-        this.f$0 = editTextBoldCursor;
+public final /* synthetic */ class StickersAlert$$ExternalSyntheticLambda6 implements View.OnClickListener {
+    public final /* synthetic */ StickersAlert f$0;
+
+    public /* synthetic */ StickersAlert$$ExternalSyntheticLambda6(StickersAlert stickersAlert) {
+        this.f$0 = stickersAlert;
     }
 
-    public final void run() {
-        StickersAlert.lambda$showNameEnterAlert$23(this.f$0);
+    public final void onClick(View view) {
+        this.f$0.lambda$updateFields$19(view);
     }
 }

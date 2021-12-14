@@ -27,23 +27,23 @@ public class EmojiReplacementCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(52.0f) + getPaddingLeft() + getPaddingRight(), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(54.0f), NUM));
     }
 
-    public void setEmoji(String e, int side) {
-        this.emoji = e;
-        this.imageView.setImageDrawable(Emoji.getEmojiBigDrawable(e));
-        if (side == -1) {
+    public void setEmoji(String str, int i) {
+        this.emoji = str;
+        this.imageView.setImageDrawable(Emoji.getEmojiBigDrawable(str));
+        if (i == -1) {
             setBackgroundResource(NUM);
             setPadding(AndroidUtilities.dp(7.0f), 0, 0, 0);
-        } else if (side == 0) {
+        } else if (i == 0) {
             setBackgroundResource(NUM);
             setPadding(0, 0, 0, 0);
-        } else if (side == 1) {
+        } else if (i == 1) {
             setBackgroundResource(NUM);
             setPadding(0, 0, AndroidUtilities.dp(7.0f), 0);
-        } else if (side == 2) {
+        } else if (i == 2) {
             setBackgroundResource(NUM);
             setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         }
@@ -63,9 +63,9 @@ public class EmojiReplacementCell extends FrameLayout {
         this.imageView.invalidate();
     }
 
-    private int getThemedColor(String key) {
+    private int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

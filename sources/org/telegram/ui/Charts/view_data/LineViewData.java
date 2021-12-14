@@ -47,15 +47,15 @@ public class LineViewData {
         paint4.setStyle(Paint.Style.STROKE);
         paint4.setStrokeCap(Paint.Cap.ROUND);
         paint4.setColor(line2.color);
-        this.linesPath = new float[(line2.y.length << 2)];
-        this.linesPathBottom = new float[(line2.y.length << 2)];
+        int[] iArr = line2.y;
+        this.linesPath = new float[(iArr.length << 2)];
+        this.linesPathBottom = new float[(iArr.length << 2)];
     }
 
     public void updateColors() {
-        if (this.line.colorKey == null || !Theme.hasThemeKey(this.line.colorKey)) {
-            boolean darkBackground = ColorUtils.calculateLuminance(Theme.getColor("windowBackgroundWhite")) < 0.5d;
-            ChartData.Line line2 = this.line;
-            this.lineColor = darkBackground ? line2.colorDark : line2.color;
+        String str = this.line.colorKey;
+        if (str == null || !Theme.hasThemeKey(str)) {
+            this.lineColor = (ColorUtils.calculateLuminance(Theme.getColor("windowBackgroundWhite")) > 0.5d ? 1 : (ColorUtils.calculateLuminance(Theme.getColor("windowBackgroundWhite")) == 0.5d ? 0 : -1)) < 0 ? this.line.colorDark : this.line.color;
         } else {
             this.lineColor = Theme.getColor(this.line.colorKey);
         }

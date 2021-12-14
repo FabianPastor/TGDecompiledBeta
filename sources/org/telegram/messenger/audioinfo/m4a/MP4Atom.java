@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 import org.telegram.messenger.audioinfo.util.RangeInputStream;
 
 public class MP4Atom extends MP4Box<RangeInputStream> {
-    public MP4Atom(RangeInputStream input, MP4Box<?> parent, String type) {
-        super(input, parent, type);
+    public MP4Atom(RangeInputStream rangeInputStream, MP4Box<?> mP4Box, String str) {
+        super(rangeInputStream, mP4Box, str);
     }
 
     public long getLength() {
@@ -26,14 +26,14 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
         return (getChild() != null ? getChild().getRemaining() : 0) < getRemaining();
     }
 
-    public MP4Atom nextChildUpTo(String expectedTypeExpression) throws IOException {
+    public MP4Atom nextChildUpTo(String str) throws IOException {
         while (getRemaining() > 0) {
-            MP4Atom atom = nextChild();
-            if (atom.getType().matches(expectedTypeExpression)) {
-                return atom;
+            MP4Atom nextChild = nextChild();
+            if (nextChild.getType().matches(str)) {
+                return nextChild;
             }
         }
-        throw new IOException("atom type mismatch, not found: " + expectedTypeExpression);
+        throw new IOException("atom type mismatch, not found: " + str);
     }
 
     public boolean readBoolean() throws IOException {
@@ -56,10 +56,10 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
         return this.data.readLong();
     }
 
-    public byte[] readBytes(int len) throws IOException {
-        byte[] bytes = new byte[len];
-        this.data.readFully(bytes);
-        return bytes;
+    public byte[] readBytes(int i) throws IOException {
+        byte[] bArr = new byte[i];
+        this.data.readFully(bArr);
+        return bArr;
     }
 
     public byte[] readBytes() throws IOException {
@@ -67,33 +67,33 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
     }
 
     public BigDecimal readShortFixedPoint() throws IOException {
-        int integer = this.data.readByte();
-        int decimal = this.data.readUnsignedByte();
-        return new BigDecimal(String.valueOf(integer) + "" + String.valueOf(decimal));
+        byte readByte = this.data.readByte();
+        int readUnsignedByte = this.data.readUnsignedByte();
+        return new BigDecimal(String.valueOf(readByte) + "" + String.valueOf(readUnsignedByte));
     }
 
     public BigDecimal readIntegerFixedPoint() throws IOException {
-        int integer = this.data.readShort();
-        int decimal = this.data.readUnsignedShort();
-        return new BigDecimal(String.valueOf(integer) + "" + String.valueOf(decimal));
+        short readShort = this.data.readShort();
+        int readUnsignedShort = this.data.readUnsignedShort();
+        return new BigDecimal(String.valueOf(readShort) + "" + String.valueOf(readUnsignedShort));
     }
 
-    public String readString(int len, String enc) throws IOException {
-        String s = new String(readBytes(len), enc);
-        int end = s.indexOf(0);
-        return end < 0 ? s : s.substring(0, end);
+    public String readString(int i, String str) throws IOException {
+        String str2 = new String(readBytes(i), str);
+        int indexOf = str2.indexOf(0);
+        return indexOf < 0 ? str2 : str2.substring(0, indexOf);
     }
 
-    public String readString(String enc) throws IOException {
-        return readString((int) getRemaining(), enc);
+    public String readString(String str) throws IOException {
+        return readString((int) getRemaining(), str);
     }
 
-    public void skip(int len) throws IOException {
-        int total = 0;
-        while (total < len) {
-            int current = this.data.skipBytes(len - total);
-            if (current > 0) {
-                total += current;
+    public void skip(int i) throws IOException {
+        int i2 = 0;
+        while (i2 < i) {
+            int skipBytes = this.data.skipBytes(i - i2);
+            if (skipBytes > 0) {
+                i2 += skipBytes;
             } else {
                 throw new EOFException();
             }
@@ -108,13 +108,13 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
         }
     }
 
-    private StringBuffer appendPath(StringBuffer s, MP4Box<?> box) {
-        if (box.getParent() != null) {
-            appendPath(s, box.getParent());
-            s.append("/");
+    private StringBuffer appendPath(StringBuffer stringBuffer, MP4Box<?> mP4Box) {
+        if (mP4Box.getParent() != null) {
+            appendPath(stringBuffer, mP4Box.getParent());
+            stringBuffer.append("/");
         }
-        s.append(box.getType());
-        return s;
+        stringBuffer.append(mP4Box.getType());
+        return stringBuffer;
     }
 
     public String getPath() {
@@ -122,15 +122,15 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
     }
 
     public String toString() {
-        StringBuffer s = new StringBuffer();
-        appendPath(s, this);
-        s.append("[off=");
-        s.append(getOffset());
-        s.append(",pos=");
-        s.append(getPosition());
-        s.append(",len=");
-        s.append(getLength());
-        s.append("]");
-        return s.toString();
+        StringBuffer stringBuffer = new StringBuffer();
+        appendPath(stringBuffer, this);
+        stringBuffer.append("[off=");
+        stringBuffer.append(getOffset());
+        stringBuffer.append(",pos=");
+        stringBuffer.append(getPosition());
+        stringBuffer.append(",len=");
+        stringBuffer.append(getLength());
+        stringBuffer.append("]");
+        return stringBuffer.toString();
     }
 }

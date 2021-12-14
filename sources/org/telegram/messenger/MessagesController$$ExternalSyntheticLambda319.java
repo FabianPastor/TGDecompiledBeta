@@ -1,19 +1,16 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda319 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ LongSparseArray f$1;
-    public final /* synthetic */ LongSparseArray f$2;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda319 implements RequestDelegate {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda319 INSTANCE = new MessagesController$$ExternalSyntheticLambda319();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda319(MessagesController messagesController, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
-        this.f$0 = messagesController;
-        this.f$1 = longSparseArray;
-        this.f$2 = longSparseArray2;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda319() {
     }
 
-    public final void run() {
-        this.f$0.m136xdavar_f0f(this.f$1, this.f$2);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        MessagesController.lambda$unregistedPush$236(tLObject, tLRPC$TL_error);
     }
 }

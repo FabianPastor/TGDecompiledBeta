@@ -10,6 +10,6 @@ public final /* synthetic */ class PullForegroundDrawable$$ExternalSyntheticLamb
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2518x8521dvar_(valueAnimator);
+        this.f$0.lambda$new$0(valueAnimator);
     }
 }

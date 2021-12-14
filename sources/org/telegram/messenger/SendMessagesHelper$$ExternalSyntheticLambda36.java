@@ -1,23 +1,23 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Message;
 
 public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda36 implements Runnable {
     public final /* synthetic */ SendMessagesHelper f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ TLRPC.InputMedia f$2;
-    public final /* synthetic */ SendMessagesHelper.DelayedMessage f$3;
+    public final /* synthetic */ MessageObject f$1;
+    public final /* synthetic */ TLRPC$Message f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ int f$4;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda36(SendMessagesHelper sendMessagesHelper, TLObject tLObject, TLRPC.InputMedia inputMedia, SendMessagesHelper.DelayedMessage delayedMessage) {
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda36(SendMessagesHelper sendMessagesHelper, MessageObject messageObject, TLRPC$Message tLRPC$Message, int i, int i2) {
         this.f$0 = sendMessagesHelper;
-        this.f$1 = tLObject;
-        this.f$2 = inputMedia;
-        this.f$3 = delayedMessage;
+        this.f$1 = messageObject;
+        this.f$2 = tLRPC$Message;
+        this.f$3 = i;
+        this.f$4 = i2;
     }
 
     public final void run() {
-        this.f$0.m485xda8697f7(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$sendMessage$7(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

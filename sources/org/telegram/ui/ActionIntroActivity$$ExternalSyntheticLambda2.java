@@ -10,6 +10,6 @@ public final /* synthetic */ class ActionIntroActivity$$ExternalSyntheticLambda2
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1343x15419b5b(dialogInterface, i);
+        this.f$0.lambda$createView$1(dialogInterface, i);
     }
 }

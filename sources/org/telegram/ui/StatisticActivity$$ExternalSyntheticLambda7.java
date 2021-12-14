@@ -11,6 +11,6 @@ public final /* synthetic */ class StatisticActivity$$ExternalSyntheticLambda7 i
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m3872lambda$createView$3$orgtelegramuiStatisticActivity(view, i);
+        this.f$0.lambda$createView$3(view, i);
     }
 }

@@ -17,10 +17,10 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         this(context, true);
     }
 
-    public PickerBottomLayoutViewer(Context context, boolean darkTheme) {
+    public PickerBottomLayoutViewer(Context context, boolean z) {
         super(context);
-        this.isDarkTheme = darkTheme;
-        setBackgroundColor(darkTheme ? -15066598 : -1);
+        this.isDarkTheme = z;
+        setBackgroundColor(z ? -15066598 : -1);
         TextView textView = new TextView(context);
         this.cancelButton = textView;
         textView.setTextSize(1, 14.0f);
@@ -55,30 +55,30 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         addView(this.doneButtonBadgeTextView, LayoutHelper.createFrame(-2, 23.0f, 53, 0.0f, 0.0f, 7.0f, 0.0f));
     }
 
-    public void updateSelectedCount(int count, boolean disable) {
-        int i = -1;
-        if (count == 0) {
+    public void updateSelectedCount(int i, boolean z) {
+        int i2 = -1;
+        if (i == 0) {
             this.doneButtonBadgeTextView.setVisibility(8);
-            if (disable) {
+            if (z) {
                 this.doneButton.setTextColor(-6710887);
                 this.doneButton.setEnabled(false);
                 return;
             }
             TextView textView = this.doneButton;
             if (!this.isDarkTheme) {
-                i = -15095832;
+                i2 = -15095832;
             }
-            textView.setTextColor(i);
+            textView.setTextColor(i2);
             return;
         }
         this.doneButtonBadgeTextView.setVisibility(0);
-        this.doneButtonBadgeTextView.setText(String.format("%d", new Object[]{Integer.valueOf(count)}));
+        this.doneButtonBadgeTextView.setText(String.format("%d", new Object[]{Integer.valueOf(i)}));
         TextView textView2 = this.doneButton;
         if (!this.isDarkTheme) {
-            i = -15095832;
+            i2 = -15095832;
         }
-        textView2.setTextColor(i);
-        if (disable) {
+        textView2.setTextColor(i2);
+        if (z) {
             this.doneButton.setEnabled(true);
         }
     }

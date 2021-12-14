@@ -23,104 +23,101 @@ public class BackupImageView extends View {
         super(context);
     }
 
-    public void setOrientation(int angle, boolean center) {
-        this.imageReceiver.setOrientation(angle, center);
+    public void setOrientation(int i, boolean z) {
+        this.imageReceiver.setOrientation(i, z);
     }
 
-    public void setImage(SecureDocument secureDocument, String filter) {
-        setImage(ImageLocation.getForSecureDocument(secureDocument), filter, (ImageLocation) null, (String) null, (Drawable) null, (Bitmap) null, (String) null, 0, (Object) null);
+    public void setImage(SecureDocument secureDocument, String str) {
+        setImage(ImageLocation.getForSecureDocument(secureDocument), str, (ImageLocation) null, (String) null, (Drawable) null, (Bitmap) null, (String) null, 0, (Object) null);
     }
 
-    public void setImage(ImageLocation imageLocation, String imageFilter, String ext, Drawable thumb, Object parentObject) {
-        setImage(imageLocation, imageFilter, (ImageLocation) null, (String) null, thumb, (Bitmap) null, ext, 0, parentObject);
+    public void setImage(ImageLocation imageLocation, String str, String str2, Drawable drawable, Object obj) {
+        setImage(imageLocation, str, (ImageLocation) null, (String) null, drawable, (Bitmap) null, str2, 0, obj);
     }
 
-    public void setImage(ImageLocation imageLocation, String imageFilter, Drawable thumb, Object parentObject) {
-        setImage(imageLocation, imageFilter, (ImageLocation) null, (String) null, thumb, (Bitmap) null, (String) null, 0, parentObject);
+    public void setImage(ImageLocation imageLocation, String str, Drawable drawable, Object obj) {
+        setImage(imageLocation, str, (ImageLocation) null, (String) null, drawable, (Bitmap) null, (String) null, 0, obj);
     }
 
-    public void setImage(ImageLocation mediaLocation, String mediaFilter, ImageLocation imageLocation, String imageFilter, Drawable thumb, Object parentObject) {
-        this.imageReceiver.setImage(mediaLocation, mediaFilter, imageLocation, imageFilter, (ImageLocation) null, (String) null, thumb, 0, (String) null, parentObject, 1);
+    public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Drawable drawable, Object obj) {
+        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (ImageLocation) null, (String) null, drawable, 0, (String) null, obj, 1);
     }
 
-    public void setImage(ImageLocation imageLocation, String imageFilter, Bitmap thumb, Object parentObject) {
-        setImage(imageLocation, imageFilter, (ImageLocation) null, (String) null, (Drawable) null, thumb, (String) null, 0, parentObject);
+    public void setImage(ImageLocation imageLocation, String str, Drawable drawable, int i, Object obj) {
+        setImage(imageLocation, str, (ImageLocation) null, (String) null, drawable, (Bitmap) null, (String) null, i, obj);
     }
 
-    public void setImage(ImageLocation imageLocation, String imageFilter, Drawable thumb, int size, Object parentObject) {
-        setImage(imageLocation, imageFilter, (ImageLocation) null, (String) null, thumb, (Bitmap) null, (String) null, size, parentObject);
+    public void setForUserOrChat(TLObject tLObject, AvatarDrawable avatarDrawable) {
+        this.imageReceiver.setForUserOrChat(tLObject, avatarDrawable);
     }
 
-    public void setImage(ImageLocation imageLocation, String imageFilter, Bitmap thumbBitmap, int size, int cacheType, Object parentObject) {
-        Bitmap bitmap = thumbBitmap;
-        Drawable thumb = null;
-        if (bitmap != null) {
-            thumb = new BitmapDrawable((Resources) null, bitmap);
-        }
-        this.imageReceiver.setImage(imageLocation, imageFilter, (ImageLocation) null, (String) null, thumb, size, (String) null, parentObject, cacheType);
+    public void setForUserOrChat(TLObject tLObject, AvatarDrawable avatarDrawable, Object obj) {
+        this.imageReceiver.setForUserOrChat(tLObject, avatarDrawable, obj);
     }
 
-    public void setForUserOrChat(TLObject object, AvatarDrawable avatarDrawable) {
-        this.imageReceiver.setForUserOrChat(object, avatarDrawable);
-    }
-
-    public void setForUserOrChat(TLObject object, AvatarDrawable avatarDrawable, Object parent) {
-        this.imageReceiver.setForUserOrChat(object, avatarDrawable, parent);
-    }
-
-    public void setImageMedia(ImageLocation mediaLocation, String mediaFilter, ImageLocation imageLocation, String imageFilter, Bitmap thumbBitmap, int size, int cacheType, Object parentObject) {
-        Bitmap bitmap = thumbBitmap;
-        Drawable thumb = null;
-        if (bitmap != null) {
-            thumb = new BitmapDrawable((Resources) null, bitmap);
-        }
-        this.imageReceiver.setImage(mediaLocation, mediaFilter, imageLocation, imageFilter, (ImageLocation) null, (String) null, thumb, size, (String) null, parentObject, cacheType);
-    }
-
-    public void setImage(ImageLocation imageLocation, String imageFilter, ImageLocation thumbLocation, String thumbFilter, int size, Object parentObject) {
-        setImage(imageLocation, imageFilter, thumbLocation, thumbFilter, (Drawable) null, (Bitmap) null, (String) null, size, parentObject);
-    }
-
-    public void setImage(String path, String filter, Drawable thumb) {
-        setImage(ImageLocation.getForPath(path), filter, (ImageLocation) null, (String) null, thumb, (Bitmap) null, (String) null, 0, (Object) null);
-    }
-
-    public void setImage(String path, String filter, String thumbPath, String thumbFilter) {
-        setImage(ImageLocation.getForPath(path), filter, ImageLocation.getForPath(thumbPath), thumbFilter, (Drawable) null, (Bitmap) null, (String) null, 0, (Object) null);
-    }
-
-    public void setImage(ImageLocation imageLocation, String imageFilter, ImageLocation thumbLocation, String thumbFilter, Drawable thumb, Bitmap thumbBitmap, String ext, int size, Object parentObject) {
-        Drawable thumb2;
-        Bitmap bitmap = thumbBitmap;
-        if (bitmap != null) {
-            thumb2 = new BitmapDrawable((Resources) null, bitmap);
+    public void setImageMedia(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Bitmap bitmap, int i, int i2, Object obj) {
+        BitmapDrawable bitmapDrawable;
+        BackupImageView backupImageView;
+        Bitmap bitmap2 = bitmap;
+        if (bitmap2 != null) {
+            BitmapDrawable bitmapDrawable2 = new BitmapDrawable((Resources) null, bitmap2);
+            backupImageView = this;
+            bitmapDrawable = bitmapDrawable2;
         } else {
-            thumb2 = thumb;
+            backupImageView = this;
+            bitmapDrawable = null;
         }
-        this.imageReceiver.setImage(imageLocation, imageFilter, thumbLocation, thumbFilter, thumb2, size, ext, parentObject, 0);
+        backupImageView.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (ImageLocation) null, (String) null, bitmapDrawable, i, (String) null, obj, i2);
     }
 
-    public void setImage(ImageLocation imageLocation, String imageFilter, ImageLocation thumbLocation, String thumbFilter, String ext, int size, int cacheType, Object parentObject) {
-        this.imageReceiver.setImage(imageLocation, imageFilter, thumbLocation, thumbFilter, (Drawable) null, size, ext, parentObject, cacheType);
+    public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, int i, Object obj) {
+        setImage(imageLocation, str, imageLocation2, str2, (Drawable) null, (Bitmap) null, (String) null, i, obj);
     }
 
-    public void setImageMedia(ImageLocation mediaLocation, String mediaFilter, ImageLocation imageLocation, String imageFilter, ImageLocation thumbLocation, String thumbFilter, String ext, int size, int cacheType, Object parentObject) {
-        this.imageReceiver.setImage(mediaLocation, mediaFilter, imageLocation, imageFilter, thumbLocation, thumbFilter, (Drawable) null, size, ext, parentObject, cacheType);
+    public void setImage(String str, String str2, Drawable drawable) {
+        setImage(ImageLocation.getForPath(str), str2, (ImageLocation) null, (String) null, drawable, (Bitmap) null, (String) null, 0, (Object) null);
+    }
+
+    public void setImage(String str, String str2, String str3, String str4) {
+        setImage(ImageLocation.getForPath(str), str2, ImageLocation.getForPath(str3), str4, (Drawable) null, (Bitmap) null, (String) null, 0, (Object) null);
+    }
+
+    public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Drawable drawable, Bitmap bitmap, String str3, int i, Object obj) {
+        BitmapDrawable bitmapDrawable;
+        BackupImageView backupImageView;
+        Bitmap bitmap2 = bitmap;
+        if (bitmap2 != null) {
+            BitmapDrawable bitmapDrawable2 = new BitmapDrawable((Resources) null, bitmap2);
+            backupImageView = this;
+            bitmapDrawable = bitmapDrawable2;
+        } else {
+            backupImageView = this;
+            bitmapDrawable = drawable;
+        }
+        backupImageView.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, bitmapDrawable, i, str3, obj, 0);
+    }
+
+    public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, String str3, int i, int i2, Object obj) {
+        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (Drawable) null, i, str3, obj, i2);
+    }
+
+    public void setImageMedia(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, ImageLocation imageLocation3, String str3, String str4, int i, int i2, Object obj) {
+        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, imageLocation3, str3, (Drawable) null, i, str4, obj, i2);
     }
 
     public void setImageBitmap(Bitmap bitmap) {
         this.imageReceiver.setImageBitmap(bitmap);
     }
 
-    public void setImageResource(int resId) {
-        this.imageReceiver.setImageBitmap(getResources().getDrawable(resId));
+    public void setImageResource(int i) {
+        this.imageReceiver.setImageBitmap(getResources().getDrawable(i));
         invalidate();
     }
 
-    public void setImageResource(int resId, int color) {
-        Drawable drawable = getResources().getDrawable(resId);
+    public void setImageResource(int i, int i2) {
+        Drawable drawable = getResources().getDrawable(i);
         if (drawable != null) {
-            drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+            drawable.setColorFilter(new PorterDuffColorFilter(i2, PorterDuff.Mode.MULTIPLY));
         }
         this.imageReceiver.setImageBitmap(drawable);
         invalidate();
@@ -130,17 +127,17 @@ public class BackupImageView extends View {
         this.imageReceiver.setImageBitmap(drawable);
     }
 
-    public void setLayerNum(int value) {
-        this.imageReceiver.setLayerNum(value);
+    public void setLayerNum(int i) {
+        this.imageReceiver.setLayerNum(i);
     }
 
-    public void setRoundRadius(int value) {
-        this.imageReceiver.setRoundRadius(value);
+    public void setRoundRadius(int i) {
+        this.imageReceiver.setRoundRadius(i);
         invalidate();
     }
 
-    public void setRoundRadius(int tl, int tr, int bl, int br) {
-        this.imageReceiver.setRoundRadius(tl, tr, bl, br);
+    public void setRoundRadius(int i, int i2, int i3, int i4) {
+        this.imageReceiver.setRoundRadius(i, i2, i3, i4);
         invalidate();
     }
 
@@ -148,17 +145,17 @@ public class BackupImageView extends View {
         return this.imageReceiver.getRoundRadius();
     }
 
-    public void setAspectFit(boolean value) {
-        this.imageReceiver.setAspectFit(value);
+    public void setAspectFit(boolean z) {
+        this.imageReceiver.setAspectFit(z);
     }
 
     public ImageReceiver getImageReceiver() {
         return this.imageReceiver;
     }
 
-    public void setSize(int w, int h) {
-        this.width = w;
-        this.height = h;
+    public void setSize(int i, int i2) {
+        this.width = i;
+        this.height = i2;
     }
 
     /* access modifiers changed from: protected */

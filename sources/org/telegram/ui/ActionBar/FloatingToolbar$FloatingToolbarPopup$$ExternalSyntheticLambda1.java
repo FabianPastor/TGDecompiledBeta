@@ -14,6 +14,6 @@ public final /* synthetic */ class FloatingToolbar$FloatingToolbarPopup$$Externa
     }
 
     public final void onItemClick(AdapterView adapterView, View view, int i, long j) {
-        this.f$0.m1328x73cfc3fa(this.f$1, adapterView, view, i, j);
+        this.f$0.lambda$createOverflowPanel$1(this.f$1, adapterView, view, i, j);
     }
 }

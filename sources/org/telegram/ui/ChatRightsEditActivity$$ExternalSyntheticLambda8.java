@@ -1,19 +1,16 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import android.content.DialogInterface;
+import android.widget.DatePicker;
 
-public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda8 implements RecyclerListView.OnItemClickListener {
-    public final /* synthetic */ ChatRightsEditActivity f$0;
-    public final /* synthetic */ Context f$1;
+public final /* synthetic */ class ChatRightsEditActivity$$ExternalSyntheticLambda8 implements DialogInterface.OnShowListener {
+    public final /* synthetic */ DatePicker f$0;
 
-    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda8(ChatRightsEditActivity chatRightsEditActivity, Context context) {
-        this.f$0 = chatRightsEditActivity;
-        this.f$1 = context;
+    public /* synthetic */ ChatRightsEditActivity$$ExternalSyntheticLambda8(DatePicker datePicker) {
+        this.f$0 = datePicker;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.m1947lambda$createView$6$orgtelegramuiChatRightsEditActivity(this.f$1, view, i);
+    public final void onShow(DialogInterface dialogInterface) {
+        ChatRightsEditActivity.lambda$createView$4(this.f$0, dialogInterface);
     }
 }

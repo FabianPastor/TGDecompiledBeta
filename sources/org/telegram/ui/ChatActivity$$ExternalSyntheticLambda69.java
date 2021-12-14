@@ -1,25 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.ResultCallback;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.EmojiThemes;
+import android.view.MotionEvent;
+import android.view.View;
+import org.telegram.ui.ContentPreviewViewer;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda69 implements ResultCallback {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda69 implements View.OnTouchListener {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ ContentPreviewViewer.ContentPreviewViewerDelegate f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda69(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda69(ChatActivity chatActivity, ContentPreviewViewer.ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
         this.f$0 = chatActivity;
+        this.f$1 = contentPreviewViewerDelegate;
     }
 
-    public final void onComplete(Object obj) {
-        this.f$0.m1794lambda$setChatThemeEmoticon$175$orgtelegramuiChatActivity((EmojiThemes) obj);
-    }
-
-    public /* synthetic */ void onError(Throwable th) {
-        ResultCallback.CC.$default$onError((ResultCallback) this, th);
-    }
-
-    public /* synthetic */ void onError(TLRPC.TL_error tL_error) {
-        ResultCallback.CC.$default$onError((ResultCallback) this, tL_error);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return this.f$0.lambda$createView$35(this.f$1, view, motionEvent);
     }
 }

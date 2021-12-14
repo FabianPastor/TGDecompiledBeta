@@ -1,13 +1,14 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda16 implements Runnable {
-    public final /* synthetic */ LaunchActivity f$0;
+import android.view.View;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda16(LaunchActivity launchActivity) {
-        this.f$0 = launchActivity;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda16 implements View.OnClickListener {
+    public static final /* synthetic */ LaunchActivity$$ExternalSyntheticLambda16 INSTANCE = new LaunchActivity$$ExternalSyntheticLambda16();
+
+    private /* synthetic */ LaunchActivity$$ExternalSyntheticLambda16() {
     }
 
-    public final void run() {
-        this.f$0.m3072lambda$didReceivedNotification$74$orgtelegramuiLaunchActivity();
+    public final void onClick(View view) {
+        LaunchActivity.lambda$onCreate$1(view);
     }
 }

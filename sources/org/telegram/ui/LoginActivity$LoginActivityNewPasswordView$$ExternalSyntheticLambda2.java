@@ -14,6 +14,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityNewPasswordView$$E
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.m3188x7b12217f(this.f$1, textView, i, keyEvent);
+        return this.f$0.lambda$new$0(this.f$1, textView, i, keyEvent);
     }
 }

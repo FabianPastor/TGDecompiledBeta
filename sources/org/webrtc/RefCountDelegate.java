@@ -6,8 +6,8 @@ class RefCountDelegate implements RefCounted {
     private final AtomicInteger refCount = new AtomicInteger(1);
     private final Runnable releaseCallback;
 
-    public RefCountDelegate(Runnable releaseCallback2) {
-        this.releaseCallback = releaseCallback2;
+    public RefCountDelegate(Runnable runnable) {
+        this.releaseCallback = runnable;
     }
 
     public void retain() {
@@ -18,22 +18,22 @@ class RefCountDelegate implements RefCounted {
 
     public void release() {
         Runnable runnable;
-        int updated_count = this.refCount.decrementAndGet();
-        if (updated_count < 0) {
+        int decrementAndGet = this.refCount.decrementAndGet();
+        if (decrementAndGet < 0) {
             throw new IllegalStateException("release() called on an object with refcount < 1");
-        } else if (updated_count == 0 && (runnable = this.releaseCallback) != null) {
+        } else if (decrementAndGet == 0 && (runnable = this.releaseCallback) != null) {
             runnable.run();
         }
     }
 
     /* access modifiers changed from: package-private */
     public boolean safeRetain() {
-        int currentRefCount = this.refCount.get();
-        while (currentRefCount != 0) {
-            if (this.refCount.weakCompareAndSet(currentRefCount, currentRefCount + 1)) {
+        int i = this.refCount.get();
+        while (i != 0) {
+            if (this.refCount.weakCompareAndSet(i, i + 1)) {
                 return true;
             }
-            currentRefCount = this.refCount.get();
+            i = this.refCount.get();
         }
         return false;
     }

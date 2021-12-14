@@ -15,6 +15,6 @@ public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda5 implemen
     }
 
     public final void run() {
-        this.f$0.m2557lambda$new$0$orgtelegramuiComponentsShareAlert(this.f$1, this.f$2);
+        this.f$0.lambda$new$0(this.f$1, this.f$2);
     }
 }

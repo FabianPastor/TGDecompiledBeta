@@ -7,6 +7,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import java.util.Set;
@@ -42,25 +43,28 @@ public class DrawerActionCell extends FrameLayout {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (this.currentId == 8) {
-            Set<String> suggestions = MessagesController.getInstance(UserConfig.selectedAccount).pendingSuggestions;
-            if (suggestions.contains("VALIDATE_PHONE_NUMBER") || suggestions.contains("VALIDATE_PASSWORD")) {
-                int countTop = AndroidUtilities.dp(12.5f);
-                int countWidth = AndroidUtilities.dp(9.0f);
-                int x = ((getMeasuredWidth() - countWidth) - AndroidUtilities.dp(25.0f)) - AndroidUtilities.dp(5.5f);
-                this.rect.set((float) x, (float) countTop, (float) (x + countWidth + AndroidUtilities.dp(14.0f)), (float) (AndroidUtilities.dp(23.0f) + countTop));
+            Set<String> set = MessagesController.getInstance(UserConfig.selectedAccount).pendingSuggestions;
+            if (set.contains("VALIDATE_PHONE_NUMBER") || set.contains("VALIDATE_PASSWORD")) {
+                int dp = AndroidUtilities.dp(12.5f);
+                int dp2 = AndroidUtilities.dp(9.0f);
+                int measuredWidth = ((getMeasuredWidth() - dp2) - AndroidUtilities.dp(25.0f)) - AndroidUtilities.dp(5.5f);
+                this.rect.set((float) measuredWidth, (float) dp, (float) (measuredWidth + dp2 + AndroidUtilities.dp(14.0f)), (float) (dp + AndroidUtilities.dp(23.0f)));
                 Theme.chat_docBackPaint.setColor(Theme.getColor("chats_archiveBackground"));
-                canvas.drawRoundRect(this.rect, AndroidUtilities.density * 11.5f, AndroidUtilities.density * 11.5f, Theme.chat_docBackPaint);
-                int w = Theme.dialogs_errorDrawable.getIntrinsicWidth();
-                int h = Theme.dialogs_errorDrawable.getIntrinsicHeight();
-                Theme.dialogs_errorDrawable.setBounds((int) (this.rect.centerX() - ((float) (w / 2))), (int) (this.rect.centerY() - ((float) (h / 2))), (int) (this.rect.centerX() + ((float) (w / 2))), (int) (this.rect.centerY() + ((float) (h / 2))));
+                RectF rectF = this.rect;
+                float f = AndroidUtilities.density;
+                canvas.drawRoundRect(rectF, f * 11.5f, f * 11.5f, Theme.chat_docBackPaint);
+                int intrinsicWidth = Theme.dialogs_errorDrawable.getIntrinsicWidth();
+                float f2 = (float) (intrinsicWidth / 2);
+                float intrinsicHeight = (float) (Theme.dialogs_errorDrawable.getIntrinsicHeight() / 2);
+                Theme.dialogs_errorDrawable.setBounds((int) (this.rect.centerX() - f2), (int) (this.rect.centerY() - intrinsicHeight), (int) (this.rect.centerX() + f2), (int) (this.rect.centerY() + intrinsicHeight));
                 Theme.dialogs_errorDrawable.draw(canvas);
             }
         }
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
     /* access modifiers changed from: protected */
@@ -69,17 +73,23 @@ public class DrawerActionCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor("chats_menuItemText"));
     }
 
-    public void setTextAndIcon(int id, String text, int resId) {
-        this.currentId = id;
+    public void setTextAndIcon(int i, String str, int i2) {
+        this.currentId = i;
         try {
-            this.textView.setText(text);
-            Drawable drawable = getResources().getDrawable(resId).mutate();
-            if (drawable != null) {
-                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_menuItemIcon"), PorterDuff.Mode.MULTIPLY));
+            this.textView.setText(str);
+            Drawable mutate = getResources().getDrawable(i2).mutate();
+            if (mutate != null) {
+                mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_menuItemIcon"), PorterDuff.Mode.MULTIPLY));
             }
-            this.textView.setCompoundDrawablesWithIntrinsicBounds(drawable, (Drawable) null, (Drawable) null, (Drawable) null);
-        } catch (Throwable e) {
-            FileLog.e(e);
+            this.textView.setCompoundDrawablesWithIntrinsicBounds(mutate, (Drawable) null, (Drawable) null, (Drawable) null);
+        } catch (Throwable th) {
+            FileLog.e(th);
         }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.addAction(16);
+        accessibilityNodeInfo.addAction(32);
     }
 }

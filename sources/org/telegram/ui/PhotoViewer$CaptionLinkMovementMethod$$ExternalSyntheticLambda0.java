@@ -16,6 +16,6 @@ public final /* synthetic */ class PhotoViewer$CaptionLinkMovementMethod$$Extern
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3638xfe258192(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$onLongClick$0(this.f$1, this.f$2, dialogInterface, i);
     }
 }

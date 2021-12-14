@@ -19,6 +19,6 @@ public final /* synthetic */ class ContentPreviewViewer$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.m2793xa62d51cd(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$onInterceptTouchEvent$1(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

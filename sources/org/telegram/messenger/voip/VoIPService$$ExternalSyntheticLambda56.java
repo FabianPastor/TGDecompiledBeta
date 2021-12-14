@@ -1,14 +1,17 @@
 package org.telegram.messenger.voip;
 
-import org.telegram.messenger.NotificationCenter;
+import org.telegram.tgnet.TLRPC$TL_updateGroupCall;
 
 public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda56 implements Runnable {
-    public static final /* synthetic */ VoIPService$$ExternalSyntheticLambda56 INSTANCE = new VoIPService$$ExternalSyntheticLambda56();
+    public final /* synthetic */ VoIPService f$0;
+    public final /* synthetic */ TLRPC$TL_updateGroupCall f$1;
 
-    private /* synthetic */ VoIPService$$ExternalSyntheticLambda56() {
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda56(VoIPService voIPService, TLRPC$TL_updateGroupCall tLRPC$TL_updateGroupCall) {
+        this.f$0 = voIPService;
+        this.f$1 = tLRPC$TL_updateGroupCall;
     }
 
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didEndCall, new Object[0]);
+        this.f$0.lambda$startGroupCall$20(this.f$1);
     }
 }

@@ -1,21 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class LinkActionView$$ExternalSyntheticLambda12 implements View.OnClickListener {
+public final /* synthetic */ class LinkActionView$$ExternalSyntheticLambda12 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ LinkActionView f$0;
-    public final /* synthetic */ BottomSheet f$1;
-    public final /* synthetic */ BaseFragment f$2;
 
-    public /* synthetic */ LinkActionView$$ExternalSyntheticLambda12(LinkActionView linkActionView, BottomSheet bottomSheet, BaseFragment baseFragment) {
+    public /* synthetic */ LinkActionView$$ExternalSyntheticLambda12(LinkActionView linkActionView) {
         this.f$0 = linkActionView;
-        this.f$1 = bottomSheet;
-        this.f$2 = baseFragment;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m2399lambda$new$0$orgtelegramuiComponentsLinkActionView(this.f$1, this.f$2, view);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$new$8(keyEvent);
     }
 }

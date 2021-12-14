@@ -27,9 +27,9 @@ public class ProgressButton extends Button {
             setOutlineProvider((ViewOutlineProvider) null);
         }
         ViewHelper.setPadding(this, 8.0f, 0.0f, 8.0f, 0.0f);
-        int minWidth = AndroidUtilities.dp(60.0f);
-        setMinWidth(minWidth);
-        setMinimumWidth(minWidth);
+        int dp = AndroidUtilities.dp(60.0f);
+        setMinWidth(dp);
+        setMinimumWidth(dp);
         this.progressRect = new RectF();
         Paint paint = new Paint(1);
         this.progressPaint = paint;
@@ -42,20 +42,20 @@ public class ProgressButton extends Button {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (this.drawProgress || this.progressAlpha != 0.0f) {
-            int x = getMeasuredWidth() - AndroidUtilities.dp(11.0f);
-            this.progressRect.set((float) x, (float) AndroidUtilities.dp(3.0f), (float) (AndroidUtilities.dp(8.0f) + x), (float) AndroidUtilities.dp(11.0f));
+            int measuredWidth = getMeasuredWidth() - AndroidUtilities.dp(11.0f);
+            this.progressRect.set((float) measuredWidth, (float) AndroidUtilities.dp(3.0f), (float) (measuredWidth + AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(11.0f));
             this.progressPaint.setAlpha(Math.min(255, (int) (this.progressAlpha * 255.0f)));
             canvas.drawArc(this.progressRect, (float) this.angle, 220.0f, false, this.progressPaint);
-            long newTime = System.currentTimeMillis();
+            long currentTimeMillis = System.currentTimeMillis();
             if (Math.abs(this.lastUpdateTime - System.currentTimeMillis()) < 1000) {
-                long delta = newTime - this.lastUpdateTime;
-                int i = (int) (((float) this.angle) + (((float) (360 * delta)) / 2000.0f));
+                long j = currentTimeMillis - this.lastUpdateTime;
+                int i = (int) (((float) this.angle) + (((float) (360 * j)) / 2000.0f));
                 this.angle = i;
                 this.angle = i - ((i / 360) * 360);
                 if (this.drawProgress) {
                     float f = this.progressAlpha;
                     if (f < 1.0f) {
-                        float f2 = f + (((float) delta) / 200.0f);
+                        float f2 = f + (((float) j) / 200.0f);
                         this.progressAlpha = f2;
                         if (f2 > 1.0f) {
                             this.progressAlpha = 1.0f;
@@ -64,7 +64,7 @@ public class ProgressButton extends Button {
                 } else {
                     float f3 = this.progressAlpha;
                     if (f3 > 0.0f) {
-                        float f4 = f3 - (((float) delta) / 200.0f);
+                        float f4 = f3 - (((float) j) / 200.0f);
                         this.progressAlpha = f4;
                         if (f4 < 0.0f) {
                             this.progressAlpha = 0.0f;
@@ -72,24 +72,24 @@ public class ProgressButton extends Button {
                     }
                 }
             }
-            this.lastUpdateTime = newTime;
+            this.lastUpdateTime = currentTimeMillis;
             postInvalidateOnAnimation();
         }
     }
 
-    public void setBackgroundRoundRect(int backgroundColor, int pressedBackgroundColor) {
-        setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), backgroundColor, pressedBackgroundColor));
+    public void setBackgroundRoundRect(int i, int i2) {
+        setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), i, i2));
     }
 
-    public void setProgressColor(int progressColor) {
-        this.progressPaint.setColor(progressColor);
+    public void setProgressColor(int i) {
+        this.progressPaint.setColor(i);
     }
 
-    public void setDrawProgress(boolean drawProgress2, boolean animated) {
-        if (this.drawProgress != drawProgress2) {
-            this.drawProgress = drawProgress2;
-            if (!animated) {
-                this.progressAlpha = drawProgress2 ? 1.0f : 0.0f;
+    public void setDrawProgress(boolean z, boolean z2) {
+        if (this.drawProgress != z) {
+            this.drawProgress = z;
+            if (!z2) {
+                this.progressAlpha = z ? 1.0f : 0.0f;
             }
             this.lastUpdateTime = System.currentTimeMillis();
             invalidate();

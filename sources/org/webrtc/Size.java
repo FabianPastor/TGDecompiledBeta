@@ -4,21 +4,21 @@ public class Size {
     public int height;
     public int width;
 
-    public Size(int width2, int height2) {
-        this.width = width2;
-        this.height = height2;
+    public Size(int i, int i2) {
+        this.width = i;
+        this.height = i2;
     }
 
     public String toString() {
         return this.width + "x" + this.height;
     }
 
-    public boolean equals(Object other) {
-        if (!(other instanceof Size)) {
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Size)) {
             return false;
         }
-        Size otherSize = (Size) other;
-        if (this.width == otherSize.width && this.height == otherSize.height) {
+        Size size = (Size) obj;
+        if (this.width == size.width && this.height == size.height) {
             return true;
         }
         return false;

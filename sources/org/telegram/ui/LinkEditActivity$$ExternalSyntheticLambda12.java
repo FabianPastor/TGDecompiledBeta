@@ -1,19 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Components.SlideChooseView;
 
-public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda12 implements ThemeDescription.ThemeDescriptionDelegate {
+public final /* synthetic */ class LinkEditActivity$$ExternalSyntheticLambda12 implements SlideChooseView.Callback {
     public final /* synthetic */ LinkEditActivity f$0;
 
     public /* synthetic */ LinkEditActivity$$ExternalSyntheticLambda12(LinkEditActivity linkEditActivity) {
         this.f$0 = linkEditActivity;
     }
 
-    public final void didSetColor() {
-        this.f$0.m3139lambda$getThemeDescriptions$11$orgtelegramuiLinkEditActivity();
+    public final void onOptionSelected(int i) {
+        this.f$0.lambda$createView$4(i);
     }
 
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public /* synthetic */ void onTouchEnd() {
+        SlideChooseView.Callback.CC.$default$onTouchEnd(this);
     }
 }

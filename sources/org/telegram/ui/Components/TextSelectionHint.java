@@ -49,11 +49,11 @@ public class TextSelectionHint extends View {
     public TextSelectionHint(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.resourcesProvider = resourcesProvider2;
-        int textColor = getThemedColor("undo_infoColor");
-        int alpha = Color.alpha(textColor);
+        int themedColor = getThemedColor("undo_infoColor");
+        int alpha = Color.alpha(themedColor);
         this.textPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
-        this.textPaint.setColor(textColor);
-        this.selectionPaint.setColor(textColor);
+        this.textPaint.setColor(themedColor);
+        this.selectionPaint.setColor(themedColor);
         Paint paint = this.selectionPaint;
         double d = (double) alpha;
         Double.isNaN(d);
@@ -62,46 +62,46 @@ public class TextSelectionHint extends View {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(i, i2);
         if (getMeasuredWidth() != this.lastW || this.textLayout == null) {
             Animator animator = this.a;
             if (animator != null) {
                 animator.removeAllListeners();
                 this.a.cancel();
             }
-            String text = LocaleController.getString("TextSelectionHit", NUM);
-            Matcher matcher = Pattern.compile("\\*\\*.*\\*\\*").matcher(text);
-            String word = null;
+            String string = LocaleController.getString("TextSelectionHit", NUM);
+            Matcher matcher = Pattern.compile("\\*\\*.*\\*\\*").matcher(string);
+            String str = null;
             if (matcher.matches()) {
-                word = matcher.group();
+                str = matcher.group();
             }
-            String text2 = text.replace("**", "");
-            this.textLayout = new StaticLayout(text2, this.textPaint, getMeasuredWidth() - (this.padding * 2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            String replace = string.replace("**", "");
+            this.textLayout = new StaticLayout(replace, this.textPaint, getMeasuredWidth() - (this.padding * 2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             this.start = 0;
             this.end = 0;
-            if (word != null) {
-                this.start = text2.indexOf(word);
+            if (str != null) {
+                this.start = replace.indexOf(str);
             }
-            int i = this.start;
-            if (i > 0) {
-                this.end = i + word.length();
+            int i3 = this.start;
+            if (i3 > 0) {
+                this.end = i3 + str.length();
             } else {
-                int k = 0;
-                for (int i2 = 0; i2 < text2.length(); i2++) {
-                    if (text2.charAt(i2) == ' ') {
-                        k++;
-                        if (k == 2) {
-                            this.start = i2 + 1;
+                int i4 = 0;
+                for (int i5 = 0; i5 < replace.length(); i5++) {
+                    if (replace.charAt(i5) == ' ') {
+                        i4++;
+                        if (i4 == 2) {
+                            this.start = i5 + 1;
                         }
-                        if (k == 3) {
-                            this.end = i2 - 1;
+                        if (i4 == 3) {
+                            this.end = i5 - 1;
                         }
                     }
                 }
             }
             if (this.end == 0) {
-                this.end = text2.length();
+                this.end = replace.length();
             }
             this.animateToStart = 0;
             StaticLayout staticLayout = this.textLayout;
@@ -122,132 +122,138 @@ public class TextSelectionHint extends View {
             this.showOnMeasure = false;
             this.lastW = getMeasuredWidth();
         }
-        int h = this.textLayout.getHeight() + (AndroidUtilities.dp(8.0f) * 2);
-        if (h < AndroidUtilities.dp(56.0f)) {
-            h = AndroidUtilities.dp(56.0f);
+        int height = this.textLayout.getHeight() + (AndroidUtilities.dp(8.0f) * 2);
+        if (height < AndroidUtilities.dp(56.0f)) {
+            height = AndroidUtilities.dp(56.0f);
         }
-        setMeasuredDimension(getMeasuredWidth(), h);
+        setMeasuredDimension(getMeasuredWidth(), height);
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        int topPadding;
-        float enterProgress;
+        float f;
+        int i;
         Canvas canvas2 = canvas;
         if (this.textLayout != null) {
             super.onDraw(canvas);
             canvas.save();
-            int topPadding2 = (getMeasuredHeight() - this.textLayout.getHeight()) >> 1;
-            canvas2.translate((float) this.padding, (float) topPadding2);
+            canvas2.translate((float) this.padding, (float) ((getMeasuredHeight() - this.textLayout.getHeight()) >> 1));
             if (this.enterValue != 0.0f) {
                 drawSelection(canvas2, this.textLayout, this.currentStart, this.currentEnd);
             }
             this.textLayout.draw(canvas2);
-            int handleViewSize = AndroidUtilities.dp(14.0f);
-            int line = this.textLayout.getLineForOffset(this.currentEnd);
-            float primaryHorizontal = this.textLayout.getPrimaryHorizontal(this.currentEnd);
-            int y = this.textLayout.getLineBottom(line);
-            int i = this.currentEnd;
-            int i2 = this.animateToEnd;
-            if (i == i2) {
-                int i3 = topPadding2;
-                topPadding = y;
-                roundedRect(this.path, this.textLayout.getPrimaryHorizontal(i2), (float) this.textLayout.getLineTop(line), this.textLayout.getPrimaryHorizontal(this.animateToEnd) + AndroidUtilities.dpf2(4.0f), (float) this.textLayout.getLineBottom(line), AndroidUtilities.dpf2(4.0f), AndroidUtilities.dpf2(4.0f), false, true);
+            int dp = AndroidUtilities.dp(14.0f);
+            int lineForOffset = this.textLayout.getLineForOffset(this.currentEnd);
+            this.textLayout.getPrimaryHorizontal(this.currentEnd);
+            int lineBottom = this.textLayout.getLineBottom(lineForOffset);
+            int i2 = this.currentEnd;
+            int i3 = this.animateToEnd;
+            if (i2 == i3) {
+                roundedRect(this.path, this.textLayout.getPrimaryHorizontal(i3), (float) this.textLayout.getLineTop(lineForOffset), this.textLayout.getPrimaryHorizontal(this.animateToEnd) + AndroidUtilities.dpf2(4.0f), (float) this.textLayout.getLineBottom(lineForOffset), AndroidUtilities.dpf2(4.0f), AndroidUtilities.dpf2(4.0f), false, true);
                 canvas2.drawPath(this.path, this.selectionPaint);
-            } else {
-                topPadding = y;
             }
-            float enterProgress2 = this.interpolator.getInterpolation(this.enterValue);
-            int xOffset = (int) (this.textLayout.getPrimaryHorizontal(this.animateToEnd) + (AndroidUtilities.dpf2(4.0f) * (1.0f - this.endOffsetValue)) + ((this.textLayout.getPrimaryHorizontal(this.end) - this.textLayout.getPrimaryHorizontal(this.animateToEnd)) * this.endOffsetValue));
+            float interpolation = this.interpolator.getInterpolation(this.enterValue);
             canvas.save();
-            canvas2.translate((float) xOffset, (float) topPadding);
-            canvas2.scale(enterProgress2, enterProgress2, ((float) handleViewSize) / 2.0f, ((float) handleViewSize) / 2.0f);
+            canvas2.translate((float) ((int) (this.textLayout.getPrimaryHorizontal(this.animateToEnd) + (AndroidUtilities.dpf2(4.0f) * (1.0f - this.endOffsetValue)) + ((this.textLayout.getPrimaryHorizontal(this.end) - this.textLayout.getPrimaryHorizontal(this.animateToEnd)) * this.endOffsetValue))), (float) lineBottom);
+            float f2 = (float) dp;
+            float f3 = f2 / 2.0f;
+            canvas2.scale(interpolation, interpolation, f3, f3);
             this.path.reset();
-            this.path.addCircle(((float) handleViewSize) / 2.0f, ((float) handleViewSize) / 2.0f, ((float) handleViewSize) / 2.0f, Path.Direction.CCW);
-            this.path.addRect(0.0f, 0.0f, ((float) handleViewSize) / 2.0f, ((float) handleViewSize) / 2.0f, Path.Direction.CCW);
+            this.path.addCircle(f3, f3, f3, Path.Direction.CCW);
+            this.path.addRect(0.0f, 0.0f, f3, f3, Path.Direction.CCW);
             canvas2.drawPath(this.path, this.textPaint);
             canvas.restore();
-            int line2 = this.textLayout.getLineForOffset(this.currentStart);
-            float x = this.textLayout.getPrimaryHorizontal(this.currentStart);
-            int y2 = this.textLayout.getLineBottom(line2);
+            int lineForOffset2 = this.textLayout.getLineForOffset(this.currentStart);
+            this.textLayout.getPrimaryHorizontal(this.currentStart);
+            int lineBottom2 = this.textLayout.getLineBottom(lineForOffset2);
             if (this.currentStart == this.animateToStart) {
-                int i4 = xOffset;
-                int i5 = line2;
-                enterProgress = enterProgress2;
-                roundedRect(this.path, (float) (-AndroidUtilities.dp(4.0f)), (float) this.textLayout.getLineTop(line2), 0.0f, (float) this.textLayout.getLineBottom(line2), (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), true, false);
+                i = lineBottom2;
+                f = f3;
+                roundedRect(this.path, (float) (-AndroidUtilities.dp(4.0f)), (float) this.textLayout.getLineTop(lineForOffset2), 0.0f, (float) this.textLayout.getLineBottom(lineForOffset2), (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), true, false);
                 canvas2.drawPath(this.path, this.selectionPaint);
             } else {
-                int i6 = line2;
-                enterProgress = enterProgress2;
+                i = lineBottom2;
+                f = f3;
             }
             canvas.save();
-            canvas2.translate((float) (((int) ((this.textLayout.getPrimaryHorizontal(this.animateToStart) - (((float) AndroidUtilities.dp(4.0f)) * (1.0f - this.startOffsetValue))) + ((this.textLayout.getPrimaryHorizontal(this.start) - this.textLayout.getPrimaryHorizontal(this.animateToStart)) * this.startOffsetValue))) - handleViewSize), (float) y2);
-            canvas2.scale(enterProgress, enterProgress, ((float) handleViewSize) / 2.0f, ((float) handleViewSize) / 2.0f);
+            canvas2.translate((float) (((int) ((this.textLayout.getPrimaryHorizontal(this.animateToStart) - (((float) AndroidUtilities.dp(4.0f)) * (1.0f - this.startOffsetValue))) + ((this.textLayout.getPrimaryHorizontal(this.start) - this.textLayout.getPrimaryHorizontal(this.animateToStart)) * this.startOffsetValue))) - dp), (float) i);
+            float f4 = f;
+            canvas2.scale(interpolation, interpolation, f4, f4);
             this.path.reset();
-            this.path.addCircle(((float) handleViewSize) / 2.0f, ((float) handleViewSize) / 2.0f, ((float) handleViewSize) / 2.0f, Path.Direction.CCW);
-            Path path2 = this.path;
-            path2.addRect(((float) handleViewSize) / 2.0f, 0.0f, (float) handleViewSize, ((float) handleViewSize) / 2.0f, Path.Direction.CCW);
+            this.path.addCircle(f4, f4, f4, Path.Direction.CCW);
+            this.path.addRect(f4, 0.0f, f2, f4, Path.Direction.CCW);
             canvas2.drawPath(this.path, this.textPaint);
             canvas.restore();
             canvas.restore();
         }
     }
 
-    private void roundedRect(Path path2, float left, float top, float right, float bottom, float rx, float ry, boolean tl, boolean tr) {
-        Path path3 = path2;
-        float f = right;
+    private void roundedRect(Path path2, float f, float f2, float f3, float f4, float f5, float f6, boolean z, boolean z2) {
         path2.reset();
-        float rx2 = rx < 0.0f ? 0.0f : rx;
-        float ry2 = ry < 0.0f ? 0.0f : ry;
-        float width = f - left;
-        float height = bottom - top;
-        if (rx2 > width / 2.0f) {
-            rx2 = width / 2.0f;
+        if (f5 < 0.0f) {
+            f5 = 0.0f;
         }
-        if (ry2 > height / 2.0f) {
-            ry2 = height / 2.0f;
+        if (f6 < 0.0f) {
+            f6 = 0.0f;
         }
-        float widthMinusCorners = width - (rx2 * 2.0f);
-        float heightMinusCorners = height - (2.0f * ry2);
-        path2.moveTo(f, top + ry2);
-        if (tr) {
-            path2.rQuadTo(0.0f, -ry2, -rx2, -ry2);
+        float f7 = f3 - f;
+        float f8 = f4 - f2;
+        float f9 = f7 / 2.0f;
+        if (f5 > f9) {
+            f5 = f9;
+        }
+        float var_ = f8 / 2.0f;
+        if (f6 > var_) {
+            f6 = var_;
+        }
+        float var_ = f7 - (f5 * 2.0f);
+        float var_ = f8 - (2.0f * f6);
+        path2.moveTo(f3, f2 + f6);
+        if (z2) {
+            float var_ = -f6;
+            path2.rQuadTo(0.0f, var_, -f5, var_);
         } else {
-            path2.rLineTo(0.0f, -ry2);
-            path2.rLineTo(-rx2, 0.0f);
+            path2.rLineTo(0.0f, -f6);
+            path2.rLineTo(-f5, 0.0f);
         }
-        path2.rLineTo(-widthMinusCorners, 0.0f);
-        if (tl) {
-            path2.rQuadTo(-rx2, 0.0f, -rx2, ry2);
+        path2.rLineTo(-var_, 0.0f);
+        if (z) {
+            float var_ = -f5;
+            path2.rQuadTo(var_, 0.0f, var_, f6);
         } else {
-            path2.rLineTo(-rx2, 0.0f);
-            path2.rLineTo(0.0f, ry2);
+            path2.rLineTo(-f5, 0.0f);
+            path2.rLineTo(0.0f, f6);
         }
-        path2.rLineTo(0.0f, heightMinusCorners);
-        path2.rLineTo(0.0f, ry2);
-        path2.rLineTo(rx2, 0.0f);
-        path2.rLineTo(widthMinusCorners, 0.0f);
-        path2.rLineTo(rx2, 0.0f);
-        path2.rLineTo(0.0f, -ry2);
-        path2.rLineTo(0.0f, -heightMinusCorners);
+        path2.rLineTo(0.0f, var_);
+        path2.rLineTo(0.0f, f6);
+        path2.rLineTo(f5, 0.0f);
+        path2.rLineTo(var_, 0.0f);
+        path2.rLineTo(f5, 0.0f);
+        path2.rLineTo(0.0f, -f6);
+        path2.rLineTo(0.0f, -var_);
         path2.close();
     }
 
-    private void drawSelection(Canvas canvas, StaticLayout layout, int selectionStart, int selectionEnd) {
-        StaticLayout staticLayout = layout;
-        int i = selectionEnd;
-        int startLine = layout.getLineForOffset(selectionStart);
-        int endLine = staticLayout.getLineForOffset(i);
-        int startX = (int) layout.getPrimaryHorizontal(selectionStart);
-        int endX = (int) staticLayout.getPrimaryHorizontal(i);
-        if (startLine == endLine) {
-            canvas.drawRect((float) startX, (float) staticLayout.getLineTop(startLine), (float) endX, (float) staticLayout.getLineBottom(startLine), this.selectionPaint);
+    private void drawSelection(Canvas canvas, StaticLayout staticLayout, int i, int i2) {
+        StaticLayout staticLayout2 = staticLayout;
+        int i3 = i2;
+        int lineForOffset = staticLayout.getLineForOffset(i);
+        int lineForOffset2 = staticLayout2.getLineForOffset(i3);
+        int primaryHorizontal = (int) staticLayout.getPrimaryHorizontal(i);
+        int primaryHorizontal2 = (int) staticLayout2.getPrimaryHorizontal(i3);
+        if (lineForOffset == lineForOffset2) {
+            canvas.drawRect((float) primaryHorizontal, (float) staticLayout2.getLineTop(lineForOffset), (float) primaryHorizontal2, (float) staticLayout2.getLineBottom(lineForOffset), this.selectionPaint);
             return;
         }
-        canvas.drawRect((float) startX, (float) staticLayout.getLineTop(startLine), staticLayout.getLineWidth(startLine), (float) staticLayout.getLineBottom(startLine), this.selectionPaint);
-        canvas.drawRect(0.0f, (float) staticLayout.getLineTop(endLine), (float) endX, (float) staticLayout.getLineBottom(endLine), this.selectionPaint);
-        for (int i2 = startLine + 1; i2 < endLine; i2++) {
-            canvas.drawRect(0.0f, (float) staticLayout.getLineTop(i2), staticLayout.getLineWidth(i2), (float) staticLayout.getLineBottom(i2), this.selectionPaint);
+        canvas.drawRect((float) primaryHorizontal, (float) staticLayout2.getLineTop(lineForOffset), staticLayout2.getLineWidth(lineForOffset), (float) staticLayout2.getLineBottom(lineForOffset), this.selectionPaint);
+        canvas.drawRect(0.0f, (float) staticLayout2.getLineTop(lineForOffset2), (float) primaryHorizontal2, (float) staticLayout2.getLineBottom(lineForOffset2), this.selectionPaint);
+        while (true) {
+            lineForOffset++;
+            if (lineForOffset < lineForOffset2) {
+                canvas.drawRect(0.0f, (float) staticLayout2.getLineTop(lineForOffset), staticLayout2.getLineWidth(lineForOffset), (float) staticLayout2.getLineBottom(lineForOffset), this.selectionPaint);
+            } else {
+                return;
+            }
         }
     }
 
@@ -271,55 +277,56 @@ public class TextSelectionHint extends View {
         this.startOffsetValue = 1.0f;
         this.endOffsetValue = 1.0f;
         invalidate();
-        ValueAnimator prepareAnimation = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-        prepareAnimation.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda1(this));
-        prepareAnimation.setDuration(210);
-        prepareAnimation.setInterpolator(new DecelerateInterpolator());
-        ValueAnimator enterAnimation = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-        enterAnimation.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda2(this));
-        enterAnimation.setStartDelay(600);
-        enterAnimation.setDuration(250);
-        ValueAnimator moveStart = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
-        moveStart.setStartDelay(500);
-        moveStart.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda3(this));
-        moveStart.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-        moveStart.setDuration(500);
-        ValueAnimator moveEnd = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
-        moveEnd.setStartDelay(400);
-        moveEnd.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda4(this));
-        moveEnd.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-        moveEnd.setDuration(900);
-        AnimatorSet set = new AnimatorSet();
-        set.playSequentially(new Animator[]{prepareAnimation, enterAnimation, moveStart, moveEnd});
-        this.a = set;
-        set.start();
+        ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+        ofFloat.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda4(this));
+        ofFloat.setDuration(210);
+        ofFloat.setInterpolator(new DecelerateInterpolator());
+        ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+        ofFloat2.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda0(this));
+        ofFloat2.setStartDelay(600);
+        ofFloat2.setDuration(250);
+        ValueAnimator ofFloat3 = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
+        ofFloat3.setStartDelay(500);
+        ofFloat3.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda1(this));
+        CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.EASE_OUT;
+        ofFloat3.setInterpolator(cubicBezierInterpolator);
+        ofFloat3.setDuration(500);
+        ValueAnimator ofFloat4 = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
+        ofFloat4.setStartDelay(400);
+        ofFloat4.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda3(this));
+        ofFloat4.setInterpolator(cubicBezierInterpolator);
+        ofFloat4.setDuration(900);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playSequentially(new Animator[]{ofFloat, ofFloat2, ofFloat3, ofFloat4});
+        this.a = animatorSet;
+        animatorSet.start();
         AndroidUtilities.runOnUIThread(this.dismissTunnable, 5000);
     }
 
-    /* renamed from: lambda$show$0$org-telegram-ui-Components-TextSelectionHint  reason: not valid java name */
-    public /* synthetic */ void m2674lambda$show$0$orgtelegramuiComponentsTextSelectionHint(ValueAnimator animation) {
-        this.prepareProgress = ((Float) animation.getAnimatedValue()).floatValue();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$show$0(ValueAnimator valueAnimator) {
+        this.prepareProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
-    /* renamed from: lambda$show$1$org-telegram-ui-Components-TextSelectionHint  reason: not valid java name */
-    public /* synthetic */ void m2675lambda$show$1$orgtelegramuiComponentsTextSelectionHint(ValueAnimator animation) {
-        this.enterValue = ((Float) animation.getAnimatedValue()).floatValue();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$show$1(ValueAnimator valueAnimator) {
+        this.enterValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
-    /* renamed from: lambda$show$2$org-telegram-ui-Components-TextSelectionHint  reason: not valid java name */
-    public /* synthetic */ void m2676lambda$show$2$orgtelegramuiComponentsTextSelectionHint(ValueAnimator animation) {
-        float floatValue = ((Float) animation.getAnimatedValue()).floatValue();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$show$2(ValueAnimator valueAnimator) {
+        float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.startOffsetValue = floatValue;
         int i = this.animateToStart;
         this.currentStart = (int) (((float) i) + (((float) (this.start - i)) * floatValue));
         invalidate();
     }
 
-    /* renamed from: lambda$show$3$org-telegram-ui-Components-TextSelectionHint  reason: not valid java name */
-    public /* synthetic */ void m2677lambda$show$3$orgtelegramuiComponentsTextSelectionHint(ValueAnimator animation) {
-        float floatValue = ((Float) animation.getAnimatedValue()).floatValue();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$show$3(ValueAnimator valueAnimator) {
+        float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.endOffsetValue = floatValue;
         int i = this.animateToEnd;
         this.currentEnd = i + ((int) Math.ceil((double) (((float) (this.end - i)) * floatValue)));
@@ -339,20 +346,20 @@ public class TextSelectionHint extends View {
             this.a.cancel();
         }
         this.showing = false;
-        ValueAnimator animator2 = ValueAnimator.ofFloat(new float[]{this.prepareProgress, 0.0f});
-        animator2.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda0(this));
-        animator2.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
+        ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.prepareProgress, 0.0f});
+        ofFloat.addUpdateListener(new TextSelectionHint$$ExternalSyntheticLambda2(this));
+        ofFloat.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animator) {
                 TextSelectionHint.this.setVisibility(4);
             }
         });
-        this.a = animator2;
-        animator2.start();
+        this.a = ofFloat;
+        ofFloat.start();
     }
 
-    /* renamed from: lambda$hideInternal$4$org-telegram-ui-Components-TextSelectionHint  reason: not valid java name */
-    public /* synthetic */ void m2673x3avar_fdd(ValueAnimator animation) {
-        this.prepareProgress = ((Float) animation.getAnimatedValue()).floatValue();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$hideInternal$4(ValueAnimator valueAnimator) {
+        this.prepareProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
@@ -360,9 +367,9 @@ public class TextSelectionHint extends View {
         return this.prepareProgress;
     }
 
-    private int getThemedColor(String key) {
+    private int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

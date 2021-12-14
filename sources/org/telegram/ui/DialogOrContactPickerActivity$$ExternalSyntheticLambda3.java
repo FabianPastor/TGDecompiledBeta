@@ -11,6 +11,6 @@ public final /* synthetic */ class DialogOrContactPickerActivity$$ExternalSynthe
     }
 
     public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-        this.f$0.m2833lambda$new$1$orgtelegramuiDialogOrContactPickerActivity(dialogsActivity, arrayList, charSequence, z);
+        this.f$0.lambda$new$1(dialogsActivity, arrayList, charSequence, z);
     }
 }

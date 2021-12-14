@@ -12,6 +12,6 @@ public final /* synthetic */ class GroupCallRenderersContainer$$ExternalSyntheti
     }
 
     public final void run() {
-        this.f$0.m2750x28d52479(this.f$1, this.f$2);
+        this.f$0.lambda$requestFullscreen$2(this.f$1, this.f$2);
     }
 }

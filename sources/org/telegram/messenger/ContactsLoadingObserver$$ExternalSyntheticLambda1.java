@@ -10,6 +10,6 @@ public final /* synthetic */ class ContactsLoadingObserver$$ExternalSyntheticLam
     }
 
     public final void didReceivedNotification(int i, int i2, Object[] objArr) {
-        this.f$0.m613lambda$new$0$orgtelegrammessengerContactsLoadingObserver(i, i2, objArr);
+        this.f$0.lambda$new$0(i, i2, objArr);
     }
 }

@@ -1,89 +1,119 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Dialog;
+import org.telegram.tgnet.TLRPC$InputPeer;
+import org.telegram.tgnet.TLRPC$Peer;
+import org.telegram.tgnet.TLRPC$TL_dialog;
+import org.telegram.tgnet.TLRPC$TL_dialogFolder;
 
 public class DialogObject {
-    public static boolean isChannel(TLRPC.Dialog dialog) {
-        return (dialog == null || (dialog.flags & 1) == 0) ? false : true;
+    public static int getEncryptedChatId(long j) {
+        return (int) (j & 4294967295L);
     }
 
-    public static long makeFolderDialogId(int folderId) {
-        return ((long) folderId) | 2305843009213693952L;
+    public static int getFolderId(long j) {
+        return (int) j;
     }
 
-    public static boolean isFolderDialogId(long dialogId) {
-        return (2305843009213693952L & dialogId) != 0 && (Long.MIN_VALUE & dialogId) == 0;
+    public static boolean isEncryptedDialog(long j) {
+        return (4611686018427387904L & j) != 0 && (j & Long.MIN_VALUE) == 0;
     }
 
-    public static void initDialog(TLRPC.Dialog dialog) {
-        if (dialog != null && dialog.id == 0) {
-            if (dialog instanceof TLRPC.TL_dialog) {
-                if (dialog.peer != null) {
-                    if (dialog.peer.user_id != 0) {
-                        dialog.id = dialog.peer.user_id;
-                    } else if (dialog.peer.chat_id != 0) {
-                        dialog.id = -dialog.peer.chat_id;
+    public static boolean isFolderDialogId(long j) {
+        return (2305843009213693952L & j) != 0 && (j & Long.MIN_VALUE) == 0;
+    }
+
+    public static long makeEncryptedDialogId(long j) {
+        return (j & 4294967295L) | 4611686018427387904L;
+    }
+
+    public static long makeFolderDialogId(int i) {
+        return ((long) i) | 2305843009213693952L;
+    }
+
+    public static boolean isChannel(TLRPC$Dialog tLRPC$Dialog) {
+        return (tLRPC$Dialog == null || (tLRPC$Dialog.flags & 1) == 0) ? false : true;
+    }
+
+    public static void initDialog(TLRPC$Dialog tLRPC$Dialog) {
+        if (tLRPC$Dialog != null && tLRPC$Dialog.id == 0) {
+            if (tLRPC$Dialog instanceof TLRPC$TL_dialog) {
+                TLRPC$Peer tLRPC$Peer = tLRPC$Dialog.peer;
+                if (tLRPC$Peer != null) {
+                    long j = tLRPC$Peer.user_id;
+                    if (j != 0) {
+                        tLRPC$Dialog.id = j;
+                        return;
+                    }
+                    long j2 = tLRPC$Peer.chat_id;
+                    if (j2 != 0) {
+                        tLRPC$Dialog.id = -j2;
                     } else {
-                        dialog.id = -dialog.peer.channel_id;
+                        tLRPC$Dialog.id = -tLRPC$Peer.channel_id;
                     }
                 }
-            } else if (dialog instanceof TLRPC.TL_dialogFolder) {
-                dialog.id = makeFolderDialogId(((TLRPC.TL_dialogFolder) dialog).folder.id);
+            } else if (tLRPC$Dialog instanceof TLRPC$TL_dialogFolder) {
+                tLRPC$Dialog.id = makeFolderDialogId(((TLRPC$TL_dialogFolder) tLRPC$Dialog).folder.id);
             }
         }
     }
 
-    public static long getPeerDialogId(TLRPC.Peer peer) {
-        if (peer == null) {
+    public static long getPeerDialogId(TLRPC$Peer tLRPC$Peer) {
+        if (tLRPC$Peer == null) {
             return 0;
         }
-        if (peer.user_id != 0) {
-            return peer.user_id;
+        long j = tLRPC$Peer.user_id;
+        if (j != 0) {
+            return j;
         }
-        if (peer.chat_id != 0) {
-            return -peer.chat_id;
+        long j2 = tLRPC$Peer.chat_id;
+        if (j2 != 0) {
+            return -j2;
         }
-        return -peer.channel_id;
+        return -tLRPC$Peer.channel_id;
     }
 
-    public static long getPeerDialogId(TLRPC.InputPeer peer) {
-        if (peer == null) {
+    public static long getPeerDialogId(TLRPC$InputPeer tLRPC$InputPeer) {
+        if (tLRPC$InputPeer == null) {
             return 0;
         }
-        if (peer.user_id != 0) {
-            return peer.user_id;
+        long j = tLRPC$InputPeer.user_id;
+        if (j != 0) {
+            return j;
         }
-        if (peer.chat_id != 0) {
-            return -peer.chat_id;
+        long j2 = tLRPC$InputPeer.chat_id;
+        if (j2 != 0) {
+            return -j2;
         }
-        return -peer.channel_id;
+        return -tLRPC$InputPeer.channel_id;
     }
 
-    public static long getLastMessageOrDraftDate(TLRPC.Dialog dialog, TLRPC.DraftMessage draftMessage) {
-        return (long) ((draftMessage == null || draftMessage.date < dialog.last_message_date) ? dialog.last_message_date : draftMessage.date);
+    /* JADX WARNING: Code restructure failed: missing block: B:1:0x0002, code lost:
+        r2 = r2.date;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static long getLastMessageOrDraftDate(org.telegram.tgnet.TLRPC$Dialog r1, org.telegram.tgnet.TLRPC$DraftMessage r2) {
+        /*
+            if (r2 == 0) goto L_0x000a
+            int r2 = r2.date
+            int r0 = r1.last_message_date
+            if (r2 < r0) goto L_0x000a
+            long r1 = (long) r2
+            goto L_0x000d
+        L_0x000a:
+            int r1 = r1.last_message_date
+            long r1 = (long) r1
+        L_0x000d:
+            return r1
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DialogObject.getLastMessageOrDraftDate(org.telegram.tgnet.TLRPC$Dialog, org.telegram.tgnet.TLRPC$DraftMessage):long");
     }
 
-    public static boolean isChatDialog(long dialogId) {
-        return !isEncryptedDialog(dialogId) && !isFolderDialogId(dialogId) && dialogId < 0;
+    public static boolean isChatDialog(long j) {
+        return !isEncryptedDialog(j) && !isFolderDialogId(j) && j < 0;
     }
 
-    public static boolean isUserDialog(long dialogId) {
-        return !isEncryptedDialog(dialogId) && !isFolderDialogId(dialogId) && dialogId > 0;
-    }
-
-    public static boolean isEncryptedDialog(long dialogId) {
-        return (4611686018427387904L & dialogId) != 0 && (Long.MIN_VALUE & dialogId) == 0;
-    }
-
-    public static long makeEncryptedDialogId(long chatId) {
-        return (4294967295L & chatId) | 4611686018427387904L;
-    }
-
-    public static int getEncryptedChatId(long dialogId) {
-        return (int) (4294967295L & dialogId);
-    }
-
-    public static int getFolderId(long dialogId) {
-        return (int) dialogId;
+    public static boolean isUserDialog(long j) {
+        return !isEncryptedDialog(j) && !isFolderDialogId(j) && j > 0;
     }
 }

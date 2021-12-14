@@ -1,26 +1,15 @@
 package org.telegram.ui;
 
-import android.content.Intent;
-import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.PasscodeView;
 
-public final /* synthetic */ class ExternalActionActivity$$ExternalSyntheticLambda10 implements AlertsCreator.AccountSelectDelegate {
+public final /* synthetic */ class ExternalActionActivity$$ExternalSyntheticLambda10 implements PasscodeView.PasscodeViewDelegate {
     public final /* synthetic */ ExternalActionActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ Intent f$2;
-    public final /* synthetic */ boolean f$3;
-    public final /* synthetic */ boolean f$4;
-    public final /* synthetic */ boolean f$5;
 
-    public /* synthetic */ ExternalActionActivity$$ExternalSyntheticLambda10(ExternalActionActivity externalActionActivity, int i, Intent intent, boolean z, boolean z2, boolean z3) {
+    public /* synthetic */ ExternalActionActivity$$ExternalSyntheticLambda10(ExternalActionActivity externalActionActivity) {
         this.f$0 = externalActionActivity;
-        this.f$1 = i;
-        this.f$2 = intent;
-        this.f$3 = z;
-        this.f$4 = z2;
-        this.f$5 = z3;
     }
 
-    public final void didSelectAccount(int i) {
-        this.f$0.m2895lambda$handleIntent$3$orgtelegramuiExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, i);
+    public final void didAcceptedPassword() {
+        this.f$0.lambda$showPasscodeActivity$2();
     }
 }

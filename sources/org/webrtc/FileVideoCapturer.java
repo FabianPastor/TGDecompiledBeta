@@ -28,8 +28,15 @@ public class FileVideoCapturer implements VideoCapturer {
         VideoFrame getNextFrame();
     }
 
+    public void changeCaptureFormat(int i, int i2, int i3) {
+    }
+
+    public boolean isScreencast() {
+        return false;
+    }
+
     private static class VideoReaderY4M implements VideoReader {
-        private static final int FRAME_DELIMETER_LENGTH = ("FRAME".length() + 1);
+        private static final int FRAME_DELIMETER_LENGTH = 6;
         private static final String TAG = "VideoReaderY4M";
         private static final String Y4M_FRAME_DELIMETER = "FRAME";
         private final int frameHeight;
@@ -38,78 +45,74 @@ public class FileVideoCapturer implements VideoCapturer {
         private final FileChannel mediaFileChannel;
         private final long videoStart;
 
-        public VideoReaderY4M(String file) throws IOException {
-            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+        public VideoReaderY4M(String str) throws IOException {
+            RandomAccessFile randomAccessFile = new RandomAccessFile(str, "r");
             this.mediaFile = randomAccessFile;
             this.mediaFileChannel = randomAccessFile.getChannel();
-            StringBuilder builder = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             while (true) {
-                int c = this.mediaFile.read();
-                if (c == -1) {
-                    throw new RuntimeException("Found end of file before end of header for file: " + file);
-                } else if (c == 10) {
+                int read = this.mediaFile.read();
+                if (read == -1) {
+                    throw new RuntimeException("Found end of file before end of header for file: " + str);
+                } else if (read == 10) {
                     this.videoStart = this.mediaFileChannel.position();
-                    int w = 0;
-                    int h = 0;
-                    String colorSpace = "";
-                    for (String tok : builder.toString().split("[ ]")) {
-                        switch (tok.charAt(0)) {
-                            case 'C':
-                                colorSpace = tok.substring(1);
-                                break;
-                            case 'H':
-                                h = Integer.parseInt(tok.substring(1));
-                                break;
-                            case 'W':
-                                w = Integer.parseInt(tok.substring(1));
-                                break;
+                    String str2 = "";
+                    int i = 0;
+                    int i2 = 0;
+                    for (String str3 : sb.toString().split("[ ]")) {
+                        char charAt = str3.charAt(0);
+                        if (charAt == 'C') {
+                            str2 = str3.substring(1);
+                        } else if (charAt == 'H') {
+                            i2 = Integer.parseInt(str3.substring(1));
+                        } else if (charAt == 'W') {
+                            i = Integer.parseInt(str3.substring(1));
                         }
                     }
-                    Logging.d("VideoReaderY4M", "Color space: " + colorSpace);
-                    if (!colorSpace.equals("420") && !colorSpace.equals("420mpeg2")) {
+                    Logging.d("VideoReaderY4M", "Color space: " + str2);
+                    if (!str2.equals("420") && !str2.equals("420mpeg2")) {
                         throw new IllegalArgumentException("Does not support any other color space than I420 or I420mpeg2");
-                    } else if (w % 2 == 1 || h % 2 == 1) {
+                    } else if (i % 2 == 1 || i2 % 2 == 1) {
                         throw new IllegalArgumentException("Does not support odd width or height");
                     } else {
-                        this.frameWidth = w;
-                        this.frameHeight = h;
-                        Logging.d("VideoReaderY4M", "frame dim: (" + w + ", " + h + ")");
+                        this.frameWidth = i;
+                        this.frameHeight = i2;
+                        Logging.d("VideoReaderY4M", "frame dim: (" + i + ", " + i2 + ")");
                         return;
                     }
                 } else {
-                    builder.append((char) c);
+                    sb.append((char) read);
                 }
             }
         }
 
         public VideoFrame getNextFrame() {
-            long captureTimeNs = TimeUnit.MILLISECONDS.toNanos(SystemClock.elapsedRealtime());
-            JavaI420Buffer buffer = JavaI420Buffer.allocate(this.frameWidth, this.frameHeight);
-            ByteBuffer dataY = buffer.getDataY();
-            ByteBuffer dataU = buffer.getDataU();
-            ByteBuffer dataV = buffer.getDataV();
-            int i = this.frameHeight;
-            int chromaHeight = (i + 1) / 2;
-            int strideY = i * buffer.getStrideY();
-            int strideU = buffer.getStrideU() * chromaHeight;
-            int strideV = buffer.getStrideV() * chromaHeight;
+            long nanos = TimeUnit.MILLISECONDS.toNanos(SystemClock.elapsedRealtime());
+            JavaI420Buffer allocate = JavaI420Buffer.allocate(this.frameWidth, this.frameHeight);
+            ByteBuffer dataY = allocate.getDataY();
+            ByteBuffer dataU = allocate.getDataU();
+            ByteBuffer dataV = allocate.getDataV();
+            int i = (this.frameHeight + 1) / 2;
+            allocate.getStrideY();
+            allocate.getStrideU();
+            allocate.getStrideV();
             try {
                 int i2 = FRAME_DELIMETER_LENGTH;
-                ByteBuffer frameDelim = ByteBuffer.allocate(i2);
-                if (this.mediaFileChannel.read(frameDelim) < i2) {
+                ByteBuffer allocate2 = ByteBuffer.allocate(i2);
+                if (this.mediaFileChannel.read(allocate2) < i2) {
                     this.mediaFileChannel.position(this.videoStart);
-                    if (this.mediaFileChannel.read(frameDelim) < i2) {
+                    if (this.mediaFileChannel.read(allocate2) < i2) {
                         throw new RuntimeException("Error looping video");
                     }
                 }
-                String frameDelimStr = new String(frameDelim.array(), Charset.forName("US-ASCII"));
-                if (frameDelimStr.equals("FRAME\n")) {
+                String str = new String(allocate2.array(), Charset.forName("US-ASCII"));
+                if (str.equals("FRAME\n")) {
                     this.mediaFileChannel.read(dataY);
                     this.mediaFileChannel.read(dataU);
                     this.mediaFileChannel.read(dataV);
-                    return new VideoFrame(buffer, 0, captureTimeNs);
+                    return new VideoFrame(allocate, 0, nanos);
                 }
-                throw new RuntimeException("Frames should be delimited by FRAME plus newline, found delimter was: '" + frameDelimStr + "'");
+                throw new RuntimeException("Frames should be delimited by FRAME plus newline, found delimter was: '" + str + "'");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -124,41 +127,34 @@ public class FileVideoCapturer implements VideoCapturer {
         }
     }
 
-    public FileVideoCapturer(String inputFile) throws IOException {
+    public FileVideoCapturer(String str) throws IOException {
         try {
-            this.videoReader = new VideoReaderY4M(inputFile);
+            this.videoReader = new VideoReaderY4M(str);
         } catch (IOException e) {
-            Logging.d("FileVideoCapturer", "Could not open video file: " + inputFile);
+            Logging.d("FileVideoCapturer", "Could not open video file: " + str);
             throw e;
         }
     }
 
     public void tick() {
-        VideoFrame videoFrame = this.videoReader.getNextFrame();
-        this.capturerObserver.onFrameCaptured(videoFrame);
-        videoFrame.release();
+        VideoFrame nextFrame = this.videoReader.getNextFrame();
+        this.capturerObserver.onFrameCaptured(nextFrame);
+        nextFrame.release();
     }
 
-    public void initialize(SurfaceTextureHelper surfaceTextureHelper, Context applicationContext, CapturerObserver capturerObserver2) {
+    public void initialize(SurfaceTextureHelper surfaceTextureHelper, Context context, CapturerObserver capturerObserver2) {
         this.capturerObserver = capturerObserver2;
     }
 
-    public void startCapture(int width, int height, int framerate) {
-        this.timer.schedule(this.tickTask, 0, (long) (1000 / framerate));
+    public void startCapture(int i, int i2, int i3) {
+        this.timer.schedule(this.tickTask, 0, (long) (1000 / i3));
     }
 
     public void stopCapture() throws InterruptedException {
         this.timer.cancel();
     }
 
-    public void changeCaptureFormat(int width, int height, int framerate) {
-    }
-
     public void dispose() {
         this.videoReader.close();
-    }
-
-    public boolean isScreencast() {
-        return false;
     }
 }

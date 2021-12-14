@@ -10,6 +10,6 @@ public final /* synthetic */ class ArticleViewer$22$$ExternalSyntheticLambda0 im
     }
 
     public final void run() {
-        this.f$0.m1451lambda$onAnimationEnd$0$orgtelegramuiArticleViewer$22();
+        this.f$0.lambda$onAnimationEnd$0();
     }
 }

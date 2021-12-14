@@ -10,6 +10,6 @@ public final /* synthetic */ class EmojiView$36$$ExternalSyntheticLambda0 implem
     }
 
     public final void run() {
-        this.f$0.m2251lambda$onAnimationEnd$0$orgtelegramuiComponentsEmojiView$36();
+        this.f$0.lambda$onAnimationEnd$0();
     }
 }

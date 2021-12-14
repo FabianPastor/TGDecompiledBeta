@@ -2,16 +2,14 @@ package org.telegram.messenger.voip;
 
 import org.telegram.messenger.voip.NativeInstance;
 
-public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda69 implements NativeInstance.RequestBroadcastPartCallback {
+public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda69 implements NativeInstance.AudioLevelsCallback {
     public final /* synthetic */ VoIPService f$0;
-    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda69(VoIPService voIPService, int i) {
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda69(VoIPService voIPService) {
         this.f$0 = voIPService;
-        this.f$1 = i;
     }
 
-    public final void run(long j, long j2, int i, int i2) {
-        this.f$0.m1217x7a8b866b(this.f$1, j, j2, i, i2);
+    public final void run(int[] iArr, float[] fArr, boolean[] zArr) {
+        this.f$0.lambda$initiateActualEncryptedCall$53(iArr, fArr, zArr);
     }
 }

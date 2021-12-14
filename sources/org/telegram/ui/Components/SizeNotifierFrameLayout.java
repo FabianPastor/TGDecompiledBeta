@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
@@ -22,7 +23,6 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     private boolean animationInProgress;
     private Drawable backgroundDrawable;
     private int backgroundTranslationY;
-    private float bgAngle;
     private int bottomClip;
     private SizeNotifierFrameLayoutDelegate delegate;
     private int emojiHeight;
@@ -43,28 +43,38 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         void onSizeChanged(int i, boolean z);
     }
 
+    /* access modifiers changed from: protected */
+    public AdjustPanLayoutHelper createAdjustPanLayoutHelper() {
+        return null;
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean isActionBarVisible() {
+        return true;
+    }
+
     public SizeNotifierFrameLayout(Context context) {
         this(context, (ActionBarLayout) null);
     }
 
-    public SizeNotifierFrameLayout(Context context, ActionBarLayout layout) {
+    public SizeNotifierFrameLayout(Context context, ActionBarLayout actionBarLayout) {
         super(context);
         this.rect = new Rect();
         this.occupyStatusBar = true;
         this.parallaxScale = 1.0f;
         this.paused = true;
         setWillNotDraw(false);
-        this.parentLayout = layout;
+        this.parentLayout = actionBarLayout;
         this.adjustPanLayoutHelper = createAdjustPanLayoutHelper();
     }
 
-    public void setBackgroundImage(Drawable bitmap, boolean motion) {
-        if (this.backgroundDrawable != bitmap) {
-            if (bitmap instanceof MotionBackgroundDrawable) {
-                ((MotionBackgroundDrawable) bitmap).setParentView(this);
+    public void setBackgroundImage(Drawable drawable, boolean z) {
+        if (this.backgroundDrawable != drawable) {
+            if (drawable instanceof MotionBackgroundDrawable) {
+                ((MotionBackgroundDrawable) drawable).setParentView(this);
             }
-            this.backgroundDrawable = bitmap;
-            if (motion) {
+            this.backgroundDrawable = drawable;
+            if (z) {
                 if (this.parallaxEffect == null) {
                     WallpaperParallaxEffect wallpaperParallaxEffect = new WallpaperParallaxEffect(getContext());
                     this.parallaxEffect = wallpaperParallaxEffect;
@@ -90,11 +100,10 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         }
     }
 
-    /* renamed from: lambda$setBackgroundImage$0$org-telegram-ui-Components-SizeNotifierFrameLayout  reason: not valid java name */
-    public /* synthetic */ void m2609x49b6021f(int offsetX, int offsetY, float angle) {
-        this.translationX = (float) offsetX;
-        this.translationY = (float) offsetY;
-        this.bgAngle = angle;
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$setBackgroundImage$0(int i, int i2, float f) {
+        this.translationX = (float) i;
+        this.translationY = (float) i2;
         invalidate();
     }
 
@@ -102,12 +111,12 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         return this.backgroundDrawable;
     }
 
-    public void setDelegate(SizeNotifierFrameLayoutDelegate delegate2) {
-        this.delegate = delegate2;
+    public void setDelegate(SizeNotifierFrameLayoutDelegate sizeNotifierFrameLayoutDelegate) {
+        this.delegate = sizeNotifierFrameLayoutDelegate;
     }
 
-    public void setOccupyStatusBar(boolean value) {
-        this.occupyStatusBar = value;
+    public void setOccupyStatusBar(boolean z) {
+        this.occupyStatusBar = z;
     }
 
     public void onPause() {
@@ -127,18 +136,21 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        super.onLayout(z, i, i2, i3, i4);
         notifyHeightChanged();
     }
 
     public int measureKeyboardHeight() {
         View rootView = getRootView();
         getWindowVisibleDisplayFrame(this.rect);
-        if (this.rect.bottom == 0 && this.rect.top == 0) {
+        Rect rect2 = this.rect;
+        if (rect2.bottom == 0 && rect2.top == 0) {
             return 0;
         }
-        int max = Math.max(0, ((rootView.getHeight() - (this.rect.top != 0 ? AndroidUtilities.statusBarHeight : 0)) - AndroidUtilities.getViewInset(rootView)) - (this.rect.bottom - this.rect.top));
+        int height = (rootView.getHeight() - (this.rect.top != 0 ? AndroidUtilities.statusBarHeight : 0)) - AndroidUtilities.getViewInset(rootView);
+        Rect rect3 = this.rect;
+        int max = Math.max(0, height - (rect3.bottom - rect3.top));
         this.keyboardHeight = max;
         return max;
     }
@@ -154,24 +166,25 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         }
         if (this.delegate != null) {
             this.keyboardHeight = measureKeyboardHeight();
-            post(new SizeNotifierFrameLayout$$ExternalSyntheticLambda0(this, AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y));
+            Point point = AndroidUtilities.displaySize;
+            post(new SizeNotifierFrameLayout$$ExternalSyntheticLambda0(this, point.x > point.y));
         }
     }
 
-    /* renamed from: lambda$notifyHeightChanged$1$org-telegram-ui-Components-SizeNotifierFrameLayout  reason: not valid java name */
-    public /* synthetic */ void m2608xe23b7f7f(boolean isWidthGreater) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$notifyHeightChanged$1(boolean z) {
         SizeNotifierFrameLayoutDelegate sizeNotifierFrameLayoutDelegate = this.delegate;
         if (sizeNotifierFrameLayoutDelegate != null) {
-            sizeNotifierFrameLayoutDelegate.onSizeChanged(this.keyboardHeight, isWidthGreater);
+            sizeNotifierFrameLayoutDelegate.onSizeChanged(this.keyboardHeight, z);
         }
     }
 
-    public void setBottomClip(int value) {
-        this.bottomClip = value;
+    public void setBottomClip(int i) {
+        this.bottomClip = i;
     }
 
-    public void setBackgroundTranslation(int translation) {
-        this.backgroundTranslationY = translation;
+    public void setBackgroundTranslation(int i) {
+        this.backgroundTranslationY = i;
     }
 
     public int getBackgroundTranslationY() {
@@ -189,66 +202,61 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     }
 
     public int getBackgroundSizeY() {
-        int offset = 0;
         Drawable drawable = this.backgroundDrawable;
+        int i = 0;
         if (drawable instanceof MotionBackgroundDrawable) {
-            if (((MotionBackgroundDrawable) drawable).hasPattern()) {
-                offset = this.backgroundTranslationY != 0 ? 0 : -this.keyboardHeight;
-            } else if (this.animationInProgress) {
-                offset = (int) this.emojiOffset;
-            } else if (this.emojiHeight != 0) {
-                offset = this.emojiHeight;
-            } else {
-                offset = this.backgroundTranslationY;
+            if (!((MotionBackgroundDrawable) drawable).hasPattern()) {
+                if (this.animationInProgress) {
+                    i = (int) this.emojiOffset;
+                } else {
+                    i = this.emojiHeight;
+                    if (i == 0) {
+                        i = this.backgroundTranslationY;
+                    }
+                }
+            } else if (this.backgroundTranslationY == 0) {
+                i = -this.keyboardHeight;
             }
         }
-        return getMeasuredHeight() - offset;
+        return getMeasuredHeight() - i;
     }
 
     public int getHeightWithKeyboard() {
         return this.keyboardHeight + getMeasuredHeight();
     }
 
-    public void setEmojiKeyboardHeight(int height) {
-        this.emojiHeight = height;
+    public void setEmojiKeyboardHeight(int i) {
+        this.emojiHeight = i;
     }
 
-    public void setEmojiOffset(boolean animInProgress, float offset) {
-        this.emojiOffset = offset;
-        this.animationInProgress = animInProgress;
+    public void setEmojiOffset(boolean z, float f) {
+        this.emojiOffset = f;
+        this.animationInProgress = z;
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        Drawable newDrawable;
-        int a;
-        int i;
-        int i2;
-        Canvas canvas2 = canvas;
         if (this.backgroundDrawable == null || this.skipBackgroundDrawing) {
             super.onDraw(canvas);
             return;
         }
-        Drawable newDrawable2 = getNewDrawable();
-        if (!(newDrawable2 == this.backgroundDrawable || newDrawable2 == null)) {
+        Drawable newDrawable = getNewDrawable();
+        if (!(newDrawable == this.backgroundDrawable || newDrawable == null)) {
             if (Theme.isAnimatingColor()) {
                 this.oldBackgroundDrawable = this.backgroundDrawable;
             }
-            if (newDrawable2 instanceof MotionBackgroundDrawable) {
-                ((MotionBackgroundDrawable) newDrawable2).setParentView(this);
+            if (newDrawable instanceof MotionBackgroundDrawable) {
+                ((MotionBackgroundDrawable) newDrawable).setParentView(this);
             }
-            this.backgroundDrawable = newDrawable2;
+            this.backgroundDrawable = newDrawable;
         }
         ActionBarLayout actionBarLayout = this.parentLayout;
         float themeAnimationValue = actionBarLayout != null ? actionBarLayout.getThemeAnimationValue() : 1.0f;
-        int a2 = 0;
-        while (a2 < 2) {
-            Drawable drawable = a2 == 0 ? this.oldBackgroundDrawable : this.backgroundDrawable;
-            if (drawable == null) {
-                newDrawable = newDrawable2;
-                a = a2;
-            } else {
-                if (a2 != 1 || this.oldBackgroundDrawable == null || this.parentLayout == null) {
+        int i = 0;
+        while (i < 2) {
+            Drawable drawable = i == 0 ? this.oldBackgroundDrawable : this.backgroundDrawable;
+            if (drawable != null) {
+                if (i != 1 || this.oldBackgroundDrawable == null || this.parentLayout == null) {
                     drawable.setAlpha(255);
                 } else {
                     drawable.setAlpha((int) (255.0f * themeAnimationValue));
@@ -256,125 +264,93 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 if (drawable instanceof MotionBackgroundDrawable) {
                     MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
                     if (motionBackgroundDrawable.hasPattern()) {
-                        int actionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
-                        int viewHeight = getRootView().getMeasuredHeight() - actionBarHeight;
-                        float scale = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) viewHeight) / ((float) drawable.getIntrinsicHeight()));
-                        int actionBarHeight2 = actionBarHeight;
-                        int width = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * scale * this.parallaxScale));
-                        a = a2;
-                        int height = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * scale * this.parallaxScale));
-                        int x = ((getMeasuredWidth() - width) / 2) + ((int) this.translationX);
-                        int y = this.backgroundTranslationY + ((viewHeight - height) / 2) + actionBarHeight2 + ((int) this.translationY);
+                        int currentActionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
+                        int measuredHeight = getRootView().getMeasuredHeight() - currentActionBarHeight;
+                        float max = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) measuredHeight) / ((float) drawable.getIntrinsicHeight()));
+                        int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * max * this.parallaxScale));
+                        int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * max * this.parallaxScale));
+                        int measuredWidth = ((getMeasuredWidth() - ceil) / 2) + ((int) this.translationX);
+                        int i2 = this.backgroundTranslationY + ((measuredHeight - ceil2) / 2) + currentActionBarHeight + ((int) this.translationY);
                         canvas.save();
-                        newDrawable = newDrawable2;
-                        int actionBarHeight3 = actionBarHeight2;
-                        int actionBarHeight4 = viewHeight;
-                        canvas2.clipRect(0, actionBarHeight3, width, getMeasuredHeight() - this.bottomClip);
-                        drawable.setBounds(x, y, x + width, y + height);
-                        drawable.draw(canvas2);
+                        canvas.clipRect(0, currentActionBarHeight, ceil, getMeasuredHeight() - this.bottomClip);
+                        drawable.setBounds(measuredWidth, i2, ceil + measuredWidth, ceil2 + i2);
+                        drawable.draw(canvas);
                         canvas.restore();
                     } else {
-                        newDrawable = newDrawable2;
-                        a = a2;
                         if (this.bottomClip != 0) {
                             canvas.save();
-                            canvas2.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - this.bottomClip);
+                            canvas.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - this.bottomClip);
                         }
                         motionBackgroundDrawable.setTranslationY(this.backgroundTranslationY);
-                        int bottom = getMeasuredHeight() - this.backgroundTranslationY;
+                        int measuredHeight2 = getMeasuredHeight() - this.backgroundTranslationY;
                         if (this.animationInProgress) {
-                            bottom = (int) (((float) bottom) - this.emojiOffset);
+                            measuredHeight2 = (int) (((float) measuredHeight2) - this.emojiOffset);
                         } else {
                             int i3 = this.emojiHeight;
                             if (i3 != 0) {
-                                bottom -= i3;
+                                measuredHeight2 -= i3;
                             }
                         }
-                        drawable.setBounds(0, 0, getMeasuredWidth(), bottom);
-                        drawable.draw(canvas2);
+                        drawable.setBounds(0, 0, getMeasuredWidth(), measuredHeight2);
+                        drawable.draw(canvas);
                         if (this.bottomClip != 0) {
                             canvas.restore();
                         }
                     }
-                } else {
-                    newDrawable = newDrawable2;
-                    a = a2;
-                    if (drawable instanceof ColorDrawable) {
-                        if (this.bottomClip != 0) {
-                            canvas.save();
-                            i2 = 0;
-                            canvas2.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - this.bottomClip);
-                        } else {
-                            i2 = 0;
-                        }
-                        drawable.setBounds(i2, i2, getMeasuredWidth(), getRootView().getMeasuredHeight());
-                        drawable.draw(canvas2);
-                        if (this.bottomClip != 0) {
-                            canvas.restore();
-                        }
-                    } else if (drawable instanceof GradientDrawable) {
-                        if (this.bottomClip != 0) {
-                            canvas.save();
-                            i = 0;
-                            canvas2.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - this.bottomClip);
-                        } else {
-                            i = 0;
-                        }
-                        drawable.setBounds(i, this.backgroundTranslationY, getMeasuredWidth(), this.backgroundTranslationY + getRootView().getMeasuredHeight());
-                        drawable.draw(canvas2);
-                        if (this.bottomClip != 0) {
-                            canvas.restore();
-                        }
-                    } else if (drawable instanceof BitmapDrawable) {
-                        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-                        if (bitmapDrawable.getTileModeX() == Shader.TileMode.REPEAT) {
-                            canvas.save();
-                            float scale2 = 2.0f / AndroidUtilities.density;
-                            canvas2.scale(scale2, scale2);
-                            drawable.setBounds(0, 0, (int) Math.ceil((double) (((float) getMeasuredWidth()) / scale2)), (int) Math.ceil((double) (((float) getRootView().getMeasuredHeight()) / scale2)));
-                            drawable.draw(canvas2);
-                            canvas.restore();
-                        } else {
-                            int actionBarHeight5 = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
-                            int viewHeight2 = getRootView().getMeasuredHeight() - actionBarHeight5;
-                            float scale3 = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) viewHeight2) / ((float) drawable.getIntrinsicHeight()));
-                            int width2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * scale3 * this.parallaxScale));
-                            int height2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * scale3 * this.parallaxScale));
-                            int x2 = ((getMeasuredWidth() - width2) / 2) + ((int) this.translationX);
-                            int y2 = this.backgroundTranslationY + ((viewHeight2 - height2) / 2) + actionBarHeight5 + ((int) this.translationY);
-                            canvas.save();
-                            BitmapDrawable bitmapDrawable2 = bitmapDrawable;
-                            canvas2.clipRect(0, actionBarHeight5, width2, getMeasuredHeight() - this.bottomClip);
-                            drawable.setBounds(x2, y2, x2 + width2, y2 + height2);
-                            drawable.draw(canvas2);
-                            canvas.restore();
-                        }
+                } else if (drawable instanceof ColorDrawable) {
+                    if (this.bottomClip != 0) {
+                        canvas.save();
+                        canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - this.bottomClip);
+                    }
+                    drawable.setBounds(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight());
+                    drawable.draw(canvas);
+                    if (this.bottomClip != 0) {
+                        canvas.restore();
+                    }
+                } else if (drawable instanceof GradientDrawable) {
+                    if (this.bottomClip != 0) {
+                        canvas.save();
+                        canvas.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - this.bottomClip);
+                    }
+                    drawable.setBounds(0, this.backgroundTranslationY, getMeasuredWidth(), this.backgroundTranslationY + getRootView().getMeasuredHeight());
+                    drawable.draw(canvas);
+                    if (this.bottomClip != 0) {
+                        canvas.restore();
+                    }
+                } else if (drawable instanceof BitmapDrawable) {
+                    if (((BitmapDrawable) drawable).getTileModeX() == Shader.TileMode.REPEAT) {
+                        canvas.save();
+                        float f = 2.0f / AndroidUtilities.density;
+                        canvas.scale(f, f);
+                        drawable.setBounds(0, 0, (int) Math.ceil((double) (((float) getMeasuredWidth()) / f)), (int) Math.ceil((double) (((float) getRootView().getMeasuredHeight()) / f)));
+                        drawable.draw(canvas);
+                        canvas.restore();
+                    } else {
+                        int currentActionBarHeight2 = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
+                        int measuredHeight3 = getRootView().getMeasuredHeight() - currentActionBarHeight2;
+                        float max2 = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) measuredHeight3) / ((float) drawable.getIntrinsicHeight()));
+                        int ceil3 = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * max2 * this.parallaxScale));
+                        int ceil4 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * max2 * this.parallaxScale));
+                        int measuredWidth2 = ((getMeasuredWidth() - ceil3) / 2) + ((int) this.translationX);
+                        int i4 = this.backgroundTranslationY + ((measuredHeight3 - ceil4) / 2) + currentActionBarHeight2 + ((int) this.translationY);
+                        canvas.save();
+                        canvas.clipRect(0, currentActionBarHeight2, ceil3, getMeasuredHeight() - this.bottomClip);
+                        drawable.setBounds(measuredWidth2, i4, ceil3 + measuredWidth2, ceil4 + i4);
+                        drawable.draw(canvas);
+                        canvas.restore();
                     }
                 }
-                if (a == 0 && this.oldBackgroundDrawable != null) {
-                    if (themeAnimationValue >= 1.0f) {
-                        this.oldBackgroundDrawable = null;
-                        invalidate();
-                    }
+                if (i == 0 && this.oldBackgroundDrawable != null && themeAnimationValue >= 1.0f) {
+                    this.oldBackgroundDrawable = null;
+                    invalidate();
                 }
             }
-            a2 = a + 1;
-            newDrawable2 = newDrawable;
+            i++;
         }
     }
 
-    /* access modifiers changed from: protected */
-    public boolean isActionBarVisible() {
-        return true;
-    }
-
-    /* access modifiers changed from: protected */
-    public AdjustPanLayoutHelper createAdjustPanLayoutHelper() {
-        return null;
-    }
-
-    public void setSkipBackgroundDrawing(boolean skipBackgroundDrawing2) {
-        this.skipBackgroundDrawing = skipBackgroundDrawing2;
+    public void setSkipBackgroundDrawing(boolean z) {
+        this.skipBackgroundDrawing = z;
         invalidate();
     }
 
@@ -384,7 +360,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public boolean verifyDrawable(Drawable who) {
-        return who == getBackgroundImage() || super.verifyDrawable(who);
+    public boolean verifyDrawable(Drawable drawable) {
+        return drawable == getBackgroundImage() || super.verifyDrawable(drawable);
     }
 }

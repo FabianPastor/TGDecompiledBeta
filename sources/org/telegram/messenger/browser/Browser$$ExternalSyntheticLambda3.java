@@ -5,7 +5,7 @@ import android.net.Uri;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class Browser$$ExternalSyntheticLambda3 implements RequestDelegate {
@@ -23,7 +23,7 @@ public final /* synthetic */ class Browser$$ExternalSyntheticLambda3 implements 
         this.f$4 = z;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Browser$$ExternalSyntheticLambda2(this.f$0, tLObject, this.f$1, this.f$2, this.f$3, this.f$4));
     }
 }

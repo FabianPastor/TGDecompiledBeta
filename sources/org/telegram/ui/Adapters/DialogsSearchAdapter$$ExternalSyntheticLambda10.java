@@ -1,15 +1,15 @@
 package org.telegram.ui.Adapters;
 
-import android.view.View;
-
-public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda10 implements View.OnClickListener {
+public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda10 implements Runnable {
     public final /* synthetic */ DialogsSearchAdapter f$0;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda10(DialogsSearchAdapter dialogsSearchAdapter) {
+    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda10(DialogsSearchAdapter dialogsSearchAdapter, long j) {
         this.f$0 = dialogsSearchAdapter;
+        this.f$1 = j;
     }
 
-    public final void onClick(View view) {
-        this.f$0.m1358xd59a794c(view);
+    public final void run() {
+        this.f$0.lambda$putRecentSearch$6(this.f$1);
     }
 }

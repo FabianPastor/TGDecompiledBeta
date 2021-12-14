@@ -13,6 +13,6 @@ public final /* synthetic */ class AvatarPreviewer$Layout$$ExternalSyntheticLamb
     }
 
     public final void accept(Object obj) {
-        this.f$0.m1461lambda$setData$5$orgtelegramuiAvatarPreviewer$Layout(this.f$1, obj);
+        this.f$0.lambda$setData$5(this.f$1, obj);
     }
 }

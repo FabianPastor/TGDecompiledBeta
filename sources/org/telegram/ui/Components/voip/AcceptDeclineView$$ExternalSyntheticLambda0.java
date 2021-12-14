@@ -10,6 +10,6 @@ public final /* synthetic */ class AcceptDeclineView$$ExternalSyntheticLambda0 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2737x4fc0e726(valueAnimator);
+        this.f$0.lambda$onTouchEvent$0(valueAnimator);
     }
 }

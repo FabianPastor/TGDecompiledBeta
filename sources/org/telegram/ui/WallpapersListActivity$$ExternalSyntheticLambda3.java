@@ -14,6 +14,6 @@ public final /* synthetic */ class WallpapersListActivity$$ExternalSyntheticLamb
     }
 
     public final void run() {
-        this.f$0.m4080lambda$loadWallpapers$5$orgtelegramuiWallpapersListActivity(this.f$1, this.f$2);
+        this.f$0.lambda$loadWallpapers$5(this.f$1, this.f$2);
     }
 }

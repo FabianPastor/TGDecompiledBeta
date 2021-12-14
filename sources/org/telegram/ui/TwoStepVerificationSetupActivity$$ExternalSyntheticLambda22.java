@@ -1,15 +1,17 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda22 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda22 implements Runnable {
     public final /* synthetic */ TwoStepVerificationSetupActivity f$0;
+    public final /* synthetic */ TLRPC$TL_error f$1;
 
-    public /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda22(TwoStepVerificationSetupActivity twoStepVerificationSetupActivity) {
+    public /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda22(TwoStepVerificationSetupActivity twoStepVerificationSetupActivity, TLRPC$TL_error tLRPC$TL_error) {
         this.f$0 = twoStepVerificationSetupActivity;
+        this.f$1 = tLRPC$TL_error;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m4019x65var_ad(dialogInterface, i);
+    public final void run() {
+        this.f$0.lambda$createView$16(this.f$1);
     }
 }

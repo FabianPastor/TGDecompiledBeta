@@ -14,6 +14,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityNewPasswordView$$E
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3193x49187d5c(this.f$1, dialogInterface, i);
+        this.f$0.lambda$recoverPassword$4(this.f$1, dialogInterface, i);
     }
 }

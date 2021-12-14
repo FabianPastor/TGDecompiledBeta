@@ -1,7 +1,6 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -30,45 +29,39 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     private Context mContext;
     private DrawerProfileCell profileCell;
 
-    public DrawerLayoutAdapter(Context context, SideMenultItemAnimator animator) {
+    public DrawerLayoutAdapter(Context context, SideMenultItemAnimator sideMenultItemAnimator) {
         this.mContext = context;
-        this.itemAnimator = animator;
+        this.itemAnimator = sideMenultItemAnimator;
         boolean z = true;
         this.accountsShown = (UserConfig.getActivatedAccountsCount() <= 1 || !MessagesController.getGlobalMainSettings().getBoolean("accountsShown", true)) ? false : z;
         Theme.createCommonDialogResources(context);
         resetItems();
         try {
             this.hasGps = ApplicationLoader.applicationContext.getPackageManager().hasSystemFeature("android.hardware.location.gps");
-        } catch (Throwable th) {
+        } catch (Throwable unused) {
             this.hasGps = false;
         }
     }
 
     private int getAccountRowsCount() {
-        int count = this.accountNumbers.size() + 1;
-        if (this.accountNumbers.size() < 3) {
-            return count + 1;
-        }
-        return count;
+        int size = this.accountNumbers.size() + 1;
+        return this.accountNumbers.size() < 3 ? size + 1 : size;
     }
 
     public int getItemCount() {
-        int count = this.items.size() + 2;
-        if (this.accountsShown) {
-            return count + getAccountRowsCount();
-        }
-        return count;
+        int size = this.items.size() + 2;
+        return this.accountsShown ? size + getAccountRowsCount() : size;
     }
 
-    public void setAccountsShown(boolean value, boolean animated) {
-        if (this.accountsShown != value && !this.itemAnimator.isRunning()) {
-            this.accountsShown = value;
+    public void setAccountsShown(boolean z, boolean z2) {
+        if (this.accountsShown != z && !this.itemAnimator.isRunning()) {
+            this.accountsShown = z;
             DrawerProfileCell drawerProfileCell = this.profileCell;
             if (drawerProfileCell != null) {
-                drawerProfileCell.setAccountsShown(value, animated);
+                drawerProfileCell.setAccountsShown(z, z2);
             }
             MessagesController.getGlobalMainSettings().edit().putBoolean("accountsShown", this.accountsShown).commit();
-            if (animated) {
+            if (z2) {
                 this.itemAnimator.setShouldClipChildren(false);
                 if (this.accountsShown) {
                     notifyItemRangeInserted(2, getAccountRowsCount());
@@ -90,58 +83,46 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         super.notifyDataSetChanged();
     }
 
-    public boolean isEnabled(RecyclerView.ViewHolder holder) {
-        int itemType = holder.getItemViewType();
-        return itemType == 3 || itemType == 4 || itemType == 5 || itemType == 6;
+    public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+        int itemViewType = viewHolder.getItemViewType();
+        return itemViewType == 3 || itemViewType == 4 || itemViewType == 5 || itemViewType == 6;
     }
 
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        switch (viewType) {
-            case 0:
-                DrawerProfileCell drawerProfileCell = new DrawerProfileCell(this.mContext);
-                this.profileCell = drawerProfileCell;
-                view = drawerProfileCell;
-                break;
-            case 2:
-                view = new DividerCell(this.mContext);
-                break;
-            case 3:
-                view = new DrawerActionCell(this.mContext);
-                break;
-            case 4:
-                view = new DrawerUserCell(this.mContext);
-                break;
-            case 5:
-                view = new DrawerAddCell(this.mContext);
-                break;
-            default:
-                view = new EmptyCell(this.mContext, AndroidUtilities.dp(8.0f));
-                break;
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        EmptyCell emptyCell;
+        if (i == 0) {
+            DrawerProfileCell drawerProfileCell = new DrawerProfileCell(this.mContext);
+            this.profileCell = drawerProfileCell;
+            emptyCell = drawerProfileCell;
+        } else if (i == 2) {
+            emptyCell = new DividerCell(this.mContext);
+        } else if (i == 3) {
+            emptyCell = new DrawerActionCell(this.mContext);
+        } else if (i == 4) {
+            emptyCell = new DrawerUserCell(this.mContext);
+        } else if (i != 5) {
+            emptyCell = new EmptyCell(this.mContext, AndroidUtilities.dp(8.0f));
+        } else {
+            emptyCell = new DrawerAddCell(this.mContext);
         }
-        view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-        return new RecyclerListView.Holder(view);
+        emptyCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+        return new RecyclerListView.Holder(emptyCell);
     }
 
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        switch (holder.getItemViewType()) {
-            case 0:
-                ((DrawerProfileCell) holder.itemView).setUser(MessagesController.getInstance(UserConfig.selectedAccount).getUser(Long.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShown);
-                return;
-            case 3:
-                DrawerActionCell drawerActionCell = (DrawerActionCell) holder.itemView;
-                int position2 = position - 2;
-                if (this.accountsShown) {
-                    position2 -= getAccountRowsCount();
-                }
-                this.items.get(position2).bind(drawerActionCell);
-                drawerActionCell.setPadding(0, 0, 0, 0);
-                return;
-            case 4:
-                ((DrawerUserCell) holder.itemView).setAccount(this.accountNumbers.get(position - 2).intValue());
-                return;
-            default:
-                return;
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+        int itemViewType = viewHolder.getItemViewType();
+        if (itemViewType == 0) {
+            ((DrawerProfileCell) viewHolder.itemView).setUser(MessagesController.getInstance(UserConfig.selectedAccount).getUser(Long.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShown);
+        } else if (itemViewType == 3) {
+            DrawerActionCell drawerActionCell = (DrawerActionCell) viewHolder.itemView;
+            int i2 = i - 2;
+            if (this.accountsShown) {
+                i2 -= getAccountRowsCount();
+            }
+            this.items.get(i2).bind(drawerActionCell);
+            drawerActionCell.setPadding(0, 0, 0, 0);
+        } else if (itemViewType == 4) {
+            ((DrawerUserCell) viewHolder.itemView).setAccount(this.accountNumbers.get(i - 2).intValue());
         }
     }
 
@@ -172,35 +153,35 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         return this.items.get(i2) == null ? 2 : 3;
     }
 
-    public void swapElements(int fromIndex, int toIndex) {
-        int idx1 = fromIndex - 2;
-        int idx2 = toIndex - 2;
-        if (idx1 >= 0 && idx2 >= 0 && idx1 < this.accountNumbers.size() && idx2 < this.accountNumbers.size()) {
-            UserConfig userConfig1 = UserConfig.getInstance(this.accountNumbers.get(idx1).intValue());
-            UserConfig userConfig2 = UserConfig.getInstance(this.accountNumbers.get(idx2).intValue());
-            int tempLoginTime = userConfig1.loginTime;
-            userConfig1.loginTime = userConfig2.loginTime;
-            userConfig2.loginTime = tempLoginTime;
-            userConfig1.saveConfig(false);
-            userConfig2.saveConfig(false);
-            Collections.swap(this.accountNumbers, idx1, idx2);
-            notifyItemMoved(fromIndex, toIndex);
+    public void swapElements(int i, int i2) {
+        int i3 = i - 2;
+        int i4 = i2 - 2;
+        if (i3 >= 0 && i4 >= 0 && i3 < this.accountNumbers.size() && i4 < this.accountNumbers.size()) {
+            UserConfig instance = UserConfig.getInstance(this.accountNumbers.get(i3).intValue());
+            UserConfig instance2 = UserConfig.getInstance(this.accountNumbers.get(i4).intValue());
+            int i5 = instance.loginTime;
+            instance.loginTime = instance2.loginTime;
+            instance2.loginTime = i5;
+            instance.saveConfig(false);
+            instance2.saveConfig(false);
+            Collections.swap(this.accountNumbers, i3, i4);
+            notifyItemMoved(i, i2);
         }
     }
 
     private void resetItems() {
-        int peopleNearbyIcon;
-        int helpIcon;
-        int inviteIcon;
-        int settingsIcon;
-        int savedIcon;
-        int callsIcon;
-        int contactsIcon;
-        int newGroupIcon;
+        int i;
+        int i2;
+        int i3;
+        int i4;
+        int i5;
+        int i6;
+        int i7;
+        int i8;
         this.accountNumbers.clear();
-        for (int a = 0; a < 3; a++) {
-            if (UserConfig.getInstance(a).isClientActivated()) {
-                this.accountNumbers.add(Integer.valueOf(a));
+        for (int i9 = 0; i9 < 3; i9++) {
+            if (UserConfig.getInstance(i9).isClientActivated()) {
+                this.accountNumbers.add(Integer.valueOf(i9));
             }
         }
         Collections.sort(this.accountNumbers, DrawerLayoutAdapter$$ExternalSyntheticLambda0.INSTANCE);
@@ -208,85 +189,81 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
             int eventType = Theme.getEventType();
             if (eventType == 0) {
-                newGroupIcon = NUM;
-                contactsIcon = NUM;
-                callsIcon = NUM;
-                savedIcon = NUM;
-                settingsIcon = NUM;
-                inviteIcon = NUM;
-                helpIcon = NUM;
-                peopleNearbyIcon = NUM;
-            } else if (eventType == 1) {
-                newGroupIcon = NUM;
-                contactsIcon = NUM;
-                callsIcon = NUM;
-                savedIcon = NUM;
-                settingsIcon = NUM;
-                inviteIcon = NUM;
-                helpIcon = NUM;
-                peopleNearbyIcon = NUM;
-            } else if (eventType == 2) {
-                newGroupIcon = NUM;
-                contactsIcon = NUM;
-                callsIcon = NUM;
-                savedIcon = NUM;
-                settingsIcon = NUM;
-                inviteIcon = NUM;
-                helpIcon = NUM;
-                peopleNearbyIcon = NUM;
+                i8 = NUM;
+                i7 = NUM;
+                i6 = NUM;
+                i5 = NUM;
+                i4 = NUM;
+                i3 = NUM;
+                i2 = NUM;
+                i = NUM;
             } else {
-                newGroupIcon = NUM;
-                contactsIcon = NUM;
-                callsIcon = NUM;
-                savedIcon = NUM;
-                settingsIcon = NUM;
-                inviteIcon = NUM;
-                helpIcon = NUM;
-                peopleNearbyIcon = NUM;
+                if (eventType == 1) {
+                    i8 = NUM;
+                    i = NUM;
+                    i7 = NUM;
+                    i6 = NUM;
+                    i5 = NUM;
+                    i4 = NUM;
+                    i3 = NUM;
+                } else if (eventType == 2) {
+                    i8 = NUM;
+                    i7 = NUM;
+                    i6 = NUM;
+                    i5 = NUM;
+                    i4 = NUM;
+                    i3 = NUM;
+                    i2 = NUM;
+                    i = NUM;
+                } else {
+                    i8 = NUM;
+                    i = NUM;
+                    i7 = NUM;
+                    i6 = NUM;
+                    i5 = NUM;
+                    i4 = NUM;
+                    i3 = NUM;
+                }
+                i2 = NUM;
             }
-            this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), newGroupIcon));
-            this.items.add(new Item(6, LocaleController.getString("Contacts", NUM), contactsIcon));
-            this.items.add(new Item(10, LocaleController.getString("Calls", NUM), callsIcon));
+            this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), i8));
+            this.items.add(new Item(6, LocaleController.getString("Contacts", NUM), i7));
+            this.items.add(new Item(10, LocaleController.getString("Calls", NUM), i6));
             if (this.hasGps) {
-                this.items.add(new Item(12, LocaleController.getString("PeopleNearby", NUM), peopleNearbyIcon));
+                this.items.add(new Item(12, LocaleController.getString("PeopleNearby", NUM), i));
             }
-            this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), savedIcon));
-            this.items.add(new Item(8, LocaleController.getString("Settings", NUM), settingsIcon));
+            this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), i5));
+            this.items.add(new Item(8, LocaleController.getString("Settings", NUM), i4));
             this.items.add((Object) null);
-            this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), inviteIcon));
-            this.items.add(new Item(13, LocaleController.getString("TelegramFeatures", NUM), helpIcon));
+            this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), i3));
+            this.items.add(new Item(13, LocaleController.getString("TelegramFeatures", NUM), i2));
         }
     }
 
-    static /* synthetic */ int lambda$resetItems$0(Integer o1, Integer o2) {
-        long l1 = (long) UserConfig.getInstance(o1.intValue()).loginTime;
-        long l2 = (long) UserConfig.getInstance(o2.intValue()).loginTime;
-        if (l1 > l2) {
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$resetItems$0(Integer num, Integer num2) {
+        long j = (long) UserConfig.getInstance(num.intValue()).loginTime;
+        long j2 = (long) UserConfig.getInstance(num2.intValue()).loginTime;
+        if (j > j2) {
             return 1;
         }
-        if (l1 < l2) {
-            return -1;
-        }
-        return 0;
+        return j < j2 ? -1 : 0;
     }
 
-    public int getId(int position) {
+    public int getId(int i) {
         Item item;
-        int position2 = position - 2;
+        int i2 = i - 2;
         if (this.accountsShown) {
-            position2 -= getAccountRowsCount();
+            i2 -= getAccountRowsCount();
         }
-        if (position2 < 0 || position2 >= this.items.size() || (item = this.items.get(position2)) == null) {
+        if (i2 < 0 || i2 >= this.items.size() || (item = this.items.get(i2)) == null) {
             return -1;
         }
         return item.id;
     }
 
     public int getFirstAccountPosition() {
-        if (!this.accountsShown) {
-            return -1;
-        }
-        return 2;
+        return !this.accountsShown ? -1 : 2;
     }
 
     public int getLastAccountPosition() {
@@ -301,14 +278,14 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         public int id;
         public String text;
 
-        public Item(int id2, String text2, int icon2) {
-            this.icon = icon2;
-            this.id = id2;
-            this.text = text2;
+        public Item(int i, String str, int i2) {
+            this.icon = i2;
+            this.id = i;
+            this.text = str;
         }
 
-        public void bind(DrawerActionCell actionCell) {
-            actionCell.setTextAndIcon(this.id, this.text, this.icon);
+        public void bind(DrawerActionCell drawerActionCell) {
+            drawerActionCell.setTextAndIcon(this.id, this.text, this.icon);
         }
     }
 }

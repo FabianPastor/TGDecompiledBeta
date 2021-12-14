@@ -7,172 +7,72 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.widget.RemoteViews;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.app.BundleCompat;
 import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 
 public final class CustomTabsIntent {
-    public static final String EXTRA_ACTION_BUTTON_BUNDLE = "android.support.customtabs.extra.ACTION_BUTTON_BUNDLE";
-    public static final String EXTRA_CLOSE_BUTTON_ICON = "android.support.customtabs.extra.CLOSE_BUTTON_ICON";
-    public static final String EXTRA_DEFAULT_SHARE_MENU_ITEM = "android.support.customtabs.extra.SHARE_MENU_ITEM";
-    public static final String EXTRA_ENABLE_INSTANT_APPS = "android.support.customtabs.extra.EXTRA_ENABLE_INSTANT_APPS";
-    public static final String EXTRA_ENABLE_URLBAR_HIDING = "android.support.customtabs.extra.ENABLE_URLBAR_HIDING";
-    public static final String EXTRA_EXIT_ANIMATION_BUNDLE = "android.support.customtabs.extra.EXIT_ANIMATION_BUNDLE";
-    public static final String EXTRA_MENU_ITEMS = "android.support.customtabs.extra.MENU_ITEMS";
-    public static final String EXTRA_REMOTEVIEWS = "android.support.customtabs.extra.EXTRA_REMOTEVIEWS";
-    public static final String EXTRA_REMOTEVIEWS_CLICKED_ID = "android.support.customtabs.extra.EXTRA_REMOTEVIEWS_CLICKED_ID";
-    public static final String EXTRA_REMOTEVIEWS_PENDINGINTENT = "android.support.customtabs.extra.EXTRA_REMOTEVIEWS_PENDINGINTENT";
-    public static final String EXTRA_REMOTEVIEWS_VIEW_IDS = "android.support.customtabs.extra.EXTRA_REMOTEVIEWS_VIEW_IDS";
-    public static final String EXTRA_SECONDARY_TOOLBAR_COLOR = "android.support.customtabs.extra.SECONDARY_TOOLBAR_COLOR";
-    public static final String EXTRA_SESSION = "android.support.customtabs.extra.SESSION";
-    public static final String EXTRA_TINT_ACTION_BUTTON = "android.support.customtabs.extra.TINT_ACTION_BUTTON";
-    public static final String EXTRA_TITLE_VISIBILITY_STATE = "android.support.customtabs.extra.TITLE_VISIBILITY";
-    public static final String EXTRA_TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR";
-    public static final String EXTRA_TOOLBAR_ITEMS = "android.support.customtabs.extra.TOOLBAR_ITEMS";
-    private static final String EXTRA_USER_OPT_OUT_FROM_CUSTOM_TABS = "android.support.customtabs.extra.user_opt_out";
-    public static final String KEY_DESCRIPTION = "android.support.customtabs.customaction.DESCRIPTION";
-    public static final String KEY_ICON = "android.support.customtabs.customaction.ICON";
-    public static final String KEY_ID = "android.support.customtabs.customaction.ID";
-    public static final String KEY_MENU_ITEM_TITLE = "android.support.customtabs.customaction.MENU_ITEM_TITLE";
-    public static final String KEY_PENDING_INTENT = "android.support.customtabs.customaction.PENDING_INTENT";
-    private static final int MAX_TOOLBAR_ITEMS = 5;
-    public static final int NO_TITLE = 0;
-    public static final int SHOW_PAGE_TITLE = 1;
-    public static final int TOOLBAR_ACTION_BUTTON_ID = 0;
     public final Intent intent;
     public final Bundle startAnimationBundle;
 
-    public void launchUrl(Context context, Uri url) {
-        this.intent.setData(url);
+    public void launchUrl(Context context, Uri uri) {
+        this.intent.setData(uri);
         ContextCompat.startActivity(context, this.intent, this.startAnimationBundle);
     }
 
-    private CustomTabsIntent(Intent intent2, Bundle startAnimationBundle2) {
+    private CustomTabsIntent(Intent intent2, Bundle bundle) {
         this.intent = intent2;
-        this.startAnimationBundle = startAnimationBundle2;
+        this.startAnimationBundle = bundle;
     }
 
     public static final class Builder {
-        private ArrayList<Bundle> mActionButtons;
-        private boolean mInstantAppsEnabled;
+        private ArrayList<Bundle> mActionButtons = null;
+        private boolean mInstantAppsEnabled = true;
         private final Intent mIntent;
-        private ArrayList<Bundle> mMenuItems;
-        private Bundle mStartAnimationBundle;
+        private ArrayList<Bundle> mMenuItems = null;
+        private Bundle mStartAnimationBundle = null;
 
-        public Builder() {
-            this((CustomTabsSession) null);
-        }
-
-        public Builder(CustomTabsSession session) {
+        public Builder(CustomTabsSession customTabsSession) {
             Intent intent = new Intent("android.intent.action.VIEW");
             this.mIntent = intent;
             IBinder iBinder = null;
-            this.mMenuItems = null;
-            this.mStartAnimationBundle = null;
-            this.mActionButtons = null;
-            this.mInstantAppsEnabled = true;
-            if (session != null) {
-                intent.setPackage(session.getComponentName().getPackageName());
+            if (customTabsSession != null) {
+                intent.setPackage(customTabsSession.getComponentName().getPackageName());
             }
             Bundle bundle = new Bundle();
-            BundleCompat.putBinder(bundle, "android.support.customtabs.extra.SESSION", session != null ? session.getBinder() : iBinder);
+            BundleCompat.putBinder(bundle, "android.support.customtabs.extra.SESSION", customTabsSession != null ? customTabsSession.getBinder() : iBinder);
             intent.putExtras(bundle);
         }
 
-        public Builder setToolbarColor(int color) {
-            this.mIntent.putExtra("android.support.customtabs.extra.TOOLBAR_COLOR", color);
+        public Builder setToolbarColor(int i) {
+            this.mIntent.putExtra("android.support.customtabs.extra.TOOLBAR_COLOR", i);
             return this;
         }
 
-        public Builder enableUrlBarHiding() {
-            this.mIntent.putExtra("android.support.customtabs.extra.ENABLE_URLBAR_HIDING", true);
+        public Builder setShowTitle(boolean z) {
+            this.mIntent.putExtra("android.support.customtabs.extra.TITLE_VISIBILITY", z ? 1 : 0);
             return this;
         }
 
-        public Builder setCloseButtonIcon(Bitmap icon) {
-            this.mIntent.putExtra("android.support.customtabs.extra.CLOSE_BUTTON_ICON", icon);
-            return this;
-        }
-
-        public Builder setShowTitle(boolean showTitle) {
-            this.mIntent.putExtra("android.support.customtabs.extra.TITLE_VISIBILITY", showTitle);
-            return this;
-        }
-
-        public Builder addMenuItem(String label, PendingIntent pendingIntent) {
+        public Builder addMenuItem(String str, PendingIntent pendingIntent) {
             if (this.mMenuItems == null) {
                 this.mMenuItems = new ArrayList<>();
             }
             Bundle bundle = new Bundle();
-            bundle.putString("android.support.customtabs.customaction.MENU_ITEM_TITLE", label);
+            bundle.putString("android.support.customtabs.customaction.MENU_ITEM_TITLE", str);
             bundle.putParcelable("android.support.customtabs.customaction.PENDING_INTENT", pendingIntent);
             this.mMenuItems.add(bundle);
             return this;
         }
 
-        public Builder addDefaultShareMenuItem() {
-            this.mIntent.putExtra("android.support.customtabs.extra.SHARE_MENU_ITEM", true);
-            return this;
-        }
-
-        public Builder setActionButton(Bitmap icon, String description, PendingIntent pendingIntent, boolean shouldTint) {
+        public Builder setActionButton(Bitmap bitmap, String str, PendingIntent pendingIntent, boolean z) {
             Bundle bundle = new Bundle();
             bundle.putInt("android.support.customtabs.customaction.ID", 0);
-            bundle.putParcelable("android.support.customtabs.customaction.ICON", icon);
-            bundle.putString("android.support.customtabs.customaction.DESCRIPTION", description);
+            bundle.putParcelable("android.support.customtabs.customaction.ICON", bitmap);
+            bundle.putString("android.support.customtabs.customaction.DESCRIPTION", str);
             bundle.putParcelable("android.support.customtabs.customaction.PENDING_INTENT", pendingIntent);
             this.mIntent.putExtra("android.support.customtabs.extra.ACTION_BUTTON_BUNDLE", bundle);
-            this.mIntent.putExtra("android.support.customtabs.extra.TINT_ACTION_BUTTON", shouldTint);
-            return this;
-        }
-
-        public Builder setActionButton(Bitmap icon, String description, PendingIntent pendingIntent) {
-            return setActionButton(icon, description, pendingIntent, false);
-        }
-
-        @Deprecated
-        public Builder addToolbarItem(int id, Bitmap icon, String description, PendingIntent pendingIntent) throws IllegalStateException {
-            if (this.mActionButtons == null) {
-                this.mActionButtons = new ArrayList<>();
-            }
-            if (this.mActionButtons.size() < 5) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("android.support.customtabs.customaction.ID", id);
-                bundle.putParcelable("android.support.customtabs.customaction.ICON", icon);
-                bundle.putString("android.support.customtabs.customaction.DESCRIPTION", description);
-                bundle.putParcelable("android.support.customtabs.customaction.PENDING_INTENT", pendingIntent);
-                this.mActionButtons.add(bundle);
-                return this;
-            }
-            throw new IllegalStateException("Exceeded maximum toolbar item count of 5");
-        }
-
-        public Builder setSecondaryToolbarColor(int color) {
-            this.mIntent.putExtra("android.support.customtabs.extra.SECONDARY_TOOLBAR_COLOR", color);
-            return this;
-        }
-
-        public Builder setSecondaryToolbarViews(RemoteViews remoteViews, int[] clickableIDs, PendingIntent pendingIntent) {
-            this.mIntent.putExtra("android.support.customtabs.extra.EXTRA_REMOTEVIEWS", remoteViews);
-            this.mIntent.putExtra("android.support.customtabs.extra.EXTRA_REMOTEVIEWS_VIEW_IDS", clickableIDs);
-            this.mIntent.putExtra("android.support.customtabs.extra.EXTRA_REMOTEVIEWS_PENDINGINTENT", pendingIntent);
-            return this;
-        }
-
-        public Builder setInstantAppsEnabled(boolean enabled) {
-            this.mInstantAppsEnabled = enabled;
-            return this;
-        }
-
-        public Builder setStartAnimations(Context context, int enterResId, int exitResId) {
-            this.mStartAnimationBundle = ActivityOptionsCompat.makeCustomAnimation(context, enterResId, exitResId).toBundle();
-            return this;
-        }
-
-        public Builder setExitAnimations(Context context, int enterResId, int exitResId) {
-            this.mIntent.putExtra("android.support.customtabs.extra.EXIT_ANIMATION_BUNDLE", ActivityOptionsCompat.makeCustomAnimation(context, enterResId, exitResId).toBundle());
+            this.mIntent.putExtra("android.support.customtabs.extra.TINT_ACTION_BUTTON", z);
             return this;
         }
 
@@ -190,27 +90,7 @@ public final class CustomTabsIntent {
         }
     }
 
-    public static int getMaxToolbarItems() {
-        return 5;
-    }
-
-    public static Intent setAlwaysUseBrowserUI(Intent intent2) {
-        if (intent2 == null) {
-            intent2 = new Intent("android.intent.action.VIEW");
-        }
-        intent2.addFlags(NUM);
-        intent2.putExtra("android.support.customtabs.extra.user_opt_out", true);
-        return intent2;
-    }
-
     public void setUseNewTask() {
         this.intent.addFlags(NUM);
-    }
-
-    public static boolean shouldAlwaysUseBrowserUI(Intent intent2) {
-        if (!intent2.getBooleanExtra("android.support.customtabs.extra.user_opt_out", false) || (intent2.getFlags() & NUM) == 0) {
-            return false;
-        }
-        return true;
     }
 }

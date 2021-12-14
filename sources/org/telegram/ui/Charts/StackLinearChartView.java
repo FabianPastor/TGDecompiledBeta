@@ -5,13 +5,9 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Path;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Charts.data.ChartData;
 import org.telegram.ui.Charts.data.StackLinearChartData;
-import org.telegram.ui.Charts.view_data.ChartHorizontalLinesData;
-import org.telegram.ui.Charts.view_data.LineViewData;
 import org.telegram.ui.Charts.view_data.StackLinearViewData;
-import org.telegram.ui.Charts.view_data.TransitionParams;
 
 public class StackLinearChartView<T extends StackLinearViewData> extends BaseChartView<StackLinearChartData, T> {
     private float[] mapPoints = new float[2];
@@ -19,6 +15,15 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
     Path ovalPath = new Path();
     boolean[] skipPoints;
     float[] startFromY;
+
+    public int findMaxValue(int i, int i2) {
+        return 100;
+    }
+
+    /* access modifiers changed from: protected */
+    public float getMinDistance() {
+        return 0.1f;
+    }
 
     public StackLinearChartView(Context context) {
         super(context);
@@ -32,27 +37,39 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x051e  */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x069a  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x03a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x03f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x03fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x03fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:122:0x0404 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x0444  */
+    /* JADX WARNING: Removed duplicated region for block: B:143:0x045a  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x045e  */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x0468  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x0474  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x01fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x0203  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x0214  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x021d  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x0251  */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x0254  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x0261 A[ADDED_TO_REGION] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void drawChart(android.graphics.Canvas r52) {
+    public void drawChart(android.graphics.Canvas r36) {
         /*
-            r51 = this;
-            r0 = r51
-            r1 = r52
-            org.telegram.ui.Charts.data.ChartData r2 = r0.chartData
-            if (r2 == 0) goto L_0x0743
+            r35 = this;
+            r0 = r35
+            r1 = r36
+            T r2 = r0.chartData
+            if (r2 == 0) goto L_0x0625
             float r2 = r0.chartWidth
             org.telegram.ui.Charts.ChartPickerDelegate r3 = r0.pickerDelegate
-            float r3 = r3.pickerEnd
-            org.telegram.ui.Charts.ChartPickerDelegate r4 = r0.pickerDelegate
-            float r4 = r4.pickerStart
-            float r3 = r3 - r4
-            float r2 = r2 / r3
-            org.telegram.ui.Charts.ChartPickerDelegate r3 = r0.pickerDelegate
+            float r4 = r3.pickerEnd
             float r3 = r3.pickerStart
+            float r4 = r4 - r3
+            float r2 = r2 / r4
             float r3 = r3 * r2
-            float r4 = HORIZONTAL_PADDING
+            float r4 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
             float r3 = r3 - r4
             android.graphics.RectF r4 = r0.chartArea
             float r4 = r4.centerX()
@@ -63,1149 +80,1158 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             float r6 = (float) r6
             float r5 = r5 + r6
             r6 = 0
-        L_0x0032:
-            java.util.ArrayList r7 = r0.lines
-            int r7 = r7.size()
-            if (r6 >= r7) goto L_0x0057
-            java.util.ArrayList r7 = r0.lines
-            java.lang.Object r7 = r7.get(r6)
-            org.telegram.ui.Charts.view_data.StackLinearViewData r7 = (org.telegram.ui.Charts.view_data.StackLinearViewData) r7
-            android.graphics.Path r7 = r7.chartPath
-            r7.reset()
-            java.util.ArrayList r7 = r0.lines
-            java.lang.Object r7 = r7.get(r6)
-            org.telegram.ui.Charts.view_data.StackLinearViewData r7 = (org.telegram.ui.Charts.view_data.StackLinearViewData) r7
-            android.graphics.Path r7 = r7.chartPathPicker
-            r7.reset()
-            int r6 = r6 + 1
-            goto L_0x0032
-        L_0x0057:
-            r52.save()
-            boolean[] r6 = r0.skipPoints
-            if (r6 == 0) goto L_0x006b
-            int r6 = r6.length
-            org.telegram.ui.Charts.data.ChartData r7 = r0.chartData
+            r7 = 0
+        L_0x002d:
+            java.util.ArrayList<L> r8 = r0.lines
+            int r8 = r8.size()
+            if (r7 >= r8) goto L_0x0052
+            java.util.ArrayList<L> r8 = r0.lines
+            java.lang.Object r8 = r8.get(r7)
+            org.telegram.ui.Charts.view_data.StackLinearViewData r8 = (org.telegram.ui.Charts.view_data.StackLinearViewData) r8
+            android.graphics.Path r8 = r8.chartPath
+            r8.reset()
+            java.util.ArrayList<L> r8 = r0.lines
+            java.lang.Object r8 = r8.get(r7)
+            org.telegram.ui.Charts.view_data.StackLinearViewData r8 = (org.telegram.ui.Charts.view_data.StackLinearViewData) r8
+            android.graphics.Path r8 = r8.chartPathPicker
+            r8.reset()
+            int r7 = r7 + 1
+            goto L_0x002d
+        L_0x0052:
+            r36.save()
+            boolean[] r7 = r0.skipPoints
+            if (r7 == 0) goto L_0x0066
+            int r7 = r7.length
+            T r8 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r8 = (org.telegram.ui.Charts.data.StackLinearChartData) r8
+            java.util.ArrayList<org.telegram.ui.Charts.data.ChartData$Line> r8 = r8.lines
+            int r8 = r8.size()
+            if (r7 >= r8) goto L_0x0082
+        L_0x0066:
+            T r7 = r0.chartData
             org.telegram.ui.Charts.data.StackLinearChartData r7 = (org.telegram.ui.Charts.data.StackLinearChartData) r7
-            java.util.ArrayList r7 = r7.lines
+            java.util.ArrayList<org.telegram.ui.Charts.data.ChartData$Line> r7 = r7.lines
             int r7 = r7.size()
-            if (r6 >= r7) goto L_0x0087
-        L_0x006b:
-            org.telegram.ui.Charts.data.ChartData r6 = r0.chartData
-            org.telegram.ui.Charts.data.StackLinearChartData r6 = (org.telegram.ui.Charts.data.StackLinearChartData) r6
-            java.util.ArrayList r6 = r6.lines
-            int r6 = r6.size()
-            boolean[] r6 = new boolean[r6]
-            r0.skipPoints = r6
-            org.telegram.ui.Charts.data.ChartData r6 = r0.chartData
-            org.telegram.ui.Charts.data.StackLinearChartData r6 = (org.telegram.ui.Charts.data.StackLinearChartData) r6
-            java.util.ArrayList r6 = r6.lines
-            int r6 = r6.size()
-            float[] r6 = new float[r6]
-            r0.startFromY = r6
-        L_0x0087:
-            r6 = 0
-            r7 = 255(0xff, float:3.57E-43)
-            r8 = 0
-            int r9 = r0.transitionMode
+            boolean[] r7 = new boolean[r7]
+            r0.skipPoints = r7
+            T r7 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r7 = (org.telegram.ui.Charts.data.StackLinearChartData) r7
+            java.util.ArrayList<org.telegram.ui.Charts.data.ChartData$Line> r7 = r7.lines
+            int r7 = r7.size()
+            float[] r7 = new float[r7]
+            r0.startFromY = r7
+        L_0x0082:
+            int r7 = r0.transitionMode
+            r8 = 3
             r10 = 2
             r11 = 1065353216(0x3var_, float:1.0)
-            if (r9 != r10) goto L_0x0113
-            org.telegram.ui.Charts.view_data.TransitionParams r9 = r0.transitionParams
-            float r9 = r9.progress
-            r12 = 1058642330(0x3var_a, float:0.6)
-            float r9 = r9 / r12
-            int r8 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
-            if (r8 <= 0) goto L_0x00a1
-            r8 = 1065353216(0x3var_, float:1.0)
-            goto L_0x00a2
-        L_0x00a1:
-            r8 = r9
-        L_0x00a2:
-            android.graphics.Path r9 = r0.ovalPath
-            r9.reset()
-            android.graphics.RectF r9 = r0.chartArea
-            float r9 = r9.width()
-            android.graphics.RectF r12 = r0.chartArea
-            float r12 = r12.height()
-            int r9 = (r9 > r12 ? 1 : (r9 == r12 ? 0 : -1))
-            if (r9 <= 0) goto L_0x00be
-            android.graphics.RectF r9 = r0.chartArea
-            float r9 = r9.width()
-            goto L_0x00c4
-        L_0x00be:
-            android.graphics.RectF r9 = r0.chartArea
-            float r9 = r9.height()
-        L_0x00c4:
-            android.graphics.RectF r12 = r0.chartArea
-            float r12 = r12.width()
+            if (r7 != r10) goto L_0x0109
+            org.telegram.ui.Charts.view_data.TransitionParams r7 = r0.transitionParams
+            float r7 = r7.progress
+            r13 = 1058642330(0x3var_a, float:0.6)
+            float r7 = r7 / r13
+            int r13 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1))
+            if (r13 <= 0) goto L_0x0098
+            r7 = 1065353216(0x3var_, float:1.0)
+        L_0x0098:
+            android.graphics.Path r13 = r0.ovalPath
+            r13.reset()
+            android.graphics.RectF r13 = r0.chartArea
+            float r13 = r13.width()
+            android.graphics.RectF r14 = r0.chartArea
+            float r14 = r14.height()
+            int r13 = (r13 > r14 ? 1 : (r13 == r14 ? 0 : -1))
+            if (r13 <= 0) goto L_0x00b4
+            android.graphics.RectF r13 = r0.chartArea
+            float r13 = r13.width()
+            goto L_0x00ba
+        L_0x00b4:
             android.graphics.RectF r13 = r0.chartArea
             float r13 = r13.height()
-            int r12 = (r12 > r13 ? 1 : (r12 == r13 ? 0 : -1))
-            if (r12 <= 0) goto L_0x00db
-            android.graphics.RectF r12 = r0.chartArea
-            float r12 = r12.height()
-            goto L_0x00e1
-        L_0x00db:
-            android.graphics.RectF r12 = r0.chartArea
-            float r12 = r12.width()
-        L_0x00e1:
-            r13 = 1055286886(0x3ee66666, float:0.45)
-            float r12 = r12 * r13
-            float r13 = r9 - r12
-            r14 = 1073741824(0x40000000, float:2.0)
-            float r13 = r13 / r14
-            org.telegram.ui.Charts.view_data.TransitionParams r14 = r0.transitionParams
-            float r14 = r14.progress
-            float r14 = r11 - r14
-            float r13 = r13 * r14
-            float r13 = r13 + r12
-            android.graphics.RectF r14 = new android.graphics.RectF
-            r14.<init>()
-            float r15 = r4 - r13
-            float r11 = r5 - r13
-            float r10 = r4 + r13
-            r17 = r6
-            float r6 = r5 + r13
-            r14.set(r15, r11, r10, r6)
-            android.graphics.Path r6 = r0.ovalPath
-            android.graphics.Path$Direction r10 = android.graphics.Path.Direction.CW
-            r6.addRoundRect(r14, r13, r13, r10)
-            android.graphics.Path r6 = r0.ovalPath
-            r1.clipPath(r6)
-            goto L_0x0124
-        L_0x0113:
-            r17 = r6
-            int r6 = r0.transitionMode
-            r9 = 3
-            if (r6 != r9) goto L_0x0124
-            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
-            float r6 = r6.progress
+        L_0x00ba:
+            android.graphics.RectF r14 = r0.chartArea
+            float r14 = r14.width()
+            android.graphics.RectF r15 = r0.chartArea
+            float r15 = r15.height()
+            int r14 = (r14 > r15 ? 1 : (r14 == r15 ? 0 : -1))
+            if (r14 <= 0) goto L_0x00d1
+            android.graphics.RectF r14 = r0.chartArea
+            float r14 = r14.height()
+            goto L_0x00d7
+        L_0x00d1:
+            android.graphics.RectF r14 = r0.chartArea
+            float r14 = r14.width()
+        L_0x00d7:
+            r15 = 1055286886(0x3ee66666, float:0.45)
+            float r14 = r14 * r15
+            float r13 = r13 - r14
+            r15 = 1073741824(0x40000000, float:2.0)
+            float r13 = r13 / r15
+            org.telegram.ui.Charts.view_data.TransitionParams r15 = r0.transitionParams
+            float r15 = r15.progress
+            float r15 = r11 - r15
+            float r13 = r13 * r15
+            float r14 = r14 + r13
+            android.graphics.RectF r13 = new android.graphics.RectF
+            r13.<init>()
+            float r15 = r4 - r14
+            float r9 = r5 - r14
+            float r11 = r4 + r14
+            float r12 = r5 + r14
+            r13.set(r15, r9, r11, r12)
+            android.graphics.Path r9 = r0.ovalPath
+            android.graphics.Path$Direction r11 = android.graphics.Path.Direction.CW
+            r9.addRoundRect(r13, r14, r14, r11)
+            android.graphics.Path r9 = r0.ovalPath
+            r1.clipPath(r9)
+            r9 = r7
+            r7 = 255(0xff, float:3.57E-43)
+            goto L_0x0118
+        L_0x0109:
+            if (r7 != r8) goto L_0x0115
+            org.telegram.ui.Charts.view_data.TransitionParams r7 = r0.transitionParams
+            float r7 = r7.progress
             r9 = 1132396544(0x437var_, float:255.0)
-            float r6 = r6 * r9
-            int r7 = (int) r6
-            goto L_0x0125
-        L_0x0124:
-        L_0x0125:
-            r6 = 0
+            float r7 = r7 * r9
+            int r7 = (int) r7
+            goto L_0x0117
+        L_0x0115:
+            r7 = 255(0xff, float:3.57E-43)
+        L_0x0117:
             r9 = 0
-            r10 = 0
-            r11 = 0
-            org.telegram.ui.Charts.data.ChartData r12 = r0.chartData
+        L_0x0118:
+            T r11 = r0.chartData
+            r12 = r11
             org.telegram.ui.Charts.data.StackLinearChartData r12 = (org.telegram.ui.Charts.data.StackLinearChartData) r12
             float[] r12 = r12.xPercentage
             int r12 = r12.length
             r13 = 1
-            r14 = 2
-            if (r12 >= r14) goto L_0x0137
-            r12 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0141
-        L_0x0137:
-            org.telegram.ui.Charts.data.ChartData r12 = r0.chartData
-            org.telegram.ui.Charts.data.StackLinearChartData r12 = (org.telegram.ui.Charts.data.StackLinearChartData) r12
-            float[] r12 = r12.xPercentage
-            r12 = r12[r13]
-            float r12 = r12 * r2
-        L_0x0141:
-            float r14 = HORIZONTAL_PADDING
-            float r14 = r14 / r12
-            int r14 = (int) r14
-            int r14 = r14 + r13
-            int r15 = r0.startXIndex
-            int r15 = r15 - r14
-            int r15 = r15 - r13
-            r13 = 0
-            int r15 = java.lang.Math.max(r13, r15)
-            org.telegram.ui.Charts.data.ChartData r13 = r0.chartData
-            org.telegram.ui.Charts.data.StackLinearChartData r13 = (org.telegram.ui.Charts.data.StackLinearChartData) r13
-            float[] r13 = r13.xPercentage
-            int r13 = r13.length
-            r18 = 1
-            int r13 = r13 + -1
-            r20 = r6
-            int r6 = r0.endXIndex
-            int r6 = r6 + r14
-            int r6 = r6 + 1
-            int r6 = java.lang.Math.min(r13, r6)
-            r13 = 0
+            if (r12 >= r10) goto L_0x0126
+            r11 = 1065353216(0x3var_, float:1.0)
+            goto L_0x012e
+        L_0x0126:
+            org.telegram.ui.Charts.data.StackLinearChartData r11 = (org.telegram.ui.Charts.data.StackLinearChartData) r11
+            float[] r11 = r11.xPercentage
+            r11 = r11[r13]
+            float r11 = r11 * r2
+        L_0x012e:
+            float r12 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
+            float r12 = r12 / r11
+            int r11 = (int) r12
+            int r11 = r11 + r13
+            int r12 = r0.startXIndex
+            int r12 = r12 - r11
+            int r12 = r12 - r13
+            int r12 = java.lang.Math.max(r6, r12)
+            T r14 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r14 = (org.telegram.ui.Charts.data.StackLinearChartData) r14
+            float[] r14 = r14.xPercentage
+            int r14 = r14.length
+            int r14 = r14 - r13
+            int r15 = r0.endXIndex
+            int r15 = r15 + r11
+            int r15 = r15 + r13
+            int r11 = java.lang.Math.min(r14, r15)
+            r14 = r12
+            r8 = 0
+            r15 = 0
+            r18 = 0
+        L_0x0150:
+            if (r14 > r11) goto L_0x05d5
+            r10 = 0
+            r20 = 0
             r21 = 0
-            r22 = r15
-            r48 = r21
-            r21 = r9
-            r9 = r48
-            r49 = r22
-            r22 = r10
-            r10 = r49
+        L_0x0157:
+            java.util.ArrayList<L> r13 = r0.lines
+            int r13 = r13.size()
+            if (r6 >= r13) goto L_0x0190
+            java.util.ArrayList<L> r13 = r0.lines
+            java.lang.Object r13 = r13.get(r6)
+            org.telegram.ui.Charts.view_data.LineViewData r13 = (org.telegram.ui.Charts.view_data.LineViewData) r13
+            r22 = r7
+            boolean r7 = r13.enabled
+            if (r7 != 0) goto L_0x0176
+            float r7 = r13.alpha
+            r17 = 0
+            int r7 = (r7 > r17 ? 1 : (r7 == r17 ? 0 : -1))
+            if (r7 != 0) goto L_0x0176
+            goto L_0x018b
         L_0x0176:
-            if (r10 > r6) goto L_0x06db
-            r23 = 0
-            r24 = 0
-            r25 = 0
-            r26 = 0
-            r27 = 0
-            r48 = r25
-            r25 = r11
-            r11 = r48
-            r49 = r26
-            r26 = r12
-            r12 = r49
-            r50 = r27
-            r27 = r14
-            r14 = r50
+            org.telegram.ui.Charts.data.ChartData$Line r7 = r13.line
+            int[] r7 = r7.y
+            r21 = r7[r14]
+            if (r21 <= 0) goto L_0x0189
+            r7 = r7[r14]
+            float r7 = (float) r7
+            float r13 = r13.alpha
+            float r7 = r7 * r13
+            float r20 = r20 + r7
+            int r10 = r10 + 1
+        L_0x0189:
+            r21 = r6
+        L_0x018b:
+            int r6 = r6 + 1
+            r7 = r22
+            goto L_0x0157
+        L_0x0190:
+            r22 = r7
+            r6 = 0
+            r7 = 0
         L_0x0194:
-            r28 = r7
-            java.util.ArrayList r7 = r0.lines
-            int r7 = r7.size()
-            if (r14 >= r7) goto L_0x01dc
-            java.util.ArrayList r7 = r0.lines
-            java.lang.Object r7 = r7.get(r14)
-            org.telegram.ui.Charts.view_data.LineViewData r7 = (org.telegram.ui.Charts.view_data.LineViewData) r7
-            boolean r1 = r7.enabled
-            if (r1 != 0) goto L_0x01b5
-            float r1 = r7.alpha
-            r29 = 0
-            int r1 = (r1 > r29 ? 1 : (r1 == r29 ? 0 : -1))
-            if (r1 != 0) goto L_0x01b5
-            r30 = r9
-            goto L_0x01d3
-        L_0x01b5:
-            org.telegram.ui.Charts.data.ChartData$Line r1 = r7.line
-            int[] r1 = r1.y
-            r1 = r1[r10]
-            if (r1 <= 0) goto L_0x01cf
-            org.telegram.ui.Charts.data.ChartData$Line r1 = r7.line
-            int[] r1 = r1.y
-            r1 = r1[r10]
-            float r1 = (float) r1
-            r30 = r9
-            float r9 = r7.alpha
-            float r1 = r1 * r9
-            float r24 = r24 + r1
-            int r12 = r12 + 1
-            goto L_0x01d1
-        L_0x01cf:
-            r30 = r9
-        L_0x01d1:
-            r1 = r14
-            r11 = r1
-        L_0x01d3:
-            int r14 = r14 + 1
-            r1 = r52
-            r7 = r28
-            r9 = r30
-            goto L_0x0194
-        L_0x01dc:
-            r30 = r9
-            r1 = 0
-        L_0x01df:
-            java.util.ArrayList r7 = r0.lines
-            int r7 = r7.size()
-            if (r1 >= r7) goto L_0x06bc
-            java.util.ArrayList r7 = r0.lines
-            java.lang.Object r7 = r7.get(r1)
-            org.telegram.ui.Charts.view_data.LineViewData r7 = (org.telegram.ui.Charts.view_data.LineViewData) r7
-            boolean r14 = r7.enabled
-            if (r14 != 0) goto L_0x020b
-            float r14 = r7.alpha
-            r29 = 0
-            int r14 = (r14 > r29 ? 1 : (r14 == r29 ? 0 : -1))
-            if (r14 != 0) goto L_0x020b
-            r34 = r2
-            r35 = r3
-            r46 = r4
-            r14 = r6
-            r45 = r8
-            r31 = r12
-            r41 = r15
-            r3 = 0
-            goto L_0x06ab
-        L_0x020b:
-            org.telegram.ui.Charts.data.ChartData$Line r14 = r7.line
-            int[] r14 = r14.y
-            r30 = r9
-            r9 = 1
-            if (r12 != r9) goto L_0x0221
-            r9 = r14[r10]
-            if (r9 != 0) goto L_0x021c
-            r9 = 0
-            r31 = r12
-            goto L_0x0235
-        L_0x021c:
-            float r9 = r7.alpha
-            r31 = r12
-            goto L_0x0235
-        L_0x0221:
-            r9 = 0
-            int r31 = (r24 > r9 ? 1 : (r24 == r9 ? 0 : -1))
-            if (r31 != 0) goto L_0x022a
-            r9 = 0
-            r31 = r12
-            goto L_0x0235
-        L_0x022a:
-            r9 = r14[r10]
-            float r9 = (float) r9
-            r31 = r12
-            float r12 = r7.alpha
-            float r9 = r9 * r12
-            float r9 = r9 / r24
-        L_0x0235:
-            org.telegram.ui.Charts.data.ChartData r12 = r0.chartData
-            org.telegram.ui.Charts.data.StackLinearChartData r12 = (org.telegram.ui.Charts.data.StackLinearChartData) r12
-            float[] r12 = r12.xPercentage
-            r12 = r12[r10]
-            float r12 = r12 * r2
-            float r12 = r12 - r3
-            if (r10 != r6) goto L_0x024a
-            r32 = r13
-            int r13 = r51.getMeasuredWidth()
-            float r13 = (float) r13
-            goto L_0x0259
-        L_0x024a:
-            r32 = r13
-            org.telegram.ui.Charts.data.ChartData r13 = r0.chartData
-            org.telegram.ui.Charts.data.StackLinearChartData r13 = (org.telegram.ui.Charts.data.StackLinearChartData) r13
-            float[] r13 = r13.xPercentage
-            int r33 = r10 + 1
-            r13 = r13[r33]
-            float r13 = r13 * r2
-            float r13 = r13 - r3
-        L_0x0259:
-            r29 = 0
-            int r33 = (r9 > r29 ? 1 : (r9 == r29 ? 0 : -1))
-            if (r33 != 0) goto L_0x0263
-            if (r1 != r11) goto L_0x0263
-            r17 = 1
-        L_0x0263:
-            int r33 = r51.getMeasuredHeight()
-            r34 = r2
-            int r2 = r0.chartBottom
-            int r33 = r33 - r2
-            int r2 = SIGNATURE_TEXT_HEIGHT
-            int r2 = r33 - r2
-            float r2 = (float) r2
-            float r2 = r2 * r9
-            int r33 = r51.getMeasuredHeight()
-            r35 = r3
-            int r3 = r0.chartBottom
-            int r3 = r33 - r3
-            float r3 = (float) r3
-            float r3 = r3 - r2
-            float r3 = r3 - r23
-            r33 = r2
-            float[] r2 = r0.startFromY
-            r2[r1] = r3
-            r2 = 0
-            int r36 = r51.getMeasuredHeight()
-            r37 = r2
-            int r2 = r0.chartBottom
-            int r2 = r36 - r2
-            float r2 = (float) r2
-            r36 = r12
-            if (r10 != r6) goto L_0x029b
-            r30 = r12
-            goto L_0x029f
-        L_0x029b:
-            if (r10 != r15) goto L_0x029f
-            r32 = r12
-        L_0x029f:
-            r38 = r6
-            int r6 = r0.transitionMode
-            r39 = 1119092736(0x42b40000, float:90.0)
-            r40 = r14
-            r14 = 2
-            if (r6 != r14) goto L_0x042f
-            if (r1 == r11) goto L_0x042f
-            int r6 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
-            if (r6 >= 0) goto L_0x02c1
-            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
-            float[] r6 = r6.startX
-            r6 = r6[r1]
-            org.telegram.ui.Charts.view_data.TransitionParams r14 = r0.transitionParams
-            float[] r14 = r14.startY
-            r14 = r14[r1]
-            r22 = r6
-            r25 = r14
-            goto L_0x02d1
-        L_0x02c1:
-            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
-            float[] r6 = r6.endX
-            r6 = r6[r1]
-            org.telegram.ui.Charts.view_data.TransitionParams r14 = r0.transitionParams
-            float[] r14 = r14.endY
-            r14 = r14[r1]
-            r22 = r6
-            r25 = r14
-        L_0x02d1:
-            float r20 = r4 - r22
-            float r21 = r5 - r25
-            float r6 = r12 - r22
-            float r6 = r6 * r21
-            float r6 = r6 / r20
-            float r6 = r6 + r25
-            r14 = 1065353216(0x3var_, float:1.0)
-            float r16 = r14 - r8
-            float r16 = r16 * r3
-            float r41 = r6 * r8
-            float r3 = r16 + r41
-            float r41 = r14 - r8
-            float r41 = r41 * r2
-            float r14 = r6 * r8
-            float r41 = r41 + r14
-            float r2 = r21 / r20
-            r14 = 0
-            int r42 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1))
-            if (r42 <= 0) goto L_0x0305
-            r42 = r6
-            r14 = r7
-            double r6 = (double) r2
-            double r6 = java.lang.Math.atan(r6)
-            double r6 = -r6
-            double r6 = java.lang.Math.toDegrees(r6)
-            float r6 = (float) r6
-            goto L_0x0316
-        L_0x0305:
-            r42 = r6
-            r14 = r7
-            float r6 = java.lang.Math.abs(r2)
-            double r6 = (double) r6
-            double r6 = java.lang.Math.atan(r6)
-            double r6 = java.lang.Math.toDegrees(r6)
-            float r6 = (float) r6
-        L_0x0316:
-            float r6 = r6 - r39
-            int r7 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
-            if (r7 < 0) goto L_0x037e
-            float[] r7 = r0.mapPoints
-            r19 = 0
-            r7[r19] = r12
-            r18 = 1
-            r7[r18] = r3
-            android.graphics.Matrix r7 = r0.matrix
-            r7.reset()
-            android.graphics.Matrix r7 = r0.matrix
-            r43 = r2
-            org.telegram.ui.Charts.view_data.TransitionParams r2 = r0.transitionParams
-            float r2 = r2.progress
-            float r2 = r2 * r6
-            r7.postRotate(r2, r4, r5)
-            android.graphics.Matrix r2 = r0.matrix
-            float[] r7 = r0.mapPoints
-            r2.mapPoints(r7)
-            float[] r2 = r0.mapPoints
-            r7 = 0
-            r12 = r2[r7]
-            r7 = 1
-            r3 = r2[r7]
-            int r7 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
-            if (r7 >= 0) goto L_0x034d
-            r7 = r4
-            r12 = r7
-        L_0x034d:
-            r7 = 0
-            r2[r7] = r36
-            r7 = 1
-            r2[r7] = r41
-            android.graphics.Matrix r2 = r0.matrix
-            r2.reset()
-            android.graphics.Matrix r2 = r0.matrix
-            org.telegram.ui.Charts.view_data.TransitionParams r7 = r0.transitionParams
-            float r7 = r7.progress
-            float r7 = r7 * r6
-            r2.postRotate(r7, r4, r5)
-            android.graphics.Matrix r2 = r0.matrix
-            float[] r7 = r0.mapPoints
-            r2.mapPoints(r7)
-            float[] r2 = r0.mapPoints
-            r7 = 1
-            r2 = r2[r7]
-            int r7 = (r36 > r4 ? 1 : (r36 == r4 ? 0 : -1))
-            if (r7 >= 0) goto L_0x0375
-            r36 = r4
-        L_0x0375:
-            r7 = r3
-            r45 = r8
-            r3 = r2
-            r2 = r6
-            r6 = r36
-            goto L_0x0438
-        L_0x037e:
-            r43 = r2
-            int r2 = (r13 > r4 ? 1 : (r13 == r4 ? 0 : -1))
-            if (r2 < 0) goto L_0x03a2
-            r2 = 1065353216(0x3var_, float:1.0)
-            float r7 = r2 - r8
-            float r7 = r7 * r12
-            float r16 = r4 * r8
-            float r7 = r7 + r16
-            r12 = r7
-            r36 = r7
-            float r7 = r2 - r8
-            float r7 = r7 * r3
-            float r2 = r5 * r8
-            float r7 = r7 + r2
-            r3 = r7
-            r2 = r7
-            r45 = r8
-            r3 = r2
-            r2 = r6
-            r6 = r36
-            goto L_0x0438
-        L_0x03a2:
-            float[] r2 = r0.mapPoints
-            r7 = 0
-            r2[r7] = r12
-            r7 = 1
-            r2[r7] = r3
-            android.graphics.Matrix r2 = r0.matrix
-            r2.reset()
-            android.graphics.Matrix r2 = r0.matrix
-            org.telegram.ui.Charts.view_data.TransitionParams r7 = r0.transitionParams
-            float r7 = r7.progress
-            float r7 = r7 * r6
-            r44 = r3
-            org.telegram.ui.Charts.view_data.TransitionParams r3 = r0.transitionParams
-            float r3 = r3.progress
-            r45 = r8
-            org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
-            float[] r8 = r8.angle
-            r8 = r8[r1]
-            float r3 = r3 * r8
-            float r7 = r7 + r3
-            r2.postRotate(r7, r4, r5)
-            android.graphics.Matrix r2 = r0.matrix
-            float[] r3 = r0.mapPoints
-            r2.mapPoints(r3)
-            float[] r2 = r0.mapPoints
-            r3 = 0
-            r12 = r2[r3]
-            r3 = 1
-            r7 = r2[r3]
-            int r3 = (r13 > r4 ? 1 : (r13 == r4 ? 0 : -1))
-            if (r3 < 0) goto L_0x03f3
-            org.telegram.ui.Charts.view_data.TransitionParams r3 = r0.transitionParams
-            float r3 = r3.progress
-            r8 = 1065353216(0x3var_, float:1.0)
-            float r3 = r8 - r3
-            float r3 = r3 * r36
-            org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
-            float r8 = r8.progress
-            float r8 = r8 * r4
-            float r3 = r3 + r8
-            r8 = 0
-            r2[r8] = r3
-            goto L_0x03f6
-        L_0x03f3:
-            r8 = 0
-            r2[r8] = r36
-        L_0x03f6:
-            float[] r2 = r0.mapPoints
-            r3 = 1
-            r2[r3] = r41
-            android.graphics.Matrix r2 = r0.matrix
-            r2.reset()
-            android.graphics.Matrix r2 = r0.matrix
-            org.telegram.ui.Charts.view_data.TransitionParams r3 = r0.transitionParams
-            float r3 = r3.progress
-            float r3 = r3 * r6
-            org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
-            float r8 = r8.progress
-            r37 = r6
-            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
-            float[] r6 = r6.angle
-            r6 = r6[r1]
-            float r8 = r8 * r6
-            float r3 = r3 + r8
-            r2.postRotate(r3, r4, r5)
-            android.graphics.Matrix r2 = r0.matrix
-            float[] r3 = r0.mapPoints
-            r2.mapPoints(r3)
-            float[] r2 = r0.mapPoints
-            r3 = 0
-            r36 = r2[r3]
-            r3 = 1
-            r2 = r2[r3]
-            r3 = r2
-            r6 = r36
-            r2 = r37
-            goto L_0x0438
-        L_0x042f:
-            r14 = r7
-            r45 = r8
-            r7 = r3
-            r6 = r36
-            r3 = r2
-            r2 = r37
-        L_0x0438:
-            if (r10 != r15) goto L_0x049d
-            r8 = 0
-            r36 = r13
-            int r13 = r51.getMeasuredHeight()
-            float r13 = (float) r13
-            r37 = r14
-            int r14 = r0.transitionMode
-            r41 = r15
-            r15 = 2
-            if (r14 != r15) goto L_0x048a
-            if (r1 == r11) goto L_0x048a
-            float[] r14 = r0.mapPoints
-            float r15 = r8 - r4
-            r19 = 0
-            r14[r19] = r15
-            r15 = 1
-            r14[r15] = r13
-            android.graphics.Matrix r14 = r0.matrix
-            r14.reset()
-            android.graphics.Matrix r14 = r0.matrix
-            org.telegram.ui.Charts.view_data.TransitionParams r15 = r0.transitionParams
-            float r15 = r15.progress
-            float r15 = r15 * r2
-            r42 = r2
-            org.telegram.ui.Charts.view_data.TransitionParams r2 = r0.transitionParams
-            float r2 = r2.progress
-            r43 = r8
-            org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
-            float[] r8 = r8.angle
-            r8 = r8[r1]
-            float r2 = r2 * r8
-            float r15 = r15 + r2
-            r14.postRotate(r15, r4, r5)
-            android.graphics.Matrix r2 = r0.matrix
-            float[] r8 = r0.mapPoints
-            r2.mapPoints(r8)
-            float[] r2 = r0.mapPoints
-            r8 = 0
-            r14 = r2[r8]
-            r8 = 1
-            r13 = r2[r8]
-            r8 = r14
-            goto L_0x0490
-        L_0x048a:
-            r42 = r2
-            r43 = r8
-            r8 = r43
-        L_0x0490:
-            r2 = r37
-            android.graphics.Path r14 = r2.chartPath
-            r14.moveTo(r8, r13)
-            boolean[] r14 = r0.skipPoints
-            r15 = 0
-            r14[r1] = r15
-            goto L_0x04a4
-        L_0x049d:
-            r42 = r2
-            r36 = r13
-            r2 = r14
-            r41 = r15
-        L_0x04a4:
-            org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
-            if (r8 != 0) goto L_0x04aa
-            r8 = 0
-            goto L_0x04ae
-        L_0x04aa:
-            org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
-            float r8 = r8.progress
-        L_0x04ae:
+            java.util.ArrayList<L> r13 = r0.lines
+            int r13 = r13.size()
+            if (r7 >= r13) goto L_0x05ba
+            java.util.ArrayList<L> r13 = r0.lines
+            java.lang.Object r13 = r13.get(r7)
+            org.telegram.ui.Charts.view_data.LineViewData r13 = (org.telegram.ui.Charts.view_data.LineViewData) r13
+            r23 = r8
+            boolean r8 = r13.enabled
+            if (r8 != 0) goto L_0x01c7
+            float r8 = r13.alpha
+            r17 = 0
+            int r8 = (r8 > r17 ? 1 : (r8 == r17 ? 0 : -1))
+            if (r8 != 0) goto L_0x01c7
+            r26 = r2
+            r27 = r3
+            r1 = r6
+            r32 = r9
+            r25 = r10
+            r9 = r11
+            r33 = r12
+            r2 = r21
+            r8 = r23
+            r6 = 0
+            r10 = 2
             r13 = 0
-            int r14 = (r9 > r13 ? 1 : (r9 == r13 ? 0 : -1))
-            if (r14 != 0) goto L_0x04e9
-            if (r10 <= 0) goto L_0x04e9
-            int r13 = r10 + -1
-            r13 = r40[r13]
-            if (r13 != 0) goto L_0x04e9
-            r14 = r38
-            if (r10 >= r14) goto L_0x04eb
-            int r13 = r10 + 1
-            r13 = r40[r13]
-            if (r13 != 0) goto L_0x04eb
-            int r13 = r0.transitionMode
-            r15 = 2
-            if (r13 == r15) goto L_0x04eb
-            boolean[] r13 = r0.skipPoints
-            boolean r13 = r13[r1]
-            if (r13 != 0) goto L_0x04e3
-            if (r1 != r11) goto L_0x04de
-            android.graphics.Path r13 = r2.chartPath
-            r15 = 1065353216(0x3var_, float:1.0)
-            float r37 = r15 - r8
-            float r15 = r3 * r37
-            r13.lineTo(r6, r15)
-            goto L_0x04e3
-        L_0x04de:
-            android.graphics.Path r13 = r2.chartPath
-            r13.lineTo(r6, r3)
-        L_0x04e3:
-            boolean[] r13 = r0.skipPoints
+            goto L_0x05a6
+        L_0x01c7:
+            org.telegram.ui.Charts.data.ChartData$Line r8 = r13.line
+            int[] r8 = r8.y
+            r24 = r15
             r15 = 1
-            r13[r1] = r15
-            goto L_0x051c
-        L_0x04e9:
-            r14 = r38
-        L_0x04eb:
-            boolean[] r13 = r0.skipPoints
-            boolean r13 = r13[r1]
-            if (r13 == 0) goto L_0x0504
-            if (r1 != r11) goto L_0x04ff
-            android.graphics.Path r13 = r2.chartPath
-            r15 = 1065353216(0x3var_, float:1.0)
-            float r37 = r15 - r8
-            float r15 = r3 * r37
-            r13.lineTo(r6, r15)
-            goto L_0x0504
-        L_0x04ff:
-            android.graphics.Path r13 = r2.chartPath
-            r13.lineTo(r6, r3)
-        L_0x0504:
-            if (r1 != r11) goto L_0x0512
-            android.graphics.Path r13 = r2.chartPath
-            r15 = 1065353216(0x3var_, float:1.0)
-            float r16 = r15 - r8
-            float r15 = r7 * r16
-            r13.lineTo(r12, r15)
-            goto L_0x0517
-        L_0x0512:
-            android.graphics.Path r13 = r2.chartPath
-            r13.lineTo(r12, r7)
-        L_0x0517:
-            boolean[] r13 = r0.skipPoints
+            if (r10 != r15) goto L_0x01da
+            r15 = r8[r14]
+            if (r15 != 0) goto L_0x01d5
+            goto L_0x01df
+        L_0x01d5:
+            float r15 = r13.alpha
+            r25 = r10
+            goto L_0x01ef
+        L_0x01da:
             r15 = 0
-            r13[r1] = r15
-        L_0x051c:
-            if (r10 != r14) goto L_0x069a
-            int r13 = r51.getMeasuredWidth()
-            float r13 = (float) r13
-            int r15 = r51.getMeasuredHeight()
+            int r25 = (r20 > r15 ? 1 : (r20 == r15 ? 0 : -1))
+            if (r25 != 0) goto L_0x01e3
+        L_0x01df:
+            r25 = r10
+            r15 = 0
+            goto L_0x01ef
+        L_0x01e3:
+            r15 = r8[r14]
             float r15 = (float) r15
-            r16 = r3
-            int r3 = r0.transitionMode
-            r38 = r6
-            r6 = 2
-            if (r3 != r6) goto L_0x0566
-            if (r1 == r11) goto L_0x0566
-            float[] r3 = r0.mapPoints
-            float r6 = r13 + r4
-            r19 = 0
-            r3[r19] = r6
-            r6 = 1
-            r3[r6] = r15
+            r25 = r10
+            float r10 = r13.alpha
+            float r15 = r15 * r10
+            float r10 = r15 / r20
+            r15 = r10
+        L_0x01ef:
+            T r10 = r0.chartData
+            r1 = r10
+            org.telegram.ui.Charts.data.StackLinearChartData r1 = (org.telegram.ui.Charts.data.StackLinearChartData) r1
+            float[] r1 = r1.xPercentage
+            r1 = r1[r14]
+            float r1 = r1 * r2
+            float r1 = r1 - r3
+            if (r14 != r11) goto L_0x0203
+            int r10 = r35.getMeasuredWidth()
+            float r10 = (float) r10
+            goto L_0x020e
+        L_0x0203:
+            org.telegram.ui.Charts.data.StackLinearChartData r10 = (org.telegram.ui.Charts.data.StackLinearChartData) r10
+            float[] r10 = r10.xPercentage
+            int r26 = r14 + 1
+            r10 = r10[r26]
+            float r10 = r10 * r2
+            float r10 = r10 - r3
+        L_0x020e:
+            r17 = 0
+            int r26 = (r15 > r17 ? 1 : (r15 == r17 ? 0 : -1))
+            if (r26 != 0) goto L_0x021d
+            r26 = r2
+            r2 = r21
+            if (r7 != r2) goto L_0x0221
+            r18 = 1
+            goto L_0x0221
+        L_0x021d:
+            r26 = r2
+            r2 = r21
+        L_0x0221:
+            int r21 = r35.getMeasuredHeight()
+            r27 = r3
+            int r3 = r0.chartBottom
+            int r21 = r21 - r3
+            int r3 = org.telegram.ui.Charts.BaseChartView.SIGNATURE_TEXT_HEIGHT
+            int r3 = r21 - r3
+            float r3 = (float) r3
+            float r3 = r3 * r15
+            int r21 = r35.getMeasuredHeight()
+            r28 = r8
+            int r8 = r0.chartBottom
+            int r8 = r21 - r8
+            float r8 = (float) r8
+            float r8 = r8 - r3
+            float r8 = r8 - r6
+            r21 = r3
+            float[] r3 = r0.startFromY
+            r3[r7] = r8
+            int r3 = r35.getMeasuredHeight()
+            r29 = r6
+            int r6 = r0.chartBottom
+            int r3 = r3 - r6
+            float r3 = (float) r3
+            if (r14 != r11) goto L_0x0254
+            r23 = r1
+            goto L_0x0258
+        L_0x0254:
+            if (r14 != r12) goto L_0x0258
+            r24 = r1
+        L_0x0258:
+            int r6 = r0.transitionMode
+            r30 = 1119092736(0x42b40000, float:90.0)
+            r31 = r11
+            r11 = 2
+            if (r6 != r11) goto L_0x039c
+            if (r7 == r2) goto L_0x039c
+            int r6 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
+            if (r6 >= 0) goto L_0x0272
+            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
+            float[] r11 = r6.startX
+            r11 = r11[r7]
+            float[] r6 = r6.startY
+            r6 = r6[r7]
+            goto L_0x027c
+        L_0x0272:
+            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
+            float[] r11 = r6.endX
+            r11 = r11[r7]
+            float[] r6 = r6.endY
+            r6 = r6[r7]
+        L_0x027c:
+            float r32 = r4 - r11
+            float r33 = r5 - r6
+            float r11 = r1 - r11
+            float r11 = r11 * r33
+            float r11 = r11 / r32
+            float r11 = r11 + r6
+            r6 = 1065353216(0x3var_, float:1.0)
+            float r34 = r6 - r9
+            float r8 = r8 * r34
+            float r11 = r11 * r9
+            float r8 = r8 + r11
+            float r3 = r3 * r34
+            float r3 = r3 + r11
+            float r6 = r33 / r32
+            r11 = 0
+            int r32 = (r6 > r11 ? 1 : (r6 == r11 ? 0 : -1))
+            if (r32 <= 0) goto L_0x02a7
+            r32 = r12
+            double r11 = (double) r6
+            double r11 = java.lang.Math.atan(r11)
+            double r11 = -r11
+            double r11 = java.lang.Math.toDegrees(r11)
+            goto L_0x02b6
+        L_0x02a7:
+            r32 = r12
+            float r6 = java.lang.Math.abs(r6)
+            double r11 = (double) r6
+            double r11 = java.lang.Math.atan(r11)
+            double r11 = java.lang.Math.toDegrees(r11)
+        L_0x02b6:
+            float r6 = (float) r11
+            float r6 = r6 - r30
+            int r11 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
+            if (r11 < 0) goto L_0x0314
+            float[] r10 = r0.mapPoints
+            r11 = 0
+            r10[r11] = r1
+            r11 = 1
+            r10[r11] = r8
+            android.graphics.Matrix r8 = r0.matrix
+            r8.reset()
+            android.graphics.Matrix r8 = r0.matrix
+            org.telegram.ui.Charts.view_data.TransitionParams r10 = r0.transitionParams
+            float r10 = r10.progress
+            float r10 = r10 * r6
+            r8.postRotate(r10, r4, r5)
+            android.graphics.Matrix r8 = r0.matrix
+            float[] r10 = r0.mapPoints
+            r8.mapPoints(r10)
+            float[] r8 = r0.mapPoints
+            r10 = 0
+            r11 = r8[r10]
+            r12 = 1
+            r33 = r8[r12]
+            int r19 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
+            if (r19 >= 0) goto L_0x02e9
+            r11 = r4
+        L_0x02e9:
+            r8[r10] = r1
+            r8[r12] = r3
             android.graphics.Matrix r3 = r0.matrix
             r3.reset()
             android.graphics.Matrix r3 = r0.matrix
-            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
-            float r6 = r6.progress
-            r43 = r8
             org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
-            float[] r8 = r8.angle
-            r8 = r8[r1]
-            float r6 = r6 * r8
-            r3.postRotate(r6, r4, r5)
+            float r8 = r8.progress
+            float r8 = r8 * r6
+            r3.postRotate(r8, r4, r5)
             android.graphics.Matrix r3 = r0.matrix
-            float[] r6 = r0.mapPoints
-            r3.mapPoints(r6)
+            float[] r8 = r0.mapPoints
+            r3.mapPoints(r8)
             float[] r3 = r0.mapPoints
-            r6 = 0
-            r13 = r3[r6]
-            r6 = 1
-            r15 = r3[r6]
-            goto L_0x056d
-        L_0x0566:
-            r43 = r8
-            android.graphics.Path r3 = r2.chartPath
-            r3.lineTo(r13, r15)
-        L_0x056d:
-            int r3 = r0.transitionMode
-            r6 = 2
-            if (r3 != r6) goto L_0x0694
-            if (r1 == r11) goto L_0x0694
+            r8 = 1
+            r3 = r3[r8]
+            int r8 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
+            if (r8 >= 0) goto L_0x030e
+            r1 = r4
+        L_0x030e:
+            r10 = r32
+            r8 = r33
+            goto L_0x03a2
+        L_0x0314:
+            int r11 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
+            if (r11 < 0) goto L_0x0328
+            float r1 = r1 * r34
+            float r3 = r4 * r9
+            float r1 = r1 + r3
+            float r8 = r8 * r34
+            float r3 = r5 * r9
+            float r8 = r8 + r3
+            r11 = r1
+            r3 = r8
+            r10 = r32
+            goto L_0x03a2
+        L_0x0328:
+            float[] r11 = r0.mapPoints
+            r12 = 0
+            r11[r12] = r1
+            r12 = 1
+            r11[r12] = r8
+            android.graphics.Matrix r8 = r0.matrix
+            r8.reset()
+            android.graphics.Matrix r8 = r0.matrix
+            org.telegram.ui.Charts.view_data.TransitionParams r11 = r0.transitionParams
+            float r12 = r11.progress
+            float r33 = r12 * r6
+            float[] r11 = r11.angle
+            r11 = r11[r7]
+            float r12 = r12 * r11
+            float r11 = r33 + r12
+            r8.postRotate(r11, r4, r5)
+            android.graphics.Matrix r8 = r0.matrix
+            float[] r11 = r0.mapPoints
+            r8.mapPoints(r11)
+            float[] r8 = r0.mapPoints
+            r11 = 0
+            r12 = r8[r11]
+            r19 = 1
+            r33 = r8[r19]
+            int r10 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
+            if (r10 < 0) goto L_0x036c
+            org.telegram.ui.Charts.view_data.TransitionParams r10 = r0.transitionParams
+            float r10 = r10.progress
+            r16 = 1065353216(0x3var_, float:1.0)
+            float r19 = r16 - r10
+            float r1 = r1 * r19
+            float r10 = r10 * r4
+            float r1 = r1 + r10
+            r8[r11] = r1
+            goto L_0x036e
+        L_0x036c:
+            r8[r11] = r1
+        L_0x036e:
+            r1 = 1
+            r8[r1] = r3
+            android.graphics.Matrix r1 = r0.matrix
+            r1.reset()
+            android.graphics.Matrix r1 = r0.matrix
             org.telegram.ui.Charts.view_data.TransitionParams r3 = r0.transitionParams
-            float[] r3 = r3.startX
-            r3 = r3[r1]
-            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
-            float[] r6 = r6.startY
-            r6 = r6[r1]
-            float r8 = r4 - r3
-            float r20 = r5 - r6
-            r22 = r3
-            float r3 = r20 / r8
-            r21 = 0
-            int r25 = (r3 > r21 ? 1 : (r3 == r21 ? 0 : -1))
-            if (r25 <= 0) goto L_0x059e
-            r25 = r8
-            r44 = r9
-            double r8 = (double) r3
-            double r8 = java.lang.Math.atan(r8)
-            double r8 = -r8
-            double r8 = java.lang.Math.toDegrees(r8)
-            float r8 = (float) r8
-            goto L_0x05b0
-        L_0x059e:
-            r25 = r8
-            r44 = r9
-            float r8 = java.lang.Math.abs(r3)
-            double r8 = (double) r8
-            double r8 = java.lang.Math.atan(r8)
-            double r8 = java.lang.Math.toDegrees(r8)
-            float r8 = (float) r8
-        L_0x05b0:
-            float r8 = r8 - r39
-            org.telegram.ui.Charts.view_data.TransitionParams r9 = r0.transitionParams
-            float[] r9 = r9.startX
-            r9 = r9[r1]
-            org.telegram.ui.Charts.view_data.TransitionParams r13 = r0.transitionParams
-            float[] r13 = r13.startY
-            r13 = r13[r1]
-            float[] r15 = r0.mapPoints
-            r19 = 0
-            r15[r19] = r9
-            r18 = 1
-            r15[r18] = r13
-            android.graphics.Matrix r15 = r0.matrix
-            r15.reset()
-            android.graphics.Matrix r15 = r0.matrix
-            r21 = r3
-            org.telegram.ui.Charts.view_data.TransitionParams r3 = r0.transitionParams
-            float r3 = r3.progress
-            float r3 = r3 * r8
-            r39 = r6
-            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
-            float r6 = r6.progress
-            r42 = r8
-            org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
-            float[] r8 = r8.angle
-            r8 = r8[r1]
-            float r6 = r6 * r8
-            float r3 = r3 + r6
-            r15.postRotate(r3, r4, r5)
-            android.graphics.Matrix r3 = r0.matrix
-            float[] r6 = r0.mapPoints
-            r3.mapPoints(r6)
+            float r8 = r3.progress
+            float r10 = r8 * r6
+            float[] r3 = r3.angle
+            r3 = r3[r7]
+            float r8 = r8 * r3
+            float r10 = r10 + r8
+            r1.postRotate(r10, r4, r5)
+            android.graphics.Matrix r1 = r0.matrix
             float[] r3 = r0.mapPoints
-            r6 = 0
-            r8 = r3[r6]
-            r9 = 1
-            r3 = r3[r9]
-            float r9 = r12 - r8
-            float r9 = java.lang.Math.abs(r9)
-            r19 = r7
-            double r6 = (double) r9
-            r46 = 4562254508917369340(0x3var_dd2f1a9fc, double:0.001)
-            int r9 = (r6 > r46 ? 1 : (r6 == r46 ? 0 : -1))
-            if (r9 >= 0) goto L_0x0634
-            int r6 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r6 >= 0) goto L_0x0614
-            int r6 = (r19 > r5 ? 1 : (r19 == r5 ? 0 : -1))
-            if (r6 < 0) goto L_0x061c
-        L_0x0614:
-            int r6 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r6 <= 0) goto L_0x0634
-            int r6 = (r19 > r5 ? 1 : (r19 == r5 ? 0 : -1))
-            if (r6 <= 0) goto L_0x0634
-        L_0x061c:
-            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
-            float[] r6 = r6.angle
-            r6 = r6[r1]
-            r7 = -1020002304(0xffffffffCLASSNAME, float:-180.0)
-            int r6 = (r6 > r7 ? 1 : (r6 == r7 ? 0 : -1))
-            if (r6 != 0) goto L_0x062e
-            r6 = 0
-            r7 = 0
-            r9 = r7
-            r7 = r19
-            goto L_0x063e
-        L_0x062e:
-            r6 = 0
-            r7 = 3
-            r9 = r7
-            r7 = r19
-            goto L_0x063e
-        L_0x0634:
-            r7 = r19
-            int r6 = r0.quarterForPoint(r12, r7)
-            int r9 = r0.quarterForPoint(r8, r3)
-        L_0x063e:
-            r13 = r6
-        L_0x063f:
-            if (r13 > r9) goto L_0x0688
-            if (r13 != 0) goto L_0x0654
-            android.graphics.Path r15 = r2.chartPath
-            r19 = r3
-            int r3 = r51.getMeasuredWidth()
-            float r3 = (float) r3
-            r46 = r4
-            r4 = 0
-            r15.lineTo(r3, r4)
+            r1.mapPoints(r3)
+            float[] r1 = r0.mapPoints
             r3 = 0
-            goto L_0x0681
-        L_0x0654:
-            r19 = r3
-            r46 = r4
+            r8 = r1[r3]
             r3 = 1
-            if (r13 != r3) goto L_0x066c
-            android.graphics.Path r3 = r2.chartPath
-            int r4 = r51.getMeasuredWidth()
-            float r4 = (float) r4
-            int r15 = r51.getMeasuredHeight()
-            float r15 = (float) r15
-            r3.lineTo(r4, r15)
+            r1 = r1[r3]
+            r3 = r1
+            r1 = r8
+            r11 = r12
+            goto L_0x030e
+        L_0x039c:
+            r32 = r12
+            r11 = r1
+            r10 = r32
+            r6 = 0
+        L_0x03a2:
+            if (r14 != r10) goto L_0x03f3
+            int r12 = r35.getMeasuredHeight()
+            float r12 = (float) r12
+            r32 = r9
+            int r9 = r0.transitionMode
+            r33 = r10
+            r10 = 2
+            if (r9 != r10) goto L_0x03e7
+            if (r7 == r2) goto L_0x03e7
+            float[] r9 = r0.mapPoints
+            r10 = 0
+            float r34 = r10 - r4
+            r10 = 0
+            r9[r10] = r34
+            r10 = 1
+            r9[r10] = r12
+            android.graphics.Matrix r9 = r0.matrix
+            r9.reset()
+            android.graphics.Matrix r9 = r0.matrix
+            org.telegram.ui.Charts.view_data.TransitionParams r10 = r0.transitionParams
+            float r12 = r10.progress
+            float r6 = r6 * r12
+            float[] r10 = r10.angle
+            r10 = r10[r7]
+            float r12 = r12 * r10
+            float r6 = r6 + r12
+            r9.postRotate(r6, r4, r5)
+            android.graphics.Matrix r6 = r0.matrix
+            float[] r9 = r0.mapPoints
+            r6.mapPoints(r9)
+            float[] r6 = r0.mapPoints
+            r9 = 0
+            r10 = r6[r9]
+            r12 = 1
+            r6 = r6[r12]
+            r12 = r6
+            goto L_0x03e9
+        L_0x03e7:
+            r9 = 0
+            r10 = 0
+        L_0x03e9:
+            android.graphics.Path r6 = r13.chartPath
+            r6.moveTo(r10, r12)
+            boolean[] r6 = r0.skipPoints
+            r6[r7] = r9
+            goto L_0x03f7
+        L_0x03f3:
+            r32 = r9
+            r33 = r10
+        L_0x03f7:
+            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
+            if (r6 != 0) goto L_0x03fd
+            r6 = 0
+            goto L_0x03ff
+        L_0x03fd:
+            float r6 = r6.progress
+        L_0x03ff:
+            r9 = 0
+            int r10 = (r15 > r9 ? 1 : (r15 == r9 ? 0 : -1))
+            if (r10 != 0) goto L_0x043c
+            if (r14 <= 0) goto L_0x043c
+            int r9 = r14 + -1
+            r9 = r28[r9]
+            if (r9 != 0) goto L_0x043c
+            r9 = r31
+            if (r14 >= r9) goto L_0x043e
+            int r10 = r14 + 1
+            r10 = r28[r10]
+            if (r10 != 0) goto L_0x043e
+            int r10 = r0.transitionMode
+            r12 = 2
+            if (r10 == r12) goto L_0x043e
+            boolean[] r10 = r0.skipPoints
+            boolean r10 = r10[r7]
+            if (r10 != 0) goto L_0x0434
+            if (r7 != r2) goto L_0x042f
+            android.graphics.Path r10 = r13.chartPath
+            r12 = 1065353216(0x3var_, float:1.0)
+            float r6 = r12 - r6
+            float r3 = r3 * r6
+            r10.lineTo(r1, r3)
+            goto L_0x0434
+        L_0x042f:
+            android.graphics.Path r6 = r13.chartPath
+            r6.lineTo(r1, r3)
+        L_0x0434:
+            boolean[] r1 = r0.skipPoints
+            r3 = 1
+            r1[r7] = r3
+            r12 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0472
+        L_0x043c:
+            r9 = r31
+        L_0x043e:
+            boolean[] r10 = r0.skipPoints
+            boolean r10 = r10[r7]
+            if (r10 == 0) goto L_0x045a
+            if (r7 != r2) goto L_0x0452
+            android.graphics.Path r10 = r13.chartPath
+            r12 = 1065353216(0x3var_, float:1.0)
+            float r15 = r12 - r6
+            float r3 = r3 * r15
+            r10.lineTo(r1, r3)
+            goto L_0x045c
+        L_0x0452:
+            r12 = 1065353216(0x3var_, float:1.0)
+            android.graphics.Path r10 = r13.chartPath
+            r10.lineTo(r1, r3)
+            goto L_0x045c
+        L_0x045a:
+            r12 = 1065353216(0x3var_, float:1.0)
+        L_0x045c:
+            if (r7 != r2) goto L_0x0468
+            android.graphics.Path r1 = r13.chartPath
+            float r3 = r12 - r6
+            float r3 = r3 * r8
+            r1.lineTo(r11, r3)
+            goto L_0x046d
+        L_0x0468:
+            android.graphics.Path r1 = r13.chartPath
+            r1.lineTo(r11, r8)
+        L_0x046d:
+            boolean[] r1 = r0.skipPoints
             r3 = 0
-            goto L_0x0681
-        L_0x066c:
-            r3 = 2
-            if (r13 != r3) goto L_0x067b
-            android.graphics.Path r4 = r2.chartPath
-            int r15 = r51.getMeasuredHeight()
-            float r15 = (float) r15
-            r3 = 0
-            r4.lineTo(r3, r15)
-            goto L_0x0681
-        L_0x067b:
-            r3 = 0
-            android.graphics.Path r4 = r2.chartPath
-            r4.lineTo(r3, r3)
-        L_0x0681:
-            int r13 = r13 + 1
-            r3 = r19
-            r4 = r46
-            goto L_0x063f
-        L_0x0688:
-            r19 = r3
-            r46 = r4
-            r3 = 0
-            r21 = r20
-            r20 = r25
-            r25 = r39
-            goto L_0x06a5
-        L_0x0694:
-            r46 = r4
-            r44 = r9
-            r3 = 0
-            goto L_0x06a5
-        L_0x069a:
-            r16 = r3
-            r46 = r4
-            r38 = r6
-            r43 = r8
-            r44 = r9
-            r3 = 0
-        L_0x06a5:
-            float r23 = r23 + r33
-            r9 = r30
-            r13 = r32
-        L_0x06ab:
-            int r1 = r1 + 1
-            r6 = r14
-            r12 = r31
-            r2 = r34
-            r3 = r35
-            r15 = r41
-            r8 = r45
-            r4 = r46
-            goto L_0x01df
-        L_0x06bc:
-            r34 = r2
-            r35 = r3
-            r46 = r4
-            r14 = r6
-            r45 = r8
-            r30 = r9
-            r31 = r12
-            r32 = r13
-            r41 = r15
-            int r10 = r10 + 1
-            r1 = r52
-            r11 = r25
-            r12 = r26
-            r14 = r27
-            r7 = r28
-            goto L_0x0176
-        L_0x06db:
-            r34 = r2
-            r35 = r3
-            r46 = r4
-            r28 = r7
-            r45 = r8
-            r30 = r9
-            r25 = r11
-            r26 = r12
-            r27 = r14
-            r41 = r15
-            r14 = r6
-            r52.save()
-            int r1 = SIGNATURE_TEXT_HEIGHT
+            r1[r7] = r3
+        L_0x0472:
+            if (r14 != r9) goto L_0x059d
+            int r1 = r35.getMeasuredWidth()
             float r1 = (float) r1
-            int r2 = r51.getMeasuredHeight()
+            int r3 = r35.getMeasuredHeight()
+            float r3 = (float) r3
+            int r6 = r0.transitionMode
+            r10 = 2
+            if (r6 != r10) goto L_0x04b2
+            if (r7 == r2) goto L_0x04b2
+            float[] r6 = r0.mapPoints
+            float r1 = r1 + r4
+            r10 = 0
+            r6[r10] = r1
+            r1 = 1
+            r6[r1] = r3
+            android.graphics.Matrix r1 = r0.matrix
+            r1.reset()
+            android.graphics.Matrix r1 = r0.matrix
+            org.telegram.ui.Charts.view_data.TransitionParams r3 = r0.transitionParams
+            float r6 = r3.progress
+            float[] r3 = r3.angle
+            r3 = r3[r7]
+            float r6 = r6 * r3
+            r1.postRotate(r6, r4, r5)
+            android.graphics.Matrix r1 = r0.matrix
+            float[] r3 = r0.mapPoints
+            r1.mapPoints(r3)
+            float[] r1 = r0.mapPoints
+            r3 = 0
+            r6 = r1[r3]
+            r3 = 1
+            r1 = r1[r3]
+            goto L_0x04b7
+        L_0x04b2:
+            android.graphics.Path r6 = r13.chartPath
+            r6.lineTo(r1, r3)
+        L_0x04b7:
+            int r1 = r0.transitionMode
+            r3 = 2
+            if (r1 != r3) goto L_0x059d
+            if (r7 == r2) goto L_0x059d
+            org.telegram.ui.Charts.view_data.TransitionParams r1 = r0.transitionParams
+            float[] r3 = r1.startX
+            r3 = r3[r7]
+            float[] r1 = r1.startY
+            r1 = r1[r7]
+            float r3 = r4 - r3
+            float r1 = r5 - r1
+            float r1 = r1 / r3
+            r3 = 0
+            int r6 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
+            if (r6 <= 0) goto L_0x04de
+            r3 = r13
+            double r12 = (double) r1
+            double r12 = java.lang.Math.atan(r12)
+            double r12 = -r12
+            double r12 = java.lang.Math.toDegrees(r12)
+            goto L_0x04ec
+        L_0x04de:
+            r3 = r13
+            float r1 = java.lang.Math.abs(r1)
+            double r12 = (double) r1
+            double r12 = java.lang.Math.atan(r12)
+            double r12 = java.lang.Math.toDegrees(r12)
+        L_0x04ec:
+            float r1 = (float) r12
+            float r1 = r1 - r30
+            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
+            float[] r10 = r6.startX
+            r10 = r10[r7]
+            float[] r6 = r6.startY
+            r6 = r6[r7]
+            float[] r12 = r0.mapPoints
+            r13 = 0
+            r12[r13] = r10
+            r10 = 1
+            r12[r10] = r6
+            android.graphics.Matrix r6 = r0.matrix
+            r6.reset()
+            android.graphics.Matrix r6 = r0.matrix
+            org.telegram.ui.Charts.view_data.TransitionParams r10 = r0.transitionParams
+            float r12 = r10.progress
+            float r1 = r1 * r12
+            float[] r10 = r10.angle
+            r10 = r10[r7]
+            float r12 = r12 * r10
+            float r1 = r1 + r12
+            r6.postRotate(r1, r4, r5)
+            android.graphics.Matrix r1 = r0.matrix
+            float[] r6 = r0.mapPoints
+            r1.mapPoints(r6)
+            float[] r1 = r0.mapPoints
+            r6 = 0
+            r10 = r1[r6]
+            r12 = 1
+            r1 = r1[r12]
+            float r12 = r11 - r10
+            float r12 = java.lang.Math.abs(r12)
+            double r12 = (double) r12
+            r30 = 4562254508917369340(0x3var_dd2f1a9fc, double:0.001)
+            int r15 = (r12 > r30 ? 1 : (r12 == r30 ? 0 : -1))
+            if (r15 >= 0) goto L_0x0558
+            int r12 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
+            if (r12 >= 0) goto L_0x053f
+            int r12 = (r8 > r5 ? 1 : (r8 == r5 ? 0 : -1))
+            if (r12 < 0) goto L_0x0547
+        L_0x053f:
+            int r12 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
+            if (r12 <= 0) goto L_0x0558
+            int r12 = (r8 > r5 ? 1 : (r8 == r5 ? 0 : -1))
+            if (r12 <= 0) goto L_0x0558
+        L_0x0547:
+            org.telegram.ui.Charts.view_data.TransitionParams r1 = r0.transitionParams
+            float[] r1 = r1.angle
+            r1 = r1[r7]
+            r8 = -1020002304(0xffffffffCLASSNAME, float:-180.0)
+            int r1 = (r1 > r8 ? 1 : (r1 == r8 ? 0 : -1))
+            if (r1 != 0) goto L_0x0555
+            r1 = 0
+            goto L_0x0556
+        L_0x0555:
+            r1 = 3
+        L_0x0556:
+            r11 = 0
+            goto L_0x0560
+        L_0x0558:
+            int r11 = r0.quarterForPoint(r11, r8)
+            int r1 = r0.quarterForPoint(r10, r1)
+        L_0x0560:
+            if (r11 > r1) goto L_0x059e
+            if (r11 != 0) goto L_0x0572
+            android.graphics.Path r8 = r3.chartPath
+            int r10 = r35.getMeasuredWidth()
+            float r10 = (float) r10
+            r12 = 0
+            r8.lineTo(r10, r12)
+        L_0x056f:
+            r10 = 2
+            r13 = 0
+            goto L_0x059a
+        L_0x0572:
+            r8 = 1
+            if (r11 != r8) goto L_0x0585
+            android.graphics.Path r8 = r3.chartPath
+            int r10 = r35.getMeasuredWidth()
+            float r10 = (float) r10
+            int r12 = r35.getMeasuredHeight()
+            float r12 = (float) r12
+            r8.lineTo(r10, r12)
+            goto L_0x056f
+        L_0x0585:
+            r10 = 2
+            if (r11 != r10) goto L_0x0594
+            android.graphics.Path r8 = r3.chartPath
+            int r12 = r35.getMeasuredHeight()
+            float r12 = (float) r12
+            r13 = 0
+            r8.lineTo(r13, r12)
+            goto L_0x059a
+        L_0x0594:
+            r13 = 0
+            android.graphics.Path r8 = r3.chartPath
+            r8.lineTo(r13, r13)
+        L_0x059a:
+            int r11 = r11 + 1
+            goto L_0x0560
+        L_0x059d:
+            r6 = 0
+        L_0x059e:
+            r10 = 2
+            r13 = 0
+            float r1 = r29 + r21
+            r8 = r23
+            r15 = r24
+        L_0x05a6:
+            int r7 = r7 + 1
+            r6 = r1
+            r21 = r2
+            r11 = r9
+            r10 = r25
+            r2 = r26
+            r3 = r27
+            r9 = r32
+            r12 = r33
+            r1 = r36
+            goto L_0x0194
+        L_0x05ba:
+            r26 = r2
+            r27 = r3
+            r23 = r8
+            r32 = r9
+            r9 = r11
+            r33 = r12
+            r24 = r15
+            r6 = 0
+            r10 = 2
+            r13 = 0
+            int r14 = r14 + 1
+            r1 = r36
+            r7 = r22
+            r9 = r32
+            r13 = 1
+            goto L_0x0150
+        L_0x05d5:
+            r22 = r7
+            r36.save()
+            int r1 = org.telegram.ui.Charts.BaseChartView.SIGNATURE_TEXT_HEIGHT
+            float r1 = (float) r1
+            int r2 = r35.getMeasuredHeight()
             int r3 = r0.chartBottom
             int r2 = r2 - r3
             float r2 = (float) r2
-            r3 = r52
-            r4 = r30
-            r3.clipRect(r13, r1, r4, r2)
-            if (r17 == 0) goto L_0x0710
+            r3 = r36
+            r3.clipRect(r15, r1, r8, r2)
+            if (r18 == 0) goto L_0x05f5
             java.lang.String r1 = "statisticChartLineEmpty"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r3.drawColor(r1)
-        L_0x0710:
-            java.util.ArrayList r1 = r0.lines
+        L_0x05f5:
+            java.util.ArrayList<L> r1 = r0.lines
             int r1 = r1.size()
             r2 = 1
             int r1 = r1 - r2
-        L_0x0718:
-            if (r1 < 0) goto L_0x073a
-            java.util.ArrayList r2 = r0.lines
+        L_0x05fd:
+            if (r1 < 0) goto L_0x061f
+            java.util.ArrayList<L> r2 = r0.lines
             java.lang.Object r2 = r2.get(r1)
             org.telegram.ui.Charts.view_data.LineViewData r2 = (org.telegram.ui.Charts.view_data.LineViewData) r2
-            android.graphics.Paint r6 = r2.paint
-            r7 = r28
-            r6.setAlpha(r7)
-            android.graphics.Path r6 = r2.chartPath
-            android.graphics.Paint r8 = r2.paint
-            r3.drawPath(r6, r8)
-            android.graphics.Paint r6 = r2.paint
-            r8 = 255(0xff, float:3.57E-43)
-            r6.setAlpha(r8)
+            android.graphics.Paint r4 = r2.paint
+            r7 = r22
+            r4.setAlpha(r7)
+            android.graphics.Path r4 = r2.chartPath
+            android.graphics.Paint r5 = r2.paint
+            r3.drawPath(r4, r5)
+            android.graphics.Paint r2 = r2.paint
+            r4 = 255(0xff, float:3.57E-43)
+            r2.setAlpha(r4)
             int r1 = r1 + -1
-            goto L_0x0718
-        L_0x073a:
-            r7 = r28
-            r52.restore()
-            r52.restore()
-            goto L_0x0744
-        L_0x0743:
-            r3 = r1
-        L_0x0744:
+            goto L_0x05fd
+        L_0x061f:
+            r36.restore()
+            r36.restore()
+        L_0x0625:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.StackLinearChartView.drawChart(android.graphics.Canvas):void");
     }
 
-    private int quarterForPoint(float x, float y) {
-        float cX = this.chartArea.centerX();
-        float cY = this.chartArea.centerY() + ((float) AndroidUtilities.dp(16.0f));
-        if (x >= cX && y <= cY) {
+    private int quarterForPoint(float f, float f2) {
+        float centerX = this.chartArea.centerX();
+        float centerY = this.chartArea.centerY() + ((float) AndroidUtilities.dp(16.0f));
+        if (f >= centerX && f2 <= centerY) {
             return 0;
         }
-        if (x >= cX && y >= cY) {
-            return 1;
+        if (f < centerX || f2 < centerY) {
+            return (f >= centerX || f2 < centerY) ? 3 : 2;
         }
-        if (x >= cX || y < cY) {
-            return 3;
-        }
-        return 2;
+        return 1;
     }
 
     /* access modifiers changed from: protected */
-    public void drawPickerChart(Canvas canvas) {
-        float f;
-        float sum;
-        int nl;
-        float yPercentage;
-        boolean hasEmptyPoint;
-        Canvas canvas2 = canvas;
-        if (this.chartData != null) {
-            int nl2 = this.lines.size();
-            for (int k = 0; k < nl2; k++) {
-                ((StackLinearViewData) this.lines.get(k)).chartPathPicker.reset();
-            }
-            int n = ((StackLinearChartData) this.chartData).simplifiedSize;
-            boolean[] zArr = this.skipPoints;
-            if (zArr == null || zArr.length < ((StackLinearChartData) this.chartData).lines.size()) {
-                this.skipPoints = new boolean[((StackLinearChartData) this.chartData).lines.size()];
-            }
-            boolean hasEmptyPoint2 = false;
-            int i = 0;
-            while (true) {
-                int i2 = 1;
-                if (i >= n) {
-                    break;
-                }
-                float stackOffset = 0.0f;
-                float sum2 = 0.0f;
-                int lastEnabled = 0;
-                int drawingLinesCount = 0;
-                int k2 = 0;
-                while (true) {
-                    f = 0.0f;
-                    if (k2 >= this.lines.size()) {
-                        break;
-                    }
-                    LineViewData line = (LineViewData) this.lines.get(k2);
-                    if (line.enabled || line.alpha != 0.0f) {
-                        if (((StackLinearChartData) this.chartData).simplifiedY[k2][i] > 0) {
-                            sum2 += ((float) ((StackLinearChartData) this.chartData).simplifiedY[k2][i]) * line.alpha;
-                            drawingLinesCount++;
-                        }
-                        lastEnabled = k2;
-                    }
-                    k2++;
-                }
-                float xPoint = (((float) i) / ((float) (n - 1))) * this.pickerWidth;
-                int k3 = 0;
-                while (k3 < this.lines.size()) {
-                    LineViewData line2 = (LineViewData) this.lines.get(k3);
-                    if (line2.enabled || line2.alpha != f) {
-                        if (drawingLinesCount == i2) {
-                            if (((StackLinearChartData) this.chartData).simplifiedY[k3][i] == 0) {
-                                yPercentage = 0.0f;
-                            } else {
-                                yPercentage = line2.alpha;
-                            }
-                        } else if (sum2 == f) {
-                            yPercentage = 0.0f;
-                        } else {
-                            yPercentage = (((float) ((StackLinearChartData) this.chartData).simplifiedY[k3][i]) * line2.alpha) / sum2;
-                        }
-                        if (yPercentage == f && k3 == lastEnabled) {
-                            hasEmptyPoint2 = true;
-                        }
-                        float height = ((float) this.pikerHeight) * yPercentage;
-                        float yPoint = (((float) this.pikerHeight) - height) - stackOffset;
-                        if (i == 0) {
-                            nl = nl2;
-                            hasEmptyPoint = hasEmptyPoint2;
-                            sum = sum2;
-                            line2.chartPathPicker.moveTo(0.0f, (float) this.pikerHeight);
-                            this.skipPoints[k3] = false;
-                        } else {
-                            nl = nl2;
-                            hasEmptyPoint = hasEmptyPoint2;
-                            sum = sum2;
-                        }
-                        if (((StackLinearChartData) this.chartData).simplifiedY[k3][i] == 0 && i > 0 && ((StackLinearChartData) this.chartData).simplifiedY[k3][i - 1] == 0 && i < n - 1 && ((StackLinearChartData) this.chartData).simplifiedY[k3][i + 1] == 0) {
-                            if (!this.skipPoints[k3]) {
-                                line2.chartPathPicker.lineTo(xPoint, (float) this.pikerHeight);
-                            }
-                            this.skipPoints[k3] = true;
-                        } else {
-                            if (this.skipPoints[k3]) {
-                                line2.chartPathPicker.lineTo(xPoint, (float) this.pikerHeight);
-                            }
-                            line2.chartPathPicker.lineTo(xPoint, yPoint);
-                            this.skipPoints[k3] = false;
-                        }
-                        if (i == n - 1) {
-                            line2.chartPathPicker.lineTo(this.pickerWidth, (float) this.pikerHeight);
-                        }
-                        stackOffset += height;
-                        hasEmptyPoint2 = hasEmptyPoint;
-                    } else {
-                        nl = nl2;
-                        sum = sum2;
-                    }
-                    k3++;
-                    nl2 = nl;
-                    sum2 = sum;
-                    i2 = 1;
-                    f = 0.0f;
-                }
-                float f2 = sum2;
-                i++;
-            }
-            if (hasEmptyPoint2) {
-                canvas2.drawColor(Theme.getColor("statisticChartLineEmpty"));
-            }
-            for (int k4 = this.lines.size() - 1; k4 >= 0; k4--) {
-                LineViewData line3 = (LineViewData) this.lines.get(k4);
-                canvas2.drawPath(line3.chartPathPicker, line3.paint);
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:47:0x00f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x0102  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x0112 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x014a  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x015e  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void drawPickerChart(android.graphics.Canvas r20) {
+        /*
+            r19 = this;
+            r0 = r19
+            r1 = r20
+            T r2 = r0.chartData
+            if (r2 == 0) goto L_0x01a3
+            java.util.ArrayList<L> r2 = r0.lines
+            int r2 = r2.size()
+            r4 = 0
+        L_0x000f:
+            if (r4 >= r2) goto L_0x0021
+            java.util.ArrayList<L> r5 = r0.lines
+            java.lang.Object r5 = r5.get(r4)
+            org.telegram.ui.Charts.view_data.StackLinearViewData r5 = (org.telegram.ui.Charts.view_data.StackLinearViewData) r5
+            android.graphics.Path r5 = r5.chartPathPicker
+            r5.reset()
+            int r4 = r4 + 1
+            goto L_0x000f
+        L_0x0021:
+            T r2 = r0.chartData
+            r4 = r2
+            org.telegram.ui.Charts.data.StackLinearChartData r4 = (org.telegram.ui.Charts.data.StackLinearChartData) r4
+            int r4 = r4.simplifiedSize
+            boolean[] r5 = r0.skipPoints
+            if (r5 == 0) goto L_0x0037
+            int r5 = r5.length
+            org.telegram.ui.Charts.data.StackLinearChartData r2 = (org.telegram.ui.Charts.data.StackLinearChartData) r2
+            java.util.ArrayList<org.telegram.ui.Charts.data.ChartData$Line> r2 = r2.lines
+            int r2 = r2.size()
+            if (r5 >= r2) goto L_0x0045
+        L_0x0037:
+            T r2 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r2 = (org.telegram.ui.Charts.data.StackLinearChartData) r2
+            java.util.ArrayList<org.telegram.ui.Charts.data.ChartData$Line> r2 = r2.lines
+            int r2 = r2.size()
+            boolean[] r2 = new boolean[r2]
+            r0.skipPoints = r2
+        L_0x0045:
+            r2 = 0
+            r5 = 0
+        L_0x0047:
+            r6 = 1
+            if (r2 >= r4) goto L_0x017c
+            r7 = 0
+            r8 = 0
+            r9 = 0
+            r10 = 0
+            r11 = 0
+        L_0x004f:
+            java.util.ArrayList<L> r12 = r0.lines
+            int r12 = r12.size()
+            if (r8 >= r12) goto L_0x008b
+            java.util.ArrayList<L> r12 = r0.lines
+            java.lang.Object r12 = r12.get(r8)
+            org.telegram.ui.Charts.view_data.LineViewData r12 = (org.telegram.ui.Charts.view_data.LineViewData) r12
+            boolean r13 = r12.enabled
+            if (r13 != 0) goto L_0x006a
+            float r13 = r12.alpha
+            int r13 = (r13 > r7 ? 1 : (r13 == r7 ? 0 : -1))
+            if (r13 != 0) goto L_0x006a
+            goto L_0x0088
+        L_0x006a:
+            T r11 = r0.chartData
+            r13 = r11
+            org.telegram.ui.Charts.data.StackLinearChartData r13 = (org.telegram.ui.Charts.data.StackLinearChartData) r13
+            int[][] r13 = r13.simplifiedY
+            r13 = r13[r8]
+            r13 = r13[r2]
+            if (r13 <= 0) goto L_0x0087
+            org.telegram.ui.Charts.data.StackLinearChartData r11 = (org.telegram.ui.Charts.data.StackLinearChartData) r11
+            int[][] r11 = r11.simplifiedY
+            r11 = r11[r8]
+            r11 = r11[r2]
+            float r11 = (float) r11
+            float r12 = r12.alpha
+            float r11 = r11 * r12
+            float r9 = r9 + r11
+            int r10 = r10 + 1
+        L_0x0087:
+            r11 = r8
+        L_0x0088:
+            int r8 = r8 + 1
+            goto L_0x004f
+        L_0x008b:
+            float r8 = (float) r2
+            int r12 = r4 + -1
+            float r13 = (float) r12
+            float r8 = r8 / r13
+            float r13 = r0.pickerWidth
+            float r8 = r8 * r13
+            r13 = 0
+            r14 = 0
+        L_0x0096:
+            java.util.ArrayList<L> r15 = r0.lines
+            int r15 = r15.size()
+            if (r13 >= r15) goto L_0x0173
+            java.util.ArrayList<L> r15 = r0.lines
+            java.lang.Object r15 = r15.get(r13)
+            org.telegram.ui.Charts.view_data.LineViewData r15 = (org.telegram.ui.Charts.view_data.LineViewData) r15
+            boolean r3 = r15.enabled
+            if (r3 != 0) goto L_0x00b8
+            float r3 = r15.alpha
+            int r3 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1))
+            if (r3 != 0) goto L_0x00b8
+            r17 = r4
+            r18 = r5
+            r5 = 0
+            r6 = 0
+            goto L_0x0169
+        L_0x00b8:
+            if (r10 != r6) goto L_0x00ca
+            T r3 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r3 = (org.telegram.ui.Charts.data.StackLinearChartData) r3
+            int[][] r3 = r3.simplifiedY
+            r3 = r3[r13]
+            r3 = r3[r2]
+            if (r3 != 0) goto L_0x00c7
+            goto L_0x00ce
+        L_0x00c7:
+            float r3 = r15.alpha
+            goto L_0x00e0
+        L_0x00ca:
+            int r3 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
+            if (r3 != 0) goto L_0x00d0
+        L_0x00ce:
+            r3 = 0
+            goto L_0x00e0
+        L_0x00d0:
+            T r3 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r3 = (org.telegram.ui.Charts.data.StackLinearChartData) r3
+            int[][] r3 = r3.simplifiedY
+            r3 = r3[r13]
+            r3 = r3[r2]
+            float r3 = (float) r3
+            float r6 = r15.alpha
+            float r3 = r3 * r6
+            float r3 = r3 / r9
+        L_0x00e0:
+            int r6 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1))
+            if (r6 != 0) goto L_0x00e7
+            if (r13 != r11) goto L_0x00e7
+            r5 = 1
+        L_0x00e7:
+            int r6 = r0.pikerHeight
+            float r7 = (float) r6
+            float r3 = r3 * r7
+            float r7 = (float) r6
+            float r7 = r7 - r3
+            float r7 = r7 - r14
+            r17 = r4
+            if (r2 != 0) goto L_0x0102
+            android.graphics.Path r4 = r15.chartPathPicker
+            float r6 = (float) r6
+            r18 = r5
+            r5 = 0
+            r4.moveTo(r5, r6)
+            boolean[] r4 = r0.skipPoints
+            r6 = 0
+            r4[r13] = r6
+            goto L_0x0105
+        L_0x0102:
+            r18 = r5
+            r5 = 0
+        L_0x0105:
+            T r4 = r0.chartData
+            r6 = r4
+            org.telegram.ui.Charts.data.StackLinearChartData r6 = (org.telegram.ui.Charts.data.StackLinearChartData) r6
+            int[][] r6 = r6.simplifiedY
+            r6 = r6[r13]
+            r6 = r6[r2]
+            if (r6 != 0) goto L_0x0144
+            if (r2 <= 0) goto L_0x0144
+            r6 = r4
+            org.telegram.ui.Charts.data.StackLinearChartData r6 = (org.telegram.ui.Charts.data.StackLinearChartData) r6
+            int[][] r6 = r6.simplifiedY
+            r6 = r6[r13]
+            int r16 = r2 + -1
+            r6 = r6[r16]
+            if (r6 != 0) goto L_0x0144
+            if (r2 >= r12) goto L_0x0144
+            org.telegram.ui.Charts.data.StackLinearChartData r4 = (org.telegram.ui.Charts.data.StackLinearChartData) r4
+            int[][] r4 = r4.simplifiedY
+            r4 = r4[r13]
+            int r6 = r2 + 1
+            r4 = r4[r6]
+            if (r4 != 0) goto L_0x0144
+            boolean[] r4 = r0.skipPoints
+            boolean r4 = r4[r13]
+            if (r4 != 0) goto L_0x013d
+            android.graphics.Path r4 = r15.chartPathPicker
+            int r6 = r0.pikerHeight
+            float r6 = (float) r6
+            r4.lineTo(r8, r6)
+        L_0x013d:
+            boolean[] r4 = r0.skipPoints
+            r6 = 1
+            r4[r13] = r6
+            r6 = 0
+            goto L_0x015c
+        L_0x0144:
+            boolean[] r4 = r0.skipPoints
+            boolean r4 = r4[r13]
+            if (r4 == 0) goto L_0x0152
+            android.graphics.Path r4 = r15.chartPathPicker
+            int r6 = r0.pikerHeight
+            float r6 = (float) r6
+            r4.lineTo(r8, r6)
+        L_0x0152:
+            android.graphics.Path r4 = r15.chartPathPicker
+            r4.lineTo(r8, r7)
+            boolean[] r4 = r0.skipPoints
+            r6 = 0
+            r4[r13] = r6
+        L_0x015c:
+            if (r2 != r12) goto L_0x0168
+            android.graphics.Path r4 = r15.chartPathPicker
+            float r7 = r0.pickerWidth
+            int r15 = r0.pikerHeight
+            float r15 = (float) r15
+            r4.lineTo(r7, r15)
+        L_0x0168:
+            float r14 = r14 + r3
+        L_0x0169:
+            int r13 = r13 + 1
+            r4 = r17
+            r5 = r18
+            r6 = 1
+            r7 = 0
+            goto L_0x0096
+        L_0x0173:
+            r17 = r4
+            r18 = r5
+            r6 = 0
+            int r2 = r2 + 1
+            goto L_0x0047
+        L_0x017c:
+            if (r5 == 0) goto L_0x0187
+            java.lang.String r2 = "statisticChartLineEmpty"
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r1.drawColor(r2)
+        L_0x0187:
+            java.util.ArrayList<L> r2 = r0.lines
+            int r2 = r2.size()
+            r3 = 1
+            int r2 = r2 - r3
+        L_0x018f:
+            if (r2 < 0) goto L_0x01a3
+            java.util.ArrayList<L> r3 = r0.lines
+            java.lang.Object r3 = r3.get(r2)
+            org.telegram.ui.Charts.view_data.LineViewData r3 = (org.telegram.ui.Charts.view_data.LineViewData) r3
+            android.graphics.Path r4 = r3.chartPathPicker
+            android.graphics.Paint r3 = r3.paint
+            r1.drawPath(r4, r3)
+            int r2 = r2 + -1
+            goto L_0x018f
+        L_0x01a3:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.StackLinearChartView.drawPickerChart(android.graphics.Canvas):void");
     }
 
     /* access modifiers changed from: protected */
@@ -1217,9 +1243,10 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
         int i = 0;
         while (true) {
             this.tmpI = i;
-            if (this.tmpI < this.tmpN) {
-                drawHorizontalLines(canvas, (ChartHorizontalLinesData) this.horizontalLines.get(this.tmpI));
-                drawSignaturesToHorizontalLines(canvas, (ChartHorizontalLinesData) this.horizontalLines.get(this.tmpI));
+            int i2 = this.tmpI;
+            if (i2 < this.tmpN) {
+                drawHorizontalLines(canvas, this.horizontalLines.get(i2));
+                drawSignaturesToHorizontalLines(canvas, this.horizontalLines.get(this.tmpI));
                 i = this.tmpI + 1;
             } else {
                 drawBottomSignature(canvas);
@@ -1231,106 +1258,222 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
         }
     }
 
-    public int findMaxValue(int startXIndex, int endXIndex) {
-        return 100;
-    }
-
-    /* access modifiers changed from: protected */
-    public float getMinDistance() {
-        return 0.1f;
-    }
-
-    public void fillTransitionParams(TransitionParams params) {
-        float p;
-        float offset;
-        float fullWidth;
-        float p2;
-        float yPercentage;
-        if (this.chartData != null) {
-            float fullWidth2 = this.chartWidth / (this.pickerDelegate.pickerEnd - this.pickerDelegate.pickerStart);
-            float offset2 = (this.pickerDelegate.pickerStart * fullWidth2) - HORIZONTAL_PADDING;
-            int i = 2;
-            int i2 = 1;
-            if (((StackLinearChartData) this.chartData).xPercentage.length < 2) {
-                p = 1.0f;
-            } else {
-                p = ((StackLinearChartData) this.chartData).xPercentage[1] * fullWidth2;
-            }
-            int additionalPoints = ((int) (HORIZONTAL_PADDING / p)) + 1;
-            int localStart = Math.max(0, (this.startXIndex - additionalPoints) - 1);
-            int localEnd = Math.min(((StackLinearChartData) this.chartData).xPercentage.length - 1, this.endXIndex + additionalPoints + 1);
-            this.transitionParams.startX = new float[((StackLinearChartData) this.chartData).lines.size()];
-            this.transitionParams.startY = new float[((StackLinearChartData) this.chartData).lines.size()];
-            this.transitionParams.endX = new float[((StackLinearChartData) this.chartData).lines.size()];
-            this.transitionParams.endY = new float[((StackLinearChartData) this.chartData).lines.size()];
-            this.transitionParams.angle = new float[((StackLinearChartData) this.chartData).lines.size()];
-            int j = 0;
-            while (j < i) {
-                int i3 = localStart;
-                if (j == i2) {
-                    i3 = localEnd;
-                }
-                int stackOffset = 0;
-                float sum = 0.0f;
-                int drawingLinesCount = 0;
-                for (int k = 0; k < this.lines.size(); k++) {
-                    LineViewData line = (LineViewData) this.lines.get(k);
-                    if ((line.enabled || line.alpha != 0.0f) && line.line.y[i3] > 0) {
-                        sum += ((float) line.line.y[i3]) * line.alpha;
-                        drawingLinesCount++;
-                    }
-                }
-                int k2 = 0;
-                while (k2 < this.lines.size()) {
-                    LineViewData line2 = (LineViewData) this.lines.get(k2);
-                    if (line2.enabled || line2.alpha != 0.0f) {
-                        int[] y = line2.line.y;
-                        if (drawingLinesCount == 1) {
-                            if (y[i3] == 0) {
-                                p2 = p;
-                                yPercentage = 0.0f;
-                            } else {
-                                yPercentage = line2.alpha;
-                                p2 = p;
-                            }
-                        } else if (sum == 0.0f) {
-                            yPercentage = 0.0f;
-                            p2 = p;
-                        } else {
-                            p2 = p;
-                            yPercentage = (((float) y[i3]) * line2.alpha) / sum;
-                        }
-                        float xPoint = (((StackLinearChartData) this.chartData).xPercentage[i3] * fullWidth2) - offset2;
-                        fullWidth = fullWidth2;
-                        float height = ((float) ((getMeasuredHeight() - this.chartBottom) - SIGNATURE_TEXT_HEIGHT)) * yPercentage;
-                        offset = offset2;
-                        LineViewData lineViewData = line2;
-                        float yPoint = (((float) (getMeasuredHeight() - this.chartBottom)) - height) - ((float) stackOffset);
-                        int stackOffset2 = (int) (((float) stackOffset) + height);
-                        if (j == 0) {
-                            this.transitionParams.startX[k2] = xPoint;
-                            this.transitionParams.startY[k2] = yPoint;
-                        } else {
-                            this.transitionParams.endX[k2] = xPoint;
-                            this.transitionParams.endY[k2] = yPoint;
-                        }
-                        stackOffset = stackOffset2;
-                    } else {
-                        fullWidth = fullWidth2;
-                        offset = offset2;
-                        p2 = p;
-                    }
-                    k2++;
-                    p = p2;
-                    fullWidth2 = fullWidth;
-                    offset2 = offset;
-                }
-                float f = offset2;
-                float f2 = p;
-                j++;
-                i = 2;
-                i2 = 1;
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x0135  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x0140  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void fillTransitionParams(org.telegram.ui.Charts.view_data.TransitionParams r18) {
+        /*
+            r17 = this;
+            r0 = r17
+            T r1 = r0.chartData
+            if (r1 != 0) goto L_0x0007
+            return
+        L_0x0007:
+            float r2 = r0.chartWidth
+            org.telegram.ui.Charts.ChartPickerDelegate r3 = r0.pickerDelegate
+            float r4 = r3.pickerEnd
+            float r3 = r3.pickerStart
+            float r4 = r4 - r3
+            float r2 = r2 / r4
+            float r3 = r3 * r2
+            float r4 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
+            float r3 = r3 - r4
+            r5 = r1
+            org.telegram.ui.Charts.data.StackLinearChartData r5 = (org.telegram.ui.Charts.data.StackLinearChartData) r5
+            float[] r5 = r5.xPercentage
+            int r5 = r5.length
+            r6 = 2
+            r7 = 1
+            if (r5 >= r6) goto L_0x0023
+            r1 = 1065353216(0x3var_, float:1.0)
+            goto L_0x002b
+        L_0x0023:
+            org.telegram.ui.Charts.data.StackLinearChartData r1 = (org.telegram.ui.Charts.data.StackLinearChartData) r1
+            float[] r1 = r1.xPercentage
+            r1 = r1[r7]
+            float r1 = r1 * r2
+        L_0x002b:
+            float r4 = r4 / r1
+            int r1 = (int) r4
+            int r1 = r1 + r7
+            int r4 = r0.startXIndex
+            int r4 = r4 - r1
+            int r4 = r4 - r7
+            r5 = 0
+            int r4 = java.lang.Math.max(r5, r4)
+            T r8 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r8 = (org.telegram.ui.Charts.data.StackLinearChartData) r8
+            float[] r8 = r8.xPercentage
+            int r8 = r8.length
+            int r8 = r8 - r7
+            int r9 = r0.endXIndex
+            int r9 = r9 + r1
+            int r9 = r9 + r7
+            int r1 = java.lang.Math.min(r8, r9)
+            org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
+            T r9 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r9 = (org.telegram.ui.Charts.data.StackLinearChartData) r9
+            java.util.ArrayList<org.telegram.ui.Charts.data.ChartData$Line> r9 = r9.lines
+            int r9 = r9.size()
+            float[] r9 = new float[r9]
+            r8.startX = r9
+            org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
+            T r9 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r9 = (org.telegram.ui.Charts.data.StackLinearChartData) r9
+            java.util.ArrayList<org.telegram.ui.Charts.data.ChartData$Line> r9 = r9.lines
+            int r9 = r9.size()
+            float[] r9 = new float[r9]
+            r8.startY = r9
+            org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
+            T r9 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r9 = (org.telegram.ui.Charts.data.StackLinearChartData) r9
+            java.util.ArrayList<org.telegram.ui.Charts.data.ChartData$Line> r9 = r9.lines
+            int r9 = r9.size()
+            float[] r9 = new float[r9]
+            r8.endX = r9
+            org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
+            T r9 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r9 = (org.telegram.ui.Charts.data.StackLinearChartData) r9
+            java.util.ArrayList<org.telegram.ui.Charts.data.ChartData$Line> r9 = r9.lines
+            int r9 = r9.size()
+            float[] r9 = new float[r9]
+            r8.endY = r9
+            org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
+            T r9 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r9 = (org.telegram.ui.Charts.data.StackLinearChartData) r9
+            java.util.ArrayList<org.telegram.ui.Charts.data.ChartData$Line> r9 = r9.lines
+            int r9 = r9.size()
+            float[] r9 = new float[r9]
+            r8.angle = r9
+            r8 = 0
+        L_0x0098:
+            if (r8 >= r6) goto L_0x0157
+            if (r8 != r7) goto L_0x009e
+            r9 = r1
+            goto L_0x009f
+        L_0x009e:
+            r9 = r4
+        L_0x009f:
+            r10 = 0
+            r11 = 0
+            r12 = 0
+            r13 = 0
+        L_0x00a3:
+            java.util.ArrayList<L> r14 = r0.lines
+            int r14 = r14.size()
+            if (r11 >= r14) goto L_0x00d3
+            java.util.ArrayList<L> r14 = r0.lines
+            java.lang.Object r14 = r14.get(r11)
+            org.telegram.ui.Charts.view_data.LineViewData r14 = (org.telegram.ui.Charts.view_data.LineViewData) r14
+            boolean r15 = r14.enabled
+            if (r15 != 0) goto L_0x00be
+            float r15 = r14.alpha
+            int r15 = (r15 > r10 ? 1 : (r15 == r10 ? 0 : -1))
+            if (r15 != 0) goto L_0x00be
+            goto L_0x00d0
+        L_0x00be:
+            org.telegram.ui.Charts.data.ChartData$Line r15 = r14.line
+            int[] r15 = r15.y
+            r16 = r15[r9]
+            if (r16 <= 0) goto L_0x00d0
+            r15 = r15[r9]
+            float r15 = (float) r15
+            float r14 = r14.alpha
+            float r15 = r15 * r14
+            float r12 = r12 + r15
+            int r13 = r13 + 1
+        L_0x00d0:
+            int r11 = r11 + 1
+            goto L_0x00a3
+        L_0x00d3:
+            r11 = 0
+            r14 = 0
+        L_0x00d5:
+            java.util.ArrayList<L> r15 = r0.lines
+            int r15 = r15.size()
+            if (r11 >= r15) goto L_0x0150
+            java.util.ArrayList<L> r15 = r0.lines
+            java.lang.Object r15 = r15.get(r11)
+            org.telegram.ui.Charts.view_data.LineViewData r15 = (org.telegram.ui.Charts.view_data.LineViewData) r15
+            boolean r5 = r15.enabled
+            if (r5 != 0) goto L_0x00f0
+            float r5 = r15.alpha
+            int r5 = (r5 > r10 ? 1 : (r5 == r10 ? 0 : -1))
+            if (r5 != 0) goto L_0x00f0
+            goto L_0x014a
+        L_0x00f0:
+            org.telegram.ui.Charts.data.ChartData$Line r5 = r15.line
+            int[] r5 = r5.y
+            if (r13 != r7) goto L_0x00fe
+            r5 = r5[r9]
+            if (r5 != 0) goto L_0x00fb
+            goto L_0x0102
+        L_0x00fb:
+            float r5 = r15.alpha
+            goto L_0x010c
+        L_0x00fe:
+            int r16 = (r12 > r10 ? 1 : (r12 == r10 ? 0 : -1))
+            if (r16 != 0) goto L_0x0104
+        L_0x0102:
+            r5 = 0
+            goto L_0x010c
+        L_0x0104:
+            r5 = r5[r9]
+            float r5 = (float) r5
+            float r15 = r15.alpha
+            float r5 = r5 * r15
+            float r5 = r5 / r12
+        L_0x010c:
+            T r15 = r0.chartData
+            org.telegram.ui.Charts.data.StackLinearChartData r15 = (org.telegram.ui.Charts.data.StackLinearChartData) r15
+            float[] r15 = r15.xPercentage
+            r15 = r15[r9]
+            float r15 = r15 * r2
+            float r15 = r15 - r3
+            int r16 = r17.getMeasuredHeight()
+            int r6 = r0.chartBottom
+            int r16 = r16 - r6
+            int r6 = org.telegram.ui.Charts.BaseChartView.SIGNATURE_TEXT_HEIGHT
+            int r6 = r16 - r6
+            float r6 = (float) r6
+            float r5 = r5 * r6
+            int r6 = r17.getMeasuredHeight()
+            int r7 = r0.chartBottom
+            int r6 = r6 - r7
+            float r6 = (float) r6
+            float r6 = r6 - r5
+            float r7 = (float) r14
+            float r6 = r6 - r7
+            float r7 = r7 + r5
+            int r14 = (int) r7
+            if (r8 != 0) goto L_0x0140
+            org.telegram.ui.Charts.view_data.TransitionParams r5 = r0.transitionParams
+            float[] r7 = r5.startX
+            r7[r11] = r15
+            float[] r5 = r5.startY
+            r5[r11] = r6
+            goto L_0x014a
+        L_0x0140:
+            org.telegram.ui.Charts.view_data.TransitionParams r5 = r0.transitionParams
+            float[] r7 = r5.endX
+            r7[r11] = r15
+            float[] r5 = r5.endY
+            r5[r11] = r6
+        L_0x014a:
+            int r11 = r11 + 1
+            r5 = 0
+            r6 = 2
+            r7 = 1
+            goto L_0x00d5
+        L_0x0150:
+            int r8 = r8 + 1
+            r5 = 0
+            r6 = 2
+            r7 = 1
+            goto L_0x0098
+        L_0x0157:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.StackLinearChartView.fillTransitionParams(org.telegram.ui.Charts.view_data.TransitionParams):void");
     }
 }

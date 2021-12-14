@@ -1,22 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda107 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ AlertDialog[] f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ BaseFragment f$3;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ ArrayList f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda107(MessagesController messagesController, AlertDialog[] alertDialogArr, int i, BaseFragment baseFragment) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda107(MessagesController messagesController, ArrayList arrayList, ArrayList arrayList2) {
         this.f$0 = messagesController;
-        this.f$1 = alertDialogArr;
-        this.f$2 = i;
-        this.f$3 = baseFragment;
+        this.f$1 = arrayList;
+        this.f$2 = arrayList2;
     }
 
     public final void run() {
-        this.f$0.m298xdcffed4a(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$processUpdateArray$292(this.f$1, this.f$2);
     }
 }

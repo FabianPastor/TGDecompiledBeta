@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupInviteActivity$$ExternalSyntheticLambda0
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3033lambda$createView$0$orgtelegramuiGroupInviteActivity(dialogInterface, i);
+        this.f$0.lambda$createView$0(dialogInterface, i);
     }
 }

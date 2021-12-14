@@ -12,6 +12,6 @@ public final /* synthetic */ class PhotoViewerCaptionEnterView$$ExternalSyntheti
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2498x40b9CLASSNAME(this.f$1, valueAnimator);
+        this.f$0.lambda$showPopup$7(this.f$1, valueAnimator);
     }
 }

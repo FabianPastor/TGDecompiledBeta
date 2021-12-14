@@ -1,19 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.NativeByteBuffer;
+import java.util.Comparator;
+import org.telegram.messenger.MessagesController;
 
-public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda189 implements Runnable {
-    public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ NativeByteBuffer f$2;
+public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda189 implements Comparator {
+    public static final /* synthetic */ MessagesStorage$$ExternalSyntheticLambda189 INSTANCE = new MessagesStorage$$ExternalSyntheticLambda189();
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda189(MessagesStorage messagesStorage, long j, NativeByteBuffer nativeByteBuffer) {
-        this.f$0 = messagesStorage;
-        this.f$1 = j;
-        this.f$2 = nativeByteBuffer;
+    private /* synthetic */ MessagesStorage$$ExternalSyntheticLambda189() {
     }
 
-    public final void run() {
-        this.f$0.m925x9e425e5f(this.f$1, this.f$2);
+    public final int compare(Object obj, Object obj2) {
+        return MessagesStorage.lambda$processLoadedFilterPeersInternal$41((MessagesController.DialogFilter) obj, (MessagesController.DialogFilter) obj2);
     }
 }

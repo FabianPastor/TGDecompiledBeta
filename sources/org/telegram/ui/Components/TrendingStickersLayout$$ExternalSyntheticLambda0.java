@@ -17,6 +17,6 @@ public final /* synthetic */ class TrendingStickersLayout$$ExternalSyntheticLamb
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.m2698lambda$new$1$orgtelegramuiComponentsTrendingStickersLayout(this.f$1, this.f$2, view, motionEvent);
+        return this.f$0.lambda$new$1(this.f$1, this.f$2, view, motionEvent);
     }
 }

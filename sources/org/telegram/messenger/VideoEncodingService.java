@@ -13,19 +13,19 @@ public class VideoEncodingService extends Service implements NotificationCenter.
     private int currentProgress;
     private String path;
 
-    public VideoEncodingService() {
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.stopEncodingService);
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
-    public IBinder onBind(Intent arg2) {
-        return null;
+    public VideoEncodingService() {
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.stopEncodingService);
     }
 
     public void onDestroy() {
         super.onDestroy();
         try {
             stopForeground(true);
-        } catch (Throwable th) {
+        } catch (Throwable unused) {
         }
         NotificationManagerCompat.from(ApplicationLoader.applicationContext).cancel(4);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.stopEncodingService);
@@ -35,52 +35,54 @@ public class VideoEncodingService extends Service implements NotificationCenter.
         }
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
         String str;
         boolean z = true;
-        if (id == NotificationCenter.fileUploadProgressChanged) {
-            String fileName = args[0];
-            if (account == this.currentAccount && (str = this.path) != null && str.equals(fileName)) {
-                float progress = Math.min(1.0f, ((float) args[1].longValue()) / ((float) args[2].longValue()));
-                Boolean bool = args[3];
-                int i = (int) (100.0f * progress);
-                this.currentProgress = i;
+        if (i == NotificationCenter.fileUploadProgressChanged) {
+            String str2 = objArr[0];
+            if (i2 == this.currentAccount && (str = this.path) != null && str.equals(str2)) {
+                float min = Math.min(1.0f, ((float) objArr[1].longValue()) / ((float) objArr[2].longValue()));
+                Boolean bool = objArr[3];
+                int i3 = (int) (min * 100.0f);
+                this.currentProgress = i3;
                 NotificationCompat.Builder builder2 = this.builder;
-                if (i != 0) {
+                if (i3 != 0) {
                     z = false;
                 }
-                builder2.setProgress(100, i, z);
+                builder2.setProgress(100, i3, z);
                 try {
                     NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
-                } catch (Throwable e) {
-                    FileLog.e(e);
+                } catch (Throwable th) {
+                    FileLog.e(th);
                 }
             }
-        } else if (id == NotificationCenter.stopEncodingService) {
-            String filepath = args[0];
-            if (args[1].intValue() != this.currentAccount) {
+        } else if (i == NotificationCenter.stopEncodingService) {
+            String str3 = objArr[0];
+            if (objArr[1].intValue() != this.currentAccount) {
                 return;
             }
-            if (filepath == null || filepath.equals(this.path)) {
+            if (str3 == null || str3.equals(this.path)) {
                 stopSelf();
             }
         }
     }
 
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(Intent intent, int i, int i2) {
         this.path = intent.getStringExtra("path");
-        int oldAccount = this.currentAccount;
+        int i3 = this.currentAccount;
         int intExtra = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
         this.currentAccount = intExtra;
         if (!UserConfig.isValidAccount(intExtra)) {
             stopSelf();
             return 2;
         }
-        if (oldAccount != this.currentAccount) {
-            NotificationCenter.getInstance(oldAccount).removeObserver(this, NotificationCenter.fileUploadProgressChanged);
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileUploadProgressChanged);
+        if (i3 != this.currentAccount) {
+            NotificationCenter instance = NotificationCenter.getInstance(i3);
+            int i4 = NotificationCenter.fileUploadProgressChanged;
+            instance.removeObserver(this, i4);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, i4);
         }
-        boolean isGif = intent.getBooleanExtra("gif", false);
+        boolean booleanExtra = intent.getBooleanExtra("gif", false);
         if (this.path == null) {
             stopSelf();
             return 2;
@@ -96,7 +98,7 @@ public class VideoEncodingService extends Service implements NotificationCenter.
             this.builder.setWhen(System.currentTimeMillis());
             this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
             this.builder.setContentTitle(LocaleController.getString("AppName", NUM));
-            if (isGif) {
+            if (booleanExtra) {
                 this.builder.setTicker(LocaleController.getString("SendingGif", NUM));
                 this.builder.setContentText(LocaleController.getString("SendingGif", NUM));
             } else {

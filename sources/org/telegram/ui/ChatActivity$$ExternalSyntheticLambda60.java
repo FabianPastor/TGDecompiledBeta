@@ -1,34 +1,21 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessageObject;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
+import android.widget.FrameLayout;
+import org.telegram.ui.Components.ChatActivityEnterTopView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda60 implements RequestDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda60 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ MessageObject f$3;
-    public final /* synthetic */ Runnable f$4;
-    public final /* synthetic */ TLRPC.TL_messages_getDiscussionMessage f$5;
-    public final /* synthetic */ TLRPC.Chat f$6;
-    public final /* synthetic */ int f$7;
-    public final /* synthetic */ MessageObject f$8;
+    public final /* synthetic */ ChatActivityEnterTopView.EditViewButton f$1;
+    public final /* synthetic */ FrameLayout f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda60(ChatActivity chatActivity, int i, int i2, MessageObject messageObject, Runnable runnable, TLRPC.TL_messages_getDiscussionMessage tL_messages_getDiscussionMessage, TLRPC.Chat chat, int i3, MessageObject messageObject2) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda60(ChatActivity chatActivity, ChatActivityEnterTopView.EditViewButton editViewButton, FrameLayout frameLayout) {
         this.f$0 = chatActivity;
-        this.f$1 = i;
-        this.f$2 = i2;
-        this.f$3 = messageObject;
-        this.f$4 = runnable;
-        this.f$5 = tL_messages_getDiscussionMessage;
-        this.f$6 = chat;
-        this.f$7 = i3;
-        this.f$8 = messageObject2;
+        this.f$1 = editViewButton;
+        this.f$2 = frameLayout;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m1761x2695243(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, tLObject, tL_error);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$48(this.f$1, this.f$2, view);
     }
 }

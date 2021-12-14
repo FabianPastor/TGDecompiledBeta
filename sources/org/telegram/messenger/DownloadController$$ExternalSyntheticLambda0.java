@@ -8,6 +8,6 @@ public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda0 
     }
 
     public final void run() {
-        this.f$0.m67lambda$new$0$orgtelegrammessengerDownloadController();
+        this.f$0.lambda$new$0();
     }
 }

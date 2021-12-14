@@ -5,8 +5,8 @@ public class TurnCustomizer {
 
     private static native void nativeFreeTurnCustomizer(long j);
 
-    public TurnCustomizer(long nativeTurnCustomizer2) {
-        this.nativeTurnCustomizer = nativeTurnCustomizer2;
+    public TurnCustomizer(long j) {
+        this.nativeTurnCustomizer = j;
     }
 
     public void dispose() {
@@ -16,6 +16,7 @@ public class TurnCustomizer {
     }
 
     /* access modifiers changed from: package-private */
+    @CalledByNative
     public long getNativeTurnCustomizer() {
         checkTurnCustomizerExists();
         return this.nativeTurnCustomizer;

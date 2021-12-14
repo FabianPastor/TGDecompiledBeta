@@ -12,6 +12,6 @@ public final /* synthetic */ class WallpaperUpdater$$ExternalSyntheticLambda0 im
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2724lambda$showAlert$0$orgtelegramuiComponentsWallpaperUpdater(this.f$1, dialogInterface, i);
+        this.f$0.lambda$showAlert$0(this.f$1, dialogInterface, i);
     }
 }

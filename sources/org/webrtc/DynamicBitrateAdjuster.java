@@ -12,53 +12,60 @@ class DynamicBitrateAdjuster extends BaseBitrateAdjuster {
     DynamicBitrateAdjuster() {
     }
 
-    public void setTargets(int targetBitrateBps, int targetFps) {
-        if (this.targetBitrateBps > 0 && targetBitrateBps < this.targetBitrateBps) {
+    public void setTargets(int i, int i2) {
+        int i3 = this.targetBitrateBps;
+        if (i3 > 0 && i < i3) {
             double d = this.deviationBytes;
-            double d2 = (double) targetBitrateBps;
+            double d2 = (double) i;
             Double.isNaN(d2);
             double d3 = d * d2;
-            double d4 = (double) this.targetBitrateBps;
+            double d4 = (double) i3;
             Double.isNaN(d4);
             this.deviationBytes = d3 / d4;
         }
-        super.setTargets(targetBitrateBps, targetFps);
+        super.setTargets(i, i2);
     }
 
-    public void reportEncodedFrame(int size) {
-        if (this.targetFps != 0) {
-            double d = (double) this.targetBitrateBps;
+    public void reportEncodedFrame(int i) {
+        int i2 = this.targetFps;
+        if (i2 != 0) {
+            int i3 = this.targetBitrateBps;
+            double d = (double) i3;
             Double.isNaN(d);
-            double d2 = (double) this.targetFps;
+            double d2 = (double) i2;
             Double.isNaN(d2);
-            double expectedBytesPerFrame = (d / 8.0d) / d2;
-            double d3 = this.deviationBytes;
-            double d4 = (double) size;
-            Double.isNaN(d4);
-            this.deviationBytes = d3 + (d4 - expectedBytesPerFrame);
-            double d5 = this.timeSinceLastAdjustmentMs;
-            double d6 = (double) this.targetFps;
-            Double.isNaN(d6);
-            this.timeSinceLastAdjustmentMs = d5 + (1000.0d / d6);
-            double d7 = (double) this.targetBitrateBps;
-            Double.isNaN(d7);
-            double deviationThresholdBytes = d7 / 8.0d;
-            double deviationCap = 3.0d * deviationThresholdBytes;
-            double min = Math.min(this.deviationBytes, deviationCap);
+            double d3 = (d / 8.0d) / d2;
+            double d4 = this.deviationBytes;
+            double d5 = (double) i;
+            Double.isNaN(d5);
+            double d6 = d4 + (d5 - d3);
+            this.deviationBytes = d6;
+            double d7 = this.timeSinceLastAdjustmentMs;
+            double d8 = (double) i2;
+            Double.isNaN(d8);
+            this.timeSinceLastAdjustmentMs = d7 + (1000.0d / d8);
+            double d9 = (double) i3;
+            Double.isNaN(d9);
+            double d10 = d9 / 8.0d;
+            double d11 = 3.0d * d10;
+            double min = Math.min(d6, d11);
             this.deviationBytes = min;
-            double max = Math.max(min, -deviationCap);
+            double max = Math.max(min, -d11);
             this.deviationBytes = max;
             if (this.timeSinceLastAdjustmentMs > 3000.0d) {
-                if (max > deviationThresholdBytes) {
-                    int i = this.bitrateAdjustmentScaleExp - ((int) ((max / deviationThresholdBytes) + 0.5d));
-                    this.bitrateAdjustmentScaleExp = i;
-                    this.bitrateAdjustmentScaleExp = Math.max(i, -20);
-                    this.deviationBytes = deviationThresholdBytes;
-                } else if (max < (-deviationThresholdBytes)) {
-                    int i2 = this.bitrateAdjustmentScaleExp + ((int) (((-max) / deviationThresholdBytes) + 0.5d));
-                    this.bitrateAdjustmentScaleExp = i2;
-                    this.bitrateAdjustmentScaleExp = Math.min(i2, 20);
-                    this.deviationBytes = -deviationThresholdBytes;
+                if (max > d10) {
+                    int i4 = this.bitrateAdjustmentScaleExp - ((int) ((max / d10) + 0.5d));
+                    this.bitrateAdjustmentScaleExp = i4;
+                    this.bitrateAdjustmentScaleExp = Math.max(i4, -20);
+                    this.deviationBytes = d10;
+                } else {
+                    double d12 = -d10;
+                    if (max < d12) {
+                        int i5 = this.bitrateAdjustmentScaleExp + ((int) (((-max) / d10) + 0.5d));
+                        this.bitrateAdjustmentScaleExp = i5;
+                        this.bitrateAdjustmentScaleExp = Math.min(i5, 20);
+                        this.deviationBytes = d12;
+                    }
                 }
                 this.timeSinceLastAdjustmentMs = 0.0d;
             }

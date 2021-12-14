@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsAdapter$DialogsPreloader$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.m1352x8b23716d();
+        this.f$0.lambda$new$0();
     }
 }

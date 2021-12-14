@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
-import java.io.File;
-
 public final /* synthetic */ class MediaController$$ExternalSyntheticLambda28 implements Runnable {
-    public final /* synthetic */ MessageObject f$0;
-    public final /* synthetic */ File f$1;
+    public final /* synthetic */ MediaController f$0;
+    public final /* synthetic */ MessageObject f$1;
 
-    public /* synthetic */ MediaController$$ExternalSyntheticLambda28(MessageObject messageObject, File file) {
-        this.f$0 = messageObject;
-        this.f$1 = file;
+    public /* synthetic */ MediaController$$ExternalSyntheticLambda28(MediaController mediaController, MessageObject messageObject) {
+        this.f$0 = mediaController;
+        this.f$1 = messageObject;
     }
 
     public final void run() {
-        NotificationCenter.getInstance(this.f$0.currentAccount).postNotificationName(NotificationCenter.fileLoaded, FileLoader.getAttachFileName(this.f$0.getDocument()), this.f$1);
+        this.f$0.lambda$startAudioAgain$7(this.f$1);
     }
 }

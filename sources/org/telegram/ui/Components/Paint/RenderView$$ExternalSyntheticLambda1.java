@@ -10,6 +10,6 @@ public final /* synthetic */ class RenderView$$ExternalSyntheticLambda1 implemen
     }
 
     public final void run() {
-        this.f$0.m2422xd0118e5a(this.f$1);
+        this.f$0.lambda$performInContext$1(this.f$1);
     }
 }

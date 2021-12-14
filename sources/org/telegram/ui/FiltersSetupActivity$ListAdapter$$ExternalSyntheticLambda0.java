@@ -14,6 +14,6 @@ public final /* synthetic */ class FiltersSetupActivity$ListAdapter$$ExternalSyn
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2940x58497cc0(this.f$1, dialogInterface, i);
+        this.f$0.lambda$onCreateViewHolder$3(this.f$1, dialogInterface, i);
     }
 }

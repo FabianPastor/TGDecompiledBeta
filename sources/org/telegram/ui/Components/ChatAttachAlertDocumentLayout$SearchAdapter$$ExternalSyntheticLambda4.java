@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatAttachAlertDocumentLayout$SearchAdapter$$
     }
 
     public final void run() {
-        this.f$0.m2141xe95e5031(this.f$1);
+        this.f$0.lambda$updateSearchResults$5(this.f$1);
     }
 }

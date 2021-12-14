@@ -1,15 +1,13 @@
 package org.telegram.ui.Adapters;
 
-import java.util.Comparator;
-import org.telegram.ui.Adapters.DialogsSearchAdapter;
+public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda4 implements Runnable {
+    public final /* synthetic */ DialogsSearchAdapter f$0;
 
-public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda4 implements Comparator {
-    public static final /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda4 INSTANCE = new DialogsSearchAdapter$$ExternalSyntheticLambda4();
-
-    private /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda4() {
+    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda4(DialogsSearchAdapter dialogsSearchAdapter) {
+        this.f$0 = dialogsSearchAdapter;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return DialogsSearchAdapter.lambda$loadRecentSearch$3((DialogsSearchAdapter.RecentSearchObject) obj, (DialogsSearchAdapter.RecentSearchObject) obj2);
+    public final void run() {
+        this.f$0.lambda$searchDialogsInternal$9();
     }
 }

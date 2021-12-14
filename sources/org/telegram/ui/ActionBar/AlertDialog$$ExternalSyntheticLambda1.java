@@ -10,6 +10,6 @@ public final /* synthetic */ class AlertDialog$$ExternalSyntheticLambda1 impleme
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m1315lambda$showCancelAlert$6$orgtelegramuiActionBarAlertDialog(dialogInterface);
+        this.f$0.lambda$showCancelAlert$6(dialogInterface);
     }
 }

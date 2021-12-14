@@ -1,17 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AndroidUtilities;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class PassportActivity$$ExternalSyntheticLambda64 implements RequestDelegate {
-    public static final /* synthetic */ PassportActivity$$ExternalSyntheticLambda64 INSTANCE = new PassportActivity$$ExternalSyntheticLambda64();
+    public final /* synthetic */ PassportActivity f$0;
 
-    private /* synthetic */ PassportActivity$$ExternalSyntheticLambda64() {
+    public /* synthetic */ PassportActivity$$ExternalSyntheticLambda64(PassportActivity passportActivity) {
+        this.f$0 = passportActivity;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new PassportActivity$$ExternalSyntheticLambda40(tLObject));
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$createManageInterface$19(tLObject, tLRPC$TL_error);
     }
 }

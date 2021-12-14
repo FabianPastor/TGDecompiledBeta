@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityNewPasswordView$$E
     }
 
     public final void run() {
-        this.f$0.m3190xf9d7be81();
+        this.f$0.lambda$onShow$8();
     }
 }

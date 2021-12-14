@@ -11,6 +11,6 @@ public final /* synthetic */ class CameraView$CameraGLThread$$ExternalSyntheticL
     }
 
     public final void onFrameAvailable(SurfaceTexture surfaceTexture) {
-        this.f$0.m1183xd2064eaf(surfaceTexture);
+        this.f$0.lambda$initGL$0(surfaceTexture);
     }
 }

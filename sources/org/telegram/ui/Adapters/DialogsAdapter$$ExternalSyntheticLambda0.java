@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsAdapter$$ExternalSyntheticLambda0 impl
     }
 
     public final void onClick(View view) {
-        this.f$0.m1351x3c8bd2a9(view);
+        this.f$0.lambda$onCreateViewHolder$1(view);
     }
 }

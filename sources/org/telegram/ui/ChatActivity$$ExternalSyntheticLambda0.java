@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda0 implem
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1733lambda$hidePinnedMessageView$110$orgtelegramuiChatActivity(valueAnimator);
+        this.f$0.lambda$hidePinnedMessageView$110(valueAnimator);
     }
 }

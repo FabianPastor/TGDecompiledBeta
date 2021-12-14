@@ -10,6 +10,6 @@ public final /* synthetic */ class MediaController$MediaLoader$$ExternalSyntheti
     }
 
     public final void run() {
-        this.f$0.m764x99201a9a();
+        this.f$0.lambda$start$2();
     }
 }

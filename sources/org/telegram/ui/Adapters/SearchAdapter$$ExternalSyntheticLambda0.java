@@ -16,6 +16,6 @@ public final /* synthetic */ class SearchAdapter$$ExternalSyntheticLambda0 imple
     }
 
     public final void run() {
-        this.f$0.m1389x2CLASSNAMEe2(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$updateSearchResults$2(this.f$1, this.f$2, this.f$3);
     }
 }

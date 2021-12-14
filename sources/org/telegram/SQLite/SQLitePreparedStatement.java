@@ -46,30 +46,30 @@ public class SQLitePreparedStatement {
         return this.sqliteStatementHandle;
     }
 
-    public SQLitePreparedStatement(SQLiteDatabase db, String sql) throws SQLiteException {
-        this.sqliteStatementHandle = prepare(db.getSQLiteHandle(), sql);
+    public SQLitePreparedStatement(SQLiteDatabase sQLiteDatabase, String str) throws SQLiteException {
+        this.sqliteStatementHandle = prepare(sQLiteDatabase.getSQLiteHandle(), str);
         if (BuildVars.LOGS_ENABLED) {
-            this.query = sql;
+            this.query = str;
             this.startTime = SystemClock.elapsedRealtime();
         }
     }
 
-    public SQLiteCursor query(Object[] args) throws SQLiteException {
-        if (args != null) {
+    public SQLiteCursor query(Object[] objArr) throws SQLiteException {
+        if (objArr != null) {
             checkFinalized();
             reset(this.sqliteStatementHandle);
             int i = 1;
-            for (Object obj : args) {
-                if (obj == null) {
+            for (Integer num : objArr) {
+                if (num == null) {
                     bindNull(this.sqliteStatementHandle, i);
-                } else if (obj instanceof Integer) {
-                    bindInt(this.sqliteStatementHandle, i, ((Integer) obj).intValue());
-                } else if (obj instanceof Double) {
-                    bindDouble(this.sqliteStatementHandle, i, ((Double) obj).doubleValue());
-                } else if (obj instanceof String) {
-                    bindString(this.sqliteStatementHandle, i, (String) obj);
-                } else if (obj instanceof Long) {
-                    bindLong(this.sqliteStatementHandle, i, ((Long) obj).longValue());
+                } else if (num instanceof Integer) {
+                    bindInt(this.sqliteStatementHandle, i, num.intValue());
+                } else if (num instanceof Double) {
+                    bindDouble(this.sqliteStatementHandle, i, ((Double) num).doubleValue());
+                } else if (num instanceof String) {
+                    bindString(this.sqliteStatementHandle, i, (String) num);
+                } else if (num instanceof Long) {
+                    bindLong(this.sqliteStatementHandle, i, ((Long) num).longValue());
                 } else {
                     throw new IllegalArgumentException();
                 }
@@ -108,9 +108,9 @@ public class SQLitePreparedStatement {
     public void finalizeQuery() {
         if (!this.isFinalized) {
             if (BuildVars.LOGS_ENABLED) {
-                long diff = SystemClock.elapsedRealtime() - this.startTime;
-                if (diff > 500) {
-                    FileLog.d("sqlite query " + this.query + " took " + diff + "ms");
+                long elapsedRealtime = SystemClock.elapsedRealtime() - this.startTime;
+                if (elapsedRealtime > 500) {
+                    FileLog.d("sqlite query " + this.query + " took " + elapsedRealtime + "ms");
                 }
             }
             try {
@@ -124,31 +124,31 @@ public class SQLitePreparedStatement {
         }
     }
 
-    public void bindInteger(int index, int value) throws SQLiteException {
-        bindInt(this.sqliteStatementHandle, index, value);
+    public void bindInteger(int i, int i2) throws SQLiteException {
+        bindInt(this.sqliteStatementHandle, i, i2);
     }
 
-    public void bindDouble(int index, double value) throws SQLiteException {
-        bindDouble(this.sqliteStatementHandle, index, value);
+    public void bindDouble(int i, double d) throws SQLiteException {
+        bindDouble(this.sqliteStatementHandle, i, d);
     }
 
-    public void bindByteBuffer(int index, ByteBuffer value) throws SQLiteException {
-        bindByteBuffer(this.sqliteStatementHandle, index, value, value.limit());
+    public void bindByteBuffer(int i, ByteBuffer byteBuffer) throws SQLiteException {
+        bindByteBuffer(this.sqliteStatementHandle, i, byteBuffer, byteBuffer.limit());
     }
 
-    public void bindByteBuffer(int index, NativeByteBuffer value) throws SQLiteException {
-        bindByteBuffer(this.sqliteStatementHandle, index, value.buffer, value.limit());
+    public void bindByteBuffer(int i, NativeByteBuffer nativeByteBuffer) throws SQLiteException {
+        bindByteBuffer(this.sqliteStatementHandle, i, nativeByteBuffer.buffer, nativeByteBuffer.limit());
     }
 
-    public void bindString(int index, String value) throws SQLiteException {
-        bindString(this.sqliteStatementHandle, index, value);
+    public void bindString(int i, String str) throws SQLiteException {
+        bindString(this.sqliteStatementHandle, i, str);
     }
 
-    public void bindLong(int index, long value) throws SQLiteException {
-        bindLong(this.sqliteStatementHandle, index, value);
+    public void bindLong(int i, long j) throws SQLiteException {
+        bindLong(this.sqliteStatementHandle, i, j);
     }
 
-    public void bindNull(int index) throws SQLiteException {
-        bindNull(this.sqliteStatementHandle, index);
+    public void bindNull(int i) throws SQLiteException {
+        bindNull(this.sqliteStatementHandle, i);
     }
 }

@@ -1,13 +1,16 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda336 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda336(MessagesController messagesController) {
-        this.f$0 = messagesController;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda336 implements RequestDelegate {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda336 INSTANCE = new MessagesController$$ExternalSyntheticLambda336();
+
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda336() {
     }
 
-    public final void run() {
-        this.f$0.m150lambda$cleanup$29$orgtelegrammessengerMessagesController();
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        MessagesController.lambda$reportSpam$50(tLObject, tLRPC$TL_error);
     }
 }

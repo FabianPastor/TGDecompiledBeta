@@ -10,6 +10,6 @@ public final /* synthetic */ class AvatarsImageView$$ExternalSyntheticLambda0 im
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2010x4d01b158(valueAnimator);
+        this.f$0.lambda$commitTransition$0(valueAnimator);
     }
 }

@@ -1,14 +1,15 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda49 implements Comparator {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda49 INSTANCE = new ChatActivity$$ExternalSyntheticLambda49();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda49 implements View.OnClickListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda49() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda49(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return ((Integer) obj2).compareTo((Integer) obj);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$47(view);
     }
 }

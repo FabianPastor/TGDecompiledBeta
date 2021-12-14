@@ -11,6 +11,6 @@ public final /* synthetic */ class ProfileActivity$4$$ExternalSyntheticLambda6 i
     }
 
     public final void run(int i) {
-        this.f$0.m3721lambda$onItemClick$0$orgtelegramuiProfileActivity$4(i);
+        this.f$0.lambda$onItemClick$0(i);
     }
 }

@@ -1,21 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.concurrent.CountDownLatch;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda143 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ boolean[] f$2;
-    public final /* synthetic */ CountDownLatch f$3;
+    public final /* synthetic */ MessageObject f$1;
+    public final /* synthetic */ ArrayList f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda143(MessagesStorage messagesStorage, int i, boolean[] zArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda143(MessagesStorage messagesStorage, MessageObject messageObject, ArrayList arrayList) {
         this.f$0 = messagesStorage;
-        this.f$1 = i;
-        this.f$2 = zArr;
-        this.f$3 = countDownLatch;
+        this.f$1 = messageObject;
+        this.f$2 = arrayList;
     }
 
     public final void run() {
-        this.f$0.m970lambda$hasAuthMessage$132$orgtelegrammessengerMessagesStorage(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$replaceMessageIfExists$167(this.f$1, this.f$2);
     }
 }

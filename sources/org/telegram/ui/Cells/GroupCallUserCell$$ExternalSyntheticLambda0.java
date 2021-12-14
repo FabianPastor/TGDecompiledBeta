@@ -14,6 +14,6 @@ public final /* synthetic */ class GroupCallUserCell$$ExternalSyntheticLambda0 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1533xvar_dd947(this.f$1, this.f$2, valueAnimator);
+        this.f$0.lambda$applyParticipantChanges$6(this.f$1, this.f$2, valueAnimator);
     }
 }

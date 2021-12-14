@@ -10,6 +10,6 @@ public final /* synthetic */ class RenderView$1$$ExternalSyntheticLambda1 implem
     }
 
     public final void run() {
-        this.f$0.m2425xd0e9e8e9();
+        this.f$0.lambda$onSurfaceTextureSizeChanged$0();
     }
 }

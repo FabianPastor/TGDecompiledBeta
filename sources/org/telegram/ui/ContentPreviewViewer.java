@@ -1,5 +1,6 @@
 package org.telegram.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,7 +17,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -35,7 +35,15 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.WebFile;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$BotInlineResult;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$DocumentAttribute;
+import org.telegram.tgnet.TLRPC$InputStickerSet;
+import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
+import org.telegram.tgnet.TLRPC$TL_webDocument;
+import org.telegram.tgnet.TLRPC$VideoSize;
+import org.telegram.tgnet.TLRPC$WebDocument;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ContextLinkCell;
@@ -46,10 +54,8 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class ContentPreviewViewer {
-    private static final int CONTENT_TYPE_GIF = 1;
-    private static final int CONTENT_TYPE_NONE = -1;
-    private static final int CONTENT_TYPE_STICKER = 0;
-    private static volatile ContentPreviewViewer Instance = null;
+    @SuppressLint({"StaticFieldLeak"})
+    private static volatile ContentPreviewViewer Instance;
     private static TextPaint textPaint;
     /* access modifiers changed from: private */
     public boolean animateY;
@@ -64,7 +70,7 @@ public class ContentPreviewViewer {
     /* access modifiers changed from: private */
     public int currentContentType;
     /* access modifiers changed from: private */
-    public TLRPC.Document currentDocument;
+    public TLRPC$Document currentDocument;
     private float currentMoveY;
     /* access modifiers changed from: private */
     public float currentMoveYProgress;
@@ -72,7 +78,7 @@ public class ContentPreviewViewer {
     /* access modifiers changed from: private */
     public String currentQuery;
     /* access modifiers changed from: private */
-    public TLRPC.InputStickerSet currentStickerSet;
+    public TLRPC$InputStickerSet currentStickerSet;
     /* access modifiers changed from: private */
     public ContentPreviewViewerDelegate delegate;
     /* access modifiers changed from: private */
@@ -80,7 +86,7 @@ public class ContentPreviewViewer {
     /* access modifiers changed from: private */
     public SendMessagesHelper.ImportingSticker importingSticker;
     /* access modifiers changed from: private */
-    public TLRPC.BotInlineResult inlineResult;
+    public TLRPC$BotInlineResult inlineResult;
     /* access modifiers changed from: private */
     public boolean isRecentSticker;
     private boolean isVisible = false;
@@ -100,90 +106,92 @@ public class ContentPreviewViewer {
     private float showProgress;
     private Runnable showSheetRunnable = new Runnable() {
         public void run() {
-            boolean canDelete;
+            boolean z;
             String str;
             int i;
             if (ContentPreviewViewer.this.parentActivity != null) {
                 if (ContentPreviewViewer.this.currentContentType == 0) {
-                    boolean inFavs = MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).isStickerInFavorites(ContentPreviewViewer.this.currentDocument);
+                    boolean isStickerInFavorites = MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).isStickerInFavorites(ContentPreviewViewer.this.currentDocument);
                     BottomSheet.Builder builder = new BottomSheet.Builder(ContentPreviewViewer.this.parentActivity, true, ContentPreviewViewer.this.resourcesProvider);
-                    ArrayList<CharSequence> items = new ArrayList<>();
-                    ArrayList<Integer> actions = new ArrayList<>();
-                    ArrayList<Integer> icons = new ArrayList<>();
+                    ArrayList arrayList = new ArrayList();
+                    ArrayList arrayList2 = new ArrayList();
+                    ArrayList arrayList3 = new ArrayList();
                     if (ContentPreviewViewer.this.delegate != null) {
                         if (ContentPreviewViewer.this.delegate.needSend() && !ContentPreviewViewer.this.delegate.isInScheduleMode()) {
-                            items.add(LocaleController.getString("SendStickerPreview", NUM));
-                            icons.add(NUM);
-                            actions.add(0);
+                            arrayList.add(LocaleController.getString("SendStickerPreview", NUM));
+                            arrayList3.add(NUM);
+                            arrayList2.add(0);
                         }
                         if (!ContentPreviewViewer.this.delegate.isInScheduleMode()) {
-                            items.add(LocaleController.getString("SendWithoutSound", NUM));
-                            icons.add(NUM);
-                            actions.add(6);
+                            arrayList.add(LocaleController.getString("SendWithoutSound", NUM));
+                            arrayList3.add(NUM);
+                            arrayList2.add(6);
                         }
                         if (ContentPreviewViewer.this.delegate.canSchedule()) {
-                            items.add(LocaleController.getString("Schedule", NUM));
-                            icons.add(NUM);
-                            actions.add(3);
+                            arrayList.add(LocaleController.getString("Schedule", NUM));
+                            arrayList3.add(NUM);
+                            arrayList2.add(3);
                         }
                         if (ContentPreviewViewer.this.currentStickerSet != null && ContentPreviewViewer.this.delegate.needOpen()) {
-                            items.add(LocaleController.formatString("ViewPackPreview", NUM, new Object[0]));
-                            icons.add(NUM);
-                            actions.add(1);
+                            arrayList.add(LocaleController.formatString("ViewPackPreview", NUM, new Object[0]));
+                            arrayList3.add(NUM);
+                            arrayList2.add(1);
                         }
                         if (ContentPreviewViewer.this.delegate.needRemove()) {
-                            items.add(LocaleController.getString("ImportStickersRemoveMenu", NUM));
-                            icons.add(NUM);
-                            actions.add(5);
+                            arrayList.add(LocaleController.getString("ImportStickersRemoveMenu", NUM));
+                            arrayList3.add(NUM);
+                            arrayList2.add(5);
                         }
                     }
-                    if (!MessageObject.isMaskDocument(ContentPreviewViewer.this.currentDocument) && (inFavs || (MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).canAddStickerToFavorites() && MessageObject.isStickerHasSet(ContentPreviewViewer.this.currentDocument)))) {
-                        if (inFavs) {
+                    if (!MessageObject.isMaskDocument(ContentPreviewViewer.this.currentDocument) && (isStickerInFavorites || (MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).canAddStickerToFavorites() && MessageObject.isStickerHasSet(ContentPreviewViewer.this.currentDocument)))) {
+                        if (isStickerInFavorites) {
                             i = NUM;
                             str = "DeleteFromFavorites";
                         } else {
                             i = NUM;
                             str = "AddToFavorites";
                         }
-                        items.add(LocaleController.getString(str, i));
-                        icons.add(Integer.valueOf(inFavs ? NUM : NUM));
-                        actions.add(2);
+                        arrayList.add(LocaleController.getString(str, i));
+                        arrayList3.add(Integer.valueOf(isStickerInFavorites ? NUM : NUM));
+                        arrayList2.add(2);
                     }
                     if (ContentPreviewViewer.this.isRecentSticker) {
-                        items.add(LocaleController.getString("DeleteFromRecent", NUM));
-                        icons.add(NUM);
-                        actions.add(4);
+                        arrayList.add(LocaleController.getString("DeleteFromRecent", NUM));
+                        arrayList3.add(NUM);
+                        arrayList2.add(4);
                     }
-                    if (!items.isEmpty()) {
-                        int[] ic = new int[icons.size()];
-                        for (int a = 0; a < icons.size(); a++) {
-                            ic[a] = icons.get(a).intValue();
+                    if (!arrayList.isEmpty()) {
+                        int[] iArr = new int[arrayList3.size()];
+                        for (int i2 = 0; i2 < arrayList3.size(); i2++) {
+                            iArr[i2] = ((Integer) arrayList3.get(i2)).intValue();
                         }
-                        builder.setItems((CharSequence[]) items.toArray(new CharSequence[0]), ic, new ContentPreviewViewer$1$$ExternalSyntheticLambda1(this, actions, inFavs));
+                        builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), iArr, new ContentPreviewViewer$1$$ExternalSyntheticLambda1(this, arrayList2, isStickerInFavorites));
                         builder.setDimBehind(false);
                         BottomSheet unused = ContentPreviewViewer.this.visibleDialog = builder.create();
-                        ContentPreviewViewer.this.visibleDialog.setOnDismissListener(new ContentPreviewViewer$1$$ExternalSyntheticLambda2(this));
+                        ContentPreviewViewer.this.visibleDialog.setOnDismissListener(new ContentPreviewViewer$1$$ExternalSyntheticLambda3(this));
                         ContentPreviewViewer.this.visibleDialog.show();
                         ContentPreviewViewer.this.containerView.performHapticFeedback(0);
                         if (ContentPreviewViewer.this.delegate != null && ContentPreviewViewer.this.delegate.needRemove()) {
-                            BottomSheet.BottomSheetCell cell = ContentPreviewViewer.this.visibleDialog.getItemViews().get(0);
-                            cell.setTextColor(ContentPreviewViewer.this.getThemedColor("dialogTextRed"));
-                            cell.setIconColor(ContentPreviewViewer.this.getThemedColor("dialogRedIcon"));
+                            BottomSheet.BottomSheetCell bottomSheetCell = ContentPreviewViewer.this.visibleDialog.getItemViews().get(0);
+                            bottomSheetCell.setTextColor(ContentPreviewViewer.this.getThemedColor("dialogTextRed"));
+                            bottomSheetCell.setIconColor(ContentPreviewViewer.this.getThemedColor("dialogRedIcon"));
                         }
                     }
                 } else if (ContentPreviewViewer.this.delegate != null) {
                     boolean unused2 = ContentPreviewViewer.this.animateY = true;
                     BottomSheet unused3 = ContentPreviewViewer.this.visibleDialog = new BottomSheet(ContentPreviewViewer.this.parentActivity, false) {
                         /* access modifiers changed from: protected */
-                        public void onContainerTranslationYChanged(float translationY) {
+                        public void onContainerTranslationYChanged(float f) {
                             if (ContentPreviewViewer.this.animateY) {
-                                ViewGroup sheetContainer = getSheetContainer();
+                                getSheetContainer();
                                 if (ContentPreviewViewer.this.finalMoveY == 0.0f) {
                                     float unused = ContentPreviewViewer.this.finalMoveY = 0.0f;
-                                    float unused2 = ContentPreviewViewer.this.startMoveY = ContentPreviewViewer.this.moveY;
+                                    ContentPreviewViewer contentPreviewViewer = ContentPreviewViewer.this;
+                                    float unused2 = contentPreviewViewer.startMoveY = contentPreviewViewer.moveY;
                                 }
-                                float unused3 = ContentPreviewViewer.this.currentMoveYProgress = 1.0f - Math.min(1.0f, translationY / ((float) this.containerView.getMeasuredHeight()));
-                                float unused4 = ContentPreviewViewer.this.moveY = ContentPreviewViewer.this.startMoveY + ((ContentPreviewViewer.this.finalMoveY - ContentPreviewViewer.this.startMoveY) * ContentPreviewViewer.this.currentMoveYProgress);
+                                float unused3 = ContentPreviewViewer.this.currentMoveYProgress = 1.0f - Math.min(1.0f, f / ((float) this.containerView.getMeasuredHeight()));
+                                ContentPreviewViewer contentPreviewViewer2 = ContentPreviewViewer.this;
+                                float unused4 = contentPreviewViewer2.moveY = contentPreviewViewer2.startMoveY + ((ContentPreviewViewer.this.finalMoveY - ContentPreviewViewer.this.startMoveY) * ContentPreviewViewer.this.currentMoveYProgress);
                                 ContentPreviewViewer.this.containerView.invalidate();
                                 if (ContentPreviewViewer.this.currentMoveYProgress == 1.0f) {
                                     boolean unused5 = ContentPreviewViewer.this.animateY = false;
@@ -191,124 +199,123 @@ public class ContentPreviewViewer {
                             }
                         }
                     };
-                    ArrayList<CharSequence> items2 = new ArrayList<>();
-                    ArrayList<Integer> actions2 = new ArrayList<>();
-                    ArrayList<Integer> icons2 = new ArrayList<>();
+                    ArrayList arrayList4 = new ArrayList();
+                    ArrayList arrayList5 = new ArrayList();
+                    ArrayList arrayList6 = new ArrayList();
                     if (ContentPreviewViewer.this.delegate.needSend() && !ContentPreviewViewer.this.delegate.isInScheduleMode()) {
-                        items2.add(LocaleController.getString("SendGifPreview", NUM));
-                        icons2.add(NUM);
-                        actions2.add(0);
+                        arrayList4.add(LocaleController.getString("SendGifPreview", NUM));
+                        arrayList6.add(NUM);
+                        arrayList5.add(0);
                     }
                     if (ContentPreviewViewer.this.delegate.canSchedule()) {
-                        items2.add(LocaleController.getString("Schedule", NUM));
-                        icons2.add(NUM);
-                        actions2.add(3);
+                        arrayList4.add(LocaleController.getString("Schedule", NUM));
+                        arrayList6.add(NUM);
+                        arrayList5.add(3);
                     }
                     if (ContentPreviewViewer.this.currentDocument != null) {
-                        boolean hasRecentGif = MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).hasRecentGif(ContentPreviewViewer.this.currentDocument);
-                        canDelete = hasRecentGif;
-                        if (hasRecentGif) {
-                            items2.add(LocaleController.formatString("Delete", NUM, new Object[0]));
-                            icons2.add(NUM);
-                            actions2.add(1);
+                        z = MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).hasRecentGif(ContentPreviewViewer.this.currentDocument);
+                        if (z) {
+                            arrayList4.add(LocaleController.formatString("Delete", NUM, new Object[0]));
+                            arrayList6.add(NUM);
+                            arrayList5.add(1);
                         } else {
-                            items2.add(LocaleController.formatString("SaveToGIFs", NUM, new Object[0]));
-                            icons2.add(NUM);
-                            actions2.add(2);
+                            arrayList4.add(LocaleController.formatString("SaveToGIFs", NUM, new Object[0]));
+                            arrayList6.add(NUM);
+                            arrayList5.add(2);
                         }
                     } else {
-                        canDelete = false;
+                        z = false;
                     }
-                    int[] ic2 = new int[icons2.size()];
-                    for (int a2 = 0; a2 < icons2.size(); a2++) {
-                        ic2[a2] = icons2.get(a2).intValue();
+                    int[] iArr2 = new int[arrayList6.size()];
+                    for (int i3 = 0; i3 < arrayList6.size(); i3++) {
+                        iArr2[i3] = ((Integer) arrayList6.get(i3)).intValue();
                     }
-                    ContentPreviewViewer.this.visibleDialog.setItems((CharSequence[]) items2.toArray(new CharSequence[0]), ic2, new ContentPreviewViewer$1$$ExternalSyntheticLambda0(this, actions2));
+                    ContentPreviewViewer.this.visibleDialog.setItems((CharSequence[]) arrayList4.toArray(new CharSequence[0]), iArr2, new ContentPreviewViewer$1$$ExternalSyntheticLambda0(this, arrayList5));
                     ContentPreviewViewer.this.visibleDialog.setDimBehind(false);
-                    ContentPreviewViewer.this.visibleDialog.setOnDismissListener(new ContentPreviewViewer$1$$ExternalSyntheticLambda3(this));
+                    ContentPreviewViewer.this.visibleDialog.setOnDismissListener(new ContentPreviewViewer$1$$ExternalSyntheticLambda2(this));
                     ContentPreviewViewer.this.visibleDialog.show();
                     ContentPreviewViewer.this.containerView.performHapticFeedback(0);
-                    if (canDelete) {
-                        ContentPreviewViewer.this.visibleDialog.setItemColor(items2.size() - 1, ContentPreviewViewer.this.getThemedColor("dialogTextRed2"), ContentPreviewViewer.this.getThemedColor("dialogRedIcon"));
+                    if (z) {
+                        ContentPreviewViewer.this.visibleDialog.setItemColor(arrayList4.size() - 1, ContentPreviewViewer.this.getThemedColor("dialogTextRed2"), ContentPreviewViewer.this.getThemedColor("dialogRedIcon"));
                     }
                 }
             }
         }
 
-        /* renamed from: lambda$run$1$org-telegram-ui-ContentPreviewViewer$1  reason: not valid java name */
-        public /* synthetic */ void m2796lambda$run$1$orgtelegramuiContentPreviewViewer$1(ArrayList actions, boolean inFavs, DialogInterface dialog, int which) {
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$run$1(ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
             if (ContentPreviewViewer.this.parentActivity != null) {
-                if (((Integer) actions.get(which)).intValue() == 0 || ((Integer) actions.get(which)).intValue() == 6) {
+                if (((Integer) arrayList.get(i)).intValue() == 0 || ((Integer) arrayList.get(i)).intValue() == 6) {
                     if (ContentPreviewViewer.this.delegate != null) {
-                        ContentPreviewViewer.this.delegate.sendSticker(ContentPreviewViewer.this.currentDocument, ContentPreviewViewer.this.currentQuery, ContentPreviewViewer.this.parentObject, ((Integer) actions.get(which)).intValue() == 0, 0);
+                        ContentPreviewViewer.this.delegate.sendSticker(ContentPreviewViewer.this.currentDocument, ContentPreviewViewer.this.currentQuery, ContentPreviewViewer.this.parentObject, ((Integer) arrayList.get(i)).intValue() == 0, 0);
                     }
-                } else if (((Integer) actions.get(which)).intValue() == 1) {
+                } else if (((Integer) arrayList.get(i)).intValue() == 1) {
                     if (ContentPreviewViewer.this.delegate != null) {
                         ContentPreviewViewer.this.delegate.openSet(ContentPreviewViewer.this.currentStickerSet, ContentPreviewViewer.this.clearsInputField);
                     }
-                } else if (((Integer) actions.get(which)).intValue() == 2) {
-                    MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentSticker(2, ContentPreviewViewer.this.parentObject, ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000), inFavs);
-                } else if (((Integer) actions.get(which)).intValue() == 3) {
-                    TLRPC.Document sticker = ContentPreviewViewer.this.currentDocument;
-                    Object parent = ContentPreviewViewer.this.parentObject;
-                    String query = ContentPreviewViewer.this.currentQuery;
-                    ContentPreviewViewerDelegate stickerPreviewViewerDelegate = ContentPreviewViewer.this.delegate;
-                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, stickerPreviewViewerDelegate.getDialogId(), new ContentPreviewViewer$1$$ExternalSyntheticLambda4(stickerPreviewViewerDelegate, sticker, query, parent));
-                } else if (((Integer) actions.get(which)).intValue() == 4) {
+                } else if (((Integer) arrayList.get(i)).intValue() == 2) {
+                    MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentSticker(2, ContentPreviewViewer.this.parentObject, ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000), z);
+                } else if (((Integer) arrayList.get(i)).intValue() == 3) {
+                    TLRPC$Document access$300 = ContentPreviewViewer.this.currentDocument;
+                    Object access$1800 = ContentPreviewViewer.this.parentObject;
+                    String access$1900 = ContentPreviewViewer.this.currentQuery;
+                    ContentPreviewViewerDelegate access$600 = ContentPreviewViewer.this.delegate;
+                    AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$600.getDialogId(), new ContentPreviewViewer$1$$ExternalSyntheticLambda4(access$600, access$300, access$1900, access$1800));
+                } else if (((Integer) arrayList.get(i)).intValue() == 4) {
                     MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentSticker(0, ContentPreviewViewer.this.parentObject, ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000), true);
-                } else if (((Integer) actions.get(which)).intValue() == 5) {
+                } else if (((Integer) arrayList.get(i)).intValue() == 5) {
                     ContentPreviewViewer.this.delegate.remove(ContentPreviewViewer.this.importingSticker);
                 }
             }
         }
 
-        /* renamed from: lambda$run$2$org-telegram-ui-ContentPreviewViewer$1  reason: not valid java name */
-        public /* synthetic */ void m2797lambda$run$2$orgtelegramuiContentPreviewViewer$1(DialogInterface dialog) {
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$run$2(DialogInterface dialogInterface) {
             BottomSheet unused = ContentPreviewViewer.this.visibleDialog = null;
             ContentPreviewViewer.this.close();
         }
 
-        /* renamed from: lambda$run$4$org-telegram-ui-ContentPreviewViewer$1  reason: not valid java name */
-        public /* synthetic */ void m2798lambda$run$4$orgtelegramuiContentPreviewViewer$1(ArrayList actions, DialogInterface dialog, int which) {
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$run$4(ArrayList arrayList, DialogInterface dialogInterface, int i) {
             if (ContentPreviewViewer.this.parentActivity != null) {
-                if (((Integer) actions.get(which)).intValue() == 0) {
+                if (((Integer) arrayList.get(i)).intValue() == 0) {
                     ContentPreviewViewer.this.delegate.sendGif(ContentPreviewViewer.this.currentDocument != null ? ContentPreviewViewer.this.currentDocument : ContentPreviewViewer.this.inlineResult, ContentPreviewViewer.this.parentObject, true, 0);
-                } else if (((Integer) actions.get(which)).intValue() == 1) {
+                } else if (((Integer) arrayList.get(i)).intValue() == 1) {
                     MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).removeRecentGif(ContentPreviewViewer.this.currentDocument);
                     ContentPreviewViewer.this.delegate.gifAddedOrDeleted();
-                } else if (((Integer) actions.get(which)).intValue() == 2) {
+                } else if (((Integer) arrayList.get(i)).intValue() == 2) {
                     MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentGif(ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000));
                     MessagesController.getInstance(ContentPreviewViewer.this.currentAccount).saveGif("gif", ContentPreviewViewer.this.currentDocument);
                     ContentPreviewViewer.this.delegate.gifAddedOrDeleted();
-                } else if (((Integer) actions.get(which)).intValue() == 3) {
-                    TLRPC.Document document = ContentPreviewViewer.this.currentDocument;
-                    TLRPC.BotInlineResult result = ContentPreviewViewer.this.inlineResult;
-                    Object parent = ContentPreviewViewer.this.parentObject;
-                    ContentPreviewViewerDelegate stickerPreviewViewerDelegate = ContentPreviewViewer.this.delegate;
-                    AlertsCreator.createScheduleDatePickerDialog((Context) ContentPreviewViewer.this.parentActivity, stickerPreviewViewerDelegate.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ContentPreviewViewer$1$$ExternalSyntheticLambda5(stickerPreviewViewerDelegate, document, result, parent), ContentPreviewViewer.this.resourcesProvider);
+                } else if (((Integer) arrayList.get(i)).intValue() == 3) {
+                    TLRPC$Document access$300 = ContentPreviewViewer.this.currentDocument;
+                    TLRPC$BotInlineResult access$1700 = ContentPreviewViewer.this.inlineResult;
+                    Object access$1800 = ContentPreviewViewer.this.parentObject;
+                    ContentPreviewViewerDelegate access$600 = ContentPreviewViewer.this.delegate;
+                    AlertsCreator.createScheduleDatePickerDialog((Context) ContentPreviewViewer.this.parentActivity, access$600.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ContentPreviewViewer$1$$ExternalSyntheticLambda5(access$600, access$300, access$1700, access$1800), ContentPreviewViewer.this.resourcesProvider);
                 }
             }
         }
 
-        /* JADX WARNING: type inference failed for: r3v0, types: [org.telegram.tgnet.TLRPC$BotInlineResult] */
+        /* JADX WARNING: type inference failed for: r2v0, types: [org.telegram.tgnet.TLRPC$BotInlineResult] */
+        /* access modifiers changed from: private */
         /* JADX WARNING: Unknown variable types count: 1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        static /* synthetic */ void lambda$run$3(org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r1, org.telegram.tgnet.TLRPC.Document r2, org.telegram.tgnet.TLRPC.BotInlineResult r3, java.lang.Object r4, boolean r5, int r6) {
+        public static /* synthetic */ void lambda$run$3(org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r0, org.telegram.tgnet.TLRPC$Document r1, org.telegram.tgnet.TLRPC$BotInlineResult r2, java.lang.Object r3, boolean r4, int r5) {
             /*
-                if (r2 == 0) goto L_0x0004
-                r0 = r2
-                goto L_0x0005
+                if (r1 == 0) goto L_0x0003
+                goto L_0x0004
+            L_0x0003:
+                r1 = r2
             L_0x0004:
-                r0 = r3
-            L_0x0005:
-                r1.sendGif(r0, r4, r5, r6)
+                r0.sendGif(r1, r3, r4, r5)
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.AnonymousClass1.lambda$run$3(org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate, org.telegram.tgnet.TLRPC$Document, org.telegram.tgnet.TLRPC$BotInlineResult, java.lang.Object, boolean, int):void");
         }
 
-        /* renamed from: lambda$run$5$org-telegram-ui-ContentPreviewViewer$1  reason: not valid java name */
-        public /* synthetic */ void m2799lambda$run$5$orgtelegramuiContentPreviewViewer$1(DialogInterface dialog) {
+        /* access modifiers changed from: private */
+        public /* synthetic */ void lambda$run$5(DialogInterface dialogInterface) {
             BottomSheet unused = ContentPreviewViewer.this.visibleDialog = null;
             ContentPreviewViewer.this.close();
         }
@@ -325,19 +332,36 @@ public class ContentPreviewViewer {
     private WindowManager.LayoutParams windowLayoutParams;
     private FrameLayout windowView;
 
-    private class FrameLayoutDrawer extends FrameLayout {
-        public FrameLayoutDrawer(Context context) {
-            super(context);
-            setWillNotDraw(false);
-        }
-
-        /* access modifiers changed from: protected */
-        public void onDraw(Canvas canvas) {
-            ContentPreviewViewer.this.onDraw(canvas);
-        }
-    }
-
     public interface ContentPreviewViewerDelegate {
+
+        /* renamed from: org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static String $default$getQuery(ContentPreviewViewerDelegate contentPreviewViewerDelegate, boolean z) {
+                return null;
+            }
+
+            public static void $default$gifAddedOrDeleted(ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
+            }
+
+            public static boolean $default$needMenu(ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
+                return true;
+            }
+
+            public static boolean $default$needOpen(ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
+                return true;
+            }
+
+            public static boolean $default$needRemove(ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
+                return false;
+            }
+
+            public static void $default$remove(ContentPreviewViewerDelegate contentPreviewViewerDelegate, SendMessagesHelper.ImportingSticker importingSticker) {
+            }
+
+            public static void $default$sendGif(ContentPreviewViewerDelegate contentPreviewViewerDelegate, Object obj, Object obj2, boolean z, int i) {
+            }
+        }
+
         boolean canSchedule();
 
         long getDialogId();
@@ -356,56 +380,39 @@ public class ContentPreviewViewer {
 
         boolean needSend();
 
-        void openSet(TLRPC.InputStickerSet inputStickerSet, boolean z);
+        void openSet(TLRPC$InputStickerSet tLRPC$InputStickerSet, boolean z);
 
         void remove(SendMessagesHelper.ImportingSticker importingSticker);
 
         void sendGif(Object obj, Object obj2, boolean z, int i);
 
-        void sendSticker(TLRPC.Document document, String str, Object obj, boolean z, int i);
+        void sendSticker(TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, int i);
+    }
 
-        /* renamed from: org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate$-CC  reason: invalid class name */
-        public final /* synthetic */ class CC {
-            public static boolean $default$needRemove(ContentPreviewViewerDelegate _this) {
-                return false;
-            }
+    private class FrameLayoutDrawer extends FrameLayout {
+        public FrameLayoutDrawer(Context context) {
+            super(context);
+            setWillNotDraw(false);
+        }
 
-            public static void $default$remove(ContentPreviewViewerDelegate _this, SendMessagesHelper.ImportingSticker sticker) {
-            }
-
-            public static String $default$getQuery(ContentPreviewViewerDelegate _this, boolean isGif) {
-                return null;
-            }
-
-            public static boolean $default$needOpen(ContentPreviewViewerDelegate _this) {
-                return true;
-            }
-
-            public static void $default$sendGif(ContentPreviewViewerDelegate _this, Object gif, Object parent, boolean notify, int scheduleDate) {
-            }
-
-            public static void $default$gifAddedOrDeleted(ContentPreviewViewerDelegate _this) {
-            }
-
-            public static boolean $default$needMenu(ContentPreviewViewerDelegate _this) {
-                return true;
-            }
+        /* access modifiers changed from: protected */
+        public void onDraw(Canvas canvas) {
+            ContentPreviewViewer.this.onDraw(canvas);
         }
     }
 
     public static ContentPreviewViewer getInstance() {
-        ContentPreviewViewer localInstance = Instance;
-        if (localInstance == null) {
+        ContentPreviewViewer contentPreviewViewer = Instance;
+        if (contentPreviewViewer == null) {
             synchronized (PhotoViewer.class) {
-                localInstance = Instance;
-                if (localInstance == null) {
-                    ContentPreviewViewer contentPreviewViewer = new ContentPreviewViewer();
-                    localInstance = contentPreviewViewer;
+                contentPreviewViewer = Instance;
+                if (contentPreviewViewer == null) {
+                    contentPreviewViewer = new ContentPreviewViewer();
                     Instance = contentPreviewViewer;
                 }
             }
         }
-        return localInstance;
+        return contentPreviewViewer;
     }
 
     public static boolean hasInstance() {
@@ -431,230 +438,376 @@ public class ContentPreviewViewer {
         }
     }
 
-    public boolean onTouch(MotionEvent event, RecyclerListView listView, int height, Object listener, ContentPreviewViewerDelegate contentPreviewViewerDelegate, Theme.ResourcesProvider resourcesProvider2) {
-        ContextLinkCell view;
-        int contentType;
-        boolean z;
-        boolean z2;
-        RecyclerListView recyclerListView = listView;
-        this.delegate = contentPreviewViewerDelegate;
-        this.resourcesProvider = resourcesProvider2;
-        boolean z3 = false;
-        if (this.openPreviewRunnable == null && !isVisible()) {
-            Object obj = listener;
-            return false;
-        } else if (event.getAction() == 1 || event.getAction() == 3 || event.getAction() == 6) {
-            AndroidUtilities.runOnUIThread(new ContentPreviewViewer$$ExternalSyntheticLambda2(recyclerListView, listener), 150);
-            Runnable runnable = this.openPreviewRunnable;
-            if (runnable != null) {
-                AndroidUtilities.cancelRunOnUIThread(runnable);
-                this.openPreviewRunnable = null;
-                return false;
-            } else if (!isVisible()) {
-                return false;
-            } else {
-                close();
-                View view2 = this.currentPreviewCell;
-                if (view2 == null) {
-                    return false;
-                }
-                if (view2 instanceof StickerEmojiCell) {
-                    ((StickerEmojiCell) view2).setScaled(false);
-                } else if (view2 instanceof StickerCell) {
-                    ((StickerCell) view2).setScaled(false);
-                } else if (view2 instanceof ContextLinkCell) {
-                    ((ContextLinkCell) view2).setScaled(false);
-                }
-                this.currentPreviewCell = null;
-                return false;
-            }
-        } else if (event.getAction() == 0) {
-            Object obj2 = listener;
-            return false;
-        } else if (this.isVisible) {
-            if (event.getAction() != 2) {
-                return true;
-            }
-            if (this.currentContentType == 1) {
-                if (this.visibleDialog == null && this.showProgress == 1.0f) {
-                    if (this.lastTouchY == -10000.0f) {
-                        this.lastTouchY = event.getY();
-                        this.currentMoveY = 0.0f;
-                        this.moveY = 0.0f;
-                    } else {
-                        float newY = event.getY();
-                        float f = this.currentMoveY + (newY - this.lastTouchY);
-                        this.currentMoveY = f;
-                        this.lastTouchY = newY;
-                        if (f > 0.0f) {
-                            this.currentMoveY = 0.0f;
-                        } else if (f < ((float) (-AndroidUtilities.dp(60.0f)))) {
-                            this.currentMoveY = (float) (-AndroidUtilities.dp(60.0f));
-                        }
-                        this.moveY = rubberYPoisition(this.currentMoveY, (float) AndroidUtilities.dp(200.0f));
-                        this.containerView.invalidate();
-                        if (this.currentMoveY <= ((float) (-AndroidUtilities.dp(55.0f)))) {
-                            AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
-                            this.showSheetRunnable.run();
-                            return true;
-                        }
-                    }
-                }
-                return true;
-            }
-            int x = (int) event.getX();
-            int y = (int) event.getY();
-            int count = listView.getChildCount();
-            int a = 0;
-            while (a < count) {
-                if (recyclerListView instanceof RecyclerListView) {
-                    view = recyclerListView.getChildAt(a);
-                } else {
-                    view = null;
-                }
-                if (view == null) {
-                    return z3;
-                }
-                int top = view.getTop();
-                int bottom = view.getBottom();
-                int left = view.getLeft();
-                int right = view.getRight();
-                if (top > y || bottom < y || left > x) {
-                    int i = left;
-                    int i2 = bottom;
-                    int i3 = top;
-                    ContextLinkCell contextLinkCell = view;
-                } else if (right >= x) {
-                    if (view instanceof StickerEmojiCell) {
-                        this.centerImage.setRoundRadius((int) z3);
-                        contentType = 0;
-                    } else if (view instanceof StickerCell) {
-                        this.centerImage.setRoundRadius((int) z3);
-                        contentType = 0;
-                    } else {
-                        if (view instanceof ContextLinkCell) {
-                            ContextLinkCell cell = view;
-                            if (cell.isSticker()) {
-                                this.centerImage.setRoundRadius(z3 ? 1 : 0);
-                                contentType = 0;
-                            } else if (cell.isGif()) {
-                                this.centerImage.setRoundRadius(AndroidUtilities.dp(6.0f));
-                                contentType = 1;
-                            }
-                        }
-                        contentType = -1;
-                    }
-                    if (contentType != -1) {
-                        View view3 = this.currentPreviewCell;
-                        if (view == view3) {
-                            return true;
-                        }
-                        if (view3 instanceof StickerEmojiCell) {
-                            z = false;
-                            ((StickerEmojiCell) view3).setScaled(false);
-                        } else if (view3 instanceof StickerCell) {
-                            z = false;
-                            ((StickerCell) view3).setScaled(false);
-                        } else if (view3 instanceof ContextLinkCell) {
-                            z = false;
-                            ((ContextLinkCell) view3).setScaled(false);
-                        } else {
-                            z = false;
-                        }
-                        this.currentPreviewCell = view;
-                        setKeyboardHeight(height);
-                        this.clearsInputField = z;
-                        View view4 = this.currentPreviewCell;
-                        int i4 = right;
-                        if ((view4 instanceof StickerEmojiCell) != 0) {
-                            StickerEmojiCell stickerEmojiCell = (StickerEmojiCell) view4;
-                            TLRPC.Document sticker = stickerEmojiCell.getSticker();
-                            SendMessagesHelper.ImportingSticker stickerPath = stickerEmojiCell.getStickerPath();
-                            String emoji = stickerEmojiCell.getEmoji();
-                            ContentPreviewViewerDelegate contentPreviewViewerDelegate2 = this.delegate;
-                            int i5 = left;
-                            int i6 = bottom;
-                            int i7 = top;
-                            ContextLinkCell contextLinkCell2 = view;
-                            int i8 = a;
-                            int i9 = count;
-                            int i10 = y;
-                            open(sticker, stickerPath, emoji, contentPreviewViewerDelegate2 != null ? contentPreviewViewerDelegate2.getQuery(false) : null, (TLRPC.BotInlineResult) null, contentType, stickerEmojiCell.isRecent(), stickerEmojiCell.getParentObject(), resourcesProvider2);
-                            stickerEmojiCell.setScaled(true);
-                            z2 = true;
-                        } else {
-                            int i11 = bottom;
-                            int i12 = top;
-                            ContextLinkCell contextLinkCell3 = view;
-                            int i13 = a;
-                            int i14 = count;
-                            int i15 = y;
-                            if (view4 instanceof StickerCell) {
-                                StickerCell stickerCell = (StickerCell) view4;
-                                TLRPC.Document sticker2 = stickerCell.getSticker();
-                                ContentPreviewViewerDelegate contentPreviewViewerDelegate3 = this.delegate;
-                                StickerCell stickerCell2 = stickerCell;
-                                open(sticker2, (SendMessagesHelper.ImportingSticker) null, (String) null, contentPreviewViewerDelegate3 != null ? contentPreviewViewerDelegate3.getQuery(false) : null, (TLRPC.BotInlineResult) null, contentType, false, stickerCell.getParentObject(), resourcesProvider2);
-                                stickerCell2.setScaled(true);
-                                this.clearsInputField = stickerCell2.isClearsInputField();
-                                z2 = true;
-                            } else if (view4 instanceof ContextLinkCell) {
-                                ContextLinkCell contextLinkCell4 = (ContextLinkCell) view4;
-                                TLRPC.Document document = contextLinkCell4.getDocument();
-                                ContentPreviewViewerDelegate contentPreviewViewerDelegate4 = this.delegate;
-                                open(document, (SendMessagesHelper.ImportingSticker) null, (String) null, contentPreviewViewerDelegate4 != null ? contentPreviewViewerDelegate4.getQuery(true) : null, contextLinkCell4.getBotInlineResult(), contentType, false, contextLinkCell4.getBotInlineResult() != null ? contextLinkCell4.getInlineBot() : contextLinkCell4.getParentObject(), resourcesProvider2);
-                                z2 = true;
-                                if (contentType != 1) {
-                                    contextLinkCell4.setScaled(true);
-                                }
-                            } else {
-                                z2 = true;
-                            }
-                        }
-                        runSmoothHaptic();
-                        return z2;
-                    }
-                    int i16 = left;
-                    int i17 = bottom;
-                    int i18 = top;
-                    ContextLinkCell contextLinkCell5 = view;
-                    int i19 = a;
-                    int i20 = count;
-                    int i21 = y;
-                    return true;
-                }
-                a++;
-                ContentPreviewViewerDelegate contentPreviewViewerDelegate5 = contentPreviewViewerDelegate;
-                count = count;
-                y = y;
-                z3 = false;
-            }
-            int i22 = a;
-            int i23 = count;
-            int i24 = y;
-            return true;
-        } else if (this.openPreviewRunnable == null) {
-            Object obj3 = listener;
-            return false;
-        } else if (event.getAction() != 2) {
-            AndroidUtilities.cancelRunOnUIThread(this.openPreviewRunnable);
-            this.openPreviewRunnable = null;
-            Object obj4 = listener;
-            return false;
-        } else if (Math.hypot((double) (((float) this.startX) - event.getX()), (double) (((float) this.startY) - event.getY())) > ((double) AndroidUtilities.dp(10.0f))) {
-            AndroidUtilities.cancelRunOnUIThread(this.openPreviewRunnable);
-            this.openPreviewRunnable = null;
-            Object obj5 = listener;
-            return false;
-        } else {
-            Object obj6 = listener;
-            return false;
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x0136  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x013c  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x015e  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x0193  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean onTouch(android.view.MotionEvent r16, org.telegram.ui.Components.RecyclerListView r17, int r18, java.lang.Object r19, org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r20, org.telegram.ui.ActionBar.Theme.ResourcesProvider r21) {
+        /*
+            r15 = this;
+            r10 = r15
+            r0 = r17
+            r1 = r20
+            r10.delegate = r1
+            r9 = r21
+            r10.resourcesProvider = r9
+            java.lang.Runnable r1 = r10.openPreviewRunnable
+            r2 = 0
+            if (r1 != 0) goto L_0x0016
+            boolean r1 = r15.isVisible()
+            if (r1 == 0) goto L_0x028c
+        L_0x0016:
+            int r1 = r16.getAction()
+            r3 = 0
+            r11 = 1
+            if (r1 == r11) goto L_0x024a
+            int r1 = r16.getAction()
+            r4 = 3
+            if (r1 == r4) goto L_0x024a
+            int r1 = r16.getAction()
+            r4 = 6
+            if (r1 != r4) goto L_0x002e
+            goto L_0x024a
+        L_0x002e:
+            int r1 = r16.getAction()
+            if (r1 == 0) goto L_0x028c
+            boolean r1 = r10.isVisible
+            r4 = 2
+            if (r1 == 0) goto L_0x020f
+            int r1 = r16.getAction()
+            if (r1 != r4) goto L_0x020e
+            int r1 = r10.currentContentType
+            if (r1 != r11) goto L_0x00bb
+            org.telegram.ui.ActionBar.BottomSheet r0 = r10.visibleDialog
+            if (r0 != 0) goto L_0x00ba
+            float r0 = r10.showProgress
+            r1 = 1065353216(0x3var_, float:1.0)
+            int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
+            if (r0 != 0) goto L_0x00ba
+            float r0 = r10.lastTouchY
+            r1 = -971227136(0xffffffffCLASSNAMECLASSNAME, float:-10000.0)
+            r2 = 0
+            int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
+            if (r0 != 0) goto L_0x0064
+            float r0 = r16.getY()
+            r10.lastTouchY = r0
+            r10.currentMoveY = r2
+            r10.moveY = r2
+            goto L_0x00ba
+        L_0x0064:
+            float r0 = r16.getY()
+            float r1 = r10.currentMoveY
+            float r3 = r10.lastTouchY
+            float r3 = r0 - r3
+            float r1 = r1 + r3
+            r10.currentMoveY = r1
+            r10.lastTouchY = r0
+            int r0 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+            if (r0 <= 0) goto L_0x007a
+            r10.currentMoveY = r2
+            goto L_0x008e
+        L_0x007a:
+            r0 = 1114636288(0x42700000, float:60.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r2 = -r2
+            float r2 = (float) r2
+            int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+            if (r1 >= 0) goto L_0x008e
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r0 = -r0
+            float r0 = (float) r0
+            r10.currentMoveY = r0
+        L_0x008e:
+            float r0 = r10.currentMoveY
+            r1 = 1128792064(0x43480000, float:200.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            float r0 = r15.rubberYPoisition(r0, r1)
+            r10.moveY = r0
+            org.telegram.ui.ContentPreviewViewer$FrameLayoutDrawer r0 = r10.containerView
+            r0.invalidate()
+            float r0 = r10.currentMoveY
+            r1 = 1113325568(0x425CLASSNAME, float:55.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = -r1
+            float r1 = (float) r1
+            int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
+            if (r0 > 0) goto L_0x00ba
+            java.lang.Runnable r0 = r10.showSheetRunnable
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
+            java.lang.Runnable r0 = r10.showSheetRunnable
+            r0.run()
+        L_0x00ba:
+            return r11
+        L_0x00bb:
+            float r1 = r16.getX()
+            int r1 = (int) r1
+            float r4 = r16.getY()
+            int r4 = (int) r4
+            int r5 = r17.getChildCount()
+            r6 = 0
+        L_0x00ca:
+            if (r6 >= r5) goto L_0x020e
+            android.view.View r7 = r0.getChildAt(r6)
+            if (r7 != 0) goto L_0x00d3
+            return r2
+        L_0x00d3:
+            int r8 = r7.getTop()
+            int r12 = r7.getBottom()
+            int r13 = r7.getLeft()
+            int r14 = r7.getRight()
+            if (r8 > r4) goto L_0x0208
+            if (r12 < r4) goto L_0x0208
+            if (r13 > r1) goto L_0x0208
+            if (r14 >= r1) goto L_0x00ed
+            goto L_0x0208
+        L_0x00ed:
+            boolean r0 = r7 instanceof org.telegram.ui.Cells.StickerEmojiCell
+            r1 = -1
+            if (r0 == 0) goto L_0x00f9
+            org.telegram.messenger.ImageReceiver r0 = r10.centerImage
+            r0.setRoundRadius((int) r2)
+        L_0x00f7:
+            r12 = 0
+            goto L_0x012a
+        L_0x00f9:
+            boolean r0 = r7 instanceof org.telegram.ui.Cells.StickerCell
+            if (r0 == 0) goto L_0x0103
+            org.telegram.messenger.ImageReceiver r0 = r10.centerImage
+            r0.setRoundRadius((int) r2)
+            goto L_0x00f7
+        L_0x0103:
+            boolean r0 = r7 instanceof org.telegram.ui.Cells.ContextLinkCell
+            if (r0 == 0) goto L_0x0129
+            r0 = r7
+            org.telegram.ui.Cells.ContextLinkCell r0 = (org.telegram.ui.Cells.ContextLinkCell) r0
+            boolean r4 = r0.isSticker()
+            if (r4 == 0) goto L_0x0116
+            org.telegram.messenger.ImageReceiver r0 = r10.centerImage
+            r0.setRoundRadius((int) r2)
+            goto L_0x00f7
+        L_0x0116:
+            boolean r0 = r0.isGif()
+            if (r0 == 0) goto L_0x0129
+            org.telegram.messenger.ImageReceiver r0 = r10.centerImage
+            r4 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r0.setRoundRadius((int) r4)
+            r12 = 1
+            goto L_0x012a
+        L_0x0129:
+            r12 = -1
+        L_0x012a:
+            if (r12 == r1) goto L_0x020e
+            android.view.View r0 = r10.currentPreviewCell
+            if (r7 != r0) goto L_0x0132
+            goto L_0x020e
+        L_0x0132:
+            boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
+            if (r1 == 0) goto L_0x013c
+            org.telegram.ui.Cells.StickerEmojiCell r0 = (org.telegram.ui.Cells.StickerEmojiCell) r0
+            r0.setScaled(r2)
+            goto L_0x014f
+        L_0x013c:
+            boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerCell
+            if (r1 == 0) goto L_0x0146
+            org.telegram.ui.Cells.StickerCell r0 = (org.telegram.ui.Cells.StickerCell) r0
+            r0.setScaled(r2)
+            goto L_0x014f
+        L_0x0146:
+            boolean r1 = r0 instanceof org.telegram.ui.Cells.ContextLinkCell
+            if (r1 == 0) goto L_0x014f
+            org.telegram.ui.Cells.ContextLinkCell r0 = (org.telegram.ui.Cells.ContextLinkCell) r0
+            r0.setScaled(r2)
+        L_0x014f:
+            r10.currentPreviewCell = r7
+            r7 = r18
+            r15.setKeyboardHeight(r7)
+            r10.clearsInputField = r2
+            android.view.View r0 = r10.currentPreviewCell
+            boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
+            if (r1 == 0) goto L_0x0193
+            r13 = r0
+            org.telegram.ui.Cells.StickerEmojiCell r13 = (org.telegram.ui.Cells.StickerEmojiCell) r13
+            org.telegram.tgnet.TLRPC$Document r1 = r13.getSticker()
+            org.telegram.messenger.SendMessagesHelper$ImportingSticker r4 = r13.getStickerPath()
+            java.lang.String r5 = r13.getEmoji()
+            org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r10.delegate
+            if (r0 == 0) goto L_0x0177
+            java.lang.String r0 = r0.getQuery(r2)
+            r6 = r0
+            goto L_0x0178
+        L_0x0177:
+            r6 = r3
+        L_0x0178:
+            r7 = 0
+            boolean r8 = r13.isRecent()
+            java.lang.Object r14 = r13.getParentObject()
+            r0 = r15
+            r2 = r4
+            r3 = r5
+            r4 = r6
+            r5 = r7
+            r6 = r12
+            r7 = r8
+            r8 = r14
+            r9 = r21
+            r0.open(r1, r2, r3, r4, r5, r6, r7, r8, r9)
+            r13.setScaled(r11)
+            goto L_0x0204
+        L_0x0193:
+            boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerCell
+            if (r1 == 0) goto L_0x01c8
+            r13 = r0
+            org.telegram.ui.Cells.StickerCell r13 = (org.telegram.ui.Cells.StickerCell) r13
+            org.telegram.tgnet.TLRPC$Document r1 = r13.getSticker()
+            r4 = 0
+            r5 = 0
+            org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r10.delegate
+            if (r0 == 0) goto L_0x01aa
+            java.lang.String r0 = r0.getQuery(r2)
+            r6 = r0
+            goto L_0x01ab
+        L_0x01aa:
+            r6 = r3
+        L_0x01ab:
+            r7 = 0
+            r8 = 0
+            java.lang.Object r14 = r13.getParentObject()
+            r0 = r15
+            r2 = r4
+            r3 = r5
+            r4 = r6
+            r5 = r7
+            r6 = r12
+            r7 = r8
+            r8 = r14
+            r9 = r21
+            r0.open(r1, r2, r3, r4, r5, r6, r7, r8, r9)
+            r13.setScaled(r11)
+            boolean r0 = r13.isClearsInputField()
+            r10.clearsInputField = r0
+            goto L_0x0204
+        L_0x01c8:
+            boolean r1 = r0 instanceof org.telegram.ui.Cells.ContextLinkCell
+            if (r1 == 0) goto L_0x0204
+            r13 = r0
+            org.telegram.ui.Cells.ContextLinkCell r13 = (org.telegram.ui.Cells.ContextLinkCell) r13
+            org.telegram.tgnet.TLRPC$Document r1 = r13.getDocument()
+            r2 = 0
+            r4 = 0
+            org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r10.delegate
+            if (r0 == 0) goto L_0x01df
+            java.lang.String r0 = r0.getQuery(r11)
+            r5 = r0
+            goto L_0x01e0
+        L_0x01df:
+            r5 = r3
+        L_0x01e0:
+            org.telegram.tgnet.TLRPC$BotInlineResult r6 = r13.getBotInlineResult()
+            r7 = 0
+            org.telegram.tgnet.TLRPC$BotInlineResult r0 = r13.getBotInlineResult()
+            if (r0 == 0) goto L_0x01f0
+            org.telegram.tgnet.TLRPC$User r0 = r13.getInlineBot()
+            goto L_0x01f4
+        L_0x01f0:
+            java.lang.Object r0 = r13.getParentObject()
+        L_0x01f4:
+            r8 = r0
+            r0 = r15
+            r3 = r4
+            r4 = r5
+            r5 = r6
+            r6 = r12
+            r9 = r21
+            r0.open(r1, r2, r3, r4, r5, r6, r7, r8, r9)
+            if (r12 == r11) goto L_0x0204
+            r13.setScaled(r11)
+        L_0x0204:
+            r15.runSmoothHaptic()
+            return r11
+        L_0x0208:
+            r7 = r18
+            int r6 = r6 + 1
+            goto L_0x00ca
+        L_0x020e:
+            return r11
+        L_0x020f:
+            java.lang.Runnable r0 = r10.openPreviewRunnable
+            if (r0 == 0) goto L_0x028c
+            int r0 = r16.getAction()
+            if (r0 != r4) goto L_0x0242
+            int r0 = r10.startX
+            float r0 = (float) r0
+            float r1 = r16.getX()
+            float r0 = r0 - r1
+            double r0 = (double) r0
+            int r4 = r10.startY
+            float r4 = (float) r4
+            float r5 = r16.getY()
+            float r4 = r4 - r5
+            double r4 = (double) r4
+            double r0 = java.lang.Math.hypot(r0, r4)
+            r4 = 1092616192(0x41200000, float:10.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            double r4 = (double) r4
+            int r6 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
+            if (r6 <= 0) goto L_0x028c
+            java.lang.Runnable r0 = r10.openPreviewRunnable
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
+            r10.openPreviewRunnable = r3
+            goto L_0x028c
+        L_0x0242:
+            java.lang.Runnable r0 = r10.openPreviewRunnable
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
+            r10.openPreviewRunnable = r3
+            goto L_0x028c
+        L_0x024a:
+            org.telegram.ui.ContentPreviewViewer$$ExternalSyntheticLambda2 r1 = new org.telegram.ui.ContentPreviewViewer$$ExternalSyntheticLambda2
+            r4 = r19
+            r1.<init>(r0, r4)
+            r4 = 150(0x96, double:7.4E-322)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r4)
+            java.lang.Runnable r0 = r10.openPreviewRunnable
+            if (r0 == 0) goto L_0x0260
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
+            r10.openPreviewRunnable = r3
+            goto L_0x028c
+        L_0x0260:
+            boolean r0 = r15.isVisible()
+            if (r0 == 0) goto L_0x028c
+            r15.close()
+            android.view.View r0 = r10.currentPreviewCell
+            if (r0 == 0) goto L_0x028c
+            boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
+            if (r1 == 0) goto L_0x0277
+            org.telegram.ui.Cells.StickerEmojiCell r0 = (org.telegram.ui.Cells.StickerEmojiCell) r0
+            r0.setScaled(r2)
+            goto L_0x028a
+        L_0x0277:
+            boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerCell
+            if (r1 == 0) goto L_0x0281
+            org.telegram.ui.Cells.StickerCell r0 = (org.telegram.ui.Cells.StickerCell) r0
+            r0.setScaled(r2)
+            goto L_0x028a
+        L_0x0281:
+            boolean r1 = r0 instanceof org.telegram.ui.Cells.ContextLinkCell
+            if (r1 == 0) goto L_0x028a
+            org.telegram.ui.Cells.ContextLinkCell r0 = (org.telegram.ui.Cells.ContextLinkCell) r0
+            r0.setScaled(r2)
+        L_0x028a:
+            r10.currentPreviewCell = r3
+        L_0x028c:
+            return r2
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onTouch(android.view.MotionEvent, org.telegram.ui.Components.RecyclerListView, int, java.lang.Object, org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate, org.telegram.ui.ActionBar.Theme$ResourcesProvider):boolean");
     }
 
-    static /* synthetic */ void lambda$onTouch$0(RecyclerListView listView, Object listener) {
-        if (listView instanceof RecyclerListView) {
-            listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) listener);
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$onTouch$0(RecyclerListView recyclerListView, Object obj) {
+        if (recyclerListView instanceof RecyclerListView) {
+            recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) obj);
         }
     }
 
@@ -670,200 +823,154 @@ public class ContentPreviewViewer {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x00b2 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x00b4  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x009b A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x009c  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean onInterceptTouchEvent(android.view.MotionEvent r22, org.telegram.ui.Components.RecyclerListView r23, int r24, org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r25, org.telegram.ui.ActionBar.Theme.ResourcesProvider r26) {
+    public boolean onInterceptTouchEvent(android.view.MotionEvent r14, org.telegram.ui.Components.RecyclerListView r15, int r16, org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r17, org.telegram.ui.ActionBar.Theme.ResourcesProvider r18) {
         /*
-            r21 = this;
-            r6 = r21
-            r7 = r23
-            r8 = r25
-            r6.delegate = r8
-            r9 = r26
-            r6.resourcesProvider = r9
-            int r0 = r22.getAction()
+            r13 = this;
+            r6 = r13
+            r0 = r17
+            r6.delegate = r0
+            r5 = r18
+            r6.resourcesProvider = r5
+            int r0 = r14.getAction()
             r1 = 0
-            if (r0 != 0) goto L_0x00e6
-            float r0 = r22.getX()
-            int r10 = (int) r0
-            float r0 = r22.getY()
-            int r11 = (int) r0
-            int r12 = r23.getChildCount()
-            r0 = 0
-            r13 = r0
-        L_0x0023:
-            if (r13 >= r12) goto L_0x00e6
-            r0 = 0
-            boolean r2 = r7 instanceof org.telegram.ui.Components.RecyclerListView
-            if (r2 == 0) goto L_0x0030
-            android.view.View r0 = r7.getChildAt(r13)
-            r14 = r0
-            goto L_0x0031
-        L_0x0030:
-            r14 = r0
-        L_0x0031:
-            if (r14 != 0) goto L_0x0034
+            if (r0 != 0) goto L_0x00bb
+            float r0 = r14.getX()
+            int r0 = (int) r0
+            float r2 = r14.getY()
+            int r2 = (int) r2
+            int r3 = r15.getChildCount()
+            r4 = 0
+        L_0x001f:
+            if (r4 >= r3) goto L_0x00bb
+            r7 = r15
+            android.view.View r8 = r15.getChildAt(r4)
+            if (r8 != 0) goto L_0x0029
             return r1
-        L_0x0034:
-            int r15 = r14.getTop()
-            int r5 = r14.getBottom()
-            int r3 = r14.getLeft()
-            int r2 = r14.getRight()
-            if (r15 > r11) goto L_0x00db
-            if (r5 < r11) goto L_0x00db
-            if (r3 > r10) goto L_0x00db
-            if (r2 >= r10) goto L_0x004e
-            goto L_0x00e1
-        L_0x004e:
-            r0 = -1
-            boolean r4 = r14 instanceof org.telegram.ui.Cells.StickerEmojiCell
-            if (r4 == 0) goto L_0x0064
-            r4 = r14
-            org.telegram.ui.Cells.StickerEmojiCell r4 = (org.telegram.ui.Cells.StickerEmojiCell) r4
-            boolean r4 = r4.showingBitmap()
-            if (r4 == 0) goto L_0x00ae
-            r0 = 0
-            org.telegram.messenger.ImageReceiver r4 = r6.centerImage
-            r4.setRoundRadius((int) r1)
-            r1 = r0
-            goto L_0x00af
-        L_0x0064:
-            boolean r4 = r14 instanceof org.telegram.ui.Cells.StickerCell
-            if (r4 == 0) goto L_0x0079
-            r4 = r14
-            org.telegram.ui.Cells.StickerCell r4 = (org.telegram.ui.Cells.StickerCell) r4
-            boolean r4 = r4.showingBitmap()
-            if (r4 == 0) goto L_0x00ae
-            r0 = 0
-            org.telegram.messenger.ImageReceiver r4 = r6.centerImage
-            r4.setRoundRadius((int) r1)
-            r1 = r0
-            goto L_0x00af
-        L_0x0079:
-            boolean r4 = r14 instanceof org.telegram.ui.Cells.ContextLinkCell
-            if (r4 == 0) goto L_0x00ae
-            r4 = r14
-            org.telegram.ui.Cells.ContextLinkCell r4 = (org.telegram.ui.Cells.ContextLinkCell) r4
-            boolean r16 = r4.showingBitmap()
-            if (r16 == 0) goto L_0x00ae
-            boolean r16 = r4.isSticker()
-            if (r16 == 0) goto L_0x0097
-            r0 = 0
-            r16 = r0
-            org.telegram.messenger.ImageReceiver r0 = r6.centerImage
-            r0.setRoundRadius((int) r1)
-            r1 = r16
-            goto L_0x00af
-        L_0x0097:
-            boolean r16 = r4.isGif()
-            if (r16 == 0) goto L_0x00ae
-            r0 = 1
-            org.telegram.messenger.ImageReceiver r1 = r6.centerImage
-            r17 = 1086324736(0x40CLASSNAME, float:6.0)
-            r18 = r0
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r17)
-            r1.setRoundRadius((int) r0)
-            r1 = r18
-            goto L_0x00af
-        L_0x00ae:
-            r1 = r0
-        L_0x00af:
-            r0 = -1
-            if (r1 != r0) goto L_0x00b4
-            r0 = 0
-            return r0
-        L_0x00b4:
-            r6.startX = r10
-            r6.startY = r11
-            r6.currentPreviewCell = r14
-            r4 = r1
-            org.telegram.ui.ContentPreviewViewer$$ExternalSyntheticLambda4 r0 = new org.telegram.ui.ContentPreviewViewer$$ExternalSyntheticLambda4
-            r16 = r0
-            r18 = r1
-            r1 = r21
-            r17 = r2
-            r2 = r23
-            r19 = r3
-            r3 = r24
-            r20 = r5
-            r5 = r26
+        L_0x0029:
+            int r9 = r8.getTop()
+            int r10 = r8.getBottom()
+            int r11 = r8.getLeft()
+            int r12 = r8.getRight()
+            if (r9 > r2) goto L_0x00b7
+            if (r10 < r2) goto L_0x00b7
+            if (r11 > r0) goto L_0x00b7
+            if (r12 >= r0) goto L_0x0043
+            goto L_0x00b7
+        L_0x0043:
+            boolean r3 = r8 instanceof org.telegram.ui.Cells.StickerEmojiCell
+            r4 = -1
+            r9 = 1
+            if (r3 == 0) goto L_0x0059
+            r3 = r8
+            org.telegram.ui.Cells.StickerEmojiCell r3 = (org.telegram.ui.Cells.StickerEmojiCell) r3
+            boolean r3 = r3.showingBitmap()
+            if (r3 == 0) goto L_0x0098
+            org.telegram.messenger.ImageReceiver r3 = r6.centerImage
+            r3.setRoundRadius((int) r1)
+        L_0x0057:
+            r10 = 0
+            goto L_0x0099
+        L_0x0059:
+            boolean r3 = r8 instanceof org.telegram.ui.Cells.StickerCell
+            if (r3 == 0) goto L_0x006c
+            r3 = r8
+            org.telegram.ui.Cells.StickerCell r3 = (org.telegram.ui.Cells.StickerCell) r3
+            boolean r3 = r3.showingBitmap()
+            if (r3 == 0) goto L_0x0098
+            org.telegram.messenger.ImageReceiver r3 = r6.centerImage
+            r3.setRoundRadius((int) r1)
+            goto L_0x0057
+        L_0x006c:
+            boolean r3 = r8 instanceof org.telegram.ui.Cells.ContextLinkCell
+            if (r3 == 0) goto L_0x0098
+            r3 = r8
+            org.telegram.ui.Cells.ContextLinkCell r3 = (org.telegram.ui.Cells.ContextLinkCell) r3
+            boolean r10 = r3.showingBitmap()
+            if (r10 == 0) goto L_0x0098
+            boolean r10 = r3.isSticker()
+            if (r10 == 0) goto L_0x0085
+            org.telegram.messenger.ImageReceiver r3 = r6.centerImage
+            r3.setRoundRadius((int) r1)
+            goto L_0x0057
+        L_0x0085:
+            boolean r3 = r3.isGif()
+            if (r3 == 0) goto L_0x0098
+            org.telegram.messenger.ImageReceiver r3 = r6.centerImage
+            r10 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            r3.setRoundRadius((int) r10)
+            r10 = 1
+            goto L_0x0099
+        L_0x0098:
+            r10 = -1
+        L_0x0099:
+            if (r10 != r4) goto L_0x009c
+            return r1
+        L_0x009c:
+            r6.startX = r0
+            r6.startY = r2
+            r6.currentPreviewCell = r8
+            org.telegram.ui.ContentPreviewViewer$$ExternalSyntheticLambda4 r8 = new org.telegram.ui.ContentPreviewViewer$$ExternalSyntheticLambda4
+            r0 = r8
+            r1 = r13
+            r2 = r15
+            r3 = r16
+            r4 = r10
+            r5 = r18
             r0.<init>(r1, r2, r3, r4, r5)
-            r6.openPreviewRunnable = r0
-            r1 = 200(0xc8, double:9.9E-322)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)
-            r0 = 1
-            return r0
-        L_0x00db:
-            r17 = r2
-            r19 = r3
-            r20 = r5
-        L_0x00e1:
-            int r13 = r13 + 1
-            r1 = 0
-            goto L_0x0023
-        L_0x00e6:
-            r0 = 0
-            return r0
+            r6.openPreviewRunnable = r8
+            r0 = 200(0xc8, double:9.9E-322)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r8, r0)
+            return r9
+        L_0x00b7:
+            int r4 = r4 + 1
+            goto L_0x001f
+        L_0x00bb:
+            return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onInterceptTouchEvent(android.view.MotionEvent, org.telegram.ui.Components.RecyclerListView, int, org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate, org.telegram.ui.ActionBar.Theme$ResourcesProvider):boolean");
     }
 
-    /* renamed from: lambda$onInterceptTouchEvent$1$org-telegram-ui-ContentPreviewViewer  reason: not valid java name */
-    public /* synthetic */ void m2793xa62d51cd(RecyclerListView listView, int height, int contentTypeFinal, Theme.ResourcesProvider resourcesProvider2) {
-        RecyclerListView recyclerListView = listView;
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onInterceptTouchEvent$1(RecyclerListView recyclerListView, int i, int i2, Theme.ResourcesProvider resourcesProvider2) {
+        RecyclerListView recyclerListView2 = recyclerListView;
         if (this.openPreviewRunnable != null) {
-            String str = null;
             recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) null);
             recyclerListView.requestDisallowInterceptTouchEvent(true);
             this.openPreviewRunnable = null;
-            setParentActivity((Activity) listView.getContext());
-            setKeyboardHeight(height);
+            setParentActivity((Activity) recyclerListView.getContext());
+            setKeyboardHeight(i);
             this.clearsInputField = false;
             View view = this.currentPreviewCell;
             if (view instanceof StickerEmojiCell) {
                 StickerEmojiCell stickerEmojiCell = (StickerEmojiCell) view;
-                TLRPC.Document sticker = stickerEmojiCell.getSticker();
+                TLRPC$Document sticker = stickerEmojiCell.getSticker();
                 SendMessagesHelper.ImportingSticker stickerPath = stickerEmojiCell.getStickerPath();
                 String emoji = stickerEmojiCell.getEmoji();
                 ContentPreviewViewerDelegate contentPreviewViewerDelegate = this.delegate;
-                if (contentPreviewViewerDelegate != null) {
-                    str = contentPreviewViewerDelegate.getQuery(false);
-                }
-                open(sticker, stickerPath, emoji, str, (TLRPC.BotInlineResult) null, contentTypeFinal, stickerEmojiCell.isRecent(), stickerEmojiCell.getParentObject(), resourcesProvider2);
+                open(sticker, stickerPath, emoji, contentPreviewViewerDelegate != null ? contentPreviewViewerDelegate.getQuery(false) : null, (TLRPC$BotInlineResult) null, i2, stickerEmojiCell.isRecent(), stickerEmojiCell.getParentObject(), resourcesProvider2);
                 stickerEmojiCell.setScaled(true);
-                int i = contentTypeFinal;
             } else if (view instanceof StickerCell) {
                 StickerCell stickerCell = (StickerCell) view;
-                TLRPC.Document sticker2 = stickerCell.getSticker();
+                TLRPC$Document sticker2 = stickerCell.getSticker();
                 ContentPreviewViewerDelegate contentPreviewViewerDelegate2 = this.delegate;
-                if (contentPreviewViewerDelegate2 != null) {
-                    str = contentPreviewViewerDelegate2.getQuery(false);
-                }
-                open(sticker2, (SendMessagesHelper.ImportingSticker) null, (String) null, str, (TLRPC.BotInlineResult) null, contentTypeFinal, false, stickerCell.getParentObject(), resourcesProvider2);
+                open(sticker2, (SendMessagesHelper.ImportingSticker) null, (String) null, contentPreviewViewerDelegate2 != null ? contentPreviewViewerDelegate2.getQuery(false) : null, (TLRPC$BotInlineResult) null, i2, false, stickerCell.getParentObject(), resourcesProvider2);
                 stickerCell.setScaled(true);
                 this.clearsInputField = stickerCell.isClearsInputField();
-                int i2 = contentTypeFinal;
             } else if (view instanceof ContextLinkCell) {
                 ContextLinkCell contextLinkCell = (ContextLinkCell) view;
-                TLRPC.Document document = contextLinkCell.getDocument();
+                TLRPC$Document document = contextLinkCell.getDocument();
                 ContentPreviewViewerDelegate contentPreviewViewerDelegate3 = this.delegate;
-                if (contentPreviewViewerDelegate3 != null) {
-                    str = contentPreviewViewerDelegate3.getQuery(true);
-                }
-                open(document, (SendMessagesHelper.ImportingSticker) null, (String) null, str, contextLinkCell.getBotInlineResult(), contentTypeFinal, false, contextLinkCell.getBotInlineResult() != null ? contextLinkCell.getInlineBot() : contextLinkCell.getParentObject(), resourcesProvider2);
-                if (contentTypeFinal != 1) {
+                open(document, (SendMessagesHelper.ImportingSticker) null, (String) null, contentPreviewViewerDelegate3 != null ? contentPreviewViewerDelegate3.getQuery(true) : null, contextLinkCell.getBotInlineResult(), i2, false, contextLinkCell.getBotInlineResult() != null ? contextLinkCell.getInlineBot() : contextLinkCell.getParentObject(), resourcesProvider2);
+                if (i2 != 1) {
                     contextLinkCell.setScaled(true);
                 }
-            } else {
-                int i3 = contentTypeFinal;
             }
             this.currentPreviewCell.performHapticFeedback(0, 2);
         }
-    }
-
-    public void setDelegate(ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
-        this.delegate = contentPreviewViewerDelegate;
     }
 
     public void setParentActivity(Activity activity) {
@@ -878,7 +985,8 @@ public class ContentPreviewViewer {
             this.windowView = frameLayout;
             frameLayout.setFocusable(true);
             this.windowView.setFocusableInTouchMode(true);
-            if (Build.VERSION.SDK_INT >= 21) {
+            int i2 = Build.VERSION.SDK_INT;
+            if (i2 >= 21) {
                 this.windowView.setFitsSystemWindows(true);
                 this.windowView.setOnApplyWindowInsetsListener(new ContentPreviewViewer$$ExternalSyntheticLambda0(this));
             }
@@ -890,14 +998,14 @@ public class ContentPreviewViewer {
             WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
             this.windowLayoutParams = layoutParams;
             layoutParams.height = -1;
-            this.windowLayoutParams.format = -3;
-            this.windowLayoutParams.width = -1;
-            this.windowLayoutParams.gravity = 48;
-            this.windowLayoutParams.type = 99;
-            if (Build.VERSION.SDK_INT >= 21) {
-                this.windowLayoutParams.flags = -NUM;
+            layoutParams.format = -3;
+            layoutParams.width = -1;
+            layoutParams.gravity = 48;
+            layoutParams.type = 99;
+            if (i2 >= 21) {
+                layoutParams.flags = -NUM;
             } else {
-                this.windowLayoutParams.flags = 8;
+                layoutParams.flags = 8;
             }
             this.centerImage.setAspectFit(true);
             this.centerImage.setInvalidateAll(true);
@@ -905,90 +1013,80 @@ public class ContentPreviewViewer {
         }
     }
 
-    /* renamed from: lambda$setParentActivity$2$org-telegram-ui-ContentPreviewViewer  reason: not valid java name */
-    public /* synthetic */ WindowInsets m2794lambda$setParentActivity$2$orgtelegramuiContentPreviewViewer(View v, WindowInsets insets) {
-        this.lastInsets = insets;
-        return insets;
+    /* access modifiers changed from: private */
+    public /* synthetic */ WindowInsets lambda$setParentActivity$2(View view, WindowInsets windowInsets) {
+        this.lastInsets = windowInsets;
+        return windowInsets;
     }
 
-    /* renamed from: lambda$setParentActivity$3$org-telegram-ui-ContentPreviewViewer  reason: not valid java name */
-    public /* synthetic */ boolean m2795lambda$setParentActivity$3$orgtelegramuiContentPreviewViewer(View v, MotionEvent event) {
-        if (event.getAction() == 1 || event.getAction() == 6 || event.getAction() == 3) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$setParentActivity$3(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == 1 || motionEvent.getAction() == 6 || motionEvent.getAction() == 3) {
             close();
         }
         return true;
     }
 
-    public void setKeyboardHeight(int height) {
-        this.keyboardHeight = height;
+    public void setKeyboardHeight(int i) {
+        this.keyboardHeight = i;
     }
 
-    public void open(TLRPC.Document document, SendMessagesHelper.ImportingSticker sticker, String emojiPath, String query, TLRPC.BotInlineResult botInlineResult, int contentType, boolean isRecent, Object parent, Theme.ResourcesProvider resourcesProvider2) {
-        TLRPC.InputStickerSet newSet;
+    public void open(TLRPC$Document tLRPC$Document, SendMessagesHelper.ImportingSticker importingSticker2, String str, String str2, TLRPC$BotInlineResult tLRPC$BotInlineResult, int i, boolean z, Object obj, Theme.ResourcesProvider resourcesProvider2) {
+        TLRPC$InputStickerSet tLRPC$InputStickerSet;
         ContentPreviewViewerDelegate contentPreviewViewerDelegate;
-        TLRPC.Document document2 = document;
-        SendMessagesHelper.ImportingSticker importingSticker2 = sticker;
-        String str = emojiPath;
-        TLRPC.BotInlineResult botInlineResult2 = botInlineResult;
-        int i = contentType;
+        TLRPC$Document tLRPC$Document2 = tLRPC$Document;
+        SendMessagesHelper.ImportingSticker importingSticker3 = importingSticker2;
+        String str3 = str;
+        TLRPC$BotInlineResult tLRPC$BotInlineResult2 = tLRPC$BotInlineResult;
+        int i2 = i;
         Theme.ResourcesProvider resourcesProvider3 = resourcesProvider2;
-        if (this.parentActivity == null) {
-            String str2 = query;
-            Object obj = parent;
-        } else if (this.windowView == null) {
-            String str3 = query;
-            Object obj2 = parent;
-        } else {
+        if (this.parentActivity != null && this.windowView != null) {
             this.resourcesProvider = resourcesProvider3;
-            this.isRecentSticker = isRecent;
+            this.isRecentSticker = z;
             this.stickerEmojiLayout = null;
-            if (i != 0) {
-                if (document2 != null) {
-                    TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90);
-                    TLRPC.VideoSize videoSize = MessageObject.getDocumentVideoThumb(document);
-                    ImageLocation location = ImageLocation.getForDocument(document);
-                    location.imageType = 2;
-                    if (videoSize != null) {
-                        this.centerImage.setImage(location, (String) null, ImageLocation.getForDocument(videoSize, document2), (String) null, ImageLocation.getForDocument(thumb, document2), "90_90_b", (Drawable) null, document2.size, (String) null, "gif" + document2, 0);
+            if (i2 != 0) {
+                if (tLRPC$Document2 != null) {
+                    TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
+                    TLRPC$VideoSize documentVideoThumb = MessageObject.getDocumentVideoThumb(tLRPC$Document);
+                    ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$Document);
+                    forDocument.imageType = 2;
+                    if (documentVideoThumb != null) {
+                        this.centerImage.setImage(forDocument, (String) null, ImageLocation.getForDocument(documentVideoThumb, tLRPC$Document2), (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), "90_90_b", (Drawable) null, tLRPC$Document2.size, (String) null, "gif" + tLRPC$Document2, 0);
                     } else {
-                        this.centerImage.setImage(location, (String) null, ImageLocation.getForDocument(thumb, document2), "90_90_b", document2.size, (String) null, "gif" + document2, 0);
+                        this.centerImage.setImage(forDocument, (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), "90_90_b", tLRPC$Document2.size, (String) null, "gif" + tLRPC$Document2, 0);
                     }
-                } else if (botInlineResult2 == null) {
-                    String str4 = query;
-                    Object obj3 = parent;
-                    return;
-                } else if (botInlineResult2.content != null) {
-                    if (!(botInlineResult2.thumb instanceof TLRPC.TL_webDocument) || !"video/mp4".equals(botInlineResult2.thumb.mime_type)) {
-                        this.centerImage.setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(botInlineResult2.content)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(botInlineResult2.thumb)), "90_90_b", botInlineResult2.content.size, (String) null, "gif" + botInlineResult2, 1);
+                } else if (tLRPC$BotInlineResult2 != null && tLRPC$BotInlineResult2.content != null) {
+                    TLRPC$WebDocument tLRPC$WebDocument = tLRPC$BotInlineResult2.thumb;
+                    if (!(tLRPC$WebDocument instanceof TLRPC$TL_webDocument) || !"video/mp4".equals(tLRPC$WebDocument.mime_type)) {
+                        this.centerImage.setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.content)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), "90_90_b", tLRPC$BotInlineResult2.content.size, (String) null, "gif" + tLRPC$BotInlineResult2, 1);
                     } else {
-                        this.centerImage.setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(botInlineResult2.content)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(botInlineResult2.thumb)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(botInlineResult2.thumb)), "90_90_b", (Drawable) null, botInlineResult2.content.size, (String) null, "gif" + botInlineResult2, 1);
+                        this.centerImage.setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.content)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), "90_90_b", (Drawable) null, tLRPC$BotInlineResult2.content.size, (String) null, "gif" + tLRPC$BotInlineResult2, 1);
                     }
                 } else {
                     return;
                 }
                 AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
                 AndroidUtilities.runOnUIThread(this.showSheetRunnable, 2000);
-            } else if (document2 != null || importingSticker2 != null) {
+            } else if (tLRPC$Document2 != null || importingSticker3 != null) {
                 if (textPaint == null) {
                     TextPaint textPaint2 = new TextPaint(1);
                     textPaint = textPaint2;
                     textPaint2.setTextSize((float) AndroidUtilities.dp(24.0f));
                 }
-                if (document2 != null) {
-                    int a = 0;
+                if (tLRPC$Document2 != null) {
+                    int i3 = 0;
                     while (true) {
-                        if (a >= document2.attributes.size()) {
-                            newSet = null;
+                        if (i3 >= tLRPC$Document2.attributes.size()) {
+                            tLRPC$InputStickerSet = null;
                             break;
                         }
-                        TLRPC.DocumentAttribute attribute = document2.attributes.get(a);
-                        if ((attribute instanceof TLRPC.TL_documentAttributeSticker) && attribute.stickerset != null) {
-                            newSet = attribute.stickerset;
+                        TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document2.attributes.get(i3);
+                        if ((tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) && (tLRPC$InputStickerSet = tLRPC$DocumentAttribute.stickerset) != null) {
                             break;
                         }
-                        a++;
+                        i3++;
                     }
-                    if (newSet != null && ((contentPreviewViewerDelegate = this.delegate) == null || contentPreviewViewerDelegate.needMenu())) {
+                    if (tLRPC$InputStickerSet != null && ((contentPreviewViewerDelegate = this.delegate) == null || contentPreviewViewerDelegate.needMenu())) {
                         try {
                             BottomSheet bottomSheet = this.visibleDialog;
                             if (bottomSheet != null) {
@@ -1002,26 +1100,24 @@ public class ContentPreviewViewer {
                         AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
                         AndroidUtilities.runOnUIThread(this.showSheetRunnable, 1300);
                     }
-                    this.currentStickerSet = newSet;
-                    this.centerImage.setImage(ImageLocation.getForDocument(document), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90), document2), (String) null, "webp", (Object) this.currentStickerSet, 1);
-                    int a2 = 0;
+                    this.currentStickerSet = tLRPC$InputStickerSet;
+                    this.centerImage.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90), tLRPC$Document2), (String) null, "webp", (Object) this.currentStickerSet, 1);
+                    int i4 = 0;
                     while (true) {
-                        if (a2 >= document2.attributes.size()) {
+                        if (i4 >= tLRPC$Document2.attributes.size()) {
                             break;
                         }
-                        TLRPC.DocumentAttribute attribute2 = document2.attributes.get(a2);
-                        if ((attribute2 instanceof TLRPC.TL_documentAttributeSticker) && !TextUtils.isEmpty(attribute2.alt)) {
-                            this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(attribute2.alt, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                        TLRPC$DocumentAttribute tLRPC$DocumentAttribute2 = tLRPC$Document2.attributes.get(i4);
+                        if ((tLRPC$DocumentAttribute2 instanceof TLRPC$TL_documentAttributeSticker) && !TextUtils.isEmpty(tLRPC$DocumentAttribute2.alt)) {
+                            this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(tLRPC$DocumentAttribute2.alt, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                             break;
-                        } else {
-                            a2++;
-                            boolean z = isRecent;
                         }
+                        i4++;
                     }
-                } else if (importingSticker2 != null) {
-                    this.centerImage.setImage(importingSticker2.path, (String) null, (Drawable) null, importingSticker2.animated ? "tgs" : null, 0);
-                    if (str != null) {
-                        this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(str, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                } else if (importingSticker3 != null) {
+                    this.centerImage.setImage(importingSticker3.path, (String) null, (Drawable) null, importingSticker3.animated ? "tgs" : null, 0);
+                    if (str3 != null) {
+                        this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(str3, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                     }
                     if (this.delegate.needMenu()) {
                         try {
@@ -1041,12 +1137,12 @@ public class ContentPreviewViewer {
             } else {
                 return;
             }
-            this.currentContentType = i;
-            this.currentDocument = document2;
-            this.importingSticker = importingSticker2;
-            this.currentQuery = query;
-            this.inlineResult = botInlineResult2;
-            this.parentObject = parent;
+            this.currentContentType = i2;
+            this.currentDocument = tLRPC$Document2;
+            this.importingSticker = importingSticker3;
+            this.currentQuery = str2;
+            this.inlineResult = tLRPC$BotInlineResult2;
+            this.parentObject = obj;
             this.resourcesProvider = resourcesProvider3;
             this.containerView.invalidate();
             if (!this.isVisible) {
@@ -1130,58 +1226,62 @@ public class ContentPreviewViewer {
         }
     }
 
-    private float rubberYPoisition(float offset, float factor) {
-        float f = 1.0f;
-        float f2 = -((1.0f - (1.0f / (((0.55f * Math.abs(offset)) / factor) + 1.0f))) * factor);
-        if (offset >= 0.0f) {
-            f = -1.0f;
+    private float rubberYPoisition(float f, float f2) {
+        float f3 = 1.0f;
+        float f4 = -((1.0f - (1.0f / (((Math.abs(f) * 0.55f) / f2) + 1.0f))) * f2);
+        if (f >= 0.0f) {
+            f3 = -1.0f;
         }
-        return f2 * f;
+        return f4 * f3;
     }
 
     /* access modifiers changed from: private */
+    @SuppressLint({"DrawAllocation"})
     public void onDraw(Canvas canvas) {
         ColorDrawable colorDrawable;
-        int top;
-        int size;
+        int i;
+        int i2;
+        int i3;
         Drawable drawable;
         WindowInsets windowInsets;
         if (this.containerView != null && (colorDrawable = this.backgroundDrawable) != null) {
             colorDrawable.setAlpha((int) (this.showProgress * 180.0f));
-            int i = 0;
+            int i4 = 0;
             this.backgroundDrawable.setBounds(0, 0, this.containerView.getWidth(), this.containerView.getHeight());
             this.backgroundDrawable.draw(canvas);
             canvas.save();
-            int insets = 0;
             if (Build.VERSION.SDK_INT < 21 || (windowInsets = this.lastInsets) == null) {
-                top = AndroidUtilities.statusBarHeight;
+                i = AndroidUtilities.statusBarHeight;
+                i2 = 0;
             } else {
-                insets = windowInsets.getStableInsetBottom() + this.lastInsets.getStableInsetTop();
-                top = this.lastInsets.getStableInsetTop();
+                i2 = windowInsets.getStableInsetBottom() + this.lastInsets.getStableInsetTop();
+                i = this.lastInsets.getStableInsetTop();
             }
             if (this.currentContentType == 1) {
-                size = Math.min(this.containerView.getWidth(), this.containerView.getHeight() - insets) - AndroidUtilities.dp(40.0f);
+                i3 = Math.min(this.containerView.getWidth(), this.containerView.getHeight() - i2) - AndroidUtilities.dp(40.0f);
             } else {
-                size = (int) (((float) Math.min(this.containerView.getWidth(), this.containerView.getHeight() - insets)) / 1.8f);
+                i3 = (int) (((float) Math.min(this.containerView.getWidth(), this.containerView.getHeight() - i2)) / 1.8f);
             }
             float width = (float) (this.containerView.getWidth() / 2);
             float f = this.moveY;
-            int i2 = (size / 2) + top;
+            int i5 = (i3 / 2) + i;
             if (this.stickerEmojiLayout != null) {
-                i = AndroidUtilities.dp(40.0f);
+                i4 = AndroidUtilities.dp(40.0f);
             }
-            canvas.translate(width, f + ((float) Math.max(i2 + i, ((this.containerView.getHeight() - insets) - this.keyboardHeight) / 2)));
+            canvas.translate(width, f + ((float) Math.max(i5 + i4, ((this.containerView.getHeight() - i2) - this.keyboardHeight) / 2)));
             float f2 = this.showProgress;
-            int size2 = (int) (((float) size) * ((f2 * 0.8f) / 0.8f));
+            int i6 = (int) (((float) i3) * ((f2 * 0.8f) / 0.8f));
             this.centerImage.setAlpha(f2);
-            this.centerImage.setImageCoords((float) ((-size2) / 2), (float) ((-size2) / 2), (float) size2, (float) size2);
+            float f3 = (float) ((-i6) / 2);
+            float f4 = (float) i6;
+            this.centerImage.setImageCoords(f3, f3, f4, f4);
             this.centerImage.draw(canvas);
             if (this.currentContentType == 1 && (drawable = this.slideUpDrawable) != null) {
-                int w = drawable.getIntrinsicWidth();
-                int h = this.slideUpDrawable.getIntrinsicHeight();
-                int y = (int) (this.centerImage.getDrawRegion().top - ((float) AndroidUtilities.dp(((this.currentMoveY / ((float) AndroidUtilities.dp(60.0f))) * 6.0f) + 17.0f)));
+                int intrinsicWidth = drawable.getIntrinsicWidth();
+                int intrinsicHeight = this.slideUpDrawable.getIntrinsicHeight();
+                int dp = (int) (this.centerImage.getDrawRegion().top - ((float) AndroidUtilities.dp(((this.currentMoveY / ((float) AndroidUtilities.dp(60.0f))) * 6.0f) + 17.0f)));
                 this.slideUpDrawable.setAlpha((int) ((1.0f - this.currentMoveYProgress) * 255.0f));
-                this.slideUpDrawable.setBounds((-w) / 2, (-h) + y, w / 2, y);
+                this.slideUpDrawable.setBounds((-intrinsicWidth) / 2, (-intrinsicHeight) + dp, intrinsicWidth / 2, dp);
                 this.slideUpDrawable.draw(canvas);
             }
             if (this.stickerEmojiLayout != null) {
@@ -1191,18 +1291,18 @@ public class ContentPreviewViewer {
             canvas.restore();
             if (this.isVisible) {
                 if (this.showProgress != 1.0f) {
-                    long newTime = System.currentTimeMillis();
-                    this.lastUpdateTime = newTime;
-                    this.showProgress += ((float) (newTime - this.lastUpdateTime)) / 120.0f;
+                    long currentTimeMillis = System.currentTimeMillis();
+                    this.lastUpdateTime = currentTimeMillis;
+                    this.showProgress += ((float) (currentTimeMillis - this.lastUpdateTime)) / 120.0f;
                     this.containerView.invalidate();
                     if (this.showProgress > 1.0f) {
                         this.showProgress = 1.0f;
                     }
                 }
             } else if (this.showProgress != 0.0f) {
-                long newTime2 = System.currentTimeMillis();
-                this.lastUpdateTime = newTime2;
-                this.showProgress -= ((float) (newTime2 - this.lastUpdateTime)) / 120.0f;
+                long currentTimeMillis2 = System.currentTimeMillis();
+                this.lastUpdateTime = currentTimeMillis2;
+                this.showProgress -= ((float) (currentTimeMillis2 - this.lastUpdateTime)) / 120.0f;
                 this.containerView.invalidate();
                 if (this.showProgress < 0.0f) {
                     this.showProgress = 0.0f;
@@ -1223,15 +1323,15 @@ public class ContentPreviewViewer {
         }
     }
 
-    /* renamed from: lambda$onDraw$4$org-telegram-ui-ContentPreviewViewer  reason: not valid java name */
-    public /* synthetic */ void m2792lambda$onDraw$4$orgtelegramuiContentPreviewViewer() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDraw$4() {
         this.centerImage.setImageBitmap((Bitmap) null);
     }
 
     /* access modifiers changed from: private */
-    public int getThemedColor(String key) {
+    public int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 }

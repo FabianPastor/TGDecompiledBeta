@@ -12,6 +12,6 @@ public final /* synthetic */ class MentionsAdapter$$ExternalSyntheticLambda0 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1375xe59697ad(this.f$1, dialogInterface, i);
+        this.f$0.lambda$processFoundUser$3(this.f$1, dialogInterface, i);
     }
 }

@@ -1,15 +1,19 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda255 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda255(MessagesController messagesController, int i) {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda255 implements RequestDelegate {
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ long f$1;
+
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda255(MessagesController messagesController, long j) {
         this.f$0 = messagesController;
-        this.f$1 = i;
+        this.f$1 = j;
     }
 
-    public final void run() {
-        this.f$0.m294x4e01054c(this.f$1);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$deleteMessages$91(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

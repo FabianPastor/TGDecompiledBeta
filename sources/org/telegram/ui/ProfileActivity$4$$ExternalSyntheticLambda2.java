@@ -11,6 +11,6 @@ public final /* synthetic */ class ProfileActivity$4$$ExternalSyntheticLambda2 i
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3729lambda$onItemClick$8$orgtelegramuiProfileActivity$4(dialogInterface, i);
+        this.f$0.lambda$onItemClick$8(dialogInterface, i);
     }
 }

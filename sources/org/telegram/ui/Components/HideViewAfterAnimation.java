@@ -11,8 +11,8 @@ public class HideViewAfterAnimation extends AnimatorListenerAdapter {
         this.view = view2;
     }
 
-    public void onAnimationEnd(Animator animation) {
-        super.onAnimationEnd(animation);
+    public void onAnimationEnd(Animator animator) {
+        super.onAnimationEnd(animator);
         this.view.setVisibility(8);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class ProxyListActivity$$ExternalSyntheticLambda4 i
     }
 
     public final boolean onItemClick(View view, int i) {
-        return this.f$0.m3830lambda$createView$2$orgtelegramuiProxyListActivity(view, i);
+        return this.f$0.lambda$createView$2(view, i);
     }
 }

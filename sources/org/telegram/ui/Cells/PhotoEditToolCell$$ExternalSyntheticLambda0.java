@@ -12,6 +12,6 @@ public final /* synthetic */ class PhotoEditToolCell$$ExternalSyntheticLambda0 i
     }
 
     public final void onProgressChanged(int i, int i2) {
-        this.f$0.m1546x61679307(this.f$1, i, i2);
+        this.f$0.lambda$setSeekBarDelegate$0(this.f$1, i, i2);
     }
 }

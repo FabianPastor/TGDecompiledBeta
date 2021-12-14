@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda0 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3187lambda$onDoneButtonPressed$3$orgtelegramuiLoginActivity(dialogInterface, i);
+        this.f$0.lambda$onDoneButtonPressed$3(dialogInterface, i);
     }
 }

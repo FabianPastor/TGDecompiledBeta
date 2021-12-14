@@ -1,15 +1,13 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda22 implements Runnable {
+    public final /* synthetic */ LaunchActivity f$0;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda22 implements DialogInterface.OnCancelListener {
-    public final /* synthetic */ boolean[] f$0;
-
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda22(boolean[] zArr) {
-        this.f$0 = zArr;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda22(LaunchActivity launchActivity) {
+        this.f$0 = launchActivity;
     }
 
-    public final void onCancel(DialogInterface dialogInterface) {
-        LaunchActivity.lambda$runLinkRequest$29(this.f$0, dialogInterface);
+    public final void run() {
+        this.f$0.lambda$runLinkRequest$46();
     }
 }

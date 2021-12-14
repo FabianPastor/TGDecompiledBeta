@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.animation.AnimatorSet;
 
 public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda15 implements Runnable {
-    public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ AlertDialog f$2;
+    public final /* synthetic */ AnimatorSet f$0;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda15(ProfileActivity profileActivity, boolean z, AlertDialog alertDialog) {
-        this.f$0 = profileActivity;
-        this.f$1 = z;
-        this.f$2 = alertDialog;
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda15(AnimatorSet animatorSet) {
+        this.f$0 = animatorSet;
     }
 
     public final void run() {
-        this.f$0.m3718lambda$sendLogs$33$orgtelegramuiProfileActivity(this.f$1, this.f$2);
+        this.f$0.start();
     }
 }

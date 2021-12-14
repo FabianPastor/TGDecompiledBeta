@@ -7,24 +7,24 @@ public class AccountInstance {
     private static volatile AccountInstance[] Instance = new AccountInstance[3];
     private int currentAccount;
 
-    public static AccountInstance getInstance(int num) {
-        AccountInstance localInstance = Instance[num];
-        if (localInstance == null) {
+    public static AccountInstance getInstance(int i) {
+        AccountInstance accountInstance = Instance[i];
+        if (accountInstance == null) {
             synchronized (AccountInstance.class) {
-                localInstance = Instance[num];
-                if (localInstance == null) {
+                accountInstance = Instance[i];
+                if (accountInstance == null) {
                     AccountInstance[] accountInstanceArr = Instance;
-                    AccountInstance accountInstance = new AccountInstance(num);
-                    localInstance = accountInstance;
-                    accountInstanceArr[num] = accountInstance;
+                    AccountInstance accountInstance2 = new AccountInstance(i);
+                    accountInstanceArr[i] = accountInstance2;
+                    accountInstance = accountInstance2;
                 }
             }
         }
-        return localInstance;
+        return accountInstance;
     }
 
-    public AccountInstance(int instance) {
-        this.currentAccount = instance;
+    public AccountInstance(int i) {
+        this.currentAccount = i;
     }
 
     public MessagesController getMessagesController() {

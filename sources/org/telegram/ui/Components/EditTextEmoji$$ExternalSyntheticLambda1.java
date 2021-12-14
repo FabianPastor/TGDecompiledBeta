@@ -12,6 +12,6 @@ public final /* synthetic */ class EditTextEmoji$$ExternalSyntheticLambda1 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2231lambda$hidePopup$1$orgtelegramuiComponentsEditTextEmoji(this.f$1, valueAnimator);
+        this.f$0.lambda$hidePopup$1(this.f$1, valueAnimator);
     }
 }

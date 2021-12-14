@@ -12,6 +12,6 @@ public final /* synthetic */ class GroupCallMiniTextureView$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m2740x43625071(this.f$1);
+        this.f$0.lambda$saveThumb$3(this.f$1);
     }
 }

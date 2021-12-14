@@ -10,7 +10,7 @@ public final /* synthetic */ class InviteContactsActivity$$ExternalSyntheticLamb
     }
 
     public final void didSetColor() {
-        this.f$0.m3054xbbfbd00f();
+        this.f$0.lambda$getThemeDescriptions$3();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

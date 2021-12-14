@@ -1,15 +1,12 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+public final /* synthetic */ class PhotoPaintView$$ExternalSyntheticLambda18 implements Runnable {
+    public static final /* synthetic */ PhotoPaintView$$ExternalSyntheticLambda18 INSTANCE = new PhotoPaintView$$ExternalSyntheticLambda18();
 
-public final /* synthetic */ class PhotoPaintView$$ExternalSyntheticLambda18 implements View.OnClickListener {
-    public final /* synthetic */ PhotoPaintView f$0;
-
-    public /* synthetic */ PhotoPaintView$$ExternalSyntheticLambda18(PhotoPaintView photoPaintView) {
-        this.f$0 = photoPaintView;
+    private /* synthetic */ PhotoPaintView$$ExternalSyntheticLambda18() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.m2484xvar_e6c7f(view);
+    public final void run() {
+        PhotoPaintView.lambda$shutdown$5();
     }
 }

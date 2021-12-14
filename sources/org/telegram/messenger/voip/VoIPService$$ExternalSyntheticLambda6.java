@@ -8,6 +8,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda6 impleme
     }
 
     public final void run() {
-        this.f$0.m1232lambda$loadResources$74$orgtelegrammessengervoipVoIPService();
+        this.f$0.lambda$onCallUpdated$15();
     }
 }

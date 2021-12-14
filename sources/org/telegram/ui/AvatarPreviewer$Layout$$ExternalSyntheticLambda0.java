@@ -11,6 +11,6 @@ public final /* synthetic */ class AvatarPreviewer$Layout$$ExternalSyntheticLamb
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1458lambda$onDraw$3$orgtelegramuiAvatarPreviewer$Layout(valueAnimator);
+        this.f$0.lambda$onTouchEvent$0(valueAnimator);
     }
 }

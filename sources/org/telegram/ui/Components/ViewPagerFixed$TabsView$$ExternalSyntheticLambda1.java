@@ -12,6 +12,6 @@ public final /* synthetic */ class ViewPagerFixed$TabsView$$ExternalSyntheticLam
     }
 
     public final void onItemClick(View view, int i, float f, float f2) {
-        this.f$0.m2723lambda$new$0$orgtelegramuiComponentsViewPagerFixed$TabsView(view, i, f, f2);
+        this.f$0.lambda$new$0(view, i, f, f2);
     }
 }

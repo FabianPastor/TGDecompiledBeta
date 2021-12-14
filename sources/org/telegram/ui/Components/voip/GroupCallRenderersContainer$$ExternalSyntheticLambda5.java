@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallRenderersContainer$$ExternalSyntheti
     }
 
     public final void onClick(View view) {
-        this.f$0.m2749x767d48ae(view);
+        this.f$0.lambda$new$0(view);
     }
 }

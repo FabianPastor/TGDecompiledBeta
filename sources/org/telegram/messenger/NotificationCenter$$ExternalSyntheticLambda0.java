@@ -8,6 +8,6 @@ public final /* synthetic */ class NotificationCenter$$ExternalSyntheticLambda0 
     }
 
     public final void run() {
-        this.f$0.m1094xb7818d86();
+        this.f$0.lambda$checkForExpiredNotifications$0();
     }
 }

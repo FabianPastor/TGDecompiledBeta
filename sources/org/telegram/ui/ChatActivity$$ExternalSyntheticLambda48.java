@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda48 implements Runnable {
-    public final /* synthetic */ AlertDialog[] f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda48 implements View.OnClickListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda48(AlertDialog[] alertDialogArr) {
-        this.f$0 = alertDialogArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda48(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        ChatActivity.lambda$processSelectedOption$137(this.f$0);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$52(view);
     }
 }

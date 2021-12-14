@@ -10,6 +10,6 @@ public final /* synthetic */ class CropView$$ExternalSyntheticLambda2 implements
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.m2225xvar_a1fe5(dialogInterface);
+        this.f$0.lambda$showAspectRatioDialog$3(dialogInterface);
     }
 }

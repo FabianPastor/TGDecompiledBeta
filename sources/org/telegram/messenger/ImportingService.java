@@ -10,42 +10,42 @@ import org.telegram.messenger.NotificationCenter;
 public class ImportingService extends Service implements NotificationCenter.NotificationCenterDelegate {
     private NotificationCompat.Builder builder;
 
-    public ImportingService() {
-        for (int a = 0; a < 3; a++) {
-            NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.historyImportProgressChanged);
-            NotificationCenter.getInstance(a).addObserver(this, NotificationCenter.stickersImportProgressChanged);
-        }
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
-    public IBinder onBind(Intent arg2) {
-        return null;
+    public ImportingService() {
+        for (int i = 0; i < 3; i++) {
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.historyImportProgressChanged);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.stickersImportProgressChanged);
+        }
     }
 
     public void onDestroy() {
         super.onDestroy();
         try {
             stopForeground(true);
-        } catch (Throwable th) {
+        } catch (Throwable unused) {
         }
         NotificationManagerCompat.from(ApplicationLoader.applicationContext).cancel(5);
-        for (int a = 0; a < 3; a++) {
-            NotificationCenter.getInstance(a).removeObserver(this, NotificationCenter.historyImportProgressChanged);
-            NotificationCenter.getInstance(a).removeObserver(this, NotificationCenter.stickersImportProgressChanged);
+        for (int i = 0; i < 3; i++) {
+            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.historyImportProgressChanged);
+            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.stickersImportProgressChanged);
         }
-        if (BuildVars.LOGS_ENABLED != 0) {
+        if (BuildVars.LOGS_ENABLED) {
             FileLog.d("destroy import service");
         }
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if ((id == NotificationCenter.historyImportProgressChanged || id == NotificationCenter.stickersImportProgressChanged) && !hasImportingStickers() && !hasImportingStickers()) {
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if ((i == NotificationCenter.historyImportProgressChanged || i == NotificationCenter.stickersImportProgressChanged) && !hasImportingStickers() && !hasImportingStickers()) {
             stopSelf();
         }
     }
 
     private boolean hasImportingHistory() {
-        for (int a = 0; a < 3; a++) {
-            if (SendMessagesHelper.getInstance(a).isImportingHistory()) {
+        for (int i = 0; i < 3; i++) {
+            if (SendMessagesHelper.getInstance(i).isImportingHistory()) {
                 return true;
             }
         }
@@ -53,15 +53,15 @@ public class ImportingService extends Service implements NotificationCenter.Noti
     }
 
     private boolean hasImportingStickers() {
-        for (int a = 0; a < 3; a++) {
-            if (SendMessagesHelper.getInstance(a).isImportingStickers()) {
+        for (int i = 0; i < 3; i++) {
+            if (SendMessagesHelper.getInstance(i).isImportingStickers()) {
                 return true;
             }
         }
         return false;
     }
 
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(Intent intent, int i, int i2) {
         if (hasImportingStickers() || hasImportingHistory()) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("start import service");

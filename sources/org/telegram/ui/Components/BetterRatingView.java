@@ -27,7 +27,7 @@ public class BetterRatingView extends View {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         setMeasuredDimension((this.numStars * AndroidUtilities.dp(32.0f)) + ((this.numStars - 1) * AndroidUtilities.dp(16.0f)), AndroidUtilities.dp(32.0f));
     }
 
@@ -41,19 +41,19 @@ public class BetterRatingView extends View {
         }
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
-        float offset = (float) AndroidUtilities.dp(-8.0f);
-        int i = 0;
-        while (i < this.numStars) {
-            if (event.getX() <= offset || event.getX() >= ((float) AndroidUtilities.dp(48.0f)) + offset || this.selectedRating == i + 1) {
-                offset += (float) AndroidUtilities.dp(48.0f);
-                i++;
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        int i;
+        float dp = (float) AndroidUtilities.dp(-8.0f);
+        int i2 = 0;
+        while (i2 < this.numStars) {
+            if (motionEvent.getX() <= dp || motionEvent.getX() >= ((float) AndroidUtilities.dp(48.0f)) + dp || this.selectedRating == (i = i2 + 1)) {
+                dp += (float) AndroidUtilities.dp(48.0f);
+                i2++;
             } else {
-                int i2 = i + 1;
-                this.selectedRating = i2;
+                this.selectedRating = i;
                 OnRatingChangeListener onRatingChangeListener = this.listener;
                 if (onRatingChangeListener != null) {
-                    onRatingChangeListener.onRatingChanged(i2);
+                    onRatingChangeListener.onRatingChanged(i);
                 }
                 invalidate();
                 return true;
@@ -66,7 +66,7 @@ public class BetterRatingView extends View {
         return this.selectedRating;
     }
 
-    public void setOnRatingChangeListener(OnRatingChangeListener l) {
-        this.listener = l;
+    public void setOnRatingChangeListener(OnRatingChangeListener onRatingChangeListener) {
+        this.listener = onRatingChangeListener;
     }
 }

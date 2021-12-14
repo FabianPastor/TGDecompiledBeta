@@ -1,16 +1,17 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatLinkActivity$$ExternalSyntheticLambda9 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class ChatLinkActivity$$ExternalSyntheticLambda9 implements Runnable {
     public final /* synthetic */ ChatLinkActivity f$0;
+    public final /* synthetic */ AlertDialog[] f$1;
 
-    public /* synthetic */ ChatLinkActivity$$ExternalSyntheticLambda9(ChatLinkActivity chatLinkActivity) {
+    public /* synthetic */ ChatLinkActivity$$ExternalSyntheticLambda9(ChatLinkActivity chatLinkActivity, AlertDialog[] alertDialogArr) {
         this.f$0 = chatLinkActivity;
+        this.f$1 = alertDialogArr;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.m1918lambda$createView$6$orgtelegramuiChatLinkActivity(view, i);
+    public final void run() {
+        this.f$0.lambda$createView$1(this.f$1);
     }
 }

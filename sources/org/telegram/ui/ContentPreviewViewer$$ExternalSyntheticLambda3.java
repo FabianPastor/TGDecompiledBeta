@@ -8,6 +8,6 @@ public final /* synthetic */ class ContentPreviewViewer$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.m2792lambda$onDraw$4$orgtelegramuiContentPreviewViewer();
+        this.f$0.lambda$onDraw$4();
     }
 }

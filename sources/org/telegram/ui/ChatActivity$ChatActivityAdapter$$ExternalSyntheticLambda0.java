@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$ChatActivityAdapter$$ExternalSyn
     }
 
     public final void didPressUrl(String str) {
-        this.f$0.m1853x61aaae70(str);
+        this.f$0.lambda$onCreateViewHolder$0(str);
     }
 }

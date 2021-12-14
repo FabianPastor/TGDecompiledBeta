@@ -8,6 +8,6 @@ public final /* synthetic */ class RLottieDrawable$$ExternalSyntheticLambda1 imp
     }
 
     public final void run() {
-        this.f$0.m2529x7797e0f();
+        this.f$0.lambda$setDiceNumber$2();
     }
 }

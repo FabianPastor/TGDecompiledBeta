@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import com.google.android.gms.internal.vision.zzhv$$ExternalSyntheticBackport0;
+import java.util.Comparator;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda8 implements DialogInterface.OnDismissListener {
-    public final /* synthetic */ ThemeActivity f$0;
+public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda8 implements Comparator {
+    public static final /* synthetic */ ThemeActivity$$ExternalSyntheticLambda8 INSTANCE = new ThemeActivity$$ExternalSyntheticLambda8();
 
-    public /* synthetic */ ThemeActivity$$ExternalSyntheticLambda8(ThemeActivity themeActivity) {
-        this.f$0 = themeActivity;
+    private /* synthetic */ ThemeActivity$$ExternalSyntheticLambda8() {
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m3913lambda$didReceivedNotification$1$orgtelegramuiThemeActivity(dialogInterface);
+    public final int compare(Object obj, Object obj2) {
+        return zzhv$$ExternalSyntheticBackport0.m(((Theme.ThemeInfo) obj).sortIndex, ((Theme.ThemeInfo) obj2).sortIndex);
     }
 }

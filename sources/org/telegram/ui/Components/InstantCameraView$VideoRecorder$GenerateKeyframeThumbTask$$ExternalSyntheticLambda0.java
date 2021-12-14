@@ -13,6 +13,6 @@ public final /* synthetic */ class InstantCameraView$VideoRecorder$GenerateKeyfr
     }
 
     public final void run() {
-        this.f$0.m2358x5a43423d(this.f$1);
+        this.f$0.lambda$run$0(this.f$1);
     }
 }

@@ -10,7 +10,7 @@ public final /* synthetic */ class GroupCreateFinalActivity$$ExternalSyntheticLa
     }
 
     public final void didSetColor() {
-        this.f$0.m3031x91f4CLASSNAME();
+        this.f$0.lambda$getThemeDescriptions$9();
     }
 
     public /* synthetic */ void onAnimationProgress(float f) {

@@ -14,6 +14,6 @@ public final /* synthetic */ class VideoFileRenderer$$ExternalSyntheticLambda2 i
     }
 
     public final void run() {
-        this.f$0.m4128lambda$renderFrameOnRenderThread$1$orgwebrtcVideoFileRenderer(this.f$1, this.f$2);
+        this.f$0.lambda$renderFrameOnRenderThread$1(this.f$1, this.f$2);
     }
 }

@@ -2,22 +2,16 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda218 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC.Chat f$1;
-    public final /* synthetic */ TLRPC.User f$2;
-    public final /* synthetic */ TLRPC.Chat f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda218(MessagesController messagesController, TLRPC.Chat chat, TLRPC.User user, TLRPC.Chat chat2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda218(MessagesController messagesController) {
         this.f$0 = messagesController;
-        this.f$1 = chat;
-        this.f$2 = user;
-        this.f$3 = chat2;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m181x606e761e(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$updateTimerProc$112(tLObject, tLRPC$TL_error);
     }
 }

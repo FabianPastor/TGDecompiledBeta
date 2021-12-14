@@ -19,30 +19,30 @@ public class ID3v2FrameBody {
     static final class Buffer {
         byte[] bytes;
 
-        Buffer(int initialLength) {
-            this.bytes = new byte[initialLength];
+        Buffer(int i) {
+            this.bytes = new byte[i];
         }
 
         /* access modifiers changed from: package-private */
-        public byte[] bytes(int minLength) {
+        public byte[] bytes(int i) {
             byte[] bArr = this.bytes;
-            if (minLength > bArr.length) {
-                int length = bArr.length * 2;
-                while (minLength > length) {
+            if (i > bArr.length) {
+                int length = bArr.length;
+                do {
                     length *= 2;
-                }
+                } while (i > length);
                 this.bytes = new byte[length];
             }
             return this.bytes;
         }
     }
 
-    ID3v2FrameBody(InputStream delegate, long position, int dataLength, ID3v2TagHeader tagHeader2, ID3v2FrameHeader frameHeader2) throws IOException {
-        RangeInputStream rangeInputStream = new RangeInputStream(delegate, position, (long) dataLength);
+    ID3v2FrameBody(InputStream inputStream, long j, int i, ID3v2TagHeader iD3v2TagHeader, ID3v2FrameHeader iD3v2FrameHeader) throws IOException {
+        RangeInputStream rangeInputStream = new RangeInputStream(inputStream, j, (long) i);
         this.input = rangeInputStream;
         this.data = new ID3v2DataInput(rangeInputStream);
-        this.tagHeader = tagHeader2;
-        this.frameHeader = frameHeader2;
+        this.tagHeader = iD3v2TagHeader;
+        this.frameHeader = iD3v2FrameHeader;
     }
 
     public ID3v2DataInput getData() {
@@ -65,78 +65,77 @@ public class ID3v2FrameBody {
         return this.frameHeader;
     }
 
-    private String extractString(byte[] bytes, int offset, int length, ID3v2Encoding encoding, boolean searchZeros) {
-        if (searchZeros) {
-            int zeros = 0;
-            int i = 0;
+    private String extractString(byte[] bArr, int i, int i2, ID3v2Encoding iD3v2Encoding, boolean z) {
+        if (z) {
+            int i3 = 0;
+            int i4 = 0;
             while (true) {
-                if (i < length) {
-                    if (bytes[offset + i] != 0 || (encoding == ID3v2Encoding.UTF_16 && zeros == 0 && (offset + i) % 2 != 0)) {
-                        zeros = 0;
+                if (i3 < i2) {
+                    int i5 = i + i3;
+                    if (bArr[i5] != 0 || (iD3v2Encoding == ID3v2Encoding.UTF_16 && i4 == 0 && i5 % 2 != 0)) {
+                        i4 = 0;
                     } else {
-                        zeros++;
-                        if (zeros == encoding.getZeroBytes()) {
-                            length = (i + 1) - encoding.getZeroBytes();
+                        i4++;
+                        if (i4 == iD3v2Encoding.getZeroBytes()) {
+                            i2 = (i3 + 1) - iD3v2Encoding.getZeroBytes();
                             break;
                         }
                     }
-                    i++;
+                    i3++;
                 }
             }
         }
         try {
-            String string = new String(bytes, offset, length, encoding.getCharset().name());
-            if (string.length() <= 0 || string.charAt(0) != 65279) {
-                return string;
-            }
-            return string.substring(1);
-        } catch (Exception e) {
+            String str = new String(bArr, i, i2, iD3v2Encoding.getCharset().name());
+            return (str.length() <= 0 || str.charAt(0) != 65279) ? str : str.substring(1);
+        } catch (Exception unused) {
             return "";
         }
     }
 
-    public String readZeroTerminatedString(int maxLength, ID3v2Encoding encoding) throws IOException, ID3v2Exception {
-        int zeros = 0;
-        int length = Math.min(maxLength, (int) getRemainingLength());
-        byte[] bytes = textBuffer.get().bytes(length);
-        for (int i = 0; i < length; i++) {
+    public String readZeroTerminatedString(int i, ID3v2Encoding iD3v2Encoding) throws IOException, ID3v2Exception {
+        int min = Math.min(i, (int) getRemainingLength());
+        byte[] bytes = textBuffer.get().bytes(min);
+        int i2 = 0;
+        for (int i3 = 0; i3 < min; i3++) {
             byte readByte = this.data.readByte();
-            bytes[i] = readByte;
-            if (readByte != 0 || (encoding == ID3v2Encoding.UTF_16 && zeros == 0 && i % 2 != 0)) {
-                zeros = 0;
+            bytes[i3] = readByte;
+            if (readByte != 0 || (iD3v2Encoding == ID3v2Encoding.UTF_16 && i2 == 0 && i3 % 2 != 0)) {
+                i2 = 0;
             } else {
-                zeros++;
-                if (zeros == encoding.getZeroBytes()) {
-                    return extractString(bytes, 0, (i + 1) - encoding.getZeroBytes(), encoding, false);
+                i2++;
+                if (i2 == iD3v2Encoding.getZeroBytes()) {
+                    return extractString(bytes, 0, (i3 + 1) - iD3v2Encoding.getZeroBytes(), iD3v2Encoding, false);
                 }
             }
         }
         throw new ID3v2Exception("Could not read zero-termiated string");
     }
 
-    public String readFixedLengthString(int length, ID3v2Encoding encoding) throws IOException, ID3v2Exception {
-        if (((long) length) <= getRemainingLength()) {
-            byte[] bytes = textBuffer.get().bytes(length);
-            this.data.readFully(bytes, 0, length);
-            return extractString(bytes, 0, length, encoding, true);
+    public String readFixedLengthString(int i, ID3v2Encoding iD3v2Encoding) throws IOException, ID3v2Exception {
+        if (((long) i) <= getRemainingLength()) {
+            byte[] bytes = textBuffer.get().bytes(i);
+            this.data.readFully(bytes, 0, i);
+            return extractString(bytes, 0, i, iD3v2Encoding, true);
         }
-        throw new ID3v2Exception("Could not read fixed-length string of length: " + length);
+        throw new ID3v2Exception("Could not read fixed-length string of length: " + i);
     }
 
     public ID3v2Encoding readEncoding() throws IOException, ID3v2Exception {
-        byte value = this.data.readByte();
-        switch (value) {
-            case 0:
-                return ID3v2Encoding.ISO_8859_1;
-            case 1:
-                return ID3v2Encoding.UTF_16;
-            case 2:
-                return ID3v2Encoding.UTF_16BE;
-            case 3:
-                return ID3v2Encoding.UTF_8;
-            default:
-                throw new ID3v2Exception("Invalid encoding: " + value);
+        byte readByte = this.data.readByte();
+        if (readByte == 0) {
+            return ID3v2Encoding.ISO_8859_1;
         }
+        if (readByte == 1) {
+            return ID3v2Encoding.UTF_16;
+        }
+        if (readByte == 2) {
+            return ID3v2Encoding.UTF_16BE;
+        }
+        if (readByte == 3) {
+            return ID3v2Encoding.UTF_8;
+        }
+        throw new ID3v2Exception("Invalid encoding: " + readByte);
     }
 
     public String toString() {

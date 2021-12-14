@@ -11,6 +11,6 @@ public final /* synthetic */ class StatisticActivity$BaseChartCell$$ExternalSynt
     }
 
     public final void onDateSelected(long j) {
-        this.f$0.m3883lambda$new$1$orgtelegramuiStatisticActivity$BaseChartCell(j);
+        this.f$0.lambda$new$1(j);
     }
 }

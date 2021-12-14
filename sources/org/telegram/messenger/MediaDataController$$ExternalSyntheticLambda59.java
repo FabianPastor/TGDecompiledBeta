@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda59 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ TLRPC.Document f$2;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ long f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda59(MediaDataController mediaDataController, int i, TLRPC.Document document) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda59(MediaDataController mediaDataController, ArrayList arrayList, long j) {
         this.f$0 = mediaDataController;
-        this.f$1 = i;
-        this.f$2 = document;
+        this.f$1 = arrayList;
+        this.f$2 = j;
     }
 
     public final void run() {
-        this.f$0.m775x7a740023(this.f$1, this.f$2);
+        this.f$0.lambda$savePinnedMessages$109(this.f$1, this.f$2);
     }
 }

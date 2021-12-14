@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivityEnterView$54$$ExternalSyntheticLa
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2088x718147c7(dialogInterface, i);
+        this.f$0.lambda$onClearEmojiRecent$1(dialogInterface, i);
     }
 }

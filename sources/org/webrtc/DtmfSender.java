@@ -13,8 +13,8 @@ public class DtmfSender {
 
     private static native String nativeTones(long j);
 
-    public DtmfSender(long nativeDtmfSender2) {
-        this.nativeDtmfSender = nativeDtmfSender2;
+    public DtmfSender(long j) {
+        this.nativeDtmfSender = j;
     }
 
     public boolean canInsertDtmf() {
@@ -22,9 +22,9 @@ public class DtmfSender {
         return nativeCanInsertDtmf(this.nativeDtmfSender);
     }
 
-    public boolean insertDtmf(String tones, int duration, int interToneGap) {
+    public boolean insertDtmf(String str, int i, int i2) {
         checkDtmfSenderExists();
-        return nativeInsertDtmf(this.nativeDtmfSender, tones, duration, interToneGap);
+        return nativeInsertDtmf(this.nativeDtmfSender, str, i, i2);
     }
 
     public String tones() {

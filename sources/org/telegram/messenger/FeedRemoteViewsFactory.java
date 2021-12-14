@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC$PhotoSize;
 
 /* compiled from: FeedWidgetService */
 class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, NotificationCenter.NotificationCenterDelegate {
@@ -25,22 +26,38 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
     private Context mContext;
     private ArrayList<MessageObject> messages = new ArrayList<>();
 
+    public long getItemId(int i) {
+        return (long) i;
+    }
+
+    public RemoteViews getLoadingView() {
+        return null;
+    }
+
+    public int getViewTypeCount() {
+        return 1;
+    }
+
+    public boolean hasStableIds() {
+        return true;
+    }
+
+    public void onDestroy() {
+    }
+
     public FeedRemoteViewsFactory(Context context, Intent intent) {
         this.mContext = context;
-        int appWidgetId = intent.getIntExtra("appWidgetId", 0);
-        SharedPreferences preferences = context.getSharedPreferences("shortcut_widget", 0);
-        int accountId = preferences.getInt("account" + appWidgetId, -1);
-        if (accountId >= 0) {
-            this.dialogId = preferences.getLong("dialogId" + appWidgetId, 0);
-            this.accountInstance = AccountInstance.getInstance(accountId);
+        int intExtra = intent.getIntExtra("appWidgetId", 0);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shortcut_widget", 0);
+        int i = sharedPreferences.getInt("account" + intExtra, -1);
+        if (i >= 0) {
+            this.dialogId = sharedPreferences.getLong("dialogId" + intExtra, 0);
+            this.accountInstance = AccountInstance.getInstance(i);
         }
     }
 
     public void onCreate() {
         ApplicationLoader.postInitApplication();
-    }
-
-    public void onDestroy() {
     }
 
     public int getCount() {
@@ -56,55 +73,40 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
         }
     }
 
-    public RemoteViews getViewAt(int position) {
-        MessageObject messageObject = this.messages.get(position);
-        RemoteViews rv = new RemoteViews(this.mContext.getPackageName(), NUM);
+    public RemoteViews getViewAt(int i) {
+        MessageObject messageObject = this.messages.get(i);
+        RemoteViews remoteViews = new RemoteViews(this.mContext.getPackageName(), NUM);
         if (messageObject.type == 0) {
-            rv.setTextViewText(NUM, messageObject.messageText);
-            rv.setViewVisibility(NUM, 0);
+            remoteViews.setTextViewText(NUM, messageObject.messageText);
+            remoteViews.setViewVisibility(NUM, 0);
         } else if (TextUtils.isEmpty(messageObject.caption)) {
-            rv.setViewVisibility(NUM, 8);
+            remoteViews.setViewVisibility(NUM, 8);
         } else {
-            rv.setTextViewText(NUM, messageObject.caption);
-            rv.setViewVisibility(NUM, 0);
+            remoteViews.setTextViewText(NUM, messageObject.caption);
+            remoteViews.setViewVisibility(NUM, 0);
         }
-        if (messageObject.photoThumbs == null || messageObject.photoThumbs.isEmpty()) {
-            rv.setViewVisibility(NUM, 8);
+        ArrayList<TLRPC$PhotoSize> arrayList = messageObject.photoThumbs;
+        if (arrayList == null || arrayList.isEmpty()) {
+            remoteViews.setViewVisibility(NUM, 8);
         } else {
-            File f = FileLoader.getPathToAttach(FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize()));
-            if (f.exists()) {
-                rv.setViewVisibility(NUM, 0);
-                Uri uri = FileProvider.getUriForFile(this.mContext, "org.telegram.messenger.beta.provider", f);
-                grantUriAccessToWidget(this.mContext, uri);
-                rv.setImageViewUri(NUM, uri);
+            File pathToAttach = FileLoader.getPathToAttach(FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize()));
+            if (pathToAttach.exists()) {
+                remoteViews.setViewVisibility(NUM, 0);
+                Uri uriForFile = FileProvider.getUriForFile(this.mContext, "org.telegram.messenger.beta.provider", pathToAttach);
+                grantUriAccessToWidget(this.mContext, uriForFile);
+                remoteViews.setImageViewUri(NUM, uriForFile);
             } else {
-                rv.setViewVisibility(NUM, 8);
+                remoteViews.setViewVisibility(NUM, 8);
             }
         }
-        Bundle extras = new Bundle();
-        extras.putLong("chatId", -messageObject.getDialogId());
-        extras.putInt("message_id", messageObject.getId());
-        extras.putInt("currentAccount", this.accountInstance.getCurrentAccount());
-        Intent fillInIntent = new Intent();
-        fillInIntent.putExtras(extras);
-        rv.setOnClickFillInIntent(NUM, fillInIntent);
-        return rv;
-    }
-
-    public RemoteViews getLoadingView() {
-        return null;
-    }
-
-    public int getViewTypeCount() {
-        return 1;
-    }
-
-    public long getItemId(int position) {
-        return (long) position;
-    }
-
-    public boolean hasStableIds() {
-        return true;
+        Bundle bundle = new Bundle();
+        bundle.putLong("chatId", -messageObject.getDialogId());
+        bundle.putInt("message_id", messageObject.getId());
+        bundle.putInt("currentAccount", this.accountInstance.getCurrentAccount());
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        remoteViews.setOnClickFillInIntent(NUM, intent);
+        return remoteViews;
     }
 
     public void onDataSetChanged() {
@@ -121,8 +123,8 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
         }
     }
 
-    /* renamed from: lambda$onDataSetChanged$0$org-telegram-messenger-FeedRemoteViewsFactory  reason: not valid java name */
-    public /* synthetic */ void m617xab71b43d() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDataSetChanged$0() {
         this.accountInstance.getNotificationCenter().addObserver(this, NotificationCenter.messagesDidLoad);
         if (this.classGuid == 0) {
             this.classGuid = ConnectionsManager.generateClassGuid();
@@ -130,10 +132,10 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
         this.accountInstance.getMessagesController().loadMessages(this.dialogId, 0, false, 20, 0, 0, true, 0, this.classGuid, 0, 0, 0, 0, 0, 1);
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.messagesDidLoad && args[10].intValue() == this.classGuid) {
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.messagesDidLoad && objArr[10].intValue() == this.classGuid) {
             this.messages.clear();
-            this.messages.addAll(args[2]);
+            this.messages.addAll(objArr[2]);
             this.countDownLatch.countDown();
         }
     }

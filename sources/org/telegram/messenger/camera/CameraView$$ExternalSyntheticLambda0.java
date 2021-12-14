@@ -8,6 +8,6 @@ public final /* synthetic */ class CameraView$$ExternalSyntheticLambda0 implemen
     }
 
     public final void run() {
-        this.f$0.m1179x692aae4f();
+        this.f$0.lambda$createCamera$2();
     }
 }

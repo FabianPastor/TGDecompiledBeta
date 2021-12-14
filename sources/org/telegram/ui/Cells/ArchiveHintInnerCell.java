@@ -17,7 +17,7 @@ public class ArchiveHintInnerCell extends FrameLayout {
     private ImageView imageView2;
     private TextView messageTextView;
 
-    public ArchiveHintInnerCell(Context context, int num) {
+    public ArchiveHintInnerCell(Context context, int i) {
         super(context);
         ImageView imageView3 = new ImageView(context);
         this.imageView = imageView3;
@@ -35,32 +35,26 @@ public class ArchiveHintInnerCell extends FrameLayout {
         this.messageTextView.setTextSize(1, 14.0f);
         this.messageTextView.setGravity(17);
         addView(this.messageTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 110.0f, 52.0f, 0.0f));
-        switch (num) {
-            case 0:
-                addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 20.0f, 8.0f, 0.0f));
-                ImageView imageView4 = new ImageView(context);
-                this.imageView2 = imageView4;
-                imageView4.setImageResource(NUM);
-                this.imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_unreadCounter"), PorterDuff.Mode.MULTIPLY));
-                addView(this.imageView2, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 20.0f, 8.0f, 0.0f));
-                this.headerTextView.setText(LocaleController.getString("ArchiveHintHeader1", NUM));
-                this.messageTextView.setText(LocaleController.getString("ArchiveHintText1", NUM));
-                this.imageView.setImageResource(NUM);
-                return;
-            case 1:
-                addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 18.0f, 0.0f, 0.0f));
-                this.headerTextView.setText(LocaleController.getString("ArchiveHintHeader2", NUM));
-                this.messageTextView.setText(LocaleController.getString("ArchiveHintText2", NUM));
-                this.imageView.setImageResource(NUM);
-                return;
-            case 2:
-                addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 18.0f, 0.0f, 0.0f));
-                this.headerTextView.setText(LocaleController.getString("ArchiveHintHeader3", NUM));
-                this.messageTextView.setText(LocaleController.getString("ArchiveHintText3", NUM));
-                this.imageView.setImageResource(NUM);
-                return;
-            default:
-                return;
+        if (i == 0) {
+            addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 20.0f, 8.0f, 0.0f));
+            ImageView imageView4 = new ImageView(context);
+            this.imageView2 = imageView4;
+            imageView4.setImageResource(NUM);
+            this.imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_unreadCounter"), PorterDuff.Mode.MULTIPLY));
+            addView(this.imageView2, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 20.0f, 8.0f, 0.0f));
+            this.headerTextView.setText(LocaleController.getString("ArchiveHintHeader1", NUM));
+            this.messageTextView.setText(LocaleController.getString("ArchiveHintText1", NUM));
+            this.imageView.setImageResource(NUM);
+        } else if (i == 1) {
+            addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 18.0f, 0.0f, 0.0f));
+            this.headerTextView.setText(LocaleController.getString("ArchiveHintHeader2", NUM));
+            this.messageTextView.setText(LocaleController.getString("ArchiveHintText2", NUM));
+            this.imageView.setImageResource(NUM);
+        } else if (i == 2) {
+            addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 18.0f, 0.0f, 0.0f));
+            this.headerTextView.setText(LocaleController.getString("ArchiveHintHeader3", NUM));
+            this.messageTextView.setText(LocaleController.getString("ArchiveHintText3", NUM));
+            this.imageView.setImageResource(NUM);
         }
     }
 }

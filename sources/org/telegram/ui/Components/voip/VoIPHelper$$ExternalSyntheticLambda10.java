@@ -1,16 +1,19 @@
 package org.telegram.ui.Components.voip;
 
+import android.content.SharedPreferences;
 import android.view.View;
-import org.telegram.ui.Components.BetterRatingView;
+import org.telegram.ui.Cells.TextCheckCell;
 
-public final /* synthetic */ class VoIPHelper$$ExternalSyntheticLambda10 implements BetterRatingView.OnRatingChangeListener {
-    public final /* synthetic */ View f$0;
+public final /* synthetic */ class VoIPHelper$$ExternalSyntheticLambda10 implements View.OnClickListener {
+    public final /* synthetic */ SharedPreferences f$0;
+    public final /* synthetic */ TextCheckCell f$1;
 
-    public /* synthetic */ VoIPHelper$$ExternalSyntheticLambda10(View view) {
-        this.f$0 = view;
+    public /* synthetic */ VoIPHelper$$ExternalSyntheticLambda10(SharedPreferences sharedPreferences, TextCheckCell textCheckCell) {
+        this.f$0 = sharedPreferences;
+        this.f$1 = textCheckCell;
     }
 
-    public final void onRatingChanged(int i) {
-        VoIPHelper.lambda$showRateAlert$14(this.f$0, i);
+    public final void onClick(View view) {
+        VoIPHelper.lambda$showCallDebugSettings$18(this.f$0, this.f$1, view);
     }
 }

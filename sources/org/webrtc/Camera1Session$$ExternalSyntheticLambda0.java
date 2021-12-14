@@ -10,7 +10,7 @@ public final /* synthetic */ class Camera1Session$$ExternalSyntheticLambda0 impl
     }
 
     public final void onFrame(VideoFrame videoFrame) {
-        this.f$0.m4095lambda$listenForTextureFrames$0$orgwebrtcCamera1Session(videoFrame);
+        this.f$0.lambda$listenForTextureFrames$0(videoFrame);
     }
 
     public /* synthetic */ void setParentSink(VideoSink videoSink) {

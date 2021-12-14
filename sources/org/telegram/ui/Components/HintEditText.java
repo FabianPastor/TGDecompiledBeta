@@ -24,15 +24,15 @@ public class HintEditText extends EditTextBoldCursor {
         return this.hintText;
     }
 
-    public void setHintText(String value) {
-        this.hintText = value;
+    public void setHintText(String str) {
+        this.hintText = str;
         onTextChange();
         setText(getText());
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        super.onLayout(z, i, i2, i3, i4);
         onTextChange();
     }
 
@@ -48,17 +48,17 @@ public class HintEditText extends EditTextBoldCursor {
         float f;
         super.onDraw(canvas);
         if (this.hintText != null && length() < this.hintText.length()) {
-            int top = getMeasuredHeight() / 2;
-            float offsetX = this.textOffset;
-            for (int a = length(); a < this.hintText.length(); a++) {
-                if (this.hintText.charAt(a) == ' ') {
+            int measuredHeight = getMeasuredHeight() / 2;
+            float f2 = this.textOffset;
+            for (int length = length(); length < this.hintText.length(); length++) {
+                if (this.hintText.charAt(length) == ' ') {
                     f = this.spaceSize;
                 } else {
-                    this.rect.set(((int) offsetX) + AndroidUtilities.dp(1.0f), top, ((int) (this.numberSize + offsetX)) - AndroidUtilities.dp(1.0f), AndroidUtilities.dp(2.0f) + top);
+                    this.rect.set(((int) f2) + AndroidUtilities.dp(1.0f), measuredHeight, ((int) (this.numberSize + f2)) - AndroidUtilities.dp(1.0f), AndroidUtilities.dp(2.0f) + measuredHeight);
                     canvas.drawRect(this.rect, this.paint);
                     f = this.numberSize;
                 }
-                offsetX += f;
+                f2 += f;
             }
         }
     }

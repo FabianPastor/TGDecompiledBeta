@@ -18,7 +18,7 @@ public final /* synthetic */ class PermanentLinkBottomSheet$$ExternalSyntheticLa
     }
 
     public final void revokeLink() {
-        this.f$0.m2449lambda$new$0$orgtelegramuiComponentsPermanentLinkBottomSheet();
+        this.f$0.lambda$new$0();
     }
 
     public /* synthetic */ void showUsersForPermanentLink() {

@@ -8,6 +8,6 @@ public final /* synthetic */ class ApplicationLoader$$ExternalSyntheticLambda1 i
     }
 
     public final void run() {
-        this.f$0.m10xd905017d();
+        this.f$0.lambda$initPlayServices$2();
     }
 }

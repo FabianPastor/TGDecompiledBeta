@@ -1,17 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda16 implements Runnable {
-    public final /* synthetic */ PrivacySettingsActivity f$0;
-    public final /* synthetic */ TLRPC.TL_account_password f$1;
+public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda16 implements RequestDelegate {
+    public static final /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda16 INSTANCE = new PrivacySettingsActivity$$ExternalSyntheticLambda16();
 
-    public /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda16(PrivacySettingsActivity privacySettingsActivity, TLRPC.TL_account_password tL_account_password) {
-        this.f$0 = privacySettingsActivity;
-        this.f$1 = tL_account_password;
+    private /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda16() {
     }
 
-    public final void run() {
-        this.f$0.m3677x308128e8(this.f$1);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        PrivacySettingsActivity.lambda$onFragmentDestroy$0(tLObject, tLRPC$TL_error);
     }
 }

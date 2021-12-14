@@ -13,6 +13,6 @@ public final /* synthetic */ class EmojiView$GifAdapter$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.m2258x14f0b3a(this.f$1);
+        this.f$0.lambda$searchBotUser$0(this.f$1);
     }
 }

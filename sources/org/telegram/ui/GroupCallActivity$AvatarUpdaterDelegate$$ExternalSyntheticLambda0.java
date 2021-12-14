@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallActivity$AvatarUpdaterDelegate$$Exte
     }
 
     public final void run() {
-        this.f$0.m3009xd7d877a0();
+        this.f$0.lambda$didUploadPhoto$2();
     }
 }

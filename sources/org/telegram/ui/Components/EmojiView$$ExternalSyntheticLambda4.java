@@ -1,19 +1,14 @@
 package org.telegram.ui.Components;
 
-import android.view.MotionEvent;
-import android.view.View;
-import org.telegram.ui.ActionBar.Theme;
+import android.view.ViewTreeObserver;
 
-public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda4 implements View.OnTouchListener {
-    public final /* synthetic */ EmojiView f$0;
-    public final /* synthetic */ Theme.ResourcesProvider f$1;
+public final /* synthetic */ class EmojiView$$ExternalSyntheticLambda4 implements ViewTreeObserver.OnScrollChangedListener {
+    public static final /* synthetic */ EmojiView$$ExternalSyntheticLambda4 INSTANCE = new EmojiView$$ExternalSyntheticLambda4();
 
-    public /* synthetic */ EmojiView$$ExternalSyntheticLambda4(EmojiView emojiView, Theme.ResourcesProvider resourcesProvider) {
-        this.f$0 = emojiView;
-        this.f$1 = resourcesProvider;
+    private /* synthetic */ EmojiView$$ExternalSyntheticLambda4() {
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.m2245lambda$new$4$orgtelegramuiComponentsEmojiView(this.f$1, view, motionEvent);
+    public final void onScrollChanged() {
+        EmojiView.lambda$static$0();
     }
 }

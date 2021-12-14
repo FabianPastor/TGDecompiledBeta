@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatUsersActivity$ListAdapter$$ExternalSynthe
     }
 
     public final boolean onOptionsButtonCheck(ManageChatUserCell manageChatUserCell, boolean z) {
-        return this.f$0.m1978xfCLASSNAME(manageChatUserCell, z);
+        return this.f$0.lambda$onCreateViewHolder$0(manageChatUserCell, z);
     }
 }

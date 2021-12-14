@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.TLRPC$Document;
+
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda76 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ long f$3;
+    public final /* synthetic */ TLRPC$Document f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda76(MediaDataController mediaDataController, long j, long j2, long j3) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda76(MediaDataController mediaDataController, TLRPC$Document tLRPC$Document) {
         this.f$0 = mediaDataController;
-        this.f$1 = j;
-        this.f$2 = j2;
-        this.f$3 = j3;
+        this.f$1 = tLRPC$Document;
     }
 
     public final void run() {
-        this.f$0.m826lambda$loadMusic$85$orgtelegrammessengerMediaDataController(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$removeRecentGif$6(this.f$1);
     }
 }

@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda3 implements View.OnTouchListener {
-    public static final /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda3 INSTANCE = new TwoStepVerificationSetupActivity$$ExternalSyntheticLambda3();
+public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda3 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ TwoStepVerificationSetupActivity f$0;
 
-    private /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda3() {
+    public /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda3(TwoStepVerificationSetupActivity twoStepVerificationSetupActivity) {
+        this.f$0 = twoStepVerificationSetupActivity;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return TwoStepVerificationSetupActivity.lambda$createView$19(view, motionEvent);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$createView$22(dialogInterface, i);
     }
 }

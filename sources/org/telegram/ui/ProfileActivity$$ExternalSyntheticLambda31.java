@@ -1,17 +1,19 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda31 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda31 implements ThemeDescription.ThemeDescriptionDelegate {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda31(ProfileActivity profileActivity, int i) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda31(ProfileActivity profileActivity) {
         this.f$0 = profileActivity;
-        this.f$1 = i;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3715lambda$processOnClickOrPress$20$orgtelegramuiProfileActivity(this.f$1, dialogInterface, i);
+    public final void didSetColor() {
+        this.f$0.lambda$getThemeDescriptions$34();
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

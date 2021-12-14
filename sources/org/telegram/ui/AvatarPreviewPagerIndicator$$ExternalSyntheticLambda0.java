@@ -10,6 +10,6 @@ public final /* synthetic */ class AvatarPreviewPagerIndicator$$ExternalSyntheti
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1457lambda$new$0$orgtelegramuiAvatarPreviewPagerIndicator(valueAnimator);
+        this.f$0.lambda$new$0(valueAnimator);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class ProfileNotificationsActivity$3$$ExternalSynth
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m3825x60394a4f(view, i);
+        this.f$0.lambda$onItemClick$3(view, i);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivityEnterView$11$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m2083xe9004var_();
+        this.f$0.lambda$onTouchEvent$2();
     }
 }

@@ -1,17 +1,16 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda331 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ ArrayList f$1;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda331 implements RequestDelegate {
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda331 INSTANCE = new MessagesController$$ExternalSyntheticLambda331();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda331(MessagesController messagesController, ArrayList arrayList) {
-        this.f$0 = messagesController;
-        this.f$1 = arrayList;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda331() {
     }
 
-    public final void run() {
-        this.f$0.m207xbe769cf3(this.f$1);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        MessagesController.lambda$markMentionsAsRead$190(tLObject, tLRPC$TL_error);
     }
 }

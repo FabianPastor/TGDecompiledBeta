@@ -32,11 +32,13 @@ public class TextColorThemeCell extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(3.0f));
-        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) (LocaleController.isRTL ? 21 : 57), 0.0f, (float) (LocaleController.isRTL ? 57 : 21), 0.0f));
+        TextView textView3 = this.textView;
+        boolean z = LocaleController.isRTL;
+        addView(textView3, LayoutHelper.createFrame(-1, -1.0f, (!z ? 3 : i) | 48, (float) (z ? 21 : 57), 0.0f, (float) (z ? 57 : 21), 0.0f));
     }
 
-    public void setAlpha(float value) {
-        this.alpha = value;
+    public void setAlpha(float f) {
+        this.alpha = f;
         invalidate();
     }
 
@@ -45,14 +47,14 @@ public class TextColorThemeCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + (this.needDivider ? 1 : 0), NUM));
     }
 
-    public void setTextAndColor(CharSequence text, int color) {
-        this.textView.setText(text);
-        this.currentColor = color;
-        setWillNotDraw(!this.needDivider && color == 0);
+    public void setTextAndColor(CharSequence charSequence, int i) {
+        this.textView.setText(charSequence);
+        this.currentColor = i;
+        setWillNotDraw(!this.needDivider && i == 0);
         invalidate();
     }
 

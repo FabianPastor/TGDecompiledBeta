@@ -1,13 +1,21 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda162 implements Runnable {
+import org.telegram.tgnet.ResultCallback;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.ActionBar.EmojiThemes;
+
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda162 implements ResultCallback {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda162(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        this.f$0.m1728lambda$didReceivedNotification$94$orgtelegramuiChatActivity();
+    public final void onComplete(Object obj) {
+        this.f$0.lambda$setChatThemeEmoticon$175((EmojiThemes) obj);
+    }
+
+    public /* synthetic */ void onError(TLRPC$TL_error tLRPC$TL_error) {
+        ResultCallback.CC.$default$onError((ResultCallback) this, tLRPC$TL_error);
     }
 }

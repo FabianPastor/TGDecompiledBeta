@@ -8,6 +8,6 @@ public final /* synthetic */ class GroupCreateFinalActivity$$ExternalSyntheticLa
     }
 
     public final void run() {
-        this.f$0.m3024lambda$createView$2$orgtelegramuiGroupCreateFinalActivity();
+        this.f$0.lambda$createView$2();
     }
 }

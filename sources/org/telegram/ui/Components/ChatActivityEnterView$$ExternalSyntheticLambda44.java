@@ -1,15 +1,14 @@
 package org.telegram.ui.Components;
 
-import android.animation.ValueAnimator;
+import org.telegram.messenger.MediaController;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda44 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ ChatActivityEnterView f$0;
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda44 implements Runnable {
+    public static final /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda44 INSTANCE = new ChatActivityEnterView$$ExternalSyntheticLambda44();
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda44(ChatActivityEnterView chatActivityEnterView) {
-        this.f$0 = chatActivityEnterView;
+    private /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda44() {
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2058lambda$new$33$orgtelegramuiComponentsChatActivityEnterView(valueAnimator);
+    public final void run() {
+        MediaController.getInstance().stopRecording(0, false, 0);
     }
 }

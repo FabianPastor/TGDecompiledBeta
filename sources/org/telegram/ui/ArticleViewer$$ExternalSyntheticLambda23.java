@@ -1,21 +1,21 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
+import java.util.ArrayList;
 
 public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda23 implements Runnable {
     public final /* synthetic */ ArticleViewer f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ long f$3;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ String f$3;
 
-    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda23(ArticleViewer articleViewer, TLObject tLObject, int i, long j) {
+    public /* synthetic */ ArticleViewer$$ExternalSyntheticLambda23(ArticleViewer articleViewer, int i, ArrayList arrayList, String str) {
         this.f$0 = articleViewer;
-        this.f$1 = tLObject;
-        this.f$2 = i;
-        this.f$3 = j;
+        this.f$1 = i;
+        this.f$2 = arrayList;
+        this.f$3 = str;
     }
 
     public final void run() {
-        this.f$0.m1441lambda$setParentActivity$9$orgtelegramuiArticleViewer(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$processSearch$24(this.f$1, this.f$2, this.f$3);
     }
 }

@@ -14,6 +14,6 @@ public final /* synthetic */ class GroupCallActivity$20$$ExternalSyntheticLambda
     }
 
     public final void onClick(View view) {
-        this.f$0.m2997lambda$createTextView$0$orgtelegramuiGroupCallActivity$20(this.f$1, view);
+        this.f$0.lambda$createTextView$0(this.f$1, view);
     }
 }

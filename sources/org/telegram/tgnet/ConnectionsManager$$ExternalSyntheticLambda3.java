@@ -1,14 +1,15 @@
 package org.telegram.tgnet;
 
-import org.telegram.messenger.NotificationCenter;
-
 public final /* synthetic */ class ConnectionsManager$$ExternalSyntheticLambda3 implements Runnable {
-    public static final /* synthetic */ ConnectionsManager$$ExternalSyntheticLambda3 INSTANCE = new ConnectionsManager$$ExternalSyntheticLambda3();
+    public final /* synthetic */ int f$0;
+    public final /* synthetic */ int f$1;
 
-    private /* synthetic */ ConnectionsManager$$ExternalSyntheticLambda3() {
+    public /* synthetic */ ConnectionsManager$$ExternalSyntheticLambda3(int i, int i2) {
+        this.f$0 = i;
+        this.f$1 = i2;
     }
 
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needShowAlert, 3);
+        ConnectionsManager.lambda$onConnectionStateChanged$6(this.f$0, this.f$1);
     }
 }

@@ -1,25 +1,17 @@
 package org.telegram.messenger;
 
-import java.io.File;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.Theme;
+import androidx.collection.LongSparseArray;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda81 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC.WallPaper f$1;
-    public final /* synthetic */ TLRPC.TL_wallPaperSettings f$2;
-    public final /* synthetic */ Theme.OverrideWallpaperInfo f$3;
-    public final /* synthetic */ File f$4;
+    public final /* synthetic */ LongSparseArray f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda81(MessagesController messagesController, TLRPC.WallPaper wallPaper, TLRPC.TL_wallPaperSettings tL_wallPaperSettings, Theme.OverrideWallpaperInfo overrideWallpaperInfo, File file) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda81(MessagesController messagesController, LongSparseArray longSparseArray) {
         this.f$0 = messagesController;
-        this.f$1 = wallPaper;
-        this.f$2 = tL_wallPaperSettings;
-        this.f$3 = overrideWallpaperInfo;
-        this.f$4 = file;
+        this.f$1 = longSparseArray;
     }
 
     public final void run() {
-        this.f$0.m188x6b7d2b95(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$getDifference$261(this.f$1);
     }
 }

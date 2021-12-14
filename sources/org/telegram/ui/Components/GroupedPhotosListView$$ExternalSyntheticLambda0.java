@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupedPhotosListView$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2334x71b0d47b(valueAnimator);
+        this.f$0.lambda$fillList$0(valueAnimator);
     }
 }

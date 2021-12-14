@@ -22,8 +22,8 @@ public class VoIPTimerView extends View {
     StaticLayout timerLayout;
     Runnable updater = new VoIPTimerView$$ExternalSyntheticLambda0(this);
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Components-voip-VoIPTimerView  reason: not valid java name */
-    public /* synthetic */ void m2775lambda$new$0$orgtelegramuiComponentsvoipVoIPTimerView() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0() {
         if (getVisibility() == 0) {
             updateTimer();
         }
@@ -39,38 +39,38 @@ public class VoIPTimerView extends View {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        StaticLayout timerLayout2 = this.timerLayout;
-        if (timerLayout2 != null) {
-            setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), timerLayout2.getHeight());
+    public void onMeasure(int i, int i2) {
+        StaticLayout staticLayout = this.timerLayout;
+        if (staticLayout != null) {
+            setMeasuredDimension(View.MeasureSpec.getSize(i), staticLayout.getHeight());
         } else {
-            setMeasuredDimension(View.MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(15.0f));
+            setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(15.0f));
         }
     }
 
     public void updateTimer() {
         removeCallbacks(this.updater);
-        VoIPService service = VoIPService.getSharedInstance();
-        if (service != null) {
-            String str = AndroidUtilities.formatLongDuration((int) (service.getCallDuration() / 1000));
-            String str2 = this.currentTimeStr;
-            if (str2 == null || !str2.equals(str)) {
-                this.currentTimeStr = str;
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null) {
+            String formatLongDuration = AndroidUtilities.formatLongDuration((int) (sharedInstance.getCallDuration() / 1000));
+            String str = this.currentTimeStr;
+            if (str == null || !str.equals(formatLongDuration)) {
+                this.currentTimeStr = formatLongDuration;
                 if (this.timerLayout == null) {
                     requestLayout();
                 }
-                String str3 = this.currentTimeStr;
+                String str2 = this.currentTimeStr;
                 TextPaint textPaint2 = this.textPaint;
-                this.timerLayout = new StaticLayout(str3, textPaint2, (int) textPaint2.measureText(str3), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                this.timerLayout = new StaticLayout(str2, textPaint2, (int) textPaint2.measureText(str2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }
             postDelayed(this.updater, 300);
             invalidate();
         }
     }
 
-    public void setVisibility(int visibility) {
-        if (getVisibility() != visibility) {
-            if (visibility == 0) {
+    public void setVisibility(int i) {
+        if (getVisibility() != i) {
+            if (i == 0) {
                 this.currentTimeStr = "00:00";
                 String str = this.currentTimeStr;
                 TextPaint textPaint2 = this.textPaint;
@@ -81,32 +81,41 @@ public class VoIPTimerView extends View {
                 this.timerLayout = null;
             }
         }
-        super.setVisibility(visibility);
+        super.setVisibility(i);
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        StaticLayout timerLayout2 = this.timerLayout;
-        int totalWidth = timerLayout2 == null ? 0 : timerLayout2.getWidth() + AndroidUtilities.dp(21.0f);
+        int i;
+        StaticLayout staticLayout = this.timerLayout;
+        int i2 = 0;
+        if (staticLayout == null) {
+            i = 0;
+        } else {
+            i = staticLayout.getWidth() + AndroidUtilities.dp(21.0f);
+        }
         canvas.save();
-        canvas.translate(((float) (getMeasuredWidth() - totalWidth)) / 2.0f, 0.0f);
+        canvas.translate(((float) (getMeasuredWidth() - i)) / 2.0f, 0.0f);
         canvas.save();
         canvas.translate(0.0f, ((float) (getMeasuredHeight() - AndroidUtilities.dp(11.0f))) / 2.0f);
-        for (int i = 0; i < 4; i++) {
-            Paint p = i + 1 > this.signalBarCount ? this.inactivePaint : this.activePaint;
-            this.rectF.set(AndroidUtilities.dpf2(4.16f) * ((float) i), AndroidUtilities.dpf2(2.75f) * ((float) (3 - i)), (AndroidUtilities.dpf2(4.16f) * ((float) i)) + AndroidUtilities.dpf2(2.75f), (float) AndroidUtilities.dp(11.0f));
-            canvas.drawRoundRect(this.rectF, AndroidUtilities.dpf2(0.7f), AndroidUtilities.dpf2(0.7f), p);
+        while (i2 < 4) {
+            int i3 = i2 + 1;
+            Paint paint = i3 > this.signalBarCount ? this.inactivePaint : this.activePaint;
+            float f = (float) i2;
+            this.rectF.set(AndroidUtilities.dpf2(4.16f) * f, AndroidUtilities.dpf2(2.75f) * ((float) (3 - i2)), (AndroidUtilities.dpf2(4.16f) * f) + AndroidUtilities.dpf2(2.75f), (float) AndroidUtilities.dp(11.0f));
+            canvas.drawRoundRect(this.rectF, AndroidUtilities.dpf2(0.7f), AndroidUtilities.dpf2(0.7f), paint);
+            i2 = i3;
         }
         canvas.restore();
-        if (timerLayout2 != null) {
+        if (staticLayout != null) {
             canvas.translate((float) AndroidUtilities.dp(21.0f), 0.0f);
-            timerLayout2.draw(canvas);
+            staticLayout.draw(canvas);
         }
         canvas.restore();
     }
 
-    public void setSignalBarCount(int count) {
-        this.signalBarCount = count;
+    public void setSignalBarCount(int i) {
+        this.signalBarCount = i;
         invalidate();
     }
 }

@@ -3,12 +3,15 @@ package org.telegram.ui.Components;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -30,13 +33,20 @@ import com.google.android.gms.vision.face.FaceDetector;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.messenger.VideoEditedInfo;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$InputDocument;
+import org.telegram.tgnet.TLRPC$TL_inputDocument;
+import org.telegram.tgnet.TLRPC$TL_maskCoords;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -53,8 +63,8 @@ import org.telegram.ui.Components.Paint.Views.StickerView;
 import org.telegram.ui.Components.Paint.Views.TextPaintView;
 import org.telegram.ui.PhotoViewer;
 
+@SuppressLint({"NewApi"})
 public class PhotoPaintView extends FrameLayout implements EntityView.EntityViewDelegate {
-    private static final int gallery_menu_done = 1;
     private float baseScale;
     private Bitmap bitmapToEdit;
     private Swatch brushSwatch;
@@ -62,7 +72,6 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     private TextView cancelTextView;
     /* access modifiers changed from: private */
     public ColorPicker colorPicker;
-    private Animator colorPickerAnimator;
     int currentBrush;
     private MediaController.CropState currentCropState;
     /* access modifiers changed from: private */
@@ -103,19 +112,33 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     /* access modifiers changed from: private */
     public UndoStore undoStore;
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v18, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v19, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* access modifiers changed from: protected */
+    public void didSetAnimatedSticker(RLottieDrawable rLottieDrawable) {
+    }
+
+    /* access modifiers changed from: protected */
+    public void onOpenCloseStickersAlert(boolean z) {
+    }
+
+    /* access modifiers changed from: protected */
+    public void onTextAdd() {
+    }
+
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v38, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v41, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v42, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v43, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public PhotoPaintView(android.content.Context r27, android.graphics.Bitmap r28, android.graphics.Bitmap r29, int r30, java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r31, org.telegram.messenger.MediaController.CropState r32, java.lang.Runnable r33, org.telegram.ui.ActionBar.Theme.ResourcesProvider r34) {
+    public PhotoPaintView(android.content.Context r24, android.graphics.Bitmap r25, android.graphics.Bitmap r26, int r27, java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r28, org.telegram.messenger.MediaController.CropState r29, java.lang.Runnable r30, org.telegram.ui.ActionBar.Theme.ResourcesProvider r31) {
         /*
-            r26 = this;
-            r0 = r26
-            r1 = r27
-            r2 = r28
-            r3 = r31
-            r26.<init>(r27)
+            r23 = this;
+            r0 = r23
+            r1 = r24
+            r2 = r25
+            r3 = r28
+            r23.<init>(r24)
             r4 = 4
             org.telegram.ui.Components.Paint.Brush[] r5 = new org.telegram.ui.Components.Paint.Brush[r4]
             org.telegram.ui.Components.Paint.Brush$Radial r6 = new org.telegram.ui.Components.Paint.Brush$Radial
@@ -140,381 +163,353 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r0.selectedTextType = r9
             int[] r5 = new int[r9]
             r0.pos = r5
-            r5 = r34
+            r5 = r31
             r0.resourcesProvider = r5
-            boolean r6 = r1 instanceof org.telegram.ui.BubbleActivity
-            r0.inBubbleMode = r6
-            r6 = r32
-            r0.currentCropState = r6
-            org.telegram.messenger.DispatchQueue r10 = new org.telegram.messenger.DispatchQueue
-            java.lang.String r11 = "Paint"
-            r10.<init>(r11)
-            r0.queue = r10
-            r10 = r30
-            r0.originalBitmapRotation = r10
+            boolean r5 = r1 instanceof org.telegram.ui.BubbleActivity
+            r0.inBubbleMode = r5
+            r5 = r29
+            r0.currentCropState = r5
+            org.telegram.messenger.DispatchQueue r5 = new org.telegram.messenger.DispatchQueue
+            java.lang.String r6 = "Paint"
+            r5.<init>(r6)
+            r0.queue = r5
+            r5 = r27
+            r0.originalBitmapRotation = r5
             r0.bitmapToEdit = r2
-            r11 = r29
-            r0.facesBitmap = r11
-            org.telegram.ui.Components.Paint.UndoStore r12 = new org.telegram.ui.Components.Paint.UndoStore
-            r12.<init>()
-            r0.undoStore = r12
-            org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda12 r13 = new org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda12
-            r13.<init>(r0)
-            r12.setDelegate(r13)
-            android.widget.FrameLayout r12 = new android.widget.FrameLayout
-            r12.<init>(r1)
-            r0.curtainView = r12
-            r13 = 570425344(0x22000000, float:1.7347235E-18)
-            r12.setBackgroundColor(r13)
-            android.widget.FrameLayout r12 = r0.curtainView
-            r12.setVisibility(r4)
-            android.widget.FrameLayout r12 = r0.curtainView
-            r13 = -1
-            r14 = -1082130432(0xffffffffbvar_, float:-1.0)
-            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14)
-            r0.addView(r12, r14)
-            org.telegram.ui.Components.Paint.RenderView r12 = new org.telegram.ui.Components.Paint.RenderView
-            org.telegram.ui.Components.Paint.Painting r14 = new org.telegram.ui.Components.Paint.Painting
-            org.telegram.ui.Components.Size r15 = r26.getPaintingSize()
-            r14.<init>(r15)
-            r12.<init>(r1, r14, r2)
-            r0.renderView = r12
-            org.telegram.ui.Components.PhotoPaintView$1 r14 = new org.telegram.ui.Components.PhotoPaintView$1
-            r15 = r33
-            r14.<init>(r15)
-            r12.setDelegate(r14)
-            org.telegram.ui.Components.Paint.RenderView r12 = r0.renderView
-            org.telegram.ui.Components.Paint.UndoStore r14 = r0.undoStore
-            r12.setUndoStore(r14)
-            org.telegram.ui.Components.Paint.RenderView r12 = r0.renderView
-            org.telegram.messenger.DispatchQueue r14 = r0.queue
-            r12.setQueue(r14)
-            org.telegram.ui.Components.Paint.RenderView r12 = r0.renderView
-            r12.setVisibility(r4)
-            org.telegram.ui.Components.Paint.RenderView r12 = r0.renderView
-            org.telegram.ui.Components.Paint.Brush[] r14 = r0.brushes
-            r14 = r14[r7]
-            r12.setBrush(r14)
-            org.telegram.ui.Components.Paint.RenderView r12 = r0.renderView
-            r14 = 51
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r13, (int) r13, (int) r14)
-            r0.addView(r12, r4)
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r4 = new org.telegram.ui.Components.Paint.Views.EntitiesContainerView
-            org.telegram.ui.Components.PhotoPaintView$2 r12 = new org.telegram.ui.Components.PhotoPaintView$2
-            r12.<init>()
-            r4.<init>(r1, r12)
-            r0.entitiesView = r4
-            r0.addView(r4)
-            android.widget.FrameLayout r4 = new android.widget.FrameLayout
-            r4.<init>(r1)
-            r0.dimView = r4
-            r12 = 0
-            r4.setAlpha(r12)
-            android.widget.FrameLayout r4 = r0.dimView
-            r9 = 1711276032(0x66000000, float:1.5111573E23)
-            r4.setBackgroundColor(r9)
-            android.widget.FrameLayout r4 = r0.dimView
-            r14 = 8
-            r4.setVisibility(r14)
-            android.widget.FrameLayout r4 = r0.dimView
-            r0.addView(r4)
-            android.widget.FrameLayout r4 = new android.widget.FrameLayout
-            r4.<init>(r1)
-            r0.textDimView = r4
-            r4.setAlpha(r12)
-            android.widget.FrameLayout r4 = r0.textDimView
-            r4.setBackgroundColor(r9)
-            android.widget.FrameLayout r4 = r0.textDimView
-            r4.setVisibility(r14)
-            android.widget.FrameLayout r4 = r0.textDimView
-            org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda14 r9 = new org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda14
-            r9.<init>(r0)
-            r4.setOnClickListener(r9)
-            org.telegram.ui.Components.PhotoPaintView$3 r4 = new org.telegram.ui.Components.PhotoPaintView$3
-            r4.<init>(r1)
-            r0.selectionContainerView = r4
-            r0.addView(r4)
-            org.telegram.ui.Components.Paint.Views.ColorPicker r4 = new org.telegram.ui.Components.Paint.Views.ColorPicker
-            r4.<init>(r1)
-            r0.colorPicker = r4
-            r0.addView(r4)
-            org.telegram.ui.Components.Paint.Views.ColorPicker r4 = r0.colorPicker
-            org.telegram.ui.Components.PhotoPaintView$4 r9 = new org.telegram.ui.Components.PhotoPaintView$4
-            r9.<init>()
-            r4.setDelegate(r9)
-            android.widget.FrameLayout r4 = new android.widget.FrameLayout
-            r4.<init>(r1)
-            r0.toolsView = r4
-            r9 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            r4.setBackgroundColor(r9)
-            android.widget.FrameLayout r4 = r0.toolsView
-            r9 = 48
-            r12 = 83
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r13, (int) r9, (int) r12)
-            r0.addView(r4, r9)
-            android.widget.TextView r4 = new android.widget.TextView
-            r4.<init>(r1)
-            r0.cancelTextView = r4
-            r9 = 1096810496(0x41600000, float:14.0)
-            r4.setTextSize(r8, r9)
-            android.widget.TextView r4 = r0.cancelTextView
-            r4.setTextColor(r13)
-            android.widget.TextView r4 = r0.cancelTextView
-            r12 = 17
-            r4.setGravity(r12)
-            android.widget.TextView r4 = r0.cancelTextView
-            r14 = -12763843(0xffffffffff3d3d3d, float:-2.5154206E38)
-            android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r14, r7)
-            r4.setBackgroundDrawable(r12)
-            android.widget.TextView r4 = r0.cancelTextView
-            r12 = 1101004800(0x41a00000, float:20.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            r4.setPadding(r14, r7, r8, r7)
-            android.widget.TextView r4 = r0.cancelTextView
-            java.lang.String r8 = "Cancel"
-            r14 = 2131624692(0x7f0e02f4, float:1.887657E38)
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r14)
-            java.lang.String r8 = r8.toUpperCase()
-            r4.setText(r8)
-            android.widget.TextView r4 = r0.cancelTextView
-            java.lang.String r8 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r14 = org.telegram.messenger.AndroidUtilities.getTypeface(r8)
-            r4.setTypeface(r14)
-            android.widget.FrameLayout r4 = r0.toolsView
-            android.widget.TextView r14 = r0.cancelTextView
-            r12 = -2
-            r7 = 51
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r12, (int) r13, (int) r7)
-            r4.addView(r14, r7)
-            android.widget.TextView r4 = new android.widget.TextView
-            r4.<init>(r1)
-            r0.doneTextView = r4
-            r7 = 1
-            r4.setTextSize(r7, r9)
-            android.widget.TextView r4 = r0.doneTextView
-            java.lang.String r7 = "dialogFloatingButton"
-            int r7 = r0.getThemedColor(r7)
-            r4.setTextColor(r7)
-            android.widget.TextView r4 = r0.doneTextView
-            r7 = 17
-            r4.setGravity(r7)
-            android.widget.TextView r4 = r0.doneTextView
-            r7 = -12763843(0xffffffffff3d3d3d, float:-2.5154206E38)
-            r9 = 0
-            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r7, r9)
-            r4.setBackgroundDrawable(r7)
-            android.widget.TextView r4 = r0.doneTextView
-            r7 = 1101004800(0x41a00000, float:20.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r4.setPadding(r14, r9, r7, r9)
-            android.widget.TextView r4 = r0.doneTextView
-            java.lang.String r7 = "Done"
-            r9 = 2131625321(0x7f0e0569, float:1.8877847E38)
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r9)
-            java.lang.String r7 = r7.toUpperCase()
-            r4.setText(r7)
-            android.widget.TextView r4 = r0.doneTextView
-            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r8)
-            r4.setTypeface(r7)
-            android.widget.FrameLayout r4 = r0.toolsView
-            android.widget.TextView r7 = r0.doneTextView
-            r8 = 53
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r12, (int) r13, (int) r8)
-            r4.addView(r7, r8)
-            android.widget.ImageView r4 = new android.widget.ImageView
-            r4.<init>(r1)
-            r0.paintButton = r4
-            android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
-            r4.setScaleType(r7)
-            android.widget.ImageView r4 = r0.paintButton
-            r7 = 2131165964(0x7var_c, float:1.794616E38)
-            r4.setImageResource(r7)
-            android.widget.ImageView r4 = r0.paintButton
-            r7 = 1090519039(0x40ffffff, float:7.9999995)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r7)
-            r4.setBackgroundDrawable(r8)
-            android.widget.FrameLayout r4 = r0.toolsView
-            android.widget.ImageView r8 = r0.paintButton
-            r19 = 54
-            r20 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r21 = 17
+            r5 = r26
+            r0.facesBitmap = r5
+            org.telegram.ui.Components.Paint.UndoStore r5 = new org.telegram.ui.Components.Paint.UndoStore
+            r5.<init>()
+            r0.undoStore = r5
+            org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda20 r6 = new org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda20
+            r6.<init>(r0)
+            r5.setDelegate(r6)
+            android.widget.FrameLayout r5 = new android.widget.FrameLayout
+            r5.<init>(r1)
+            r0.curtainView = r5
+            r6 = 570425344(0x22000000, float:1.7347235E-18)
+            r5.setBackgroundColor(r6)
+            android.widget.FrameLayout r5 = r0.curtainView
+            r5.setVisibility(r4)
+            android.widget.FrameLayout r5 = r0.curtainView
+            r6 = -1
+            r10 = -1082130432(0xffffffffbvar_, float:-1.0)
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r10)
+            r0.addView(r5, r10)
+            org.telegram.ui.Components.Paint.RenderView r5 = new org.telegram.ui.Components.Paint.RenderView
+            org.telegram.ui.Components.Paint.Painting r10 = new org.telegram.ui.Components.Paint.Painting
+            org.telegram.ui.Components.Size r11 = r23.getPaintingSize()
+            r10.<init>(r11)
+            r5.<init>(r1, r10, r2)
+            r0.renderView = r5
+            org.telegram.ui.Components.PhotoPaintView$1 r2 = new org.telegram.ui.Components.PhotoPaintView$1
+            r10 = r30
+            r2.<init>(r10)
+            r5.setDelegate(r2)
+            org.telegram.ui.Components.Paint.RenderView r2 = r0.renderView
+            org.telegram.ui.Components.Paint.UndoStore r5 = r0.undoStore
+            r2.setUndoStore(r5)
+            org.telegram.ui.Components.Paint.RenderView r2 = r0.renderView
+            org.telegram.messenger.DispatchQueue r5 = r0.queue
+            r2.setQueue(r5)
+            org.telegram.ui.Components.Paint.RenderView r2 = r0.renderView
+            r2.setVisibility(r4)
+            org.telegram.ui.Components.Paint.RenderView r2 = r0.renderView
+            org.telegram.ui.Components.Paint.Brush[] r5 = r0.brushes
+            r5 = r5[r7]
+            r2.setBrush(r5)
+            org.telegram.ui.Components.Paint.RenderView r2 = r0.renderView
+            r5 = 51
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r6, r5)
+            r0.addView(r2, r10)
+            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r2 = new org.telegram.ui.Components.Paint.Views.EntitiesContainerView
+            org.telegram.ui.Components.PhotoPaintView$2 r10 = new org.telegram.ui.Components.PhotoPaintView$2
+            r10.<init>()
+            r2.<init>(r1, r10)
+            r0.entitiesView = r2
+            r0.addView(r2)
+            android.widget.FrameLayout r2 = new android.widget.FrameLayout
+            r2.<init>(r1)
+            r0.dimView = r2
+            r10 = 0
+            r2.setAlpha(r10)
+            android.widget.FrameLayout r2 = r0.dimView
+            r11 = 1711276032(0x66000000, float:1.5111573E23)
+            r2.setBackgroundColor(r11)
+            android.widget.FrameLayout r2 = r0.dimView
+            r12 = 8
+            r2.setVisibility(r12)
+            android.widget.FrameLayout r2 = r0.dimView
+            r0.addView(r2)
+            android.widget.FrameLayout r2 = new android.widget.FrameLayout
+            r2.<init>(r1)
+            r0.textDimView = r2
+            r2.setAlpha(r10)
+            android.widget.FrameLayout r2 = r0.textDimView
+            r2.setBackgroundColor(r11)
+            android.widget.FrameLayout r2 = r0.textDimView
+            r2.setVisibility(r12)
+            android.widget.FrameLayout r2 = r0.textDimView
+            org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda3 r10 = new org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda3
+            r10.<init>(r0)
+            r2.setOnClickListener(r10)
+            org.telegram.ui.Components.PhotoPaintView$3 r2 = new org.telegram.ui.Components.PhotoPaintView$3
+            r2.<init>(r0, r1)
+            r0.selectionContainerView = r2
+            r0.addView(r2)
+            org.telegram.ui.Components.Paint.Views.ColorPicker r2 = new org.telegram.ui.Components.Paint.Views.ColorPicker
+            r2.<init>(r1)
+            r0.colorPicker = r2
+            r0.addView(r2)
+            org.telegram.ui.Components.Paint.Views.ColorPicker r2 = r0.colorPicker
+            org.telegram.ui.Components.PhotoPaintView$4 r10 = new org.telegram.ui.Components.PhotoPaintView$4
+            r10.<init>()
+            r2.setDelegate(r10)
+            android.widget.FrameLayout r2 = new android.widget.FrameLayout
+            r2.<init>(r1)
+            r0.toolsView = r2
+            r10 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+            r2.setBackgroundColor(r10)
+            android.widget.FrameLayout r2 = r0.toolsView
+            r10 = 48
+            r11 = 83
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r10, r11)
+            r0.addView(r2, r10)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r1)
+            r0.cancelTextView = r2
+            r10 = 1096810496(0x41600000, float:14.0)
+            r2.setTextSize(r8, r10)
+            android.widget.TextView r2 = r0.cancelTextView
+            r2.setTextColor(r6)
+            android.widget.TextView r2 = r0.cancelTextView
+            r11 = 17
+            r2.setGravity(r11)
+            android.widget.TextView r2 = r0.cancelTextView
+            r12 = -12763843(0xffffffffff3d3d3d, float:-2.5154206E38)
+            android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r12, r7)
+            r2.setBackgroundDrawable(r13)
+            android.widget.TextView r2 = r0.cancelTextView
+            r13 = 1101004800(0x41a00000, float:20.0)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            int r15 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            r2.setPadding(r14, r7, r15, r7)
+            android.widget.TextView r2 = r0.cancelTextView
+            java.lang.String r14 = "Cancel"
+            r15 = 2131624692(0x7f0e02f4, float:1.887657E38)
+            java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r14, r15)
+            java.lang.String r14 = r14.toUpperCase()
+            r2.setText(r14)
+            android.widget.TextView r2 = r0.cancelTextView
+            java.lang.String r14 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r15 = org.telegram.messenger.AndroidUtilities.getTypeface(r14)
+            r2.setTypeface(r15)
+            android.widget.FrameLayout r2 = r0.toolsView
+            android.widget.TextView r15 = r0.cancelTextView
+            r4 = -2
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r6, r5)
+            r2.addView(r15, r5)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r1)
+            r0.doneTextView = r2
+            r2.setTextSize(r8, r10)
+            android.widget.TextView r2 = r0.doneTextView
+            java.lang.String r5 = "dialogFloatingButton"
+            int r5 = r0.getThemedColor(r5)
+            r2.setTextColor(r5)
+            android.widget.TextView r2 = r0.doneTextView
+            r2.setGravity(r11)
+            android.widget.TextView r2 = r0.doneTextView
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r12, r7)
+            r2.setBackgroundDrawable(r5)
+            android.widget.TextView r2 = r0.doneTextView
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            r2.setPadding(r5, r7, r10, r7)
+            android.widget.TextView r2 = r0.doneTextView
+            java.lang.String r5 = "Done"
+            r10 = 2131625321(0x7f0e0569, float:1.8877847E38)
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r10)
+            java.lang.String r5 = r5.toUpperCase()
+            r2.setText(r5)
+            android.widget.TextView r2 = r0.doneTextView
+            android.graphics.Typeface r5 = org.telegram.messenger.AndroidUtilities.getTypeface(r14)
+            r2.setTypeface(r5)
+            android.widget.FrameLayout r2 = r0.toolsView
+            android.widget.TextView r5 = r0.doneTextView
+            r10 = 53
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r6, r10)
+            r2.addView(r5, r4)
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r1)
+            r0.paintButton = r2
+            android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r4)
+            android.widget.ImageView r2 = r0.paintButton
+            r4 = 2131165964(0x7var_c, float:1.794616E38)
+            r2.setImageResource(r4)
+            android.widget.ImageView r2 = r0.paintButton
+            r4 = 1090519039(0x40ffffff, float:7.9999995)
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
+            r2.setBackgroundDrawable(r5)
+            android.widget.FrameLayout r2 = r0.toolsView
+            android.widget.ImageView r5 = r0.paintButton
+            r16 = 54
+            r17 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r18 = 17
+            r19 = 0
+            r20 = 0
+            r21 = 1113587712(0x42600000, float:56.0)
             r22 = 0
-            r23 = 0
-            r24 = 1113587712(0x42600000, float:56.0)
-            r25 = 0
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
-            r4.addView(r8, r9)
-            android.widget.ImageView r4 = r0.paintButton
-            org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda15 r8 = new org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda15
-            r8.<init>(r0)
-            r4.setOnClickListener(r8)
-            android.widget.ImageView r4 = new android.widget.ImageView
-            r4.<init>(r1)
-            android.widget.ImageView$ScaleType r8 = android.widget.ImageView.ScaleType.CENTER
-            r4.setScaleType(r8)
-            r8 = 2131165968(0x7var_, float:1.7946168E38)
-            r4.setImageResource(r8)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r7)
-            r4.setBackgroundDrawable(r8)
-            android.widget.FrameLayout r8 = r0.toolsView
-            r9 = 54
-            r12 = 17
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame((int) r9, (int) r13, (int) r12)
-            r8.addView(r4, r9)
-            org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda16 r8 = new org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda16
-            r8.<init>(r0)
-            r4.setOnClickListener(r8)
-            android.widget.ImageView r8 = new android.widget.ImageView
-            r8.<init>(r1)
-            android.widget.ImageView$ScaleType r9 = android.widget.ImageView.ScaleType.CENTER
-            r8.setScaleType(r9)
-            r9 = 2131165966(0x7var_e, float:1.7946164E38)
-            r8.setImageResource(r9)
-            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r7)
-            r8.setBackgroundDrawable(r7)
-            android.widget.FrameLayout r7 = r0.toolsView
-            r22 = 1113587712(0x42600000, float:56.0)
-            r24 = 0
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
-            r7.addView(r8, r9)
-            org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda17 r7 = new org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda17
-            r7.<init>(r0)
-            r8.setOnClickListener(r7)
-            org.telegram.ui.Components.Paint.Views.ColorPicker r7 = r0.colorPicker
-            r9 = 0
-            r7.setUndoEnabled(r9)
-            org.telegram.ui.Components.Paint.Views.ColorPicker r7 = r0.colorPicker
-            org.telegram.ui.Components.Paint.Swatch r7 = r7.getSwatch()
-            r0.setCurrentSwatch(r7, r9)
-            r26.updateSettingsButton()
-            if (r3 == 0) goto L_0x03a2
-            boolean r7 = r31.isEmpty()
-            if (r7 != 0) goto L_0x03a2
-            r7 = 0
-            int r9 = r31.size()
-        L_0x02c1:
-            if (r7 >= r9) goto L_0x03a2
-            java.lang.Object r12 = r3.get(r7)
-            org.telegram.messenger.VideoEditedInfo$MediaEntity r12 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r12
-            byte r13 = r12.type
-            if (r13 != 0) goto L_0x02f1
-            java.lang.Object r13 = r12.parentObject
-            org.telegram.tgnet.TLRPC$Document r14 = r12.document
-            r1 = 0
-            org.telegram.ui.Components.Paint.Views.StickerView r13 = r0.createSticker(r13, r14, r1)
-            byte r1 = r12.subType
-            r14 = 2
-            r1 = r1 & r14
-            if (r1 == 0) goto L_0x02df
-            r13.mirror()
-        L_0x02df:
-            r1 = r13
-            android.view.ViewGroup$LayoutParams r14 = r1.getLayoutParams()
-            r18 = r1
-            int r1 = r12.viewWidth
-            r14.width = r1
-            int r1 = r12.viewHeight
-            r14.height = r1
-            r1 = r18
-            goto L_0x0323
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
+            r2.addView(r5, r10)
+            android.widget.ImageView r2 = r0.paintButton
+            org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda4 r5 = new org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda4
+            r5.<init>(r0)
+            r2.setOnClickListener(r5)
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r1)
+            android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r5)
+            r5 = 2131165968(0x7var_, float:1.7946168E38)
+            r2.setImageResource(r5)
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
+            r2.setBackgroundDrawable(r5)
+            android.widget.FrameLayout r5 = r0.toolsView
+            r10 = 54
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r6, r11)
+            r5.addView(r2, r6)
+            org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda2 r5 = new org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda2
+            r5.<init>(r0)
+            r2.setOnClickListener(r5)
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r1)
+            android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r1)
+            r1 = 2131165966(0x7var_e, float:1.7946164E38)
+            r2.setImageResource(r1)
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
+            r2.setBackgroundDrawable(r1)
+            android.widget.FrameLayout r1 = r0.toolsView
+            r19 = 1113587712(0x42600000, float:56.0)
+            r21 = 0
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
+            r1.addView(r2, r4)
+            org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda6 r1 = new org.telegram.ui.Components.PhotoPaintView$$ExternalSyntheticLambda6
+            r1.<init>(r0)
+            r2.setOnClickListener(r1)
+            org.telegram.ui.Components.Paint.Views.ColorPicker r1 = r0.colorPicker
+            r1.setUndoEnabled(r7)
+            org.telegram.ui.Components.Paint.Views.ColorPicker r1 = r0.colorPicker
+            org.telegram.ui.Components.Paint.Swatch r1 = r1.getSwatch()
+            r0.setCurrentSwatch(r1, r7)
+            r23.updateSettingsButton()
+            if (r3 == 0) goto L_0x0373
+            boolean r1 = r28.isEmpty()
+            if (r1 != 0) goto L_0x0373
+            int r1 = r28.size()
+            r2 = 0
+        L_0x02b3:
+            if (r2 >= r1) goto L_0x0373
+            java.lang.Object r4 = r3.get(r2)
+            org.telegram.messenger.VideoEditedInfo$MediaEntity r4 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r4
+            byte r5 = r4.type
+            if (r5 != 0) goto L_0x02dc
+            java.lang.Object r5 = r4.parentObject
+            org.telegram.tgnet.TLRPC$Document r6 = r4.document
+            org.telegram.ui.Components.Paint.Views.StickerView r5 = r0.createSticker(r5, r6, r7)
+            byte r6 = r4.subType
+            r6 = r6 & r9
+            if (r6 == 0) goto L_0x02cf
+            r5.mirror()
+        L_0x02cf:
+            android.view.ViewGroup$LayoutParams r6 = r5.getLayoutParams()
+            int r10 = r4.viewWidth
+            r6.width = r10
+            int r10 = r4.viewHeight
+            r6.height = r10
+            goto L_0x0304
+        L_0x02dc:
+            if (r5 != r8) goto L_0x036f
+            org.telegram.ui.Components.Paint.Views.TextPaintView r5 = r0.createText(r7)
+            byte r6 = r4.subType
+            r10 = r6 & 1
+            if (r10 == 0) goto L_0x02ea
+            r6 = 0
+            goto L_0x02f1
+        L_0x02ea:
+            r6 = r6 & 4
+            if (r6 == 0) goto L_0x02f0
+            r6 = 2
+            goto L_0x02f1
+        L_0x02f0:
+            r6 = 1
         L_0x02f1:
-            byte r1 = r12.type
-            r13 = 1
-            if (r1 != r13) goto L_0x0396
-            r1 = 0
-            org.telegram.ui.Components.Paint.Views.TextPaintView r14 = r0.createText(r1)
-            byte r1 = r12.subType
-            r1 = r1 & r13
-            if (r1 == 0) goto L_0x0302
-            r1 = 0
-            goto L_0x030d
-        L_0x0302:
-            byte r1 = r12.subType
-            r16 = 4
-            r1 = r1 & 4
-            if (r1 == 0) goto L_0x030c
-            r1 = 2
-            goto L_0x030d
-        L_0x030c:
-            r1 = 1
-        L_0x030d:
-            r14.setType(r1)
-            java.lang.String r13 = r12.text
-            r14.setText(r13)
-            org.telegram.ui.Components.Paint.Swatch r13 = r14.getSwatch()
-            r18 = r1
-            int r1 = r12.color
-            r13.color = r1
-            r14.setSwatch(r13)
-            r1 = r14
-        L_0x0323:
-            float r13 = r12.x
-            org.telegram.ui.Components.Size r14 = r0.paintingSize
-            float r14 = r14.width
-            float r13 = r13 * r14
-            int r14 = r12.viewWidth
-            float r14 = (float) r14
-            float r2 = r12.scale
-            r18 = 1065353216(0x3var_, float:1.0)
-            float r2 = r18 - r2
-            float r14 = r14 * r2
-            r2 = 1073741824(0x40000000, float:2.0)
-            float r14 = r14 / r2
-            float r13 = r13 - r14
-            r1.setX(r13)
-            float r13 = r12.y
-            org.telegram.ui.Components.Size r14 = r0.paintingSize
-            float r14 = r14.height
-            float r13 = r13 * r14
-            int r14 = r12.viewHeight
-            float r14 = (float) r14
-            float r2 = r12.scale
-            float r18 = r18 - r2
-            float r14 = r14 * r18
-            r2 = 1073741824(0x40000000, float:2.0)
-            float r14 = r14 / r2
-            float r13 = r13 - r14
-            r1.setY(r13)
-            org.telegram.ui.Components.Point r2 = new org.telegram.ui.Components.Point
-            float r13 = r1.getX()
-            int r14 = r12.viewWidth
-            r17 = 2
-            int r14 = r14 / 2
-            float r14 = (float) r14
-            float r13 = r13 + r14
-            float r14 = r1.getY()
-            int r3 = r12.viewHeight
-            int r3 = r3 / 2
-            float r3 = (float) r3
-            float r14 = r14 + r3
-            r2.<init>(r13, r14)
-            r1.setPosition(r2)
-            float r2 = r12.scale
-            r1.setScaleX(r2)
-            float r2 = r12.scale
-            r1.setScaleY(r2)
-            float r2 = r12.rotation
-            float r2 = -r2
-            double r2 = (double) r2
-            r13 = 4614256656552045848(0x400921fb54442d18, double:3.NUM)
-            java.lang.Double.isNaN(r2)
-            double r2 = r2 / r13
-            r13 = 4640537203540230144(0xNUM, double:180.0)
-            double r2 = r2 * r13
-            float r2 = (float) r2
-            r1.setRotation(r2)
-            goto L_0x0398
-        L_0x0396:
-            r17 = 2
-        L_0x0398:
-            int r7 = r7 + 1
-            r1 = r27
-            r2 = r28
-            r3 = r31
-            goto L_0x02c1
-        L_0x03a2:
+            r5.setType(r6)
+            java.lang.String r6 = r4.text
+            r5.setText(r6)
+            org.telegram.ui.Components.Paint.Swatch r6 = r5.getSwatch()
+            int r10 = r4.color
+            r6.color = r10
+            r5.setSwatch(r6)
+        L_0x0304:
+            float r6 = r4.x
+            org.telegram.ui.Components.Size r10 = r0.paintingSize
+            float r10 = r10.width
+            float r6 = r6 * r10
+            int r10 = r4.viewWidth
+            float r10 = (float) r10
+            float r11 = r4.scale
+            r12 = 1065353216(0x3var_, float:1.0)
+            float r11 = r12 - r11
+            float r10 = r10 * r11
+            r11 = 1073741824(0x40000000, float:2.0)
+            float r10 = r10 / r11
+            float r6 = r6 - r10
+            r5.setX(r6)
+            float r6 = r4.y
+            org.telegram.ui.Components.Size r10 = r0.paintingSize
+            float r10 = r10.height
+            float r6 = r6 * r10
+            int r10 = r4.viewHeight
+            float r10 = (float) r10
+            float r13 = r4.scale
+            float r12 = r12 - r13
+            float r10 = r10 * r12
+            float r10 = r10 / r11
+            float r6 = r6 - r10
+            r5.setY(r6)
+            org.telegram.ui.Components.Point r6 = new org.telegram.ui.Components.Point
+            float r10 = r5.getX()
+            int r11 = r4.viewWidth
+            int r11 = r11 / r9
+            float r11 = (float) r11
+            float r10 = r10 + r11
+            float r11 = r5.getY()
+            int r12 = r4.viewHeight
+            int r12 = r12 / r9
+            float r12 = (float) r12
+            float r11 = r11 + r12
+            r6.<init>(r10, r11)
+            r5.setPosition(r6)
+            float r6 = r4.scale
+            r5.setScaleX(r6)
+            float r6 = r4.scale
+            r5.setScaleY(r6)
+            float r4 = r4.rotation
+            float r4 = -r4
+            double r10 = (double) r4
+            r12 = 4614256656552045848(0x400921fb54442d18, double:3.NUM)
+            java.lang.Double.isNaN(r10)
+            double r10 = r10 / r12
+            r12 = 4640537203540230144(0xNUM, double:180.0)
+            double r10 = r10 * r12
+            float r4 = (float) r10
+            r5.setRotation(r4)
+        L_0x036f:
+            int r2 = r2 + 1
+            goto L_0x02b3
+        L_0x0373:
             org.telegram.ui.Components.Paint.Views.EntitiesContainerView r1 = r0.entitiesView
             r2 = 4
             r1.setVisibility(r2)
@@ -523,28 +518,28 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.<init>(android.content.Context, android.graphics.Bitmap, android.graphics.Bitmap, int, java.util.ArrayList, org.telegram.messenger.MediaController$CropState, java.lang.Runnable, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
     }
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2474lambda$new$0$orgtelegramuiComponentsPhotoPaintView() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0() {
         this.colorPicker.setUndoEnabled(this.undoStore.canUndo());
     }
 
-    /* renamed from: lambda$new$1$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2475lambda$new$1$orgtelegramuiComponentsPhotoPaintView(View v) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(View view) {
         closeTextEnter(true);
     }
 
-    /* renamed from: lambda$new$2$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2476lambda$new$2$orgtelegramuiComponentsPhotoPaintView(View v) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$2(View view) {
         selectEntity((EntityView) null);
     }
 
-    /* renamed from: lambda$new$3$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2477lambda$new$3$orgtelegramuiComponentsPhotoPaintView(View v) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$3(View view) {
         openStickersView();
     }
 
-    /* renamed from: lambda$new$4$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2478lambda$new$4$orgtelegramuiComponentsPhotoPaintView(View v) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$4(View view) {
         createText(true);
     }
 
@@ -552,7 +547,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         this.renderView.redraw();
     }
 
-    public boolean onTouch(MotionEvent ev) {
+    public boolean onTouch(MotionEvent motionEvent) {
         if (this.currentEntityView != null) {
             if (this.editingText) {
                 closeTextEnter(true);
@@ -560,27 +555,23 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 selectEntity((EntityView) null);
             }
         }
-        float x2 = ((ev.getX() - this.renderView.getTranslationX()) - ((float) (getMeasuredWidth() / 2))) / this.renderView.getScaleX();
-        float y2 = (((ev.getY() - this.renderView.getTranslationY()) - ((float) (getMeasuredHeight() / 2))) + ((float) AndroidUtilities.dp(32.0f))) / this.renderView.getScaleY();
-        float rotation = (float) Math.toRadians((double) (-this.renderView.getRotation()));
-        double d = (double) x2;
-        double cos = Math.cos((double) rotation);
+        float x = ((motionEvent.getX() - this.renderView.getTranslationX()) - ((float) (getMeasuredWidth() / 2))) / this.renderView.getScaleX();
+        float y = (((motionEvent.getY() - this.renderView.getTranslationY()) - ((float) (getMeasuredHeight() / 2))) + ((float) AndroidUtilities.dp(32.0f))) / this.renderView.getScaleY();
+        double d = (double) x;
+        double radians = (double) ((float) Math.toRadians((double) (-this.renderView.getRotation())));
+        double cos = Math.cos(radians);
         Double.isNaN(d);
-        double d2 = d * cos;
-        double d3 = (double) y2;
-        double sin = Math.sin((double) rotation);
-        Double.isNaN(d3);
-        float x = ((float) (d2 - (d3 * sin))) + ((float) (this.renderView.getMeasuredWidth() / 2));
-        double d4 = (double) x2;
-        double sin2 = Math.sin((double) rotation);
-        Double.isNaN(d4);
-        double d5 = d4 * sin2;
-        double d6 = (double) y2;
-        double cos2 = Math.cos((double) rotation);
-        Double.isNaN(d6);
-        MotionEvent event = MotionEvent.obtain(0, 0, ev.getActionMasked(), x, ((float) (d5 + (d6 * cos2))) + ((float) (this.renderView.getMeasuredHeight() / 2)), 0);
-        this.renderView.onTouch(event);
-        event.recycle();
+        double d2 = (double) y;
+        double sin = Math.sin(radians);
+        Double.isNaN(d2);
+        float measuredWidth = ((float) ((cos * d) - (sin * d2))) + ((float) (this.renderView.getMeasuredWidth() / 2));
+        double sin2 = Math.sin(radians);
+        Double.isNaN(d);
+        double cos2 = Math.cos(radians);
+        Double.isNaN(d2);
+        MotionEvent obtain = MotionEvent.obtain(0, 0, motionEvent.getActionMasked(), measuredWidth, ((float) ((d * sin2) + (d2 * cos2))) + ((float) (this.renderView.getMeasuredHeight() / 2)), 0);
+        this.renderView.onTouch(obtain);
+        obtain.recycle();
         return true;
     }
 
@@ -593,23 +584,24 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         float height = (float) this.bitmapToEdit.getHeight();
         Size size2 = new Size(width, height);
         size2.width = 1280.0f;
-        size2.height = (float) Math.floor((double) ((size2.width * height) / width));
-        if (size2.height > 1280.0f) {
+        float floor = (float) Math.floor((double) ((1280.0f * height) / width));
+        size2.height = floor;
+        if (floor > 1280.0f) {
             size2.height = 1280.0f;
-            size2.width = (float) Math.floor((double) ((size2.height * width) / height));
+            size2.width = (float) Math.floor((double) ((1280.0f * width) / height));
         }
         this.paintingSize = size2;
         return size2;
     }
 
     private void updateSettingsButton() {
-        int resource = NUM;
         EntityView entityView = this.currentEntityView;
+        int i = NUM;
         if (entityView != null) {
             if (entityView instanceof StickerView) {
-                resource = NUM;
+                i = NUM;
             } else if (entityView instanceof TextPaintView) {
-                resource = NUM;
+                i = NUM;
             }
             this.paintButton.setImageResource(NUM);
             this.paintButton.setColorFilter((ColorFilter) null);
@@ -622,7 +614,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             this.paintButton.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
             this.paintButton.setImageResource(NUM);
         }
-        this.colorPicker.setSettingsButtonImage(resource);
+        this.colorPicker.setSettingsButtonImage(i);
     }
 
     public void updateColors() {
@@ -648,13 +640,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         this.renderView.shutdown();
         this.entitiesView.setVisibility(8);
         this.selectionContainerView.setVisibility(8);
-        this.queue.postRunnable(PhotoPaintView$$ExternalSyntheticLambda9.INSTANCE);
+        this.queue.postRunnable(PhotoPaintView$$ExternalSyntheticLambda18.INSTANCE);
     }
 
-    static /* synthetic */ void lambda$shutdown$5() {
-        Looper looper = Looper.myLooper();
-        if (looper != null) {
-            looper.quit();
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$shutdown$5() {
+        Looper myLooper = Looper.myLooper();
+        if (myLooper != null) {
+            myLooper.quit();
         }
     }
 
@@ -682,335 +675,145 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         return this.undoStore.canUndo();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x01d8  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x01df  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x0212  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x0249  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public android.graphics.Bitmap getBitmap(java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r22, android.graphics.Bitmap[] r23) {
-        /*
-            r21 = this;
-            r1 = r21
-            r2 = r22
-            org.telegram.ui.Components.Paint.RenderView r0 = r1.renderView
-            android.graphics.Bitmap r3 = r0.getResultBitmap()
-            java.math.BigInteger r0 = java.math.BigInteger.ONE
-            r1.lcm = r0
-            if (r3 == 0) goto L_0x0256
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r0 = r1.entitiesView
-            int r0 = r0.entitiesCount()
-            if (r0 <= 0) goto L_0x0256
-            r0 = 0
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r4 = r1.entitiesView
-            int r4 = r4.getChildCount()
-            r5 = 0
-        L_0x0020:
-            if (r5 >= r4) goto L_0x0254
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r6 = r1.entitiesView
-            android.view.View r6 = r6.getChildAt(r5)
-            boolean r7 = r6 instanceof org.telegram.ui.Components.Paint.Views.EntityView
-            if (r7 != 0) goto L_0x0030
-            r17 = r0
-            goto L_0x01ce
-        L_0x0030:
-            r7 = r6
-            org.telegram.ui.Components.Paint.Views.EntityView r7 = (org.telegram.ui.Components.Paint.Views.EntityView) r7
-            org.telegram.ui.Components.Point r8 = r7.getPosition()
-            r10 = 0
-            r11 = 2
-            if (r2 == 0) goto L_0x01d2
-            org.telegram.messenger.VideoEditedInfo$MediaEntity r12 = new org.telegram.messenger.VideoEditedInfo$MediaEntity
-            r12.<init>()
-            boolean r13 = r7 instanceof org.telegram.ui.Components.Paint.Views.TextPaintView
-            r14 = 1
-            if (r13 == 0) goto L_0x0075
-            r12.type = r14
-            r13 = r7
-            org.telegram.ui.Components.Paint.Views.TextPaintView r13 = (org.telegram.ui.Components.Paint.Views.TextPaintView) r13
-            java.lang.String r15 = r13.getText()
-            r12.text = r15
-            int r15 = r13.getType()
-            if (r15 != 0) goto L_0x005d
-            byte r9 = r12.subType
-            r9 = r9 | r14
-            byte r9 = (byte) r9
-            r12.subType = r9
-            goto L_0x0066
-        L_0x005d:
-            if (r15 != r11) goto L_0x0066
-            byte r9 = r12.subType
-            r9 = r9 | 4
-            byte r9 = (byte) r9
-            r12.subType = r9
-        L_0x0066:
-            org.telegram.ui.Components.Paint.Swatch r9 = r13.getSwatch()
-            int r9 = r9.color
-            r12.color = r9
-            int r9 = r13.getTextSize()
-            r12.fontSize = r9
-            goto L_0x00dd
-        L_0x0075:
-            boolean r9 = r7 instanceof org.telegram.ui.Components.Paint.Views.StickerView
-            if (r9 == 0) goto L_0x01cc
-            r12.type = r10
-            r9 = r7
-            org.telegram.ui.Components.Paint.Views.StickerView r9 = (org.telegram.ui.Components.Paint.Views.StickerView) r9
-            org.telegram.ui.Components.Size r13 = r9.getBaseSize()
-            float r15 = r13.width
-            r12.width = r15
-            float r15 = r13.height
-            r12.height = r15
-            org.telegram.tgnet.TLRPC$Document r15 = r9.getSticker()
-            r12.document = r15
-            java.lang.Object r15 = r9.getParentObject()
-            r12.parentObject = r15
-            org.telegram.tgnet.TLRPC$Document r15 = r9.getSticker()
-            java.io.File r16 = org.telegram.messenger.FileLoader.getPathToAttach(r15, r14)
-            java.lang.String r10 = r16.getAbsolutePath()
-            r12.text = r10
-            boolean r10 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r15, r14)
-            if (r10 == 0) goto L_0x00d0
-            byte r10 = r12.subType
-            r10 = r10 | r14
-            byte r10 = (byte) r10
-            r12.subType = r10
-            long r17 = r9.getDuration()
-            r19 = 0
-            int r10 = (r17 > r19 ? 1 : (r17 == r19 ? 0 : -1))
-            if (r10 == 0) goto L_0x00d0
-            java.math.BigInteger r10 = java.math.BigInteger.valueOf(r17)
-            java.math.BigInteger r14 = r1.lcm
-            java.math.BigInteger r14 = r14.multiply(r10)
-            java.math.BigInteger r11 = r1.lcm
-            java.math.BigInteger r11 = r11.gcd(r10)
-            java.math.BigInteger r11 = r14.divide(r11)
-            r1.lcm = r11
-        L_0x00d0:
-            boolean r10 = r9.isMirrored()
-            if (r10 == 0) goto L_0x00dd
-            byte r10 = r12.subType
-            r11 = 2
-            r10 = r10 | r11
-            byte r10 = (byte) r10
-            r12.subType = r10
-        L_0x00dd:
-            r2.add(r12)
-            float r9 = r6.getScaleX()
-            float r10 = r6.getScaleY()
-            float r11 = r6.getX()
-            float r13 = r6.getY()
-            int r14 = r6.getWidth()
-            r12.viewWidth = r14
-            int r14 = r6.getHeight()
-            r12.viewHeight = r14
-            int r14 = r6.getWidth()
-            float r14 = (float) r14
-            float r14 = r14 * r9
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r15 = r1.entitiesView
-            int r15 = r15.getMeasuredWidth()
-            float r15 = (float) r15
-            float r14 = r14 / r15
-            r12.width = r14
-            int r14 = r6.getHeight()
-            float r14 = (float) r14
-            float r14 = r14 * r10
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r15 = r1.entitiesView
-            int r15 = r15.getMeasuredHeight()
-            float r15 = (float) r15
-            float r14 = r14 / r15
-            r12.height = r14
-            int r14 = r6.getWidth()
-            float r14 = (float) r14
-            r15 = 1065353216(0x3var_, float:1.0)
-            float r17 = r15 - r9
-            float r14 = r14 * r17
-            r17 = 1073741824(0x40000000, float:2.0)
-            float r14 = r14 / r17
-            float r14 = r14 + r11
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r15 = r1.entitiesView
-            int r15 = r15.getMeasuredWidth()
-            float r15 = (float) r15
-            float r14 = r14 / r15
-            r12.x = r14
-            int r14 = r6.getHeight()
-            float r14 = (float) r14
-            r15 = 1065353216(0x3var_, float:1.0)
-            float r15 = r15 - r10
-            float r14 = r14 * r15
-            float r14 = r14 / r17
-            float r14 = r14 + r13
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r15 = r1.entitiesView
-            int r15 = r15.getMeasuredHeight()
-            float r15 = (float) r15
-            float r14 = r14 / r15
-            r12.y = r14
-            float r14 = r6.getRotation()
-            float r14 = -r14
-            double r14 = (double) r14
-            r17 = 4580687790476533049(0x3var_dvar_a2529d39, double:0.NUM)
-            java.lang.Double.isNaN(r14)
-            double r14 = r14 * r17
-            float r14 = (float) r14
-            r12.rotation = r14
-            int r14 = r6.getWidth()
-            r15 = 2
-            int r14 = r14 / r15
-            float r14 = (float) r14
-            float r14 = r14 + r11
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r15 = r1.entitiesView
-            int r15 = r15.getMeasuredWidth()
-            float r15 = (float) r15
-            float r14 = r14 / r15
-            r12.textViewX = r14
-            int r14 = r6.getHeight()
-            r15 = 2
-            int r14 = r14 / r15
-            float r14 = (float) r14
-            float r14 = r14 + r13
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r15 = r1.entitiesView
-            int r15 = r15.getMeasuredHeight()
-            float r15 = (float) r15
-            float r14 = r14 / r15
-            r12.textViewY = r14
-            int r14 = r12.viewWidth
-            float r14 = (float) r14
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r15 = r1.entitiesView
-            int r15 = r15.getMeasuredWidth()
-            float r15 = (float) r15
-            float r14 = r14 / r15
-            r12.textViewWidth = r14
-            int r14 = r12.viewHeight
-            float r14 = (float) r14
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r15 = r1.entitiesView
-            int r15 = r15.getMeasuredHeight()
-            float r15 = (float) r15
-            float r14 = r14 / r15
-            r12.textViewHeight = r14
-            r12.scale = r9
-            r14 = 0
-            r15 = r23[r14]
-            if (r15 != 0) goto L_0x01c9
-            int r15 = r3.getWidth()
-            int r14 = r3.getHeight()
-            r17 = r0
-            android.graphics.Bitmap$Config r0 = r3.getConfig()
-            android.graphics.Bitmap r0 = android.graphics.Bitmap.createBitmap(r15, r14, r0)
-            r14 = 0
-            r23[r14] = r0
-            android.graphics.Canvas r0 = new android.graphics.Canvas
-            r15 = r23[r14]
-            r0.<init>(r15)
-            r14 = 0
-            r15 = 0
-            r0.drawBitmap(r3, r14, r14, r15)
-            goto L_0x01d6
-        L_0x01c9:
-            r17 = r0
-            goto L_0x01d4
-        L_0x01cc:
-            r17 = r0
-        L_0x01ce:
-            r0 = r17
-            goto L_0x0250
-        L_0x01d2:
-            r17 = r0
-        L_0x01d4:
-            r0 = r17
-        L_0x01d6:
-            if (r0 != 0) goto L_0x01df
-            android.graphics.Canvas r9 = new android.graphics.Canvas
-            r9.<init>(r3)
-            r0 = r9
-            goto L_0x01e0
-        L_0x01df:
-            r9 = r0
-        L_0x01e0:
-            r9.save()
-            float r0 = r8.x
-            float r10 = r8.y
-            r9.translate(r0, r10)
-            float r0 = r6.getScaleX()
-            float r10 = r6.getScaleY()
-            r9.scale(r0, r10)
-            float r0 = r6.getRotation()
-            r9.rotate(r0)
-            int r0 = r7.getWidth()
-            int r0 = -r0
-            r10 = 2
-            int r0 = r0 / r10
-            float r0 = (float) r0
-            int r11 = r7.getHeight()
-            int r11 = -r11
-            int r11 = r11 / r10
-            float r10 = (float) r11
-            r9.translate(r0, r10)
-            boolean r0 = r6 instanceof org.telegram.ui.Components.Paint.Views.TextPaintView
-            if (r0 == 0) goto L_0x0249
-            int r0 = r6.getWidth()
-            int r10 = r6.getHeight()
-            android.graphics.Bitmap$Config r11 = android.graphics.Bitmap.Config.ARGB_8888
-            android.graphics.Bitmap r10 = org.telegram.messenger.Bitmaps.createBitmap(r0, r10, r11)
-            android.graphics.Canvas r0 = new android.graphics.Canvas
-            r0.<init>(r10)
-            r11 = r0
-            r6.draw(r11)
-            android.graphics.Rect r0 = new android.graphics.Rect
-            int r12 = r10.getWidth()
-            int r13 = r10.getHeight()
-            r14 = 0
-            r0.<init>(r14, r14, r12, r13)
-            r12 = 0
-            r9.drawBitmap(r10, r12, r0, r12)
-            r11.setBitmap(r12)     // Catch:{ Exception -> 0x023f }
-            goto L_0x0245
-        L_0x023f:
-            r0 = move-exception
-            r12 = r0
-            r0 = r12
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0245:
-            r10.recycle()
-            goto L_0x024c
-        L_0x0249:
-            r6.draw(r9)
-        L_0x024c:
-            r9.restore()
-            r0 = r9
-        L_0x0250:
-            int r5 = r5 + 1
-            goto L_0x0020
-        L_0x0254:
-            r17 = r0
-        L_0x0256:
-            return r3
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.getBitmap(java.util.ArrayList, android.graphics.Bitmap[]):android.graphics.Bitmap");
+    public Bitmap getBitmap(ArrayList<VideoEditedInfo.MediaEntity> arrayList, Bitmap[] bitmapArr) {
+        int i;
+        ArrayList<VideoEditedInfo.MediaEntity> arrayList2 = arrayList;
+        Bitmap resultBitmap = this.renderView.getResultBitmap();
+        this.lcm = BigInteger.ONE;
+        if (resultBitmap != null && this.entitiesView.entitiesCount() > 0) {
+            int childCount = this.entitiesView.getChildCount();
+            byte b = 0;
+            Canvas canvas = null;
+            int i2 = 0;
+            while (i2 < childCount) {
+                View childAt = this.entitiesView.getChildAt(i2);
+                if (childAt instanceof EntityView) {
+                    EntityView entityView = (EntityView) childAt;
+                    Point position = entityView.getPosition();
+                    if (arrayList2 != null) {
+                        VideoEditedInfo.MediaEntity mediaEntity = new VideoEditedInfo.MediaEntity();
+                        if (entityView instanceof TextPaintView) {
+                            mediaEntity.type = 1;
+                            TextPaintView textPaintView = (TextPaintView) entityView;
+                            mediaEntity.text = textPaintView.getText();
+                            int type = textPaintView.getType();
+                            if (type == 0) {
+                                mediaEntity.subType = (byte) (1 | mediaEntity.subType);
+                            } else if (type == 2) {
+                                mediaEntity.subType = (byte) (mediaEntity.subType | 4);
+                            }
+                            mediaEntity.color = textPaintView.getSwatch().color;
+                            mediaEntity.fontSize = textPaintView.getTextSize();
+                        } else if (entityView instanceof StickerView) {
+                            mediaEntity.type = b;
+                            StickerView stickerView = (StickerView) entityView;
+                            Size baseSize = stickerView.getBaseSize();
+                            mediaEntity.width = baseSize.width;
+                            mediaEntity.height = baseSize.height;
+                            mediaEntity.document = stickerView.getSticker();
+                            mediaEntity.parentObject = stickerView.getParentObject();
+                            TLRPC$Document sticker = stickerView.getSticker();
+                            mediaEntity.text = FileLoader.getPathToAttach(sticker, true).getAbsolutePath();
+                            if (MessageObject.isAnimatedStickerDocument(sticker, true)) {
+                                mediaEntity.subType = (byte) (mediaEntity.subType | 1);
+                                long duration = stickerView.getDuration();
+                                if (duration != 0) {
+                                    BigInteger valueOf = BigInteger.valueOf(duration);
+                                    this.lcm = this.lcm.multiply(valueOf).divide(this.lcm.gcd(valueOf));
+                                }
+                            }
+                            if (stickerView.isMirrored()) {
+                                mediaEntity.subType = (byte) (mediaEntity.subType | 2);
+                            }
+                        }
+                        arrayList2.add(mediaEntity);
+                        float scaleX = childAt.getScaleX();
+                        float scaleY = childAt.getScaleY();
+                        float x = childAt.getX();
+                        float y = childAt.getY();
+                        mediaEntity.viewWidth = childAt.getWidth();
+                        mediaEntity.viewHeight = childAt.getHeight();
+                        mediaEntity.width = (((float) childAt.getWidth()) * scaleX) / ((float) this.entitiesView.getMeasuredWidth());
+                        mediaEntity.height = (((float) childAt.getHeight()) * scaleY) / ((float) this.entitiesView.getMeasuredHeight());
+                        mediaEntity.x = (((((float) childAt.getWidth()) * (1.0f - scaleX)) / 2.0f) + x) / ((float) this.entitiesView.getMeasuredWidth());
+                        mediaEntity.y = (((((float) childAt.getHeight()) * (1.0f - scaleY)) / 2.0f) + y) / ((float) this.entitiesView.getMeasuredHeight());
+                        i = i2;
+                        double d = (double) (-childAt.getRotation());
+                        Double.isNaN(d);
+                        mediaEntity.rotation = (float) (d * 0.017453292519943295d);
+                        mediaEntity.textViewX = (x + ((float) (childAt.getWidth() / 2))) / ((float) this.entitiesView.getMeasuredWidth());
+                        mediaEntity.textViewY = (y + ((float) (childAt.getHeight() / 2))) / ((float) this.entitiesView.getMeasuredHeight());
+                        mediaEntity.textViewWidth = ((float) mediaEntity.viewWidth) / ((float) this.entitiesView.getMeasuredWidth());
+                        mediaEntity.textViewHeight = ((float) mediaEntity.viewHeight) / ((float) this.entitiesView.getMeasuredHeight());
+                        mediaEntity.scale = scaleX;
+                        if (bitmapArr[0] == null) {
+                            bitmapArr[0] = Bitmap.createBitmap(resultBitmap.getWidth(), resultBitmap.getHeight(), resultBitmap.getConfig());
+                            canvas = new Canvas(bitmapArr[0]);
+                            canvas.drawBitmap(resultBitmap, 0.0f, 0.0f, (Paint) null);
+                        }
+                    } else {
+                        i = i2;
+                    }
+                    if (canvas == null) {
+                        canvas = new Canvas(resultBitmap);
+                    }
+                    Canvas canvas2 = canvas;
+                    canvas2.save();
+                    canvas2.translate(position.x, position.y);
+                    canvas2.scale(childAt.getScaleX(), childAt.getScaleY());
+                    canvas2.rotate(childAt.getRotation());
+                    canvas2.translate((float) ((-entityView.getWidth()) / 2), (float) ((-entityView.getHeight()) / 2));
+                    if (childAt instanceof TextPaintView) {
+                        Bitmap createBitmap = Bitmaps.createBitmap(childAt.getWidth(), childAt.getHeight(), Bitmap.Config.ARGB_8888);
+                        Canvas canvas3 = new Canvas(createBitmap);
+                        childAt.draw(canvas3);
+                        canvas2.drawBitmap(createBitmap, (Rect) null, new Rect(0, 0, createBitmap.getWidth(), createBitmap.getHeight()), (Paint) null);
+                        try {
+                            canvas3.setBitmap((Bitmap) null);
+                        } catch (Exception e) {
+                            FileLog.e((Throwable) e);
+                        }
+                        createBitmap.recycle();
+                    } else {
+                        childAt.draw(canvas2);
+                    }
+                    canvas2.restore();
+                    canvas = canvas2;
+                    i2 = i + 1;
+                    b = 0;
+                }
+                i = i2;
+                i2 = i + 1;
+                b = 0;
+            }
+        }
+        return resultBitmap;
     }
 
     public long getLcm() {
         return this.lcm.longValue();
     }
 
-    public void maybeShowDismissalAlert(PhotoViewer photoViewer, Activity parentActivity, Runnable okRunnable) {
+    public void maybeShowDismissalAlert(PhotoViewer photoViewer, Activity activity, Runnable runnable) {
         if (this.editingText) {
             closeTextEnter(false);
         } else if (!hasChanges()) {
-            okRunnable.run();
-        } else if (parentActivity != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) parentActivity);
+            runnable.run();
+        } else if (activity != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
             builder.setMessage(LocaleController.getString("PhotoEditorDiscardAlert", NUM));
             builder.setTitle(LocaleController.getString("DiscardChanges", NUM));
-            builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new PhotoPaintView$$ExternalSyntheticLambda0(okRunnable));
+            builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new PhotoPaintView$$ExternalSyntheticLambda0(runnable));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             photoViewer.showAlertDialog(builder);
         }
     }
 
     /* access modifiers changed from: private */
-    public void setCurrentSwatch(Swatch swatch, boolean updateInterface) {
+    public void setCurrentSwatch(Swatch swatch, boolean z) {
         this.renderView.setColor(swatch.color);
         this.renderView.setBrushSize(swatch.brushWeight);
-        if (updateInterface) {
+        if (z) {
             if (this.brushSwatch == null && this.paintButton.getColorFilter() != null) {
                 this.brushSwatch = this.colorPicker.getSwatch();
             }
@@ -1023,44 +826,44 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     /* access modifiers changed from: private */
-    public void setDimVisibility(final boolean visible) {
-        Animator animator;
-        if (visible) {
+    public void setDimVisibility(final boolean z) {
+        ObjectAnimator objectAnimator;
+        if (z) {
             this.dimView.setVisibility(0);
-            animator = ObjectAnimator.ofFloat(this.dimView, View.ALPHA, new float[]{0.0f, 1.0f});
+            objectAnimator = ObjectAnimator.ofFloat(this.dimView, View.ALPHA, new float[]{0.0f, 1.0f});
         } else {
-            animator = ObjectAnimator.ofFloat(this.dimView, View.ALPHA, new float[]{1.0f, 0.0f});
+            objectAnimator = ObjectAnimator.ofFloat(this.dimView, View.ALPHA, new float[]{1.0f, 0.0f});
         }
-        animator.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                if (!visible) {
+        objectAnimator.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animator) {
+                if (!z) {
                     PhotoPaintView.this.dimView.setVisibility(8);
                 }
             }
         });
-        animator.setDuration(200);
-        animator.start();
+        objectAnimator.setDuration(200);
+        objectAnimator.start();
     }
 
-    private void setTextDimVisibility(final boolean visible, EntityView view) {
-        Animator animator;
-        if (visible && view != null) {
-            ViewGroup parent = (ViewGroup) view.getParent();
+    private void setTextDimVisibility(final boolean z, EntityView entityView) {
+        ObjectAnimator objectAnimator;
+        if (z && entityView != null) {
+            ViewGroup viewGroup = (ViewGroup) entityView.getParent();
             if (this.textDimView.getParent() != null) {
                 ((EntitiesContainerView) this.textDimView.getParent()).removeView(this.textDimView);
             }
-            parent.addView(this.textDimView, parent.indexOfChild(view));
+            viewGroup.addView(this.textDimView, viewGroup.indexOfChild(entityView));
         }
-        view.setSelectionVisibility(!visible);
-        if (visible) {
+        entityView.setSelectionVisibility(!z);
+        if (z) {
             this.textDimView.setVisibility(0);
-            animator = ObjectAnimator.ofFloat(this.textDimView, View.ALPHA, new float[]{0.0f, 1.0f});
+            objectAnimator = ObjectAnimator.ofFloat(this.textDimView, View.ALPHA, new float[]{0.0f, 1.0f});
         } else {
-            animator = ObjectAnimator.ofFloat(this.textDimView, View.ALPHA, new float[]{1.0f, 0.0f});
+            objectAnimator = ObjectAnimator.ofFloat(this.textDimView, View.ALPHA, new float[]{1.0f, 0.0f});
         }
-        animator.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                if (!visible) {
+        objectAnimator.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animator) {
+                if (!z) {
                     PhotoPaintView.this.textDimView.setVisibility(8);
                     if (PhotoPaintView.this.textDimView.getParent() != null) {
                         ((EntitiesContainerView) PhotoPaintView.this.textDimView.getParent()).removeView(PhotoPaintView.this.textDimView);
@@ -1068,77 +871,80 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 }
             }
         });
-        animator.setDuration(200);
-        animator.start();
+        objectAnimator.setDuration(200);
+        objectAnimator.start();
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        float bitmapH;
-        float bitmapW;
+    public void onMeasure(int i, int i2) {
+        float f;
+        float f2;
         this.ignoreLayout = true;
-        int width = View.MeasureSpec.getSize(widthMeasureSpec);
-        int height = View.MeasureSpec.getSize(heightMeasureSpec);
-        setMeasuredDimension(width, height);
-        int maxHeight = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(48.0f);
+        int size = View.MeasureSpec.getSize(i);
+        int size2 = View.MeasureSpec.getSize(i2);
+        setMeasuredDimension(size, size2);
+        int currentActionBarHeight = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(48.0f);
         Bitmap bitmap = this.bitmapToEdit;
         if (bitmap != null) {
-            bitmapW = (float) bitmap.getWidth();
-            bitmapH = (float) this.bitmapToEdit.getHeight();
+            f = (float) bitmap.getWidth();
+            f2 = (float) this.bitmapToEdit.getHeight();
         } else {
-            bitmapW = (float) width;
-            bitmapH = (float) ((height - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(48.0f));
+            f2 = (float) ((size2 - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(48.0f));
+            f = (float) size;
         }
-        float renderWidth = (float) width;
-        float renderHeight = (float) Math.floor((double) ((renderWidth * bitmapH) / bitmapW));
-        if (renderHeight > ((float) maxHeight)) {
-            renderHeight = (float) maxHeight;
-            renderWidth = (float) Math.floor((double) ((renderHeight * bitmapW) / bitmapH));
+        float f3 = (float) size;
+        float floor = (float) Math.floor((double) ((f3 * f2) / f));
+        float f4 = (float) currentActionBarHeight;
+        if (floor > f4) {
+            f3 = (float) Math.floor((double) ((f * f4) / f2));
+            floor = f4;
         }
-        this.renderView.measure(View.MeasureSpec.makeMeasureSpec((int) renderWidth, NUM), View.MeasureSpec.makeMeasureSpec((int) renderHeight, NUM));
-        float f = renderWidth / this.paintingSize.width;
-        this.baseScale = f;
-        this.entitiesView.setScaleX(f);
+        int i3 = (int) f3;
+        int i4 = (int) floor;
+        this.renderView.measure(View.MeasureSpec.makeMeasureSpec(i3, NUM), View.MeasureSpec.makeMeasureSpec(i4, NUM));
+        float f5 = f3 / this.paintingSize.width;
+        this.baseScale = f5;
+        this.entitiesView.setScaleX(f5);
         this.entitiesView.setScaleY(this.baseScale);
         this.entitiesView.measure(View.MeasureSpec.makeMeasureSpec((int) this.paintingSize.width, NUM), View.MeasureSpec.makeMeasureSpec((int) this.paintingSize.height, NUM));
-        this.dimView.measure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(maxHeight, Integer.MIN_VALUE));
+        this.dimView.measure(i, View.MeasureSpec.makeMeasureSpec(currentActionBarHeight, Integer.MIN_VALUE));
         EntityView entityView = this.currentEntityView;
         if (entityView != null) {
             entityView.updateSelectionView();
         }
-        this.selectionContainerView.measure(View.MeasureSpec.makeMeasureSpec((int) renderWidth, NUM), View.MeasureSpec.makeMeasureSpec((int) renderHeight, NUM));
-        this.colorPicker.measure(View.MeasureSpec.makeMeasureSpec(width, NUM), View.MeasureSpec.makeMeasureSpec(maxHeight, NUM));
-        this.toolsView.measure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
-        this.curtainView.measure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(maxHeight, NUM));
+        this.selectionContainerView.measure(View.MeasureSpec.makeMeasureSpec(i3, NUM), View.MeasureSpec.makeMeasureSpec(i4, NUM));
+        this.colorPicker.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(currentActionBarHeight, NUM));
+        this.toolsView.measure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+        this.curtainView.measure(i, View.MeasureSpec.makeMeasureSpec(currentActionBarHeight, NUM));
         this.ignoreLayout = false;
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int width = right - left;
-        int height = bottom - top;
-        int status = (Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight;
-        int actionBarHeight = ActionBar.getCurrentActionBarHeight();
-        int actionBarHeight2 = actionBarHeight + status;
-        int dp = (AndroidUtilities.displaySize.y - actionBarHeight) - AndroidUtilities.dp(48.0f);
-        int x = (int) Math.ceil((double) ((width - this.renderView.getMeasuredWidth()) / 2));
-        int y = ((((height - actionBarHeight2) - AndroidUtilities.dp(48.0f)) - this.renderView.getMeasuredHeight()) / 2) + AndroidUtilities.dp(8.0f) + status;
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        int i5 = i3 - i;
+        int i6 = i4 - i2;
+        int i7 = (Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight;
+        int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + i7;
+        int i8 = AndroidUtilities.displaySize.y;
+        AndroidUtilities.dp(48.0f);
+        int ceil = (int) Math.ceil((double) ((i5 - this.renderView.getMeasuredWidth()) / 2));
+        int dp = ((((i6 - currentActionBarHeight) - AndroidUtilities.dp(48.0f)) - this.renderView.getMeasuredHeight()) / 2) + AndroidUtilities.dp(8.0f) + i7;
         RenderView renderView2 = this.renderView;
-        renderView2.layout(x, y, renderView2.getMeasuredWidth() + x, this.renderView.getMeasuredHeight() + y);
-        int x2 = ((this.renderView.getMeasuredWidth() - this.entitiesView.getMeasuredWidth()) / 2) + x;
-        int y2 = ((this.renderView.getMeasuredHeight() - this.entitiesView.getMeasuredHeight()) / 2) + y;
+        renderView2.layout(ceil, dp, renderView2.getMeasuredWidth() + ceil, this.renderView.getMeasuredHeight() + dp);
+        int measuredWidth = ((this.renderView.getMeasuredWidth() - this.entitiesView.getMeasuredWidth()) / 2) + ceil;
+        int measuredHeight = ((this.renderView.getMeasuredHeight() - this.entitiesView.getMeasuredHeight()) / 2) + dp;
         EntitiesContainerView entitiesContainerView = this.entitiesView;
-        entitiesContainerView.layout(x2, y2, entitiesContainerView.getMeasuredWidth() + x2, this.entitiesView.getMeasuredHeight() + y2);
+        entitiesContainerView.layout(measuredWidth, measuredHeight, entitiesContainerView.getMeasuredWidth() + measuredWidth, this.entitiesView.getMeasuredHeight() + measuredHeight);
         FrameLayout frameLayout = this.dimView;
-        frameLayout.layout(0, status, frameLayout.getMeasuredWidth(), this.dimView.getMeasuredHeight() + status);
+        frameLayout.layout(0, i7, frameLayout.getMeasuredWidth(), this.dimView.getMeasuredHeight() + i7);
         FrameLayout frameLayout2 = this.selectionContainerView;
-        frameLayout2.layout(x, y, frameLayout2.getMeasuredWidth() + x, this.selectionContainerView.getMeasuredHeight() + y);
+        frameLayout2.layout(ceil, dp, frameLayout2.getMeasuredWidth() + ceil, this.selectionContainerView.getMeasuredHeight() + dp);
         ColorPicker colorPicker2 = this.colorPicker;
-        colorPicker2.layout(0, actionBarHeight2, colorPicker2.getMeasuredWidth(), this.colorPicker.getMeasuredHeight() + actionBarHeight2);
+        colorPicker2.layout(0, currentActionBarHeight, colorPicker2.getMeasuredWidth(), this.colorPicker.getMeasuredHeight() + currentActionBarHeight);
         FrameLayout frameLayout3 = this.toolsView;
-        frameLayout3.layout(0, height - frameLayout3.getMeasuredHeight(), this.toolsView.getMeasuredWidth(), height);
+        frameLayout3.layout(0, i6 - frameLayout3.getMeasuredHeight(), this.toolsView.getMeasuredWidth(), i6);
         FrameLayout frameLayout4 = this.curtainView;
-        frameLayout4.layout(0, y, frameLayout4.getMeasuredWidth(), this.curtainView.getMeasuredHeight() + y);
+        frameLayout4.layout(0, dp, frameLayout4.getMeasuredWidth(), this.curtainView.getMeasuredHeight() + dp);
     }
 
     public void requestLayout() {
@@ -1156,28 +962,25 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         return true;
     }
 
-    public float[] getTransformedTouch(float x, float y) {
-        float x2 = x - ((float) (AndroidUtilities.displaySize.x / 2));
-        float y2 = y - ((float) (AndroidUtilities.displaySize.y / 2));
-        float rotation = (float) Math.toRadians((double) (-this.entitiesView.getRotation()));
+    public float[] getTransformedTouch(float f, float f2) {
+        Point point = AndroidUtilities.displaySize;
+        float f3 = f - ((float) (point.x / 2));
+        float f4 = f2 - ((float) (point.y / 2));
         float[] fArr = this.temp;
-        double d = (double) x2;
-        double cos = Math.cos((double) rotation);
+        double d = (double) f3;
+        double radians = (double) ((float) Math.toRadians((double) (-this.entitiesView.getRotation())));
+        double cos = Math.cos(radians);
         Double.isNaN(d);
-        double d2 = d * cos;
-        double d3 = (double) y2;
-        double sin = Math.sin((double) rotation);
-        Double.isNaN(d3);
-        fArr[0] = ((float) (d2 - (d3 * sin))) + ((float) (AndroidUtilities.displaySize.x / 2));
+        double d2 = (double) f4;
+        double sin = Math.sin(radians);
+        Double.isNaN(d2);
+        fArr[0] = ((float) ((cos * d) - (sin * d2))) + ((float) (AndroidUtilities.displaySize.x / 2));
         float[] fArr2 = this.temp;
-        double d4 = (double) x2;
-        double sin2 = Math.sin((double) rotation);
-        Double.isNaN(d4);
-        double d5 = d4 * sin2;
-        double d6 = (double) y2;
-        double cos2 = Math.cos((double) rotation);
-        Double.isNaN(d6);
-        fArr2[1] = ((float) (d5 + (d6 * cos2))) + ((float) (AndroidUtilities.displaySize.y / 2));
+        double sin2 = Math.sin(radians);
+        Double.isNaN(d);
+        double cos2 = Math.cos(radians);
+        Double.isNaN(d2);
+        fArr2[1] = ((float) ((d * sin2) + (d2 * cos2))) + ((float) (AndroidUtilities.displaySize.y / 2));
         return this.temp;
     }
 
@@ -1190,222 +993,224 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     /* access modifiers changed from: protected */
-    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
-        View view = child;
-        boolean restore = false;
-        if (view != this.renderView && view != this.entitiesView && view != this.selectionContainerView) {
-            Canvas canvas2 = canvas;
-        } else if (this.currentCropState != null) {
+    public boolean drawChild(Canvas canvas, View view, long j) {
+        int i = 0;
+        if ((view == this.renderView || view == this.entitiesView || view == this.selectionContainerView) && this.currentCropState != null) {
             canvas.save();
-            int status = (Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight;
-            int actionBarHeight2 = ActionBar.getCurrentActionBarHeight() + status;
-            int vw = child.getMeasuredWidth();
-            int vh = child.getMeasuredHeight();
-            int tr = this.currentCropState.transformRotation;
-            if (tr == 90 || tr == 270) {
-                int temp2 = vw;
-                vw = vh;
-                vh = temp2;
+            if (Build.VERSION.SDK_INT >= 21 && !this.inBubbleMode) {
+                i = AndroidUtilities.statusBarHeight;
             }
-            int w = (int) (((((float) vw) * this.currentCropState.cropPw) * child.getScaleX()) / this.currentCropState.cropScale);
-            int h = (int) (((((float) vh) * this.currentCropState.cropPh) * child.getScaleY()) / this.currentCropState.cropScale);
-            float x = ((float) Math.ceil((double) ((getMeasuredWidth() - w) / 2))) + this.transformX;
-            float y = ((float) (((((getMeasuredHeight() - actionBarHeight2) - AndroidUtilities.dp(48.0f)) - h) / 2) + AndroidUtilities.dp(8.0f) + status)) + this.transformY;
-            canvas.clipRect(Math.max(0.0f, x), Math.max(0.0f, y), Math.min(((float) w) + x, (float) getMeasuredWidth()), Math.min((float) getMeasuredHeight(), ((float) h) + y));
-            restore = true;
-        } else {
-            Canvas canvas3 = canvas;
+            int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + i;
+            int measuredWidth = view.getMeasuredWidth();
+            int measuredHeight = view.getMeasuredHeight();
+            MediaController.CropState cropState = this.currentCropState;
+            int i2 = cropState.transformRotation;
+            if (i2 == 90 || i2 == 270) {
+                int i3 = measuredHeight;
+                measuredHeight = measuredWidth;
+                measuredWidth = i3;
+            }
+            float scaleX = ((float) measuredWidth) * cropState.cropPw * view.getScaleX();
+            MediaController.CropState cropState2 = this.currentCropState;
+            int i4 = (int) (scaleX / cropState2.cropScale);
+            int scaleY = (int) (((((float) measuredHeight) * cropState2.cropPh) * view.getScaleY()) / this.currentCropState.cropScale);
+            float ceil = ((float) Math.ceil((double) ((getMeasuredWidth() - i4) / 2))) + this.transformX;
+            float measuredHeight2 = ((float) (((((getMeasuredHeight() - currentActionBarHeight) - AndroidUtilities.dp(48.0f)) - scaleY) / 2) + AndroidUtilities.dp(8.0f) + i)) + this.transformY;
+            canvas.clipRect(Math.max(0.0f, ceil), Math.max(0.0f, measuredHeight2), Math.min(ceil + ((float) i4), (float) getMeasuredWidth()), Math.min((float) getMeasuredHeight(), measuredHeight2 + ((float) scaleY)));
+            i = 1;
         }
-        boolean result = super.drawChild(canvas, child, drawingTime);
-        if (restore) {
+        boolean drawChild = super.drawChild(canvas, view, j);
+        if (i != 0) {
             canvas.restore();
         }
-        return result;
+        return drawChild;
     }
 
     private Point centerPositionForEntity() {
         Size paintingSize2 = getPaintingSize();
-        float x = paintingSize2.width / 2.0f;
-        float y = paintingSize2.height / 2.0f;
+        float f = paintingSize2.width / 2.0f;
+        float f2 = paintingSize2.height / 2.0f;
         MediaController.CropState cropState = this.currentCropState;
         if (cropState != null) {
-            float rotation = (float) Math.toRadians((double) (-(((float) cropState.transformRotation) + this.currentCropState.cropRotate)));
+            float radians = (float) Math.toRadians((double) (-(((float) cropState.transformRotation) + cropState.cropRotate)));
             double d = (double) this.currentCropState.cropPx;
-            double cos = Math.cos((double) rotation);
+            double d2 = (double) radians;
+            double cos = Math.cos(d2);
             Double.isNaN(d);
-            double d2 = d * cos;
-            double d3 = (double) this.currentCropState.cropPy;
-            double sin = Math.sin((double) rotation);
-            Double.isNaN(d3);
-            double d4 = (double) this.currentCropState.cropPx;
-            double sin2 = Math.sin((double) rotation);
+            double d3 = d * cos;
+            double d4 = (double) this.currentCropState.cropPy;
+            double sin = Math.sin(d2);
             Double.isNaN(d4);
-            double d5 = d4 * sin2;
-            double d6 = (double) this.currentCropState.cropPy;
-            double cos2 = Math.cos((double) rotation);
-            Double.isNaN(d6);
-            x -= paintingSize2.width * ((float) (d2 - (d3 * sin)));
-            y -= paintingSize2.height * ((float) (d5 + (d6 * cos2)));
+            float f3 = (float) (d3 - (d4 * sin));
+            double d5 = (double) this.currentCropState.cropPx;
+            double sin2 = Math.sin(d2);
+            Double.isNaN(d5);
+            double d6 = d5 * sin2;
+            double d7 = (double) this.currentCropState.cropPy;
+            double cos2 = Math.cos(d2);
+            Double.isNaN(d7);
+            f -= f3 * paintingSize2.width;
+            f2 -= ((float) (d6 + (d7 * cos2))) * paintingSize2.height;
         }
-        return new Point(x, y);
+        return new Point(f, f2);
     }
 
     private Point startPositionRelativeToEntity(EntityView entityView) {
-        float offset = 200.0f;
         MediaController.CropState cropState = this.currentCropState;
+        float f = 200.0f;
         if (cropState != null) {
-            offset = 200.0f / cropState.cropScale;
+            f = 200.0f / cropState.cropScale;
         }
         if (entityView != null) {
             Point position = entityView.getPosition();
-            return new Point(position.x + offset, position.y + offset);
+            return new Point(position.x + f, position.y + f);
         }
-        float minimalDistance = 100.0f;
-        MediaController.CropState cropState2 = this.currentCropState;
-        if (cropState2 != null) {
-            minimalDistance = 100.0f / cropState2.cropScale;
+        float f2 = 100.0f;
+        if (cropState != null) {
+            f2 = 100.0f / cropState.cropScale;
         }
-        Point position2 = centerPositionForEntity();
+        Point centerPositionForEntity = centerPositionForEntity();
         while (true) {
-            boolean occupied = false;
-            for (int index = 0; index < this.entitiesView.getChildCount(); index++) {
-                View view = this.entitiesView.getChildAt(index);
-                if (view instanceof EntityView) {
-                    Point location = ((EntityView) view).getPosition();
-                    if (((float) Math.sqrt(Math.pow((double) (location.x - position2.x), 2.0d) + Math.pow((double) (location.y - position2.y), 2.0d))) < minimalDistance) {
-                        occupied = true;
+            boolean z = false;
+            for (int i = 0; i < this.entitiesView.getChildCount(); i++) {
+                View childAt = this.entitiesView.getChildAt(i);
+                if (childAt instanceof EntityView) {
+                    Point position2 = ((EntityView) childAt).getPosition();
+                    if (((float) Math.sqrt(Math.pow((double) (position2.x - centerPositionForEntity.x), 2.0d) + Math.pow((double) (position2.y - centerPositionForEntity.y), 2.0d))) < f2) {
+                        z = true;
                     }
                 }
             }
-            if (!occupied) {
-                return position2;
+            if (!z) {
+                return centerPositionForEntity;
             }
-            position2 = new Point(position2.x + offset, position2.y + offset);
+            centerPositionForEntity = new Point(centerPositionForEntity.x + f, centerPositionForEntity.y + f);
         }
     }
 
-    public ArrayList<TLRPC.InputDocument> getMasks() {
-        ArrayList<TLRPC.InputDocument> result = null;
-        int count = this.entitiesView.getChildCount();
-        for (int a = 0; a < count; a++) {
-            View child = this.entitiesView.getChildAt(a);
-            if (child instanceof StickerView) {
-                TLRPC.Document document = ((StickerView) child).getSticker();
-                if (result == null) {
-                    result = new ArrayList<>();
+    public ArrayList<TLRPC$InputDocument> getMasks() {
+        int childCount = this.entitiesView.getChildCount();
+        ArrayList<TLRPC$InputDocument> arrayList = null;
+        for (int i = 0; i < childCount; i++) {
+            View childAt = this.entitiesView.getChildAt(i);
+            if (childAt instanceof StickerView) {
+                TLRPC$Document sticker = ((StickerView) childAt).getSticker();
+                if (arrayList == null) {
+                    arrayList = new ArrayList<>();
                 }
-                TLRPC.TL_inputDocument inputDocument = new TLRPC.TL_inputDocument();
-                inputDocument.id = document.id;
-                inputDocument.access_hash = document.access_hash;
-                inputDocument.file_reference = document.file_reference;
-                if (inputDocument.file_reference == null) {
-                    inputDocument.file_reference = new byte[0];
+                TLRPC$TL_inputDocument tLRPC$TL_inputDocument = new TLRPC$TL_inputDocument();
+                tLRPC$TL_inputDocument.id = sticker.id;
+                tLRPC$TL_inputDocument.access_hash = sticker.access_hash;
+                byte[] bArr = sticker.file_reference;
+                tLRPC$TL_inputDocument.file_reference = bArr;
+                if (bArr == null) {
+                    tLRPC$TL_inputDocument.file_reference = new byte[0];
                 }
-                result.add(inputDocument);
+                arrayList.add(tLRPC$TL_inputDocument);
             }
         }
-        return result;
+        return arrayList;
     }
 
-    public void setTransform(float scale, float trX, float trY, float imageWidth, float imageHeight) {
+    public void setTransform(float f, float f2, float f3, float f4, float f5) {
         View view;
-        float rotation;
-        float rotation2;
-        float tx;
-        float f = trX;
-        float f2 = trY;
-        this.transformX = f;
-        this.transformY = f2;
-        int a = 0;
-        while (a < 3) {
-            float tx2 = 1.0f;
-            if (a == 0) {
+        float f6;
+        float f7;
+        float f8;
+        float f9;
+        float var_ = f2;
+        float var_ = f3;
+        this.transformX = var_;
+        this.transformY = var_;
+        for (int i = 0; i < 3; i++) {
+            float var_ = 1.0f;
+            if (i == 0) {
                 view = this.entitiesView;
-            } else if (a == 1) {
+            } else if (i == 1) {
                 view = this.selectionContainerView;
             } else {
                 view = this.renderView;
             }
             MediaController.CropState cropState = this.currentCropState;
             if (cropState != null) {
-                float additionlScale = 1.0f * cropState.cropScale;
-                int w = view.getMeasuredWidth();
-                int h = view.getMeasuredHeight();
-                int tr = this.currentCropState.transformRotation;
-                int fw = w;
-                int rotatedW = w;
-                int fh = h;
-                int rotatedH = h;
-                if (tr == 90 || tr == 270) {
-                    int temp2 = fw;
-                    rotatedW = fh;
-                    fw = fh;
-                    rotatedH = temp2;
-                    fh = temp2;
+                float var_ = cropState.cropScale * 1.0f;
+                int measuredWidth = view.getMeasuredWidth();
+                int measuredHeight = view.getMeasuredHeight();
+                MediaController.CropState cropState2 = this.currentCropState;
+                int i2 = cropState2.transformRotation;
+                if (i2 == 90 || i2 == 270) {
+                    int i3 = measuredHeight;
+                    measuredHeight = measuredWidth;
+                    measuredWidth = i3;
                 }
-                float sc = Math.max(imageWidth / ((float) ((int) (((float) fw) * this.currentCropState.cropPw))), imageHeight / ((float) ((int) (((float) fh) * this.currentCropState.cropPh))));
-                float additionlScale2 = additionlScale * sc;
-                float tx3 = f + (this.currentCropState.cropPx * ((float) rotatedW) * scale * sc * this.currentCropState.cropScale);
-                rotation = this.currentCropState.cropRotate + ((float) tr);
-                tx = f2 + (this.currentCropState.cropPy * ((float) rotatedH) * scale * sc * this.currentCropState.cropScale);
-                rotation2 = tx3;
-                tx2 = additionlScale2;
+                float var_ = (float) measuredWidth;
+                float var_ = (float) measuredHeight;
+                float max = Math.max(f4 / ((float) ((int) (cropState2.cropPw * var_))), f5 / ((float) ((int) (cropState2.cropPh * var_))));
+                f8 = var_ * max;
+                MediaController.CropState cropState3 = this.currentCropState;
+                float var_ = cropState3.cropScale;
+                f6 = (cropState3.cropPx * var_ * f * max * var_) + var_;
+                f9 = var_ + (cropState3.cropPy * var_ * f * max * var_);
+                f7 = cropState3.cropRotate + ((float) i2);
             } else {
-                if (a == 0) {
-                    tx2 = 1.0f * this.baseScale;
+                if (i == 0) {
+                    var_ = 1.0f * this.baseScale;
                 }
-                rotation2 = trX;
-                tx = trY;
-                rotation = 0.0f;
+                f6 = var_;
+                f8 = var_;
+                f7 = 0.0f;
+                f9 = var_;
             }
-            view.setScaleX(scale * tx2);
-            view.setScaleY(scale * tx2);
-            view.setTranslationX(rotation2);
-            view.setTranslationY(tx);
-            view.setRotation(rotation);
+            float var_ = f8 * f;
+            view.setScaleX(var_);
+            view.setScaleY(var_);
+            view.setTranslationX(f6);
+            view.setTranslationY(f9);
+            view.setRotation(f7);
             view.invalidate();
-            a++;
-            f = trX;
         }
         invalidate();
     }
 
     /* access modifiers changed from: private */
     public boolean selectEntity(EntityView entityView) {
-        boolean changed = false;
+        boolean z;
         EntityView entityView2 = this.currentEntityView;
-        if (entityView2 != null) {
-            if (entityView2 == entityView) {
-                if (!this.editingText) {
-                    showMenuForEntity(entityView2);
-                }
-                return true;
+        boolean z2 = true;
+        if (entityView2 == null) {
+            z = false;
+        } else if (entityView2 == entityView) {
+            if (!this.editingText) {
+                showMenuForEntity(entityView2);
             }
+            return true;
+        } else {
             entityView2.deselect();
-            changed = true;
-        }
-        EntityView oldEntity = this.currentEntityView;
-        this.currentEntityView = entityView;
-        if ((oldEntity instanceof TextPaintView) && TextUtils.isEmpty(((TextPaintView) oldEntity).getText())) {
-            m2481x59ab8b73(oldEntity);
+            z = true;
         }
         EntityView entityView3 = this.currentEntityView;
-        if (entityView3 != null) {
-            entityView3.select(this.selectionContainerView);
+        this.currentEntityView = entityView;
+        if ((entityView3 instanceof TextPaintView) && TextUtils.isEmpty(((TextPaintView) entityView3).getText())) {
+            lambda$registerRemovalUndo$9(entityView3);
+        }
+        EntityView entityView4 = this.currentEntityView;
+        if (entityView4 != null) {
+            entityView4.select(this.selectionContainerView);
             this.entitiesView.bringViewToFront(this.currentEntityView);
-            EntityView entityView4 = this.currentEntityView;
-            if (entityView4 instanceof TextPaintView) {
-                setCurrentSwatch(((TextPaintView) entityView4).getSwatch(), true);
+            EntityView entityView5 = this.currentEntityView;
+            if (entityView5 instanceof TextPaintView) {
+                setCurrentSwatch(((TextPaintView) entityView5).getSwatch(), true);
             }
-            changed = true;
+        } else {
+            z2 = z;
         }
         updateSettingsButton();
-        return changed;
+        return z2;
     }
 
     /* access modifiers changed from: private */
     /* renamed from: removeEntity */
-    public void m2481x59ab8b73(EntityView entityView) {
+    public void lambda$registerRemovalUndo$9(EntityView entityView) {
         EntityView entityView2 = this.currentEntityView;
         if (entityView == entityView2) {
             entityView2.deselect();
@@ -1419,123 +1224,74 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         this.undoStore.unregisterUndo(entityView.getUUID());
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v0, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v1, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v2, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v3, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v3, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
-    /* JADX WARNING: Multi-variable type inference failed */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void duplicateSelectedEntity() {
-        /*
-            r6 = this;
-            org.telegram.ui.Components.Paint.Views.EntityView r0 = r6.currentEntityView
-            if (r0 != 0) goto L_0x0005
-            return
-        L_0x0005:
-            r1 = 0
-            org.telegram.ui.Components.Point r0 = r6.startPositionRelativeToEntity(r0)
-            org.telegram.ui.Components.Paint.Views.EntityView r2 = r6.currentEntityView
-            boolean r3 = r2 instanceof org.telegram.ui.Components.Paint.Views.StickerView
-            if (r3 == 0) goto L_0x0027
-            org.telegram.ui.Components.Paint.Views.StickerView r2 = new org.telegram.ui.Components.Paint.Views.StickerView
-            android.content.Context r3 = r6.getContext()
-            org.telegram.ui.Components.Paint.Views.EntityView r4 = r6.currentEntityView
-            org.telegram.ui.Components.Paint.Views.StickerView r4 = (org.telegram.ui.Components.Paint.Views.StickerView) r4
-            r2.<init>(r3, r4, r0)
-            r2.setDelegate(r6)
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r3 = r6.entitiesView
-            r3.addView(r2)
-            r1 = r2
-            goto L_0x0056
-        L_0x0027:
-            boolean r2 = r2 instanceof org.telegram.ui.Components.Paint.Views.TextPaintView
-            if (r2 == 0) goto L_0x0056
-            org.telegram.ui.Components.Paint.Views.TextPaintView r2 = new org.telegram.ui.Components.Paint.Views.TextPaintView
-            android.content.Context r3 = r6.getContext()
-            org.telegram.ui.Components.Paint.Views.EntityView r4 = r6.currentEntityView
-            org.telegram.ui.Components.Paint.Views.TextPaintView r4 = (org.telegram.ui.Components.Paint.Views.TextPaintView) r4
-            r2.<init>(r3, r4, r0)
-            r2.setDelegate(r6)
-            org.telegram.ui.Components.Size r3 = r6.getPaintingSize()
-            float r3 = r3.width
-            r4 = 1101004800(0x41a00000, float:20.0)
-            float r3 = r3 - r4
-            int r3 = (int) r3
-            r2.setMaxWidth(r3)
-            org.telegram.ui.Components.Paint.Views.EntitiesContainerView r3 = r6.entitiesView
-            r4 = -2
-            r5 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r5)
-            r3.addView(r2, r4)
-            r1 = r2
-            goto L_0x0057
-        L_0x0056:
-        L_0x0057:
-            r6.registerRemovalUndo(r1)
-            r6.selectEntity(r1)
-            r6.updateSettingsButton()
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.duplicateSelectedEntity():void");
+        EntityView entityView = this.currentEntityView;
+        if (entityView != null) {
+            StickerView stickerView = null;
+            Point startPositionRelativeToEntity = startPositionRelativeToEntity(entityView);
+            EntityView entityView2 = this.currentEntityView;
+            if (entityView2 instanceof StickerView) {
+                StickerView stickerView2 = new StickerView(getContext(), (StickerView) this.currentEntityView, startPositionRelativeToEntity);
+                stickerView2.setDelegate(this);
+                this.entitiesView.addView(stickerView2);
+                stickerView = stickerView2;
+            } else if (entityView2 instanceof TextPaintView) {
+                TextPaintView textPaintView = new TextPaintView(getContext(), (TextPaintView) this.currentEntityView, startPositionRelativeToEntity);
+                textPaintView.setDelegate(this);
+                textPaintView.setMaxWidth((int) (getPaintingSize().width - 20.0f));
+                this.entitiesView.addView(textPaintView, LayoutHelper.createFrame(-2, -2.0f));
+                stickerView = textPaintView;
+            }
+            registerRemovalUndo(stickerView);
+            selectEntity(stickerView);
+            updateSettingsButton();
+        }
     }
 
     private void openStickersView() {
         StickerMasksAlert stickerMasksAlert = new StickerMasksAlert(getContext(), this.facesBitmap == null, this.resourcesProvider);
-        stickerMasksAlert.setDelegate(new PhotoPaintView$$ExternalSyntheticLambda13(this));
-        stickerMasksAlert.setOnDismissListener(new PhotoPaintView$$ExternalSyntheticLambda11(this));
+        stickerMasksAlert.setDelegate(new PhotoPaintView$$ExternalSyntheticLambda21(this));
+        stickerMasksAlert.setOnDismissListener(new PhotoPaintView$$ExternalSyntheticLambda1(this));
         stickerMasksAlert.show();
         onOpenCloseStickersAlert(true);
     }
 
-    /* renamed from: lambda$openStickersView$7$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2479x3df5var_(Object parentObject, TLRPC.Document sticker) {
-        createSticker(parentObject, sticker, true);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$openStickersView$7(Object obj, TLRPC$Document tLRPC$Document) {
+        createSticker(obj, tLRPC$Document, true);
     }
 
-    /* renamed from: lambda$openStickersView$8$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2480x23375var_(DialogInterface dialog) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$openStickersView$8(DialogInterface dialogInterface) {
         onOpenCloseStickersAlert(false);
-    }
-
-    /* access modifiers changed from: protected */
-    public void onOpenCloseStickersAlert(boolean open) {
-    }
-
-    /* access modifiers changed from: protected */
-    public void onTextAdd() {
     }
 
     private Size baseStickerSize() {
         double d = (double) getPaintingSize().width;
         Double.isNaN(d);
-        float side = (float) Math.floor(d * 0.5d);
-        return new Size(side, side);
+        float floor = (float) Math.floor(d * 0.5d);
+        return new Size(floor, floor);
     }
 
     private void registerRemovalUndo(EntityView entityView) {
-        this.undoStore.registerUndo(entityView.getUUID(), new PhotoPaintView$$ExternalSyntheticLambda7(this, entityView));
+        this.undoStore.registerUndo(entityView.getUUID(), new PhotoPaintView$$ExternalSyntheticLambda17(this, entityView));
     }
 
-    private StickerView createSticker(Object parentObject, TLRPC.Document sticker, boolean select) {
-        StickerPosition position = calculateStickerPosition(sticker);
-        StickerView view = new StickerView(getContext(), position.position, position.angle, position.scale, baseStickerSize(), sticker, parentObject) {
+    private StickerView createSticker(Object obj, TLRPC$Document tLRPC$Document, boolean z) {
+        StickerPosition calculateStickerPosition = calculateStickerPosition(tLRPC$Document);
+        AnonymousClass7 r1 = new StickerView(getContext(), calculateStickerPosition.position, calculateStickerPosition.angle, calculateStickerPosition.scale, baseStickerSize(), tLRPC$Document, obj) {
             /* access modifiers changed from: protected */
-            public void didSetAnimatedSticker(RLottieDrawable drawable) {
-                PhotoPaintView.this.didSetAnimatedSticker(drawable);
+            public void didSetAnimatedSticker(RLottieDrawable rLottieDrawable) {
+                PhotoPaintView.this.didSetAnimatedSticker(rLottieDrawable);
             }
         };
-        view.setDelegate(this);
-        this.entitiesView.addView(view);
-        if (select) {
-            registerRemovalUndo(view);
-            selectEntity(view);
+        r1.setDelegate(this);
+        this.entitiesView.addView(r1);
+        if (z) {
+            registerRemovalUndo(r1);
+            selectEntity(r1);
         }
-        return view;
-    }
-
-    /* access modifiers changed from: protected */
-    public void didSetAnimatedSticker(RLottieDrawable drawable) {
+        return r1;
     }
 
     /* access modifiers changed from: private */
@@ -1546,35 +1302,36 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }
     }
 
-    private TextPaintView createText(boolean select) {
+    private TextPaintView createText(boolean z) {
         Swatch swatch;
         onTextAdd();
-        Swatch currentSwatch = this.colorPicker.getSwatch();
+        Swatch swatch2 = this.colorPicker.getSwatch();
         int i = this.selectedTextType;
         if (i == 0) {
-            swatch = new Swatch(-16777216, 0.85f, currentSwatch.brushWeight);
+            swatch = new Swatch(-16777216, 0.85f, swatch2.brushWeight);
         } else if (i == 1) {
-            swatch = new Swatch(-1, 1.0f, currentSwatch.brushWeight);
+            swatch = new Swatch(-1, 1.0f, swatch2.brushWeight);
         } else {
-            swatch = new Swatch(-1, 1.0f, currentSwatch.brushWeight);
+            swatch = new Swatch(-1, 1.0f, swatch2.brushWeight);
         }
         Size paintingSize2 = getPaintingSize();
-        TextPaintView view = new TextPaintView(getContext(), startPositionRelativeToEntity((EntityView) null), (int) (paintingSize2.width / 9.0f), "", swatch, this.selectedTextType);
-        view.setDelegate(this);
-        view.setMaxWidth((int) (paintingSize2.width - 20.0f));
-        this.entitiesView.addView(view, LayoutHelper.createFrame(-2, -2.0f));
+        TextPaintView textPaintView = new TextPaintView(getContext(), startPositionRelativeToEntity((EntityView) null), (int) (paintingSize2.width / 9.0f), "", swatch, this.selectedTextType);
+        textPaintView.setDelegate(this);
+        textPaintView.setMaxWidth((int) (paintingSize2.width - 20.0f));
+        this.entitiesView.addView(textPaintView, LayoutHelper.createFrame(-2, -2.0f));
         MediaController.CropState cropState = this.currentCropState;
         if (cropState != null) {
-            view.scale(1.0f / cropState.cropScale);
-            view.rotate(-(((float) this.currentCropState.transformRotation) + this.currentCropState.cropRotate));
+            textPaintView.scale(1.0f / cropState.cropScale);
+            MediaController.CropState cropState2 = this.currentCropState;
+            textPaintView.rotate(-(((float) cropState2.transformRotation) + cropState2.cropRotate));
         }
-        if (select) {
-            registerRemovalUndo(view);
-            selectEntity(view);
+        if (z) {
+            registerRemovalUndo(textPaintView);
+            selectEntity(textPaintView);
             editSelectedTextEntity();
         }
         setCurrentSwatch(swatch, true);
-        return view;
+        return textPaintView;
     }
 
     private void editSelectedTextEntity() {
@@ -1589,7 +1346,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             textPaintView.setPosition(centerPositionForEntity());
             MediaController.CropState cropState = this.currentCropState;
             if (cropState != null) {
-                textPaintView.setRotation(-(((float) cropState.transformRotation) + this.currentCropState.cropRotate));
+                textPaintView.setRotation(-(((float) cropState.transformRotation) + cropState.cropRotate));
                 textPaintView.setScale(1.0f / this.currentCropState.cropScale);
             } else {
                 textPaintView.setRotation(0.0f);
@@ -1598,13 +1355,13 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             this.toolsView.setVisibility(8);
             setTextDimVisibility(true, textPaintView);
             textPaintView.beginEditing();
-            View view = textPaintView.getFocusedView();
-            view.requestFocus();
-            AndroidUtilities.showKeyboard(view);
+            View focusedView = textPaintView.getFocusedView();
+            focusedView.requestFocus();
+            AndroidUtilities.showKeyboard(focusedView);
         }
     }
 
-    public void closeTextEnter(boolean apply) {
+    public void closeTextEnter(boolean z) {
         if (this.editingText) {
             EntityView entityView = this.currentEntityView;
             if (entityView instanceof TextPaintView) {
@@ -1613,7 +1370,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 AndroidUtilities.hideKeyboard(textPaintView.getFocusedView());
                 textPaintView.getFocusedView().clearFocus();
                 textPaintView.endEditing();
-                if (!apply) {
+                if (!z) {
                     textPaintView.setText(this.initialText);
                 }
                 if (textPaintView.getText().trim().length() == 0) {
@@ -1635,23 +1392,23 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }
     }
 
-    private void setBrush(int brush) {
+    private void setBrush(int i) {
         RenderView renderView2 = this.renderView;
         Brush[] brushArr = this.brushes;
-        this.currentBrush = brush;
-        renderView2.setBrush(brushArr[brush]);
+        this.currentBrush = i;
+        renderView2.setBrush(brushArr[i]);
     }
 
-    private void setType(int type) {
-        this.selectedTextType = type;
+    private void setType(int i) {
+        this.selectedTextType = i;
         if (this.currentEntityView instanceof TextPaintView) {
-            Swatch currentSwatch = this.colorPicker.getSwatch();
-            if (type == 0 && currentSwatch.color == -1) {
-                setCurrentSwatch(new Swatch(-16777216, 0.85f, currentSwatch.brushWeight), true);
-            } else if ((type == 1 || type == 2) && currentSwatch.color == -16777216) {
-                setCurrentSwatch(new Swatch(-1, 1.0f, currentSwatch.brushWeight), true);
+            Swatch swatch = this.colorPicker.getSwatch();
+            if (i == 0 && swatch.color == -1) {
+                setCurrentSwatch(new Swatch(-16777216, 0.85f, swatch.brushWeight), true);
+            } else if ((i == 1 || i == 2) && swatch.color == -16777216) {
+                setCurrentSwatch(new Swatch(-1, 1.0f, swatch.brushWeight), true);
             }
-            ((TextPaintView) this.currentEntityView).setType(type);
+            ((TextPaintView) this.currentEntityView).setType(i);
         }
     }
 
@@ -1659,96 +1416,92 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         view.getLocationInWindow(this.pos);
         float rotation = view.getRotation();
         MediaController.CropState cropState = this.currentCropState;
-        float rotation2 = (float) Math.toRadians((double) (rotation + (cropState != null ? cropState.cropRotate + ((float) this.currentCropState.transformRotation) : 0.0f)));
-        float width = ((float) view.getWidth()) * view.getScaleX() * this.entitiesView.getScaleX();
-        float height = ((float) view.getHeight()) * view.getScaleY() * this.entitiesView.getScaleY();
-        double d = (double) width;
-        double cos = Math.cos((double) rotation2);
-        Double.isNaN(d);
-        double d2 = d * cos;
-        double d3 = (double) height;
-        double sin = Math.sin((double) rotation2);
-        Double.isNaN(d3);
-        double d4 = (double) width;
-        double sin2 = Math.sin((double) rotation2);
-        Double.isNaN(d4);
-        double d5 = d4 * sin2;
-        double d6 = (double) height;
-        double cos2 = Math.cos((double) rotation2);
-        Double.isNaN(d6);
+        float f = cropState != null ? cropState.cropRotate + ((float) cropState.transformRotation) : 0.0f;
+        double width = (double) (((float) view.getWidth()) * view.getScaleX() * this.entitiesView.getScaleX());
+        double radians = (double) ((float) Math.toRadians((double) (rotation + f)));
+        double cos = Math.cos(radians);
+        Double.isNaN(width);
+        double height = (double) (((float) view.getHeight()) * view.getScaleY() * this.entitiesView.getScaleY());
+        double sin = Math.sin(radians);
+        Double.isNaN(height);
+        float f2 = (float) ((cos * width) - (sin * height));
+        double sin2 = Math.sin(radians);
+        Double.isNaN(width);
+        double cos2 = Math.cos(radians);
+        Double.isNaN(height);
         int[] iArr = this.pos;
-        iArr[0] = (int) (((float) iArr[0]) + (((float) (d2 - (d3 * sin))) / 2.0f));
-        iArr[1] = (int) (((float) iArr[1]) + (((float) (d5 + (d6 * cos2))) / 2.0f));
+        iArr[0] = (int) (((float) iArr[0]) + (f2 / 2.0f));
+        iArr[1] = (int) (((float) iArr[1]) + (((float) ((width * sin2) + (height * cos2))) / 2.0f));
         return iArr;
     }
 
     public float getCropRotation() {
         MediaController.CropState cropState = this.currentCropState;
         if (cropState != null) {
-            return cropState.cropRotate + ((float) this.currentCropState.transformRotation);
+            return cropState.cropRotate + ((float) cropState.transformRotation);
         }
         return 0.0f;
     }
 
     private void showMenuForEntity(EntityView entityView) {
-        int[] pos2 = getCenterLocationInWindow(entityView);
-        showPopup(new PhotoPaintView$$ExternalSyntheticLambda8(this, entityView), this, 51, pos2[0], pos2[1] - AndroidUtilities.dp(32.0f));
+        int[] centerLocationInWindow = getCenterLocationInWindow(entityView);
+        showPopup(new PhotoPaintView$$ExternalSyntheticLambda16(this, entityView), this, 51, centerLocationInWindow[0], centerLocationInWindow[1] - AndroidUtilities.dp(32.0f));
     }
 
-    /* renamed from: lambda$showMenuForEntity$13$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2486xbCLASSNAMEa01(EntityView entityView) {
-        LinearLayout parent = new LinearLayout(getContext());
-        parent.setOrientation(0);
-        TextView deleteView = new TextView(getContext());
-        deleteView.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
-        deleteView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-        deleteView.setGravity(16);
-        deleteView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(14.0f), 0);
-        deleteView.setTextSize(1, 18.0f);
-        deleteView.setTag(0);
-        deleteView.setText(LocaleController.getString("PaintDelete", NUM));
-        deleteView.setOnClickListener(new PhotoPaintView$$ExternalSyntheticLambda1(this, entityView));
-        parent.addView(deleteView, LayoutHelper.createLinear(-2, 48));
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$showMenuForEntity$13(EntityView entityView) {
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.setOrientation(0);
+        TextView textView = new TextView(getContext());
+        textView.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
+        textView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        textView.setGravity(16);
+        textView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(14.0f), 0);
+        textView.setTextSize(1, 18.0f);
+        textView.setTag(0);
+        textView.setText(LocaleController.getString("PaintDelete", NUM));
+        textView.setOnClickListener(new PhotoPaintView$$ExternalSyntheticLambda10(this, entityView));
+        linearLayout.addView(textView, LayoutHelper.createLinear(-2, 48));
         if (entityView instanceof TextPaintView) {
-            TextView editView = new TextView(getContext());
-            editView.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
-            editView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            editView.setGravity(16);
-            editView.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
-            editView.setTextSize(1, 18.0f);
-            editView.setTag(1);
-            editView.setText(LocaleController.getString("PaintEdit", NUM));
-            editView.setOnClickListener(new PhotoPaintView$$ExternalSyntheticLambda18(this));
-            parent.addView(editView, LayoutHelper.createLinear(-2, 48));
+            TextView textView2 = new TextView(getContext());
+            textView2.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
+            textView2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+            textView2.setGravity(16);
+            textView2.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
+            textView2.setTextSize(1, 18.0f);
+            textView2.setTag(1);
+            textView2.setText(LocaleController.getString("PaintEdit", NUM));
+            textView2.setOnClickListener(new PhotoPaintView$$ExternalSyntheticLambda7(this));
+            linearLayout.addView(textView2, LayoutHelper.createLinear(-2, 48));
         }
-        TextView duplicateView = new TextView(getContext());
-        duplicateView.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
-        duplicateView.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-        duplicateView.setGravity(16);
-        duplicateView.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(16.0f), 0);
-        duplicateView.setTextSize(1, 18.0f);
-        duplicateView.setTag(2);
-        duplicateView.setText(LocaleController.getString("PaintDuplicate", NUM));
-        duplicateView.setOnClickListener(new PhotoPaintView$$ExternalSyntheticLambda19(this));
-        parent.addView(duplicateView, LayoutHelper.createLinear(-2, 48));
-        this.popupLayout.addView(parent);
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) parent.getLayoutParams();
-        params.width = -2;
-        params.height = -2;
-        parent.setLayoutParams(params);
+        TextView textView3 = new TextView(getContext());
+        textView3.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
+        textView3.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        textView3.setGravity(16);
+        textView3.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(16.0f), 0);
+        textView3.setTextSize(1, 18.0f);
+        textView3.setTag(2);
+        textView3.setText(LocaleController.getString("PaintDuplicate", NUM));
+        textView3.setOnClickListener(new PhotoPaintView$$ExternalSyntheticLambda5(this));
+        linearLayout.addView(textView3, LayoutHelper.createLinear(-2, 48));
+        this.popupLayout.addView(linearLayout);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) linearLayout.getLayoutParams();
+        layoutParams.width = -2;
+        layoutParams.height = -2;
+        linearLayout.setLayoutParams(layoutParams);
     }
 
-    /* renamed from: lambda$showMenuForEntity$10$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2483xc5cfdbe(EntityView entityView, View v) {
-        m2481x59ab8b73(entityView);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$showMenuForEntity$10(EntityView entityView, View view) {
+        lambda$registerRemovalUndo$9(entityView);
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.popupWindow.dismiss(true);
         }
     }
 
-    /* renamed from: lambda$showMenuForEntity$11$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2484xvar_e6c7f(View v) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$showMenuForEntity$11(View view) {
         editSelectedTextEntity();
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
@@ -1756,8 +1509,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }
     }
 
-    /* renamed from: lambda$showMenuForEntity$12$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2485xd6dfdb40(View v) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$showMenuForEntity$12(View view) {
         duplicateSelectedEntity();
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
@@ -1765,42 +1518,42 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }
     }
 
-    private LinearLayout buttonForBrush(int brush, int icon, String text, boolean selected) {
-        LinearLayout button = new LinearLayout(getContext()) {
-            public boolean onInterceptTouchEvent(MotionEvent ev) {
+    private LinearLayout buttonForBrush(int i, int i2, String str, boolean z) {
+        AnonymousClass8 r0 = new LinearLayout(this, getContext()) {
+            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 return true;
             }
         };
-        int i = 0;
-        button.setOrientation(0);
-        button.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-        button.setOnClickListener(new PhotoPaintView$$ExternalSyntheticLambda20(this, brush));
+        int i3 = 0;
+        r0.setOrientation(0);
+        r0.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        r0.setOnClickListener(new PhotoPaintView$$ExternalSyntheticLambda8(this, i));
         ImageView imageView = new ImageView(getContext());
         imageView.setScaleType(ImageView.ScaleType.CENTER);
-        imageView.setImageResource(icon);
+        imageView.setImageResource(i2);
         imageView.setColorFilter(getThemedColor("actionBarDefaultSubmenuItem"));
-        button.addView(imageView, LayoutHelper.createLinear(-2, -2, 19, 16, 0, 16, 0));
+        r0.addView(imageView, LayoutHelper.createLinear(-2, -2, 19, 16, 0, 16, 0));
         TextView textView = new TextView(getContext());
         textView.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
         textView.setTextSize(1, 16.0f);
-        textView.setText(text);
+        textView.setText(str);
         textView.setMinWidth(AndroidUtilities.dp(70.0f));
-        button.addView(textView, LayoutHelper.createLinear(-2, -2, 19, 0, 0, 16, 0));
-        ImageView check = new ImageView(getContext());
-        check.setImageResource(NUM);
-        check.setScaleType(ImageView.ScaleType.CENTER);
-        check.setColorFilter(new PorterDuffColorFilter(getThemedColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
-        if (!selected) {
-            i = 4;
+        r0.addView(textView, LayoutHelper.createLinear(-2, -2, 19, 0, 0, 16, 0));
+        ImageView imageView2 = new ImageView(getContext());
+        imageView2.setImageResource(NUM);
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        imageView2.setColorFilter(new PorterDuffColorFilter(getThemedColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
+        if (!z) {
+            i3 = 4;
         }
-        check.setVisibility(i);
-        button.addView(check, LayoutHelper.createLinear(50, -1));
-        return button;
+        imageView2.setVisibility(i3);
+        r0.addView(imageView2, LayoutHelper.createLinear(50, -1));
+        return r0;
     }
 
-    /* renamed from: lambda$buttonForBrush$14$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2471xb19dd1f5(int brush, View v) {
-        setBrush(brush);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$buttonForBrush$14(int i, View view) {
+        setBrush(i);
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.popupWindow.dismiss(true);
@@ -1809,11 +1562,11 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
     /* access modifiers changed from: private */
     public void showBrushSettings() {
-        showPopup(new PhotoPaintView$$ExternalSyntheticLambda5(this), this, 85, 0, AndroidUtilities.dp(48.0f));
+        showPopup(new PhotoPaintView$$ExternalSyntheticLambda13(this), this, 85, 0, AndroidUtilities.dp(48.0f));
     }
 
-    /* renamed from: lambda$showBrushSettings$15$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2482xae966b73() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$showBrushSettings$15() {
         boolean z = false;
         this.popupLayout.addView(buttonForBrush(0, NUM, LocaleController.getString("PaintPen", NUM), this.currentBrush == 0), LayoutHelper.createLinear(-1, 54));
         this.popupLayout.addView(buttonForBrush(1, NUM, LocaleController.getString("PaintMarker", NUM), this.currentBrush == 1), LayoutHelper.createLinear(-1, 54));
@@ -1825,39 +1578,38 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         this.popupLayout.addView(buttonForBrush(3, NUM, string, z), LayoutHelper.createLinear(-1, 54));
     }
 
-    private LinearLayout buttonForText(int type, String text, int icon, boolean selected) {
-        LinearLayout button = new LinearLayout(getContext()) {
-            public boolean onInterceptTouchEvent(MotionEvent ev) {
+    private LinearLayout buttonForText(int i, String str, int i2, boolean z) {
+        AnonymousClass9 r0 = new LinearLayout(this, getContext()) {
+            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 return true;
             }
         };
-        button.setOrientation(0);
-        button.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-        int i = type;
-        button.setOnClickListener(new PhotoPaintView$$ExternalSyntheticLambda21(this, type));
+        r0.setOrientation(0);
+        r0.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        r0.setOnClickListener(new PhotoPaintView$$ExternalSyntheticLambda9(this, i));
         ImageView imageView = new ImageView(getContext());
         imageView.setScaleType(ImageView.ScaleType.CENTER);
-        imageView.setImageResource(icon);
+        imageView.setImageResource(i2);
         imageView.setColorFilter(getThemedColor("actionBarDefaultSubmenuItem"));
-        button.addView(imageView, LayoutHelper.createLinear(-2, -2, 19, 16, 0, 16, 0));
+        r0.addView(imageView, LayoutHelper.createLinear(-2, -2, 19, 16, 0, 16, 0));
         TextView textView = new TextView(getContext());
         textView.setTextColor(getThemedColor("actionBarDefaultSubmenuItem"));
         textView.setTextSize(1, 16.0f);
-        textView.setText(text);
-        button.addView(textView, LayoutHelper.createLinear(-2, -2, 19, 0, 0, 16, 0));
-        if (selected) {
-            ImageView check = new ImageView(getContext());
-            check.setImageResource(NUM);
-            check.setScaleType(ImageView.ScaleType.CENTER);
-            check.setColorFilter(new PorterDuffColorFilter(getThemedColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
-            button.addView(check, LayoutHelper.createLinear(50, -1));
+        textView.setText(str);
+        r0.addView(textView, LayoutHelper.createLinear(-2, -2, 19, 0, 0, 16, 0));
+        if (z) {
+            ImageView imageView2 = new ImageView(getContext());
+            imageView2.setImageResource(NUM);
+            imageView2.setScaleType(ImageView.ScaleType.CENTER);
+            imageView2.setColorFilter(new PorterDuffColorFilter(getThemedColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
+            r0.addView(imageView2, LayoutHelper.createLinear(50, -1));
         }
-        return button;
+        return r0;
     }
 
-    /* renamed from: lambda$buttonForText$16$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2472x41484eb0(int type, View v) {
-        setType(type);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$buttonForText$16(int i, View view) {
+        setType(i);
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.popupWindow.dismiss(true);
@@ -1866,34 +1618,34 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
     /* access modifiers changed from: private */
     public void showTextSettings() {
-        showPopup(new PhotoPaintView$$ExternalSyntheticLambda6(this), this, 85, 0, AndroidUtilities.dp(48.0f));
+        showPopup(new PhotoPaintView$$ExternalSyntheticLambda14(this), this, 85, 0, AndroidUtilities.dp(48.0f));
     }
 
-    /* renamed from: lambda$showTextSettings$17$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2490xdd81e6ee() {
-        int icon;
-        String text;
-        for (int a = 0; a < 3; a++) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$showTextSettings$17() {
+        int i;
+        String str;
+        for (int i2 = 0; i2 < 3; i2++) {
             boolean z = true;
-            if (a == 0) {
-                text = LocaleController.getString("PaintOutlined", NUM);
-                icon = NUM;
-            } else if (a == 1) {
-                text = LocaleController.getString("PaintRegular", NUM);
-                icon = NUM;
+            if (i2 == 0) {
+                str = LocaleController.getString("PaintOutlined", NUM);
+                i = NUM;
+            } else if (i2 == 1) {
+                str = LocaleController.getString("PaintRegular", NUM);
+                i = NUM;
             } else {
-                text = LocaleController.getString("PaintFramed", NUM);
-                icon = NUM;
+                str = LocaleController.getString("PaintFramed", NUM);
+                i = NUM;
             }
             ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
-            if (this.selectedTextType != a) {
+            if (this.selectedTextType != i2) {
                 z = false;
             }
-            actionBarPopupWindowLayout.addView(buttonForText(a, text, icon, z), LayoutHelper.createLinear(-1, 48));
+            actionBarPopupWindowLayout.addView(buttonForText(i2, str, i, z), LayoutHelper.createLinear(-1, 48));
         }
     }
 
-    private void showPopup(Runnable setupRunnable, View parent, int gravity, int x, int y) {
+    private void showPopup(Runnable runnable, View view, int i, int i2, int i3) {
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow == null || !actionBarPopupWindow.isShowing()) {
             if (this.popupLayout == null) {
@@ -1901,12 +1653,12 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext());
                 this.popupLayout = actionBarPopupWindowLayout;
                 actionBarPopupWindowLayout.setAnimationEnabled(false);
-                this.popupLayout.setOnTouchListener(new PhotoPaintView$$ExternalSyntheticLambda2(this));
-                this.popupLayout.setDispatchKeyEventListener(new PhotoPaintView$$ExternalSyntheticLambda10(this));
+                this.popupLayout.setOnTouchListener(new PhotoPaintView$$ExternalSyntheticLambda11(this));
+                this.popupLayout.setDispatchKeyEventListener(new PhotoPaintView$$ExternalSyntheticLambda19(this));
                 this.popupLayout.setShownFromBotton(true);
             }
             this.popupLayout.removeInnerViews();
-            setupRunnable.run();
+            runnable.run();
             if (this.popupWindow == null) {
                 ActionBarPopupWindow actionBarPopupWindow2 = new ActionBarPopupWindow(this.popupLayout, -2, -2);
                 this.popupWindow = actionBarPopupWindow2;
@@ -1917,59 +1669,57 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 this.popupWindow.setInputMethodMode(2);
                 this.popupWindow.setSoftInputMode(0);
                 this.popupWindow.getContentView().setFocusableInTouchMode(true);
-                this.popupWindow.setOnDismissListener(new PhotoPaintView$$ExternalSyntheticLambda3(this));
+                this.popupWindow.setOnDismissListener(new PhotoPaintView$$ExternalSyntheticLambda12(this));
             }
             this.popupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
             this.popupWindow.setFocusable(true);
-            if ((gravity & 48) != 0) {
-                x -= this.popupLayout.getMeasuredWidth() / 2;
-                y -= this.popupLayout.getMeasuredHeight();
+            if ((i & 48) != 0) {
+                i2 -= this.popupLayout.getMeasuredWidth() / 2;
+                i3 -= this.popupLayout.getMeasuredHeight();
             }
-            this.popupWindow.showAtLocation(parent, gravity, x, y);
+            this.popupWindow.showAtLocation(view, i, i2, i3);
             this.popupWindow.startAnimation();
             return;
         }
         this.popupWindow.dismiss();
     }
 
-    /* renamed from: lambda$showPopup$18$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ boolean m2487lambda$showPopup$18$orgtelegramuiComponentsPhotoPaintView(View v, MotionEvent event) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$showPopup$18(View view, MotionEvent motionEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
-        if (event.getActionMasked() != 0 || (actionBarPopupWindow = this.popupWindow) == null || !actionBarPopupWindow.isShowing()) {
+        if (motionEvent.getActionMasked() != 0 || (actionBarPopupWindow = this.popupWindow) == null || !actionBarPopupWindow.isShowing()) {
             return false;
         }
-        v.getHitRect(this.popupRect);
-        if (this.popupRect.contains((int) event.getX(), (int) event.getY())) {
+        view.getHitRect(this.popupRect);
+        if (this.popupRect.contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
             return false;
         }
         this.popupWindow.dismiss();
         return false;
     }
 
-    /* renamed from: lambda$showPopup$19$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2488lambda$showPopup$19$orgtelegramuiComponentsPhotoPaintView(KeyEvent keyEvent) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$showPopup$19(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.popupWindow) != null && actionBarPopupWindow.isShowing()) {
             this.popupWindow.dismiss();
         }
     }
 
-    /* renamed from: lambda$showPopup$20$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2489lambda$showPopup$20$orgtelegramuiComponentsPhotoPaintView() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$showPopup$20() {
         this.popupLayout.removeInnerViews();
     }
 
     private int getFrameRotation() {
-        switch (this.originalBitmapRotation) {
-            case 90:
-                return 1;
-            case 180:
-                return 2;
-            case 270:
-                return 3;
-            default:
-                return 0;
+        int i = this.originalBitmapRotation;
+        if (i == 90) {
+            return 1;
         }
+        if (i != 180) {
+            return i != 270 ? 0 : 3;
+        }
+        return 2;
     }
 
     private boolean isSidewardOrientation() {
@@ -1978,11 +1728,11 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     private void detectFaces() {
-        this.queue.postRunnable(new PhotoPaintView$$ExternalSyntheticLambda4(this));
+        this.queue.postRunnable(new PhotoPaintView$$ExternalSyntheticLambda15(this));
     }
 
-    /* renamed from: lambda$detectFaces$21$org-telegram-ui-Components-PhotoPaintView  reason: not valid java name */
-    public /* synthetic */ void m2473lambda$detectFaces$21$orgtelegramuiComponentsPhotoPaintView() {
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$detectFaces$21() {
         FaceDetector faceDetector = null;
         try {
             faceDetector = new FaceDetector.Builder(getContext()).setMode(1).setLandmarkType(1).setTrackingEnabled(false).build();
@@ -1990,174 +1740,200 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("face detection is not operational");
                 }
-                if (faceDetector != null) {
-                    faceDetector.release();
-                    return;
-                }
+                faceDetector.release();
                 return;
             }
             try {
-                SparseArray<Face> faces2 = faceDetector.detect(new Frame.Builder().setBitmap(this.facesBitmap).setRotation(getFrameRotation()).build());
-                ArrayList<PhotoFace> result = new ArrayList<>();
-                Size targetSize = getPaintingSize();
-                for (int i = 0; i < faces2.size(); i++) {
-                    PhotoFace face = new PhotoFace(faces2.get(faces2.keyAt(i)), this.facesBitmap, targetSize, isSidewardOrientation());
-                    if (face.isSufficient()) {
-                        result.add(face);
+                SparseArray<Face> detect = faceDetector.detect(new Frame.Builder().setBitmap(this.facesBitmap).setRotation(getFrameRotation()).build());
+                ArrayList<PhotoFace> arrayList = new ArrayList<>();
+                Size paintingSize2 = getPaintingSize();
+                for (int i = 0; i < detect.size(); i++) {
+                    PhotoFace photoFace = new PhotoFace(detect.get(detect.keyAt(i)), this.facesBitmap, paintingSize2, isSidewardOrientation());
+                    if (photoFace.isSufficient()) {
+                        arrayList.add(photoFace);
                     }
                 }
-                this.faces = result;
-                if (faceDetector == null) {
-                    return;
-                }
+                this.faces = arrayList;
                 faceDetector.release();
-            } catch (Throwable e) {
-                FileLog.e(e);
-                if (faceDetector != null) {
-                    faceDetector.release();
-                }
+            } catch (Throwable th) {
+                FileLog.e(th);
+                faceDetector.release();
             }
-        } catch (Exception e2) {
-            FileLog.e((Throwable) e2);
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
             if (faceDetector == null) {
             }
-        } catch (Throwable th) {
+        } catch (Throwable th2) {
             if (faceDetector != null) {
                 faceDetector.release();
             }
-            throw th;
+            throw th2;
         }
     }
 
-    private StickerPosition calculateStickerPosition(TLRPC.Document document) {
-        float baseScale2;
-        float rotation;
-        ArrayList<PhotoFace> arrayList;
-        TLRPC.Document document2 = document;
-        TLRPC.TL_maskCoords maskCoords = null;
-        int a = 0;
-        while (true) {
-            if (a >= document2.attributes.size()) {
-                break;
-            }
-            TLRPC.DocumentAttribute attribute = document2.attributes.get(a);
-            if (attribute instanceof TLRPC.TL_documentAttributeSticker) {
-                maskCoords = attribute.mask_coords;
-                break;
-            }
-            a++;
-        }
-        MediaController.CropState cropState = this.currentCropState;
-        if (cropState != null) {
-            rotation = -(((float) cropState.transformRotation) + this.currentCropState.cropRotate);
-            baseScale2 = 0.75f / this.currentCropState.cropScale;
-        } else {
-            rotation = 0.0f;
-            baseScale2 = 0.75f;
-        }
-        StickerPosition defaultPosition = new StickerPosition(centerPositionForEntity(), baseScale2, rotation);
-        if (maskCoords == null || (arrayList = this.faces) == null) {
-            float f = baseScale2;
-            return defaultPosition;
-        } else if (arrayList.size() == 0) {
-            float f2 = rotation;
-            float f3 = baseScale2;
-            return defaultPosition;
-        } else {
-            int anchor = maskCoords.n;
-            PhotoFace face = getRandomFaceWithVacantAnchor(anchor, document2.id, maskCoords);
-            if (face == null) {
-                return defaultPosition;
-            }
-            Point referencePoint = face.getPointForAnchor(anchor);
-            float referenceWidth = face.getWidthForAnchor(anchor);
-            float angle = face.getAngle();
-            double d = (double) (referenceWidth / baseStickerSize().width);
-            double d2 = maskCoords.zoom;
-            Double.isNaN(d);
-            float radAngle = (float) Math.toRadians((double) angle);
-            double d3 = (double) radAngle;
-            Double.isNaN(d3);
-            double sin = Math.sin(1.5707963267948966d - d3);
-            double d4 = (double) referenceWidth;
-            Double.isNaN(d4);
-            float xCompX = (float) (sin * d4 * maskCoords.x);
-            double d5 = (double) radAngle;
-            Double.isNaN(d5);
-            double cos = Math.cos(1.5707963267948966d - d5);
-            float f4 = rotation;
-            float f5 = baseScale2;
-            double d6 = (double) referenceWidth;
-            Double.isNaN(d6);
-            float xCompY = (float) (cos * d6 * maskCoords.x);
-            double d7 = (double) radAngle;
-            Double.isNaN(d7);
-            double cos2 = Math.cos(d7 + 1.5707963267948966d);
-            int anchor2 = anchor;
-            PhotoFace photoFace = face;
-            double d8 = (double) referenceWidth;
-            Double.isNaN(d8);
-            float yCompX = (float) (cos2 * d8 * maskCoords.y);
-            double d9 = (double) radAngle;
-            Double.isNaN(d9);
-            double sin2 = Math.sin(d9 + 1.5707963267948966d);
-            int i = anchor2;
-            StickerPosition stickerPosition = defaultPosition;
-            double d10 = (double) referenceWidth;
-            Double.isNaN(d10);
-            float f6 = xCompX;
-            return new StickerPosition(new Point(referencePoint.x + xCompX + yCompX, referencePoint.y + xCompY + ((float) (sin2 * d10 * maskCoords.y))), (float) (d * d2), angle);
-        }
+    /* JADX WARNING: Code restructure failed: missing block: B:18:0x0049, code lost:
+        r4 = r2.n;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private org.telegram.ui.Components.PhotoPaintView.StickerPosition calculateStickerPosition(org.telegram.tgnet.TLRPC$Document r17) {
+        /*
+            r16 = this;
+            r0 = r16
+            r1 = r17
+            r2 = 0
+        L_0x0005:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r3 = r1.attributes
+            int r3 = r3.size()
+            if (r2 >= r3) goto L_0x001f
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r3 = r1.attributes
+            java.lang.Object r3 = r3.get(r2)
+            org.telegram.tgnet.TLRPC$DocumentAttribute r3 = (org.telegram.tgnet.TLRPC$DocumentAttribute) r3
+            boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeSticker
+            if (r4 == 0) goto L_0x001c
+            org.telegram.tgnet.TLRPC$TL_maskCoords r2 = r3.mask_coords
+            goto L_0x0020
+        L_0x001c:
+            int r2 = r2 + 1
+            goto L_0x0005
+        L_0x001f:
+            r2 = 0
+        L_0x0020:
+            org.telegram.messenger.MediaController$CropState r3 = r0.currentCropState
+            r4 = 1061158912(0x3var_, float:0.75)
+            if (r3 == 0) goto L_0x0031
+            int r5 = r3.transformRotation
+            float r5 = (float) r5
+            float r6 = r3.cropRotate
+            float r5 = r5 + r6
+            float r5 = -r5
+            float r3 = r3.cropScale
+            float r4 = r4 / r3
+            goto L_0x0032
+        L_0x0031:
+            r5 = 0
+        L_0x0032:
+            org.telegram.ui.Components.PhotoPaintView$StickerPosition r3 = new org.telegram.ui.Components.PhotoPaintView$StickerPosition
+            org.telegram.ui.Components.Point r6 = r16.centerPositionForEntity()
+            r3.<init>(r6, r4, r5)
+            if (r2 == 0) goto L_0x00d7
+            java.util.ArrayList<org.telegram.ui.Components.Paint.PhotoFace> r4 = r0.faces
+            if (r4 == 0) goto L_0x00d7
+            int r4 = r4.size()
+            if (r4 != 0) goto L_0x0049
+            goto L_0x00d7
+        L_0x0049:
+            int r4 = r2.n
+            long r5 = r1.id
+            org.telegram.ui.Components.Paint.PhotoFace r1 = r0.getRandomFaceWithVacantAnchor(r4, r5, r2)
+            if (r1 != 0) goto L_0x0054
+            return r3
+        L_0x0054:
+            org.telegram.ui.Components.Point r3 = r1.getPointForAnchor(r4)
+            float r4 = r1.getWidthForAnchor(r4)
+            float r1 = r1.getAngle()
+            org.telegram.ui.Components.Size r5 = r16.baseStickerSize()
+            float r5 = r5.width
+            float r5 = r4 / r5
+            double r5 = (double) r5
+            double r7 = r2.zoom
+            java.lang.Double.isNaN(r5)
+            double r5 = r5 * r7
+            float r5 = (float) r5
+            double r6 = (double) r1
+            double r6 = java.lang.Math.toRadians(r6)
+            float r6 = (float) r6
+            double r6 = (double) r6
+            r8 = 4609753056924675352(0x3fvar_fb54442d18, double:1.NUM)
+            java.lang.Double.isNaN(r6)
+            double r10 = r8 - r6
+            double r12 = java.lang.Math.sin(r10)
+            double r14 = (double) r4
+            java.lang.Double.isNaN(r14)
+            double r12 = r12 * r14
+            double r8 = r2.x
+            double r12 = r12 * r8
+            float r4 = (float) r12
+            double r8 = java.lang.Math.cos(r10)
+            java.lang.Double.isNaN(r14)
+            double r8 = r8 * r14
+            double r10 = r2.x
+            double r8 = r8 * r10
+            float r8 = (float) r8
+            java.lang.Double.isNaN(r6)
+            r9 = 4609753056924675352(0x3fvar_fb54442d18, double:1.NUM)
+            double r6 = r6 + r9
+            double r9 = java.lang.Math.cos(r6)
+            java.lang.Double.isNaN(r14)
+            double r9 = r9 * r14
+            double r11 = r2.y
+            double r9 = r9 * r11
+            float r9 = (float) r9
+            double r6 = java.lang.Math.sin(r6)
+            java.lang.Double.isNaN(r14)
+            double r6 = r6 * r14
+            double r10 = r2.y
+            double r6 = r6 * r10
+            float r2 = (float) r6
+            float r6 = r3.x
+            float r6 = r6 + r4
+            float r6 = r6 + r9
+            float r3 = r3.y
+            float r3 = r3 + r8
+            float r3 = r3 + r2
+            org.telegram.ui.Components.PhotoPaintView$StickerPosition r2 = new org.telegram.ui.Components.PhotoPaintView$StickerPosition
+            org.telegram.ui.Components.Point r4 = new org.telegram.ui.Components.Point
+            r4.<init>(r6, r3)
+            r2.<init>(r4, r5, r1)
+            return r2
+        L_0x00d7:
+            return r3
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.calculateStickerPosition(org.telegram.tgnet.TLRPC$Document):org.telegram.ui.Components.PhotoPaintView$StickerPosition");
     }
 
-    private PhotoFace getRandomFaceWithVacantAnchor(int anchor, long documentId, TLRPC.TL_maskCoords maskCoords) {
-        int i = anchor;
-        if (i < 0 || i > 3 || this.faces.isEmpty()) {
-            return null;
-        }
-        int count = this.faces.size();
-        int i2 = Utilities.random.nextInt(count);
-        for (int remaining = count; remaining > 0; remaining--) {
-            PhotoFace face = this.faces.get(i2);
-            if (!isFaceAnchorOccupied(face, anchor, documentId, maskCoords)) {
-                return face;
+    private PhotoFace getRandomFaceWithVacantAnchor(int i, long j, TLRPC$TL_maskCoords tLRPC$TL_maskCoords) {
+        if (i >= 0 && i <= 3 && !this.faces.isEmpty()) {
+            int size = this.faces.size();
+            int nextInt = Utilities.random.nextInt(size);
+            for (int i2 = size; i2 > 0; i2--) {
+                PhotoFace photoFace = this.faces.get(nextInt);
+                if (!isFaceAnchorOccupied(photoFace, i, j, tLRPC$TL_maskCoords)) {
+                    return photoFace;
+                }
+                nextInt = (nextInt + 1) % size;
             }
-            i2 = (i2 + 1) % count;
         }
         return null;
     }
 
-    private boolean isFaceAnchorOccupied(PhotoFace face, int anchor, long documentId, TLRPC.TL_maskCoords maskCoords) {
-        Point anchorPoint = face.getPointForAnchor(anchor);
-        if (anchorPoint == null) {
+    private boolean isFaceAnchorOccupied(PhotoFace photoFace, int i, long j, TLRPC$TL_maskCoords tLRPC$TL_maskCoords) {
+        Point pointForAnchor = photoFace.getPointForAnchor(i);
+        if (pointForAnchor == null) {
             return true;
         }
-        float minDistance = face.getWidthForAnchor(0) * 1.1f;
-        for (int index = 0; index < this.entitiesView.getChildCount(); index++) {
-            View view = this.entitiesView.getChildAt(index);
-            if (!(view instanceof StickerView)) {
-                int i = anchor;
-            } else {
-                StickerView stickerView = (StickerView) view;
-                if (stickerView.getAnchor() != anchor) {
+        float widthForAnchor = photoFace.getWidthForAnchor(0) * 1.1f;
+        for (int i2 = 0; i2 < this.entitiesView.getChildCount(); i2++) {
+            View childAt = this.entitiesView.getChildAt(i2);
+            if (childAt instanceof StickerView) {
+                StickerView stickerView = (StickerView) childAt;
+                if (stickerView.getAnchor() != i) {
                     continue;
                 } else {
-                    Point location = stickerView.getPosition();
-                    float distance = (float) Math.hypot((double) (location.x - anchorPoint.x), (double) (location.y - anchorPoint.y));
-                    if ((documentId == stickerView.getSticker().id || this.faces.size() > 1) && distance < minDistance) {
+                    Point position = stickerView.getPosition();
+                    float hypot = (float) Math.hypot((double) (position.x - pointForAnchor.x), (double) (position.y - pointForAnchor.y));
+                    if ((j == stickerView.getSticker().id || this.faces.size() > 1) && hypot < widthForAnchor) {
                         return true;
                     }
                 }
             }
         }
-        int i2 = anchor;
         return false;
     }
 
-    private int getThemedColor(String key) {
+    private int getThemedColor(String str) {
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
-        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(key) : null;
-        return color != null ? color.intValue() : Theme.getColor(key);
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 
     private static class StickerPosition {
@@ -2168,10 +1944,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         /* access modifiers changed from: private */
         public float scale;
 
-        StickerPosition(Point position2, float scale2, float angle2) {
-            this.position = position2;
-            this.scale = scale2;
-            this.angle = angle2;
+        StickerPosition(Point point, float f, float f2) {
+            this.position = point;
+            this.scale = f;
+            this.angle = f2;
         }
     }
 }

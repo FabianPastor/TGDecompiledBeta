@@ -12,6 +12,6 @@ public final /* synthetic */ class ConnectionsManager$FirebaseTask$$ExternalSynt
     }
 
     public final void onComplete(Task task) {
-        this.f$0.m1281x8523a68f(task);
+        this.f$0.lambda$doInBackground$0(task);
     }
 }

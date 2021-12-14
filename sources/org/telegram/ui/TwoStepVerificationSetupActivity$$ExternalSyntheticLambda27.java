@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-
-public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda27 implements RequestDelegate {
+public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyntheticLambda27 implements Runnable {
     public final /* synthetic */ TwoStepVerificationSetupActivity f$0;
-    public final /* synthetic */ String f$1;
+    public final /* synthetic */ byte[] f$1;
 
-    public /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda27(TwoStepVerificationSetupActivity twoStepVerificationSetupActivity, String str) {
+    public /* synthetic */ TwoStepVerificationSetupActivity$$ExternalSyntheticLambda27(TwoStepVerificationSetupActivity twoStepVerificationSetupActivity, byte[] bArr) {
         this.f$0 = twoStepVerificationSetupActivity;
-        this.f$1 = str;
+        this.f$1 = bArr;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m4011x5CLASSNAMEa(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$createView$12(this.f$1);
     }
 }

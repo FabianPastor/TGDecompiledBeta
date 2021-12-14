@@ -1,18 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.AccountInstance;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda82 implements RequestDelegate {
-    public final /* synthetic */ AccountInstance f$0;
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda82 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda82();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda82(AccountInstance accountInstance) {
-        this.f$0 = accountInstance;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda82() {
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        AlertsCreator.lambda$showBlockReportSpamReplyAlert$4(this.f$0, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AlertsCreator.lambda$sendReport$62(tLObject, tLRPC$TL_error);
     }
 }

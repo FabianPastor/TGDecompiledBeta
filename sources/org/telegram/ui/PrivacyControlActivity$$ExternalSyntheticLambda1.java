@@ -10,6 +10,6 @@ public final /* synthetic */ class PrivacyControlActivity$$ExternalSyntheticLamb
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3659lambda$checkDiscard$9$orgtelegramuiPrivacyControlActivity(dialogInterface, i);
+        this.f$0.lambda$checkDiscard$8(dialogInterface, i);
     }
 }

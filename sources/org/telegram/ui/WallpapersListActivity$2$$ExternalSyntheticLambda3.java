@@ -12,6 +12,6 @@ public final /* synthetic */ class WallpapersListActivity$2$$ExternalSyntheticLa
     }
 
     public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-        this.f$0.m4085lambda$onItemClick$3$orgtelegramuiWallpapersListActivity$2(dialogsActivity, arrayList, charSequence, z);
+        this.f$0.lambda$onItemClick$3(dialogsActivity, arrayList, charSequence, z);
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class Camera1Session$2$$ExternalSyntheticLambda0 im
     }
 
     public final void run() {
-        this.f$0.m4096lambda$onPreviewFrame$0$orgwebrtcCamera1Session$2(this.f$1);
+        this.f$0.lambda$onPreviewFrame$0(this.f$1);
     }
 }

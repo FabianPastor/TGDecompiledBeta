@@ -2,7 +2,7 @@ package org.telegram.ui.Adapters;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class MentionsAdapter$$ExternalSyntheticLambda7 implements RequestDelegate {
     public final /* synthetic */ MentionsAdapter f$0;
@@ -13,7 +13,7 @@ public final /* synthetic */ class MentionsAdapter$$ExternalSyntheticLambda7 imp
         this.f$1 = str;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m1380x5b1741cc(this.f$1, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$searchServerStickers$1(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

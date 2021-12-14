@@ -10,6 +10,6 @@ public final /* synthetic */ class CodeNumberField$$ExternalSyntheticLambda1 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1988lambda$startExitAnimation$0$orgtelegramuiCodeNumberField(valueAnimator);
+        this.f$0.lambda$startExitAnimation$0(valueAnimator);
     }
 }

@@ -130,23 +130,19 @@ public enum ID3v1Genre {
     
     private final String description;
 
-    public static ID3v1Genre getGenre(int id) {
+    public static ID3v1Genre getGenre(int i) {
         ID3v1Genre[] values = values();
-        if (id < 0 || id >= values.length) {
+        if (i < 0 || i >= values.length) {
             return null;
         }
-        return values[id];
+        return values[i];
     }
 
-    private ID3v1Genre(String description2) {
-        this.description = description2;
+    private ID3v1Genre(String str) {
+        this.description = str;
     }
 
     public String getDescription() {
         return this.description;
-    }
-
-    public int getId() {
-        return ordinal();
     }
 }

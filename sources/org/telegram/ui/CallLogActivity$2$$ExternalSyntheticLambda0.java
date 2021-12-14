@@ -12,6 +12,6 @@ public final /* synthetic */ class CallLogActivity$2$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.m1498lambda$onScrolled$0$orgtelegramuiCallLogActivity$2(this.f$1);
+        this.f$0.lambda$onScrolled$0(this.f$1);
     }
 }

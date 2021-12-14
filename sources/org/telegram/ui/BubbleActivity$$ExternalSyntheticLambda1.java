@@ -10,6 +10,6 @@ public final /* synthetic */ class BubbleActivity$$ExternalSyntheticLambda1 impl
     }
 
     public final void didAcceptedPassword() {
-        this.f$0.m1464lambda$showPasscodeActivity$0$orgtelegramuiBubbleActivity();
+        this.f$0.lambda$showPasscodeActivity$0();
     }
 }

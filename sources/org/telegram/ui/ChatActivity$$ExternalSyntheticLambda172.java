@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda172 implements Runnable {
+import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
+
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda172 implements RecyclerAnimationScrollHelper.ScrollListener {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda172(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        this.f$0.m1786lambda$searchLinks$77$orgtelegramuiChatActivity();
+    public final void onScroll() {
+        this.f$0.invalidateMessagesVisiblePart();
     }
 }

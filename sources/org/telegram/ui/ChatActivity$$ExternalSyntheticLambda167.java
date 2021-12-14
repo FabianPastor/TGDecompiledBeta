@@ -1,13 +1,20 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda167 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import org.telegram.messenger.MessageObject;
+import org.telegram.ui.Components.AlertsCreator;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda167(ChatActivity chatActivity) {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda167 implements AlertsCreator.ScheduleDatePickerDelegate {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ MessageObject.GroupedMessages f$1;
+    public final /* synthetic */ MessageObject f$2;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda167(ChatActivity chatActivity, MessageObject.GroupedMessages groupedMessages, MessageObject messageObject) {
         this.f$0 = chatActivity;
+        this.f$1 = groupedMessages;
+        this.f$2 = messageObject;
     }
 
-    public final void run() {
-        this.f$0.m1752lambda$onResume$115$orgtelegramuiChatActivity();
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.lambda$processSelectedOption$146(this.f$1, this.f$2, z, i);
     }
 }

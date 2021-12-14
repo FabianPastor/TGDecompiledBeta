@@ -2,7 +2,7 @@ package org.telegram.ui.Delegates;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class MemberRequestsDelegate$$ExternalSyntheticLambda8 implements RequestDelegate {
     public final /* synthetic */ MemberRequestsDelegate f$0;
@@ -19,7 +19,7 @@ public final /* synthetic */ class MemberRequestsDelegate$$ExternalSyntheticLamb
         this.f$4 = z2;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2824xca134cf6(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$loadMembers$4(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
     }
 }

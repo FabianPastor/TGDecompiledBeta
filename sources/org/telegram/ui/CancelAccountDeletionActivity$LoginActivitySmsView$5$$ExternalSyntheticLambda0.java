@@ -10,6 +10,6 @@ public final /* synthetic */ class CancelAccountDeletionActivity$LoginActivitySm
     }
 
     public final void run() {
-        this.f$0.m1522x50var_ce9();
+        this.f$0.lambda$run$2();
     }
 }

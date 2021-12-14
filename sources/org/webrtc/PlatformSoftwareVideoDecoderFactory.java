@@ -18,8 +18,8 @@ public class PlatformSoftwareVideoDecoderFactory extends MediaCodecVideoDecoderF
             return Predicate.CC.$default$or(this, predicate);
         }
 
-        public boolean test(MediaCodecInfo arg) {
-            return MediaCodecUtils.isSoftwareOnly(arg);
+        public boolean test(MediaCodecInfo mediaCodecInfo) {
+            return MediaCodecUtils.isSoftwareOnly(mediaCodecInfo);
         }
     };
 
@@ -31,7 +31,7 @@ public class PlatformSoftwareVideoDecoderFactory extends MediaCodecVideoDecoderF
         return super.getSupportedCodecs();
     }
 
-    public PlatformSoftwareVideoDecoderFactory(EglBase.Context sharedContext) {
-        super(sharedContext, defaultAllowedPredicate);
+    public PlatformSoftwareVideoDecoderFactory(EglBase.Context context) {
+        super(context, defaultAllowedPredicate);
     }
 }

@@ -1,20 +1,14 @@
 package org.telegram.ui.Components;
 
-import java.util.Calendar;
 import org.telegram.ui.Components.NumberPicker;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda91 implements NumberPicker.Formatter {
-    public final /* synthetic */ long f$0;
-    public final /* synthetic */ Calendar f$1;
-    public final /* synthetic */ int f$2;
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda91 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda91();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda91(long j, Calendar calendar, int i) {
-        this.f$0 = j;
-        this.f$1 = calendar;
-        this.f$2 = i;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda91() {
     }
 
     public final String format(int i) {
-        return AlertsCreator.lambda$createDatePickerDialog$50(this.f$0, this.f$1, this.f$2, i);
+        return AlertsCreator.lambda$createCalendarPickerDialog$58(i);
     }
 }

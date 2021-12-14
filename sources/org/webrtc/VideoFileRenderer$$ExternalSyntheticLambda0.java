@@ -8,6 +8,6 @@ public final /* synthetic */ class VideoFileRenderer$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.m4127lambda$release$3$orgwebrtcVideoFileRenderer();
+        this.f$0.lambda$release$3();
     }
 }

@@ -1,22 +1,18 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.messenger.MessagesController;
+import android.content.Context;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda5 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ MessagesController.SponsoredMessagesInfo f$3;
+    public final /* synthetic */ Context f$0;
+    public final /* synthetic */ AlertDialog f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda5(MessagesController messagesController, ArrayList arrayList, long j, MessagesController.SponsoredMessagesInfo sponsoredMessagesInfo) {
-        this.f$0 = messagesController;
-        this.f$1 = arrayList;
-        this.f$2 = j;
-        this.f$3 = sponsoredMessagesInfo;
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda5(Context context, AlertDialog alertDialog) {
+        this.f$0 = context;
+        this.f$1 = alertDialog;
     }
 
     public final void run() {
-        this.f$0.m229xc7bc2b41(this.f$1, this.f$2, this.f$3);
+        MessagesController.lambda$convertToGigaGroup$207(this.f$0, this.f$1);
     }
 }

@@ -1,15 +1,15 @@
 package org.telegram.ui.ActionBar;
 
-import android.graphics.drawable.Drawable;
+import org.telegram.messenger.MessageObject;
 
 public final /* synthetic */ class Theme$$ExternalSyntheticLambda3 implements Runnable {
-    public final /* synthetic */ Drawable f$0;
+    public final /* synthetic */ MessageObject f$0;
 
-    public /* synthetic */ Theme$$ExternalSyntheticLambda3(Drawable drawable) {
-        this.f$0 = drawable;
+    public /* synthetic */ Theme$$ExternalSyntheticLambda3(MessageObject messageObject) {
+        this.f$0 = messageObject;
     }
 
     public final void run() {
-        Theme.lambda$loadWallpaper$7(this.f$0);
+        Theme.lambda$unrefAudioVisualizeDrawable$9(this.f$0);
     }
 }

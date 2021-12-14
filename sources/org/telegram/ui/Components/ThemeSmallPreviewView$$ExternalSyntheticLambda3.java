@@ -15,6 +15,6 @@ public final /* synthetic */ class ThemeSmallPreviewView$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.m2692x64var_ac(this.f$1, this.f$2);
+        this.f$0.lambda$setItem$2(this.f$1, this.f$2);
     }
 }

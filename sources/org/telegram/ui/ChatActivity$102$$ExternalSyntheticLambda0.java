@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatActivity$102$$ExternalSyntheticLambda0 im
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m1829lambda$onClick$0$orgtelegramuiChatActivity$102(this.f$1, view, i);
+        this.f$0.lambda$onClick$0(this.f$1, view, i);
     }
 }

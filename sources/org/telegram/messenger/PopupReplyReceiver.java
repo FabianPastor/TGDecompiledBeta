@@ -8,9 +8,9 @@ public class PopupReplyReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent != null) {
             ApplicationLoader.postInitApplication();
-            int currentAccount = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
-            if (UserConfig.isValidAccount(currentAccount)) {
-                NotificationsController.getInstance(currentAccount).forceShowPopupForReply();
+            int intExtra = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
+            if (UserConfig.isValidAccount(intExtra)) {
+                NotificationsController.getInstance(intExtra).forceShowPopupForReply();
             }
         }
     }

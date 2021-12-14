@@ -2,7 +2,7 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class MemberRequestsController$$ExternalSyntheticLambda1 implements RequestDelegate {
     public final /* synthetic */ MemberRequestsController f$0;
@@ -15,7 +15,7 @@ public final /* synthetic */ class MemberRequestsController$$ExternalSyntheticLa
         this.f$2 = requestDelegate;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m909x928219c8(this.f$1, this.f$2, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$getImporters$1(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

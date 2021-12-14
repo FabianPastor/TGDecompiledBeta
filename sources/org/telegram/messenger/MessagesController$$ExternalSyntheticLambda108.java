@@ -1,28 +1,20 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$updates_ChannelDifference;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda108 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ AlertDialog[] f$1;
-    public final /* synthetic */ BaseFragment f$2;
-    public final /* synthetic */ TLRPC.TL_error f$3;
-    public final /* synthetic */ TLObject f$4;
-    public final /* synthetic */ int f$5;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ TLRPC$updates_ChannelDifference f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda108(MessagesController messagesController, AlertDialog[] alertDialogArr, BaseFragment baseFragment, TLRPC.TL_error tL_error, TLObject tLObject, int i) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda108(MessagesController messagesController, ArrayList arrayList, TLRPC$updates_ChannelDifference tLRPC$updates_ChannelDifference) {
         this.f$0 = messagesController;
-        this.f$1 = alertDialogArr;
-        this.f$2 = baseFragment;
-        this.f$3 = tL_error;
-        this.f$4 = tLObject;
-        this.f$5 = i;
+        this.f$1 = arrayList;
+        this.f$2 = tLRPC$updates_ChannelDifference;
     }
 
     public final void run() {
-        this.f$0.m295x2d3ba107(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.lambda$getChannelDifference$253(this.f$1, this.f$2);
     }
 }

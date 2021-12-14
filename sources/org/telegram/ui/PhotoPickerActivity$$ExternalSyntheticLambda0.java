@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoPickerActivity$$ExternalSyntheticLambda0
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3542lambda$createView$0$orgtelegramuiPhotoPickerActivity(dialogInterface, i);
+        this.f$0.lambda$createView$0(dialogInterface, i);
     }
 }

@@ -14,6 +14,6 @@ public final /* synthetic */ class CancelAccountDeletionActivity$LoginActivitySm
     }
 
     public final boolean onKey(View view, int i, KeyEvent keyEvent) {
-        return this.f$0.m1517xcCLASSNAMEd79(this.f$1, view, i, keyEvent);
+        return this.f$0.lambda$setParams$4(this.f$1, view, i, keyEvent);
     }
 }

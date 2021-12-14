@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
+import android.view.View;
 
-public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda4 implements Runnable {
+public final /* synthetic */ class ChannelCreateActivity$$ExternalSyntheticLambda4 implements View.OnClickListener {
     public final /* synthetic */ ChannelCreateActivity f$0;
-    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda4(ChannelCreateActivity channelCreateActivity, TLObject tLObject) {
+    public /* synthetic */ ChannelCreateActivity$$ExternalSyntheticLambda4(ChannelCreateActivity channelCreateActivity) {
         this.f$0 = channelCreateActivity;
-        this.f$1 = tLObject;
     }
 
-    public final void run() {
-        this.f$0.m1643x61eCLASSNAMEa3(this.f$1);
+    public final void onClick(View view) {
+        this.f$0.lambda$loadAdminedChannels$16(view);
     }
 }

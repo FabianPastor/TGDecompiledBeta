@@ -1,20 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ContactsActivity;
+import android.view.View;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda78 implements ContactsActivity.ContactsActivityDelegate {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda78 implements RecyclerListView.OnItemLongClickListener {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ int[] f$2;
+    public final /* synthetic */ ItemTouchHelper f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda78(LaunchActivity launchActivity, boolean z, int[] iArr) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda78(LaunchActivity launchActivity, ItemTouchHelper itemTouchHelper) {
         this.f$0 = launchActivity;
-        this.f$1 = z;
-        this.f$2 = iArr;
+        this.f$1 = itemTouchHelper;
     }
 
-    public final void didSelectContact(TLRPC.User user, String str, ContactsActivity contactsActivity) {
-        this.f$0.m3079lambda$handleIntent$13$orgtelegramuiLaunchActivity(this.f$1, this.f$2, user, str, contactsActivity);
+    public final boolean onItemClick(View view, int i) {
+        return this.f$0.lambda$onCreate$3(this.f$1, view, i);
     }
 }

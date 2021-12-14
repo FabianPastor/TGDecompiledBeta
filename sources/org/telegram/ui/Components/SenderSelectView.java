@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.util.AttributeSet;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageReceiver;
@@ -37,33 +36,11 @@ public class SenderSelectView extends View {
         updateColors();
     }
 
-    public SenderSelectView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        this.avatarImage.setRoundRadius(AndroidUtilities.dp(28.0f));
-        this.menuDrawable.setMiniIcon(true);
-        this.menuDrawable.setRotateToBack(false);
-        this.menuDrawable.setRotation(0.0f, false);
-        this.menuDrawable.setRoundCap();
-        this.menuDrawable.setCallback(this);
-        updateColors();
-    }
-
-    public SenderSelectView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        this.avatarImage.setRoundRadius(AndroidUtilities.dp(28.0f));
-        this.menuDrawable.setMiniIcon(true);
-        this.menuDrawable.setRotateToBack(false);
-        this.menuDrawable.setRotation(0.0f, false);
-        this.menuDrawable.setRoundCap();
-        this.menuDrawable.setCallback(this);
-        updateColors();
-    }
-
     private void updateColors() {
         this.backgroundPaint.setColor(Theme.getColor("chat_messagePanelVoiceBackground"));
-        int textColor = Theme.getColor("chat_messagePanelVoicePressed");
-        this.menuDrawable.setBackColor(textColor);
-        this.menuDrawable.setIconColor(textColor);
+        int color = Theme.getColor("chat_messagePanelVoicePressed");
+        this.menuDrawable.setBackColor(color);
+        this.menuDrawable.setIconColor(color);
         Drawable createSimpleSelectorRoundRectDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(16.0f), 0, Theme.getColor("windowBackgroundWhite"));
         this.selectorDrawable = createSimpleSelectorRoundRectDrawable;
         createSimpleSelectorRoundRectDrawable.setCallback(this);
@@ -82,8 +59,8 @@ public class SenderSelectView extends View {
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        super.onLayout(z, i, i2, i3, i4);
         this.avatarImage.setImageCoords(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
     }
 
@@ -91,13 +68,13 @@ public class SenderSelectView extends View {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         this.avatarImage.draw(canvas);
-        int alpha = (int) (this.menuDrawable.getCurrentRotation() * 255.0f);
-        this.backgroundPaint.setAlpha(alpha);
+        int currentRotation = (int) (this.menuDrawable.getCurrentRotation() * 255.0f);
+        this.backgroundPaint.setAlpha(currentRotation);
         this.mTempRect.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
         canvas.drawRoundRect(this.mTempRect, (float) AndroidUtilities.dp(16.0f), (float) AndroidUtilities.dp(16.0f), this.backgroundPaint);
         canvas.save();
         canvas.translate((float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f));
-        this.menuDrawable.setAlpha(alpha);
+        this.menuDrawable.setAlpha(currentRotation);
         this.menuDrawable.setBounds(0, 0, getWidth(), getHeight());
         this.menuDrawable.draw(canvas);
         canvas.restore();
@@ -105,17 +82,17 @@ public class SenderSelectView extends View {
         this.selectorDrawable.draw(canvas);
     }
 
-    public void setAvatar(TLObject obj) {
-        this.avatarDrawable.setInfo(obj);
-        this.avatarImage.setForUserOrChat(obj, this.avatarDrawable);
+    public void setAvatar(TLObject tLObject) {
+        this.avatarDrawable.setInfo(tLObject);
+        this.avatarImage.setForUserOrChat(tLObject, this.avatarDrawable);
     }
 
-    public void setProgress(float progress) {
-        setProgress(progress, true);
+    public void setProgress(float f) {
+        setProgress(f, true);
     }
 
-    public void setProgress(float progress, boolean animate) {
-        this.menuDrawable.setRotation(progress, animate);
+    public void setProgress(float f, boolean z) {
+        this.menuDrawable.setRotation(f, z);
     }
 
     public float getProgress() {
@@ -123,8 +100,8 @@ public class SenderSelectView extends View {
     }
 
     /* access modifiers changed from: protected */
-    public boolean verifyDrawable(Drawable who) {
-        return super.verifyDrawable(who) || this.selectorDrawable == who;
+    public boolean verifyDrawable(Drawable drawable) {
+        return super.verifyDrawable(drawable) || this.selectorDrawable == drawable;
     }
 
     /* access modifiers changed from: protected */

@@ -20,29 +20,39 @@ public class PlayingGameDrawable extends StatusDrawable {
     Theme.ResourcesProvider resourcesProvider;
     private boolean started = false;
 
-    public PlayingGameDrawable(boolean isDialogScreen2, Theme.ResourcesProvider resourcesProvider2) {
-        this.isDialogScreen = isDialogScreen2;
+    public int getOpacity() {
+        return -2;
+    }
+
+    public void setAlpha(int i) {
+    }
+
+    public void setColor(int i) {
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
+
+    public PlayingGameDrawable(boolean z, Theme.ResourcesProvider resourcesProvider2) {
+        this.isDialogScreen = z;
         this.resourcesProvider = resourcesProvider2;
     }
 
-    public void setIsChat(boolean value) {
-        this.isChat = value;
-    }
-
-    public void setColor(int color) {
+    public void setIsChat(boolean z) {
+        this.isChat = z;
     }
 
     private void update() {
-        long newTime = System.currentTimeMillis();
-        long dt = newTime - this.lastUpdateTime;
-        this.lastUpdateTime = newTime;
-        if (dt > 16) {
-            dt = 16;
+        long currentTimeMillis = System.currentTimeMillis();
+        long j = currentTimeMillis - this.lastUpdateTime;
+        this.lastUpdateTime = currentTimeMillis;
+        if (j > 16) {
+            j = 16;
         }
         if (this.progress >= 1.0f) {
             this.progress = 0.0f;
         }
-        float f = this.progress + (((float) dt) / 300.0f);
+        float f = this.progress + (((float) j) / 300.0f);
         this.progress = f;
         if (f > 1.0f) {
             this.progress = 1.0f;
@@ -62,41 +72,34 @@ public class PlayingGameDrawable extends StatusDrawable {
     }
 
     public void draw(Canvas canvas) {
-        int y;
-        int rad;
-        int size = AndroidUtilities.dp(10.0f);
-        int y2 = getBounds().top + ((getIntrinsicHeight() - size) / 2);
-        if (this.isChat) {
-            y = y2;
-        } else {
-            y = y2 + AndroidUtilities.dp(1.0f);
+        int dp = AndroidUtilities.dp(10.0f);
+        int intrinsicHeight = getBounds().top + ((getIntrinsicHeight() - dp) / 2);
+        if (!this.isChat) {
+            intrinsicHeight += AndroidUtilities.dp(1.0f);
         }
+        int i = intrinsicHeight;
         this.paint.setColor(Theme.getColor(this.isDialogScreen ? "chats_actionMessage" : "chat_status", this.resourcesProvider));
-        this.rect.set(0.0f, (float) y, (float) size, (float) (y + size));
+        this.rect.set(0.0f, (float) i, (float) dp, (float) (i + dp));
         float f = this.progress;
-        if (f < 0.5f) {
-            rad = (int) ((1.0f - (f / 0.5f)) * 35.0f);
-        } else {
-            rad = (int) (((f - 0.5f) * 35.0f) / 0.5f);
-        }
-        for (int a = 0; a < 3; a++) {
+        int i2 = (int) (f < 0.5f ? (1.0f - (f / 0.5f)) * 35.0f : ((f - 0.5f) * 35.0f) / 0.5f);
+        for (int i3 = 0; i3 < 3; i3++) {
             float f2 = this.progress;
-            float x = ((float) ((AndroidUtilities.dp(5.0f) * a) + AndroidUtilities.dp(9.2f))) - (((float) AndroidUtilities.dp(5.0f)) * f2);
-            if (a == 2) {
+            float dp2 = ((float) ((AndroidUtilities.dp(5.0f) * i3) + AndroidUtilities.dp(9.2f))) - (((float) AndroidUtilities.dp(5.0f)) * f2);
+            if (i3 == 2) {
                 this.paint.setAlpha(Math.min(255, (int) ((f2 * 255.0f) / 0.5f)));
-            } else if (a != 0) {
+            } else if (i3 != 0) {
                 this.paint.setAlpha(255);
             } else if (f2 > 0.5f) {
                 this.paint.setAlpha((int) ((1.0f - ((f2 - 0.5f) / 0.5f)) * 255.0f));
             } else {
                 this.paint.setAlpha(255);
             }
-            canvas.drawCircle(x, (float) ((size / 2) + y), (float) AndroidUtilities.dp(1.2f), this.paint);
+            canvas.drawCircle(dp2, (float) ((dp / 2) + i), (float) AndroidUtilities.dp(1.2f), this.paint);
         }
         this.paint.setAlpha(255);
-        canvas.drawArc(this.rect, (float) rad, (float) (360 - (rad * 2)), true, this.paint);
+        canvas.drawArc(this.rect, (float) i2, (float) (360 - (i2 * 2)), true, this.paint);
         this.paint.setColor(Theme.getColor(this.isDialogScreen ? "windowBackgroundWhite" : "actionBarDefault"));
-        canvas.drawCircle((float) AndroidUtilities.dp(4.0f), (float) (((size / 2) + y) - AndroidUtilities.dp(2.0f)), (float) AndroidUtilities.dp(1.0f), this.paint);
+        canvas.drawCircle((float) AndroidUtilities.dp(4.0f), (float) ((i + (dp / 2)) - AndroidUtilities.dp(2.0f)), (float) AndroidUtilities.dp(1.0f), this.paint);
         checkUpdate();
     }
 
@@ -110,16 +113,6 @@ public class PlayingGameDrawable extends StatusDrawable {
         } else {
             AndroidUtilities.runOnUIThread(new PlayingGameDrawable$$ExternalSyntheticLambda0(this), 100);
         }
-    }
-
-    public void setAlpha(int alpha) {
-    }
-
-    public void setColorFilter(ColorFilter cf) {
-    }
-
-    public int getOpacity() {
-        return -2;
     }
 
     public int getIntrinsicWidth() {

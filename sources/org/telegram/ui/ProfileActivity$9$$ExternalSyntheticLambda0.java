@@ -11,6 +11,6 @@ public final /* synthetic */ class ProfileActivity$9$$ExternalSyntheticLambda0 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m3730lambda$runPendingAnimations$0$orgtelegramuiProfileActivity$9(valueAnimator);
+        this.f$0.lambda$runPendingAnimations$0(valueAnimator);
     }
 }

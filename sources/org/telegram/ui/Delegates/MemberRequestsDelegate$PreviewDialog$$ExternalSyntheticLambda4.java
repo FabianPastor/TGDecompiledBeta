@@ -10,6 +10,6 @@ public final /* synthetic */ class MemberRequestsDelegate$PreviewDialog$$Externa
     }
 
     public final void run() {
-        this.f$0.m2832x8f2a92bf();
+        this.f$0.lambda$show$3();
     }
 }

@@ -1,13 +1,19 @@
 package org.telegram.ui.Adapters;
 
-public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda14 implements Runnable {
-    public final /* synthetic */ DialogsSearchAdapter f$0;
+import org.telegram.messenger.MessagesStorage;
 
-    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda14(DialogsSearchAdapter dialogsSearchAdapter) {
+public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda14 implements MessagesStorage.IntCallback {
+    public final /* synthetic */ DialogsSearchAdapter f$0;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ Object f$2;
+
+    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda14(DialogsSearchAdapter dialogsSearchAdapter, long j, Object obj) {
         this.f$0 = dialogsSearchAdapter;
+        this.f$1 = j;
+        this.f$2 = obj;
     }
 
-    public final void run() {
-        this.f$0.m1366xd91b03c3();
+    public final void run(int i) {
+        this.f$0.lambda$updateSearchResults$11(this.f$1, this.f$2, i);
     }
 }

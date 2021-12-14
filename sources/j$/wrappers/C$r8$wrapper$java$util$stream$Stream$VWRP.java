@@ -1,201 +1,198 @@
 package j$.wrappers;
 
+import j$.util.CLASSNAMEa;
 import j$.util.Optional;
-import j$.util.OptionalConversions;
-import j$.util.Spliterator;
+import j$.util.function.A;
+import j$.util.function.B;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
-import j$.util.function.BinaryOperator;
+import j$.util.function.C;
+import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
 import j$.util.function.Function;
-import j$.util.function.IntFunction;
-import j$.util.function.Predicate;
-import j$.util.function.Supplier;
-import j$.util.function.ToDoubleFunction;
-import j$.util.function.ToIntFunction;
-import j$.util.function.ToLongFunction;
-import j$.util.stream.BaseStream;
-import j$.util.stream.Collector;
-import j$.util.stream.DoubleStream;
-import j$.util.stream.IntStream;
-import j$.util.stream.LongStream;
+import j$.util.function.m;
+import j$.util.function.y;
+import j$.util.function.z;
+import j$.util.stream.CLASSNAMEf1;
+import j$.util.stream.CLASSNAMEg;
+import j$.util.stream.M0;
 import j$.util.stream.Stream;
+import j$.util.stream.U;
 import java.util.Comparator;
 import java.util.Iterator;
 
 /* renamed from: j$.wrappers.$r8$wrapper$java$util$stream$Stream$-V-WRP  reason: invalid class name */
-/* compiled from: Stream */
 public final /* synthetic */ class C$r8$wrapper$java$util$stream$Stream$VWRP implements Stream {
-    final /* synthetic */ java.util.stream.Stream wrappedValue;
+    final /* synthetic */ java.util.stream.Stream a;
 
     private /* synthetic */ C$r8$wrapper$java$util$stream$Stream$VWRP(java.util.stream.Stream stream) {
-        this.wrappedValue = stream;
+        this.a = stream;
     }
 
     public static /* synthetic */ Stream convert(java.util.stream.Stream stream) {
         if (stream == null) {
             return null;
         }
-        return stream instanceof C$r8$wrapper$java$util$stream$Stream$WRP ? ((C$r8$wrapper$java$util$stream$Stream$WRP) stream).wrappedValue : new C$r8$wrapper$java$util$stream$Stream$VWRP(stream);
+        return stream instanceof R0 ? ((R0) stream).a : new C$r8$wrapper$java$util$stream$Stream$VWRP(stream);
     }
 
-    public /* synthetic */ boolean allMatch(Predicate predicate) {
-        return this.wrappedValue.allMatch(C$r8$wrapper$java$util$function$Predicate$WRP.convert(predicate));
+    public /* synthetic */ Object B(Object obj, BiFunction biFunction, CLASSNAMEb bVar) {
+        return this.a.reduce(obj, CLASSNAMEt.a(biFunction), CLASSNAMEv.a(bVar));
     }
 
-    public /* synthetic */ boolean anyMatch(Predicate predicate) {
-        return this.wrappedValue.anyMatch(C$r8$wrapper$java$util$function$Predicate$WRP.convert(predicate));
+    public /* synthetic */ U E(Function function) {
+        return L0.n0(this.a.flatMapToDouble(N.a(function)));
+    }
+
+    public /* synthetic */ Stream T(y yVar) {
+        return convert(this.a.filter(y0.a(yVar)));
+    }
+
+    public /* synthetic */ Stream V(Consumer consumer) {
+        return convert(this.a.peek(CLASSNAMEx.a(consumer)));
+    }
+
+    public /* synthetic */ boolean W(y yVar) {
+        return this.a.allMatch(y0.a(yVar));
+    }
+
+    public /* synthetic */ CLASSNAMEf1 X(Function function) {
+        return P0.n0(this.a.flatMapToLong(N.a(function)));
+    }
+
+    public /* synthetic */ boolean a(y yVar) {
+        return this.a.anyMatch(y0.a(yVar));
+    }
+
+    public /* synthetic */ Object b0(J0 j0) {
+        return this.a.collect(j0 == null ? null : j0.a);
+    }
+
+    public /* synthetic */ M0 c(Function function) {
+        return N0.n0(this.a.flatMapToInt(N.a(function)));
     }
 
     public /* synthetic */ void close() {
-        this.wrappedValue.close();
-    }
-
-    public /* synthetic */ Object collect(Supplier supplier, BiConsumer biConsumer, BiConsumer biConsumer2) {
-        return this.wrappedValue.collect(C$r8$wrapper$java$util$function$Supplier$WRP.convert(supplier), C$r8$wrapper$java$util$function$BiConsumer$WRP.convert(biConsumer), C$r8$wrapper$java$util$function$BiConsumer$WRP.convert(biConsumer2));
-    }
-
-    public /* synthetic */ Object collect(Collector collector) {
-        return this.wrappedValue.collect(C$r8$wrapper$java$util$stream$Collector$WRP.convert(collector));
+        this.a.close();
     }
 
     public /* synthetic */ long count() {
-        return this.wrappedValue.count();
+        return this.a.count();
+    }
+
+    public /* synthetic */ boolean d0(y yVar) {
+        return this.a.noneMatch(y0.a(yVar));
     }
 
     public /* synthetic */ Stream distinct() {
-        return convert(this.wrappedValue.distinct());
+        return convert(this.a.distinct());
     }
 
-    public /* synthetic */ Stream filter(Predicate predicate) {
-        return convert(this.wrappedValue.filter(C$r8$wrapper$java$util$function$Predicate$WRP.convert(predicate)));
+    public /* synthetic */ void e(Consumer consumer) {
+        this.a.forEachOrdered(CLASSNAMEx.a(consumer));
     }
 
     public /* synthetic */ Optional findAny() {
-        return OptionalConversions.convert(this.wrappedValue.findAny());
+        return CLASSNAMEa.p(this.a.findAny());
     }
 
     public /* synthetic */ Optional findFirst() {
-        return OptionalConversions.convert(this.wrappedValue.findFirst());
-    }
-
-    public /* synthetic */ Stream flatMap(Function function) {
-        return convert(this.wrappedValue.flatMap(C$r8$wrapper$java$util$function$Function$WRP.convert(function)));
-    }
-
-    public /* synthetic */ DoubleStream flatMapToDouble(Function function) {
-        return C$r8$wrapper$java$util$stream$DoubleStream$VWRP.convert(this.wrappedValue.flatMapToDouble(C$r8$wrapper$java$util$function$Function$WRP.convert(function)));
-    }
-
-    public /* synthetic */ IntStream flatMapToInt(Function function) {
-        return C$r8$wrapper$java$util$stream$IntStream$VWRP.convert(this.wrappedValue.flatMapToInt(C$r8$wrapper$java$util$function$Function$WRP.convert(function)));
-    }
-
-    public /* synthetic */ LongStream flatMapToLong(Function function) {
-        return C$r8$wrapper$java$util$stream$LongStream$VWRP.convert(this.wrappedValue.flatMapToLong(C$r8$wrapper$java$util$function$Function$WRP.convert(function)));
+        return CLASSNAMEa.p(this.a.findFirst());
     }
 
     public /* synthetic */ void forEach(Consumer consumer) {
-        this.wrappedValue.forEach(C$r8$wrapper$java$util$function$Consumer$WRP.convert(consumer));
+        this.a.forEach(CLASSNAMEx.a(consumer));
     }
 
-    public /* synthetic */ void forEachOrdered(Consumer consumer) {
-        this.wrappedValue.forEachOrdered(C$r8$wrapper$java$util$function$Consumer$WRP.convert(consumer));
+    public /* synthetic */ CLASSNAMEf1 g0(C c) {
+        return P0.n0(this.a.mapToLong(G0.a(c)));
+    }
+
+    public /* synthetic */ Object i(z zVar, BiConsumer biConsumer, BiConsumer biConsumer2) {
+        return this.a.collect(A0.a(zVar), r.a(biConsumer), r.a(biConsumer2));
     }
 
     public /* synthetic */ boolean isParallel() {
-        return this.wrappedValue.isParallel();
+        return this.a.isParallel();
     }
 
     public /* synthetic */ Iterator iterator() {
-        return this.wrappedValue.iterator();
+        return this.a.iterator();
+    }
+
+    public /* synthetic */ U j0(A a2) {
+        return L0.n0(this.a.mapToDouble(C0.a(a2)));
+    }
+
+    public /* synthetic */ Object[] l(m mVar) {
+        return this.a.toArray(U.a(mVar));
     }
 
     public /* synthetic */ Stream limit(long j) {
-        return convert(this.wrappedValue.limit(j));
+        return convert(this.a.limit(j));
     }
 
-    public /* synthetic */ Stream map(Function function) {
-        return convert(this.wrappedValue.map(C$r8$wrapper$java$util$function$Function$WRP.convert(function)));
+    public /* synthetic */ M0 m(B b) {
+        return N0.n0(this.a.mapToInt(E0.a(b)));
     }
 
-    public /* synthetic */ DoubleStream mapToDouble(ToDoubleFunction toDoubleFunction) {
-        return C$r8$wrapper$java$util$stream$DoubleStream$VWRP.convert(this.wrappedValue.mapToDouble(C$r8$wrapper$java$util$function$ToDoubleFunction$WRP.convert(toDoubleFunction)));
-    }
-
-    public /* synthetic */ IntStream mapToInt(ToIntFunction toIntFunction) {
-        return C$r8$wrapper$java$util$stream$IntStream$VWRP.convert(this.wrappedValue.mapToInt(C$r8$wrapper$java$util$function$ToIntFunction$WRP.convert(toIntFunction)));
-    }
-
-    public /* synthetic */ LongStream mapToLong(ToLongFunction toLongFunction) {
-        return C$r8$wrapper$java$util$stream$LongStream$VWRP.convert(this.wrappedValue.mapToLong(C$r8$wrapper$java$util$function$ToLongFunction$WRP.convert(toLongFunction)));
+    public /* synthetic */ Object m0(Object obj, CLASSNAMEb bVar) {
+        return this.a.reduce(obj, CLASSNAMEv.a(bVar));
     }
 
     public /* synthetic */ Optional max(Comparator comparator) {
-        return OptionalConversions.convert(this.wrappedValue.max(comparator));
+        return CLASSNAMEa.p(this.a.max(comparator));
     }
 
     public /* synthetic */ Optional min(Comparator comparator) {
-        return OptionalConversions.convert(this.wrappedValue.min(comparator));
+        return CLASSNAMEa.p(this.a.min(comparator));
     }
 
-    public /* synthetic */ boolean noneMatch(Predicate predicate) {
-        return this.wrappedValue.noneMatch(C$r8$wrapper$java$util$function$Predicate$WRP.convert(predicate));
+    public /* synthetic */ Stream n(Function function) {
+        return convert(this.a.map(N.a(function)));
     }
 
-    public /* synthetic */ BaseStream onClose(Runnable runnable) {
-        return C$r8$wrapper$java$util$stream$BaseStream$VWRP.convert(this.wrappedValue.onClose(runnable));
+    public /* synthetic */ Stream o(Function function) {
+        return convert(this.a.flatMap(N.a(function)));
     }
 
-    public /* synthetic */ BaseStream parallel() {
-        return C$r8$wrapper$java$util$stream$BaseStream$VWRP.convert(this.wrappedValue.parallel());
+    public /* synthetic */ CLASSNAMEg onClose(Runnable runnable) {
+        return H0.n0(this.a.onClose(runnable));
     }
 
-    public /* synthetic */ Stream peek(Consumer consumer) {
-        return convert(this.wrappedValue.peek(C$r8$wrapper$java$util$function$Consumer$WRP.convert(consumer)));
+    public /* synthetic */ CLASSNAMEg parallel() {
+        return H0.n0(this.a.parallel());
     }
 
-    public /* synthetic */ Optional reduce(BinaryOperator binaryOperator) {
-        return OptionalConversions.convert(this.wrappedValue.reduce(C$r8$wrapper$java$util$function$BinaryOperator$WRP.convert(binaryOperator)));
-    }
-
-    public /* synthetic */ Object reduce(Object obj, BiFunction biFunction, BinaryOperator binaryOperator) {
-        return this.wrappedValue.reduce(obj, C$r8$wrapper$java$util$function$BiFunction$WRP.convert(biFunction), C$r8$wrapper$java$util$function$BinaryOperator$WRP.convert(binaryOperator));
-    }
-
-    public /* synthetic */ Object reduce(Object obj, BinaryOperator binaryOperator) {
-        return this.wrappedValue.reduce(obj, C$r8$wrapper$java$util$function$BinaryOperator$WRP.convert(binaryOperator));
-    }
-
-    public /* synthetic */ BaseStream sequential() {
-        return C$r8$wrapper$java$util$stream$BaseStream$VWRP.convert(this.wrappedValue.sequential());
+    public /* synthetic */ CLASSNAMEg sequential() {
+        return H0.n0(this.a.sequential());
     }
 
     public /* synthetic */ Stream skip(long j) {
-        return convert(this.wrappedValue.skip(j));
+        return convert(this.a.skip(j));
     }
 
     public /* synthetic */ Stream sorted() {
-        return convert(this.wrappedValue.sorted());
+        return convert(this.a.sorted());
     }
 
     public /* synthetic */ Stream sorted(Comparator comparator) {
-        return convert(this.wrappedValue.sorted(comparator));
+        return convert(this.a.sorted(comparator));
     }
 
-    public /* synthetic */ Spliterator spliterator() {
-        return C$r8$wrapper$java$util$Spliterator$VWRP.convert(this.wrappedValue.spliterator());
+    public /* synthetic */ j$.util.y spliterator() {
+        return CLASSNAMEg.a(this.a.spliterator());
+    }
+
+    public /* synthetic */ Optional t(CLASSNAMEb bVar) {
+        return CLASSNAMEa.p(this.a.reduce(CLASSNAMEv.a(bVar)));
     }
 
     public /* synthetic */ Object[] toArray() {
-        return this.wrappedValue.toArray();
+        return this.a.toArray();
     }
 
-    public /* synthetic */ Object[] toArray(IntFunction intFunction) {
-        return this.wrappedValue.toArray(C$r8$wrapper$java$util$function$IntFunction$WRP.convert(intFunction));
-    }
-
-    public /* synthetic */ BaseStream unordered() {
-        return C$r8$wrapper$java$util$stream$BaseStream$VWRP.convert(this.wrappedValue.unordered());
+    public /* synthetic */ CLASSNAMEg unordered() {
+        return H0.n0(this.a.unordered());
     }
 }

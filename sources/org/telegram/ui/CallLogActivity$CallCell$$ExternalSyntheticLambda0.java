@@ -11,6 +11,6 @@ public final /* synthetic */ class CallLogActivity$CallCell$$ExternalSyntheticLa
     }
 
     public final void onClick(View view) {
-        this.f$0.m1499lambda$new$0$orgtelegramuiCallLogActivity$CallCell(view);
+        this.f$0.lambda$new$0(view);
     }
 }

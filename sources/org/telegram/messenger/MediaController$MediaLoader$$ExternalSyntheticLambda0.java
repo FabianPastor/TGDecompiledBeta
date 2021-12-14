@@ -11,6 +11,6 @@ public final /* synthetic */ class MediaController$MediaLoader$$ExternalSyntheti
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.m768lambda$new$0$orgtelegrammessengerMediaController$MediaLoader(dialogInterface);
+        this.f$0.lambda$new$0(dialogInterface);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupStickersActivity$$ExternalSyntheticLambd
     }
 
     public final void onClick(View view) {
-        this.f$0.m3037lambda$createView$0$orgtelegramuiGroupStickersActivity(view);
+        this.f$0.lambda$createView$0(view);
     }
 }

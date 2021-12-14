@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda0 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2973lambda$new$25$orgtelegramuiGroupCallActivity(valueAnimator);
+        this.f$0.lambda$new$25(valueAnimator);
     }
 }

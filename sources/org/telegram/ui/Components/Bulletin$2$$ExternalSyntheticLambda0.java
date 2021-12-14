@@ -11,6 +11,6 @@ public final /* synthetic */ class Bulletin$2$$ExternalSyntheticLambda0 implemen
     }
 
     public final void accept(Object obj) {
-        this.f$0.m2028lambda$onLayoutChange$1$orgtelegramuiComponentsBulletin$2((Float) obj);
+        this.f$0.lambda$onLayoutChange$1((Float) obj);
     }
 }

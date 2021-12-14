@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda2 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda2 implements DialogInterface.OnCancelListener {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ long f$2;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda2(MessagesController messagesController, ArrayList arrayList, long j) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda2(MessagesController messagesController, int i) {
         this.f$0 = messagesController;
-        this.f$1 = arrayList;
-        this.f$2 = j;
+        this.f$1 = i;
     }
 
-    public final void run() {
-        this.f$0.m174xa4b6d0d5(this.f$1, this.f$2);
+    public final void onCancel(DialogInterface dialogInterface) {
+        this.f$0.lambda$convertToMegaGroup$206(this.f$1, dialogInterface);
     }
 }

@@ -1,7 +1,12 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.text.style.CharacterStyle;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
@@ -10,116 +15,148 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$KeyboardButton;
+import org.telegram.tgnet.TLRPC$TL_message;
+import org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl;
+import org.telegram.tgnet.TLRPC$TL_messageMediaEmpty;
+import org.telegram.tgnet.TLRPC$TL_messageReplyHeader;
+import org.telegram.tgnet.TLRPC$TL_peerUser;
+import org.telegram.tgnet.TLRPC$TL_reactionCount;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.PinchToZoomHelper;
 
 public class ThemePreviewMessagesCell extends LinearLayout {
     private Drawable backgroundDrawable;
     private BackgroundGradientDrawable.Disposable backgroundGradientDisposable;
     private ChatMessageCell[] cells = new ChatMessageCell[2];
-    private final Runnable invalidateRunnable = new ThemePreviewMessagesCell$$ExternalSyntheticLambda0(this);
     private Drawable oldBackgroundDrawable;
     private BackgroundGradientDrawable.Disposable oldBackgroundGradientDisposable;
     private ActionBarLayout parentLayout;
     private Drawable shadowDrawable;
 
+    /* access modifiers changed from: protected */
+    public void dispatchSetPressed(boolean z) {
+    }
+
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        return false;
+    }
+
+    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        return false;
+    }
+
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        return false;
+    }
+
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public ThemePreviewMessagesCell(Context context, ActionBarLayout layout, int type) {
+    public ThemePreviewMessagesCell(Context context, ActionBarLayout actionBarLayout, int i) {
         super(context);
         Context context2 = context;
-        this.parentLayout = layout;
+        new ThemePreviewMessagesCell$$ExternalSyntheticLambda0(this);
+        this.parentLayout = actionBarLayout;
         setWillNotDraw(false);
         setOrientation(1);
         setPadding(0, AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(11.0f));
         this.shadowDrawable = Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow");
-        int date = ((int) (System.currentTimeMillis() / 1000)) - 3600;
-        TLRPC.Message message = new TLRPC.TL_message();
-        if (type == 0) {
-            message.message = LocaleController.getString("FontSizePreviewReply", NUM);
+        int currentTimeMillis = ((int) (System.currentTimeMillis() / 1000)) - 3600;
+        TLRPC$TL_message tLRPC$TL_message = new TLRPC$TL_message();
+        if (i == 0) {
+            tLRPC$TL_message.message = LocaleController.getString("FontSizePreviewReply", NUM);
         } else {
-            message.message = LocaleController.getString("NewThemePreviewReply", NUM);
+            tLRPC$TL_message.message = LocaleController.getString("NewThemePreviewReply", NUM);
         }
-        message.date = date + 60;
-        message.dialog_id = 1;
-        message.flags = 259;
-        message.from_id = new TLRPC.TL_peerUser();
-        message.from_id.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
-        message.id = 1;
-        message.media = new TLRPC.TL_messageMediaEmpty();
-        message.out = true;
-        message.peer_id = new TLRPC.TL_peerUser();
-        message.peer_id.user_id = 0;
-        MessageObject replyMessageObject = new MessageObject(UserConfig.selectedAccount, message, true, false);
-        TLRPC.Message message2 = new TLRPC.TL_message();
-        if (type == 0) {
-            message2.message = LocaleController.getString("FontSizePreviewLine2", NUM);
+        int i2 = currentTimeMillis + 60;
+        tLRPC$TL_message.date = i2;
+        tLRPC$TL_message.dialog_id = 1;
+        tLRPC$TL_message.flags = 259;
+        TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+        tLRPC$TL_message.from_id = tLRPC$TL_peerUser;
+        tLRPC$TL_peerUser.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+        tLRPC$TL_message.id = 1;
+        tLRPC$TL_message.media = new TLRPC$TL_messageMediaEmpty();
+        tLRPC$TL_message.out = true;
+        TLRPC$TL_peerUser tLRPC$TL_peerUser2 = new TLRPC$TL_peerUser();
+        tLRPC$TL_message.peer_id = tLRPC$TL_peerUser2;
+        tLRPC$TL_peerUser2.user_id = 0;
+        MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, true, false);
+        TLRPC$TL_message tLRPC$TL_message2 = new TLRPC$TL_message();
+        if (i == 0) {
+            tLRPC$TL_message2.message = LocaleController.getString("FontSizePreviewLine2", NUM);
         } else {
-            String text = LocaleController.getString("NewThemePreviewLine3", NUM);
-            StringBuilder builder = new StringBuilder(text);
-            int index1 = text.indexOf(42);
-            int index2 = text.lastIndexOf(42);
-            if (!(index1 == -1 || index2 == -1)) {
-                builder.replace(index2, index2 + 1, "");
-                builder.replace(index1, index1 + 1, "");
-                TLRPC.TL_messageEntityTextUrl entityUrl = new TLRPC.TL_messageEntityTextUrl();
-                entityUrl.offset = index1;
-                entityUrl.length = (index2 - index1) - 1;
-                entityUrl.url = "https://telegram.org";
-                message2.entities.add(entityUrl);
+            String string = LocaleController.getString("NewThemePreviewLine3", NUM);
+            StringBuilder sb = new StringBuilder(string);
+            int indexOf = string.indexOf(42);
+            int lastIndexOf = string.lastIndexOf(42);
+            if (!(indexOf == -1 || lastIndexOf == -1)) {
+                sb.replace(lastIndexOf, lastIndexOf + 1, "");
+                sb.replace(indexOf, indexOf + 1, "");
+                TLRPC$TL_messageEntityTextUrl tLRPC$TL_messageEntityTextUrl = new TLRPC$TL_messageEntityTextUrl();
+                tLRPC$TL_messageEntityTextUrl.offset = indexOf;
+                tLRPC$TL_messageEntityTextUrl.length = (lastIndexOf - indexOf) - 1;
+                tLRPC$TL_messageEntityTextUrl.url = "https://telegram.org";
+                tLRPC$TL_message2.entities.add(tLRPC$TL_messageEntityTextUrl);
             }
-            message2.message = builder.toString();
+            tLRPC$TL_message2.message = sb.toString();
         }
-        message2.date = date + 960;
-        message2.dialog_id = 1;
-        message2.flags = 259;
-        message2.from_id = new TLRPC.TL_peerUser();
-        message2.from_id.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
-        message2.id = 1;
-        message2.media = new TLRPC.TL_messageMediaEmpty();
-        message2.out = true;
-        message2.peer_id = new TLRPC.TL_peerUser();
-        message2.peer_id.user_id = 0;
-        MessageObject message1 = new MessageObject(UserConfig.selectedAccount, message2, true, false);
-        message1.resetLayout();
-        message1.eventId = 1;
-        TLRPC.Message message3 = new TLRPC.TL_message();
-        if (type == 0) {
-            message3.message = LocaleController.getString("FontSizePreviewLine1", NUM);
+        tLRPC$TL_message2.date = currentTimeMillis + 960;
+        tLRPC$TL_message2.dialog_id = 1;
+        tLRPC$TL_message2.flags = 259;
+        TLRPC$TL_peerUser tLRPC$TL_peerUser3 = new TLRPC$TL_peerUser();
+        tLRPC$TL_message2.from_id = tLRPC$TL_peerUser3;
+        tLRPC$TL_peerUser3.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+        tLRPC$TL_message2.id = 1;
+        tLRPC$TL_message2.media = new TLRPC$TL_messageMediaEmpty();
+        tLRPC$TL_message2.out = true;
+        TLRPC$TL_peerUser tLRPC$TL_peerUser4 = new TLRPC$TL_peerUser();
+        tLRPC$TL_message2.peer_id = tLRPC$TL_peerUser4;
+        tLRPC$TL_peerUser4.user_id = 0;
+        MessageObject messageObject2 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message2, true, false);
+        messageObject2.resetLayout();
+        messageObject2.eventId = 1;
+        TLRPC$TL_message tLRPC$TL_message3 = new TLRPC$TL_message();
+        if (i == 0) {
+            tLRPC$TL_message3.message = LocaleController.getString("FontSizePreviewLine1", NUM);
         } else {
-            message3.message = LocaleController.getString("NewThemePreviewLine1", NUM);
+            tLRPC$TL_message3.message = LocaleController.getString("NewThemePreviewLine1", NUM);
         }
-        message3.date = date + 60;
-        message3.dialog_id = 1;
-        message3.flags = 265;
-        message3.from_id = new TLRPC.TL_peerUser();
-        message3.id = 1;
-        message3.reply_to = new TLRPC.TL_messageReplyHeader();
-        message3.reply_to.reply_to_msg_id = 5;
-        message3.media = new TLRPC.TL_messageMediaEmpty();
-        message3.out = false;
-        message3.peer_id = new TLRPC.TL_peerUser();
-        message3.peer_id.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
-        MessageObject message22 = new MessageObject(UserConfig.selectedAccount, message3, true, false);
-        if (type == 0) {
-            message22.customReplyName = LocaleController.getString("FontSizePreviewName", NUM);
+        tLRPC$TL_message3.date = i2;
+        tLRPC$TL_message3.dialog_id = 1;
+        tLRPC$TL_message3.flags = 265;
+        tLRPC$TL_message3.from_id = new TLRPC$TL_peerUser();
+        tLRPC$TL_message3.id = 1;
+        TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = new TLRPC$TL_messageReplyHeader();
+        tLRPC$TL_message3.reply_to = tLRPC$TL_messageReplyHeader;
+        tLRPC$TL_messageReplyHeader.reply_to_msg_id = 5;
+        tLRPC$TL_message3.media = new TLRPC$TL_messageMediaEmpty();
+        tLRPC$TL_message3.out = false;
+        TLRPC$TL_peerUser tLRPC$TL_peerUser5 = new TLRPC$TL_peerUser();
+        tLRPC$TL_message3.peer_id = tLRPC$TL_peerUser5;
+        tLRPC$TL_peerUser5.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+        MessageObject messageObject3 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message3, true, false);
+        if (i == 0) {
+            messageObject3.customReplyName = LocaleController.getString("FontSizePreviewName", NUM);
         } else {
-            message22.customReplyName = LocaleController.getString("NewThemePreviewName", NUM);
+            messageObject3.customReplyName = LocaleController.getString("NewThemePreviewName", NUM);
         }
-        message22.eventId = 1;
-        message22.resetLayout();
-        message22.replyMessageObject = replyMessageObject;
-        int a = 0;
+        messageObject3.eventId = 1;
+        messageObject3.resetLayout();
+        messageObject3.replyMessageObject = messageObject;
+        int i3 = 0;
         while (true) {
             ChatMessageCell[] chatMessageCellArr = this.cells;
-            if (a < chatMessageCellArr.length) {
-                chatMessageCellArr[a] = new ChatMessageCell(context2);
-                this.cells[a].setDelegate(new ChatMessageCell.ChatMessageCellDelegate() {
+            if (i3 < chatMessageCellArr.length) {
+                chatMessageCellArr[i3] = new ChatMessageCell(context2);
+                this.cells[i3].setDelegate(new ChatMessageCell.ChatMessageCellDelegate(this) {
                     public /* synthetic */ boolean canPerformActions() {
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canPerformActions(this);
                     }
@@ -128,24 +165,24 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPress(this, chatMessageCell, f, f2);
                     }
 
-                    public /* synthetic */ boolean didLongPressChannelAvatar(ChatMessageCell chatMessageCell, TLRPC.Chat chat, int i, float f, float f2) {
-                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressChannelAvatar(this, chatMessageCell, chat, i, f, f2);
+                    public /* synthetic */ boolean didLongPressChannelAvatar(ChatMessageCell chatMessageCell, TLRPC$Chat tLRPC$Chat, int i, float f, float f2) {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressChannelAvatar(this, chatMessageCell, tLRPC$Chat, i, f, f2);
                     }
 
-                    public /* synthetic */ boolean didLongPressUserAvatar(ChatMessageCell chatMessageCell, TLRPC.User user, float f, float f2) {
-                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressUserAvatar(this, chatMessageCell, user, f, f2);
+                    public /* synthetic */ boolean didLongPressUserAvatar(ChatMessageCell chatMessageCell, TLRPC$User tLRPC$User, float f, float f2) {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressUserAvatar(this, chatMessageCell, tLRPC$User, f, f2);
                     }
 
-                    public /* synthetic */ void didPressBotButton(ChatMessageCell chatMessageCell, TLRPC.KeyboardButton keyboardButton) {
-                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressBotButton(this, chatMessageCell, keyboardButton);
+                    public /* synthetic */ void didPressBotButton(ChatMessageCell chatMessageCell, TLRPC$KeyboardButton tLRPC$KeyboardButton) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressBotButton(this, chatMessageCell, tLRPC$KeyboardButton);
                     }
 
                     public /* synthetic */ void didPressCancelSendButton(ChatMessageCell chatMessageCell) {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressCancelSendButton(this, chatMessageCell);
                     }
 
-                    public /* synthetic */ void didPressChannelAvatar(ChatMessageCell chatMessageCell, TLRPC.Chat chat, int i, float f, float f2) {
-                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressChannelAvatar(this, chatMessageCell, chat, i, f, f2);
+                    public /* synthetic */ void didPressChannelAvatar(ChatMessageCell chatMessageCell, TLRPC$Chat tLRPC$Chat, int i, float f, float f2) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressChannelAvatar(this, chatMessageCell, tLRPC$Chat, i, f, f2);
                     }
 
                     public /* synthetic */ void didPressCommentButton(ChatMessageCell chatMessageCell) {
@@ -172,8 +209,8 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressOther(this, chatMessageCell, f, f2);
                     }
 
-                    public /* synthetic */ void didPressReaction(ChatMessageCell chatMessageCell, TLRPC.TL_reactionCount tL_reactionCount) {
-                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressReaction(this, chatMessageCell, tL_reactionCount);
+                    public /* synthetic */ void didPressReaction(ChatMessageCell chatMessageCell, TLRPC$TL_reactionCount tLRPC$TL_reactionCount) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressReaction(this, chatMessageCell, tLRPC$TL_reactionCount);
                     }
 
                     public /* synthetic */ void didPressReplyMessage(ChatMessageCell chatMessageCell, int i) {
@@ -192,8 +229,8 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressUrl(this, chatMessageCell, characterStyle, z);
                     }
 
-                    public /* synthetic */ void didPressUserAvatar(ChatMessageCell chatMessageCell, TLRPC.User user, float f, float f2) {
-                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressUserAvatar(this, chatMessageCell, user, f, f2);
+                    public /* synthetic */ void didPressUserAvatar(ChatMessageCell chatMessageCell, TLRPC$User tLRPC$User, float f, float f2) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressUserAvatar(this, chatMessageCell, tLRPC$User, f, f2);
                     }
 
                     public /* synthetic */ void didPressViaBot(ChatMessageCell chatMessageCell, String str) {
@@ -264,11 +301,12 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$videoTimerReached(this);
                     }
                 });
-                this.cells[a].isChat = false;
-                this.cells[a].setFullyDraw(true);
-                this.cells[a].setMessageObject(a == 0 ? message22 : message1, (MessageObject.GroupedMessages) null, false, false);
-                addView(this.cells[a], LayoutHelper.createLinear(-1, -2));
-                a++;
+                ChatMessageCell[] chatMessageCellArr2 = this.cells;
+                chatMessageCellArr2[i3].isChat = false;
+                chatMessageCellArr2[i3].setFullyDraw(true);
+                this.cells[i3].setMessageObject(i3 == 0 ? messageObject3 : messageObject2, (MessageObject.GroupedMessages) null, false, false);
+                addView(this.cells[i3], LayoutHelper.createLinear(-1, -2));
+                i3++;
             } else {
                 return;
             }
@@ -281,12 +319,12 @@ public class ThemePreviewMessagesCell extends LinearLayout {
 
     public void invalidate() {
         super.invalidate();
-        int a = 0;
+        int i = 0;
         while (true) {
             ChatMessageCell[] chatMessageCellArr = this.cells;
-            if (a < chatMessageCellArr.length) {
-                chatMessageCellArr[a].invalidate();
-                a++;
+            if (i < chatMessageCellArr.length) {
+                chatMessageCellArr[i].invalidate();
+                i++;
             } else {
                 return;
             }
@@ -294,195 +332,72 @@ public class ThemePreviewMessagesCell extends LinearLayout {
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x0126  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x0138  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void onDraw(android.graphics.Canvas r18) {
-        /*
-            r17 = this;
-            r0 = r17
-            r1 = r18
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getCachedWallpaperNonBlocking()
-            android.graphics.drawable.Drawable r3 = r0.backgroundDrawable
-            r4 = 0
-            if (r2 == r3) goto L_0x0029
-            if (r2 == 0) goto L_0x0029
-            boolean r3 = org.telegram.ui.ActionBar.Theme.isAnimatingColor()
-            if (r3 == 0) goto L_0x001e
-            android.graphics.drawable.Drawable r3 = r0.backgroundDrawable
-            r0.oldBackgroundDrawable = r3
-            org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r3 = r0.backgroundGradientDisposable
-            r0.oldBackgroundGradientDisposable = r3
-            goto L_0x0027
-        L_0x001e:
-            org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r3 = r0.backgroundGradientDisposable
-            if (r3 == 0) goto L_0x0027
-            r3.dispose()
-            r0.backgroundGradientDisposable = r4
-        L_0x0027:
-            r0.backgroundDrawable = r2
-        L_0x0029:
-            org.telegram.ui.ActionBar.ActionBarLayout r3 = r0.parentLayout
-            float r3 = r3.getThemeAnimationValue()
-            r5 = 0
-        L_0x0030:
-            r6 = 2
-            r7 = 0
-            if (r5 >= r6) goto L_0x013d
-            if (r5 != 0) goto L_0x0039
-            android.graphics.drawable.Drawable r8 = r0.oldBackgroundDrawable
-            goto L_0x003b
-        L_0x0039:
-            android.graphics.drawable.Drawable r8 = r0.backgroundDrawable
-        L_0x003b:
-            if (r8 != 0) goto L_0x0041
-            r16 = r5
-            goto L_0x0139
-        L_0x0041:
-            r9 = 1
-            if (r5 != r9) goto L_0x0055
-            android.graphics.drawable.Drawable r9 = r0.oldBackgroundDrawable
-            if (r9 == 0) goto L_0x0055
-            org.telegram.ui.ActionBar.ActionBarLayout r9 = r0.parentLayout
-            if (r9 == 0) goto L_0x0055
-            r9 = 1132396544(0x437var_, float:255.0)
-            float r9 = r9 * r3
-            int r9 = (int) r9
-            r8.setAlpha(r9)
-            goto L_0x005a
-        L_0x0055:
-            r9 = 255(0xff, float:3.57E-43)
-            r8.setAlpha(r9)
-        L_0x005a:
-            boolean r9 = r8 instanceof android.graphics.drawable.ColorDrawable
-            if (r9 != 0) goto L_0x00fc
-            boolean r9 = r8 instanceof android.graphics.drawable.GradientDrawable
-            if (r9 != 0) goto L_0x00fc
-            boolean r9 = r8 instanceof org.telegram.ui.Components.MotionBackgroundDrawable
-            if (r9 == 0) goto L_0x006a
-            r16 = r5
-            goto L_0x00fe
-        L_0x006a:
-            boolean r9 = r8 instanceof android.graphics.drawable.BitmapDrawable
-            if (r9 == 0) goto L_0x00f9
-            r9 = r8
-            android.graphics.drawable.BitmapDrawable r9 = (android.graphics.drawable.BitmapDrawable) r9
-            android.graphics.Shader$TileMode r10 = r9.getTileModeX()
-            android.graphics.Shader$TileMode r11 = android.graphics.Shader.TileMode.REPEAT
-            if (r10 != r11) goto L_0x00a2
-            r18.save()
-            r6 = 1073741824(0x40000000, float:2.0)
-            float r10 = org.telegram.messenger.AndroidUtilities.density
-            float r6 = r6 / r10
-            r1.scale(r6, r6)
-            int r10 = r17.getMeasuredWidth()
-            float r10 = (float) r10
-            float r10 = r10 / r6
-            double r10 = (double) r10
-            double r10 = java.lang.Math.ceil(r10)
-            int r10 = (int) r10
-            int r11 = r17.getMeasuredHeight()
-            float r11 = (float) r11
-            float r11 = r11 / r6
-            double r11 = (double) r11
-            double r11 = java.lang.Math.ceil(r11)
-            int r11 = (int) r11
-            r8.setBounds(r7, r7, r10, r11)
-            r16 = r5
-            goto L_0x00f2
-        L_0x00a2:
-            int r10 = r17.getMeasuredHeight()
-            int r11 = r17.getMeasuredWidth()
-            float r11 = (float) r11
-            int r12 = r8.getIntrinsicWidth()
-            float r12 = (float) r12
-            float r11 = r11 / r12
-            float r12 = (float) r10
-            int r13 = r8.getIntrinsicHeight()
-            float r13 = (float) r13
-            float r12 = r12 / r13
-            float r13 = java.lang.Math.max(r11, r12)
-            int r14 = r8.getIntrinsicWidth()
-            float r14 = (float) r14
-            float r14 = r14 * r13
-            double r14 = (double) r14
-            double r14 = java.lang.Math.ceil(r14)
-            int r14 = (int) r14
-            int r15 = r8.getIntrinsicHeight()
-            float r15 = (float) r15
-            float r15 = r15 * r13
-            r16 = r5
-            double r4 = (double) r15
-            double r4 = java.lang.Math.ceil(r4)
-            int r4 = (int) r4
-            int r5 = r17.getMeasuredWidth()
-            int r5 = r5 - r14
-            int r5 = r5 / r6
-            int r15 = r10 - r4
-            int r15 = r15 / r6
-            r18.save()
-            int r6 = r17.getMeasuredHeight()
-            r1.clipRect(r7, r7, r14, r6)
-            int r6 = r5 + r14
-            int r7 = r15 + r4
-            r8.setBounds(r5, r15, r6, r7)
-        L_0x00f2:
-            r8.draw(r1)
-            r18.restore()
-            goto L_0x011a
-        L_0x00f9:
-            r16 = r5
-            goto L_0x011a
-        L_0x00fc:
-            r16 = r5
-        L_0x00fe:
-            int r4 = r17.getMeasuredWidth()
-            int r5 = r17.getMeasuredHeight()
-            r8.setBounds(r7, r7, r4, r5)
-            boolean r4 = r8 instanceof org.telegram.ui.Components.BackgroundGradientDrawable
-            if (r4 == 0) goto L_0x0117
-            r4 = r8
-            org.telegram.ui.Components.BackgroundGradientDrawable r4 = (org.telegram.ui.Components.BackgroundGradientDrawable) r4
-            org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r5 = r4.drawExactBoundsSize(r1, r0)
-            r0.backgroundGradientDisposable = r5
-            goto L_0x011a
-        L_0x0117:
-            r8.draw(r1)
-        L_0x011a:
-            if (r16 != 0) goto L_0x0138
-            android.graphics.drawable.Drawable r4 = r0.oldBackgroundDrawable
-            if (r4 == 0) goto L_0x0138
-            r4 = 1065353216(0x3var_, float:1.0)
-            int r4 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r4 < 0) goto L_0x0138
-            org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r4 = r0.oldBackgroundGradientDisposable
-            if (r4 == 0) goto L_0x0131
-            r4.dispose()
-            r4 = 0
-            r0.oldBackgroundGradientDisposable = r4
-            goto L_0x0132
-        L_0x0131:
-            r4 = 0
-        L_0x0132:
-            r0.oldBackgroundDrawable = r4
-            r17.invalidate()
-            goto L_0x0139
-        L_0x0138:
-            r4 = 0
-        L_0x0139:
-            int r5 = r16 + 1
-            goto L_0x0030
-        L_0x013d:
-            r16 = r5
-            android.graphics.drawable.Drawable r4 = r0.shadowDrawable
-            int r5 = r17.getMeasuredWidth()
-            int r6 = r17.getMeasuredHeight()
-            r4.setBounds(r7, r7, r5, r6)
-            android.graphics.drawable.Drawable r4 = r0.shadowDrawable
-            r4.draw(r1)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ThemePreviewMessagesCell.onDraw(android.graphics.Canvas):void");
+    public void onDraw(Canvas canvas) {
+        Drawable cachedWallpaperNonBlocking = Theme.getCachedWallpaperNonBlocking();
+        if (!(cachedWallpaperNonBlocking == this.backgroundDrawable || cachedWallpaperNonBlocking == null)) {
+            if (Theme.isAnimatingColor()) {
+                this.oldBackgroundDrawable = this.backgroundDrawable;
+                this.oldBackgroundGradientDisposable = this.backgroundGradientDisposable;
+            } else {
+                BackgroundGradientDrawable.Disposable disposable = this.backgroundGradientDisposable;
+                if (disposable != null) {
+                    disposable.dispose();
+                    this.backgroundGradientDisposable = null;
+                }
+            }
+            this.backgroundDrawable = cachedWallpaperNonBlocking;
+        }
+        float themeAnimationValue = this.parentLayout.getThemeAnimationValue();
+        int i = 0;
+        while (i < 2) {
+            Drawable drawable = i == 0 ? this.oldBackgroundDrawable : this.backgroundDrawable;
+            if (drawable != null) {
+                if (i != 1 || this.oldBackgroundDrawable == null || this.parentLayout == null) {
+                    drawable.setAlpha(255);
+                } else {
+                    drawable.setAlpha((int) (255.0f * themeAnimationValue));
+                }
+                if ((drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable) || (drawable instanceof MotionBackgroundDrawable)) {
+                    drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                    if (drawable instanceof BackgroundGradientDrawable) {
+                        this.backgroundGradientDisposable = ((BackgroundGradientDrawable) drawable).drawExactBoundsSize(canvas, this);
+                    } else {
+                        drawable.draw(canvas);
+                    }
+                } else if (drawable instanceof BitmapDrawable) {
+                    if (((BitmapDrawable) drawable).getTileModeX() == Shader.TileMode.REPEAT) {
+                        canvas.save();
+                        float f = 2.0f / AndroidUtilities.density;
+                        canvas.scale(f, f);
+                        drawable.setBounds(0, 0, (int) Math.ceil((double) (((float) getMeasuredWidth()) / f)), (int) Math.ceil((double) (((float) getMeasuredHeight()) / f)));
+                    } else {
+                        int measuredHeight = getMeasuredHeight();
+                        float max = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) measuredHeight) / ((float) drawable.getIntrinsicHeight()));
+                        int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * max));
+                        int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * max));
+                        int measuredWidth = (getMeasuredWidth() - ceil) / 2;
+                        int i2 = (measuredHeight - ceil2) / 2;
+                        canvas.save();
+                        canvas.clipRect(0, 0, ceil, getMeasuredHeight());
+                        drawable.setBounds(measuredWidth, i2, ceil + measuredWidth, ceil2 + i2);
+                    }
+                    drawable.draw(canvas);
+                    canvas.restore();
+                }
+                if (i == 0 && this.oldBackgroundDrawable != null && themeAnimationValue >= 1.0f) {
+                    BackgroundGradientDrawable.Disposable disposable2 = this.oldBackgroundGradientDisposable;
+                    if (disposable2 != null) {
+                        disposable2.dispose();
+                        this.oldBackgroundGradientDisposable = null;
+                    }
+                    this.oldBackgroundDrawable = null;
+                    invalidate();
+                }
+            }
+            i++;
+        }
+        this.shadowDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+        this.shadowDrawable.draw(canvas);
     }
 
     /* access modifiers changed from: protected */
@@ -498,21 +413,5 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             disposable2.dispose();
             this.oldBackgroundGradientDisposable = null;
         }
-    }
-
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return false;
-    }
-
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        return false;
-    }
-
-    /* access modifiers changed from: protected */
-    public void dispatchSetPressed(boolean pressed) {
-    }
-
-    public boolean onTouchEvent(MotionEvent event) {
-        return false;
     }
 }

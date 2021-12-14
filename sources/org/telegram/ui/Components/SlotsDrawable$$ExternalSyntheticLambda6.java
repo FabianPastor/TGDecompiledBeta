@@ -8,6 +8,6 @@ public final /* synthetic */ class SlotsDrawable$$ExternalSyntheticLambda6 imple
     }
 
     public final void run() {
-        this.f$0.m2617lambda$setDiceNumber$6$orgtelegramuiComponentsSlotsDrawable();
+        this.f$0.lambda$new$0();
     }
 }

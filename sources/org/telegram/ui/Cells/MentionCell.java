@@ -10,7 +10,10 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatPhoto;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$UserProfilePhoto;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -51,27 +54,28 @@ public class MentionCell extends LinearLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(36.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(36.0f), NUM));
     }
 
-    public void setUser(TLRPC.User user) {
-        if (user == null) {
+    public void setUser(TLRPC$User tLRPC$User) {
+        if (tLRPC$User == null) {
             this.nameTextView.setText("");
             this.usernameTextView.setText("");
             this.imageView.setImageDrawable((Drawable) null);
             return;
         }
-        this.avatarDrawable.setInfo(user);
-        if (user.photo == null || user.photo.photo_small == null) {
+        this.avatarDrawable.setInfo(tLRPC$User);
+        TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = tLRPC$User.photo;
+        if (tLRPC$UserProfilePhoto == null || tLRPC$UserProfilePhoto.photo_small == null) {
             this.imageView.setImageDrawable(this.avatarDrawable);
         } else {
-            this.imageView.setForUserOrChat(user, this.avatarDrawable);
+            this.imageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
         }
-        this.nameTextView.setText(UserObject.getUserName(user));
-        if (user.username != null) {
+        this.nameTextView.setText(UserObject.getUserName(tLRPC$User));
+        if (tLRPC$User.username != null) {
             TextView textView = this.usernameTextView;
-            textView.setText("@" + user.username);
+            textView.setText("@" + tLRPC$User.username);
         } else {
             this.usernameTextView.setText("");
         }
@@ -79,23 +83,24 @@ public class MentionCell extends LinearLayout {
         this.usernameTextView.setVisibility(0);
     }
 
-    public void setChat(TLRPC.Chat chat) {
-        if (chat == null) {
+    public void setChat(TLRPC$Chat tLRPC$Chat) {
+        if (tLRPC$Chat == null) {
             this.nameTextView.setText("");
             this.usernameTextView.setText("");
             this.imageView.setImageDrawable((Drawable) null);
             return;
         }
-        this.avatarDrawable.setInfo(chat);
-        if (chat.photo == null || chat.photo.photo_small == null) {
+        this.avatarDrawable.setInfo(tLRPC$Chat);
+        TLRPC$ChatPhoto tLRPC$ChatPhoto = tLRPC$Chat.photo;
+        if (tLRPC$ChatPhoto == null || tLRPC$ChatPhoto.photo_small == null) {
             this.imageView.setImageDrawable(this.avatarDrawable);
         } else {
-            this.imageView.setForUserOrChat(chat, this.avatarDrawable);
+            this.imageView.setForUserOrChat(tLRPC$Chat, this.avatarDrawable);
         }
-        this.nameTextView.setText(chat.title);
-        if (chat.username != null) {
+        this.nameTextView.setText(tLRPC$Chat.title);
+        if (tLRPC$Chat.username != null) {
             TextView textView = this.usernameTextView;
-            textView.setText("@" + chat.username);
+            textView.setText("@" + tLRPC$Chat.username);
         } else {
             this.usernameTextView.setText("");
         }
@@ -103,10 +108,10 @@ public class MentionCell extends LinearLayout {
         this.usernameTextView.setVisibility(0);
     }
 
-    public void setText(String text) {
+    public void setText(String str) {
         this.imageView.setVisibility(4);
         this.usernameTextView.setVisibility(4);
-        this.nameTextView.setText(text);
+        this.nameTextView.setText(str);
     }
 
     public void invalidate() {
@@ -114,37 +119,38 @@ public class MentionCell extends LinearLayout {
         this.nameTextView.invalidate();
     }
 
-    public void setEmojiSuggestion(MediaDataController.KeywordResult suggestion) {
+    public void setEmojiSuggestion(MediaDataController.KeywordResult keywordResult) {
         this.imageView.setVisibility(4);
         this.usernameTextView.setVisibility(4);
-        StringBuilder stringBuilder = new StringBuilder(suggestion.emoji.length() + suggestion.keyword.length() + 4);
-        stringBuilder.append(suggestion.emoji);
-        stringBuilder.append("   :");
-        stringBuilder.append(suggestion.keyword);
+        StringBuilder sb = new StringBuilder(keywordResult.emoji.length() + keywordResult.keyword.length() + 4);
+        sb.append(keywordResult.emoji);
+        sb.append("   :");
+        sb.append(keywordResult.keyword);
         TextView textView = this.nameTextView;
-        textView.setText(Emoji.replaceEmoji(stringBuilder, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
+        textView.setText(Emoji.replaceEmoji(sb, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
     }
 
-    public void setBotCommand(String command, String help, TLRPC.User user) {
-        if (user != null) {
+    public void setBotCommand(String str, String str2, TLRPC$User tLRPC$User) {
+        if (tLRPC$User != null) {
             this.imageView.setVisibility(0);
-            this.avatarDrawable.setInfo(user);
-            if (user.photo == null || user.photo.photo_small == null) {
+            this.avatarDrawable.setInfo(tLRPC$User);
+            TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = tLRPC$User.photo;
+            if (tLRPC$UserProfilePhoto == null || tLRPC$UserProfilePhoto.photo_small == null) {
                 this.imageView.setImageDrawable(this.avatarDrawable);
             } else {
-                this.imageView.setForUserOrChat(user, this.avatarDrawable);
+                this.imageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
             }
         } else {
             this.imageView.setVisibility(4);
         }
         this.usernameTextView.setVisibility(0);
-        this.nameTextView.setText(command);
+        this.nameTextView.setText(str);
         TextView textView = this.usernameTextView;
-        textView.setText(Emoji.replaceEmoji(help, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
+        textView.setText(Emoji.replaceEmoji(str2, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
     }
 
-    public void setIsDarkTheme(boolean isDarkTheme) {
-        if (isDarkTheme) {
+    public void setIsDarkTheme(boolean z) {
+        if (z) {
             this.nameTextView.setTextColor(-1);
             this.usernameTextView.setTextColor(-4473925);
             return;

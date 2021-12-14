@@ -11,6 +11,6 @@ public final /* synthetic */ class EditWidgetActivity$$ExternalSyntheticLambda1 
     }
 
     public final void didSelectDialogs(ArrayList arrayList) {
-        this.f$0.m2889lambda$createView$0$orgtelegramuiEditWidgetActivity(arrayList);
+        this.f$0.lambda$createView$0(arrayList);
     }
 }

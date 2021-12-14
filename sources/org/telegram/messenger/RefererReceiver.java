@@ -8,7 +8,7 @@ public class RefererReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         try {
             MessagesController.getInstance(UserConfig.selectedAccount).setReferer(intent.getExtras().getString("referrer"));
-        } catch (Exception e) {
+        } catch (Exception unused) {
         }
     }
 }

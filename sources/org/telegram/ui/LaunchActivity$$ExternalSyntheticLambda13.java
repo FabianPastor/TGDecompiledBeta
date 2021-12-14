@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC;
+import android.view.View;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda13 implements Runnable {
-    public final /* synthetic */ ActionIntroActivity f$0;
-    public final /* synthetic */ TLRPC.TL_error f$1;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda13 implements View.OnClickListener {
+    public final /* synthetic */ LaunchActivity f$0;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda13(ActionIntroActivity actionIntroActivity, TLRPC.TL_error tL_error) {
-        this.f$0 = actionIntroActivity;
-        this.f$1 = tL_error;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda13(LaunchActivity launchActivity) {
+        this.f$0 = launchActivity;
     }
 
-    public final void run() {
-        LaunchActivity.lambda$handleIntent$14(this.f$0, this.f$1);
+    public final void onClick(View view) {
+        this.f$0.lambda$createUpdateUI$55(view);
     }
 }

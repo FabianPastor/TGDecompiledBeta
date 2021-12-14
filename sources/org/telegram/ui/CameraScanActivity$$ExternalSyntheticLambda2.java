@@ -10,6 +10,6 @@ public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda2 
     }
 
     public final void onClick(View view) {
-        this.f$0.m1504lambda$createView$4$orgtelegramuiCameraScanActivity(view);
+        this.f$0.lambda$createView$4(view);
     }
 }

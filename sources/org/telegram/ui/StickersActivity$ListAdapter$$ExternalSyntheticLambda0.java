@@ -16,6 +16,6 @@ public final /* synthetic */ class StickersActivity$ListAdapter$$ExternalSynthet
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3906xb873efa7(this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.lambda$processSelectionMenu$0(this.f$1, this.f$2, dialogInterface, i);
     }
 }

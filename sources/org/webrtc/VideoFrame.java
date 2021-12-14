@@ -9,30 +9,42 @@ public class VideoFrame implements RefCounted {
     private final long timestampNs;
 
     public interface Buffer extends RefCounted {
+        @CalledByNative("Buffer")
         Buffer cropAndScale(int i, int i2, int i3, int i4, int i5, int i6);
 
+        @CalledByNative("Buffer")
         int getHeight();
 
+        @CalledByNative("Buffer")
         int getWidth();
 
+        @CalledByNative("Buffer")
         void release();
 
+        @CalledByNative("Buffer")
         void retain();
 
+        @CalledByNative("Buffer")
         I420Buffer toI420();
     }
 
     public interface I420Buffer extends Buffer {
+        @CalledByNative("I420Buffer")
         ByteBuffer getDataU();
 
+        @CalledByNative("I420Buffer")
         ByteBuffer getDataV();
 
+        @CalledByNative("I420Buffer")
         ByteBuffer getDataY();
 
+        @CalledByNative("I420Buffer")
         int getStrideU();
 
+        @CalledByNative("I420Buffer")
         int getStrideV();
 
+        @CalledByNative("I420Buffer")
         int getStrideY();
     }
 
@@ -49,8 +61,8 @@ public class VideoFrame implements RefCounted {
             
             private final int glTarget;
 
-            private Type(int glTarget2) {
-                this.glTarget = glTarget2;
+            private Type(int i) {
+                this.glTarget = i;
             }
 
             public int getGlTarget() {
@@ -59,26 +71,30 @@ public class VideoFrame implements RefCounted {
         }
     }
 
-    public VideoFrame(Buffer buffer2, int rotation2, long timestampNs2) {
+    @CalledByNative
+    public VideoFrame(Buffer buffer2, int i, long j) {
         if (buffer2 == null) {
             throw new IllegalArgumentException("buffer not allowed to be null");
-        } else if (rotation2 % 90 == 0) {
+        } else if (i % 90 == 0) {
             this.buffer = buffer2;
-            this.rotation = rotation2;
-            this.timestampNs = timestampNs2;
+            this.rotation = i;
+            this.timestampNs = j;
         } else {
             throw new IllegalArgumentException("rotation must be a multiple of 90");
         }
     }
 
+    @CalledByNative
     public Buffer getBuffer() {
         return this.buffer;
     }
 
+    @CalledByNative
     public int getRotation() {
         return this.rotation;
     }
 
+    @CalledByNative
     public long getTimestampNs() {
         return this.timestampNs;
     }
@@ -101,6 +117,7 @@ public class VideoFrame implements RefCounted {
         this.buffer.retain();
     }
 
+    @CalledByNative
     public void release() {
         this.buffer.release();
     }

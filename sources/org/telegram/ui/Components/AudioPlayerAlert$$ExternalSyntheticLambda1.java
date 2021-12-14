@@ -1,19 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import android.view.View;
 
-public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda1 implements ThemeDescription.ThemeDescriptionDelegate {
+public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda1 implements View.OnClickListener {
     public final /* synthetic */ AudioPlayerAlert f$0;
 
     public /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda1(AudioPlayerAlert audioPlayerAlert) {
         this.f$0 = audioPlayerAlert;
     }
 
-    public final void didSetColor() {
-        this.f$0.m1993xb100d91f();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$3(view);
     }
 }

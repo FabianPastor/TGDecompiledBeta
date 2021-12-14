@@ -1,13 +1,17 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MediaController$$ExternalSyntheticLambda38 implements Runnable {
-    public final /* synthetic */ int f$0;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-    public /* synthetic */ MediaController$$ExternalSyntheticLambda38(int i) {
-        this.f$0 = i;
+public final /* synthetic */ class MediaController$$ExternalSyntheticLambda38 implements Runnable {
+    public final /* synthetic */ AlertDialog f$0;
+    public final /* synthetic */ boolean[] f$1;
+
+    public /* synthetic */ MediaController$$ExternalSyntheticLambda38(AlertDialog alertDialog, boolean[] zArr) {
+        this.f$0 = alertDialog;
+        this.f$1 = zArr;
     }
 
     public final void run() {
-        MediaController.lambda$loadGalleryPhotosAlbums$40(this.f$0);
+        MediaController.lambda$saveFile$37(this.f$0, this.f$1);
     }
 }

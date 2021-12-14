@@ -1,15 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLObject;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda121 implements Comparator {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda121 INSTANCE = new MessagesController$$ExternalSyntheticLambda121();
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda121 implements Runnable {
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ TLObject f$1;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda121() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda121(MessagesController messagesController, TLObject tLObject) {
+        this.f$0 = messagesController;
+        this.f$1 = tLObject;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return AndroidUtilities.compare(((TLRPC.Updates) obj).pts, ((TLRPC.Updates) obj2).pts);
+    public final void run() {
+        this.f$0.lambda$loadUnreadDialogs$268(this.f$1);
     }
 }

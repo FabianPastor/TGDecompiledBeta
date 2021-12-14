@@ -12,6 +12,6 @@ public final /* synthetic */ class InviteContactsActivity$InviteAdapter$1$$Exter
     }
 
     public final void run() {
-        this.f$0.m3056x7953d5da(this.f$1);
+        this.f$0.lambda$run$0(this.f$1);
     }
 }

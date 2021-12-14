@@ -20,6 +20,10 @@ public class Logging {
         LS_NONE
     }
 
+    @Deprecated
+    public static void enableTracing(String str, EnumSet<TraceLevel> enumSet) {
+    }
+
     private static native void nativeEnableLogThreads();
 
     private static native void nativeEnableLogTimeStamps();
@@ -29,14 +33,14 @@ public class Logging {
     private static native void nativeLog(int i, String str, String str2);
 
     private static Logger createFallbackLogger() {
-        Logger fallbackLogger2 = Logger.getLogger("org.webrtc.Logging");
-        fallbackLogger2.setLevel(Level.ALL);
-        return fallbackLogger2;
+        Logger logger = Logger.getLogger("org.webrtc.Logging");
+        logger.setLevel(Level.ALL);
+        return logger;
     }
 
-    static void injectLoggable(Loggable injectedLoggable, Severity severity) {
-        if (injectedLoggable != null) {
-            loggable = injectedLoggable;
+    static void injectLoggable(Loggable loggable2, Severity severity) {
+        if (loggable2 != null) {
+            loggable = loggable2;
             loggableSeverity = severity;
         }
     }
@@ -65,8 +69,8 @@ public class Logging {
         
         public final int level;
 
-        private TraceLevel(int level2) {
-            this.level = level2;
+        private TraceLevel(int i) {
+            this.level = i;
         }
     }
 
@@ -76,10 +80,6 @@ public class Logging {
 
     public static void enableLogTimeStamps() {
         nativeEnableLogTimeStamps();
-    }
-
-    @Deprecated
-    public static void enableTracing(String path, EnumSet<TraceLevel> enumSet) {
     }
 
     public static synchronized void enableLogToDebugOutput(Severity severity) {
@@ -93,33 +93,29 @@ public class Logging {
         }
     }
 
-    public static void log(Severity severity, String tag, String message) {
+    public static void log(Severity severity, String str, String str2) {
         Level level;
-        if (tag == null || message == null) {
+        if (str == null || str2 == null) {
             throw new IllegalArgumentException("Logging tag or message may not be null.");
         } else if (loggable != null) {
             if (severity.ordinal() >= loggableSeverity.ordinal()) {
-                loggable.onLogMessage(message, severity, tag);
+                loggable.onLogMessage(str2, severity, str);
             }
         } else if (loggingEnabled) {
-            nativeLog(severity.ordinal(), tag, message);
+            nativeLog(severity.ordinal(), str, str2);
         } else {
-            switch (AnonymousClass1.$SwitchMap$org$webrtc$Logging$Severity[severity.ordinal()]) {
-                case 1:
-                    level = Level.SEVERE;
-                    break;
-                case 2:
-                    level = Level.WARNING;
-                    break;
-                case 3:
-                    level = Level.INFO;
-                    break;
-                default:
-                    level = Level.FINE;
-                    break;
+            int i = AnonymousClass1.$SwitchMap$org$webrtc$Logging$Severity[severity.ordinal()];
+            if (i == 1) {
+                level = Level.SEVERE;
+            } else if (i == 2) {
+                level = Level.WARNING;
+            } else if (i != 3) {
+                level = Level.FINE;
+            } else {
+                level = Level.INFO;
             }
             Logger logger = fallbackLogger;
-            logger.log(level, tag + ": " + message);
+            logger.log(level, str + ": " + str2);
         }
     }
 
@@ -127,58 +123,75 @@ public class Logging {
     static /* synthetic */ class AnonymousClass1 {
         static final /* synthetic */ int[] $SwitchMap$org$webrtc$Logging$Severity;
 
+        /* JADX WARNING: Can't wrap try/catch for region: R(6:0|1|2|3|4|(3:5|6|8)) */
+        /* JADX WARNING: Failed to process nested try/catch */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0012 */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001d */
         static {
-            int[] iArr = new int[Severity.values().length];
-            $SwitchMap$org$webrtc$Logging$Severity = iArr;
-            try {
-                iArr[Severity.LS_ERROR.ordinal()] = 1;
-            } catch (NoSuchFieldError e) {
-            }
-            try {
-                $SwitchMap$org$webrtc$Logging$Severity[Severity.LS_WARNING.ordinal()] = 2;
-            } catch (NoSuchFieldError e2) {
-            }
-            try {
-                $SwitchMap$org$webrtc$Logging$Severity[Severity.LS_INFO.ordinal()] = 3;
-            } catch (NoSuchFieldError e3) {
-            }
+            /*
+                org.webrtc.Logging$Severity[] r0 = org.webrtc.Logging.Severity.values()
+                int r0 = r0.length
+                int[] r0 = new int[r0]
+                $SwitchMap$org$webrtc$Logging$Severity = r0
+                org.webrtc.Logging$Severity r1 = org.webrtc.Logging.Severity.LS_ERROR     // Catch:{ NoSuchFieldError -> 0x0012 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0012 }
+                r2 = 1
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0012 }
+            L_0x0012:
+                int[] r0 = $SwitchMap$org$webrtc$Logging$Severity     // Catch:{ NoSuchFieldError -> 0x001d }
+                org.webrtc.Logging$Severity r1 = org.webrtc.Logging.Severity.LS_WARNING     // Catch:{ NoSuchFieldError -> 0x001d }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x001d }
+                r2 = 2
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x001d }
+            L_0x001d:
+                int[] r0 = $SwitchMap$org$webrtc$Logging$Severity     // Catch:{ NoSuchFieldError -> 0x0028 }
+                org.webrtc.Logging$Severity r1 = org.webrtc.Logging.Severity.LS_INFO     // Catch:{ NoSuchFieldError -> 0x0028 }
+                int r1 = r1.ordinal()     // Catch:{ NoSuchFieldError -> 0x0028 }
+                r2 = 3
+                r0[r1] = r2     // Catch:{ NoSuchFieldError -> 0x0028 }
+            L_0x0028:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.webrtc.Logging.AnonymousClass1.<clinit>():void");
         }
     }
 
-    public static void d(String tag, String message) {
-        log(Severity.LS_INFO, tag, message);
+    public static void d(String str, String str2) {
+        log(Severity.LS_INFO, str, str2);
     }
 
-    public static void e(String tag, String message) {
-        log(Severity.LS_ERROR, tag, message);
+    public static void e(String str, String str2) {
+        log(Severity.LS_ERROR, str, str2);
     }
 
-    public static void w(String tag, String message) {
-        log(Severity.LS_WARNING, tag, message);
+    public static void w(String str, String str2) {
+        log(Severity.LS_WARNING, str, str2);
     }
 
-    public static void e(String tag, String message, Throwable e) {
-        log(Severity.LS_ERROR, tag, message);
-        log(Severity.LS_ERROR, tag, e.toString());
-        log(Severity.LS_ERROR, tag, getStackTraceString(e));
+    public static void e(String str, String str2, Throwable th) {
+        Severity severity = Severity.LS_ERROR;
+        log(severity, str, str2);
+        log(severity, str, th.toString());
+        log(severity, str, getStackTraceString(th));
     }
 
-    public static void w(String tag, String message, Throwable e) {
-        log(Severity.LS_WARNING, tag, message);
-        log(Severity.LS_WARNING, tag, e.toString());
-        log(Severity.LS_WARNING, tag, getStackTraceString(e));
+    public static void w(String str, String str2, Throwable th) {
+        Severity severity = Severity.LS_WARNING;
+        log(severity, str, str2);
+        log(severity, str, th.toString());
+        log(severity, str, getStackTraceString(th));
     }
 
-    public static void v(String tag, String message) {
-        log(Severity.LS_VERBOSE, tag, message);
+    public static void v(String str, String str2) {
+        log(Severity.LS_VERBOSE, str, str2);
     }
 
-    private static String getStackTraceString(Throwable e) {
-        if (e == null) {
+    private static String getStackTraceString(Throwable th) {
+        if (th == null) {
             return "";
         }
-        StringWriter sw = new StringWriter();
-        e.printStackTrace(new PrintWriter(sw));
-        return sw.toString();
+        StringWriter stringWriter = new StringWriter();
+        th.printStackTrace(new PrintWriter(stringWriter));
+        return stringWriter.toString();
     }
 }

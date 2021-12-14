@@ -1,19 +1,14 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
+import android.view.animation.Interpolator;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda21 implements Runnable {
-    public final /* synthetic */ DialogsActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ ArrayList f$2;
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda21 implements Interpolator {
+    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda21 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda21();
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda21(DialogsActivity dialogsActivity, int i, ArrayList arrayList) {
-        this.f$0 = dialogsActivity;
-        this.f$1 = i;
-        this.f$2 = arrayList;
+    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda21() {
     }
 
-    public final void run() {
-        this.f$0.m2862x30508b23(this.f$1, this.f$2);
+    public final float getInterpolation(float f) {
+        return DialogsActivity.lambda$static$0(f);
     }
 }

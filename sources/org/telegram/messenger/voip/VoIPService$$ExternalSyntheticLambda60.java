@@ -1,15 +1,14 @@
 package org.telegram.messenger.voip;
 
-import org.telegram.messenger.voip.Instance;
+import org.telegram.messenger.NotificationCenter;
 
-public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda60 implements Instance.OnRemoteMediaStateUpdatedListener {
-    public final /* synthetic */ VoIPService f$0;
+public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda60 implements Runnable {
+    public static final /* synthetic */ VoIPService$$ExternalSyntheticLambda60 INSTANCE = new VoIPService$$ExternalSyntheticLambda60();
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda60(VoIPService voIPService) {
-        this.f$0 = voIPService;
+    private /* synthetic */ VoIPService$$ExternalSyntheticLambda60() {
     }
 
-    public final void onMediaStateUpdated(int i, int i2) {
-        this.f$0.m1231xbbb9var_(i, i2);
+    public final void run() {
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
     }
 }

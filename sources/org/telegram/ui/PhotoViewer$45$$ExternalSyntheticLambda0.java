@@ -11,6 +11,6 @@ public final /* synthetic */ class PhotoViewer$45$$ExternalSyntheticLambda0 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3624lambda$onError$0$orgtelegramuiPhotoViewer$45(dialogInterface, i);
+        this.f$0.lambda$onError$0(dialogInterface, i);
     }
 }

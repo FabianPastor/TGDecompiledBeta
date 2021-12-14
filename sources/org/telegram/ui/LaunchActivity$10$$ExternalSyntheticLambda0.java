@@ -10,6 +10,6 @@ public final /* synthetic */ class LaunchActivity$10$$ExternalSyntheticLambda0 i
     }
 
     public final void run() {
-        this.f$0.m3131lambda$onAcceptTerms$0$orgtelegramuiLaunchActivity$10();
+        this.f$0.lambda$onAcceptTerms$0();
     }
 }

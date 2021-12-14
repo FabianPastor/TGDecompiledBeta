@@ -14,106 +14,97 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
     private final boolean lastRowFullWidth;
     private int rowsCount;
 
-    public ExtendedGridLayoutManager(Context context, int spanCount) {
-        this(context, spanCount, false);
+    public int getColumnCountForAccessibility(RecyclerView.Recycler recycler, RecyclerView.State state) {
+        return 1;
     }
 
-    public ExtendedGridLayoutManager(Context context, int spanCount, boolean lastRowFullWidth2) {
-        super(context, spanCount);
-        this.itemSpans = new SparseIntArray();
-        this.itemsToRow = new SparseIntArray();
-        this.lastRowFullWidth = lastRowFullWidth2;
+    /* access modifiers changed from: protected */
+    public Size getSizeForItem(int i) {
+        throw null;
     }
 
     public boolean supportsPredictiveItemAnimations() {
         return false;
     }
 
-    private void prepareLayout(float viewPortAvailableSize) {
-        float viewPortAvailableSize2;
-        int requiredSpan;
-        boolean moveToNewRow;
-        float viewPortAvailableSize3;
-        float viewPortAvailableSize4;
-        if (viewPortAvailableSize == 0.0f) {
-            viewPortAvailableSize2 = 100.0f;
-        } else {
-            viewPortAvailableSize2 = viewPortAvailableSize;
-        }
+    public ExtendedGridLayoutManager(Context context, int i) {
+        this(context, i, false);
+    }
+
+    public ExtendedGridLayoutManager(Context context, int i, boolean z) {
+        super(context, i);
+        this.itemSpans = new SparseIntArray();
+        this.itemsToRow = new SparseIntArray();
+        this.lastRowFullWidth = z;
+    }
+
+    private void prepareLayout(float f) {
+        int i;
+        boolean z;
+        float f2 = f == 0.0f ? 100.0f : f;
         this.itemSpans.clear();
         this.itemsToRow.clear();
         this.rowsCount = 0;
         this.firstRowMax = 0;
-        int itemsCount = getFlowItemCount();
-        if (itemsCount != 0) {
-            int preferredRowSize = AndroidUtilities.dp(100.0f);
+        int flowItemCount = getFlowItemCount();
+        if (flowItemCount != 0) {
+            int dp = AndroidUtilities.dp(100.0f);
             int spanCount = getSpanCount();
-            int spanLeft = spanCount;
-            int currentItemsInRow = 0;
-            int currentItemsSpanAmount = 0;
-            int a = 0;
-            int N = (this.lastRowFullWidth ? 1 : 0) + itemsCount;
-            while (true) {
-                if (a >= N) {
-                    break;
-                }
-                Size size = a < itemsCount ? sizeForItem(a) : null;
-                if (size == null) {
-                    moveToNewRow = currentItemsInRow != 0;
-                    requiredSpan = spanCount;
+            int i2 = (this.lastRowFullWidth ? 1 : 0) + flowItemCount;
+            int i3 = spanCount;
+            int i4 = 0;
+            int i5 = 0;
+            while (i4 < i2) {
+                Size sizeForItem = i4 < flowItemCount ? sizeForItem(i4) : null;
+                if (sizeForItem == null) {
+                    z = i5 != 0;
+                    i = spanCount;
                 } else {
-                    requiredSpan = Math.min(spanCount, (int) Math.floor((double) (((float) spanCount) * (((size.width / size.height) * ((float) preferredRowSize)) / viewPortAvailableSize2))));
-                    moveToNewRow = spanLeft < requiredSpan || (requiredSpan > 33 && spanLeft < requiredSpan + -15);
+                    int min = Math.min(spanCount, (int) Math.floor((double) (((float) spanCount) * (((sizeForItem.width / sizeForItem.height) * ((float) dp)) / f2))));
+                    i = min;
+                    z = i3 < min || (min > 33 && i3 < min + -15);
                 }
-                if (moveToNewRow) {
-                    if (spanLeft != 0) {
-                        int spanPerItem = spanLeft / currentItemsInRow;
-                        int start = a - currentItemsInRow;
-                        int b = start;
-                        while (b < start + currentItemsInRow) {
-                            if (b == (start + currentItemsInRow) - 1) {
-                                SparseIntArray sparseIntArray = this.itemSpans;
-                                viewPortAvailableSize4 = viewPortAvailableSize2;
-                                sparseIntArray.put(b, sparseIntArray.get(b) + spanLeft);
-                            } else {
-                                viewPortAvailableSize4 = viewPortAvailableSize2;
-                                SparseIntArray sparseIntArray2 = this.itemSpans;
-                                sparseIntArray2.put(b, sparseIntArray2.get(b) + spanPerItem);
+                if (z) {
+                    if (i3 != 0) {
+                        int i6 = i3 / i5;
+                        int i7 = i4 - i5;
+                        int i8 = i7;
+                        while (true) {
+                            int i9 = i7 + i5;
+                            if (i8 >= i9) {
+                                break;
                             }
-                            spanLeft -= spanPerItem;
-                            b++;
-                            viewPortAvailableSize2 = viewPortAvailableSize4;
+                            if (i8 == i9 - 1) {
+                                SparseIntArray sparseIntArray = this.itemSpans;
+                                sparseIntArray.put(i8, sparseIntArray.get(i8) + i3);
+                            } else {
+                                SparseIntArray sparseIntArray2 = this.itemSpans;
+                                sparseIntArray2.put(i8, sparseIntArray2.get(i8) + i6);
+                            }
+                            i3 -= i6;
+                            i8++;
                         }
-                        viewPortAvailableSize3 = viewPortAvailableSize2;
-                        this.itemsToRow.put(a - 1, this.rowsCount);
-                    } else {
-                        viewPortAvailableSize3 = viewPortAvailableSize2;
+                        this.itemsToRow.put(i4 - 1, this.rowsCount);
                     }
-                    if (a == itemsCount) {
+                    if (i4 == flowItemCount) {
                         break;
                     }
                     this.rowsCount++;
-                    currentItemsSpanAmount = 0;
-                    currentItemsInRow = 0;
-                    spanLeft = spanCount;
-                } else {
-                    viewPortAvailableSize3 = viewPortAvailableSize2;
-                    if (spanLeft < requiredSpan) {
-                        requiredSpan = spanLeft;
-                    }
+                    i3 = spanCount;
+                    i5 = 0;
+                } else if (i3 < i) {
+                    i = i3;
                 }
                 if (this.rowsCount == 0) {
-                    this.firstRowMax = Math.max(this.firstRowMax, a);
+                    this.firstRowMax = Math.max(this.firstRowMax, i4);
                 }
-                if (a == itemsCount - 1 && !this.lastRowFullWidth) {
-                    this.itemsToRow.put(a, this.rowsCount);
+                if (i4 == flowItemCount - 1 && !this.lastRowFullWidth) {
+                    this.itemsToRow.put(i4, this.rowsCount);
                 }
-                currentItemsSpanAmount += requiredSpan;
-                currentItemsInRow++;
-                spanLeft -= requiredSpan;
-                this.itemSpans.put(a, requiredSpan);
-                a++;
-                viewPortAvailableSize2 = viewPortAvailableSize3;
+                i5++;
+                i3 -= i;
+                this.itemSpans.put(i4, i);
+                i4++;
             }
             this.rowsCount++;
         }
@@ -134,18 +125,15 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
         if (size.height == 0.0f) {
             size.height = 100.0f;
         }
-        float aspect = size.width / size.height;
-        if (aspect > 4.0f || aspect < 0.2f) {
-            float max = Math.max(size.width, size.height);
+        float f = size.width;
+        float f2 = size.height;
+        float f3 = f / f2;
+        if (f3 > 4.0f || f3 < 0.2f) {
+            float max = Math.max(f, f2);
             size.width = max;
             size.height = max;
         }
         return size;
-    }
-
-    /* access modifiers changed from: protected */
-    public Size getSizeForItem(int i) {
-        return new Size(100.0f, 100.0f);
     }
 
     private void checkLayout() {
@@ -160,9 +148,9 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
         return this.itemSpans.get(i);
     }
 
-    public int getRowsCount(int width) {
+    public int getRowsCount(int i) {
         if (this.rowsCount == 0) {
-            prepareLayout((float) width);
+            prepareLayout((float) i);
         }
         return this.rowsCount;
     }
@@ -184,9 +172,5 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
 
     public int getRowCountForAccessibility(RecyclerView.Recycler recycler, RecyclerView.State state) {
         return state.getItemCount();
-    }
-
-    public int getColumnCountForAccessibility(RecyclerView.Recycler recycler, RecyclerView.State state) {
-        return 1;
     }
 }

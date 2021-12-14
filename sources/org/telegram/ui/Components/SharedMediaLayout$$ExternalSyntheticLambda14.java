@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.SharedMediaLayout;
+import org.telegram.ui.Components.FragmentContextView;
 
-public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda14 implements Runnable {
-    public final /* synthetic */ SharedMediaLayout.MediaPage f$0;
-    public final /* synthetic */ SharedMediaFastScrollTooltip f$1;
+public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda14 implements FragmentContextView.FragmentContextViewDelegate {
+    public final /* synthetic */ SharedMediaLayout f$0;
 
-    public /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda14(SharedMediaLayout.MediaPage mediaPage, SharedMediaFastScrollTooltip sharedMediaFastScrollTooltip) {
-        this.f$0 = mediaPage;
-        this.f$1 = sharedMediaFastScrollTooltip;
+    public /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda14(SharedMediaLayout sharedMediaLayout) {
+        this.f$0 = sharedMediaLayout;
     }
 
-    public final void run() {
-        SharedMediaLayout.lambda$showFastScrollHint$14(this.f$0, this.f$1);
+    public final void onAnimation(boolean z, boolean z2) {
+        this.f$0.lambda$new$9(z, z2);
     }
 }

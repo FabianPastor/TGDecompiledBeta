@@ -1,29 +1,19 @@
 package org.telegram.ui.Components;
 
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import org.telegram.ui.Components.NumberPicker;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda3 implements NumberPicker.OnValueChangeListener {
-    public final /* synthetic */ LinearLayout f$0;
-    public final /* synthetic */ TextView f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ long f$3;
-    public final /* synthetic */ NumberPicker f$4;
-    public final /* synthetic */ NumberPicker f$5;
-    public final /* synthetic */ NumberPicker f$6;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda3 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ long f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ Runnable f$2;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda3(LinearLayout linearLayout, TextView textView, long j, long j2, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3) {
-        this.f$0 = linearLayout;
-        this.f$1 = textView;
-        this.f$2 = j;
-        this.f$3 = j2;
-        this.f$4 = numberPicker;
-        this.f$5 = numberPicker2;
-        this.f$6 = numberPicker3;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda3(long j, int i, Runnable runnable) {
+        this.f$0 = j;
+        this.f$1 = i;
+        this.f$2 = runnable;
     }
 
-    public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-        AlertsCreator.lambda$createScheduleDatePickerDialog$44(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, numberPicker, i, i2);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        AlertsCreator.lambda$createColorSelectDialog$68(this.f$0, this.f$1, this.f$2, dialogInterface, i);
     }
 }

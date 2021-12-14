@@ -11,6 +11,6 @@ public final /* synthetic */ class DialogsActivity$DialogsRecyclerView$$External
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2886xa454faae(valueAnimator);
+        this.f$0.lambda$onTouchEvent$0(valueAnimator);
     }
 }

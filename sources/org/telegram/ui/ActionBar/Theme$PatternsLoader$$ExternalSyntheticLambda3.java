@@ -3,7 +3,7 @@ package org.telegram.ui.ActionBar;
 import java.util.ArrayList;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class Theme$PatternsLoader$$ExternalSyntheticLambda3 implements RequestDelegate {
@@ -15,7 +15,7 @@ public final /* synthetic */ class Theme$PatternsLoader$$ExternalSyntheticLambda
         this.f$1 = arrayList;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m1334lambda$new$0$orgtelegramuiActionBarTheme$PatternsLoader(this.f$1, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$new$0(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

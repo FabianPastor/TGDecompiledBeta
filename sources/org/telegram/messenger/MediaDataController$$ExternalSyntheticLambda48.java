@@ -1,19 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda48 implements RequestDelegate {
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda48 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC.TL_messages_saveGif f$1;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda48(MediaDataController mediaDataController, TLRPC.TL_messages_saveGif tL_messages_saveGif) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda48(MediaDataController mediaDataController, String str) {
         this.f$0 = mediaDataController;
-        this.f$1 = tL_messages_saveGif;
+        this.f$1 = str;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m881x1CLASSNAMEd8(this.f$1, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$fetchNewEmojiKeywords$140(this.f$1);
     }
 }

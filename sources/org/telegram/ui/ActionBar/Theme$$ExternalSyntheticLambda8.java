@@ -1,15 +1,15 @@
 package org.telegram.ui.ActionBar;
 
-import org.telegram.messenger.NotificationCenter;
+import java.util.Comparator;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class Theme$$ExternalSyntheticLambda8 implements Runnable {
-    public final /* synthetic */ boolean f$0;
+public final /* synthetic */ class Theme$$ExternalSyntheticLambda8 implements Comparator {
+    public static final /* synthetic */ Theme$$ExternalSyntheticLambda8 INSTANCE = new Theme$$ExternalSyntheticLambda8();
 
-    public /* synthetic */ Theme$$ExternalSyntheticLambda8(boolean z) {
-        this.f$0 = z;
+    private /* synthetic */ Theme$$ExternalSyntheticLambda8() {
     }
 
-    public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewTheme, false, Boolean.valueOf(this.f$0));
+    public final int compare(Object obj, Object obj2) {
+        return Theme.lambda$sortThemes$1((Theme.ThemeInfo) obj, (Theme.ThemeInfo) obj2);
     }
 }

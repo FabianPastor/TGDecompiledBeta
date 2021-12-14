@@ -1,19 +1,23 @@
 package org.telegram.ui;
 
-import android.view.View;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import org.telegram.ui.Components.RecyclerListView;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda75 implements RecyclerListView.OnItemLongClickListener {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda75 implements ChatAttachAlertContactsLayout.PhonebookShareAlertDelegate {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ ItemTouchHelper f$1;
+    public final /* synthetic */ ChatActivity f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda75(LaunchActivity launchActivity, ItemTouchHelper itemTouchHelper) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda75(LaunchActivity launchActivity, ChatActivity chatActivity, ArrayList arrayList, int i) {
         this.f$0 = launchActivity;
-        this.f$1 = itemTouchHelper;
+        this.f$1 = chatActivity;
+        this.f$2 = arrayList;
+        this.f$3 = i;
     }
 
-    public final boolean onItemClick(View view, int i) {
-        return this.f$0.m3086lambda$onCreate$3$orgtelegramuiLaunchActivity(this.f$1, view, i);
+    public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
+        this.f$0.lambda$didSelectDialogs$60(this.f$1, this.f$2, this.f$3, tLRPC$User, z, i);
     }
 }

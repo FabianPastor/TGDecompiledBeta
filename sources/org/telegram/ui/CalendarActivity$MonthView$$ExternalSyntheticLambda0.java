@@ -25,6 +25,6 @@ public final /* synthetic */ class CalendarActivity$MonthView$$ExternalSynthetic
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1482lambda$animateRow$1$orgtelegramuiCalendarActivity$MonthView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, valueAnimator);
+        this.f$0.lambda$animateRow$1(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, valueAnimator);
     }
 }

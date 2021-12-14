@@ -11,6 +11,6 @@ public final /* synthetic */ class CancelAccountDeletionActivity$LoginActivitySm
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1514x4cvar_ac2(dialogInterface, i);
+        this.f$0.lambda$resendCode$1(dialogInterface, i);
     }
 }

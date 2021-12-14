@@ -1,22 +1,19 @@
 package org.telegram.ui;
 
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda17 implements Runnable {
+public final /* synthetic */ class ChatEditTypeActivity$$ExternalSyntheticLambda17 implements RequestDelegate {
     public final /* synthetic */ ChatEditTypeActivity f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ TLRPC.TL_error f$2;
-    public final /* synthetic */ TLObject f$3;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda17(ChatEditTypeActivity chatEditTypeActivity, String str, TLRPC.TL_error tL_error, TLObject tLObject) {
+    public /* synthetic */ ChatEditTypeActivity$$ExternalSyntheticLambda17(ChatEditTypeActivity chatEditTypeActivity, boolean z) {
         this.f$0 = chatEditTypeActivity;
-        this.f$1 = str;
-        this.f$2 = tL_error;
-        this.f$3 = tLObject;
+        this.f$1 = z;
     }
 
-    public final void run() {
-        this.f$0.m1893lambda$checkUserName$13$orgtelegramuiChatEditTypeActivity(this.f$1, this.f$2, this.f$3);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$generateLink$17(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

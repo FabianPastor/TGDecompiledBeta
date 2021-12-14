@@ -24,23 +24,23 @@ public class RecyclerItemsEnterAnimator {
     public final RecyclerListView listView;
     ArrayList<ViewTreeObserver.OnPreDrawListener> preDrawListeners = new ArrayList<>();
 
-    public RecyclerItemsEnterAnimator(RecyclerListView listView2, boolean alwaysCheckItemsAlpha2) {
-        this.listView = listView2;
-        this.alwaysCheckItemsAlpha = alwaysCheckItemsAlpha2;
-        listView2.setItemsEnterAnimator(this);
+    public RecyclerItemsEnterAnimator(RecyclerListView recyclerListView, boolean z) {
+        this.listView = recyclerListView;
+        this.alwaysCheckItemsAlpha = z;
+        recyclerListView.setItemsEnterAnimator(this);
     }
 
     public void dispatchDraw() {
         if (this.invalidateAlpha || this.alwaysCheckItemsAlpha) {
             for (int i = 0; i < this.listView.getChildCount(); i++) {
-                View child = this.listView.getChildAt(i);
-                int position = this.listView.getChildAdapterPosition(child);
-                if (position >= 0 && !this.ignoreView.contains(child)) {
-                    Float alpha = this.listAlphaItems.get(position, (Object) null);
-                    if (alpha == null) {
-                        child.setAlpha(1.0f);
+                View childAt = this.listView.getChildAt(i);
+                int childAdapterPosition = this.listView.getChildAdapterPosition(childAt);
+                if (childAdapterPosition >= 0 && !this.ignoreView.contains(childAt)) {
+                    Float f = this.listAlphaItems.get(childAdapterPosition, (Object) null);
+                    if (f == null) {
+                        childAt.setAlpha(1.0f);
                     } else {
-                        child.setAlpha(alpha.floatValue());
+                        childAt.setAlpha(f.floatValue());
                     }
                 }
             }
@@ -48,96 +48,99 @@ public class RecyclerItemsEnterAnimator {
         }
     }
 
-    public void showItemsAnimated(int from) {
+    public void showItemsAnimated(final int i) {
         Animator animator;
-        final View finalProgressView = getProgressView();
+        final View progressView = getProgressView();
         final RecyclerView.LayoutManager layoutManager = this.listView.getLayoutManager();
-        if (!(finalProgressView == null || layoutManager == null)) {
-            this.listView.removeView(finalProgressView);
-            this.ignoreView.add(finalProgressView);
-            this.listView.addView(finalProgressView);
-            layoutManager.ignoreView(finalProgressView);
+        if (!(progressView == null || layoutManager == null)) {
+            this.listView.removeView(progressView);
+            this.ignoreView.add(progressView);
+            this.listView.addView(progressView);
+            layoutManager.ignoreView(progressView);
             if (this.animateAlphaProgressView) {
-                animator = ObjectAnimator.ofFloat(finalProgressView, View.ALPHA, new float[]{finalProgressView.getAlpha(), 0.0f});
+                animator = ObjectAnimator.ofFloat(progressView, View.ALPHA, new float[]{progressView.getAlpha(), 0.0f});
             } else {
                 animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             }
             animator.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    finalProgressView.setAlpha(1.0f);
-                    layoutManager.stopIgnoringView(finalProgressView);
-                    RecyclerItemsEnterAnimator.this.ignoreView.remove(finalProgressView);
-                    RecyclerItemsEnterAnimator.this.listView.removeView(finalProgressView);
+                public void onAnimationEnd(Animator animator) {
+                    progressView.setAlpha(1.0f);
+                    layoutManager.stopIgnoringView(progressView);
+                    RecyclerItemsEnterAnimator.this.ignoreView.remove(progressView);
+                    RecyclerItemsEnterAnimator.this.listView.removeView(progressView);
                 }
             });
             animator.start();
-            from--;
+            i--;
         }
-        final int finalFrom = from;
-        ViewTreeObserver.OnPreDrawListener preDrawListener = new ViewTreeObserver.OnPreDrawListener() {
+        AnonymousClass2 r1 = new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
                 RecyclerItemsEnterAnimator.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
                 RecyclerItemsEnterAnimator.this.preDrawListeners.remove(this);
-                int n = RecyclerItemsEnterAnimator.this.listView.getChildCount();
+                int childCount = RecyclerItemsEnterAnimator.this.listView.getChildCount();
                 final AnimatorSet animatorSet = new AnimatorSet();
-                for (int i = 0; i < n; i++) {
-                    View child = RecyclerItemsEnterAnimator.this.listView.getChildAt(i);
-                    final int position = RecyclerItemsEnterAnimator.this.listView.getChildAdapterPosition(child);
-                    if (child != finalProgressView && position >= finalFrom - 1 && RecyclerItemsEnterAnimator.this.listAlphaItems.get(position, (Object) null) == null) {
-                        RecyclerItemsEnterAnimator.this.listAlphaItems.put(position, Float.valueOf(0.0f));
-                        RecyclerItemsEnterAnimator.this.invalidateAlpha = true;
-                        RecyclerItemsEnterAnimator.this.listView.invalidate();
-                        ValueAnimator a = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                        a.addUpdateListener(new RecyclerItemsEnterAnimator$2$$ExternalSyntheticLambda0(this, position));
-                        a.addListener(new AnimatorListenerAdapter() {
-                            public void onAnimationEnd(Animator animation) {
-                                RecyclerItemsEnterAnimator.this.listAlphaItems.remove(position);
-                                RecyclerItemsEnterAnimator.this.invalidateAlpha = true;
-                                RecyclerItemsEnterAnimator.this.listView.invalidate();
+                for (int i = 0; i < childCount; i++) {
+                    View childAt = RecyclerItemsEnterAnimator.this.listView.getChildAt(i);
+                    final int childAdapterPosition = RecyclerItemsEnterAnimator.this.listView.getChildAdapterPosition(childAt);
+                    if (childAt != progressView && childAdapterPosition >= i - 1 && RecyclerItemsEnterAnimator.this.listAlphaItems.get(childAdapterPosition, (Object) null) == null) {
+                        RecyclerItemsEnterAnimator.this.listAlphaItems.put(childAdapterPosition, Float.valueOf(0.0f));
+                        RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = RecyclerItemsEnterAnimator.this;
+                        recyclerItemsEnterAnimator.invalidateAlpha = true;
+                        recyclerItemsEnterAnimator.listView.invalidate();
+                        ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                        ofFloat.addUpdateListener(new RecyclerItemsEnterAnimator$2$$ExternalSyntheticLambda0(this, childAdapterPosition));
+                        ofFloat.addListener(new AnimatorListenerAdapter() {
+                            public void onAnimationEnd(Animator animator) {
+                                RecyclerItemsEnterAnimator.this.listAlphaItems.remove(childAdapterPosition);
+                                RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = RecyclerItemsEnterAnimator.this;
+                                recyclerItemsEnterAnimator.invalidateAlpha = true;
+                                recyclerItemsEnterAnimator.listView.invalidate();
                             }
                         });
-                        a.setStartDelay((long) ((int) ((((float) Math.min(RecyclerItemsEnterAnimator.this.listView.getMeasuredHeight(), Math.max(0, child.getTop()))) / ((float) RecyclerItemsEnterAnimator.this.listView.getMeasuredHeight())) * 100.0f)));
-                        a.setDuration(200);
-                        animatorSet.playTogether(new Animator[]{a});
+                        ofFloat.setStartDelay((long) ((int) ((((float) Math.min(RecyclerItemsEnterAnimator.this.listView.getMeasuredHeight(), Math.max(0, childAt.getTop()))) / ((float) RecyclerItemsEnterAnimator.this.listView.getMeasuredHeight())) * 100.0f)));
+                        ofFloat.setDuration(200);
+                        animatorSet.playTogether(new Animator[]{ofFloat});
                     }
                 }
                 RecyclerItemsEnterAnimator.this.currentAnimations.add(animatorSet);
                 animatorSet.start();
                 animatorSet.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
+                    public void onAnimationEnd(Animator animator) {
+                        super.onAnimationEnd(animator);
                         RecyclerItemsEnterAnimator.this.currentAnimations.remove(animatorSet);
                         if (RecyclerItemsEnterAnimator.this.currentAnimations.isEmpty()) {
                             RecyclerItemsEnterAnimator.this.listAlphaItems.clear();
-                            RecyclerItemsEnterAnimator.this.invalidateAlpha = true;
-                            RecyclerItemsEnterAnimator.this.listView.invalidate();
+                            RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = RecyclerItemsEnterAnimator.this;
+                            recyclerItemsEnterAnimator.invalidateAlpha = true;
+                            recyclerItemsEnterAnimator.listView.invalidate();
                         }
                     }
                 });
                 return false;
             }
 
-            /* renamed from: lambda$onPreDraw$0$org-telegram-ui-Components-RecyclerItemsEnterAnimator$2  reason: not valid java name */
-            public /* synthetic */ void m2534x18071e0(int position, ValueAnimator valueAnimator) {
-                RecyclerItemsEnterAnimator.this.listAlphaItems.put(position, (Float) valueAnimator.getAnimatedValue());
-                RecyclerItemsEnterAnimator.this.invalidateAlpha = true;
-                RecyclerItemsEnterAnimator.this.listView.invalidate();
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$onPreDraw$0(int i, ValueAnimator valueAnimator) {
+                RecyclerItemsEnterAnimator.this.listAlphaItems.put(i, (Float) valueAnimator.getAnimatedValue());
+                RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = RecyclerItemsEnterAnimator.this;
+                recyclerItemsEnterAnimator.invalidateAlpha = true;
+                recyclerItemsEnterAnimator.listView.invalidate();
             }
         };
-        this.preDrawListeners.add(preDrawListener);
-        this.listView.getViewTreeObserver().addOnPreDrawListener(preDrawListener);
+        this.preDrawListeners.add(r1);
+        this.listView.getViewTreeObserver().addOnPreDrawListener(r1);
     }
 
     public View getProgressView() {
-        View progressView = null;
-        int n = this.listView.getChildCount();
-        for (int i = 0; i < n; i++) {
-            View child = this.listView.getChildAt(i);
-            if (this.listView.getChildAdapterPosition(child) >= 0 && (child instanceof FlickerLoadingView)) {
-                progressView = child;
+        int childCount = this.listView.getChildCount();
+        View view = null;
+        for (int i = 0; i < childCount; i++) {
+            View childAt = this.listView.getChildAt(i);
+            if (this.listView.getChildAdapterPosition(childAt) >= 0 && (childAt instanceof FlickerLoadingView)) {
+                view = childAt;
             }
         }
-        return progressView;
+        return view;
     }
 
     public void onDetached() {
@@ -146,10 +149,10 @@ public class RecyclerItemsEnterAnimator {
 
     public void cancel() {
         if (!this.currentAnimations.isEmpty()) {
-            ArrayList<AnimatorSet> animations = new ArrayList<>(this.currentAnimations);
-            for (int i = 0; i < animations.size(); i++) {
-                animations.get(i).end();
-                animations.get(i).cancel();
+            ArrayList arrayList = new ArrayList(this.currentAnimations);
+            for (int i = 0; i < arrayList.size(); i++) {
+                ((AnimatorSet) arrayList.get(i)).end();
+                ((AnimatorSet) arrayList.get(i)).cancel();
             }
         }
         this.currentAnimations.clear();

@@ -3,7 +3,7 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda6 implements RequestDelegate {
     public final /* synthetic */ ShareAlert f$0;
@@ -14,7 +14,7 @@ public final /* synthetic */ class ShareAlert$$ExternalSyntheticLambda6 implemen
         this.f$1 = context;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2558lambda$new$1$orgtelegramuiComponentsShareAlert(this.f$1, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$new$1(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

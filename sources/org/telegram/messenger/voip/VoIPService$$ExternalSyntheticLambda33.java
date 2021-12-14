@@ -1,15 +1,13 @@
 package org.telegram.messenger.voip;
 
-import android.media.AudioManager;
-
 public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda33 implements Runnable {
-    public final /* synthetic */ AudioManager f$0;
+    public final /* synthetic */ VoIPService f$0;
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda33(AudioManager audioManager) {
-        this.f$0 = audioManager;
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda33(VoIPService voIPService) {
+        this.f$0 = voIPService;
     }
 
     public final void run() {
-        VoIPService.lambda$updateBluetoothHeadsetState$77(this.f$0);
+        this.f$0.lambda$onCallUpdated$17();
     }
 }

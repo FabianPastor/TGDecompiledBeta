@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
 import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda24 implements View.OnClickListener {
-    public final /* synthetic */ ThemePreviewActivity f$0;
+public final /* synthetic */ class ThemePreviewActivity$$ExternalSyntheticLambda24 implements RecyclerListView.OnItemClickListener {
+    public static final /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda24 INSTANCE = new ThemePreviewActivity$$ExternalSyntheticLambda24();
 
-    public /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda24(ThemePreviewActivity themePreviewActivity) {
-        this.f$0 = themePreviewActivity;
+    private /* synthetic */ ThemePreviewActivity$$ExternalSyntheticLambda24() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.m3933lambda$createView$3$orgtelegramuiThemePreviewActivity(view);
+    public final void onItemClick(View view, int i) {
+        ThemePreviewActivity.lambda$createView$1(view, i);
     }
 }

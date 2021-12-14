@@ -10,6 +10,6 @@ public final /* synthetic */ class GigagroupConvertAlert$$ExternalSyntheticLambd
     }
 
     public final void onClick(View view) {
-        this.f$0.m2315lambda$new$2$orgtelegramuiComponentsGigagroupConvertAlert(view);
+        this.f$0.lambda$new$2(view);
     }
 }

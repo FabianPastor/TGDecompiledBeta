@@ -14,6 +14,6 @@ public final /* synthetic */ class ImageLoader$HttpImageTask$$ExternalSyntheticL
     }
 
     public final void run() {
-        this.f$0.m716xCLASSNAMEa65f(this.f$1, this.f$2);
+        this.f$0.lambda$reportProgress$1(this.f$1, this.f$2);
     }
 }

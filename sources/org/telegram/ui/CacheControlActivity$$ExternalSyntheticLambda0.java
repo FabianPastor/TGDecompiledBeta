@@ -10,6 +10,6 @@ public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1470lambda$clearDatabase$9$orgtelegramuiCacheControlActivity(dialogInterface, i);
+        this.f$0.lambda$clearDatabase$9(dialogInterface, i);
     }
 }

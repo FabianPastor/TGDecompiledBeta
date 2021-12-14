@@ -12,6 +12,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityRecoverView$$Exter
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.m3213xcd144188(textView, i, keyEvent);
+        return this.f$0.lambda$new$0(textView, i, keyEvent);
     }
 }

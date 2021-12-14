@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlertAudioLayout$$ExternalSynthetic
     }
 
     public final boolean onItemClick(View view, int i) {
-        return this.f$0.m2118x8e26456f(view, i);
+        return this.f$0.lambda$new$2(view, i);
     }
 }

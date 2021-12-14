@@ -13,6 +13,6 @@ public final /* synthetic */ class BaseChartView$$ExternalSyntheticLambda3 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m1653lambda$setMaxMinValue$2$orgtelegramuiChartsBaseChartView(this.f$1, valueAnimator);
+        this.f$0.lambda$setMaxMinValue$2(this.f$1, valueAnimator);
     }
 }

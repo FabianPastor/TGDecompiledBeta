@@ -1,8 +1,8 @@
 package org.webrtc;
 
 public class AudioSource extends MediaSource {
-    public AudioSource(long nativeSource) {
-        super(nativeSource);
+    public AudioSource(long j) {
+        super(j);
     }
 
     /* access modifiers changed from: package-private */

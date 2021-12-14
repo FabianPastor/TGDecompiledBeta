@@ -6,8 +6,8 @@ import android.content.Intent;
 
 public class StopLiveLocationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
-        for (int a = 0; a < 3; a++) {
-            LocationController.getInstance(a).removeAllLocationSharings();
+        for (int i = 0; i < 3; i++) {
+            LocationController.getInstance(i).removeAllLocationSharings();
         }
     }
 }

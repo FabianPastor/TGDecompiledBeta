@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import java.util.Comparator;
+import org.telegram.messenger.support.LongSparseIntArray;
 
-public final /* synthetic */ class FilterCreateActivity$$ExternalSyntheticLambda8 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ FilterCreateActivity f$0;
+public final /* synthetic */ class FilterCreateActivity$$ExternalSyntheticLambda8 implements Comparator {
+    public final /* synthetic */ LongSparseIntArray f$0;
 
-    public /* synthetic */ FilterCreateActivity$$ExternalSyntheticLambda8(FilterCreateActivity filterCreateActivity) {
-        this.f$0 = filterCreateActivity;
+    public /* synthetic */ FilterCreateActivity$$ExternalSyntheticLambda8(LongSparseIntArray longSparseIntArray) {
+        this.f$0 = longSparseIntArray;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m2912lambda$createView$3$orgtelegramuiFilterCreateActivity(dialogInterface, i);
+    public final int compare(Object obj, Object obj2) {
+        return FilterCreateActivity.lambda$saveFilterToServer$11(this.f$0, (Long) obj, (Long) obj2);
     }
 }

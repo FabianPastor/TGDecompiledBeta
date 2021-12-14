@@ -14,6 +14,6 @@ public final /* synthetic */ class AutoMessageHeardReceiver$$ExternalSyntheticLa
     }
 
     public final void run() {
-        AndroidUtilities.runOnUIThread(new AutoMessageHeardReceiver$$ExternalSyntheticLambda2(this.f$0, this.f$0.getMessagesStorage().getChatSync(-this.f$1), this.f$2, this.f$1, this.f$3));
+        AndroidUtilities.runOnUIThread(new AutoMessageHeardReceiver$$ExternalSyntheticLambda3(this.f$0, this.f$0.getMessagesStorage().getUserSync(this.f$1), this.f$2, this.f$1, this.f$3));
     }
 }

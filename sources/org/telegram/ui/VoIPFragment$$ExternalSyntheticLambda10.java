@@ -3,12 +3,13 @@ package org.telegram.ui;
 import android.view.View;
 
 public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda10 implements View.OnClickListener {
-    public static final /* synthetic */ VoIPFragment$$ExternalSyntheticLambda10 INSTANCE = new VoIPFragment$$ExternalSyntheticLambda10();
+    public final /* synthetic */ VoIPFragment f$0;
 
-    private /* synthetic */ VoIPFragment$$ExternalSyntheticLambda10() {
+    public /* synthetic */ VoIPFragment$$ExternalSyntheticLambda10(VoIPFragment voIPFragment) {
+        this.f$0 = voIPFragment;
     }
 
     public final void onClick(View view) {
-        VoIPFragment.lambda$updateButtons$21(view);
+        this.f$0.lambda$setMicrohoneAction$22(view);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class CancelAccountDeletionActivity$LoginActivitySm
     }
 
     public final void onClick(View view) {
-        this.f$0.m1510xvar_de3a5(view);
+        this.f$0.lambda$new$0(view);
     }
 }

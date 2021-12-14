@@ -1,18 +1,17 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.ui.Cells.TextCheckCell;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda11 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class PrivacySettingsActivity$$ExternalSyntheticLambda11 implements RequestDelegate {
     public final /* synthetic */ PrivacySettingsActivity f$0;
-    public final /* synthetic */ TextCheckCell f$1;
 
-    public /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda11(PrivacySettingsActivity privacySettingsActivity, TextCheckCell textCheckCell) {
+    public /* synthetic */ PrivacySettingsActivity$$ExternalSyntheticLambda11(PrivacySettingsActivity privacySettingsActivity) {
         this.f$0 = privacySettingsActivity;
-        this.f$1 = textCheckCell;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3676lambda$createView$9$orgtelegramuiPrivacySettingsActivity(this.f$1, dialogInterface, i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$loadPasswordSettings$17(tLObject, tLRPC$TL_error);
     }
 }

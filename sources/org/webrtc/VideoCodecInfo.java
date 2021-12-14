@@ -18,17 +18,18 @@ public class VideoCodecInfo {
     @Deprecated
     public final int payload;
 
-    public VideoCodecInfo(String name2, Map<String, String> params2) {
+    @CalledByNative
+    public VideoCodecInfo(String str, Map<String, String> map) {
         this.payload = 0;
-        this.name = name2;
-        this.params = params2;
+        this.name = str;
+        this.params = map;
     }
 
     @Deprecated
-    public VideoCodecInfo(int payload2, String name2, Map<String, String> params2) {
-        this.payload = payload2;
-        this.name = name2;
-        this.params = params2;
+    public VideoCodecInfo(int i, String str, Map<String, String> map) {
+        this.payload = i;
+        this.name = str;
+        this.params = map;
     }
 
     public boolean equals(Object obj) {
@@ -41,8 +42,8 @@ public class VideoCodecInfo {
         if (!(obj instanceof VideoCodecInfo)) {
             return false;
         }
-        VideoCodecInfo otherInfo = (VideoCodecInfo) obj;
-        if (!this.name.equalsIgnoreCase(otherInfo.name) || !this.params.equals(otherInfo.params)) {
+        VideoCodecInfo videoCodecInfo = (VideoCodecInfo) obj;
+        if (!this.name.equalsIgnoreCase(videoCodecInfo.name) || !this.params.equals(videoCodecInfo.params)) {
             return false;
         }
         return true;
@@ -53,11 +54,13 @@ public class VideoCodecInfo {
     }
 
     /* access modifiers changed from: package-private */
+    @CalledByNative
     public String getName() {
         return this.name;
     }
 
     /* access modifiers changed from: package-private */
+    @CalledByNative
     public Map getParams() {
         return this.params;
     }

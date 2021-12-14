@@ -1,19 +1,23 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import android.net.Uri;
+import java.util.ArrayList;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda76 implements RequestDelegate {
+public final /* synthetic */ class SendMessagesHelper$$ExternalSyntheticLambda76 implements MessagesStorage.LongCallback {
     public final /* synthetic */ SendMessagesHelper f$0;
-    public final /* synthetic */ long f$1;
+    public final /* synthetic */ Uri f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ MessagesStorage.LongCallback f$3;
 
-    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda76(SendMessagesHelper sendMessagesHelper, long j) {
+    public /* synthetic */ SendMessagesHelper$$ExternalSyntheticLambda76(SendMessagesHelper sendMessagesHelper, Uri uri, ArrayList arrayList, MessagesStorage.LongCallback longCallback) {
         this.f$0 = sendMessagesHelper;
-        this.f$1 = j;
+        this.f$1 = uri;
+        this.f$2 = arrayList;
+        this.f$3 = longCallback;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m466lambda$sendGame$31$orgtelegrammessengerSendMessagesHelper(this.f$1, tLObject, tL_error);
+    public final void run(long j) {
+        this.f$0.lambda$prepareImportHistory$64(this.f$1, this.f$2, this.f$3, j);
     }
 }

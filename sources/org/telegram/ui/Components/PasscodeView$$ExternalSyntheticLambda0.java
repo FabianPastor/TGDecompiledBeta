@@ -10,6 +10,6 @@ public final /* synthetic */ class PasscodeView$$ExternalSyntheticLambda0 implem
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.m2436x228947ec(dialogInterface);
+        this.f$0.lambda$checkFingerprint$7(dialogInterface);
     }
 }

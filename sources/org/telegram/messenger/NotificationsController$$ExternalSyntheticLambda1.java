@@ -1,13 +1,15 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda1 implements Runnable {
-    public final /* synthetic */ NotificationsController f$0;
+import android.graphics.Canvas;
+import android.graphics.PostProcessor;
 
-    public /* synthetic */ NotificationsController$$ExternalSyntheticLambda1(NotificationsController notificationsController) {
-        this.f$0 = notificationsController;
+public final /* synthetic */ class NotificationsController$$ExternalSyntheticLambda1 implements PostProcessor {
+    public static final /* synthetic */ NotificationsController$$ExternalSyntheticLambda1 INSTANCE = new NotificationsController$$ExternalSyntheticLambda1();
+
+    private /* synthetic */ NotificationsController$$ExternalSyntheticLambda1() {
     }
 
-    public final void run() {
-        this.f$0.m1103xa67ee1();
+    public final int onPostProcess(Canvas canvas) {
+        return NotificationsController.lambda$loadRoundAvatar$35(canvas);
     }
 }

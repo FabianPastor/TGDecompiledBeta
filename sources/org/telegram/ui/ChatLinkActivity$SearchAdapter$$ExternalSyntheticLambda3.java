@@ -15,6 +15,6 @@ public final /* synthetic */ class ChatLinkActivity$SearchAdapter$$ExternalSynth
     }
 
     public final void run() {
-        this.f$0.m1934x87a2aCLASSNAME(this.f$1, this.f$2);
+        this.f$0.lambda$updateSearchResults$3(this.f$1, this.f$2);
     }
 }

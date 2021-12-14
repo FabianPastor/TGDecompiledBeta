@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import android.view.View;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheticLambda34 implements View.OnClickListener {
-    public final /* synthetic */ TwoStepVerificationActivity f$0;
+public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheticLambda34 implements RequestDelegate {
+    public static final /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda34 INSTANCE = new TwoStepVerificationActivity$$ExternalSyntheticLambda34();
 
-    public /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda34(TwoStepVerificationActivity twoStepVerificationActivity) {
-        this.f$0 = twoStepVerificationActivity;
+    private /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda34() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.m3985lambda$createView$2$orgtelegramuiTwoStepVerificationActivity(view);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        TwoStepVerificationActivity.lambda$checkSecretValues$25(tLObject, tLRPC$TL_error);
     }
 }

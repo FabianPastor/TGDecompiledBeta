@@ -1,34 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda265 implements Runnable {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda265 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ TLRPC.messages_Dialogs f$3;
-    public final /* synthetic */ boolean f$4;
-    public final /* synthetic */ int f$5;
-    public final /* synthetic */ ArrayList f$6;
-    public final /* synthetic */ int f$7;
-    public final /* synthetic */ boolean f$8;
-    public final /* synthetic */ boolean f$9;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda265(MessagesController messagesController, int i, int i2, TLRPC.messages_Dialogs messages_dialogs, boolean z, int i3, ArrayList arrayList, int i4, boolean z2, boolean z3) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda265(MessagesController messagesController, long j) {
         this.f$0 = messagesController;
-        this.f$1 = i;
-        this.f$2 = i2;
-        this.f$3 = messages_dialogs;
-        this.f$4 = z;
-        this.f$5 = i3;
-        this.f$6 = arrayList;
-        this.f$7 = i4;
-        this.f$8 = z2;
-        this.f$9 = z3;
+        this.f$1 = j;
     }
 
-    public final void run() {
-        this.f$0.m314xb2fCLASSNAMEa5(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$deleteDialog$104(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

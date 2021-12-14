@@ -10,6 +10,6 @@ public final /* synthetic */ class BottomSheet$7$$ExternalSyntheticLambda0 imple
     }
 
     public final void run() {
-        this.f$0.m1322lambda$onAnimationEnd$0$orgtelegramuiActionBarBottomSheet$7();
+        this.f$0.lambda$onAnimationEnd$0();
     }
 }

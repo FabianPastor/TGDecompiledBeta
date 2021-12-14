@@ -10,6 +10,6 @@ public final /* synthetic */ class ChangePhoneActivity$PhoneView$$ExternalSynthe
     }
 
     public final void run() {
-        this.f$0.m1591lambda$new$0$orgtelegramuiChangePhoneActivity$PhoneView();
+        this.f$0.lambda$new$0();
     }
 }

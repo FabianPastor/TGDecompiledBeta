@@ -8,17 +8,17 @@ public class StickerImageView extends BackupImageView implements NotificationCen
     int stickerNum;
     String stickerPackName = "tg_placeholders_android";
 
-    public StickerImageView(Context context, int currentAccount2) {
+    public StickerImageView(Context context, int i) {
         super(context);
-        this.currentAccount = currentAccount2;
+        this.currentAccount = i;
     }
 
-    public void setStickerNum(int stickerNum2) {
-        this.stickerNum = stickerNum2;
+    public void setStickerNum(int i) {
+        this.stickerNum = i;
     }
 
-    public void setStickerPackName(String stickerPackName2) {
-        this.stickerPackName = stickerPackName2;
+    public void setStickerPackName(String str) {
+        this.stickerPackName = str;
     }
 
     /* access modifiers changed from: protected */
@@ -34,84 +34,77 @@ public class StickerImageView extends BackupImageView implements NotificationCen
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.diceStickersDidLoad);
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.diceStickersDidLoad) {
-            if (this.stickerPackName.equals(args[0])) {
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.diceStickersDidLoad) {
+            if (this.stickerPackName.equals(objArr[0])) {
                 setSticker();
             }
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v11, resolved type: java.lang.Object} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v2, resolved type: org.telegram.tgnet.TLRPC$Document} */
-    /* JADX WARNING: Multi-variable type inference failed */
+    /* JADX WARNING: Code restructure failed: missing block: B:5:0x001e, code lost:
+        r1 = r6.documents.size();
+        r2 = r7.stickerNum;
+     */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void setSticker() {
         /*
-            r11 = this;
+            r7 = this;
+            int r0 = r7.currentAccount
+            org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
+            java.lang.String r1 = r7.stickerPackName
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r0.getStickerSetByName(r1)
+            if (r0 != 0) goto L_0x001a
+            int r0 = r7.currentAccount
+            org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
+            java.lang.String r1 = r7.stickerPackName
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r0.getStickerSetByEmojiOrName(r1)
+        L_0x001a:
+            r6 = r0
             r0 = 0
-            r1 = 0
-            r2 = 0
-            int r3 = r11.currentAccount
-            org.telegram.messenger.MediaDataController r3 = org.telegram.messenger.MediaDataController.getInstance(r3)
-            java.lang.String r4 = r11.stickerPackName
-            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r2 = r3.getStickerSetByName(r4)
-            if (r2 != 0) goto L_0x001d
-            int r3 = r11.currentAccount
-            org.telegram.messenger.MediaDataController r3 = org.telegram.messenger.MediaDataController.getInstance(r3)
-            java.lang.String r4 = r11.stickerPackName
-            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r2 = r3.getStickerSetByEmojiOrName(r4)
-        L_0x001d:
-            if (r2 == 0) goto L_0x0034
-            java.util.ArrayList r3 = r2.documents
-            int r3 = r3.size()
-            int r4 = r11.stickerNum
-            if (r3 <= r4) goto L_0x0034
-            java.util.ArrayList r3 = r2.documents
-            int r4 = r11.stickerNum
-            java.lang.Object r3 = r3.get(r4)
-            r1 = r3
-            org.telegram.tgnet.TLRPC$Document r1 = (org.telegram.tgnet.TLRPC.Document) r1
-        L_0x0034:
-            java.lang.String r0 = "130_130"
-            r3 = 0
-            if (r1 == 0) goto L_0x0046
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r4 = r1.thumbs
-            r5 = 1045220557(0x3e4ccccd, float:0.2)
-            java.lang.String r6 = "emptyListPlaceholder"
-            org.telegram.messenger.SvgHelper$SvgDrawable r3 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC.PhotoSize>) r4, (java.lang.String) r6, (float) r5)
-            r9 = r3
-            goto L_0x0047
-        L_0x0046:
-            r9 = r3
-        L_0x0047:
-            if (r9 == 0) goto L_0x004e
-            r3 = 512(0x200, float:7.175E-43)
-            r9.overrideWidthAndHeight(r3, r3)
-        L_0x004e:
-            if (r1 == 0) goto L_0x005f
-            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForDocument(r1)
-            java.lang.String r6 = "tgs"
-            r3 = r11
-            r4 = r10
+            if (r6 == 0) goto L_0x0031
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r1 = r6.documents
+            int r1 = r1.size()
+            int r2 = r7.stickerNum
+            if (r1 <= r2) goto L_0x0031
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r1 = r6.documents
+            java.lang.Object r1 = r1.get(r2)
+            org.telegram.tgnet.TLRPC$Document r1 = (org.telegram.tgnet.TLRPC$Document) r1
+            goto L_0x0032
+        L_0x0031:
+            r1 = r0
+        L_0x0032:
+            if (r1 == 0) goto L_0x003f
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r0 = r1.thumbs
+            r2 = 1045220557(0x3e4ccccd, float:0.2)
+            java.lang.String r3 = "emptyListPlaceholder"
+            org.telegram.messenger.SvgHelper$SvgDrawable r0 = org.telegram.messenger.DocumentObject.getSvgThumb((java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize>) r0, (java.lang.String) r3, (float) r2)
+        L_0x003f:
             r5 = r0
-            r7 = r9
-            r8 = r2
-            r3.setImage((org.telegram.messenger.ImageLocation) r4, (java.lang.String) r5, (java.lang.String) r6, (android.graphics.drawable.Drawable) r7, (java.lang.Object) r8)
-            goto L_0x0070
-        L_0x005f:
-            int r3 = r11.currentAccount
-            org.telegram.messenger.MediaDataController r3 = org.telegram.messenger.MediaDataController.getInstance(r3)
-            java.lang.String r4 = r11.stickerPackName
-            r5 = 0
-            if (r2 != 0) goto L_0x006c
-            r6 = 1
-            goto L_0x006d
-        L_0x006c:
-            r6 = 0
-        L_0x006d:
-            r3.loadStickersByEmojiOrName(r4, r5, r6)
-        L_0x0070:
+            if (r5 == 0) goto L_0x0047
+            r0 = 512(0x200, float:7.175E-43)
+            r5.overrideWidthAndHeight(r0, r0)
+        L_0x0047:
+            if (r1 == 0) goto L_0x0056
+            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument(r1)
+            java.lang.String r3 = "130_130"
+            java.lang.String r4 = "tgs"
+            r1 = r7
+            r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (java.lang.String) r4, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r6)
+            goto L_0x0067
+        L_0x0056:
+            int r0 = r7.currentAccount
+            org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
+            java.lang.String r1 = r7.stickerPackName
+            r2 = 0
+            if (r6 != 0) goto L_0x0063
+            r3 = 1
+            goto L_0x0064
+        L_0x0063:
+            r3 = 0
+        L_0x0064:
+            r0.loadStickersByEmojiOrName(r1, r2, r3)
+        L_0x0067:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickerImageView.setSticker():void");

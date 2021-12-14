@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
 import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda37 implements View.OnTouchListener {
-    public static final /* synthetic */ LocationActivity$$ExternalSyntheticLambda37 INSTANCE = new LocationActivity$$ExternalSyntheticLambda37();
+public final /* synthetic */ class LocationActivity$$ExternalSyntheticLambda37 implements RecyclerListView.OnItemClickListener {
+    public final /* synthetic */ LocationActivity f$0;
 
-    private /* synthetic */ LocationActivity$$ExternalSyntheticLambda37() {
+    public /* synthetic */ LocationActivity$$ExternalSyntheticLambda37(LocationActivity locationActivity) {
+        this.f$0 = locationActivity;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return LocationActivity.lambda$createView$7(view, motionEvent);
+    public final void onItemClick(View view, int i) {
+        this.f$0.lambda$createView$14(view, i);
     }
 }

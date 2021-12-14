@@ -11,6 +11,6 @@ public final /* synthetic */ class GroupCallActivity$GroupCallItemAnimator$$Exte
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m3011x8b80169(valueAnimator);
+        this.f$0.lambda$runPendingAnimations$0(valueAnimator);
     }
 }

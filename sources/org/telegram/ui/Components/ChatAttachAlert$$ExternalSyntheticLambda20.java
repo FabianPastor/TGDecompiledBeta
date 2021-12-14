@@ -1,17 +1,16 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda20 implements Runnable {
-    public final /* synthetic */ ChatAttachAlert f$0;
-    public final /* synthetic */ EditTextBoldCursor f$1;
-    public final /* synthetic */ boolean f$2;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda20(ChatAttachAlert chatAttachAlert, EditTextBoldCursor editTextBoldCursor, boolean z) {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda20 implements RecyclerListView.OnItemLongClickListener {
+    public final /* synthetic */ ChatAttachAlert f$0;
+
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda20(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
-        this.f$1 = editTextBoldCursor;
-        this.f$2 = z;
     }
 
-    public final void run() {
-        this.f$0.m2092x6717acdd(this.f$1, this.f$2);
+    public final boolean onItemClick(View view, int i) {
+        return this.f$0.lambda$new$8(view, i);
     }
 }

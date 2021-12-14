@@ -10,6 +10,6 @@ public final /* synthetic */ class VideoCapturerDevice$$ExternalSyntheticLambda3
     }
 
     public final void run() {
-        this.f$0.m495x7b7d465a(this.f$1);
+        this.f$0.lambda$onStateChanged$6(this.f$1);
     }
 }

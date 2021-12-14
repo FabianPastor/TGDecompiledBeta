@@ -8,6 +8,6 @@ public final /* synthetic */ class AnimatedFileDrawable$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.m1992lambda$new$1$orgtelegramuiComponentsAnimatedFileDrawable();
+        this.f$0.lambda$new$1();
     }
 }

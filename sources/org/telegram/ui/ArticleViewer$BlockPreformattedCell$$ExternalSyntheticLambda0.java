@@ -11,6 +11,6 @@ public final /* synthetic */ class ArticleViewer$BlockPreformattedCell$$External
     }
 
     public final void onScrollChange(View view, int i, int i2, int i3, int i4) {
-        this.f$0.m1456lambda$new$0$orgtelegramuiArticleViewer$BlockPreformattedCell(view, i, i2, i3, i4);
+        this.f$0.lambda$new$0(view, i, i2, i3, i4);
     }
 }

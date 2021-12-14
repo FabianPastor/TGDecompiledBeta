@@ -1,19 +1,19 @@
 package org.telegram.ui.Adapters;
 
-public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda2 implements Runnable {
-    public final /* synthetic */ DialogsSearchAdapter f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ String f$3;
+import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
-    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda2(DialogsSearchAdapter dialogsSearchAdapter, String str, int i, String str2) {
-        this.f$0 = dialogsSearchAdapter;
-        this.f$1 = str;
-        this.f$2 = i;
-        this.f$3 = str2;
+public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda2 implements Runnable {
+    public final /* synthetic */ int f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ DialogsSearchAdapter.OnRecentSearchLoaded f$2;
+
+    public /* synthetic */ DialogsSearchAdapter$$ExternalSyntheticLambda2(int i, int i2, DialogsSearchAdapter.OnRecentSearchLoaded onRecentSearchLoaded) {
+        this.f$0 = i;
+        this.f$1 = i2;
+        this.f$2 = onRecentSearchLoaded;
     }
 
     public final void run() {
-        this.f$0.m1364x4783704c(this.f$1, this.f$2, this.f$3);
+        DialogsSearchAdapter.lambda$loadRecentSearch$5(this.f$0, this.f$1, this.f$2);
     }
 }

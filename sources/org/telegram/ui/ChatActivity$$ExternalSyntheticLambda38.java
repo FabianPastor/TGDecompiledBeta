@@ -1,23 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessageObject;
-import org.telegram.ui.ActionBar.ActionBarLayout;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda38 implements Runnable {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda38 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ BaseFragment f$1;
-    public final /* synthetic */ MessageObject f$2;
-    public final /* synthetic */ ActionBarLayout f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda38(ChatActivity chatActivity, BaseFragment baseFragment, MessageObject messageObject, ActionBarLayout actionBarLayout) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda38(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = baseFragment;
-        this.f$2 = messageObject;
-        this.f$3 = actionBarLayout;
     }
 
-    public final void run() {
-        this.f$0.m1736lambda$migrateToNewChat$104$orgtelegramuiChatActivity(this.f$1, this.f$2, this.f$3);
+    public final void onClick(View view) {
+        this.f$0.lambda$createMenu$120(view);
     }
 }

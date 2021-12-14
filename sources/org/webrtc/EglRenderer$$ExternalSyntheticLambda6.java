@@ -12,6 +12,6 @@ public final /* synthetic */ class EglRenderer$$ExternalSyntheticLambda6 impleme
     }
 
     public final void run() {
-        this.f$0.m4102lambda$getTexture$7$orgwebrtcEglRenderer(this.f$1);
+        this.f$0.lambda$getTexture$7(this.f$1);
     }
 }

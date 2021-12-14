@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.MotionEvent;
-import android.view.View;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 
-public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda8 implements View.OnTouchListener {
-    public static final /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda8 INSTANCE = new AudioPlayerAlert$$ExternalSyntheticLambda8();
+public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda8 implements ActionBarMenuItem.ActionBarMenuItemDelegate {
+    public final /* synthetic */ AudioPlayerAlert f$0;
 
-    private /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda8() {
+    public /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda8(AudioPlayerAlert audioPlayerAlert) {
+        this.f$0 = audioPlayerAlert;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return AudioPlayerAlert.lambda$new$7(view, motionEvent);
+    public final void onItemClick(int i) {
+        this.f$0.lambda$new$0(i);
     }
 }

@@ -1,23 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_updatePeerBlocked;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda165 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda165 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ String f$3;
+    public final /* synthetic */ TLRPC$TL_updatePeerBlocked f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda165(MessagesController messagesController, int i, String str, String str2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda165(MessagesController messagesController, TLRPC$TL_updatePeerBlocked tLRPC$TL_updatePeerBlocked) {
         this.f$0 = messagesController;
-        this.f$1 = i;
-        this.f$2 = str;
-        this.f$3 = str2;
+        this.f$1 = tLRPC$TL_updatePeerBlocked;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m146x8fa33284(this.f$1, this.f$2, this.f$3, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$processUpdateArray$295(this.f$1);
     }
 }

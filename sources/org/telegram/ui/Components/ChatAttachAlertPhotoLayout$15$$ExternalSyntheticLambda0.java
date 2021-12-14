@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatAttachAlertPhotoLayout$15$$ExternalSynthe
     }
 
     public final void run() {
-        this.f$0.m2188xf7e45609();
+        this.f$0.lambda$cancelButtonPressed$0();
     }
 }

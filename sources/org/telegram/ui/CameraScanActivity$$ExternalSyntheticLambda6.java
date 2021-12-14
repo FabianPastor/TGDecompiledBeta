@@ -10,6 +10,6 @@ public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda6 
     }
 
     public final void run() {
-        this.f$0.m1507lambda$onPreviewFrame$7$orgtelegramuiCameraScanActivity(this.f$1);
+        this.f$0.lambda$onPreviewFrame$7(this.f$1);
     }
 }

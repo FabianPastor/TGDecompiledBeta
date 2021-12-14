@@ -11,6 +11,6 @@ public final /* synthetic */ class CodeFieldContainer$$ExternalSyntheticLambda0 
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.m1986lambda$setNumbersCount$0$orgtelegramuiCodeFieldContainer(textView, i, keyEvent);
+        return this.f$0.lambda$setNumbersCount$0(textView, i, keyEvent);
     }
 }

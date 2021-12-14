@@ -14,6 +14,6 @@ public final /* synthetic */ class PollVotesAlert$$ExternalSyntheticLambda6 impl
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.m2510lambda$new$4$orgtelegramuiComponentsPollVotesAlert(this.f$1, view, i);
+        this.f$0.lambda$new$4(this.f$1, view, i);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class BubbleActivity$$ExternalSyntheticLambda0 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m1465lambda$showPermissionErrorAlert$1$orgtelegramuiBubbleActivity(dialogInterface, i);
+        this.f$0.lambda$showPermissionErrorAlert$1(dialogInterface, i);
     }
 }

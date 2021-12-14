@@ -10,6 +10,6 @@ public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda0 im
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.m3858lambda$createView$6$orgtelegramuiSessionsActivity(dialogInterface, i);
+        this.f$0.lambda$createView$6(dialogInterface, i);
     }
 }

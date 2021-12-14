@@ -16,28 +16,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class MediaActionDrawable extends Drawable {
-    private static final float CANCEL_TO_CHECK_STAGE1 = 0.5f;
-    private static final float CANCEL_TO_CHECK_STAGE2 = 0.5f;
-    private static final float DOWNLOAD_TO_CANCEL_STAGE1 = 0.5f;
-    private static final float DOWNLOAD_TO_CANCEL_STAGE2 = 0.2f;
-    private static final float DOWNLOAD_TO_CANCEL_STAGE3 = 0.3f;
-    private static final float EPS = 0.001f;
-    public static final int ICON_CANCEL = 3;
-    public static final int ICON_CANCEL_FILL = 14;
-    public static final int ICON_CANCEL_NOPROFRESS = 12;
-    public static final int ICON_CANCEL_PERCENT = 13;
-    public static final int ICON_CHECK = 6;
-    public static final int ICON_DOWNLOAD = 2;
-    public static final int ICON_EMPTY = 10;
-    public static final int ICON_EMPTY_NOPROGRESS = 11;
-    public static final int ICON_FILE = 5;
-    public static final int ICON_FIRE = 7;
-    public static final int ICON_GIF = 8;
-    public static final int ICON_NONE = 4;
-    public static final int ICON_PAUSE = 1;
-    public static final int ICON_PLAY = 0;
-    public static final int ICON_SECRETCHECK = 9;
-    public static final int ICON_UPDATE = 15;
     private float animatedDownloadProgress;
     private boolean animatingTransition;
     private Paint backPaint = new Paint(1);
@@ -74,6 +52,20 @@ public class MediaActionDrawable extends Drawable {
         void invalidate();
     }
 
+    public static float getCircleValue(float f) {
+        while (f > 360.0f) {
+            f -= 360.0f;
+        }
+        return f;
+    }
+
+    public int getOpacity() {
+        return -2;
+    }
+
+    public void setAlpha(int i) {
+    }
+
     public MediaActionDrawable() {
         this.paint.setColor(-1);
         this.paint.setStrokeCap(Paint.Cap.ROUND);
@@ -86,11 +78,8 @@ public class MediaActionDrawable extends Drawable {
         this.paint2.setColor(-1);
     }
 
-    public void setAlpha(int alpha) {
-    }
-
-    public void setOverrideAlpha(float alpha) {
-        this.overrideAlpha = alpha;
+    public void setOverrideAlpha(float f) {
+        this.overrideAlpha = f;
     }
 
     public void setColorFilter(ColorFilter colorFilter2) {
@@ -100,75 +89,68 @@ public class MediaActionDrawable extends Drawable {
         this.textPaint.setColorFilter(colorFilter2);
     }
 
-    public void setColor(int value) {
-        this.paint.setColor(value | -16777216);
-        this.paint2.setColor(value | -16777216);
-        this.paint3.setColor(value | -16777216);
-        this.textPaint.setColor(-16777216 | value);
-        this.colorFilter = new PorterDuffColorFilter(value, PorterDuff.Mode.MULTIPLY);
+    public void setColor(int i) {
+        int i2 = -16777216 | i;
+        this.paint.setColor(i2);
+        this.paint2.setColor(i2);
+        this.paint3.setColor(i2);
+        this.textPaint.setColor(i2);
+        this.colorFilter = new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY);
     }
 
-    public void setBackColor(int value) {
-        this.backPaint.setColor(-16777216 | value);
+    public void setBackColor(int i) {
+        this.backPaint.setColor(i | -16777216);
     }
 
-    public int getColor() {
-        return this.paint.getColor();
-    }
-
-    public void setMini(boolean value) {
-        this.isMini = value;
-        this.paint.setStrokeWidth((float) AndroidUtilities.dp(value ? 2.0f : 3.0f));
-    }
-
-    public int getOpacity() {
-        return -2;
+    public void setMini(boolean z) {
+        this.isMini = z;
+        this.paint.setStrokeWidth((float) AndroidUtilities.dp(z ? 2.0f : 3.0f));
     }
 
     public void setDelegate(MediaActionDrawableDelegate mediaActionDrawableDelegate) {
         this.delegate = mediaActionDrawableDelegate;
     }
 
-    public boolean setIcon(int icon, boolean animated) {
-        int i;
+    public boolean setIcon(int i, boolean z) {
         int i2;
-        if (this.currentIcon == icon && (i2 = this.nextIcon) != icon) {
-            this.currentIcon = i2;
+        int i3;
+        if (this.currentIcon == i && (i3 = this.nextIcon) != i) {
+            this.currentIcon = i3;
             this.transitionProgress = 1.0f;
         }
-        if (animated) {
-            int i3 = this.currentIcon;
-            if (i3 == icon || (i = this.nextIcon) == icon) {
+        if (z) {
+            int i4 = this.currentIcon;
+            if (i4 == i || (i2 = this.nextIcon) == i) {
                 return false;
             }
-            if ((i3 == 0 && icon == 1) || (i3 == 1 && icon == 0)) {
+            if ((i4 == 0 && i == 1) || (i4 == 1 && i == 0)) {
                 this.transitionAnimationTime = 300.0f;
-            } else if (i3 == 2 && (icon == 3 || icon == 14)) {
+            } else if (i4 == 2 && (i == 3 || i == 14)) {
                 this.transitionAnimationTime = 400.0f;
-            } else if (i3 != 4 && icon == 6) {
+            } else if (i4 != 4 && i == 6) {
                 this.transitionAnimationTime = 360.0f;
-            } else if ((i3 == 4 && icon == 14) || (i3 == 14 && icon == 4)) {
+            } else if ((i4 == 4 && i == 14) || (i4 == 14 && i == 4)) {
                 this.transitionAnimationTime = 160.0f;
             } else {
                 this.transitionAnimationTime = 220.0f;
             }
             if (this.animatingTransition) {
-                this.currentIcon = i;
+                this.currentIcon = i2;
             }
             this.animatingTransition = true;
-            this.nextIcon = icon;
+            this.nextIcon = i;
             this.savedTransitionProgress = this.transitionProgress;
             this.transitionProgress = 0.0f;
-        } else if (this.currentIcon == icon) {
+        } else if (this.currentIcon == i) {
             return false;
         } else {
             this.animatingTransition = false;
-            this.nextIcon = icon;
-            this.currentIcon = icon;
+            this.nextIcon = i;
+            this.currentIcon = i;
             this.savedTransitionProgress = this.transitionProgress;
             this.transitionProgress = 1.0f;
         }
-        if (icon == 3 || icon == 14) {
+        if (i == 3 || i == 14) {
             this.downloadRadOffset = 112.0f;
             this.animatedDownloadProgress = 0.0f;
             this.downloadProgressAnimationStart = 0.0f;
@@ -186,34 +168,23 @@ public class MediaActionDrawable extends Drawable {
         return this.currentIcon;
     }
 
-    public void setProgress(float value, boolean animated) {
-        if (!animated) {
-            this.animatedDownloadProgress = value;
-            this.downloadProgressAnimationStart = value;
+    public void setProgress(float f, boolean z) {
+        if (!z) {
+            this.animatedDownloadProgress = f;
+            this.downloadProgressAnimationStart = f;
         } else {
-            if (this.animatedDownloadProgress > value) {
-                this.animatedDownloadProgress = value;
+            if (this.animatedDownloadProgress > f) {
+                this.animatedDownloadProgress = f;
             }
             this.downloadProgressAnimationStart = this.animatedDownloadProgress;
         }
-        this.downloadProgress = value;
+        this.downloadProgress = f;
         this.downloadProgressTime = 0.0f;
         invalidateSelf();
     }
 
     public float getProgress() {
         return this.downloadProgress;
-    }
-
-    public static float getCircleValue(float value) {
-        while (value > 360.0f) {
-            value -= 360.0f;
-        }
-        return value;
-    }
-
-    public float getProgressAlpha() {
-        return 1.0f - this.transitionProgress;
     }
 
     public float getTransitionProgress() {
@@ -223,22 +194,22 @@ public class MediaActionDrawable extends Drawable {
         return 1.0f;
     }
 
-    public void setBackgroundDrawable(Theme.MessageDrawable drawable) {
-        this.messageDrawable = drawable;
+    public void setBackgroundDrawable(Theme.MessageDrawable messageDrawable2) {
+        this.messageDrawable = messageDrawable2;
     }
 
-    public void setBackgroundGradientDrawable(LinearGradient drawable) {
-        this.gradientDrawable = drawable;
+    public void setBackgroundGradientDrawable(LinearGradient linearGradient) {
+        this.gradientDrawable = linearGradient;
         this.gradientMatrix = new Matrix();
     }
 
-    public void setHasOverlayImage(boolean value) {
-        this.hasOverlayImage = value;
+    public void setHasOverlayImage(boolean z) {
+        this.hasOverlayImage = z;
     }
 
-    public void setBounds(int left, int top, int right, int bottom) {
-        super.setBounds(left, top, right, bottom);
-        float intrinsicWidth = ((float) (right - left)) / ((float) getIntrinsicWidth());
+    public void setBounds(int i, int i2, int i3, int i4) {
+        super.setBounds(i, i2, i3, i4);
+        float intrinsicWidth = ((float) (i3 - i)) / ((float) getIntrinsicWidth());
         this.scale = intrinsicWidth;
         if (intrinsicWidth < 0.7f) {
             this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
@@ -253,103 +224,91 @@ public class MediaActionDrawable extends Drawable {
         }
     }
 
-    private void applyShaderMatrix(boolean path) {
+    private void applyShaderMatrix(boolean z) {
         Theme.MessageDrawable messageDrawable2 = this.messageDrawable;
         if (messageDrawable2 != null && messageDrawable2.hasGradient() && !this.hasOverlayImage) {
             Rect bounds = getBounds();
-            Shader shader = this.messageDrawable.getGradientShader();
+            Shader gradientShader = this.messageDrawable.getGradientShader();
             Matrix matrix = this.messageDrawable.getMatrix();
             matrix.reset();
             this.messageDrawable.applyMatrixScale();
-            if (path) {
+            if (z) {
                 matrix.postTranslate((float) (-bounds.centerX()), (float) ((-this.messageDrawable.getTopY()) + bounds.top));
             } else {
                 matrix.postTranslate(0.0f, (float) (-this.messageDrawable.getTopY()));
             }
-            shader.setLocalMatrix(matrix);
+            gradientShader.setLocalMatrix(matrix);
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:322:0x08da, code lost:
-        if (r0.nextIcon != 1) goto L_0x08de;
+    /* JADX WARNING: Code restructure failed: missing block: B:337:0x0889, code lost:
+        if (r0.nextIcon == 1) goto L_0x088b;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:344:0x090c, code lost:
-        if (r2 == 1) goto L_0x0910;
+    /* JADX WARNING: Code restructure failed: missing block: B:339:0x088e, code lost:
+        r4 = 0.0f;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x03b9  */
-    /* JADX WARNING: Removed duplicated region for block: B:127:0x0438  */
-    /* JADX WARNING: Removed duplicated region for block: B:130:0x0447  */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x0470  */
-    /* JADX WARNING: Removed duplicated region for block: B:177:0x0563  */
-    /* JADX WARNING: Removed duplicated region for block: B:180:0x056e  */
-    /* JADX WARNING: Removed duplicated region for block: B:182:0x0578  */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x05ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:193:0x0607  */
-    /* JADX WARNING: Removed duplicated region for block: B:206:0x062c  */
-    /* JADX WARNING: Removed duplicated region for block: B:207:0x062f  */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x0690  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x069f  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x06a6  */
-    /* JADX WARNING: Removed duplicated region for block: B:230:0x06cf  */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x06d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x06df  */
-    /* JADX WARNING: Removed duplicated region for block: B:237:0x06e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:243:0x06f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x06f8  */
-    /* JADX WARNING: Removed duplicated region for block: B:249:0x0705  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x070a  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0726  */
-    /* JADX WARNING: Removed duplicated region for block: B:259:0x0731  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x07c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:276:0x07cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:282:0x07de  */
-    /* JADX WARNING: Removed duplicated region for block: B:283:0x07e1  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x07fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:289:0x0838  */
-    /* JADX WARNING: Removed duplicated region for block: B:296:0x084f  */
-    /* JADX WARNING: Removed duplicated region for block: B:297:0x0852  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x00cf  */
-    /* JADX WARNING: Removed duplicated region for block: B:303:0x087a  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x00d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:311:0x08c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:321:0x08d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:323:0x08dd  */
-    /* JADX WARNING: Removed duplicated region for block: B:339:0x0903  */
-    /* JADX WARNING: Removed duplicated region for block: B:340:0x0906  */
-    /* JADX WARNING: Removed duplicated region for block: B:343:0x090b  */
-    /* JADX WARNING: Removed duplicated region for block: B:345:0x090f  */
-    /* JADX WARNING: Removed duplicated region for block: B:359:0x096a  */
-    /* JADX WARNING: Removed duplicated region for block: B:360:0x096d  */
-    /* JADX WARNING: Removed duplicated region for block: B:364:0x0975  */
-    /* JADX WARNING: Removed duplicated region for block: B:372:0x09ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:395:0x0a12  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x0a16  */
-    /* JADX WARNING: Removed duplicated region for block: B:420:0x0ad5  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x0b18  */
-    /* JADX WARNING: Removed duplicated region for block: B:429:0x0b1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:435:0x0b58  */
-    /* JADX WARNING: Removed duplicated region for block: B:448:0x0bc0  */
-    /* JADX WARNING: Removed duplicated region for block: B:450:0x0bc6  */
-    /* JADX WARNING: Removed duplicated region for block: B:471:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:484:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:485:0x0CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:498:0x0ce4  */
-    /* JADX WARNING: Removed duplicated region for block: B:506:0x0d08  */
-    /* JADX WARNING: Removed duplicated region for block: B:508:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Code restructure failed: missing block: B:341:0x0891, code lost:
+        if (r1 != 1) goto L_0x088e;
+     */
+    /* JADX WARNING: Removed duplicated region for block: B:101:0x0358  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0403  */
+    /* JADX WARNING: Removed duplicated region for block: B:137:0x0429  */
+    /* JADX WARNING: Removed duplicated region for block: B:180:0x0518  */
+    /* JADX WARNING: Removed duplicated region for block: B:183:0x0523  */
+    /* JADX WARNING: Removed duplicated region for block: B:185:0x052d  */
+    /* JADX WARNING: Removed duplicated region for block: B:191:0x05ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x05b3  */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x05d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:208:0x05db  */
+    /* JADX WARNING: Removed duplicated region for block: B:221:0x063b  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x0644  */
+    /* JADX WARNING: Removed duplicated region for block: B:225:0x0649  */
+    /* JADX WARNING: Removed duplicated region for block: B:232:0x0670  */
+    /* JADX WARNING: Removed duplicated region for block: B:233:0x0673  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x0683  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:0x0686  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x0692  */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x0698  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x06a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x06aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:262:0x06c2  */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x06cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:280:0x0769  */
+    /* JADX WARNING: Removed duplicated region for block: B:281:0x076c  */
+    /* JADX WARNING: Removed duplicated region for block: B:287:0x077e  */
+    /* JADX WARNING: Removed duplicated region for block: B:288:0x0781  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x0795  */
+    /* JADX WARNING: Removed duplicated region for block: B:294:0x07cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:301:0x07e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:302:0x07e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:307:0x080c  */
+    /* JADX WARNING: Removed duplicated region for block: B:315:0x0852  */
+    /* JADX WARNING: Removed duplicated region for block: B:318:0x085a A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:331:0x0877  */
+    /* JADX WARNING: Removed duplicated region for block: B:336:0x0886  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00f6 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:359:0x08f6  */
+    /* JADX WARNING: Removed duplicated region for block: B:360:0x08f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:364:0x0900  */
+    /* JADX WARNING: Removed duplicated region for block: B:372:0x0938 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0160  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x0320  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x0349  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void draw(android.graphics.Canvas r43) {
+    public void draw(android.graphics.Canvas r34) {
         /*
-            r42 = this;
-            r0 = r42
-            r7 = r43
-            android.graphics.Rect r8 = r42.getBounds()
+            r33 = this;
+            r0 = r33
+            r7 = r34
+            android.graphics.Rect r8 = r33.getBounds()
             org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = r0.messageDrawable
             r9 = 0
-            if (r1 == 0) goto L_0x002d
+            r10 = 0
+            if (r1 == 0) goto L_0x002e
             boolean r1 = r1.hasGradient()
-            if (r1 == 0) goto L_0x002d
+            if (r1 == 0) goto L_0x002e
             boolean r1 = r0.hasOverlayImage
-            if (r1 != 0) goto L_0x002d
+            if (r1 != 0) goto L_0x002e
             org.telegram.ui.ActionBar.Theme$MessageDrawable r1 = r0.messageDrawable
             android.graphics.Shader r1 = r1.getGradientShader()
             android.graphics.Paint r2 = r0.paint
@@ -359,17 +318,17 @@ public class MediaActionDrawable extends Drawable {
             android.graphics.Paint r2 = r0.paint3
             r2.setShader(r1)
             goto L_0x006f
-        L_0x002d:
+        L_0x002e:
             android.graphics.LinearGradient r1 = r0.gradientDrawable
-            if (r1 == 0) goto L_0x005f
+            if (r1 == 0) goto L_0x0060
             boolean r1 = r0.hasOverlayImage
-            if (r1 != 0) goto L_0x005f
+            if (r1 != 0) goto L_0x0060
             android.graphics.Matrix r1 = r0.gradientMatrix
             r1.reset()
             android.graphics.Matrix r1 = r0.gradientMatrix
             int r2 = r8.top
             float r2 = (float) r2
-            r1.setTranslate(r9, r2)
+            r1.setTranslate(r10, r2)
             android.graphics.LinearGradient r1 = r0.gradientDrawable
             android.graphics.Matrix r2 = r0.gradientMatrix
             r1.setLocalMatrix(r2)
@@ -383,1334 +342,1263 @@ public class MediaActionDrawable extends Drawable {
             android.graphics.LinearGradient r2 = r0.gradientDrawable
             r1.setShader(r2)
             goto L_0x006f
-        L_0x005f:
+        L_0x0060:
             android.graphics.Paint r1 = r0.paint
-            r2 = 0
-            r1.setShader(r2)
+            r1.setShader(r9)
             android.graphics.Paint r1 = r0.paint2
-            r1.setShader(r2)
+            r1.setShader(r9)
             android.graphics.Paint r1 = r0.paint3
-            r1.setShader(r2)
+            r1.setShader(r9)
         L_0x006f:
-            int r10 = r8.centerX()
-            int r11 = r8.centerY()
-            r1 = 0
-            int r2 = r0.nextIcon
-            r12 = 10
+            int r11 = r8.centerX()
+            int r12 = r8.centerY()
+            int r1 = r0.nextIcon
             r13 = 6
             r14 = 3
             r15 = 4
-            r6 = 14
-            r5 = 1065353216(0x3var_, float:1.0)
-            if (r2 != r15) goto L_0x009a
-            int r2 = r0.currentIcon
-            if (r2 == r14) goto L_0x00af
-            if (r2 == r6) goto L_0x00af
-            int r1 = r43.save()
+            r6 = 0
+            r5 = 14
+            r4 = 1065353216(0x3var_, float:1.0)
+            if (r1 != r15) goto L_0x0097
+            int r1 = r0.currentIcon
+            if (r1 == r14) goto L_0x00ae
+            if (r1 == r5) goto L_0x00ae
+            int r1 = r34.save()
             float r2 = r0.transitionProgress
-            float r2 = r5 - r2
-            float r3 = (float) r10
-            float r4 = (float) r11
-            r7.scale(r2, r2, r3, r4)
-            r4 = r1
-            goto L_0x00b0
-        L_0x009a:
-            if (r2 == r13) goto L_0x009e
-            if (r2 != r12) goto L_0x00af
-        L_0x009e:
-            int r2 = r0.currentIcon
-            if (r2 != r15) goto L_0x00af
-            int r1 = r43.save()
+            float r2 = r4 - r2
+            float r3 = (float) r11
+            float r9 = (float) r12
+            r7.scale(r2, r2, r3, r9)
+            goto L_0x00ac
+        L_0x0097:
+            if (r1 == r13) goto L_0x009d
+            r2 = 10
+            if (r1 != r2) goto L_0x00ae
+        L_0x009d:
+            int r1 = r0.currentIcon
+            if (r1 != r15) goto L_0x00ae
+            int r1 = r34.save()
             float r2 = r0.transitionProgress
-            float r3 = (float) r10
-            float r4 = (float) r11
-            r7.scale(r2, r2, r3, r4)
-            r4 = r1
-            goto L_0x00b0
+            float r3 = (float) r11
+            float r9 = (float) r12
+            r7.scale(r2, r2, r3, r9)
+        L_0x00ac:
+            r9 = r1
+            goto L_0x00af
+        L_0x00ae:
+            r9 = 0
         L_0x00af:
-            r4 = r1
-        L_0x00b0:
             r1 = 1077936128(0x40400000, float:3.0)
-            int r16 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            org.telegram.messenger.AndroidUtilities.dp(r1)
             int r1 = r0.currentIcon
             r17 = 1094713344(0x41400000, float:12.0)
             r18 = 1120403456(0x42CLASSNAME, float:100.0)
             r19 = 1080033280(0x40600000, float:3.5)
-            r20 = 1088421888(0x40e00000, float:7.0)
-            r21 = 1073741824(0x40000000, float:2.0)
-            r13 = 0
+            r20 = 1073741824(0x40000000, float:2.0)
+            r21 = 1088421888(0x40e00000, float:7.0)
             r22 = 1056964608(0x3var_, float:0.5)
             r23 = 1132396544(0x437var_, float:255.0)
-            r12 = 2
-            if (r1 == r12) goto L_0x00d3
+            r13 = 2
+            if (r1 == r13) goto L_0x00cb
             int r1 = r0.nextIcon
-            if (r1 != r12) goto L_0x00cf
-            goto L_0x00d3
-        L_0x00cf:
-            r35 = r4
-            goto L_0x03ad
-        L_0x00d3:
-            r0.applyShaderMatrix(r13)
-            float r1 = (float) r11
+            if (r1 != r13) goto L_0x036f
+        L_0x00cb:
+            r0.applyShaderMatrix(r6)
+            float r1 = (float) r12
             r24 = 1091567616(0x41100000, float:9.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r24)
             float r3 = (float) r3
-            float r13 = r0.scale
-            float r3 = r3 * r13
-            float r13 = r1 - r3
-            float r1 = (float) r11
-            r3 = 1091567616(0x41100000, float:9.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r3 = (float) r3
+            float r6 = r0.scale
+            float r3 = r3 * r6
+            float r3 = r1 - r3
+            r6 = 1091567616(0x41100000, float:9.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
             float r15 = r0.scale
-            float r3 = r3 * r15
-            float r15 = r1 + r3
-            float r1 = (float) r11
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r17)
-            float r3 = (float) r3
-            float r9 = r0.scale
-            float r3 = r3 * r9
-            float r9 = r1 + r3
-            int r1 = r0.currentIcon
-            if (r1 == r14) goto L_0x0104
-            if (r1 != r6) goto L_0x012a
-        L_0x0104:
-            int r1 = r0.nextIcon
-            if (r1 != r12) goto L_0x012a
-            android.graphics.Paint r1 = r0.paint
-            float r3 = r0.transitionProgress
-            float r3 = r3 / r22
-            float r3 = java.lang.Math.min(r5, r3)
-            float r3 = r3 * r23
-            int r3 = (int) r3
-            r1.setAlpha(r3)
-            float r1 = r0.transitionProgress
-            float r3 = (float) r11
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r17)
-            float r2 = (float) r2
-            float r5 = r0.scale
-            float r2 = r2 * r5
-            float r3 = r3 + r2
-            r26 = r1
-            r27 = r3
-            goto L_0x0169
-        L_0x012a:
-            int r1 = r0.nextIcon
-            if (r1 == r14) goto L_0x014f
-            if (r1 == r6) goto L_0x014f
-            if (r1 == r12) goto L_0x014f
-            android.graphics.Paint r1 = r0.paint
-            float r2 = r0.savedTransitionProgress
-            float r2 = r2 / r22
-            r3 = 1065353216(0x3var_, float:1.0)
-            float r2 = java.lang.Math.min(r3, r2)
-            float r2 = r2 * r23
-            float r5 = r0.transitionProgress
-            float r5 = r3 - r5
-            float r2 = r2 * r5
-            int r2 = (int) r2
-            r1.setAlpha(r2)
-            float r1 = r0.savedTransitionProgress
-            r2 = 255(0xff, float:3.57E-43)
-            goto L_0x0158
-        L_0x014f:
-            android.graphics.Paint r1 = r0.paint
-            r2 = 255(0xff, float:3.57E-43)
-            r1.setAlpha(r2)
-            float r1 = r0.transitionProgress
-        L_0x0158:
-            float r3 = (float) r11
-            r5 = 1065353216(0x3var_, float:1.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r2 = (float) r2
-            float r5 = r0.scale
-            float r2 = r2 * r5
-            float r3 = r3 + r2
-            r26 = r1
-            r27 = r3
-        L_0x0169:
-            boolean r1 = r0.animatingTransition
-            r2 = 1090519040(0x41000000, float:8.0)
-            if (r1 == 0) goto L_0x0358
-            r1 = r26
-            int r3 = r0.nextIcon
-            if (r3 == r12) goto L_0x030f
-            int r5 = (r1 > r22 ? 1 : (r1 == r22 ? 0 : -1))
-            if (r5 > 0) goto L_0x017d
-            r35 = r4
-            goto L_0x0311
-        L_0x017d:
-            r2 = 1095761920(0x41500000, float:13.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r2 = (float) r2
-            float r3 = r0.scale
-            float r2 = r2 * r3
-            float r2 = r2 * r3
-            boolean r3 = r0.isMini
-            if (r3 == 0) goto L_0x0193
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r21)
-            goto L_0x0194
-        L_0x0193:
-            r3 = 0
-        L_0x0194:
-            float r3 = (float) r3
-            float r28 = r2 + r3
-            float r1 = r1 - r22
-            float r29 = r1 / r22
-            r2 = 1045220557(0x3e4ccccd, float:0.2)
-            int r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r2 <= 0) goto L_0x01b4
-            r2 = 1045220557(0x3e4ccccd, float:0.2)
-            float r1 = r1 - r2
-            r2 = 1065353216(0x3var_, float:1.0)
-            r3 = 1050253722(0x3e99999a, float:0.3)
-            float r3 = r1 / r3
-            r30 = r1
-            r31 = r2
-            r32 = r3
-            goto L_0x01c0
-        L_0x01b4:
-            r2 = 1045220557(0x3e4ccccd, float:0.2)
-            float r2 = r1 / r2
-            r3 = 0
-            r30 = r1
-            r31 = r2
-            r32 = r3
-        L_0x01c0:
-            android.graphics.RectF r1 = r0.rect
-            float r2 = (float) r10
-            float r2 = r2 - r28
-            float r3 = r28 / r21
-            float r3 = r9 - r3
-            float r5 = (float) r10
-            float r33 = r28 / r21
-            float r6 = r9 + r33
-            r1.set(r2, r3, r5, r6)
-            float r33 = r32 * r18
-            android.graphics.RectF r2 = r0.rect
-            r1 = 1120927744(0x42d00000, float:104.0)
-            float r1 = r1 * r29
-            float r5 = r1 - r33
-            r6 = 0
-            android.graphics.Paint r3 = r0.paint
-            r1 = r43
-            r25 = r3
-            r3 = r33
-            r35 = r4
-            r4 = r5
-            r12 = 1065353216(0x3var_, float:1.0)
-            r5 = r6
-            r14 = 14
-            r6 = r25
-            r1.drawArc(r2, r3, r4, r5, r6)
-            float r1 = r9 - r27
-            float r1 = r1 * r31
-            float r25 = r27 + r1
-            r34 = r9
-            r36 = r9
-            float r1 = (float) r10
-            r37 = r1
-            r38 = r1
-            r1 = 0
-            int r2 = (r32 > r1 ? 1 : (r32 == r1 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0357
-            int r1 = r0.nextIcon
-            if (r1 != r14) goto L_0x020c
-            r1 = 0
-            r6 = r1
-            goto L_0x0213
-        L_0x020c:
-            r1 = -1036779520(0xffffffffCLASSNAME, float:-45.0)
-            float r5 = r12 - r32
-            float r1 = r1 * r5
-            r6 = r1
-        L_0x0213:
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r20)
-            float r1 = (float) r1
-            float r1 = r1 * r32
-            float r2 = r0.scale
-            float r28 = r1 * r2
-            float r1 = r32 * r23
-            int r1 = (int) r1
-            int r2 = r0.nextIcon
-            r3 = 3
-            if (r2 == r3) goto L_0x023b
-            if (r2 == r14) goto L_0x023b
-            r3 = 2
-            if (r2 == r3) goto L_0x023b
+            float r6 = r6 * r15
+            float r6 = r6 + r1
+            int r15 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r15 = (float) r15
+            float r10 = r0.scale
+            float r15 = r15 * r10
+            float r15 = r15 + r1
+            int r10 = r0.currentIcon
+            if (r10 == r14) goto L_0x00f8
+            if (r10 != r5) goto L_0x011d
+        L_0x00f8:
+            int r10 = r0.nextIcon
+            if (r10 != r13) goto L_0x011d
+            android.graphics.Paint r10 = r0.paint
             float r2 = r0.transitionProgress
             float r2 = r2 / r22
-            float r2 = java.lang.Math.min(r12, r2)
-            float r5 = r12 - r2
-            float r2 = (float) r1
-            float r2 = r2 * r5
-            int r1 = (int) r2
-            r5 = r1
-            goto L_0x023c
-        L_0x023b:
-            r5 = r1
-        L_0x023c:
+            float r2 = java.lang.Math.min(r4, r2)
+            float r2 = r2 * r23
+            int r2 = (int) r2
+            r10.setAlpha(r2)
+            float r2 = r0.transitionProgress
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r10 = (float) r10
+            float r4 = r0.scale
+            float r10 = r10 * r4
+            float r10 = r10 + r1
+            r25 = r10
+            r10 = 1065353216(0x3var_, float:1.0)
+            goto L_0x015a
+        L_0x011d:
+            int r2 = r0.nextIcon
+            if (r2 == r14) goto L_0x0142
+            if (r2 == r5) goto L_0x0142
+            if (r2 == r13) goto L_0x0142
+            android.graphics.Paint r2 = r0.paint
+            float r4 = r0.savedTransitionProgress
+            float r4 = r4 / r22
+            r10 = 1065353216(0x3var_, float:1.0)
+            float r4 = java.lang.Math.min(r10, r4)
+            float r4 = r4 * r23
+            float r5 = r0.transitionProgress
+            float r5 = r10 - r5
+            float r4 = r4 * r5
+            int r4 = (int) r4
+            r2.setAlpha(r4)
+            float r2 = r0.savedTransitionProgress
+            r4 = 255(0xff, float:3.57E-43)
+            goto L_0x014b
+        L_0x0142:
+            android.graphics.Paint r2 = r0.paint
+            r4 = 255(0xff, float:3.57E-43)
+            r2.setAlpha(r4)
+            float r2 = r0.transitionProgress
+        L_0x014b:
+            r10 = 1065353216(0x3var_, float:1.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            float r5 = (float) r5
+            float r4 = r0.scale
+            float r5 = r5 * r4
+            float r4 = r1 + r5
+            r25 = r4
+        L_0x015a:
+            boolean r4 = r0.animatingTransition
+            r5 = 1090519040(0x41000000, float:8.0)
+            if (r4 == 0) goto L_0x0320
+            int r4 = r0.nextIcon
+            if (r4 == r13) goto L_0x02d6
+            int r26 = (r2 > r22 ? 1 : (r2 == r22 ? 0 : -1))
+            if (r26 > 0) goto L_0x016a
+            goto L_0x02d6
+        L_0x016a:
+            r3 = 1095761920(0x41500000, float:13.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r3 = (float) r3
+            float r4 = r0.scale
+            float r3 = r3 * r4
+            float r3 = r3 * r4
+            boolean r4 = r0.isMini
+            if (r4 == 0) goto L_0x0180
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r20)
+            goto L_0x0181
+        L_0x0180:
+            r4 = 0
+        L_0x0181:
+            float r4 = (float) r4
+            float r3 = r3 + r4
+            float r2 = r2 - r22
+            float r4 = r2 / r22
+            r5 = 1045220557(0x3e4ccccd, float:0.2)
+            int r5 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
+            if (r5 <= 0) goto L_0x019b
+            r5 = 1045220557(0x3e4ccccd, float:0.2)
+            float r2 = r2 - r5
+            r5 = 1050253722(0x3e99999a, float:0.3)
+            float r2 = r2 / r5
+            r27 = r2
+            r26 = 1065353216(0x3var_, float:1.0)
+            goto L_0x01a3
+        L_0x019b:
+            r5 = 1045220557(0x3e4ccccd, float:0.2)
+            float r2 = r2 / r5
+            r26 = r2
+            r27 = 0
+        L_0x01a3:
+            android.graphics.RectF r2 = r0.rect
+            float r6 = (float) r11
+            float r5 = r6 - r3
+            float r3 = r3 / r20
+            float r10 = r15 - r3
+            float r3 = r3 + r15
+            r2.set(r5, r10, r6, r3)
+            float r3 = r27 * r18
+            android.graphics.RectF r2 = r0.rect
+            r5 = 1120927744(0x42d00000, float:104.0)
+            float r4 = r4 * r5
+            float r4 = r4 - r3
+            r5 = 0
+            android.graphics.Paint r10 = r0.paint
+            r28 = r1
+            r1 = r34
+            r13 = 1065353216(0x3var_, float:1.0)
+            r14 = 14
+            r30 = r6
+            r6 = r10
+            r1.drawArc(r2, r3, r4, r5, r6)
+            float r1 = r15 - r25
+            float r1 = r1 * r26
+            float r25 = r25 + r1
             r1 = 0
-            int r2 = (r6 > r1 ? 1 : (r6 == r1 ? 0 : -1))
-            if (r2 == 0) goto L_0x0249
-            r43.save()
-            float r1 = (float) r10
-            float r2 = (float) r11
-            r7.rotate(r6, r1, r2)
-        L_0x0249:
-            if (r5 == 0) goto L_0x0303
-            android.graphics.Paint r1 = r0.paint
-            r1.setAlpha(r5)
+            int r2 = (r27 > r1 ? 1 : (r27 == r1 ? 0 : -1))
+            if (r2 <= 0) goto L_0x02cf
             int r1 = r0.nextIcon
-            if (r1 != r14) goto L_0x02d7
+            if (r1 != r14) goto L_0x01db
+            r10 = 0
+            goto L_0x01e2
+        L_0x01db:
+            r1 = -1036779520(0xffffffffCLASSNAME, float:-45.0)
+            float r4 = r13 - r27
+            float r1 = r1 * r4
+            r10 = r1
+        L_0x01e2:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            float r1 = (float) r1
+            float r1 = r1 * r27
+            float r2 = r0.scale
+            float r1 = r1 * r2
+            float r2 = r27 * r23
+            int r2 = (int) r2
+            int r3 = r0.nextIcon
+            r4 = 3
+            if (r3 == r4) goto L_0x0208
+            if (r3 == r14) goto L_0x0208
+            r4 = 2
+            if (r3 == r4) goto L_0x0208
+            float r3 = r0.transitionProgress
+            float r3 = r3 / r22
+            float r3 = java.lang.Math.min(r13, r3)
+            float r4 = r13 - r3
+            float r2 = (float) r2
+            float r2 = r2 * r4
+            int r2 = (int) r2
+        L_0x0208:
+            r6 = r2
+            r2 = 0
+            int r3 = (r10 > r2 ? 1 : (r10 == r2 ? 0 : -1))
+            if (r3 == 0) goto L_0x0219
+            r34.save()
+            r2 = r28
+            r5 = r30
+            r7.rotate(r10, r5, r2)
+            goto L_0x021d
+        L_0x0219:
+            r2 = r28
+            r5 = r30
+        L_0x021d:
+            if (r6 == 0) goto L_0x02c4
+            android.graphics.Paint r3 = r0.paint
+            r3.setAlpha(r6)
+            int r3 = r0.nextIcon
+            if (r3 != r14) goto L_0x02a4
             android.graphics.Paint r1 = r0.paint3
-            r1.setAlpha(r5)
+            r1.setAlpha(r6)
             android.graphics.RectF r1 = r0.rect
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r2 = r10 - r2
+            int r2 = r11 - r2
             float r2 = (float) r2
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r3 = r11 - r3
+            int r3 = r12 - r3
             float r3 = (float) r3
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r4 = r4 + r10
+            int r4 = r4 + r11
             float r4 = (float) r4
-            int r39 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r14 = r11 + r39
+            int r24 = org.telegram.messenger.AndroidUtilities.dp(r19)
+            int r14 = r12 + r24
             float r14 = (float) r14
             r1.set(r2, r3, r4, r14)
             android.graphics.RectF r1 = r0.rect
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r20)
             float r2 = (float) r2
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r20)
             float r3 = (float) r3
             android.graphics.Paint r4 = r0.paint3
             r7.drawRoundRect(r1, r2, r3, r4)
-            android.graphics.Paint r1 = r0.paint
-            float r2 = (float) r5
-            r3 = 1041865114(0x3e19999a, float:0.15)
-            float r2 = r2 * r3
-            int r2 = (int) r2
-            r1.setAlpha(r2)
-            boolean r1 = r0.isMini
-            if (r1 == 0) goto L_0x029d
-            r3 = 1073741824(0x40000000, float:2.0)
-            goto L_0x029f
-        L_0x029d:
-            r3 = 1082130432(0x40800000, float:4.0)
-        L_0x029f:
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            android.graphics.RectF r1 = r0.rect
-            int r2 = r8.left
-            int r2 = r2 + r14
-            float r2 = (float) r2
-            int r3 = r8.top
-            int r3 = r3 + r14
-            float r3 = (float) r3
-            int r4 = r8.right
-            int r4 = r4 - r14
-            float r4 = (float) r4
-            int r12 = r8.bottom
-            int r12 = r12 - r14
-            float r12 = (float) r12
-            r1.set(r2, r3, r4, r12)
-            android.graphics.RectF r2 = r0.rect
-            r3 = 0
-            r4 = 1135869952(0x43b40000, float:360.0)
-            r12 = 0
-            android.graphics.Paint r1 = r0.paint
-            r40 = r1
-            r1 = r43
-            r41 = r5
-            r5 = r12
-            r12 = r6
-            r6 = r40
-            r1.drawArc(r2, r3, r4, r5, r6)
-            android.graphics.Paint r1 = r0.paint
-            r6 = r41
-            r1.setAlpha(r6)
-            r40 = r6
-            goto L_0x0306
-        L_0x02d7:
-            r12 = r6
-            r6 = r5
-            float r1 = (float) r10
-            float r2 = r1 - r28
-            float r1 = (float) r11
-            float r3 = r1 - r28
-            float r1 = (float) r10
-            float r4 = r1 + r28
-            float r1 = (float) r11
-            float r5 = r1 + r28
-            android.graphics.Paint r14 = r0.paint
-            r1 = r43
-            r40 = r6
-            r6 = r14
-            r1.drawLine(r2, r3, r4, r5, r6)
-            float r1 = (float) r10
-            float r2 = r1 + r28
-            float r1 = (float) r11
-            float r3 = r1 - r28
-            float r1 = (float) r10
-            float r4 = r1 - r28
-            float r1 = (float) r11
-            float r5 = r1 + r28
-            android.graphics.Paint r6 = r0.paint
-            r1 = r43
-            r1.drawLine(r2, r3, r4, r5, r6)
-            goto L_0x0306
-        L_0x0303:
-            r40 = r5
-            r12 = r6
-        L_0x0306:
-            r1 = 0
-            int r2 = (r12 > r1 ? 1 : (r12 == r1 ? 0 : -1))
-            if (r2 == 0) goto L_0x0357
-            r43.restore()
-            goto L_0x0357
-        L_0x030f:
-            r35 = r4
-        L_0x0311:
-            r4 = 2
-            if (r3 != r4) goto L_0x031b
-            r3 = r26
-            r4 = 1065353216(0x3var_, float:1.0)
-            float r5 = r4 - r3
-            goto L_0x0321
-        L_0x031b:
-            r4 = 1065353216(0x3var_, float:1.0)
-            float r5 = r26 / r22
-            float r3 = r4 - r5
-        L_0x0321:
-            float r4 = r27 - r13
-            float r4 = r4 * r5
-            float r25 = r13 + r4
-            float r4 = r9 - r15
-            float r4 = r4 * r5
-            float r36 = r15 + r4
-            float r4 = (float) r10
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r6 = (float) r6
-            float r6 = r6 * r3
-            float r12 = r0.scale
-            float r6 = r6 * r12
-            float r38 = r4 - r6
-            float r4 = (float) r10
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r6 = (float) r6
-            float r6 = r6 * r3
-            float r12 = r0.scale
-            float r6 = r6 * r12
-            float r37 = r4 + r6
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r2 = (float) r2
-            float r2 = r2 * r3
-            float r4 = r0.scale
-            float r2 = r2 * r4
-            float r34 = r36 - r2
-        L_0x0357:
-            goto L_0x0381
-        L_0x0358:
-            r35 = r4
-            r25 = r13
-            r36 = r15
-            float r1 = (float) r10
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r3 = (float) r3
-            float r4 = r0.scale
-            float r3 = r3 * r4
-            float r38 = r1 - r3
-            float r1 = (float) r10
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r3 = (float) r3
-            float r4 = r0.scale
-            float r3 = r3 * r4
-            float r37 = r1 + r3
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r1 = (float) r1
-            float r2 = r0.scale
-            float r1 = r1 * r2
-            float r34 = r36 - r1
-        L_0x0381:
-            int r1 = (r25 > r36 ? 1 : (r25 == r36 ? 0 : -1))
-            if (r1 == 0) goto L_0x0392
-            float r2 = (float) r10
-            float r4 = (float) r10
-            android.graphics.Paint r6 = r0.paint
-            r1 = r43
-            r3 = r25
-            r5 = r36
-            r1.drawLine(r2, r3, r4, r5, r6)
-        L_0x0392:
-            float r1 = (float) r10
-            int r1 = (r38 > r1 ? 1 : (r38 == r1 ? 0 : -1))
-            if (r1 == 0) goto L_0x03ad
-            float r4 = (float) r10
-            android.graphics.Paint r6 = r0.paint
-            r1 = r43
-            r2 = r38
-            r3 = r34
-            r5 = r36
-            r1.drawLine(r2, r3, r4, r5, r6)
-            float r4 = (float) r10
-            android.graphics.Paint r6 = r0.paint
-            r2 = r37
-            r1.drawLine(r2, r3, r4, r5, r6)
-        L_0x03ad:
-            int r1 = r0.currentIcon
-            r9 = 13
-            r12 = 1
-            r2 = 3
-            if (r1 == r2) goto L_0x0438
-            r3 = 14
-            if (r1 == r3) goto L_0x0438
-            r4 = 4
-            if (r1 != r4) goto L_0x03c6
-            int r4 = r0.nextIcon
-            if (r4 == r3) goto L_0x03c2
-            if (r4 != r2) goto L_0x03c6
-        L_0x03c2:
-            r14 = 1082130432(0x40800000, float:4.0)
-            goto L_0x043a
-        L_0x03c6:
-            r2 = 10
-            if (r1 == r2) goto L_0x03d3
-            int r3 = r0.nextIcon
-            if (r3 == r2) goto L_0x03d3
-            if (r1 != r9) goto L_0x03d1
-            goto L_0x03d3
-        L_0x03d1:
-            goto L_0x0695
-        L_0x03d3:
-            int r1 = r0.nextIcon
-            r2 = 4
-            if (r1 == r2) goto L_0x03e0
-            r2 = 6
-            if (r1 != r2) goto L_0x03dc
-            goto L_0x03e0
-        L_0x03dc:
-            r1 = 255(0xff, float:3.57E-43)
-            r13 = r1
-            goto L_0x03ea
-        L_0x03e0:
-            float r1 = r0.transitionProgress
-            r2 = 1065353216(0x3var_, float:1.0)
-            float r5 = r2 - r1
-            float r2 = r5 * r23
-            int r1 = (int) r2
-            r13 = r1
-        L_0x03ea:
-            if (r13 == 0) goto L_0x0695
-            r1 = 0
-            r0.applyShaderMatrix(r1)
-            android.graphics.Paint r1 = r0.paint
-            float r2 = (float) r13
-            float r3 = r0.overrideAlpha
-            float r2 = r2 * r3
-            int r2 = (int) r2
-            r1.setAlpha(r2)
-            r1 = 1135869952(0x43b40000, float:360.0)
-            float r2 = r0.animatedDownloadProgress
-            float r2 = r2 * r1
-            r14 = 1082130432(0x40800000, float:4.0)
-            float r15 = java.lang.Math.max(r14, r2)
-            boolean r1 = r0.isMini
-            if (r1 == 0) goto L_0x040e
-            r3 = 1073741824(0x40000000, float:2.0)
-            goto L_0x0410
-        L_0x040e:
-            r3 = 1082130432(0x40800000, float:4.0)
-        L_0x0410:
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            android.graphics.RectF r1 = r0.rect
-            int r2 = r8.left
-            int r2 = r2 + r14
-            float r2 = (float) r2
-            int r3 = r8.top
-            int r3 = r3 + r14
-            float r3 = (float) r3
-            int r4 = r8.right
-            int r4 = r4 - r14
-            float r4 = (float) r4
-            int r5 = r8.bottom
-            int r5 = r5 - r14
-            float r5 = (float) r5
-            r1.set(r2, r3, r4, r5)
-            android.graphics.RectF r2 = r0.rect
-            float r3 = r0.downloadRadOffset
-            r5 = 0
-            android.graphics.Paint r6 = r0.paint
-            r1 = r43
-            r4 = r15
-            r1.drawArc(r2, r3, r4, r5, r6)
-            goto L_0x0695
-        L_0x0438:
-            r14 = 1082130432(0x40800000, float:4.0)
-        L_0x043a:
-            r1 = 0
-            r0.applyShaderMatrix(r1)
-            r1 = 1065353216(0x3var_, float:1.0)
-            r2 = 0
-            r3 = 0
-            int r4 = r0.nextIcon
-            r5 = 2
-            if (r4 != r5) goto L_0x0470
-            float r4 = r0.transitionProgress
-            int r5 = (r4 > r22 ? 1 : (r4 == r22 ? 0 : -1))
-            if (r5 > 0) goto L_0x0462
-            float r4 = r4 / r22
-            r5 = 1065353216(0x3var_, float:1.0)
-            float r6 = r5 - r4
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r20)
-            float r5 = (float) r5
-            float r5 = r5 * r6
-            float r13 = r0.scale
-            float r5 = r5 * r13
-            float r13 = r6 * r23
-            int r4 = (int) r13
-            goto L_0x0464
-        L_0x0462:
-            r5 = 0
-            r4 = 0
-        L_0x0464:
-            r6 = 0
-            r9 = r1
-            r12 = r2
-            r15 = r3
-            r27 = r5
-            r5 = r6
-            r13 = 1065353216(0x3var_, float:1.0)
-            r6 = r4
-            goto L_0x055f
-        L_0x0470:
-            r5 = 15
-            if (r4 == r5) goto L_0x052b
-            if (r4 == 0) goto L_0x052b
-            if (r4 == r12) goto L_0x052b
-            r5 = 5
-            if (r4 == r5) goto L_0x052b
-            r5 = 8
-            if (r4 == r5) goto L_0x052b
-            r5 = 9
-            if (r4 == r5) goto L_0x052b
-            r5 = 7
-            if (r4 == r5) goto L_0x052b
-            r5 = 6
-            if (r4 != r5) goto L_0x048b
-            goto L_0x052b
-        L_0x048b:
-            r5 = 4
-            if (r4 != r5) goto L_0x04cc
-            float r4 = r0.transitionProgress
-            r5 = 1065353216(0x3var_, float:1.0)
-            float r6 = r5 - r4
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r20)
-            float r5 = (float) r5
-            float r13 = r0.scale
-            float r5 = r5 * r13
-            float r13 = r6 * r23
-            int r13 = (int) r13
-            int r15 = r0.currentIcon
-            r12 = 14
-            if (r15 != r12) goto L_0x04b0
-            r12 = 0
-            r1 = r6
-            int r15 = r8.left
-            float r2 = (float) r15
-            int r15 = r8.top
-            float r3 = (float) r15
-            r6 = r12
-            goto L_0x04c1
-        L_0x04b0:
-            r12 = 1110704128(0x42340000, float:45.0)
-            float r12 = r12 * r4
-            r1 = 1065353216(0x3var_, float:1.0)
-            int r15 = r8.centerX()
-            float r2 = (float) r15
-            int r15 = r8.centerY()
-            float r3 = (float) r15
-            r6 = r12
-        L_0x04c1:
-            r9 = r1
-            r12 = r2
-            r15 = r3
-            r27 = r5
-            r5 = r6
-            r6 = r13
-            r13 = 1065353216(0x3var_, float:1.0)
-            goto L_0x055f
-        L_0x04cc:
-            r5 = 14
-            if (r4 == r5) goto L_0x04eb
-            r5 = 3
-            if (r4 != r5) goto L_0x04d4
-            goto L_0x04eb
-        L_0x04d4:
-            r6 = 0
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r20)
-            float r4 = (float) r4
-            float r5 = r0.scale
-            float r5 = r5 * r4
-            r4 = 255(0xff, float:3.57E-43)
-            r9 = r1
-            r12 = r2
-            r15 = r3
-            r27 = r5
-            r5 = r6
-            r13 = 1065353216(0x3var_, float:1.0)
-            r6 = r4
-            goto L_0x055f
-        L_0x04eb:
-            float r4 = r0.transitionProgress
-            r5 = 1065353216(0x3var_, float:1.0)
-            float r6 = r5 - r4
-            int r5 = r0.currentIcon
-            r12 = 4
-            if (r5 != r12) goto L_0x04f9
-            r5 = 0
-            r1 = r4
-            goto L_0x04ff
-        L_0x04f9:
-            r5 = 1110704128(0x42340000, float:45.0)
-            float r5 = r5 * r6
-            r1 = 1065353216(0x3var_, float:1.0)
-        L_0x04ff:
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r20)
-            float r12 = (float) r12
-            float r13 = r0.scale
-            float r12 = r12 * r13
-            float r13 = r4 * r23
-            int r13 = (int) r13
-            int r15 = r0.nextIcon
-            r9 = 14
-            if (r15 != r9) goto L_0x0518
-            int r9 = r8.left
-            float r2 = (float) r9
-            int r9 = r8.top
-            float r3 = (float) r9
-            goto L_0x0522
-        L_0x0518:
-            int r9 = r8.centerX()
-            float r2 = (float) r9
-            int r9 = r8.centerY()
-            float r3 = (float) r9
-        L_0x0522:
-            r9 = r1
-            r15 = r3
-            r27 = r12
-            r6 = r13
-            r13 = 1065353216(0x3var_, float:1.0)
-            r12 = r2
-            goto L_0x055f
-        L_0x052b:
-            r5 = 6
-            if (r4 != r5) goto L_0x0539
-            float r4 = r0.transitionProgress
-            float r4 = r4 / r22
-            r5 = 1065353216(0x3var_, float:1.0)
-            float r4 = java.lang.Math.min(r5, r4)
-            goto L_0x053d
-        L_0x0539:
-            r5 = 1065353216(0x3var_, float:1.0)
-            float r4 = r0.transitionProgress
-        L_0x053d:
-            float r6 = r5 - r4
-            r5 = 1110704128(0x42340000, float:45.0)
-            float r5 = r5 * r4
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r20)
-            float r9 = (float) r9
-            float r9 = r9 * r6
-            float r12 = r0.scale
-            float r9 = r9 * r12
-            float r12 = r6 * r21
-            r13 = 1065353216(0x3var_, float:1.0)
-            float r12 = java.lang.Math.min(r13, r12)
-            float r12 = r12 * r23
-            int r4 = (int) r12
-            r12 = r2
-            r15 = r3
-            r6 = r4
-            r27 = r9
-            r9 = r1
-        L_0x055f:
-            int r1 = (r9 > r13 ? 1 : (r9 == r13 ? 0 : -1))
-            if (r1 == 0) goto L_0x0569
-            r43.save()
-            r7.scale(r9, r9, r12, r15)
-        L_0x0569:
-            r1 = 0
-            int r2 = (r5 > r1 ? 1 : (r5 == r1 ? 0 : -1))
-            if (r2 == 0) goto L_0x0576
-            r43.save()
-            float r1 = (float) r10
-            float r2 = (float) r11
-            r7.rotate(r5, r1, r2)
-        L_0x0576:
-            if (r6 == 0) goto L_0x05ff
             android.graphics.Paint r1 = r0.paint
             float r2 = (float) r6
-            float r3 = r0.overrideAlpha
-            float r2 = r2 * r3
-            int r2 = (int) r2
-            r1.setAlpha(r2)
-            int r1 = r0.currentIcon
-            r2 = 14
-            if (r1 == r2) goto L_0x05c0
-            int r1 = r0.nextIcon
-            if (r1 != r2) goto L_0x0591
-            r28 = r5
-            r13 = r6
-            goto L_0x05c3
-        L_0x0591:
-            float r1 = (float) r10
-            float r2 = r1 - r27
-            float r1 = (float) r11
-            float r3 = r1 - r27
-            float r1 = (float) r10
-            float r4 = r1 + r27
-            float r1 = (float) r11
-            float r13 = r1 + r27
-            android.graphics.Paint r1 = r0.paint
-            r19 = r1
-            r1 = r43
-            r28 = r5
-            r5 = r13
-            r13 = r6
-            r6 = r19
-            r1.drawLine(r2, r3, r4, r5, r6)
-            float r1 = (float) r10
-            float r2 = r1 + r27
-            float r1 = (float) r11
-            float r3 = r1 - r27
-            float r1 = (float) r10
-            float r4 = r1 - r27
-            float r1 = (float) r11
-            float r5 = r1 + r27
-            android.graphics.Paint r6 = r0.paint
-            r1 = r43
-            r1.drawLine(r2, r3, r4, r5, r6)
-            goto L_0x0602
-        L_0x05c0:
-            r28 = r5
-            r13 = r6
-        L_0x05c3:
-            android.graphics.Paint r1 = r0.paint3
-            float r2 = (float) r13
-            float r3 = r0.overrideAlpha
-            float r2 = r2 * r3
-            int r2 = (int) r2
-            r1.setAlpha(r2)
-            android.graphics.RectF r1 = r0.rect
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r2 = r10 - r2
-            float r2 = (float) r2
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r3 = r11 - r3
-            float r3 = (float) r3
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r4 = r4 + r10
-            float r4 = (float) r4
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r5 = r5 + r11
-            float r5 = (float) r5
-            r1.set(r2, r3, r4, r5)
-            android.graphics.RectF r1 = r0.rect
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r21)
-            float r2 = (float) r2
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r21)
-            float r3 = (float) r3
-            android.graphics.Paint r4 = r0.paint3
-            r7.drawRoundRect(r1, r2, r3, r4)
-            goto L_0x0602
-        L_0x05ff:
-            r28 = r5
-            r13 = r6
-        L_0x0602:
-            r1 = 0
-            int r2 = (r28 > r1 ? 1 : (r28 == r1 ? 0 : -1))
-            if (r2 == 0) goto L_0x060a
-            r43.restore()
-        L_0x060a:
-            int r1 = r0.currentIcon
-            r2 = 3
-            if (r1 == r2) goto L_0x061c
-            r3 = 14
-            if (r1 == r3) goto L_0x061c
-            r4 = 4
-            if (r1 != r4) goto L_0x068a
-            int r1 = r0.nextIcon
-            if (r1 == r3) goto L_0x061c
-            if (r1 != r2) goto L_0x068a
-        L_0x061c:
-            if (r13 == 0) goto L_0x068a
-            r1 = 1135869952(0x43b40000, float:360.0)
-            float r2 = r0.animatedDownloadProgress
-            float r2 = r2 * r1
-            float r19 = java.lang.Math.max(r14, r2)
-            boolean r1 = r0.isMini
-            if (r1 == 0) goto L_0x062f
-            r3 = 1073741824(0x40000000, float:2.0)
-            goto L_0x0631
-        L_0x062f:
-            r3 = 1082130432(0x40800000, float:4.0)
-        L_0x0631:
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            android.graphics.RectF r1 = r0.rect
-            int r2 = r8.left
-            int r2 = r2 + r14
-            float r2 = (float) r2
-            int r3 = r8.top
-            int r3 = r3 + r14
-            float r3 = (float) r3
-            int r4 = r8.right
-            int r4 = r4 - r14
-            float r4 = (float) r4
-            int r5 = r8.bottom
-            int r5 = r5 - r14
-            float r5 = (float) r5
-            r1.set(r2, r3, r4, r5)
-            int r1 = r0.currentIcon
-            r2 = 14
-            if (r1 == r2) goto L_0x065a
-            r3 = 4
-            if (r1 != r3) goto L_0x067c
-            int r1 = r0.nextIcon
-            if (r1 == r2) goto L_0x065a
-            r2 = 3
-            if (r1 != r2) goto L_0x067c
-        L_0x065a:
-            android.graphics.Paint r1 = r0.paint
-            float r2 = (float) r13
             r3 = 1041865114(0x3e19999a, float:0.15)
             float r2 = r2 * r3
-            float r3 = r0.overrideAlpha
-            float r2 = r2 * r3
             int r2 = (int) r2
             r1.setAlpha(r2)
+            boolean r1 = r0.isMini
+            if (r1 == 0) goto L_0x0271
+            r3 = 1073741824(0x40000000, float:2.0)
+            goto L_0x0273
+        L_0x0271:
+            r3 = 1082130432(0x40800000, float:4.0)
+        L_0x0273:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            android.graphics.RectF r2 = r0.rect
+            int r3 = r8.left
+            int r3 = r3 + r1
+            float r3 = (float) r3
+            int r4 = r8.top
+            int r4 = r4 + r1
+            float r4 = (float) r4
+            int r14 = r8.right
+            int r14 = r14 - r1
+            float r14 = (float) r14
+            int r13 = r8.bottom
+            int r13 = r13 - r1
+            float r1 = (float) r13
+            r2.set(r3, r4, r14, r1)
             android.graphics.RectF r2 = r0.rect
             r3 = 0
             r4 = 1135869952(0x43b40000, float:360.0)
-            r5 = 0
-            android.graphics.Paint r6 = r0.paint
-            r1 = r43
+            r13 = 0
+            android.graphics.Paint r14 = r0.paint
+            r1 = r34
+            r24 = r5
+            r5 = r13
+            r13 = r6
+            r6 = r14
             r1.drawArc(r2, r3, r4, r5, r6)
             android.graphics.Paint r1 = r0.paint
             r1.setAlpha(r13)
-        L_0x067c:
+            goto L_0x02c6
+        L_0x02a4:
+            r24 = r5
+            float r13 = r24 - r1
+            float r14 = r2 - r1
+            float r26 = r24 + r1
+            float r27 = r2 + r1
+            android.graphics.Paint r6 = r0.paint
+            r1 = r34
+            r2 = r13
+            r3 = r14
+            r4 = r26
+            r5 = r27
+            r1.drawLine(r2, r3, r4, r5, r6)
+            android.graphics.Paint r6 = r0.paint
+            r2 = r26
+            r4 = r13
+            r1.drawLine(r2, r3, r4, r5, r6)
+            goto L_0x02c6
+        L_0x02c4:
+            r24 = r5
+        L_0x02c6:
+            r1 = 0
+            int r2 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1))
+            if (r2 == 0) goto L_0x02d1
+            r34.restore()
+            goto L_0x02d1
+        L_0x02cf:
+            r24 = r30
+        L_0x02d1:
+            r2 = r15
+            r1 = r24
+            r6 = r1
+            goto L_0x031a
+        L_0x02d6:
+            r1 = 2
+            if (r4 != r1) goto L_0x02de
+            r1 = 1065353216(0x3var_, float:1.0)
+            float r4 = r1 - r2
+            goto L_0x02e4
+        L_0x02de:
+            r1 = 1065353216(0x3var_, float:1.0)
+            float r4 = r2 / r22
+            float r2 = r1 - r4
+        L_0x02e4:
+            float r25 = r25 - r3
+            float r25 = r25 * r4
+            float r25 = r3 + r25
+            float r15 = r15 - r6
+            float r15 = r15 * r4
+            float r15 = r15 + r6
+            float r1 = (float) r11
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r3 = (float) r3
+            float r3 = r3 * r2
+            float r4 = r0.scale
+            float r3 = r3 * r4
+            float r6 = r1 - r3
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r3 = (float) r3
+            float r3 = r3 * r2
+            float r4 = r0.scale
+            float r3 = r3 * r4
+            float r1 = r1 + r3
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r3 = (float) r3
+            float r3 = r3 * r2
+            float r2 = r0.scale
+            float r3 = r3 * r2
+            float r2 = r15 - r3
+            r32 = r15
+            r15 = r2
+            r2 = r32
+        L_0x031a:
+            r13 = r1
+            r14 = r2
+            r10 = r6
+            r3 = r25
+            goto L_0x0345
+        L_0x0320:
+            float r1 = (float) r11
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r2 = (float) r2
+            float r4 = r0.scale
+            float r2 = r2 * r4
+            float r2 = r1 - r2
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r4 = (float) r4
+            float r10 = r0.scale
+            float r4 = r4 * r10
+            float r1 = r1 + r4
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r4 = (float) r4
+            float r5 = r0.scale
+            float r4 = r4 * r5
+            float r4 = r6 - r4
+            r13 = r1
+            r10 = r2
+            r15 = r4
+            r14 = r6
+        L_0x0345:
+            int r1 = (r3 > r14 ? 1 : (r3 == r14 ? 0 : -1))
+            if (r1 == 0) goto L_0x0353
+            float r4 = (float) r11
+            android.graphics.Paint r6 = r0.paint
+            r1 = r34
+            r2 = r4
+            r5 = r14
+            r1.drawLine(r2, r3, r4, r5, r6)
+        L_0x0353:
+            float r6 = (float) r11
+            int r1 = (r10 > r6 ? 1 : (r10 == r6 ? 0 : -1))
+            if (r1 == 0) goto L_0x036f
+            android.graphics.Paint r5 = r0.paint
+            r1 = r34
+            r2 = r10
+            r3 = r15
+            r4 = r6
+            r10 = r5
+            r5 = r14
+            r24 = r6
+            r6 = r10
+            r1.drawLine(r2, r3, r4, r5, r6)
+            android.graphics.Paint r6 = r0.paint
+            r2 = r13
+            r4 = r24
+            r1.drawLine(r2, r3, r4, r5, r6)
+        L_0x036f:
+            int r1 = r0.currentIcon
+            r10 = 13
+            r13 = 1
+            r2 = 3
+            if (r1 == r2) goto L_0x03f8
+            r3 = 14
+            if (r1 == r3) goto L_0x03f8
+            r4 = 4
+            if (r1 != r4) goto L_0x0386
+            int r4 = r0.nextIcon
+            if (r4 == r3) goto L_0x03f8
+            if (r4 != r2) goto L_0x0386
+            goto L_0x03f8
+        L_0x0386:
+            r2 = 10
+            if (r1 == r2) goto L_0x0396
+            int r2 = r0.nextIcon
+            r3 = 10
+            if (r2 == r3) goto L_0x0396
+            if (r1 != r10) goto L_0x0393
+            goto L_0x0396
+        L_0x0393:
+            r14 = 0
+            goto L_0x063e
+        L_0x0396:
+            int r1 = r0.nextIcon
+            r2 = 4
+            if (r1 == r2) goto L_0x03a2
+            r2 = 6
+            if (r1 != r2) goto L_0x039f
+            goto L_0x03a2
+        L_0x039f:
+            r2 = 255(0xff, float:3.57E-43)
+            goto L_0x03ab
+        L_0x03a2:
+            float r1 = r0.transitionProgress
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r4 = r2 - r1
+            float r4 = r4 * r23
+            int r2 = (int) r4
+        L_0x03ab:
+            if (r2 == 0) goto L_0x0393
+            r14 = 0
+            r0.applyShaderMatrix(r14)
+            android.graphics.Paint r1 = r0.paint
+            float r2 = (float) r2
+            float r3 = r0.overrideAlpha
+            float r2 = r2 * r3
+            int r2 = (int) r2
+            r1.setAlpha(r2)
+            r1 = 1135869952(0x43b40000, float:360.0)
+            float r2 = r0.animatedDownloadProgress
+            float r2 = r2 * r1
+            r15 = 1082130432(0x40800000, float:4.0)
+            float r4 = java.lang.Math.max(r15, r2)
+            boolean r1 = r0.isMini
+            if (r1 == 0) goto L_0x03cf
+            r3 = 1073741824(0x40000000, float:2.0)
+            goto L_0x03d1
+        L_0x03cf:
+            r3 = 1082130432(0x40800000, float:4.0)
+        L_0x03d1:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            android.graphics.RectF r2 = r0.rect
+            int r3 = r8.left
+            int r3 = r3 + r1
+            float r3 = (float) r3
+            int r5 = r8.top
+            int r5 = r5 + r1
+            float r5 = (float) r5
+            int r6 = r8.right
+            int r6 = r6 - r1
+            float r6 = (float) r6
+            int r15 = r8.bottom
+            int r15 = r15 - r1
+            float r1 = (float) r15
+            r2.set(r3, r5, r6, r1)
             android.graphics.RectF r2 = r0.rect
             float r3 = r0.downloadRadOffset
             r5 = 0
             android.graphics.Paint r6 = r0.paint
-            r1 = r43
-            r4 = r19
+            r1 = r34
             r1.drawArc(r2, r3, r4, r5, r6)
-        L_0x068a:
-            r1 = 1065353216(0x3var_, float:1.0)
-            int r2 = (r9 > r1 ? 1 : (r9 == r1 ? 0 : -1))
-            if (r2 == 0) goto L_0x03d1
-            r43.restore()
-            goto L_0x03d1
-        L_0x0695:
+            goto L_0x063e
+        L_0x03f8:
+            r14 = 0
+            r15 = 1082130432(0x40800000, float:4.0)
+            r0.applyShaderMatrix(r14)
+            int r1 = r0.nextIcon
+            r2 = 2
+            if (r1 != r2) goto L_0x0429
+            float r1 = r0.transitionProgress
+            int r2 = (r1 > r22 ? 1 : (r1 == r22 ? 0 : -1))
+            if (r2 > 0) goto L_0x041e
+            float r1 = r1 / r22
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r4 = r2 - r1
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            float r1 = (float) r1
+            float r1 = r1 * r4
+            float r2 = r0.scale
+            float r1 = r1 * r2
+            float r4 = r4 * r23
+            int r6 = (int) r4
+            goto L_0x0420
+        L_0x041e:
             r1 = 0
-            r2 = 0
+            r6 = 0
+        L_0x0420:
+            r2 = 1065353216(0x3var_, float:1.0)
             r3 = 0
             r4 = 0
-            int r5 = r0.currentIcon
-            int r6 = r0.nextIcon
-            if (r5 != r6) goto L_0x06a6
-            r6 = 1065353216(0x3var_, float:1.0)
-            r5 = r6
-            r9 = r6
-            r12 = r9
-            r9 = r5
-            goto L_0x06c9
-        L_0x06a6:
-            r6 = 1065353216(0x3var_, float:1.0)
-            r9 = 4
-            if (r5 != r9) goto L_0x06b4
-            float r9 = r0.transitionProgress
-            float r5 = r0.transitionProgress
-            float r5 = r6 - r5
-            r12 = r9
-            r9 = r5
-            goto L_0x06c9
-        L_0x06b4:
-            float r5 = r0.transitionProgress
-            float r5 = r5 / r22
-            float r9 = java.lang.Math.min(r6, r5)
-            float r5 = r0.transitionProgress
-            float r5 = r5 / r22
-            float r5 = r6 - r5
-            r6 = 0
-            float r5 = java.lang.Math.max(r6, r5)
-            r12 = r9
-            r9 = r5
-        L_0x06c9:
-            int r5 = r0.nextIcon
-            r6 = 15
-            if (r5 != r6) goto L_0x06d2
-            android.graphics.Path[] r3 = org.telegram.ui.ActionBar.Theme.chat_updatePath
-            goto L_0x06da
-        L_0x06d2:
-            int r5 = r0.currentIcon
-            r6 = 15
-            if (r5 != r6) goto L_0x06da
-            android.graphics.Path[] r4 = org.telegram.ui.ActionBar.Theme.chat_updatePath
-        L_0x06da:
-            int r5 = r0.nextIcon
-            r6 = 5
-            if (r5 != r6) goto L_0x06e4
-            android.graphics.Path[] r3 = org.telegram.ui.ActionBar.Theme.chat_filePath
-            r13 = r3
-            r14 = r4
-            goto L_0x06f0
-        L_0x06e4:
-            int r5 = r0.currentIcon
-            r6 = 5
-            if (r5 != r6) goto L_0x06ee
-            android.graphics.Path[] r4 = org.telegram.ui.ActionBar.Theme.chat_filePath
-            r13 = r3
-            r14 = r4
-            goto L_0x06f0
-        L_0x06ee:
-            r13 = r3
-            r14 = r4
-        L_0x06f0:
-            int r3 = r0.nextIcon
-            r4 = 7
-            if (r3 != r4) goto L_0x06f8
-            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.chat_flameIcon
-            goto L_0x06ff
-        L_0x06f8:
-            int r3 = r0.currentIcon
-            r4 = 7
-            if (r3 != r4) goto L_0x06ff
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.chat_flameIcon
-        L_0x06ff:
-            int r3 = r0.nextIcon
-            r4 = 8
-            if (r3 != r4) goto L_0x070a
-            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.chat_gifIcon
-            r15 = r1
-            r6 = r2
-            goto L_0x0717
-        L_0x070a:
-            int r3 = r0.currentIcon
-            r4 = 8
-            if (r3 != r4) goto L_0x0715
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.chat_gifIcon
-            r15 = r1
-            r6 = r2
-            goto L_0x0717
-        L_0x0715:
-            r15 = r1
-            r6 = r2
-        L_0x0717:
-            int r1 = r0.currentIcon
+            r5 = 1065353216(0x3var_, float:1.0)
+        L_0x0426:
+            r13 = 0
+            goto L_0x0514
+        L_0x0429:
+            r2 = 15
+            if (r1 == r2) goto L_0x04e1
+            if (r1 == 0) goto L_0x04e1
+            if (r1 == r13) goto L_0x04e1
+            r2 = 5
+            if (r1 == r2) goto L_0x04e1
+            r2 = 8
+            if (r1 == r2) goto L_0x04e1
             r2 = 9
-            r19 = 1086324736(0x40CLASSNAME, float:6.0)
-            if (r1 == r2) goto L_0x0731
-            int r1 = r0.nextIcon
-            r2 = 9
-            if (r1 != r2) goto L_0x0726
-            goto L_0x0731
-        L_0x0726:
-            r28 = r9
-            r27 = r13
-            r29 = r14
-            r30 = r15
-            r15 = r6
-            goto L_0x07b1
-        L_0x0731:
+            if (r1 == r2) goto L_0x04e1
+            r2 = 7
+            if (r1 == r2) goto L_0x04e1
+            r2 = 6
+            if (r1 != r2) goto L_0x0444
+            goto L_0x04e2
+        L_0x0444:
+            r2 = 4
+            if (r1 != r2) goto L_0x0488
+            float r1 = r0.transitionProgress
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r4 = r2 - r1
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            float r2 = (float) r2
+            float r3 = r0.scale
+            float r2 = r2 * r3
+            float r3 = r4 * r23
+            int r3 = (int) r3
+            int r5 = r0.currentIcon
+            r6 = 14
+            if (r5 != r6) goto L_0x0469
+            int r1 = r8.left
+            float r1 = (float) r1
+            int r5 = r8.top
+            float r5 = (float) r5
+            r6 = r5
+            r5 = r1
             r1 = 0
-            r0.applyShaderMatrix(r1)
+            goto L_0x047b
+        L_0x0469:
+            r4 = 1110704128(0x42340000, float:45.0)
+            float r1 = r1 * r4
+            int r4 = r8.centerX()
+            float r4 = (float) r4
+            int r5 = r8.centerY()
+            float r5 = (float) r5
+            r6 = r5
+            r5 = r4
+            r4 = 1065353216(0x3var_, float:1.0)
+        L_0x047b:
+            r13 = r1
+            r1 = r2
+            r2 = 1065353216(0x3var_, float:1.0)
+            r32 = r6
+            r6 = r3
+        L_0x0482:
+            r3 = r5
+            r5 = r4
+            r4 = r32
+            goto L_0x0514
+        L_0x0488:
+            r2 = 14
+            if (r1 == r2) goto L_0x04a2
+            r2 = 3
+            if (r1 != r2) goto L_0x0490
+            goto L_0x04a2
+        L_0x0490:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            float r1 = (float) r1
+            float r2 = r0.scale
+            float r1 = r1 * r2
+            r2 = 1065353216(0x3var_, float:1.0)
+            r3 = 0
+            r4 = 0
+            r5 = 1065353216(0x3var_, float:1.0)
+            r6 = 255(0xff, float:3.57E-43)
+            goto L_0x0426
+        L_0x04a2:
+            float r1 = r0.transitionProgress
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r4 = r2 - r1
+            int r2 = r0.currentIcon
+            r3 = 4
+            if (r2 != r3) goto L_0x04b0
+            r4 = r1
+            r2 = 0
+            goto L_0x04b7
+        L_0x04b0:
+            r2 = 1110704128(0x42340000, float:45.0)
+            float r4 = r4 * r2
+            r2 = r4
+            r4 = 1065353216(0x3var_, float:1.0)
+        L_0x04b7:
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            float r3 = (float) r3
+            float r5 = r0.scale
+            float r3 = r3 * r5
+            float r1 = r1 * r23
+            int r1 = (int) r1
+            int r5 = r0.nextIcon
+            r6 = 14
+            if (r5 != r6) goto L_0x04cf
+            int r5 = r8.left
+            float r5 = (float) r5
+            int r6 = r8.top
+            goto L_0x04d8
+        L_0x04cf:
+            int r5 = r8.centerX()
+            float r5 = (float) r5
+            int r6 = r8.centerY()
+        L_0x04d8:
+            float r6 = (float) r6
+            r13 = r2
+            r2 = 1065353216(0x3var_, float:1.0)
+            r32 = r6
+            r6 = r1
+            r1 = r3
+            goto L_0x0482
+        L_0x04e1:
+            r2 = 6
+        L_0x04e2:
+            if (r1 != r2) goto L_0x04ef
+            float r1 = r0.transitionProgress
+            float r1 = r1 / r22
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r1 = java.lang.Math.min(r2, r1)
+            goto L_0x04f3
+        L_0x04ef:
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r1 = r0.transitionProgress
+        L_0x04f3:
+            float r4 = r2 - r1
+            r3 = 1110704128(0x42340000, float:45.0)
+            float r1 = r1 * r3
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            float r3 = (float) r3
+            float r3 = r3 * r4
+            float r5 = r0.scale
+            float r3 = r3 * r5
+            float r4 = r4 * r20
+            float r4 = java.lang.Math.min(r2, r4)
+            float r4 = r4 * r23
+            int r4 = (int) r4
+            r13 = r1
+            r1 = r3
+            r6 = r4
+            r3 = 0
+            r4 = 0
+            r5 = 1065353216(0x3var_, float:1.0)
+        L_0x0514:
+            int r25 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
+            if (r25 == 0) goto L_0x051e
+            r34.save()
+            r7.scale(r5, r5, r3, r4)
+        L_0x051e:
+            r2 = 0
+            int r3 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1))
+            if (r3 == 0) goto L_0x052b
+            r34.save()
+            float r2 = (float) r11
+            float r3 = (float) r12
+            r7.rotate(r13, r2, r3)
+        L_0x052b:
+            if (r6 == 0) goto L_0x05ab
+            android.graphics.Paint r2 = r0.paint
+            float r3 = (float) r6
+            float r4 = r0.overrideAlpha
+            float r4 = r4 * r3
+            int r4 = (int) r4
+            r2.setAlpha(r4)
+            int r2 = r0.currentIcon
+            r4 = 14
+            if (r2 == r4) goto L_0x056d
+            int r2 = r0.nextIcon
+            if (r2 != r4) goto L_0x0543
+            goto L_0x056d
+        L_0x0543:
+            float r2 = (float) r11
+            float r19 = r2 - r1
+            float r3 = (float) r12
+            float r25 = r3 - r1
+            float r26 = r2 + r1
+            float r27 = r3 + r1
+            android.graphics.Paint r4 = r0.paint
+            r1 = r34
+            r2 = r19
+            r3 = r25
+            r28 = r4
+            r4 = r26
+            r29 = r5
+            r5 = r27
+            r10 = r6
+            r6 = r28
+            r1.drawLine(r2, r3, r4, r5, r6)
+            android.graphics.Paint r6 = r0.paint
+            r2 = r26
+            r4 = r19
+            r1.drawLine(r2, r3, r4, r5, r6)
+            goto L_0x05ae
+        L_0x056d:
+            r29 = r5
+            r10 = r6
+            android.graphics.Paint r1 = r0.paint3
+            float r2 = r0.overrideAlpha
+            float r3 = r3 * r2
+            int r2 = (int) r3
+            r1.setAlpha(r2)
+            android.graphics.RectF r1 = r0.rect
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r19)
+            int r2 = r11 - r2
+            float r2 = (float) r2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r19)
+            int r3 = r12 - r3
+            float r3 = (float) r3
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r19)
+            int r4 = r4 + r11
+            float r4 = (float) r4
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r19)
+            int r5 = r5 + r12
+            float r5 = (float) r5
+            r1.set(r2, r3, r4, r5)
+            android.graphics.RectF r1 = r0.rect
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r20)
+            float r2 = (float) r2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r20)
+            float r3 = (float) r3
+            android.graphics.Paint r4 = r0.paint3
+            r7.drawRoundRect(r1, r2, r3, r4)
+            goto L_0x05ae
+        L_0x05ab:
+            r29 = r5
+            r10 = r6
+        L_0x05ae:
+            r1 = 0
+            int r2 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
+            if (r2 == 0) goto L_0x05b6
+            r34.restore()
+        L_0x05b6:
+            int r1 = r0.currentIcon
+            r2 = 3
+            if (r1 == r2) goto L_0x05c8
+            r3 = 14
+            if (r1 == r3) goto L_0x05c8
+            r4 = 4
+            if (r1 != r4) goto L_0x0635
+            int r1 = r0.nextIcon
+            if (r1 == r3) goto L_0x05c8
+            if (r1 != r2) goto L_0x0635
+        L_0x05c8:
+            if (r10 == 0) goto L_0x0635
+            r1 = 1135869952(0x43b40000, float:360.0)
+            float r2 = r0.animatedDownloadProgress
+            float r2 = r2 * r1
+            float r13 = java.lang.Math.max(r15, r2)
+            boolean r1 = r0.isMini
+            if (r1 == 0) goto L_0x05db
+            r3 = 1073741824(0x40000000, float:2.0)
+            goto L_0x05dd
+        L_0x05db:
+            r3 = 1082130432(0x40800000, float:4.0)
+        L_0x05dd:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            android.graphics.RectF r2 = r0.rect
+            int r3 = r8.left
+            int r3 = r3 + r1
+            float r3 = (float) r3
+            int r4 = r8.top
+            int r4 = r4 + r1
+            float r4 = (float) r4
+            int r5 = r8.right
+            int r5 = r5 - r1
+            float r5 = (float) r5
+            int r6 = r8.bottom
+            int r6 = r6 - r1
+            float r1 = (float) r6
+            r2.set(r3, r4, r5, r1)
+            int r1 = r0.currentIcon
+            r2 = 14
+            if (r1 == r2) goto L_0x0606
+            r3 = 4
+            if (r1 != r3) goto L_0x0628
+            int r1 = r0.nextIcon
+            if (r1 == r2) goto L_0x0606
+            r2 = 3
+            if (r1 != r2) goto L_0x0628
+        L_0x0606:
+            android.graphics.Paint r1 = r0.paint
+            float r2 = (float) r10
+            r3 = 1041865114(0x3e19999a, float:0.15)
+            float r2 = r2 * r3
+            float r3 = r0.overrideAlpha
+            float r2 = r2 * r3
+            int r2 = (int) r2
+            r1.setAlpha(r2)
+            android.graphics.RectF r2 = r0.rect
+            r3 = 0
+            r4 = 1135869952(0x43b40000, float:360.0)
+            r5 = 0
+            android.graphics.Paint r6 = r0.paint
+            r1 = r34
+            r1.drawArc(r2, r3, r4, r5, r6)
+            android.graphics.Paint r1 = r0.paint
+            r1.setAlpha(r10)
+        L_0x0628:
+            android.graphics.RectF r2 = r0.rect
+            float r3 = r0.downloadRadOffset
+            r5 = 0
+            android.graphics.Paint r6 = r0.paint
+            r1 = r34
+            r4 = r13
+            r1.drawArc(r2, r3, r4, r5, r6)
+        L_0x0635:
+            r1 = 1065353216(0x3var_, float:1.0)
+            int r2 = (r29 > r1 ? 1 : (r29 == r1 ? 0 : -1))
+            if (r2 == 0) goto L_0x063e
+            r34.restore()
+        L_0x063e:
+            int r1 = r0.currentIcon
+            int r2 = r0.nextIcon
+            if (r1 != r2) goto L_0x0649
+            r10 = 1065353216(0x3var_, float:1.0)
+            r13 = 1065353216(0x3var_, float:1.0)
+            goto L_0x066a
+        L_0x0649:
+            r2 = 4
+            if (r1 != r2) goto L_0x0653
+            float r4 = r0.transitionProgress
+            r1 = 1065353216(0x3var_, float:1.0)
+            float r2 = r1 - r4
+            goto L_0x0668
+        L_0x0653:
+            r1 = 1065353216(0x3var_, float:1.0)
+            float r2 = r0.transitionProgress
+            float r2 = r2 / r22
+            float r4 = java.lang.Math.min(r1, r2)
+            float r2 = r0.transitionProgress
+            float r2 = r2 / r22
+            float r2 = r1 - r2
+            r1 = 0
+            float r2 = java.lang.Math.max(r1, r2)
+        L_0x0668:
+            r13 = r2
+            r10 = r4
+        L_0x066a:
+            int r1 = r0.nextIcon
+            r2 = 15
+            if (r1 != r2) goto L_0x0673
+            android.graphics.Path[] r2 = org.telegram.ui.ActionBar.Theme.chat_updatePath
+            goto L_0x067f
+        L_0x0673:
+            int r2 = r0.currentIcon
+            r3 = 15
+            if (r2 != r3) goto L_0x067e
+            android.graphics.Path[] r2 = org.telegram.ui.ActionBar.Theme.chat_updatePath
+            r3 = r2
+            r2 = 0
+            goto L_0x0680
+        L_0x067e:
+            r2 = 0
+        L_0x067f:
+            r3 = 0
+        L_0x0680:
+            r4 = 5
+            if (r1 != r4) goto L_0x0686
+            android.graphics.Path[] r2 = org.telegram.ui.ActionBar.Theme.chat_filePath
+            goto L_0x068d
+        L_0x0686:
+            int r4 = r0.currentIcon
+            r5 = 5
+            if (r4 != r5) goto L_0x068d
+            android.graphics.Path[] r3 = org.telegram.ui.ActionBar.Theme.chat_filePath
+        L_0x068d:
+            r15 = r2
+            r6 = r3
+            r2 = 7
+            if (r1 != r2) goto L_0x0698
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.chat_flameIcon
+            r16 = r2
+            r2 = 0
+            goto L_0x06a3
+        L_0x0698:
+            int r2 = r0.currentIcon
+            r3 = 7
+            if (r2 != r3) goto L_0x06a0
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.chat_flameIcon
+            goto L_0x06a1
+        L_0x06a0:
+            r2 = 0
+        L_0x06a1:
+            r16 = 0
+        L_0x06a3:
+            r3 = 8
+            if (r1 != r3) goto L_0x06aa
+            android.graphics.drawable.Drawable r16 = org.telegram.ui.ActionBar.Theme.chat_gifIcon
+            goto L_0x06b2
+        L_0x06aa:
+            int r3 = r0.currentIcon
+            r4 = 8
+            if (r3 != r4) goto L_0x06b2
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.chat_gifIcon
+        L_0x06b2:
+            r5 = r2
+            r4 = r16
+            int r2 = r0.currentIcon
+            r3 = 9
+            r16 = 1086324736(0x40CLASSNAME, float:6.0)
+            if (r2 == r3) goto L_0x06cc
+            r2 = 9
+            if (r1 != r2) goto L_0x06c2
+            goto L_0x06cc
+        L_0x06c2:
+            r14 = r4
+            r31 = r6
+            r20 = r9
+            r19 = r15
+            r15 = r5
+            goto L_0x0753
+        L_0x06cc:
+            r0.applyShaderMatrix(r14)
             android.graphics.Paint r1 = r0.paint
             int r2 = r0.currentIcon
             int r3 = r0.nextIcon
-            if (r2 != r3) goto L_0x0740
+            if (r2 != r3) goto L_0x06da
             r2 = 255(0xff, float:3.57E-43)
-            goto L_0x0745
-        L_0x0740:
+            goto L_0x06df
+        L_0x06da:
             float r2 = r0.transitionProgress
             float r2 = r2 * r23
             int r2 = (int) r2
-        L_0x0745:
+        L_0x06df:
             r1.setAlpha(r2)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r20)
-            int r5 = r11 + r1
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            int r3 = r12 + r1
             r1 = 1077936128(0x40400000, float:3.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r4 = r10 - r1
+            int r2 = r11 - r1
             int r1 = r0.currentIcon
-            int r2 = r0.nextIcon
-            if (r1 == r2) goto L_0x0766
-            r43.save()
+            int r14 = r0.nextIcon
+            if (r1 == r14) goto L_0x0703
+            r34.save()
             float r1 = r0.transitionProgress
-            float r2 = (float) r10
-            float r3 = (float) r11
-            r7.scale(r1, r1, r2, r3)
-        L_0x0766:
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r1 = r4 - r1
-            float r2 = (float) r1
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r1 = r5 - r1
-            float r3 = (float) r1
-            float r1 = (float) r4
-            r21 = r6
-            float r6 = (float) r5
-            r27 = r13
-            android.graphics.Paint r13 = r0.paint
-            r28 = r1
-            r1 = r43
-            r29 = r14
-            r14 = r4
-            r4 = r28
-            r28 = r9
-            r9 = r5
-            r5 = r6
-            r30 = r15
-            r15 = r21
-            r6 = r13
-            r1.drawLine(r2, r3, r4, r5, r6)
-            float r2 = (float) r14
-            float r3 = (float) r9
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
-            int r4 = r14 + r1
-            float r4 = (float) r4
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
-            int r5 = r9 - r1
-            float r5 = (float) r5
+            float r14 = (float) r11
+            r19 = r4
+            float r4 = (float) r12
+            r7.scale(r1, r1, r14, r4)
+            goto L_0x0705
+        L_0x0703:
+            r19 = r4
+        L_0x0705:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r1 = r2 - r1
+            float r4 = (float) r1
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r1 = r3 - r1
+            float r14 = (float) r1
+            float r1 = (float) r2
+            r20 = r9
+            float r9 = (float) r3
+            r25 = r6
             android.graphics.Paint r6 = r0.paint
-            r1 = r43
+            r26 = r1
+            r1 = r34
+            r27 = r2
+            r2 = r4
+            r28 = r3
+            r3 = r14
+            r14 = r19
+            r4 = r26
+            r19 = r15
+            r15 = r5
+            r5 = r9
+            r31 = r25
+            r1.drawLine(r2, r3, r4, r5, r6)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            int r2 = r27 + r1
+            float r4 = (float) r2
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            int r3 = r28 - r1
+            float r5 = (float) r3
+            android.graphics.Paint r6 = r0.paint
+            r1 = r34
+            r2 = r26
+            r3 = r9
             r1.drawLine(r2, r3, r4, r5, r6)
             int r1 = r0.currentIcon
             int r2 = r0.nextIcon
-            if (r1 == r2) goto L_0x07b1
-            r43.restore()
-        L_0x07b1:
+            if (r1 == r2) goto L_0x0753
+            r34.restore()
+        L_0x0753:
             int r1 = r0.currentIcon
             r2 = 12
-            if (r1 == r2) goto L_0x07bd
+            if (r1 == r2) goto L_0x075f
             int r1 = r0.nextIcon
             r2 = 12
-            if (r1 != r2) goto L_0x083b
-        L_0x07bd:
+            if (r1 != r2) goto L_0x07cf
+        L_0x075f:
             r1 = 0
             r0.applyShaderMatrix(r1)
             int r1 = r0.currentIcon
             int r2 = r0.nextIcon
-            if (r1 != r2) goto L_0x07cb
-            r3 = 1065353216(0x3var_, float:1.0)
-            r9 = r3
-            goto L_0x07da
-        L_0x07cb:
+            if (r1 != r2) goto L_0x076c
+            r4 = 1065353216(0x3var_, float:1.0)
+            goto L_0x077a
+        L_0x076c:
             r3 = 13
-            if (r2 != r3) goto L_0x07d3
-            float r3 = r0.transitionProgress
-            r9 = r3
-            goto L_0x07da
-        L_0x07d3:
+            if (r2 != r3) goto L_0x0773
+            float r4 = r0.transitionProgress
+            goto L_0x077a
+        L_0x0773:
             float r3 = r0.transitionProgress
             r4 = 1065353216(0x3var_, float:1.0)
             float r3 = r4 - r3
-            r9 = r3
-        L_0x07da:
+            r4 = r3
+        L_0x077a:
             android.graphics.Paint r3 = r0.paint
-            if (r1 != r2) goto L_0x07e1
+            if (r1 != r2) goto L_0x0781
             r2 = 255(0xff, float:3.57E-43)
-            goto L_0x07e4
-        L_0x07e1:
-            float r1 = r9 * r23
+            goto L_0x0784
+        L_0x0781:
+            float r1 = r4 * r23
             int r2 = (int) r1
-        L_0x07e4:
+        L_0x0784:
             r3.setAlpha(r2)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r20)
-            int r13 = r11 + r1
+            org.telegram.messenger.AndroidUtilities.dp(r21)
             r1 = 1077936128(0x40400000, float:3.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r14 = r10 - r1
+            org.telegram.messenger.AndroidUtilities.dp(r1)
             int r1 = r0.currentIcon
             int r2 = r0.nextIcon
-            if (r1 == r2) goto L_0x0803
-            r43.save()
-            float r1 = (float) r10
-            float r2 = (float) r11
-            r7.scale(r9, r9, r1, r2)
-        L_0x0803:
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r20)
+            if (r1 == r2) goto L_0x079d
+            r34.save()
+            float r1 = (float) r11
+            float r2 = (float) r12
+            r7.scale(r4, r4, r1, r2)
+        L_0x079d:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
             float r1 = (float) r1
             float r2 = r0.scale
-            float r21 = r1 * r2
-            float r1 = (float) r10
-            float r2 = r1 - r21
-            float r1 = (float) r11
-            float r3 = r1 - r21
-            float r1 = (float) r10
-            float r4 = r1 + r21
-            float r1 = (float) r11
-            float r5 = r1 + r21
+            float r1 = r1 * r2
+            float r2 = (float) r11
+            float r9 = r2 - r1
+            float r3 = (float) r12
+            float r25 = r3 - r1
+            float r26 = r2 + r1
+            float r27 = r3 + r1
             android.graphics.Paint r6 = r0.paint
-            r1 = r43
+            r1 = r34
+            r2 = r9
+            r3 = r25
+            r4 = r26
+            r5 = r27
             r1.drawLine(r2, r3, r4, r5, r6)
-            float r1 = (float) r10
-            float r2 = r1 + r21
-            float r1 = (float) r11
-            float r3 = r1 - r21
-            float r1 = (float) r10
-            float r4 = r1 - r21
-            float r1 = (float) r11
-            float r5 = r1 + r21
             android.graphics.Paint r6 = r0.paint
-            r1 = r43
+            r2 = r26
+            r4 = r9
             r1.drawLine(r2, r3, r4, r5, r6)
             int r1 = r0.currentIcon
             int r2 = r0.nextIcon
-            if (r1 == r2) goto L_0x083b
-            r43.restore()
-        L_0x083b:
+            if (r1 == r2) goto L_0x07cf
+            r34.restore()
+        L_0x07cf:
             int r1 = r0.currentIcon
             r2 = 13
-            if (r1 == r2) goto L_0x0845
+            if (r1 == r2) goto L_0x07d9
             int r1 = r0.nextIcon
-            if (r1 != r2) goto L_0x08c3
-        L_0x0845:
+            if (r1 != r2) goto L_0x0855
+        L_0x07d9:
             r1 = 0
             r0.applyShaderMatrix(r1)
             int r1 = r0.currentIcon
-            int r2 = r0.nextIcon
-            if (r1 != r2) goto L_0x0852
-            r1 = 1065353216(0x3var_, float:1.0)
-            goto L_0x085f
-        L_0x0852:
-            r1 = 13
-            if (r2 != r1) goto L_0x0859
-            float r1 = r0.transitionProgress
-            goto L_0x085f
-        L_0x0859:
+            int r3 = r0.nextIcon
+            if (r1 != r3) goto L_0x07e6
+            r4 = 1065353216(0x3var_, float:1.0)
+            goto L_0x07f1
+        L_0x07e6:
+            if (r3 != r2) goto L_0x07eb
+            float r4 = r0.transitionProgress
+            goto L_0x07f1
+        L_0x07eb:
             float r1 = r0.transitionProgress
             r2 = 1065353216(0x3var_, float:1.0)
-            float r1 = r2 - r1
-        L_0x085f:
-            android.text.TextPaint r2 = r0.textPaint
-            float r3 = r1 * r23
-            int r3 = (int) r3
-            r2.setAlpha(r3)
-            r2 = 1084227584(0x40a00000, float:5.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r2 = r2 + r11
-            int r3 = r0.percentStringWidth
-            r4 = 2
-            int r3 = r3 / r4
-            int r3 = r10 - r3
-            int r4 = r0.currentIcon
+            float r4 = r2 - r1
+        L_0x07f1:
+            android.text.TextPaint r1 = r0.textPaint
+            float r2 = r4 * r23
+            int r2 = (int) r2
+            r1.setAlpha(r2)
+            r1 = 1084227584(0x40a00000, float:5.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = r1 + r12
+            int r2 = r0.percentStringWidth
+            r3 = 2
+            int r2 = r2 / r3
+            int r2 = r11 - r2
+            int r3 = r0.currentIcon
             int r5 = r0.nextIcon
-            if (r4 == r5) goto L_0x0882
-            r43.save()
-            float r4 = (float) r10
-            float r5 = (float) r11
-            r7.scale(r1, r1, r4, r5)
-        L_0x0882:
-            float r4 = r0.animatedDownloadProgress
-            float r4 = r4 * r18
-            int r4 = (int) r4
-            java.lang.String r5 = r0.percentString
-            if (r5 == 0) goto L_0x088f
-            int r5 = r0.lastPercent
-            if (r4 == r5) goto L_0x08b1
-        L_0x088f:
-            r0.lastPercent = r4
-            r5 = 1
-            java.lang.Object[] r6 = new java.lang.Object[r5]
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r4)
-            r9 = 0
-            r6[r9] = r5
-            java.lang.String r5 = "%d%%"
-            java.lang.String r5 = java.lang.String.format(r5, r6)
-            r0.percentString = r5
-            android.text.TextPaint r6 = r0.textPaint
-            float r5 = r6.measureText(r5)
-            double r5 = (double) r5
-            double r5 = java.lang.Math.ceil(r5)
-            int r5 = (int) r5
-            r0.percentStringWidth = r5
-        L_0x08b1:
-            java.lang.String r5 = r0.percentString
-            float r6 = (float) r3
-            float r9 = (float) r2
-            android.text.TextPaint r13 = r0.textPaint
-            r7.drawText(r5, r6, r9, r13)
-            int r5 = r0.currentIcon
-            int r6 = r0.nextIcon
-            if (r5 == r6) goto L_0x08c3
-            r43.restore()
-        L_0x08c3:
+            if (r3 == r5) goto L_0x0814
+            r34.save()
+            float r3 = (float) r11
+            float r5 = (float) r12
+            r7.scale(r4, r4, r3, r5)
+        L_0x0814:
+            float r3 = r0.animatedDownloadProgress
+            float r3 = r3 * r18
+            int r3 = (int) r3
+            java.lang.String r4 = r0.percentString
+            if (r4 == 0) goto L_0x0821
+            int r4 = r0.lastPercent
+            if (r3 == r4) goto L_0x0843
+        L_0x0821:
+            r0.lastPercent = r3
+            r4 = 1
+            java.lang.Object[] r5 = new java.lang.Object[r4]
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
+            r4 = 0
+            r5[r4] = r3
+            java.lang.String r3 = "%d%%"
+            java.lang.String r3 = java.lang.String.format(r3, r5)
+            r0.percentString = r3
+            android.text.TextPaint r4 = r0.textPaint
+            float r3 = r4.measureText(r3)
+            double r3 = (double) r3
+            double r3 = java.lang.Math.ceil(r3)
+            int r3 = (int) r3
+            r0.percentStringWidth = r3
+        L_0x0843:
+            java.lang.String r3 = r0.percentString
+            float r2 = (float) r2
+            float r1 = (float) r1
+            android.text.TextPaint r4 = r0.textPaint
+            r7.drawText(r3, r2, r1, r4)
             int r1 = r0.currentIcon
-            if (r1 == 0) goto L_0x08d5
+            int r2 = r0.nextIcon
+            if (r1 == r2) goto L_0x0855
+            r34.restore()
+        L_0x0855:
+            int r1 = r0.currentIcon
             r2 = 1
-            if (r1 == r2) goto L_0x08d5
+            if (r1 == 0) goto L_0x0867
+            if (r1 == r2) goto L_0x0867
             int r3 = r0.nextIcon
-            if (r3 == 0) goto L_0x08d5
-            if (r3 != r2) goto L_0x08d1
-            goto L_0x08d5
-        L_0x08d1:
+            if (r3 == 0) goto L_0x0867
+            if (r3 != r2) goto L_0x0863
+            goto L_0x0867
+        L_0x0863:
             r9 = 255(0xff, float:3.57E-43)
-            goto L_0x0a08
-        L_0x08d5:
-            if (r1 != 0) goto L_0x08dd
+            goto L_0x0992
+        L_0x0867:
+            if (r1 != 0) goto L_0x086d
+            int r3 = r0.nextIcon
+            if (r3 == r2) goto L_0x0873
+        L_0x086d:
+            if (r1 != r2) goto L_0x0890
             int r2 = r0.nextIcon
-            r3 = 1
-            if (r2 == r3) goto L_0x08e4
-            goto L_0x08de
-        L_0x08dd:
-            r3 = 1
-        L_0x08de:
-            if (r1 != r3) goto L_0x0900
-            int r2 = r0.nextIcon
-            if (r2 != 0) goto L_0x0900
-        L_0x08e4:
+            if (r2 != 0) goto L_0x0890
+        L_0x0873:
             boolean r2 = r0.animatingTransition
-            if (r2 == 0) goto L_0x08f6
+            if (r2 == 0) goto L_0x0886
             int r2 = r0.nextIcon
-            if (r2 != 0) goto L_0x08f3
+            if (r2 != 0) goto L_0x0882
             float r2 = r0.transitionProgress
             r3 = 1065353216(0x3var_, float:1.0)
-            float r5 = r3 - r2
-            goto L_0x0907
-        L_0x08f3:
-            float r5 = r0.transitionProgress
-            goto L_0x0907
-        L_0x08f6:
+            float r4 = r3 - r2
+            goto L_0x0884
+        L_0x0882:
+            float r4 = r0.transitionProgress
+        L_0x0884:
+            r3 = 1
+            goto L_0x0894
+        L_0x0886:
             int r2 = r0.nextIcon
             r3 = 1
-            if (r2 != r3) goto L_0x08fe
-            r5 = 1065353216(0x3var_, float:1.0)
-            goto L_0x08ff
-        L_0x08fe:
-            r5 = 0
-        L_0x08ff:
-            goto L_0x0907
-        L_0x0900:
-            r2 = 1
-            if (r1 != r2) goto L_0x0906
-            r5 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0907
-        L_0x0906:
-            r5 = 0
-        L_0x0907:
+            if (r2 != r3) goto L_0x088e
+        L_0x088b:
+            r4 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0894
+        L_0x088e:
+            r4 = 0
+            goto L_0x0894
+        L_0x0890:
+            r3 = 1
+            if (r1 != r3) goto L_0x088e
+            goto L_0x088b
+        L_0x0894:
             int r2 = r0.nextIcon
-            if (r2 == 0) goto L_0x090f
-            r3 = 1
-            if (r2 != r3) goto L_0x0914
-            goto L_0x0910
-        L_0x090f:
-            r3 = 1
-        L_0x0910:
-            if (r1 == 0) goto L_0x093a
-            if (r1 == r3) goto L_0x093a
-        L_0x0914:
+            if (r2 == 0) goto L_0x089d
+            if (r2 != r3) goto L_0x089b
+            goto L_0x089d
+        L_0x089b:
             r3 = 4
-            if (r2 != r3) goto L_0x0928
+            goto L_0x08a2
+        L_0x089d:
+            if (r1 == 0) goto L_0x08c6
+            if (r1 == r3) goto L_0x08c6
+            goto L_0x089b
+        L_0x08a2:
+            if (r2 != r3) goto L_0x08b6
             android.graphics.Paint r1 = r0.paint2
             float r2 = r0.transitionProgress
             r3 = 1065353216(0x3var_, float:1.0)
@@ -1718,582 +1606,551 @@ public class MediaActionDrawable extends Drawable {
             float r2 = r2 * r23
             int r2 = (int) r2
             r1.setAlpha(r2)
+        L_0x08b2:
+            r1 = 1
             r9 = 255(0xff, float:3.57E-43)
-            goto L_0x0941
-        L_0x0928:
+            goto L_0x08ce
+        L_0x08b6:
             android.graphics.Paint r3 = r0.paint2
-            if (r1 != r2) goto L_0x092f
+            if (r1 != r2) goto L_0x08bd
             r2 = 255(0xff, float:3.57E-43)
-            goto L_0x0934
-        L_0x092f:
+            goto L_0x08c2
+        L_0x08bd:
             float r1 = r0.transitionProgress
             float r1 = r1 * r23
             int r2 = (int) r1
-        L_0x0934:
+        L_0x08c2:
             r3.setAlpha(r2)
-            r9 = 255(0xff, float:3.57E-43)
-            goto L_0x0941
-        L_0x093a:
+            goto L_0x08b2
+        L_0x08c6:
             android.graphics.Paint r1 = r0.paint2
             r9 = 255(0xff, float:3.57E-43)
             r1.setAlpha(r9)
-        L_0x0941:
             r1 = 1
+        L_0x08ce:
             r0.applyShaderMatrix(r1)
-            r43.save()
+            r34.save()
             int r1 = r8.centerX()
             float r1 = (float) r1
             r2 = 1065353216(0x3var_, float:1.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
             float r3 = (float) r3
-            float r4 = r2 - r5
-            float r3 = r3 * r4
+            float r5 = r2 - r4
+            float r3 = r3 * r5
             float r1 = r1 + r3
             int r2 = r8.centerY()
             float r2 = (float) r2
             r7.translate(r1, r2)
             r1 = 1140457472(0x43fa0000, float:500.0)
-            float r1 = r1 * r5
-            int r2 = r0.currentIcon
-            r3 = 1
-            if (r2 != r3) goto L_0x096d
+            float r4 = r4 * r1
+            int r1 = r0.currentIcon
+            r2 = 1
+            if (r1 != r2) goto L_0x08f9
             r3 = 1119092736(0x42b40000, float:90.0)
-            goto L_0x096e
-        L_0x096d:
+            goto L_0x08fa
+        L_0x08f9:
             r3 = 0
-        L_0x096e:
-            if (r2 != 0) goto L_0x09ac
-            int r4 = r0.nextIcon
-            r6 = 1
-            if (r4 != r6) goto L_0x09ac
-            r2 = 1136656384(0x43CLASSNAME, float:384.0)
-            int r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r2 >= 0) goto L_0x098b
-            r2 = 1119748096(0x42be0000, float:95.0)
-            org.telegram.ui.Components.CubicBezierInterpolator r4 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
-            r6 = 1136656384(0x43CLASSNAME, float:384.0)
-            float r6 = r1 / r6
-            float r4 = r4.getInterpolation(r6)
-            float r4 = r4 * r2
-            r3 = r4
-            goto L_0x09a9
-        L_0x098b:
-            r2 = 1139933184(0x43var_, float:484.0)
-            int r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r2 >= 0) goto L_0x09a6
-            r2 = 1119748096(0x42be0000, float:95.0)
-            r4 = 1084227584(0x40a00000, float:5.0)
-            org.telegram.ui.Components.CubicBezierInterpolator r6 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
-            r13 = 1136656384(0x43CLASSNAME, float:384.0)
-            float r13 = r1 - r13
-            float r13 = r13 / r18
-            float r6 = r6.getInterpolation(r13)
-            float r6 = r6 * r4
-            float r2 = r2 - r6
+        L_0x08fa:
+            if (r1 != 0) goto L_0x0938
+            int r5 = r0.nextIcon
+            if (r5 != r2) goto L_0x0938
+            r1 = 1136656384(0x43CLASSNAME, float:384.0)
+            int r1 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r1 >= 0) goto L_0x0916
+            r1 = 1119748096(0x42be0000, float:95.0)
+            org.telegram.ui.Components.CubicBezierInterpolator r2 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
+            r3 = 1136656384(0x43CLASSNAME, float:384.0)
+            float r3 = r4 / r3
+            float r2 = r2.getInterpolation(r3)
+            float r2 = r2 * r1
             r3 = r2
-            goto L_0x09a9
-        L_0x09a6:
-            r2 = 1119092736(0x42b40000, float:90.0)
-            r3 = r2
-        L_0x09a9:
-            float r1 = r1 + r18
-            goto L_0x09e0
-        L_0x09ac:
-            r4 = 1
-            if (r2 != r4) goto L_0x09e0
-            int r2 = r0.nextIcon
-            if (r2 != 0) goto L_0x09e0
-            int r2 = (r1 > r18 ? 1 : (r1 == r18 ? 0 : -1))
-            if (r2 >= 0) goto L_0x09c4
-            r2 = -1063256064(0xffffffffc0a00000, float:-5.0)
-            org.telegram.ui.Components.CubicBezierInterpolator r4 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
-            float r6 = r1 / r18
-            float r4 = r4.getInterpolation(r6)
-            float r3 = r4 * r2
-            goto L_0x09e0
-        L_0x09c4:
-            r2 = 1139933184(0x43var_, float:484.0)
-            int r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r2 >= 0) goto L_0x09de
-            r2 = -1063256064(0xffffffffc0a00000, float:-5.0)
-            r4 = 1119748096(0x42be0000, float:95.0)
-            org.telegram.ui.Components.CubicBezierInterpolator r6 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
-            float r13 = r1 - r18
-            r14 = 1136656384(0x43CLASSNAME, float:384.0)
-            float r13 = r13 / r14
-            float r6 = r6.getInterpolation(r13)
-            float r6 = r6 * r4
-            float r3 = r6 + r2
-            goto L_0x09e0
-        L_0x09de:
+            goto L_0x0935
+        L_0x0916:
+            r1 = 1139933184(0x43var_, float:484.0)
+            int r1 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r1 >= 0) goto L_0x0931
+            r1 = 1119748096(0x42be0000, float:95.0)
+            r2 = 1084227584(0x40a00000, float:5.0)
+            org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
+            r5 = 1136656384(0x43CLASSNAME, float:384.0)
+            float r5 = r4 - r5
+            float r5 = r5 / r18
+            float r3 = r3.getInterpolation(r5)
+            float r3 = r3 * r2
+            float r1 = r1 - r3
+            r3 = r1
+            goto L_0x0935
+        L_0x0931:
+            r1 = 1119092736(0x42b40000, float:90.0)
             r3 = 1119092736(0x42b40000, float:90.0)
-        L_0x09e0:
+        L_0x0935:
+            float r4 = r4 + r18
+            goto L_0x096a
+        L_0x0938:
+            if (r1 != r2) goto L_0x096a
+            int r1 = r0.nextIcon
+            if (r1 != 0) goto L_0x096a
+            int r1 = (r4 > r18 ? 1 : (r4 == r18 ? 0 : -1))
+            if (r1 >= 0) goto L_0x094f
+            r1 = -1063256064(0xffffffffc0a00000, float:-5.0)
+            org.telegram.ui.Components.CubicBezierInterpolator r2 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
+            float r3 = r4 / r18
+            float r2 = r2.getInterpolation(r3)
+            float r3 = r2 * r1
+            goto L_0x096a
+        L_0x094f:
+            r1 = 1139933184(0x43var_, float:484.0)
+            int r1 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r1 >= 0) goto L_0x0968
+            r1 = -1063256064(0xffffffffc0a00000, float:-5.0)
+            r2 = 1119748096(0x42be0000, float:95.0)
+            org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
+            float r5 = r4 - r18
+            r6 = 1136656384(0x43CLASSNAME, float:384.0)
+            float r5 = r5 / r6
+            float r3 = r3.getInterpolation(r5)
+            float r3 = r3 * r2
+            float r3 = r3 + r1
+            goto L_0x096a
+        L_0x0968:
+            r3 = 1119092736(0x42b40000, float:90.0)
+        L_0x096a:
             r7.rotate(r3)
-            int r2 = r0.currentIcon
-            if (r2 == 0) goto L_0x09ea
-            r4 = 1
-            if (r2 != r4) goto L_0x09ed
-        L_0x09ea:
-            r4 = 4
-            if (r2 != r4) goto L_0x09f0
-        L_0x09ed:
-            r7.scale(r12, r12)
-        L_0x09f0:
-            org.telegram.ui.Components.PathAnimator r2 = org.telegram.ui.ActionBar.Theme.playPauseAnimator
-            android.graphics.Paint r4 = r0.paint2
-            r2.draw(r7, r4, r1)
-            r2 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r4 = 1065353216(0x3var_, float:1.0)
-            r7.scale(r4, r2)
-            org.telegram.ui.Components.PathAnimator r2 = org.telegram.ui.ActionBar.Theme.playPauseAnimator
-            android.graphics.Paint r4 = r0.paint2
-            r2.draw(r7, r4, r1)
-            r43.restore()
-        L_0x0a08:
+            int r1 = r0.currentIcon
+            if (r1 == 0) goto L_0x0974
+            r2 = 1
+            if (r1 != r2) goto L_0x0977
+        L_0x0974:
+            r2 = 4
+            if (r1 != r2) goto L_0x097a
+        L_0x0977:
+            r7.scale(r10, r10)
+        L_0x097a:
+            org.telegram.ui.Components.PathAnimator r1 = org.telegram.ui.ActionBar.Theme.playPauseAnimator
+            android.graphics.Paint r2 = r0.paint2
+            r1.draw(r7, r2, r4)
+            r1 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r2 = 1065353216(0x3var_, float:1.0)
+            r7.scale(r2, r1)
+            org.telegram.ui.Components.PathAnimator r1 = org.telegram.ui.ActionBar.Theme.playPauseAnimator
+            android.graphics.Paint r2 = r0.paint2
+            r1.draw(r7, r2, r4)
+            r34.restore()
+        L_0x0992:
             int r1 = r0.currentIcon
             r2 = 6
-            if (r1 == r2) goto L_0x0a16
+            if (r1 == r2) goto L_0x09a0
             int r1 = r0.nextIcon
-            if (r1 != r2) goto L_0x0a12
-            goto L_0x0a16
-        L_0x0a12:
-            r19 = r8
-            goto L_0x0ad3
-        L_0x0a16:
+            if (r1 != r2) goto L_0x099c
+            goto L_0x09a0
+        L_0x099c:
+            r18 = r10
+            goto L_0x0a5b
+        L_0x09a0:
             r1 = 0
             r0.applyShaderMatrix(r1)
             int r1 = r0.currentIcon
-            if (r1 == r2) goto L_0x0a49
+            if (r1 == r2) goto L_0x09d1
             float r1 = r0.transitionProgress
             int r2 = (r1 > r22 ? 1 : (r1 == r22 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0a3e
+            if (r2 <= 0) goto L_0x09c7
             float r1 = r1 - r22
             float r1 = r1 / r22
             float r2 = r1 / r22
             r3 = 1065353216(0x3var_, float:1.0)
             float r2 = java.lang.Math.min(r3, r2)
-            float r5 = r3 - r2
+            float r4 = r3 - r2
             int r2 = (r1 > r22 ? 1 : (r1 == r22 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0a3b
-            float r2 = r1 - r22
-            float r2 = r2 / r22
-            goto L_0x0a3c
-        L_0x0a3b:
-            r2 = 0
-        L_0x0a3c:
-            r1 = r2
-            goto L_0x0a41
-        L_0x0a3e:
-            r5 = 1065353216(0x3var_, float:1.0)
+            if (r2 <= 0) goto L_0x09c5
+            float r1 = r1 - r22
+            float r1 = r1 / r22
+            goto L_0x09ca
+        L_0x09c5:
             r1 = 0
-        L_0x0a41:
+            goto L_0x09ca
+        L_0x09c7:
+            r1 = 0
+            r4 = 1065353216(0x3var_, float:1.0)
+        L_0x09ca:
             android.graphics.Paint r2 = r0.paint
             r2.setAlpha(r9)
-            r13 = r1
-            r14 = r5
-            goto L_0x0a67
-        L_0x0a49:
-            r5 = 0
+            r8 = r1
+            goto L_0x09ed
+        L_0x09d1:
+            int r1 = r0.nextIcon
+            r2 = 6
+            if (r1 == r2) goto L_0x09e5
+            android.graphics.Paint r1 = r0.paint
+            float r2 = r0.transitionProgress
+            r3 = 1065353216(0x3var_, float:1.0)
+            float r4 = r3 - r2
+            float r4 = r4 * r23
+            int r2 = (int) r4
+            r1.setAlpha(r2)
+            goto L_0x09ea
+        L_0x09e5:
+            android.graphics.Paint r1 = r0.paint
+            r1.setAlpha(r9)
+        L_0x09ea:
+            r4 = 0
+            r8 = 1065353216(0x3var_, float:1.0)
+        L_0x09ed:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
+            int r6 = r12 + r1
+            r1 = 1077936128(0x40400000, float:3.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r5 = r11 - r1
             r1 = 1065353216(0x3var_, float:1.0)
-            int r2 = r0.nextIcon
-            r3 = 6
-            if (r2 == r3) goto L_0x0a60
-            android.graphics.Paint r2 = r0.paint
+            int r2 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r2 >= 0) goto L_0x0a37
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r1 = r5 - r1
+            float r2 = (float) r1
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r1 = r6 - r1
+            float r3 = (float) r1
+            float r1 = (float) r5
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            float r9 = (float) r9
+            float r9 = r9 * r4
+            float r9 = r1 - r9
+            float r1 = (float) r6
+            r18 = r5
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            float r5 = (float) r5
+            float r5 = r5 * r4
+            float r5 = r1 - r5
+            android.graphics.Paint r4 = r0.paint
+            r1 = r34
+            r16 = r4
+            r4 = r9
+            r9 = r18
+            r18 = r10
+            r10 = r6
+            r6 = r16
+            r1.drawLine(r2, r3, r4, r5, r6)
+            goto L_0x0a3b
+        L_0x0a37:
+            r9 = r5
+            r18 = r10
+            r10 = r6
+        L_0x0a3b:
+            r1 = 0
+            int r2 = (r8 > r1 ? 1 : (r8 == r1 ? 0 : -1))
+            if (r2 <= 0) goto L_0x0a5b
+            float r2 = (float) r9
+            float r3 = (float) r10
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r1 = (float) r1
+            float r1 = r1 * r8
+            float r4 = r2 + r1
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r1 = (float) r1
+            float r1 = r1 * r8
+            float r5 = r3 - r1
+            android.graphics.Paint r6 = r0.paint
+            r1 = r34
+            r1.drawLine(r2, r3, r4, r5, r6)
+        L_0x0a5b:
+            if (r15 == 0) goto L_0x0a98
+            if (r15 == r14) goto L_0x0a98
+            int r1 = r15.getIntrinsicWidth()
+            float r1 = (float) r1
+            float r1 = r1 * r13
+            int r1 = (int) r1
+            int r2 = r15.getIntrinsicHeight()
+            float r2 = (float) r2
+            float r2 = r2 * r13
+            int r2 = (int) r2
+            android.graphics.ColorFilter r3 = r0.colorFilter
+            r15.setColorFilter(r3)
+            int r3 = r0.currentIcon
+            int r4 = r0.nextIcon
+            if (r3 != r4) goto L_0x0a7d
+            r3 = 255(0xff, float:3.57E-43)
+            goto L_0x0a86
+        L_0x0a7d:
             float r3 = r0.transitionProgress
             r4 = 1065353216(0x3var_, float:1.0)
             float r3 = r4 - r3
             float r3 = r3 * r23
             int r3 = (int) r3
-            r2.setAlpha(r3)
-            goto L_0x0a65
-        L_0x0a60:
-            android.graphics.Paint r2 = r0.paint
-            r2.setAlpha(r9)
-        L_0x0a65:
-            r13 = r1
-            r14 = r5
-        L_0x0a67:
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r20)
-            int r6 = r11 + r1
-            r1 = 1077936128(0x40400000, float:3.0)
+        L_0x0a86:
+            r15.setAlpha(r3)
+            r3 = 2
+            int r1 = r1 / r3
+            int r4 = r11 - r1
+            int r2 = r2 / r3
+            int r3 = r12 - r2
+            int r1 = r1 + r11
+            int r2 = r2 + r12
+            r15.setBounds(r4, r3, r1, r2)
+            r15.draw(r7)
+        L_0x0a98:
+            if (r14 == 0) goto L_0x0acf
+            int r1 = r14.getIntrinsicWidth()
+            float r1 = (float) r1
+            float r1 = r1 * r18
+            int r1 = (int) r1
+            int r2 = r14.getIntrinsicHeight()
+            float r2 = (float) r2
+            float r2 = r2 * r18
+            int r2 = (int) r2
+            android.graphics.ColorFilter r3 = r0.colorFilter
+            r14.setColorFilter(r3)
+            int r3 = r0.currentIcon
+            int r4 = r0.nextIcon
+            if (r3 != r4) goto L_0x0ab8
+            r3 = 255(0xff, float:3.57E-43)
+            goto L_0x0abd
+        L_0x0ab8:
+            float r3 = r0.transitionProgress
+            float r3 = r3 * r23
+            int r3 = (int) r3
+        L_0x0abd:
+            r14.setAlpha(r3)
+            r3 = 2
+            int r1 = r1 / r3
+            int r4 = r11 - r1
+            int r2 = r2 / r3
+            int r3 = r12 - r2
+            int r1 = r1 + r11
+            int r2 = r2 + r12
+            r14.setBounds(r4, r3, r1, r2)
+            r14.draw(r7)
+        L_0x0acf:
+            r3 = r31
+            r2 = r19
+            if (r3 == 0) goto L_0x0b37
+            if (r3 == r2) goto L_0x0b37
+            r1 = 1103101952(0x41CLASSNAME, float:24.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r5 = r10 - r1
-            r1 = 1065353216(0x3var_, float:1.0)
-            int r2 = (r14 > r1 ? 1 : (r14 == r1 ? 0 : -1))
-            if (r2 >= 0) goto L_0x0aae
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r1 = r5 - r1
-            float r2 = (float) r1
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            int r1 = r6 - r1
-            float r3 = (float) r1
-            float r1 = (float) r5
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            float r4 = (float) r4
-            float r4 = r4 * r14
-            float r4 = r1 - r4
-            float r1 = (float) r6
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r19)
-            float r9 = (float) r9
-            float r9 = r9 * r14
-            float r9 = r1 - r9
-            android.graphics.Paint r1 = r0.paint
-            r18 = r1
-            r1 = r43
-            r19 = r8
-            r8 = r5
-            r5 = r9
-            r9 = r6
-            r6 = r18
-            r1.drawLine(r2, r3, r4, r5, r6)
-            goto L_0x0ab2
-        L_0x0aae:
-            r9 = r6
-            r19 = r8
-            r8 = r5
-        L_0x0ab2:
-            r1 = 0
-            int r2 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0ad3
-            float r2 = (float) r8
-            float r3 = (float) r9
-            float r1 = (float) r8
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r1 = (float) r1
+            float r1 = r1 * r13
+            int r1 = (int) r1
+            r4 = 1103101952(0x41CLASSNAME, float:24.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r4 = (float) r4
             float r4 = r4 * r13
-            float r4 = r4 + r1
-            float r1 = (float) r9
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r17)
-            float r5 = (float) r5
-            float r5 = r5 * r13
-            float r5 = r1 - r5
-            android.graphics.Paint r6 = r0.paint
-            r1 = r43
-            r1.drawLine(r2, r3, r4, r5, r6)
-        L_0x0ad3:
-            if (r15 == 0) goto L_0x0b18
-            r1 = r30
-            if (r15 == r1) goto L_0x0b1a
-            int r2 = r15.getIntrinsicWidth()
-            float r2 = (float) r2
-            float r2 = r2 * r28
-            int r2 = (int) r2
-            int r3 = r15.getIntrinsicHeight()
-            float r3 = (float) r3
-            float r3 = r3 * r28
-            int r3 = (int) r3
-            android.graphics.ColorFilter r4 = r0.colorFilter
-            r15.setColorFilter(r4)
-            int r4 = r0.currentIcon
-            int r5 = r0.nextIcon
-            if (r4 != r5) goto L_0x0af7
-            r4 = 255(0xff, float:3.57E-43)
-            goto L_0x0b00
-        L_0x0af7:
-            float r4 = r0.transitionProgress
-            r5 = 1065353216(0x3var_, float:1.0)
-            float r4 = r5 - r4
-            float r4 = r4 * r23
             int r4 = (int) r4
-        L_0x0b00:
-            r15.setAlpha(r4)
-            int r4 = r2 / 2
-            int r4 = r10 - r4
-            int r5 = r3 / 2
-            int r5 = r11 - r5
-            int r6 = r2 / 2
-            int r6 = r6 + r10
-            int r8 = r3 / 2
-            int r8 = r8 + r11
-            r15.setBounds(r4, r5, r6, r8)
-            r15.draw(r7)
-            goto L_0x0b1a
-        L_0x0b18:
-            r1 = r30
-        L_0x0b1a:
-            if (r1 == 0) goto L_0x0b56
-            int r2 = r1.getIntrinsicWidth()
-            float r2 = (float) r2
-            float r2 = r2 * r12
-            int r2 = (int) r2
-            int r3 = r1.getIntrinsicHeight()
-            float r3 = (float) r3
-            float r3 = r3 * r12
-            int r3 = (int) r3
-            android.graphics.ColorFilter r4 = r0.colorFilter
-            r1.setColorFilter(r4)
-            int r4 = r0.currentIcon
-            int r5 = r0.nextIcon
-            if (r4 != r5) goto L_0x0b3a
-            r4 = 255(0xff, float:3.57E-43)
-            goto L_0x0b3f
-        L_0x0b3a:
-            float r4 = r0.transitionProgress
-            float r4 = r4 * r23
-            int r4 = (int) r4
-        L_0x0b3f:
-            r1.setAlpha(r4)
-            int r4 = r2 / 2
-            int r4 = r10 - r4
-            int r5 = r3 / 2
-            int r5 = r11 - r5
-            int r6 = r2 / 2
-            int r6 = r6 + r10
-            int r8 = r3 / 2
-            int r8 = r8 + r11
-            r1.setBounds(r4, r5, r6, r8)
-            r1.draw(r7)
-        L_0x0b56:
-            if (r29 == 0) goto L_0x0bc0
-            r3 = r27
-            r4 = r29
-            if (r4 == r3) goto L_0x0bc4
-            r2 = 1103101952(0x41CLASSNAME, float:24.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r2 = (float) r2
-            float r2 = r2 * r28
-            int r2 = (int) r2
-            r5 = 1103101952(0x41CLASSNAME, float:24.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r5 = (float) r5
-            float r5 = r5 * r28
-            int r5 = (int) r5
-            android.graphics.Paint r6 = r0.paint2
-            android.graphics.Paint$Style r8 = android.graphics.Paint.Style.FILL_AND_STROKE
-            r6.setStyle(r8)
-            android.graphics.Paint r6 = r0.paint2
-            int r8 = r0.currentIcon
-            int r9 = r0.nextIcon
-            if (r8 != r9) goto L_0x0b84
-            r8 = 255(0xff, float:3.57E-43)
-            goto L_0x0b8d
-        L_0x0b84:
-            float r8 = r0.transitionProgress
-            r9 = 1065353216(0x3var_, float:1.0)
-            float r8 = r9 - r8
-            float r8 = r8 * r23
-            int r8 = (int) r8
-        L_0x0b8d:
-            r6.setAlpha(r8)
-            r6 = 1
-            r0.applyShaderMatrix(r6)
-            r43.save()
-            int r6 = r2 / 2
-            int r6 = r10 - r6
-            float r6 = (float) r6
-            int r8 = r5 / 2
-            int r8 = r11 - r8
-            float r8 = (float) r8
-            r7.translate(r6, r8)
-            r6 = 0
-            r8 = r4[r6]
-            if (r8 == 0) goto L_0x0bb0
-            r8 = r4[r6]
-            android.graphics.Paint r6 = r0.paint2
-            r7.drawPath(r8, r6)
-        L_0x0bb0:
-            r6 = 1
-            r8 = r4[r6]
-            if (r8 == 0) goto L_0x0bbc
-            r8 = r4[r6]
-            android.graphics.Paint r6 = r0.backPaint
-            r7.drawPath(r8, r6)
-        L_0x0bbc:
-            r43.restore()
-            goto L_0x0bc4
-        L_0x0bc0:
-            r3 = r27
-            r4 = r29
-        L_0x0bc4:
-            if (r3 == 0) goto L_0x0CLASSNAME
-            r2 = 1103101952(0x41CLASSNAME, float:24.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            float r2 = (float) r2
-            float r2 = r2 * r12
-            int r2 = (int) r2
-            r5 = 1103101952(0x41CLASSNAME, float:24.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r5 = (float) r5
-            float r5 = r5 * r12
-            int r5 = (int) r5
+            android.graphics.Paint r5 = r0.paint2
+            android.graphics.Paint$Style r6 = android.graphics.Paint.Style.FILL_AND_STROKE
+            r5.setStyle(r6)
+            android.graphics.Paint r5 = r0.paint2
             int r6 = r0.currentIcon
             int r8 = r0.nextIcon
-            if (r6 != r8) goto L_0x0be3
+            if (r6 != r8) goto L_0x0afd
             r6 = 255(0xff, float:3.57E-43)
-            goto L_0x0be8
-        L_0x0be3:
+            goto L_0x0b06
+        L_0x0afd:
             float r6 = r0.transitionProgress
+            r8 = 1065353216(0x3var_, float:1.0)
+            float r6 = r8 - r6
             float r6 = r6 * r23
             int r6 = (int) r6
-        L_0x0be8:
-            android.graphics.Paint r8 = r0.paint2
-            android.graphics.Paint$Style r9 = android.graphics.Paint.Style.FILL_AND_STROKE
-            r8.setStyle(r9)
-            android.graphics.Paint r8 = r0.paint2
-            r8.setAlpha(r6)
-            r8 = 1
-            r0.applyShaderMatrix(r8)
-            r43.save()
-            int r8 = r2 / 2
-            int r8 = r10 - r8
-            float r8 = (float) r8
-            int r9 = r5 / 2
-            int r9 = r11 - r9
-            float r9 = (float) r9
-            r7.translate(r8, r9)
-            r8 = 0
-            r9 = r3[r8]
-            if (r9 == 0) goto L_0x0CLASSNAME
-            r9 = r3[r8]
-            android.graphics.Paint r8 = r0.paint2
-            r7.drawPath(r9, r8)
-        L_0x0CLASSNAME:
-            int r8 = r3.length
-            r9 = 3
-            if (r8 < r9) goto L_0x0CLASSNAME
-            r8 = 2
-            r9 = r3[r8]
-            if (r9 == 0) goto L_0x0CLASSNAME
-            r9 = r3[r8]
-            android.graphics.Paint r8 = r0.paint
-            r7.drawPath(r9, r8)
-        L_0x0CLASSNAME:
-            r8 = 1
-            r9 = r3[r8]
-            if (r9 == 0) goto L_0x0CLASSNAME
-            r8 = 255(0xff, float:3.57E-43)
-            if (r6 == r8) goto L_0x0c4d
-            android.graphics.Paint r8 = r0.backPaint
-            int r8 = r8.getAlpha()
-            android.graphics.Paint r9 = r0.backPaint
-            float r13 = (float) r8
-            float r14 = (float) r6
-            float r14 = r14 / r23
-            float r13 = r13 * r14
-            int r13 = (int) r13
-            r9.setAlpha(r13)
-            r9 = 1
-            r13 = r3[r9]
-            android.graphics.Paint r14 = r0.backPaint
-            r7.drawPath(r13, r14)
-            android.graphics.Paint r13 = r0.backPaint
-            r13.setAlpha(r8)
-            goto L_0x0CLASSNAME
-        L_0x0c4d:
-            r9 = 1
-            r8 = r3[r9]
-            android.graphics.Paint r9 = r0.backPaint
-            r7.drawPath(r8, r9)
-        L_0x0CLASSNAME:
-            r43.restore()
-        L_0x0CLASSNAME:
-            long r5 = java.lang.System.currentTimeMillis()
-            long r8 = r0.lastAnimationTime
-            long r8 = r5 - r8
-            r13 = 17
-            int r2 = (r8 > r13 ? 1 : (r8 == r13 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0CLASSNAME
-            r8 = 17
-        L_0x0CLASSNAME:
-            r0.lastAnimationTime = r5
-            int r2 = r0.currentIcon
-            r13 = 3
-            if (r2 == r13) goto L_0x0CLASSNAME
-            r13 = 14
-            if (r2 == r13) goto L_0x0CLASSNAME
-            r14 = 4
-            if (r2 != r14) goto L_0x0c7a
-            int r14 = r0.nextIcon
-            if (r14 == r13) goto L_0x0CLASSNAME
-        L_0x0c7a:
-            r13 = 10
-            if (r2 == r13) goto L_0x0CLASSNAME
-            r13 = 13
-            if (r2 != r13) goto L_0x0CLASSNAME
-            goto L_0x0CLASSNAME
-        L_0x0CLASSNAME:
-            r30 = r1
-            r27 = r3
-            goto L_0x0ce0
-        L_0x0CLASSNAME:
-            float r2 = r0.downloadRadOffset
-            r13 = 360(0x168, double:1.78E-321)
-            long r13 = r13 * r8
-            float r13 = (float) r13
-            r14 = 1159479296(0x451CLASSNAME, float:2500.0)
-            float r13 = r13 / r14
-            float r2 = r2 + r13
-            r0.downloadRadOffset = r2
-            float r2 = getCircleValue(r2)
-            r0.downloadRadOffset = r2
-            int r2 = r0.nextIcon
-            r13 = 2
-            if (r2 == r13) goto L_0x0cd9
-            float r2 = r0.downloadProgress
-            float r13 = r0.downloadProgressAnimationStart
-            float r14 = r2 - r13
-            r17 = 0
-            int r18 = (r14 > r17 ? 1 : (r14 == r17 ? 0 : -1))
-            if (r18 <= 0) goto L_0x0cd4
-            r30 = r1
-            float r1 = r0.downloadProgressTime
-            r27 = r3
-            float r3 = (float) r8
-            float r1 = r1 + r3
-            r0.downloadProgressTime = r1
-            r3 = 1128792064(0x43480000, float:200.0)
-            int r3 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r3 < 0) goto L_0x0cc5
-            r0.animatedDownloadProgress = r2
-            r0.downloadProgressAnimationStart = r2
+        L_0x0b06:
+            r5.setAlpha(r6)
+            r5 = 1
+            r0.applyShaderMatrix(r5)
+            r34.save()
+            r5 = 2
+            int r1 = r1 / r5
+            int r1 = r11 - r1
+            float r1 = (float) r1
+            int r4 = r4 / r5
+            int r4 = r12 - r4
+            float r4 = (float) r4
+            r7.translate(r1, r4)
             r1 = 0
-            r0.downloadProgressTime = r1
-            goto L_0x0cdd
-        L_0x0cc5:
-            android.view.animation.DecelerateInterpolator r2 = r0.interpolator
-            r3 = 1128792064(0x43480000, float:200.0)
-            float r1 = r1 / r3
-            float r1 = r2.getInterpolation(r1)
-            float r1 = r1 * r14
-            float r13 = r13 + r1
-            r0.animatedDownloadProgress = r13
-            goto L_0x0cdd
-        L_0x0cd4:
-            r30 = r1
-            r27 = r3
-            goto L_0x0cdd
-        L_0x0cd9:
-            r30 = r1
-            r27 = r3
-        L_0x0cdd:
-            r42.invalidateSelf()
-        L_0x0ce0:
+            r4 = r3[r1]
+            if (r4 == 0) goto L_0x0b28
+            r4 = r3[r1]
+            android.graphics.Paint r1 = r0.paint2
+            r7.drawPath(r4, r1)
+        L_0x0b28:
+            r1 = 1
+            r4 = r3[r1]
+            if (r4 == 0) goto L_0x0b34
+            r3 = r3[r1]
+            android.graphics.Paint r1 = r0.backPaint
+            r7.drawPath(r3, r1)
+        L_0x0b34:
+            r34.restore()
+        L_0x0b37:
+            if (r2 == 0) goto L_0x0bc8
+            r1 = 1103101952(0x41CLASSNAME, float:24.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            float r1 = r1 * r18
+            int r1 = (int) r1
+            r3 = 1103101952(0x41CLASSNAME, float:24.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r3 = (float) r3
+            float r3 = r3 * r18
+            int r3 = (int) r3
+            int r4 = r0.currentIcon
+            int r5 = r0.nextIcon
+            if (r4 != r5) goto L_0x0b56
+            r4 = 255(0xff, float:3.57E-43)
+            goto L_0x0b5b
+        L_0x0b56:
+            float r4 = r0.transitionProgress
+            float r4 = r4 * r23
+            int r4 = (int) r4
+        L_0x0b5b:
+            android.graphics.Paint r5 = r0.paint2
+            android.graphics.Paint$Style r6 = android.graphics.Paint.Style.FILL_AND_STROKE
+            r5.setStyle(r6)
+            android.graphics.Paint r5 = r0.paint2
+            r5.setAlpha(r4)
+            r5 = 1
+            r0.applyShaderMatrix(r5)
+            r34.save()
+            r5 = 2
+            int r1 = r1 / r5
+            int r11 = r11 - r1
+            float r1 = (float) r11
+            int r3 = r3 / r5
+            int r12 = r12 - r3
+            float r3 = (float) r12
+            r7.translate(r1, r3)
+            r1 = 0
+            r3 = r2[r1]
+            if (r3 == 0) goto L_0x0b84
+            r3 = r2[r1]
+            android.graphics.Paint r1 = r0.paint2
+            r7.drawPath(r3, r1)
+        L_0x0b84:
+            int r1 = r2.length
+            r3 = 3
+            if (r1 < r3) goto L_0x0b94
+            r1 = 2
+            r3 = r2[r1]
+            if (r3 == 0) goto L_0x0b94
+            r3 = r2[r1]
+            android.graphics.Paint r1 = r0.paint
+            r7.drawPath(r3, r1)
+        L_0x0b94:
+            r1 = 1
+            r3 = r2[r1]
+            if (r3 == 0) goto L_0x0bc5
+            r1 = 255(0xff, float:3.57E-43)
+            if (r4 == r1) goto L_0x0bbd
+            android.graphics.Paint r1 = r0.backPaint
+            int r1 = r1.getAlpha()
+            android.graphics.Paint r3 = r0.backPaint
+            float r5 = (float) r1
+            float r4 = (float) r4
+            float r4 = r4 / r23
+            float r5 = r5 * r4
+            int r4 = (int) r5
+            r3.setAlpha(r4)
+            r3 = 1
+            r2 = r2[r3]
+            android.graphics.Paint r4 = r0.backPaint
+            r7.drawPath(r2, r4)
+            android.graphics.Paint r2 = r0.backPaint
+            r2.setAlpha(r1)
+            goto L_0x0bc5
+        L_0x0bbd:
+            r3 = 1
+            r1 = r2[r3]
+            android.graphics.Paint r2 = r0.backPaint
+            r7.drawPath(r1, r2)
+        L_0x0bc5:
+            r34.restore()
+        L_0x0bc8:
+            long r1 = java.lang.System.currentTimeMillis()
+            long r3 = r0.lastAnimationTime
+            long r3 = r1 - r3
+            r5 = 17
+            int r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r8 <= 0) goto L_0x0bd8
+            r3 = 17
+        L_0x0bd8:
+            r0.lastAnimationTime = r1
+            int r1 = r0.currentIcon
+            r2 = 3
+            if (r1 == r2) goto L_0x0bf2
+            r2 = 14
+            if (r1 == r2) goto L_0x0bf2
+            r5 = 4
+            if (r1 != r5) goto L_0x0bea
+            int r5 = r0.nextIcon
+            if (r5 == r2) goto L_0x0bf2
+        L_0x0bea:
+            r2 = 10
+            if (r1 == r2) goto L_0x0bf2
+            r2 = 13
+            if (r1 != r2) goto L_0x0c3a
+        L_0x0bf2:
+            float r1 = r0.downloadRadOffset
+            r5 = 360(0x168, double:1.78E-321)
+            long r5 = r5 * r3
+            float r2 = (float) r5
+            r5 = 1159479296(0x451CLASSNAME, float:2500.0)
+            float r2 = r2 / r5
+            float r1 = r1 + r2
+            r0.downloadRadOffset = r1
+            float r1 = getCircleValue(r1)
+            r0.downloadRadOffset = r1
+            int r1 = r0.nextIcon
+            r2 = 2
+            if (r1 == r2) goto L_0x0CLASSNAME
+            float r1 = r0.downloadProgress
+            float r2 = r0.downloadProgressAnimationStart
+            float r5 = r1 - r2
+            r6 = 0
+            int r8 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
+            if (r8 <= 0) goto L_0x0CLASSNAME
+            float r8 = r0.downloadProgressTime
+            float r9 = (float) r3
+            float r8 = r8 + r9
+            r0.downloadProgressTime = r8
+            r9 = 1128792064(0x43480000, float:200.0)
+            int r9 = (r8 > r9 ? 1 : (r8 == r9 ? 0 : -1))
+            if (r9 < 0) goto L_0x0CLASSNAME
+            r0.animatedDownloadProgress = r1
+            r0.downloadProgressAnimationStart = r1
+            r0.downloadProgressTime = r6
+            goto L_0x0CLASSNAME
+        L_0x0CLASSNAME:
+            android.view.animation.DecelerateInterpolator r1 = r0.interpolator
+            r6 = 1128792064(0x43480000, float:200.0)
+            float r8 = r8 / r6
+            float r1 = r1.getInterpolation(r8)
+            float r5 = r5 * r1
+            float r2 = r2 + r5
+            r0.animatedDownloadProgress = r2
+        L_0x0CLASSNAME:
+            r33.invalidateSelf()
+        L_0x0c3a:
             boolean r1 = r0.animatingTransition
-            if (r1 == 0) goto L_0x0d03
+            if (r1 == 0) goto L_0x0c5d
             float r1 = r0.transitionProgress
             r2 = 1065353216(0x3var_, float:1.0)
-            int r3 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r3 >= 0) goto L_0x0d03
-            float r3 = (float) r8
-            float r13 = r0.transitionAnimationTime
-            float r3 = r3 / r13
+            int r5 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+            if (r5 >= 0) goto L_0x0c5d
+            float r3 = (float) r3
+            float r4 = r0.transitionAnimationTime
+            float r3 = r3 / r4
             float r1 = r1 + r3
             r0.transitionProgress = r1
             int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r1 < 0) goto L_0x0d00
+            if (r1 < 0) goto L_0x0c5a
             int r1 = r0.nextIcon
             r0.currentIcon = r1
             r0.transitionProgress = r2
             r1 = 0
             r0.animatingTransition = r1
-        L_0x0d00:
-            r42.invalidateSelf()
-        L_0x0d03:
-            r1 = r35
+        L_0x0c5a:
+            r33.invalidateSelf()
+        L_0x0c5d:
+            r1 = r20
             r2 = 1
-            if (r1 < r2) goto L_0x0d0b
+            if (r1 < r2) goto L_0x0CLASSNAME
             r7.restoreToCount(r1)
-        L_0x0d0b:
+        L_0x0CLASSNAME:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MediaActionDrawable.draw(android.graphics.Canvas):void");

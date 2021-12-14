@@ -10,6 +10,6 @@ public final /* synthetic */ class SearchCounterView$$ExternalSyntheticLambda0 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.m2551lambda$setCount$0$orgtelegramuiComponentsSearchCounterView(valueAnimator);
+        this.f$0.lambda$setCount$0(valueAnimator);
     }
 }

@@ -1,21 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import java.util.ArrayList;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda192 implements RequestDelegate {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda192 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
+    public final /* synthetic */ boolean f$1;
     public final /* synthetic */ long f$2;
+    public final /* synthetic */ ArrayList f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda192(MessagesController messagesController, long j, long j2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda192(MessagesController messagesController, boolean z, long j, ArrayList arrayList) {
         this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = j2;
+        this.f$1 = z;
+        this.f$2 = j;
+        this.f$3 = arrayList;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m271x6var_aedf(this.f$1, this.f$2, tLObject, tL_error);
+    public final void run() {
+        this.f$0.lambda$processUpdates$285(this.f$1, this.f$2, this.f$3);
     }
 }

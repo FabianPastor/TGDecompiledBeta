@@ -14,6 +14,6 @@ public final /* synthetic */ class RecyclerListView$RecyclerListViewItemClickLis
     }
 
     public final void run() {
-        this.f$0.m2536x7396bf8f(this.f$1, this.f$2);
+        this.f$0.lambda$onInterceptTouchEvent$0(this.f$1, this.f$2);
     }
 }

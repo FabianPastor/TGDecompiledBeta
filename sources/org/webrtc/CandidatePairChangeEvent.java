@@ -7,11 +7,12 @@ public final class CandidatePairChangeEvent {
     public final String reason;
     public final IceCandidate remote;
 
-    CandidatePairChangeEvent(IceCandidate local2, IceCandidate remote2, int lastDataReceivedMs2, String reason2, int estimatedDisconnectedTimeMs2) {
-        this.local = local2;
-        this.remote = remote2;
-        this.lastDataReceivedMs = lastDataReceivedMs2;
-        this.reason = reason2;
-        this.estimatedDisconnectedTimeMs = estimatedDisconnectedTimeMs2;
+    @CalledByNative
+    CandidatePairChangeEvent(IceCandidate iceCandidate, IceCandidate iceCandidate2, int i, String str, int i2) {
+        this.local = iceCandidate;
+        this.remote = iceCandidate2;
+        this.lastDataReceivedMs = i;
+        this.reason = str;
+        this.estimatedDisconnectedTimeMs = i2;
     }
 }

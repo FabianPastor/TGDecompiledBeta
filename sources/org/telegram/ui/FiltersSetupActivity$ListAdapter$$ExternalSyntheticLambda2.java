@@ -11,6 +11,6 @@ public final /* synthetic */ class FiltersSetupActivity$ListAdapter$$ExternalSyn
     }
 
     public final void onClick(View view) {
-        this.f$0.m2942x3b9cc8fe(view);
+        this.f$0.lambda$onCreateViewHolder$5(view);
     }
 }

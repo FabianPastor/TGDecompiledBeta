@@ -18,6 +18,6 @@ public final /* synthetic */ class PollVotesAlert$$ExternalSyntheticLambda0 impl
     }
 
     public final void run() {
-        this.f$0.m2508lambda$new$2$orgtelegramuiComponentsPollVotesAlert(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$new$2(this.f$1, this.f$2, this.f$3);
     }
 }

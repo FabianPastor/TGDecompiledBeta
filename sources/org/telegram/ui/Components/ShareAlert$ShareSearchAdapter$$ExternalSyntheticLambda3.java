@@ -14,6 +14,6 @@ public final /* synthetic */ class ShareAlert$ShareSearchAdapter$$ExternalSynthe
     }
 
     public final void run() {
-        this.f$0.m2570xba04a7a2(this.f$1, this.f$2);
+        this.f$0.lambda$searchDialogs$4(this.f$1, this.f$2);
     }
 }

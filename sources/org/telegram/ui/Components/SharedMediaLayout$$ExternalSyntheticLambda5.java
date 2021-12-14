@@ -1,15 +1,14 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.FragmentContextView;
+import android.view.animation.Interpolator;
 
-public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda5 implements FragmentContextView.FragmentContextViewDelegate {
-    public final /* synthetic */ SharedMediaLayout f$0;
+public final /* synthetic */ class SharedMediaLayout$$ExternalSyntheticLambda5 implements Interpolator {
+    public static final /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda5 INSTANCE = new SharedMediaLayout$$ExternalSyntheticLambda5();
 
-    public /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda5(SharedMediaLayout sharedMediaLayout) {
-        this.f$0 = sharedMediaLayout;
+    private /* synthetic */ SharedMediaLayout$$ExternalSyntheticLambda5() {
     }
 
-    public final void onAnimation(boolean z, boolean z2) {
-        this.f$0.m2585lambda$new$9$orgtelegramuiComponentsSharedMediaLayout(z, z2);
+    public final float getInterpolation(float f) {
+        return SharedMediaLayout.lambda$static$1(f);
     }
 }

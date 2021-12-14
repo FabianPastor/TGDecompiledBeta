@@ -1,22 +1,15 @@
 package org.telegram.ui;
 
-import java.io.File;
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.view.View;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda14 implements Runnable {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda14 implements View.OnLongClickListener {
     public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ AlertDialog f$1;
-    public final /* synthetic */ boolean[] f$2;
-    public final /* synthetic */ File f$3;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda14(ProfileActivity profileActivity, AlertDialog alertDialog, boolean[] zArr, File file) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda14(ProfileActivity profileActivity) {
         this.f$0 = profileActivity;
-        this.f$1 = alertDialog;
-        this.f$2 = zArr;
-        this.f$3 = file;
     }
 
-    public final void run() {
-        this.f$0.m3717lambda$sendLogs$32$orgtelegramuiProfileActivity(this.f$1, this.f$2, this.f$3);
+    public final boolean onLongClick(View view) {
+        return this.f$0.lambda$createView$11(view);
     }
 }

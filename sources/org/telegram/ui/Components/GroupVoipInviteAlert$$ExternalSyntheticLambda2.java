@@ -13,6 +13,6 @@ public final /* synthetic */ class GroupVoipInviteAlert$$ExternalSyntheticLambda
     }
 
     public final int compare(Object obj, Object obj2) {
-        return this.f$0.m2326x98fvar_a(this.f$1, (TLObject) obj, (TLObject) obj2);
+        return this.f$0.lambda$loadChatParticipants$2(this.f$1, (TLObject) obj, (TLObject) obj2);
     }
 }

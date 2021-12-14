@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoPickerActivity$5$$ExternalSyntheticLambd
     }
 
     public final void run() {
-        this.f$0.m3553lambda$onMeasure$0$orgtelegramuiPhotoPickerActivity$5();
+        this.f$0.lambda$onMeasure$0();
     }
 }

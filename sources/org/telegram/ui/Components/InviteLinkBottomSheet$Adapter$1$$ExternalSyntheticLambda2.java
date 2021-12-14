@@ -2,7 +2,7 @@ package org.telegram.ui.Components;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.Components.InviteLinkBottomSheet;
 
 public final /* synthetic */ class InviteLinkBottomSheet$Adapter$1$$ExternalSyntheticLambda2 implements RequestDelegate {
@@ -12,7 +12,7 @@ public final /* synthetic */ class InviteLinkBottomSheet$Adapter$1$$ExternalSynt
         this.f$0 = r1;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m2365x3var_(tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$revokeLink$1(tLObject, tLRPC$TL_error);
     }
 }

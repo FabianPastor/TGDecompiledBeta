@@ -1,21 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import androidx.collection.LongSparseArray;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda85 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ long f$1;
+    public final /* synthetic */ LongSparseArray f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda85(MessagesStorage messagesStorage, boolean z, long j, ArrayList arrayList) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda85(MessagesStorage messagesStorage, long j, LongSparseArray longSparseArray) {
         this.f$0 = messagesStorage;
-        this.f$1 = z;
-        this.f$2 = j;
-        this.f$3 = arrayList;
+        this.f$1 = j;
+        this.f$2 = longSparseArray;
     }
 
     public final void run() {
-        this.f$0.m926xa632eff0(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$putChannelAdmins$85(this.f$1, this.f$2);
     }
 }

@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda94 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC.updates_Difference f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda94(MessagesController messagesController, TLRPC.updates_Difference updates_difference, int i, int i2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda94(MessagesController messagesController, ArrayList arrayList) {
         this.f$0 = messagesController;
-        this.f$1 = updates_difference;
-        this.f$2 = i;
-        this.f$3 = i2;
+        this.f$1 = arrayList;
     }
 
     public final void run() {
-        this.f$0.m213x65ababa8(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$generateJoinMessage$276(this.f$1);
     }
 }

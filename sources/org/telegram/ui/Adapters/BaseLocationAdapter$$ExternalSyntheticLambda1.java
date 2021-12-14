@@ -14,6 +14,6 @@ public final /* synthetic */ class BaseLocationAdapter$$ExternalSyntheticLambda1
     }
 
     public final void run() {
-        this.f$0.m1348xdd58fbb0(this.f$1, this.f$2);
+        this.f$0.lambda$searchDelayed$0(this.f$1, this.f$2);
     }
 }

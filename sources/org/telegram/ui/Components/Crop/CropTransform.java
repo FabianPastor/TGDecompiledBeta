@@ -15,32 +15,32 @@ public class CropTransform {
     private float minScale;
     private float trueCropScale;
 
-    public void setViewTransform(boolean set, float px, float py, float rotate, int orientation, float scale, float cs, float ms, float pw, float ph, float cx, float cy, boolean mirrored) {
-        this.hasTransform = set;
-        this.cropPx = px;
-        this.cropPy = py;
-        this.cropScale = scale;
-        this.cropRotation = rotate;
-        this.cropOrientation = orientation;
-        while (true) {
-            int i = this.cropOrientation;
-            if (i >= 0) {
-                break;
-            }
-            this.cropOrientation = i + 360;
-        }
+    public void setViewTransform(boolean z, float f, float f2, float f3, int i, float f4, float f5, float f6, float f7, float f8, float f9, float var_, boolean z2) {
+        this.hasTransform = z;
+        this.cropPx = f;
+        this.cropPy = f2;
+        this.cropScale = f4;
+        this.cropRotation = f3;
+        this.cropOrientation = i;
         while (true) {
             int i2 = this.cropOrientation;
-            if (i2 >= 360) {
-                this.cropOrientation = i2 - 360;
+            if (i2 >= 0) {
+                break;
+            }
+            this.cropOrientation = i2 + 360;
+        }
+        while (true) {
+            int i3 = this.cropOrientation;
+            if (i3 >= 360) {
+                this.cropOrientation = i3 - 360;
             } else {
-                this.cropPw = pw;
-                this.cropPh = ph;
-                this.cropAreaX = cx;
-                this.cropAreaY = cy;
-                this.trueCropScale = cs;
-                this.minScale = ms;
-                this.isMirrored = mirrored;
+                this.cropPw = f7;
+                this.cropPh = f8;
+                this.cropAreaX = f9;
+                this.cropAreaY = var_;
+                this.trueCropScale = f5;
+                this.minScale = f6;
+                this.isMirrored = z2;
                 return;
             }
         }

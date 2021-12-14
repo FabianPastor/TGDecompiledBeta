@@ -1,23 +1,16 @@
 package org.telegram.ui;
 
-import j$.util.function.Function;
-import org.telegram.ui.CountrySelectActivity;
+import android.view.View;
+import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda2 implements Function {
-    public static final /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda2 INSTANCE = new LoginActivity$PhoneView$$ExternalSyntheticLambda2();
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda2 implements View.OnClickListener {
+    public final /* synthetic */ LoginActivity.PhoneView f$0;
 
-    private /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda2() {
+    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda2(LoginActivity.PhoneView phoneView) {
+        this.f$0 = phoneView;
     }
 
-    public /* synthetic */ Function andThen(Function function) {
-        return Function.CC.$default$andThen(this, function);
-    }
-
-    public final Object apply(Object obj) {
-        return ((CountrySelectActivity.Country) obj).name;
-    }
-
-    public /* synthetic */ Function compose(Function function) {
-        return Function.CC.$default$compose(this, function);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$5(view);
     }
 }

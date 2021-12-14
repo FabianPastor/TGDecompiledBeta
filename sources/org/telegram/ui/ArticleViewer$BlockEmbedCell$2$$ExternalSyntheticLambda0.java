@@ -10,6 +10,6 @@ public final /* synthetic */ class ArticleViewer$BlockEmbedCell$2$$ExternalSynth
     }
 
     public final void run() {
-        this.f$0.m1454x5355var_();
+        this.f$0.lambda$onShowCustomView$0();
     }
 }

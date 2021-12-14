@@ -19,12 +19,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.SvgHelper;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Photo;
+import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$TL_wallPaper;
+import org.telegram.tgnet.TLRPC$WallPaperSettings;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
@@ -47,10 +51,18 @@ public class WallpaperCell extends FrameLayout {
     private int spanCount = 3;
     private WallpaperView[] wallpaperViews = new WallpaperView[5];
 
+    /* access modifiers changed from: protected */
+    public void onWallpaperClick(Object obj, int i) {
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean onWallpaperLongClick(Object obj, int i) {
+        return false;
+    }
+
     private class WallpaperView extends FrameLayout {
         /* access modifiers changed from: private */
         public AnimatorSet animator;
-        private AnimatorSet animatorSet;
         private CheckBox checkBox;
         /* access modifiers changed from: private */
         public Object currentWallpaper;
@@ -77,10 +89,10 @@ public class WallpaperCell extends FrameLayout {
                     }
                     if (WallpaperView.this.isSelected) {
                         WallpaperCell.this.circlePaint.setColor(Theme.serviceMessageColorBackup);
-                        int cx = getMeasuredWidth() / 2;
-                        int cy = getMeasuredHeight() / 2;
-                        canvas.drawCircle((float) cx, (float) cy, (float) AndroidUtilities.dp(20.0f), WallpaperCell.this.circlePaint);
-                        WallpaperCell.this.checkDrawable.setBounds(cx - (WallpaperCell.this.checkDrawable.getIntrinsicWidth() / 2), cy - (WallpaperCell.this.checkDrawable.getIntrinsicHeight() / 2), (WallpaperCell.this.checkDrawable.getIntrinsicWidth() / 2) + cx, (WallpaperCell.this.checkDrawable.getIntrinsicHeight() / 2) + cy);
+                        int measuredWidth = getMeasuredWidth() / 2;
+                        int measuredHeight = getMeasuredHeight() / 2;
+                        canvas.drawCircle((float) measuredWidth, (float) measuredHeight, (float) AndroidUtilities.dp(20.0f), WallpaperCell.this.circlePaint);
+                        WallpaperCell.this.checkDrawable.setBounds(measuredWidth - (WallpaperCell.this.checkDrawable.getIntrinsicWidth() / 2), measuredHeight - (WallpaperCell.this.checkDrawable.getIntrinsicHeight() / 2), measuredWidth + (WallpaperCell.this.checkDrawable.getIntrinsicWidth() / 2), measuredHeight + (WallpaperCell.this.checkDrawable.getIntrinsicHeight() / 2));
                         WallpaperCell.this.checkDrawable.draw(canvas);
                     }
                 }
@@ -103,38 +115,41 @@ public class WallpaperCell extends FrameLayout {
             addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, 53, 0.0f, 2.0f, 2.0f, 0.0f));
         }
 
-        public boolean onTouchEvent(MotionEvent event) {
+        public boolean onTouchEvent(MotionEvent motionEvent) {
             if (Build.VERSION.SDK_INT >= 21) {
-                this.selector.drawableHotspotChanged(event.getX(), event.getY());
+                this.selector.drawableHotspotChanged(motionEvent.getX(), motionEvent.getY());
             }
-            return super.onTouchEvent(event);
+            return super.onTouchEvent(motionEvent);
         }
 
-        public void setWallpaper(Object object, Object selectedWallpaper, Drawable themedWallpaper, boolean themed) {
-            int patternColor;
-            int patternColor2;
-            Object obj = object;
-            this.currentWallpaper = obj;
+        public void setWallpaper(Object obj, Object obj2, Drawable drawable, boolean z) {
+            int i;
+            int i2;
+            Object obj3 = obj;
+            this.currentWallpaper = obj3;
             this.imageView.setVisibility(0);
             this.imageView2.setVisibility(4);
+            TLRPC$PhotoSize tLRPC$PhotoSize = null;
             this.imageView.setBackgroundDrawable((Drawable) null);
             this.imageView.getImageReceiver().setColorFilter((ColorFilter) null);
             this.imageView.getImageReceiver().setAlpha(1.0f);
             this.imageView.getImageReceiver().setBlendMode((Object) null);
             this.imageView.getImageReceiver().setGradientBitmap((Bitmap) null);
-            this.isSelected = obj == selectedWallpaper;
-            if (obj instanceof TLRPC.TL_wallPaper) {
-                TLRPC.TL_wallPaper wallPaper = (TLRPC.TL_wallPaper) obj;
-                TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(wallPaper.document.thumbs, 100);
-                TLRPC.PhotoSize image = FileLoader.getClosestPhotoSizeWithSize(wallPaper.document.thumbs, 320);
-                if (image == thumb) {
-                    image = null;
+            this.isSelected = obj3 == obj2;
+            if (obj3 instanceof TLRPC$TL_wallPaper) {
+                TLRPC$TL_wallPaper tLRPC$TL_wallPaper = (TLRPC$TL_wallPaper) obj3;
+                TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_wallPaper.document.thumbs, 100);
+                TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_wallPaper.document.thumbs, 320);
+                if (closestPhotoSizeWithSize2 != closestPhotoSizeWithSize) {
+                    tLRPC$PhotoSize = closestPhotoSizeWithSize2;
                 }
-                int size = image != null ? image.size : wallPaper.document.size;
-                if (wallPaper.pattern) {
-                    if (wallPaper.settings.third_background_color != 0) {
-                        MotionBackgroundDrawable motionBackgroundDrawable = new MotionBackgroundDrawable(wallPaper.settings.background_color, wallPaper.settings.second_background_color, wallPaper.settings.third_background_color, wallPaper.settings.fourth_background_color, true);
-                        if (wallPaper.settings.intensity >= 0 || !Theme.getActiveTheme().isDark()) {
+                int i3 = tLRPC$PhotoSize != null ? tLRPC$PhotoSize.size : tLRPC$TL_wallPaper.document.size;
+                if (tLRPC$TL_wallPaper.pattern) {
+                    TLRPC$WallPaperSettings tLRPC$WallPaperSettings = tLRPC$TL_wallPaper.settings;
+                    if (tLRPC$WallPaperSettings.third_background_color != 0) {
+                        TLRPC$WallPaperSettings tLRPC$WallPaperSettings2 = tLRPC$TL_wallPaper.settings;
+                        MotionBackgroundDrawable motionBackgroundDrawable = new MotionBackgroundDrawable(tLRPC$WallPaperSettings2.background_color, tLRPC$WallPaperSettings2.second_background_color, tLRPC$WallPaperSettings2.third_background_color, tLRPC$WallPaperSettings2.fourth_background_color, true);
+                        if (tLRPC$TL_wallPaper.settings.intensity >= 0 || !Theme.getActiveTheme().isDark()) {
                             this.imageView.setBackground(motionBackgroundDrawable);
                             if (Build.VERSION.SDK_INT >= 29) {
                                 this.imageView.getImageReceiver().setBlendMode(BlendMode.SOFT_LIGHT);
@@ -142,146 +157,155 @@ public class WallpaperCell extends FrameLayout {
                         } else {
                             this.imageView.getImageReceiver().setGradientBitmap(motionBackgroundDrawable.getBitmap());
                         }
-                        patternColor2 = MotionBackgroundDrawable.getPatternColor(wallPaper.settings.background_color, wallPaper.settings.second_background_color, wallPaper.settings.third_background_color, wallPaper.settings.fourth_background_color);
+                        TLRPC$WallPaperSettings tLRPC$WallPaperSettings3 = tLRPC$TL_wallPaper.settings;
+                        i2 = MotionBackgroundDrawable.getPatternColor(tLRPC$WallPaperSettings3.background_color, tLRPC$WallPaperSettings3.second_background_color, tLRPC$WallPaperSettings3.third_background_color, tLRPC$WallPaperSettings3.fourth_background_color);
                     } else {
-                        this.imageView.setBackgroundColor(Theme.getWallpaperColor(wallPaper.settings.background_color));
-                        patternColor2 = AndroidUtilities.getPatternColor(wallPaper.settings.background_color);
+                        this.imageView.setBackgroundColor(Theme.getWallpaperColor(tLRPC$WallPaperSettings.background_color));
+                        i2 = AndroidUtilities.getPatternColor(tLRPC$TL_wallPaper.settings.background_color);
                     }
-                    if (Build.VERSION.SDK_INT < 29 || wallPaper.settings.third_background_color == 0) {
-                        this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(AndroidUtilities.getPatternColor(patternColor2), PorterDuff.Mode.SRC_IN));
+                    if (Build.VERSION.SDK_INT < 29 || tLRPC$TL_wallPaper.settings.third_background_color == 0) {
+                        this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(AndroidUtilities.getPatternColor(i2), PorterDuff.Mode.SRC_IN));
                     }
-                    if (image != null) {
-                        this.imageView.setImage(ImageLocation.getForDocument(image, wallPaper.document), "100_100", ImageLocation.getForDocument(thumb, wallPaper.document), (String) null, "jpg", size, 1, wallPaper);
+                    if (tLRPC$PhotoSize != null) {
+                        this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), (String) null, "jpg", i3, 1, tLRPC$TL_wallPaper);
                     } else {
-                        this.imageView.setImage(ImageLocation.getForDocument(thumb, wallPaper.document), "100_100", (ImageLocation) null, (String) null, "jpg", size, 1, wallPaper);
+                        this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100", (ImageLocation) null, (String) null, "jpg", i3, 1, tLRPC$TL_wallPaper);
                     }
-                    this.imageView.getImageReceiver().setAlpha(((float) Math.abs(wallPaper.settings.intensity)) / 100.0f);
-                } else if (image != null) {
-                    this.imageView.setImage(ImageLocation.getForDocument(image, wallPaper.document), "100_100", ImageLocation.getForDocument(thumb, wallPaper.document), "100_100_b", "jpg", size, 1, wallPaper);
+                    this.imageView.getImageReceiver().setAlpha(((float) Math.abs(tLRPC$TL_wallPaper.settings.intensity)) / 100.0f);
+                } else if (tLRPC$PhotoSize != null) {
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100_b", "jpg", i3, 1, tLRPC$TL_wallPaper);
                 } else {
-                    this.imageView.setImage(ImageLocation.getForDocument(wallPaper.document), "100_100", ImageLocation.getForDocument(thumb, wallPaper.document), "100_100_b", "jpg", size, 1, wallPaper);
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100_b", "jpg", i3, 1, tLRPC$TL_wallPaper);
                 }
-            } else if (obj instanceof WallpapersListActivity.ColorWallpaper) {
-                WallpapersListActivity.ColorWallpaper wallPaper2 = (WallpapersListActivity.ColorWallpaper) obj;
-                if (wallPaper2.path == null && wallPaper2.pattern == null && !"d".equals(wallPaper2.slug)) {
+            } else if (obj3 instanceof WallpapersListActivity.ColorWallpaper) {
+                WallpapersListActivity.ColorWallpaper colorWallpaper = (WallpapersListActivity.ColorWallpaper) obj3;
+                if (colorWallpaper.path == null && colorWallpaper.pattern == null && !"d".equals(colorWallpaper.slug)) {
                     this.imageView.setImageBitmap((Bitmap) null);
-                    if (wallPaper2.isGradient) {
-                        this.imageView.setBackground(new MotionBackgroundDrawable(wallPaper2.color, wallPaper2.gradientColor1, wallPaper2.gradientColor2, wallPaper2.gradientColor3, true));
-                    } else if (wallPaper2.gradientColor1 != 0) {
-                        this.imageView.setBackground(new GradientDrawable(GradientDrawable.Orientation.BL_TR, new int[]{wallPaper2.color | -16777216, wallPaper2.gradientColor1 | -16777216}));
+                    if (colorWallpaper.isGradient) {
+                        this.imageView.setBackground(new MotionBackgroundDrawable(colorWallpaper.color, colorWallpaper.gradientColor1, colorWallpaper.gradientColor2, colorWallpaper.gradientColor3, true));
+                    } else if (colorWallpaper.gradientColor1 != 0) {
+                        this.imageView.setBackground(new GradientDrawable(GradientDrawable.Orientation.BL_TR, new int[]{colorWallpaper.color | -16777216, colorWallpaper.gradientColor1 | -16777216}));
                     } else {
-                        this.imageView.setBackgroundColor(wallPaper2.color | -16777216);
+                        this.imageView.setBackgroundColor(colorWallpaper.color | -16777216);
                     }
                 } else {
-                    if (wallPaper2.gradientColor2 != 0) {
-                        MotionBackgroundDrawable motionBackgroundDrawable2 = new MotionBackgroundDrawable(wallPaper2.color, wallPaper2.gradientColor1, wallPaper2.gradientColor2, wallPaper2.gradientColor3, true);
-                        if (wallPaper2.intensity >= 0.0f) {
-                            this.imageView.setBackground(new MotionBackgroundDrawable(wallPaper2.color, wallPaper2.gradientColor1, wallPaper2.gradientColor2, wallPaper2.gradientColor3, true));
+                    if (colorWallpaper.gradientColor2 != 0) {
+                        MotionBackgroundDrawable motionBackgroundDrawable2 = new MotionBackgroundDrawable(colorWallpaper.color, colorWallpaper.gradientColor1, colorWallpaper.gradientColor2, colorWallpaper.gradientColor3, true);
+                        if (colorWallpaper.intensity >= 0.0f) {
+                            this.imageView.setBackground(new MotionBackgroundDrawable(colorWallpaper.color, colorWallpaper.gradientColor1, colorWallpaper.gradientColor2, colorWallpaper.gradientColor3, true));
                             if (Build.VERSION.SDK_INT >= 29) {
                                 this.imageView.getImageReceiver().setBlendMode(BlendMode.SOFT_LIGHT);
                             }
                         } else {
                             this.imageView.getImageReceiver().setGradientBitmap(motionBackgroundDrawable2.getBitmap());
                         }
-                        patternColor = MotionBackgroundDrawable.getPatternColor(wallPaper2.color, wallPaper2.gradientColor1, wallPaper2.gradientColor2, wallPaper2.gradientColor3);
+                        i = MotionBackgroundDrawable.getPatternColor(colorWallpaper.color, colorWallpaper.gradientColor1, colorWallpaper.gradientColor2, colorWallpaper.gradientColor3);
                     } else {
-                        patternColor = AndroidUtilities.getPatternColor(wallPaper2.color);
+                        i = AndroidUtilities.getPatternColor(colorWallpaper.color);
                     }
-                    if ("d".equals(wallPaper2.slug)) {
-                        if (wallPaper2.defaultCache == null) {
-                            wallPaper2.defaultCache = SvgHelper.getBitmap(NUM, 100, 180, -16777216);
+                    if ("d".equals(colorWallpaper.slug)) {
+                        if (colorWallpaper.defaultCache == null) {
+                            colorWallpaper.defaultCache = SvgHelper.getBitmap(NUM, 100, 180, -16777216);
                         }
-                        this.imageView.setImageBitmap(wallPaper2.defaultCache);
-                        this.imageView.getImageReceiver().setAlpha(Math.abs(wallPaper2.intensity));
-                    } else if (wallPaper2.path != null) {
-                        this.imageView.setImage(wallPaper2.path.getAbsolutePath(), "100_100", (Drawable) null);
-                    } else {
-                        TLRPC.PhotoSize thumb2 = FileLoader.getClosestPhotoSizeWithSize(wallPaper2.pattern.document.thumbs, 100);
-                        this.imageView.setImage(ImageLocation.getForDocument(thumb2, wallPaper2.pattern.document), "100_100", (ImageLocation) null, (String) null, "jpg", thumb2 != null ? thumb2.size : wallPaper2.pattern.document.size, 1, wallPaper2.pattern);
-                        this.imageView.getImageReceiver().setAlpha(Math.abs(wallPaper2.intensity));
-                        if (Build.VERSION.SDK_INT < 29 || wallPaper2.gradientColor2 == 0) {
-                            this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(AndroidUtilities.getPatternColor(patternColor), PorterDuff.Mode.SRC_IN));
-                        }
+                        this.imageView.setImageBitmap(colorWallpaper.defaultCache);
+                        this.imageView.getImageReceiver().setAlpha(Math.abs(colorWallpaper.intensity));
+                        return;
+                    }
+                    File file = colorWallpaper.path;
+                    if (file != null) {
+                        this.imageView.setImage(file.getAbsolutePath(), "100_100", (Drawable) null);
+                        return;
+                    }
+                    TLRPC$PhotoSize closestPhotoSizeWithSize3 = FileLoader.getClosestPhotoSizeWithSize(colorWallpaper.pattern.document.thumbs, 100);
+                    this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize3, colorWallpaper.pattern.document), "100_100", (ImageLocation) null, (String) null, "jpg", closestPhotoSizeWithSize3 != null ? closestPhotoSizeWithSize3.size : colorWallpaper.pattern.document.size, 1, colorWallpaper.pattern);
+                    this.imageView.getImageReceiver().setAlpha(Math.abs(colorWallpaper.intensity));
+                    if (Build.VERSION.SDK_INT < 29 || colorWallpaper.gradientColor2 == 0) {
+                        this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(AndroidUtilities.getPatternColor(i), PorterDuff.Mode.SRC_IN));
                     }
                 }
-            } else if (obj instanceof WallpapersListActivity.FileWallpaper) {
-                WallpapersListActivity.FileWallpaper wallPaper3 = (WallpapersListActivity.FileWallpaper) obj;
-                if (wallPaper3.originalPath != null) {
-                    this.imageView.setImage(wallPaper3.originalPath.getAbsolutePath(), "100_100", (Drawable) null);
-                } else if (wallPaper3.path != null) {
-                    this.imageView.setImage(wallPaper3.path.getAbsolutePath(), "100_100", (Drawable) null);
-                } else if ("t".equals(wallPaper3.slug)) {
+            } else if (obj3 instanceof WallpapersListActivity.FileWallpaper) {
+                WallpapersListActivity.FileWallpaper fileWallpaper = (WallpapersListActivity.FileWallpaper) obj3;
+                File file2 = fileWallpaper.originalPath;
+                if (file2 != null) {
+                    this.imageView.setImage(file2.getAbsolutePath(), "100_100", (Drawable) null);
+                    return;
+                }
+                File file3 = fileWallpaper.path;
+                if (file3 != null) {
+                    this.imageView.setImage(file3.getAbsolutePath(), "100_100", (Drawable) null);
+                } else if ("t".equals(fileWallpaper.slug)) {
                     BackupImageView backupImageView = this.imageView;
                     backupImageView.setImageDrawable(Theme.getThemedWallpaper(true, backupImageView));
                 } else {
-                    this.imageView.setImageResource(wallPaper3.thumbResId);
+                    this.imageView.setImageResource(fileWallpaper.thumbResId);
                 }
-            } else if (obj instanceof MediaController.SearchImage) {
-                MediaController.SearchImage wallPaper4 = (MediaController.SearchImage) obj;
-                if (wallPaper4.photo != null) {
-                    TLRPC.PhotoSize thumb3 = FileLoader.getClosestPhotoSizeWithSize(wallPaper4.photo.sizes, 100);
-                    TLRPC.PhotoSize image2 = FileLoader.getClosestPhotoSizeWithSize(wallPaper4.photo.sizes, 320);
-                    if (image2 == thumb3) {
-                        image2 = null;
+            } else if (obj3 instanceof MediaController.SearchImage) {
+                MediaController.SearchImage searchImage = (MediaController.SearchImage) obj3;
+                TLRPC$Photo tLRPC$Photo = searchImage.photo;
+                if (tLRPC$Photo != null) {
+                    TLRPC$PhotoSize closestPhotoSizeWithSize4 = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo.sizes, 100);
+                    TLRPC$PhotoSize closestPhotoSizeWithSize5 = FileLoader.getClosestPhotoSizeWithSize(searchImage.photo.sizes, 320);
+                    if (closestPhotoSizeWithSize5 != closestPhotoSizeWithSize4) {
+                        tLRPC$PhotoSize = closestPhotoSizeWithSize5;
                     }
-                    this.imageView.setImage(ImageLocation.getForPhoto(image2, wallPaper4.photo), "100_100", ImageLocation.getForPhoto(thumb3, wallPaper4.photo), "100_100_b", "jpg", image2 != null ? image2.size : 0, 1, wallPaper4);
+                    this.imageView.setImage(ImageLocation.getForPhoto(tLRPC$PhotoSize, searchImage.photo), "100_100", ImageLocation.getForPhoto(closestPhotoSizeWithSize4, searchImage.photo), "100_100_b", "jpg", tLRPC$PhotoSize != null ? tLRPC$PhotoSize.size : 0, 1, searchImage);
                     return;
                 }
-                this.imageView.setImage(wallPaper4.thumbUrl, "100_100", (Drawable) null);
+                this.imageView.setImage(searchImage.thumbUrl, "100_100", (Drawable) null);
             } else {
                 this.isSelected = false;
             }
         }
 
-        public void setChecked(final boolean checked, boolean animated) {
+        public void setChecked(final boolean z, boolean z2) {
             if (this.checkBox.getVisibility() != 0) {
                 this.checkBox.setVisibility(0);
             }
-            this.checkBox.setChecked(checked, animated);
-            AnimatorSet animatorSet2 = this.animator;
-            if (animatorSet2 != null) {
-                animatorSet2.cancel();
+            this.checkBox.setChecked(z, z2);
+            AnimatorSet animatorSet = this.animator;
+            if (animatorSet != null) {
+                animatorSet.cancel();
                 this.animator = null;
             }
             float f = 0.8875f;
-            if (animated) {
-                AnimatorSet animatorSet3 = new AnimatorSet();
-                this.animator = animatorSet3;
+            if (z2) {
+                AnimatorSet animatorSet2 = new AnimatorSet();
+                this.animator = animatorSet2;
                 Animator[] animatorArr = new Animator[2];
                 BackupImageView backupImageView = this.imageView;
                 float[] fArr = new float[1];
-                fArr[0] = checked ? 0.8875f : 1.0f;
+                fArr[0] = z ? 0.8875f : 1.0f;
                 animatorArr[0] = ObjectAnimator.ofFloat(backupImageView, "scaleX", fArr);
                 BackupImageView backupImageView2 = this.imageView;
                 float[] fArr2 = new float[1];
-                if (!checked) {
+                if (!z) {
                     f = 1.0f;
                 }
                 fArr2[0] = f;
                 animatorArr[1] = ObjectAnimator.ofFloat(backupImageView2, "scaleY", fArr2);
-                animatorSet3.playTogether(animatorArr);
+                animatorSet2.playTogether(animatorArr);
                 this.animator.setDuration(200);
                 this.animator.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        if (WallpaperView.this.animator != null && WallpaperView.this.animator.equals(animation)) {
+                    public void onAnimationEnd(Animator animator) {
+                        if (WallpaperView.this.animator != null && WallpaperView.this.animator.equals(animator)) {
                             AnimatorSet unused = WallpaperView.this.animator = null;
-                            if (!checked) {
+                            if (!z) {
                                 WallpaperView.this.setBackgroundColor(0);
                             }
                         }
                     }
 
-                    public void onAnimationCancel(Animator animation) {
-                        if (WallpaperView.this.animator != null && WallpaperView.this.animator.equals(animation)) {
+                    public void onAnimationCancel(Animator animator) {
+                        if (WallpaperView.this.animator != null && WallpaperView.this.animator.equals(animator)) {
                             AnimatorSet unused = WallpaperView.this.animator = null;
                         }
                     }
                 });
                 this.animator.start();
             } else {
-                this.imageView.setScaleX(checked ? 0.8875f : 1.0f);
+                this.imageView.setScaleX(z ? 0.8875f : 1.0f);
                 BackupImageView backupImageView3 = this.imageView;
-                if (!checked) {
+                if (!z) {
                     f = 1.0f;
                 }
                 backupImageView3.setScaleY(f);
@@ -296,9 +320,9 @@ public class WallpaperCell extends FrameLayout {
 
         public void clearAnimation() {
             super.clearAnimation();
-            AnimatorSet animatorSet2 = this.animator;
-            if (animatorSet2 != null) {
-                animatorSet2.cancel();
+            AnimatorSet animatorSet = this.animator;
+            if (animatorSet != null) {
+                animatorSet.cancel();
                 this.animator = null;
             }
         }
@@ -313,18 +337,16 @@ public class WallpaperCell extends FrameLayout {
 
     public WallpaperCell(Context context) {
         super(context);
-        int a = 0;
+        int i = 0;
         while (true) {
             WallpaperView[] wallpaperViewArr = this.wallpaperViews;
-            if (a < wallpaperViewArr.length) {
+            if (i < wallpaperViewArr.length) {
                 WallpaperView wallpaperView = new WallpaperView(context);
-                wallpaperViewArr[a] = wallpaperView;
-                WallpaperView wallpaperView2 = wallpaperView;
-                int num = a;
-                addView(wallpaperView2);
-                wallpaperView2.setOnClickListener(new WallpaperCell$$ExternalSyntheticLambda0(this, wallpaperView2, num));
-                wallpaperView2.setOnLongClickListener(new WallpaperCell$$ExternalSyntheticLambda1(this, wallpaperView2, num));
-                a++;
+                wallpaperViewArr[i] = wallpaperView;
+                addView(wallpaperView);
+                wallpaperView.setOnClickListener(new WallpaperCell$$ExternalSyntheticLambda0(this, wallpaperView, i));
+                wallpaperView.setOnLongClickListener(new WallpaperCell$$ExternalSyntheticLambda1(this, wallpaperView, i));
+                i++;
             } else {
                 Paint paint = new Paint();
                 this.framePaint = paint;
@@ -339,44 +361,35 @@ public class WallpaperCell extends FrameLayout {
         }
     }
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Cells-WallpaperCell  reason: not valid java name */
-    public /* synthetic */ void m1566lambda$new$0$orgtelegramuiCellsWallpaperCell(WallpaperView wallpaperView, int num, View v) {
-        onWallpaperClick(wallpaperView.currentWallpaper, num);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(WallpaperView wallpaperView, int i, View view) {
+        onWallpaperClick(wallpaperView.currentWallpaper, i);
     }
 
-    /* renamed from: lambda$new$1$org-telegram-ui-Cells-WallpaperCell  reason: not valid java name */
-    public /* synthetic */ boolean m1567lambda$new$1$orgtelegramuiCellsWallpaperCell(WallpaperView wallpaperView, int num, View v) {
-        return onWallpaperLongClick(wallpaperView.currentWallpaper, num);
-    }
-
-    /* access modifiers changed from: protected */
-    public void onWallpaperClick(Object wallPaper, int index) {
+    /* access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$new$1(WallpaperView wallpaperView, int i, View view) {
+        return onWallpaperLongClick(wallpaperView.currentWallpaper, i);
     }
 
     /* access modifiers changed from: protected */
-    public boolean onWallpaperLongClick(Object wallPaper, int index) {
-        return false;
-    }
-
-    /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int width = View.MeasureSpec.getSize(widthMeasureSpec);
-        int availableWidth = width - AndroidUtilities.dp((float) (((this.spanCount - 1) * 6) + 28));
-        int itemWidth = availableWidth / this.spanCount;
-        int height = this.currentType == 0 ? AndroidUtilities.dp(180.0f) : itemWidth;
+    public void onMeasure(int i, int i2) {
+        int size = View.MeasureSpec.getSize(i);
+        int dp = size - AndroidUtilities.dp((float) (((this.spanCount - 1) * 6) + 28));
+        int i3 = dp / this.spanCount;
+        int dp2 = this.currentType == 0 ? AndroidUtilities.dp(180.0f) : i3;
         float f = 14.0f;
-        int dp = (this.isTop ? AndroidUtilities.dp(14.0f) : 0) + height;
+        int i4 = 0;
+        int dp3 = (this.isTop ? AndroidUtilities.dp(14.0f) : 0) + dp2;
         if (!this.isBottom) {
             f = 6.0f;
         }
-        setMeasuredDimension(width, dp + AndroidUtilities.dp(f));
-        int a = 0;
+        setMeasuredDimension(size, dp3 + AndroidUtilities.dp(f));
         while (true) {
-            int i = this.spanCount;
-            if (a < i) {
-                this.wallpaperViews[a].measure(View.MeasureSpec.makeMeasureSpec(a == i + -1 ? availableWidth : itemWidth, NUM), View.MeasureSpec.makeMeasureSpec(height, NUM));
-                availableWidth -= itemWidth;
-                a++;
+            int i5 = this.spanCount;
+            if (i4 < i5) {
+                this.wallpaperViews[i4].measure(View.MeasureSpec.makeMeasureSpec(i4 == i5 + -1 ? dp : i3, NUM), View.MeasureSpec.makeMeasureSpec(dp2, NUM));
+                dp -= i3;
+                i4++;
             } else {
                 return;
             }
@@ -384,53 +397,53 @@ public class WallpaperCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int l = AndroidUtilities.dp(14.0f);
-        int t = this.isTop ? AndroidUtilities.dp(14.0f) : 0;
-        for (int a = 0; a < this.spanCount; a++) {
-            int w = this.wallpaperViews[a].getMeasuredWidth();
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        int dp = AndroidUtilities.dp(14.0f);
+        int dp2 = this.isTop ? AndroidUtilities.dp(14.0f) : 0;
+        for (int i5 = 0; i5 < this.spanCount; i5++) {
+            int measuredWidth = this.wallpaperViews[i5].getMeasuredWidth();
             WallpaperView[] wallpaperViewArr = this.wallpaperViews;
-            wallpaperViewArr[a].layout(l, t, l + w, wallpaperViewArr[a].getMeasuredHeight() + t);
-            l += AndroidUtilities.dp(6.0f) + w;
+            wallpaperViewArr[i5].layout(dp, dp2, dp + measuredWidth, wallpaperViewArr[i5].getMeasuredHeight() + dp2);
+            dp += measuredWidth + AndroidUtilities.dp(6.0f);
         }
     }
 
-    public void setParams(int columns, boolean top, boolean bottom) {
-        this.spanCount = columns;
-        this.isTop = top;
-        this.isBottom = bottom;
-        int a = 0;
+    public void setParams(int i, boolean z, boolean z2) {
+        this.spanCount = i;
+        this.isTop = z;
+        this.isBottom = z2;
+        int i2 = 0;
         while (true) {
             WallpaperView[] wallpaperViewArr = this.wallpaperViews;
-            if (a < wallpaperViewArr.length) {
-                wallpaperViewArr[a].setVisibility(a < columns ? 0 : 8);
-                this.wallpaperViews[a].clearAnimation();
-                a++;
+            if (i2 < wallpaperViewArr.length) {
+                wallpaperViewArr[i2].setVisibility(i2 < i ? 0 : 8);
+                this.wallpaperViews[i2].clearAnimation();
+                i2++;
             } else {
                 return;
             }
         }
     }
 
-    public void setWallpaper(int type, int index, Object wallpaper, Object selectedWallpaper, Drawable themedWallpaper, boolean themed) {
-        this.currentType = type;
-        if (wallpaper == null) {
-            this.wallpaperViews[index].setVisibility(8);
-            this.wallpaperViews[index].clearAnimation();
+    public void setWallpaper(int i, int i2, Object obj, Object obj2, Drawable drawable, boolean z) {
+        this.currentType = i;
+        if (obj == null) {
+            this.wallpaperViews[i2].setVisibility(8);
+            this.wallpaperViews[i2].clearAnimation();
             return;
         }
-        this.wallpaperViews[index].setVisibility(0);
-        this.wallpaperViews[index].setWallpaper(wallpaper, selectedWallpaper, themedWallpaper, themed);
+        this.wallpaperViews[i2].setVisibility(0);
+        this.wallpaperViews[i2].setWallpaper(obj, obj2, drawable, z);
     }
 
-    public void setChecked(int index, boolean checked, boolean animated) {
-        this.wallpaperViews[index].setChecked(checked, animated);
+    public void setChecked(int i, boolean z, boolean z2) {
+        this.wallpaperViews[i].setChecked(z, z2);
     }
 
     public void invalidate() {
         super.invalidate();
-        for (int a = 0; a < this.spanCount; a++) {
-            this.wallpaperViews[a].invalidate();
+        for (int i = 0; i < this.spanCount; i++) {
+            this.wallpaperViews[i].invalidate();
         }
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ProximitySheet$6$$ExternalSyntheticLambda0 im
     }
 
     public final void run() {
-        this.f$0.m2517xb0bca8e();
+        this.f$0.lambda$onAnimationEnd$0();
     }
 }

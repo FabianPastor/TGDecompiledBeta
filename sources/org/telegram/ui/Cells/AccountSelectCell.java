@@ -13,7 +13,8 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -27,7 +28,7 @@ public class AccountSelectCell extends FrameLayout {
     private TextView infoTextView;
     private TextView textView;
 
-    public AccountSelectCell(Context context, boolean hasInfo) {
+    public AccountSelectCell(Context context, boolean z) {
         super(context);
         AvatarDrawable avatarDrawable2 = new AvatarDrawable();
         this.avatarDrawable = avatarDrawable2;
@@ -45,7 +46,7 @@ public class AccountSelectCell extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setGravity(19);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
-        if (hasInfo) {
+        if (z) {
             addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 61.0f, 7.0f, 8.0f, 0.0f));
             this.textView.setTextColor(Theme.getColor("voipgroup_nameText"));
             this.textView.setText(LocaleController.getString("VoipGroupDisplayAs", NUM));
@@ -73,11 +74,11 @@ public class AccountSelectCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         if (this.checkImageView == null && (this.infoTextView == null || getLayoutParams().width == -2)) {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
         } else {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
         }
     }
 
@@ -89,28 +90,28 @@ public class AccountSelectCell extends FrameLayout {
         }
     }
 
-    public void setObject(TLObject object) {
-        if (object instanceof TLRPC.User) {
-            TLRPC.User user = (TLRPC.User) object;
-            this.avatarDrawable.setInfo(user);
-            this.infoTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
-            this.imageView.setForUserOrChat(user, this.avatarDrawable);
+    public void setObject(TLObject tLObject) {
+        if (tLObject instanceof TLRPC$User) {
+            TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
+            this.avatarDrawable.setInfo(tLRPC$User);
+            this.infoTextView.setText(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
+            this.imageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
             return;
         }
-        TLRPC.Chat chat = (TLRPC.Chat) object;
-        this.avatarDrawable.setInfo(chat);
-        this.infoTextView.setText(chat.title);
-        this.imageView.setForUserOrChat(chat, this.avatarDrawable);
+        TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject;
+        this.avatarDrawable.setInfo(tLRPC$Chat);
+        this.infoTextView.setText(tLRPC$Chat.title);
+        this.imageView.setForUserOrChat(tLRPC$Chat, this.avatarDrawable);
     }
 
-    public void setAccount(int account, boolean check) {
-        this.accountNumber = account;
-        TLRPC.User user = UserConfig.getInstance(account).getCurrentUser();
-        this.avatarDrawable.setInfo(user);
-        this.textView.setText(ContactsController.formatName(user.first_name, user.last_name));
-        this.imageView.getImageReceiver().setCurrentAccount(account);
-        this.imageView.setForUserOrChat(user, this.avatarDrawable);
-        this.checkImageView.setVisibility((!check || account != UserConfig.selectedAccount) ? 4 : 0);
+    public void setAccount(int i, boolean z) {
+        this.accountNumber = i;
+        TLRPC$User currentUser = UserConfig.getInstance(i).getCurrentUser();
+        this.avatarDrawable.setInfo(currentUser);
+        this.textView.setText(ContactsController.formatName(currentUser.first_name, currentUser.last_name));
+        this.imageView.getImageReceiver().setCurrentAccount(i);
+        this.imageView.setForUserOrChat(currentUser, this.avatarDrawable);
+        this.checkImageView.setVisibility((!z || i != UserConfig.selectedAccount) ? 4 : 0);
     }
 
     public int getAccountNumber() {

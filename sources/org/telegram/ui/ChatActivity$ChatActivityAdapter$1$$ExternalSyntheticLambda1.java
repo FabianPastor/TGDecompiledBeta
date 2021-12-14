@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatActivity$ChatActivityAdapter$1$$ExternalS
     }
 
     public final void run() {
-        this.f$0.m1857xfa9906e9(this.f$1);
+        this.f$0.lambda$didPressImage$3(this.f$1);
     }
 }

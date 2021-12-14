@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.Adapters.MentionsAdapter;
 
 public final /* synthetic */ class MentionsAdapter$7$$ExternalSyntheticLambda1 implements RequestDelegate {
@@ -23,7 +23,7 @@ public final /* synthetic */ class MentionsAdapter$7$$ExternalSyntheticLambda1 i
         this.f$4 = messagesController;
     }
 
-    public final void run(TLObject tLObject, TLRPC.TL_error tL_error) {
-        this.f$0.m1386lambda$run$1$orgtelegramuiAdaptersMentionsAdapter$7(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tL_error);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$run$1(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
     }
 }

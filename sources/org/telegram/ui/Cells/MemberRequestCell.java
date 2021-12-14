@@ -9,7 +9,8 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLRPC$TL_chatInviteImporter;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
@@ -19,23 +20,23 @@ import org.telegram.ui.Components.LayoutHelper;
 public class MemberRequestCell extends FrameLayout {
     private final AvatarDrawable avatarDrawable = new AvatarDrawable();
     private final BackupImageView avatarImageView;
-    private TLRPC.TL_chatInviteImporter importer;
+    private TLRPC$TL_chatInviteImporter importer;
     private boolean isNeedDivider;
     private final SimpleTextView nameTextView;
     private final SimpleTextView statusTextView;
 
     public interface OnClickListener {
-        void onAddClicked(TLRPC.TL_chatInviteImporter tL_chatInviteImporter);
+        void onAddClicked(TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter);
 
-        void onDismissClicked(TLRPC.TL_chatInviteImporter tL_chatInviteImporter);
+        void onDismissClicked(TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public MemberRequestCell(Context context, OnClickListener clickListener, boolean isChannel) {
+    public MemberRequestCell(Context context, OnClickListener onClickListener, boolean z) {
         super(context);
         String str;
         int i;
-        OnClickListener onClickListener = clickListener;
+        OnClickListener onClickListener2 = onClickListener;
         BackupImageView backupImageView = new BackupImageView(getContext());
         this.avatarImageView = backupImageView;
         SimpleTextView simpleTextView = new SimpleTextView(getContext());
@@ -49,89 +50,93 @@ public class MemberRequestCell extends FrameLayout {
         simpleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         simpleTextView.setTextSize(17);
         simpleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        addView(simpleTextView, LayoutHelper.createFrame(-1, -2.0f, 48, LocaleController.isRTL ? 12.0f : 74.0f, 12.0f, LocaleController.isRTL ? 74.0f : 12.0f, 0.0f));
+        boolean z2 = LocaleController.isRTL;
+        addView(simpleTextView, LayoutHelper.createFrame(-1, -2.0f, 48, z2 ? 12.0f : 74.0f, 12.0f, z2 ? 74.0f : 12.0f, 0.0f));
         simpleTextView2.setGravity(8388611);
         simpleTextView2.setMaxLines(1);
         simpleTextView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
         simpleTextView2.setTextSize(14);
-        addView(simpleTextView2, LayoutHelper.createFrame(-1, -2.0f, 48, LocaleController.isRTL ? 12.0f : 74.0f, 36.0f, LocaleController.isRTL ? 74.0f : 12.0f, 0.0f));
-        int btnPadding = AndroidUtilities.dp(17.0f);
-        TextView addButton = new TextView(getContext());
-        addButton.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+        boolean z3 = LocaleController.isRTL;
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, -2.0f, 48, z3 ? 12.0f : 74.0f, 36.0f, z3 ? 74.0f : 12.0f, 0.0f));
+        int dp = AndroidUtilities.dp(17.0f);
+        TextView textView = new TextView(getContext());
+        textView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
         int i2 = 5;
-        addButton.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        addButton.setMaxLines(1);
+        textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        textView.setMaxLines(1);
         int i3 = 0;
-        addButton.setPadding(btnPadding, 0, btnPadding, 0);
-        if (isChannel) {
+        textView.setPadding(dp, 0, dp, 0);
+        if (z) {
             i = NUM;
             str = "AddToChannel";
         } else {
             i = NUM;
             str = "AddToGroup";
         }
-        addButton.setText(LocaleController.getString(str, i));
-        addButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-        addButton.setTextSize(14.0f);
-        addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        addButton.setOnClickListener(new MemberRequestCell$$ExternalSyntheticLambda0(this, onClickListener));
-        addView(addButton, LayoutHelper.createFrame(-2, 32.0f, 8388611, LocaleController.isRTL ? 0.0f : 73.0f, 62.0f, LocaleController.isRTL ? 73.0f : 0.0f, 0.0f));
-        float addButtonWidth = addButton.getPaint().measureText(addButton.getText().toString()) + ((float) (btnPadding * 2));
-        TextView dismissButton = new TextView(getContext());
-        dismissButton.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), 0, Theme.getColor("listSelectorSDK21"), -16777216));
-        dismissButton.setGravity((!LocaleController.isRTL ? 3 : i2) | 16);
-        dismissButton.setMaxLines(1);
-        dismissButton.setPadding(btnPadding, 0, btnPadding, 0);
-        dismissButton.setText(LocaleController.getString("Dismiss", NUM));
-        dismissButton.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText"));
-        dismissButton.setTextSize(14.0f);
-        dismissButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        dismissButton.setOnClickListener(new MemberRequestCell$$ExternalSyntheticLambda1(this, onClickListener));
-        FrameLayout.LayoutParams dismissLayoutParams = new FrameLayout.LayoutParams(-2, AndroidUtilities.dp(32.0f));
-        dismissLayoutParams.topMargin = AndroidUtilities.dp(62.0f);
-        dismissLayoutParams.leftMargin = LocaleController.isRTL ? 0 : (int) (((float) AndroidUtilities.dp(79.0f)) + addButtonWidth);
-        dismissLayoutParams.rightMargin = LocaleController.isRTL ? (int) (((float) AndroidUtilities.dp(79.0f)) + addButtonWidth) : i3;
-        addView(dismissButton, dismissLayoutParams);
+        textView.setText(LocaleController.getString(str, i));
+        textView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+        textView.setTextSize(14.0f);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView.setOnClickListener(new MemberRequestCell$$ExternalSyntheticLambda1(this, onClickListener2));
+        boolean z4 = LocaleController.isRTL;
+        addView(textView, LayoutHelper.createFrame(-2, 32.0f, 8388611, z4 ? 0.0f : 73.0f, 62.0f, z4 ? 73.0f : 0.0f, 0.0f));
+        float measureText = textView.getPaint().measureText(textView.getText().toString()) + ((float) (dp * 2));
+        TextView textView2 = new TextView(getContext());
+        textView2.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), 0, Theme.getColor("listSelectorSDK21"), -16777216));
+        textView2.setGravity((!LocaleController.isRTL ? 3 : i2) | 16);
+        textView2.setMaxLines(1);
+        textView2.setPadding(dp, 0, dp, 0);
+        textView2.setText(LocaleController.getString("Dismiss", NUM));
+        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText"));
+        textView2.setTextSize(14.0f);
+        textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textView2.setOnClickListener(new MemberRequestCell$$ExternalSyntheticLambda0(this, onClickListener2));
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(-2, AndroidUtilities.dp(32.0f));
+        layoutParams.topMargin = AndroidUtilities.dp(62.0f);
+        layoutParams.leftMargin = LocaleController.isRTL ? 0 : (int) (((float) AndroidUtilities.dp(79.0f)) + measureText);
+        layoutParams.rightMargin = LocaleController.isRTL ? (int) (measureText + ((float) AndroidUtilities.dp(79.0f))) : i3;
+        addView(textView2, layoutParams);
     }
 
-    /* renamed from: lambda$new$0$org-telegram-ui-Cells-MemberRequestCell  reason: not valid java name */
-    public /* synthetic */ void m1543lambda$new$0$orgtelegramuiCellsMemberRequestCell(OnClickListener clickListener, View v) {
-        TLRPC.TL_chatInviteImporter tL_chatInviteImporter;
-        if (clickListener != null && (tL_chatInviteImporter = this.importer) != null) {
-            clickListener.onAddClicked(tL_chatInviteImporter);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0(OnClickListener onClickListener, View view) {
+        TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter;
+        if (onClickListener != null && (tLRPC$TL_chatInviteImporter = this.importer) != null) {
+            onClickListener.onAddClicked(tLRPC$TL_chatInviteImporter);
         }
     }
 
-    /* renamed from: lambda$new$1$org-telegram-ui-Cells-MemberRequestCell  reason: not valid java name */
-    public /* synthetic */ void m1544lambda$new$1$orgtelegramuiCellsMemberRequestCell(OnClickListener clickListener, View v) {
-        TLRPC.TL_chatInviteImporter tL_chatInviteImporter;
-        if (clickListener != null && (tL_chatInviteImporter = this.importer) != null) {
-            clickListener.onDismissClicked(tL_chatInviteImporter);
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(OnClickListener onClickListener, View view) {
+        TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter;
+        if (onClickListener != null && (tLRPC$TL_chatInviteImporter = this.importer) != null) {
+            onClickListener.onDismissClicked(tLRPC$TL_chatInviteImporter);
         }
     }
 
-    public void setData(LongSparseArray<TLRPC.User> users, TLRPC.TL_chatInviteImporter importer2, boolean isNeedDivider2) {
-        this.importer = importer2;
-        this.isNeedDivider = isNeedDivider2;
-        setWillNotDraw(!isNeedDivider2);
-        TLRPC.User user = users.get(importer2.user_id);
-        this.avatarDrawable.setInfo(user);
-        this.avatarImageView.setForUserOrChat(user, this.avatarDrawable);
-        this.nameTextView.setText(UserObject.getUserName(user));
-        String dateText = LocaleController.formatDateAudio((long) importer2.date, false);
-        if (importer2.approved_by == 0) {
-            this.statusTextView.setText(LocaleController.formatString("RequestedToJoinAt", NUM, dateText));
+    public void setData(LongSparseArray<TLRPC$User> longSparseArray, TLRPC$TL_chatInviteImporter tLRPC$TL_chatInviteImporter, boolean z) {
+        this.importer = tLRPC$TL_chatInviteImporter;
+        this.isNeedDivider = z;
+        setWillNotDraw(!z);
+        TLRPC$User tLRPC$User = longSparseArray.get(tLRPC$TL_chatInviteImporter.user_id);
+        this.avatarDrawable.setInfo(tLRPC$User);
+        this.avatarImageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
+        this.nameTextView.setText(UserObject.getUserName(tLRPC$User));
+        String formatDateAudio = LocaleController.formatDateAudio((long) tLRPC$TL_chatInviteImporter.date, false);
+        long j = tLRPC$TL_chatInviteImporter.approved_by;
+        if (j == 0) {
+            this.statusTextView.setText(LocaleController.formatString("RequestedToJoinAt", NUM, formatDateAudio));
             return;
         }
-        TLRPC.User approvedByUser = users.get(importer2.approved_by);
-        if (approvedByUser != null) {
-            this.statusTextView.setText(LocaleController.formatString("AddedBy", NUM, UserObject.getFirstName(approvedByUser), dateText));
+        TLRPC$User tLRPC$User2 = longSparseArray.get(j);
+        if (tLRPC$User2 != null) {
+            this.statusTextView.setText(LocaleController.formatString("AddedBy", NUM, UserObject.getFirstName(tLRPC$User2), formatDateAudio));
             return;
         }
         this.statusTextView.setText("");
     }
 
-    public TLRPC.TL_chatInviteImporter getImporter() {
+    public TLRPC$TL_chatInviteImporter getImporter() {
         return this.importer;
     }
 
@@ -144,8 +149,8 @@ public class MemberRequestCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(widthMeasureSpec), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(107.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(107.0f), NUM));
     }
 
     /* access modifiers changed from: protected */

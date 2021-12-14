@@ -1,19 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.DialogsActivity;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda37 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda37 implements MessagesStorage.IntCallback {
     public final /* synthetic */ DialogsActivity f$0;
-    public final /* synthetic */ DialogsActivity.ViewPage f$1;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda37(DialogsActivity dialogsActivity, DialogsActivity.ViewPage viewPage) {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda37(DialogsActivity dialogsActivity) {
         this.f$0 = dialogsActivity;
-        this.f$1 = viewPage;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.m2840lambda$createView$4$orgtelegramuiDialogsActivity(this.f$1, view, i);
+    public final void run(int i) {
+        this.f$0.lambda$onResume$11(i);
     }
 }

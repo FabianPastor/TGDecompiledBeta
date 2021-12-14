@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda11 implements ActionBarMenuItem.ActionBarMenuItemDelegate {
-    public final /* synthetic */ AudioPlayerAlert f$0;
+public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda11 implements RecyclerListView.OnItemClickListener {
+    public static final /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda11 INSTANCE = new AudioPlayerAlert$$ExternalSyntheticLambda11();
 
-    public /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda11(AudioPlayerAlert audioPlayerAlert) {
-        this.f$0 = audioPlayerAlert;
+    private /* synthetic */ AudioPlayerAlert$$ExternalSyntheticLambda11() {
     }
 
-    public final void onItemClick(int i) {
-        this.f$0.m1998lambda$new$4$orgtelegramuiComponentsAudioPlayerAlert(i);
+    public final void onItemClick(View view, int i) {
+        AudioPlayerAlert.lambda$new$8(view, i);
     }
 }

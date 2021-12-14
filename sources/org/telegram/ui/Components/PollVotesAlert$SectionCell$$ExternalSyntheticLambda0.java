@@ -11,6 +11,6 @@ public final /* synthetic */ class PollVotesAlert$SectionCell$$ExternalSynthetic
     }
 
     public final void onClick(View view) {
-        this.f$0.m2511xe45e52c1(view);
+        this.f$0.lambda$new$0(view);
     }
 }
