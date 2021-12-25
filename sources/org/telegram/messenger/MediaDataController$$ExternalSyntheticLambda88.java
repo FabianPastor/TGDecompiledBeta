@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
+import org.telegram.tgnet.TLRPC$TL_emojiKeywordsDifference;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda88 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
+    public final /* synthetic */ TLRPC$TL_emojiKeywordsDifference f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda88(MediaDataController mediaDataController, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda88(MediaDataController mediaDataController, TLRPC$TL_emojiKeywordsDifference tLRPC$TL_emojiKeywordsDifference, String str) {
         this.f$0 = mediaDataController;
-        this.f$1 = tLRPC$TL_messages_stickerSet;
+        this.f$1 = tLRPC$TL_emojiKeywordsDifference;
+        this.f$2 = str;
     }
 
     public final void run() {
-        this.f$0.lambda$putSetToCache$13(this.f$1);
+        this.f$0.lambda$putEmojiKeywords$148(this.f$1, this.f$2);
     }
 }

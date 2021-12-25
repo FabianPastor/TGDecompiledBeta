@@ -1,17 +1,22 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.tgnet.TLRPC$TL_messageMediaPoll;
-import org.telegram.ui.PollCreateActivity;
+import android.view.View;
+import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.TLRPC$TL_availableReaction;
+import org.telegram.ui.Components.ReactionsContainerLayout;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda182 implements PollCreateActivity.PollCreateActivityDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda182 implements ReactionsContainerLayout.ReactionsContainerDelegate {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ MessageObject f$1;
+    public final /* synthetic */ ReactionsContainerLayout f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda182(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda182(ChatActivity chatActivity, MessageObject messageObject, ReactionsContainerLayout reactionsContainerLayout) {
         this.f$0 = chatActivity;
+        this.f$1 = messageObject;
+        this.f$2 = reactionsContainerLayout;
     }
 
-    public final void sendPoll(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
-        this.f$0.lambda$openPollCreate$76(tLRPC$TL_messageMediaPoll, hashMap, z, i);
+    public final void onReactionClicked(View view, TLRPC$TL_availableReaction tLRPC$TL_availableReaction) {
+        this.f$0.lambda$createMenu$130(this.f$1, this.f$2, view, tLRPC$TL_availableReaction);
     }
 }

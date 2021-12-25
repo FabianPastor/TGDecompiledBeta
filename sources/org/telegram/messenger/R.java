@@ -248,6 +248,7 @@ public final class R {
         public static final int actions_nearby_off = NUM;
         public static final int actions_nearby_on = NUM;
         public static final int actions_permissions = NUM;
+        public static final int actions_reactions = NUM;
         public static final int actions_remove_user = NUM;
         public static final int actions_removed = NUM;
         public static final int actions_requests = NUM;
@@ -400,6 +401,7 @@ public final class R {
         public static final int device_web_safari = NUM;
         public static final int devices = NUM;
         public static final int dice = NUM;
+        public static final int dino_pic = NUM;
         public static final int doc_big = NUM;
         public static final int edit_cancel = NUM;
         public static final int editor_rotate = NUM;
@@ -824,6 +826,8 @@ public final class R {
         public static final int msg_pollstop = NUM;
         public static final int msg_psa = NUM;
         public static final int msg_qrcode = NUM;
+        public static final int msg_reactions = NUM;
+        public static final int msg_reactions_filled = NUM;
         public static final int msg_removefolder = NUM;
         public static final int msg_reorder = NUM;
         public static final int msg_replace = NUM;
@@ -1029,6 +1033,7 @@ public final class R {
         public static final int proxy_on = NUM;
         public static final int qr_flashlight = NUM;
         public static final int qr_gallery = NUM;
+        public static final int reactions_bubble_shadow = NUM;
         public static final int redcircle = NUM;
         public static final int regbtn2 = NUM;
         public static final int regbtn2_pressed = NUM;
@@ -2408,6 +2413,7 @@ public final class R {
         public static final int AutoplayVideo = NUM;
         public static final int AutoplayVideoInfo = NUM;
         public static final int Available = NUM;
+        public static final int AvailableReactions = NUM;
         public static final int AwaitingEncryption = NUM;
         public static final int AwayTo = NUM;
         public static final int Back = NUM;
@@ -3186,6 +3192,10 @@ public final class R {
         public static final int DocumentsTitle = NUM;
         public static final int Done = NUM;
         public static final int DontAskAgain = NUM;
+        public static final int DoubleTapPreviewMessage = NUM;
+        public static final int DoubleTapPreviewRational = NUM;
+        public static final int DoubleTapPreviewSenderName = NUM;
+        public static final int DoubleTapSetting = NUM;
         public static final int Draft = NUM;
         public static final int Edit = NUM;
         public static final int EditAdmin = NUM;
@@ -3268,6 +3278,9 @@ public final class R {
         public static final int EnableAllStreamingInfo = NUM;
         public static final int EnableAnimations = NUM;
         public static final int EnableAutoDelete = NUM;
+        public static final int EnableReactions = NUM;
+        public static final int EnableReactionsChannelInfo = NUM;
+        public static final int EnableReactionsGroupInfo = NUM;
         public static final int EnableStreaming = NUM;
         public static final int EnabledNotifications = NUM;
         public static final int EnabledPasswordText = NUM;
@@ -5286,6 +5299,21 @@ public final class R {
         public static final int RateCallVideoDistorted = NUM;
         public static final int RateCallVideoPixelated = NUM;
         public static final int ReEnterYourPasscode = NUM;
+        public static final int Reacted_few = NUM;
+        public static final int Reacted_many = NUM;
+        public static final int Reacted_one = NUM;
+        public static final int Reacted_other = NUM;
+        public static final int Reacted_two = NUM;
+        public static final int Reacted_zero = NUM;
+        public static final int Reactions = NUM;
+        public static final int ReactionsCount = NUM;
+        public static final int ReactionsCount_few = NUM;
+        public static final int ReactionsCount_many = NUM;
+        public static final int ReactionsCount_one = NUM;
+        public static final int ReactionsCount_other = NUM;
+        public static final int ReactionsCount_two = NUM;
+        public static final int ReactionsCount_zero = NUM;
+        public static final int ReactionsOff = NUM;
         public static final int Recent = NUM;
         public static final int RecentFiles = NUM;
         public static final int RecentFilesAZ = NUM;

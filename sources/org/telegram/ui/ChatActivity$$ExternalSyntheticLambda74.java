@@ -1,19 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.Theme;
+import android.view.MotionEvent;
+import android.view.View;
+import org.telegram.ui.ContentPreviewViewer;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda74 implements Runnable {
-    public final /* synthetic */ Theme.ThemeAccent f$0;
-    public final /* synthetic */ Theme.ThemeInfo f$1;
-    public final /* synthetic */ boolean f$2;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda74 implements View.OnTouchListener {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ ContentPreviewViewer.ContentPreviewViewerDelegate f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda74(Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, boolean z) {
-        this.f$0 = themeAccent;
-        this.f$1 = themeInfo;
-        this.f$2 = z;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda74(ChatActivity chatActivity, ContentPreviewViewer.ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
+        this.f$0 = chatActivity;
+        this.f$1 = contentPreviewViewerDelegate;
     }
 
-    public final void run() {
-        ChatActivity.lambda$didReceivedNotification$98(this.f$0, this.f$1, this.f$2);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return this.f$0.lambda$createView$35(this.f$1, view, motionEvent);
     }
 }

@@ -267,6 +267,7 @@
     <public type="drawable" name="actions_nearby_off" id="NUM" />
     <public type="drawable" name="actions_nearby_on" id="NUM" />
     <public type="drawable" name="actions_permissions" id="NUM" />
+    <public type="drawable" name="actions_reactions" id="NUM" />
     <public type="drawable" name="actions_remove_user" id="NUM" />
     <public type="drawable" name="actions_removed" id="NUM" />
     <public type="drawable" name="actions_requests" id="NUM" />
@@ -419,6 +420,7 @@
     <public type="drawable" name="device_web_safari" id="NUM" />
     <public type="drawable" name="devices" id="NUM" />
     <public type="drawable" name="dice" id="NUM" />
+    <public type="drawable" name="dino_pic" id="NUM" />
     <public type="drawable" name="doc_big" id="NUM" />
     <public type="drawable" name="edit_cancel" id="NUM" />
     <public type="drawable" name="editor_rotate" id="NUM" />
@@ -843,6 +845,8 @@
     <public type="drawable" name="msg_pollstop" id="NUM" />
     <public type="drawable" name="msg_psa" id="NUM" />
     <public type="drawable" name="msg_qrcode" id="NUM" />
+    <public type="drawable" name="msg_reactions" id="NUM" />
+    <public type="drawable" name="msg_reactions_filled" id="NUM" />
     <public type="drawable" name="msg_removefolder" id="NUM" />
     <public type="drawable" name="msg_reorder" id="NUM" />
     <public type="drawable" name="msg_replace" id="NUM" />
@@ -1048,6 +1052,7 @@
     <public type="drawable" name="proxy_on" id="NUM" />
     <public type="drawable" name="qr_flashlight" id="NUM" />
     <public type="drawable" name="qr_gallery" id="NUM" />
+    <public type="drawable" name="reactions_bubble_shadow" id="NUM" />
     <public type="drawable" name="redcircle" id="NUM" />
     <public type="drawable" name="regbtn2" id="NUM" />
     <public type="drawable" name="regbtn2_pressed" id="NUM" />
@@ -2269,6 +2274,7 @@
     <public type="string" name="AutoplayVideo" id="NUM" />
     <public type="string" name="AutoplayVideoInfo" id="NUM" />
     <public type="string" name="Available" id="NUM" />
+    <public type="string" name="AvailableReactions" id="NUM" />
     <public type="string" name="AwaitingEncryption" id="NUM" />
     <public type="string" name="AwayTo" id="NUM" />
     <public type="string" name="Back" id="NUM" />
@@ -3047,6 +3053,10 @@
     <public type="string" name="DocumentsTitle" id="NUM" />
     <public type="string" name="Done" id="NUM" />
     <public type="string" name="DontAskAgain" id="NUM" />
+    <public type="string" name="DoubleTapPreviewMessage" id="NUM" />
+    <public type="string" name="DoubleTapPreviewRational" id="NUM" />
+    <public type="string" name="DoubleTapPreviewSenderName" id="NUM" />
+    <public type="string" name="DoubleTapSetting" id="NUM" />
     <public type="string" name="Draft" id="NUM" />
     <public type="string" name="Edit" id="NUM" />
     <public type="string" name="EditAdmin" id="NUM" />
@@ -3129,6 +3139,9 @@
     <public type="string" name="EnableAllStreamingInfo" id="NUM" />
     <public type="string" name="EnableAnimations" id="NUM" />
     <public type="string" name="EnableAutoDelete" id="NUM" />
+    <public type="string" name="EnableReactions" id="NUM" />
+    <public type="string" name="EnableReactionsChannelInfo" id="NUM" />
+    <public type="string" name="EnableReactionsGroupInfo" id="NUM" />
     <public type="string" name="EnableStreaming" id="NUM" />
     <public type="string" name="EnabledNotifications" id="NUM" />
     <public type="string" name="EnabledPasswordText" id="NUM" />
@@ -5147,6 +5160,21 @@
     <public type="string" name="RateCallVideoDistorted" id="NUM" />
     <public type="string" name="RateCallVideoPixelated" id="NUM" />
     <public type="string" name="ReEnterYourPasscode" id="NUM" />
+    <public type="string" name="Reacted_few" id="NUM" />
+    <public type="string" name="Reacted_many" id="NUM" />
+    <public type="string" name="Reacted_one" id="NUM" />
+    <public type="string" name="Reacted_other" id="NUM" />
+    <public type="string" name="Reacted_two" id="NUM" />
+    <public type="string" name="Reacted_zero" id="NUM" />
+    <public type="string" name="Reactions" id="NUM" />
+    <public type="string" name="ReactionsCount" id="NUM" />
+    <public type="string" name="ReactionsCount_few" id="NUM" />
+    <public type="string" name="ReactionsCount_many" id="NUM" />
+    <public type="string" name="ReactionsCount_one" id="NUM" />
+    <public type="string" name="ReactionsCount_other" id="NUM" />
+    <public type="string" name="ReactionsCount_two" id="NUM" />
+    <public type="string" name="ReactionsCount_zero" id="NUM" />
+    <public type="string" name="ReactionsOff" id="NUM" />
     <public type="string" name="Recent" id="NUM" />
     <public type="string" name="RecentFiles" id="NUM" />
     <public type="string" name="RecentFilesAZ" id="NUM" />

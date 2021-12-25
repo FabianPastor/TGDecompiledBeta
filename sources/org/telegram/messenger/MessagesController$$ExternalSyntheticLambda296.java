@@ -2,22 +2,18 @@ package org.telegram.messenger;
 
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$User;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda296 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$Chat f$1;
-    public final /* synthetic */ TLRPC$User f$2;
+    public final /* synthetic */ String f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda296(MessagesController messagesController, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda296(MessagesController messagesController, String str) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$Chat;
-        this.f$2 = tLRPC$User;
+        this.f$1 = str;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$unpinAllMessages$94(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$registerForPush$243(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

@@ -1,29 +1,25 @@
 package org.telegram.messenger;
 
 import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
-import org.telegram.messenger.MediaDataController;
 
 public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda104 implements Runnable {
     public final /* synthetic */ MediaDataController f$0;
-    public final /* synthetic */ String[] f$1;
-    public final /* synthetic */ MediaDataController.KeywordResultCallback f$2;
-    public final /* synthetic */ String f$3;
-    public final /* synthetic */ boolean f$4;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ long f$4;
     public final /* synthetic */ ArrayList f$5;
-    public final /* synthetic */ CountDownLatch f$6;
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda104(MediaDataController mediaDataController, String[] strArr, MediaDataController.KeywordResultCallback keywordResultCallback, String str, boolean z, ArrayList arrayList, CountDownLatch countDownLatch) {
+    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda104(MediaDataController mediaDataController, boolean z, ArrayList arrayList, int i, long j, ArrayList arrayList2) {
         this.f$0 = mediaDataController;
-        this.f$1 = strArr;
-        this.f$2 = keywordResultCallback;
-        this.f$3 = str;
-        this.f$4 = z;
-        this.f$5 = arrayList;
-        this.f$6 = countDownLatch;
+        this.f$1 = z;
+        this.f$2 = arrayList;
+        this.f$3 = i;
+        this.f$4 = j;
+        this.f$5 = arrayList2;
     }
 
     public final void run() {
-        this.f$0.lambda$getEmojiSuggestions$148(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        this.f$0.lambda$processLoadedFeaturedStickers$32(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

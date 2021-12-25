@@ -378,18 +378,18 @@ public class SessionBottomSheet extends BottomSheet {
         L_0x00c6:
             boolean r13 = r1.contains(r2)
             if (r13 == 0) goto L_0x00d3
-            r13 = 2131165401(0x7var_d9, float:1.7945018E38)
-            r3 = 2131165401(0x7var_d9, float:1.7945018E38)
+            r13 = 2131165402(0x7var_da, float:1.794502E38)
+            r3 = 2131165402(0x7var_da, float:1.794502E38)
             goto L_0x00e6
         L_0x00d3:
             boolean r13 = r1.contains(r11)
             if (r13 == 0) goto L_0x00e0
-            r13 = 2131165400(0x7var_d8, float:1.7945016E38)
-            r3 = 2131165400(0x7var_d8, float:1.7945016E38)
+            r13 = 2131165401(0x7var_d9, float:1.7945018E38)
+            r3 = 2131165401(0x7var_d9, float:1.7945018E38)
             goto L_0x00e6
         L_0x00e0:
-            r13 = 2131165402(0x7var_da, float:1.794502E38)
-            r3 = 2131165402(0x7var_da, float:1.794502E38)
+            r13 = 2131165403(0x7var_db, float:1.7945022E38)
+            r3 = 2131165403(0x7var_db, float:1.7945022E38)
         L_0x00e6:
             r4 = r9
             r13 = 0

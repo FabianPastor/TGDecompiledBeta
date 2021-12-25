@@ -42,6 +42,9 @@ public abstract class TLRPC$MessageEntity extends TLObject {
             case 681706865:
                 tLRPC$MessageEntity = new TLRPC$TL_messageEntityCode();
                 break;
+            case 852137487:
+                tLRPC$MessageEntity = new TLRPC$TL_messageEntitySpoiler();
+                break;
             case 892193368:
                 tLRPC$MessageEntity = new TLRPC$TL_messageEntityMentionName_layer131();
                 break;

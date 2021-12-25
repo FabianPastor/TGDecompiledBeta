@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_config;
+import org.telegram.tgnet.TLRPC$TL_channels_sendAsPeers;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda144 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$TL_config f$1;
+    public final /* synthetic */ TLRPC$TL_channels_sendAsPeers f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda144(MessagesController messagesController, TLRPC$TL_config tLRPC$TL_config) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda144(MessagesController messagesController, TLRPC$TL_channels_sendAsPeers tLRPC$TL_channels_sendAsPeers) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$TL_config;
+        this.f$1 = tLRPC$TL_channels_sendAsPeers;
     }
 
     public final void run() {
-        this.f$0.lambda$updateConfig$17(this.f$1);
+        this.f$0.lambda$getSendAsPeers$320(this.f$1);
     }
 }

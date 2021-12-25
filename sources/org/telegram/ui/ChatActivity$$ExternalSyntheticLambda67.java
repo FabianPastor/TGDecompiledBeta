@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
 import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda67 implements View.OnTouchListener {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda67 implements View.OnClickListener {
+    public final /* synthetic */ boolean[] f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda67(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda67(boolean[] zArr) {
+        this.f$0 = zArr;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$createView$50(view, motionEvent);
+    public final void onClick(View view) {
+        ChatActivity.lambda$processSelectedOption$140(this.f$0, view);
     }
 }

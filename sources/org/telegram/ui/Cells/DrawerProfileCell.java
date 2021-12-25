@@ -454,9 +454,4 @@ public class DrawerProfileCell extends FrameLayout {
         }
         imageView.setContentDescription(LocaleController.getString(str, i));
     }
-
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        accessibilityNodeInfo.addAction(16);
-    }
 }

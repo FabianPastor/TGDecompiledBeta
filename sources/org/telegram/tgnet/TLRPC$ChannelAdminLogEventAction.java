@@ -67,9 +67,6 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
             case 648939889:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionToggleSignatures();
                 break;
-            case 663693416:
-                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionSendMessage();
-                break;
             case 771095562:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionDefaultBannedRights();
                 break;

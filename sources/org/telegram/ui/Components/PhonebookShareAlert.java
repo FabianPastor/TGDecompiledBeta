@@ -775,7 +775,7 @@ public class PhonebookShareAlert extends BottomSheet {
             int r7 = r0.getThemedColor(r7)
             r4.setBackgroundColor(r7)
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            r7 = 2131165485(0x7var_d, float:1.7945188E38)
+            r7 = 2131165487(0x7var_f, float:1.7945193E38)
             r4.setBackButtonImage(r7)
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
             java.lang.String r7 = "dialogTextBlack"
@@ -796,7 +796,7 @@ public class PhonebookShareAlert extends BottomSheet {
             boolean r4 = r0.isImport
             r8 = 2131624211(0x7f0e0113, float:1.8875595E38)
             java.lang.String r10 = "AddContactPhonebookTitle"
-            r11 = 2131627792(0x7f0e0var_, float:1.8882858E38)
+            r11 = 2131627815(0x7f0e0var_, float:1.8882905E38)
             java.lang.String r12 = "ShareContactTitle"
             if (r4 == 0) goto L_0x023b
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar

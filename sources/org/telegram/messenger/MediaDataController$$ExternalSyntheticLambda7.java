@@ -8,6 +8,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda7
     }
 
     public final void run() {
-        this.f$0.lambda$loadHints$88();
+        this.f$0.lambda$loadHints$96();
     }
 }

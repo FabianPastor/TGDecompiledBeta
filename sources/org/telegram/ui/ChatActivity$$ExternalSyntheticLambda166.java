@@ -1,17 +1,22 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda166 implements AlertsCreator.ScheduleDatePickerDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda166 implements RequestDelegate {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ Object f$1;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda166(ChatActivity chatActivity, Object obj) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda166(ChatActivity chatActivity, AlertDialog[] alertDialogArr, String str) {
         this.f$0 = chatActivity;
-        this.f$1 = obj;
+        this.f$1 = alertDialogArr;
+        this.f$2 = str;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$createView$37(this.f$1, z, i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$didPressMessageUrl$176(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

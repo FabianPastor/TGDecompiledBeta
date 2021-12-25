@@ -29,9 +29,11 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.ViewPropertyAnimator;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.view.GestureDetectorCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.lang.reflect.Field;
@@ -45,6 +47,8 @@ import org.telegram.ui.ActionBar.Theme;
 public class RecyclerListView extends RecyclerView {
     private static int[] attributes;
     private static boolean gotAttributes;
+    private View.AccessibilityDelegate accessibilityDelegate;
+    private boolean accessibilityEnabled;
     /* access modifiers changed from: private */
     public boolean allowItemsInteractionDuringAnimation;
     private boolean animateEmptyView;
@@ -69,7 +73,7 @@ public class RecyclerListView extends RecyclerView {
     public FastScroll fastScroll;
     public boolean fastScrollAnimationRunning;
     /* access modifiers changed from: private */
-    public GestureDetector gestureDetector;
+    public GestureDetectorCompat gestureDetector;
     private ArrayList<View> headers;
     private ArrayList<View> headersCache;
     private boolean hiddenByEmptyView;
@@ -152,6 +156,21 @@ public class RecyclerListView extends RecyclerView {
     }
 
     public interface OnItemClickListenerExtended {
+
+        /* renamed from: org.telegram.ui.Components.RecyclerListView$OnItemClickListenerExtended$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static boolean $default$hasDoubleTap(OnItemClickListenerExtended onItemClickListenerExtended, View view, int i) {
+                return false;
+            }
+
+            public static void $default$onDoubleTap(OnItemClickListenerExtended onItemClickListenerExtended, View view, int i, float f, float f2) {
+            }
+        }
+
+        boolean hasDoubleTap(View view, int i);
+
+        void onDoubleTap(View view, int i, float f, float f2);
+
         void onItemClick(View view, int i, float f, float f2);
     }
 
@@ -160,6 +179,16 @@ public class RecyclerListView extends RecyclerView {
     }
 
     public interface OnItemLongClickListenerExtended {
+
+        /* renamed from: org.telegram.ui.Components.RecyclerListView$OnItemLongClickListenerExtended$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static void $default$onLongClickRelease(OnItemLongClickListenerExtended onItemLongClickListenerExtended) {
+            }
+
+            public static void $default$onMove(OnItemLongClickListenerExtended onItemLongClickListenerExtended, float f, float f2) {
+            }
+        }
+
         boolean onItemClick(View view, int i, float f, float f2);
 
         void onLongClickRelease();
@@ -1566,74 +1595,95 @@ public class RecyclerListView extends RecyclerView {
         }
 
         public RecyclerListViewItemClickListener(Context context) {
-            GestureDetector unused = RecyclerListView.this.gestureDetector = new GestureDetector(context, new GestureDetector.OnGestureListener(RecyclerListView.this) {
+            GestureDetectorCompat unused = RecyclerListView.this.gestureDetector = new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener(RecyclerListView.this) {
+                private View doubleTapView;
+
                 public boolean onDown(MotionEvent motionEvent) {
                     return false;
                 }
 
-                public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-                    return false;
-                }
-
-                public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-                    return false;
-                }
-
-                public void onShowPress(MotionEvent motionEvent) {
-                }
-
                 public boolean onSingleTapUp(MotionEvent motionEvent) {
-                    if (!(RecyclerListView.this.currentChildView == null || (RecyclerListView.this.onItemClickListener == null && RecyclerListView.this.onItemClickListenerExtended == null))) {
+                    if (RecyclerListView.this.currentChildView == null) {
+                        return false;
+                    }
+                    if (RecyclerListView.this.onItemClickListenerExtended == null || !RecyclerListView.this.onItemClickListenerExtended.hasDoubleTap(RecyclerListView.this.currentChildView, RecyclerListView.this.currentChildPosition)) {
+                        onPressItem(RecyclerListView.this.currentChildView, motionEvent);
+                        return true;
+                    }
+                    this.doubleTapView = RecyclerListView.this.currentChildView;
+                    return false;
+                }
+
+                public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+                    if (this.doubleTapView == null || RecyclerListView.this.onItemClickListenerExtended == null || !RecyclerListView.this.onItemClickListenerExtended.hasDoubleTap(this.doubleTapView, RecyclerListView.this.currentChildPosition)) {
+                        return false;
+                    }
+                    onPressItem(this.doubleTapView, motionEvent);
+                    this.doubleTapView = null;
+                    return true;
+                }
+
+                public boolean onDoubleTap(MotionEvent motionEvent) {
+                    if (this.doubleTapView == null || RecyclerListView.this.onItemClickListenerExtended == null || !RecyclerListView.this.onItemClickListenerExtended.hasDoubleTap(this.doubleTapView, RecyclerListView.this.currentChildPosition)) {
+                        return false;
+                    }
+                    RecyclerListView.this.onItemClickListenerExtended.onDoubleTap(this.doubleTapView, RecyclerListView.this.currentChildPosition, motionEvent.getX(), motionEvent.getY());
+                    this.doubleTapView = null;
+                    return true;
+                }
+
+                private void onPressItem(View view, MotionEvent motionEvent) {
+                    if (view == null) {
+                        return;
+                    }
+                    if (RecyclerListView.this.onItemClickListener != null || RecyclerListView.this.onItemClickListenerExtended != null) {
                         final float x = motionEvent.getX();
                         final float y = motionEvent.getY();
-                        RecyclerListView recyclerListView = RecyclerListView.this;
-                        recyclerListView.onChildPressed(recyclerListView.currentChildView, x, y, true);
-                        final View access$500 = RecyclerListView.this.currentChildView;
-                        final int access$800 = RecyclerListView.this.currentChildPosition;
-                        if (RecyclerListView.this.instantClick && access$800 != -1) {
-                            access$500.playSoundEffect(0);
-                            access$500.sendAccessibilityEvent(1);
+                        RecyclerListView.this.onChildPressed(view, x, y, true);
+                        final int access$700 = RecyclerListView.this.currentChildPosition;
+                        if (RecyclerListView.this.instantClick && access$700 != -1) {
+                            view.playSoundEffect(0);
+                            view.sendAccessibilityEvent(1);
                             if (RecyclerListView.this.onItemClickListener != null) {
-                                RecyclerListView.this.onItemClickListener.onItemClick(access$500, access$800);
+                                RecyclerListView.this.onItemClickListener.onItemClick(view, access$700);
                             } else if (RecyclerListView.this.onItemClickListenerExtended != null) {
-                                RecyclerListView.this.onItemClickListenerExtended.onItemClick(access$500, access$800, x - access$500.getX(), y - access$500.getY());
+                                RecyclerListView.this.onItemClickListenerExtended.onItemClick(view, access$700, x - view.getX(), y - view.getY());
                             }
                         }
+                        final View view2 = view;
                         AndroidUtilities.runOnUIThread(RecyclerListView.this.clickRunnable = new Runnable() {
                             public void run() {
                                 if (this == RecyclerListView.this.clickRunnable) {
                                     Runnable unused = RecyclerListView.this.clickRunnable = null;
                                 }
-                                View view = access$500;
+                                View view = view2;
                                 if (view != null) {
                                     RecyclerListView.this.onChildPressed(view, 0.0f, 0.0f, false);
                                     if (!RecyclerListView.this.instantClick) {
-                                        access$500.playSoundEffect(0);
-                                        access$500.sendAccessibilityEvent(1);
-                                        if (access$800 == -1) {
+                                        view2.playSoundEffect(0);
+                                        view2.sendAccessibilityEvent(1);
+                                        if (access$700 == -1) {
                                             return;
                                         }
                                         if (RecyclerListView.this.onItemClickListener != null) {
-                                            RecyclerListView.this.onItemClickListener.onItemClick(access$500, access$800);
+                                            RecyclerListView.this.onItemClickListener.onItemClick(view2, access$700);
                                         } else if (RecyclerListView.this.onItemClickListenerExtended != null) {
-                                            OnItemClickListenerExtended access$700 = RecyclerListView.this.onItemClickListenerExtended;
-                                            View view2 = access$500;
-                                            access$700.onItemClick(view2, access$800, x - view2.getX(), y - access$500.getY());
+                                            OnItemClickListenerExtended access$600 = RecyclerListView.this.onItemClickListenerExtended;
+                                            View view2 = view2;
+                                            access$600.onItemClick(view2, access$700, x - view2.getX(), y - view2.getY());
                                         }
                                     }
                                 }
                             }
                         }, (long) ViewConfiguration.getPressedStateDuration());
                         if (RecyclerListView.this.selectChildRunnable != null) {
-                            View access$5002 = RecyclerListView.this.currentChildView;
                             AndroidUtilities.cancelRunOnUIThread(RecyclerListView.this.selectChildRunnable);
                             Runnable unused = RecyclerListView.this.selectChildRunnable = null;
                             View unused2 = RecyclerListView.this.currentChildView = null;
                             boolean unused3 = RecyclerListView.this.interceptedByChild = false;
-                            RecyclerListView.this.removeSelection(access$5002, motionEvent);
+                            RecyclerListView.this.removeSelection(view, motionEvent);
                         }
                     }
-                    return true;
                 }
 
                 public void onLongPress(MotionEvent motionEvent) {
@@ -1878,6 +1928,15 @@ public class RecyclerListView extends RecyclerView {
         this.scrollEnabled = true;
         this.lastX = Float.MAX_VALUE;
         this.lastY = Float.MAX_VALUE;
+        this.accessibilityEnabled = true;
+        this.accessibilityDelegate = new View.AccessibilityDelegate(this) {
+            public void onInitializeAccessibilityNodeInfo(View view, AccessibilityNodeInfo accessibilityNodeInfo) {
+                super.onInitializeAccessibilityNodeInfo(view, accessibilityNodeInfo);
+                if (view.isEnabled()) {
+                    accessibilityNodeInfo.addAction(16);
+                }
+            }
+        };
         this.observer = new RecyclerView.AdapterDataObserver() {
             public void onChanged() {
                 RecyclerListView.this.checkIfEmpty(true);
@@ -2641,9 +2700,13 @@ public class RecyclerListView extends RecyclerView {
             RecyclerView.ViewHolder findContainingViewHolder = findContainingViewHolder(view);
             if (findContainingViewHolder != null) {
                 view.setEnabled(((SelectionAdapter) getAdapter()).isEnabled(findContainingViewHolder));
+                if (this.accessibilityEnabled) {
+                    view.setAccessibilityDelegate(this.accessibilityDelegate);
+                }
             }
         } else {
             view.setEnabled(false);
+            view.setAccessibilityDelegate((View.AccessibilityDelegate) null);
         }
         super.onChildAttachedToWindow(view);
     }
@@ -3100,5 +3163,9 @@ public class RecyclerListView extends RecyclerView {
 
     public void setItemsEnterAnimator(RecyclerItemsEnterAnimator recyclerItemsEnterAnimator) {
         this.itemsEnterAnimator = recyclerItemsEnterAnimator;
+    }
+
+    public void setAccessibilityEnabled(boolean z) {
+        this.accessibilityEnabled = z;
     }
 }

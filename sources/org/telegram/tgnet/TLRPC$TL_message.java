@@ -1,9 +1,7 @@
 package org.telegram.tgnet;
 
-import android.text.TextUtils;
-
 public class TLRPC$TL_message extends TLRPC$Message {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -36,14 +34,7 @@ public class TLRPC$TL_message extends TLRPC$Message {
         this.date = abstractSerializedData.readInt32(z);
         this.message = abstractSerializedData.readString(z);
         if ((this.flags & 512) != 0) {
-            TLRPC$MessageMedia TLdeserialize = TLRPC$MessageMedia.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-            this.media = TLdeserialize;
-            if (TLdeserialize != null) {
-                this.ttl = TLdeserialize.ttl_seconds;
-            }
-            if (TLdeserialize != null && !TextUtils.isEmpty(TLdeserialize.captionLegacy)) {
-                this.message = this.media.captionLegacy;
-            }
+            this.media = TLRPC$MessageMedia.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 64) != 0) {
             this.reply_markup = TLRPC$ReplyMarkup.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -54,9 +45,9 @@ public class TLRPC$TL_message extends TLRPC$Message {
                 int readInt323 = abstractSerializedData.readInt32(z);
                 int i2 = 0;
                 while (i2 < readInt323) {
-                    TLRPC$MessageEntity TLdeserialize2 = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize2 != null) {
-                        this.entities.add(TLdeserialize2);
+                    TLRPC$MessageEntity TLdeserialize = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                    if (TLdeserialize != null) {
+                        this.entities.add(TLdeserialize);
                         i2++;
                     } else {
                         return;
@@ -86,14 +77,17 @@ public class TLRPC$TL_message extends TLRPC$Message {
         if ((this.flags & 131072) != 0) {
             this.grouped_id = abstractSerializedData.readInt64(z);
         }
+        if ((this.flags & 1048576) != 0) {
+            this.reactions = TLRPC$TL_messageReactions.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
         if ((this.flags & 4194304) != 0) {
             int readInt324 = abstractSerializedData.readInt32(z);
             if (readInt324 == NUM) {
                 int readInt325 = abstractSerializedData.readInt32(z);
                 while (i < readInt325) {
-                    TLRPC$TL_restrictionReason TLdeserialize3 = TLRPC$TL_restrictionReason.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize3 != null) {
-                        this.restriction_reason.add(TLdeserialize3);
+                    TLRPC$TL_restrictionReason TLdeserialize2 = TLRPC$TL_restrictionReason.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                    if (TLdeserialize2 != null) {
+                        this.restriction_reason.add(TLdeserialize2);
                         i++;
                     } else {
                         return;
@@ -181,6 +175,9 @@ public class TLRPC$TL_message extends TLRPC$Message {
         if ((this.flags & 131072) != 0) {
             abstractSerializedData.writeInt64(this.grouped_id);
         }
+        if ((this.flags & 1048576) != 0) {
+            this.reactions.serializeToStream(abstractSerializedData);
+        }
         if ((this.flags & 4194304) != 0) {
             abstractSerializedData.writeInt32(NUM);
             int size2 = this.restriction_reason.size();
@@ -192,6 +189,5 @@ public class TLRPC$TL_message extends TLRPC$Message {
         if ((this.flags & 33554432) != 0) {
             abstractSerializedData.writeInt32(this.ttl_period);
         }
-        writeAttachPath(abstractSerializedData);
     }
 }

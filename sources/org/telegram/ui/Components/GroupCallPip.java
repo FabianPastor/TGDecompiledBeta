@@ -914,7 +914,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
 
     private void updateAvatars(boolean z) {
         AvatarsImageView avatarsImageView2 = this.avatarsImageView;
-        if (avatarsImageView2.transitionProgressAnimator == null) {
+        if (avatarsImageView2.avatarsDarawable.transitionProgressAnimator == null) {
             VoIPService sharedInstance = VoIPService.getSharedInstance();
             ChatObject.Call call = sharedInstance != null ? sharedInstance.groupCall : null;
             int i = 0;

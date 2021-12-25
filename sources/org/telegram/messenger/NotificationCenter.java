@@ -24,6 +24,7 @@ public class NotificationCenter {
     public static final int cameraInitied;
     public static final int changeRepliesCounter;
     public static final int channelRightsUpdated;
+    public static final int chatAvailableReactionsUpdated;
     public static final int chatDidCreated;
     public static final int chatDidFailCreate;
     public static final int chatInfoCantLoad;
@@ -155,6 +156,7 @@ public class NotificationCenter {
     public static final int proxyCheckDone;
     public static final int proxySettingsChanged;
     public static final int pushMessagesUpdated;
+    public static final int reactionsDidLoad;
     public static final int recentDocumentsDidLoad;
     public static final int recordProgressChanged;
     public static final int recordStartError;
@@ -793,8 +795,14 @@ public class NotificationCenter {
         int i189 = i188 + 1;
         totalEvents = i189;
         onEmojiInteractionsReceived = i188;
-        totalEvents = i189 + 1;
+        int i190 = i189 + 1;
+        totalEvents = i190;
         emojiPreviewThemesChanged = i189;
+        int i191 = i190 + 1;
+        totalEvents = i191;
+        reactionsDidLoad = i190;
+        totalEvents = i191 + 1;
+        chatAvailableReactionsUpdated = i191;
     }
 
     private static class DelayedPost {

@@ -1,23 +1,19 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.GroupCreateActivity;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import org.telegram.ui.Components.ReactedUsersListView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda180 implements GroupCreateActivity.ContactsAddActivityDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ long f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda180 implements ReactedUsersListView.OnHeightChangedListener {
+    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$0;
+    public final /* synthetic */ int[] f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda180(ChatActivity chatActivity, long j) {
-        this.f$0 = chatActivity;
-        this.f$1 = j;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda180(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int[] iArr) {
+        this.f$0 = actionBarPopupWindowLayout;
+        this.f$1 = iArr;
     }
 
-    public final void didSelectUsers(ArrayList arrayList, int i) {
-        this.f$0.lambda$createView$29(this.f$1, arrayList, i);
-    }
-
-    public /* synthetic */ void needAddBot(TLRPC$User tLRPC$User) {
-        GroupCreateActivity.ContactsAddActivityDelegate.CC.$default$needAddBot(this, tLRPC$User);
+    public final void onHeightChanged(ReactedUsersListView reactedUsersListView, int i) {
+        this.f$0.getSwipeBack().setNewForegroundHeight(this.f$1[0], AndroidUtilities.dp(52.0f) + i);
     }
 }

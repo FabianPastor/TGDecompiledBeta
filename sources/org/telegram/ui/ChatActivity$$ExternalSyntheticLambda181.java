@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.PinchToZoomHelper;
+import org.telegram.ui.Components.ReactedUsersListView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda181 implements PinchToZoomHelper.ClipBoundsListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda181 implements ReactedUsersListView.OnProfileSelectedListener {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda181(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void getClipTopBottom(float[] fArr) {
-        this.f$0.lambda$createView$62(fArr);
+    public final void onProfileSelected(ReactedUsersListView reactedUsersListView, long j) {
+        this.f$0.lambda$createMenu$124(reactedUsersListView, j);
     }
 }
