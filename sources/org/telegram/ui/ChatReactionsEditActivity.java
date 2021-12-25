@@ -165,7 +165,7 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
             }
 
             public int getItemCount() {
-                return (!ChatReactionsEditActivity.this.chatReactions.isEmpty() ? ChatReactionsEditActivity.this.getAvailableReactions().size() + 1 : 0) + 1;
+                return (!ChatReactionsEditActivity.this.chatReactions.isEmpty() ? ChatReactionsEditActivity.this.chatReactions.size() + 1 : 0) + 1;
             }
         };
         this.listAdapter = r2;

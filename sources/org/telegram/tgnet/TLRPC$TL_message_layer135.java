@@ -2,7 +2,7 @@ package org.telegram.tgnet;
 
 import android.text.TextUtils;
 
-public class TLRPC$TL_message_layer135 extends TLRPC$Message {
+public class TLRPC$TL_message_layer135 extends TLRPC$TL_message {
     public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {

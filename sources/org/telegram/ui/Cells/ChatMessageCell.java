@@ -3353,8 +3353,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:362:0x05a5, code lost:
-        if (r8 > (r0 + ((float) org.telegram.messenger.AndroidUtilities.dp((float) (32 + ((r6.drawSideButton != 3 || r6.commentLayout == null) ? 0 : 18)))))) goto L_0x05a7;
+    /* JADX WARNING: Code restructure failed: missing block: B:362:0x058b, code lost:
+        if (r8 > (r0 + ((float) org.telegram.messenger.AndroidUtilities.dp((float) (32 + ((r6.drawSideButton != 3 || r6.commentLayout == null) ? 0 : 18)))))) goto L_0x058d;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r18) {
@@ -3362,57 +3362,47 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r17 = this;
             r6 = r17
             org.telegram.messenger.MessageObject r0 = r6.currentMessageObject
-            if (r0 == 0) goto L_0x05ad
+            if (r0 == 0) goto L_0x0593
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r6.delegate
             boolean r0 = r0.canPerformActions()
-            if (r0 == 0) goto L_0x05ad
+            if (r0 == 0) goto L_0x0593
             boolean r0 = r6.animationRunning
             if (r0 == 0) goto L_0x0014
-            goto L_0x05ad
+            goto L_0x0593
         L_0x0014:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder
-            r0.<init>()
-            java.lang.String r1 = "message type "
-            r0.append(r1)
-            org.telegram.messenger.MessageObject r1 = r6.currentMessageObject
-            int r1 = r1.type
-            r0.append(r1)
-            java.lang.String r0 = r0.toString()
-            java.lang.String r1 = "kek"
-            com.google.android.exoplayer2.util.Log.d(r1, r0)
             boolean r0 = r17.checkTextSelection(r18)
             r1 = 1
-            if (r0 == 0) goto L_0x0036
+            if (r0 == 0) goto L_0x001c
             return r1
-        L_0x0036:
+        L_0x001c:
             boolean r0 = r17.checkRoundSeekbar(r18)
-            if (r0 == 0) goto L_0x003d
+            if (r0 == 0) goto L_0x0023
             return r1
-        L_0x003d:
+        L_0x0023:
             boolean r0 = r17.chekReactionsTouchEvent(r18)
-            if (r0 == 0) goto L_0x0044
+            if (r0 == 0) goto L_0x002a
             return r1
-        L_0x0044:
+        L_0x002a:
             org.telegram.messenger.video.VideoPlayerRewinder r0 = r6.videoPlayerRewinder
             r2 = 3
             r3 = 0
-            if (r0 == 0) goto L_0x0069
+            if (r0 == 0) goto L_0x004f
             int r0 = r0.rewindCount
-            if (r0 <= 0) goto L_0x0069
+            if (r0 <= 0) goto L_0x004f
             int r0 = r18.getAction()
-            if (r0 == r1) goto L_0x005c
+            if (r0 == r1) goto L_0x0042
             int r0 = r18.getAction()
-            if (r0 != r2) goto L_0x005b
-            goto L_0x005c
-        L_0x005b:
+            if (r0 != r2) goto L_0x0041
+            goto L_0x0042
+        L_0x0041:
             return r1
-        L_0x005c:
+        L_0x0042:
             android.view.ViewParent r0 = r17.getParent()
             r0.requestDisallowInterceptTouchEvent(r3)
             org.telegram.messenger.video.VideoPlayerRewinder r0 = r6.videoPlayerRewinder
             r0.cancelRewind()
             return r3
-        L_0x0069:
+        L_0x004f:
             r6.disallowLongPress = r3
             float r0 = r18.getX()
             r6.lastTouchX = r0
@@ -3422,48 +3412,48 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             float r5 = r6.lastTouchX
             r4.setTouchCoords(r5, r0)
             boolean r0 = r17.checkTextBlockMotionEvent(r18)
-            if (r0 != 0) goto L_0x0088
+            if (r0 != 0) goto L_0x006e
             boolean r0 = r17.checkPinchToZoom(r18)
-        L_0x0088:
-            if (r0 != 0) goto L_0x008e
+        L_0x006e:
+            if (r0 != 0) goto L_0x0074
             boolean r0 = r17.checkDateMotionEvent(r18)
-        L_0x008e:
-            if (r0 != 0) goto L_0x0094
+        L_0x0074:
+            if (r0 != 0) goto L_0x007a
             boolean r0 = r17.checkTextSelection(r18)
-        L_0x0094:
-            if (r0 != 0) goto L_0x009a
+        L_0x007a:
+            if (r0 != 0) goto L_0x0080
             boolean r0 = r17.checkOtherButtonMotionEvent(r18)
-        L_0x009a:
-            if (r0 != 0) goto L_0x00a0
+        L_0x0080:
+            if (r0 != 0) goto L_0x0086
             boolean r0 = r17.checkCaptionMotionEvent(r18)
-        L_0x00a0:
-            if (r0 != 0) goto L_0x00a6
+        L_0x0086:
+            if (r0 != 0) goto L_0x008c
             boolean r0 = r17.checkAudioMotionEvent(r18)
-        L_0x00a6:
-            if (r0 != 0) goto L_0x00ac
+        L_0x008c:
+            if (r0 != 0) goto L_0x0092
             boolean r0 = r17.checkLinkPreviewMotionEvent(r18)
-        L_0x00ac:
-            if (r0 != 0) goto L_0x00b2
+        L_0x0092:
+            if (r0 != 0) goto L_0x0098
             boolean r0 = r17.checkInstantButtonMotionEvent(r18)
-        L_0x00b2:
-            if (r0 != 0) goto L_0x00b8
+        L_0x0098:
+            if (r0 != 0) goto L_0x009e
             boolean r0 = r17.checkCommentButtonMotionEvent(r18)
-        L_0x00b8:
-            if (r0 != 0) goto L_0x00be
+        L_0x009e:
+            if (r0 != 0) goto L_0x00a4
             boolean r0 = r17.checkGameMotionEvent(r18)
-        L_0x00be:
-            if (r0 != 0) goto L_0x00c4
+        L_0x00a4:
+            if (r0 != 0) goto L_0x00aa
             boolean r0 = r17.checkPhotoImageMotionEvent(r18)
-        L_0x00c4:
-            if (r0 != 0) goto L_0x00ca
+        L_0x00aa:
+            if (r0 != 0) goto L_0x00b0
             boolean r0 = r17.checkBotButtonMotionEvent(r18)
-        L_0x00ca:
-            if (r0 != 0) goto L_0x00d0
+        L_0x00b0:
+            if (r0 != 0) goto L_0x00b6
             boolean r0 = r17.checkPollButtonMotionEvent(r18)
-        L_0x00d0:
+        L_0x00b6:
             int r4 = r18.getAction()
             r5 = 21
-            if (r4 != r2) goto L_0x0114
+            if (r4 != r2) goto L_0x00fa
             r6.buttonPressed = r3
             r6.miniButtonPressed = r3
             r0 = -1
@@ -3481,43 +3471,43 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r6.instantButtonPressed = r3
             r6.instantPressed = r3
             int r4 = android.os.Build.VERSION.SDK_INT
-            if (r4 < r5) goto L_0x010f
+            if (r4 < r5) goto L_0x00f5
             r4 = 0
-        L_0x00fc:
+        L_0x00e2:
             android.graphics.drawable.Drawable[] r7 = r6.selectorDrawable
             int r8 = r7.length
-            if (r4 >= r8) goto L_0x010f
+            if (r4 >= r8) goto L_0x00f5
             r8 = r7[r4]
-            if (r8 == 0) goto L_0x010c
+            if (r8 == 0) goto L_0x00f2
             r7 = r7[r4]
             int[] r8 = android.util.StateSet.NOTHING
             r7.setState(r8)
-        L_0x010c:
+        L_0x00f2:
             int r4 = r4 + 1
-            goto L_0x00fc
-        L_0x010f:
+            goto L_0x00e2
+        L_0x00f5:
             r6.resetPressedLink(r0)
             r7 = 0
-            goto L_0x0115
-        L_0x0114:
+            goto L_0x00fb
+        L_0x00fa:
             r7 = r0
-        L_0x0115:
+        L_0x00fb:
             r17.updateRadialProgressBackground()
             boolean r0 = r6.disallowLongPress
-            if (r0 != 0) goto L_0x0127
-            if (r7 == 0) goto L_0x0127
+            if (r0 != 0) goto L_0x010d
+            if (r7 == 0) goto L_0x010d
             int r0 = r18.getAction()
-            if (r0 != 0) goto L_0x0127
+            if (r0 != 0) goto L_0x010d
             r17.startCheckLongPress()
-        L_0x0127:
+        L_0x010d:
             int r0 = r18.getAction()
             r4 = 2
-            if (r0 == 0) goto L_0x0137
+            if (r0 == 0) goto L_0x011d
             int r0 = r18.getAction()
-            if (r0 == r4) goto L_0x0137
+            if (r0 == r4) goto L_0x011d
             r17.cancelCheckLongPress()
-        L_0x0137:
-            if (r7 != 0) goto L_0x05ac
+        L_0x011d:
+            if (r7 != 0) goto L_0x0592
             float r0 = r18.getX()
             float r8 = r18.getY()
             int r9 = r18.getAction()
@@ -3527,54 +3517,54 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r14 = 1082130432(0x40800000, float:4.0)
             r15 = 1109393408(0x42200000, float:40.0)
             r16 = 1107296256(0x42000000, float:32.0)
-            if (r9 != 0) goto L_0x02ea
+            if (r9 != 0) goto L_0x02d0
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r4 = r6.delegate
-            if (r4 == 0) goto L_0x015d
+            if (r4 == 0) goto L_0x0143
             boolean r4 = r4.canPerformActions()
-            if (r4 == 0) goto L_0x05ac
-        L_0x015d:
+            if (r4 == 0) goto L_0x0592
+        L_0x0143:
             boolean r4 = r6.isAvatarVisible
-            if (r4 == 0) goto L_0x0173
+            if (r4 == 0) goto L_0x0159
             org.telegram.messenger.ImageReceiver r4 = r6.avatarImage
             int r9 = r17.getTop()
             float r9 = (float) r9
             float r9 = r9 + r8
             boolean r4 = r4.isInsideImage(r0, r9)
-            if (r4 == 0) goto L_0x0173
+            if (r4 == 0) goto L_0x0159
             r6.avatarPressed = r1
-            goto L_0x02e2
-        L_0x0173:
+            goto L_0x02c8
+        L_0x0159:
             boolean r4 = r6.psaButtonVisible
-            if (r4 == 0) goto L_0x01e8
+            if (r4 == 0) goto L_0x01ce
             boolean r4 = r6.hasPsaHint
-            if (r4 == 0) goto L_0x01e8
+            if (r4 == 0) goto L_0x01ce
             int r4 = r6.psaHelpX
             float r9 = (float) r4
             int r9 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1))
-            if (r9 < 0) goto L_0x01e8
+            if (r9 < 0) goto L_0x01ce
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r15)
             int r4 = r4 + r9
             float r4 = (float) r4
             int r4 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r4 > 0) goto L_0x01e8
+            if (r4 > 0) goto L_0x01ce
             int r4 = r6.psaHelpY
             float r9 = (float) r4
             int r9 = (r8 > r9 ? 1 : (r8 == r9 ? 0 : -1))
-            if (r9 < 0) goto L_0x01e8
+            if (r9 < 0) goto L_0x01ce
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r15)
             int r4 = r4 + r9
             float r4 = (float) r4
             int r4 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1))
-            if (r4 > 0) goto L_0x01e8
+            if (r4 > 0) goto L_0x01ce
             r6.psaHintPressed = r1
             r6.createSelectorDrawable(r3)
             int[] r4 = r6.selectorDrawableMaskType
             r4[r3] = r2
             int r2 = android.os.Build.VERSION.SDK_INT
-            if (r2 < r5) goto L_0x01e3
+            if (r2 < r5) goto L_0x01c9
             android.graphics.drawable.Drawable[] r2 = r6.selectorDrawable
             r4 = r2[r3]
-            if (r4 == 0) goto L_0x01e3
+            if (r4 == 0) goto L_0x01c9
             r2 = r2[r3]
             int r4 = r6.psaHelpX
             r5 = 1090519040(0x41000000, float:8.0)
@@ -3597,34 +3587,34 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r0 = r0[r3]
             int[] r2 = r6.pressedState
             r0.setState(r2)
-        L_0x01e3:
+        L_0x01c9:
             r17.invalidate()
-            goto L_0x02e2
-        L_0x01e8:
+            goto L_0x02c8
+        L_0x01ce:
             boolean r4 = r6.drawForwardedName
-            if (r4 == 0) goto L_0x022d
+            if (r4 == 0) goto L_0x0213
             android.text.StaticLayout[] r4 = r6.forwardedNameLayout
             r4 = r4[r3]
-            if (r4 == 0) goto L_0x022d
+            if (r4 == 0) goto L_0x0213
             float r4 = r6.forwardNameX
             int r5 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r5 < 0) goto L_0x022d
+            if (r5 < 0) goto L_0x0213
             int r5 = r6.forwardedNameWidth
             float r5 = (float) r5
             float r4 = r4 + r5
             int r4 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r4 > 0) goto L_0x022d
+            if (r4 > 0) goto L_0x0213
             int r4 = r6.forwardNameY
             float r5 = (float) r4
             int r5 = (r8 > r5 ? 1 : (r8 == r5 ? 0 : -1))
-            if (r5 < 0) goto L_0x022d
+            if (r5 < 0) goto L_0x0213
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r16)
             int r4 = r4 + r5
             float r4 = (float) r4
             int r4 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1))
-            if (r4 > 0) goto L_0x022d
+            if (r4 > 0) goto L_0x0213
             int r2 = r6.viaWidth
-            if (r2 == 0) goto L_0x0229
+            if (r2 == 0) goto L_0x020f
             float r2 = r6.forwardNameX
             int r3 = r6.viaNameWidth
             float r3 = (float) r3
@@ -3633,176 +3623,176 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             float r3 = (float) r3
             float r2 = r2 + r3
             int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 < 0) goto L_0x0229
+            if (r0 < 0) goto L_0x020f
             r6.forwardBotPressed = r1
-            goto L_0x02e2
-        L_0x0229:
+            goto L_0x02c8
+        L_0x020f:
             r6.forwardNamePressed = r1
-            goto L_0x02e2
-        L_0x022d:
+            goto L_0x02c8
+        L_0x0213:
             boolean r4 = r6.drawNameLayout
-            if (r4 == 0) goto L_0x0267
+            if (r4 == 0) goto L_0x024d
             android.text.StaticLayout r4 = r6.nameLayout
-            if (r4 == 0) goto L_0x0267
+            if (r4 == 0) goto L_0x024d
             int r4 = r6.viaWidth
-            if (r4 == 0) goto L_0x0267
+            if (r4 == 0) goto L_0x024d
             float r5 = r6.nameX
             int r9 = r6.viaNameWidth
             float r11 = (float) r9
             float r11 = r11 + r5
             int r11 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1))
-            if (r11 < 0) goto L_0x0267
+            if (r11 < 0) goto L_0x024d
             float r9 = (float) r9
             float r5 = r5 + r9
             float r4 = (float) r4
             float r5 = r5 + r4
             int r4 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-            if (r4 > 0) goto L_0x0267
+            if (r4 > 0) goto L_0x024d
             float r4 = r6.nameY
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r14)
             float r5 = (float) r5
             float r4 = r4 - r5
             int r4 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1))
-            if (r4 < 0) goto L_0x0267
+            if (r4 < 0) goto L_0x024d
             float r4 = r6.nameY
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r12)
             float r5 = (float) r5
             float r4 = r4 + r5
             int r4 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1))
-            if (r4 > 0) goto L_0x0267
+            if (r4 > 0) goto L_0x024d
             r6.forwardBotPressed = r1
-            goto L_0x02e2
-        L_0x0267:
+            goto L_0x02c8
+        L_0x024d:
             int r4 = r6.drawSideButton
-            if (r4 == 0) goto L_0x02a5
+            if (r4 == 0) goto L_0x028b
             float r4 = r6.sideStartX
             int r5 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r5 < 0) goto L_0x02a5
+            if (r5 < 0) goto L_0x028b
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r15)
             float r5 = (float) r5
             float r4 = r4 + r5
             int r4 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r4 > 0) goto L_0x02a5
+            if (r4 > 0) goto L_0x028b
             float r4 = r6.sideStartY
             int r5 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1))
-            if (r5 < 0) goto L_0x02a5
+            if (r5 < 0) goto L_0x028b
             int r5 = r6.drawSideButton
-            if (r5 != r2) goto L_0x028b
+            if (r5 != r2) goto L_0x0271
             android.text.StaticLayout r2 = r6.commentLayout
-            if (r2 == 0) goto L_0x028b
+            if (r2 == 0) goto L_0x0271
             r3 = 18
-        L_0x028b:
+        L_0x0271:
             int r13 = r13 + r3
             float r2 = (float) r13
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             float r2 = (float) r2
             float r4 = r4 + r2
             int r2 = (r8 > r4 ? 1 : (r8 == r4 ? 0 : -1))
-            if (r2 > 0) goto L_0x02a5
+            if (r2 > 0) goto L_0x028b
             org.telegram.messenger.MessageObject r0 = r6.currentMessageObject
             boolean r0 = r0.isSent()
-            if (r0 == 0) goto L_0x02a1
+            if (r0 == 0) goto L_0x0287
             r6.sideButtonPressed = r1
-        L_0x02a1:
+        L_0x0287:
             r17.invalidate()
-            goto L_0x02e2
-        L_0x02a5:
+            goto L_0x02c8
+        L_0x028b:
             android.text.StaticLayout r2 = r6.replyNameLayout
-            if (r2 == 0) goto L_0x02e1
+            if (r2 == 0) goto L_0x02c7
             org.telegram.messenger.MessageObject r2 = r6.currentMessageObject
             boolean r2 = r2.shouldDrawWithoutBackground()
-            if (r2 == 0) goto L_0x02bc
+            if (r2 == 0) goto L_0x02a2
             int r2 = r6.replyStartX
             int r3 = r6.replyNameWidth
             int r4 = r6.replyTextWidth
             int r3 = java.lang.Math.max(r3, r4)
-            goto L_0x02c0
-        L_0x02bc:
+            goto L_0x02a6
+        L_0x02a2:
             int r2 = r6.replyStartX
             int r3 = r6.backgroundDrawableRight
-        L_0x02c0:
+        L_0x02a6:
             int r2 = r2 + r3
             int r3 = r6.replyStartX
             float r3 = (float) r3
             int r3 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r3 < 0) goto L_0x02e1
+            if (r3 < 0) goto L_0x02c7
             float r2 = (float) r2
             int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 > 0) goto L_0x02e1
+            if (r0 > 0) goto L_0x02c7
             int r0 = r6.replyStartY
             float r2 = (float) r0
             int r2 = (r8 > r2 ? 1 : (r8 == r2 ? 0 : -1))
-            if (r2 < 0) goto L_0x02e1
+            if (r2 < 0) goto L_0x02c7
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r0 = r0 + r2
             float r0 = (float) r0
             int r0 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1))
-            if (r0 > 0) goto L_0x02e1
+            if (r0 > 0) goto L_0x02c7
             r6.replyPressed = r1
-            goto L_0x02e2
-        L_0x02e1:
+            goto L_0x02c8
+        L_0x02c7:
             r1 = r7
-        L_0x02e2:
-            if (r1 == 0) goto L_0x02e7
+        L_0x02c8:
+            if (r1 == 0) goto L_0x02cd
             r17.startCheckLongPress()
-        L_0x02e7:
+        L_0x02cd:
             r7 = r1
-            goto L_0x05ac
-        L_0x02ea:
+            goto L_0x0592
+        L_0x02d0:
             int r9 = r18.getAction()
-            if (r9 == r4) goto L_0x02f3
+            if (r9 == r4) goto L_0x02d9
             r17.cancelCheckLongPress()
-        L_0x02f3:
+        L_0x02d9:
             boolean r9 = r6.avatarPressed
-            if (r9 == 0) goto L_0x0377
+            if (r9 == 0) goto L_0x035d
             int r5 = r18.getAction()
-            if (r5 != r1) goto L_0x0351
+            if (r5 != r1) goto L_0x0337
             r6.avatarPressed = r3
             r6.playSoundEffect(r3)
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r6.delegate
-            if (r0 == 0) goto L_0x05ac
+            if (r0 == 0) goto L_0x0592
             org.telegram.tgnet.TLRPC$User r1 = r6.currentUser
-            if (r1 == 0) goto L_0x0320
+            if (r1 == 0) goto L_0x0306
             long r2 = r1.id
             r4 = 0
             int r8 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r8 != 0) goto L_0x0317
+            if (r8 != 0) goto L_0x02fd
             r0.didPressHiddenForward(r6)
-            goto L_0x05ac
-        L_0x0317:
+            goto L_0x0592
+        L_0x02fd:
             float r2 = r6.lastTouchX
             float r3 = r6.lastTouchY
             r0.didPressUserAvatar(r6, r1, r2, r3)
-            goto L_0x05ac
-        L_0x0320:
+            goto L_0x0592
+        L_0x0306:
             org.telegram.tgnet.TLRPC$Chat r1 = r6.currentChat
-            if (r1 == 0) goto L_0x05ac
+            if (r1 == 0) goto L_0x0592
             org.telegram.messenger.MessageObject r2 = r6.currentMessageObject
             org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner
             org.telegram.tgnet.TLRPC$MessageFwdHeader r2 = r2.fwd_from
-            if (r2 == 0) goto L_0x033c
+            if (r2 == 0) goto L_0x0322
             int r3 = r2.flags
             r3 = r3 & 16
-            if (r3 == 0) goto L_0x0336
+            if (r3 == 0) goto L_0x031c
             int r2 = r2.saved_from_msg_id
             r3 = r1
-            goto L_0x033a
-        L_0x0336:
+            goto L_0x0320
+        L_0x031c:
             int r2 = r2.channel_post
             org.telegram.tgnet.TLRPC$Chat r3 = r6.currentForwardChannel
-        L_0x033a:
+        L_0x0320:
             r4 = r2
-            goto L_0x033e
-        L_0x033c:
+            goto L_0x0324
+        L_0x0322:
             r3 = r1
             r4 = 0
-        L_0x033e:
-            if (r3 == 0) goto L_0x0342
+        L_0x0324:
+            if (r3 == 0) goto L_0x0328
             r2 = r3
-            goto L_0x0343
-        L_0x0342:
+            goto L_0x0329
+        L_0x0328:
             r2 = r1
-        L_0x0343:
+        L_0x0329:
             float r5 = r6.lastTouchX
             float r8 = r6.lastTouchY
             r1 = r17
@@ -3810,56 +3800,56 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r4 = r5
             r5 = r8
             r0.didPressChannelAvatar(r1, r2, r3, r4, r5)
-            goto L_0x05ac
-        L_0x0351:
+            goto L_0x0592
+        L_0x0337:
             int r1 = r18.getAction()
-            if (r1 != r2) goto L_0x035b
+            if (r1 != r2) goto L_0x0341
             r6.avatarPressed = r3
-            goto L_0x05ac
-        L_0x035b:
+            goto L_0x0592
+        L_0x0341:
             int r1 = r18.getAction()
-            if (r1 != r4) goto L_0x05ac
+            if (r1 != r4) goto L_0x0592
             boolean r1 = r6.isAvatarVisible
-            if (r1 == 0) goto L_0x05ac
+            if (r1 == 0) goto L_0x0592
             org.telegram.messenger.ImageReceiver r1 = r6.avatarImage
             int r2 = r17.getTop()
             float r2 = (float) r2
             float r8 = r8 + r2
             boolean r0 = r1.isInsideImage(r0, r8)
-            if (r0 != 0) goto L_0x05ac
+            if (r0 != 0) goto L_0x0592
             r6.avatarPressed = r3
-            goto L_0x05ac
-        L_0x0377:
+            goto L_0x0592
+        L_0x035d:
             boolean r9 = r6.psaHintPressed
-            if (r9 == 0) goto L_0x03a1
+            if (r9 == 0) goto L_0x0387
             int r0 = r18.getAction()
-            if (r0 != r1) goto L_0x05ac
+            if (r0 != r1) goto L_0x0592
             r6.playSoundEffect(r3)
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r6.delegate
             r0.didPressHint(r6, r1)
             r6.psaHintPressed = r3
             int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r5) goto L_0x039c
+            if (r0 < r5) goto L_0x0382
             android.graphics.drawable.Drawable[] r0 = r6.selectorDrawable
             r1 = r0[r3]
-            if (r1 == 0) goto L_0x039c
+            if (r1 == 0) goto L_0x0382
             r0 = r0[r3]
             int[] r1 = android.util.StateSet.NOTHING
             r0.setState(r1)
-        L_0x039c:
+        L_0x0382:
             r17.invalidate()
-            goto L_0x05ac
-        L_0x03a1:
+            goto L_0x0592
+        L_0x0387:
             boolean r5 = r6.forwardNamePressed
-            if (r5 == 0) goto L_0x0414
+            if (r5 == 0) goto L_0x03fa
             int r5 = r18.getAction()
-            if (r5 != r1) goto L_0x03e1
+            if (r5 != r1) goto L_0x03c7
             r6.forwardNamePressed = r3
             r6.playSoundEffect(r3)
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r6.delegate
-            if (r0 == 0) goto L_0x05ac
+            if (r0 == 0) goto L_0x0592
             org.telegram.tgnet.TLRPC$Chat r2 = r6.currentForwardChannel
-            if (r2 == 0) goto L_0x03cb
+            if (r2 == 0) goto L_0x03b1
             org.telegram.messenger.MessageObject r1 = r6.currentMessageObject
             org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
             org.telegram.tgnet.TLRPC$MessageFwdHeader r1 = r1.fwd_from
@@ -3868,142 +3858,142 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             float r5 = r6.lastTouchY
             r1 = r17
             r0.didPressChannelAvatar(r1, r2, r3, r4, r5)
-            goto L_0x05ac
-        L_0x03cb:
+            goto L_0x0592
+        L_0x03b1:
             org.telegram.tgnet.TLRPC$User r1 = r6.currentForwardUser
-            if (r1 == 0) goto L_0x03d8
+            if (r1 == 0) goto L_0x03be
             float r2 = r6.lastTouchX
             float r3 = r6.lastTouchY
             r0.didPressUserAvatar(r6, r1, r2, r3)
-            goto L_0x05ac
-        L_0x03d8:
+            goto L_0x0592
+        L_0x03be:
             java.lang.String r1 = r6.currentForwardName
-            if (r1 == 0) goto L_0x05ac
+            if (r1 == 0) goto L_0x0592
             r0.didPressHiddenForward(r6)
-            goto L_0x05ac
-        L_0x03e1:
+            goto L_0x0592
+        L_0x03c7:
             int r1 = r18.getAction()
-            if (r1 != r2) goto L_0x03eb
+            if (r1 != r2) goto L_0x03d1
             r6.forwardNamePressed = r3
-            goto L_0x05ac
-        L_0x03eb:
+            goto L_0x0592
+        L_0x03d1:
             int r1 = r18.getAction()
-            if (r1 != r4) goto L_0x05ac
+            if (r1 != r4) goto L_0x0592
             float r1 = r6.forwardNameX
             int r2 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r2 < 0) goto L_0x0410
+            if (r2 < 0) goto L_0x03f6
             int r2 = r6.forwardedNameWidth
             float r2 = (float) r2
             float r1 = r1 + r2
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 > 0) goto L_0x0410
+            if (r0 > 0) goto L_0x03f6
             int r0 = r6.forwardNameY
             float r1 = (float) r0
             int r1 = (r8 > r1 ? 1 : (r8 == r1 ? 0 : -1))
-            if (r1 < 0) goto L_0x0410
+            if (r1 < 0) goto L_0x03f6
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r16)
             int r0 = r0 + r1
             float r0 = (float) r0
             int r0 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1))
-            if (r0 <= 0) goto L_0x05ac
-        L_0x0410:
+            if (r0 <= 0) goto L_0x0592
+        L_0x03f6:
             r6.forwardNamePressed = r3
-            goto L_0x05ac
-        L_0x0414:
+            goto L_0x0592
+        L_0x03fa:
             boolean r5 = r6.forwardBotPressed
-            if (r5 == 0) goto L_0x04a6
+            if (r5 == 0) goto L_0x048c
             int r5 = r18.getAction()
-            if (r5 != r1) goto L_0x0439
+            if (r5 != r1) goto L_0x041f
             r6.forwardBotPressed = r3
             r6.playSoundEffect(r3)
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r6.delegate
-            if (r0 == 0) goto L_0x05ac
+            if (r0 == 0) goto L_0x0592
             org.telegram.tgnet.TLRPC$User r1 = r6.currentViaBotUser
-            if (r1 == 0) goto L_0x042e
+            if (r1 == 0) goto L_0x0414
             java.lang.String r1 = r1.username
-            goto L_0x0434
-        L_0x042e:
+            goto L_0x041a
+        L_0x0414:
             org.telegram.messenger.MessageObject r1 = r6.currentMessageObject
             org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
             java.lang.String r1 = r1.via_bot_name
-        L_0x0434:
+        L_0x041a:
             r0.didPressViaBot(r6, r1)
-            goto L_0x05ac
-        L_0x0439:
+            goto L_0x0592
+        L_0x041f:
             int r1 = r18.getAction()
-            if (r1 != r2) goto L_0x0443
+            if (r1 != r2) goto L_0x0429
             r6.forwardBotPressed = r3
-            goto L_0x05ac
-        L_0x0443:
+            goto L_0x0592
+        L_0x0429:
             int r1 = r18.getAction()
-            if (r1 != r4) goto L_0x05ac
+            if (r1 != r4) goto L_0x0592
             boolean r1 = r6.drawForwardedName
-            if (r1 == 0) goto L_0x0476
+            if (r1 == 0) goto L_0x045c
             android.text.StaticLayout[] r1 = r6.forwardedNameLayout
             r1 = r1[r3]
-            if (r1 == 0) goto L_0x0476
+            if (r1 == 0) goto L_0x045c
             float r1 = r6.forwardNameX
             int r2 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r2 < 0) goto L_0x0472
+            if (r2 < 0) goto L_0x0458
             int r2 = r6.forwardedNameWidth
             float r2 = (float) r2
             float r1 = r1 + r2
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 > 0) goto L_0x0472
+            if (r0 > 0) goto L_0x0458
             int r0 = r6.forwardNameY
             float r1 = (float) r0
             int r1 = (r8 > r1 ? 1 : (r8 == r1 ? 0 : -1))
-            if (r1 < 0) goto L_0x0472
+            if (r1 < 0) goto L_0x0458
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r16)
             int r0 = r0 + r1
             float r0 = (float) r0
             int r0 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1))
-            if (r0 <= 0) goto L_0x05ac
-        L_0x0472:
+            if (r0 <= 0) goto L_0x0592
+        L_0x0458:
             r6.forwardBotPressed = r3
-            goto L_0x05ac
-        L_0x0476:
+            goto L_0x0592
+        L_0x045c:
             float r1 = r6.nameX
             int r2 = r6.viaNameWidth
             float r4 = (float) r2
             float r4 = r4 + r1
             int r4 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r4 < 0) goto L_0x04a2
+            if (r4 < 0) goto L_0x0488
             float r2 = (float) r2
             float r1 = r1 + r2
             int r2 = r6.viaWidth
             float r2 = (float) r2
             float r1 = r1 + r2
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 > 0) goto L_0x04a2
+            if (r0 > 0) goto L_0x0488
             float r0 = r6.nameY
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r14)
             float r1 = (float) r1
             float r0 = r0 - r1
             int r0 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1))
-            if (r0 < 0) goto L_0x04a2
+            if (r0 < 0) goto L_0x0488
             float r0 = r6.nameY
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r12)
             float r1 = (float) r1
             float r0 = r0 + r1
             int r0 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1))
-            if (r0 <= 0) goto L_0x05ac
-        L_0x04a2:
+            if (r0 <= 0) goto L_0x0592
+        L_0x0488:
             r6.forwardBotPressed = r3
-            goto L_0x05ac
-        L_0x04a6:
+            goto L_0x0592
+        L_0x048c:
             boolean r5 = r6.replyPressed
-            if (r5 == 0) goto L_0x054b
+            if (r5 == 0) goto L_0x0531
             int r5 = r18.getAction()
-            if (r5 != r1) goto L_0x0503
+            if (r5 != r1) goto L_0x04e9
             r6.replyPressed = r3
             r6.playSoundEffect(r3)
             boolean r0 = r6.replyPanelIsForward
-            if (r0 == 0) goto L_0x04ea
+            if (r0 == 0) goto L_0x04d0
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r6.delegate
-            if (r0 == 0) goto L_0x05ac
+            if (r0 == 0) goto L_0x0592
             org.telegram.tgnet.TLRPC$Chat r2 = r6.currentForwardChannel
-            if (r2 == 0) goto L_0x04d4
+            if (r2 == 0) goto L_0x04ba
             org.telegram.messenger.MessageObject r1 = r6.currentMessageObject
             org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
             org.telegram.tgnet.TLRPC$MessageFwdHeader r1 = r1.fwd_from
@@ -4012,128 +4002,128 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             float r5 = r6.lastTouchY
             r1 = r17
             r0.didPressChannelAvatar(r1, r2, r3, r4, r5)
-            goto L_0x05ac
-        L_0x04d4:
+            goto L_0x0592
+        L_0x04ba:
             org.telegram.tgnet.TLRPC$User r1 = r6.currentForwardUser
-            if (r1 == 0) goto L_0x04e1
+            if (r1 == 0) goto L_0x04c7
             float r2 = r6.lastTouchX
             float r3 = r6.lastTouchY
             r0.didPressUserAvatar(r6, r1, r2, r3)
-            goto L_0x05ac
-        L_0x04e1:
+            goto L_0x0592
+        L_0x04c7:
             java.lang.String r1 = r6.currentForwardName
-            if (r1 == 0) goto L_0x05ac
+            if (r1 == 0) goto L_0x0592
             r0.didPressHiddenForward(r6)
-            goto L_0x05ac
-        L_0x04ea:
+            goto L_0x0592
+        L_0x04d0:
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r6.delegate
-            if (r0 == 0) goto L_0x05ac
+            if (r0 == 0) goto L_0x0592
             org.telegram.messenger.MessageObject r0 = r6.currentMessageObject
             boolean r0 = r0.hasValidReplyMessageObject()
-            if (r0 == 0) goto L_0x05ac
+            if (r0 == 0) goto L_0x0592
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r6.delegate
             org.telegram.messenger.MessageObject r1 = r6.currentMessageObject
             int r1 = r1.getReplyMsgId()
             r0.didPressReplyMessage(r6, r1)
-            goto L_0x05ac
-        L_0x0503:
+            goto L_0x0592
+        L_0x04e9:
             int r1 = r18.getAction()
-            if (r1 != r2) goto L_0x050d
+            if (r1 != r2) goto L_0x04f3
             r6.replyPressed = r3
-            goto L_0x05ac
-        L_0x050d:
+            goto L_0x0592
+        L_0x04f3:
             int r1 = r18.getAction()
-            if (r1 != r4) goto L_0x05ac
+            if (r1 != r4) goto L_0x0592
             org.telegram.messenger.MessageObject r1 = r6.currentMessageObject
             boolean r1 = r1.shouldDrawWithoutBackground()
-            if (r1 == 0) goto L_0x0526
+            if (r1 == 0) goto L_0x050c
             int r1 = r6.replyStartX
             int r2 = r6.replyNameWidth
             int r4 = r6.replyTextWidth
             int r2 = java.lang.Math.max(r2, r4)
-            goto L_0x052a
-        L_0x0526:
+            goto L_0x0510
+        L_0x050c:
             int r1 = r6.replyStartX
             int r2 = r6.backgroundDrawableRight
-        L_0x052a:
+        L_0x0510:
             int r1 = r1 + r2
             int r2 = r6.replyStartX
             float r2 = (float) r2
             int r2 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r2 < 0) goto L_0x0548
+            if (r2 < 0) goto L_0x052e
             float r1 = (float) r1
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 > 0) goto L_0x0548
+            if (r0 > 0) goto L_0x052e
             int r0 = r6.replyStartY
             float r1 = (float) r0
             int r1 = (r8 > r1 ? 1 : (r8 == r1 ? 0 : -1))
-            if (r1 < 0) goto L_0x0548
+            if (r1 < 0) goto L_0x052e
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r0 = r0 + r1
             float r0 = (float) r0
             int r0 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1))
-            if (r0 <= 0) goto L_0x05ac
-        L_0x0548:
+            if (r0 <= 0) goto L_0x0592
+        L_0x052e:
             r6.replyPressed = r3
-            goto L_0x05ac
-        L_0x054b:
+            goto L_0x0592
+        L_0x0531:
             boolean r5 = r6.sideButtonPressed
-            if (r5 == 0) goto L_0x05ac
+            if (r5 == 0) goto L_0x0592
             int r5 = r18.getAction()
-            if (r5 != r1) goto L_0x056a
+            if (r5 != r1) goto L_0x0550
             r6.sideButtonPressed = r3
             r6.playSoundEffect(r3)
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r6.delegate
-            if (r0 == 0) goto L_0x05a9
+            if (r0 == 0) goto L_0x058f
             int r1 = r6.drawSideButton
-            if (r1 != r2) goto L_0x0566
+            if (r1 != r2) goto L_0x054c
             r0.didPressCommentButton(r6)
-            goto L_0x05a9
-        L_0x0566:
+            goto L_0x058f
+        L_0x054c:
             r0.didPressSideButton(r6)
-            goto L_0x05a9
-        L_0x056a:
+            goto L_0x058f
+        L_0x0550:
             int r1 = r18.getAction()
-            if (r1 != r2) goto L_0x0573
+            if (r1 != r2) goto L_0x0559
             r6.sideButtonPressed = r3
-            goto L_0x05a9
-        L_0x0573:
+            goto L_0x058f
+        L_0x0559:
             int r1 = r18.getAction()
-            if (r1 != r4) goto L_0x05a9
+            if (r1 != r4) goto L_0x058f
             float r1 = r6.sideStartX
             int r4 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r4 < 0) goto L_0x05a7
+            if (r4 < 0) goto L_0x058d
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r15)
             float r4 = (float) r4
             float r1 = r1 + r4
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 > 0) goto L_0x05a7
+            if (r0 > 0) goto L_0x058d
             float r0 = r6.sideStartY
             int r1 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1))
-            if (r1 < 0) goto L_0x05a7
+            if (r1 < 0) goto L_0x058d
             int r1 = r6.drawSideButton
-            if (r1 != r2) goto L_0x059a
+            if (r1 != r2) goto L_0x0580
             android.text.StaticLayout r1 = r6.commentLayout
-            if (r1 == 0) goto L_0x059a
+            if (r1 == 0) goto L_0x0580
             r11 = 18
-            goto L_0x059b
-        L_0x059a:
+            goto L_0x0581
+        L_0x0580:
             r11 = 0
-        L_0x059b:
+        L_0x0581:
             int r13 = r13 + r11
             float r1 = (float) r13
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r1 = (float) r1
             float r0 = r0 + r1
             int r0 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1))
-            if (r0 <= 0) goto L_0x05a9
-        L_0x05a7:
+            if (r0 <= 0) goto L_0x058f
+        L_0x058d:
             r6.sideButtonPressed = r3
-        L_0x05a9:
+        L_0x058f:
             r17.invalidate()
-        L_0x05ac:
+        L_0x0592:
             return r7
-        L_0x05ad:
+        L_0x0593:
             r17.checkTextSelection(r18)
             boolean r0 = super.onTouchEvent(r18)
             return r0

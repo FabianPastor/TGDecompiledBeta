@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -32185,15 +32186,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
+    @SuppressLint({"NotifyDataSetChanged"})
     public void updateMessageAnimated(MessageObject messageObject) {
-        getNotificationCenter().doOnIdle(new ChatActivity$$ExternalSyntheticLambda124(this, messageObject));
+        if (this.chatAdapter != null) {
+            getNotificationCenter().doOnIdle(new ChatActivity$$ExternalSyntheticLambda124(this, messageObject));
+        }
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$updateMessageAnimated$132(MessageObject messageObject) {
         MessageObject.GroupedMessages groupedMessages = this.groupedMessagesMap.get(messageObject.getGroupId());
         if (groupedMessages != null) {
-            this.chatListItemAnimator.groupWillChanged(groupedMessages);
+            ChatListItemAnimator chatListItemAnimator2 = this.chatListItemAnimator;
+            if (chatListItemAnimator2 != null) {
+                chatListItemAnimator2.groupWillChanged(groupedMessages);
+            }
             for (int i = 0; i < groupedMessages.messages.size(); i++) {
                 groupedMessages.messages.get(i).forceUpdate = true;
             }
