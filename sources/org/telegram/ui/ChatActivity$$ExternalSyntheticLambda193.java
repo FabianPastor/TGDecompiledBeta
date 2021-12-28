@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.ui.PinchToZoomHelper;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda193 implements PinchToZoomHelper.ClipBoundsListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda193 implements RecyclerListView.OnItemLongClickListener {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda193(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void getClipTopBottom(float[] fArr) {
-        this.f$0.lambda$createView$62(fArr);
+    public final boolean onItemClick(View view, int i) {
+        return this.f$0.lambda$createView$41(view, i);
     }
 }

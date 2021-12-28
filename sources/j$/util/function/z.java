@@ -1,5 +1,5 @@
 package j$.util.function;
 
 public interface z {
-    Object get();
+    double applyAsDouble(Object obj);
 }

@@ -216,6 +216,19 @@ public class BottomSheet extends Dialog {
         return false;
     }
 
+    /* access modifiers changed from: protected */
+    public boolean onScrollUp(float f) {
+        return false;
+    }
+
+    /* access modifiers changed from: protected */
+    public void onScrollUpBegin(float f) {
+    }
+
+    /* access modifiers changed from: protected */
+    public void onScrollUpEnd(float f) {
+    }
+
     static /* synthetic */ int access$1110(BottomSheet bottomSheet) {
         int i = bottomSheet.layoutCount;
         bottomSheet.layoutCount = i - 1;
@@ -253,6 +266,7 @@ public class BottomSheet extends Dialog {
         private int startedTrackingX;
         private int startedTrackingY;
         private VelocityTracker velocityTracker = null;
+        private float y = 0.0f;
 
         public boolean hasOverlappingRendering() {
             return false;
@@ -368,7 +382,6 @@ public class BottomSheet extends Dialog {
             }
         }
 
-        /* access modifiers changed from: package-private */
         public boolean processTouchEvent(MotionEvent motionEvent, boolean z) {
             if (BottomSheet.this.dismissed) {
                 return false;
@@ -376,50 +389,7 @@ public class BottomSheet extends Dialog {
             if (BottomSheet.this.onContainerTouchEvent(motionEvent)) {
                 return true;
             }
-            if (!BottomSheet.this.canDismissWithTouchOutside() || motionEvent == null || (!(motionEvent.getAction() == 0 || motionEvent.getAction() == 2) || this.startedTracking || this.maybeStartTracking || motionEvent.getPointerCount() != 1)) {
-                float f = 0.0f;
-                if (motionEvent != null && motionEvent.getAction() == 2 && motionEvent.getPointerId(0) == this.startedTrackingPointerId) {
-                    if (this.velocityTracker == null) {
-                        this.velocityTracker = VelocityTracker.obtain();
-                    }
-                    float abs = (float) Math.abs((int) (motionEvent.getX() - ((float) this.startedTrackingX)));
-                    float y = (float) (((int) motionEvent.getY()) - this.startedTrackingY);
-                    this.velocityTracker.addMovement(motionEvent);
-                    if (!BottomSheet.this.disableScroll && this.maybeStartTracking && !this.startedTracking && y > 0.0f && y / 3.0f > Math.abs(abs) && Math.abs(y) >= ((float) BottomSheet.this.touchSlop)) {
-                        this.startedTrackingY = (int) motionEvent.getY();
-                        this.maybeStartTracking = false;
-                        this.startedTracking = true;
-                        requestDisallowInterceptTouchEvent(true);
-                    } else if (this.startedTracking) {
-                        float translationY = BottomSheet.this.containerView.getTranslationY() + y;
-                        if (translationY >= 0.0f) {
-                            f = translationY;
-                        }
-                        BottomSheet.this.containerView.setTranslationY(f);
-                        this.startedTrackingY = (int) motionEvent.getY();
-                        BottomSheet.this.container.invalidate();
-                    }
-                } else if (motionEvent == null || (motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6))) {
-                    if (this.velocityTracker == null) {
-                        this.velocityTracker = VelocityTracker.obtain();
-                    }
-                    this.velocityTracker.computeCurrentVelocity(1000);
-                    float translationY2 = BottomSheet.this.containerView.getTranslationY();
-                    if (this.startedTracking || translationY2 != 0.0f) {
-                        checkDismiss(this.velocityTracker.getXVelocity(), this.velocityTracker.getYVelocity());
-                        this.startedTracking = false;
-                    } else {
-                        this.maybeStartTracking = false;
-                        this.startedTracking = false;
-                    }
-                    VelocityTracker velocityTracker2 = this.velocityTracker;
-                    if (velocityTracker2 != null) {
-                        velocityTracker2.recycle();
-                        this.velocityTracker = null;
-                    }
-                    this.startedTrackingPointerId = -1;
-                }
-            } else {
+            if (BottomSheet.this.canDismissWithTouchOutside() && motionEvent != null && ((motionEvent.getAction() == 0 || motionEvent.getAction() == 2) && !this.startedTracking && !this.maybeStartTracking && motionEvent.getPointerCount() == 1)) {
                 this.startedTrackingX = (int) motionEvent.getX();
                 int y2 = (int) motionEvent.getY();
                 this.startedTrackingY = y2;
@@ -427,13 +397,55 @@ public class BottomSheet extends Dialog {
                     BottomSheet.this.dismiss();
                     return true;
                 }
+                BottomSheet.this.onScrollUpBegin(this.y);
                 this.startedTrackingPointerId = motionEvent.getPointerId(0);
                 this.maybeStartTracking = true;
                 cancelCurrentAnimation();
+                VelocityTracker velocityTracker2 = this.velocityTracker;
+                if (velocityTracker2 != null) {
+                    velocityTracker2.clear();
+                }
+            } else if (motionEvent != null && motionEvent.getAction() == 2 && motionEvent.getPointerId(0) == this.startedTrackingPointerId) {
+                if (this.velocityTracker == null) {
+                    this.velocityTracker = VelocityTracker.obtain();
+                }
+                float abs = (float) Math.abs((int) (motionEvent.getX() - ((float) this.startedTrackingX)));
+                float y3 = (float) (((int) motionEvent.getY()) - this.startedTrackingY);
+                boolean onScrollUp = BottomSheet.this.onScrollUp(this.y + y3);
+                this.velocityTracker.addMovement(motionEvent);
+                if (!BottomSheet.this.disableScroll && this.maybeStartTracking && !this.startedTracking && y3 > 0.0f && y3 / 3.0f > Math.abs(abs) && Math.abs(y3) >= ((float) BottomSheet.this.touchSlop)) {
+                    this.startedTrackingY = (int) motionEvent.getY();
+                    this.maybeStartTracking = false;
+                    this.startedTracking = true;
+                    requestDisallowInterceptTouchEvent(true);
+                } else if (this.startedTracking) {
+                    float f = this.y + y3;
+                    this.y = f;
+                    if (!onScrollUp) {
+                        this.y = Math.max(f, 0.0f);
+                    }
+                    BottomSheet.this.containerView.setTranslationY(Math.max(this.y, 0.0f));
+                    this.startedTrackingY = (int) motionEvent.getY();
+                    BottomSheet.this.container.invalidate();
+                }
+            } else if (motionEvent == null || (motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6))) {
+                if (this.velocityTracker == null) {
+                    this.velocityTracker = VelocityTracker.obtain();
+                }
+                this.velocityTracker.computeCurrentVelocity(1000);
+                BottomSheet.this.onScrollUpEnd(this.y);
+                if (this.startedTracking || this.y > 0.0f) {
+                    checkDismiss(this.velocityTracker.getXVelocity(), this.velocityTracker.getYVelocity());
+                } else {
+                    this.maybeStartTracking = false;
+                }
+                this.startedTracking = false;
                 VelocityTracker velocityTracker3 = this.velocityTracker;
                 if (velocityTracker3 != null) {
-                    velocityTracker3.clear();
+                    velocityTracker3.recycle();
+                    this.velocityTracker = null;
                 }
+                this.startedTrackingPointerId = -1;
             }
             if ((z || !this.maybeStartTracking) && !this.startedTracking && BottomSheet.this.canDismissWithSwipe()) {
                 return false;

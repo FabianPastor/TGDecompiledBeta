@@ -372,6 +372,7 @@ public class ReactionsLayoutInBubble {
 
         public ReactionButton(TLRPC$TL_reactionCount tLRPC$TL_reactionCount) {
             TLRPC$TL_availableReaction tLRPC$TL_availableReaction;
+            String str;
             this.counterDrawable = new CounterView.CounterDrawable(ReactionsLayoutInBubble.this.parentView, false, (Theme.ResourcesProvider) null);
             this.reactionCount = tLRPC$TL_reactionCount;
             this.reaction = tLRPC$TL_reactionCount.reaction;
@@ -383,14 +384,19 @@ public class ReactionsLayoutInBubble {
             boolean z = tLRPC$TL_reactionCount.chosen;
             this.isSelected = z;
             this.counterDrawable.updateVisibility = false;
-            String str = "chat_outReactionButtonBackground";
+            String str2 = "chat_outReactionButtonBackground";
             if (z) {
-                this.backgroundColor = Theme.getColor(ReactionsLayoutInBubble.this.messageObject.isOutOwner() ? "chat_outLoader" : "chat_inLoader", ReactionsLayoutInBubble.this.resourcesProvider);
-                this.textColor = Theme.getColor("chat_mediaProgress", ReactionsLayoutInBubble.this.resourcesProvider);
-                this.serviceTextColor = Theme.getColor(!ReactionsLayoutInBubble.this.messageObject.isOutOwner() ? "chat_inReactionButtonBackground" : str, ReactionsLayoutInBubble.this.resourcesProvider);
+                if (ReactionsLayoutInBubble.this.messageObject.isOutOwner()) {
+                    str = str2;
+                } else {
+                    str = "chat_inReactionButtonBackground";
+                }
+                this.backgroundColor = Theme.getColor(str, ReactionsLayoutInBubble.this.resourcesProvider);
+                this.textColor = Theme.getColor(ReactionsLayoutInBubble.this.messageObject.isOutOwner() ? "chat_outReactionButtonText" : "chat_inReactionButtonText", ReactionsLayoutInBubble.this.resourcesProvider);
+                this.serviceTextColor = Theme.getColor(!ReactionsLayoutInBubble.this.messageObject.isOutOwner() ? "chat_inReactionButtonBackground" : str2, ReactionsLayoutInBubble.this.resourcesProvider);
                 this.serviceBackgroundColor = Theme.getColor(ReactionsLayoutInBubble.this.messageObject.isOutOwner() ? "chat_outBubble" : "chat_inBubble");
             } else {
-                int color = Theme.getColor(!ReactionsLayoutInBubble.this.messageObject.isOutOwner() ? "chat_inReactionButtonBackground" : str, ReactionsLayoutInBubble.this.resourcesProvider);
+                int color = Theme.getColor(!ReactionsLayoutInBubble.this.messageObject.isOutOwner() ? "chat_inReactionButtonBackground" : str2, ReactionsLayoutInBubble.this.resourcesProvider);
                 this.backgroundColor = color;
                 this.textColor = color;
                 this.backgroundColor = ColorUtils.setAlphaComponent(color, (int) (((float) Color.alpha(color)) * 0.156f));

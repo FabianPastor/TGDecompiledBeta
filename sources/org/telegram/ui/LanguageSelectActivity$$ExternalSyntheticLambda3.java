@@ -1,16 +1,17 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
-import org.telegram.messenger.LocaleController;
+import java.util.ArrayList;
 
-public final /* synthetic */ class LanguageSelectActivity$$ExternalSyntheticLambda3 implements Comparator {
-    public final /* synthetic */ LocaleController.LocaleInfo f$0;
+public final /* synthetic */ class LanguageSelectActivity$$ExternalSyntheticLambda3 implements Runnable {
+    public final /* synthetic */ LanguageSelectActivity f$0;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ LanguageSelectActivity$$ExternalSyntheticLambda3(LocaleController.LocaleInfo localeInfo) {
-        this.f$0 = localeInfo;
+    public /* synthetic */ LanguageSelectActivity$$ExternalSyntheticLambda3(LanguageSelectActivity languageSelectActivity, ArrayList arrayList) {
+        this.f$0 = languageSelectActivity;
+        this.f$1 = arrayList;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return LanguageSelectActivity.lambda$fillLanguages$3(this.f$0, (LocaleController.LocaleInfo) obj, (LocaleController.LocaleInfo) obj2);
+    public final void run() {
+        this.f$0.lambda$updateSearchResults$7(this.f$1);
     }
 }

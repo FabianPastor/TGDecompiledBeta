@@ -78,7 +78,7 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
                     org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                     android.content.Context r4 = r4
                     r3.<init>(r4)
-                    r4 = 2131625327(0x7f0e056f, float:1.8877859E38)
+                    r4 = 2131625331(0x7f0e0573, float:1.8877867E38)
                     java.lang.String r0 = "DoubleTapPreviewRational"
                     java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                     r3.setText(r4)
@@ -145,15 +145,15 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
     }
 
     private void updateRows() {
-        int i = this.rowCount;
+        this.rowCount = 0;
+        int i = 0 + 1;
+        this.rowCount = i;
+        this.previewRow = 0;
         int i2 = i + 1;
         this.rowCount = i2;
-        this.previewRow = i;
-        int i3 = i2 + 1;
-        this.rowCount = i3;
-        this.infoRow = i2;
-        this.rowCount = i3 + 1;
-        this.reactionsStartRow = i3;
+        this.infoRow = i;
+        this.rowCount = i2 + 1;
+        this.reactionsStartRow = i2;
     }
 
     public void onFragmentDestroy() {

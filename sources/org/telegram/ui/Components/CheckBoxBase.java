@@ -20,6 +20,7 @@ import org.telegram.ui.ActionBar.Theme;
 public class CheckBoxBase {
     private static Paint eraser;
     private static Paint paint;
+    public long animationDuration = 200;
     private boolean attachedToWindow;
     private String background2ColorKey = "chat_serviceBackground";
     private float backgroundAlpha = 1.0f;
@@ -175,7 +176,7 @@ public class CheckBoxBase {
             }
         });
         this.checkAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-        this.checkAnimator.setDuration(200);
+        this.checkAnimator.setDuration(this.animationDuration);
         this.checkAnimator.start();
     }
 

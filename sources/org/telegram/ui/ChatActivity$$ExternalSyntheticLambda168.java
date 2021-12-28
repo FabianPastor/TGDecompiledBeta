@@ -3,14 +3,18 @@ package org.telegram.ui;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_getWebPagePreview;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda168 implements RequestDelegate {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda168 INSTANCE = new ChatActivity$$ExternalSyntheticLambda168();
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLRPC$TL_messages_getWebPagePreview f$1;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda168() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda168(ChatActivity chatActivity, TLRPC$TL_messages_getWebPagePreview tLRPC$TL_messages_getWebPagePreview) {
+        this.f$0 = chatActivity;
+        this.f$1 = tLRPC$TL_messages_getWebPagePreview;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        ChatActivity.lambda$markSponsoredAsRead$181(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$searchLinks$82(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

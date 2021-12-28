@@ -13,6 +13,8 @@ import org.telegram.messenger.DispatchQueue;
 
 public class SpoilerEffectBitmapFactory {
     private static SpoilerEffectBitmapFactory factory;
+    Bitmap backgroundBitmap;
+    Bitmap bufferBitmap;
     DispatchQueue dispatchQueue = new DispatchQueue("SpoilerEffectBitmapFactory");
     boolean isRunning;
     long lastUpdateTime;
@@ -77,25 +79,36 @@ public class SpoilerEffectBitmapFactory {
         if (System.currentTimeMillis() - this.lastUpdateTime > 32 && !this.isRunning) {
             this.lastUpdateTime = System.currentTimeMillis();
             this.isRunning = true;
-            this.dispatchQueue.postRunnable(new SpoilerEffectBitmapFactory$$ExternalSyntheticLambda0(this));
+            this.dispatchQueue.postRunnable(new SpoilerEffectBitmapFactory$$ExternalSyntheticLambda0(this, this.bufferBitmap));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUpdate$1() {
-        Bitmap createBitmap = Bitmap.createBitmap(AndroidUtilities.dp(200.0f), AndroidUtilities.dp(200.0f), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(createBitmap);
+    public /* synthetic */ void lambda$checkUpdate$1(Bitmap bitmap) {
+        if (bitmap == null) {
+            bitmap = Bitmap.createBitmap(AndroidUtilities.dp(200.0f), AndroidUtilities.dp(200.0f), Bitmap.Config.ARGB_8888);
+        }
+        Bitmap bitmap2 = this.backgroundBitmap;
+        if (bitmap2 == null) {
+            this.backgroundBitmap = Bitmap.createBitmap(AndroidUtilities.dp(200.0f), AndroidUtilities.dp(200.0f), Bitmap.Config.ARGB_8888);
+        } else {
+            bitmap2.eraseColor(0);
+        }
+        Canvas canvas = new Canvas(bitmap);
+        Canvas canvas2 = new Canvas(this.backgroundBitmap);
         for (int i = 0; i < 10; i++) {
             for (int i2 = 0; i2 < 10; i2++) {
-                this.shaderSpoilerEffects.get((i * 10) + i2).draw(canvas);
+                this.shaderSpoilerEffects.get((i * 10) + i2).draw(canvas2);
             }
         }
-        AndroidUtilities.runOnUIThread(new SpoilerEffectBitmapFactory$$ExternalSyntheticLambda1(this, createBitmap));
+        bitmap.eraseColor(0);
+        canvas.drawBitmap(this.backgroundBitmap, 0.0f, 0.0f, (Paint) null);
+        AndroidUtilities.runOnUIThread(new SpoilerEffectBitmapFactory$$ExternalSyntheticLambda1(this, bitmap));
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$checkUpdate$0(Bitmap bitmap) {
-        this.shaderBitmap.recycle();
+        this.bufferBitmap = this.shaderBitmap;
         this.shaderBitmap = bitmap;
         Paint paint = this.shaderPaint;
         Bitmap bitmap2 = this.shaderBitmap;

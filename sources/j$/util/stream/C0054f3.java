@@ -6,11 +6,11 @@ import j$.util.function.A;
 import j$.util.function.B;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
-import j$.util.function.C;
 import j$.util.function.CLASSNAMEa;
 import j$.util.function.CLASSNAMEb;
 import j$.util.function.Consumer;
 import j$.util.function.Function;
+import j$.util.function.Predicate;
 import j$.util.function.m;
 import j$.util.function.z;
 import j$.util.y;
@@ -62,13 +62,13 @@ abstract class CLASSNAMEf3 extends CLASSNAMEc implements Stream {
     }
 
     /* access modifiers changed from: package-private */
-    public final y K0(CLASSNAMEz2 z2Var, z zVar, boolean z) {
-        return new M4(z2Var, zVar, z);
+    public final y K0(CLASSNAMEz2 z2Var, j$.util.function.y yVar, boolean z) {
+        return new M4(z2Var, yVar, z);
     }
 
-    public final Stream T(j$.util.function.y yVar) {
-        yVar.getClass();
-        return new L(this, (CLASSNAMEc) this, CLASSNAMEf4.REFERENCE, CLASSNAMEe4.t, yVar);
+    public final Stream T(Predicate predicate) {
+        predicate.getClass();
+        return new L(this, (CLASSNAMEc) this, CLASSNAMEf4.REFERENCE, CLASSNAMEe4.t, predicate);
     }
 
     public final Stream V(Consumer consumer) {
@@ -76,8 +76,8 @@ abstract class CLASSNAMEf3 extends CLASSNAMEc implements Stream {
         return new L(this, (CLASSNAMEc) this, CLASSNAMEf4.REFERENCE, 0, consumer);
     }
 
-    public final boolean W(j$.util.function.y yVar) {
-        return ((Boolean) x0(CLASSNAMEp1.x(yVar, CLASSNAMEl1.ALL))).booleanValue();
+    public final boolean W(Predicate predicate) {
+        return ((Boolean) x0(CLASSNAMEp1.x(predicate, CLASSNAMEl1.ALL))).booleanValue();
     }
 
     public final CLASSNAMEf1 X(Function function) {
@@ -85,15 +85,15 @@ abstract class CLASSNAMEf3 extends CLASSNAMEc implements Stream {
         return new N(this, (CLASSNAMEc) this, CLASSNAMEf4.REFERENCE, CLASSNAMEe4.p | CLASSNAMEe4.n | CLASSNAMEe4.t, function);
     }
 
-    public final boolean a(j$.util.function.y yVar) {
-        return ((Boolean) x0(CLASSNAMEp1.x(yVar, CLASSNAMEl1.ANY))).booleanValue();
+    public final boolean a(Predicate predicate) {
+        return ((Boolean) x0(CLASSNAMEp1.x(predicate, CLASSNAMEl1.ANY))).booleanValue();
     }
 
     public final Object b0(J0 j0) {
         Object obj;
         if (!isParallel() || !j0.b().contains(CLASSNAMEh.CONCURRENT) || (C0() && !j0.b().contains(CLASSNAMEh.UNORDERED))) {
             j0.getClass();
-            z f = j0.f();
+            j$.util.function.y f = j0.f();
             obj = x0(new J2(CLASSNAMEf4.REFERENCE, j0.c(), j0.a(), f, j0));
         } else {
             obj = j0.f().get();
@@ -111,8 +111,8 @@ abstract class CLASSNAMEf3 extends CLASSNAMEc implements Stream {
         return ((CLASSNAMEe1) g0(Y2.a)).sum();
     }
 
-    public final boolean d0(j$.util.function.y yVar) {
-        return ((Boolean) x0(CLASSNAMEp1.x(yVar, CLASSNAMEl1.NONE))).booleanValue();
+    public final boolean d0(Predicate predicate) {
+        return ((Boolean) x0(CLASSNAMEp1.x(predicate, CLASSNAMEl1.NONE))).booleanValue();
     }
 
     public final Stream distinct() {
@@ -137,25 +137,25 @@ abstract class CLASSNAMEf3 extends CLASSNAMEc implements Stream {
         x0(new CLASSNAMEn0(consumer, false));
     }
 
-    public final CLASSNAMEf1 g0(C c) {
-        c.getClass();
-        return new N(this, (CLASSNAMEc) this, CLASSNAMEf4.REFERENCE, CLASSNAMEe4.p | CLASSNAMEe4.n, c);
+    public final CLASSNAMEf1 g0(B b) {
+        b.getClass();
+        return new N(this, (CLASSNAMEc) this, CLASSNAMEf4.REFERENCE, CLASSNAMEe4.p | CLASSNAMEe4.n, b);
     }
 
-    public final Object i(z zVar, BiConsumer biConsumer, BiConsumer biConsumer2) {
-        zVar.getClass();
+    public final Object i(j$.util.function.y yVar, BiConsumer biConsumer, BiConsumer biConsumer2) {
+        yVar.getClass();
         biConsumer.getClass();
         biConsumer2.getClass();
-        return x0(new A2(CLASSNAMEf4.REFERENCE, biConsumer2, biConsumer, zVar));
+        return x0(new A2(CLASSNAMEf4.REFERENCE, biConsumer2, biConsumer, yVar));
     }
 
     public final Iterator iterator() {
         return N.i(spliterator());
     }
 
-    public final U j0(A a) {
-        a.getClass();
-        return new K(this, (CLASSNAMEc) this, CLASSNAMEf4.REFERENCE, CLASSNAMEe4.p | CLASSNAMEe4.n, a);
+    public final U j0(z zVar) {
+        zVar.getClass();
+        return new K(this, (CLASSNAMEc) this, CLASSNAMEf4.REFERENCE, CLASSNAMEe4.p | CLASSNAMEe4.n, zVar);
     }
 
     public final Object[] l(m mVar) {
@@ -169,9 +169,9 @@ abstract class CLASSNAMEf3 extends CLASSNAMEc implements Stream {
         throw new IllegalArgumentException(Long.toString(j));
     }
 
-    public final M0 m(B b) {
-        b.getClass();
-        return new M(this, (CLASSNAMEc) this, CLASSNAMEf4.REFERENCE, CLASSNAMEe4.p | CLASSNAMEe4.n, b);
+    public final M0 m(A a) {
+        a.getClass();
+        return new M(this, (CLASSNAMEc) this, CLASSNAMEf4.REFERENCE, CLASSNAMEe4.p | CLASSNAMEe4.n, a);
     }
 
     public final Object m0(Object obj, CLASSNAMEb bVar) {

@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.util.SparseArray;
 import androidx.collection.LongSparseArray;
 import com.google.android.exoplayer2.util.Log;
-import com.google.android.gms.internal.vision.zzhv$$ExternalSyntheticBackport0;
+import com.google.android.gms.internal.mlkit_language_id.zzdp$$ExternalSyntheticBackport0;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -1835,7 +1835,7 @@ public class ChatObject {
             }
             int i4 = tLRPC$TL_groupCallParticipant.active_date;
             if (i4 != 0 && (i = tLRPC$TL_groupCallParticipant2.active_date) != 0) {
-                return zzhv$$ExternalSyntheticBackport0.m(i, i4);
+                return zzdp$$ExternalSyntheticBackport0.m(i, i4);
             }
             if (i4 != 0) {
                 return -1;
@@ -1865,9 +1865,9 @@ public class ChatObject {
                 }
             }
             if (this.call.join_date_asc) {
-                return zzhv$$ExternalSyntheticBackport0.m(tLRPC$TL_groupCallParticipant.date, tLRPC$TL_groupCallParticipant2.date);
+                return zzdp$$ExternalSyntheticBackport0.m(tLRPC$TL_groupCallParticipant.date, tLRPC$TL_groupCallParticipant2.date);
             }
-            return zzhv$$ExternalSyntheticBackport0.m(tLRPC$TL_groupCallParticipant2.date, tLRPC$TL_groupCallParticipant.date);
+            return zzdp$$ExternalSyntheticBackport0.m(tLRPC$TL_groupCallParticipant2.date, tLRPC$TL_groupCallParticipant.date);
         }
 
         public boolean canRecordVideo() {

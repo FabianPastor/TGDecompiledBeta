@@ -4224,7 +4224,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r0)
             r7.setLayoutParams(r0)
             android.content.Context r0 = r27.getContext()
-            r1 = 2131166012(0x7var_c, float:1.7946257E38)
+            r1 = 2131166014(0x7var_e, float:1.7946261E38)
             android.graphics.drawable.Drawable r0 = androidx.core.content.ContextCompat.getDrawable(r0, r1)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -4253,7 +4253,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r2.setTextColor(r0)
             r0 = 1097859072(0x41700000, float:15.0)
             r2.setTextSize(r14, r0)
-            r0 = 2131627746(0x7f0e0ee2, float:1.8882765E38)
+            r0 = 2131627758(0x7f0e0eee, float:1.888279E38)
             java.lang.String r1 = "SendMessageAsTitle"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r2.setText(r0)

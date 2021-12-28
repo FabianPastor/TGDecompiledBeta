@@ -1,7 +1,6 @@
 package j$.util.stream;
 
 import j$.util.function.m;
-import j$.util.function.z;
 import j$.util.y;
 
 /* renamed from: j$.util.stream.c  reason: case insensitive filesystem */
@@ -140,7 +139,7 @@ abstract class CLASSNAMEc extends CLASSNAMEz2 implements CLASSNAMEg {
     }
 
     /* access modifiers changed from: package-private */
-    public abstract y K0(CLASSNAMEz2 z2Var, z zVar, boolean z);
+    public abstract y K0(CLASSNAMEz2 z2Var, j$.util.function.y yVar, boolean z);
 
     public void close() {
         this.h = true;

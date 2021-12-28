@@ -436,7 +436,9 @@ public class ReactionsContainerLayout extends FrameLayout {
         public TLRPC$TL_availableReaction currentReaction;
         Runnable playRunnable = new Runnable() {
             public void run() {
-                ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation().start();
+                if (ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation() != null) {
+                    ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation().start();
+                }
             }
         };
 

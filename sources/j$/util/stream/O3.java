@@ -1,6 +1,7 @@
 package j$.util.stream;
 
 import j$.util.CLASSNAMEa;
+import j$.util.Collection$EL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -17,13 +18,13 @@ final class O3 extends G3 {
     }
 
     public void m() {
-        CLASSNAMEa.H(this.d, this.b);
+        CLASSNAMEa.G(this.d, this.b);
         this.a.n((long) this.d.size());
         if (!this.c) {
             ArrayList arrayList = this.d;
             CLASSNAMEn3 n3Var = this.a;
             n3Var.getClass();
-            CLASSNAMEa.y(arrayList, new CLASSNAMEb(n3Var));
+            Collection$EL.a(arrayList, new CLASSNAMEb(n3Var));
         } else {
             Iterator it = this.d.iterator();
             while (it.hasNext()) {

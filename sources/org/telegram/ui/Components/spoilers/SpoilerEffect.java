@@ -255,78 +255,71 @@ public class SpoilerEffect extends Drawable {
         Particle particle;
         int i;
         float f;
-        int i2;
-        Particle particle2;
-        Canvas canvas2 = canvas;
         if (this.drawPoints) {
             long currentTimeMillis = System.currentTimeMillis();
             int min = (int) Math.min(currentTimeMillis - this.lastDrawTime, 34);
             this.lastDrawTime = currentTimeMillis;
-            int i3 = getBounds().left;
-            int i4 = getBounds().top;
-            int i5 = getBounds().right;
-            int i6 = getBounds().bottom;
-            for (int i7 = 0; i7 < ALPHAS.length; i7++) {
-                this.renderCount[i7] = 0;
+            int i2 = getBounds().left;
+            int i3 = getBounds().top;
+            int i4 = getBounds().right;
+            int i5 = getBounds().bottom;
+            for (int i6 = 0; i6 < ALPHAS.length; i6++) {
+                this.renderCount[i6] = 0;
             }
-            int i8 = 0;
-            while (i8 < this.particles.size()) {
-                Particle particle3 = this.particles.get(i8);
+            int i7 = 0;
+            while (i7 < this.particles.size()) {
+                Particle particle2 = this.particles.get(i7);
                 float f2 = (float) min;
-                float unused = particle3.currentTime = Math.min(particle3.currentTime + f2, particle3.lifeTime);
-                if (particle3.currentTime < particle3.lifeTime) {
+                float unused = particle2.currentTime = Math.min(particle2.currentTime + f2, particle2.lifeTime);
+                if (particle2.currentTime < particle2.lifeTime) {
                     float f3 = f2;
-                    Particle particle4 = particle3;
-                    if (isOutOfBounds(i3, i4, i5, i6, particle3.x, particle3.y)) {
-                        particle2 = particle4;
-                    } else {
-                        float access$900 = (particle4.velocity * f3) / 500.0f;
-                        Particle particle5 = particle4;
-                        Particle.access$516(particle5, particle4.vecX * access$900);
-                        Particle.access$616(particle5, particle5.vecY * access$900);
-                        int access$1200 = particle5.alpha;
-                        this.particlePoints[access$1200][this.renderCount[access$1200] * 2] = particle5.x;
-                        this.particlePoints[access$1200][(this.renderCount[access$1200] * 2) + 1] = particle5.y;
+                    if (!isOutOfBounds(i2, i3, i4, i5, particle2.x, particle2.y)) {
+                        float access$900 = (particle2.velocity * f3) / 500.0f;
+                        Particle.access$516(particle2, particle2.vecX * access$900);
+                        Particle.access$616(particle2, particle2.vecY * access$900);
+                        int access$1200 = particle2.alpha;
+                        this.particlePoints[access$1200][this.renderCount[access$1200] * 2] = particle2.x;
+                        this.particlePoints[access$1200][(this.renderCount[access$1200] * 2) + 1] = particle2.y;
                         int[] iArr = this.renderCount;
                         iArr[access$1200] = iArr[access$1200] + 1;
-                        i8++;
+                        i7++;
                     }
-                } else {
-                    particle2 = particle3;
                 }
                 if (this.particlesPool.size() < this.maxParticles) {
                     this.particlesPool.push(particle2);
                 }
-                this.particles.remove(i8);
-                i8--;
-                i8++;
+                this.particles.remove(i7);
+                i7--;
+                i7++;
             }
             int size = this.particles.size();
-            int i9 = this.maxParticles;
-            if (size < i9) {
-                int size2 = i9 - this.particles.size();
+            int i8 = this.maxParticles;
+            if (size < i8) {
+                int size2 = i8 - this.particles.size();
                 float f4 = -1.0f;
                 Arrays.fill(this.particleRands, -1.0f);
-                int i10 = 0;
-                while (i10 < size2) {
+                int i9 = 0;
+                while (i9 < size2) {
                     float[] fArr = this.particleRands;
-                    int i11 = i10 % 14;
-                    float f5 = fArr[i11];
+                    int i10 = i9 % 14;
+                    float f5 = fArr[i10];
                     if (f5 == f4) {
                         f5 = Utilities.fastRandom.nextFloat();
-                        fArr[i11] = f5;
+                        fArr[i10] = f5;
                     }
                     float f6 = f5;
                     Particle pop = !this.particlesPool.isEmpty() ? this.particlesPool.pop() : new Particle();
-                    int i12 = 0;
+                    int i11 = 0;
                     while (true) {
-                        generateRandomLocation(pop, i10);
-                        int i13 = i12 + 1;
+                        generateRandomLocation(pop, i9);
+                        float access$500 = pop.x;
+                        float access$600 = pop.y;
+                        int i12 = i11 + 1;
                         particle = pop;
+                        float f7 = access$500;
                         i = size2;
                         f = f6;
-                        i2 = i10;
-                        if (!isOutOfBounds(i3, i4, i5, i6, pop.x, pop.y) || i13 >= 4) {
+                        if (!isOutOfBounds(i2, i3, i4, i5, f7, access$600) || i12 >= 4) {
                             double d = (double) f;
                             Double.isNaN(d);
                             double d2 = ((d * 3.141592653589793d) * 2.0d) - 3.141592653589793d;
@@ -342,14 +335,13 @@ public class SpoilerEffect extends Drawable {
                             this.particlePoints[access$12002][(this.renderCount[access$12002] * 2) + 1] = particle.y;
                             int[] iArr2 = this.renderCount;
                             iArr2[access$12002] = iArr2[access$12002] + 1;
-                            i10 = i2 + 1;
+                            i9++;
                             size2 = i;
                             f4 = -1.0f;
                         } else {
                             f6 = f;
                             pop = particle;
-                            i12 = i13;
-                            i10 = i2;
+                            i11 = i12;
                             size2 = i;
                         }
                     }
@@ -368,42 +360,33 @@ public class SpoilerEffect extends Drawable {
                     this.particlePoints[access$120022][(this.renderCount[access$120022] * 2) + 1] = particle.y;
                     int[] iArr22 = this.renderCount;
                     iArr22[access$120022] = iArr22[access$120022] + 1;
-                    i10 = i2 + 1;
+                    i9++;
                     size2 = i;
                     f4 = -1.0f;
                 }
             }
-            int length = this.enableAlpha ? 0 : ALPHAS.length - 1;
-            while (length < ALPHAS.length) {
+            for (int length = this.enableAlpha ? 0 : ALPHAS.length - 1; length < ALPHAS.length; length++) {
+                int i13 = 0;
                 int i14 = 0;
-                int i15 = 0;
-                for (int i16 = 0; i16 < this.particles.size(); i16++) {
-                    Particle particle6 = this.particles.get(i16);
+                for (int i15 = 0; i15 < this.particles.size(); i15++) {
+                    Particle particle3 = this.particles.get(i15);
                     RectF rectF = this.visibleRect;
-                    if ((rectF == null || rectF.contains(particle6.x, particle6.y)) && (particle6.alpha == length || !this.enableAlpha)) {
-                        int i17 = (i16 - i15) * 2;
-                        this.particlePoints[length][i17] = particle6.x;
-                        this.particlePoints[length][i17 + 1] = particle6.y;
-                        i14 += 2;
+                    if ((rectF == null || rectF.contains(particle3.x, particle3.y)) && (particle3.alpha == length || !this.enableAlpha)) {
+                        int i16 = (i15 - i14) * 2;
+                        this.particlePoints[length][i16] = particle3.x;
+                        this.particlePoints[length][i16 + 1] = particle3.y;
+                        i13 += 2;
                     } else {
-                        i15++;
+                        i14++;
                     }
                 }
-                canvas2.drawPoints(this.particlePoints[length], 0, i14, this.particlePaints[length]);
-                if (i14 != 0) {
-                    length++;
-                } else {
-                    throw new RuntimeException();
-                }
+                canvas.drawPoints(this.particlePoints[length], 0, i13, this.particlePaints[length]);
             }
             return;
         }
-        Paint paint = SpoilerEffectBitmapFactory.getInstance().getPaint();
-        paint.setColorFilter(new PorterDuffColorFilter(this.lastColor, PorterDuff.Mode.SRC_IN));
-        canvas.save();
-        canvas2.clipRect(getBounds().left, getBounds().top, getBounds().right, getBounds().bottom);
-        canvas2.drawPaint(paint);
-        canvas.restore();
+        Canvas canvas2 = canvas;
+        SpoilerEffectBitmapFactory.getInstance().getPaint().setColorFilter(new PorterDuffColorFilter(this.lastColor, PorterDuff.Mode.SRC_IN));
+        canvas.drawRect((float) getBounds().left, (float) getBounds().top, (float) getBounds().right, (float) getBounds().bottom, SpoilerEffectBitmapFactory.getInstance().getPaint());
         invalidateSelf();
         SpoilerEffectBitmapFactory.getInstance().checkUpdate();
     }

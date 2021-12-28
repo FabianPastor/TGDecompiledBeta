@@ -825,6 +825,7 @@ public final class R {
         public static final int msg_played = NUM;
         public static final int msg_pollstop = NUM;
         public static final int msg_psa = NUM;
+        public static final int msg_qr_mini = NUM;
         public static final int msg_qrcode = NUM;
         public static final int msg_reactions = NUM;
         public static final int msg_reactions_filled = NUM;
@@ -878,6 +879,7 @@ public final class R {
         public static final int msg_theme = NUM;
         public static final int msg_timer = NUM;
         public static final int msg_timeredit = NUM;
+        public static final int msg_translate = NUM;
         public static final int msg_unarchive = NUM;
         public static final int msg_unfave = NUM;
         public static final int msg_unmute = NUM;
@@ -1031,6 +1033,9 @@ public final class R {
         public static final int proxy_check = NUM;
         public static final int proxy_off = NUM;
         public static final int proxy_on = NUM;
+        public static final int qr_at_large = NUM;
+        public static final int qr_at_medium = NUM;
+        public static final int qr_at_small = NUM;
         public static final int qr_flashlight = NUM;
         public static final int qr_gallery = NUM;
         public static final int reactions_bubble_shadow = NUM;
@@ -1729,6 +1734,7 @@ public final class R {
         public static final int pip_voice_request = NUM;
         public static final int player_prev = NUM;
         public static final int qr_code_logo = NUM;
+        public static final int qr_code_logo_2 = NUM;
         public static final int qr_login = NUM;
         public static final int qr_logo = NUM;
         public static final int record_audio = NUM;
@@ -2410,6 +2416,7 @@ public final class R {
         public static final int AutodownloadSizeLimit = NUM;
         public static final int AutodownloadSizeLimitUpTo = NUM;
         public static final int AutomaticMediaDownload = NUM;
+        public static final int AutomaticTranslation = NUM;
         public static final int AutoplayGIF = NUM;
         public static final int AutoplayMedia = NUM;
         public static final int AutoplayVideo = NUM;
@@ -2838,6 +2845,7 @@ public final class R {
         public static final int ChooseFromGallery = NUM;
         public static final int ChooseFromSearch = NUM;
         public static final int ChooseFromYourStickers = NUM;
+        public static final int ChooseLanguages = NUM;
         public static final int ChoosePhoto = NUM;
         public static final int ChoosePhotoOrVideo = NUM;
         public static final int ChooseRecordVideo = NUM;
@@ -2879,6 +2887,7 @@ public final class R {
         public static final int ClearTelegramCache = NUM;
         public static final int Close = NUM;
         public static final int CloseEditor = NUM;
+        public static final int CloseTranslation = NUM;
         public static final int Code = NUM;
         public static final int CodeExpired = NUM;
         public static final int ColorBlue = NUM;
@@ -3192,6 +3201,7 @@ public final class R {
         public static final int DistanceUnitsMiles = NUM;
         public static final int DistanceUnitsTitle = NUM;
         public static final int DoNoSetTheme = NUM;
+        public static final int DoNotTranslate = NUM;
         public static final int DocumentsTitle = NUM;
         public static final int Done = NUM;
         public static final int DontAskAgain = NUM;
@@ -3672,6 +3682,7 @@ public final class R {
         public static final int FromChats_zero = NUM;
         public static final int FromFormatted = NUM;
         public static final int FromGalley = NUM;
+        public static final int FromLanguageToLanguage = NUM;
         public static final int FromYou = NUM;
         public static final int FwdMessageToChats = NUM;
         public static final int FwdMessageToGroup = NUM;
@@ -3980,6 +3991,12 @@ public final class R {
         public static final int LanguageUnofficial = NUM;
         public static final int LanguageUnsupportedError = NUM;
         public static final int LanguagesChartTitle = NUM;
+        public static final int Languages_few = NUM;
+        public static final int Languages_many = NUM;
+        public static final int Languages_one = NUM;
+        public static final int Languages_other = NUM;
+        public static final int Languages_two = NUM;
+        public static final int Languages_zero = NUM;
         public static final int LargeEmoji = NUM;
         public static final int LastName = NUM;
         public static final int LastSeen = NUM;
@@ -5279,6 +5296,7 @@ public final class R {
         public static final int QRCodeLinkHelpChannel = NUM;
         public static final int QRCodeLinkHelpGroup = NUM;
         public static final int QRCodePermissionNoCamera = NUM;
+        public static final int QrCode = NUM;
         public static final int QuestionHint = NUM;
         public static final int QuickReplyCustom = NUM;
         public static final int QuickReplyDefault1 = NUM;
@@ -5755,6 +5773,7 @@ public final class R {
         public static final int ShowSenderNames = NUM;
         public static final int ShowSendersName = NUM;
         public static final int ShowStickers = NUM;
+        public static final int ShowTranslateButton = NUM;
         public static final int ShowVotes_few = NUM;
         public static final int ShowVotes_many = NUM;
         public static final int ShowVotes_one = NUM;
@@ -6069,6 +6088,13 @@ public final class R {
         public static final int TotalDataUsage = NUM;
         public static final int TotalDeviceFreeSize = NUM;
         public static final int TotalDeviceSize = NUM;
+        public static final int TranslateMessage = NUM;
+        public static final int TranslateMessages = NUM;
+        public static final int TranslateMessagesInfo1 = NUM;
+        public static final int TranslateMessagesInfo2 = NUM;
+        public static final int TranslateMore = NUM;
+        public static final int TranslationFailedAlert1 = NUM;
+        public static final int TranslationFailedAlert2 = NUM;
         public static final int TurnPasswordOff = NUM;
         public static final int TurnPasswordOffPassport = NUM;
         public static final int TurnPasswordOffQuestion = NUM;

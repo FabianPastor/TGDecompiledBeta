@@ -5,15 +5,15 @@ import j$.util.function.Consumer;
 import j$.util.function.p;
 import j$.util.function.q;
 import j$.util.function.w;
-import j$.util.function.z;
+import j$.util.function.y;
 
 class B2 extends U2 implements T2, CLASSNAMEm3 {
-    final /* synthetic */ z b;
+    final /* synthetic */ y b;
     final /* synthetic */ w c;
     final /* synthetic */ CLASSNAMEb d;
 
-    B2(z zVar, w wVar, CLASSNAMEb bVar) {
-        this.b = zVar;
+    B2(y yVar, w wVar, CLASSNAMEb bVar) {
+        this.b = yVar;
         this.c = wVar;
         this.d = bVar;
     }

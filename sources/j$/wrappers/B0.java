@@ -1,16 +1,16 @@
 package j$.wrappers;
 
-import j$.util.function.A;
+import j$.util.function.z;
 import java.util.function.ToDoubleFunction;
 
-public final /* synthetic */ class B0 implements A {
+public final /* synthetic */ class B0 implements z {
     final /* synthetic */ ToDoubleFunction a;
 
     private /* synthetic */ B0(ToDoubleFunction toDoubleFunction) {
         this.a = toDoubleFunction;
     }
 
-    public static /* synthetic */ A a(ToDoubleFunction toDoubleFunction) {
+    public static /* synthetic */ z a(ToDoubleFunction toDoubleFunction) {
         if (toDoubleFunction == null) {
             return null;
         }

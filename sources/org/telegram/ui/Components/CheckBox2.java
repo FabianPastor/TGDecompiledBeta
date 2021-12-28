@@ -67,6 +67,10 @@ public class CheckBox2 extends View {
         this.checkBoxBase.onAttachedToWindow();
     }
 
+    public void setDuration(long j) {
+        this.checkBoxBase.animationDuration = j;
+    }
+
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();

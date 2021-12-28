@@ -2,10 +2,10 @@ package j$.util.stream;
 
 import j$.lang.a;
 import j$.util.function.Consumer;
+import j$.util.function.Predicate;
 import j$.util.function.g;
 import j$.util.function.m;
 import j$.util.function.r;
-import j$.util.function.y;
 
 class L extends CLASSNAMEe3 {
     public final /* synthetic */ int l = 1;
@@ -52,8 +52,8 @@ class L extends CLASSNAMEe3 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public L(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, y yVar) {
+    public L(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, Predicate predicate) {
         super(cVar, f4Var, i);
-        this.m = yVar;
+        this.m = predicate;
     }
 }

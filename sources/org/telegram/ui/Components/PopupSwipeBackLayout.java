@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import androidx.core.view.GestureDetectorCompat;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -37,6 +39,8 @@ public class PopupSwipeBackLayout extends FrameLayout {
     public boolean isSwipeDisallowed;
     private Path mPath = new Path();
     private RectF mRect = new RectF();
+    /* access modifiers changed from: private */
+    public int notificationIndex;
     private OnSwipeBackProgressListener onSwipeBackProgressListener;
     private Paint overlayPaint = new Paint(1);
     private float overrideForegroundHeight;
@@ -288,7 +292,9 @@ public class PopupSwipeBackLayout extends FrameLayout {
     /* access modifiers changed from: private */
     public void animateToState(final float f, float f2) {
         ValueAnimator duration = ValueAnimator.ofFloat(new float[]{this.transitionProgress, f}).setDuration((long) (Math.max(0.5f, Math.abs(this.transitionProgress - f) - Math.min(0.2f, f2)) * 300.0f));
-        duration.setInterpolator(Easings.easeOutQuad);
+        duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
+        final int i = UserConfig.selectedAccount;
+        this.notificationIndex = NotificationCenter.getInstance(i).setAnimationInProgress(this.notificationIndex, (int[]) null);
         duration.addUpdateListener(new PopupSwipeBackLayout$$ExternalSyntheticLambda1(this));
         duration.addListener(new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animator) {
@@ -297,6 +303,7 @@ public class PopupSwipeBackLayout extends FrameLayout {
             }
 
             public void onAnimationEnd(Animator animator) {
+                NotificationCenter.getInstance(i).onAnimationFinish(PopupSwipeBackLayout.this.notificationIndex);
                 float unused = PopupSwipeBackLayout.this.transitionProgress = f;
                 PopupSwipeBackLayout.this.invalidateTransforms();
                 boolean unused2 = PopupSwipeBackLayout.this.isAnimationInProgress = false;

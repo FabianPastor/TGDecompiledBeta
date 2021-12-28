@@ -3,7 +3,7 @@ package j$.wrappers;
 import j$.util.function.BiConsumer;
 import j$.util.function.CLASSNAMEb;
 import j$.util.function.Function;
-import j$.util.function.z;
+import j$.util.function.y;
 import java.util.Set;
 import java.util.stream.Collector;
 
@@ -37,7 +37,7 @@ public final /* synthetic */ class J0 {
         return M.a(this.a.finisher());
     }
 
-    public z f() {
+    public y f() {
         return z0.a(this.a.supplier());
     }
 }

@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import android.net.Uri;
-import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda172 implements AlertsCreator.ScheduleDatePickerDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ Uri f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda172 implements RequestDelegate {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda172 INSTANCE = new ChatActivity$$ExternalSyntheticLambda172();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda172(ChatActivity chatActivity, Uri uri) {
-        this.f$0 = chatActivity;
-        this.f$1 = uri;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda172() {
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$onActivityResultFragment$93(this.f$1, z, i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        ChatActivity.lambda$markSponsoredAsRead$185(tLObject, tLRPC$TL_error);
     }
 }

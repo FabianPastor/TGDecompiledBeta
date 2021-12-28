@@ -1,19 +1,22 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
-import org.telegram.ui.Components.ReactedUsersListView;
+import org.telegram.tgnet.TLRPC$TL_document;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda180 implements ReactedUsersListView.OnHeightChangedListener {
-    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$0;
-    public final /* synthetic */ int[] f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda180 implements AlertsCreator.ScheduleDatePickerDelegate {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLRPC$TL_document f$1;
+    public final /* synthetic */ String f$2;
+    public final /* synthetic */ Object f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda180(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int[] iArr) {
-        this.f$0 = actionBarPopupWindowLayout;
-        this.f$1 = iArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda180(ChatActivity chatActivity, TLRPC$TL_document tLRPC$TL_document, String str, Object obj) {
+        this.f$0 = chatActivity;
+        this.f$1 = tLRPC$TL_document;
+        this.f$2 = str;
+        this.f$3 = obj;
     }
 
-    public final void onHeightChanged(ReactedUsersListView reactedUsersListView, int i) {
-        this.f$0.getSwipeBack().setNewForegroundHeight(this.f$1[0], AndroidUtilities.dp(52.0f) + i);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.lambda$createView$36(this.f$1, this.f$2, this.f$3, z, i);
     }
 }

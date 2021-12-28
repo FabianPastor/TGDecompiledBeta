@@ -1,9 +1,9 @@
 package j$.util.stream;
 
-import j$.util.function.B;
+import j$.util.function.A;
 
 /* renamed from: j$.util.stream.w0  reason: case insensitive filesystem */
-public final /* synthetic */ class CLASSNAMEw0 implements B {
+public final /* synthetic */ class CLASSNAMEw0 implements A {
     public static final /* synthetic */ CLASSNAMEw0 a = new CLASSNAMEw0();
 
     private /* synthetic */ CLASSNAMEw0() {

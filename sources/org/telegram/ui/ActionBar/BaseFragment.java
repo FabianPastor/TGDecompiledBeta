@@ -842,7 +842,7 @@ public abstract class BaseFragment {
     }
 
     public int getThemedColor(String str) {
-        return Theme.getColor(str);
+        return Theme.getColor(str, getResourceProvider());
     }
 
     public Drawable getThemedDrawable(String str) {

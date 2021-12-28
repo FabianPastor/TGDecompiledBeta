@@ -1,21 +1,21 @@
 package j$.util.function;
 
 import j$.util.concurrent.a;
+import j$.util.function.Predicate;
 import java.util.Comparator;
 
 /* renamed from: j$.util.function.a  reason: case insensitive filesystem */
-public final /* synthetic */ class CLASSNAMEa implements CLASSNAMEb, y {
+public final /* synthetic */ class CLASSNAMEa implements CLASSNAMEb, Predicate {
     public final /* synthetic */ int a;
     public final /* synthetic */ Object b;
 
-    public /* synthetic */ CLASSNAMEa(y yVar) {
+    public /* synthetic */ CLASSNAMEa(Predicate predicate) {
         this.a = 2;
-        this.b = yVar;
+        this.b = predicate;
     }
 
-    public y a(y yVar) {
-        yVar.getClass();
-        return new x(this, yVar, 1);
+    public /* synthetic */ Predicate and(Predicate predicate) {
+        return Predicate.CC.$default$and(this, predicate);
     }
 
     public BiFunction andThen(Function function) {
@@ -38,17 +38,16 @@ public final /* synthetic */ class CLASSNAMEa implements CLASSNAMEb, y {
         }
     }
 
-    public y b(y yVar) {
-        yVar.getClass();
-        return new x(this, yVar, 0);
+    public /* synthetic */ Predicate negate() {
+        return Predicate.CC.$default$negate(this);
     }
 
-    public y negate() {
-        return new CLASSNAMEa(this);
+    public /* synthetic */ Predicate or(Predicate predicate) {
+        return Predicate.CC.$default$or(this, predicate);
     }
 
     public boolean test(Object obj) {
-        return !((y) this.b).test(obj);
+        return !((Predicate) this.b).test(obj);
     }
 
     public /* synthetic */ CLASSNAMEa(Comparator comparator, int i) {

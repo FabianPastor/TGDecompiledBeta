@@ -1,6 +1,7 @@
 package j$.util.stream;
 
 import j$.util.function.Consumer;
+import j$.util.function.Predicate;
 import j$.util.function.f;
 import j$.util.function.l;
 import j$.util.function.m;
@@ -230,10 +231,10 @@ public abstract /* synthetic */ class CLASSNAMEp1 {
         return new CLASSNAMEm1(CLASSNAMEf4.LONG_VALUE, l1Var, new CLASSNAMEo(l1Var, j0Var));
     }
 
-    public static O4 x(j$.util.function.y yVar, CLASSNAMEl1 l1Var) {
-        yVar.getClass();
+    public static O4 x(Predicate predicate, CLASSNAMEl1 l1Var) {
+        predicate.getClass();
         l1Var.getClass();
-        return new CLASSNAMEm1(CLASSNAMEf4.REFERENCE, l1Var, new CLASSNAMEo(l1Var, yVar));
+        return new CLASSNAMEm1(CLASSNAMEf4.REFERENCE, l1Var, new CLASSNAMEo(l1Var, predicate));
     }
 
     public static Stream y(y yVar, boolean z) {

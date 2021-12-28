@@ -2,14 +2,18 @@ package org.telegram.ui;
 
 import android.view.MotionEvent;
 import android.view.View;
+import org.telegram.ui.ContentPreviewViewer;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda75 implements View.OnTouchListener {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda75 INSTANCE = new ChatActivity$$ExternalSyntheticLambda75();
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ ContentPreviewViewer.ContentPreviewViewerDelegate f$1;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda75() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda75(ChatActivity chatActivity, ContentPreviewViewer.ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
+        this.f$0 = chatActivity;
+        this.f$1 = contentPreviewViewerDelegate;
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ChatActivity.lambda$createView$44(view, motionEvent);
+        return this.f$0.lambda$createView$49(this.f$1, view, motionEvent);
     }
 }

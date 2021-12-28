@@ -1,20 +1,20 @@
 package j$.wrappers;
 
-import j$.util.function.A;
+import j$.util.function.z;
 import java.util.function.ToDoubleFunction;
 
 public final /* synthetic */ class C0 implements ToDoubleFunction {
-    final /* synthetic */ A a;
+    final /* synthetic */ z a;
 
-    private /* synthetic */ C0(A a2) {
-        this.a = a2;
+    private /* synthetic */ C0(z zVar) {
+        this.a = zVar;
     }
 
-    public static /* synthetic */ ToDoubleFunction a(A a2) {
-        if (a2 == null) {
+    public static /* synthetic */ ToDoubleFunction a(z zVar) {
+        if (zVar == null) {
             return null;
         }
-        return a2 instanceof B0 ? ((B0) a2).a : new C0(a2);
+        return zVar instanceof B0 ? ((B0) zVar).a : new C0(zVar);
     }
 
     public /* synthetic */ double applyAsDouble(Object obj) {

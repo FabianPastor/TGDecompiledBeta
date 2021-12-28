@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.gms.internal.vision.zzhv$$ExternalSyntheticBackport0;
+import com.google.android.gms.internal.mlkit_language_id.zzdp$$ExternalSyntheticBackport0;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -218,7 +218,7 @@ public class ReactedUsersListView extends FrameLayout {
         if (tLRPC$TL_messageUserReaction2.reaction == null) {
             i = 0;
         }
-        return zzhv$$ExternalSyntheticBackport0.m(i2, i);
+        return zzdp$$ExternalSyntheticBackport0.m(i2, i);
     }
 
     /* access modifiers changed from: private */

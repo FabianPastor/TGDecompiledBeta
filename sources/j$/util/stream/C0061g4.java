@@ -1,8 +1,7 @@
 package j$.util.stream;
 
 import j$.util.CLASSNAMEa;
-import j$.util.function.CLASSNAMEc;
-import j$.util.function.z;
+import j$.util.function.c;
 import j$.util.y;
 import java.util.Comparator;
 
@@ -10,17 +9,17 @@ import java.util.Comparator;
 abstract class CLASSNAMEg4 implements y {
     final boolean a;
     final CLASSNAMEz2 b;
-    private z c;
+    private j$.util.function.y c;
     y d;
     CLASSNAMEn3 e;
-    CLASSNAMEc f;
+    c f;
     long g;
     CLASSNAMEe h;
     boolean i;
 
-    CLASSNAMEg4(CLASSNAMEz2 z2Var, z zVar, boolean z) {
+    CLASSNAMEg4(CLASSNAMEz2 z2Var, j$.util.function.y yVar, boolean z) {
         this.b = z2Var;
-        this.c = zVar;
+        this.c = yVar;
         this.d = null;
         this.a = z;
     }

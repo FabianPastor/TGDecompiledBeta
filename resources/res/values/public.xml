@@ -844,6 +844,7 @@
     <public type="drawable" name="msg_played" id="NUM" />
     <public type="drawable" name="msg_pollstop" id="NUM" />
     <public type="drawable" name="msg_psa" id="NUM" />
+    <public type="drawable" name="msg_qr_mini" id="NUM" />
     <public type="drawable" name="msg_qrcode" id="NUM" />
     <public type="drawable" name="msg_reactions" id="NUM" />
     <public type="drawable" name="msg_reactions_filled" id="NUM" />
@@ -897,6 +898,7 @@
     <public type="drawable" name="msg_theme" id="NUM" />
     <public type="drawable" name="msg_timer" id="NUM" />
     <public type="drawable" name="msg_timeredit" id="NUM" />
+    <public type="drawable" name="msg_translate" id="NUM" />
     <public type="drawable" name="msg_unarchive" id="NUM" />
     <public type="drawable" name="msg_unfave" id="NUM" />
     <public type="drawable" name="msg_unmute" id="NUM" />
@@ -1050,6 +1052,9 @@
     <public type="drawable" name="proxy_check" id="NUM" />
     <public type="drawable" name="proxy_off" id="NUM" />
     <public type="drawable" name="proxy_on" id="NUM" />
+    <public type="drawable" name="qr_at_large" id="NUM" />
+    <public type="drawable" name="qr_at_medium" id="NUM" />
+    <public type="drawable" name="qr_at_small" id="NUM" />
     <public type="drawable" name="qr_flashlight" id="NUM" />
     <public type="drawable" name="qr_gallery" id="NUM" />
     <public type="drawable" name="reactions_bubble_shadow" id="NUM" />
@@ -1596,6 +1601,7 @@
     <public type="raw" name="pip_voice_request" id="NUM" />
     <public type="raw" name="player_prev" id="NUM" />
     <public type="raw" name="qr_code_logo" id="NUM" />
+    <public type="raw" name="qr_code_logo_2" id="NUM" />
     <public type="raw" name="qr_login" id="NUM" />
     <public type="raw" name="qr_logo" id="NUM" />
     <public type="raw" name="record_audio" id="NUM" />
@@ -2271,6 +2277,7 @@
     <public type="string" name="AutodownloadSizeLimit" id="NUM" />
     <public type="string" name="AutodownloadSizeLimitUpTo" id="NUM" />
     <public type="string" name="AutomaticMediaDownload" id="NUM" />
+    <public type="string" name="AutomaticTranslation" id="NUM" />
     <public type="string" name="AutoplayGIF" id="NUM" />
     <public type="string" name="AutoplayMedia" id="NUM" />
     <public type="string" name="AutoplayVideo" id="NUM" />
@@ -2699,6 +2706,7 @@
     <public type="string" name="ChooseFromGallery" id="NUM" />
     <public type="string" name="ChooseFromSearch" id="NUM" />
     <public type="string" name="ChooseFromYourStickers" id="NUM" />
+    <public type="string" name="ChooseLanguages" id="NUM" />
     <public type="string" name="ChoosePhoto" id="NUM" />
     <public type="string" name="ChoosePhotoOrVideo" id="NUM" />
     <public type="string" name="ChooseRecordVideo" id="NUM" />
@@ -2740,6 +2748,7 @@
     <public type="string" name="ClearTelegramCache" id="NUM" />
     <public type="string" name="Close" id="NUM" />
     <public type="string" name="CloseEditor" id="NUM" />
+    <public type="string" name="CloseTranslation" id="NUM" />
     <public type="string" name="Code" id="NUM" />
     <public type="string" name="CodeExpired" id="NUM" />
     <public type="string" name="ColorBlue" id="NUM" />
@@ -3053,6 +3062,7 @@
     <public type="string" name="DistanceUnitsMiles" id="NUM" />
     <public type="string" name="DistanceUnitsTitle" id="NUM" />
     <public type="string" name="DoNoSetTheme" id="NUM" />
+    <public type="string" name="DoNotTranslate" id="NUM" />
     <public type="string" name="DocumentsTitle" id="NUM" />
     <public type="string" name="Done" id="NUM" />
     <public type="string" name="DontAskAgain" id="NUM" />
@@ -3533,6 +3543,7 @@
     <public type="string" name="FromChats_zero" id="NUM" />
     <public type="string" name="FromFormatted" id="NUM" />
     <public type="string" name="FromGalley" id="NUM" />
+    <public type="string" name="FromLanguageToLanguage" id="NUM" />
     <public type="string" name="FromYou" id="NUM" />
     <public type="string" name="FwdMessageToChats" id="NUM" />
     <public type="string" name="FwdMessageToGroup" id="NUM" />
@@ -3841,6 +3852,12 @@
     <public type="string" name="LanguageUnofficial" id="NUM" />
     <public type="string" name="LanguageUnsupportedError" id="NUM" />
     <public type="string" name="LanguagesChartTitle" id="NUM" />
+    <public type="string" name="Languages_few" id="NUM" />
+    <public type="string" name="Languages_many" id="NUM" />
+    <public type="string" name="Languages_one" id="NUM" />
+    <public type="string" name="Languages_other" id="NUM" />
+    <public type="string" name="Languages_two" id="NUM" />
+    <public type="string" name="Languages_zero" id="NUM" />
     <public type="string" name="LargeEmoji" id="NUM" />
     <public type="string" name="LastName" id="NUM" />
     <public type="string" name="LastSeen" id="NUM" />
@@ -5140,6 +5157,7 @@
     <public type="string" name="QRCodeLinkHelpChannel" id="NUM" />
     <public type="string" name="QRCodeLinkHelpGroup" id="NUM" />
     <public type="string" name="QRCodePermissionNoCamera" id="NUM" />
+    <public type="string" name="QrCode" id="NUM" />
     <public type="string" name="QuestionHint" id="NUM" />
     <public type="string" name="QuickReplyCustom" id="NUM" />
     <public type="string" name="QuickReplyDefault1" id="NUM" />
@@ -5616,6 +5634,7 @@
     <public type="string" name="ShowSenderNames" id="NUM" />
     <public type="string" name="ShowSendersName" id="NUM" />
     <public type="string" name="ShowStickers" id="NUM" />
+    <public type="string" name="ShowTranslateButton" id="NUM" />
     <public type="string" name="ShowVotes_few" id="NUM" />
     <public type="string" name="ShowVotes_many" id="NUM" />
     <public type="string" name="ShowVotes_one" id="NUM" />
@@ -5930,6 +5949,13 @@
     <public type="string" name="TotalDataUsage" id="NUM" />
     <public type="string" name="TotalDeviceFreeSize" id="NUM" />
     <public type="string" name="TotalDeviceSize" id="NUM" />
+    <public type="string" name="TranslateMessage" id="NUM" />
+    <public type="string" name="TranslateMessages" id="NUM" />
+    <public type="string" name="TranslateMessagesInfo1" id="NUM" />
+    <public type="string" name="TranslateMessagesInfo2" id="NUM" />
+    <public type="string" name="TranslateMore" id="NUM" />
+    <public type="string" name="TranslationFailedAlert1" id="NUM" />
+    <public type="string" name="TranslationFailedAlert2" id="NUM" />
     <public type="string" name="TurnPasswordOff" id="NUM" />
     <public type="string" name="TurnPasswordOffPassport" id="NUM" />
     <public type="string" name="TurnPasswordOffQuestion" id="NUM" />

@@ -10,7 +10,7 @@ import j$.util.function.l;
 import j$.util.function.m;
 import j$.util.function.n;
 import j$.util.function.v;
-import j$.util.function.z;
+import j$.util.function.y;
 import j$.util.stream.CLASSNAMEf1;
 import j$.util.stream.CLASSNAMEg;
 import j$.util.stream.M0;
@@ -120,8 +120,8 @@ public final /* synthetic */ class N0 implements M0 {
         return this.a.isParallel();
     }
 
-    public /* synthetic */ Object k0(z zVar, v vVar, BiConsumer biConsumer) {
-        return this.a.collect(A0.a(zVar), u0.a(vVar), r.a(biConsumer));
+    public /* synthetic */ Object k0(y yVar, v vVar, BiConsumer biConsumer) {
+        return this.a.collect(A0.a(yVar), u0.a(vVar), r.a(biConsumer));
     }
 
     public /* synthetic */ M0 limit(long j) {

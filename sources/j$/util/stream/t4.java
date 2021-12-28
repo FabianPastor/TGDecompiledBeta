@@ -3,16 +3,15 @@ package j$.util.stream;
 import j$.util.CLASSNAMEa;
 import j$.util.function.Consumer;
 import j$.util.function.q;
-import j$.util.function.z;
+import j$.util.function.y;
 import j$.util.w;
-import j$.util.y;
 
 final class t4 extends CLASSNAMEg4 implements w {
-    t4(CLASSNAMEz2 z2Var, z zVar, boolean z) {
-        super(z2Var, zVar, z);
+    t4(CLASSNAMEz2 z2Var, y yVar, boolean z) {
+        super(z2Var, yVar, z);
     }
 
-    t4(CLASSNAMEz2 z2Var, y yVar, boolean z) {
+    t4(CLASSNAMEz2 z2Var, j$.util.y yVar, boolean z) {
         super(z2Var, yVar, z);
     }
 
@@ -59,7 +58,7 @@ final class t4 extends CLASSNAMEg4 implements w {
     }
 
     /* access modifiers changed from: package-private */
-    public CLASSNAMEg4 l(y yVar) {
+    public CLASSNAMEg4 l(j$.util.y yVar) {
         return new t4(this.b, yVar, this.a);
     }
 

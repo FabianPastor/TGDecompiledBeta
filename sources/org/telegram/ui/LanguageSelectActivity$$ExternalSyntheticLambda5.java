@@ -1,16 +1,27 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import j$.util.function.Predicate;
 
-public final /* synthetic */ class LanguageSelectActivity$$ExternalSyntheticLambda5 implements RecyclerListView.OnItemLongClickListener {
-    public final /* synthetic */ LanguageSelectActivity f$0;
+public final /* synthetic */ class LanguageSelectActivity$$ExternalSyntheticLambda5 implements Predicate {
+    public final /* synthetic */ String f$0;
 
-    public /* synthetic */ LanguageSelectActivity$$ExternalSyntheticLambda5(LanguageSelectActivity languageSelectActivity) {
-        this.f$0 = languageSelectActivity;
+    public /* synthetic */ LanguageSelectActivity$$ExternalSyntheticLambda5(String str) {
+        this.f$0 = str;
     }
 
-    public final boolean onItemClick(View view, int i) {
-        return this.f$0.lambda$createView$2(view, i);
+    public /* synthetic */ Predicate and(Predicate predicate) {
+        return Predicate.CC.$default$and(this, predicate);
+    }
+
+    public /* synthetic */ Predicate negate() {
+        return Predicate.CC.$default$negate(this);
+    }
+
+    public /* synthetic */ Predicate or(Predicate predicate) {
+        return Predicate.CC.$default$or(this, predicate);
+    }
+
+    public final boolean test(Object obj) {
+        return LanguageSelectActivity.lambda$createView$0(this.f$0, (String) obj);
     }
 }

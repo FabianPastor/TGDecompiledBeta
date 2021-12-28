@@ -1,14 +1,15 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda151 implements Comparator {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda151 INSTANCE = new ChatActivity$$ExternalSyntheticLambda151();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda151 implements Runnable {
+    public final /* synthetic */ AlertDialog[] f$0;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda151() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda151(AlertDialog[] alertDialogArr) {
+        this.f$0 = alertDialogArr;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return ((Integer) obj2).compareTo((Integer) obj);
+    public final void run() {
+        ChatActivity.lambda$processSelectedOption$149(this.f$0);
     }
 }

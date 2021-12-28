@@ -3,7 +3,7 @@ package j$.util.stream;
 import j$.lang.a;
 import j$.lang.b;
 import j$.lang.c;
-import j$.util.function.C;
+import j$.util.function.B;
 import j$.util.function.Function;
 import j$.util.function.h;
 import j$.util.function.n;
@@ -81,8 +81,8 @@ class N extends CLASSNAMEd1 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public N(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, C c) {
+    public N(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, B b) {
         super(cVar, f4Var, i);
-        this.m = c;
+        this.m = b;
     }
 }

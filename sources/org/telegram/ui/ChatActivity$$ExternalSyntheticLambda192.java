@@ -1,23 +1,18 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.GroupCreateActivity;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda192 implements GroupCreateActivity.ContactsAddActivityDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda192 implements RecyclerListView.OnItemClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ long f$1;
+    public final /* synthetic */ MessageSeenView f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda192(ChatActivity chatActivity, long j) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda192(ChatActivity chatActivity, MessageSeenView messageSeenView) {
         this.f$0 = chatActivity;
-        this.f$1 = j;
+        this.f$1 = messageSeenView;
     }
 
-    public final void didSelectUsers(ArrayList arrayList, int i) {
-        this.f$0.lambda$createView$29(this.f$1, arrayList, i);
-    }
-
-    public /* synthetic */ void needAddBot(TLRPC$User tLRPC$User) {
-        GroupCreateActivity.ContactsAddActivityDelegate.CC.$default$needAddBot(this, tLRPC$User);
+    public final void onItemClick(View view, int i) {
+        this.f$0.lambda$createMenu$126(this.f$1, view, i);
     }
 }

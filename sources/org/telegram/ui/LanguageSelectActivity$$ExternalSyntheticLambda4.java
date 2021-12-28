@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import java.util.Comparator;
+import org.telegram.messenger.LocaleController;
 
-public final /* synthetic */ class LanguageSelectActivity$$ExternalSyntheticLambda4 implements RecyclerListView.OnItemClickListener {
-    public final /* synthetic */ LanguageSelectActivity f$0;
+public final /* synthetic */ class LanguageSelectActivity$$ExternalSyntheticLambda4 implements Comparator {
+    public final /* synthetic */ LocaleController.LocaleInfo f$0;
 
-    public /* synthetic */ LanguageSelectActivity$$ExternalSyntheticLambda4(LanguageSelectActivity languageSelectActivity) {
-        this.f$0 = languageSelectActivity;
+    public /* synthetic */ LanguageSelectActivity$$ExternalSyntheticLambda4(LocaleController.LocaleInfo localeInfo) {
+        this.f$0 = localeInfo;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$0(view, i);
+    public final int compare(Object obj, Object obj2) {
+        return LanguageSelectActivity.lambda$fillLanguages$5(this.f$0, (LocaleController.LocaleInfo) obj, (LocaleController.LocaleInfo) obj2);
     }
 }

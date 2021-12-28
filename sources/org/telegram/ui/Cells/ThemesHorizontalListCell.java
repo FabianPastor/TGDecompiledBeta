@@ -721,7 +721,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 dArr = AndroidUtilities.rgbToHsv(Color.red(this.themeInfo.getPreviewBackgroundColor()), Color.green(this.themeInfo.getPreviewBackgroundColor()), Color.blue(this.themeInfo.getPreviewBackgroundColor()));
             } else if (themeInfo2.previewWallpaperOffset > 0 || themeInfo2.pathToWallpaper != null) {
                 Theme.ThemeInfo themeInfo4 = this.themeInfo;
-                Bitmap scaledBitmap = ThemesHorizontalListCell.getScaledBitmap((float) AndroidUtilities.dp(76.0f), (float) AndroidUtilities.dp(97.0f), themeInfo4.pathToWallpaper, themeInfo4.pathToFile, themeInfo4.previewWallpaperOffset);
+                Bitmap scaledBitmap = AndroidUtilities.getScaledBitmap((float) AndroidUtilities.dp(76.0f), (float) AndroidUtilities.dp(97.0f), themeInfo4.pathToWallpaper, themeInfo4.pathToFile, themeInfo4.previewWallpaperOffset);
                 if (scaledBitmap != null) {
                     this.backgroundDrawable = new BitmapDrawable(scaledBitmap);
                     Shader.TileMode tileMode = Shader.TileMode.CLAMP;
@@ -1142,112 +1142,6 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         if (this.drawDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
-    }
-
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x007c A[SYNTHETIC, Splitter:B:39:0x007c] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static android.graphics.Bitmap getScaledBitmap(float r7, float r8, java.lang.String r9, java.lang.String r10, int r11) {
-        /*
-            r0 = 0
-            android.graphics.BitmapFactory$Options r1 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0075 }
-            r1.<init>()     // Catch:{ all -> 0x0075 }
-            r2 = 1
-            r1.inJustDecodeBounds = r2     // Catch:{ all -> 0x0075 }
-            if (r9 == 0) goto L_0x0010
-            android.graphics.BitmapFactory.decodeFile(r9, r1)     // Catch:{ all -> 0x0075 }
-            r3 = r0
-            goto L_0x0020
-        L_0x0010:
-            java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ all -> 0x0075 }
-            r3.<init>(r10)     // Catch:{ all -> 0x0075 }
-            java.nio.channels.FileChannel r10 = r3.getChannel()     // Catch:{ all -> 0x0073 }
-            long r4 = (long) r11     // Catch:{ all -> 0x0073 }
-            r10.position(r4)     // Catch:{ all -> 0x0073 }
-            android.graphics.BitmapFactory.decodeStream(r3, r0, r1)     // Catch:{ all -> 0x0073 }
-        L_0x0020:
-            int r10 = r1.outWidth     // Catch:{ all -> 0x0073 }
-            if (r10 <= 0) goto L_0x006d
-            int r4 = r1.outHeight     // Catch:{ all -> 0x0073 }
-            if (r4 <= 0) goto L_0x006d
-            int r5 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
-            if (r5 <= 0) goto L_0x0031
-            if (r10 >= r4) goto L_0x0031
-            r6 = r8
-            r8 = r7
-            r7 = r6
-        L_0x0031:
-            float r10 = (float) r10     // Catch:{ all -> 0x0073 }
-            float r10 = r10 / r7
-            float r7 = (float) r4     // Catch:{ all -> 0x0073 }
-            float r7 = r7 / r8
-            float r7 = java.lang.Math.min(r10, r7)     // Catch:{ all -> 0x0073 }
-            r1.inSampleSize = r2     // Catch:{ all -> 0x0073 }
-            r8 = 1065353216(0x3var_, float:1.0)
-            int r8 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
-            if (r8 <= 0) goto L_0x004c
-        L_0x0041:
-            int r8 = r1.inSampleSize     // Catch:{ all -> 0x0073 }
-            int r8 = r8 * 2
-            r1.inSampleSize = r8     // Catch:{ all -> 0x0073 }
-            float r8 = (float) r8     // Catch:{ all -> 0x0073 }
-            int r8 = (r8 > r7 ? 1 : (r8 == r7 ? 0 : -1))
-            if (r8 < 0) goto L_0x0041
-        L_0x004c:
-            r7 = 0
-            r1.inJustDecodeBounds = r7     // Catch:{ all -> 0x0073 }
-            if (r9 == 0) goto L_0x0056
-            android.graphics.Bitmap r7 = android.graphics.BitmapFactory.decodeFile(r9, r1)     // Catch:{ all -> 0x0073 }
-            goto L_0x0062
-        L_0x0056:
-            java.nio.channels.FileChannel r7 = r3.getChannel()     // Catch:{ all -> 0x0073 }
-            long r8 = (long) r11     // Catch:{ all -> 0x0073 }
-            r7.position(r8)     // Catch:{ all -> 0x0073 }
-            android.graphics.Bitmap r7 = android.graphics.BitmapFactory.decodeStream(r3, r0, r1)     // Catch:{ all -> 0x0073 }
-        L_0x0062:
-            if (r3 == 0) goto L_0x006c
-            r3.close()     // Catch:{ Exception -> 0x0068 }
-            goto L_0x006c
-        L_0x0068:
-            r8 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x006c:
-            return r7
-        L_0x006d:
-            if (r3 == 0) goto L_0x0084
-            r3.close()     // Catch:{ Exception -> 0x0080 }
-            goto L_0x0084
-        L_0x0073:
-            r7 = move-exception
-            goto L_0x0077
-        L_0x0075:
-            r7 = move-exception
-            r3 = r0
-        L_0x0077:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)     // Catch:{ all -> 0x0085 }
-            if (r3 == 0) goto L_0x0084
-            r3.close()     // Catch:{ Exception -> 0x0080 }
-            goto L_0x0084
-        L_0x0080:
-            r7 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)
-        L_0x0084:
-            return r0
-        L_0x0085:
-            r7 = move-exception
-            if (r3 == 0) goto L_0x0090
-            r3.close()     // Catch:{ Exception -> 0x008c }
-            goto L_0x0090
-        L_0x008c:
-            r8 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x0090:
-            goto L_0x0092
-        L_0x0091:
-            throw r7
-        L_0x0092:
-            goto L_0x0091
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ThemesHorizontalListCell.getScaledBitmap(float, float, java.lang.String, java.lang.String, int):android.graphics.Bitmap");
     }
 
     public void setBackgroundColor(int i) {

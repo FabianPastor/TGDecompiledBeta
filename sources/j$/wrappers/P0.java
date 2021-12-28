@@ -10,7 +10,7 @@ import j$.util.function.q;
 import j$.util.function.r;
 import j$.util.function.t;
 import j$.util.function.w;
-import j$.util.function.z;
+import j$.util.function.y;
 import j$.util.stream.CLASSNAMEf1;
 import j$.util.stream.CLASSNAMEg;
 import j$.util.stream.M0;
@@ -88,8 +88,8 @@ public final /* synthetic */ class P0 implements CLASSNAMEf1 {
         return N0.n0(this.a.mapToInt(n0Var == null ? null : n0Var.a));
     }
 
-    public /* synthetic */ Object f0(z zVar, w wVar, BiConsumer biConsumer) {
-        return this.a.collect(A0.a(zVar), w0.a(wVar), r.a(biConsumer));
+    public /* synthetic */ Object f0(y yVar, w wVar, BiConsumer biConsumer) {
+        return this.a.collect(A0.a(yVar), w0.a(wVar), r.a(biConsumer));
     }
 
     public /* synthetic */ CLASSNAMEl findAny() {

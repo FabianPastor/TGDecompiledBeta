@@ -1,17 +1,17 @@
 package j$.util.stream;
 
-import j$.util.function.y;
+import j$.util.function.Predicate;
 
 /* renamed from: j$.util.stream.g1  reason: case insensitive filesystem */
 class CLASSNAMEg1 extends CLASSNAMEk1 {
     final /* synthetic */ CLASSNAMEl1 c;
-    final /* synthetic */ y d;
+    final /* synthetic */ Predicate d;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    CLASSNAMEg1(CLASSNAMEl1 l1Var, y yVar) {
+    CLASSNAMEg1(CLASSNAMEl1 l1Var, Predicate predicate) {
         super(l1Var);
         this.c = l1Var;
-        this.d = yVar;
+        this.d = predicate;
     }
 
     public void accept(Object obj) {

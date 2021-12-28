@@ -9,7 +9,7 @@ import j$.util.function.f;
 import j$.util.function.g;
 import j$.util.function.h;
 import j$.util.function.u;
-import j$.util.function.z;
+import j$.util.function.y;
 import j$.wrappers.E;
 import j$.wrappers.G;
 import j$.wrappers.K;
@@ -17,7 +17,7 @@ import j$.wrappers.K;
 public interface U extends CLASSNAMEg {
     CLASSNAMEj G(d dVar);
 
-    Object H(z zVar, u uVar, BiConsumer biConsumer);
+    Object H(y yVar, u uVar, BiConsumer biConsumer);
 
     double K(double d, d dVar);
 

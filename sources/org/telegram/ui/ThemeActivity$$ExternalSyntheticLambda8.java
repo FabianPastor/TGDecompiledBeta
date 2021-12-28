@@ -1,6 +1,6 @@
 package org.telegram.ui;
 
-import com.google.android.gms.internal.vision.zzhv$$ExternalSyntheticBackport0;
+import com.google.android.gms.internal.mlkit_language_id.zzdp$$ExternalSyntheticBackport0;
 import java.util.Comparator;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -11,6 +11,6 @@ public final /* synthetic */ class ThemeActivity$$ExternalSyntheticLambda8 imple
     }
 
     public final int compare(Object obj, Object obj2) {
-        return zzhv$$ExternalSyntheticBackport0.m(((Theme.ThemeInfo) obj).sortIndex, ((Theme.ThemeInfo) obj2).sortIndex);
+        return zzdp$$ExternalSyntheticBackport0.m(((Theme.ThemeInfo) obj).sortIndex, ((Theme.ThemeInfo) obj2).sortIndex);
     }
 }

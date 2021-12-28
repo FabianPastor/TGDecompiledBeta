@@ -1,20 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessageObject;
-import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda174 implements AlertsCreator.ScheduleDatePickerDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda174 implements ThemeDescription.ThemeDescriptionDelegate {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessageObject.GroupedMessages f$1;
-    public final /* synthetic */ MessageObject f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda174(ChatActivity chatActivity, MessageObject.GroupedMessages groupedMessages, MessageObject messageObject) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda174(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = groupedMessages;
-        this.f$2 = messageObject;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$processSelectedOption$157(this.f$1, this.f$2, z, i);
+    public final void didSetColor() {
+        this.f$0.lambda$getThemeDescriptions$186();
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

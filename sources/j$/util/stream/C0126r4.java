@@ -3,17 +3,16 @@ package j$.util.stream;
 import j$.util.CLASSNAMEa;
 import j$.util.function.Consumer;
 import j$.util.function.l;
-import j$.util.function.z;
+import j$.util.function.y;
 import j$.util.v;
-import j$.util.y;
 
 /* renamed from: j$.util.stream.r4  reason: case insensitive filesystem */
 final class CLASSNAMEr4 extends CLASSNAMEg4 implements v {
-    CLASSNAMEr4(CLASSNAMEz2 z2Var, z zVar, boolean z) {
-        super(z2Var, zVar, z);
+    CLASSNAMEr4(CLASSNAMEz2 z2Var, y yVar, boolean z) {
+        super(z2Var, yVar, z);
     }
 
-    CLASSNAMEr4(CLASSNAMEz2 z2Var, y yVar, boolean z) {
+    CLASSNAMEr4(CLASSNAMEz2 z2Var, j$.util.y yVar, boolean z) {
         super(z2Var, yVar, z);
     }
 
@@ -60,7 +59,7 @@ final class CLASSNAMEr4 extends CLASSNAMEg4 implements v {
     }
 
     /* access modifiers changed from: package-private */
-    public CLASSNAMEg4 l(y yVar) {
+    public CLASSNAMEg4 l(j$.util.y yVar) {
         return new CLASSNAMEr4(this.b, yVar, this.a);
     }
 

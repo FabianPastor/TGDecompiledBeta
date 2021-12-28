@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
+import org.telegram.ui.Components.PopupSwipeBackLayout;
+import org.telegram.ui.Components.ReactionsContainerLayout;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda183 implements RecyclerAnimationScrollHelper.ScrollListener {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda183 implements PopupSwipeBackLayout.OnSwipeBackProgressListener {
+    public final /* synthetic */ ReactionsContainerLayout f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda183(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda183(ReactionsContainerLayout reactionsContainerLayout) {
+        this.f$0 = reactionsContainerLayout;
     }
 
-    public final void onScroll() {
-        this.f$0.invalidateMessagesVisiblePart();
+    public final void onSwipeBackProgress(PopupSwipeBackLayout popupSwipeBackLayout, float f, float f2) {
+        ChatActivity.lambda$createMenu$135(this.f$0, popupSwipeBackLayout, f, f2);
     }
 }

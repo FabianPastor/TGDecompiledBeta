@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LanguageDetector;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda154 implements MessagesStorage.IntCallback {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ boolean f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda154 implements LanguageDetector.ExceptionCallback {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda154 INSTANCE = new ChatActivity$$ExternalSyntheticLambda154();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda154(ChatActivity chatActivity, boolean z) {
-        this.f$0 = chatActivity;
-        this.f$1 = z;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda154() {
     }
 
-    public final void run(int i) {
-        this.f$0.lambda$processSelectedOption$137(this.f$1, i);
+    public final void run(Exception exc) {
+        FileLog.e((Throwable) exc);
     }
 }

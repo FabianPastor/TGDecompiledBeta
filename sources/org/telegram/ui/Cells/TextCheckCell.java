@@ -109,6 +109,11 @@ public class TextCheckCell extends FrameLayout {
         return super.onTouchEvent(motionEvent);
     }
 
+    public void setDivider(boolean z) {
+        this.needDivider = z;
+        setWillNotDraw(!z);
+    }
+
     public void setTextAndCheck(String str, boolean z, boolean z2) {
         this.textView.setText(str);
         this.isMultiline = false;

@@ -362,20 +362,22 @@ public class ReactionsEffectOverlay {
     }
 
     public static void show(BaseFragment baseFragment, ReactionsContainerLayout reactionsContainerLayout, ChatMessageCell chatMessageCell, float f, float f2, String str, int i) {
-        ReactionsEffectOverlay reactionsEffectOverlay = new ReactionsEffectOverlay(baseFragment.getParentActivity(), baseFragment, reactionsContainerLayout, chatMessageCell, f, f2, str, i);
-        currentOverlay = reactionsEffectOverlay;
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.height = -1;
-        layoutParams.width = -1;
-        layoutParams.type = 1000;
-        layoutParams.flags = 65816;
-        layoutParams.format = -3;
-        WindowManager windowManager2 = baseFragment.getParentActivity().getWindowManager();
-        reactionsEffectOverlay.windowManager = windowManager2;
-        windowManager2.addView(reactionsEffectOverlay.windowView, layoutParams);
-        chatMessageCell.invalidate();
-        if (chatMessageCell.getCurrentMessagesGroup() != null && chatMessageCell.getParent() != null) {
-            ((View) chatMessageCell.getParent()).invalidate();
+        if (chatMessageCell != null) {
+            ReactionsEffectOverlay reactionsEffectOverlay = new ReactionsEffectOverlay(baseFragment.getParentActivity(), baseFragment, reactionsContainerLayout, chatMessageCell, f, f2, str, i);
+            currentOverlay = reactionsEffectOverlay;
+            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+            layoutParams.height = -1;
+            layoutParams.width = -1;
+            layoutParams.type = 1000;
+            layoutParams.flags = 65816;
+            layoutParams.format = -3;
+            WindowManager windowManager2 = baseFragment.getParentActivity().getWindowManager();
+            reactionsEffectOverlay.windowManager = windowManager2;
+            windowManager2.addView(reactionsEffectOverlay.windowView, layoutParams);
+            chatMessageCell.invalidate();
+            if (chatMessageCell.getCurrentMessagesGroup() != null && chatMessageCell.getParent() != null) {
+                ((View) chatMessageCell.getParent()).invalidate();
+            }
         }
     }
 

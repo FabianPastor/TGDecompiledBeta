@@ -7,17 +7,16 @@ import j$.util.concurrent.b;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
 import j$.util.function.Consumer;
+import j$.util.function.Predicate;
 import j$.util.function.f;
 import j$.util.function.l;
 import j$.util.function.q;
-import j$.util.function.y;
 import j$.util.stream.CLASSNAMEp1;
 import j$.util.stream.Stream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -25,25 +24,11 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
-import java.util.Set;
-import java.util.SortedSet;
 import java.util.concurrent.ConcurrentMap;
 
 /* renamed from: j$.util.a  reason: case insensitive filesystem */
 public abstract /* synthetic */ class CLASSNAMEa {
-    public static Object A(Map map, Object obj, Object obj2) {
-        if (map instanceof Map) {
-            return ((Map) map).getOrDefault(obj, obj2);
-        }
-        if (map instanceof ConcurrentMap) {
-            Object obj3 = ((ConcurrentMap) map).get(obj);
-            return obj3 != null ? obj3 : obj2;
-        }
-        Object obj4 = map.get(obj);
-        return (obj4 != null || map.containsKey(obj)) ? obj4 : obj2;
-    }
-
-    public static Object B(Map map, Object obj, Object obj2, BiFunction biFunction) {
+    public static Object A(Map map, Object obj, Object obj2, BiFunction biFunction) {
         if (map instanceof Map) {
             return ((Map) map).merge(obj, obj2, biFunction);
         }
@@ -72,7 +57,7 @@ public abstract /* synthetic */ class CLASSNAMEa {
         }
     }
 
-    public static Object C(java.util.Map map, Object obj, Object obj2) {
+    public static Object B(java.util.Map map, Object obj, Object obj2) {
         if (map instanceof Map) {
             return ((Map) map).putIfAbsent(obj, obj2);
         }
@@ -80,7 +65,7 @@ public abstract /* synthetic */ class CLASSNAMEa {
         return obj3 == null ? map.put(obj, obj2) : obj3;
     }
 
-    public static boolean D(java.util.Map map, Object obj, Object obj2) {
+    public static boolean C(java.util.Map map, Object obj, Object obj2) {
         if (map instanceof Map) {
             return ((Map) map).remove(obj, obj2);
         }
@@ -92,7 +77,7 @@ public abstract /* synthetic */ class CLASSNAMEa {
         return true;
     }
 
-    public static Object E(java.util.Map map, Object obj, Object obj2) {
+    public static Object D(java.util.Map map, Object obj, Object obj2) {
         if (map instanceof Map) {
             return ((Map) map).replace(obj, obj2);
         }
@@ -100,7 +85,7 @@ public abstract /* synthetic */ class CLASSNAMEa {
         return (obj3 != null || map.containsKey(obj)) ? map.put(obj, obj2) : obj3;
     }
 
-    public static boolean F(java.util.Map map, Object obj, Object obj2, Object obj3) {
+    public static boolean E(java.util.Map map, Object obj, Object obj2, Object obj3) {
         if (map instanceof Map) {
             return ((Map) map).replace(obj, obj2, obj3);
         }
@@ -112,7 +97,7 @@ public abstract /* synthetic */ class CLASSNAMEa {
         return true;
     }
 
-    public static void G(java.util.Map map, BiFunction biFunction) {
+    public static void F(java.util.Map map, BiFunction biFunction) {
         if (map instanceof Map) {
             ((Map) map).replaceAll(biFunction);
         } else if (map instanceof ConcurrentMap) {
@@ -129,7 +114,7 @@ public abstract /* synthetic */ class CLASSNAMEa {
         }
     }
 
-    public static void H(List list, Comparator comparator) {
+    public static void G(List list, Comparator comparator) {
         if (DesugarCollections.b.isInstance(list)) {
             DesugarCollections.d(list, comparator);
             return;
@@ -143,32 +128,7 @@ public abstract /* synthetic */ class CLASSNAMEa {
         }
     }
 
-    public static y I(Collection collection) {
-        if (collection instanceof CLASSNAMEb) {
-            return ((CLASSNAMEb) collection).spliterator();
-        }
-        if (collection instanceof LinkedHashSet) {
-            LinkedHashSet linkedHashSet = (LinkedHashSet) collection;
-            linkedHashSet.getClass();
-            return new L(linkedHashSet, 17);
-        } else if (collection instanceof SortedSet) {
-            SortedSet sortedSet = (SortedSet) collection;
-            return new t(sortedSet, sortedSet, 21);
-        } else if (collection instanceof Set) {
-            Set set = (Set) collection;
-            set.getClass();
-            return new L(set, 1);
-        } else if (collection instanceof List) {
-            List list = (List) collection;
-            list.getClass();
-            return new L(list, 16);
-        } else {
-            collection.getClass();
-            return new L(collection, 0);
-        }
-    }
-
-    public static Comparator J(Comparator comparator, Comparator comparator2) {
+    public static Comparator H(Comparator comparator, Comparator comparator2) {
         if (comparator instanceof CLASSNAMEe) {
             return ((CLASSNAMEf) ((CLASSNAMEe) comparator)).thenComparing(comparator2);
         }
@@ -231,18 +191,18 @@ public abstract /* synthetic */ class CLASSNAMEa {
     }
 
     public static Stream g(Collection collection) {
-        return CLASSNAMEp1.y(I(collection), true);
+        return CLASSNAMEp1.y(Collection$EL.b(collection), true);
     }
 
-    public static boolean h(Collection collection, y yVar) {
+    public static boolean h(Collection collection, Predicate predicate) {
         if (DesugarCollections.a.isInstance(collection)) {
-            return DesugarCollections.c(collection, yVar);
+            return DesugarCollections.c(collection, predicate);
         }
-        yVar.getClass();
+        predicate.getClass();
         boolean z = false;
         Iterator it = collection.iterator();
         while (it.hasNext()) {
-            if (yVar.test(it.next())) {
+            if (predicate.test(it.next())) {
                 it.remove();
                 z = true;
             }
@@ -251,7 +211,7 @@ public abstract /* synthetic */ class CLASSNAMEa {
     }
 
     public static Stream i(Collection collection) {
-        return CLASSNAMEp1.y(I(collection), false);
+        return CLASSNAMEp1.y(Collection$EL.b(collection), false);
     }
 
     public static boolean j(u uVar, Consumer consumer) {
@@ -444,15 +404,7 @@ public abstract /* synthetic */ class CLASSNAMEa {
         return obj == obj2 || (obj != null && obj.equals(obj2));
     }
 
-    public static /* synthetic */ void y(Collection collection, Consumer consumer) {
-        if (collection instanceof CLASSNAMEb) {
-            ((CLASSNAMEb) collection).forEach(consumer);
-        } else {
-            a(collection, consumer);
-        }
-    }
-
-    public static /* synthetic */ void z(java.util.Map map, BiConsumer biConsumer) {
+    public static /* synthetic */ void y(java.util.Map map, BiConsumer biConsumer) {
         if (map instanceof Map) {
             ((Map) map).forEach(biConsumer);
         } else if (map instanceof ConcurrentMap) {
@@ -460,5 +412,17 @@ public abstract /* synthetic */ class CLASSNAMEa {
         } else {
             Map.CC.$default$forEach(map, biConsumer);
         }
+    }
+
+    public static Object z(java.util.Map map, Object obj, Object obj2) {
+        if (map instanceof Map) {
+            return ((Map) map).getOrDefault(obj, obj2);
+        }
+        if (map instanceof ConcurrentMap) {
+            Object obj3 = ((ConcurrentMap) map).get(obj);
+            return obj3 != null ? obj3 : obj2;
+        }
+        Object obj4 = map.get(obj);
+        return (obj4 != null || map.containsKey(obj)) ? obj4 : obj2;
     }
 }
