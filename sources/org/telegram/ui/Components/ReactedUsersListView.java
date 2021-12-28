@@ -289,7 +289,7 @@ public class ReactedUsersListView extends FrameLayout {
             BackupImageView backupImageView = new BackupImageView(context);
             this.avatarView = backupImageView;
             backupImageView.setRoundRadius(AndroidUtilities.dp(32.0f));
-            addView(this.avatarView, LayoutHelper.createFrameRelatively(36.0f, 36.0f, 8388627, 13.0f, 0.0f, 0.0f, 0.0f));
+            addView(this.avatarView, LayoutHelper.createFrameRelatively(36.0f, 36.0f, 8388627, 8.0f, 0.0f, 0.0f, 0.0f));
             TextView textView = new TextView(context);
             this.titleView = textView;
             textView.setLines(1);

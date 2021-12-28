@@ -1094,6 +1094,7 @@ public class ForwardingPreviewView extends FrameLayout {
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             ChatMessageCell chatMessageCell = (ChatMessageCell) viewHolder.itemView;
+            chatMessageCell.setInvalidateSpoilersParent(ForwardingPreviewView.this.forwardingMessagesParams.hasSpoilers);
             chatMessageCell.setParentViewSize(ForwardingPreviewView.this.chatListView.getMeasuredWidth(), ForwardingPreviewView.this.chatListView.getMeasuredHeight());
             int id = chatMessageCell.getMessageObject() != null ? chatMessageCell.getMessageObject().getId() : 0;
             ForwardingMessagesParams forwardingMessagesParams = ForwardingPreviewView.this.forwardingMessagesParams;

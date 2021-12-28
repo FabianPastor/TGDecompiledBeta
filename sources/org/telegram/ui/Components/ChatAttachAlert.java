@@ -242,7 +242,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         protected final Theme.ResourcesProvider resourcesProvider;
 
         /* access modifiers changed from: package-private */
-        public void applyCaption(String str) {
+        public void applyCaption(CharSequence charSequence) {
         }
 
         /* access modifiers changed from: package-private */
@@ -776,7 +776,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r7.doneItem = r12
             r12.setLongClickEnabled(r11)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.doneItem
-            r1 = 2131625101(0x7f0e048d, float:1.88774E38)
+            r1 = 2131625102(0x7f0e048e, float:1.8877402E38)
             java.lang.String r2 = "Create"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -817,7 +817,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = 2131165497(0x7var_, float:1.7945213E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.searchItem
-            r1 = 2131627639(0x7f0e0e77, float:1.8882548E38)
+            r1 = 2131627642(0x7f0e0e7a, float:1.8882554E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -1044,7 +1044,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6 = r36
             r0.<init>(r2, r3, r4, r5, r6)
             r7.commentTextView = r15
-            r0 = 2131624206(0x7f0e010e, float:1.8875585E38)
+            r0 = 2131624207(0x7f0e010f, float:1.8875587E38)
             java.lang.String r1 = "AddCaption"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r15.setHint(r0)
@@ -1607,7 +1607,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     /* access modifiers changed from: protected */
     public void applyCaption() {
         if (this.commentTextView.length() > 0) {
-            this.currentAttachLayout.applyCaption(this.commentTextView.getText().toString());
+            this.currentAttachLayout.applyCaption(this.commentTextView.getText());
         }
     }
 

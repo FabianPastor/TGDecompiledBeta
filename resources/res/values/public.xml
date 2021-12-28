@@ -1379,6 +1379,7 @@
     <public type="id" name="menu_link" id="NUM" />
     <public type="id" name="menu_mono" id="NUM" />
     <public type="id" name="menu_regular" id="NUM" />
+    <public type="id" name="menu_spoiler" id="NUM" />
     <public type="id" name="menu_strike" id="NUM" />
     <public type="id" name="menu_underline" id="NUM" />
     <public type="id" name="monochrome" id="NUM" />
@@ -1895,6 +1896,7 @@
     <public type="string" name="ActionPinnedText" id="NUM" />
     <public type="string" name="ActionPinnedVideo" id="NUM" />
     <public type="string" name="ActionPinnedVoice" id="NUM" />
+    <public type="string" name="ActionReactionsChanged" id="NUM" />
     <public type="string" name="ActionRemovedPhoto" id="NUM" />
     <public type="string" name="ActionRevokedInviteLinkClickable" id="NUM" />
     <public type="string" name="ActionTTLChanged" id="NUM" />
@@ -2893,6 +2895,7 @@
     <public type="string" name="Days_zero" id="NUM" />
     <public type="string" name="Deactivate" id="NUM" />
     <public type="string" name="DebugClearLogs" id="NUM" />
+    <public type="string" name="DebugDrawSnowInChat" id="NUM" />
     <public type="string" name="DebugMenu" id="NUM" />
     <public type="string" name="DebugMenuCallSettings" id="NUM" />
     <public type="string" name="DebugMenuCheckAppUpdate" id="NUM" />
@@ -4304,6 +4307,7 @@
     <public type="string" name="NobodyLikesSpam1" id="NUM" />
     <public type="string" name="NobodyLikesSpam2" id="NUM" />
     <public type="string" name="NobodyLikesSpam3" id="NUM" />
+    <public type="string" name="NobodyViewed" id="NUM" />
     <public type="string" name="NotMounted" id="NUM" />
     <public type="string" name="NotificationActionPinnedContact2" id="NUM" />
     <public type="string" name="NotificationActionPinnedContactChannel2" id="NUM" />
@@ -5658,6 +5662,7 @@
     <public type="string" name="SpeedSlow" id="NUM" />
     <public type="string" name="SpeedVeryFast" id="NUM" />
     <public type="string" name="SpeedVerySlow" id="NUM" />
+    <public type="string" name="Spoiler" id="NUM" />
     <public type="string" name="SponsoredMessage" id="NUM" />
     <public type="string" name="SponsoredMessageAlertLearnMore" id="NUM" />
     <public type="string" name="SponsoredMessageAlertLearnMoreUrl" id="NUM" />

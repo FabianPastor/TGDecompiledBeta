@@ -226,6 +226,7 @@
     <string name="ActionPinnedText">un1 pinned \"%1$s\"</string>
     <string name="ActionPinnedVideo">un1 pinned a video</string>
     <string name="ActionPinnedVoice">un1 pinned a voice message</string>
+    <string name="ActionReactionsChanged">un1 changed chat reactions \10from: %1$s \10to: %2$s</string>
     <string name="ActionRemovedPhoto">un1 removed the group photo</string>
     <string name="ActionRevokedInviteLinkClickable">un1 revoked invite link un2</string>
     <string name="ActionTTLChanged">un1 has set messages to auto-delete in %1$s</string>
@@ -1224,6 +1225,7 @@
     <string name="Days_zero">%1$d days</string>
     <string name="Deactivate">DELETE NOW</string>
     <string name="DebugClearLogs">Clear Logs</string>
+    <string name="DebugDrawSnowInChat">Snow in chat</string>
     <string name="DebugMenu">Debug Menu</string>
     <string name="DebugMenuCallSettings">Call settings</string>
     <string name="DebugMenuCheckAppUpdate">Check app update</string>
@@ -1384,8 +1386,8 @@
     <string name="DocumentsTitle">Shared Files</string>
     <string name="Done">Done</string>
     <string name="DontAskAgain">Don\'t ask again</string>
-    <string name="DoubleTapPreviewMessage">i hope you\'re enjoying your day as mach as i am.</string>
-    <string name="DoubleTapPreviewRational">Double tap on this message for a quck reaction.</string>
+    <string name="DoubleTapPreviewMessage">I hope you\'re enjoying your day as much as I am.</string>
+    <string name="DoubleTapPreviewRational">Double tap this message for a quck reaction.</string>
     <string name="DoubleTapPreviewSenderName">Dino</string>
     <string name="DoubleTapSetting">Quick Reactions</string>
     <string name="Draft">Draft</string>
@@ -2635,6 +2637,7 @@
     <string name="NobodyLikesSpam1">Sorry, you can only send messages to mutual contacts at the moment.</string>
     <string name="NobodyLikesSpam2">Sorry, you can only add mutual contacts to groups at the moment.</string>
     <string name="NobodyLikesSpam3">Sorry, you are currently restricted from posting to public groups.</string>
+    <string name="NobodyViewed">Nobody viewed</string>
     <string name="NotMounted">Storage not mounted</string>
     <string name="NotificationActionPinnedContact2">%1$s pinned a contact %3$s in the group %2$s</string>
     <string name="NotificationActionPinnedContactChannel2">%1$s pinned a contact %2$s</string>
@@ -3989,6 +3992,7 @@
     <string name="SpeedSlow">Slow</string>
     <string name="SpeedVeryFast">Very fast</string>
     <string name="SpeedVerySlow">Very slow</string>
+    <string name="Spoiler">Spoiler</string>
     <string name="SponsoredMessage">sponsored</string>
     <string name="SponsoredMessageAlertLearnMore">LEARN MORE</string>
     <string name="SponsoredMessageAlertLearnMoreUrl">https://telegram.org</string>

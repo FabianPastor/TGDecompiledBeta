@@ -25119,6 +25119,8 @@ public class MessagesController extends BaseController implements NotificationCe
                     messageObject.sponsoredId = tLRPC$TL_sponsoredMessage.random_id;
                     messageObject.botStartParam = tLRPC$TL_sponsoredMessage.start_param;
                     messageObject.sponsoredChannelPost = tLRPC$TL_sponsoredMessage.channel_post;
+                    messageObject.sponsoredChatInvite = tLRPC$TL_sponsoredMessage.chat_invite;
+                    messageObject.sponsoredChatInviteHash = tLRPC$TL_sponsoredMessage.chat_invite_hash;
                     arrayList.add(messageObject);
                     i++;
                     i4--;
@@ -26651,7 +26653,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC$TL_messages_setChatAvailableReactions tLRPC$TL_messages_setChatAvailableReactions = new TLRPC$TL_messages_setChatAvailableReactions();
         tLRPC$TL_messages_setChatAvailableReactions.peer = getInputPeer(-j);
         tLRPC$TL_messages_setChatAvailableReactions.available_reactions.addAll(list);
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_setChatAvailableReactions, new MessagesController$$ExternalSyntheticLambda281(this, j, list), 64);
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_setChatAvailableReactions, new MessagesController$$ExternalSyntheticLambda281(this, j, list));
     }
 
     /* access modifiers changed from: private */

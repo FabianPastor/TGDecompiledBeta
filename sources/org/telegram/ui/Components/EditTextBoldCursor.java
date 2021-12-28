@@ -26,7 +26,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.Keep;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
@@ -40,7 +39,7 @@ import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
 import org.telegram.ui.ActionBar.Theme;
 
-public class EditTextBoldCursor extends EditText {
+public class EditTextBoldCursor extends EditTextEffects {
     private static Class editorClass;
     private static Method getVerticalOffsetMethod;
     private static Field mCursorDrawableResField;

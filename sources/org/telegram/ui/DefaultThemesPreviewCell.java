@@ -268,7 +268,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
                         if (r11 == 0) goto L_0x0155
                         org.telegram.ui.DefaultThemesPreviewCell r11 = org.telegram.ui.DefaultThemesPreviewCell.this
                         org.telegram.ui.Cells.TextCell r11 = r11.dayNightCell
-                        r0 = 2131627811(0x7f0e0var_, float:1.8882897E38)
+                        r0 = 2131627814(0x7f0e0var_, float:1.8882903E38)
                         java.lang.String r2 = "SettingsSwitchToNightMode"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
                         org.telegram.ui.DefaultThemesPreviewCell r2 = org.telegram.ui.DefaultThemesPreviewCell.this
@@ -278,7 +278,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
                     L_0x0155:
                         org.telegram.ui.DefaultThemesPreviewCell r11 = org.telegram.ui.DefaultThemesPreviewCell.this
                         org.telegram.ui.Cells.TextCell r11 = r11.dayNightCell
-                        r0 = 2131627810(0x7f0e0var_, float:1.8882895E38)
+                        r0 = 2131627813(0x7f0e0var_, float:1.8882901E38)
                         java.lang.String r2 = "SettingsSwitchToDayMode"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
                         org.telegram.ui.DefaultThemesPreviewCell r2 = org.telegram.ui.DefaultThemesPreviewCell.this

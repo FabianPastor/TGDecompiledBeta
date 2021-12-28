@@ -201,7 +201,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         this.val$type = r5;
                         this.gestureDetector = new GestureDetector(r3, new GestureDetector.SimpleOnGestureListener() {
                             public boolean onDoubleTap(MotionEvent motionEvent) {
-                                boolean selectReaction = AnonymousClass1.this.getMessageObject().selectReaction(MediaDataController.getInstance(AnonymousClass1.this.val$currentAccount).getDoubleTapReaction());
+                                boolean selectReaction = AnonymousClass1.this.getMessageObject().selectReaction(MediaDataController.getInstance(AnonymousClass1.this.val$currentAccount).getDoubleTapReaction(), false);
                                 AnonymousClass1 r1 = AnonymousClass1.this;
                                 r1.setMessageObject(r1.getMessageObject(), (MessageObject.GroupedMessages) null, false, false);
                                 AnonymousClass1.this.requestLayout();
@@ -209,6 +209,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                                 if (selectReaction) {
                                     ThemePreviewMessagesCell themePreviewMessagesCell = ThemePreviewMessagesCell.this;
                                     ReactionsEffectOverlay.show(themePreviewMessagesCell.fragment, (ReactionsContainerLayout) null, themePreviewMessagesCell.cells[1], motionEvent.getX(), motionEvent.getY(), MediaDataController.getInstance(AnonymousClass1.this.val$currentAccount).getDoubleTapReaction(), AnonymousClass1.this.val$currentAccount);
+                                    ReactionsEffectOverlay.startAnimation();
                                 }
                                 AnonymousClass1.this.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                                     public boolean onPreDraw() {

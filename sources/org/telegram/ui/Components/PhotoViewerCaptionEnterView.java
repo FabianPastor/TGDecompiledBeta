@@ -209,7 +209,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
         };
         this.messageEditText = r7;
-        r7.setWindowView(this.windowView);
+        r7.setDelegate(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda8(this));
+        this.messageEditText.setWindowView(this.windowView);
         this.messageEditText.setHint(LocaleController.getString("AddCaption", NUM));
         this.messageEditText.setImeOptions(NUM);
         this.messageEditText.setLinkTextColor(-8994063);
@@ -228,7 +229,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.messageEditText.setHintTextColor(-NUM);
         frameLayout.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 83, 52.0f, 0.0f, 6.0f, 0.0f));
         this.messageEditText.setOnKeyListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda6(this));
-        this.messageEditText.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda3(this));
+        this.messageEditText.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda5(this));
         this.messageEditText.addTextChangedListener(new TextWatcher() {
             boolean processChange = false;
 
@@ -463,7 +464,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         imageView3.setScaleType(ImageView.ScaleType.CENTER);
         imageView3.setImageDrawable(combinedDrawable);
         linearLayout.addView(imageView3, LayoutHelper.createLinear(48, 48, 80));
-        imageView3.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda5(this));
+        imageView3.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda3(this));
         imageView3.setContentDescription(LocaleController.getString("Done", NUM));
         NumberTextView numberTextView = new NumberTextView(context2);
         this.captionLimitView = numberTextView;
@@ -485,7 +486,12 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$1(View view, int i, KeyEvent keyEvent) {
+    public /* synthetic */ void lambda$new$1() {
+        this.messageEditText.invalidateEffects();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$new$2(View view, int i, KeyEvent keyEvent) {
         if (i == 4) {
             if (this.windowView != null && hideActionMode()) {
                 return true;
@@ -501,14 +507,14 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$2(View view) {
+    public /* synthetic */ void lambda$new$3(View view) {
         if (isPopupShowing()) {
             showPopup((AndroidUtilities.isInMultiwindow || AndroidUtilities.usingHardwareInput) ? 0 : 2, false);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$3(View view) {
+    public /* synthetic */ void lambda$new$4(View view) {
         if (this.captionMaxLength - this.codePointCount < 0) {
             AndroidUtilities.shakeView(this.captionLimitView, 2.0f, 0);
             Vibrator vibrator = (Vibrator) this.captionLimitView.getContext().getSystemService("vibrator");
@@ -581,12 +587,12 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDraw$4(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onDraw$5(ValueAnimator valueAnimator) {
         this.messageEditText.setOffsetY(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDraw$5(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onDraw$6(ValueAnimator valueAnimator) {
         this.offset = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
@@ -819,7 +825,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setFieldFocused$6() {
+    public /* synthetic */ void lambda$setFieldFocused$7() {
         EditTextCaption editTextCaption = this.messageEditText;
         if (editTextCaption != null) {
             try {
@@ -913,7 +919,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showPopup$7(float f, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showPopup$8(float f, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.emojiPadding = (int) floatValue;
         float f2 = f - floatValue;

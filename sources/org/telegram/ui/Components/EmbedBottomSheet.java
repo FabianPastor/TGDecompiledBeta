@@ -520,7 +520,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r15.setPadding(r9, r6, r13, r6)
-            r9 = 2131625007(0x7f0e042f, float:1.887721E38)
+            r9 = 2131625008(0x7f0e0430, float:1.8877212E38)
             java.lang.String r13 = "Close"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r13, r9)
             java.lang.String r9 = r9.toUpperCase()
@@ -591,7 +591,7 @@ public class EmbedBottomSheet extends BottomSheet {
             r12.setScaleType(r13)
             r13 = 2131166162(0x7var_d2, float:1.7946562E38)
             r12.setImageResource(r13)
-            r13 = 2131625092(0x7f0e0484, float:1.8877382E38)
+            r13 = 2131625093(0x7f0e0485, float:1.8877384E38)
             java.lang.String r15 = "CopyLink"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             r12.setContentDescription(r13)
@@ -633,7 +633,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r8.setPadding(r12, r6, r13, r6)
             android.widget.TextView r8 = r0.copyTextButton
-            r12 = 2131625090(0x7f0e0482, float:1.8877378E38)
+            r12 = 2131625091(0x7f0e0483, float:1.887738E38)
             java.lang.String r13 = "Copy"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             java.lang.String r12 = r12.toUpperCase()
@@ -664,7 +664,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r2.setPadding(r1, r6, r4, r6)
-            r1 = 2131626783(0x7f0e0b1f, float:1.8880812E38)
+            r1 = 2131626786(0x7f0e0b22, float:1.8880818E38)
             java.lang.String r4 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             java.lang.String r1 = r1.toUpperCase()

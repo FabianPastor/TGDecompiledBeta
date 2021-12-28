@@ -133,12 +133,14 @@ import org.telegram.tgnet.TLRPC$TL_keyboardButtonRequestPoll;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonSwitchInline;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonUrl;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonUrlAuth;
+import org.telegram.tgnet.TLRPC$TL_keyboardButtonUserProfile;
 import org.telegram.tgnet.TLRPC$TL_message;
 import org.telegram.tgnet.TLRPC$TL_messageEntityBold;
 import org.telegram.tgnet.TLRPC$TL_messageEntityCode;
 import org.telegram.tgnet.TLRPC$TL_messageEntityItalic;
 import org.telegram.tgnet.TLRPC$TL_messageEntityMentionName;
 import org.telegram.tgnet.TLRPC$TL_messageEntityPre;
+import org.telegram.tgnet.TLRPC$TL_messageEntitySpoiler;
 import org.telegram.tgnet.TLRPC$TL_messageEntityStrike;
 import org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl;
 import org.telegram.tgnet.TLRPC$TL_messageEntityUnderline;
@@ -171,6 +173,7 @@ import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.GroupStickersActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoViewer;
+import org.telegram.ui.ProfileActivity;
 import org.telegram.ui.StickersActivity;
 
 public class ChatActivityEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate {
@@ -2936,6 +2939,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
             public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
                 InputConnection onCreateInputConnection = super.onCreateInputConnection(editorInfo);
+                if (onCreateInputConnection == null) {
+                    return null;
+                }
                 try {
                     EditorInfoCompat.setContentMimeTypes(editorInfo, new String[]{"image/gif", "image/*", "image/jpg", "image/png", "image/webp"});
                     return InputConnectionCompat.createWrapper(onCreateInputConnection, editorInfo, new ChatActivityEnterView$11$$ExternalSyntheticLambda0(this, resourcesProvider4));
@@ -4071,6 +4077,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$2() {
+        this.messageEditText.invalidateEffects();
         ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
         if (chatActivityEnterViewDelegate != null) {
             chatActivityEnterViewDelegate.onTextSpansChanged(this.messageEditText.getText());
@@ -4246,7 +4253,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r2.setTextColor(r0)
             r0 = 1097859072(0x41700000, float:15.0)
             r2.setTextSize(r14, r0)
-            r0 = 2131627743(0x7f0e0edf, float:1.888276E38)
+            r0 = 2131627746(0x7f0e0ee2, float:1.8882765E38)
             java.lang.String r1 = "SendMessageAsTitle"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r2.setText(r0)
@@ -6527,7 +6534,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             CharSequence[] charSequenceArr = {AndroidUtilities.getTrimmedString(this.messageEditText.getText())};
             ArrayList<TLRPC$MessageEntity> entities = MediaDataController.getInstance(this.currentAccount).getEntities(charSequenceArr, supportsSendingNewEntities());
-            if (!TextUtils.equals(charSequenceArr[0], this.editingMessageObject.messageText) || ((entities != null && !entities.isEmpty()) || ((entities == null && !this.editingMessageObject.messageOwner.entities.isEmpty()) || (this.editingMessageObject.messageOwner.media instanceof TLRPC$TL_messageMediaWebPage)))) {
+            if (!TextUtils.equals(charSequenceArr[0], this.editingMessageObject.messageText) || ((entities != null && !entities.isEmpty()) || (((entities == null || entities.isEmpty()) && !this.editingMessageObject.messageOwner.entities.isEmpty()) || (this.editingMessageObject.messageOwner.media instanceof TLRPC$TL_messageMediaWebPage)))) {
                 MessageObject messageObject = this.editingMessageObject;
                 messageObject.editingMessage = charSequenceArr[0];
                 messageObject.editingMessageEntities = entities;
@@ -9293,14 +9300,20 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                                     URLSpanReplacement uRLSpanReplacement = new URLSpanReplacement(tLRPC$MessageEntity.url);
                                                     int i9 = tLRPC$MessageEntity.offset;
                                                     spannableStringBuilder.setSpan(uRLSpanReplacement, i9, tLRPC$MessageEntity.length + i9, 33);
+                                                } else if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntitySpoiler) {
+                                                    TextStyleSpan.TextStyleRun textStyleRun5 = new TextStyleSpan.TextStyleRun();
+                                                    textStyleRun5.flags |= 256;
+                                                    TextStyleSpan textStyleSpan5 = new TextStyleSpan(textStyleRun5);
+                                                    int i10 = tLRPC$MessageEntity.offset;
+                                                    MediaDataController.addStyleToText(textStyleSpan5, i10, tLRPC$MessageEntity.length + i10, spannableStringBuilder, true);
                                                 }
                                             }
                                         }
-                                        TextStyleSpan.TextStyleRun textStyleRun5 = new TextStyleSpan.TextStyleRun();
-                                        textStyleRun5.flags |= 4;
-                                        TextStyleSpan textStyleSpan5 = new TextStyleSpan(textStyleRun5);
-                                        int i10 = tLRPC$MessageEntity.offset;
-                                        MediaDataController.addStyleToText(textStyleSpan5, i10, tLRPC$MessageEntity.length + i10, spannableStringBuilder, true);
+                                        TextStyleSpan.TextStyleRun textStyleRun6 = new TextStyleSpan.TextStyleRun();
+                                        textStyleRun6.flags |= 4;
+                                        TextStyleSpan textStyleSpan6 = new TextStyleSpan(textStyleRun6);
+                                        int i11 = tLRPC$MessageEntity.offset;
+                                        MediaDataController.addStyleToText(textStyleSpan6, i11, tLRPC$MessageEntity.length + i11, spannableStringBuilder, true);
                                     }
                                 }
                                 i2++;
@@ -10335,9 +10348,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.parentFragment.showDialog(builder.create());
             } else if ((tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonCallback) || (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonGame) || (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonBuy) || (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonUrlAuth)) {
                 SendMessagesHelper.getInstance(this.currentAccount).sendCallback(true, messageObject3, tLRPC$KeyboardButton2, this.parentFragment);
-            } else if (!(tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonSwitchInline) || this.parentFragment.processSwitchButton((TLRPC$TL_keyboardButtonSwitchInline) tLRPC$KeyboardButton2)) {
-                return true;
-            } else {
+            } else if (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonSwitchInline) {
+                if (this.parentFragment.processSwitchButton((TLRPC$TL_keyboardButtonSwitchInline) tLRPC$KeyboardButton2)) {
+                    return true;
+                }
                 if (tLRPC$KeyboardButton2.same_peer) {
                     TLRPC$Message tLRPC$Message = messageObject3.messageOwner;
                     long j = tLRPC$Message.from_id.user_id;
@@ -10358,6 +10372,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     dialogsActivity.setDelegate(new ChatActivityEnterView$$ExternalSyntheticLambda53(this, messageObject3, tLRPC$KeyboardButton2));
                     this.parentFragment.presentFragment(dialogsActivity);
                 }
+            } else if ((tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonUserProfile) && MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(tLRPC$KeyboardButton2.user_id)) != null) {
+                Bundle bundle2 = new Bundle();
+                bundle2.putLong("user_id", tLRPC$KeyboardButton2.user_id);
+                this.parentFragment.presentFragment(new ProfileActivity(bundle2));
             }
         }
         return true;

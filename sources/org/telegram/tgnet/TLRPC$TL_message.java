@@ -1,5 +1,7 @@
 package org.telegram.tgnet;
 
+import android.text.TextUtils;
+
 public class TLRPC$TL_message extends TLRPC$Message {
     public static int constructor = NUM;
 
@@ -34,7 +36,14 @@ public class TLRPC$TL_message extends TLRPC$Message {
         this.date = abstractSerializedData.readInt32(z);
         this.message = abstractSerializedData.readString(z);
         if ((this.flags & 512) != 0) {
-            this.media = TLRPC$MessageMedia.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            TLRPC$MessageMedia TLdeserialize = TLRPC$MessageMedia.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.media = TLdeserialize;
+            if (TLdeserialize != null) {
+                this.ttl = TLdeserialize.ttl_seconds;
+            }
+            if (TLdeserialize != null && !TextUtils.isEmpty(TLdeserialize.captionLegacy)) {
+                this.message = this.media.captionLegacy;
+            }
         }
         if ((this.flags & 64) != 0) {
             this.reply_markup = TLRPC$ReplyMarkup.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -45,9 +54,9 @@ public class TLRPC$TL_message extends TLRPC$Message {
                 int readInt323 = abstractSerializedData.readInt32(z);
                 int i2 = 0;
                 while (i2 < readInt323) {
-                    TLRPC$MessageEntity TLdeserialize = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize != null) {
-                        this.entities.add(TLdeserialize);
+                    TLRPC$MessageEntity TLdeserialize2 = TLRPC$MessageEntity.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                    if (TLdeserialize2 != null) {
+                        this.entities.add(TLdeserialize2);
                         i2++;
                     } else {
                         return;
@@ -85,9 +94,9 @@ public class TLRPC$TL_message extends TLRPC$Message {
             if (readInt324 == NUM) {
                 int readInt325 = abstractSerializedData.readInt32(z);
                 while (i < readInt325) {
-                    TLRPC$TL_restrictionReason TLdeserialize2 = TLRPC$TL_restrictionReason.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                    if (TLdeserialize2 != null) {
-                        this.restriction_reason.add(TLdeserialize2);
+                    TLRPC$TL_restrictionReason TLdeserialize3 = TLRPC$TL_restrictionReason.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                    if (TLdeserialize3 != null) {
+                        this.restriction_reason.add(TLdeserialize3);
                         i++;
                     } else {
                         return;

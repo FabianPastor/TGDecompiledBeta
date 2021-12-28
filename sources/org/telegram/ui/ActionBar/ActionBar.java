@@ -219,7 +219,7 @@ public class ActionBar extends FrameLayout {
             this.manualStart = true;
             if (this.snowflakesEffect == null) {
                 this.fireworksEffect = null;
-                this.snowflakesEffect = new SnowflakesEffect();
+                this.snowflakesEffect = new SnowflakesEffect(0);
                 this.titleTextView[0].invalidate();
                 invalidate();
             } else {
@@ -276,7 +276,7 @@ public class ActionBar extends FrameLayout {
                 }
                 if (Theme.canStartHolidayAnimation()) {
                     if (this.snowflakesEffect == null) {
-                        this.snowflakesEffect = new SnowflakesEffect();
+                        this.snowflakesEffect = new SnowflakesEffect(0);
                     }
                 } else if (!this.manualStart && this.snowflakesEffect != null) {
                     this.snowflakesEffect = null;

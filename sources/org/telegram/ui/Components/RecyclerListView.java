@@ -33,7 +33,6 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
-import androidx.core.view.GestureDetectorCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.lang.reflect.Field;
@@ -73,7 +72,7 @@ public class RecyclerListView extends RecyclerView {
     public FastScroll fastScroll;
     public boolean fastScrollAnimationRunning;
     /* access modifiers changed from: private */
-    public GestureDetectorCompat gestureDetector;
+    public GestureDetectorFixDoubleTap gestureDetector;
     private ArrayList<View> headers;
     private ArrayList<View> headersCache;
     private boolean hiddenByEmptyView;
@@ -1595,7 +1594,7 @@ public class RecyclerListView extends RecyclerView {
         }
 
         public RecyclerListViewItemClickListener(Context context) {
-            GestureDetectorCompat unused = RecyclerListView.this.gestureDetector = new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener(RecyclerListView.this) {
+            GestureDetectorFixDoubleTap unused = RecyclerListView.this.gestureDetector = new GestureDetectorFixDoubleTap(context, new GestureDetector.SimpleOnGestureListener(RecyclerListView.this) {
                 private View doubleTapView;
 
                 public boolean onDown(MotionEvent motionEvent) {

@@ -2,12 +2,22 @@ package org.telegram.ui.Components.Reactions;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.MediaDataController;
+import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Cells.ChatMessageCell;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.CubicBezierInterpolator;
+import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
 import org.telegram.ui.Components.ReactionsContainerLayout;
 
 public class ReactionsEffectOverlay {
@@ -21,10 +31,13 @@ public class ReactionsEffectOverlay {
     public float dismissProgress;
     /* access modifiers changed from: private */
     public boolean dismissed;
-    private final AnimationView effectImageView;
+    /* access modifiers changed from: private */
+    public final AnimationView effectImageView;
     /* access modifiers changed from: private */
     public final AnimationView emojiImageView;
     private final long groupId;
+    /* access modifiers changed from: private */
+    public ReactionsContainerLayout.ReactionHolderView holderView = null;
     /* access modifiers changed from: private */
     public float lastDrawnToX;
     /* access modifiers changed from: private */
@@ -33,6 +46,10 @@ public class ReactionsEffectOverlay {
     /* access modifiers changed from: private */
     public final int messageId;
     private final String reaction;
+    /* access modifiers changed from: private */
+    public boolean started;
+    /* access modifiers changed from: private */
+    public boolean wasScrolled;
     /* access modifiers changed from: private */
     public WindowManager windowManager;
     FrameLayout windowView;
@@ -43,328 +60,305 @@ public class ReactionsEffectOverlay {
         return f2;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x005a  */
-    /* JADX WARNING: Removed duplicated region for block: B:13:0x005c  */
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x0060  */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x0091  */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x0161  */
-    /* JADX WARNING: Removed duplicated region for block: B:32:? A[RETURN, SYNTHETIC] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private ReactionsEffectOverlay(android.content.Context r27, org.telegram.ui.ActionBar.BaseFragment r28, org.telegram.ui.Components.ReactionsContainerLayout r29, org.telegram.ui.Cells.ChatMessageCell r30, float r31, float r32, java.lang.String r33, int r34) {
-        /*
-            r26 = this;
-            r11 = r26
-            r12 = r27
-            r0 = r29
-            r13 = r30
-            r14 = r33
-            r26.<init>()
-            r1 = 2
-            int[] r1 = new int[r1]
-            r11.loc = r1
-            org.telegram.messenger.MessageObject r1 = r30.getMessageObject()
-            int r1 = r1.getId()
-            r11.messageId = r1
-            org.telegram.messenger.MessageObject r1 = r30.getMessageObject()
-            long r1 = r1.getGroupId()
-            r11.groupId = r1
-            r11.reaction = r14
-            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble$ReactionButton r1 = r13.getReactionButton(r14)
-            r15 = 0
-            if (r0 == 0) goto L_0x0056
-            r2 = 0
-        L_0x0030:
-            org.telegram.ui.Components.RecyclerListView r3 = r0.recyclerListView
-            int r3 = r3.getChildCount()
-            if (r2 >= r3) goto L_0x0056
-            org.telegram.ui.Components.RecyclerListView r3 = r0.recyclerListView
-            android.view.View r3 = r3.getChildAt(r2)
-            org.telegram.ui.Components.ReactionsContainerLayout$ReactionHolderView r3 = (org.telegram.ui.Components.ReactionsContainerLayout.ReactionHolderView) r3
-            org.telegram.tgnet.TLRPC$TL_availableReaction r3 = r3.currentReaction
-            java.lang.String r3 = r3.reaction
-            boolean r3 = r3.equals(r14)
-            if (r3 == 0) goto L_0x0053
-            org.telegram.ui.Components.RecyclerListView r3 = r0.recyclerListView
-            android.view.View r2 = r3.getChildAt(r2)
-            org.telegram.ui.Components.ReactionsContainerLayout$ReactionHolderView r2 = (org.telegram.ui.Components.ReactionsContainerLayout.ReactionHolderView) r2
-            goto L_0x0057
-        L_0x0053:
-            int r2 = r2 + 1
-            goto L_0x0030
-        L_0x0056:
-            r2 = 0
-        L_0x0057:
-            r3 = 1
-            if (r2 == 0) goto L_0x005c
-            r8 = 1
-            goto L_0x005d
-        L_0x005c:
-            r8 = 0
-        L_0x005d:
-            r4 = 0
-            if (r2 == 0) goto L_0x0091
-            int[] r1 = r11.loc
-            r0.getLocationOnScreen(r1)
-            int[] r0 = r11.loc
-            r0 = r0[r15]
-            float r0 = (float) r0
-            float r1 = r2.getX()
-            float r0 = r0 + r1
-            org.telegram.ui.Components.BackupImageView r1 = r2.backupImageView
-            float r1 = r1.getX()
-            float r0 = r0 + r1
-            int[] r1 = r11.loc
-            r1 = r1[r3]
-            float r1 = (float) r1
-            float r3 = r2.getY()
-            float r1 = r1 + r3
-            org.telegram.ui.Components.BackupImageView r3 = r2.backupImageView
-            float r3 = r3.getY()
-            float r1 = r1 + r3
-            org.telegram.ui.Components.BackupImageView r2 = r2.backupImageView
-            int r2 = r2.getWidth()
-            float r2 = (float) r2
-            r9 = r0
-            r10 = r1
-            goto L_0x00e9
-        L_0x0091:
-            if (r1 == 0) goto L_0x00cf
-            int[] r0 = r11.loc
-            r13.getLocationInWindow(r0)
-            int[] r0 = r11.loc
-            r0 = r0[r15]
-            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r2 = r13.reactionsLayoutInBubble
-            int r2 = r2.x
-            int r0 = r0 + r2
-            int r2 = r1.x
-            int r0 = r0 + r2
-            float r0 = (float) r0
-            org.telegram.messenger.ImageReceiver r2 = r1.imageReceiver
-            float r2 = r2.getImageX()
-            float r0 = r0 + r2
-            int[] r2 = r11.loc
-            r2 = r2[r3]
-            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r3 = r13.reactionsLayoutInBubble
-            int r3 = r3.y
-            int r2 = r2 + r3
-            int r3 = r1.y
-            int r2 = r2 + r3
-            float r2 = (float) r2
-            org.telegram.messenger.ImageReceiver r3 = r1.imageReceiver
-            float r3 = r3.getImageY()
-            float r2 = r2 + r3
-            org.telegram.messenger.ImageReceiver r3 = r1.imageReceiver
-            float r3 = r3.getImageHeight()
-            org.telegram.messenger.ImageReceiver r1 = r1.imageReceiver
-            r1.getImageWidth()
-            r9 = r0
-            r10 = r2
-            r2 = r3
-            goto L_0x00e9
-        L_0x00cf:
-            android.view.ViewParent r0 = r30.getParent()
-            android.view.View r0 = (android.view.View) r0
-            int[] r1 = r11.loc
-            r0.getLocationInWindow(r1)
-            int[] r0 = r11.loc
-            r1 = r0[r15]
-            float r1 = (float) r1
-            float r1 = r1 + r31
-            r0 = r0[r3]
-            float r0 = (float) r0
-            float r0 = r0 + r32
-            r10 = r0
-            r9 = r1
-            r2 = 0
-        L_0x00e9:
-            r0 = 1135542272(0x43avar_, float:350.0)
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            android.graphics.Point r1 = org.telegram.messenger.AndroidUtilities.displaySize
-            int r3 = r1.x
-            int r1 = r1.y
-            int r1 = java.lang.Math.min(r3, r1)
-            int r0 = java.lang.Math.min(r0, r1)
-            float r0 = (float) r0
-            r1 = 1061997773(0x3f4ccccd, float:0.8)
-            float r0 = r0 * r1
-            int r7 = java.lang.Math.round(r0)
-            r0 = 1073741824(0x40000000, float:2.0)
-            float r1 = (float) r7
-            float r1 = r1 * r0
-            float r0 = org.telegram.messenger.AndroidUtilities.density
-            float r1 = r1 / r0
-            int r6 = (int) r1
-            int r5 = r7 >> 1
-            int r3 = r6 >> 1
-            float r0 = (float) r5
-            float r16 = r2 / r0
-            r11.animateInProgress = r4
-            r11.animateOutProgress = r4
-            android.widget.FrameLayout r4 = new android.widget.FrameLayout
-            r4.<init>(r12)
-            r11.container = r4
-            org.telegram.ui.Components.Reactions.ReactionsEffectOverlay$1 r2 = new org.telegram.ui.Components.Reactions.ReactionsEffectOverlay$1
-            r0 = r2
-            r1 = r26
-            r15 = r2
-            r2 = r27
-            r13 = r3
-            r3 = r28
-            r17 = r4
-            r4 = r30
-            r28 = r5
-            r5 = r33
-            r29 = r13
-            r13 = r6
-            r6 = r28
-            r18 = r7
-            r7 = r16
-            r0.<init>(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-            r11.windowView = r15
-            org.telegram.ui.Components.Reactions.ReactionsEffectOverlay$AnimationView r0 = new org.telegram.ui.Components.Reactions.ReactionsEffectOverlay$AnimationView
-            r0.<init>(r11, r12)
-            r11.effectImageView = r0
-            org.telegram.ui.Components.Reactions.ReactionsEffectOverlay$AnimationView r8 = new org.telegram.ui.Components.Reactions.ReactionsEffectOverlay$AnimationView
-            r8.<init>(r11, r12)
-            r11.emojiImageView = r8
-            org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r34)
-            java.util.HashMap r1 = r1.getReactionsMap()
-            java.lang.Object r1 = r1.get(r14)
-            org.telegram.tgnet.TLRPC$TL_availableReaction r1 = (org.telegram.tgnet.TLRPC$TL_availableReaction) r1
-            if (r1 == 0) goto L_0x02c4
-            org.telegram.tgnet.TLRPC$Document r2 = r1.effect_animation
-            org.telegram.messenger.ImageReceiver r3 = r0.getImageReceiver()
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder
-            r4.<init>()
-            int r5 = unicPrefix
-            int r6 = r5 + 1
-            unicPrefix = r6
-            r4.append(r5)
-            java.lang.String r5 = "_"
-            r4.append(r5)
-            org.telegram.messenger.MessageObject r6 = r30.getMessageObject()
-            int r6 = r6.getId()
-            r4.append(r6)
-            r4.append(r5)
-            java.lang.String r4 = r4.toString()
-            r3.setUniqKeyPrefix(r4)
-            org.telegram.messenger.ImageLocation r20 = org.telegram.messenger.ImageLocation.getForDocument(r2)
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder
-            r2.<init>()
-            r2.append(r13)
-            r2.append(r5)
-            r2.append(r13)
-            java.lang.String r3 = "_pcache"
-            r2.append(r3)
-            java.lang.String r21 = r2.toString()
-            r22 = 0
-            r23 = 0
-            r24 = 0
-            r25 = 0
-            r19 = r0
-            r19.setImage((org.telegram.messenger.ImageLocation) r20, (java.lang.String) r21, (org.telegram.messenger.ImageLocation) r22, (java.lang.String) r23, (int) r24, (java.lang.Object) r25)
-            org.telegram.messenger.ImageReceiver r2 = r0.getImageReceiver()
-            r3 = 0
-            r2.setAutoRepeat(r3)
-            org.telegram.messenger.ImageReceiver r2 = r0.getImageReceiver()
-            r2.setAllowStartAnimation(r3)
-            org.telegram.messenger.ImageReceiver r2 = r0.getImageReceiver()
-            org.telegram.ui.Components.RLottieDrawable r2 = r2.getLottieAnimation()
-            if (r2 == 0) goto L_0x01e6
-            org.telegram.messenger.ImageReceiver r2 = r0.getImageReceiver()
-            org.telegram.ui.Components.RLottieDrawable r2 = r2.getLottieAnimation()
-            r2.setCurrentFrame(r3, r3)
-            org.telegram.messenger.ImageReceiver r2 = r0.getImageReceiver()
-            org.telegram.ui.Components.RLottieDrawable r2 = r2.getLottieAnimation()
-            r2.start()
-        L_0x01e6:
-            org.telegram.tgnet.TLRPC$Document r1 = r1.activate_animation
-            org.telegram.messenger.ImageReceiver r2 = r8.getImageReceiver()
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder
-            r3.<init>()
-            int r4 = unicPrefix
-            int r6 = r4 + 1
-            unicPrefix = r6
-            r3.append(r4)
-            r3.append(r5)
-            org.telegram.messenger.MessageObject r4 = r30.getMessageObject()
-            int r4 = r4.getId()
-            r3.append(r4)
-            r3.append(r5)
-            java.lang.String r3 = r3.toString()
-            r2.setUniqKeyPrefix(r3)
-            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument(r1)
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder
-            r1.<init>()
-            r3 = r29
-            r1.append(r3)
-            r1.append(r5)
-            r1.append(r3)
-            java.lang.String r3 = r1.toString()
-            r4 = 0
-            r5 = 0
-            r6 = 0
-            r7 = 0
-            r1 = r8
-            r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (org.telegram.messenger.ImageLocation) r4, (java.lang.String) r5, (int) r6, (java.lang.Object) r7)
-            org.telegram.messenger.ImageReceiver r1 = r8.getImageReceiver()
-            r2 = 0
-            r1.setAutoRepeat(r2)
-            org.telegram.messenger.ImageReceiver r1 = r8.getImageReceiver()
-            r1.setAllowStartAnimation(r2)
-            org.telegram.messenger.ImageReceiver r1 = r8.getImageReceiver()
-            org.telegram.ui.Components.RLottieDrawable r1 = r1.getLottieAnimation()
-            if (r1 == 0) goto L_0x0261
-            org.telegram.messenger.ImageReceiver r1 = r8.getImageReceiver()
-            org.telegram.ui.Components.RLottieDrawable r1 = r1.getLottieAnimation()
-            r1.setCurrentFrame(r2, r2)
-            org.telegram.messenger.ImageReceiver r1 = r8.getImageReceiver()
-            org.telegram.ui.Components.RLottieDrawable r1 = r1.getLottieAnimation()
-            r1.start()
-        L_0x0261:
-            r2 = r28
-            r1 = r18
-            int r7 = r1 - r2
-            int r3 = r7 >> 1
-            r4 = r17
-            r4.addView(r8)
-            android.view.ViewGroup$LayoutParams r5 = r8.getLayoutParams()
-            r5.width = r2
-            android.view.ViewGroup$LayoutParams r5 = r8.getLayoutParams()
-            r5.height = r2
-            android.view.ViewGroup$LayoutParams r2 = r8.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
-            r2.topMargin = r3
-            android.view.ViewGroup$LayoutParams r2 = r8.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
-            r2.leftMargin = r7
-            r4.addView(r0)
-            android.view.ViewGroup$LayoutParams r2 = r0.getLayoutParams()
-            r2.width = r1
-            android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
-            r0.height = r1
-            android.widget.FrameLayout r0 = r11.windowView
-            r0.addView(r4)
-            android.view.ViewGroup$LayoutParams r0 = r4.getLayoutParams()
-            r0.width = r1
-            android.view.ViewGroup$LayoutParams r0 = r4.getLayoutParams()
-            r0.height = r1
-            android.view.ViewGroup$LayoutParams r0 = r4.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r0 = (android.widget.FrameLayout.LayoutParams) r0
-            int r1 = -r3
-            r0.topMargin = r1
-            android.view.ViewGroup$LayoutParams r0 = r4.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r0 = (android.widget.FrameLayout.LayoutParams) r0
-            int r1 = -r7
-            r0.leftMargin = r1
-            float r0 = (float) r7
-            r4.setPivotX(r0)
-            float r0 = (float) r3
-            r4.setPivotY(r0)
-        L_0x02c4:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Reactions.ReactionsEffectOverlay.<init>(android.content.Context, org.telegram.ui.ActionBar.BaseFragment, org.telegram.ui.Components.ReactionsContainerLayout, org.telegram.ui.Cells.ChatMessageCell, float, float, java.lang.String, int):void");
+    private ReactionsEffectOverlay(Context context, BaseFragment baseFragment, ReactionsContainerLayout reactionsContainerLayout, ChatMessageCell chatMessageCell, float f, float f2, String str, int i) {
+        final float f3;
+        final float f4;
+        float f5;
+        Context context2 = context;
+        ReactionsContainerLayout reactionsContainerLayout2 = reactionsContainerLayout;
+        ChatMessageCell chatMessageCell2 = chatMessageCell;
+        String str2 = str;
+        this.messageId = chatMessageCell.getMessageObject().getId();
+        this.groupId = chatMessageCell.getMessageObject().getGroupId();
+        this.reaction = str2;
+        ReactionsLayoutInBubble.ReactionButton reactionButton = chatMessageCell2.getReactionButton(str2);
+        if (reactionsContainerLayout2 != null) {
+            int i2 = 0;
+            while (true) {
+                if (i2 >= reactionsContainerLayout2.recyclerListView.getChildCount()) {
+                    break;
+                } else if (((ReactionsContainerLayout.ReactionHolderView) reactionsContainerLayout2.recyclerListView.getChildAt(i2)).currentReaction.reaction.equals(str2)) {
+                    this.holderView = (ReactionsContainerLayout.ReactionHolderView) reactionsContainerLayout2.recyclerListView.getChildAt(i2);
+                    break;
+                } else {
+                    i2++;
+                }
+            }
+        }
+        ReactionsContainerLayout.ReactionHolderView reactionHolderView = this.holderView;
+        final boolean z = (reactionHolderView == null && (f == 0.0f || f2 == 0.0f)) ? false : true;
+        if (reactionHolderView != null) {
+            reactionsContainerLayout2.getLocationOnScreen(this.loc);
+            float x = ((float) this.loc[0]) + this.holderView.getX() + this.holderView.backupImageView.getX() + ((float) AndroidUtilities.dp(16.0f));
+            float y = ((float) this.loc[1]) + this.holderView.getY() + this.holderView.backupImageView.getY() + ((float) AndroidUtilities.dp(16.0f));
+            f5 = (float) this.holderView.backupImageView.getWidth();
+            f4 = x;
+            f3 = y;
+        } else if (reactionButton != null) {
+            chatMessageCell2.getLocationInWindow(this.loc);
+            float imageX = ((float) (this.loc[0] + chatMessageCell2.reactionsLayoutInBubble.x + reactionButton.x)) + reactionButton.imageReceiver.getImageX();
+            float imageY = ((float) (this.loc[1] + chatMessageCell2.reactionsLayoutInBubble.y + reactionButton.y)) + reactionButton.imageReceiver.getImageY();
+            float imageHeight = reactionButton.imageReceiver.getImageHeight();
+            reactionButton.imageReceiver.getImageWidth();
+            f4 = imageX;
+            f3 = imageY;
+            f5 = imageHeight;
+        } else {
+            ((View) chatMessageCell.getParent()).getLocationInWindow(this.loc);
+            int[] iArr = this.loc;
+            f3 = ((float) iArr[1]) + f2;
+            f4 = ((float) iArr[0]) + f;
+            f5 = 0.0f;
+        }
+        int dp = AndroidUtilities.dp(350.0f);
+        Point point = AndroidUtilities.displaySize;
+        int round = Math.round(((float) Math.min(dp, Math.min(point.x, point.y))) * 0.8f);
+        int i3 = (int) ((((float) round) * 2.0f) / AndroidUtilities.density);
+        int i4 = round >> 1;
+        float f6 = f5 / ((float) i4);
+        this.animateInProgress = 0.0f;
+        this.animateOutProgress = 0.0f;
+        FrameLayout frameLayout = new FrameLayout(context2);
+        this.container = frameLayout;
+        AnonymousClass1 r15 = r0;
+        FrameLayout frameLayout2 = frameLayout;
+        final BaseFragment baseFragment2 = baseFragment;
+        FrameLayout frameLayout3 = frameLayout2;
+        final ChatMessageCell chatMessageCell3 = chatMessageCell;
+        int i5 = i4;
+        final String str3 = str;
+        int i6 = i3 >> 1;
+        int i7 = i3;
+        final int i8 = i5;
+        int i9 = round;
+        final float f7 = f6;
+        AnonymousClass1 r0 = new FrameLayout(context) {
+            /* access modifiers changed from: protected */
+            public void dispatchDraw(Canvas canvas) {
+                ChatMessageCell chatMessageCell;
+                float f;
+                float f2;
+                float f3;
+                float f4;
+                int i;
+                float f5;
+                if (ReactionsEffectOverlay.this.dismissed) {
+                    if (ReactionsEffectOverlay.this.dismissProgress != 1.0f) {
+                        ReactionsEffectOverlay.access$116(ReactionsEffectOverlay.this, 0.10666667f);
+                        if (ReactionsEffectOverlay.this.dismissProgress > 1.0f) {
+                            float unused = ReactionsEffectOverlay.this.dismissProgress = 1.0f;
+                            AndroidUtilities.runOnUIThread(new ReactionsEffectOverlay$1$$ExternalSyntheticLambda1(this));
+                        }
+                    }
+                    if (ReactionsEffectOverlay.this.dismissProgress != 1.0f) {
+                        setAlpha(1.0f - ReactionsEffectOverlay.this.dismissProgress);
+                        super.dispatchDraw(canvas);
+                    }
+                    invalidate();
+                } else if (!ReactionsEffectOverlay.this.started) {
+                    invalidate();
+                } else {
+                    if (ReactionsEffectOverlay.this.holderView != null) {
+                        ReactionsEffectOverlay.this.holderView.backupImageView.setAlpha(0.0f);
+                    }
+                    BaseFragment baseFragment = baseFragment2;
+                    if (baseFragment instanceof ChatActivity) {
+                        chatMessageCell = ((ChatActivity) baseFragment).findMessageCell(ReactionsEffectOverlay.this.messageId);
+                    } else {
+                        chatMessageCell = chatMessageCell3;
+                    }
+                    if (chatMessageCell != null) {
+                        chatMessageCell3.getLocationInWindow(ReactionsEffectOverlay.this.loc);
+                        ReactionsLayoutInBubble.ReactionButton reactionButton = chatMessageCell3.getReactionButton(str3);
+                        int[] iArr = ReactionsEffectOverlay.this.loc;
+                        int i2 = iArr[0];
+                        ReactionsLayoutInBubble reactionsLayoutInBubble = chatMessageCell3.reactionsLayoutInBubble;
+                        f = (float) (i2 + reactionsLayoutInBubble.x);
+                        f2 = (float) (iArr[1] + reactionsLayoutInBubble.y);
+                        if (reactionButton != null) {
+                            f += ((float) reactionButton.x) + reactionButton.imageReceiver.getImageX();
+                            f2 += ((float) reactionButton.y) + reactionButton.imageReceiver.getImageY();
+                        }
+                        float unused2 = ReactionsEffectOverlay.this.lastDrawnToX = f;
+                        float unused3 = ReactionsEffectOverlay.this.lastDrawnToY = f2;
+                    } else {
+                        f = ReactionsEffectOverlay.this.lastDrawnToX;
+                        f2 = ReactionsEffectOverlay.this.lastDrawnToY;
+                    }
+                    int i3 = i8;
+                    float f6 = f - (((float) i3) / 2.0f);
+                    float f7 = f2 - (((float) i3) / 2.0f);
+                    if (baseFragment2.getParentActivity() != null && baseFragment2.getFragmentView().getParent() != null && baseFragment2.getFragmentView().getVisibility() == 0 && baseFragment2.getFragmentView() != null) {
+                        baseFragment2.getFragmentView().getLocationOnScreen(ReactionsEffectOverlay.this.loc);
+                        setAlpha(((View) baseFragment2.getFragmentView().getParent()).getAlpha());
+                        int[] iArr2 = ReactionsEffectOverlay.this.loc;
+                        if (f6 < ((float) iArr2[0])) {
+                            f6 = (float) iArr2[0];
+                        }
+                        if (((float) i8) + f6 > ((float) (iArr2[0] + getMeasuredWidth()))) {
+                            f6 = (float) ((ReactionsEffectOverlay.this.loc[0] + getMeasuredWidth()) - i8);
+                        }
+                        if (z) {
+                            f4 = CubicBezierInterpolator.EASE_OUT_QUINT.getInterpolation(ReactionsEffectOverlay.this.animateInProgress);
+                            f3 = CubicBezierInterpolator.DEFAULT.getInterpolation(ReactionsEffectOverlay.this.animateInProgress);
+                        } else {
+                            f4 = ReactionsEffectOverlay.this.animateInProgress;
+                            f3 = f4;
+                        }
+                        float f8 = 1.0f - f4;
+                        float f9 = (f7 * f8) + f4;
+                        if (chatMessageCell3.getMessageObject().shouldDrawReactionsInLayout()) {
+                            f5 = (float) AndroidUtilities.dp(20.0f);
+                            i = i8;
+                        } else {
+                            f5 = (float) AndroidUtilities.dp(14.0f);
+                            i = i8;
+                        }
+                        float var_ = f5 / ((float) i);
+                        float var_ = (f4 * f8) + (f6 * f4);
+                        float var_ = (f3 * (1.0f - f3)) + (f7 * f3);
+                        ReactionsEffectOverlay.this.effectImageView.setTranslationX(var_);
+                        ReactionsEffectOverlay.this.effectImageView.setTranslationY(var_);
+                        ReactionsEffectOverlay.this.effectImageView.setAlpha(1.0f - ReactionsEffectOverlay.this.animateOutProgress);
+                        ReactionsEffectOverlay reactionsEffectOverlay = ReactionsEffectOverlay.this;
+                        float var_ = reactionsEffectOverlay.animateOutProgress;
+                        if (var_ != 0.0f) {
+                            f9 = (f9 * (1.0f - var_)) + (var_ * var_);
+                            var_ = (var_ * (1.0f - var_)) + (f * var_);
+                            var_ = (var_ * (1.0f - var_)) + (f2 * var_);
+                        }
+                        reactionsEffectOverlay.container.setTranslationX(var_);
+                        ReactionsEffectOverlay.this.container.setTranslationY(var_);
+                        ReactionsEffectOverlay.this.container.setScaleX(f9);
+                        ReactionsEffectOverlay.this.container.setScaleY(f9);
+                        super.dispatchDraw(canvas);
+                        if (ReactionsEffectOverlay.this.emojiImageView.wasPlaying) {
+                            ReactionsEffectOverlay reactionsEffectOverlay2 = ReactionsEffectOverlay.this;
+                            float var_ = reactionsEffectOverlay2.animateInProgress;
+                            if (var_ != 1.0f) {
+                                if (z) {
+                                    reactionsEffectOverlay2.animateInProgress = var_ + 0.045714285f;
+                                } else {
+                                    reactionsEffectOverlay2.animateInProgress = var_ + 0.07272727f;
+                                }
+                                if (reactionsEffectOverlay2.animateInProgress > 1.0f) {
+                                    reactionsEffectOverlay2.animateInProgress = 1.0f;
+                                }
+                            }
+                        }
+                        if (ReactionsEffectOverlay.this.wasScrolled || (ReactionsEffectOverlay.this.emojiImageView.wasPlaying && ReactionsEffectOverlay.this.emojiImageView.getImageReceiver().getLottieAnimation() != null && !ReactionsEffectOverlay.this.emojiImageView.getImageReceiver().getLottieAnimation().isRunning())) {
+                            ReactionsEffectOverlay reactionsEffectOverlay3 = ReactionsEffectOverlay.this;
+                            float var_ = reactionsEffectOverlay3.animateOutProgress;
+                            if (var_ != 1.0f) {
+                                float var_ = var_ + 0.07272727f;
+                                reactionsEffectOverlay3.animateOutProgress = var_;
+                                if (var_ > 1.0f) {
+                                    reactionsEffectOverlay3.animateOutProgress = 1.0f;
+                                    ReactionsEffectOverlay.currentOverlay = null;
+                                    chatMessageCell3.invalidate();
+                                    if (!(chatMessageCell3.getCurrentMessagesGroup() == null || chatMessageCell3.getParent() == null)) {
+                                        ((View) chatMessageCell3.getParent()).invalidate();
+                                    }
+                                    AndroidUtilities.runOnUIThread(new ReactionsEffectOverlay$1$$ExternalSyntheticLambda0(this));
+                                }
+                            }
+                        }
+                        invalidate();
+                    }
+                }
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$dispatchDraw$0() {
+                try {
+                    ReactionsEffectOverlay.this.windowManager.removeView(ReactionsEffectOverlay.this.windowView);
+                } catch (Exception unused) {
+                }
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$dispatchDraw$1() {
+                try {
+                    ReactionsEffectOverlay.this.windowManager.removeView(ReactionsEffectOverlay.this.windowView);
+                } catch (Exception unused) {
+                }
+            }
+        };
+        this.windowView = r15;
+        AnimationView animationView = new AnimationView(this, context2);
+        this.effectImageView = animationView;
+        AnimationView animationView2 = new AnimationView(this, context2);
+        this.emojiImageView = animationView2;
+        TLRPC$TL_availableReaction tLRPC$TL_availableReaction = MediaDataController.getInstance(i).getReactionsMap().get(str2);
+        if (tLRPC$TL_availableReaction != null) {
+            TLRPC$Document tLRPC$Document = tLRPC$TL_availableReaction.effect_animation;
+            ImageReceiver imageReceiver = animationView.getImageReceiver();
+            StringBuilder sb = new StringBuilder();
+            int i10 = unicPrefix;
+            unicPrefix = i10 + 1;
+            sb.append(i10);
+            sb.append("_");
+            sb.append(chatMessageCell.getMessageObject().getId());
+            sb.append("_");
+            imageReceiver.setUniqKeyPrefix(sb.toString());
+            ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$Document);
+            animationView.setImage(forDocument, i7 + "_" + i7 + "_pcache", (ImageLocation) null, (String) null, 0, (Object) null);
+            animationView.getImageReceiver().setAutoRepeat(0);
+            animationView.getImageReceiver().setAllowStartAnimation(false);
+            if (animationView.getImageReceiver().getLottieAnimation() != null) {
+                animationView.getImageReceiver().getLottieAnimation().setCurrentFrame(0, false);
+                animationView.getImageReceiver().getLottieAnimation().start();
+            }
+            TLRPC$Document tLRPC$Document2 = tLRPC$TL_availableReaction.activate_animation;
+            ImageReceiver imageReceiver2 = animationView2.getImageReceiver();
+            StringBuilder sb2 = new StringBuilder();
+            int i11 = unicPrefix;
+            unicPrefix = i11 + 1;
+            sb2.append(i11);
+            sb2.append("_");
+            sb2.append(chatMessageCell.getMessageObject().getId());
+            sb2.append("_");
+            imageReceiver2.setUniqKeyPrefix(sb2.toString());
+            ImageLocation forDocument2 = ImageLocation.getForDocument(tLRPC$Document2);
+            StringBuilder sb3 = new StringBuilder();
+            int i12 = i6;
+            sb3.append(i12);
+            sb3.append("_");
+            sb3.append(i12);
+            animationView2.setImage(forDocument2, sb3.toString(), (ImageLocation) null, (String) null, 0, (Object) null);
+            animationView2.getImageReceiver().setAutoRepeat(0);
+            animationView2.getImageReceiver().setAllowStartAnimation(false);
+            if (animationView2.getImageReceiver().getLottieAnimation() != null) {
+                animationView2.getImageReceiver().getLottieAnimation().setCurrentFrame(0, false);
+                animationView2.getImageReceiver().getLottieAnimation().start();
+            }
+            int i13 = i5;
+            int i14 = i9;
+            int i15 = i14 - i13;
+            int i16 = i15 >> 1;
+            FrameLayout frameLayout4 = frameLayout3;
+            frameLayout4.addView(animationView2);
+            animationView2.getLayoutParams().width = i13;
+            animationView2.getLayoutParams().height = i13;
+            ((FrameLayout.LayoutParams) animationView2.getLayoutParams()).topMargin = i16;
+            ((FrameLayout.LayoutParams) animationView2.getLayoutParams()).leftMargin = i15;
+            this.windowView.addView(frameLayout4);
+            frameLayout4.getLayoutParams().width = i14;
+            frameLayout4.getLayoutParams().height = i14;
+            int i17 = -i16;
+            ((FrameLayout.LayoutParams) frameLayout4.getLayoutParams()).topMargin = i17;
+            int i18 = -i15;
+            ((FrameLayout.LayoutParams) frameLayout4.getLayoutParams()).leftMargin = i18;
+            this.windowView.addView(animationView);
+            animationView.getLayoutParams().width = i14;
+            animationView.getLayoutParams().height = i14;
+            animationView.getLayoutParams().width = i14;
+            animationView.getLayoutParams().height = i14;
+            ((FrameLayout.LayoutParams) animationView.getLayoutParams()).topMargin = i17;
+            ((FrameLayout.LayoutParams) animationView.getLayoutParams()).leftMargin = i18;
+            frameLayout4.setPivotX((float) i15);
+            frameLayout4.setPivotY((float) i16);
+        }
     }
 
     public static void show(BaseFragment baseFragment, ReactionsContainerLayout reactionsContainerLayout, ChatMessageCell chatMessageCell, float f, float f2, String str, int i) {
@@ -382,6 +376,13 @@ public class ReactionsEffectOverlay {
         chatMessageCell.invalidate();
         if (chatMessageCell.getCurrentMessagesGroup() != null && chatMessageCell.getParent() != null) {
             ((View) chatMessageCell.getParent()).invalidate();
+        }
+    }
+
+    public static void startAnimation() {
+        ReactionsEffectOverlay reactionsEffectOverlay = currentOverlay;
+        if (reactionsEffectOverlay != null) {
+            reactionsEffectOverlay.started = true;
         }
     }
 
@@ -436,6 +437,9 @@ public class ReactionsEffectOverlay {
         ReactionsEffectOverlay reactionsEffectOverlay = currentOverlay;
         if (reactionsEffectOverlay != null) {
             reactionsEffectOverlay.lastDrawnToY -= (float) i;
+            if (i != 0) {
+                reactionsEffectOverlay.wasScrolled = true;
+            }
         }
     }
 }

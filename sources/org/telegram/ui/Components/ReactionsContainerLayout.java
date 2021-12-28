@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import org.telegram.messenger.AndroidUtilities;
@@ -50,6 +51,8 @@ public class ReactionsContainerLayout extends FrameLayout {
     private int bigCircleOffset;
     private float bigCircleRadius;
     private ReactionsContainerDelegate delegate;
+    HashSet<View> lastVisibleViews;
+    HashSet<View> lastVisibleViewsTmp;
     /* access modifiers changed from: private */
     public float leftAlpha;
     /* access modifiers changed from: private */
@@ -95,6 +98,8 @@ public class ReactionsContainerLayout extends FrameLayout {
         this.location = new int[2];
         this.shadowPad = new Rect();
         new ArrayList();
+        this.lastVisibleViews = new HashSet<>();
+        this.lastVisibleViewsTmp = new HashSet<>();
         this.resourcesProvider = resourcesProvider2;
         this.shadow = ContextCompat.getDrawable(context, NUM).mutate();
         Rect rect2 = this.shadowPad;
@@ -172,6 +177,7 @@ public class ReactionsContainerLayout extends FrameLayout {
                     childAt3.setScaleX(1.0f);
                     childAt3.setScaleY(1.0f);
                 }
+                ReactionsContainerLayout.this.invalidate();
             }
         });
         recyclerListView2.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -216,6 +222,22 @@ public class ReactionsContainerLayout extends FrameLayout {
         float f3;
         float f4;
         Canvas canvas2 = canvas;
+        this.lastVisibleViewsTmp.clear();
+        this.lastVisibleViewsTmp.addAll(this.lastVisibleViews);
+        this.lastVisibleViews.clear();
+        if (this.transitionProgress != 0.0f) {
+            int i = 0;
+            for (int i2 = 0; i2 < this.recyclerListView.getChildCount(); i2++) {
+                View childAt = this.recyclerListView.getChildAt(i2);
+                if (childAt.getX() + ((float) childAt.getMeasuredWidth()) > 0.0f && childAt.getX() < ((float) getWidth())) {
+                    if (!this.lastVisibleViewsTmp.contains(childAt)) {
+                        ((ReactionHolderView) childAt).play(i);
+                        i += 50;
+                    }
+                    this.lastVisibleViews.add(childAt);
+                }
+            }
+        }
         float max = (Math.max(0.25f, Math.min(this.transitionProgress, 1.0f)) - 0.25f) / 0.75f;
         float f5 = this.bigCircleRadius * max;
         float f6 = this.smallCircleRadius * max;
@@ -412,18 +434,37 @@ public class ReactionsContainerLayout extends FrameLayout {
     public final class ReactionHolderView extends FrameLayout {
         public BackupImageView backupImageView;
         public TLRPC$TL_availableReaction currentReaction;
+        Runnable playRunnable = new Runnable() {
+            public void run() {
+                ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation().start();
+            }
+        };
 
         ReactionHolderView(ReactionsContainerLayout reactionsContainerLayout, Context context) {
             super(context);
             BackupImageView backupImageView2 = new BackupImageView(context);
             this.backupImageView = backupImageView2;
-            addView(backupImageView2, LayoutHelper.createFrame(34, 34, 17));
+            backupImageView2.getImageReceiver().setAutoRepeat(0);
+            addView(this.backupImageView, LayoutHelper.createFrame(34, 34, 17));
         }
 
         /* access modifiers changed from: private */
         public void setReaction(TLRPC$TL_availableReaction tLRPC$TL_availableReaction) {
             this.currentReaction = tLRPC$TL_availableReaction;
-            this.backupImageView.getImageReceiver().setImage(ImageLocation.getForDocument(this.currentReaction.select_animation), "80_80", (ImageLocation) null, (String) null, DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.select_animation, "windowBackgroundGray", 1.0f), 0, "tgs", tLRPC$TL_availableReaction, 0);
+            this.backupImageView.getImageReceiver().setImage(ImageLocation.getForDocument(this.currentReaction.appear_animation), "80_80_nolimit", (ImageLocation) null, (String) null, DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.appear_animation, "windowBackgroundGray", 1.0f), 0, "tgs", tLRPC$TL_availableReaction, 0);
+        }
+
+        public void play(int i) {
+            AndroidUtilities.cancelRunOnUIThread(this.playRunnable);
+            if (this.backupImageView.getImageReceiver().getLottieAnimation() != null) {
+                this.backupImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(0);
+                if (i == 0) {
+                    this.playRunnable.run();
+                    return;
+                }
+                this.backupImageView.getImageReceiver().getLottieAnimation().stop();
+                AndroidUtilities.runOnUIThread(this.playRunnable, (long) i);
+            }
         }
     }
 }

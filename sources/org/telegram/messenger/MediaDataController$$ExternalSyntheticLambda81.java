@@ -14,6 +14,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda8
     }
 
     public final void run() {
-        this.f$0.lambda$loadBotKeyboard$134(this.f$1, this.f$2);
+        this.f$0.lambda$loadBotKeyboard$138(this.f$1, this.f$2);
     }
 }

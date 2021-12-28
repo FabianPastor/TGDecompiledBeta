@@ -214,6 +214,11 @@ public class AndroidUtilities {
         return c == '-' || c == '~';
     }
 
+    /* access modifiers changed from: private */
+    public static /* synthetic */ String lambda$formatSpannableSimple$5(Integer num) {
+        return "%s";
+    }
+
     public static float lerp(float f, float f2, float f3) {
         return f + (f3 * (f2 - f));
     }
@@ -1052,7 +1057,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131625064(0x7f0e0468, float:1.8877325E38)
+                r0 = 2131625065(0x7f0e0469, float:1.8877327E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1064,12 +1069,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131625065(0x7f0e0469, float:1.8877327E38)
+                r0 = 2131625066(0x7f0e046a, float:1.887733E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131625066(0x7f0e046a, float:1.887733E38)
+                r0 = 2131625067(0x7f0e046b, float:1.8877331E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1187,27 +1192,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131627161(0x7f0e0CLASSNAME, float:1.8881579E38)
+                r0 = 2131627164(0x7f0e0c9c, float:1.8881585E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131627162(0x7f0e0c9a, float:1.888158E38)
+                r0 = 2131627165(0x7f0e0c9d, float:1.8881587E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131627153(0x7f0e0CLASSNAME, float:1.8881562E38)
+                r0 = 2131627156(0x7f0e0CLASSNAME, float:1.8881568E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131627152(0x7f0e0CLASSNAME, float:1.888156E38)
+                r0 = 2131627155(0x7f0e0CLASSNAME, float:1.8881566E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131627154(0x7f0e0CLASSNAME, float:1.8881564E38)
+                r0 = 2131627157(0x7f0e0CLASSNAME, float:1.888157E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -2440,6 +2445,36 @@ public class AndroidUtilities {
         }
     }
 
+    public static int charSequenceIndexOf(CharSequence charSequence, CharSequence charSequence2, int i) {
+        while (i < charSequence.length() - charSequence2.length()) {
+            boolean z = false;
+            int i2 = 0;
+            while (true) {
+                if (i2 >= charSequence2.length()) {
+                    z = true;
+                    break;
+                } else if (charSequence2.charAt(i2) != charSequence.charAt(i + i2)) {
+                    break;
+                } else {
+                    i2++;
+                }
+            }
+            if (z) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
+
+    public static int charSequenceIndexOf(CharSequence charSequence, CharSequence charSequence2) {
+        return charSequenceIndexOf(charSequence, charSequence2, 0);
+    }
+
+    public static boolean charSequenceContains(CharSequence charSequence, CharSequence charSequence2) {
+        return charSequenceIndexOf(charSequence, charSequence2) != -1;
+    }
+
     public static CharSequence getTrimmedString(CharSequence charSequence) {
         if (!(charSequence == null || charSequence.length() == 0)) {
             while (charSequence.length() > 0 && (charSequence.charAt(0) == 10 || charSequence.charAt(0) == ' ')) {
@@ -3307,9 +3342,9 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0157
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0157
-            r7 = 2131626759(0x7f0e0b07, float:1.8880763E38)
+            r7 = 2131626762(0x7f0e0b0a, float:1.888077E38)
             java.lang.String r8 = "OK"
-            r9 = 2131624300(0x7f0e016c, float:1.8875776E38)
+            r9 = 2131624301(0x7f0e016d, float:1.8875778E38)
             java.lang.String r10 = "AppName"
             r11 = 1
             if (r2 == 0) goto L_0x00a4
@@ -3330,7 +3365,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625993(0x7f0e0809, float:1.887921E38)
+            r1 = 2131625995(0x7f0e080b, float:1.8879214E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3414,7 +3449,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626525(0x7f0e0a1d, float:1.8880289E38)
+            r1 = 2131626527(0x7f0e0a1f, float:1.8880293E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3488,21 +3523,21 @@ public class AndroidUtilities {
             if (r2 != 0) goto L_0x0096
             org.telegram.ui.ActionBar.AlertDialog$Builder r6 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r6.<init>(r9, r10)
-            r7 = 2131624300(0x7f0e016c, float:1.8875776E38)
+            r7 = 2131624301(0x7f0e016d, float:1.8875778E38)
             java.lang.String r8 = "AppName"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setTitle(r7)
-            r7 = 2131624298(0x7f0e016a, float:1.8875772E38)
+            r7 = 2131624299(0x7f0e016b, float:1.8875774E38)
             java.lang.String r8 = "ApkRestricted"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setMessage(r7)
-            r7 = 2131627146(0x7f0e0c8a, float:1.8881548E38)
+            r7 = 2131627149(0x7f0e0c8d, float:1.8881554E38)
             java.lang.String r8 = "PermissionOpenSettings"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.messenger.AndroidUtilities$$ExternalSyntheticLambda0 r8 = new org.telegram.messenger.AndroidUtilities$$ExternalSyntheticLambda0
             r8.<init>(r9)
             r6.setPositiveButton(r7, r8)
-            r7 = 2131624693(0x7f0e02f5, float:1.8876573E38)
+            r7 = 2131624694(0x7f0e02f6, float:1.8876575E38)
             java.lang.String r8 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setNegativeButton(r7, r5)
@@ -3586,6 +3621,72 @@ public class AndroidUtilities {
         return openForView(FileLoader.getPathToAttach(tLRPC$Document, true), FileLoader.getAttachFileName(tLRPC$Document), tLRPC$Document.mime_type, activity, (Theme.ResourcesProvider) null);
     }
 
+    public static SpannableStringBuilder formatSpannableSimple(String str, CharSequence... charSequenceArr) {
+        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda8.INSTANCE, charSequenceArr);
+    }
+
+    public static SpannableStringBuilder formatSpannable(String str, CharSequence... charSequenceArr) {
+        if (str.contains("%s")) {
+            return formatSpannableSimple(str, charSequenceArr);
+        }
+        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda7.INSTANCE, charSequenceArr);
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ String lambda$formatSpannable$6(Integer num) {
+        return "%" + (num.intValue() + 1) + "$s";
+    }
+
+    public static SpannableStringBuilder formatSpannable(String str, GenericProvider<Integer, String> genericProvider, CharSequence... charSequenceArr) {
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str);
+        for (int i = 0; i < charSequenceArr.length; i++) {
+            String provide = genericProvider.provide(Integer.valueOf(i));
+            int indexOf = str.indexOf(provide);
+            if (indexOf != -1) {
+                spannableStringBuilder.replace(indexOf, provide.length() + indexOf, charSequenceArr[i]);
+                str = str.substring(0, indexOf) + charSequenceArr[i].toString() + str.substring(indexOf + provide.length());
+            }
+        }
+        return spannableStringBuilder;
+    }
+
+    public static CharSequence replaceTwoNewLinesToOne(CharSequence charSequence) {
+        char[] cArr = new char[2];
+        if (charSequence instanceof StringBuilder) {
+            StringBuilder sb = (StringBuilder) charSequence;
+            int length = charSequence.length();
+            int i = 0;
+            while (i < length - 2) {
+                int i2 = i + 2;
+                sb.getChars(i, i2, cArr, 0);
+                if (cArr[0] == 10 && cArr[1] == 10) {
+                    sb = sb.replace(i, i2, "\n");
+                    i--;
+                    length--;
+                }
+                i++;
+            }
+            return charSequence;
+        } else if (!(charSequence instanceof SpannableStringBuilder)) {
+            return charSequence.toString().replace("\n\n", "\n");
+        } else {
+            SpannableStringBuilder spannableStringBuilder = (SpannableStringBuilder) charSequence;
+            int length2 = charSequence.length();
+            int i3 = 0;
+            while (i3 < length2 - 2) {
+                int i4 = i3 + 2;
+                spannableStringBuilder.getChars(i3, i4, cArr, 0);
+                if (cArr[0] == 10 && cArr[1] == 10) {
+                    spannableStringBuilder = spannableStringBuilder.replace(i3, i4, "\n");
+                    i3--;
+                    length2--;
+                }
+                i3++;
+            }
+            return charSequence;
+        }
+    }
+
     public static CharSequence replaceNewLines(CharSequence charSequence) {
         int i = 0;
         if (charSequence instanceof StringBuilder) {
@@ -3597,7 +3698,10 @@ public class AndroidUtilities {
                 }
                 i++;
             }
-        } else if (charSequence instanceof SpannableStringBuilder) {
+            return charSequence;
+        } else if (!(charSequence instanceof SpannableStringBuilder)) {
+            return charSequence.toString().replace(10, ' ');
+        } else {
             SpannableStringBuilder spannableStringBuilder = (SpannableStringBuilder) charSequence;
             int length2 = charSequence.length();
             while (i < length2) {
@@ -3606,8 +3710,8 @@ public class AndroidUtilities {
                 }
                 i++;
             }
+            return charSequence;
         }
-        return charSequence.toString().replace(10, ' ');
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:16:0x004d, code lost:
@@ -4020,7 +4124,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showProxyAlert$6(String str, String str2, String str3, String str4, String str5, Runnable runnable, View view) {
+    public static /* synthetic */ void lambda$showProxyAlert$8(String str, String str2, String str3, String str4, String str5, Runnable runnable, View view) {
         SharedConfig.ProxyInfo proxyInfo;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("proxy_enabled", true);
@@ -4495,7 +4599,7 @@ public class AndroidUtilities {
                 Field declaredField = baseFragment.getClass().getDeclaredField("listView");
                 declaredField.setAccessible(true);
                 RecyclerListView recyclerListView = (RecyclerListView) declaredField.get(baseFragment);
-                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda7(baseFragment, str, recyclerListView));
+                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda9(baseFragment, str, recyclerListView));
                 declaredField.setAccessible(false);
             } catch (Throwable unused) {
             }
@@ -4503,7 +4607,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$scrollToFragmentRow$7(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
+    public static /* synthetic */ int lambda$scrollToFragmentRow$9(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
         int i = -1;
         try {
             Field declaredField = baseFragment.getClass().getDeclaredField(str);

@@ -5,6 +5,7 @@ import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.tgnet.TLRPC$MessageEntity;
+import org.telegram.ui.ActionBar.Theme;
 
 public class TextStyleSpan extends MetricAffectingSpan {
     private int color;
@@ -55,6 +56,9 @@ public class TextStyleSpan extends MetricAffectingSpan {
             } else {
                 textPaint.setFlags(textPaint.getFlags() & -17);
             }
+            if ((this.flags & 512) != 0) {
+                textPaint.bgColor = Theme.getColor("chats_archivePullDownBackground");
+            }
         }
 
         public Typeface getTypeface() {
@@ -93,6 +97,18 @@ public class TextStyleSpan extends MetricAffectingSpan {
 
     public TextStyleRun getTextStyleRun() {
         return this.style;
+    }
+
+    public boolean isSpoiler() {
+        return (this.style.flags & 256) > 0;
+    }
+
+    public void setSpoilerRevealed(boolean z) {
+        if (z) {
+            this.style.flags |= 512;
+            return;
+        }
+        this.style.flags &= -513;
     }
 
     public void updateMeasureState(TextPaint textPaint) {

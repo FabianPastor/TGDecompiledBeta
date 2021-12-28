@@ -1482,6 +1482,7 @@ public final class R {
         public static final int menu_link = NUM;
         public static final int menu_mono = NUM;
         public static final int menu_regular = NUM;
+        public static final int menu_spoiler = NUM;
         public static final int menu_strike = NUM;
         public static final int menu_underline = NUM;
         public static final int monochrome = NUM;
@@ -2034,6 +2035,7 @@ public final class R {
         public static final int ActionPinnedText = NUM;
         public static final int ActionPinnedVideo = NUM;
         public static final int ActionPinnedVoice = NUM;
+        public static final int ActionReactionsChanged = NUM;
         public static final int ActionRemovedPhoto = NUM;
         public static final int ActionRevokedInviteLinkClickable = NUM;
         public static final int ActionTTLChanged = NUM;
@@ -3032,6 +3034,7 @@ public final class R {
         public static final int Days_zero = NUM;
         public static final int Deactivate = NUM;
         public static final int DebugClearLogs = NUM;
+        public static final int DebugDrawSnowInChat = NUM;
         public static final int DebugMenu = NUM;
         public static final int DebugMenuCallSettings = NUM;
         public static final int DebugMenuCheckAppUpdate = NUM;
@@ -4443,6 +4446,7 @@ public final class R {
         public static final int NobodyLikesSpam1 = NUM;
         public static final int NobodyLikesSpam2 = NUM;
         public static final int NobodyLikesSpam3 = NUM;
+        public static final int NobodyViewed = NUM;
         public static final int NotMounted = NUM;
         public static final int NotificationActionPinnedContact2 = NUM;
         public static final int NotificationActionPinnedContactChannel2 = NUM;
@@ -5797,6 +5801,7 @@ public final class R {
         public static final int SpeedSlow = NUM;
         public static final int SpeedVeryFast = NUM;
         public static final int SpeedVerySlow = NUM;
+        public static final int Spoiler = NUM;
         public static final int SponsoredMessage = NUM;
         public static final int SponsoredMessageAlertLearnMore = NUM;
         public static final int SponsoredMessageAlertLearnMoreUrl = NUM;

@@ -13,6 +13,7 @@ import android.os.Build;
 import android.view.View;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
@@ -36,6 +37,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     private boolean paused;
     private Rect rect;
     private boolean skipBackgroundDrawing;
+    SnowflakesEffect snowflakesEffect;
     private float translationX;
     private float translationY;
 
@@ -275,6 +277,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                         canvas.clipRect(0, currentActionBarHeight, ceil, getMeasuredHeight() - this.bottomClip);
                         drawable.setBounds(measuredWidth, i2, ceil + measuredWidth, ceil2 + i2);
                         drawable.draw(canvas);
+                        checkSnowflake(canvas);
                         canvas.restore();
                     } else {
                         if (this.bottomClip != 0) {
@@ -304,6 +307,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                     }
                     drawable.setBounds(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight());
                     drawable.draw(canvas);
+                    checkSnowflake(canvas);
                     if (this.bottomClip != 0) {
                         canvas.restore();
                     }
@@ -314,6 +318,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                     }
                     drawable.setBounds(0, this.backgroundTranslationY, getMeasuredWidth(), this.backgroundTranslationY + getRootView().getMeasuredHeight());
                     drawable.draw(canvas);
+                    checkSnowflake(canvas);
                     if (this.bottomClip != 0) {
                         canvas.restore();
                     }
@@ -324,6 +329,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                         canvas.scale(f, f);
                         drawable.setBounds(0, 0, (int) Math.ceil((double) (((float) getMeasuredWidth()) / f)), (int) Math.ceil((double) (((float) getRootView().getMeasuredHeight()) / f)));
                         drawable.draw(canvas);
+                        checkSnowflake(canvas);
                         canvas.restore();
                     } else {
                         int currentActionBarHeight2 = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
@@ -337,6 +343,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                         canvas.clipRect(0, currentActionBarHeight2, ceil3, getMeasuredHeight() - this.bottomClip);
                         drawable.setBounds(measuredWidth2, i4, ceil3 + measuredWidth2, ceil4 + i4);
                         drawable.draw(canvas);
+                        checkSnowflake(canvas);
                         canvas.restore();
                     }
                 }
@@ -346,6 +353,15 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 }
             }
             i++;
+        }
+    }
+
+    private void checkSnowflake(Canvas canvas) {
+        if (SharedConfig.drawSnowInChat) {
+            if (this.snowflakesEffect == null) {
+                this.snowflakesEffect = new SnowflakesEffect(1);
+            }
+            this.snowflakesEffect.onDraw(this, canvas);
         }
     }
 

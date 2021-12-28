@@ -20,6 +20,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda0 implem
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        ChatActivity.lambda$createMenu$122(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
+        ChatActivity.lambda$createMenu$121(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
     }
 }

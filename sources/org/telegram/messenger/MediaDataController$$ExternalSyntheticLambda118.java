@@ -1,17 +1,12 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda118 implements GenericProvider {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda118 INSTANCE = new MediaDataController$$ExternalSyntheticLambda118();
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda118 implements RequestDelegate {
-    public final /* synthetic */ MediaDataController f$0;
-
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda118(MediaDataController mediaDataController) {
-        this.f$0 = mediaDataController;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda118() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadDraftsIfNeed$127(tLObject, tLRPC$TL_error);
+    public final Object provide(Object obj) {
+        return MediaDataController.lambda$getEntities$125((Void) obj);
     }
 }

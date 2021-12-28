@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.SpannedString;
 import android.text.TextUtils;
@@ -26,6 +27,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLiteException;
@@ -98,6 +101,7 @@ import org.telegram.tgnet.TLRPC$TL_messageEntityEmail;
 import org.telegram.tgnet.TLRPC$TL_messageEntityItalic;
 import org.telegram.tgnet.TLRPC$TL_messageEntityMentionName;
 import org.telegram.tgnet.TLRPC$TL_messageEntityPre;
+import org.telegram.tgnet.TLRPC$TL_messageEntitySpoiler;
 import org.telegram.tgnet.TLRPC$TL_messageEntityStrike;
 import org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl;
 import org.telegram.tgnet.TLRPC$TL_messageEntityUnderline;
@@ -158,6 +162,8 @@ import org.telegram.ui.Components.TextStyleSpan;
 import org.telegram.ui.Components.URLSpanReplacement;
 
 public class MediaDataController extends BaseController {
+    private static Pattern BOLD_PATTERN = Pattern.compile("\\*\\*(.+?)\\*\\*");
+    private static Pattern ITALIC_PATTERN = Pattern.compile("__(.+?)__");
     private static volatile MediaDataController[] Instance = new MediaDataController[3];
     public static final int MEDIA_AUDIO = 2;
     public static final int MEDIA_FILE = 1;
@@ -169,6 +175,8 @@ public class MediaDataController extends BaseController {
     public static final int MEDIA_URL = 3;
     public static final int MEDIA_VIDEOS_ONLY = 7;
     public static String SHORTCUT_CATEGORY = "org.telegram.messenger.SHORTCUT_SHARE";
+    private static Pattern SPOILER_PATTERN = Pattern.compile("\\|\\|(.+?)\\|\\|");
+    private static Pattern STRIKE_PATTERN = Pattern.compile("~~(.+?)~~");
     public static final int TYPE_EMOJI = 4;
     public static final int TYPE_FAVE = 2;
     public static final int TYPE_FEATURED = 3;
@@ -194,6 +202,7 @@ public class MediaDataController extends BaseController {
     private SharedPreferences draftPreferences;
     private LongSparseArray<SparseArray<TLRPC$DraftMessage>> drafts = new LongSparseArray<>();
     private LongSparseArray<Integer> draftsFolderIds = new LongSparseArray<>();
+    private List<TLRPC$TL_availableReaction> enabledReactionsList = new ArrayList();
     private ArrayList<TLRPC$StickerSetCovered> featuredStickerSets = new ArrayList<>();
     private LongSparseArray<TLRPC$StickerSetCovered> featuredStickerSetsById = new LongSparseArray<>();
     private boolean featuredStickersLoaded;
@@ -283,7 +292,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$saveDraft$128(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$saveDraft$132(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     public static MediaDataController getInstance(int i) {
@@ -440,7 +449,7 @@ public class MediaDataController extends BaseController {
         int i;
         this.isLoadingReactions = true;
         if (z) {
-            getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda11(this));
+            getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda10(this));
             return;
         }
         TLRPC$TL_messages_getAvailableReactions tLRPC$TL_messages_getAvailableReactions = new TLRPC$TL_messages_getAvailableReactions();
@@ -450,7 +459,7 @@ public class MediaDataController extends BaseController {
             i = this.reactionsUpdateHash;
         }
         tLRPC$TL_messages_getAvailableReactions.hash = i;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_getAvailableReactions, new MediaDataController$$ExternalSyntheticLambda120(this));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_getAvailableReactions, new MediaDataController$$ExternalSyntheticLambda124(this));
     }
 
     /* access modifiers changed from: private */
@@ -567,10 +576,14 @@ public class MediaDataController extends BaseController {
         if (!(list == null || i2 == 0)) {
             this.reactionsList.clear();
             this.reactionsMap.clear();
+            this.enabledReactionsList.clear();
             this.reactionsList.addAll(list);
             for (int i3 = 0; i3 < this.reactionsList.size(); i3++) {
                 this.reactionsList.get(i3).positionInList = i3;
                 this.reactionsMap.put(this.reactionsList.get(i3).reaction, this.reactionsList.get(i3));
+                if (!this.reactionsList.get(i3).inactive) {
+                    this.enabledReactionsList.add(this.reactionsList.get(i3));
+                }
             }
             this.reactionsUpdateHash = i;
         }
@@ -591,6 +604,7 @@ public class MediaDataController extends BaseController {
             ImageReceiver imageReceiver = new ImageReceiver();
             TLRPC$TL_availableReaction tLRPC$TL_availableReaction = (TLRPC$TL_availableReaction) list.get(i);
             imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.activate_animation), (String) null, (Drawable) null, (String) null, (Object) null, 1);
+            imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.appear_animation), (String) null, (Drawable) null, (String) null, (Object) null, 1);
             new ImageReceiver().setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), (String) null, (Drawable) null, (String) null, (Object) null, 1);
         }
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.reactionsDidLoad, new Object[0]);
@@ -713,7 +727,7 @@ public class MediaDataController extends BaseController {
                     tLRPC$TL_inputDocument.file_reference = new byte[0];
                 }
                 tLRPC$TL_messages_faveSticker.unfave = z3;
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_faveSticker, new MediaDataController$$ExternalSyntheticLambda138(this, obj2, tLRPC$TL_messages_faveSticker));
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_faveSticker, new MediaDataController$$ExternalSyntheticLambda142(this, obj2, tLRPC$TL_messages_faveSticker));
                 i3 = getMessagesController().maxFaveStickersCount;
             } else {
                 if (i4 == 0 && z3) {
@@ -729,7 +743,7 @@ public class MediaDataController extends BaseController {
                         tLRPC$TL_inputDocument2.file_reference = new byte[0];
                     }
                     tLRPC$TL_messages_saveRecentSticker.unsave = true;
-                    getConnectionsManager().sendRequest(tLRPC$TL_messages_saveRecentSticker, new MediaDataController$$ExternalSyntheticLambda139(this, obj2, tLRPC$TL_messages_saveRecentSticker));
+                    getConnectionsManager().sendRequest(tLRPC$TL_messages_saveRecentSticker, new MediaDataController$$ExternalSyntheticLambda143(this, obj2, tLRPC$TL_messages_saveRecentSticker));
                 }
                 i3 = getMessagesController().maxRecentStickersCount;
             }
@@ -813,7 +827,7 @@ public class MediaDataController extends BaseController {
             tLRPC$TL_inputDocument.file_reference = new byte[0];
         }
         tLRPC$TL_messages_saveGif.unsave = true;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_saveGif, new MediaDataController$$ExternalSyntheticLambda147(this, tLRPC$TL_messages_saveGif));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_saveGif, new MediaDataController$$ExternalSyntheticLambda151(this, tLRPC$TL_messages_saveGif));
         getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda79(this, tLRPC$Document));
     }
 
@@ -1077,7 +1091,7 @@ public class MediaDataController extends BaseController {
         tLRPC$TL_messages_getStickerSet.stickerset = tLRPC$TL_inputStickerSetID;
         tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet.id;
         tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet.access_hash;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new MediaDataController$$ExternalSyntheticLambda119(this));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new MediaDataController$$ExternalSyntheticLambda123(this));
     }
 
     /* access modifiers changed from: private */
@@ -1346,7 +1360,7 @@ public class MediaDataController extends BaseController {
             long r9 = calcDocumentsHash(r9)
             r8.hash = r9
             org.telegram.tgnet.ConnectionsManager r9 = r6.getConnectionsManager()
-            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda123 r10 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda123
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda127 r10 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda127
             r10.<init>(r6, r7)
             r9.sendRequest(r8, r10)
             goto L_0x00fd
@@ -1391,7 +1405,7 @@ public class MediaDataController extends BaseController {
             r8.attached = r0
         L_0x00f1:
             org.telegram.tgnet.ConnectionsManager r9 = r6.getConnectionsManager()
-            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda124 r10 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda124
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda128 r10 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda128
             r10.<init>(r6, r7)
             r9.sendRequest(r8, r10)
         L_0x00fd:
@@ -1670,7 +1684,7 @@ public class MediaDataController extends BaseController {
                 j = this.loadFeaturedHash;
             }
             tLRPC$TL_messages_getFeaturedStickers.hash = j;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_getFeaturedStickers, new MediaDataController$$ExternalSyntheticLambda146(this, tLRPC$TL_messages_getFeaturedStickers));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_getFeaturedStickers, new MediaDataController$$ExternalSyntheticLambda150(this, tLRPC$TL_messages_getFeaturedStickers));
         }
     }
 
@@ -1791,7 +1805,7 @@ public class MediaDataController extends BaseController {
     }
 
     private void processLoadedFeaturedStickers(ArrayList<TLRPC$StickerSetCovered> arrayList, ArrayList<Long> arrayList2, boolean z, int i, long j) {
-        AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda4(this));
+        AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda3(this));
         Utilities.stageQueue.postRunnable(new MediaDataController$$ExternalSyntheticLambda104(this, z, arrayList, i, j, arrayList2));
     }
 
@@ -1931,7 +1945,7 @@ public class MediaDataController extends BaseController {
             getNotificationCenter().postNotificationName(NotificationCenter.featuredStickersDidLoad, new Object[0]);
             putFeaturedStickersToCache(this.featuredStickerSets, this.unreadStickerSets, this.loadFeaturedDate, this.loadFeaturedHash);
             if (z) {
-                getConnectionsManager().sendRequest(new TLRPC$TL_messages_readFeaturedStickers(), MediaDataController$$ExternalSyntheticLambda149.INSTANCE);
+                getConnectionsManager().sendRequest(new TLRPC$TL_messages_readFeaturedStickers(), MediaDataController$$ExternalSyntheticLambda153.INSTANCE);
             }
         }
     }
@@ -1952,7 +1966,7 @@ public class MediaDataController extends BaseController {
             this.readingStickerSets.add(Long.valueOf(j));
             TLRPC$TL_messages_readFeaturedStickers tLRPC$TL_messages_readFeaturedStickers = new TLRPC$TL_messages_readFeaturedStickers();
             tLRPC$TL_messages_readFeaturedStickers.id.add(Long.valueOf(j));
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_readFeaturedStickers, MediaDataController$$ExternalSyntheticLambda151.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_readFeaturedStickers, MediaDataController$$ExternalSyntheticLambda154.INSTANCE);
             AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda26(this, j), 1000);
         }
     }
@@ -2009,7 +2023,7 @@ public class MediaDataController extends BaseController {
         arrayList.add(tLRPC$Message);
         TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet = new TLRPC$TL_messages_getStickerSet();
         tLRPC$TL_messages_getStickerSet.stickerset = MessageObject.getInputStickerSet(tLRPC$Message);
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new MediaDataController$$ExternalSyntheticLambda140(this, str));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new MediaDataController$$ExternalSyntheticLambda144(this, str));
     }
 
     /* access modifiers changed from: private */
@@ -2073,7 +2087,7 @@ public class MediaDataController extends BaseController {
             z2 = false;
         }
         tLRPC$TL_messages_getArchivedStickers.masks = z2;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_getArchivedStickers, new MediaDataController$$ExternalSyntheticLambda122(this, i));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_getArchivedStickers, new MediaDataController$$ExternalSyntheticLambda126(this, i));
     }
 
     /* access modifiers changed from: private */
@@ -2125,10 +2139,10 @@ public class MediaDataController extends BaseController {
                 tLRPC$TL_messages_getStickerSet.stickerset = tLRPC$TL_inputStickerSetID;
                 tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet.id;
                 tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet.access_hash;
-                MediaDataController$$ExternalSyntheticLambda143 mediaDataController$$ExternalSyntheticLambda143 = r0;
+                MediaDataController$$ExternalSyntheticLambda147 mediaDataController$$ExternalSyntheticLambda147 = r0;
                 ConnectionsManager connectionsManager = getConnectionsManager();
-                MediaDataController$$ExternalSyntheticLambda143 mediaDataController$$ExternalSyntheticLambda1432 = new MediaDataController$$ExternalSyntheticLambda143(this, arrayList, i2, longSparseArray, tLRPC$StickerSet, tLRPC$TL_messages_allStickers, i);
-                connectionsManager.sendRequest(tLRPC$TL_messages_getStickerSet, mediaDataController$$ExternalSyntheticLambda143);
+                MediaDataController$$ExternalSyntheticLambda147 mediaDataController$$ExternalSyntheticLambda1472 = new MediaDataController$$ExternalSyntheticLambda147(this, arrayList, i2, longSparseArray, tLRPC$StickerSet, tLRPC$TL_messages_allStickers, i);
+                connectionsManager.sendRequest(tLRPC$TL_messages_getStickerSet, mediaDataController$$ExternalSyntheticLambda147);
                 i2++;
                 j = 1000;
             }
@@ -2178,7 +2192,7 @@ public class MediaDataController extends BaseController {
                 tLRPC$TL_inputStickerSetShortName.short_name = str;
                 tLRPC$TL_messages_getStickerSet.stickerset = tLRPC$TL_inputStickerSetShortName;
             }
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new MediaDataController$$ExternalSyntheticLambda142(this, str, z));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new MediaDataController$$ExternalSyntheticLambda146(this, str, z));
         }
     }
 
@@ -2270,7 +2284,7 @@ public class MediaDataController extends BaseController {
     }
 
     private void processLoadedDiceStickers(String str, boolean z, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, boolean z2, int i) {
-        AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda49(this, str));
+        AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda47(this, str));
         Utilities.stageQueue.postRunnable(new MediaDataController$$ExternalSyntheticLambda106(this, z2, tLRPC$TL_messages_stickerSet, i, str, z));
     }
 
@@ -2420,7 +2434,7 @@ public class MediaDataController extends BaseController {
             r6.<init>()
             r5.stickerset = r6
             org.telegram.tgnet.ConnectionsManager r6 = r3.getConnectionsManager()
-            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda121 r7 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda121
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda125 r7 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda125
             r7.<init>(r3, r4)
             r6.sendRequest(r5, r7)
             goto L_0x00b7
@@ -2449,7 +2463,7 @@ public class MediaDataController extends BaseController {
             r5.hash = r0
         L_0x00ab:
             org.telegram.tgnet.ConnectionsManager r6 = r3.getConnectionsManager()
-            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda125 r7 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda125
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda129 r7 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda129
             r7.<init>(r3, r4, r0)
             r6.sendRequest(r5, r7)
         L_0x00b7:
@@ -2988,12 +3002,12 @@ public class MediaDataController extends BaseController {
                 z3 = false;
             }
             tLRPC$TL_messages_installStickerSet.archived = z3;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_installStickerSet, new MediaDataController$$ExternalSyntheticLambda145(this, tLRPC$StickerSet, baseFragment, z, i2, z2, context, tLObject));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_installStickerSet, new MediaDataController$$ExternalSyntheticLambda149(this, tLRPC$StickerSet, baseFragment, z, i2, z2, context, tLObject));
             return;
         }
         TLRPC$TL_messages_uninstallStickerSet tLRPC$TL_messages_uninstallStickerSet = new TLRPC$TL_messages_uninstallStickerSet();
         tLRPC$TL_messages_uninstallStickerSet.stickerset = tLRPC$TL_inputStickerSetID;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_uninstallStickerSet, new MediaDataController$$ExternalSyntheticLambda144(this, tLRPC$StickerSet2, i2));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_uninstallStickerSet, new MediaDataController$$ExternalSyntheticLambda148(this, tLRPC$StickerSet2, i2));
     }
 
     /* access modifiers changed from: private */
@@ -3079,7 +3093,7 @@ public class MediaDataController extends BaseController {
         } else if (i3 == 2) {
             tLRPC$TL_messages_toggleStickerSets.unarchive = true;
         }
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_toggleStickerSets, new MediaDataController$$ExternalSyntheticLambda128(this, i2, baseFragment, z, i));
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_toggleStickerSets, new MediaDataController$$ExternalSyntheticLambda132(this, i2, baseFragment, z, i));
     }
 
     /* access modifiers changed from: private */
@@ -3299,9 +3313,9 @@ public class MediaDataController extends BaseController {
                 }
                 tLRPC$TL_messages_search.filter = new TLRPC$TL_inputMessagesFilterEmpty();
                 ConnectionsManager connectionsManager = getConnectionsManager();
-                MediaDataController$$ExternalSyntheticLambda137 mediaDataController$$ExternalSyntheticLambda137 = r0;
-                MediaDataController$$ExternalSyntheticLambda137 mediaDataController$$ExternalSyntheticLambda1372 = new MediaDataController$$ExternalSyntheticLambda137(this, j2, tLRPC$TL_messages_search, j, i, i2, i3, tLRPC$User, tLRPC$Chat, z2);
-                this.mergeReqId = connectionsManager.sendRequest(tLRPC$TL_messages_search, mediaDataController$$ExternalSyntheticLambda137, 2);
+                MediaDataController$$ExternalSyntheticLambda141 mediaDataController$$ExternalSyntheticLambda141 = r0;
+                MediaDataController$$ExternalSyntheticLambda141 mediaDataController$$ExternalSyntheticLambda1412 = new MediaDataController$$ExternalSyntheticLambda141(this, j2, tLRPC$TL_messages_search, j, i, i2, i3, tLRPC$User, tLRPC$Chat, z2);
+                this.mergeReqId = connectionsManager.sendRequest(tLRPC$TL_messages_search, mediaDataController$$ExternalSyntheticLambda141, 2);
                 return;
             }
             return;
@@ -3340,9 +3354,9 @@ public class MediaDataController extends BaseController {
             int i12 = this.lastReqId + 1;
             this.lastReqId = i12;
             this.lastSearchQuery = str3;
-            MediaDataController$$ExternalSyntheticLambda141 mediaDataController$$ExternalSyntheticLambda141 = r0;
-            MediaDataController$$ExternalSyntheticLambda141 mediaDataController$$ExternalSyntheticLambda1412 = new MediaDataController$$ExternalSyntheticLambda141(this, str3, i12, z2, tLRPC$TL_messages_search2, j3, j, i, j2, i3, tLRPC$User, tLRPC$Chat);
-            this.reqId = getConnectionsManager().sendRequest(tLRPC$TL_messages_search2, mediaDataController$$ExternalSyntheticLambda141, 2);
+            MediaDataController$$ExternalSyntheticLambda145 mediaDataController$$ExternalSyntheticLambda145 = r0;
+            MediaDataController$$ExternalSyntheticLambda145 mediaDataController$$ExternalSyntheticLambda1452 = new MediaDataController$$ExternalSyntheticLambda145(this, str3, i12, z2, tLRPC$TL_messages_search2, j3, j, i, j2, i3, tLRPC$User, tLRPC$Chat);
+            this.reqId = getConnectionsManager().sendRequest(tLRPC$TL_messages_search2, mediaDataController$$ExternalSyntheticLambda145, 2);
         }
     }
 
@@ -3585,7 +3599,7 @@ public class MediaDataController extends BaseController {
             return
         L_0x00e7:
             org.telegram.tgnet.ConnectionsManager r13 = r16.getConnectionsManager()
-            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda132 r15 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda132
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda136 r15 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda136
             r0 = r15
             r1 = r16
             r2 = r17
@@ -3705,7 +3719,7 @@ public class MediaDataController extends BaseController {
                 i3++;
             }
             if (!tLRPC$TL_messages_getSearchCounters.filters.isEmpty()) {
-                getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getSearchCounters, new MediaDataController$$ExternalSyntheticLambda148(this, iArr, j2)), i);
+                getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getSearchCounters, new MediaDataController$$ExternalSyntheticLambda152(this, iArr, j2)), i);
             }
             if (!z) {
                 AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda42(this, j2, iArr2));
@@ -3790,7 +3804,7 @@ public class MediaDataController extends BaseController {
         TLRPC$InputPeer inputPeer = getMessagesController().getInputPeer(j);
         tLRPC$TL_messages_getSearchCounters.peer = inputPeer;
         if (inputPeer != null) {
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getSearchCounters, new MediaDataController$$ExternalSyntheticLambda131(this, j, i, i2)), i2);
+            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getSearchCounters, new MediaDataController$$ExternalSyntheticLambda135(this, j, i, i2)), i2);
         }
     }
 
@@ -4870,7 +4884,7 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02c9 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02c9 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02c9 }
-            r10 = 2131626475(0x7f0e09eb, float:1.8880187E38)
+            r10 = 2131626477(0x7f0e09ed, float:1.8880191E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02c9 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02c9 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02c9 }
@@ -5133,7 +5147,7 @@ public class MediaDataController extends BaseController {
                 tLRPC$TL_contacts_getTopPeers.bots_inline = true;
                 tLRPC$TL_contacts_getTopPeers.offset = 0;
                 tLRPC$TL_contacts_getTopPeers.limit = 20;
-                getConnectionsManager().sendRequest(tLRPC$TL_contacts_getTopPeers, new MediaDataController$$ExternalSyntheticLambda117(this));
+                getConnectionsManager().sendRequest(tLRPC$TL_contacts_getTopPeers, new MediaDataController$$ExternalSyntheticLambda122(this));
             } else if (!this.loaded) {
                 this.loading = true;
                 getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda5(this));
@@ -5274,7 +5288,7 @@ public class MediaDataController extends BaseController {
             }
             executeFast.dispose();
             getMessagesStorage().getDatabase().commitTransaction();
-            AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda10(this));
+            AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda9(this));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
@@ -5300,7 +5314,7 @@ public class MediaDataController extends BaseController {
         this.inlineBots.clear();
         getNotificationCenter().postNotificationName(NotificationCenter.reloadHints, new Object[0]);
         getNotificationCenter().postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
-        getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda3(this));
+        getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda2(this));
         buildShortcuts();
     }
 
@@ -5363,7 +5377,7 @@ public class MediaDataController extends BaseController {
                 TLRPC$TL_contacts_resetTopPeerRating tLRPC$TL_contacts_resetTopPeerRating = new TLRPC$TL_contacts_resetTopPeerRating();
                 tLRPC$TL_contacts_resetTopPeerRating.category = new TLRPC$TL_topPeerCategoryBotsInline();
                 tLRPC$TL_contacts_resetTopPeerRating.peer = getMessagesController().getInputPeer(j);
-                getConnectionsManager().sendRequest(tLRPC$TL_contacts_resetTopPeerRating, MediaDataController$$ExternalSyntheticLambda152.INSTANCE);
+                getConnectionsManager().sendRequest(tLRPC$TL_contacts_resetTopPeerRating, MediaDataController$$ExternalSyntheticLambda156.INSTANCE);
                 deletePeer(j, 1);
                 getNotificationCenter().postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
                 return;
@@ -5380,7 +5394,7 @@ public class MediaDataController extends BaseController {
                 tLRPC$TL_contacts_resetTopPeerRating.category = new TLRPC$TL_topPeerCategoryCorrespondents();
                 tLRPC$TL_contacts_resetTopPeerRating.peer = getMessagesController().getInputPeer(j);
                 deletePeer(j, 0);
-                getConnectionsManager().sendRequest(tLRPC$TL_contacts_resetTopPeerRating, MediaDataController$$ExternalSyntheticLambda153.INSTANCE);
+                getConnectionsManager().sendRequest(tLRPC$TL_contacts_resetTopPeerRating, MediaDataController$$ExternalSyntheticLambda157.INSTANCE);
                 return;
             }
         }
@@ -5571,7 +5585,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0074
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627493(0x7f0e0de5, float:1.8882252E38)
+            r9 = 2131627496(0x7f0e0de8, float:1.8882258E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
         L_0x0071:
             r9 = r4
@@ -5581,7 +5595,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0084
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627626(0x7f0e0e6a, float:1.8882522E38)
+            r9 = 2131627629(0x7f0e0e6d, float:1.8882528E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
             goto L_0x0071
         L_0x0084:
@@ -5945,7 +5959,7 @@ public class MediaDataController extends BaseController {
             tLRPC$TL_messages_search.offset_id = i;
             tLRPC$TL_messages_search.q = "";
             tLRPC$TL_messages_search.filter = new TLRPC$TL_inputMessagesFilterPinned();
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_search, new MediaDataController$$ExternalSyntheticLambda127(this, i2, tLRPC$TL_messages_search, j, i));
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_search, new MediaDataController$$ExternalSyntheticLambda131(this, i2, tLRPC$TL_messages_search, j, i));
         }
     }
 
@@ -6001,7 +6015,7 @@ public class MediaDataController extends BaseController {
         }
         long j2 = j;
         getMessagesStorage().updatePinnedMessages(j2, arrayList, true, i3, i2, z, hashMap);
-        AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda25(this, j2));
+        AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda24(this, j2));
     }
 
     /* access modifiers changed from: private */
@@ -6168,7 +6182,7 @@ public class MediaDataController extends BaseController {
             r8.channel = r2     // Catch:{ Exception -> 0x01c9 }
             r8.id = r1     // Catch:{ Exception -> 0x01c9 }
             org.telegram.tgnet.ConnectionsManager r10 = r17.getConnectionsManager()     // Catch:{ Exception -> 0x01c9 }
-            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda134 r11 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda134     // Catch:{ Exception -> 0x01c9 }
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda138 r11 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda138     // Catch:{ Exception -> 0x01c9 }
             r1 = r11
             r2 = r17
             r3 = r20
@@ -6182,7 +6196,7 @@ public class MediaDataController extends BaseController {
             r2.<init>()     // Catch:{ Exception -> 0x01c9 }
             r2.id = r1     // Catch:{ Exception -> 0x01c9 }
             org.telegram.tgnet.ConnectionsManager r1 = r17.getConnectionsManager()     // Catch:{ Exception -> 0x01c9 }
-            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda136 r3 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda136     // Catch:{ Exception -> 0x01c9 }
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda140 r3 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda140     // Catch:{ Exception -> 0x01c9 }
             r4 = r17
             r3.<init>(r4, r5, r2)     // Catch:{ Exception -> 0x01c7 }
             r1.sendRequest(r2, r3)     // Catch:{ Exception -> 0x01c7 }
@@ -6775,16 +6789,16 @@ public class MediaDataController extends BaseController {
                         TLRPC$TL_channels_getMessages tLRPC$TL_channels_getMessages = new TLRPC$TL_channels_getMessages();
                         tLRPC$TL_channels_getMessages.channel = getMessagesController().getInputChannel(keyAt2);
                         tLRPC$TL_channels_getMessages.id = (ArrayList) longSparseArray4.valueAt(i4);
-                        MediaDataController$$ExternalSyntheticLambda133 mediaDataController$$ExternalSyntheticLambda133 = r1;
+                        MediaDataController$$ExternalSyntheticLambda137 mediaDataController$$ExternalSyntheticLambda137 = r1;
                         i = size2;
                         ConnectionsManager connectionsManager = getConnectionsManager();
-                        MediaDataController$$ExternalSyntheticLambda133 mediaDataController$$ExternalSyntheticLambda1332 = new MediaDataController$$ExternalSyntheticLambda133(this, j, keyAt2, longSparseArray, z, runnable);
-                        connectionsManager.sendRequest(tLRPC$TL_channels_getMessages, mediaDataController$$ExternalSyntheticLambda133);
+                        MediaDataController$$ExternalSyntheticLambda137 mediaDataController$$ExternalSyntheticLambda1372 = new MediaDataController$$ExternalSyntheticLambda137(this, j, keyAt2, longSparseArray, z, runnable);
+                        connectionsManager.sendRequest(tLRPC$TL_channels_getMessages, mediaDataController$$ExternalSyntheticLambda137);
                     } else {
                         i = size2;
                         TLRPC$TL_messages_getMessages tLRPC$TL_messages_getMessages = new TLRPC$TL_messages_getMessages();
                         tLRPC$TL_messages_getMessages.id = (ArrayList) longSparseArray4.valueAt(i4);
-                        getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessages, new MediaDataController$$ExternalSyntheticLambda135(this, j, longSparseArray, z, runnable));
+                        getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessages, new MediaDataController$$ExternalSyntheticLambda139(this, j, longSparseArray, z, runnable));
                     }
                     i4++;
                     LongSparseArray longSparseArray5 = longSparseArray;
@@ -6939,11 +6953,11 @@ public class MediaDataController extends BaseController {
         Collections.sort(arrayList, entityComparator);
     }
 
-    private static boolean checkInclusion(int i, ArrayList<TLRPC$MessageEntity> arrayList, boolean z) {
-        if (arrayList != null && !arrayList.isEmpty()) {
-            int size = arrayList.size();
+    private static boolean checkInclusion(int i, List<TLRPC$MessageEntity> list, boolean z) {
+        if (list != null && !list.isEmpty()) {
+            int size = list.size();
             for (int i2 = 0; i2 < size; i2++) {
-                TLRPC$MessageEntity tLRPC$MessageEntity = arrayList.get(i2);
+                TLRPC$MessageEntity tLRPC$MessageEntity = list.get(i2);
                 int i3 = tLRPC$MessageEntity.offset;
                 if (z) {
                     if (i3 >= i) {
@@ -6960,11 +6974,11 @@ public class MediaDataController extends BaseController {
         return false;
     }
 
-    private static boolean checkIntersection(int i, int i2, ArrayList<TLRPC$MessageEntity> arrayList) {
-        if (arrayList != null && !arrayList.isEmpty()) {
-            int size = arrayList.size();
+    private static boolean checkIntersection(int i, int i2, List<TLRPC$MessageEntity> list) {
+        if (list != null && !list.isEmpty()) {
+            int size = list.size();
             for (int i3 = 0; i3 < size; i3++) {
-                TLRPC$MessageEntity tLRPC$MessageEntity = arrayList.get(i3);
+                TLRPC$MessageEntity tLRPC$MessageEntity = list.get(i3);
                 int i4 = tLRPC$MessageEntity.offset;
                 if (i4 > i && i4 + tLRPC$MessageEntity.length <= i2) {
                     return true;
@@ -6972,17 +6986,6 @@ public class MediaDataController extends BaseController {
             }
         }
         return false;
-    }
-
-    private static void removeOffsetAfter(int i, int i2, ArrayList<TLRPC$MessageEntity> arrayList) {
-        int size = arrayList.size();
-        for (int i3 = 0; i3 < size; i3++) {
-            TLRPC$MessageEntity tLRPC$MessageEntity = arrayList.get(i3);
-            int i4 = tLRPC$MessageEntity.offset;
-            if (i4 > i) {
-                tLRPC$MessageEntity.offset = i4 - i2;
-            }
-        }
     }
 
     public CharSequence substring(CharSequence charSequence, int i, int i2) {
@@ -7013,61 +7016,61 @@ public class MediaDataController extends BaseController {
         return null;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x008a A[Catch:{ Exception -> 0x00b2 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x008a A[Catch:{ Exception -> 0x00c0 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static void addStyleToText(org.telegram.ui.Components.TextStyleSpan r11, int r12, int r13, android.text.Spannable r14, boolean r15) {
         /*
             java.lang.Class<android.text.style.CharacterStyle> r0 = android.text.style.CharacterStyle.class
-            java.lang.Object[] r0 = r14.getSpans(r12, r13, r0)     // Catch:{ Exception -> 0x00b2 }
-            android.text.style.CharacterStyle[] r0 = (android.text.style.CharacterStyle[]) r0     // Catch:{ Exception -> 0x00b2 }
+            java.lang.Object[] r0 = r14.getSpans(r12, r13, r0)     // Catch:{ Exception -> 0x00c0 }
+            android.text.style.CharacterStyle[] r0 = (android.text.style.CharacterStyle[]) r0     // Catch:{ Exception -> 0x00c0 }
             r1 = 33
             if (r0 == 0) goto L_0x00aa
-            int r2 = r0.length     // Catch:{ Exception -> 0x00b2 }
+            int r2 = r0.length     // Catch:{ Exception -> 0x00c0 }
             if (r2 <= 0) goto L_0x00aa
             r2 = 0
         L_0x0010:
-            int r3 = r0.length     // Catch:{ Exception -> 0x00b2 }
+            int r3 = r0.length     // Catch:{ Exception -> 0x00c0 }
             if (r2 >= r3) goto L_0x00aa
-            r3 = r0[r2]     // Catch:{ Exception -> 0x00b2 }
+            r3 = r0[r2]     // Catch:{ Exception -> 0x00c0 }
             if (r11 == 0) goto L_0x001c
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r4 = r11.getTextStyleRun()     // Catch:{ Exception -> 0x00b2 }
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r4 = r11.getTextStyleRun()     // Catch:{ Exception -> 0x00c0 }
             goto L_0x0021
         L_0x001c:
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r4 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x00b2 }
-            r4.<init>()     // Catch:{ Exception -> 0x00b2 }
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r4 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x00c0 }
+            r4.<init>()     // Catch:{ Exception -> 0x00c0 }
         L_0x0021:
-            boolean r5 = r3 instanceof org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x00b2 }
+            boolean r5 = r3 instanceof org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x00c0 }
             if (r5 == 0) goto L_0x002d
             r5 = r3
-            org.telegram.ui.Components.TextStyleSpan r5 = (org.telegram.ui.Components.TextStyleSpan) r5     // Catch:{ Exception -> 0x00b2 }
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r5 = r5.getTextStyleRun()     // Catch:{ Exception -> 0x00b2 }
+            org.telegram.ui.Components.TextStyleSpan r5 = (org.telegram.ui.Components.TextStyleSpan) r5     // Catch:{ Exception -> 0x00c0 }
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r5 = r5.getTextStyleRun()     // Catch:{ Exception -> 0x00c0 }
             goto L_0x003f
         L_0x002d:
-            boolean r5 = r3 instanceof org.telegram.ui.Components.URLSpanReplacement     // Catch:{ Exception -> 0x00b2 }
+            boolean r5 = r3 instanceof org.telegram.ui.Components.URLSpanReplacement     // Catch:{ Exception -> 0x00c0 }
             if (r5 == 0) goto L_0x00a6
             r5 = r3
-            org.telegram.ui.Components.URLSpanReplacement r5 = (org.telegram.ui.Components.URLSpanReplacement) r5     // Catch:{ Exception -> 0x00b2 }
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r5 = r5.getTextStyleRun()     // Catch:{ Exception -> 0x00b2 }
+            org.telegram.ui.Components.URLSpanReplacement r5 = (org.telegram.ui.Components.URLSpanReplacement) r5     // Catch:{ Exception -> 0x00c0 }
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r5 = r5.getTextStyleRun()     // Catch:{ Exception -> 0x00c0 }
             if (r5 != 0) goto L_0x003f
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r5 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x00b2 }
-            r5.<init>()     // Catch:{ Exception -> 0x00b2 }
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r5 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x00c0 }
+            r5.<init>()     // Catch:{ Exception -> 0x00c0 }
         L_0x003f:
             if (r5 != 0) goto L_0x0043
             goto L_0x00a6
         L_0x0043:
-            int r6 = r14.getSpanStart(r3)     // Catch:{ Exception -> 0x00b2 }
-            int r7 = r14.getSpanEnd(r3)     // Catch:{ Exception -> 0x00b2 }
-            r14.removeSpan(r3)     // Catch:{ Exception -> 0x00b2 }
+            int r6 = r14.getSpanStart(r3)     // Catch:{ Exception -> 0x00c0 }
+            int r7 = r14.getSpanEnd(r3)     // Catch:{ Exception -> 0x00c0 }
+            r14.removeSpan(r3)     // Catch:{ Exception -> 0x00c0 }
             if (r6 <= r12) goto L_0x006a
             if (r13 <= r7) goto L_0x006a
-            android.text.style.CharacterStyle r3 = createNewSpan(r3, r5, r4, r15)     // Catch:{ Exception -> 0x00b2 }
-            r14.setSpan(r3, r6, r7, r1)     // Catch:{ Exception -> 0x00b2 }
+            android.text.style.CharacterStyle r3 = createNewSpan(r3, r5, r4, r15)     // Catch:{ Exception -> 0x00c0 }
+            r14.setSpan(r3, r6, r7, r1)     // Catch:{ Exception -> 0x00c0 }
             if (r11 == 0) goto L_0x0068
-            org.telegram.ui.Components.TextStyleSpan r3 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x00b2 }
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r5 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x00b2 }
-            r5.<init>(r4)     // Catch:{ Exception -> 0x00b2 }
-            r3.<init>(r5)     // Catch:{ Exception -> 0x00b2 }
-            r14.setSpan(r3, r7, r13, r1)     // Catch:{ Exception -> 0x00b2 }
+            org.telegram.ui.Components.TextStyleSpan r3 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x00c0 }
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r5 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x00c0 }
+            r5.<init>(r4)     // Catch:{ Exception -> 0x00c0 }
+            r3.<init>(r5)     // Catch:{ Exception -> 0x00c0 }
+            r14.setSpan(r3, r7, r13, r1)     // Catch:{ Exception -> 0x00c0 }
         L_0x0068:
             r13 = r6
             goto L_0x00a6
@@ -7075,14 +7078,14 @@ public class MediaDataController extends BaseController {
             r8 = 0
             if (r6 > r12) goto L_0x0087
             if (r6 == r12) goto L_0x0076
-            android.text.style.CharacterStyle r9 = createNewSpan(r3, r5, r8, r15)     // Catch:{ Exception -> 0x00b2 }
-            r14.setSpan(r9, r6, r12, r1)     // Catch:{ Exception -> 0x00b2 }
+            android.text.style.CharacterStyle r9 = createNewSpan(r3, r5, r8, r15)     // Catch:{ Exception -> 0x00c0 }
+            r14.setSpan(r9, r6, r12, r1)     // Catch:{ Exception -> 0x00c0 }
         L_0x0076:
             if (r7 <= r12) goto L_0x0087
             if (r11 == 0) goto L_0x0085
-            android.text.style.CharacterStyle r9 = createNewSpan(r3, r5, r4, r15)     // Catch:{ Exception -> 0x00b2 }
-            int r10 = java.lang.Math.min(r7, r13)     // Catch:{ Exception -> 0x00b2 }
-            r14.setSpan(r9, r12, r10, r1)     // Catch:{ Exception -> 0x00b2 }
+            android.text.style.CharacterStyle r9 = createNewSpan(r3, r5, r4, r15)     // Catch:{ Exception -> 0x00c0 }
+            int r10 = java.lang.Math.min(r7, r13)     // Catch:{ Exception -> 0x00c0 }
+            r14.setSpan(r9, r12, r10, r1)     // Catch:{ Exception -> 0x00c0 }
         L_0x0085:
             r9 = r7
             goto L_0x0088
@@ -7091,15 +7094,15 @@ public class MediaDataController extends BaseController {
         L_0x0088:
             if (r7 < r13) goto L_0x00a5
             if (r7 == r13) goto L_0x0093
-            android.text.style.CharacterStyle r8 = createNewSpan(r3, r5, r8, r15)     // Catch:{ Exception -> 0x00b2 }
-            r14.setSpan(r8, r13, r7, r1)     // Catch:{ Exception -> 0x00b2 }
+            android.text.style.CharacterStyle r8 = createNewSpan(r3, r5, r8, r15)     // Catch:{ Exception -> 0x00c0 }
+            r14.setSpan(r8, r13, r7, r1)     // Catch:{ Exception -> 0x00c0 }
         L_0x0093:
             if (r13 <= r6) goto L_0x00a5
             if (r7 > r12) goto L_0x00a5
             if (r11 == 0) goto L_0x00a4
-            android.text.style.CharacterStyle r12 = createNewSpan(r3, r5, r4, r15)     // Catch:{ Exception -> 0x00b2 }
-            int r13 = java.lang.Math.min(r7, r13)     // Catch:{ Exception -> 0x00b2 }
-            r14.setSpan(r12, r6, r13, r1)     // Catch:{ Exception -> 0x00b2 }
+            android.text.style.CharacterStyle r12 = createNewSpan(r3, r5, r4, r15)     // Catch:{ Exception -> 0x00c0 }
+            int r13 = java.lang.Math.min(r7, r13)     // Catch:{ Exception -> 0x00c0 }
+            r14.setSpan(r12, r6, r13, r1)     // Catch:{ Exception -> 0x00c0 }
         L_0x00a4:
             r13 = r6
         L_0x00a5:
@@ -7108,17 +7111,40 @@ public class MediaDataController extends BaseController {
             int r2 = r2 + 1
             goto L_0x0010
         L_0x00aa:
-            if (r11 == 0) goto L_0x00b6
-            if (r12 >= r13) goto L_0x00b6
-            r14.setSpan(r11, r12, r13, r1)     // Catch:{ Exception -> 0x00b2 }
-            goto L_0x00b6
-        L_0x00b2:
+            if (r11 == 0) goto L_0x00c4
+            if (r12 >= r13) goto L_0x00c4
+            int r15 = r14.length()     // Catch:{ Exception -> 0x00c0 }
+            if (r12 >= r15) goto L_0x00c4
+            int r15 = r14.length()     // Catch:{ Exception -> 0x00c0 }
+            int r13 = java.lang.Math.min(r15, r13)     // Catch:{ Exception -> 0x00c0 }
+            r14.setSpan(r11, r12, r13, r1)     // Catch:{ Exception -> 0x00c0 }
+            goto L_0x00c4
+        L_0x00c0:
             r11 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
-        L_0x00b6:
+        L_0x00c4:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.addStyleToText(org.telegram.ui.Components.TextStyleSpan, int, int, android.text.Spannable, boolean):void");
+    }
+
+    public static void addTextStyleRuns(TLRPC$DraftMessage tLRPC$DraftMessage, Spannable spannable) {
+        addTextStyleRuns(tLRPC$DraftMessage.entities, tLRPC$DraftMessage.message, spannable);
+    }
+
+    public static void addTextStyleRuns(MessageObject messageObject, Spannable spannable) {
+        addTextStyleRuns(messageObject.messageOwner.entities, messageObject.messageText, spannable);
+    }
+
+    public static void addTextStyleRuns(ArrayList<TLRPC$MessageEntity> arrayList, CharSequence charSequence, Spannable spannable) {
+        for (TextStyleSpan removeSpan : (TextStyleSpan[]) spannable.getSpans(0, spannable.length(), TextStyleSpan.class)) {
+            spannable.removeSpan(removeSpan);
+        }
+        Iterator<TextStyleSpan.TextStyleRun> it = getTextStyleRuns(arrayList, charSequence).iterator();
+        while (it.hasNext()) {
+            TextStyleSpan.TextStyleRun next = it.next();
+            addStyleToText(new TextStyleSpan(next), next.start, next.end, spannable, true);
+        }
     }
 
     public static ArrayList<TextStyleSpan.TextStyleRun> getTextStyleRuns(ArrayList<TLRPC$MessageEntity> arrayList, CharSequence charSequence) {
@@ -7138,7 +7164,9 @@ public class MediaDataController extends BaseController {
                 int i4 = tLRPC$MessageEntity.offset;
                 textStyleRun.start = i4;
                 textStyleRun.end = i4 + tLRPC$MessageEntity.length;
-                if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityStrike) {
+                if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntitySpoiler) {
+                    textStyleRun.flags = 256;
+                } else if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityStrike) {
                     textStyleRun.flags = 8;
                 } else if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityUnderline) {
                     textStyleRun.flags = 16;
@@ -7237,192 +7265,183 @@ public class MediaDataController extends BaseController {
     }
 
     public void addStyle(int i, int i2, int i3, ArrayList<TLRPC$MessageEntity> arrayList) {
+        if ((i & 256) != 0) {
+            arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntitySpoiler(), i2, i3));
+        }
         if ((i & 1) != 0) {
-            TLRPC$TL_messageEntityBold tLRPC$TL_messageEntityBold = new TLRPC$TL_messageEntityBold();
-            tLRPC$TL_messageEntityBold.offset = i2;
-            tLRPC$TL_messageEntityBold.length = i3 - i2;
-            arrayList.add(tLRPC$TL_messageEntityBold);
+            arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntityBold(), i2, i3));
         }
         if ((i & 2) != 0) {
-            TLRPC$TL_messageEntityItalic tLRPC$TL_messageEntityItalic = new TLRPC$TL_messageEntityItalic();
-            tLRPC$TL_messageEntityItalic.offset = i2;
-            tLRPC$TL_messageEntityItalic.length = i3 - i2;
-            arrayList.add(tLRPC$TL_messageEntityItalic);
+            arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntityItalic(), i2, i3));
         }
         if ((i & 4) != 0) {
-            TLRPC$TL_messageEntityCode tLRPC$TL_messageEntityCode = new TLRPC$TL_messageEntityCode();
-            tLRPC$TL_messageEntityCode.offset = i2;
-            tLRPC$TL_messageEntityCode.length = i3 - i2;
-            arrayList.add(tLRPC$TL_messageEntityCode);
+            arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntityCode(), i2, i3));
         }
         if ((i & 8) != 0) {
-            TLRPC$TL_messageEntityStrike tLRPC$TL_messageEntityStrike = new TLRPC$TL_messageEntityStrike();
-            tLRPC$TL_messageEntityStrike.offset = i2;
-            tLRPC$TL_messageEntityStrike.length = i3 - i2;
-            arrayList.add(tLRPC$TL_messageEntityStrike);
+            arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntityStrike(), i2, i3));
         }
         if ((i & 16) != 0) {
-            TLRPC$TL_messageEntityUnderline tLRPC$TL_messageEntityUnderline = new TLRPC$TL_messageEntityUnderline();
-            tLRPC$TL_messageEntityUnderline.offset = i2;
-            tLRPC$TL_messageEntityUnderline.length = i3 - i2;
-            arrayList.add(tLRPC$TL_messageEntityUnderline);
+            arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntityUnderline(), i2, i3));
         }
         if ((i & 32) != 0) {
-            TLRPC$TL_messageEntityBlockquote tLRPC$TL_messageEntityBlockquote = new TLRPC$TL_messageEntityBlockquote();
-            tLRPC$TL_messageEntityBlockquote.offset = i2;
-            tLRPC$TL_messageEntityBlockquote.length = i3 - i2;
-            arrayList.add(tLRPC$TL_messageEntityBlockquote);
+            arrayList.add(setEntityStartEnd(new TLRPC$TL_messageEntityBlockquote(), i2, i3));
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:26:0x0056, code lost:
-        if (r1 != null) goto L_0x005d;
+    private TLRPC$MessageEntity setEntityStartEnd(TLRPC$MessageEntity tLRPC$MessageEntity, int i, int i2) {
+        tLRPC$MessageEntity.offset = i;
+        tLRPC$MessageEntity.length = i2 - i;
+        return tLRPC$MessageEntity;
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:25:0x0052, code lost:
+        if (r1 != null) goto L_0x0059;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:27:0x0058, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:26:0x0054, code lost:
         r1 = new java.util.ArrayList<>();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:28:0x005d, code lost:
-        if (r4 == false) goto L_0x0061;
+    /* JADX WARNING: Code restructure failed: missing block: B:27:0x0059, code lost:
+        if (r4 == false) goto L_0x005d;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:29:0x005f, code lost:
-        r13 = 3;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:30:0x0061, code lost:
-        r13 = 1;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:31:0x0062, code lost:
-        r13 = r13 + r5;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:33:0x0069, code lost:
-        if (r13 >= r20[0].length()) goto L_0x0078;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:35:0x0071, code lost:
-        if (r20[0].charAt(r13) != '`') goto L_0x0078;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:36:0x0073, code lost:
-        r5 = r5 + 1;
-        r13 = r13 + 1;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:37:0x0078, code lost:
-        if (r4 == false) goto L_0x007c;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:38:0x007a, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:28:0x005b, code lost:
         r12 = 3;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:39:0x007c, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:29:0x005d, code lost:
         r12 = 1;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:40:0x007d, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:30:0x005e, code lost:
         r12 = r12 + r5;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:41:0x007e, code lost:
-        if (r4 == false) goto L_0x0120;
+    /* JADX WARNING: Code restructure failed: missing block: B:32:0x0065, code lost:
+        if (r12 >= r19[0].length()) goto L_0x0074;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:42:0x0080, code lost:
-        if (r6 <= 0) goto L_0x008b;
+    /* JADX WARNING: Code restructure failed: missing block: B:34:0x006d, code lost:
+        if (r19[0].charAt(r12) != '`') goto L_0x0074;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:43:0x0082, code lost:
-        r4 = r20[0].charAt(r6 - 1);
+    /* JADX WARNING: Code restructure failed: missing block: B:35:0x006f, code lost:
+        r5 = r5 + 1;
+        r12 = r12 + 1;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:44:0x008b, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:36:0x0074, code lost:
+        if (r4 == false) goto L_0x0078;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:37:0x0076, code lost:
+        r10 = 3;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:38:0x0078, code lost:
+        r10 = 1;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:39:0x0079, code lost:
+        r10 = r10 + r5;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:40:0x007a, code lost:
+        if (r4 == false) goto L_0x011e;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:41:0x007c, code lost:
+        if (r6 <= 0) goto L_0x0087;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:42:0x007e, code lost:
+        r4 = r19[0].charAt(r6 - 1);
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:43:0x0087, code lost:
         r4 = 0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:45:0x008c, code lost:
-        if (r4 == ' ') goto L_0x0093;
+    /* JADX WARNING: Code restructure failed: missing block: B:45:0x008a, code lost:
+        if (r4 == ' ') goto L_0x0091;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:46:0x008e, code lost:
-        if (r4 != 10) goto L_0x0091;
+    /* JADX WARNING: Code restructure failed: missing block: B:46:0x008c, code lost:
+        if (r4 != 10) goto L_0x008f;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:47:0x0091, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:47:0x008f, code lost:
         r4 = 0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:48:0x0093, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:48:0x0091, code lost:
         r4 = 1;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:49:0x0094, code lost:
-        r13 = substring(r20[0], 0, r6 - r4);
-        r14 = substring(r20[0], r6 + 3, r5);
+    /* JADX WARNING: Code restructure failed: missing block: B:49:0x0092, code lost:
+        r13 = substring(r19[0], 0, r6 - r4);
+        r14 = substring(r19[0], r6 + 3, r5);
         r15 = r5 + 3;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:50:0x00ac, code lost:
-        if (r15 >= r20[0].length()) goto L_0x00b5;
+    /* JADX WARNING: Code restructure failed: missing block: B:50:0x00aa, code lost:
+        if (r15 >= r19[0].length()) goto L_0x00b3;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:51:0x00ae, code lost:
-        r3 = r20[0].charAt(r15);
+    /* JADX WARNING: Code restructure failed: missing block: B:51:0x00ac, code lost:
+        r3 = r19[0].charAt(r15);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:52:0x00b5, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:52:0x00b3, code lost:
         r3 = 0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:53:0x00b6, code lost:
-        r9 = r20[0];
+    /* JADX WARNING: Code restructure failed: missing block: B:53:0x00b4, code lost:
+        r11 = r19[0];
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:54:0x00b8, code lost:
-        if (r3 == ' ') goto L_0x00bf;
+    /* JADX WARNING: Code restructure failed: missing block: B:54:0x00b6, code lost:
+        if (r3 == ' ') goto L_0x00bd;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:55:0x00ba, code lost:
-        if (r3 != 10) goto L_0x00bd;
+    /* JADX WARNING: Code restructure failed: missing block: B:55:0x00b8, code lost:
+        if (r3 != 10) goto L_0x00bb;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:56:0x00bd, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:56:0x00bb, code lost:
         r3 = 0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:57:0x00bf, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:57:0x00bd, code lost:
         r3 = 1;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:58:0x00c0, code lost:
-        r3 = substring(r9, r15 + r3, r20[0].length());
+    /* JADX WARNING: Code restructure failed: missing block: B:58:0x00be, code lost:
+        r3 = substring(r11, r15 + r3, r19[0].length());
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:59:0x00d1, code lost:
-        if (r13.length() == 0) goto L_0x00de;
+    /* JADX WARNING: Code restructure failed: missing block: B:59:0x00cf, code lost:
+        if (r13.length() == 0) goto L_0x00dc;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:60:0x00d3, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:60:0x00d1, code lost:
         r13 = org.telegram.messenger.AndroidUtilities.concat(r13, "\n");
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:61:0x00de, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:61:0x00dc, code lost:
         r4 = 1;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:63:0x00e3, code lost:
-        if (r3.length() == 0) goto L_0x00ef;
+    /* JADX WARNING: Code restructure failed: missing block: B:63:0x00e1, code lost:
+        if (r3.length() == 0) goto L_0x00ed;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:64:0x00e5, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:64:0x00e3, code lost:
         r3 = org.telegram.messenger.AndroidUtilities.concat("\n", r3);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:66:0x00f3, code lost:
-        if (android.text.TextUtils.isEmpty(r14) != false) goto L_0x015d;
+    /* JADX WARNING: Code restructure failed: missing block: B:66:0x00f1, code lost:
+        if (android.text.TextUtils.isEmpty(r14) != false) goto L_0x015b;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:67:0x00f5, code lost:
-        r20[0] = org.telegram.messenger.AndroidUtilities.concat(r13, r14, r3);
+    /* JADX WARNING: Code restructure failed: missing block: B:67:0x00f3, code lost:
+        r19[0] = org.telegram.messenger.AndroidUtilities.concat(r13, r14, r3);
         r3 = new org.telegram.tgnet.TLRPC$TL_messageEntityPre();
         r3.offset = (r4 ^ 1) + r6;
         r3.length = ((r5 - r6) - 3) + (r4 ^ 1);
         r3.language = "";
         r1.add(r3);
-        r12 = r12 - 6;
+        r10 = r10 - 6;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:68:0x0120, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:68:0x011e, code lost:
         r3 = r6 + 1;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:69:0x0122, code lost:
-        if (r3 == r5) goto L_0x015d;
+    /* JADX WARNING: Code restructure failed: missing block: B:69:0x0120, code lost:
+        if (r3 == r5) goto L_0x015b;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:70:0x0124, code lost:
-        r20[0] = org.telegram.messenger.AndroidUtilities.concat(substring(r20[0], 0, r6), substring(r20[0], r3, r5), substring(r20[0], r5 + 1, r20[0].length()));
+    /* JADX WARNING: Code restructure failed: missing block: B:70:0x0122, code lost:
+        r19[0] = org.telegram.messenger.AndroidUtilities.concat(substring(r19[0], 0, r6), substring(r19[0], r3, r5), substring(r19[0], r5 + 1, r19[0].length()));
         r3 = new org.telegram.tgnet.TLRPC$TL_messageEntityCode();
         r3.offset = r6;
         r3.length = (r5 - r6) - 1;
         r1.add(r3);
-        r12 = r12 - 2;
+        r10 = r10 - 2;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> getEntities(java.lang.CharSequence[] r20, boolean r21) {
+    public java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> getEntities(java.lang.CharSequence[] r19, boolean r20) {
         /*
-            r19 = this;
-            r0 = r19
+            r18 = this;
+            r0 = r18
             r1 = 0
-            if (r20 == 0) goto L_0x03cb
+            if (r19 == 0) goto L_0x02e2
             r2 = 0
-            r3 = r20[r2]
+            r3 = r19[r2]
             if (r3 != 0) goto L_0x000c
-            goto L_0x03cb
+            goto L_0x02e2
         L_0x000c:
             r3 = -1
             r4 = 0
@@ -7430,7 +7449,7 @@ public class MediaDataController extends BaseController {
         L_0x000f:
             r6 = -1
         L_0x0010:
-            r7 = r20[r2]
+            r7 = r19[r2]
             if (r4 != 0) goto L_0x0017
             java.lang.String r8 = "`"
             goto L_0x0019
@@ -7438,146 +7457,143 @@ public class MediaDataController extends BaseController {
             java.lang.String r8 = "```"
         L_0x0019:
             int r5 = android.text.TextUtils.indexOf(r7, r8, r5)
-            r7 = 10
-            r8 = 32
-            r10 = 2
-            r11 = 1
-            if (r5 == r3) goto L_0x0162
-            r12 = 96
-            if (r6 != r3) goto L_0x0056
-            r4 = r20[r2]
+            r7 = 32
+            r8 = 2
+            r9 = 1
+            if (r5 == r3) goto L_0x0160
+            r10 = 96
+            if (r6 != r3) goto L_0x0052
+            r4 = r19[r2]
             int r4 = r4.length()
             int r4 = r4 - r5
-            if (r4 <= r10) goto L_0x0048
-            r4 = r20[r2]
+            if (r4 <= r8) goto L_0x0046
+            r4 = r19[r2]
             int r6 = r5 + 1
             char r4 = r4.charAt(r6)
-            if (r4 != r12) goto L_0x0048
-            r4 = r20[r2]
+            if (r4 != r10) goto L_0x0046
+            r4 = r19[r2]
             int r6 = r5 + 2
             char r4 = r4.charAt(r6)
-            if (r4 != r12) goto L_0x0048
+            if (r4 != r10) goto L_0x0046
             r4 = 1
-            goto L_0x0049
-        L_0x0048:
+            goto L_0x0047
+        L_0x0046:
             r4 = 0
-        L_0x0049:
-            if (r4 == 0) goto L_0x004d
+        L_0x0047:
+            if (r4 == 0) goto L_0x004a
             r9 = 3
-            goto L_0x004e
-        L_0x004d:
-            r9 = 1
-        L_0x004e:
+        L_0x004a:
             int r6 = r5 + r9
-            r18 = r6
+            r17 = r6
             r6 = r5
-            r5 = r18
+            r5 = r17
             goto L_0x0010
-        L_0x0056:
-            if (r1 != 0) goto L_0x005d
+        L_0x0052:
+            if (r1 != 0) goto L_0x0059
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x005d:
-            if (r4 == 0) goto L_0x0061
-            r13 = 3
-            goto L_0x0062
-        L_0x0061:
-            r13 = 1
-        L_0x0062:
-            int r13 = r13 + r5
-        L_0x0063:
-            r14 = r20[r2]
-            int r14 = r14.length()
-            if (r13 >= r14) goto L_0x0078
-            r14 = r20[r2]
-            char r14 = r14.charAt(r13)
-            if (r14 != r12) goto L_0x0078
-            int r5 = r5 + 1
-            int r13 = r13 + 1
-            goto L_0x0063
-        L_0x0078:
-            if (r4 == 0) goto L_0x007c
+        L_0x0059:
+            if (r4 == 0) goto L_0x005d
             r12 = 3
-            goto L_0x007d
-        L_0x007c:
+            goto L_0x005e
+        L_0x005d:
             r12 = 1
-        L_0x007d:
+        L_0x005e:
             int r12 = r12 + r5
-            if (r4 == 0) goto L_0x0120
-            if (r6 <= 0) goto L_0x008b
-            r4 = r20[r2]
-            int r13 = r6 + -1
-            char r4 = r4.charAt(r13)
-            goto L_0x008c
-        L_0x008b:
+        L_0x005f:
+            r13 = r19[r2]
+            int r13 = r13.length()
+            if (r12 >= r13) goto L_0x0074
+            r13 = r19[r2]
+            char r13 = r13.charAt(r12)
+            if (r13 != r10) goto L_0x0074
+            int r5 = r5 + 1
+            int r12 = r12 + 1
+            goto L_0x005f
+        L_0x0074:
+            if (r4 == 0) goto L_0x0078
+            r10 = 3
+            goto L_0x0079
+        L_0x0078:
+            r10 = 1
+        L_0x0079:
+            int r10 = r10 + r5
+            if (r4 == 0) goto L_0x011e
+            if (r6 <= 0) goto L_0x0087
+            r4 = r19[r2]
+            int r12 = r6 + -1
+            char r4 = r4.charAt(r12)
+            goto L_0x0088
+        L_0x0087:
             r4 = 0
-        L_0x008c:
-            if (r4 == r8) goto L_0x0093
-            if (r4 != r7) goto L_0x0091
-            goto L_0x0093
+        L_0x0088:
+            r12 = 10
+            if (r4 == r7) goto L_0x0091
+            if (r4 != r12) goto L_0x008f
+            goto L_0x0091
+        L_0x008f:
+            r4 = 0
+            goto L_0x0092
         L_0x0091:
-            r4 = 0
-            goto L_0x0094
-        L_0x0093:
             r4 = 1
-        L_0x0094:
-            r13 = r20[r2]
+        L_0x0092:
+            r13 = r19[r2]
             int r14 = r6 - r4
             java.lang.CharSequence r13 = r0.substring(r13, r2, r14)
-            r14 = r20[r2]
+            r14 = r19[r2]
             int r15 = r6 + 3
             java.lang.CharSequence r14 = r0.substring(r14, r15, r5)
             int r15 = r5 + 3
-            r16 = r20[r2]
+            r16 = r19[r2]
             int r3 = r16.length()
-            if (r15 >= r3) goto L_0x00b5
-            r3 = r20[r2]
+            if (r15 >= r3) goto L_0x00b3
+            r3 = r19[r2]
             char r3 = r3.charAt(r15)
-            goto L_0x00b6
-        L_0x00b5:
+            goto L_0x00b4
+        L_0x00b3:
             r3 = 0
-        L_0x00b6:
-            r9 = r20[r2]
-            if (r3 == r8) goto L_0x00bf
-            if (r3 != r7) goto L_0x00bd
-            goto L_0x00bf
+        L_0x00b4:
+            r11 = r19[r2]
+            if (r3 == r7) goto L_0x00bd
+            if (r3 != r12) goto L_0x00bb
+            goto L_0x00bd
+        L_0x00bb:
+            r3 = 0
+            goto L_0x00be
         L_0x00bd:
-            r3 = 0
-            goto L_0x00c0
-        L_0x00bf:
             r3 = 1
-        L_0x00c0:
+        L_0x00be:
             int r15 = r15 + r3
-            r3 = r20[r2]
+            r3 = r19[r2]
             int r3 = r3.length()
-            java.lang.CharSequence r3 = r0.substring(r9, r15, r3)
+            java.lang.CharSequence r3 = r0.substring(r11, r15, r3)
             int r7 = r13.length()
-            java.lang.String r8 = "\n"
-            if (r7 == 0) goto L_0x00de
-            java.lang.CharSequence[] r7 = new java.lang.CharSequence[r10]
+            java.lang.String r11 = "\n"
+            if (r7 == 0) goto L_0x00dc
+            java.lang.CharSequence[] r7 = new java.lang.CharSequence[r8]
             r7[r2] = r13
-            r7[r11] = r8
+            r7[r9] = r11
             java.lang.CharSequence r13 = org.telegram.messenger.AndroidUtilities.concat(r7)
-            goto L_0x00df
-        L_0x00de:
+            goto L_0x00dd
+        L_0x00dc:
             r4 = 1
-        L_0x00df:
+        L_0x00dd:
             int r7 = r3.length()
-            if (r7 == 0) goto L_0x00ef
-            java.lang.CharSequence[] r7 = new java.lang.CharSequence[r10]
-            r7[r2] = r8
-            r7[r11] = r3
+            if (r7 == 0) goto L_0x00ed
+            java.lang.CharSequence[] r7 = new java.lang.CharSequence[r8]
+            r7[r2] = r11
+            r7[r9] = r3
             java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.concat(r7)
-        L_0x00ef:
+        L_0x00ed:
             boolean r7 = android.text.TextUtils.isEmpty(r14)
-            if (r7 != 0) goto L_0x015d
+            if (r7 != 0) goto L_0x015b
             r7 = 3
-            java.lang.CharSequence[] r8 = new java.lang.CharSequence[r7]
-            r8[r2] = r13
-            r8[r11] = r14
-            r8[r10] = r3
-            java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.concat(r8)
-            r20[r2] = r3
+            java.lang.CharSequence[] r11 = new java.lang.CharSequence[r7]
+            r11[r2] = r13
+            r11[r9] = r14
+            r11[r8] = r3
+            java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.concat(r11)
+            r19[r2] = r3
             org.telegram.tgnet.TLRPC$TL_messageEntityPre r3 = new org.telegram.tgnet.TLRPC$TL_messageEntityPre
             r3.<init>()
             r7 = r4 ^ 1
@@ -7592,379 +7608,287 @@ public class MediaDataController extends BaseController {
             java.lang.String r4 = ""
             r3.language = r4
             r1.add(r3)
-            int r12 = r12 + -6
-            goto L_0x015d
-        L_0x0120:
+            int r10 = r10 + -6
+            goto L_0x015b
+        L_0x011e:
             int r3 = r6 + 1
-            if (r3 == r5) goto L_0x015d
+            if (r3 == r5) goto L_0x015b
             r4 = 3
             java.lang.CharSequence[] r4 = new java.lang.CharSequence[r4]
-            r7 = r20[r2]
+            r7 = r19[r2]
             java.lang.CharSequence r7 = r0.substring(r7, r2, r6)
             r4[r2] = r7
-            r7 = r20[r2]
+            r7 = r19[r2]
             java.lang.CharSequence r3 = r0.substring(r7, r3, r5)
-            r4[r11] = r3
-            r3 = r20[r2]
+            r4[r9] = r3
+            r3 = r19[r2]
             int r7 = r5 + 1
-            r8 = r20[r2]
-            int r8 = r8.length()
-            java.lang.CharSequence r3 = r0.substring(r3, r7, r8)
-            r4[r10] = r3
+            r11 = r19[r2]
+            int r11 = r11.length()
+            java.lang.CharSequence r3 = r0.substring(r3, r7, r11)
+            r4[r8] = r3
             java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.concat(r4)
-            r20[r2] = r3
+            r19[r2] = r3
             org.telegram.tgnet.TLRPC$TL_messageEntityCode r3 = new org.telegram.tgnet.TLRPC$TL_messageEntityCode
             r3.<init>()
             r3.offset = r6
             int r5 = r5 - r6
-            int r5 = r5 - r11
+            int r5 = r5 - r9
             r3.length = r5
             r1.add(r3)
-            int r12 = r12 + -2
-        L_0x015d:
-            r5 = r12
+            int r10 = r10 + -2
+        L_0x015b:
+            r5 = r10
             r3 = -1
             r4 = 0
             goto L_0x000f
-        L_0x0162:
-            if (r6 == r3) goto L_0x0199
-            if (r4 == 0) goto L_0x0199
-            java.lang.CharSequence[] r3 = new java.lang.CharSequence[r10]
-            r4 = r20[r2]
+        L_0x0160:
+            if (r6 == r3) goto L_0x0197
+            if (r4 == 0) goto L_0x0197
+            java.lang.CharSequence[] r3 = new java.lang.CharSequence[r8]
+            r4 = r19[r2]
             java.lang.CharSequence r4 = r0.substring(r4, r2, r6)
             r3[r2] = r4
-            r4 = r20[r2]
+            r4 = r19[r2]
             int r5 = r6 + 2
-            r9 = r20[r2]
-            int r9 = r9.length()
-            java.lang.CharSequence r4 = r0.substring(r4, r5, r9)
-            r3[r11] = r4
+            r8 = r19[r2]
+            int r8 = r8.length()
+            java.lang.CharSequence r4 = r0.substring(r4, r5, r8)
+            r3[r9] = r4
             java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.concat(r3)
-            r20[r2] = r3
-            if (r1 != 0) goto L_0x018d
+            r19[r2] = r3
+            if (r1 != 0) goto L_0x018b
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x018d:
+        L_0x018b:
             org.telegram.tgnet.TLRPC$TL_messageEntityCode r3 = new org.telegram.tgnet.TLRPC$TL_messageEntityCode
             r3.<init>()
             r3.offset = r6
-            r3.length = r11
+            r3.length = r9
             r1.add(r3)
-        L_0x0199:
-            r3 = r20[r2]
+        L_0x0197:
+            r3 = r19[r2]
             boolean r3 = r3 instanceof android.text.Spanned
-            if (r3 == 0) goto L_0x02b7
-            r3 = r20[r2]
+            if (r3 == 0) goto L_0x02b5
+            r3 = r19[r2]
             android.text.Spanned r3 = (android.text.Spanned) r3
-            r4 = r20[r2]
+            r4 = r19[r2]
             int r4 = r4.length()
             java.lang.Class<org.telegram.ui.Components.TextStyleSpan> r5 = org.telegram.ui.Components.TextStyleSpan.class
             java.lang.Object[] r4 = r3.getSpans(r2, r4, r5)
             org.telegram.ui.Components.TextStyleSpan[] r4 = (org.telegram.ui.Components.TextStyleSpan[]) r4
-            if (r4 == 0) goto L_0x01e8
+            if (r4 == 0) goto L_0x01e6
             int r5 = r4.length
-            if (r5 <= 0) goto L_0x01e8
+            if (r5 <= 0) goto L_0x01e6
             r5 = 0
-        L_0x01b7:
+        L_0x01b5:
             int r6 = r4.length
-            if (r5 >= r6) goto L_0x01e8
+            if (r5 >= r6) goto L_0x01e6
             r6 = r4[r5]
-            int r9 = r3.getSpanStart(r6)
-            int r12 = r3.getSpanEnd(r6)
-            boolean r13 = checkInclusion(r9, r1, r2)
-            if (r13 != 0) goto L_0x01e5
-            boolean r13 = checkInclusion(r12, r1, r11)
-            if (r13 != 0) goto L_0x01e5
-            boolean r13 = checkIntersection(r9, r12, r1)
-            if (r13 == 0) goto L_0x01d7
-            goto L_0x01e5
-        L_0x01d7:
-            if (r1 != 0) goto L_0x01de
+            int r8 = r3.getSpanStart(r6)
+            int r10 = r3.getSpanEnd(r6)
+            boolean r11 = checkInclusion(r8, r1, r2)
+            if (r11 != 0) goto L_0x01e3
+            boolean r11 = checkInclusion(r10, r1, r9)
+            if (r11 != 0) goto L_0x01e3
+            boolean r11 = checkIntersection(r8, r10, r1)
+            if (r11 == 0) goto L_0x01d5
+            goto L_0x01e3
+        L_0x01d5:
+            if (r1 != 0) goto L_0x01dc
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x01de:
+        L_0x01dc:
             int r6 = r6.getStyleFlags()
-            r0.addStyle(r6, r9, r12, r1)
-        L_0x01e5:
+            r0.addStyle(r6, r8, r10, r1)
+        L_0x01e3:
             int r5 = r5 + 1
-            goto L_0x01b7
-        L_0x01e8:
-            r4 = r20[r2]
+            goto L_0x01b5
+        L_0x01e6:
+            r4 = r19[r2]
             int r4 = r4.length()
             java.lang.Class<org.telegram.ui.Components.URLSpanUserMention> r5 = org.telegram.ui.Components.URLSpanUserMention.class
             java.lang.Object[] r4 = r3.getSpans(r2, r4, r5)
             org.telegram.ui.Components.URLSpanUserMention[] r4 = (org.telegram.ui.Components.URLSpanUserMention[]) r4
-            if (r4 == 0) goto L_0x0257
+            if (r4 == 0) goto L_0x0255
             int r5 = r4.length
-            if (r5 <= 0) goto L_0x0257
-            if (r1 != 0) goto L_0x0202
+            if (r5 <= 0) goto L_0x0255
+            if (r1 != 0) goto L_0x0200
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x0202:
+        L_0x0200:
             r5 = 0
-        L_0x0203:
+        L_0x0201:
             int r6 = r4.length
-            if (r5 >= r6) goto L_0x0257
+            if (r5 >= r6) goto L_0x0255
             org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName r6 = new org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName
             r6.<init>()
-            org.telegram.messenger.MessagesController r9 = r19.getMessagesController()
-            r12 = r4[r5]
-            java.lang.String r12 = r12.getURL()
-            java.lang.Long r12 = org.telegram.messenger.Utilities.parseLong(r12)
-            long r12 = r12.longValue()
-            org.telegram.tgnet.TLRPC$InputUser r9 = r9.getInputUser((long) r12)
-            r6.user_id = r9
-            if (r9 == 0) goto L_0x0254
-            r9 = r4[r5]
-            int r9 = r3.getSpanStart(r9)
-            r6.offset = r9
-            r9 = r4[r5]
-            int r9 = r3.getSpanEnd(r9)
-            r12 = r20[r2]
-            int r12 = r12.length()
-            int r9 = java.lang.Math.min(r9, r12)
-            int r12 = r6.offset
-            int r9 = r9 - r12
-            r6.length = r9
-            r13 = r20[r2]
-            int r12 = r12 + r9
-            int r12 = r12 - r11
-            char r9 = r13.charAt(r12)
-            if (r9 != r8) goto L_0x0251
-            int r9 = r6.length
-            int r9 = r9 - r11
-            r6.length = r9
-        L_0x0251:
+            org.telegram.messenger.MessagesController r8 = r18.getMessagesController()
+            r10 = r4[r5]
+            java.lang.String r10 = r10.getURL()
+            java.lang.Long r10 = org.telegram.messenger.Utilities.parseLong(r10)
+            long r10 = r10.longValue()
+            org.telegram.tgnet.TLRPC$InputUser r8 = r8.getInputUser((long) r10)
+            r6.user_id = r8
+            if (r8 == 0) goto L_0x0252
+            r8 = r4[r5]
+            int r8 = r3.getSpanStart(r8)
+            r6.offset = r8
+            r8 = r4[r5]
+            int r8 = r3.getSpanEnd(r8)
+            r10 = r19[r2]
+            int r10 = r10.length()
+            int r8 = java.lang.Math.min(r8, r10)
+            int r10 = r6.offset
+            int r8 = r8 - r10
+            r6.length = r8
+            r11 = r19[r2]
+            int r10 = r10 + r8
+            int r10 = r10 - r9
+            char r8 = r11.charAt(r10)
+            if (r8 != r7) goto L_0x024f
+            int r8 = r6.length
+            int r8 = r8 - r9
+            r6.length = r8
+        L_0x024f:
             r1.add(r6)
-        L_0x0254:
+        L_0x0252:
             int r5 = r5 + 1
-            goto L_0x0203
-        L_0x0257:
-            r4 = r20[r2]
+            goto L_0x0201
+        L_0x0255:
+            r4 = r19[r2]
             int r4 = r4.length()
             java.lang.Class<org.telegram.ui.Components.URLSpanReplacement> r5 = org.telegram.ui.Components.URLSpanReplacement.class
             java.lang.Object[] r4 = r3.getSpans(r2, r4, r5)
             org.telegram.ui.Components.URLSpanReplacement[] r4 = (org.telegram.ui.Components.URLSpanReplacement[]) r4
-            if (r4 == 0) goto L_0x02b7
+            if (r4 == 0) goto L_0x02b5
             int r5 = r4.length
-            if (r5 <= 0) goto L_0x02b7
-            if (r1 != 0) goto L_0x0271
+            if (r5 <= 0) goto L_0x02b5
+            if (r1 != 0) goto L_0x026f
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x0271:
+        L_0x026f:
             r5 = 0
-        L_0x0272:
+        L_0x0270:
             int r6 = r4.length
-            if (r5 >= r6) goto L_0x02b7
+            if (r5 >= r6) goto L_0x02b5
             org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl r6 = new org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl
             r6.<init>()
-            r9 = r4[r5]
-            int r9 = r3.getSpanStart(r9)
-            r6.offset = r9
-            r9 = r4[r5]
-            int r9 = r3.getSpanEnd(r9)
-            r12 = r20[r2]
-            int r12 = r12.length()
-            int r9 = java.lang.Math.min(r9, r12)
-            int r12 = r6.offset
-            int r9 = r9 - r12
-            r6.length = r9
-            r9 = r4[r5]
-            java.lang.String r9 = r9.getURL()
-            r6.url = r9
+            r7 = r4[r5]
+            int r7 = r3.getSpanStart(r7)
+            r6.offset = r7
+            r7 = r4[r5]
+            int r7 = r3.getSpanEnd(r7)
+            r8 = r19[r2]
+            int r8 = r8.length()
+            int r7 = java.lang.Math.min(r7, r8)
+            int r8 = r6.offset
+            int r7 = r7 - r8
+            r6.length = r7
+            r7 = r4[r5]
+            java.lang.String r7 = r7.getURL()
+            r6.url = r7
             r1.add(r6)
-            r9 = r4[r5]
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r9 = r9.getTextStyleRun()
-            if (r9 == 0) goto L_0x02b4
-            int r9 = r9.flags
-            int r12 = r6.offset
+            r7 = r4[r5]
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = r7.getTextStyleRun()
+            if (r7 == 0) goto L_0x02b2
+            int r7 = r7.flags
+            int r8 = r6.offset
             int r6 = r6.length
-            int r6 = r6 + r12
-            r0.addStyle(r9, r12, r6, r1)
-        L_0x02b4:
+            int r6 = r6 + r8
+            r0.addStyle(r7, r8, r6, r1)
+        L_0x02b2:
             int r5 = r5 + 1
-            goto L_0x0272
-        L_0x02b7:
-            if (r21 == 0) goto L_0x02bb
-            r3 = 3
-            goto L_0x02bc
-        L_0x02bb:
-            r3 = 2
-        L_0x02bc:
-            r4 = 0
-        L_0x02bd:
-            if (r4 >= r3) goto L_0x03cb
-            if (r4 == 0) goto L_0x02d5
-            if (r4 == r11) goto L_0x02cc
-            r5 = 126(0x7e, float:1.77E-43)
-            java.lang.String r6 = "~~"
-            r9 = r6
-            r5 = -1
-            r6 = 126(0x7e, float:1.77E-43)
-            goto L_0x02dd
-        L_0x02cc:
-            r5 = 95
-            java.lang.String r6 = "__"
-            r9 = r6
-            r5 = -1
-            r6 = 95
-            goto L_0x02dd
-        L_0x02d5:
-            r5 = 42
-            java.lang.String r6 = "**"
-            r9 = r6
-            r5 = -1
-            r6 = 42
-        L_0x02dd:
-            r12 = 0
-        L_0x02de:
-            r13 = r20[r2]
-            int r12 = android.text.TextUtils.indexOf(r13, r9, r12)
-            r13 = -1
-            if (r12 == r13) goto L_0x03c3
-            if (r5 != r13) goto L_0x0304
-            if (r12 != 0) goto L_0x02ee
-            r14 = 32
-            goto L_0x02f6
-        L_0x02ee:
-            r14 = r20[r2]
-            int r15 = r12 + -1
-            char r14 = r14.charAt(r15)
-        L_0x02f6:
-            boolean r15 = checkInclusion(r12, r1, r2)
-            if (r15 != 0) goto L_0x0301
-            if (r14 == r8) goto L_0x0300
-            if (r14 != r7) goto L_0x0301
-        L_0x0300:
-            r5 = r12
-        L_0x0301:
-            int r12 = r12 + 2
-            goto L_0x02de
-        L_0x0304:
-            int r14 = r12 + 2
-        L_0x0306:
-            r15 = r20[r2]
-            int r15 = r15.length()
-            if (r14 >= r15) goto L_0x031b
-            r15 = r20[r2]
-            char r15 = r15.charAt(r14)
-            if (r15 != r6) goto L_0x031b
-            int r12 = r12 + 1
-            int r14 = r14 + 1
-            goto L_0x0306
-        L_0x031b:
-            int r14 = r12 + 2
-            boolean r15 = checkInclusion(r12, r1, r2)
-            if (r15 != 0) goto L_0x03bb
-            boolean r15 = checkIntersection(r5, r12, r1)
-            if (r15 == 0) goto L_0x032b
-            goto L_0x03bb
-        L_0x032b:
-            int r15 = r5 + 2
-            if (r15 == r12) goto L_0x03bb
-            if (r1 != 0) goto L_0x0336
+            goto L_0x0270
+        L_0x02b5:
+            r3 = r19[r2]
+            if (r1 != 0) goto L_0x02be
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
-        L_0x0336:
-            r7 = 3
-            java.lang.CharSequence[] r8 = new java.lang.CharSequence[r7]     // Catch:{ Exception -> 0x035e }
-            r7 = r20[r2]     // Catch:{ Exception -> 0x035e }
-            java.lang.CharSequence r7 = r0.substring(r7, r2, r5)     // Catch:{ Exception -> 0x035e }
-            r8[r2] = r7     // Catch:{ Exception -> 0x035e }
-            r7 = r20[r2]     // Catch:{ Exception -> 0x035e }
-            java.lang.CharSequence r7 = r0.substring(r7, r15, r12)     // Catch:{ Exception -> 0x035e }
-            r8[r11] = r7     // Catch:{ Exception -> 0x035e }
-            r7 = r20[r2]     // Catch:{ Exception -> 0x035e }
-            r17 = r20[r2]     // Catch:{ Exception -> 0x035e }
-            int r13 = r17.length()     // Catch:{ Exception -> 0x035e }
-            java.lang.CharSequence r7 = r0.substring(r7, r14, r13)     // Catch:{ Exception -> 0x035e }
-            r8[r10] = r7     // Catch:{ Exception -> 0x035e }
-            java.lang.CharSequence r7 = org.telegram.messenger.AndroidUtilities.concat(r8)     // Catch:{ Exception -> 0x035e }
-            r20[r2] = r7     // Catch:{ Exception -> 0x035e }
-            goto L_0x0396
-        L_0x035e:
-            java.lang.StringBuilder r7 = new java.lang.StringBuilder
-            r7.<init>()
-            r8 = r20[r2]
-            java.lang.CharSequence r8 = r0.substring(r8, r2, r5)
-            java.lang.String r8 = r8.toString()
-            r7.append(r8)
-            r8 = r20[r2]
-            java.lang.CharSequence r8 = r0.substring(r8, r15, r12)
-            java.lang.String r8 = r8.toString()
-            r7.append(r8)
-            r8 = r20[r2]
-            r13 = r20[r2]
-            int r13 = r13.length()
-            java.lang.CharSequence r8 = r0.substring(r8, r14, r13)
-            java.lang.String r8 = r8.toString()
-            r7.append(r8)
-            java.lang.String r7 = r7.toString()
-            r20[r2] = r7
-        L_0x0396:
-            if (r4 != 0) goto L_0x039e
-            org.telegram.tgnet.TLRPC$TL_messageEntityBold r7 = new org.telegram.tgnet.TLRPC$TL_messageEntityBold
-            r7.<init>()
-            goto L_0x03ab
-        L_0x039e:
-            if (r4 != r11) goto L_0x03a6
-            org.telegram.tgnet.TLRPC$TL_messageEntityItalic r7 = new org.telegram.tgnet.TLRPC$TL_messageEntityItalic
-            r7.<init>()
-            goto L_0x03ab
-        L_0x03a6:
-            org.telegram.tgnet.TLRPC$TL_messageEntityStrike r7 = new org.telegram.tgnet.TLRPC$TL_messageEntityStrike
-            r7.<init>()
-        L_0x03ab:
-            r7.offset = r5
-            int r12 = r12 - r5
-            int r12 = r12 - r10
-            r7.length = r12
-            int r5 = r5 + r12
-            r8 = 4
-            removeOffsetAfter(r5, r8, r1)
-            r1.add(r7)
-            int r14 = r14 + -4
-        L_0x03bb:
-            r12 = r14
-            r5 = -1
-            r7 = 10
-            r8 = 32
-            goto L_0x02de
-        L_0x03c3:
-            int r4 = r4 + 1
-            r7 = 10
-            r8 = 32
-            goto L_0x02bd
-        L_0x03cb:
+        L_0x02be:
+            java.util.regex.Pattern r4 = BOLD_PATTERN
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda118 r5 = org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda118.INSTANCE
+            java.lang.CharSequence r3 = r0.parsePattern(r3, r4, r1, r5)
+            java.util.regex.Pattern r4 = ITALIC_PATTERN
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda119 r5 = org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda119.INSTANCE
+            java.lang.CharSequence r3 = r0.parsePattern(r3, r4, r1, r5)
+            java.util.regex.Pattern r4 = SPOILER_PATTERN
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda120 r5 = org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda120.INSTANCE
+            java.lang.CharSequence r3 = r0.parsePattern(r3, r4, r1, r5)
+            if (r20 == 0) goto L_0x02e0
+            java.util.regex.Pattern r4 = STRIKE_PATTERN
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda117 r5 = org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda117.INSTANCE
+            java.lang.CharSequence r3 = r0.parsePattern(r3, r4, r1, r5)
+        L_0x02e0:
+            r19[r2] = r3
+        L_0x02e2:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.getEntities(java.lang.CharSequence[], boolean):java.util.ArrayList");
     }
 
+    /* access modifiers changed from: private */
+    public static /* synthetic */ TLRPC$MessageEntity lambda$getEntities$125(Void voidR) {
+        return new TLRPC$TL_messageEntityBold();
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ TLRPC$MessageEntity lambda$getEntities$126(Void voidR) {
+        return new TLRPC$TL_messageEntityItalic();
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ TLRPC$MessageEntity lambda$getEntities$127(Void voidR) {
+        return new TLRPC$TL_messageEntitySpoiler();
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ TLRPC$MessageEntity lambda$getEntities$128(Void voidR) {
+        return new TLRPC$TL_messageEntityStrike();
+    }
+
+    private CharSequence parsePattern(CharSequence charSequence, Pattern pattern, List<TLRPC$MessageEntity> list, GenericProvider<Void, TLRPC$MessageEntity> genericProvider) {
+        Matcher matcher = pattern.matcher(charSequence);
+        int i = 0;
+        while (matcher.find()) {
+            if (!checkInclusion(matcher.start(), list, false)) {
+                checkIntersection(matcher.start(), matcher.end(), list);
+            }
+            String group = matcher.group(1);
+            charSequence = charSequence.subSequence(0, matcher.start() - i) + group + charSequence.subSequence(matcher.end() - i, charSequence.length());
+            TLRPC$MessageEntity provide = genericProvider.provide(null);
+            provide.offset = matcher.start() + i;
+            provide.length = group.length();
+            list.add(provide);
+            i += (matcher.end() - matcher.start()) - group.length();
+        }
+        return charSequence;
+    }
+
     public void loadDraftsIfNeed() {
         if (!getUserConfig().draftsLoaded && !this.loadingDrafts) {
             this.loadingDrafts = true;
-            getConnectionsManager().sendRequest(new TLRPC$TL_messages_getAllDrafts(), new MediaDataController$$ExternalSyntheticLambda118(this));
+            getConnectionsManager().sendRequest(new TLRPC$TL_messages_getAllDrafts(), new MediaDataController$$ExternalSyntheticLambda121(this));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadDraftsIfNeed$125() {
+    public /* synthetic */ void lambda$loadDraftsIfNeed$129() {
         this.loadingDrafts = false;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadDraftsIfNeed$127(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadDraftsIfNeed$131(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error != null) {
-            AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda2(this));
+            AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda4(this));
             return;
         }
         getMessagesController().processUpdates((TLRPC$Updates) tLObject, false);
-        AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda9(this));
+        AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda11(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadDraftsIfNeed$126() {
+    public /* synthetic */ void lambda$loadDraftsIfNeed$130() {
         this.loadingDrafts = false;
         UserConfig userConfig = getUserConfig();
         userConfig.draftsLoaded = true;
@@ -8063,7 +7987,7 @@ public class MediaDataController extends BaseController {
                     tLRPC$TL_messages_saveDraft.reply_to_msg_id = tLRPC$DraftMessage3.reply_to_msg_id;
                     tLRPC$TL_messages_saveDraft.entities = tLRPC$DraftMessage3.entities;
                     tLRPC$TL_messages_saveDraft.flags = tLRPC$DraftMessage3.flags;
-                    getConnectionsManager().sendRequest(tLRPC$TL_messages_saveDraft, MediaDataController$$ExternalSyntheticLambda150.INSTANCE);
+                    getConnectionsManager().sendRequest(tLRPC$TL_messages_saveDraft, MediaDataController$$ExternalSyntheticLambda155.INSTANCE);
                 } else {
                     return;
                 }
@@ -8181,7 +8105,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveDraft$131(int i, long j, long j2, int i2) {
+    public /* synthetic */ void lambda$saveDraft$135(int i, long j, long j2, int i2) {
         NativeByteBuffer byteBufferValue;
         TLRPC$Message tLRPC$Message = null;
         try {
@@ -8198,11 +8122,11 @@ public class MediaDataController extends BaseController {
                 TLRPC$TL_channels_getMessages tLRPC$TL_channels_getMessages = new TLRPC$TL_channels_getMessages();
                 tLRPC$TL_channels_getMessages.channel = getMessagesController().getInputChannel(j2);
                 tLRPC$TL_channels_getMessages.id.add(Integer.valueOf(i));
-                getConnectionsManager().sendRequest(tLRPC$TL_channels_getMessages, new MediaDataController$$ExternalSyntheticLambda129(this, j, i2));
+                getConnectionsManager().sendRequest(tLRPC$TL_channels_getMessages, new MediaDataController$$ExternalSyntheticLambda133(this, j, i2));
             } else {
                 TLRPC$TL_messages_getMessages tLRPC$TL_messages_getMessages = new TLRPC$TL_messages_getMessages();
                 tLRPC$TL_messages_getMessages.id.add(Integer.valueOf(i));
-                getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessages, new MediaDataController$$ExternalSyntheticLambda130(this, j, i2));
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessages, new MediaDataController$$ExternalSyntheticLambda134(this, j, i2));
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -8210,7 +8134,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveDraft$129(long j, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$saveDraft$133(long j, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
             if (!tLRPC$messages_Messages.messages.isEmpty()) {
@@ -8220,7 +8144,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveDraft$130(long j, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$saveDraft$134(long j, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
             if (!tLRPC$messages_Messages.messages.isEmpty()) {
@@ -8236,7 +8160,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveDraftReplyMessage$132(long j, int i, TLRPC$Message tLRPC$Message) {
+    public /* synthetic */ void lambda$saveDraftReplyMessage$136(long j, int i, TLRPC$Message tLRPC$Message) {
         String str;
         SparseArray sparseArray = this.drafts.get(j);
         TLRPC$DraftMessage tLRPC$DraftMessage = sparseArray != null ? (TLRPC$DraftMessage) sparseArray.get(i) : null;
@@ -8319,7 +8243,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$clearBotKeyboard$133(ArrayList arrayList, long j) {
+    public /* synthetic */ void lambda$clearBotKeyboard$137(ArrayList arrayList, long j) {
         if (arrayList != null) {
             for (int i = 0; i < arrayList.size(); i++) {
                 long j2 = this.botKeyboardsByMids.get(((Integer) arrayList.get(i)).intValue());
@@ -8341,11 +8265,11 @@ public class MediaDataController extends BaseController {
             getNotificationCenter().postNotificationName(NotificationCenter.botKeyboardDidLoad, tLRPC$Message, Long.valueOf(j));
             return;
         }
-        getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda24(this, j));
+        getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda25(this, j));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadBotKeyboard$135(long j) {
+    public /* synthetic */ void lambda$loadBotKeyboard$139(long j) {
         NativeByteBuffer byteBufferValue;
         TLRPC$Message tLRPC$Message = null;
         try {
@@ -8364,7 +8288,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadBotKeyboard$134(TLRPC$Message tLRPC$Message, long j) {
+    public /* synthetic */ void lambda$loadBotKeyboard$138(TLRPC$Message tLRPC$Message, long j) {
         getNotificationCenter().postNotificationName(NotificationCenter.botKeyboardDidLoad, tLRPC$Message, Long.valueOf(j));
     }
 
@@ -8395,7 +8319,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadBotInfo$137(long j, long j2, int i) {
+    public /* synthetic */ void lambda$loadBotInfo$141(long j, long j2, int i) {
         try {
             TLRPC$BotInfo loadBotInfoInternal = loadBotInfoInternal(j, j2);
             if (loadBotInfoInternal != null) {
@@ -8407,7 +8331,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadBotInfo$136(TLRPC$BotInfo tLRPC$BotInfo, int i) {
+    public /* synthetic */ void lambda$loadBotInfo$140(TLRPC$BotInfo tLRPC$BotInfo, int i) {
         getNotificationCenter().postNotificationName(NotificationCenter.botInfoDidLoad, tLRPC$BotInfo, Integer.valueOf(i));
     }
 
@@ -8440,7 +8364,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putBotKeyboard$138(long j, TLRPC$Message tLRPC$Message) {
+    public /* synthetic */ void lambda$putBotKeyboard$142(long j, TLRPC$Message tLRPC$Message) {
         TLRPC$Message tLRPC$Message2 = this.botKeyboards.get(j);
         this.botKeyboards.put(j, tLRPC$Message);
         if (MessageObject.getChannelId(tLRPC$Message) == 0) {
@@ -8461,7 +8385,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putBotInfo$139(TLRPC$BotInfo tLRPC$BotInfo, long j) {
+    public /* synthetic */ void lambda$putBotInfo$143(TLRPC$BotInfo tLRPC$BotInfo, long j) {
         try {
             SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO bot_info_v2 VALUES(?, ?, ?)");
             executeFast.requery();
@@ -8489,7 +8413,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateBotInfo$140(TLRPC$TL_updateBotCommands tLRPC$TL_updateBotCommands, long j) {
+    public /* synthetic */ void lambda$updateBotInfo$144(TLRPC$TL_updateBotCommands tLRPC$TL_updateBotCommands, long j) {
         try {
             TLRPC$BotInfo loadBotInfoInternal = loadBotInfoInternal(tLRPC$TL_updateBotCommands.bot_id, j);
             if (loadBotInfoInternal != null) {
@@ -8535,6 +8459,10 @@ public class MediaDataController extends BaseController {
         this.doubleTapReaction = str;
     }
 
+    public List<TLRPC$TL_availableReaction> getEnabledReactionsList() {
+        return this.enabledReactionsList;
+    }
+
     public void fetchNewEmojiKeywords(String[] strArr) {
         if (strArr != null) {
             int i = 0;
@@ -8542,7 +8470,7 @@ public class MediaDataController extends BaseController {
                 String str = strArr[i];
                 if (!TextUtils.isEmpty(str) && this.currentFetchingEmoji.get(str) == null) {
                     this.currentFetchingEmoji.put(str, Boolean.TRUE);
-                    getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda52(this, str));
+                    getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda50(this, str));
                     i++;
                 } else {
                     return;
@@ -8560,7 +8488,7 @@ public class MediaDataController extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:18:0x004c  */
     /* JADX WARNING: Removed duplicated region for block: B:20:0x0055  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$fetchNewEmojiKeywords$146(java.lang.String r10) {
+    public /* synthetic */ void lambda$fetchNewEmojiKeywords$150(java.lang.String r10) {
         /*
             r9 = this;
             r0 = -1
@@ -8603,7 +8531,7 @@ public class MediaDataController extends BaseController {
             r6 = 3600000(0x36ee80, double:1.7786363E-317)
             int r4 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
             if (r4 >= 0) goto L_0x0055
-            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda51 r0 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda51
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda49 r0 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda49
             r0.<init>(r9, r10)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
@@ -8620,54 +8548,54 @@ public class MediaDataController extends BaseController {
             r0.from_version = r5
         L_0x0068:
             org.telegram.tgnet.ConnectionsManager r2 = r9.getConnectionsManager()
-            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda126 r3 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda126
+            org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda130 r3 = new org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda130
             r3.<init>(r9, r5, r1, r10)
             r2.sendRequest(r0, r3)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$fetchNewEmojiKeywords$146(java.lang.String):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$fetchNewEmojiKeywords$150(java.lang.String):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$fetchNewEmojiKeywords$141(String str) {
+    public /* synthetic */ void lambda$fetchNewEmojiKeywords$145(String str) {
         this.currentFetchingEmoji.remove(str);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$fetchNewEmojiKeywords$145(int i, String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$fetchNewEmojiKeywords$149(int i, String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             TLRPC$TL_emojiKeywordsDifference tLRPC$TL_emojiKeywordsDifference = (TLRPC$TL_emojiKeywordsDifference) tLObject;
             if (i == -1 || tLRPC$TL_emojiKeywordsDifference.lang_code.equals(str)) {
                 putEmojiKeywords(str2, tLRPC$TL_emojiKeywordsDifference);
             } else {
-                getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda47(this, str2));
+                getMessagesStorage().getStorageQueue().postRunnable(new MediaDataController$$ExternalSyntheticLambda48(this, str2));
             }
         } else {
-            AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda50(this, str2));
+            AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda52(this, str2));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$fetchNewEmojiKeywords$143(String str) {
+    public /* synthetic */ void lambda$fetchNewEmojiKeywords$147(String str) {
         try {
             SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("DELETE FROM emoji_keywords_info_v2 WHERE lang = ?");
             executeFast.bindString(1, str);
             executeFast.step();
             executeFast.dispose();
-            AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda48(this, str));
+            AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda53(this, str));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$fetchNewEmojiKeywords$142(String str) {
+    public /* synthetic */ void lambda$fetchNewEmojiKeywords$146(String str) {
         this.currentFetchingEmoji.remove(str);
         fetchNewEmojiKeywords(new String[]{str});
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$fetchNewEmojiKeywords$144(String str) {
+    public /* synthetic */ void lambda$fetchNewEmojiKeywords$148(String str) {
         this.currentFetchingEmoji.remove(str);
     }
 
@@ -8678,7 +8606,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putEmojiKeywords$148(TLRPC$TL_emojiKeywordsDifference tLRPC$TL_emojiKeywordsDifference, String str) {
+    public /* synthetic */ void lambda$putEmojiKeywords$152(TLRPC$TL_emojiKeywordsDifference tLRPC$TL_emojiKeywordsDifference, String str) {
         try {
             if (!tLRPC$TL_emojiKeywordsDifference.keywords.isEmpty()) {
                 SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO emoji_keywords_v2 VALUES(?, ?, ?)");
@@ -8722,14 +8650,14 @@ public class MediaDataController extends BaseController {
             executeFast3.bindLong(4, System.currentTimeMillis());
             executeFast3.step();
             executeFast3.dispose();
-            AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda53(this, str));
+            AndroidUtilities.runOnUIThread(new MediaDataController$$ExternalSyntheticLambda51(this, str));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$putEmojiKeywords$147(String str) {
+    public /* synthetic */ void lambda$putEmojiKeywords$151(String str) {
         this.currentFetchingEmoji.remove(str);
         getNotificationCenter().postNotificationName(NotificationCenter.newEmojiSuggestionsAvailable, str);
     }
@@ -8758,7 +8686,7 @@ public class MediaDataController extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:50:0x011b  */
     /* JADX WARNING: Removed duplicated region for block: B:51:0x0122  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getEmojiSuggestions$152(java.lang.String[] r15, org.telegram.messenger.MediaDataController.KeywordResultCallback r16, java.lang.String r17, boolean r18, java.util.ArrayList r19, java.util.concurrent.CountDownLatch r20) {
+    public /* synthetic */ void lambda$getEmojiSuggestions$156(java.lang.String[] r15, org.telegram.messenger.MediaDataController.KeywordResultCallback r16, java.lang.String r17, boolean r18, java.util.ArrayList r19, java.util.concurrent.CountDownLatch r20) {
         /*
             r14 = this;
             r0 = r15
@@ -8912,11 +8840,11 @@ public class MediaDataController extends BaseController {
         L_0x012a:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$getEmojiSuggestions$152(java.lang.String[], org.telegram.messenger.MediaDataController$KeywordResultCallback, java.lang.String, boolean, java.util.ArrayList, java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$getEmojiSuggestions$156(java.lang.String[], org.telegram.messenger.MediaDataController$KeywordResultCallback, java.lang.String, boolean, java.util.ArrayList, java.util.concurrent.CountDownLatch):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$getEmojiSuggestions$149(String[] strArr, KeywordResultCallback keywordResultCallback, ArrayList arrayList) {
+    public /* synthetic */ void lambda$getEmojiSuggestions$153(String[] strArr, KeywordResultCallback keywordResultCallback, ArrayList arrayList) {
         int i = 0;
         while (i < strArr.length) {
             if (this.currentFetchingEmoji.get(strArr[i]) == null) {
@@ -8929,7 +8857,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$getEmojiSuggestions$150(ArrayList arrayList, KeywordResult keywordResult, KeywordResult keywordResult2) {
+    public static /* synthetic */ int lambda$getEmojiSuggestions$154(ArrayList arrayList, KeywordResult keywordResult, KeywordResult keywordResult2) {
         int indexOf = arrayList.indexOf(keywordResult.emoji);
         int i = Integer.MAX_VALUE;
         if (indexOf < 0) {

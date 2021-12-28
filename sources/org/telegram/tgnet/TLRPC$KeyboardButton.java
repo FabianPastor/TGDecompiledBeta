@@ -6,6 +6,7 @@ public abstract class TLRPC$KeyboardButton extends TLObject {
     public byte[] data;
     public int flags;
     public String fwd_text;
+    public TLRPC$InputUser inputUser;
     public String query;
     public boolean quiz;
     public boolean request_write_access;
@@ -13,6 +14,7 @@ public abstract class TLRPC$KeyboardButton extends TLObject {
     public boolean same_peer;
     public String text;
     public String url;
+    public long user_id;
 
     public static TLRPC$KeyboardButton TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$KeyboardButton tLRPC$KeyboardButton;
@@ -32,6 +34,9 @@ public abstract class TLRPC$KeyboardButton extends TLObject {
             case -802258988:
                 tLRPC$KeyboardButton = new TLRPC$TL_inputKeyboardButtonUrlAuth();
                 break;
+            case -376962181:
+                tLRPC$KeyboardButton = new TLRPC$TL_inputKeyboardButtonUserProfile();
+                break;
             case -59151553:
                 tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonRequestGeoLocation();
                 break;
@@ -43,6 +48,9 @@ public abstract class TLRPC$KeyboardButton extends TLObject {
                 break;
             case 629866245:
                 tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonUrl();
+                break;
+            case 814112961:
+                tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonUserProfile();
                 break;
             case 901503851:
                 tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonCallback();

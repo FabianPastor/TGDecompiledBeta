@@ -100,7 +100,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r2.setAllowOverlayTitle(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             java.lang.String r4 = "AddContactTitle"
-            r5 = 2131624212(0x7f0e0114, float:1.8875597E38)
+            r5 = 2131624213(0x7f0e0115, float:1.88756E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r2.setTitle(r4)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
@@ -121,7 +121,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r2.addItemWithWidth(r3, r5, r4)
             r1.editDoneItem = r2
             java.lang.String r4 = "Done"
-            r5 = 2131625322(0x7f0e056a, float:1.8877849E38)
+            r5 = 2131625324(0x7f0e056c, float:1.8877853E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r2.setContentDescription(r4)
             org.telegram.ui.Components.ContextProgressView r2 = new org.telegram.ui.Components.ContextProgressView
@@ -216,7 +216,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r6.setImeOptions(r14)
             org.telegram.ui.Components.EditTextBoldCursor r6 = r1.firstNameField
             java.lang.String r15 = "FirstName"
-            r4 = 2131625687(0x7f0e06d7, float:1.887859E38)
+            r4 = 2131625689(0x7f0e06d9, float:1.8878593E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r15, r4)
             r6.setHint(r4)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
@@ -284,7 +284,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.Components.EditTextBoldCursor r5 = r1.lastNameField
             r5.setImeOptions(r14)
             org.telegram.ui.Components.EditTextBoldCursor r5 = r1.lastNameField
-            r7 = 2131626111(0x7f0e087f, float:1.8879449E38)
+            r7 = 2131626113(0x7f0e0881, float:1.8879453E38)
             java.lang.String r13 = "LastName"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r13, r7)
             r5.setHint(r7)
@@ -635,7 +635,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             int r0 = r0.length()
             if (r0 != 0) goto L_0x0522
             android.widget.TextView r0 = r1.countryButton
-            r2 = 2131624962(0x7f0e0402, float:1.8877119E38)
+            r2 = 2131624963(0x7f0e0403, float:1.887712E38)
             java.lang.String r3 = "ChooseCountry"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)

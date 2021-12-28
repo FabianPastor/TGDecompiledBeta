@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
+import android.text.Spannable;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
@@ -24,6 +27,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Message;
@@ -38,9 +42,10 @@ import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.spoilers.SpoilerEffect;
 import org.telegram.ui.PhotoViewer;
 
-public class ChatActionCell extends BaseCell implements DownloadController.FileDownloadProgressListener {
+public class ChatActionCell extends BaseCell implements DownloadController.FileDownloadProgressListener, NotificationCenter.NotificationCenterDelegate {
     private int TAG;
     private AvatarDrawable avatarDrawable;
     private int backgroundHeight;
@@ -68,6 +73,8 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     private URLSpan pressedLink;
     private int previousWidth;
     private RectF rect;
+    public List<SpoilerEffect> spoilers;
+    private Stack<SpoilerEffect> spoilersPool;
     private int textHeight;
     private StaticLayout textLayout;
     TextPaint textPaint;
@@ -127,6 +134,20 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.startSpoilers) {
+            setSpoilersSuppressed(false);
+        } else if (i == NotificationCenter.stopSpoilers) {
+            setSpoilersSuppressed(true);
+        }
+    }
+
+    public void setSpoilersSuppressed(boolean z) {
+        for (SpoilerEffect suppressUpdates : this.spoilers) {
+            suppressUpdates.setSuppressUpdates(z);
+        }
+    }
+
     public ChatActionCell(Context context) {
         this(context, false, (ThemeDelegate) null);
     }
@@ -134,6 +155,8 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     public ChatActionCell(Context context, boolean z, ThemeDelegate themeDelegate2) {
         super(context);
         this.currentAccount = UserConfig.selectedAccount;
+        this.spoilers = new ArrayList();
+        this.spoilersPool = new Stack<>();
         this.lineWidths = new ArrayList<>();
         this.lineHeights = new ArrayList<>();
         this.backgroundPath = new Path();
@@ -493,13 +516,17 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     private void createLayout(CharSequence charSequence, int i) {
         int dp = i - AndroidUtilities.dp(30.0f);
         this.invalidatePath = true;
-        StaticLayout staticLayout = new StaticLayout(charSequence, (TextPaint) getThemedPaint("paintChatActionText"), dp, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-        this.textLayout = staticLayout;
+        this.textLayout = new StaticLayout(charSequence, (TextPaint) getThemedPaint("paintChatActionText"), dp, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+        this.spoilersPool.addAll(this.spoilers);
+        this.spoilers.clear();
+        if (charSequence instanceof Spannable) {
+            SpoilerEffect.addSpoilers(this, this.textLayout, (Spannable) charSequence, this.spoilersPool, this.spoilers);
+        }
         int i2 = 0;
         this.textHeight = 0;
         this.textWidth = 0;
         try {
-            int lineCount = staticLayout.getLineCount();
+            int lineCount = this.textLayout.getLineCount();
             while (i2 < lineCount) {
                 try {
                     float lineWidth = this.textLayout.getLineWidth(i2);
@@ -584,7 +611,14 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                 if (this.textLayout.getPaint() != this.textPaint) {
                     buildLayout();
                 }
+                canvas.save();
+                SpoilerEffect.clipOutCanvas(canvas, this.spoilers);
                 this.textLayout.draw(canvas);
+                canvas.restore();
+                for (SpoilerEffect next : this.spoilers) {
+                    next.setColor(this.textLayout.getPaint().getColor());
+                    next.draw(canvas);
+                }
                 canvas.restore();
             }
         }

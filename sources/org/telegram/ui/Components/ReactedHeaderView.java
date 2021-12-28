@@ -15,9 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
-import org.telegram.messenger.ImageLocation;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.ConnectionsManager;
@@ -25,13 +22,11 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$Peer;
-import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.tgnet.TLRPC$TL_channelParticipantsRecent;
 import org.telegram.tgnet.TLRPC$TL_channels_channelParticipants;
 import org.telegram.tgnet.TLRPC$TL_channels_getParticipants;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messageActionChatJoinedByRequest;
-import org.telegram.tgnet.TLRPC$TL_messageReactions;
 import org.telegram.tgnet.TLRPC$TL_messages_chatFull;
 import org.telegram.tgnet.TLRPC$TL_messages_getFullChat;
 import org.telegram.tgnet.TLRPC$TL_messages_getMessageReactionsList;
@@ -151,7 +146,25 @@ public class ReactedHeaderView extends FrameLayout {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$onAttachedToWindow$0(List list) {
         this.seenUsers.addAll(list);
-        this.users.addAll(list);
+        Iterator it = list.iterator();
+        while (it.hasNext()) {
+            TLRPC$User tLRPC$User = (TLRPC$User) it.next();
+            boolean z = false;
+            int i = 0;
+            while (true) {
+                if (i >= this.users.size()) {
+                    break;
+                } else if (this.users.get(i).id == tLRPC$User.id) {
+                    z = true;
+                    break;
+                } else {
+                    i++;
+                }
+            }
+            if (!z) {
+                this.users.add(tLRPC$User);
+            }
+        }
         Consumer<List<TLRPC$User>> consumer = this.seenCallback;
         if (consumer != null) {
             consumer.accept(list);
@@ -171,7 +184,7 @@ public class ReactedHeaderView extends FrameLayout {
             for (int i = 0; i < tLRPC$TL_channels_channelParticipants.users.size(); i++) {
                 TLRPC$User tLRPC$User = tLRPC$TL_channels_channelParticipants.users.get(i);
                 MessagesController.getInstance(this.currentAccount).putUser(tLRPC$User, false);
-                if (list.contains(Long.valueOf(tLRPC$User.id))) {
+                if (!tLRPC$User.self && list.contains(Long.valueOf(tLRPC$User.id))) {
                     list2.add(tLRPC$User);
                 }
             }
@@ -191,7 +204,7 @@ public class ReactedHeaderView extends FrameLayout {
             for (int i = 0; i < tLRPC$TL_messages_chatFull.users.size(); i++) {
                 TLRPC$User tLRPC$User = tLRPC$TL_messages_chatFull.users.get(i);
                 MessagesController.getInstance(this.currentAccount).putUser(tLRPC$User, false);
-                if (list.contains(Long.valueOf(tLRPC$User.id))) {
+                if (!tLRPC$User.self && list.contains(Long.valueOf(tLRPC$User.id))) {
                     list2.add(tLRPC$User);
                 }
             }
@@ -217,52 +230,156 @@ public class ReactedHeaderView extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadReactions$6(int i, TLRPC$TL_messages_messageReactionsList tLRPC$TL_messages_messageReactionsList) {
-        String str;
-        String str2;
-        boolean z = true;
-        if (this.seenUsers.isEmpty() || this.seenUsers.size() < i) {
-            str = LocaleController.formatPluralString("ReactionsCount", i);
-        } else {
-            if (i == this.seenUsers.size()) {
-                str2 = String.valueOf(i);
-            } else {
-                str2 = i + "/" + this.seenUsers.size();
-            }
-            str = String.format(LocaleController.getPluralString("Reacted", i), new Object[]{str2});
-        }
-        this.titleView.setText(str);
-        TLRPC$TL_messageReactions tLRPC$TL_messageReactions = this.message.messageOwner.reactions;
-        if (tLRPC$TL_messageReactions != null && tLRPC$TL_messageReactions.results.size() == 1 && !tLRPC$TL_messages_messageReactionsList.reactions.isEmpty()) {
-            Iterator<TLRPC$TL_availableReaction> it = MediaDataController.getInstance(this.currentAccount).getReactionsList().iterator();
-            while (true) {
-                if (!it.hasNext()) {
-                    break;
-                }
-                TLRPC$TL_availableReaction next = it.next();
-                if (next.reaction.equals(tLRPC$TL_messages_messageReactionsList.reactions.get(0).reaction)) {
-                    this.reactView.setImage(ImageLocation.getForDocument(next.static_icon), "50_50", "webp", (Drawable) null, (Object) next);
-                    this.reactView.setVisibility(0);
-                    this.iconView.setVisibility(8);
-                    z = false;
-                    break;
-                }
-            }
-        }
-        if (z) {
-            this.iconView.setVisibility(0);
-            this.iconView.setAlpha(0.0f);
-            this.iconView.animate().alpha(1.0f).start();
-        }
-        Iterator<TLRPC$User> it2 = tLRPC$TL_messages_messageReactionsList.users.iterator();
-        while (it2.hasNext()) {
-            TLRPC$User next2 = it2.next();
-            TLRPC$Peer tLRPC$Peer = this.message.messageOwner.from_id;
-            if (!(tLRPC$Peer == null || next2.id == tLRPC$Peer.user_id)) {
-                this.users.add(next2);
-            }
-        }
-        updateView();
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x00cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x00f2  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$loadReactions$6(int r12, org.telegram.tgnet.TLRPC$TL_messages_messageReactionsList r13) {
+        /*
+            r11 = this;
+            java.util.List<org.telegram.tgnet.TLRPC$User> r0 = r11.seenUsers
+            boolean r0 = r0.isEmpty()
+            r1 = 1
+            r2 = 0
+            if (r0 != 0) goto L_0x0049
+            java.util.List<org.telegram.tgnet.TLRPC$User> r0 = r11.seenUsers
+            int r0 = r0.size()
+            if (r0 >= r12) goto L_0x0013
+            goto L_0x0049
+        L_0x0013:
+            java.util.List<org.telegram.tgnet.TLRPC$User> r0 = r11.seenUsers
+            int r0 = r0.size()
+            if (r12 != r0) goto L_0x0020
+            java.lang.String r0 = java.lang.String.valueOf(r12)
+            goto L_0x003a
+        L_0x0020:
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder
+            r0.<init>()
+            r0.append(r12)
+            java.lang.String r3 = "/"
+            r0.append(r3)
+            java.util.List<org.telegram.tgnet.TLRPC$User> r3 = r11.seenUsers
+            int r3 = r3.size()
+            r0.append(r3)
+            java.lang.String r0 = r0.toString()
+        L_0x003a:
+            java.lang.String r3 = "Reacted"
+            java.lang.String r12 = org.telegram.messenger.LocaleController.getPluralString(r3, r12)
+            java.lang.Object[] r3 = new java.lang.Object[r1]
+            r3[r2] = r0
+            java.lang.String r12 = java.lang.String.format(r12, r3)
+            goto L_0x004f
+        L_0x0049:
+            java.lang.String r0 = "ReactionsCount"
+            java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r0, r12)
+        L_0x004f:
+            android.widget.TextView r0 = r11.titleView
+            r0.setText(r12)
+            org.telegram.messenger.MessageObject r12 = r11.message
+            org.telegram.tgnet.TLRPC$Message r12 = r12.messageOwner
+            org.telegram.tgnet.TLRPC$TL_messageReactions r12 = r12.reactions
+            r0 = 1065353216(0x3var_, float:1.0)
+            r3 = 0
+            if (r12 == 0) goto L_0x00cc
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_reactionCount> r12 = r12.results
+            int r12 = r12.size()
+            if (r12 != r1) goto L_0x00cc
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_messageUserReaction> r12 = r13.reactions
+            boolean r12 = r12.isEmpty()
+            if (r12 != 0) goto L_0x00cc
+            int r12 = r11.currentAccount
+            org.telegram.messenger.MediaDataController r12 = org.telegram.messenger.MediaDataController.getInstance(r12)
+            java.util.List r12 = r12.getReactionsList()
+            java.util.Iterator r12 = r12.iterator()
+        L_0x007d:
+            boolean r4 = r12.hasNext()
+            if (r4 == 0) goto L_0x00cc
+            java.lang.Object r4 = r12.next()
+            r10 = r4
+            org.telegram.tgnet.TLRPC$TL_availableReaction r10 = (org.telegram.tgnet.TLRPC$TL_availableReaction) r10
+            java.lang.String r4 = r10.reaction
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_messageUserReaction> r5 = r13.reactions
+            java.lang.Object r5 = r5.get(r2)
+            org.telegram.tgnet.TLRPC$TL_messageUserReaction r5 = (org.telegram.tgnet.TLRPC$TL_messageUserReaction) r5
+            java.lang.String r5 = r5.reaction
+            boolean r4 = r4.equals(r5)
+            if (r4 == 0) goto L_0x007d
+            org.telegram.ui.Components.BackupImageView r5 = r11.reactView
+            org.telegram.tgnet.TLRPC$Document r12 = r10.static_icon
+            org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForDocument(r12)
+            r9 = 0
+            java.lang.String r7 = "50_50"
+            java.lang.String r8 = "webp"
+            r5.setImage((org.telegram.messenger.ImageLocation) r6, (java.lang.String) r7, (java.lang.String) r8, (android.graphics.drawable.Drawable) r9, (java.lang.Object) r10)
+            org.telegram.ui.Components.BackupImageView r12 = r11.reactView
+            r12.setVisibility(r2)
+            org.telegram.ui.Components.BackupImageView r12 = r11.reactView
+            r12.setAlpha(r3)
+            org.telegram.ui.Components.BackupImageView r12 = r11.reactView
+            android.view.ViewPropertyAnimator r12 = r12.animate()
+            android.view.ViewPropertyAnimator r12 = r12.alpha(r0)
+            r12.start()
+            android.widget.ImageView r12 = r11.iconView
+            r4 = 8
+            r12.setVisibility(r4)
+            r12 = 0
+            goto L_0x00cd
+        L_0x00cc:
+            r12 = 1
+        L_0x00cd:
+            if (r12 == 0) goto L_0x00e6
+            android.widget.ImageView r12 = r11.iconView
+            r12.setVisibility(r2)
+            android.widget.ImageView r12 = r11.iconView
+            r12.setAlpha(r3)
+            android.widget.ImageView r12 = r11.iconView
+            android.view.ViewPropertyAnimator r12 = r12.animate()
+            android.view.ViewPropertyAnimator r12 = r12.alpha(r0)
+            r12.start()
+        L_0x00e6:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r12 = r13.users
+            java.util.Iterator r12 = r12.iterator()
+        L_0x00ec:
+            boolean r13 = r12.hasNext()
+            if (r13 == 0) goto L_0x012f
+            java.lang.Object r13 = r12.next()
+            org.telegram.tgnet.TLRPC$User r13 = (org.telegram.tgnet.TLRPC$User) r13
+            org.telegram.messenger.MessageObject r0 = r11.message
+            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r0 = r0.from_id
+            if (r0 == 0) goto L_0x00ec
+            long r3 = r13.id
+            long r5 = r0.user_id
+            int r0 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r0 == 0) goto L_0x00ec
+            r0 = 0
+        L_0x0109:
+            java.util.List<org.telegram.tgnet.TLRPC$User> r3 = r11.users
+            int r3 = r3.size()
+            if (r0 >= r3) goto L_0x0126
+            java.util.List<org.telegram.tgnet.TLRPC$User> r3 = r11.users
+            java.lang.Object r3 = r3.get(r0)
+            org.telegram.tgnet.TLRPC$User r3 = (org.telegram.tgnet.TLRPC$User) r3
+            long r3 = r3.id
+            long r5 = r13.id
+            int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r7 != 0) goto L_0x0123
+            r0 = 1
+            goto L_0x0127
+        L_0x0123:
+            int r0 = r0 + 1
+            goto L_0x0109
+        L_0x0126:
+            r0 = 0
+        L_0x0127:
+            if (r0 != 0) goto L_0x00ec
+            java.util.List<org.telegram.tgnet.TLRPC$User> r0 = r11.users
+            r0.add(r13)
+            goto L_0x00ec
+        L_0x012f:
+            r11.updateView()
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ReactedHeaderView.lambda$loadReactions$6(int, org.telegram.tgnet.TLRPC$TL_messages_messageReactionsList):void");
     }
 
     public List<TLRPC$User> getSeenUsers() {
