@@ -32495,8 +32495,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createMenu$132(int i, ArrayList arrayList, String[] strArr, String str, CharSequence charSequence, View view) {
-        if (this.selectedObject != null && i < arrayList.size()) {
-            TranslateAlert.showAlert(getParentActivity(), this, strArr[0], str, charSequence, this.currentChat.noforwards);
+        if (this.selectedObject != null && i < arrayList.size() && getParentActivity() != null) {
+            TLRPC$Chat tLRPC$Chat = this.currentChat;
+            TranslateAlert.showAlert(getParentActivity(), this, strArr[0], str, charSequence, tLRPC$Chat != null && tLRPC$Chat.noforwards);
             this.scrimView = null;
             this.contentView.invalidate();
             this.chatListView.invalidate();
@@ -32517,8 +32518,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createMenu$134(int i, ArrayList arrayList, String str, CharSequence charSequence, View view) {
-        if (this.selectedObject != null && i < arrayList.size()) {
-            TranslateAlert.showAlert(getParentActivity(), this, "und", str, charSequence, this.currentChat.noforwards);
+        if (this.selectedObject != null && i < arrayList.size() && getParentActivity() != null) {
+            TLRPC$Chat tLRPC$Chat = this.currentChat;
+            TranslateAlert.showAlert(getParentActivity(), this, "und", str, charSequence, tLRPC$Chat != null && tLRPC$Chat.noforwards);
             this.scrimView = null;
             this.contentView.invalidate();
             this.chatListView.invalidate();
@@ -44622,8 +44624,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r4 = r1
             r4.<init>(r5, r6, r7, r8, r9, r10, r11)
             r13.add(r1)
+            org.telegram.ui.ActionBar.ThemeDescription r1 = new org.telegram.ui.ActionBar.ThemeDescription
+            java.lang.String r21 = "chat_inReactionButtonTextSelected"
+            r14 = r1
+            r14.<init>(r15, r16, r17, r18, r19, r20, r21)
+            r13.add(r1)
+            org.telegram.ui.ActionBar.ThemeDescription r1 = new org.telegram.ui.ActionBar.ThemeDescription
+            java.lang.String r11 = "chat_inReactionButtonTextSelected"
+            r4 = r1
+            r4.<init>(r5, r6, r7, r8, r9, r10, r11)
+            r13.add(r1)
             org.telegram.ui.Components.ChatActivityEnterView r1 = r0.chatActivityEnterView
-            if (r1 == 0) goto L_0x32e9
+            if (r1 == 0) goto L_0x32ff
             org.telegram.ui.ActionBar.ThemeDescription r1 = new org.telegram.ui.ActionBar.ThemeDescription
             org.telegram.ui.Components.ChatActivityEnterView r2 = r0.chatActivityEnterView
             org.telegram.ui.Components.BotCommandsMenuContainer r2 = r2.botCommandsMenuContainer
@@ -44664,21 +44676,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r18 = r2
             r14.<init>((android.view.View) r15, (int) r16, (java.lang.Class[]) r17, (java.lang.String[]) r18, (android.graphics.Paint[]) r19, (android.graphics.drawable.Drawable[]) r20, (org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate) r21, (java.lang.String) r22)
             r13.add(r1)
-        L_0x32e9:
+        L_0x32ff:
             org.telegram.ui.Delegates.ChatActivityMemberRequestsDelegate r1 = r0.pendingRequestsDelegate
-            if (r1 == 0) goto L_0x32f0
+            if (r1 == 0) goto L_0x3306
             r1.fillThemeDescriptions(r13)
-        L_0x32f0:
+        L_0x3306:
             java.util.Iterator r1 = r13.iterator()
-        L_0x32f4:
+        L_0x330a:
             boolean r2 = r1.hasNext()
-            if (r2 == 0) goto L_0x3305
+            if (r2 == 0) goto L_0x331b
             java.lang.Object r2 = r1.next()
             org.telegram.ui.ActionBar.ThemeDescription r2 = (org.telegram.ui.ActionBar.ThemeDescription) r2
             org.telegram.ui.ChatActivity$ThemeDelegate r3 = r0.themeDelegate
             r2.resourcesProvider = r3
-            goto L_0x32f4
-        L_0x3305:
+            goto L_0x330a
+        L_0x331b:
             return r13
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.getThemeDescriptions():java.util.ArrayList");

@@ -2757,7 +2757,7 @@ public class NotificationsController extends BaseController {
         if (android.text.TextUtils.isEmpty(r0.messageOwner.message) != false) goto L_0x0var_;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:678:0x0var_, code lost:
-        return r0.messageOwner.message;
+        return replaceSpoilers(r23);
      */
     /* JADX WARNING: Code restructure failed: missing block: B:680:0x0f3d, code lost:
         return org.telegram.messenger.LocaleController.getString(r13, NUM);
@@ -2776,7 +2776,7 @@ public class NotificationsController extends BaseController {
         if (android.text.TextUtils.isEmpty(r2.message) != false) goto L_0x0var_;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:688:0x0var_, code lost:
-        return "🖼 " + r0.messageOwner.message;
+        return "🖼 " + replaceSpoilers(r23);
      */
     /* JADX WARNING: Code restructure failed: missing block: B:690:0x0f6f, code lost:
         if (r0.messageOwner.media.ttl_seconds == 0) goto L_0x0f7b;
@@ -2797,7 +2797,7 @@ public class NotificationsController extends BaseController {
         if (android.text.TextUtils.isEmpty(r0.messageOwner.message) != false) goto L_0x0faf;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:702:0x0fae, code lost:
-        return "📹 " + r0.messageOwner.message;
+        return "📹 " + replaceSpoilers(r23);
      */
     /* JADX WARNING: Code restructure failed: missing block: B:704:0x0fb5, code lost:
         if (r0.messageOwner.media.ttl_seconds == 0) goto L_0x0fc1;
@@ -2854,7 +2854,7 @@ public class NotificationsController extends BaseController {
         return org.telegram.messenger.LocaleController.getString("Poll", NUM);
      */
     /* JADX WARNING: Code restructure failed: missing block: B:738:0x103f, code lost:
-        if ((r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeo) != false) goto L_0x110d;
+        if ((r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeo) != false) goto L_0x110b;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:740:0x1043, code lost:
         if ((r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaVenue) == false) goto L_0x1047;
@@ -2884,7 +2884,7 @@ public class NotificationsController extends BaseController {
         if (android.text.TextUtils.isEmpty(r0.messageOwner.message) != false) goto L_0x1090;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:758:0x108f, code lost:
-        return "🎬 " + r0.messageOwner.message;
+        return "🎬 " + replaceSpoilers(r23);
      */
     /* JADX WARNING: Code restructure failed: missing block: B:760:0x1099, code lost:
         return org.telegram.messenger.LocaleController.getString("AttachGif", NUM);
@@ -2896,7 +2896,7 @@ public class NotificationsController extends BaseController {
         if (android.text.TextUtils.isEmpty(r0.messageOwner.message) != false) goto L_0x10be;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:766:0x10bd, code lost:
-        return "📎 " + r0.messageOwner.message;
+        return "📎 " + replaceSpoilers(r23);
      */
     /* JADX WARNING: Code restructure failed: missing block: B:768:0x10c7, code lost:
         return org.telegram.messenger.LocaleController.getString("AttachDocument", NUM);
@@ -2914,15 +2914,15 @@ public class NotificationsController extends BaseController {
         return org.telegram.messenger.LocaleController.getString("AttachSticker", NUM);
      */
     /* JADX WARNING: Code restructure failed: missing block: B:776:0x10fc, code lost:
-        if (android.text.TextUtils.isEmpty(r0.messageText) != false) goto L_0x1105;
+        if (android.text.TextUtils.isEmpty(r0.messageText) != false) goto L_0x1103;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:778:0x1104, code lost:
-        return r0.messageText.toString();
+    /* JADX WARNING: Code restructure failed: missing block: B:778:0x1102, code lost:
+        return replaceSpoilers(r23);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:780:0x110c, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:780:0x110a, code lost:
         return org.telegram.messenger.LocaleController.getString(r1, NUM);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:782:0x1116, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:782:0x1114, code lost:
         return org.telegram.messenger.LocaleController.getString("AttachLocation", NUM);
      */
     /* JADX WARNING: Code restructure failed: missing block: B:796:?, code lost:
@@ -2943,10 +2943,10 @@ public class NotificationsController extends BaseController {
             r22 = this;
             r0 = r23
             boolean r1 = org.telegram.messenger.AndroidUtilities.needShowPasscode()
-            if (r1 != 0) goto L_0x1125
+            if (r1 != 0) goto L_0x1123
             boolean r1 = org.telegram.messenger.SharedConfig.isWaitingForPasscodeEnter
             if (r1 == 0) goto L_0x000e
-            goto L_0x1125
+            goto L_0x1123
         L_0x000e:
             org.telegram.tgnet.TLRPC$Message r1 = r0.messageOwner
             long r2 = r1.dialog_id
@@ -3216,7 +3216,7 @@ public class NotificationsController extends BaseController {
         L_0x0210:
             r7 = 0
         L_0x0211:
-            if (r12 == 0) goto L_0x1117
+            if (r12 == 0) goto L_0x1115
             r14 = 0
             int r12 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
             if (r12 != 0) goto L_0x0227
@@ -3231,16 +3231,16 @@ public class NotificationsController extends BaseController {
             r10 = 1
         L_0x0228:
             int r12 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
-            if (r12 == 0) goto L_0x1117
+            if (r12 == 0) goto L_0x1115
             if (r7 != 0) goto L_0x0236
             java.lang.String r4 = "EnablePreviewGroup"
             boolean r4 = r11.getBoolean(r4, r10)
             if (r4 != 0) goto L_0x0240
         L_0x0236:
-            if (r7 == 0) goto L_0x1117
+            if (r7 == 0) goto L_0x1115
             java.lang.String r4 = "EnablePreviewChannel"
             boolean r4 = r11.getBoolean(r4, r10)
-            if (r4 == 0) goto L_0x1117
+            if (r4 == 0) goto L_0x1115
         L_0x0240:
             org.telegram.tgnet.TLRPC$Message r4 = r0.messageOwner
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageService
@@ -4937,8 +4937,7 @@ public class NotificationsController extends BaseController {
             java.lang.String r1 = r1.message
             boolean r1 = android.text.TextUtils.isEmpty(r1)
             if (r1 != 0) goto L_0x0var_
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-            java.lang.String r0 = r0.message
+            java.lang.String r0 = r22.replaceSpoilers(r23)
             return r0
         L_0x0var_:
             r1 = r13
@@ -4960,8 +4959,7 @@ public class NotificationsController extends BaseController {
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             r1.append(r12)
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-            java.lang.String r0 = r0.message
+            java.lang.String r0 = r22.replaceSpoilers(r23)
             r1.append(r0)
             java.lang.String r0 = r1.toString()
             return r0
@@ -4992,8 +4990,7 @@ public class NotificationsController extends BaseController {
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             r1.append(r11)
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-            java.lang.String r0 = r0.message
+            java.lang.String r0 = r22.replaceSpoilers(r23)
             r1.append(r0)
             java.lang.String r0 = r1.toString()
             return r0
@@ -5066,10 +5063,10 @@ public class NotificationsController extends BaseController {
             return r0
         L_0x103d:
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeo
-            if (r3 != 0) goto L_0x110d
+            if (r3 != 0) goto L_0x110b
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaVenue
             if (r3 == 0) goto L_0x1047
-            goto L_0x110d
+            goto L_0x110b
         L_0x1047:
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeoLive
             if (r3 == 0) goto L_0x1055
@@ -5098,8 +5095,7 @@ public class NotificationsController extends BaseController {
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             r1.append(r7)
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-            java.lang.String r0 = r0.message
+            java.lang.String r0 = r22.replaceSpoilers(r23)
             r1.append(r0)
             java.lang.String r0 = r1.toString()
             return r0
@@ -5119,8 +5115,7 @@ public class NotificationsController extends BaseController {
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             r1.append(r10)
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-            java.lang.String r0 = r0.message
+            java.lang.String r0 = r22.replaceSpoilers(r23)
             r1.append(r0)
             java.lang.String r0 = r1.toString()
             return r0
@@ -5151,29 +5146,28 @@ public class NotificationsController extends BaseController {
         L_0x10f6:
             java.lang.CharSequence r2 = r0.messageText
             boolean r2 = android.text.TextUtils.isEmpty(r2)
-            if (r2 != 0) goto L_0x1105
-            java.lang.CharSequence r0 = r0.messageText
-            java.lang.String r0 = r0.toString()
+            if (r2 != 0) goto L_0x1103
+            java.lang.String r0 = r22.replaceSpoilers(r23)
             return r0
-        L_0x1105:
+        L_0x1103:
             r0 = 2131626339(0x7f0e0963, float:1.8879911E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
-        L_0x110d:
+        L_0x110b:
             r0 = 2131624417(0x7f0e01e1, float:1.8876013E38)
             java.lang.String r1 = "AttachLocation"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
-        L_0x1117:
+        L_0x1115:
             r1 = r13
-            if (r25 == 0) goto L_0x111d
+            if (r25 == 0) goto L_0x111b
             r0 = 0
             r25[r0] = r0
-        L_0x111d:
+        L_0x111b:
             r0 = 2131626339(0x7f0e0963, float:1.8879911E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
-        L_0x1125:
+        L_0x1123:
             r0 = 2131626667(0x7f0e0aab, float:1.8880577E38)
             java.lang.String r1 = "NotificationHiddenMessage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)

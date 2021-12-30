@@ -176,22 +176,16 @@ public class EmojiThemes {
         return emojiThemes;
     }
 
-    public static EmojiThemes createHome() {
+    public static EmojiThemes createHomeQrTheme() {
         EmojiThemes emojiThemes = new EmojiThemes();
         emojiThemes.emoji = "🏠";
         ThemeItem themeItem = new ThemeItem();
-        Theme.ThemeInfo defaultThemeInfo = getDefaultThemeInfo(false);
-        themeItem.themeInfo = defaultThemeInfo;
-        if (defaultThemeInfo.getKey().equals("Blue")) {
-            themeItem.accentId = 99;
-        }
+        themeItem.themeInfo = Theme.getTheme("Blue");
+        themeItem.accentId = 99;
         emojiThemes.items.add(themeItem);
         ThemeItem themeItem2 = new ThemeItem();
-        Theme.ThemeInfo defaultThemeInfo2 = getDefaultThemeInfo(true);
-        themeItem2.themeInfo = defaultThemeInfo2;
-        if (defaultThemeInfo2.getKey().equals("Night")) {
-            themeItem2.accentId = 0;
-        }
+        themeItem2.themeInfo = Theme.getTheme("Dark Blue");
+        themeItem2.accentId = 0;
         emojiThemes.items.add(themeItem2);
         return emojiThemes;
     }

@@ -436,7 +436,7 @@ public class ReactionsContainerLayout extends FrameLayout {
         public TLRPC$TL_availableReaction currentReaction;
         Runnable playRunnable = new Runnable() {
             public void run() {
-                if (ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation() != null) {
+                if (ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation() != null && !ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation().isRunning()) {
                     ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation().start();
                 }
             }
@@ -459,12 +459,13 @@ public class ReactionsContainerLayout extends FrameLayout {
         public void play(int i) {
             AndroidUtilities.cancelRunOnUIThread(this.playRunnable);
             if (this.backupImageView.getImageReceiver().getLottieAnimation() != null) {
-                this.backupImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(0);
+                this.backupImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(0, false);
                 if (i == 0) {
                     this.playRunnable.run();
                     return;
                 }
                 this.backupImageView.getImageReceiver().getLottieAnimation().stop();
+                this.backupImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(0, false);
                 AndroidUtilities.runOnUIThread(this.playRunnable, (long) i);
             }
         }
