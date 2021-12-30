@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -24,7 +23,6 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SimpleThemeDescription;
 
 public class ReactionsDoubleTapManageActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-    private List<String> chatReactions = Collections.emptyList();
     private LinearLayout contentView;
     int infoRow;
     private RecyclerView.Adapter listAdapter;
@@ -163,7 +161,7 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
 
     /* access modifiers changed from: private */
     public List<TLRPC$TL_availableReaction> getAvailableReactions() {
-        return getMediaDataController().getReactionsList();
+        return getMediaDataController().getEnabledReactionsList();
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {

@@ -52,19 +52,16 @@ public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public int currentAccount;
     private boolean finishing;
-    /* access modifiers changed from: protected */
-    public boolean fragmentBeginToShow;
+    protected boolean fragmentBeginToShow;
     /* access modifiers changed from: protected */
     public View fragmentView;
     protected boolean hasOwnBackground;
-    /* access modifiers changed from: protected */
-    public boolean inBubbleMode;
+    protected boolean inBubbleMode;
     protected boolean inMenuMode;
     /* access modifiers changed from: protected */
     public boolean inPreviewMode;
     private boolean isFinished;
-    /* access modifiers changed from: protected */
-    public boolean isPaused;
+    protected boolean isPaused;
     protected Dialog parentDialog;
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
