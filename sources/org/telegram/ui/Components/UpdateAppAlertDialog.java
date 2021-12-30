@@ -199,7 +199,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             org.telegram.tgnet.TLRPC$Document r8 = r8.sticker
             org.telegram.messenger.ImageLocation r13 = org.telegram.messenger.ImageLocation.getForDocument(r8)
             r16 = 0
-            java.lang.String r14 = "160_160"
+            java.lang.String r14 = "250_250"
             java.lang.String r17 = "update"
             r12 = r6
             r12.setImage((org.telegram.messenger.ImageLocation) r13, (java.lang.String) r14, (android.graphics.drawable.Drawable) r15, (int) r16, (java.lang.Object) r17)
@@ -210,7 +210,7 @@ public class UpdateAppAlertDialog extends BottomSheet {
             org.telegram.messenger.ImageLocation r13 = org.telegram.messenger.ImageLocation.getForDocument(r10)
             r16 = 0
             r17 = 0
-            java.lang.String r14 = "160_160"
+            java.lang.String r14 = "250_250"
             java.lang.String r18 = "update"
             r12 = r6
             r15 = r8

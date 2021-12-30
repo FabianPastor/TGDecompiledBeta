@@ -90,6 +90,8 @@ public class TranslateAlert extends Dialog {
     private boolean maybeScrolling = false;
     /* access modifiers changed from: private */
     public long minFetchingDuration = 1000;
+    /* access modifiers changed from: private */
+    public boolean noforwards;
     private ValueAnimator openAnimationToAnimator = null;
     /* access modifiers changed from: private */
     public boolean openAnimationToAnimatorPriority = false;
@@ -233,288 +235,290 @@ public class TranslateAlert extends Dialog {
 
     /* JADX WARNING: Illegal instructions before constructor call */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public TranslateAlert(org.telegram.ui.ActionBar.BaseFragment r32, android.content.Context r33, java.lang.String r34, java.lang.String r35, java.lang.CharSequence r36) {
+    public TranslateAlert(org.telegram.ui.ActionBar.BaseFragment r32, android.content.Context r33, java.lang.String r34, java.lang.String r35, java.lang.CharSequence r36, boolean r37) {
         /*
             r31 = this;
             r0 = r31
             r1 = r33
             r2 = r34
             r3 = r35
-            r4 = 2131689509(0x7f0var_, float:1.9008035E38)
-            r0.<init>(r1, r4)
-            r4 = 0
-            r0.blockIndex = r4
+            r4 = r37
+            r5 = 2131689509(0x7f0var_, float:1.9008035E38)
+            r0.<init>(r1, r5)
             r5 = 0
-            r0.containerOpenAnimationT = r5
-            r0.openAnimationToAnimatorPriority = r4
+            r0.blockIndex = r5
             r6 = 0
-            r0.openAnimationToAnimator = r6
-            r7 = 1
-            r0.allowScroll = r7
-            r0.scrollerToBottom = r6
-            r0.fromScrollY = r5
-            android.graphics.Rect r6 = new android.graphics.Rect
-            r6.<init>()
-            r0.containerRect = r6
-            android.graphics.Rect r6 = new android.graphics.Rect
-            r6.<init>()
-            r0.textRect = r6
-            android.graphics.Rect r6 = new android.graphics.Rect
-            r6.<init>()
-            r0.translateMoreRect = r6
-            android.graphics.Rect r6 = new android.graphics.Rect
-            r6.<init>()
-            r0.buttonRect = r6
-            android.graphics.Rect r6 = new android.graphics.Rect
-            r6.<init>()
-            r0.backRect = r6
-            android.graphics.Rect r6 = new android.graphics.Rect
-            r6.<init>()
-            r0.scrollRect = r6
-            r0.fromY = r5
-            r0.pressedOutside = r4
-            r0.maybeScrolling = r4
-            r0.scrolling = r4
-            r0.fromScrollRect = r4
-            r0.fromTranslateMoreView = r4
-            r0.fromScrollViewY = r5
-            r0.openingT = r5
-            org.telegram.ui.Components.TranslateAlert$9 r6 = new org.telegram.ui.Components.TranslateAlert$9
-            r8 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            r6.<init>(r8)
-            r0.backDrawable = r6
-            r0.dismissed = r4
-            r0.openingAnimatorPriority = r4
-            r0.loading = r4
-            r0.loaded = r4
-            r6 = 6
-            java.lang.String[] r6 = new java.lang.String[r6]
-            java.lang.String r8 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"
-            r6[r4] = r8
-            java.lang.String r8 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
-            r6[r7] = r8
-            r8 = 2
-            java.lang.String r9 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:94.0) Gecko/20100101 Firefox/94.0"
-            r6[r8] = r9
-            java.lang.String r8 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0"
-            r9 = 3
-            r6[r9] = r8
-            java.lang.String r8 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36"
-            r10 = 4
-            r6[r10] = r8
-            java.lang.String r8 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.55 Safari/537.36"
-            r11 = 5
-            r6[r11] = r8
-            r0.userAgents = r6
-            r12 = 1000(0x3e8, double:4.94E-321)
-            r0.minFetchingDuration = r12
-            r6 = r32
-            r0.fragment = r6
-            if (r2 == 0) goto L_0x00a1
-            java.lang.String r6 = "und"
-            boolean r6 = r2.equals(r6)
-            if (r6 == 0) goto L_0x00a1
-            java.lang.String r6 = "auto"
-            goto L_0x00a2
-        L_0x00a1:
-            r6 = r2
-        L_0x00a2:
-            r0.fromLanguage = r6
+            r0.containerOpenAnimationT = r6
+            r0.openAnimationToAnimatorPriority = r5
+            r7 = 0
+            r0.openAnimationToAnimator = r7
+            r8 = 1
+            r0.allowScroll = r8
+            r0.scrollerToBottom = r7
+            r0.fromScrollY = r6
+            android.graphics.Rect r7 = new android.graphics.Rect
+            r7.<init>()
+            r0.containerRect = r7
+            android.graphics.Rect r7 = new android.graphics.Rect
+            r7.<init>()
+            r0.textRect = r7
+            android.graphics.Rect r7 = new android.graphics.Rect
+            r7.<init>()
+            r0.translateMoreRect = r7
+            android.graphics.Rect r7 = new android.graphics.Rect
+            r7.<init>()
+            r0.buttonRect = r7
+            android.graphics.Rect r7 = new android.graphics.Rect
+            r7.<init>()
+            r0.backRect = r7
+            android.graphics.Rect r7 = new android.graphics.Rect
+            r7.<init>()
+            r0.scrollRect = r7
+            r0.fromY = r6
+            r0.pressedOutside = r5
+            r0.maybeScrolling = r5
+            r0.scrolling = r5
+            r0.fromScrollRect = r5
+            r0.fromTranslateMoreView = r5
+            r0.fromScrollViewY = r6
+            r0.openingT = r6
+            org.telegram.ui.Components.TranslateAlert$9 r7 = new org.telegram.ui.Components.TranslateAlert$9
+            r9 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+            r7.<init>(r9)
+            r0.backDrawable = r7
+            r0.dismissed = r5
+            r0.openingAnimatorPriority = r5
+            r0.loading = r5
+            r0.loaded = r5
+            r7 = 6
+            java.lang.String[] r7 = new java.lang.String[r7]
+            java.lang.String r9 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36"
+            r7[r5] = r9
+            java.lang.String r9 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
+            r7[r8] = r9
+            r9 = 2
+            java.lang.String r10 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:94.0) Gecko/20100101 Firefox/94.0"
+            r7[r9] = r10
+            java.lang.String r9 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0"
+            r10 = 3
+            r7[r10] = r9
+            java.lang.String r9 = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36"
+            r11 = 4
+            r7[r11] = r9
+            java.lang.String r9 = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.55 Safari/537.36"
+            r12 = 5
+            r7[r12] = r9
+            r0.userAgents = r7
+            r13 = 1000(0x3e8, double:4.94E-321)
+            r0.minFetchingDuration = r13
+            r0.noforwards = r4
+            r7 = r32
+            r0.fragment = r7
+            if (r2 == 0) goto L_0x00a5
+            java.lang.String r7 = "und"
+            boolean r7 = r2.equals(r7)
+            if (r7 == 0) goto L_0x00a5
+            java.lang.String r7 = "auto"
+            goto L_0x00a6
+        L_0x00a5:
+            r7 = r2
+        L_0x00a6:
+            r0.fromLanguage = r7
             r0.toLanguage = r3
-            r6 = 1024(0x400, float:1.435E-42)
-            r8 = r36
-            java.util.ArrayList r6 = r0.cutInBlocks(r8, r6)
-            r0.textBlocks = r6
-            int r6 = android.os.Build.VERSION.SDK_INT
-            r8 = 21
-            r12 = 30
-            if (r6 < r12) goto L_0x00c3
-            android.view.Window r13 = r31.getWindow()
-            r14 = -2147483392(0xfffffffvar_, float:-3.59E-43)
-            r13.addFlags(r14)
-            goto L_0x00cf
-        L_0x00c3:
-            if (r6 < r8) goto L_0x00cf
-            android.view.Window r13 = r31.getWindow()
-            r14 = -2147417856(0xfffffffvar_, float:-9.2194E-41)
-            r13.addFlags(r14)
-        L_0x00cf:
-            android.widget.FrameLayout r13 = new android.widget.FrameLayout
-            r13.<init>(r1)
-            r0.contentView = r13
-            android.graphics.drawable.ColorDrawable r14 = r0.backDrawable
-            r13.setBackground(r14)
-            android.widget.FrameLayout r13 = r0.contentView
-            r13.setClipChildren(r4)
-            android.widget.FrameLayout r13 = r0.contentView
-            r13.setClipToPadding(r4)
-            if (r6 < r8) goto L_0x00fd
-            android.widget.FrameLayout r8 = r0.contentView
-            r8.setFitsSystemWindows(r7)
-            if (r6 < r12) goto L_0x00f6
-            android.widget.FrameLayout r8 = r0.contentView
-            r12 = 1792(0x700, float:2.511E-42)
-            r8.setSystemUiVisibility(r12)
-            goto L_0x00fd
-        L_0x00f6:
-            android.widget.FrameLayout r8 = r0.contentView
-            r12 = 1280(0x500, float:1.794E-42)
-            r8.setSystemUiVisibility(r12)
-        L_0x00fd:
-            android.graphics.Paint r8 = new android.graphics.Paint
-            r8.<init>()
-            java.lang.String r12 = "dialogBackground"
-            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r8.setColor(r12)
-            r12 = 1073741824(0x40000000, float:2.0)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            float r13 = (float) r13
-            r14 = -1087834685(0xffffffffbvar_f5c3, float:-0.66)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            r7 = 1024(0x400, float:1.435E-42)
+            r9 = r36
+            java.util.ArrayList r7 = r0.cutInBlocks(r9, r7)
+            r0.textBlocks = r7
+            int r7 = android.os.Build.VERSION.SDK_INT
+            r9 = 21
+            r13 = 30
+            if (r7 < r13) goto L_0x00c7
+            android.view.Window r14 = r31.getWindow()
+            r15 = -2147483392(0xfffffffvar_, float:-3.59E-43)
+            r14.addFlags(r15)
+            goto L_0x00d3
+        L_0x00c7:
+            if (r7 < r9) goto L_0x00d3
+            android.view.Window r14 = r31.getWindow()
+            r15 = -2147417856(0xfffffffvar_, float:-9.2194E-41)
+            r14.addFlags(r15)
+        L_0x00d3:
+            android.widget.FrameLayout r14 = new android.widget.FrameLayout
+            r14.<init>(r1)
+            r0.contentView = r14
+            android.graphics.drawable.ColorDrawable r15 = r0.backDrawable
+            r14.setBackground(r15)
+            android.widget.FrameLayout r14 = r0.contentView
+            r14.setClipChildren(r5)
+            android.widget.FrameLayout r14 = r0.contentView
+            r14.setClipToPadding(r5)
+            if (r7 < r9) goto L_0x0101
+            android.widget.FrameLayout r9 = r0.contentView
+            r9.setFitsSystemWindows(r8)
+            if (r7 < r13) goto L_0x00fa
+            android.widget.FrameLayout r9 = r0.contentView
+            r13 = 1792(0x700, float:2.511E-42)
+            r9.setSystemUiVisibility(r13)
+            goto L_0x0101
+        L_0x00fa:
+            android.widget.FrameLayout r9 = r0.contentView
+            r13 = 1280(0x500, float:1.794E-42)
+            r9.setSystemUiVisibility(r13)
+        L_0x0101:
+            android.graphics.Paint r9 = new android.graphics.Paint
+            r9.<init>()
+            java.lang.String r13 = "dialogBackground"
+            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r13)
+            r9.setColor(r13)
+            r13 = 1073741824(0x40000000, float:2.0)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r13)
             float r14 = (float) r14
-            r15 = 503316480(0x1e000000, float:6.7762636E-21)
-            r8.setShadowLayer(r13, r5, r14, r15)
-            org.telegram.ui.Components.TranslateAlert$2 r13 = new org.telegram.ui.Components.TranslateAlert$2
-            r13.<init>(r1, r8)
-            r0.container = r13
-            r13.setWillNotDraw(r4)
-            android.widget.FrameLayout r8 = new android.widget.FrameLayout
-            r8.<init>(r1)
-            r0.header = r8
-            android.widget.TextView r8 = new android.widget.TextView
-            r8.<init>(r1)
-            r0.titleView = r8
-            boolean r13 = org.telegram.messenger.LocaleController.isRTL
-            if (r13 == 0) goto L_0x0141
-            int r13 = r8.getWidth()
-            float r13 = (float) r13
-            goto L_0x0142
-        L_0x0141:
-            r13 = 0
-        L_0x0142:
-            r8.setPivotX(r13)
-            android.widget.TextView r8 = r0.titleView
-            r8.setPivotY(r5)
-            android.widget.TextView r8 = r0.titleView
-            r8.setLines(r7)
-            android.widget.TextView r8 = r0.titleView
-            r13 = 2131624539(0x7f0e025b, float:1.887626E38)
+            r15 = -1087834685(0xffffffffbvar_f5c3, float:-0.66)
+            int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            float r15 = (float) r15
+            r11 = 503316480(0x1e000000, float:6.7762636E-21)
+            r9.setShadowLayer(r14, r6, r15, r11)
+            org.telegram.ui.Components.TranslateAlert$2 r11 = new org.telegram.ui.Components.TranslateAlert$2
+            r11.<init>(r1, r9)
+            r0.container = r11
+            r11.setWillNotDraw(r5)
+            android.widget.FrameLayout r9 = new android.widget.FrameLayout
+            r9.<init>(r1)
+            r0.header = r9
+            android.widget.TextView r9 = new android.widget.TextView
+            r9.<init>(r1)
+            r0.titleView = r9
+            boolean r11 = org.telegram.messenger.LocaleController.isRTL
+            if (r11 == 0) goto L_0x0145
+            int r11 = r9.getWidth()
+            float r11 = (float) r11
+            goto L_0x0146
+        L_0x0145:
+            r11 = 0
+        L_0x0146:
+            r9.setPivotX(r11)
+            android.widget.TextView r9 = r0.titleView
+            r9.setPivotY(r6)
+            android.widget.TextView r9 = r0.titleView
+            r9.setLines(r8)
+            android.widget.TextView r9 = r0.titleView
+            r11 = 2131624539(0x7f0e025b, float:1.887626E38)
             java.lang.String r14 = "AutomaticTranslation"
-            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
-            r8.setText(r13)
-            android.widget.TextView r8 = r0.titleView
-            boolean r13 = org.telegram.messenger.LocaleController.isRTL
-            if (r13 == 0) goto L_0x0165
-            r13 = 5
-            goto L_0x0166
-        L_0x0165:
-            r13 = 3
-        L_0x0166:
-            r8.setGravity(r13)
-            android.widget.TextView r8 = r0.titleView
-            java.lang.String r13 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r14 = org.telegram.messenger.AndroidUtilities.getTypeface(r13)
-            r8.setTypeface(r14)
-            android.widget.TextView r8 = r0.titleView
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r14, r11)
+            r9.setText(r11)
+            android.widget.TextView r9 = r0.titleView
+            boolean r11 = org.telegram.messenger.LocaleController.isRTL
+            if (r11 == 0) goto L_0x0169
+            r11 = 5
+            goto L_0x016a
+        L_0x0169:
+            r11 = 3
+        L_0x016a:
+            r9.setGravity(r11)
+            android.widget.TextView r9 = r0.titleView
+            java.lang.String r11 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r14 = org.telegram.messenger.AndroidUtilities.getTypeface(r11)
+            r9.setTypeface(r14)
+            android.widget.TextView r9 = r0.titleView
             java.lang.String r14 = "dialogTextBlack"
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r14)
-            r8.setTextColor(r15)
-            android.widget.TextView r8 = r0.titleView
+            r9.setTextColor(r15)
+            android.widget.TextView r9 = r0.titleView
             r15 = 1100480512(0x41980000, float:19.0)
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
             float r15 = (float) r15
-            r8.setTextSize(r4, r15)
-            android.widget.FrameLayout r8 = r0.header
+            r9.setTextSize(r5, r15)
+            android.widget.FrameLayout r9 = r0.header
             android.widget.TextView r15 = r0.titleView
-            r16 = -1
-            r17 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r18 = 55
-            r19 = 1102053376(0x41b00000, float:22.0)
+            r17 = -1
+            r18 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r19 = 55
             r20 = 1102053376(0x41b00000, float:22.0)
             r21 = 1102053376(0x41b00000, float:22.0)
-            r22 = 0
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
-            r0.titleLayout = r10
-            r8.addView(r15, r10)
-            android.widget.TextView r8 = r0.titleView
-            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda6 r10 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda6
-            r10.<init>(r0)
-            r8.post(r10)
-            android.widget.LinearLayout r8 = new android.widget.LinearLayout
-            r8.<init>(r1)
-            r0.subtitleView = r8
-            r8.setOrientation(r4)
-            r8 = 17
-            if (r6 < r8) goto L_0x01c5
-            android.widget.LinearLayout r10 = r0.subtitleView
+            r22 = 1102053376(0x41b00000, float:22.0)
+            r23 = 0
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
+            r0.titleLayout = r12
+            r9.addView(r15, r12)
+            android.widget.TextView r9 = r0.titleView
+            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda6 r12 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda6
+            r12.<init>(r0)
+            r9.post(r12)
+            android.widget.LinearLayout r9 = new android.widget.LinearLayout
+            r9.<init>(r1)
+            r0.subtitleView = r9
+            r9.setOrientation(r5)
+            r9 = 17
+            if (r7 < r9) goto L_0x01c9
+            android.widget.LinearLayout r12 = r0.subtitleView
             boolean r15 = org.telegram.messenger.LocaleController.isRTL
-            r10.setLayoutDirection(r15)
-        L_0x01c5:
-            android.widget.LinearLayout r10 = r0.subtitleView
+            r12.setLayoutDirection(r15)
+        L_0x01c9:
+            android.widget.LinearLayout r12 = r0.subtitleView
             boolean r15 = org.telegram.messenger.LocaleController.isRTL
-            if (r15 == 0) goto L_0x01cd
+            if (r15 == 0) goto L_0x01d1
             r15 = 5
-            goto L_0x01ce
-        L_0x01cd:
+            goto L_0x01d2
+        L_0x01d1:
             r15 = 3
-        L_0x01ce:
-            r10.setGravity(r15)
-            android.widget.LinearLayout r10 = r0.subtitleView
+        L_0x01d2:
+            r12.setGravity(r15)
+            android.widget.LinearLayout r12 = r0.subtitleView
             int r15 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padHorz
-            r10.setPadding(r4, r4, r15, r4)
+            r12.setPadding(r5, r5, r15, r5)
             java.lang.String r2 = r0.languageName(r2)
-            org.telegram.ui.Components.TranslateAlert$LoadingTextView r10 = new org.telegram.ui.Components.TranslateAlert$LoadingTextView
-            if (r2 != 0) goto L_0x01e5
+            org.telegram.ui.Components.TranslateAlert$LoadingTextView r12 = new org.telegram.ui.Components.TranslateAlert$LoadingTextView
+            if (r2 != 0) goto L_0x01e9
             java.lang.String r15 = r0.languageName(r3)
-            goto L_0x01e6
-        L_0x01e5:
+            goto L_0x01ea
+        L_0x01e9:
             r15 = r2
-        L_0x01e6:
-            r10.<init>(r1, r15, r4, r7)
-            r0.subtitleFromView = r10
-            r10.showLoadingText(r4)
-            org.telegram.ui.Components.TranslateAlert$LoadingTextView r10 = r0.subtitleFromView
-            r10.setLines(r7)
-            org.telegram.ui.Components.TranslateAlert$LoadingTextView r10 = r0.subtitleFromView
+        L_0x01ea:
+            r12.<init>(r1, r15, r5, r8)
+            r0.subtitleFromView = r12
+            r12.showLoadingText(r5)
+            org.telegram.ui.Components.TranslateAlert$LoadingTextView r12 = r0.subtitleFromView
+            r12.setLines(r8)
+            org.telegram.ui.Components.TranslateAlert$LoadingTextView r12 = r0.subtitleFromView
             java.lang.String r15 = "player_actionBarSubtitle"
-            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r15)
-            r10.setTextColor(r11)
-            org.telegram.ui.Components.TranslateAlert$LoadingTextView r10 = r0.subtitleFromView
-            r11 = 1096810496(0x41600000, float:14.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            float r8 = (float) r8
-            r10.setTextSize(r4, r8)
-            if (r2 == 0) goto L_0x0211
-            org.telegram.ui.Components.TranslateAlert$LoadingTextView r8 = r0.subtitleFromView
-            r8.setText(r2)
-        L_0x0211:
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+            r12.setTextColor(r9)
+            org.telegram.ui.Components.TranslateAlert$LoadingTextView r9 = r0.subtitleFromView
+            r12 = 1096810496(0x41600000, float:14.0)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r10 = (float) r10
+            r9.setTextSize(r5, r10)
+            if (r2 == 0) goto L_0x0215
+            org.telegram.ui.Components.TranslateAlert$LoadingTextView r9 = r0.subtitleFromView
+            r9.setText(r2)
+        L_0x0215:
             android.widget.LinearLayout r2 = r0.subtitleView
-            org.telegram.ui.Components.TranslateAlert$LoadingTextView r8 = r0.subtitleFromView
+            org.telegram.ui.Components.TranslateAlert$LoadingTextView r9 = r0.subtitleFromView
             r10 = 16
-            r9 = -2
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r4, (int) r9, (int) r10)
-            r2.addView(r8, r10)
+            r6 = -2
+            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r5, (int) r6, (int) r10)
+            r2.addView(r9, r10)
             org.telegram.ui.Components.TranslateAlert$LoadingTextView r2 = r0.subtitleFromView
             r2.updateHeight()
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             r0.subtitleArrowView = r2
-            r8 = 2131166056(0x7var_, float:1.7946347E38)
-            r2.setImageResource(r8)
+            r9 = 2131166056(0x7var_, float:1.7946347E38)
+            r2.setImageResource(r9)
             android.widget.ImageView r2 = r0.subtitleArrowView
-            android.graphics.PorterDuffColorFilter r8 = new android.graphics.PorterDuffColorFilter
+            android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter
             int r10 = org.telegram.ui.ActionBar.Theme.getColor(r15)
-            android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r8.<init>(r10, r5)
-            r2.setColorFilter(r8)
+            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r9.<init>(r10, r6)
+            r2.setColorFilter(r9)
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            r5 = -1082130432(0xffffffffbvar_, float:-1.0)
-            if (r2 == 0) goto L_0x024c
+            r6 = -1082130432(0xffffffffbvar_, float:-1.0)
+            if (r2 == 0) goto L_0x0250
             android.widget.ImageView r2 = r0.subtitleArrowView
-            r2.setScaleX(r5)
-        L_0x024c:
+            r2.setScaleX(r6)
+        L_0x0250:
             android.widget.LinearLayout r2 = r0.subtitleView
-            android.widget.ImageView r8 = r0.subtitleArrowView
+            android.widget.ImageView r9 = r0.subtitleArrowView
             r24 = -2
             r25 = -2
             r26 = 16
@@ -522,66 +526,67 @@ public class TranslateAlert extends Dialog {
             float r10 = (float) r10
             float r19 = org.telegram.messenger.AndroidUtilities.density
             float r10 = r10 / r19
-            float r12 = r12 - r10
-            int r10 = (int) r12
+            float r13 = r13 - r10
+            int r10 = (int) r13
             r28 = 1
             r29 = 3
             r30 = 0
             r27 = r10
             android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r24, (int) r25, (int) r26, (int) r27, (int) r28, (int) r29, (int) r30)
-            r2.addView(r8, r10)
+            r2.addView(r9, r10)
             android.widget.TextView r2 = new android.widget.TextView
             r2.<init>(r1)
             r0.subtitleToView = r2
-            r2.setLines(r7)
+            r2.setLines(r8)
             android.widget.TextView r2 = r0.subtitleToView
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r15)
-            r2.setTextColor(r8)
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+            r2.setTextColor(r9)
             android.widget.TextView r2 = r0.subtitleToView
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            float r8 = (float) r8
-            r2.setTextSize(r4, r8)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            float r9 = (float) r9
+            r2.setTextSize(r5, r9)
             android.widget.TextView r2 = r0.subtitleToView
             java.lang.String r3 = r0.languageName(r3)
             r2.setText(r3)
             android.widget.LinearLayout r2 = r0.subtitleView
             android.widget.TextView r3 = r0.subtitleToView
-            r8 = 16
-            android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r9, (int) r9, (int) r8)
-            r2.addView(r3, r8)
+            r9 = 16
+            r10 = -2
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r10, (int) r10, (int) r9)
+            r2.addView(r3, r9)
             android.widget.FrameLayout r2 = r0.header
             android.widget.LinearLayout r3 = r0.subtitleView
             r24 = -1
             r25 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            boolean r8 = org.telegram.messenger.LocaleController.isRTL
-            if (r8 == 0) goto L_0x02af
-            r8 = 5
-            goto L_0x02b0
-        L_0x02af:
-            r8 = 3
-        L_0x02b0:
-            r26 = r8 | 48
-            int r8 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padHorz
-            float r8 = (float) r8
+            boolean r9 = org.telegram.messenger.LocaleController.isRTL
+            if (r9 == 0) goto L_0x02b4
+            r9 = 5
+            goto L_0x02b5
+        L_0x02b4:
+            r9 = 3
+        L_0x02b5:
+            r26 = r9 | 48
+            int r9 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padHorz
+            float r9 = (float) r9
             float r10 = org.telegram.messenger.AndroidUtilities.density
-            float r8 = r8 / r10
+            float r9 = r9 / r10
             r10 = 1102053376(0x41b00000, float:22.0)
-            float r27 = r10 - r8
-            r8 = 1111228416(0x423CLASSNAME, float:47.0)
-            int r12 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padVert
-            float r12 = (float) r12
+            float r27 = r10 - r9
+            r9 = 1111228416(0x423CLASSNAME, float:47.0)
+            int r13 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padVert
+            float r13 = (float) r13
             float r15 = org.telegram.messenger.AndroidUtilities.density
-            float r12 = r12 / r15
-            float r28 = r8 - r12
-            int r8 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padHorz
-            float r8 = (float) r8
-            float r12 = org.telegram.messenger.AndroidUtilities.density
-            float r8 = r8 / r12
-            float r29 = r10 - r8
+            float r13 = r13 / r15
+            float r28 = r9 - r13
+            int r9 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padHorz
+            float r9 = (float) r9
+            float r13 = org.telegram.messenger.AndroidUtilities.density
+            float r9 = r9 / r13
+            float r29 = r10 - r9
             r30 = 0
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
-            r0.subtitleLayout = r8
-            r2.addView(r3, r8)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
+            r0.subtitleLayout = r9
+            r2.addView(r3, r9)
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             r0.backButton = r2
@@ -589,175 +594,176 @@ public class TranslateAlert extends Dialog {
             r2.setImageResource(r3)
             android.widget.ImageView r2 = r0.backButton
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r14)
-            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r3.<init>(r8, r12)
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            android.graphics.PorterDuff$Mode r13 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r3.<init>(r9, r13)
             r2.setColorFilter(r3)
             android.widget.ImageView r2 = r0.backButton
             android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.FIT_CENTER
             r2.setScaleType(r3)
             android.widget.ImageView r2 = r0.backButton
             r3 = 1098907648(0x41800000, float:16.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r2.setPadding(r8, r4, r12, r4)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r2.setPadding(r9, r5, r13, r5)
             android.widget.ImageView r2 = r0.backButton
-            java.lang.String r8 = "dialogButtonSelector"
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r8)
-            r2.setBackground(r8)
+            java.lang.String r9 = "dialogButtonSelector"
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
+            android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9)
+            r2.setBackground(r9)
             android.widget.ImageView r2 = r0.backButton
-            r2.setClickable(r4)
+            r2.setClickable(r5)
             android.widget.ImageView r2 = r0.backButton
-            r8 = 0
-            r2.setAlpha(r8)
+            r9 = 0
+            r2.setAlpha(r9)
             android.widget.ImageView r2 = r0.backButton
-            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda4 r8 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda4
-            r8.<init>(r0)
-            r2.setOnClickListener(r8)
+            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda4 r9 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda4
+            r9.<init>(r0)
+            r2.setOnClickListener(r9)
             android.widget.FrameLayout r2 = r0.header
-            android.widget.ImageView r8 = r0.backButton
-            r12 = 56
+            android.widget.ImageView r9 = r0.backButton
+            r13 = 56
             r14 = 56
             r15 = 3
-            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r14, r15)
-            r2.addView(r8, r12)
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15)
+            r2.addView(r9, r13)
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
             r0.headerShadowView = r2
-            java.lang.String r8 = "dialogShadowLine"
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            r2.setBackgroundColor(r8)
+            java.lang.String r9 = "dialogShadowLine"
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
+            r2.setBackgroundColor(r9)
             android.widget.FrameLayout r2 = r0.headerShadowView
-            r8 = 0
-            r2.setAlpha(r8)
+            r9 = 0
+            r2.setAlpha(r9)
             android.widget.FrameLayout r2 = r0.header
-            android.widget.FrameLayout r8 = r0.headerShadowView
-            r12 = 87
+            android.widget.FrameLayout r9 = r0.headerShadowView
+            r13 = 87
             r14 = -1
-            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r7, r12)
-            r2.addView(r8, r12)
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r8, r13)
+            r2.addView(r9, r13)
             android.widget.FrameLayout r2 = r0.header
-            r2.setClipChildren(r4)
+            r2.setClipChildren(r5)
             android.widget.FrameLayout r2 = r0.container
-            android.widget.FrameLayout r8 = r0.header
-            r12 = 70
+            android.widget.FrameLayout r9 = r0.header
+            r13 = 70
             r15 = 55
-            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r12, r15)
-            r0.headerLayout = r12
-            r2.addView(r8, r12)
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r13, r15)
+            r0.headerLayout = r13
+            r2.addView(r9, r13)
             org.telegram.ui.Components.TranslateAlert$3 r2 = new org.telegram.ui.Components.TranslateAlert$3
             r2.<init>(r1)
             r0.scrollView = r2
-            r2.setClipChildren(r7)
+            r2.setClipChildren(r8)
             org.telegram.ui.Components.TranslateAlert$4 r2 = new org.telegram.ui.Components.TranslateAlert$4
             r2.<init>(r0, r1)
             r0.textsView = r2
-            r2.setOrientation(r7)
+            r2.setOrientation(r8)
             android.widget.LinearLayout r2 = r0.textsView
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            int r12 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padHorz
-            int r8 = r8 - r12
-            r12 = 1094713344(0x41400000, float:12.0)
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r13 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padHorz
+            int r9 = r9 - r13
+            r13 = 1094713344(0x41400000, float:12.0)
+            int r15 = org.telegram.messenger.AndroidUtilities.dp(r13)
             int r18 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padVert
             int r15 = r15 - r18
             int r18 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r19 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padHorz
-            int r11 = r18 - r19
-            int r18 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            int r12 = r18 - r19
+            int r18 = org.telegram.messenger.AndroidUtilities.dp(r13)
             int r19 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padVert
-            int r9 = r18 - r19
-            r2.setPadding(r8, r15, r11, r9)
+            int r6 = r18 - r19
+            r2.setPadding(r9, r15, r12, r6)
             android.widget.TextView r2 = new android.widget.TextView
             r2.<init>(r1)
             r0.translateMoreView = r2
-            java.lang.String r8 = "dialogTextBlue"
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            r2.setTextColor(r8)
+            java.lang.String r6 = "dialogTextBlue"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r2.setTextColor(r6)
             android.widget.TextView r2 = r0.translateMoreView
-            r2.setTextSize(r7, r3)
+            r2.setTextSize(r8, r3)
             android.widget.TextView r2 = r0.translateMoreView
-            r8 = 2131628251(0x7f0e10db, float:1.888379E38)
+            r6 = 2131628251(0x7f0e10db, float:1.888379E38)
             java.lang.String r9 = "TranslateMore"
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
-            r2.setText(r8)
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r2.setText(r6)
             android.widget.TextView r2 = r0.translateMoreView
-            java.util.ArrayList<java.lang.CharSequence> r8 = r0.textBlocks
-            int r8 = r8.size()
-            if (r8 <= r7) goto L_0x03e3
-            r8 = 4
-            goto L_0x03e5
-        L_0x03e3:
-            r8 = 8
-        L_0x03e5:
-            r2.setVisibility(r8)
-            android.widget.TextView r2 = r0.translateMoreView
-            android.text.TextPaint r2 = r2.getPaint()
-            r2.setAntiAlias(r7)
+            java.util.ArrayList<java.lang.CharSequence> r6 = r0.textBlocks
+            int r6 = r6.size()
+            if (r6 <= r8) goto L_0x03e8
+            r6 = 4
+            goto L_0x03ea
+        L_0x03e8:
+            r6 = 8
+        L_0x03ea:
+            r2.setVisibility(r6)
             android.widget.TextView r2 = r0.translateMoreView
             android.text.TextPaint r2 = r2.getPaint()
-            r2.setFlags(r7)
+            r2.setAntiAlias(r8)
             android.widget.TextView r2 = r0.translateMoreView
-            java.lang.String r8 = "dialogLinkSelection"
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            android.text.TextPaint r2 = r2.getPaint()
+            r2.setFlags(r8)
+            android.widget.TextView r2 = r0.translateMoreView
+            java.lang.String r6 = "dialogLinkSelection"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r9 = 1065353216(0x3var_, float:1.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r9)
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createRadSelectorDrawable(r8, r11, r15)
-            r2.setBackgroundDrawable(r8)
+            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createRadSelectorDrawable(r6, r12, r15)
+            r2.setBackgroundDrawable(r6)
             android.widget.TextView r2 = r0.translateMoreView
-            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda3 r8 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda3
-            r8.<init>(r0)
-            r2.setOnClickListener(r8)
+            org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda3 r6 = new org.telegram.ui.Components.TranslateAlert$$ExternalSyntheticLambda3
+            r6.<init>(r0)
+            r2.setOnClickListener(r6)
             android.widget.TextView r2 = r0.translateMoreView
-            int r8 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padHorz
-            int r11 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padVert
+            int r6 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padHorz
+            int r12 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padVert
             int r15 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padHorz
             int r9 = org.telegram.ui.Components.TranslateAlert.LoadingTextView.padVert
-            r2.setPadding(r8, r11, r15, r9)
+            r2.setPadding(r6, r12, r15, r9)
             android.widget.LinearLayout r2 = r0.textsView
-            android.widget.TextView r8 = r0.translateMoreView
-            r18 = -2
-            r19 = -2
+            android.widget.TextView r6 = r0.translateMoreView
+            r24 = -2
+            r25 = -2
             boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            if (r9 == 0) goto L_0x0439
-            r20 = 5
-            goto L_0x043b
-        L_0x0439:
-            r20 = 3
-        L_0x043b:
-            r21 = 0
-            r22 = 0
-            r23 = 0
-            r24 = 0
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23, (int) r24)
-            r2.addView(r8, r9)
+            if (r9 == 0) goto L_0x043e
+            r26 = 5
+            goto L_0x0440
+        L_0x043e:
+            r26 = 3
+        L_0x0440:
+            r27 = 0
+            r28 = 0
+            r29 = 0
+            r30 = 0
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r24, (int) r25, (int) r26, (int) r27, (int) r28, (int) r29, (int) r30)
+            r2.addView(r6, r9)
             android.graphics.Paint r2 = new android.graphics.Paint
             r2.<init>()
-            java.lang.String r8 = "chat_inTextSelectionHighlight"
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            r2.setColor(r8)
+            java.lang.String r6 = "chat_inTextSelectionHighlight"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r2.setColor(r6)
             org.telegram.ui.Components.TranslateAlert$6 r2 = new org.telegram.ui.Components.TranslateAlert$6
             r2.<init>(r1)
             r0.allTextsContainer = r2
-            r2.setClipChildren(r4)
+            r2.setClipChildren(r5)
             android.widget.FrameLayout r2 = r0.allTextsContainer
-            r2.setClipToPadding(r4)
+            r2.setClipToPadding(r5)
             android.widget.FrameLayout r2 = r0.allTextsContainer
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r12)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r10)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r13)
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            r2.setPadding(r8, r9, r10, r11)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            r2.setPadding(r6, r9, r10, r12)
             org.telegram.ui.Components.TranslateAlert$7 r2 = new org.telegram.ui.Components.TranslateAlert$7
             r2.<init>(r1)
             r0.allTextsView = r2
-            r2.setTextColor(r4)
+            r2.setTextColor(r5)
             android.widget.TextView r2 = r0.allTextsView
-            r2.setTextSize(r7, r3)
+            r2.setTextSize(r8, r3)
             android.widget.TextView r2 = r0.allTextsView
-            r2.setTextIsSelectable(r7)
+            r3 = r4 ^ 1
+            r2.setTextIsSelectable(r3)
             android.widget.TextView r2 = r0.allTextsView
             java.lang.String r3 = "chat_inTextSelectionHighlight"
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
@@ -765,37 +771,38 @@ public class TranslateAlert extends Dialog {
             java.lang.String r2 = "chat_TextSelectionCursor"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r3 = 29
-            if (r6 < r3) goto L_0x04c5
-            android.widget.TextView r3 = r0.allTextsView     // Catch:{ Exception -> 0x04c5 }
-            android.graphics.drawable.Drawable r3 = r3.getTextSelectHandleLeft()     // Catch:{ Exception -> 0x04c5 }
-            android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.SRC_IN     // Catch:{ Exception -> 0x04c5 }
-            r3.setColorFilter(r2, r4)     // Catch:{ Exception -> 0x04c5 }
-            android.widget.TextView r4 = r0.allTextsView     // Catch:{ Exception -> 0x04c5 }
-            r4.setTextSelectHandleLeft(r3)     // Catch:{ Exception -> 0x04c5 }
-            android.widget.TextView r3 = r0.allTextsView     // Catch:{ Exception -> 0x04c5 }
-            android.graphics.drawable.Drawable r3 = r3.getTextSelectHandleRight()     // Catch:{ Exception -> 0x04c5 }
-            android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.SRC_IN     // Catch:{ Exception -> 0x04c5 }
-            r3.setColorFilter(r2, r4)     // Catch:{ Exception -> 0x04c5 }
-            android.widget.TextView r2 = r0.allTextsView     // Catch:{ Exception -> 0x04c5 }
-            r2.setTextSelectHandleRight(r3)     // Catch:{ Exception -> 0x04c5 }
-        L_0x04c5:
+            if (r7 < r3) goto L_0x04cc
+            android.widget.TextView r3 = r0.allTextsView     // Catch:{ Exception -> 0x04cc }
+            android.graphics.drawable.Drawable r3 = r3.getTextSelectHandleLeft()     // Catch:{ Exception -> 0x04cc }
+            android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.SRC_IN     // Catch:{ Exception -> 0x04cc }
+            r3.setColorFilter(r2, r4)     // Catch:{ Exception -> 0x04cc }
+            android.widget.TextView r4 = r0.allTextsView     // Catch:{ Exception -> 0x04cc }
+            r4.setTextSelectHandleLeft(r3)     // Catch:{ Exception -> 0x04cc }
+            android.widget.TextView r3 = r0.allTextsView     // Catch:{ Exception -> 0x04cc }
+            android.graphics.drawable.Drawable r3 = r3.getTextSelectHandleRight()     // Catch:{ Exception -> 0x04cc }
+            android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.SRC_IN     // Catch:{ Exception -> 0x04cc }
+            r3.setColorFilter(r2, r4)     // Catch:{ Exception -> 0x04cc }
+            android.widget.TextView r2 = r0.allTextsView     // Catch:{ Exception -> 0x04cc }
+            r2.setTextSelectHandleRight(r3)     // Catch:{ Exception -> 0x04cc }
+        L_0x04cc:
             android.widget.TextView r2 = r0.allTextsView
             android.text.method.LinkMovementMethod r3 = new android.text.method.LinkMovementMethod
             r3.<init>()
             r2.setMovementMethod(r3)
             android.widget.FrameLayout r2 = r0.allTextsContainer
             android.widget.TextView r3 = r0.allTextsView
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r5)
-            r2.addView(r3, r4)
+            r4 = -1082130432(0xffffffffbvar_, float:-1.0)
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r4)
+            r2.addView(r3, r5)
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
             r0.textsContainerView = r2
             android.widget.FrameLayout r3 = r0.allTextsContainer
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r5)
-            r2.addView(r3, r4)
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r4)
+            r2.addView(r3, r5)
             android.widget.FrameLayout r2 = r0.textsContainerView
             android.widget.LinearLayout r3 = r0.textsView
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r5)
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r4)
             r2.addView(r3, r4)
             androidx.core.widget.NestedScrollView r2 = r0.scrollView
             android.widget.FrameLayout r3 = r0.textsContainerView
@@ -835,11 +842,11 @@ public class TranslateAlert extends Dialog {
             android.widget.TextView r2 = new android.widget.TextView
             r2.<init>(r1)
             r0.buttonTextView = r2
-            r2.setLines(r7)
+            r2.setLines(r8)
             android.widget.TextView r2 = r0.buttonTextView
-            r2.setSingleLine(r7)
+            r2.setSingleLine(r8)
             android.widget.TextView r2 = r0.buttonTextView
-            r2.setGravity(r7)
+            r2.setGravity(r8)
             android.widget.TextView r2 = r0.buttonTextView
             android.text.TextUtils$TruncateAt r3 = android.text.TextUtils.TruncateAt.END
             r2.setEllipsize(r3)
@@ -851,11 +858,11 @@ public class TranslateAlert extends Dialog {
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             r2.setTextColor(r3)
             android.widget.TextView r2 = r0.buttonTextView
-            android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r13)
+            android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r11)
             r2.setTypeface(r3)
             android.widget.TextView r2 = r0.buttonTextView
             r3 = 1096810496(0x41600000, float:14.0)
-            r2.setTextSize(r7, r3)
+            r2.setTextSize(r8, r3)
             android.widget.TextView r2 = r0.buttonTextView
             r3 = 2131625012(0x7f0e0434, float:1.887722E38)
             java.lang.String r4 = "CloseTranslation"
@@ -898,7 +905,7 @@ public class TranslateAlert extends Dialog {
             r1.addView(r2, r3)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.TranslateAlert.<init>(org.telegram.ui.ActionBar.BaseFragment, android.content.Context, java.lang.String, java.lang.String, java.lang.CharSequence):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.TranslateAlert.<init>(org.telegram.ui.ActionBar.BaseFragment, android.content.Context, java.lang.String, java.lang.String, java.lang.CharSequence, boolean):void");
     }
 
     /* access modifiers changed from: private */
@@ -990,6 +997,7 @@ public class TranslateAlert extends Dialog {
             this.container.getGlobalVisibleRect(this.containerRect);
             int i = (int) x;
             int i2 = (int) y;
+            boolean z = false;
             if (!this.containerRect.contains(i, i2)) {
                 if (motionEvent.getAction() == 0) {
                     this.pressedOutside = true;
@@ -1014,7 +1022,11 @@ public class TranslateAlert extends Dialog {
                         if (motionEvent.getAction() == 1 && (clickableSpan = this.pressedLink) == clickableSpanArr[0]) {
                             clickableSpan.onClick(this.allTextsView);
                             this.pressedLink = null;
-                            this.allTextsView.setTextIsSelectable(true);
+                            TextView textView = this.allTextsView;
+                            if (!this.noforwards) {
+                                z = true;
+                            }
+                            textView.setTextIsSelectable(z);
                         } else if (motionEvent.getAction() == 0) {
                             this.pressedLink = clickableSpanArr[0];
                         }
@@ -1076,7 +1088,7 @@ public class TranslateAlert extends Dialog {
                         setScrollY(f6);
                         if (motionEvent.getAction() == 1) {
                             this.scrolling = false;
-                            this.allTextsView.setTextIsSelectable(true);
+                            this.allTextsView.setTextIsSelectable(!this.noforwards);
                             this.maybeScrolling = false;
                             this.allowScroll = true;
                             if (Math.abs(f2) > ((float) AndroidUtilities.dp(16.0f))) {
@@ -1097,7 +1109,7 @@ public class TranslateAlert extends Dialog {
             }
             if (hasSelection() && this.maybeScrolling) {
                 this.scrolling = false;
-                this.allTextsView.setTextIsSelectable(true);
+                this.allTextsView.setTextIsSelectable(!this.noforwards);
                 this.maybeScrolling = false;
                 this.allowScroll = true;
                 scrollYTo((float) Math.round(this.fromScrollY));
@@ -1196,7 +1208,7 @@ public class TranslateAlert extends Dialog {
                     if (min <= 0.0f) {
                         TranslateAlert.this.dismissInternal();
                     } else if (z2) {
-                        TranslateAlert.this.allTextsView.setTextIsSelectable(true);
+                        TranslateAlert.this.allTextsView.setTextIsSelectable(!TranslateAlert.this.noforwards);
                         TranslateAlert.this.allTextsView.invalidate();
                         TranslateAlert.this.scrollView.stopNestedScroll();
                         TranslateAlert.this.openAnimation(min - 1.0f);
@@ -1208,7 +1220,7 @@ public class TranslateAlert extends Dialog {
                     if (min <= 0.0f) {
                         TranslateAlert.this.dismissInternal();
                     } else if (z2) {
-                        TranslateAlert.this.allTextsView.setTextIsSelectable(true);
+                        TranslateAlert.this.allTextsView.setTextIsSelectable(!TranslateAlert.this.noforwards);
                         TranslateAlert.this.allTextsView.invalidate();
                         TranslateAlert.this.scrollView.stopNestedScroll();
                         TranslateAlert.this.openAnimation(min - 1.0f);
@@ -1619,8 +1631,8 @@ public class TranslateAlert extends Dialog {
         }.start();
     }
 
-    public static void showAlert(Context context, BaseFragment baseFragment, String str, String str2, CharSequence charSequence) {
-        TranslateAlert translateAlert = new TranslateAlert(baseFragment, context, str, str2, charSequence);
+    public static void showAlert(Context context, BaseFragment baseFragment, String str, String str2, CharSequence charSequence, boolean z) {
+        TranslateAlert translateAlert = new TranslateAlert(baseFragment, context, str, str2, charSequence, z);
         if (baseFragment == null) {
             translateAlert.show();
         } else if (baseFragment.getParentActivity() != null) {

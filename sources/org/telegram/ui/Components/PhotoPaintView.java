@@ -1136,22 +1136,26 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 float var_ = cropState.cropScale * 1.0f;
                 int measuredWidth = view.getMeasuredWidth();
                 int measuredHeight = view.getMeasuredHeight();
-                MediaController.CropState cropState2 = this.currentCropState;
-                int i2 = cropState2.transformRotation;
-                if (i2 == 90 || i2 == 270) {
-                    int i3 = measuredHeight;
-                    measuredHeight = measuredWidth;
-                    measuredWidth = i3;
+                if (measuredWidth != 0 && measuredHeight != 0) {
+                    MediaController.CropState cropState2 = this.currentCropState;
+                    int i2 = cropState2.transformRotation;
+                    if (i2 == 90 || i2 == 270) {
+                        int i3 = measuredHeight;
+                        measuredHeight = measuredWidth;
+                        measuredWidth = i3;
+                    }
+                    float var_ = (float) measuredWidth;
+                    float var_ = (float) measuredHeight;
+                    float max = Math.max(f4 / ((float) ((int) (cropState2.cropPw * var_))), f5 / ((float) ((int) (cropState2.cropPh * var_))));
+                    f8 = var_ * max;
+                    MediaController.CropState cropState3 = this.currentCropState;
+                    float var_ = cropState3.cropScale;
+                    f6 = (cropState3.cropPx * var_ * f * max * var_) + var_;
+                    f9 = var_ + (cropState3.cropPy * var_ * f * max * var_);
+                    f7 = cropState3.cropRotate + ((float) i2);
+                } else {
+                    return;
                 }
-                float var_ = (float) measuredWidth;
-                float var_ = (float) measuredHeight;
-                float max = Math.max(f4 / ((float) ((int) (cropState2.cropPw * var_))), f5 / ((float) ((int) (cropState2.cropPh * var_))));
-                f8 = var_ * max;
-                MediaController.CropState cropState3 = this.currentCropState;
-                float var_ = cropState3.cropScale;
-                f6 = (cropState3.cropPx * var_ * f * max * var_) + var_;
-                f9 = var_ + (cropState3.cropPy * var_ * f * max * var_);
-                f7 = cropState3.cropRotate + ((float) i2);
             } else {
                 if (i == 0) {
                     var_ = 1.0f * this.baseScale;

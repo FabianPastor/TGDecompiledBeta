@@ -1940,6 +1940,7 @@ public class ActionBarLayout extends FrameLayout {
 
     public void animateThemedValues(final ThemeAnimationSettings themeAnimationSettings) {
         BaseFragment baseFragment;
+        Theme.ThemeInfo themeInfo;
         if (this.transitionAnimationInProgress || this.startedTracking) {
             this.animateThemeAfterAnimation = true;
             this.animateSetThemeAfterAnimation = themeAnimationSettings.theme;
@@ -1986,8 +1987,8 @@ public class ActionBarLayout extends FrameLayout {
                 if (i == 0) {
                     if (themeAnimationSettings.applyTheme) {
                         int i2 = themeAnimationSettings.accentId;
-                        if (i2 != -1) {
-                            themeAnimationSettings.theme.setCurrentAccentId(i2);
+                        if (!(i2 == -1 || (themeInfo = themeAnimationSettings.theme) == null)) {
+                            themeInfo.setCurrentAccentId(i2);
                             Theme.saveThemeAccents(themeAnimationSettings.theme, true, false, true, false);
                         }
                         Theme.applyTheme(themeAnimationSettings.theme, themeAnimationSettings.nightTheme);

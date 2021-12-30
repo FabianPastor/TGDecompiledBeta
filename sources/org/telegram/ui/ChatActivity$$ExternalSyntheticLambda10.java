@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda10 imple
     }
 
     public final void onCancel(DialogInterface dialogInterface) {
-        this.f$0.lambda$didPressMessageUrl$181(this.f$1, dialogInterface);
+        this.f$0.lambda$processSelectedOption$157(this.f$1, dialogInterface);
     }
 }

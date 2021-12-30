@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda189 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda189 implements RecyclerAnimationScrollHelper.ScrollListener {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda189(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createView$42(view, i);
+    public final void onScroll() {
+        this.f$0.invalidateMessagesVisiblePart();
     }
 }

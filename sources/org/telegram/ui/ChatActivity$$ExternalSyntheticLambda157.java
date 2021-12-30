@@ -1,15 +1,26 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesStorage;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import org.telegram.messenger.LanguageDetector;
+import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda157 implements MessagesStorage.IntCallback {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda157 implements LanguageDetector.StringCallback {
+    public final /* synthetic */ String[] f$0;
+    public final /* synthetic */ String f$1;
+    public final /* synthetic */ ActionBarMenuSubItem f$2;
+    public final /* synthetic */ AtomicBoolean f$3;
+    public final /* synthetic */ AtomicReference f$4;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda157(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda157(String[] strArr, String str, ActionBarMenuSubItem actionBarMenuSubItem, AtomicBoolean atomicBoolean, AtomicReference atomicReference) {
+        this.f$0 = strArr;
+        this.f$1 = str;
+        this.f$2 = actionBarMenuSubItem;
+        this.f$3 = atomicBoolean;
+        this.f$4 = atomicReference;
     }
 
-    public final void run(int i) {
-        this.f$0.lambda$createView$27(i);
+    public final void run(String str) {
+        ChatActivity.lambda$createMenu$130(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, str);
     }
 }

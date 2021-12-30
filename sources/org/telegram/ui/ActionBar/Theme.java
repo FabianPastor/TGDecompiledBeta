@@ -8712,11 +8712,11 @@ public class Theme {
             r0.put(r4, r6)
             java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
             java.lang.String r4 = "chat_inReactionButtonText"
-            java.lang.String r6 = "chat_mediaProgress"
+            java.lang.String r6 = "chat_inPreviewInstantText"
             r0.put(r4, r6)
             java.util.HashMap<java.lang.String, java.lang.String> r0 = fallbackKeys
             java.lang.String r4 = "chat_outReactionButtonText"
-            java.lang.String r6 = "chat_mediaProgress"
+            java.lang.String r6 = "chat_outPreviewInstantText"
             r0.put(r4, r6)
             java.util.HashSet<java.lang.String> r0 = themeAccentExclusionKeys
             java.lang.String[] r4 = keys_avatar_background

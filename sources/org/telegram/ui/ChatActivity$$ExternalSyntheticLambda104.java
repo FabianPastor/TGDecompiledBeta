@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda104 impl
     }
 
     public final void run() {
-        this.f$0.lambda$checkSecretMessageForLocation$99();
+        this.f$0.lambda$startMessageUnselect$88();
     }
 }
