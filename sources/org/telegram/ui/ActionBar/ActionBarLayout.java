@@ -1940,6 +1940,7 @@ public class ActionBarLayout extends FrameLayout {
 
     public void animateThemedValues(final ThemeAnimationSettings themeAnimationSettings) {
         BaseFragment baseFragment;
+        Theme.ThemeInfo themeInfo;
         if (this.transitionAnimationInProgress || this.startedTracking) {
             this.animateThemeAfterAnimation = true;
             this.animateSetThemeAfterAnimation = themeAnimationSettings.theme;
@@ -1952,10 +1953,10 @@ public class ActionBarLayout extends FrameLayout {
             animatorSet.cancel();
             this.themeAnimatorSet = null;
         }
-        int i = themeAnimationSettings.onlyTopFragment ? 1 : 2;
+        int size = themeAnimationSettings.onlyTopFragment ? 1 : this.fragmentsStack.size();
         boolean z = false;
-        for (int i2 = 0; i2 < i; i2++) {
-            if (i2 == 0) {
+        for (int i = 0; i < size; i++) {
+            if (i == 0) {
                 baseFragment = getLastFragment();
             } else {
                 if ((this.inPreviewMode || this.transitionAnimationPreviewMode) && this.fragmentsStack.size() > 1) {
@@ -1983,11 +1984,11 @@ public class ActionBarLayout extends FrameLayout {
                 } else if (dialog instanceof AlertDialog) {
                     addStartDescriptions(((AlertDialog) dialog).getThemeDescriptions());
                 }
-                if (i2 == 0) {
+                if (i == 0) {
                     if (themeAnimationSettings.applyTheme) {
-                        int i3 = themeAnimationSettings.accentId;
-                        if (i3 != -1) {
-                            themeAnimationSettings.theme.setCurrentAccentId(i3);
+                        int i2 = themeAnimationSettings.accentId;
+                        if (!(i2 == -1 || (themeInfo = themeAnimationSettings.theme) == null)) {
+                            themeInfo.setCurrentAccentId(i2);
                             Theme.saveThemeAccents(themeAnimationSettings.theme, true, false, true, false);
                         }
                         Theme.applyTheme(themeAnimationSettings.theme, themeAnimationSettings.nightTheme);
@@ -2008,11 +2009,13 @@ public class ActionBarLayout extends FrameLayout {
             }
         }
         if (z) {
-            int size = this.fragmentsStack.size() - ((this.inPreviewMode || this.transitionAnimationPreviewMode) ? 2 : 1);
-            for (int i4 = 0; i4 < size; i4++) {
-                BaseFragment baseFragment2 = this.fragmentsStack.get(i4);
-                baseFragment2.clearViews();
-                baseFragment2.setParentLayout(this);
+            if (!themeAnimationSettings.onlyTopFragment) {
+                int size2 = this.fragmentsStack.size() - ((this.inPreviewMode || this.transitionAnimationPreviewMode) ? 2 : 1);
+                for (int i3 = 0; i3 < size2; i3++) {
+                    BaseFragment baseFragment2 = this.fragmentsStack.get(i3);
+                    baseFragment2.clearViews();
+                    baseFragment2.setParentLayout(this);
+                }
             }
             if (themeAnimationSettings.instant) {
                 setThemeAnimationValue(1.0f);

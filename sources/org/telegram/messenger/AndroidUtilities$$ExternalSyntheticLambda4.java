@@ -20,6 +20,6 @@ public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda4 im
     }
 
     public final void onClick(View view) {
-        AndroidUtilities.lambda$showProxyAlert$6(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
+        AndroidUtilities.lambda$showProxyAlert$8(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
     }
 }

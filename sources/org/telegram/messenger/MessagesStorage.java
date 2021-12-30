@@ -114,7 +114,7 @@ import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
 public class MessagesStorage extends BaseController {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
-    private static final int LAST_DB_VERSION = 86;
+    private static final int LAST_DB_VERSION = 87;
     private int archiveUnreadCount;
     private int[][] bots = {new int[2], new int[2]};
     private File cacheFile;
@@ -459,7 +459,8 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE polls_v2(mid INTEGER, uid INTEGER, id INTEGER, PRIMARY KEY (mid, uid));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id_v2 ON polls_v2(id);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 86").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE reactions(data BLOB, hash INTEGER, date INTEGER);").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 87").stepThis().dispose();
                 AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda13(this));
                 loadDialogFilters();
                 loadUnreadMessages();
@@ -493,7 +494,7 @@ public class MessagesStorage extends BaseController {
                         }
                     }
                     queryFinalized.dispose();
-                    if (intValue < 86) {
+                    if (intValue < 87) {
                         updateDbToLastVersion(intValue);
                     }
                     AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda13(this));
@@ -576,7 +577,7 @@ public class MessagesStorage extends BaseController {
         MessagesStorage messagesStorage = this;
         int i4 = i;
         AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda20(messagesStorage));
-        FileLog.d("MessagesStorage start db migration from " + i4 + " to " + 86);
+        FileLog.d("MessagesStorage start db migration from " + i4 + " to " + 87);
         int i5 = 4;
         if (i4 < 4) {
             messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
@@ -1548,6 +1549,11 @@ public class MessagesStorage extends BaseController {
             messagesStorage.executeNoException("UPDATE messages_v2 SET replydata = NULL");
             messagesStorage.executeNoException("UPDATE scheduled_messages_v2 SET replydata = NULL");
             messagesStorage.database.executeFast("PRAGMA user_version = 86").stepThis().dispose();
+            i4 = 86;
+        }
+        if (i4 == 86) {
+            messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS reactions(data BLOB, hash INTEGER, date INTEGER);").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 87").stepThis().dispose();
         }
         FileLog.d("MessagesStorage db migration finished");
         AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda14(messagesStorage));
@@ -20810,12 +20816,12 @@ public class MessagesStorage extends BaseController {
             TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
             if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported_old) {
                 if (tLRPC$MessageMedia.bytes.length == 0) {
-                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(135);
+                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(136);
                 }
             } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported) {
                 TLRPC$TL_messageMediaUnsupported_old tLRPC$TL_messageMediaUnsupported_old = new TLRPC$TL_messageMediaUnsupported_old();
                 tLRPC$Message.media = tLRPC$TL_messageMediaUnsupported_old;
-                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(135);
+                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(136);
                 tLRPC$Message.flags |= 512;
             }
         }
@@ -24232,7 +24238,7 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0021:
             java.lang.String r7 = "SavedMessages"
-            r8 = 2131627603(0x7f0e0e53, float:1.8882475E38)
+            r8 = 2131627672(0x7f0e0e98, float:1.8882615E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)     // Catch:{ Exception -> 0x0654 }
             java.lang.String r7 = r7.toLowerCase()     // Catch:{ Exception -> 0x0654 }
             java.lang.String r8 = "saved messages"

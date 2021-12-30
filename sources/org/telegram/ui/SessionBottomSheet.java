@@ -288,7 +288,7 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "safari"
             boolean r2 = r1.contains(r2)
-            r3 = 2131558554(0x7f0d009a, float:1.8742427E38)
+            r3 = 2131558555(0x7f0d009b, float:1.874243E38)
             java.lang.String r4 = "avatar_backgroundBlue"
             r5 = 2131558424(0x7f0d0018, float:1.8742163E38)
             r6 = 1
@@ -296,7 +296,7 @@ public class SessionBottomSheet extends BottomSheet {
             r8 = 0
             java.lang.String r9 = "avatar_backgroundPink"
             if (r2 == 0) goto L_0x0035
-            r3 = 2131558489(0x7f0d0059, float:1.8742295E38)
+            r3 = 2131558490(0x7f0d005a, float:1.8742297E38)
         L_0x0031:
             r4 = r9
         L_0x0032:
@@ -332,7 +332,7 @@ public class SessionBottomSheet extends BottomSheet {
             java.lang.String r2 = "ubuntu"
             boolean r2 = r0.contains(r2)
             if (r2 == 0) goto L_0x0075
-            r3 = 2131558523(0x7f0d007b, float:1.8742364E38)
+            r3 = 2131558524(0x7f0d007c, float:1.8742366E38)
             goto L_0x0032
         L_0x0075:
             java.lang.String r2 = "ios"
@@ -378,18 +378,18 @@ public class SessionBottomSheet extends BottomSheet {
         L_0x00c6:
             boolean r13 = r1.contains(r2)
             if (r13 == 0) goto L_0x00d3
-            r13 = 2131165401(0x7var_d9, float:1.7945018E38)
-            r3 = 2131165401(0x7var_d9, float:1.7945018E38)
+            r13 = 2131165402(0x7var_da, float:1.794502E38)
+            r3 = 2131165402(0x7var_da, float:1.794502E38)
             goto L_0x00e6
         L_0x00d3:
             boolean r13 = r1.contains(r11)
             if (r13 == 0) goto L_0x00e0
-            r13 = 2131165400(0x7var_d8, float:1.7945016E38)
-            r3 = 2131165400(0x7var_d8, float:1.7945016E38)
+            r13 = 2131165401(0x7var_d9, float:1.7945018E38)
+            r3 = 2131165401(0x7var_d9, float:1.7945018E38)
             goto L_0x00e6
         L_0x00e0:
-            r13 = 2131165402(0x7var_da, float:1.794502E38)
-            r3 = 2131165402(0x7var_da, float:1.794502E38)
+            r13 = 2131165403(0x7var_db, float:1.7945022E38)
+            r3 = 2131165403(0x7var_db, float:1.7945022E38)
         L_0x00e6:
             r4 = r9
             r13 = 0

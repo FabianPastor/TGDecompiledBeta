@@ -3,8 +3,10 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public class TLRPC$TL_sponsoredMessage extends TLObject {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
     public int channel_post;
+    public TLRPC$ChatInvite chat_invite;
+    public String chat_invite_hash;
     public ArrayList<TLRPC$MessageEntity> entities = new ArrayList<>();
     public int flags;
     public TLRPC$Peer from_id;
@@ -27,7 +29,15 @@ public class TLRPC$TL_sponsoredMessage extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);
         this.random_id = abstractSerializedData.readByteArray(z);
-        this.from_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        if ((this.flags & 8) != 0) {
+            this.from_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
+        if ((this.flags & 16) != 0) {
+            this.chat_invite = TLRPC$ChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
+        if ((this.flags & 16) != 0) {
+            this.chat_invite_hash = abstractSerializedData.readString(z);
+        }
         if ((this.flags & 4) != 0) {
             this.channel_post = abstractSerializedData.readInt32(z);
         }
@@ -59,7 +69,15 @@ public class TLRPC$TL_sponsoredMessage extends TLObject {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);
         abstractSerializedData.writeByteArray(this.random_id);
-        this.from_id.serializeToStream(abstractSerializedData);
+        if ((this.flags & 8) != 0) {
+            this.from_id.serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 16) != 0) {
+            this.chat_invite.serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 16) != 0) {
+            abstractSerializedData.writeString(this.chat_invite_hash);
+        }
         if ((this.flags & 4) != 0) {
             abstractSerializedData.writeInt32(this.channel_post);
         }

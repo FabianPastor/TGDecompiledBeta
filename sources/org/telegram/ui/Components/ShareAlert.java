@@ -539,7 +539,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r8 = r28
             r0.parentFragment = r8
             android.content.res.Resources r8 = r27.getResources()
-            r9 = 2131166073(0x7var_, float:1.7946381E38)
+            r9 = 2131166083(0x7var_, float:1.7946401E38)
             android.graphics.drawable.Drawable r8 = r8.getDrawable(r9)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             r0.shadowDrawable = r8
@@ -809,7 +809,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
             r3.showTextView()
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r8 = 2131626500(0x7f0e0a04, float:1.8880238E38)
+            r8 = 2131626520(0x7f0e0a18, float:1.8880279E38)
             java.lang.String r13 = "NoChats"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r13, r8)
             r3.setText(r8)
@@ -972,7 +972,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3 = r3[r6]
             if (r3 == 0) goto L_0x042b
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r8 = 2131628504(0x7f0e11d8, float:1.8884303E38)
+            r8 = 2131628582(0x7f0e1226, float:1.888446E38)
             java.lang.String r15 = "VoipGroupCopySpeakerLink"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r15, r8)
             java.lang.String r8 = r8.toUpperCase()
@@ -980,7 +980,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             goto L_0x043d
         L_0x042b:
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r8 = 2131625091(0x7f0e0483, float:1.887738E38)
+            r8 = 2131625096(0x7f0e0488, float:1.887739E38)
             java.lang.String r15 = "CopyLink"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r15, r8)
             java.lang.String r8 = r8.toUpperCase()
@@ -1050,7 +1050,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r6.setOnClickListener(r8)
             android.widget.ImageView r6 = new android.widget.ImageView
             r6.<init>(r1)
-            r8 = 2131166071(0x7var_, float:1.7946377E38)
+            r8 = 2131166081(0x7var_, float:1.7946397E38)
             r6.setImageResource(r8)
             android.graphics.PorterDuffColorFilter r8 = new android.graphics.PorterDuffColorFilter
             boolean r12 = r0.darkTheme
@@ -1148,7 +1148,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r2.setTextColor(r3)
         L_0x05a8:
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
-            r3 = 2131627790(0x7f0e0f0e, float:1.8882854E38)
+            r3 = 2131627859(0x7f0e0var_, float:1.8882994E38)
             java.lang.String r4 = "ShareComment"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r2.setHint(r3)
@@ -1229,7 +1229,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r5, r6, r11)
             if (r8 >= r10) goto L_0x0687
             android.content.res.Resources r6 = r27.getResources()
-            r11 = 2131165436(0x7var_fc, float:1.794509E38)
+            r11 = 2131165438(0x7var_fe, float:1.7945093E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r11)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
@@ -1245,7 +1245,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r5 = r11
         L_0x0687:
             r2.setBackgroundDrawable(r5)
-            r5 = 2131165270(0x7var_, float:1.7944752E38)
+            r5 = 2131165271(0x7var_, float:1.7944754E38)
             r2.setImageResource(r5)
             r5 = 2
             r2.setImportantForAccessibility(r5)
@@ -2781,7 +2781,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 org.telegram.ui.Components.ShareAlert r0 = org.telegram.ui.Components.ShareAlert.this
                 org.telegram.ui.ActionBar.Theme$ResourcesProvider r0 = r0.resourcesProvider
                 r5.<init>(r4, r0)
-                r4 = 2131627424(0x7f0e0da0, float:1.8882112E38)
+                r4 = 2131627493(0x7f0e0de5, float:1.8882252E38)
                 java.lang.String r0 = "Recent"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                 r5.setText(r4)

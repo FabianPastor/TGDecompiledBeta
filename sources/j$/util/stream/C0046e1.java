@@ -11,7 +11,6 @@ import j$.util.function.o;
 import j$.util.function.q;
 import j$.util.function.r;
 import j$.util.function.t;
-import j$.util.function.z;
 import j$.util.w;
 import j$.util.y;
 import j$.wrappers.CLASSNAMEj0;
@@ -90,8 +89,8 @@ abstract class CLASSNAMEe1 extends CLASSNAMEc implements CLASSNAMEf1 {
     }
 
     /* access modifiers changed from: package-private */
-    public final y K0(CLASSNAMEz2 z2Var, z zVar, boolean z) {
-        return new t4(z2Var, zVar, z);
+    public final y K0(CLASSNAMEz2 z2Var, j$.util.function.y yVar, boolean z) {
+        return new t4(z2Var, yVar, z);
     }
 
     public final boolean L(CLASSNAMEj0 j0Var) {
@@ -155,11 +154,11 @@ abstract class CLASSNAMEe1 extends CLASSNAMEc implements CLASSNAMEf1 {
         return new M(this, (CLASSNAMEc) this, CLASSNAMEf4.LONG_VALUE, CLASSNAMEe4.p | CLASSNAMEe4.n, n0Var);
     }
 
-    public final Object f0(z zVar, j$.util.function.w wVar, BiConsumer biConsumer) {
+    public final Object f0(j$.util.function.y yVar, j$.util.function.w wVar, BiConsumer biConsumer) {
         C c = new C(biConsumer, 2);
-        zVar.getClass();
+        yVar.getClass();
         wVar.getClass();
-        return x0(new A2(CLASSNAMEf4.LONG_VALUE, (CLASSNAMEb) c, wVar, zVar));
+        return x0(new A2(CLASSNAMEf4.LONG_VALUE, (CLASSNAMEb) c, wVar, yVar));
     }
 
     public final CLASSNAMEl findAny() {
@@ -180,7 +179,7 @@ abstract class CLASSNAMEe1 extends CLASSNAMEc implements CLASSNAMEf1 {
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m535iterator() {
+    public Iterator m537iterator() {
         return N.h(spliterator());
     }
 

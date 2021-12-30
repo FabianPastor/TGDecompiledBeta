@@ -127,7 +127,7 @@ public class DrawerProfileCell extends FrameLayout {
         this.darkThemeView.setOnClickListener(new DrawerProfileCell$$ExternalSyntheticLambda0(this));
         addView(this.darkThemeView, LayoutHelper.createFrame(48, 48.0f, 85, 0.0f, 0.0f, 6.0f, 90.0f));
         if (Theme.getEventType() == 0) {
-            SnowflakesEffect snowflakesEffect2 = new SnowflakesEffect();
+            SnowflakesEffect snowflakesEffect2 = new SnowflakesEffect(0);
             this.snowflakesEffect = snowflakesEffect2;
             snowflakesEffect2.setColorKey("chats_menuName");
         }
@@ -209,7 +209,7 @@ public class DrawerProfileCell extends FrameLayout {
             int r2 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
             if (r2 == 0) goto L_0x00a9
             android.content.Context r2 = r6.getContext()
-            r3 = 2131624521(0x7f0e0249, float:1.8876224E38)
+            r3 = 2131624522(0x7f0e024a, float:1.8876226E38)
             java.lang.String r4 = "AutoNightModeOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.widget.Toast r2 = android.widget.Toast.makeText(r2, r3, r1)

@@ -1,19 +1,18 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEc;
 import j$.util.function.Consumer;
+import j$.util.function.c;
 import j$.util.function.m;
 import j$.util.function.r;
-import j$.util.function.z;
-import j$.util.y;
+import j$.util.function.y;
 import java.util.List;
 
 /* renamed from: j$.util.stream.b  reason: case insensitive filesystem */
-public final /* synthetic */ class CLASSNAMEb implements z, r, Consumer, CLASSNAMEc {
+public final /* synthetic */ class CLASSNAMEb implements y, r, Consumer, c {
     public final /* synthetic */ int a = 2;
     public final /* synthetic */ Object b;
 
-    public /* synthetic */ CLASSNAMEb(y yVar) {
+    public /* synthetic */ CLASSNAMEb(j$.util.y yVar) {
         this.b = yVar;
     }
 
@@ -45,7 +44,7 @@ public final /* synthetic */ class CLASSNAMEb implements z, r, Consumer, CLASSNA
     public Object get() {
         switch (this.a) {
             case 0:
-                return (y) this.b;
+                return (j$.util.y) this.b;
             default:
                 return ((CLASSNAMEc) this.b).D0();
         }

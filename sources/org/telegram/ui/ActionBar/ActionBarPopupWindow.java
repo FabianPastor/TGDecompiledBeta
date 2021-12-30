@@ -34,6 +34,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.PopupSwipeBackLayout;
 
 public class ActionBarPopupWindow extends PopupWindow {
     private static final ViewTreeObserver.OnScrollChangedListener NOP = ActionBarPopupWindow$$ExternalSyntheticLambda0.INSTANCE;
@@ -103,6 +104,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         private ScrollView scrollView;
         /* access modifiers changed from: private */
         public boolean shownFromBotton;
+        private PopupSwipeBackLayout swipeBackLayout;
 
         public ActionBarPopupWindowLayout(Context context) {
             this(context, (Theme.ResourcesProvider) null);
@@ -113,6 +115,10 @@ public class ActionBarPopupWindow extends PopupWindow {
         }
 
         public ActionBarPopupWindowLayout(Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
+            this(context, i, resourcesProvider2, 0);
+        }
+
+        public ActionBarPopupWindowLayout(Context context, int i, Theme.ResourcesProvider resourcesProvider2, int i2) {
             super(context);
             this.backScaleX = 1.0f;
             this.backScaleY = 1.0f;
@@ -133,15 +139,25 @@ public class ActionBarPopupWindow extends PopupWindow {
             setBackgroundColor(getThemedColor("actionBarDefaultSubmenuBackground"));
             setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             setWillNotDraw(false);
+            if ((i2 & 1) > 0) {
+                PopupSwipeBackLayout popupSwipeBackLayout = new PopupSwipeBackLayout(context, resourcesProvider2);
+                this.swipeBackLayout = popupSwipeBackLayout;
+                addView(popupSwipeBackLayout, LayoutHelper.createFrame(-2, -2.0f));
+            }
             try {
                 ScrollView scrollView2 = new ScrollView(context);
                 this.scrollView = scrollView2;
                 scrollView2.setVerticalScrollBarEnabled(false);
-                addView(this.scrollView, LayoutHelper.createFrame(-2, -2.0f));
+                PopupSwipeBackLayout popupSwipeBackLayout2 = this.swipeBackLayout;
+                if (popupSwipeBackLayout2 != null) {
+                    popupSwipeBackLayout2.addView(this.scrollView, LayoutHelper.createFrame(-2, -2.0f));
+                } else {
+                    addView(this.scrollView, LayoutHelper.createFrame(-2, -2.0f));
+                }
             } catch (Throwable th) {
                 FileLog.e(th);
             }
-            AnonymousClass1 r0 = new LinearLayout(context) {
+            AnonymousClass1 r7 = new LinearLayout(context) {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
                     if (ActionBarPopupWindowLayout.this.fitItems) {
@@ -188,14 +204,28 @@ public class ActionBarPopupWindow extends PopupWindow {
                     super.onMeasure(i, i2);
                 }
             };
-            this.linearLayout = r0;
-            r0.setOrientation(1);
+            this.linearLayout = r7;
+            r7.setOrientation(1);
             ScrollView scrollView3 = this.scrollView;
             if (scrollView3 != null) {
                 scrollView3.addView(this.linearLayout, new FrameLayout.LayoutParams(-2, -2));
+                return;
+            }
+            PopupSwipeBackLayout popupSwipeBackLayout3 = this.swipeBackLayout;
+            if (popupSwipeBackLayout3 != null) {
+                popupSwipeBackLayout3.addView(this.linearLayout, LayoutHelper.createFrame(-2, -2.0f));
             } else {
                 addView(this.linearLayout, LayoutHelper.createFrame(-2, -2.0f));
             }
+        }
+
+        public PopupSwipeBackLayout getSwipeBack() {
+            return this.swipeBackLayout;
+        }
+
+        public int addViewToSwipeBack(View view) {
+            this.swipeBackLayout.addView(view);
+            return this.swipeBackLayout.getChildCount() - 1;
         }
 
         public void setFitItems(boolean z) {
@@ -706,9 +736,5 @@ public class ActionBarPopupWindow extends PopupWindow {
             this.popupAnimationIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.popupAnimationIndex, (int[]) null);
         }
         this.windowAnimatorSet.start();
-    }
-
-    public void setEmptyOutAnimation(long j) {
-        this.outEmptyTime = j;
     }
 }

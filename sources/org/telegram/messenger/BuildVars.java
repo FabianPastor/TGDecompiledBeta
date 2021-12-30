@@ -4,11 +4,10 @@ import android.content.SharedPreferences;
 import android.os.Build;
 
 public class BuildVars {
-    public static String APPCENTER_HASH = "a5b5c4f5-51da-dedc-9918-d9766a22ca7c";
     public static String APP_HASH = "014b35b6184100b085b0d0572f9b5103";
     public static int APP_ID = 4;
-    public static int BUILD_VERSION = 2496;
-    public static String BUILD_VERSION_STRING = "8.3.2";
+    public static int BUILD_VERSION = 2522;
+    public static String BUILD_VERSION_STRING = "8.4.1";
     public static boolean CHECK_UPDATES = true;
     public static boolean DEBUG_PRIVATE_VERSION = false;
     public static boolean DEBUG_VERSION = false;

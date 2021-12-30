@@ -66,7 +66,7 @@ public abstract class TLRPC$Message extends TLObject {
                 tLRPC$Message = new TLRPC$TL_messageEmpty_layer122();
                 break;
             case -2049520670:
-                tLRPC$Message = new TLRPC$TL_message();
+                tLRPC$Message = new TLRPC$TL_message_layer135();
                 break;
             case -1868117372:
                 tLRPC$Message = new TLRPC$TL_messageEmpty();
@@ -130,6 +130,9 @@ public abstract class TLRPC$Message extends TLObject {
                 break;
             case 736885382:
                 tLRPC$Message = new TLRPC$TL_message_old6();
+                break;
+            case 940666592:
+                tLRPC$Message = new TLRPC$TL_message();
                 break;
             case 1157215293:
                 tLRPC$Message = new TLRPC$TL_message_layer104();
@@ -381,8 +384,8 @@ public abstract class TLRPC$Message extends TLObject {
             if (this.params == null) {
                 this.params = new HashMap<>();
             }
-            this.layer = 135;
-            this.params.put("legacy_layer", "135");
+            this.layer = 136;
+            this.params.put("legacy_layer", "136");
         }
         if ((this.id < 0 || this.send_state == 3 || this.legacy) && (hashMap2 = this.params) != null && hashMap2.size() > 0) {
             for (Map.Entry next2 : this.params.entrySet()) {

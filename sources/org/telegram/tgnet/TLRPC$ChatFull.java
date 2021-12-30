@@ -6,6 +6,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public String about;
     public int admins_count;
     public int available_min_id;
+    public ArrayList<String> available_reactions = new ArrayList<>();
     public int banned_count;
     public boolean blocked;
     public ArrayList<TLRPC$BotInfo> bot_info = new ArrayList<>();
@@ -76,6 +77,12 @@ public abstract class TLRPC$ChatFull extends TLObject {
             case -877254512:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer89();
                 break;
+            case -779165146:
+                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                break;
+            case -516145888:
+                tLRPC$ChatFull = new TLRPC$TL_channelFull();
+                break;
             case -374179305:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer133();
                 break;
@@ -131,7 +138,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer132();
                 break;
             case 1185349556:
-                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                tLRPC$ChatFull = new TLRPC$TL_chatFull_layer135();
                 break;
             case 1235264985:
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer132();
@@ -143,7 +150,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer131();
                 break;
             case 1449537070:
-                tLRPC$ChatFull = new TLRPC$TL_channelFull();
+                tLRPC$ChatFull = new TLRPC$TL_channelFull_layer135();
                 break;
             case 1506802019:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer134();

@@ -111,6 +111,12 @@ public class EditTextCaption extends EditTextBoldCursor {
         applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
     }
 
+    public void makeSelectedSpoiler() {
+        TextStyleSpan.TextStyleRun textStyleRun = new TextStyleSpan.TextStyleRun();
+        textStyleRun.flags |= 256;
+        applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
+    }
+
     public void makeSelectedItalic() {
         TextStyleSpan.TextStyleRun textStyleRun = new TextStyleSpan.TextStyleRun();
         textStyleRun.flags |= 2;
@@ -329,10 +335,13 @@ public class EditTextCaption extends EditTextBoldCursor {
         } else if (i == NUM) {
             makeSelectedStrike();
             return true;
+        } else if (i == NUM) {
+            makeSelectedUnderline();
+            return true;
         } else if (i != NUM) {
             return false;
         } else {
-            makeSelectedUnderline();
+            makeSelectedSpoiler();
             return true;
         }
     }
@@ -449,6 +458,7 @@ public class EditTextCaption extends EditTextBoldCursor {
             i++;
         }
         if (hasSelection()) {
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Spoiler", NUM)));
             wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Bold", NUM)));
             wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Italic", NUM)));
             wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Mono", NUM)));

@@ -94,7 +94,7 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
         backupImageView2.getImageReceiver().setCrossfadeWithOldImage(true);
         this.backupImageView.getImageReceiver().setAllowStartLottieAnimation(false);
         this.backupImageView.getImageReceiver().setAutoRepeat(0);
-        if (i2 == 0) {
+        if (i2 == 0 || i2 == 2) {
             addView(this.backupImageView, LayoutHelper.createFrame(28, 28.0f, 81, 0.0f, 0.0f, 0.0f, 12.0f));
         } else {
             addView(this.backupImageView, LayoutHelper.createFrame(36, 36.0f, 81, 0.0f, 0.0f, 0.0f, 12.0f));
@@ -110,7 +110,12 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
             int size = View.MeasureSpec.getSize(i);
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size) * 1.2f), NUM));
         } else {
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(77.0f), NUM), View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i2), NUM));
+            int dp = AndroidUtilities.dp(77.0f);
+            int size2 = View.MeasureSpec.getSize(i2);
+            if (size2 == 0) {
+                size2 = (int) (((float) dp) * 1.35f);
+            }
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(dp, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
         }
         BackupImageView backupImageView2 = this.backupImageView;
         backupImageView2.setPivotY((float) backupImageView2.getMeasuredHeight());
@@ -514,7 +519,7 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
             java.lang.String r3 = r10.pathToWallpaper
             java.lang.String r4 = r10.pathToFile
             int r10 = r10.previewWallpaperOffset
-            android.graphics.Bitmap r10 = getScaledBitmap(r0, r2, r3, r4, r10)
+            android.graphics.Bitmap r10 = org.telegram.messenger.AndroidUtilities.getScaledBitmap(r0, r2, r3, r4, r10)
             if (r10 == 0) goto L_0x007d
             android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
             r1.<init>(r10)
@@ -588,112 +593,6 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x007c A[SYNTHETIC, Splitter:B:39:0x007c] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static android.graphics.Bitmap getScaledBitmap(float r7, float r8, java.lang.String r9, java.lang.String r10, int r11) {
-        /*
-            r0 = 0
-            android.graphics.BitmapFactory$Options r1 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0075 }
-            r1.<init>()     // Catch:{ all -> 0x0075 }
-            r2 = 1
-            r1.inJustDecodeBounds = r2     // Catch:{ all -> 0x0075 }
-            if (r9 == 0) goto L_0x0010
-            android.graphics.BitmapFactory.decodeFile(r9, r1)     // Catch:{ all -> 0x0075 }
-            r3 = r0
-            goto L_0x0020
-        L_0x0010:
-            java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ all -> 0x0075 }
-            r3.<init>(r10)     // Catch:{ all -> 0x0075 }
-            java.nio.channels.FileChannel r10 = r3.getChannel()     // Catch:{ all -> 0x0073 }
-            long r4 = (long) r11     // Catch:{ all -> 0x0073 }
-            r10.position(r4)     // Catch:{ all -> 0x0073 }
-            android.graphics.BitmapFactory.decodeStream(r3, r0, r1)     // Catch:{ all -> 0x0073 }
-        L_0x0020:
-            int r10 = r1.outWidth     // Catch:{ all -> 0x0073 }
-            if (r10 <= 0) goto L_0x006d
-            int r4 = r1.outHeight     // Catch:{ all -> 0x0073 }
-            if (r4 <= 0) goto L_0x006d
-            int r5 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
-            if (r5 <= 0) goto L_0x0031
-            if (r10 >= r4) goto L_0x0031
-            r6 = r8
-            r8 = r7
-            r7 = r6
-        L_0x0031:
-            float r10 = (float) r10     // Catch:{ all -> 0x0073 }
-            float r10 = r10 / r7
-            float r7 = (float) r4     // Catch:{ all -> 0x0073 }
-            float r7 = r7 / r8
-            float r7 = java.lang.Math.min(r10, r7)     // Catch:{ all -> 0x0073 }
-            r1.inSampleSize = r2     // Catch:{ all -> 0x0073 }
-            r8 = 1065353216(0x3var_, float:1.0)
-            int r8 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
-            if (r8 <= 0) goto L_0x004c
-        L_0x0041:
-            int r8 = r1.inSampleSize     // Catch:{ all -> 0x0073 }
-            int r8 = r8 * 2
-            r1.inSampleSize = r8     // Catch:{ all -> 0x0073 }
-            float r8 = (float) r8     // Catch:{ all -> 0x0073 }
-            int r8 = (r8 > r7 ? 1 : (r8 == r7 ? 0 : -1))
-            if (r8 < 0) goto L_0x0041
-        L_0x004c:
-            r7 = 0
-            r1.inJustDecodeBounds = r7     // Catch:{ all -> 0x0073 }
-            if (r9 == 0) goto L_0x0056
-            android.graphics.Bitmap r7 = android.graphics.BitmapFactory.decodeFile(r9, r1)     // Catch:{ all -> 0x0073 }
-            goto L_0x0062
-        L_0x0056:
-            java.nio.channels.FileChannel r7 = r3.getChannel()     // Catch:{ all -> 0x0073 }
-            long r8 = (long) r11     // Catch:{ all -> 0x0073 }
-            r7.position(r8)     // Catch:{ all -> 0x0073 }
-            android.graphics.Bitmap r7 = android.graphics.BitmapFactory.decodeStream(r3, r0, r1)     // Catch:{ all -> 0x0073 }
-        L_0x0062:
-            if (r3 == 0) goto L_0x006c
-            r3.close()     // Catch:{ Exception -> 0x0068 }
-            goto L_0x006c
-        L_0x0068:
-            r8 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x006c:
-            return r7
-        L_0x006d:
-            if (r3 == 0) goto L_0x0084
-            r3.close()     // Catch:{ Exception -> 0x0080 }
-            goto L_0x0084
-        L_0x0073:
-            r7 = move-exception
-            goto L_0x0077
-        L_0x0075:
-            r7 = move-exception
-            r3 = r0
-        L_0x0077:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)     // Catch:{ all -> 0x0085 }
-            if (r3 == 0) goto L_0x0084
-            r3.close()     // Catch:{ Exception -> 0x0080 }
-            goto L_0x0084
-        L_0x0080:
-            r7 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)
-        L_0x0084:
-            return r0
-        L_0x0085:
-            r7 = move-exception
-            if (r3 == 0) goto L_0x0090
-            r3.close()     // Catch:{ Exception -> 0x008c }
-            goto L_0x0090
-        L_0x008c:
-            r8 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x0090:
-            goto L_0x0092
-        L_0x0091:
-            throw r7
-        L_0x0092:
-            goto L_0x0091
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeSmallPreviewView.getScaledBitmap(float, float, java.lang.String, java.lang.String, int):android.graphics.Bitmap");
-    }
-
     private class ThemeDrawable {
         /* access modifiers changed from: private */
         public final Paint inBubblePaint = new Paint(1);
@@ -750,7 +649,7 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
         public void draw(Canvas canvas, float f) {
             int i;
             ThemeSmallPreviewView themeSmallPreviewView = ThemeSmallPreviewView.this;
-            if (themeSmallPreviewView.chatThemeItem.isSelected || themeSmallPreviewView.strokeAlphaAnimator != null) {
+            if (themeSmallPreviewView.isSelected || themeSmallPreviewView.strokeAlphaAnimator != null) {
                 ChatThemeBottomSheet.ChatThemeItem chatThemeItem = ThemeSmallPreviewView.this.chatThemeItem;
                 EmojiThemes.ThemeItem themeItem = chatThemeItem.chatTheme.getThemeItem(chatThemeItem.themeIndex);
                 ThemeSmallPreviewView themeSmallPreviewView2 = ThemeSmallPreviewView.this;
@@ -778,43 +677,48 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
                 canvas.translate(((float) (ThemeSmallPreviewView.this.getWidth() - access$1200.getWidth())) * 0.5f, (float) AndroidUtilities.dp(18.0f));
                 access$1200.draw(canvas);
                 canvas.restore();
-                return;
-            }
-            float access$500 = themeSmallPreviewView3.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(8.0f));
-            float access$5002 = ThemeSmallPreviewView.this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(22.0f));
-            if (ThemeSmallPreviewView.this.currentType == 0) {
-                ThemeSmallPreviewView.this.rectF.set(access$5002, access$500, ThemeSmallPreviewView.this.BUBBLE_WIDTH + access$5002, ThemeSmallPreviewView.this.BUBBLE_HEIGHT + access$500);
-            } else {
-                access$500 = ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.12f;
-                ThemeSmallPreviewView.this.rectF.set(((float) ThemeSmallPreviewView.this.getMeasuredWidth()) - (((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.65f), access$500, ((float) ThemeSmallPreviewView.this.getMeasuredWidth()) - (((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.1f), ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.32f);
-            }
-            Paint paint = this.outBubblePaintSecond;
-            if (ThemeSmallPreviewView.this.currentType == 0) {
-                canvas.drawRoundRect(ThemeSmallPreviewView.this.rectF, ThemeSmallPreviewView.this.rectF.height() * 0.5f, ThemeSmallPreviewView.this.rectF.height() * 0.5f, paint);
-            } else {
+            } else if (themeSmallPreviewView3.currentType == 2) {
                 ThemeSmallPreviewView themeSmallPreviewView4 = ThemeSmallPreviewView.this;
-                themeSmallPreviewView4.messageDrawableOut.setBounds((int) themeSmallPreviewView4.rectF.left, ((int) ThemeSmallPreviewView.this.rectF.top) - AndroidUtilities.dp(2.0f), ((int) ThemeSmallPreviewView.this.rectF.right) + AndroidUtilities.dp(4.0f), ((int) ThemeSmallPreviewView.this.rectF.bottom) + AndroidUtilities.dp(2.0f));
-                ThemeSmallPreviewView themeSmallPreviewView5 = ThemeSmallPreviewView.this;
-                themeSmallPreviewView5.messageDrawableOut.setRoundRadius((int) (themeSmallPreviewView5.rectF.height() * 0.5f));
-                ThemeSmallPreviewView.this.messageDrawableOut.draw(canvas, paint);
-            }
-            if (ThemeSmallPreviewView.this.currentType == 0) {
-                float access$5003 = ThemeSmallPreviewView.this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(5.0f));
-                float access$1500 = access$500 + ThemeSmallPreviewView.this.BUBBLE_HEIGHT + ((float) AndroidUtilities.dp(4.0f));
-                ThemeSmallPreviewView.this.rectF.set(access$5003, access$1500, ThemeSmallPreviewView.this.BUBBLE_WIDTH + access$5003, ThemeSmallPreviewView.this.BUBBLE_HEIGHT + access$1500);
+                if (themeSmallPreviewView4.chatThemeItem.icon != null) {
+                    canvas.drawBitmap(ThemeSmallPreviewView.this.chatThemeItem.icon, ((float) (themeSmallPreviewView4.getWidth() - ThemeSmallPreviewView.this.chatThemeItem.icon.getWidth())) * 0.5f, (float) AndroidUtilities.dp(21.0f), (Paint) null);
+                }
             } else {
-                float measuredWidth = ((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.1f;
-                ThemeSmallPreviewView.this.rectF.set(measuredWidth, ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.35f, ((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.65f, ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.55f);
+                float access$500 = ThemeSmallPreviewView.this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(8.0f));
+                float access$5002 = ThemeSmallPreviewView.this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(22.0f));
+                if (ThemeSmallPreviewView.this.currentType == 0) {
+                    ThemeSmallPreviewView.this.rectF.set(access$5002, access$500, ThemeSmallPreviewView.this.BUBBLE_WIDTH + access$5002, ThemeSmallPreviewView.this.BUBBLE_HEIGHT + access$500);
+                } else {
+                    access$500 = ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.12f;
+                    ThemeSmallPreviewView.this.rectF.set(((float) ThemeSmallPreviewView.this.getMeasuredWidth()) - (((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.65f), access$500, ((float) ThemeSmallPreviewView.this.getMeasuredWidth()) - (((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.1f), ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.32f);
+                }
+                Paint paint = this.outBubblePaintSecond;
+                if (ThemeSmallPreviewView.this.currentType == 0) {
+                    canvas.drawRoundRect(ThemeSmallPreviewView.this.rectF, ThemeSmallPreviewView.this.rectF.height() * 0.5f, ThemeSmallPreviewView.this.rectF.height() * 0.5f, paint);
+                } else {
+                    ThemeSmallPreviewView themeSmallPreviewView5 = ThemeSmallPreviewView.this;
+                    themeSmallPreviewView5.messageDrawableOut.setBounds((int) themeSmallPreviewView5.rectF.left, ((int) ThemeSmallPreviewView.this.rectF.top) - AndroidUtilities.dp(2.0f), ((int) ThemeSmallPreviewView.this.rectF.right) + AndroidUtilities.dp(4.0f), ((int) ThemeSmallPreviewView.this.rectF.bottom) + AndroidUtilities.dp(2.0f));
+                    ThemeSmallPreviewView themeSmallPreviewView6 = ThemeSmallPreviewView.this;
+                    themeSmallPreviewView6.messageDrawableOut.setRoundRadius((int) (themeSmallPreviewView6.rectF.height() * 0.5f));
+                    ThemeSmallPreviewView.this.messageDrawableOut.draw(canvas, paint);
+                }
+                if (ThemeSmallPreviewView.this.currentType == 0) {
+                    float access$5003 = ThemeSmallPreviewView.this.INNER_RECT_SPACE + ((float) AndroidUtilities.dp(5.0f));
+                    float access$1500 = access$500 + ThemeSmallPreviewView.this.BUBBLE_HEIGHT + ((float) AndroidUtilities.dp(4.0f));
+                    ThemeSmallPreviewView.this.rectF.set(access$5003, access$1500, ThemeSmallPreviewView.this.BUBBLE_WIDTH + access$5003, ThemeSmallPreviewView.this.BUBBLE_HEIGHT + access$1500);
+                } else {
+                    float measuredWidth = ((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.1f;
+                    ThemeSmallPreviewView.this.rectF.set(measuredWidth, ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.35f, ((float) ThemeSmallPreviewView.this.getMeasuredWidth()) * 0.65f, ((float) ThemeSmallPreviewView.this.getMeasuredHeight()) * 0.55f);
+                }
+                if (ThemeSmallPreviewView.this.currentType == 0) {
+                    canvas.drawRoundRect(ThemeSmallPreviewView.this.rectF, ThemeSmallPreviewView.this.rectF.height() * 0.5f, ThemeSmallPreviewView.this.rectF.height() * 0.5f, this.inBubblePaint);
+                    return;
+                }
+                ThemeSmallPreviewView themeSmallPreviewView7 = ThemeSmallPreviewView.this;
+                themeSmallPreviewView7.messageDrawableIn.setBounds(((int) themeSmallPreviewView7.rectF.left) - AndroidUtilities.dp(4.0f), ((int) ThemeSmallPreviewView.this.rectF.top) - AndroidUtilities.dp(2.0f), (int) ThemeSmallPreviewView.this.rectF.right, ((int) ThemeSmallPreviewView.this.rectF.bottom) + AndroidUtilities.dp(2.0f));
+                ThemeSmallPreviewView themeSmallPreviewView8 = ThemeSmallPreviewView.this;
+                themeSmallPreviewView8.messageDrawableIn.setRoundRadius((int) (themeSmallPreviewView8.rectF.height() * 0.5f));
+                ThemeSmallPreviewView.this.messageDrawableIn.draw(canvas, this.inBubblePaint);
             }
-            if (ThemeSmallPreviewView.this.currentType == 0) {
-                canvas.drawRoundRect(ThemeSmallPreviewView.this.rectF, ThemeSmallPreviewView.this.rectF.height() * 0.5f, ThemeSmallPreviewView.this.rectF.height() * 0.5f, this.inBubblePaint);
-                return;
-            }
-            ThemeSmallPreviewView themeSmallPreviewView6 = ThemeSmallPreviewView.this;
-            themeSmallPreviewView6.messageDrawableIn.setBounds(((int) themeSmallPreviewView6.rectF.left) - AndroidUtilities.dp(4.0f), ((int) ThemeSmallPreviewView.this.rectF.top) - AndroidUtilities.dp(2.0f), (int) ThemeSmallPreviewView.this.rectF.right, ((int) ThemeSmallPreviewView.this.rectF.bottom) + AndroidUtilities.dp(2.0f));
-            ThemeSmallPreviewView themeSmallPreviewView7 = ThemeSmallPreviewView.this;
-            themeSmallPreviewView7.messageDrawableIn.setRoundRadius((int) (themeSmallPreviewView7.rectF.height() * 0.5f));
-            ThemeSmallPreviewView.this.messageDrawableIn.draw(canvas, this.inBubblePaint);
         }
     }
 

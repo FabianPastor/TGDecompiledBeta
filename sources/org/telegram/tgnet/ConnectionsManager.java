@@ -264,7 +264,7 @@ public class ConnectionsManager extends BaseController {
         }
         String str9 = str4.trim().length() == 0 ? "SDK Unknown" : str4;
         getUserConfig().loadConfig();
-        init(BuildVars.BUILD_VERSION, 135, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), getRegId(), AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
+        init(BuildVars.BUILD_VERSION, 136, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), getRegId(), AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
     }
 
     private String getRegId() {
@@ -884,7 +884,7 @@ public class ConnectionsManager extends BaseController {
         /* access modifiers changed from: protected */
         /* JADX WARNING: Removed duplicated region for block: B:43:0x00be A[SYNTHETIC, Splitter:B:43:0x00be] */
         /* JADX WARNING: Removed duplicated region for block: B:48:0x00c8 A[SYNTHETIC, Splitter:B:48:0x00c8] */
-        /* JADX WARNING: Removed duplicated region for block: B:52:0x00cf A[SYNTHETIC, Splitter:B:52:0x00cf] */
+        /* JADX WARNING: Removed duplicated region for block: B:53:0x00ce A[SYNTHETIC, Splitter:B:53:0x00ce] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public org.telegram.tgnet.ConnectionsManager.ResolvedDomain doInBackground(java.lang.Void... r11) {
             /*
@@ -924,7 +924,7 @@ public class ConnectionsManager extends BaseController {
             L_0x004f:
                 int r6 = r3.read(r5)     // Catch:{ all -> 0x00b1 }
                 if (r6 <= 0) goto L_0x0059
-                r4.write(r5, r1, r6)     // Catch:{ all -> 0x00b1 }
+                r4.write(r5, r2, r6)     // Catch:{ all -> 0x00b1 }
                 goto L_0x004f
             L_0x0059:
                 org.json.JSONObject r5 = new org.json.JSONObject     // Catch:{ all -> 0x00b1 }
@@ -956,7 +956,7 @@ public class ConnectionsManager extends BaseController {
                 goto L_0x00a0
             L_0x009c:
                 r0 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0, (boolean) r2)
             L_0x00a0:
                 r4.close()     // Catch:{ Exception -> 0x00a3 }
             L_0x00a3:
@@ -966,70 +966,70 @@ public class ConnectionsManager extends BaseController {
                 goto L_0x00ac
             L_0x00a8:
                 r11 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r11, (boolean) r2)
             L_0x00ac:
                 r4.close()     // Catch:{ Exception -> 0x00af }
             L_0x00af:
-                r1 = 1
-                goto L_0x00cd
+                r11 = 1
+                goto L_0x00cc
             L_0x00b1:
                 r11 = move-exception
                 goto L_0x00b9
             L_0x00b3:
                 r11 = move-exception
-                r4 = r2
+                r4 = r1
                 goto L_0x00b9
             L_0x00b6:
                 r11 = move-exception
-                r3 = r2
+                r3 = r1
                 r4 = r3
             L_0x00b9:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)     // Catch:{ all -> 0x00f0 }
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r11, (boolean) r2)     // Catch:{ all -> 0x00ef }
                 if (r3 == 0) goto L_0x00c6
                 r3.close()     // Catch:{ all -> 0x00c2 }
                 goto L_0x00c6
             L_0x00c2:
                 r11 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r11, (boolean) r2)
             L_0x00c6:
-                if (r4 == 0) goto L_0x00cd
-                r4.close()     // Catch:{ Exception -> 0x00cc }
-                goto L_0x00cd
+                if (r4 == 0) goto L_0x00cb
+                r4.close()     // Catch:{ Exception -> 0x00cb }
+            L_0x00cb:
+                r11 = 0
             L_0x00cc:
-            L_0x00cd:
-                if (r1 != 0) goto L_0x00ef
-                java.lang.String r11 = r10.currentHostName     // Catch:{ Exception -> 0x00eb }
-                java.net.InetAddress r11 = java.net.InetAddress.getByName(r11)     // Catch:{ Exception -> 0x00eb }
-                java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ Exception -> 0x00eb }
-                r1.<init>(r0)     // Catch:{ Exception -> 0x00eb }
-                java.lang.String r11 = r11.getHostAddress()     // Catch:{ Exception -> 0x00eb }
-                r1.add(r11)     // Catch:{ Exception -> 0x00eb }
-                org.telegram.tgnet.ConnectionsManager$ResolvedDomain r11 = new org.telegram.tgnet.ConnectionsManager$ResolvedDomain     // Catch:{ Exception -> 0x00eb }
-                long r3 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x00eb }
-                r11.<init>(r1, r3)     // Catch:{ Exception -> 0x00eb }
+                if (r11 != 0) goto L_0x00ee
+                java.lang.String r11 = r10.currentHostName     // Catch:{ Exception -> 0x00ea }
+                java.net.InetAddress r11 = java.net.InetAddress.getByName(r11)     // Catch:{ Exception -> 0x00ea }
+                java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ Exception -> 0x00ea }
+                r3.<init>(r0)     // Catch:{ Exception -> 0x00ea }
+                java.lang.String r11 = r11.getHostAddress()     // Catch:{ Exception -> 0x00ea }
+                r3.add(r11)     // Catch:{ Exception -> 0x00ea }
+                org.telegram.tgnet.ConnectionsManager$ResolvedDomain r11 = new org.telegram.tgnet.ConnectionsManager$ResolvedDomain     // Catch:{ Exception -> 0x00ea }
+                long r4 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x00ea }
+                r11.<init>(r3, r4)     // Catch:{ Exception -> 0x00ea }
                 return r11
-            L_0x00eb:
+            L_0x00ea:
                 r11 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r11, (boolean) r2)
+            L_0x00ee:
+                return r1
             L_0x00ef:
-                return r2
-            L_0x00f0:
                 r11 = move-exception
-                if (r3 == 0) goto L_0x00fb
-                r3.close()     // Catch:{ all -> 0x00f7 }
-                goto L_0x00fb
-            L_0x00f7:
+                if (r3 == 0) goto L_0x00fa
+                r3.close()     // Catch:{ all -> 0x00f6 }
+                goto L_0x00fa
+            L_0x00f6:
                 r0 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x00fb:
-                if (r4 == 0) goto L_0x0100
-                r4.close()     // Catch:{ Exception -> 0x0100 }
-            L_0x0100:
-                goto L_0x0102
-            L_0x0101:
-                throw r11
-            L_0x0102:
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0, (boolean) r2)
+            L_0x00fa:
+                if (r4 == 0) goto L_0x00ff
+                r4.close()     // Catch:{ Exception -> 0x00ff }
+            L_0x00ff:
                 goto L_0x0101
+            L_0x0100:
+                throw r11
+            L_0x0101:
+                goto L_0x0100
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.ConnectionsManager.ResolveHostByNameTask.doInBackground(java.lang.Void[]):org.telegram.tgnet.ConnectionsManager$ResolvedDomain");
         }

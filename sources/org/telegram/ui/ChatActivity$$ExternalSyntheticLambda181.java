@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.ui.PinchToZoomHelper;
+import org.telegram.tgnet.TLRPC$BotInlineResult;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda181 implements PinchToZoomHelper.ClipBoundsListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda181 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLRPC$BotInlineResult f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda181(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda181(ChatActivity chatActivity, TLRPC$BotInlineResult tLRPC$BotInlineResult) {
         this.f$0 = chatActivity;
+        this.f$1 = tLRPC$BotInlineResult;
     }
 
-    public final void getClipTopBottom(float[] fArr) {
-        this.f$0.lambda$createView$62(fArr);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.lambda$createView$38(this.f$1, z, i);
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
@@ -100,5 +101,10 @@ public class DrawerUserCell extends FrameLayout {
             RectF rectF2 = this.rect;
             canvas.drawText(format, rectF2.left + ((rectF2.width() - ((float) ceil)) / 2.0f), (float) (dp + AndroidUtilities.dp(16.0f)), Theme.dialogs_countTextPaint);
         }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.addAction(16);
     }
 }

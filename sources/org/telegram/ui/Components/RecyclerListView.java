@@ -17,6 +17,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.SystemClock;
 import android.text.Layout;
+import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.SparseIntArray;
@@ -28,6 +29,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.ViewPropertyAnimator;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
@@ -44,6 +46,8 @@ import org.telegram.ui.ActionBar.Theme;
 public class RecyclerListView extends RecyclerView {
     private static int[] attributes;
     private static boolean gotAttributes;
+    private View.AccessibilityDelegate accessibilityDelegate;
+    private boolean accessibilityEnabled;
     /* access modifiers changed from: private */
     public boolean allowItemsInteractionDuringAnimation;
     private boolean animateEmptyView;
@@ -68,7 +72,7 @@ public class RecyclerListView extends RecyclerView {
     public FastScroll fastScroll;
     public boolean fastScrollAnimationRunning;
     /* access modifiers changed from: private */
-    public GestureDetector gestureDetector;
+    public GestureDetectorFixDoubleTap gestureDetector;
     private ArrayList<View> headers;
     private ArrayList<View> headersCache;
     private boolean hiddenByEmptyView;
@@ -151,6 +155,21 @@ public class RecyclerListView extends RecyclerView {
     }
 
     public interface OnItemClickListenerExtended {
+
+        /* renamed from: org.telegram.ui.Components.RecyclerListView$OnItemClickListenerExtended$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static boolean $default$hasDoubleTap(OnItemClickListenerExtended onItemClickListenerExtended, View view, int i) {
+                return false;
+            }
+
+            public static void $default$onDoubleTap(OnItemClickListenerExtended onItemClickListenerExtended, View view, int i, float f, float f2) {
+            }
+        }
+
+        boolean hasDoubleTap(View view, int i);
+
+        void onDoubleTap(View view, int i, float f, float f2);
+
         void onItemClick(View view, int i, float f, float f2);
     }
 
@@ -159,6 +178,16 @@ public class RecyclerListView extends RecyclerView {
     }
 
     public interface OnItemLongClickListenerExtended {
+
+        /* renamed from: org.telegram.ui.Components.RecyclerListView$OnItemLongClickListenerExtended$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static void $default$onLongClickRelease(OnItemLongClickListenerExtended onItemLongClickListenerExtended) {
+            }
+
+            public static void $default$onMove(OnItemLongClickListenerExtended onItemLongClickListenerExtended, float f, float f2) {
+            }
+        }
+
         boolean onItemClick(View view, int i, float f, float f2);
 
         void onLongClickRelease();
@@ -397,6 +426,8 @@ public class RecyclerListView extends RecyclerView {
         private float floatingDateProgress;
         /* access modifiers changed from: private */
         public boolean floatingDateVisible;
+        private boolean fromTop;
+        private float fromWidth;
         Runnable hideFloatingDateRunnable = new Runnable() {
             public void run() {
                 if (FastScroll.this.pressed) {
@@ -408,15 +439,18 @@ public class RecyclerListView extends RecyclerView {
                 FastScroll.this.invalidate();
             }
         };
+        private StaticLayout inLetterLayout;
         private int inactiveColor;
         boolean isMoving;
         boolean isRtl;
         boolean isVisible;
+        private float lastLetterY;
         private long lastUpdateTime;
         private float lastY;
         private StaticLayout letterLayout;
         private TextPaint letterPaint = new TextPaint(1);
         private StaticLayout oldLetterLayout;
+        private StaticLayout outLetterLayout;
         private Paint paint = new Paint(1);
         private Paint paint2 = new Paint(1);
         private Path path = new Path();
@@ -426,7 +460,9 @@ public class RecyclerListView extends RecyclerView {
         private float progress;
         private float[] radii = new float[8];
         private RectF rect = new RectF();
+        private float replaceLayoutProgress = 1.0f;
         private int scrollX;
+        private StaticLayout stableLetterLayout;
         private float startDy;
         long startTime;
         float startY;
@@ -706,6 +742,7 @@ public class RecyclerListView extends RecyclerView {
             RecyclerView.LayoutManager layoutManager = RecyclerListView.this.getLayoutManager();
             if (layoutManager instanceof LinearLayoutManager) {
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                boolean z2 = true;
                 if (linearLayoutManager.getOrientation() == 1) {
                     RecyclerView.Adapter adapter = RecyclerListView.this.getAdapter();
                     if (adapter instanceof FastScrollAdapter) {
@@ -723,10 +760,40 @@ public class RecyclerListView extends RecyclerView {
                             }
                             this.letterLayout = null;
                         } else if (!letter.equals(this.currentLetter)) {
+                            this.currentLetter = letter;
                             if (this.type == 0) {
                                 this.letterLayout = new StaticLayout(letter, this.letterPaint, 1000, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             } else {
-                                this.letterLayout = new StaticLayout(letter, this.letterPaint, ((int) this.letterPaint.measureText(letter)) + 1, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                this.outLetterLayout = this.letterLayout;
+                                int measureText = ((int) this.letterPaint.measureText(letter)) + 1;
+                                this.letterLayout = new StaticLayout(letter, this.letterPaint, measureText, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                if (this.outLetterLayout != null) {
+                                    String[] split = letter.split(" ");
+                                    String[] split2 = this.outLetterLayout.getText().toString().split(" ");
+                                    if (split == null || split2 == null || split.length != 2 || split2.length != 2 || !split[1].equals(split2[1])) {
+                                        this.inLetterLayout = this.letterLayout;
+                                        this.stableLetterLayout = null;
+                                    } else {
+                                        String charSequence = this.outLetterLayout.getText().toString();
+                                        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(charSequence);
+                                        spannableStringBuilder.setSpan(new EmptyStubSpan(), split2[0].length(), charSequence.length(), 0);
+                                        this.outLetterLayout = new StaticLayout(spannableStringBuilder, this.letterPaint, ((int) this.letterPaint.measureText(charSequence)) + 1, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder(letter);
+                                        spannableStringBuilder2.setSpan(new EmptyStubSpan(), split[0].length(), letter.length(), 0);
+                                        int i = measureText;
+                                        this.inLetterLayout = new StaticLayout(spannableStringBuilder2, this.letterPaint, i, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                        SpannableStringBuilder spannableStringBuilder3 = new SpannableStringBuilder(letter);
+                                        spannableStringBuilder3.setSpan(new EmptyStubSpan(), 0, split[0].length(), 0);
+                                        this.stableLetterLayout = new StaticLayout(spannableStringBuilder3, this.letterPaint, i, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                                    }
+                                    this.fromWidth = (float) this.outLetterLayout.getWidth();
+                                    this.replaceLayoutProgress = 0.0f;
+                                    if (getProgress() <= this.lastLetterY) {
+                                        z2 = false;
+                                    }
+                                    this.fromTop = z2;
+                                }
+                                this.lastLetterY = getProgress();
                             }
                             this.oldLetterLayout = null;
                             if (this.letterLayout.getLineCount() > 0) {
@@ -756,20 +823,20 @@ public class RecyclerListView extends RecyclerView {
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Code restructure failed: missing block: B:23:0x01e1, code lost:
-            if (r15[6] == r6) goto L_0x01e3;
+        /* JADX WARNING: Code restructure failed: missing block: B:23:0x01e0, code lost:
+            if (r14[6] == r8) goto L_0x01e2;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:28:0x01f1, code lost:
-            if (r15[4] == r6) goto L_0x0247;
+            if (r14[4] == r8) goto L_0x0248;
          */
         /* JADX WARNING: Removed duplicated region for block: B:30:0x01f5  */
         /* JADX WARNING: Removed duplicated region for block: B:31:0x0201  */
-        /* JADX WARNING: Removed duplicated region for block: B:34:0x0218  */
-        /* JADX WARNING: Removed duplicated region for block: B:35:0x021e  */
-        /* JADX WARNING: Removed duplicated region for block: B:38:0x0225  */
-        /* JADX WARNING: Removed duplicated region for block: B:39:0x0228  */
-        /* JADX WARNING: Removed duplicated region for block: B:43:0x024c  */
-        /* JADX WARNING: Removed duplicated region for block: B:45:0x0250  */
+        /* JADX WARNING: Removed duplicated region for block: B:34:0x0219  */
+        /* JADX WARNING: Removed duplicated region for block: B:35:0x021f  */
+        /* JADX WARNING: Removed duplicated region for block: B:38:0x0224  */
+        /* JADX WARNING: Removed duplicated region for block: B:39:0x0227  */
+        /* JADX WARNING: Removed duplicated region for block: B:43:0x024d  */
+        /* JADX WARNING: Removed duplicated region for block: B:45:0x0251  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onDraw(android.graphics.Canvas r19) {
             /*
@@ -804,136 +871,136 @@ public class RecyclerListView extends RecyclerView {
                 float r8 = (float) r8
                 r3.set(r4, r6, r7, r8)
                 int r3 = r0.type
-                r4 = 1103101952(0x41CLASSNAME, float:24.0)
-                r6 = 1082130432(0x40800000, float:4.0)
-                r7 = 1090519040(0x41000000, float:8.0)
-                r8 = 2
-                r9 = 1073741824(0x40000000, float:2.0)
+                r4 = -1
+                r6 = 1090519040(0x41000000, float:8.0)
+                r7 = 2
+                r8 = 1082130432(0x40800000, float:4.0)
+                r9 = 1103101952(0x41CLASSNAME, float:24.0)
                 r10 = 0
-                if (r3 != 0) goto L_0x006c
+                r11 = 1073741824(0x40000000, float:2.0)
+                if (r3 != 0) goto L_0x006d
                 android.graphics.Paint r3 = r0.paint
-                int r11 = r0.inactiveColor
-                int r12 = r0.activeColor
-                float r13 = r0.bubbleProgress
-                int r11 = androidx.core.graphics.ColorUtils.blendARGB(r11, r12, r13)
-                r3.setColor(r11)
+                int r12 = r0.inactiveColor
+                int r13 = r0.activeColor
+                float r14 = r0.bubbleProgress
+                int r12 = androidx.core.graphics.ColorUtils.blendARGB(r12, r13, r14)
+                r3.setColor(r12)
                 android.graphics.RectF r3 = r0.rect
-                int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
-                float r11 = (float) r11
-                int r12 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                int r12 = org.telegram.messenger.AndroidUtilities.dp(r11)
                 float r12 = (float) r12
-                android.graphics.Paint r13 = r0.paint
-                r1.drawRoundRect(r3, r11, r12, r13)
+                int r13 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                float r13 = (float) r13
+                android.graphics.Paint r14 = r0.paint
+                r1.drawRoundRect(r3, r12, r13, r14)
                 goto L_0x0135
-            L_0x006c:
+            L_0x006d:
                 android.graphics.Paint r3 = r0.paint
-                java.lang.String r11 = "windowBackgroundWhite"
-                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-                r12 = -1
+                java.lang.String r12 = "windowBackgroundWhite"
+                int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
                 r13 = 1036831949(0x3dcccccd, float:0.1)
-                int r11 = androidx.core.graphics.ColorUtils.blendARGB(r11, r12, r13)
-                r3.setColor(r11)
+                int r12 = androidx.core.graphics.ColorUtils.blendARGB(r12, r4, r13)
+                r3.setColor(r12)
                 r3 = 1104674816(0x41d80000, float:27.0)
-                int r11 = org.telegram.messenger.AndroidUtilities.dp(r3)
-                int r11 = r11 + r2
-                float r11 = (float) r11
-                android.graphics.drawable.Drawable r12 = r0.fastScrollShadowDrawable
-                int r13 = r18.getMeasuredWidth()
-                android.graphics.drawable.Drawable r14 = r0.fastScrollShadowDrawable
-                int r14 = r14.getIntrinsicWidth()
-                int r13 = r13 - r14
-                android.graphics.drawable.Drawable r14 = r0.fastScrollShadowDrawable
-                int r14 = r14.getIntrinsicHeight()
-                int r14 = r14 / r8
-                float r14 = (float) r14
-                float r14 = r11 - r14
-                int r14 = (int) r14
-                int r15 = r18.getMeasuredWidth()
+                int r12 = org.telegram.messenger.AndroidUtilities.dp(r3)
+                int r12 = r12 + r2
+                float r12 = (float) r12
+                android.graphics.drawable.Drawable r13 = r0.fastScrollShadowDrawable
+                int r14 = r18.getMeasuredWidth()
+                android.graphics.drawable.Drawable r15 = r0.fastScrollShadowDrawable
+                int r15 = r15.getIntrinsicWidth()
+                int r14 = r14 - r15
+                android.graphics.drawable.Drawable r15 = r0.fastScrollShadowDrawable
+                int r15 = r15.getIntrinsicHeight()
+                int r15 = r15 / r7
+                float r15 = (float) r15
+                float r15 = r12 - r15
+                int r15 = (int) r15
+                int r4 = r18.getMeasuredWidth()
                 android.graphics.drawable.Drawable r5 = r0.fastScrollShadowDrawable
                 int r5 = r5.getIntrinsicHeight()
-                int r5 = r5 / r8
+                int r5 = r5 / r7
                 float r5 = (float) r5
-                float r11 = r11 + r5
-                int r5 = (int) r11
-                r12.setBounds(r13, r14, r15, r5)
-                android.graphics.drawable.Drawable r5 = r0.fastScrollShadowDrawable
-                r5.draw(r1)
-                int r5 = r0.scrollX
-                int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                int r5 = r5 + r11
-                float r5 = (float) r5
+                float r12 = r12 + r5
+                int r5 = (int) r12
+                r13.setBounds(r14, r15, r4, r5)
+                android.graphics.drawable.Drawable r4 = r0.fastScrollShadowDrawable
+                r4.draw(r1)
+                int r4 = r0.scrollX
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r6)
+                int r4 = r4 + r5
+                float r4 = (float) r4
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
                 int r3 = r3 + r2
                 float r3 = (float) r3
-                int r11 = org.telegram.messenger.AndroidUtilities.dp(r4)
-                float r11 = (float) r11
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                float r5 = (float) r5
                 android.graphics.Paint r12 = r0.paint
-                r1.drawCircle(r5, r3, r11, r12)
+                r1.drawCircle(r4, r3, r5, r12)
                 android.graphics.Paint r3 = r0.paint
-                java.lang.String r5 = "windowBackgroundWhiteBlackText"
-                int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-                r3.setColor(r5)
+                java.lang.String r4 = "windowBackgroundWhiteBlackText"
+                int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+                r3.setColor(r4)
                 r19.save()
                 int r3 = r0.scrollX
-                int r5 = org.telegram.messenger.AndroidUtilities.dp(r6)
-                int r3 = r3 + r5
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
+                int r3 = r3 + r4
                 float r3 = (float) r3
-                r5 = 1107820544(0x42080000, float:34.0)
-                int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-                int r5 = r5 + r2
+                r4 = 1107820544(0x42080000, float:34.0)
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                int r4 = r4 + r2
+                float r4 = (float) r4
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r11)
                 float r5 = (float) r5
-                int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
-                float r11 = (float) r11
                 float r12 = r0.bubbleProgress
-                float r11 = r11 * r12
-                float r5 = r5 + r11
-                r1.translate(r3, r5)
+                float r5 = r5 * r12
+                float r4 = r4 + r5
+                r1.translate(r3, r4)
                 android.graphics.Path r3 = r0.arrowPath
-                android.graphics.Paint r5 = r0.paint
-                r1.drawPath(r3, r5)
+                android.graphics.Paint r4 = r0.paint
+                r1.drawPath(r3, r4)
                 r19.restore()
                 r19.save()
                 int r3 = r0.scrollX
-                int r5 = org.telegram.messenger.AndroidUtilities.dp(r6)
-                int r3 = r3 + r5
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
+                int r3 = r3 + r4
                 float r3 = (float) r3
-                int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
-                int r5 = r5 + r2
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                int r4 = r4 + r2
+                float r4 = (float) r4
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r11)
                 float r5 = (float) r5
-                int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
-                float r11 = (float) r11
                 float r12 = r0.bubbleProgress
-                float r11 = r11 * r12
-                float r5 = r5 - r11
-                r1.translate(r3, r5)
+                float r5 = r5 * r12
+                float r4 = r4 - r5
+                r1.translate(r3, r4)
                 r3 = 1127481344(0x43340000, float:180.0)
-                int r5 = org.telegram.messenger.AndroidUtilities.dp(r9)
-                int r5 = -r5
-                float r5 = (float) r5
-                r1.rotate(r3, r10, r5)
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                int r4 = -r4
+                float r4 = (float) r4
+                r1.rotate(r3, r10, r4)
                 android.graphics.Path r3 = r0.arrowPath
-                android.graphics.Paint r5 = r0.paint
-                r1.drawPath(r3, r5)
+                android.graphics.Paint r4 = r0.paint
+                r1.drawPath(r3, r4)
                 r19.restore()
             L_0x0135:
                 int r3 = r0.type
-                r5 = 1106247680(0x41var_, float:30.0)
-                r11 = 1132396544(0x437var_, float:255.0)
+                r4 = 1106247680(0x41var_, float:30.0)
+                r5 = 1132396544(0x437var_, float:255.0)
                 r12 = 1
                 r13 = 1065353216(0x3var_, float:1.0)
-                if (r3 != 0) goto L_0x0273
+                if (r3 != 0) goto L_0x0274
                 boolean r3 = r0.isMoving
                 if (r3 != 0) goto L_0x014a
                 float r3 = r0.bubbleProgress
                 int r3 = (r3 > r10 ? 1 : (r3 == r10 ? 0 : -1))
-                if (r3 == 0) goto L_0x037a
+                if (r3 == 0) goto L_0x04a1
             L_0x014a:
                 android.graphics.Paint r3 = r0.paint
-                float r4 = r0.bubbleProgress
-                float r4 = r4 * r11
-                int r4 = (int) r4
-                r3.setAlpha(r4)
-                int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                float r6 = r0.bubbleProgress
+                float r6 = r6 * r5
+                int r5 = (int) r6
+                r3.setAlpha(r5)
+                int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
                 int r3 = r3 + r2
                 r4 = 1110966272(0x42380000, float:46.0)
                 int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
@@ -953,12 +1020,12 @@ public class RecyclerListView extends RecyclerView {
                 r4 = 0
             L_0x0179:
                 r5 = 1092616192(0x41200000, float:10.0)
-                int r7 = org.telegram.messenger.AndroidUtilities.dp(r5)
-                float r7 = (float) r7
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                float r6 = (float) r6
                 float r9 = (float) r2
-                r1.translate(r7, r9)
-                r7 = 1105723392(0x41e80000, float:29.0)
-                int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                r1.translate(r6, r9)
+                r6 = 1105723392(0x41e80000, float:29.0)
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 float r9 = (float) r9
                 r11 = 1109393408(0x42200000, float:40.0)
                 r14 = 1110441984(0x42300000, float:44.0)
@@ -966,95 +1033,96 @@ public class RecyclerListView extends RecyclerView {
                 if (r9 > 0) goto L_0x01ac
                 int r9 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 float r9 = (float) r9
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+                float r8 = (float) r8
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 float r6 = (float) r6
-                int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                float r7 = (float) r7
-                float r4 = r4 / r7
-                int r7 = org.telegram.messenger.AndroidUtilities.dp(r11)
-                float r7 = (float) r7
-                float r4 = r4 * r7
-                float r6 = r6 + r4
+                float r4 = r4 / r6
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                float r6 = (float) r6
+                float r4 = r4 * r6
+                float r8 = r8 + r4
                 goto L_0x01ce
             L_0x01ac:
-                int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 float r9 = (float) r9
                 float r4 = r4 - r9
                 int r9 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 float r9 = (float) r9
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+                float r8 = (float) r8
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 float r6 = (float) r6
-                int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                float r7 = (float) r7
-                float r4 = r4 / r7
+                float r4 = r4 / r6
                 float r4 = r13 - r4
-                int r7 = org.telegram.messenger.AndroidUtilities.dp(r11)
-                float r7 = (float) r7
-                float r4 = r4 * r7
-                float r4 = r4 + r6
-                r6 = r9
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                float r6 = (float) r6
+                float r4 = r4 * r6
+                float r4 = r4 + r8
+                r8 = r9
                 r9 = r4
             L_0x01ce:
                 boolean r4 = r0.isRtl
-                r7 = 4
-                r11 = 6
-                r14 = 0
-                if (r4 == 0) goto L_0x01e3
-                float[] r15 = r0.radii
-                r16 = r15[r14]
-                int r16 = (r16 > r9 ? 1 : (r16 == r9 ? 0 : -1))
-                if (r16 != 0) goto L_0x01f3
-                r15 = r15[r11]
-                int r15 = (r15 > r6 ? 1 : (r15 == r6 ? 0 : -1))
+                r6 = 6
+                r11 = 0
+                if (r4 == 0) goto L_0x01e2
+                float[] r14 = r0.radii
+                r15 = r14[r11]
+                int r15 = (r15 > r9 ? 1 : (r15 == r9 ? 0 : -1))
                 if (r15 != 0) goto L_0x01f3
-            L_0x01e3:
-                if (r4 != 0) goto L_0x0247
-                float[] r15 = r0.radii
-                r16 = r15[r8]
-                int r16 = (r16 > r9 ? 1 : (r16 == r9 ? 0 : -1))
-                if (r16 != 0) goto L_0x01f3
-                r15 = r15[r7]
-                int r15 = (r15 > r6 ? 1 : (r15 == r6 ? 0 : -1))
-                if (r15 == 0) goto L_0x0247
+                r14 = r14[r6]
+                int r14 = (r14 > r8 ? 1 : (r14 == r8 ? 0 : -1))
+                if (r14 != 0) goto L_0x01f3
+            L_0x01e2:
+                if (r4 != 0) goto L_0x0248
+                float[] r14 = r0.radii
+                r15 = r14[r7]
+                int r15 = (r15 > r9 ? 1 : (r15 == r9 ? 0 : -1))
+                if (r15 != 0) goto L_0x01f3
+                r15 = 4
+                r14 = r14[r15]
+                int r14 = (r14 > r8 ? 1 : (r14 == r8 ? 0 : -1))
+                if (r14 == 0) goto L_0x0248
             L_0x01f3:
                 if (r4 == 0) goto L_0x0201
                 float[] r4 = r0.radii
                 r4[r12] = r9
-                r4[r14] = r9
+                r4[r11] = r9
                 r7 = 7
-                r4[r7] = r6
-                r4[r11] = r6
-                goto L_0x020d
+                r4[r7] = r8
+                r4[r6] = r8
+                goto L_0x020e
             L_0x0201:
                 float[] r4 = r0.radii
-                r11 = 3
-                r4[r11] = r9
-                r4[r8] = r9
-                r8 = 5
-                r4[r8] = r6
-                r4[r7] = r6
-            L_0x020d:
+                r6 = 3
+                r4[r6] = r9
+                r4[r7] = r9
+                r6 = 4
+                r7 = 5
+                r4[r7] = r8
+                r4[r6] = r8
+            L_0x020e:
                 android.graphics.Path r4 = r0.path
                 r4.reset()
                 android.graphics.RectF r4 = r0.rect
                 boolean r6 = r0.isRtl
-                if (r6 == 0) goto L_0x021e
+                if (r6 == 0) goto L_0x021f
                 int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
                 float r5 = (float) r5
-                goto L_0x021f
-            L_0x021e:
-                r5 = 0
+                goto L_0x0220
             L_0x021f:
+                r5 = 0
+            L_0x0220:
                 boolean r6 = r0.isRtl
-                r7 = 1118830592(0x42b00000, float:88.0)
-                if (r6 == 0) goto L_0x0228
+                if (r6 == 0) goto L_0x0227
                 r6 = 1120141312(0x42CLASSNAME, float:98.0)
-                goto L_0x022a
-            L_0x0228:
+                goto L_0x0229
+            L_0x0227:
                 r6 = 1118830592(0x42b00000, float:88.0)
-            L_0x022a:
+            L_0x0229:
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 float r6 = (float) r6
+                r7 = 1118830592(0x42b00000, float:88.0)
                 int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 float r7 = (float) r7
                 r4.set(r5, r10, r6, r7)
@@ -1065,14 +1133,14 @@ public class RecyclerListView extends RecyclerView {
                 r4.addRoundRect(r5, r6, r7)
                 android.graphics.Path r4 = r0.path
                 r4.close()
-            L_0x0247:
+            L_0x0248:
                 android.text.StaticLayout r4 = r0.letterLayout
-                if (r4 == 0) goto L_0x024c
-                goto L_0x024e
-            L_0x024c:
+                if (r4 == 0) goto L_0x024d
+                goto L_0x024f
+            L_0x024d:
                 android.text.StaticLayout r4 = r0.oldLetterLayout
-            L_0x024e:
-                if (r4 == 0) goto L_0x037a
+            L_0x024f:
+                if (r4 == 0) goto L_0x04a1
                 r19.save()
                 float r5 = r0.bubbleProgress
                 int r6 = r0.scrollX
@@ -1088,216 +1156,372 @@ public class RecyclerListView extends RecyclerView {
                 r1.translate(r2, r3)
                 r4.draw(r1)
                 r19.restore()
-                goto L_0x037a
-            L_0x0273:
-                if (r3 != r12) goto L_0x037a
+                goto L_0x04a1
+            L_0x0274:
+                if (r3 != r12) goto L_0x04a1
                 android.text.StaticLayout r2 = r0.letterLayout
-                if (r2 == 0) goto L_0x037a
+                if (r2 == 0) goto L_0x04a1
                 float r2 = r0.floatingDateProgress
                 int r2 = (r2 > r10 ? 1 : (r2 == r10 ? 0 : -1))
-                if (r2 == 0) goto L_0x037a
+                if (r2 == 0) goto L_0x04a1
                 r19.save()
                 r2 = 1060320051(0x3var_, float:0.7)
                 r3 = 1050253722(0x3e99999a, float:0.3)
-                float r6 = r0.floatingDateProgress
-                float r6 = r6 * r3
-                float r6 = r6 + r2
+                float r7 = r0.floatingDateProgress
+                float r7 = r7 * r3
+                float r7 = r7 + r2
                 android.graphics.RectF r2 = r0.rect
                 float r2 = r2.right
                 r3 = 1094713344(0x41400000, float:12.0)
-                int r8 = org.telegram.messenger.AndroidUtilities.dp(r3)
-                float r3 = (float) r8
+                int r14 = org.telegram.messenger.AndroidUtilities.dp(r3)
+                float r3 = (float) r14
                 float r2 = r2 - r3
                 android.graphics.RectF r3 = r0.rect
                 float r3 = r3.centerY()
-                r1.scale(r6, r6, r2, r3)
+                r1.scale(r7, r7, r2, r3)
                 android.graphics.RectF r2 = r0.rect
                 float r2 = r2.centerY()
                 android.graphics.RectF r3 = r0.rect
                 float r3 = r3.left
-                int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-                float r5 = (float) r5
-                float r6 = r0.bubbleProgress
-                float r5 = r5 * r6
-                float r3 = r3 - r5
-                int r5 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                float r5 = (float) r5
-                float r3 = r3 - r5
-                android.text.StaticLayout r5 = r0.letterLayout
-                r5.getHeight()
-                r5 = 1086324736(0x40CLASSNAME, float:6.0)
-                org.telegram.messenger.AndroidUtilities.dp(r5)
-                android.graphics.RectF r5 = r0.rect
-                android.text.StaticLayout r6 = r0.letterLayout
-                int r6 = r6.getWidth()
-                float r6 = (float) r6
-                float r6 = r3 - r6
-                r8 = 1108344832(0x42100000, float:36.0)
-                int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-                float r8 = (float) r8
-                float r6 = r6 - r8
-                android.text.StaticLayout r8 = r0.letterLayout
-                int r8 = r8.getHeight()
-                float r8 = (float) r8
-                float r8 = r8 / r9
-                float r8 = r2 - r8
-                int r12 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                float r12 = (float) r12
-                float r8 = r8 - r12
-                r12 = 1094713344(0x41400000, float:12.0)
-                int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-                float r12 = (float) r12
-                float r12 = r3 - r12
-                android.text.StaticLayout r14 = r0.letterLayout
-                int r14 = r14.getHeight()
-                float r14 = (float) r14
-                float r14 = r14 / r9
-                float r14 = r14 + r2
-                int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                float r7 = (float) r7
-                float r14 = r14 + r7
-                r5.set(r6, r8, r12, r14)
-                android.graphics.Paint r5 = r0.paint2
-                int r5 = r5.getAlpha()
-                android.text.TextPaint r6 = r0.letterPaint
-                int r6 = r6.getAlpha()
-                android.graphics.Paint r7 = r0.paint2
-                float r8 = (float) r5
-                float r12 = r0.floatingDateProgress
-                float r8 = r8 * r12
-                int r8 = (int) r8
-                r7.setAlpha(r8)
-                android.text.TextPaint r7 = r0.letterPaint
-                float r8 = (float) r6
-                float r12 = r0.floatingDateProgress
-                float r8 = r8 * r12
-                int r8 = (int) r8
-                r7.setAlpha(r8)
-                android.graphics.drawable.Drawable r7 = r0.fastScrollBackgroundDrawable
-                android.graphics.RectF r8 = r0.rect
-                float r12 = r8.left
-                int r12 = (int) r12
-                float r14 = r8.top
-                int r14 = (int) r14
-                float r15 = r8.right
-                int r15 = (int) r15
-                float r8 = r8.bottom
-                int r8 = (int) r8
-                r7.setBounds(r12, r14, r15, r8)
-                android.graphics.drawable.Drawable r7 = r0.fastScrollBackgroundDrawable
-                float r8 = r0.floatingDateProgress
-                float r8 = r8 * r11
-                int r8 = (int) r8
-                r7.setAlpha(r8)
-                android.graphics.drawable.Drawable r7 = r0.fastScrollBackgroundDrawable
-                r7.draw(r1)
-                r19.save()
-                android.text.StaticLayout r7 = r0.letterLayout
-                int r7 = r7.getWidth()
-                float r7 = (float) r7
-                float r3 = r3 - r7
                 int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                float r4 = (float) r4
+                float r7 = r0.bubbleProgress
+                float r4 = r4 * r7
+                float r3 = r3 - r4
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 float r4 = (float) r4
                 float r3 = r3 - r4
                 android.text.StaticLayout r4 = r0.letterLayout
-                int r4 = r4.getHeight()
-                float r4 = (float) r4
-                float r4 = r4 / r9
-                float r2 = r2 - r4
+                r4.getHeight()
+                r4 = 1086324736(0x40CLASSNAME, float:6.0)
+                org.telegram.messenger.AndroidUtilities.dp(r4)
+                float r4 = r0.replaceLayoutProgress
+                android.text.StaticLayout r7 = r0.letterLayout
+                int r7 = r7.getWidth()
+                float r7 = (float) r7
+                float r4 = r4 * r7
+                float r7 = r0.fromWidth
+                float r14 = r0.replaceLayoutProgress
+                float r14 = r13 - r14
+                float r7 = r7 * r14
+                float r4 = r4 + r7
+                android.graphics.RectF r7 = r0.rect
+                float r4 = r3 - r4
+                r14 = 1108344832(0x42100000, float:36.0)
+                int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
+                float r14 = (float) r14
+                float r4 = r4 - r14
+                android.text.StaticLayout r14 = r0.letterLayout
+                int r14 = r14.getHeight()
+                float r14 = (float) r14
+                float r14 = r14 / r11
+                float r14 = r2 - r14
+                int r15 = org.telegram.messenger.AndroidUtilities.dp(r6)
+                float r15 = (float) r15
+                float r14 = r14 - r15
+                r15 = 1094713344(0x41400000, float:12.0)
+                int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
+                float r15 = (float) r15
+                float r15 = r3 - r15
+                android.text.StaticLayout r12 = r0.letterLayout
+                int r12 = r12.getHeight()
+                float r12 = (float) r12
+                float r12 = r12 / r11
+                float r12 = r12 + r2
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+                float r6 = (float) r6
+                float r12 = r12 + r6
+                r7.set(r4, r14, r15, r12)
+                android.graphics.Paint r4 = r0.paint2
+                int r4 = r4.getAlpha()
+                android.text.TextPaint r6 = r0.letterPaint
+                int r6 = r6.getAlpha()
+                android.graphics.Paint r7 = r0.paint2
+                float r12 = (float) r4
+                float r14 = r0.floatingDateProgress
+                float r12 = r12 * r14
+                int r12 = (int) r12
+                r7.setAlpha(r12)
+                android.graphics.drawable.Drawable r7 = r0.fastScrollBackgroundDrawable
+                android.graphics.RectF r12 = r0.rect
+                float r14 = r12.left
+                int r14 = (int) r14
+                float r15 = r12.top
+                int r15 = (int) r15
+                float r10 = r12.right
+                int r10 = (int) r10
+                float r12 = r12.bottom
+                int r12 = (int) r12
+                r7.setBounds(r14, r15, r10, r12)
+                android.graphics.drawable.Drawable r7 = r0.fastScrollBackgroundDrawable
+                float r10 = r0.floatingDateProgress
+                float r10 = r10 * r5
+                int r5 = (int) r10
+                r7.setAlpha(r5)
+                android.graphics.drawable.Drawable r5 = r0.fastScrollBackgroundDrawable
+                r5.draw(r1)
+                float r5 = r0.replaceLayoutProgress
+                int r7 = (r5 > r13 ? 1 : (r5 == r13 ? 0 : -1))
+                if (r7 == 0) goto L_0x0361
+                r7 = 1037726734(0x3dda740e, float:0.10666667)
+                float r5 = r5 + r7
+                r0.replaceLayoutProgress = r5
+                int r5 = (r5 > r13 ? 1 : (r5 == r13 ? 0 : -1))
+                if (r5 <= 0) goto L_0x035e
+                r0.replaceLayoutProgress = r13
+                goto L_0x0361
+            L_0x035e:
+                r18.invalidate()
+            L_0x0361:
+                float r5 = r0.replaceLayoutProgress
+                r7 = 1097859072(0x41700000, float:15.0)
+                int r5 = (r5 > r13 ? 1 : (r5 == r13 ? 0 : -1))
+                if (r5 == 0) goto L_0x0458
+                r19.save()
+                android.graphics.RectF r5 = r0.rect
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+                float r8 = (float) r8
+                int r10 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                float r10 = (float) r10
+                r5.inset(r8, r10)
+                android.graphics.RectF r5 = r0.rect
+                r1.clipRect(r5)
+                android.text.StaticLayout r5 = r0.outLetterLayout
+                if (r5 == 0) goto L_0x03cf
+                android.text.TextPaint r5 = r0.letterPaint
+                float r8 = (float) r6
+                float r10 = r0.floatingDateProgress
+                float r8 = r8 * r10
+                float r10 = r0.replaceLayoutProgress
+                float r10 = r13 - r10
+                float r8 = r8 * r10
+                int r8 = (int) r8
+                r5.setAlpha(r8)
+                r19.save()
+                android.text.StaticLayout r5 = r0.outLetterLayout
+                int r5 = r5.getWidth()
+                float r5 = (float) r5
+                float r5 = r3 - r5
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                float r8 = (float) r8
+                float r5 = r5 - r8
+                android.text.StaticLayout r8 = r0.outLetterLayout
+                int r8 = r8.getHeight()
+                float r8 = (float) r8
+                float r8 = r8 / r11
+                float r8 = r2 - r8
+                boolean r10 = r0.fromTop
+                if (r10 == 0) goto L_0x03b7
+                r10 = -1
+                goto L_0x03b8
+            L_0x03b7:
+                r10 = 1
+            L_0x03b8:
+                int r12 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                int r10 = r10 * r12
+                float r10 = (float) r10
+                float r12 = r0.replaceLayoutProgress
+                float r10 = r10 * r12
+                float r8 = r8 + r10
+                r1.translate(r5, r8)
+                android.text.StaticLayout r5 = r0.outLetterLayout
+                r5.draw(r1)
+                r19.restore()
+            L_0x03cf:
+                android.text.StaticLayout r5 = r0.inLetterLayout
+                if (r5 == 0) goto L_0x0420
+                android.text.TextPaint r5 = r0.letterPaint
+                float r8 = (float) r6
+                float r10 = r0.floatingDateProgress
+                float r8 = r8 * r10
+                float r10 = r0.replaceLayoutProgress
+                float r8 = r8 * r10
+                int r8 = (int) r8
+                r5.setAlpha(r8)
+                r19.save()
+                android.text.StaticLayout r5 = r0.inLetterLayout
+                int r5 = r5.getWidth()
+                float r5 = (float) r5
+                float r5 = r3 - r5
+                int r8 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                float r8 = (float) r8
+                float r5 = r5 - r8
+                android.text.StaticLayout r8 = r0.inLetterLayout
+                int r8 = r8.getHeight()
+                float r8 = (float) r8
+                float r8 = r8 / r11
+                float r8 = r2 - r8
+                boolean r10 = r0.fromTop
+                if (r10 == 0) goto L_0x0405
+                r16 = 1
+                goto L_0x0407
+            L_0x0405:
+                r16 = -1
+            L_0x0407:
+                int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                int r7 = r7 * r16
+                float r7 = (float) r7
+                float r10 = r0.replaceLayoutProgress
+                float r10 = r13 - r10
+                float r7 = r7 * r10
+                float r8 = r8 + r7
+                r1.translate(r5, r8)
+                android.text.StaticLayout r5 = r0.inLetterLayout
+                r5.draw(r1)
+                r19.restore()
+            L_0x0420:
+                android.text.StaticLayout r5 = r0.stableLetterLayout
+                if (r5 == 0) goto L_0x0454
+                android.text.TextPaint r5 = r0.letterPaint
+                float r7 = (float) r6
+                float r8 = r0.floatingDateProgress
+                float r7 = r7 * r8
+                int r7 = (int) r7
+                r5.setAlpha(r7)
+                r19.save()
+                android.text.StaticLayout r5 = r0.stableLetterLayout
+                int r5 = r5.getWidth()
+                float r5 = (float) r5
+                float r3 = r3 - r5
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                float r5 = (float) r5
+                float r3 = r3 - r5
+                android.text.StaticLayout r5 = r0.stableLetterLayout
+                int r5 = r5.getHeight()
+                float r5 = (float) r5
+                float r5 = r5 / r11
+                float r2 = r2 - r5
+                r1.translate(r3, r2)
+                android.text.StaticLayout r2 = r0.stableLetterLayout
+                r2.draw(r1)
+                r19.restore()
+            L_0x0454:
+                r19.restore()
+                goto L_0x0494
+            L_0x0458:
+                android.text.TextPaint r5 = r0.letterPaint
+                float r8 = (float) r6
+                float r10 = r0.floatingDateProgress
+                float r8 = r8 * r10
+                int r8 = (int) r8
+                r5.setAlpha(r8)
+                r19.save()
+                android.text.StaticLayout r5 = r0.letterLayout
+                int r5 = r5.getWidth()
+                float r5 = (float) r5
+                float r3 = r3 - r5
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                float r5 = (float) r5
+                float r3 = r3 - r5
+                android.text.StaticLayout r5 = r0.letterLayout
+                int r5 = r5.getHeight()
+                float r5 = (float) r5
+                float r5 = r5 / r11
+                float r2 = r2 - r5
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                float r5 = (float) r5
+                float r7 = r0.replaceLayoutProgress
+                float r7 = r13 - r7
+                float r5 = r5 * r7
+                float r2 = r2 + r5
                 r1.translate(r3, r2)
                 android.text.StaticLayout r2 = r0.letterLayout
                 r2.draw(r1)
                 r19.restore()
+            L_0x0494:
                 android.graphics.Paint r2 = r0.paint2
-                r2.setAlpha(r5)
+                r2.setAlpha(r4)
                 android.text.TextPaint r2 = r0.letterPaint
                 r2.setAlpha(r6)
                 r19.restore()
-            L_0x037a:
+            L_0x04a1:
                 long r1 = java.lang.System.currentTimeMillis()
                 long r3 = r0.lastUpdateTime
                 long r3 = r1 - r3
                 r5 = 0
                 r7 = 17
                 int r9 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-                if (r9 < 0) goto L_0x038e
+                if (r9 < 0) goto L_0x04b5
                 int r5 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1))
-                if (r5 <= 0) goto L_0x038f
-            L_0x038e:
+                if (r5 <= 0) goto L_0x04b6
+            L_0x04b5:
                 r3 = r7
-            L_0x038f:
+            L_0x04b6:
                 boolean r5 = r0.isMoving
                 r6 = 1123024896(0x42var_, float:120.0)
-                if (r5 == 0) goto L_0x039f
+                if (r5 == 0) goto L_0x04c6
                 android.text.StaticLayout r7 = r0.letterLayout
-                if (r7 == 0) goto L_0x039f
+                if (r7 == 0) goto L_0x04c6
                 float r7 = r0.bubbleProgress
                 int r7 = (r7 > r13 ? 1 : (r7 == r13 ? 0 : -1))
-                if (r7 < 0) goto L_0x03ab
-            L_0x039f:
-                if (r5 == 0) goto L_0x03a5
+                if (r7 < 0) goto L_0x04d3
+            L_0x04c6:
+                if (r5 == 0) goto L_0x04cc
                 android.text.StaticLayout r5 = r0.letterLayout
-                if (r5 != 0) goto L_0x03d3
-            L_0x03a5:
+                if (r5 != 0) goto L_0x04fc
+            L_0x04cc:
                 float r5 = r0.bubbleProgress
-                int r5 = (r5 > r10 ? 1 : (r5 == r10 ? 0 : -1))
-                if (r5 <= 0) goto L_0x03d3
-            L_0x03ab:
+                r7 = 0
+                int r5 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+                if (r5 <= 0) goto L_0x04fc
+            L_0x04d3:
                 r0.lastUpdateTime = r1
                 r18.invalidate()
                 boolean r1 = r0.isMoving
-                if (r1 == 0) goto L_0x03c6
+                if (r1 == 0) goto L_0x04ee
                 android.text.StaticLayout r1 = r0.letterLayout
-                if (r1 == 0) goto L_0x03c6
+                if (r1 == 0) goto L_0x04ee
                 float r1 = r0.bubbleProgress
                 float r2 = (float) r3
                 float r2 = r2 / r6
                 float r1 = r1 + r2
                 r0.bubbleProgress = r1
                 int r1 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1))
-                if (r1 <= 0) goto L_0x03d3
+                if (r1 <= 0) goto L_0x04fc
                 r0.bubbleProgress = r13
-                goto L_0x03d3
-            L_0x03c6:
+                goto L_0x04fc
+            L_0x04ee:
                 float r1 = r0.bubbleProgress
                 float r2 = (float) r3
                 float r2 = r2 / r6
                 float r1 = r1 - r2
                 r0.bubbleProgress = r1
-                int r1 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-                if (r1 >= 0) goto L_0x03d3
-                r0.bubbleProgress = r10
-            L_0x03d3:
+                r2 = 0
+                int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+                if (r1 >= 0) goto L_0x04fc
+                r0.bubbleProgress = r2
+            L_0x04fc:
                 boolean r1 = r0.floatingDateVisible
-                if (r1 == 0) goto L_0x03ec
+                if (r1 == 0) goto L_0x0515
                 float r2 = r0.floatingDateProgress
                 int r5 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
-                if (r5 == 0) goto L_0x03ec
+                if (r5 == 0) goto L_0x0515
                 float r1 = (float) r3
                 float r1 = r1 / r6
                 float r2 = r2 + r1
                 r0.floatingDateProgress = r2
                 int r1 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
-                if (r1 <= 0) goto L_0x03e8
+                if (r1 <= 0) goto L_0x0511
                 r0.floatingDateProgress = r13
-            L_0x03e8:
+            L_0x0511:
                 r18.invalidate()
-                goto L_0x0402
-            L_0x03ec:
-                if (r1 != 0) goto L_0x0402
+                goto L_0x052c
+            L_0x0515:
+                if (r1 != 0) goto L_0x052c
                 float r1 = r0.floatingDateProgress
-                int r2 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-                if (r2 == 0) goto L_0x0402
-                float r2 = (float) r3
-                float r2 = r2 / r6
-                float r1 = r1 - r2
+                r2 = 0
+                int r5 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+                if (r5 == 0) goto L_0x052c
+                float r3 = (float) r3
+                float r3 = r3 / r6
+                float r1 = r1 - r3
                 r0.floatingDateProgress = r1
-                int r1 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-                if (r1 >= 0) goto L_0x03ff
-                r0.floatingDateProgress = r10
-            L_0x03ff:
+                int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+                if (r1 >= 0) goto L_0x0529
+                r0.floatingDateProgress = r2
+            L_0x0529:
                 r18.invalidate()
-            L_0x0402:
+            L_0x052c:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.RecyclerListView.FastScroll.onDraw(android.graphics.Canvas):void");
@@ -1370,74 +1594,95 @@ public class RecyclerListView extends RecyclerView {
         }
 
         public RecyclerListViewItemClickListener(Context context) {
-            GestureDetector unused = RecyclerListView.this.gestureDetector = new GestureDetector(context, new GestureDetector.OnGestureListener(RecyclerListView.this) {
+            GestureDetectorFixDoubleTap unused = RecyclerListView.this.gestureDetector = new GestureDetectorFixDoubleTap(context, new GestureDetector.SimpleOnGestureListener(RecyclerListView.this) {
+                private View doubleTapView;
+
                 public boolean onDown(MotionEvent motionEvent) {
                     return false;
                 }
 
-                public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-                    return false;
-                }
-
-                public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-                    return false;
-                }
-
-                public void onShowPress(MotionEvent motionEvent) {
-                }
-
                 public boolean onSingleTapUp(MotionEvent motionEvent) {
-                    if (!(RecyclerListView.this.currentChildView == null || (RecyclerListView.this.onItemClickListener == null && RecyclerListView.this.onItemClickListenerExtended == null))) {
+                    if (RecyclerListView.this.currentChildView == null) {
+                        return false;
+                    }
+                    if (RecyclerListView.this.onItemClickListenerExtended == null || !RecyclerListView.this.onItemClickListenerExtended.hasDoubleTap(RecyclerListView.this.currentChildView, RecyclerListView.this.currentChildPosition)) {
+                        onPressItem(RecyclerListView.this.currentChildView, motionEvent);
+                        return true;
+                    }
+                    this.doubleTapView = RecyclerListView.this.currentChildView;
+                    return false;
+                }
+
+                public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+                    if (this.doubleTapView == null || RecyclerListView.this.onItemClickListenerExtended == null || !RecyclerListView.this.onItemClickListenerExtended.hasDoubleTap(this.doubleTapView, RecyclerListView.this.currentChildPosition)) {
+                        return false;
+                    }
+                    onPressItem(this.doubleTapView, motionEvent);
+                    this.doubleTapView = null;
+                    return true;
+                }
+
+                public boolean onDoubleTap(MotionEvent motionEvent) {
+                    if (this.doubleTapView == null || RecyclerListView.this.onItemClickListenerExtended == null || !RecyclerListView.this.onItemClickListenerExtended.hasDoubleTap(this.doubleTapView, RecyclerListView.this.currentChildPosition)) {
+                        return false;
+                    }
+                    RecyclerListView.this.onItemClickListenerExtended.onDoubleTap(this.doubleTapView, RecyclerListView.this.currentChildPosition, motionEvent.getX(), motionEvent.getY());
+                    this.doubleTapView = null;
+                    return true;
+                }
+
+                private void onPressItem(View view, MotionEvent motionEvent) {
+                    if (view == null) {
+                        return;
+                    }
+                    if (RecyclerListView.this.onItemClickListener != null || RecyclerListView.this.onItemClickListenerExtended != null) {
                         final float x = motionEvent.getX();
                         final float y = motionEvent.getY();
-                        RecyclerListView recyclerListView = RecyclerListView.this;
-                        recyclerListView.onChildPressed(recyclerListView.currentChildView, x, y, true);
-                        final View access$500 = RecyclerListView.this.currentChildView;
-                        final int access$800 = RecyclerListView.this.currentChildPosition;
-                        if (RecyclerListView.this.instantClick && access$800 != -1) {
-                            access$500.playSoundEffect(0);
-                            access$500.sendAccessibilityEvent(1);
+                        RecyclerListView.this.onChildPressed(view, x, y, true);
+                        final int access$700 = RecyclerListView.this.currentChildPosition;
+                        if (RecyclerListView.this.instantClick && access$700 != -1) {
+                            view.playSoundEffect(0);
+                            view.sendAccessibilityEvent(1);
                             if (RecyclerListView.this.onItemClickListener != null) {
-                                RecyclerListView.this.onItemClickListener.onItemClick(access$500, access$800);
+                                RecyclerListView.this.onItemClickListener.onItemClick(view, access$700);
                             } else if (RecyclerListView.this.onItemClickListenerExtended != null) {
-                                RecyclerListView.this.onItemClickListenerExtended.onItemClick(access$500, access$800, x - access$500.getX(), y - access$500.getY());
+                                RecyclerListView.this.onItemClickListenerExtended.onItemClick(view, access$700, x - view.getX(), y - view.getY());
                             }
                         }
+                        final View view2 = view;
                         AndroidUtilities.runOnUIThread(RecyclerListView.this.clickRunnable = new Runnable() {
                             public void run() {
                                 if (this == RecyclerListView.this.clickRunnable) {
                                     Runnable unused = RecyclerListView.this.clickRunnable = null;
                                 }
-                                View view = access$500;
+                                View view = view2;
                                 if (view != null) {
                                     RecyclerListView.this.onChildPressed(view, 0.0f, 0.0f, false);
                                     if (!RecyclerListView.this.instantClick) {
-                                        access$500.playSoundEffect(0);
-                                        access$500.sendAccessibilityEvent(1);
-                                        if (access$800 == -1) {
+                                        view2.playSoundEffect(0);
+                                        view2.sendAccessibilityEvent(1);
+                                        if (access$700 == -1) {
                                             return;
                                         }
                                         if (RecyclerListView.this.onItemClickListener != null) {
-                                            RecyclerListView.this.onItemClickListener.onItemClick(access$500, access$800);
+                                            RecyclerListView.this.onItemClickListener.onItemClick(view2, access$700);
                                         } else if (RecyclerListView.this.onItemClickListenerExtended != null) {
-                                            OnItemClickListenerExtended access$700 = RecyclerListView.this.onItemClickListenerExtended;
-                                            View view2 = access$500;
-                                            access$700.onItemClick(view2, access$800, x - view2.getX(), y - access$500.getY());
+                                            OnItemClickListenerExtended access$600 = RecyclerListView.this.onItemClickListenerExtended;
+                                            View view2 = view2;
+                                            access$600.onItemClick(view2, access$700, x - view2.getX(), y - view2.getY());
                                         }
                                     }
                                 }
                             }
                         }, (long) ViewConfiguration.getPressedStateDuration());
                         if (RecyclerListView.this.selectChildRunnable != null) {
-                            View access$5002 = RecyclerListView.this.currentChildView;
                             AndroidUtilities.cancelRunOnUIThread(RecyclerListView.this.selectChildRunnable);
                             Runnable unused = RecyclerListView.this.selectChildRunnable = null;
                             View unused2 = RecyclerListView.this.currentChildView = null;
                             boolean unused3 = RecyclerListView.this.interceptedByChild = false;
-                            RecyclerListView.this.removeSelection(access$5002, motionEvent);
+                            RecyclerListView.this.removeSelection(view, motionEvent);
                         }
                     }
-                    return true;
                 }
 
                 public void onLongPress(MotionEvent motionEvent) {
@@ -1682,6 +1927,15 @@ public class RecyclerListView extends RecyclerView {
         this.scrollEnabled = true;
         this.lastX = Float.MAX_VALUE;
         this.lastY = Float.MAX_VALUE;
+        this.accessibilityEnabled = true;
+        this.accessibilityDelegate = new View.AccessibilityDelegate(this) {
+            public void onInitializeAccessibilityNodeInfo(View view, AccessibilityNodeInfo accessibilityNodeInfo) {
+                super.onInitializeAccessibilityNodeInfo(view, accessibilityNodeInfo);
+                if (view.isEnabled()) {
+                    accessibilityNodeInfo.addAction(16);
+                }
+            }
+        };
         this.observer = new RecyclerView.AdapterDataObserver() {
             public void onChanged() {
                 RecyclerListView.this.checkIfEmpty(true);
@@ -2445,9 +2699,13 @@ public class RecyclerListView extends RecyclerView {
             RecyclerView.ViewHolder findContainingViewHolder = findContainingViewHolder(view);
             if (findContainingViewHolder != null) {
                 view.setEnabled(((SelectionAdapter) getAdapter()).isEnabled(findContainingViewHolder));
+                if (this.accessibilityEnabled) {
+                    view.setAccessibilityDelegate(this.accessibilityDelegate);
+                }
             }
         } else {
             view.setEnabled(false);
+            view.setAccessibilityDelegate((View.AccessibilityDelegate) null);
         }
         super.onChildAttachedToWindow(view);
     }
@@ -2904,5 +3162,9 @@ public class RecyclerListView extends RecyclerView {
 
     public void setItemsEnterAnimator(RecyclerItemsEnterAnimator recyclerItemsEnterAnimator) {
         this.itemsEnterAnimator = recyclerItemsEnterAnimator;
+    }
+
+    public void setAccessibilityEnabled(boolean z) {
+        this.accessibilityEnabled = z;
     }
 }

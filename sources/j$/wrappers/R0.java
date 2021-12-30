@@ -38,11 +38,11 @@ public final /* synthetic */ class R0 implements Stream {
     }
 
     public /* synthetic */ boolean allMatch(Predicate predicate) {
-        return this.a.W(x0.c(predicate));
+        return this.a.W(x0.a(predicate));
     }
 
     public /* synthetic */ boolean anyMatch(Predicate predicate) {
-        return this.a.a(x0.c(predicate));
+        return this.a.a(x0.a(predicate));
     }
 
     public /* synthetic */ void close() {
@@ -66,7 +66,7 @@ public final /* synthetic */ class R0 implements Stream {
     }
 
     public /* synthetic */ Stream filter(Predicate predicate) {
-        return n0(this.a.T(x0.c(predicate)));
+        return n0(this.a.T(x0.a(predicate)));
     }
 
     public /* synthetic */ Optional findAny() {
@@ -138,7 +138,7 @@ public final /* synthetic */ class R0 implements Stream {
     }
 
     public /* synthetic */ boolean noneMatch(Predicate predicate) {
-        return this.a.d0(x0.c(predicate));
+        return this.a.d0(x0.a(predicate));
     }
 
     public /* synthetic */ BaseStream onClose(Runnable runnable) {

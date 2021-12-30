@@ -9,7 +9,7 @@ import j$.util.function.q;
 import j$.util.function.r;
 import j$.util.function.t;
 import j$.util.function.w;
-import j$.util.function.z;
+import j$.util.function.y;
 import j$.wrappers.CLASSNAMEj0;
 import j$.wrappers.CLASSNAMEl0;
 import j$.wrappers.CLASSNAMEn0;
@@ -42,7 +42,7 @@ public interface CLASSNAMEf1 extends CLASSNAMEg {
 
     M0 e0(CLASSNAMEn0 n0Var);
 
-    Object f0(z zVar, w wVar, BiConsumer biConsumer);
+    Object f0(y yVar, w wVar, BiConsumer biConsumer);
 
     CLASSNAMEl findAny();
 

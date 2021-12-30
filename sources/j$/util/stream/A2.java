@@ -6,7 +6,7 @@ import j$.util.function.CLASSNAMEb;
 import j$.util.function.u;
 import j$.util.function.v;
 import j$.util.function.w;
-import j$.util.function.z;
+import j$.util.function.y;
 
 class A2 extends V2 {
     public final /* synthetic */ int b = 3;
@@ -15,25 +15,25 @@ class A2 extends V2 {
     final /* synthetic */ Object e;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, BiConsumer biConsumer, BiConsumer biConsumer2, z zVar) {
+    public A2(CLASSNAMEf4 f4Var, BiConsumer biConsumer, BiConsumer biConsumer2, y yVar) {
         super(f4Var);
         this.c = biConsumer;
         this.d = biConsumer2;
-        this.e = zVar;
+        this.e = yVar;
     }
 
     public T2 a() {
         switch (this.b) {
             case 0:
-                return new B2((z) this.e, (w) this.d, (CLASSNAMEb) this.c);
+                return new B2((y) this.e, (w) this.d, (CLASSNAMEb) this.c);
             case 1:
-                return new G2((z) this.e, (u) this.d, (CLASSNAMEb) this.c);
+                return new G2((y) this.e, (u) this.d, (CLASSNAMEb) this.c);
             case 2:
                 return new H2(this.e, (BiFunction) this.d, (CLASSNAMEb) this.c);
             case 3:
-                return new L2((z) this.e, (BiConsumer) this.d, (BiConsumer) this.c);
+                return new L2((y) this.e, (BiConsumer) this.d, (BiConsumer) this.c);
             default:
-                return new P2((z) this.e, (v) this.d, (CLASSNAMEb) this.c);
+                return new P2((y) this.e, (v) this.d, (CLASSNAMEb) this.c);
         }
     }
 
@@ -46,26 +46,26 @@ class A2 extends V2 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, CLASSNAMEb bVar, u uVar, z zVar) {
+    public A2(CLASSNAMEf4 f4Var, CLASSNAMEb bVar, u uVar, y yVar) {
         super(f4Var);
         this.c = bVar;
         this.d = uVar;
-        this.e = zVar;
+        this.e = yVar;
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, CLASSNAMEb bVar, v vVar, z zVar) {
+    public A2(CLASSNAMEf4 f4Var, CLASSNAMEb bVar, v vVar, y yVar) {
         super(f4Var);
         this.c = bVar;
         this.d = vVar;
-        this.e = zVar;
+        this.e = yVar;
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public A2(CLASSNAMEf4 f4Var, CLASSNAMEb bVar, w wVar, z zVar) {
+    public A2(CLASSNAMEf4 f4Var, CLASSNAMEb bVar, w wVar, y yVar) {
         super(f4Var);
         this.c = bVar;
         this.d = wVar;
-        this.e = zVar;
+        this.e = yVar;
     }
 }

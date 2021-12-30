@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$TL_topPeer;
 
-public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda116 implements RequestDelegate {
-    public final /* synthetic */ MediaDataController f$0;
+public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda116 implements Comparator {
+    public static final /* synthetic */ MediaDataController$$ExternalSyntheticLambda116 INSTANCE = new MediaDataController$$ExternalSyntheticLambda116();
 
-    public /* synthetic */ MediaDataController$$ExternalSyntheticLambda116(MediaDataController mediaDataController) {
-        this.f$0 = mediaDataController;
+    private /* synthetic */ MediaDataController$$ExternalSyntheticLambda116() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadHints$93(tLObject, tLRPC$TL_error);
+    public final int compare(Object obj, Object obj2) {
+        return MediaDataController.lambda$increasePeerRaiting$102((TLRPC$TL_topPeer) obj, (TLRPC$TL_topPeer) obj2);
     }
 }

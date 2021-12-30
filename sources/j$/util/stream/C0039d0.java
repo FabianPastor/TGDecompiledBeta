@@ -1,22 +1,22 @@
 package j$.util.stream;
 
+import j$.util.function.Predicate;
 import j$.util.function.y;
-import j$.util.function.z;
 
 /* renamed from: j$.util.stream.d0  reason: case insensitive filesystem */
 final class CLASSNAMEd0 implements O4 {
     private final CLASSNAMEf4 a;
     final boolean b;
     final Object c;
-    final y d;
-    final z e;
+    final Predicate d;
+    final y e;
 
-    CLASSNAMEd0(boolean z, CLASSNAMEf4 f4Var, Object obj, y yVar, z zVar) {
+    CLASSNAMEd0(boolean z, CLASSNAMEf4 f4Var, Object obj, Predicate predicate, y yVar) {
         this.b = z;
         this.a = f4Var;
         this.c = obj;
-        this.d = yVar;
-        this.e = zVar;
+        this.d = predicate;
+        this.e = yVar;
     }
 
     public int b() {

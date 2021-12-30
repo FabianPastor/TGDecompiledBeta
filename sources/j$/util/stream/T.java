@@ -11,7 +11,6 @@ import j$.util.function.f;
 import j$.util.function.g;
 import j$.util.function.h;
 import j$.util.function.m;
-import j$.util.function.z;
 import j$.util.u;
 import j$.util.y;
 import j$.wrappers.E;
@@ -88,11 +87,11 @@ abstract class T extends CLASSNAMEc implements U {
         return (CLASSNAMEj) x0(new E2(CLASSNAMEf4.DOUBLE_VALUE, dVar));
     }
 
-    public final Object H(z zVar, j$.util.function.u uVar, BiConsumer biConsumer) {
+    public final Object H(j$.util.function.y yVar, j$.util.function.u uVar, BiConsumer biConsumer) {
         C c = new C(biConsumer, 0);
-        zVar.getClass();
+        yVar.getClass();
         uVar.getClass();
-        return x0(new A2(CLASSNAMEf4.DOUBLE_VALUE, (CLASSNAMEb) c, uVar, zVar));
+        return x0(new A2(CLASSNAMEf4.DOUBLE_VALUE, (CLASSNAMEb) c, uVar, yVar));
     }
 
     public final double K(double d, d dVar) {
@@ -101,8 +100,8 @@ abstract class T extends CLASSNAMEc implements U {
     }
 
     /* access modifiers changed from: package-private */
-    public final y K0(CLASSNAMEz2 z2Var, z zVar, boolean z) {
-        return new CLASSNAMEp4(z2Var, zVar, z);
+    public final y K0(CLASSNAMEz2 z2Var, j$.util.function.y yVar, boolean z) {
+        return new CLASSNAMEp4(z2Var, yVar, z);
     }
 
     public final Stream M(g gVar) {
@@ -162,7 +161,7 @@ abstract class T extends CLASSNAMEc implements U {
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m527iterator() {
+    public Iterator m529iterator() {
         return N.f(spliterator());
     }
 

@@ -74,8 +74,8 @@ enum CLASSNAMEe4 {
     }
 
     private CLASSNAMEe4(int i2, CLASSNAMEc4 c4Var) {
-        for (CLASSNAMEd4 C : CLASSNAMEd4.values()) {
-            CLASSNAMEa.C(c4Var.a, C, 0);
+        for (CLASSNAMEd4 B : CLASSNAMEd4.values()) {
+            CLASSNAMEa.B(c4Var.a, B, 0);
         }
         this.a = c4Var.a;
         int i3 = i2 * 2;

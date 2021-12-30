@@ -265,10 +265,11 @@ public class TextCell extends FrameLayout {
             CharSequence text2 = this.valueTextView.getText();
             if (!TextUtils.isEmpty(text2)) {
                 accessibilityNodeInfo.setText(text + ": " + text2);
-                return;
+            } else {
+                accessibilityNodeInfo.setText(text);
             }
-            accessibilityNodeInfo.setText(text);
         }
+        accessibilityNodeInfo.addAction(16);
     }
 
     public void setNeedDivider(boolean z) {

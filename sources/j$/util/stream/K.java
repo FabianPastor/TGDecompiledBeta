@@ -3,10 +3,10 @@ package j$.util.stream;
 import j$.lang.a;
 import j$.lang.b;
 import j$.lang.c;
-import j$.util.function.A;
 import j$.util.function.Function;
 import j$.util.function.f;
 import j$.util.function.g;
+import j$.util.function.z;
 import j$.wrappers.CLASSNAMEl0;
 import j$.wrappers.E;
 import j$.wrappers.X;
@@ -80,8 +80,8 @@ class K extends S {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public K(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, A a) {
+    public K(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, z zVar) {
         super(cVar, f4Var, i);
-        this.m = a;
+        this.m = zVar;
     }
 }

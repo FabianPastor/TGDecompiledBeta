@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatMessageCell$$ExternalSyntheticLambda0 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$createStatusDrawableAnimator$1(this.f$1, valueAnimator);
+        this.f$0.lambda$createStatusDrawableAnimator$5(this.f$1, valueAnimator);
     }
 }

@@ -133,7 +133,7 @@ public class CodeNumberField extends EditTextBoldCursor {
                     requestFocus();
                 } else {
                     ClipboardManager clipboardManager = (ClipboardManager) ContextCompat.getSystemService(getContext(), ClipboardManager.class);
-                    if (clipboardManager == null) {
+                    if (clipboardManager == null || clipboardManager.getPrimaryClipDescription() == null) {
                         return false;
                     }
                     clipboardManager.getPrimaryClipDescription().hasMimeType("text/plain");

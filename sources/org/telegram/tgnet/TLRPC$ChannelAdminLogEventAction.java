@@ -7,6 +7,9 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
             case -1895328189:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionStopPoll();
                 break;
+            case -1661470870:
+                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionChangeAvailableReactions();
+                break;
             case -1347021750:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionParticipantJoinByRequest();
                 break;
@@ -66,9 +69,6 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
                 break;
             case 648939889:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionToggleSignatures();
-                break;
-            case 663693416:
-                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionSendMessage();
                 break;
             case 771095562:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionDefaultBannedRights();

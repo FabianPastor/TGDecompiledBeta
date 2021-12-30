@@ -1,16 +1,26 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
 import android.view.View;
+import java.util.ArrayList;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda65 implements View.OnTouchListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda65 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ String[] f$3;
+    public final /* synthetic */ String f$4;
+    public final /* synthetic */ CharSequence f$5;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda65(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda65(ChatActivity chatActivity, int i, ArrayList arrayList, String[] strArr, String str, CharSequence charSequence) {
         this.f$0 = chatActivity;
+        this.f$1 = i;
+        this.f$2 = arrayList;
+        this.f$3 = strArr;
+        this.f$4 = str;
+        this.f$5 = charSequence;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return this.f$0.lambda$createView$12(view, motionEvent);
+    public final void onClick(View view) {
+        this.f$0.lambda$createMenu$132(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
     }
 }

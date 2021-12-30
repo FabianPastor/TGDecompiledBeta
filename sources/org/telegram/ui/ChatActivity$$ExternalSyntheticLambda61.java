@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
 import android.view.View;
-import org.telegram.ui.Cells.CheckBoxCell;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda61 implements View.OnClickListener {
-    public final /* synthetic */ CheckBoxCell[] f$0;
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda61(CheckBoxCell[] checkBoxCellArr) {
-        this.f$0 = checkBoxCellArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda61(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
     public final void onClick(View view) {
-        ChatActivity.lambda$showRequestUrlAlert$157(this.f$0, view);
+        this.f$0.lambda$createView$54(view);
     }
 }

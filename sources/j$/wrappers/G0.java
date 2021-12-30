@@ -1,20 +1,20 @@
 package j$.wrappers;
 
-import j$.util.function.C;
+import j$.util.function.B;
 import java.util.function.ToLongFunction;
 
 public final /* synthetic */ class G0 implements ToLongFunction {
-    final /* synthetic */ C a;
+    final /* synthetic */ B a;
 
-    private /* synthetic */ G0(C c) {
-        this.a = c;
+    private /* synthetic */ G0(B b) {
+        this.a = b;
     }
 
-    public static /* synthetic */ ToLongFunction a(C c) {
-        if (c == null) {
+    public static /* synthetic */ ToLongFunction a(B b) {
+        if (b == null) {
             return null;
         }
-        return c instanceof F0 ? ((F0) c).a : new G0(c);
+        return b instanceof F0 ? ((F0) b).a : new G0(b);
     }
 
     public /* synthetic */ long applyAsLong(Object obj) {

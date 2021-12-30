@@ -1,24 +1,14 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_requestUrlAuth;
+import java.util.Comparator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda155 implements RequestDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ TLRPC$TL_messages_requestUrlAuth f$2;
-    public final /* synthetic */ boolean f$3;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda155 implements Comparator {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda155 INSTANCE = new ChatActivity$$ExternalSyntheticLambda155();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda155(ChatActivity chatActivity, String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, boolean z) {
-        this.f$0 = chatActivity;
-        this.f$1 = str;
-        this.f$2 = tLRPC$TL_messages_requestUrlAuth;
-        this.f$3 = z;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda155() {
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$showRequestUrlAlert$159(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+    public final int compare(Object obj, Object obj2) {
+        return ((Integer) obj2).compareTo((Integer) obj);
     }
 }

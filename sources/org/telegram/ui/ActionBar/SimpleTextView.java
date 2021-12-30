@@ -4,23 +4,31 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.Region;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.text.Layout;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Components.EmptyStubSpan;
 import org.telegram.ui.Components.StaticLayoutEx;
+import org.telegram.ui.Components.spoilers.SpoilerEffect;
 
 public class SimpleTextView extends View {
     private boolean buildFullLayout;
@@ -47,6 +55,7 @@ public class SimpleTextView extends View {
     private int offsetX;
     private int offsetY;
     private Layout partLayout;
+    private Path path = new Path();
     private Drawable replacedDrawable;
     private String replacedText;
     private int replacingDrawableTextIndex;
@@ -56,6 +65,8 @@ public class SimpleTextView extends View {
     private int rightDrawableTopPadding;
     private boolean scrollNonFitText;
     private float scrollingOffset;
+    private List<SpoilerEffect> spoilers = new ArrayList();
+    private Stack<SpoilerEffect> spoilersPool = new Stack<>();
     private CharSequence text;
     private boolean textDoesNotFit;
     private int textHeight;
@@ -285,6 +296,12 @@ public class SimpleTextView extends View {
                     }
                     CharSequence charSequence8 = charSequence7;
                     this.layout = new StaticLayout(charSequence8, 0, charSequence8.length(), this.textPaint, this.scrollNonFitText ? AndroidUtilities.dp(2000.0f) : AndroidUtilities.dp(8.0f) + intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                }
+                this.spoilersPool.addAll(this.spoilers);
+                this.spoilers.clear();
+                Layout layout2 = this.layout;
+                if (layout2 != null && (layout2.getText() instanceof Spannable)) {
+                    SpoilerEffect.addSpoilers(this, this.layout, this.spoilersPool, this.spoilers);
                 }
                 calcOffset(intrinsicWidth);
             } catch (Exception unused) {
@@ -713,14 +730,37 @@ public class SimpleTextView extends View {
 
     private void drawLayout(Canvas canvas) {
         if (this.fullAlpha <= 0.0f || this.fullLayoutLeftOffset == 0) {
+            canvas.save();
+            clipOutSpoilers(canvas);
             this.layout.draw(canvas);
+            canvas.restore();
+            drawSpoilers(canvas);
             return;
         }
         canvas.save();
         float f = this.fullAlpha;
         canvas.translate((((float) (-this.fullLayoutLeftOffset)) * f) + (this.fullLayoutLeftCharactersOffset * f), 0.0f);
+        canvas.save();
+        clipOutSpoilers(canvas);
         this.layout.draw(canvas);
         canvas.restore();
+        drawSpoilers(canvas);
+        canvas.restore();
+    }
+
+    private void clipOutSpoilers(Canvas canvas) {
+        this.path.rewind();
+        for (SpoilerEffect bounds : this.spoilers) {
+            Rect bounds2 = bounds.getBounds();
+            this.path.addRect((float) bounds2.left, (float) bounds2.top, (float) bounds2.right, (float) bounds2.bottom, Path.Direction.CW);
+        }
+        canvas.clipPath(this.path, Region.Op.DIFFERENCE);
+    }
+
+    private void drawSpoilers(Canvas canvas) {
+        for (SpoilerEffect draw : this.spoilers) {
+            draw.draw(canvas);
+        }
     }
 
     private void updateScrollAnimation() {

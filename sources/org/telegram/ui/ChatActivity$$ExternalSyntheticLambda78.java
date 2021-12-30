@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda78 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import android.view.MotionEvent;
+import android.view.View;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda78(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda78 implements View.OnTouchListener {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda78 INSTANCE = new ChatActivity$$ExternalSyntheticLambda78();
+
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda78() {
     }
 
-    public final void run() {
-        this.f$0.lambda$scrollToMessageId$89();
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return ChatActivity.lambda$createView$19(view, motionEvent);
     }
 }

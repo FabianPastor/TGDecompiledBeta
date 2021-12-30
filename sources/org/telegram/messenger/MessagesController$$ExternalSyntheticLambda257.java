@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda25
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$pinDialog$271(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$deleteMessages$91(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

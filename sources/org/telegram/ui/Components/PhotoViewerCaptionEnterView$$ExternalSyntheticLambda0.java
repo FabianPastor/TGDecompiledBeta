@@ -10,6 +10,6 @@ public final /* synthetic */ class PhotoViewerCaptionEnterView$$ExternalSyntheti
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$onDraw$5(valueAnimator);
+        this.f$0.lambda$onDraw$6(valueAnimator);
     }
 }

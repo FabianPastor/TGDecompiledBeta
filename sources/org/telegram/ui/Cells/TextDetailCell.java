@@ -2,10 +2,12 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
@@ -15,33 +17,38 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class TextDetailCell extends FrameLayout {
     private boolean contentDescriptionValueFirst;
+    private final ImageView imageView;
     private boolean needDivider;
-    private TextView textView;
-    private TextView valueTextView;
+    private final TextView textView;
+    private final TextView valueTextView;
 
     public TextDetailCell(Context context) {
         super(context);
         TextView textView2 = new TextView(context);
         this.textView = textView2;
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.textView.setTextSize(1, 16.0f);
-        this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.textView.setLines(1);
-        this.textView.setMaxLines(1);
-        this.textView.setSingleLine(true);
-        this.textView.setEllipsize(TextUtils.TruncateAt.END);
-        this.textView.setImportantForAccessibility(2);
-        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 8.0f, 23.0f, 0.0f));
+        textView2.setTextSize(1, 16.0f);
+        textView2.setGravity(LocaleController.isRTL ? 5 : 3);
+        textView2.setLines(1);
+        textView2.setMaxLines(1);
+        textView2.setSingleLine(true);
+        textView2.setEllipsize(TextUtils.TruncateAt.END);
+        textView2.setImportantForAccessibility(2);
+        addView(textView2, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 8.0f, 23.0f, 0.0f));
         TextView textView3 = new TextView(context);
         this.valueTextView = textView3;
         textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
-        this.valueTextView.setTextSize(1, 13.0f);
-        this.valueTextView.setLines(1);
-        this.valueTextView.setMaxLines(1);
-        this.valueTextView.setSingleLine(true);
-        this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.valueTextView.setImportantForAccessibility(2);
-        addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 33.0f, 23.0f, 0.0f));
+        textView3.setTextSize(1, 13.0f);
+        textView3.setLines(1);
+        textView3.setMaxLines(1);
+        textView3.setSingleLine(true);
+        textView3.setGravity(LocaleController.isRTL ? 5 : 3);
+        textView3.setImportantForAccessibility(2);
+        addView(textView3, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 33.0f, 23.0f, 0.0f));
+        ImageView imageView2 = new ImageView(context);
+        this.imageView = imageView2;
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        addView(imageView2, LayoutHelper.createFrameRelatively(48.0f, 48.0f, 8388629, 0.0f, 0.0f, 12.0f, 0.0f));
     }
 
     /* access modifiers changed from: protected */
@@ -54,6 +61,19 @@ public class TextDetailCell extends FrameLayout {
         this.valueTextView.setText(str2);
         this.needDivider = z;
         setWillNotDraw(!z);
+    }
+
+    public void setImage(Drawable drawable) {
+        this.imageView.setImageDrawable(drawable);
+        if (drawable == null) {
+            this.imageView.setBackground((Drawable) null);
+        } else {
+            this.imageView.setBackground(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(48.0f), 0, Theme.getColor("listSelectorSDK21")));
+        }
+    }
+
+    public void setImageClickListener(View.OnClickListener onClickListener) {
+        this.imageView.setOnClickListener(onClickListener);
     }
 
     public void setTextWithEmojiAndValue(String str, CharSequence charSequence, boolean z) {

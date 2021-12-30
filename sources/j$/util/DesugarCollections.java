@@ -3,7 +3,7 @@ package j$.util;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
 import j$.util.function.Function;
-import j$.util.function.y;
+import j$.util.function.Predicate;
 import j$.wrappers.CLASSNAMEq;
 import j$.wrappers.CLASSNAMEs;
 import j$.wrappers.M;
@@ -151,14 +151,14 @@ public class DesugarCollections {
 
         public void forEach(BiConsumer biConsumer) {
             synchronized (this.b) {
-                CLASSNAMEa.z(this.a, biConsumer);
+                CLASSNAMEa.y(this.a, biConsumer);
             }
         }
 
         public void forEach(java.util.function.BiConsumer biConsumer) {
             BiConsumer a2 = CLASSNAMEq.a(biConsumer);
             synchronized (this.b) {
-                CLASSNAMEa.z(this.a, a2);
+                CLASSNAMEa.y(this.a, a2);
             }
         }
 
@@ -171,11 +171,11 @@ public class DesugarCollections {
         }
 
         public Object getOrDefault(Object obj, Object obj2) {
-            Object A;
+            Object z;
             synchronized (this.b) {
-                A = CLASSNAMEa.A(this.a, obj, obj2);
+                z = CLASSNAMEa.z(this.a, obj, obj2);
             }
-            return A;
+            return z;
         }
 
         public int hashCode() {
@@ -206,20 +206,20 @@ public class DesugarCollections {
         }
 
         public Object merge(Object obj, Object obj2, BiFunction biFunction) {
-            Object B;
+            Object A;
             synchronized (this.b) {
-                B = CLASSNAMEa.B(this.a, obj, obj2, biFunction);
+                A = CLASSNAMEa.A(this.a, obj, obj2, biFunction);
             }
-            return B;
+            return A;
         }
 
         public Object merge(Object obj, Object obj2, java.util.function.BiFunction biFunction) {
-            Object B;
+            Object A;
             BiFunction a2 = CLASSNAMEs.a(biFunction);
             synchronized (this.b) {
-                B = CLASSNAMEa.B(this.a, obj, obj2, a2);
+                A = CLASSNAMEa.A(this.a, obj, obj2, a2);
             }
-            return B;
+            return A;
         }
 
         public Object put(Object obj, Object obj2) {
@@ -237,11 +237,11 @@ public class DesugarCollections {
         }
 
         public Object putIfAbsent(Object obj, Object obj2) {
-            Object C;
+            Object B;
             synchronized (this.b) {
-                C = CLASSNAMEa.C(this.a, obj, obj2);
+                B = CLASSNAMEa.B(this.a, obj, obj2);
             }
-            return C;
+            return B;
         }
 
         public Object remove(Object obj) {
@@ -253,39 +253,39 @@ public class DesugarCollections {
         }
 
         public boolean remove(Object obj, Object obj2) {
-            boolean D;
+            boolean C;
+            synchronized (this.b) {
+                C = CLASSNAMEa.C(this.a, obj, obj2);
+            }
+            return C;
+        }
+
+        public Object replace(Object obj, Object obj2) {
+            Object D;
             synchronized (this.b) {
                 D = CLASSNAMEa.D(this.a, obj, obj2);
             }
             return D;
         }
 
-        public Object replace(Object obj, Object obj2) {
-            Object E;
+        public boolean replace(Object obj, Object obj2, Object obj3) {
+            boolean E;
             synchronized (this.b) {
-                E = CLASSNAMEa.E(this.a, obj, obj2);
+                E = CLASSNAMEa.E(this.a, obj, obj2, obj3);
             }
             return E;
         }
 
-        public boolean replace(Object obj, Object obj2, Object obj3) {
-            boolean F;
-            synchronized (this.b) {
-                F = CLASSNAMEa.F(this.a, obj, obj2, obj3);
-            }
-            return F;
-        }
-
         public void replaceAll(BiFunction biFunction) {
             synchronized (this.b) {
-                CLASSNAMEa.G(this.a, biFunction);
+                CLASSNAMEa.F(this.a, biFunction);
             }
         }
 
         public void replaceAll(java.util.function.BiFunction biFunction) {
             BiFunction a2 = CLASSNAMEs.a(biFunction);
             synchronized (this.b) {
-                CLASSNAMEa.G(this.a, a2);
+                CLASSNAMEa.F(this.a, a2);
             }
         }
 
@@ -383,23 +383,21 @@ public class DesugarCollections {
         }
     }
 
-    static boolean c(Collection collection, y yVar) {
-        boolean k;
+    static boolean c(Collection collection, Predicate predicate) {
+        boolean removeIf;
         Field field = c;
         if (field == null) {
             try {
-                Collection collection2 = (Collection) d.get(collection);
-                return collection2 instanceof CLASSNAMEb ? ((CLASSNAMEb) collection2).k(yVar) : CLASSNAMEa.h(collection2, yVar);
+                return Collection$EL.removeIf((Collection) d.get(collection), predicate);
             } catch (IllegalAccessException e2) {
                 throw new Error("Runtime illegal access in synchronized collection removeIf fall-back.", e2);
             }
         } else {
             try {
                 synchronized (field.get(collection)) {
-                    Collection collection3 = (Collection) d.get(collection);
-                    k = collection3 instanceof CLASSNAMEb ? ((CLASSNAMEb) collection3).k(yVar) : CLASSNAMEa.h(collection3, yVar);
+                    removeIf = Collection$EL.removeIf((Collection) d.get(collection), predicate);
                 }
-                return k;
+                return removeIf;
             } catch (IllegalAccessException e3) {
                 throw new Error("Runtime illegal access in synchronized collection removeIf.", e3);
             }
@@ -410,14 +408,14 @@ public class DesugarCollections {
         Field field = c;
         if (field == null) {
             try {
-                CLASSNAMEa.H((List) d.get(list), comparator);
+                CLASSNAMEa.G((List) d.get(list), comparator);
             } catch (IllegalAccessException e2) {
                 throw new Error("Runtime illegal access in synchronized collection sort fall-back.", e2);
             }
         } else {
             try {
                 synchronized (field.get(list)) {
-                    CLASSNAMEa.H((List) d.get(list), comparator);
+                    CLASSNAMEa.G((List) d.get(list), comparator);
                 }
             } catch (IllegalAccessException e3) {
                 throw new Error("Runtime illegal access in synchronized list sort.", e3);

@@ -11,7 +11,6 @@ import j$.util.function.j;
 import j$.util.function.l;
 import j$.util.function.m;
 import j$.util.function.n;
-import j$.util.function.z;
 import j$.util.v;
 import j$.util.y;
 import j$.wrappers.CLASSNAMEb0;
@@ -107,8 +106,8 @@ abstract class L0 extends CLASSNAMEc implements M0 {
     }
 
     /* access modifiers changed from: package-private */
-    public final y K0(CLASSNAMEz2 z2Var, z zVar, boolean z) {
-        return new CLASSNAMEr4(z2Var, zVar, z);
+    public final y K0(CLASSNAMEz2 z2Var, j$.util.function.y yVar, boolean z) {
+        return new CLASSNAMEr4(z2Var, yVar, z);
     }
 
     public final int N(int i, j jVar) {
@@ -190,15 +189,15 @@ abstract class L0 extends CLASSNAMEc implements M0 {
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m523iterator() {
+    public Iterator m525iterator() {
         return N.g(spliterator());
     }
 
-    public final Object k0(z zVar, j$.util.function.v vVar, BiConsumer biConsumer) {
+    public final Object k0(j$.util.function.y yVar, j$.util.function.v vVar, BiConsumer biConsumer) {
         C c = new C(biConsumer, 1);
-        zVar.getClass();
+        yVar.getClass();
         vVar.getClass();
-        return x0(new A2(CLASSNAMEf4.INT_VALUE, (CLASSNAMEb) c, vVar, zVar));
+        return x0(new A2(CLASSNAMEf4.INT_VALUE, (CLASSNAMEb) c, vVar, yVar));
     }
 
     public final M0 limit(long j) {

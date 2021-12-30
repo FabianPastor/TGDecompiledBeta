@@ -30,7 +30,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class EmojiThemes {
     private static final String[] previewColorKeys = {"chat_inBubble", "chat_outBubble", "featuredStickers_addButton", "chat_wallpaper", "chat_wallpaper_gradient_to", "key_chat_wallpaper_gradient_to2", "key_chat_wallpaper_gradient_to3", "chat_wallpaper_gradient_rotation"};
-    String emoji;
+    public String emoji;
     ArrayList<ThemeItem> items = new ArrayList<>();
     public boolean showAsDefaultStub;
 
@@ -176,6 +176,26 @@ public class EmojiThemes {
         return emojiThemes;
     }
 
+    public static EmojiThemes createHome() {
+        EmojiThemes emojiThemes = new EmojiThemes();
+        emojiThemes.emoji = "🏠";
+        ThemeItem themeItem = new ThemeItem();
+        Theme.ThemeInfo defaultThemeInfo = getDefaultThemeInfo(false);
+        themeItem.themeInfo = defaultThemeInfo;
+        if (defaultThemeInfo.getKey().equals("Blue")) {
+            themeItem.accentId = 99;
+        }
+        emojiThemes.items.add(themeItem);
+        ThemeItem themeItem2 = new ThemeItem();
+        Theme.ThemeInfo defaultThemeInfo2 = getDefaultThemeInfo(true);
+        themeItem2.themeInfo = defaultThemeInfo2;
+        if (defaultThemeInfo2.getKey().equals("Night")) {
+            themeItem2.accentId = 0;
+        }
+        emojiThemes.items.add(themeItem2);
+        return emojiThemes;
+    }
+
     public void initColors() {
         getPreviewColors(0, 0);
         getPreviewColors(0, 1);
@@ -190,11 +210,12 @@ public class EmojiThemes {
     }
 
     public TLRPC$WallPaper getWallpaper(int i) {
+        TLRPC$TL_theme tlTheme;
         int i2 = this.items.get(i).settingsIndex;
-        if (i2 >= 0) {
-            return getTlTheme(i).settings.get(i2).wallpaper;
+        if (i2 < 0 || (tlTheme = getTlTheme(i)) == null) {
+            return null;
         }
-        return null;
+        return tlTheme.settings.get(i2).wallpaper;
     }
 
     public String getWallpaperLink(int i) {

@@ -242,7 +242,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         protected final Theme.ResourcesProvider resourcesProvider;
 
         /* access modifiers changed from: package-private */
-        public void applyCaption(String str) {
+        public void applyCaption(CharSequence charSequence) {
         }
 
         /* access modifiers changed from: package-private */
@@ -417,14 +417,16 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         public AttachButton(Context context) {
             super(context);
             setWillNotDraw(false);
-            AnonymousClass1 r0 = new RLottieImageView(context, ChatAttachAlert.this) {
+            setFocusable(true);
+            setFocusableInTouchMode(true);
+            AnonymousClass1 r1 = new RLottieImageView(context, ChatAttachAlert.this) {
                 public void setScaleX(float f) {
                     super.setScaleX(f);
                     AttachButton.this.invalidate();
                 }
             };
-            this.imageView = r0;
-            r0.setScaleType(ImageView.ScaleType.CENTER);
+            this.imageView = r1;
+            r1.setScaleType(ImageView.ScaleType.CENTER);
             addView(this.imageView, LayoutHelper.createFrame(32, 32.0f, 49, 0.0f, 18.0f, 0.0f, 0.0f));
             TextView textView2 = new TextView(context);
             this.textView = textView2;
@@ -434,6 +436,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             this.textView.setTextColor(ChatAttachAlert.this.getThemedColor("dialogTextGray2"));
             this.textView.setTextSize(1, 12.0f);
             this.textView.setLineSpacing((float) (-AndroidUtilities.dp(2.0f)), 1.0f);
+            this.textView.setImportantForAccessibility(2);
             addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 62.0f, 0.0f, 0.0f));
         }
 
@@ -679,7 +682,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r1 = r7.getThemedColor(r5)
             r0.setBackgroundColor(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131165485(0x7var_d, float:1.7945188E38)
+            r1 = 2131165487(0x7var_f, float:1.7945193E38)
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
             java.lang.String r4 = "dialogTextBlack"
@@ -723,7 +726,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r7.selectedMenuItem = r14
             r14.setLongClickEnabled(r11)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.selectedMenuItem
-            r1 = 2131165492(0x7var_, float:1.7945203E38)
+            r1 = 2131165494(0x7var_, float:1.7945207E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.selectedMenuItem
             r1 = 2131623987(0x7f0e0033, float:1.887514E38)
@@ -773,7 +776,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r7.doneItem = r12
             r12.setLongClickEnabled(r11)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.doneItem
-            r1 = 2131625100(0x7f0e048c, float:1.8877398E38)
+            r1 = 2131625105(0x7f0e0491, float:1.8877409E38)
             java.lang.String r2 = "Create"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -811,10 +814,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r7.searchItem = r15
             r15.setLongClickEnabled(r11)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.searchItem
-            r1 = 2131165495(0x7var_, float:1.7945209E38)
+            r1 = 2131165497(0x7var_, float:1.7945213E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.searchItem
-            r1 = 2131627616(0x7f0e0e60, float:1.8882501E38)
+            r1 = 2131627685(0x7f0e0ea5, float:1.8882641E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -923,7 +926,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.view.View r0 = new android.view.View
             r0.<init>(r8)
             r7.shadow = r0
-            r1 = 2131165271(0x7var_, float:1.7944754E38)
+            r1 = 2131165272(0x7var_, float:1.7944756E38)
             r0.setBackgroundResource(r1)
             android.view.View r0 = r7.shadow
             android.graphics.drawable.Drawable r0 = r0.getBackground()
@@ -1041,7 +1044,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6 = r36
             r0.<init>(r2, r3, r4, r5, r6)
             r7.commentTextView = r15
-            r0 = 2131624206(0x7f0e010e, float:1.8875585E38)
+            r0 = 2131624207(0x7f0e010f, float:1.8875587E38)
             java.lang.String r1 = "AddCaption"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r15.setHint(r0)
@@ -1112,7 +1115,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r7.writeButtonDrawable = r2
             if (r4 >= r5) goto L_0x050a
             android.content.res.Resources r2 = r32.getResources()
-            r3 = 2131165436(0x7var_fc, float:1.794509E38)
+            r3 = 2131165438(0x7var_fe, float:1.7945093E38)
             android.graphics.drawable.Drawable r2 = r2.getDrawable(r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
@@ -1131,7 +1134,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.graphics.drawable.Drawable r3 = r7.writeButtonDrawable
             r2.setBackgroundDrawable(r3)
             android.widget.ImageView r2 = r7.writeButton
-            r3 = 2131165270(0x7var_, float:1.7944752E38)
+            r3 = 2131165271(0x7var_, float:1.7944754E38)
             r2.setImageResource(r3)
             android.widget.ImageView r2 = r7.writeButton
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
@@ -1604,7 +1607,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     /* access modifiers changed from: protected */
     public void applyCaption() {
         if (this.commentTextView.length() > 0) {
-            this.currentAttachLayout.applyCaption(this.commentTextView.getText().toString());
+            this.currentAttachLayout.applyCaption(this.commentTextView.getText());
         }
     }
 

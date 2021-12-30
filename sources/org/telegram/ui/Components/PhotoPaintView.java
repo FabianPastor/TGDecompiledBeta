@@ -296,7 +296,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r14, r7, r15, r7)
             android.widget.TextView r2 = r0.cancelTextView
             java.lang.String r14 = "Cancel"
-            r15 = 2131624692(0x7f0e02f4, float:1.887657E38)
+            r15 = 2131624695(0x7f0e02f7, float:1.8876577E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r14, r15)
             java.lang.String r14 = r14.toUpperCase()
             r2.setText(r14)
@@ -328,7 +328,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r5, r7, r10, r7)
             android.widget.TextView r2 = r0.doneTextView
             java.lang.String r5 = "Done"
-            r10 = 2131625321(0x7f0e0569, float:1.8877847E38)
+            r10 = 2131625328(0x7f0e0570, float:1.887786E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r10)
             java.lang.String r5 = r5.toUpperCase()
             r2.setText(r5)
@@ -346,7 +346,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r4)
             android.widget.ImageView r2 = r0.paintButton
-            r4 = 2131165964(0x7var_c, float:1.794616E38)
+            r4 = 2131165970(0x7var_, float:1.7946172E38)
             r2.setImageResource(r4)
             android.widget.ImageView r2 = r0.paintButton
             r4 = 1090519039(0x40ffffff, float:7.9999995)
@@ -371,7 +371,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r5)
-            r5 = 2131165968(0x7var_, float:1.7946168E38)
+            r5 = 2131165974(0x7var_, float:1.794618E38)
             r2.setImageResource(r5)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r5)
@@ -386,7 +386,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r1)
-            r1 = 2131165966(0x7var_e, float:1.7946164E38)
+            r1 = 2131165972(0x7var_, float:1.7946176E38)
             r2.setImageResource(r1)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r1)
@@ -1136,22 +1136,26 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 float var_ = cropState.cropScale * 1.0f;
                 int measuredWidth = view.getMeasuredWidth();
                 int measuredHeight = view.getMeasuredHeight();
-                MediaController.CropState cropState2 = this.currentCropState;
-                int i2 = cropState2.transformRotation;
-                if (i2 == 90 || i2 == 270) {
-                    int i3 = measuredHeight;
-                    measuredHeight = measuredWidth;
-                    measuredWidth = i3;
+                if (measuredWidth != 0 && measuredHeight != 0) {
+                    MediaController.CropState cropState2 = this.currentCropState;
+                    int i2 = cropState2.transformRotation;
+                    if (i2 == 90 || i2 == 270) {
+                        int i3 = measuredHeight;
+                        measuredHeight = measuredWidth;
+                        measuredWidth = i3;
+                    }
+                    float var_ = (float) measuredWidth;
+                    float var_ = (float) measuredHeight;
+                    float max = Math.max(f4 / ((float) ((int) (cropState2.cropPw * var_))), f5 / ((float) ((int) (cropState2.cropPh * var_))));
+                    f8 = var_ * max;
+                    MediaController.CropState cropState3 = this.currentCropState;
+                    float var_ = cropState3.cropScale;
+                    f6 = (cropState3.cropPx * var_ * f * max * var_) + var_;
+                    f9 = var_ + (cropState3.cropPy * var_ * f * max * var_);
+                    f7 = cropState3.cropRotate + ((float) i2);
+                } else {
+                    return;
                 }
-                float var_ = (float) measuredWidth;
-                float var_ = (float) measuredHeight;
-                float max = Math.max(f4 / ((float) ((int) (cropState2.cropPw * var_))), f5 / ((float) ((int) (cropState2.cropPh * var_))));
-                f8 = var_ * max;
-                MediaController.CropState cropState3 = this.currentCropState;
-                float var_ = cropState3.cropScale;
-                f6 = (cropState3.cropPx * var_ * f * max * var_) + var_;
-                f9 = var_ + (cropState3.cropPy * var_ * f * max * var_);
-                f7 = cropState3.cropRotate + ((float) i2);
             } else {
                 if (i == 0) {
                     var_ = 1.0f * this.baseScale;

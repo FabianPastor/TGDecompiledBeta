@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.util.Property;
 import android.view.MotionEvent;
@@ -43,6 +44,7 @@ public class TextCheckCell extends FrameLayout {
     private Switch checkBox;
     private boolean drawCheckRipple;
     private int height;
+    private boolean isAnimatingToThumbInsteadOfTouch;
     private boolean isMultiline;
     private float lastTouchX;
     private boolean needDivider;
@@ -105,6 +107,11 @@ public class TextCheckCell extends FrameLayout {
     public boolean onTouchEvent(MotionEvent motionEvent) {
         this.lastTouchX = motionEvent.getX();
         return super.onTouchEvent(motionEvent);
+    }
+
+    public void setDivider(boolean z) {
+        this.needDivider = z;
+        setWillNotDraw(!z);
     }
 
     public void setTextAndCheck(String str, boolean z, boolean z2) {
@@ -260,18 +267,60 @@ public class TextCheckCell extends FrameLayout {
     /* access modifiers changed from: private */
     public void setAnimationProgress(float f) {
         this.animationProgress = f;
-        float max = Math.max(this.lastTouchX, ((float) getMeasuredWidth()) - this.lastTouchX) + ((float) AndroidUtilities.dp(40.0f));
-        this.checkBox.setOverrideColorProgress(this.lastTouchX, (float) (getMeasuredHeight() / 2), max * this.animationProgress);
+        float lastTouchX2 = getLastTouchX();
+        this.checkBox.setOverrideColorProgress(lastTouchX2, (float) (getMeasuredHeight() / 2), (Math.max(lastTouchX2, ((float) getMeasuredWidth()) - lastTouchX2) + ((float) AndroidUtilities.dp(40.0f))) * this.animationProgress);
+    }
+
+    public void setBackgroundColorAnimatedReverse(final int i) {
+        ObjectAnimator objectAnimator = this.animator;
+        if (objectAnimator != null) {
+            objectAnimator.cancel();
+            this.animator = null;
+        }
+        int i2 = this.animatedColorBackground;
+        if (i2 == 0) {
+            i2 = getBackground() instanceof ColorDrawable ? ((ColorDrawable) getBackground()).getColor() : 0;
+        }
+        if (this.animationPaint == null) {
+            this.animationPaint = new Paint(1);
+        }
+        this.animationPaint.setColor(i2);
+        setBackgroundColor(i);
+        this.checkBox.setOverrideColor(1);
+        this.animatedColorBackground = i;
+        ObjectAnimator duration = ObjectAnimator.ofFloat(this, ANIMATION_PROGRESS, new float[]{1.0f, 0.0f}).setDuration(240);
+        this.animator = duration;
+        duration.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animator) {
+                TextCheckCell.this.setBackgroundColor(i);
+                int unused = TextCheckCell.this.animatedColorBackground = 0;
+                TextCheckCell.this.invalidate();
+            }
+        });
+        this.animator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+        this.animator.start();
+    }
+
+    private float getLastTouchX() {
+        if (!this.isAnimatingToThumbInsteadOfTouch) {
+            return this.lastTouchX;
+        }
+        return (float) (LocaleController.isRTL ? AndroidUtilities.dp(22.0f) : getMeasuredWidth() - AndroidUtilities.dp(42.0f));
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.animatedColorBackground != 0) {
-            canvas.drawCircle(this.lastTouchX, (float) (getMeasuredHeight() / 2), (Math.max(this.lastTouchX, ((float) getMeasuredWidth()) - this.lastTouchX) + ((float) AndroidUtilities.dp(40.0f))) * this.animationProgress, this.animationPaint);
+            float lastTouchX2 = getLastTouchX();
+            canvas.drawCircle(lastTouchX2, (float) (getMeasuredHeight() / 2), (Math.max(lastTouchX2, ((float) getMeasuredWidth()) - lastTouchX2) + ((float) AndroidUtilities.dp(40.0f))) * this.animationProgress, this.animationPaint);
         }
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
+    }
+
+    public void setAnimatingToThumbInsteadOfTouch(boolean z) {
+        this.isAnimatingToThumbInsteadOfTouch = z;
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {

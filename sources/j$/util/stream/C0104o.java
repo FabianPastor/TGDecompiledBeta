@@ -3,15 +3,15 @@ package j$.util.stream;
 import j$.util.concurrent.ConcurrentHashMap;
 import j$.util.function.BiConsumer;
 import j$.util.function.Consumer;
+import j$.util.function.Predicate;
 import j$.util.function.y;
-import j$.util.function.z;
 import j$.wrappers.CLASSNAMEj0;
 import j$.wrappers.E;
 import j$.wrappers.V;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /* renamed from: j$.util.stream.o  reason: case insensitive filesystem */
-public final /* synthetic */ class CLASSNAMEo implements Consumer, z {
+public final /* synthetic */ class CLASSNAMEo implements Consumer, y {
     public final /* synthetic */ int a = 5;
     public final /* synthetic */ Object b;
     public final /* synthetic */ Object c;
@@ -62,13 +62,13 @@ public final /* synthetic */ class CLASSNAMEo implements Consumer, z {
             case 3:
                 return new CLASSNAMEi1((CLASSNAMEl1) this.b, (CLASSNAMEj0) this.c);
             default:
-                return new CLASSNAMEg1((CLASSNAMEl1) this.b, (y) this.c);
+                return new CLASSNAMEg1((CLASSNAMEl1) this.b, (Predicate) this.c);
         }
     }
 
-    public /* synthetic */ CLASSNAMEo(CLASSNAMEl1 l1Var, y yVar) {
+    public /* synthetic */ CLASSNAMEo(CLASSNAMEl1 l1Var, Predicate predicate) {
         this.b = l1Var;
-        this.c = yVar;
+        this.c = predicate;
     }
 
     public /* synthetic */ CLASSNAMEo(CLASSNAMEl1 l1Var, E e) {

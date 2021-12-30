@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda32
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$completeReadTask$186(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$unregistedPush$238(tLObject, tLRPC$TL_error);
     }
 }

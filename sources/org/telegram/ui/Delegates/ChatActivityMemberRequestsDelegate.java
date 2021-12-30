@@ -74,7 +74,7 @@ public class ChatActivityMemberRequestsDelegate {
             AnonymousClass1 r2 = new AvatarsImageView(this, this.fragment.getParentActivity(), false) {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
-                    int i3 = this.count;
+                    int i3 = this.avatarsDarawable.count;
                     super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (i3 == 0 ? 0 : ((i3 - 1) * 20) + 24)), NUM), i2);
                 }
             };

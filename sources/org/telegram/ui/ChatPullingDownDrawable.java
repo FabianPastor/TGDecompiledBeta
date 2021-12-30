@@ -40,7 +40,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
     int chatNameWidth;
     float checkProgress;
     float circleRadius;
-    CounterView.CounterDrawable counterDrawable = new CounterView.CounterDrawable((View) null, (Theme.ResourcesProvider) null);
+    CounterView.CounterDrawable counterDrawable = new CounterView.CounterDrawable((View) null, true, (Theme.ResourcesProvider) null);
     private final int currentAccount;
     private final long currentDialog;
     public int dialogFilterId;

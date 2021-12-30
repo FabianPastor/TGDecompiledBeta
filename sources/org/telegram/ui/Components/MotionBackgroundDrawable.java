@@ -20,6 +20,7 @@ import android.graphics.Xfermode;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.os.SystemClock;
 import android.view.View;
 import androidx.core.graphics.ColorUtils;
 import java.lang.ref.WeakReference;
@@ -47,6 +48,7 @@ public class MotionBackgroundDrawable extends Drawable {
     private int intensity;
     private final CubicBezierInterpolator interpolator;
     private boolean invalidateLegacy;
+    private boolean isIndeterminateAnimation;
     private boolean isPreview;
     private long lastUpdateTime;
     private Bitmap legacyBitmap;
@@ -56,6 +58,7 @@ public class MotionBackgroundDrawable extends Drawable {
     private Canvas legacyCanvas;
     private Canvas legacyCanvas2;
     private Matrix matrix;
+    private Paint overrideBitmapPaint;
     private Paint paint;
     private Paint paint2;
     private Paint paint3;
@@ -65,7 +68,7 @@ public class MotionBackgroundDrawable extends Drawable {
     private Rect patternBounds;
     private ColorFilter patternColorFilter;
     private int phase;
-    private float posAnimationProgress;
+    public float posAnimationProgress;
     private boolean postInvalidateParent;
     private RectF rect;
     private boolean rotatingPreview;
@@ -608,12 +611,18 @@ public class MotionBackgroundDrawable extends Drawable {
                     this.gradientDrawable.draw(canvas);
                 } else {
                     this.rect.set(f6, f7, f4 + f6, f5 + f7);
-                    canvas.drawBitmap(this.currentBitmap, (Rect) null, this.rect, this.paint);
+                    Bitmap bitmap3 = this.currentBitmap;
+                    RectF rectF3 = this.rect;
+                    Paint paint4 = this.overrideBitmapPaint;
+                    if (paint4 == null) {
+                        paint4 = this.paint;
+                    }
+                    canvas.drawBitmap(bitmap3, (Rect) null, rectF3, paint4);
                 }
             }
-            Bitmap bitmap3 = this.patternBitmap;
-            if (bitmap3 != null) {
-                float width6 = (float) bitmap3.getWidth();
+            Bitmap bitmap4 = this.patternBitmap;
+            if (bitmap4 != null) {
+                float width6 = (float) bitmap4.getWidth();
                 float height6 = (float) this.patternBitmap.getHeight();
                 float max5 = Math.max(width2 / width6, height2 / height6);
                 float var_ = width6 * max5;
@@ -630,247 +639,118 @@ public class MotionBackgroundDrawable extends Drawable {
         updateAnimation();
     }
 
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x00fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x014c  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateAnimation() {
-        /*
-            r18 = this;
-            r0 = r18
-            long r1 = android.os.SystemClock.elapsedRealtime()
-            long r3 = r0.lastUpdateTime
-            long r3 = r1 - r3
-            r5 = 20
-            int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r7 <= 0) goto L_0x0012
-            r3 = 17
-        L_0x0012:
-            r0.lastUpdateTime = r1
-            r1 = 1
-            int r5 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1))
-            if (r5 > 0) goto L_0x001b
-            return
-        L_0x001b:
-            float r1 = r0.posAnimationProgress
-            r2 = 1065353216(0x3var_, float:1.0)
-            int r5 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r5 >= 0) goto L_0x016d
-            boolean r5 = r0.rotatingPreview
-            r6 = 2
-            r7 = 7
-            r8 = 0
-            r9 = 1
-            if (r5 == 0) goto L_0x00bd
-            org.telegram.ui.Components.CubicBezierInterpolator r5 = r0.interpolator
-            float r1 = r5.getInterpolation(r1)
-            r5 = 1061158912(0x3var_, float:0.75)
-            r10 = 1056964608(0x3var_, float:0.5)
-            r11 = 1048576000(0x3e800000, float:0.25)
-            int r12 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
-            if (r12 > 0) goto L_0x003d
-            r1 = 0
-            goto L_0x004a
-        L_0x003d:
-            int r12 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-            if (r12 > 0) goto L_0x0043
-            r1 = 1
-            goto L_0x004a
-        L_0x0043:
-            int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-            if (r1 > 0) goto L_0x0049
-            r1 = 2
-            goto L_0x004a
-        L_0x0049:
-            r1 = 3
-        L_0x004a:
-            float r12 = r0.posAnimationProgress
-            float r3 = (float) r3
-            boolean r4 = r0.rotationBack
-            if (r4 == 0) goto L_0x0054
-            r4 = 1148846080(0x447a0000, float:1000.0)
-            goto L_0x0056
-        L_0x0054:
-            r4 = 1157234688(0x44fa0000, float:2000.0)
-        L_0x0056:
-            float r3 = r3 / r4
-            float r12 = r12 + r3
-            r0.posAnimationProgress = r12
-            int r3 = (r12 > r2 ? 1 : (r12 == r2 ? 0 : -1))
-            if (r3 <= 0) goto L_0x0060
-            r0.posAnimationProgress = r2
-        L_0x0060:
-            org.telegram.ui.Components.CubicBezierInterpolator r3 = r0.interpolator
-            float r4 = r0.posAnimationProgress
-            float r3 = r3.getInterpolation(r4)
-            if (r1 != 0) goto L_0x006e
-            int r4 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
-            if (r4 > 0) goto L_0x007a
-        L_0x006e:
-            if (r1 != r9) goto L_0x0074
-            int r4 = (r3 > r10 ? 1 : (r3 == r10 ? 0 : -1))
-            if (r4 > 0) goto L_0x007a
-        L_0x0074:
-            if (r1 != r6) goto L_0x0091
-            int r1 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0091
-        L_0x007a:
-            boolean r1 = r0.rotationBack
-            if (r1 == 0) goto L_0x0088
-            int r1 = r0.phase
-            int r1 = r1 + r9
-            r0.phase = r1
-            if (r1 <= r7) goto L_0x0091
-            r0.phase = r8
-            goto L_0x0091
-        L_0x0088:
-            int r1 = r0.phase
-            int r1 = r1 - r9
-            r0.phase = r1
-            if (r1 >= 0) goto L_0x0091
-            r0.phase = r7
-        L_0x0091:
-            int r1 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
-            if (r1 > 0) goto L_0x0097
-        L_0x0095:
-            float r3 = r3 / r11
-            goto L_0x00a5
-        L_0x0097:
-            int r1 = (r3 > r10 ? 1 : (r3 == r10 ? 0 : -1))
-            if (r1 > 0) goto L_0x009d
-            float r3 = r3 - r11
-            goto L_0x0095
-        L_0x009d:
-            int r1 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r1 > 0) goto L_0x00a3
-            float r3 = r3 - r10
-            goto L_0x0095
-        L_0x00a3:
-            float r3 = r3 - r5
-            goto L_0x0095
-        L_0x00a5:
-            boolean r1 = r0.rotationBack
-            if (r1 == 0) goto L_0x00f1
-            float r3 = r2 - r3
-            float r1 = r0.posAnimationProgress
-            int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r1 < 0) goto L_0x00f1
-            int r1 = r0.phase
-            int r1 = r1 + r9
-            r0.phase = r1
-            if (r1 <= r7) goto L_0x00ba
-            r0.phase = r8
-        L_0x00ba:
-            r3 = 1065353216(0x3var_, float:1.0)
-            goto L_0x00f1
-        L_0x00bd:
-            float r3 = (float) r3
-            boolean r4 = r0.fastAnimation
-            if (r4 == 0) goto L_0x00c5
-            r4 = 1133903872(0x43960000, float:300.0)
-            goto L_0x00c7
-        L_0x00c5:
-            r4 = 1140457472(0x43fa0000, float:500.0)
-        L_0x00c7:
-            float r3 = r3 / r4
-            float r1 = r1 + r3
-            r0.posAnimationProgress = r1
-            int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r1 <= 0) goto L_0x00d1
-            r0.posAnimationProgress = r2
-        L_0x00d1:
-            org.telegram.ui.Components.CubicBezierInterpolator r1 = r0.interpolator
-            float r3 = r0.posAnimationProgress
-            float r3 = r1.getInterpolation(r3)
-            boolean r1 = r0.rotationBack
-            if (r1 == 0) goto L_0x00f1
-            float r3 = r2 - r3
-            float r1 = r0.posAnimationProgress
-            int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r1 < 0) goto L_0x00f1
-            int r1 = r0.phase
-            int r1 = r1 + r9
-            r0.phase = r1
-            if (r1 <= r7) goto L_0x00ee
-            r0.phase = r8
-        L_0x00ee:
-            r13 = 1065353216(0x3var_, float:1.0)
-            goto L_0x00f2
-        L_0x00f1:
-            r13 = r3
-        L_0x00f2:
-            boolean r1 = r0.postInvalidateParent
-            if (r1 != 0) goto L_0x014c
-            boolean r1 = r0.rotatingPreview
-            if (r1 == 0) goto L_0x00fb
-            goto L_0x014c
-        L_0x00fb:
-            boolean r1 = useLegacyBitmap
-            if (r1 == 0) goto L_0x0104
-            int r1 = r0.intensity
-            if (r1 >= 0) goto L_0x0104
-            goto L_0x016a
-        L_0x0104:
-            r1 = 0
-            int r2 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1))
-            if (r2 == 0) goto L_0x0140
-            r2 = 1051372203(0x3eaaaaab, float:0.33333334)
-            float r3 = r13 / r2
-            int r3 = (int) r3
-            r4 = 0
-            if (r3 != 0) goto L_0x011a
-            android.graphics.Canvas r5 = r0.gradientCanvas
-            android.graphics.Bitmap r6 = r0.gradientFromBitmap
-            r5.drawBitmap(r6, r1, r1, r4)
-            goto L_0x0125
-        L_0x011a:
-            android.graphics.Canvas r5 = r0.gradientCanvas
-            android.graphics.Bitmap[] r6 = r0.gradientToBitmap
-            int r7 = r3 + -1
-            r6 = r6[r7]
-            r5.drawBitmap(r6, r1, r1, r4)
-        L_0x0125:
-            float r4 = (float) r3
-            float r4 = r4 * r2
-            float r13 = r13 - r4
-            float r13 = r13 / r2
-            android.graphics.Paint r2 = r0.paint3
-            r4 = 1132396544(0x437var_, float:255.0)
-            float r13 = r13 * r4
-            int r4 = (int) r13
-            r2.setAlpha(r4)
-            android.graphics.Canvas r2 = r0.gradientCanvas
-            android.graphics.Bitmap[] r4 = r0.gradientToBitmap
-            r3 = r4[r3]
-            android.graphics.Paint r4 = r0.paint3
-            r2.drawBitmap(r3, r1, r1, r4)
-            goto L_0x016a
-        L_0x0140:
-            android.graphics.Canvas r2 = r0.gradientCanvas
-            android.graphics.Bitmap[] r3 = r0.gradientToBitmap
-            r3 = r3[r6]
-            android.graphics.Paint r4 = r0.paint3
-            r2.drawBitmap(r3, r1, r1, r4)
-            goto L_0x016a
-        L_0x014c:
-            android.graphics.Bitmap r10 = r0.currentBitmap
-            r11 = 1
-            int r12 = r0.phase
-            int r14 = r10.getWidth()
-            android.graphics.Bitmap r1 = r0.currentBitmap
-            int r15 = r1.getHeight()
-            android.graphics.Bitmap r1 = r0.currentBitmap
-            int r16 = r1.getRowBytes()
-            int[] r1 = r0.colors
-            r17 = r1
-            org.telegram.messenger.Utilities.generateGradient(r10, r11, r12, r13, r14, r15, r16, r17)
-            r0.invalidateLegacy = r9
-        L_0x016a:
-            r18.invalidateParent()
-        L_0x016d:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MotionBackgroundDrawable.updateAnimation():void");
+        float f;
+        float f2;
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        long j = elapsedRealtime - this.lastUpdateTime;
+        if (j > 20) {
+            j = 17;
+        }
+        this.lastUpdateTime = elapsedRealtime;
+        if (j > 1) {
+            boolean z = this.isIndeterminateAnimation;
+            if (z && this.posAnimationProgress == 1.0f) {
+                this.posAnimationProgress = 0.0f;
+            }
+            float f3 = this.posAnimationProgress;
+            if (f3 < 1.0f) {
+                boolean z2 = this.postInvalidateParent || this.rotatingPreview;
+                if (z) {
+                    float f4 = f3 + (((float) j) / 12000.0f);
+                    this.posAnimationProgress = f4;
+                    if (f4 >= 1.0f) {
+                        this.posAnimationProgress = 0.0f;
+                    }
+                    float f5 = this.posAnimationProgress;
+                    int i = (int) (f5 / 0.125f);
+                    this.phase = i;
+                    f = 1.0f - ((f5 - (((float) i) * 0.125f)) / 0.125f);
+                    z2 = true;
+                } else {
+                    if (this.rotatingPreview) {
+                        float interpolation = this.interpolator.getInterpolation(f3);
+                        char c = interpolation <= 0.25f ? 0 : interpolation <= 0.5f ? 1 : interpolation <= 0.75f ? (char) 2 : 3;
+                        float f6 = this.posAnimationProgress + (((float) j) / (this.rotationBack ? 1000.0f : 2000.0f));
+                        this.posAnimationProgress = f6;
+                        if (f6 > 1.0f) {
+                            this.posAnimationProgress = 1.0f;
+                        }
+                        float interpolation2 = this.interpolator.getInterpolation(this.posAnimationProgress);
+                        if ((c == 0 && interpolation2 > 0.25f) || ((c == 1 && interpolation2 > 0.5f) || (c == 2 && interpolation2 > 0.75f))) {
+                            if (this.rotationBack) {
+                                int i2 = this.phase + 1;
+                                this.phase = i2;
+                                if (i2 > 7) {
+                                    this.phase = 0;
+                                }
+                            } else {
+                                int i3 = this.phase - 1;
+                                this.phase = i3;
+                                if (i3 < 0) {
+                                    this.phase = 7;
+                                }
+                            }
+                        }
+                        if (interpolation2 > 0.25f) {
+                            interpolation2 = interpolation2 <= 0.5f ? interpolation2 - 0.25f : interpolation2 <= 0.75f ? interpolation2 - 0.5f : interpolation2 - 0.75f;
+                        }
+                        float f7 = interpolation2 / 0.25f;
+                        if (this.rotationBack) {
+                            f2 = 1.0f - f7;
+                            if (this.posAnimationProgress >= 1.0f) {
+                                int i4 = this.phase + 1;
+                                this.phase = i4;
+                                if (i4 > 7) {
+                                    this.phase = 0;
+                                }
+                                f2 = 1.0f;
+                            }
+                        } else {
+                            f2 = f7;
+                        }
+                    } else {
+                        float f8 = f3 + (((float) j) / (this.fastAnimation ? 300.0f : 500.0f));
+                        this.posAnimationProgress = f8;
+                        if (f8 > 1.0f) {
+                            this.posAnimationProgress = 1.0f;
+                        }
+                        f2 = this.interpolator.getInterpolation(this.posAnimationProgress);
+                        if (this.rotationBack) {
+                            f2 = 1.0f - f2;
+                            if (this.posAnimationProgress >= 1.0f) {
+                                int i5 = this.phase + 1;
+                                this.phase = i5;
+                                if (i5 > 7) {
+                                    this.phase = 0;
+                                }
+                                f = 1.0f;
+                            }
+                        }
+                    }
+                    f = f2;
+                }
+                if (z2) {
+                    Bitmap bitmap = this.currentBitmap;
+                    Utilities.generateGradient(bitmap, true, this.phase, f, bitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
+                    this.invalidateLegacy = true;
+                } else if (!useLegacyBitmap || this.intensity >= 0) {
+                    if (f != 1.0f) {
+                        int i6 = (int) (f / 0.33333334f);
+                        if (i6 == 0) {
+                            this.gradientCanvas.drawBitmap(this.gradientFromBitmap, 0.0f, 0.0f, (Paint) null);
+                        } else {
+                            this.gradientCanvas.drawBitmap(this.gradientToBitmap[i6 - 1], 0.0f, 0.0f, (Paint) null);
+                        }
+                        this.paint3.setAlpha((int) (((f - (((float) i6) * 0.33333334f)) / 0.33333334f) * 255.0f));
+                        this.gradientCanvas.drawBitmap(this.gradientToBitmap[i6], 0.0f, 0.0f, this.paint3);
+                    } else {
+                        this.gradientCanvas.drawBitmap(this.gradientToBitmap[2], 0.0f, 0.0f, this.paint3);
+                    }
+                }
+                invalidateParent();
+            }
+        }
     }
 
     public void setAlpha(int i) {
@@ -882,5 +762,9 @@ public class MotionBackgroundDrawable extends Drawable {
     public boolean isOneColor() {
         int[] iArr = this.colors;
         return iArr[0] == iArr[1] && iArr[0] == iArr[2] && iArr[0] == iArr[3];
+    }
+
+    public void setIndeterminateAnimation(boolean z) {
+        this.isIndeterminateAnimation = z;
     }
 }

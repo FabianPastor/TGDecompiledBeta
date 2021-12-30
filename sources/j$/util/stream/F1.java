@@ -2,6 +2,7 @@ package j$.util.stream;
 
 import j$.util.CLASSNAMEa;
 import j$.util.CLASSNAMEb;
+import j$.util.Collection$EL;
 import j$.util.function.Consumer;
 import j$.util.function.m;
 import j$.util.y;
@@ -23,7 +24,7 @@ final class F1 implements B1 {
     }
 
     public void forEach(Consumer consumer) {
-        CLASSNAMEa.y(this.a, consumer);
+        Collection$EL.a(this.a, consumer);
     }
 
     public void i(Object[] objArr, int i) {

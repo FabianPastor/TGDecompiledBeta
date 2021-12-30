@@ -9,7 +9,7 @@ import j$.util.function.f;
 import j$.util.function.g;
 import j$.util.function.h;
 import j$.util.function.u;
-import j$.util.function.z;
+import j$.util.function.y;
 import j$.util.stream.CLASSNAMEf1;
 import j$.util.stream.CLASSNAMEg;
 import j$.util.stream.M0;
@@ -35,8 +35,8 @@ public final /* synthetic */ class L0 implements U {
         return CLASSNAMEa.q(this.a.reduce(CLASSNAMEz.a(dVar)));
     }
 
-    public /* synthetic */ Object H(z zVar, u uVar, BiConsumer biConsumer) {
-        return this.a.collect(A0.a(zVar), s0.a(uVar), r.a(biConsumer));
+    public /* synthetic */ Object H(y yVar, u uVar, BiConsumer biConsumer) {
+        return this.a.collect(A0.a(yVar), s0.a(uVar), r.a(biConsumer));
     }
 
     public /* synthetic */ double K(double d, d dVar) {

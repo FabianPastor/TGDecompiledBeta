@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda82 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import java.util.concurrent.atomic.AtomicReference;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda82(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda82 implements Runnable {
+    public final /* synthetic */ AtomicReference f$0;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda82(AtomicReference atomicReference) {
+        this.f$0 = atomicReference;
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$94();
+        ChatActivity.lambda$createMenu$133(this.f$0);
     }
 }

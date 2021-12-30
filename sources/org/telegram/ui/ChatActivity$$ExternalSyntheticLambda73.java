@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
+import android.view.MotionEvent;
 import android.view.View;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda73 implements Runnable {
-    public final /* synthetic */ View f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda73 implements View.OnTouchListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda73(View view) {
-        this.f$0 = view;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda73(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        this.f$0.performHapticFeedback(3, 2);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return this.f$0.lambda$createView$43(view, motionEvent);
     }
 }

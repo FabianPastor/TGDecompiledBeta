@@ -268,7 +268,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
                         if (r11 == 0) goto L_0x0155
                         org.telegram.ui.DefaultThemesPreviewCell r11 = org.telegram.ui.DefaultThemesPreviewCell.this
                         org.telegram.ui.Cells.TextCell r11 = r11.dayNightCell
-                        r0 = 2131627788(0x7f0e0f0c, float:1.888285E38)
+                        r0 = 2131627857(0x7f0e0var_, float:1.888299E38)
                         java.lang.String r2 = "SettingsSwitchToNightMode"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
                         org.telegram.ui.DefaultThemesPreviewCell r2 = org.telegram.ui.DefaultThemesPreviewCell.this
@@ -278,7 +278,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
                     L_0x0155:
                         org.telegram.ui.DefaultThemesPreviewCell r11 = org.telegram.ui.DefaultThemesPreviewCell.this
                         org.telegram.ui.Cells.TextCell r11 = r11.dayNightCell
-                        r0 = 2131627787(0x7f0e0f0b, float:1.8882848E38)
+                        r0 = 2131627856(0x7f0e0var_, float:1.8882988E38)
                         java.lang.String r2 = "SettingsSwitchToDayMode"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
                         org.telegram.ui.DefaultThemesPreviewCell r2 = org.telegram.ui.DefaultThemesPreviewCell.this
@@ -344,7 +344,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
             }
             themeInfo = theme;
         }
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, Boolean.TRUE, null, Integer.valueOf(i2));
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, Boolean.FALSE, null, Integer.valueOf(i2));
         this.selectedPosition = i;
         int i3 = 0;
         while (i3 < this.adapter.items.size()) {

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextSettingsCell extends FrameLayout {
@@ -33,6 +34,7 @@ public class TextSettingsCell extends FrameLayout {
     private int padding;
     Paint paint;
     private TextView textView;
+    private BackupImageView valueBackupImageView;
     private ImageView valueImageView;
     private TextView valueTextView;
 
@@ -83,6 +85,10 @@ public class TextSettingsCell extends FrameLayout {
         int i3 = measuredWidth / 2;
         if (this.valueImageView.getVisibility() == 0) {
             this.valueImageView.measure(View.MeasureSpec.makeMeasureSpec(i3, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        }
+        BackupImageView backupImageView = this.valueBackupImageView;
+        if (backupImageView != null) {
+            backupImageView.measure(View.MeasureSpec.makeMeasureSpec(backupImageView.getLayoutParams().height, NUM), View.MeasureSpec.makeMeasureSpec(this.valueBackupImageView.getLayoutParams().width, NUM));
         }
         if (this.valueTextView.getVisibility() == 0) {
             this.valueTextView.measure(View.MeasureSpec.makeMeasureSpec(i3, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
@@ -284,5 +290,16 @@ public class TextSettingsCell extends FrameLayout {
             this.measureDelay = true;
         }
         invalidate();
+    }
+
+    public BackupImageView getValueBackupImageView() {
+        if (this.valueBackupImageView == null) {
+            BackupImageView backupImageView = new BackupImageView(getContext());
+            this.valueBackupImageView = backupImageView;
+            int i = (LocaleController.isRTL ? 3 : 5) | 16;
+            int i2 = this.padding;
+            addView(backupImageView, LayoutHelper.createFrame(24, 24.0f, i, (float) i2, 0.0f, (float) i2, 0.0f));
+        }
+        return this.valueBackupImageView;
     }
 }

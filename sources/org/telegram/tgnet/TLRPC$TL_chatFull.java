@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -68,6 +68,19 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
                 }
             } else if (z) {
                 throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
+            } else {
+                return;
+            }
+        }
+        if ((this.flags & 262144) != 0) {
+            int readInt326 = abstractSerializedData.readInt32(z);
+            if (readInt326 == NUM) {
+                int readInt327 = abstractSerializedData.readInt32(z);
+                for (int i3 = 0; i3 < readInt327; i3++) {
+                    this.available_reactions.add(abstractSerializedData.readString(z));
+                }
+            } else if (z) {
+                throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt326)}));
             }
         }
     }
@@ -124,6 +137,14 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
             abstractSerializedData.writeInt32(size2);
             for (int i4 = 0; i4 < size2; i4++) {
                 abstractSerializedData.writeInt64(this.recent_requesters.get(i4).longValue());
+            }
+        }
+        if ((this.flags & 262144) != 0) {
+            abstractSerializedData.writeInt32(NUM);
+            int size3 = this.available_reactions.size();
+            abstractSerializedData.writeInt32(size3);
+            for (int i5 = 0; i5 < size3; i5++) {
+                abstractSerializedData.writeString(this.available_reactions.get(i5));
             }
         }
     }

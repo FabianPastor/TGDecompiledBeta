@@ -1,5 +1,9 @@
 package org.telegram.ui.Cells;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Shader;
@@ -8,11 +12,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.text.style.CharacterStyle;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
+import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -25,138 +33,234 @@ import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$TL_reactionCount;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBarLayout;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.MotionBackgroundDrawable;
+import org.telegram.ui.Components.Reactions.ReactionsEffectOverlay;
+import org.telegram.ui.Components.ReactionsContainerLayout;
 import org.telegram.ui.PinchToZoomHelper;
 
 public class ThemePreviewMessagesCell extends LinearLayout {
     private Drawable backgroundDrawable;
     private BackgroundGradientDrawable.Disposable backgroundGradientDisposable;
-    private ChatMessageCell[] cells = new ChatMessageCell[2];
+    /* access modifiers changed from: private */
+    public ChatMessageCell[] cells = new ChatMessageCell[2];
+    public BaseFragment fragment;
     private Drawable oldBackgroundDrawable;
     private BackgroundGradientDrawable.Disposable oldBackgroundGradientDisposable;
     private ActionBarLayout parentLayout;
     private Drawable shadowDrawable;
+    private final int type;
 
     /* access modifiers changed from: protected */
     public void dispatchSetPressed(boolean z) {
     }
 
-    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
-        return false;
-    }
-
-    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-        return false;
-    }
-
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        return false;
-    }
-
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    @SuppressLint({"ClickableViewAccessibility"})
     public ThemePreviewMessagesCell(Context context, ActionBarLayout actionBarLayout, int i) {
         super(context);
+        MessageObject messageObject;
+        MessageObject messageObject2;
         Context context2 = context;
+        int i2 = i;
         new ThemePreviewMessagesCell$$ExternalSyntheticLambda0(this);
+        this.type = i2;
+        int i3 = UserConfig.selectedAccount;
         this.parentLayout = actionBarLayout;
         setWillNotDraw(false);
         setOrientation(1);
         setPadding(0, AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(11.0f));
         this.shadowDrawable = Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow");
         int currentTimeMillis = ((int) (System.currentTimeMillis() / 1000)) - 3600;
-        TLRPC$TL_message tLRPC$TL_message = new TLRPC$TL_message();
-        if (i == 0) {
-            tLRPC$TL_message.message = LocaleController.getString("FontSizePreviewReply", NUM);
+        if (i2 == 2) {
+            TLRPC$TL_message tLRPC$TL_message = new TLRPC$TL_message();
+            tLRPC$TL_message.message = LocaleController.getString("DoubleTapPreviewMessage", NUM);
+            tLRPC$TL_message.date = currentTimeMillis + 60;
+            tLRPC$TL_message.dialog_id = 1;
+            tLRPC$TL_message.flags = 259;
+            TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+            tLRPC$TL_message.from_id = tLRPC$TL_peerUser;
+            tLRPC$TL_peerUser.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+            tLRPC$TL_message.id = 1;
+            tLRPC$TL_message.media = new TLRPC$TL_messageMediaEmpty();
+            tLRPC$TL_message.out = false;
+            TLRPC$TL_peerUser tLRPC$TL_peerUser2 = new TLRPC$TL_peerUser();
+            tLRPC$TL_message.peer_id = tLRPC$TL_peerUser2;
+            tLRPC$TL_peerUser2.user_id = 0;
+            MessageObject messageObject3 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, true, false);
+            messageObject3.resetLayout();
+            messageObject3.eventId = 1;
+            messageObject3.customName = LocaleController.getString("DoubleTapPreviewSenderName", NUM);
+            messageObject3.customAvatarDrawable = ContextCompat.getDrawable(context2, NUM);
+            messageObject2 = messageObject3;
+            messageObject = null;
         } else {
-            tLRPC$TL_message.message = LocaleController.getString("NewThemePreviewReply", NUM);
-        }
-        int i2 = currentTimeMillis + 60;
-        tLRPC$TL_message.date = i2;
-        tLRPC$TL_message.dialog_id = 1;
-        tLRPC$TL_message.flags = 259;
-        TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
-        tLRPC$TL_message.from_id = tLRPC$TL_peerUser;
-        tLRPC$TL_peerUser.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
-        tLRPC$TL_message.id = 1;
-        tLRPC$TL_message.media = new TLRPC$TL_messageMediaEmpty();
-        tLRPC$TL_message.out = true;
-        TLRPC$TL_peerUser tLRPC$TL_peerUser2 = new TLRPC$TL_peerUser();
-        tLRPC$TL_message.peer_id = tLRPC$TL_peerUser2;
-        tLRPC$TL_peerUser2.user_id = 0;
-        MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, true, false);
-        TLRPC$TL_message tLRPC$TL_message2 = new TLRPC$TL_message();
-        if (i == 0) {
-            tLRPC$TL_message2.message = LocaleController.getString("FontSizePreviewLine2", NUM);
-        } else {
-            String string = LocaleController.getString("NewThemePreviewLine3", NUM);
-            StringBuilder sb = new StringBuilder(string);
-            int indexOf = string.indexOf(42);
-            int lastIndexOf = string.lastIndexOf(42);
-            if (!(indexOf == -1 || lastIndexOf == -1)) {
-                sb.replace(lastIndexOf, lastIndexOf + 1, "");
-                sb.replace(indexOf, indexOf + 1, "");
-                TLRPC$TL_messageEntityTextUrl tLRPC$TL_messageEntityTextUrl = new TLRPC$TL_messageEntityTextUrl();
-                tLRPC$TL_messageEntityTextUrl.offset = indexOf;
-                tLRPC$TL_messageEntityTextUrl.length = (lastIndexOf - indexOf) - 1;
-                tLRPC$TL_messageEntityTextUrl.url = "https://telegram.org";
-                tLRPC$TL_message2.entities.add(tLRPC$TL_messageEntityTextUrl);
+            TLRPC$TL_message tLRPC$TL_message2 = new TLRPC$TL_message();
+            if (i2 == 0) {
+                tLRPC$TL_message2.message = LocaleController.getString("FontSizePreviewReply", NUM);
+            } else {
+                tLRPC$TL_message2.message = LocaleController.getString("NewThemePreviewReply", NUM);
             }
-            tLRPC$TL_message2.message = sb.toString();
+            int i4 = currentTimeMillis + 60;
+            tLRPC$TL_message2.date = i4;
+            tLRPC$TL_message2.dialog_id = 1;
+            tLRPC$TL_message2.flags = 259;
+            TLRPC$TL_peerUser tLRPC$TL_peerUser3 = new TLRPC$TL_peerUser();
+            tLRPC$TL_message2.from_id = tLRPC$TL_peerUser3;
+            tLRPC$TL_peerUser3.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+            tLRPC$TL_message2.id = 1;
+            tLRPC$TL_message2.media = new TLRPC$TL_messageMediaEmpty();
+            tLRPC$TL_message2.out = true;
+            TLRPC$TL_peerUser tLRPC$TL_peerUser4 = new TLRPC$TL_peerUser();
+            tLRPC$TL_message2.peer_id = tLRPC$TL_peerUser4;
+            tLRPC$TL_peerUser4.user_id = 0;
+            MessageObject messageObject4 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message2, true, false);
+            TLRPC$TL_message tLRPC$TL_message3 = new TLRPC$TL_message();
+            if (i2 == 0) {
+                tLRPC$TL_message3.message = LocaleController.getString("FontSizePreviewLine2", NUM);
+            } else {
+                String string = LocaleController.getString("NewThemePreviewLine3", NUM);
+                StringBuilder sb = new StringBuilder(string);
+                int indexOf = string.indexOf(42);
+                int lastIndexOf = string.lastIndexOf(42);
+                if (!(indexOf == -1 || lastIndexOf == -1)) {
+                    sb.replace(lastIndexOf, lastIndexOf + 1, "");
+                    sb.replace(indexOf, indexOf + 1, "");
+                    TLRPC$TL_messageEntityTextUrl tLRPC$TL_messageEntityTextUrl = new TLRPC$TL_messageEntityTextUrl();
+                    tLRPC$TL_messageEntityTextUrl.offset = indexOf;
+                    tLRPC$TL_messageEntityTextUrl.length = (lastIndexOf - indexOf) - 1;
+                    tLRPC$TL_messageEntityTextUrl.url = "https://telegram.org";
+                    tLRPC$TL_message3.entities.add(tLRPC$TL_messageEntityTextUrl);
+                }
+                tLRPC$TL_message3.message = sb.toString();
+            }
+            tLRPC$TL_message3.date = currentTimeMillis + 960;
+            tLRPC$TL_message3.dialog_id = 1;
+            tLRPC$TL_message3.flags = 259;
+            TLRPC$TL_peerUser tLRPC$TL_peerUser5 = new TLRPC$TL_peerUser();
+            tLRPC$TL_message3.from_id = tLRPC$TL_peerUser5;
+            tLRPC$TL_peerUser5.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+            tLRPC$TL_message3.id = 1;
+            tLRPC$TL_message3.media = new TLRPC$TL_messageMediaEmpty();
+            tLRPC$TL_message3.out = true;
+            TLRPC$TL_peerUser tLRPC$TL_peerUser6 = new TLRPC$TL_peerUser();
+            tLRPC$TL_message3.peer_id = tLRPC$TL_peerUser6;
+            tLRPC$TL_peerUser6.user_id = 0;
+            MessageObject messageObject5 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message3, true, false);
+            messageObject5.resetLayout();
+            messageObject5.eventId = 1;
+            TLRPC$TL_message tLRPC$TL_message4 = new TLRPC$TL_message();
+            if (i2 == 0) {
+                tLRPC$TL_message4.message = LocaleController.getString("FontSizePreviewLine1", NUM);
+            } else {
+                tLRPC$TL_message4.message = LocaleController.getString("NewThemePreviewLine1", NUM);
+            }
+            tLRPC$TL_message4.date = i4;
+            tLRPC$TL_message4.dialog_id = 1;
+            tLRPC$TL_message4.flags = 265;
+            tLRPC$TL_message4.from_id = new TLRPC$TL_peerUser();
+            tLRPC$TL_message4.id = 1;
+            TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = new TLRPC$TL_messageReplyHeader();
+            tLRPC$TL_message4.reply_to = tLRPC$TL_messageReplyHeader;
+            tLRPC$TL_messageReplyHeader.reply_to_msg_id = 5;
+            tLRPC$TL_message4.media = new TLRPC$TL_messageMediaEmpty();
+            tLRPC$TL_message4.out = false;
+            TLRPC$TL_peerUser tLRPC$TL_peerUser7 = new TLRPC$TL_peerUser();
+            tLRPC$TL_message4.peer_id = tLRPC$TL_peerUser7;
+            tLRPC$TL_peerUser7.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+            MessageObject messageObject6 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message4, true, false);
+            if (i2 == 0) {
+                messageObject6.customReplyName = LocaleController.getString("FontSizePreviewName", NUM);
+            } else {
+                messageObject6.customReplyName = LocaleController.getString("NewThemePreviewName", NUM);
+            }
+            messageObject6.eventId = 1;
+            messageObject6.resetLayout();
+            messageObject6.replyMessageObject = messageObject4;
+            messageObject2 = messageObject5;
+            messageObject = messageObject6;
         }
-        tLRPC$TL_message2.date = currentTimeMillis + 960;
-        tLRPC$TL_message2.dialog_id = 1;
-        tLRPC$TL_message2.flags = 259;
-        TLRPC$TL_peerUser tLRPC$TL_peerUser3 = new TLRPC$TL_peerUser();
-        tLRPC$TL_message2.from_id = tLRPC$TL_peerUser3;
-        tLRPC$TL_peerUser3.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
-        tLRPC$TL_message2.id = 1;
-        tLRPC$TL_message2.media = new TLRPC$TL_messageMediaEmpty();
-        tLRPC$TL_message2.out = true;
-        TLRPC$TL_peerUser tLRPC$TL_peerUser4 = new TLRPC$TL_peerUser();
-        tLRPC$TL_message2.peer_id = tLRPC$TL_peerUser4;
-        tLRPC$TL_peerUser4.user_id = 0;
-        MessageObject messageObject2 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message2, true, false);
-        messageObject2.resetLayout();
-        messageObject2.eventId = 1;
-        TLRPC$TL_message tLRPC$TL_message3 = new TLRPC$TL_message();
-        if (i == 0) {
-            tLRPC$TL_message3.message = LocaleController.getString("FontSizePreviewLine1", NUM);
-        } else {
-            tLRPC$TL_message3.message = LocaleController.getString("NewThemePreviewLine1", NUM);
-        }
-        tLRPC$TL_message3.date = i2;
-        tLRPC$TL_message3.dialog_id = 1;
-        tLRPC$TL_message3.flags = 265;
-        tLRPC$TL_message3.from_id = new TLRPC$TL_peerUser();
-        tLRPC$TL_message3.id = 1;
-        TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = new TLRPC$TL_messageReplyHeader();
-        tLRPC$TL_message3.reply_to = tLRPC$TL_messageReplyHeader;
-        tLRPC$TL_messageReplyHeader.reply_to_msg_id = 5;
-        tLRPC$TL_message3.media = new TLRPC$TL_messageMediaEmpty();
-        tLRPC$TL_message3.out = false;
-        TLRPC$TL_peerUser tLRPC$TL_peerUser5 = new TLRPC$TL_peerUser();
-        tLRPC$TL_message3.peer_id = tLRPC$TL_peerUser5;
-        tLRPC$TL_peerUser5.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
-        MessageObject messageObject3 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message3, true, false);
-        if (i == 0) {
-            messageObject3.customReplyName = LocaleController.getString("FontSizePreviewName", NUM);
-        } else {
-            messageObject3.customReplyName = LocaleController.getString("NewThemePreviewName", NUM);
-        }
-        messageObject3.eventId = 1;
-        messageObject3.resetLayout();
-        messageObject3.replyMessageObject = messageObject;
-        int i3 = 0;
+        int i5 = 0;
         while (true) {
             ChatMessageCell[] chatMessageCellArr = this.cells;
-            if (i3 < chatMessageCellArr.length) {
-                chatMessageCellArr[i3] = new ChatMessageCell(context2);
-                this.cells[i3].setDelegate(new ChatMessageCell.ChatMessageCellDelegate(this) {
+            if (i5 < chatMessageCellArr.length) {
+                chatMessageCellArr[i5] = new ChatMessageCell(context, context, i3, i) {
+                    private GestureDetector gestureDetector;
+                    final /* synthetic */ Context val$context;
+                    final /* synthetic */ int val$currentAccount;
+                    final /* synthetic */ int val$type;
+
+                    {
+                        this.val$context = r3;
+                        this.val$currentAccount = r4;
+                        this.val$type = r5;
+                        this.gestureDetector = new GestureDetector(r3, new GestureDetector.SimpleOnGestureListener() {
+                            public boolean onDoubleTap(MotionEvent motionEvent) {
+                                boolean selectReaction = AnonymousClass1.this.getMessageObject().selectReaction(MediaDataController.getInstance(AnonymousClass1.this.val$currentAccount).getDoubleTapReaction(), false);
+                                AnonymousClass1 r1 = AnonymousClass1.this;
+                                r1.setMessageObject(r1.getMessageObject(), (MessageObject.GroupedMessages) null, false, false);
+                                AnonymousClass1.this.requestLayout();
+                                ReactionsEffectOverlay.removeCurrent(false);
+                                if (selectReaction) {
+                                    ThemePreviewMessagesCell themePreviewMessagesCell = ThemePreviewMessagesCell.this;
+                                    ReactionsEffectOverlay.show(themePreviewMessagesCell.fragment, (ReactionsContainerLayout) null, themePreviewMessagesCell.cells[1], motionEvent.getX(), motionEvent.getY(), MediaDataController.getInstance(AnonymousClass1.this.val$currentAccount).getDoubleTapReaction(), AnonymousClass1.this.val$currentAccount);
+                                    ReactionsEffectOverlay.startAnimation();
+                                }
+                                AnonymousClass1.this.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                    public boolean onPreDraw() {
+                                        AnonymousClass1.this.getViewTreeObserver().removeOnPreDrawListener(this);
+                                        AnonymousClass1.this.getTransitionParams().resetAnimation();
+                                        AnonymousClass1.this.getTransitionParams().animateChange();
+                                        AnonymousClass1.this.getTransitionParams().animateChange = true;
+                                        AnonymousClass1.this.getTransitionParams().animateChangeProgress = 0.0f;
+                                        ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                                        ofFloat.addUpdateListener(new ThemePreviewMessagesCell$1$1$1$$ExternalSyntheticLambda0(this));
+                                        ofFloat.addListener(new AnimatorListenerAdapter() {
+                                            public void onAnimationEnd(Animator animator) {
+                                                super.onAnimationEnd(animator);
+                                                AnonymousClass1.this.getTransitionParams().resetAnimation();
+                                                AnonymousClass1.this.getTransitionParams().animateChange = false;
+                                                AnonymousClass1.this.getTransitionParams().animateChangeProgress = 1.0f;
+                                            }
+                                        });
+                                        ofFloat.start();
+                                        return false;
+                                    }
+
+                                    /* access modifiers changed from: private */
+                                    public /* synthetic */ void lambda$onPreDraw$0(ValueAnimator valueAnimator) {
+                                        AnonymousClass1.this.getTransitionParams().animateChangeProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+                                        AnonymousClass1.this.invalidate();
+                                    }
+                                });
+                                return true;
+                            }
+                        });
+                    }
+
+                    public boolean onTouchEvent(MotionEvent motionEvent) {
+                        this.gestureDetector.onTouchEvent(motionEvent);
+                        return true;
+                    }
+
+                    /* access modifiers changed from: protected */
+                    public void dispatchDraw(Canvas canvas) {
+                        if (getAvatarImage() != null && getAvatarImage().getImageHeight() != 0.0f) {
+                            getAvatarImage().setImageCoords(getAvatarImage().getImageX(), (((float) getMeasuredHeight()) - getAvatarImage().getImageHeight()) - ((float) AndroidUtilities.dp(4.0f)), getAvatarImage().getImageWidth(), getAvatarImage().getImageHeight());
+                            getAvatarImage().setRoundRadius((int) (getAvatarImage().getImageHeight() / 2.0f));
+                            getAvatarImage().draw(canvas);
+                        } else if (this.val$type == 2) {
+                            invalidate();
+                        }
+                        super.dispatchDraw(canvas);
+                    }
+                };
+                this.cells[i5].setDelegate(new ChatMessageCell.ChatMessageCellDelegate(this) {
                     public /* synthetic */ boolean canPerformActions() {
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canPerformActions(this);
                     }
@@ -209,8 +313,8 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressOther(this, chatMessageCell, f, f2);
                     }
 
-                    public /* synthetic */ void didPressReaction(ChatMessageCell chatMessageCell, TLRPC$TL_reactionCount tLRPC$TL_reactionCount) {
-                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressReaction(this, chatMessageCell, tLRPC$TL_reactionCount);
+                    public /* synthetic */ void didPressReaction(ChatMessageCell chatMessageCell, TLRPC$TL_reactionCount tLRPC$TL_reactionCount, boolean z) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressReaction(this, chatMessageCell, tLRPC$TL_reactionCount, z);
                     }
 
                     public /* synthetic */ void didPressReplyMessage(ChatMessageCell chatMessageCell, int i) {
@@ -302,11 +406,14 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                     }
                 });
                 ChatMessageCell[] chatMessageCellArr2 = this.cells;
-                chatMessageCellArr2[i3].isChat = false;
-                chatMessageCellArr2[i3].setFullyDraw(true);
-                this.cells[i3].setMessageObject(i3 == 0 ? messageObject3 : messageObject2, (MessageObject.GroupedMessages) null, false, false);
-                addView(this.cells[i3], LayoutHelper.createLinear(-1, -2));
-                i3++;
+                chatMessageCellArr2[i5].isChat = i2 == 2;
+                chatMessageCellArr2[i5].setFullyDraw(true);
+                MessageObject messageObject7 = i5 == 0 ? messageObject : messageObject2;
+                if (messageObject7 != null) {
+                    this.cells[i5].setMessageObject(messageObject7, (MessageObject.GroupedMessages) null, false, false);
+                    addView(this.cells[i5], LayoutHelper.createLinear(-1, -2));
+                }
+                i5++;
             } else {
                 return;
             }
@@ -413,5 +520,26 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             disposable2.dispose();
             this.oldBackgroundGradientDisposable = null;
         }
+    }
+
+    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        if (this.type == 2) {
+            return super.onInterceptTouchEvent(motionEvent);
+        }
+        return false;
+    }
+
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        if (this.type == 2) {
+            return super.dispatchTouchEvent(motionEvent);
+        }
+        return false;
+    }
+
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        if (this.type == 2) {
+            return super.onTouchEvent(motionEvent);
+        }
+        return false;
     }
 }

@@ -1,16 +1,20 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.ui.Components.ChatGreetingsView;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_getWebPagePreview;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda170 implements ChatGreetingsView.Listener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda170 implements RequestDelegate {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLRPC$TL_messages_getWebPagePreview f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda170(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda170(ChatActivity chatActivity, TLRPC$TL_messages_getWebPagePreview tLRPC$TL_messages_getWebPagePreview) {
         this.f$0 = chatActivity;
+        this.f$1 = tLRPC$TL_messages_getWebPagePreview;
     }
 
-    public final void onGreetings(TLRPC$Document tLRPC$Document) {
-        this.f$0.lambda$createView$20(tLRPC$Document);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$searchLinks$82(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

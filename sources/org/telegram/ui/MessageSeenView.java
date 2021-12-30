@@ -19,7 +19,6 @@ import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -103,7 +102,6 @@ public class MessageSeenView extends FrameLayout {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$4(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, long j, int i, TLRPC$Chat tLRPC$Chat) {
-        FileLog.e("MessageSeenView request completed");
         if (tLRPC$TL_error == null) {
             TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
             ArrayList arrayList = new ArrayList();
@@ -226,10 +224,12 @@ public class MessageSeenView extends FrameLayout {
             this.avatarsImageView.setTranslationX(0.0f);
         }
         this.avatarsImageView.commitTransition(false);
-        if (this.peerIds.size() != 1 || this.users.get(0) == null) {
-            this.titleView.setText(LocaleController.formatPluralString(this.isVoice ? "MessagePlayed" : "MessageSeen", this.peerIds.size()));
-        } else {
+        if (this.peerIds.size() == 1 && this.users.get(0) != null) {
             this.titleView.setText(ContactsController.formatName(this.users.get(0).first_name, this.users.get(0).last_name));
+        } else if (this.peerIds.size() == 0) {
+            this.titleView.setText(LocaleController.getString(LocaleController.getString("NobodyViewed", NUM)));
+        } else {
+            this.titleView.setText(LocaleController.formatPluralString(this.isVoice ? "MessagePlayed" : "MessageSeen", this.peerIds.size()));
         }
         this.titleView.animate().alpha(1.0f).setDuration(220).start();
         this.avatarsImageView.animate().alpha(1.0f).setDuration(220).start();

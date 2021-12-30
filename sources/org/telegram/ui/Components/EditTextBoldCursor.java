@@ -26,7 +26,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.Keep;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
@@ -40,7 +39,7 @@ import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
 import org.telegram.ui.ActionBar.Theme;
 
-public class EditTextBoldCursor extends EditText {
+public class EditTextBoldCursor extends EditTextEffects {
     private static Class editorClass;
     private static Method getVerticalOffsetMethod;
     private static Field mCursorDrawableResField;
@@ -293,7 +292,7 @@ public class EditTextBoldCursor extends EditText {
         L_0x00d3:
             java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00e1 }
             if (r0 == 0) goto L_0x00e1
-            r1 = 2131165417(0x7var_e9, float:1.794505E38)
+            r1 = 2131165419(0x7var_eb, float:1.7945055E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00e1 }
             r0.set(r8, r1)     // Catch:{ all -> 0x00e1 }
         L_0x00e1:

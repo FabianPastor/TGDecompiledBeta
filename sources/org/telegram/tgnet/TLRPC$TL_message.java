@@ -3,7 +3,7 @@ package org.telegram.tgnet;
 import android.text.TextUtils;
 
 public class TLRPC$TL_message extends TLRPC$Message {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -85,6 +85,9 @@ public class TLRPC$TL_message extends TLRPC$Message {
         }
         if ((this.flags & 131072) != 0) {
             this.grouped_id = abstractSerializedData.readInt64(z);
+        }
+        if ((this.flags & 1048576) != 0) {
+            this.reactions = TLRPC$TL_messageReactions.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 4194304) != 0) {
             int readInt324 = abstractSerializedData.readInt32(z);
@@ -181,6 +184,9 @@ public class TLRPC$TL_message extends TLRPC$Message {
         if ((this.flags & 131072) != 0) {
             abstractSerializedData.writeInt64(this.grouped_id);
         }
+        if ((this.flags & 1048576) != 0) {
+            this.reactions.serializeToStream(abstractSerializedData);
+        }
         if ((this.flags & 4194304) != 0) {
             abstractSerializedData.writeInt32(NUM);
             int size2 = this.restriction_reason.size();
@@ -192,6 +198,5 @@ public class TLRPC$TL_message extends TLRPC$Message {
         if ((this.flags & 33554432) != 0) {
             abstractSerializedData.writeInt32(this.ttl_period);
         }
-        writeAttachPath(abstractSerializedData);
     }
 }

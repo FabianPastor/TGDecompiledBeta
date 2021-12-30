@@ -1,19 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import org.telegram.messenger.LanguageDetector;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda156 implements RequestDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLObject f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda156 implements LanguageDetector.ExceptionCallback {
+    public final /* synthetic */ AtomicBoolean f$0;
+    public final /* synthetic */ AtomicReference f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda156(ChatActivity chatActivity, TLObject tLObject) {
-        this.f$0 = chatActivity;
-        this.f$1 = tLObject;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda156(AtomicBoolean atomicBoolean, AtomicReference atomicReference) {
+        this.f$0 = atomicBoolean;
+        this.f$1 = atomicReference;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$createView$16(this.f$1, tLObject, tLRPC$TL_error);
+    public final void run(Exception exc) {
+        ChatActivity.lambda$createMenu$131(this.f$0, this.f$1, exc);
     }
 }

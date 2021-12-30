@@ -1,20 +1,20 @@
 package j$.wrappers;
 
-import j$.util.function.z;
+import j$.util.function.y;
 import java.util.function.Supplier;
 
 public final /* synthetic */ class A0 implements Supplier {
-    final /* synthetic */ z a;
+    final /* synthetic */ y a;
 
-    private /* synthetic */ A0(z zVar) {
-        this.a = zVar;
+    private /* synthetic */ A0(y yVar) {
+        this.a = yVar;
     }
 
-    public static /* synthetic */ Supplier a(z zVar) {
-        if (zVar == null) {
+    public static /* synthetic */ Supplier a(y yVar) {
+        if (yVar == null) {
             return null;
         }
-        return zVar instanceof z0 ? ((z0) zVar).a : new A0(zVar);
+        return yVar instanceof z0 ? ((z0) yVar).a : new A0(yVar);
     }
 
     public /* synthetic */ Object get() {

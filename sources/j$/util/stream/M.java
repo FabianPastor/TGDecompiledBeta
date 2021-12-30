@@ -3,7 +3,7 @@ package j$.util.stream;
 import j$.lang.a;
 import j$.lang.b;
 import j$.lang.c;
-import j$.util.function.B;
+import j$.util.function.A;
 import j$.util.function.Function;
 import j$.util.function.l;
 import j$.util.function.m;
@@ -81,8 +81,8 @@ class M extends K0 {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public M(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, B b) {
+    public M(CLASSNAMEf3 f3Var, CLASSNAMEc cVar, CLASSNAMEf4 f4Var, int i, A a) {
         super(cVar, f4Var, i);
-        this.m = b;
+        this.m = a;
     }
 }

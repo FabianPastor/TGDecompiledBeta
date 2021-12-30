@@ -10,7 +10,7 @@ import j$.util.function.l;
 import j$.util.function.m;
 import j$.util.function.n;
 import j$.util.function.v;
-import j$.util.function.z;
+import j$.util.function.y;
 import j$.wrappers.CLASSNAMEb0;
 import j$.wrappers.V;
 import j$.wrappers.X;
@@ -58,7 +58,7 @@ public interface M0 extends CLASSNAMEg {
 
     CLASSNAMEp iterator();
 
-    Object k0(z zVar, v vVar, BiConsumer biConsumer);
+    Object k0(y yVar, v vVar, BiConsumer biConsumer);
 
     M0 limit(long j);
 

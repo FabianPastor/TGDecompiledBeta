@@ -3,7 +3,6 @@ package j$.util.stream;
 import j$.util.concurrent.ConcurrentHashMap;
 import j$.util.function.BiConsumer;
 import j$.util.function.m;
-import j$.util.function.z;
 import j$.util.y;
 import java.util.Collection;
 import java.util.HashSet;
@@ -51,6 +50,6 @@ class CLASSNAMEs extends CLASSNAMEd3 {
     public B1 L0(CLASSNAMEz2 z2Var, y yVar) {
         CLASSNAMEp pVar = CLASSNAMEp.a;
         CLASSNAMEm mVar = CLASSNAMEm.a;
-        return new F1((Collection) new A2(CLASSNAMEf4.REFERENCE, (BiConsumer) CLASSNAMEn.a, (BiConsumer) mVar, (z) pVar).c(z2Var, yVar));
+        return new F1((Collection) new A2(CLASSNAMEf4.REFERENCE, (BiConsumer) CLASSNAMEn.a, (BiConsumer) mVar, (j$.util.function.y) pVar).c(z2Var, yVar));
     }
 }
