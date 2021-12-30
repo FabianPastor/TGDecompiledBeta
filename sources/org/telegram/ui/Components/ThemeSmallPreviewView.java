@@ -649,7 +649,7 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
         public void draw(Canvas canvas, float f) {
             int i;
             ThemeSmallPreviewView themeSmallPreviewView = ThemeSmallPreviewView.this;
-            if (themeSmallPreviewView.chatThemeItem.isSelected || themeSmallPreviewView.strokeAlphaAnimator != null) {
+            if (themeSmallPreviewView.isSelected || themeSmallPreviewView.strokeAlphaAnimator != null) {
                 ChatThemeBottomSheet.ChatThemeItem chatThemeItem = ThemeSmallPreviewView.this.chatThemeItem;
                 EmojiThemes.ThemeItem themeItem = chatThemeItem.chatTheme.getThemeItem(chatThemeItem.themeIndex);
                 ThemeSmallPreviewView themeSmallPreviewView2 = ThemeSmallPreviewView.this;

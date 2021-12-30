@@ -6563,7 +6563,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x054e:
             boolean r2 = r1.isRepliesChat
             if (r2 == 0) goto L_0x055f
-            r2 = 2131628430(0x7f0e118e, float:1.8884152E38)
+            r2 = 2131628461(0x7f0e11ad, float:1.8884215E38)
             java.lang.String r3 = "ViewInChat"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x055b:
@@ -6574,7 +6574,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
             if (r2 == 0) goto L_0x0576
             if (r0 != 0) goto L_0x056f
-            r2 = 2131626140(0x7f0e089c, float:1.8879508E38)
+            r2 = 2131626139(0x7f0e089b, float:1.8879506E38)
             java.lang.String r3 = "LeaveAComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x0588
@@ -6584,7 +6584,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             goto L_0x0588
         L_0x0576:
             if (r0 != 0) goto L_0x0582
-            r2 = 2131626140(0x7f0e089c, float:1.8879508E38)
+            r2 = 2131626139(0x7f0e089b, float:1.8879506E38)
             java.lang.String r3 = "LeaveAComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x0588
@@ -7374,7 +7374,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r5 = r5 + 1
             goto L_0x0b4c
         L_0x0b74:
-            r3 = 2131626775(0x7f0e0b17, float:1.8880796E38)
+            r3 = 2131626774(0x7f0e0b16, float:1.8880794E38)
             r5 = 2
             java.lang.Object[] r7 = new java.lang.Object[r5]
             r5 = 1
@@ -7848,14 +7848,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r38 = r9
             r9 = 11
             if (r7 != r9) goto L_0x0ec1
-            r0 = 2131628506(0x7f0e11da, float:1.8884307E38)
+            r0 = 2131628537(0x7f0e11f9, float:1.888437E38)
             java.lang.String r7 = "VoipChannelVoiceChat"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r0)
             goto L_0x0ef0
         L_0x0ec1:
             r9 = 9
             if (r7 != r9) goto L_0x0ecf
-            r0 = 2131628632(0x7f0e1258, float:1.8884562E38)
+            r0 = 2131628663(0x7f0e1277, float:1.8884625E38)
             java.lang.String r7 = "VoipGroupVoiceChat"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r0)
             goto L_0x0ef0
@@ -10140,7 +10140,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r12 = 4
             r4 = r4 & r12
             if (r4 == 0) goto L_0x1f0a
-            r3 = 2131627095(0x7f0e0CLASSNAME, float:1.8881445E38)
+            r3 = 2131627094(0x7f0e0CLASSNAME, float:1.8881443E38)
             java.lang.String r4 = "PaymentReceipt"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             java.lang.String r3 = r3.toUpperCase()
@@ -10148,13 +10148,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x1f0a:
             boolean r3 = r3.test
             if (r3 == 0) goto L_0x1f1c
-            r3 = 2131627113(0x7f0e0CLASSNAME, float:1.8881481E38)
+            r3 = 2131627112(0x7f0e0CLASSNAME, float:1.888148E38)
             java.lang.String r4 = "PaymentTestInvoice"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             java.lang.String r3 = r3.toUpperCase()
             goto L_0x1var_
         L_0x1f1c:
-            r3 = 2131627082(0x7f0e0c4a, float:1.8881418E38)
+            r3 = 2131627081(0x7f0e0CLASSNAME, float:1.8881416E38)
             java.lang.String r4 = "PaymentInvoice"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             java.lang.String r3 = r3.toUpperCase()
@@ -10615,7 +10615,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.String r0 = r3.format(r0)
             goto L_0x228f
         L_0x22cd:
-            r0 = 2131626772(0x7f0e0b14, float:1.888079E38)
+            r0 = 2131626771(0x7f0e0b13, float:1.8880788E38)
             java.lang.String r3 = "NumberUnknown"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             goto L_0x228f
@@ -11165,7 +11165,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r5 == 0) goto L_0x2725
             boolean r4 = r4.public_voters
             if (r4 == 0) goto L_0x271b
-            r4 = 2131627431(0x7f0e0da7, float:1.8882126E38)
+            r4 = 2131627462(0x7f0e0dc6, float:1.888219E38)
             java.lang.String r5 = "QuizPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x273c
@@ -11177,7 +11177,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x2725:
             boolean r4 = r4.public_voters
             if (r4 == 0) goto L_0x2733
-            r4 = 2131627409(0x7f0e0d91, float:1.8882082E38)
+            r4 = 2131627408(0x7f0e0d90, float:1.888208E38)
             java.lang.String r5 = "PublicPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x273c
@@ -11258,7 +11258,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$PollResults r4 = r2.results
             int r4 = r4.total_voters
             if (r4 != 0) goto L_0x27d2
-            r4 = 2131626585(0x7f0e0a59, float:1.888041E38)
+            r4 = 2131626584(0x7f0e0a58, float:1.8880408E38)
             java.lang.String r6 = "NoVotesQuiz"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             goto L_0x27d8
@@ -11274,7 +11274,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$PollResults r4 = r2.results
             int r4 = r4.total_voters
             if (r4 != 0) goto L_0x27f0
-            r4 = 2131626584(0x7f0e0a58, float:1.8880408E38)
+            r4 = 2131626583(0x7f0e0a57, float:1.8880406E38)
             java.lang.String r6 = "NoVotes"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             goto L_0x27f6
@@ -11887,19 +11887,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x2CLASSNAME:
             if (r12 >= r3) goto L_0x2cab
             if (r12 != 0) goto L_0x2CLASSNAME
-            r3 = 2131627261(0x7f0e0cfd, float:1.8881781E38)
+            r3 = 2131627260(0x7f0e0cfc, float:1.888178E38)
             java.lang.String r4 = "PollViewResults"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             goto L_0x2CLASSNAME
         L_0x2CLASSNAME:
             r3 = 1
             if (r12 != r3) goto L_0x2c8e
-            r3 = 2131627259(0x7f0e0cfb, float:1.8881777E38)
+            r3 = 2131627258(0x7f0e0cfa, float:1.8881775E38)
             java.lang.String r4 = "PollSubmitVotes"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             goto L_0x2CLASSNAME
         L_0x2c8e:
-            r3 = 2131626584(0x7f0e0a58, float:1.8880408E38)
+            r3 = 2131626583(0x7f0e0a57, float:1.8880406E38)
             java.lang.String r4 = "NoVotes"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
         L_0x2CLASSNAME:
@@ -16377,7 +16377,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r4 = 4
             r3 = r3 & r4
             if (r3 == 0) goto L_0x4cf6
-            r3 = 2131627095(0x7f0e0CLASSNAME, float:1.8881445E38)
+            r3 = 2131627094(0x7f0e0CLASSNAME, float:1.8881443E38)
             java.lang.String r4 = "PaymentReceipt"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r39 = r3
@@ -21288,46 +21288,200 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     /* access modifiers changed from: private */
+    /* JADX WARNING: Code restructure failed: missing block: B:7:0x0017, code lost:
+        if ((r1 & 1) != 0) goto L_0x0019;
+     */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x00f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x010d  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateReactionLayoutPosition() {
-        ReactionsLayoutInBubble reactionsLayoutInBubble2 = this.reactionsLayoutInBubble;
-        if (!reactionsLayoutInBubble2.isEmpty) {
-            MessageObject.GroupedMessagePosition groupedMessagePosition = this.currentPosition;
-            if (groupedMessagePosition != null) {
-                int i = groupedMessagePosition.flags;
-                if ((i & 8) == 0 || (i & 1) == 0) {
-                    return;
-                }
-            }
-            if (!reactionsLayoutInBubble2.isSmall) {
-                float f = 11.0f;
-                if (this.currentMessageObject.isOutOwner()) {
-                    this.reactionsLayoutInBubble.x = getCurrentBackgroundLeft() + AndroidUtilities.dp(11.0f);
-                } else {
-                    ReactionsLayoutInBubble reactionsLayoutInBubble3 = this.reactionsLayoutInBubble;
-                    int currentBackgroundLeft = getCurrentBackgroundLeft();
-                    if (this.mediaBackground || !this.drawPinnedBottom) {
-                        f = 17.0f;
-                    }
-                    reactionsLayoutInBubble3.x = currentBackgroundLeft + AndroidUtilities.dp(f);
-                    if (this.mediaBackground) {
-                        this.reactionsLayoutInBubble.x -= AndroidUtilities.dp(9.0f);
-                    }
-                }
-                ReactionsLayoutInBubble reactionsLayoutInBubble4 = this.reactionsLayoutInBubble;
-                int backgroundDrawableBottom = getBackgroundDrawableBottom() - AndroidUtilities.dp(10.0f);
-                ReactionsLayoutInBubble reactionsLayoutInBubble5 = this.reactionsLayoutInBubble;
-                reactionsLayoutInBubble4.y = backgroundDrawableBottom - reactionsLayoutInBubble5.height;
-                reactionsLayoutInBubble5.y -= this.drawCommentButton ? AndroidUtilities.dp(43.0f) : 0;
-                if (this.hasNewLineForTime) {
-                    this.reactionsLayoutInBubble.y -= AndroidUtilities.dp(16.0f);
-                }
-                if (this.captionLayout != null) {
-                    this.reactionsLayoutInBubble.y -= AndroidUtilities.dp(14.0f);
-                }
-                ReactionsLayoutInBubble reactionsLayoutInBubble6 = this.reactionsLayoutInBubble;
-                reactionsLayoutInBubble6.y += reactionsLayoutInBubble6.positionOffsetY;
-            }
-        }
+        /*
+            r7 = this;
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
+            boolean r1 = r0.isEmpty
+            r2 = 1098907648(0x41800000, float:16.0)
+            r3 = 1110179840(0x422CLASSNAME, float:43.0)
+            r4 = 0
+            if (r1 != 0) goto L_0x00aa
+            org.telegram.messenger.MessageObject$GroupedMessagePosition r1 = r7.currentPosition
+            if (r1 == 0) goto L_0x0019
+            int r1 = r1.flags
+            r5 = r1 & 8
+            if (r5 == 0) goto L_0x00aa
+            r1 = r1 & 1
+            if (r1 == 0) goto L_0x00aa
+        L_0x0019:
+            boolean r0 = r0.isSmall
+            if (r0 != 0) goto L_0x00aa
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject
+            boolean r0 = r0.isOutOwner()
+            r1 = 1093664768(0x41300000, float:11.0)
+            if (r0 == 0) goto L_0x0035
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
+            int r5 = r7.getCurrentBackgroundLeft()
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r5 = r5 + r1
+            r0.x = r5
+            goto L_0x005e
+        L_0x0035:
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
+            int r5 = r7.getCurrentBackgroundLeft()
+            boolean r6 = r7.mediaBackground
+            if (r6 != 0) goto L_0x0044
+            boolean r6 = r7.drawPinnedBottom
+            if (r6 == 0) goto L_0x0044
+            goto L_0x0046
+        L_0x0044:
+            r1 = 1099431936(0x41880000, float:17.0)
+        L_0x0046:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r5 = r5 + r1
+            r0.x = r5
+            boolean r0 = r7.mediaBackground
+            if (r0 == 0) goto L_0x005e
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
+            int r1 = r0.x
+            r5 = 1091567616(0x41100000, float:9.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r1 = r1 - r5
+            r0.x = r1
+        L_0x005e:
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
+            int r1 = r7.getBackgroundDrawableBottom()
+            r5 = 1092616192(0x41200000, float:10.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r1 = r1 - r5
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r5 = r7.reactionsLayoutInBubble
+            int r6 = r5.height
+            int r1 = r1 - r6
+            r0.y = r1
+            int r0 = r5.y
+            boolean r1 = r7.drawCommentButton
+            if (r1 == 0) goto L_0x007d
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            goto L_0x007e
+        L_0x007d:
+            r1 = 0
+        L_0x007e:
+            int r0 = r0 - r1
+            r5.y = r0
+            boolean r0 = r7.hasNewLineForTime
+            if (r0 == 0) goto L_0x0090
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
+            int r1 = r0.y
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r1 = r1 - r5
+            r0.y = r1
+        L_0x0090:
+            android.text.StaticLayout r0 = r7.captionLayout
+            if (r0 == 0) goto L_0x00a1
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
+            int r1 = r0.y
+            r5 = 1096810496(0x41600000, float:14.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r1 = r1 - r5
+            r0.y = r1
+        L_0x00a1:
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
+            int r1 = r0.y
+            int r5 = r0.positionOffsetY
+            int r1 = r1 + r5
+            r0.y = r1
+        L_0x00aa:
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
+            boolean r1 = r0.isSmall
+            if (r1 == 0) goto L_0x014f
+            boolean r0 = r0.isEmpty
+            if (r0 != 0) goto L_0x014f
+            boolean r0 = r7.shouldDrawTimeOnMedia()
+            if (r0 == 0) goto L_0x00c7
+            boolean r0 = r7.drawCommentButton
+            if (r0 == 0) goto L_0x00c5
+            r0 = 1109734195(0x42253333, float:41.3)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r0)
+        L_0x00c5:
+            int r0 = -r4
+            goto L_0x00e9
+        L_0x00c7:
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject
+            boolean r0 = r0.isSponsored()
+            if (r0 == 0) goto L_0x00e0
+            r0 = 1111490560(0x42400000, float:48.0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r0 = -r0
+            boolean r1 = r7.hasNewLineForTime
+            if (r1 == 0) goto L_0x00e9
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r0 = r0 - r1
+            goto L_0x00e9
+        L_0x00e0:
+            boolean r0 = r7.drawCommentButton
+            if (r0 == 0) goto L_0x00c5
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            goto L_0x00c5
+        L_0x00e9:
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r1 = r7.reactionsLayoutInBubble
+            boolean r2 = r7.shouldDrawTimeOnMedia()
+            if (r2 == 0) goto L_0x010d
+            org.telegram.messenger.ImageReceiver r0 = r7.photoImage
+            float r0 = r0.getImageY2()
+            int r2 = r7.additionalTimeOffsetY
+            float r2 = (float) r2
+            float r0 = r0 + r2
+            r2 = 1089051034(0x40e9999a, float:7.3)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r2 = (float) r2
+            float r0 = r0 - r2
+            android.text.StaticLayout r2 = r7.timeLayout
+            int r2 = r2.getHeight()
+            float r2 = (float) r2
+            float r0 = r0 - r2
+            goto L_0x012b
+        L_0x010d:
+            int r2 = r7.layoutHeight
+            boolean r3 = r7.pinnedBottom
+            if (r3 != 0) goto L_0x011b
+            boolean r3 = r7.pinnedTop
+            if (r3 == 0) goto L_0x0118
+            goto L_0x011b
+        L_0x0118:
+            r3 = 1087373312(0x40d00000, float:6.5)
+            goto L_0x011d
+        L_0x011b:
+            r3 = 1089470464(0x40var_, float:7.5)
+        L_0x011d:
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r2 = r2 - r3
+            android.text.StaticLayout r3 = r7.timeLayout
+            int r3 = r3.getHeight()
+            int r2 = r2 - r3
+            int r2 = r2 + r0
+            float r0 = (float) r2
+        L_0x012b:
+            int r0 = (int) r0
+            r1.y = r0
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
+            int r1 = r0.y
+            float r1 = (float) r1
+            android.text.StaticLayout r2 = r7.timeLayout
+            int r2 = r2.getHeight()
+            float r2 = (float) r2
+            r3 = 1073741824(0x40000000, float:2.0)
+            float r2 = r2 / r3
+            r3 = 1088421888(0x40e00000, float:7.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r3 = (float) r3
+            float r2 = r2 - r3
+            float r1 = r1 + r2
+            int r1 = (int) r1
+            r0.y = r1
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
+            int r1 = r7.timeX
+            r0.x = r1
+        L_0x014f:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.updateReactionLayoutPosition():void");
     }
 
     public void drawLinkPreview(Canvas canvas, float f) {
@@ -24411,7 +24565,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r11 == 0) goto L_0x007e
             int r10 = r10.date
             int r4 = r4.date
-            r11 = 2131625989(0x7f0e0805, float:1.8879202E38)
+            r11 = 2131625988(0x7f0e0804, float:1.88792E38)
             java.lang.String r12 = "ImportedMessage"
             if (r10 != r4) goto L_0x005c
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r12, r11)
@@ -24548,7 +24702,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             boolean r2 = r2.isSponsored()
             r10 = 2147483646(0x7ffffffe, float:NaN)
             if (r2 == 0) goto L_0x0172
-            r2 = 2131627948(0x7f0e0fac, float:1.8883175E38)
+            r2 = 2131627979(0x7f0e0fcb, float:1.8883238E38)
             java.lang.String r13 = "SponsoredMessage"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r13, r2)
             goto L_0x01c4
@@ -25034,7 +25188,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             long r6 = r0.via_bot_id
             java.lang.String r8 = "@"
             r9 = 0
-            r11 = 2131628392(0x7f0e1168, float:1.8884075E38)
+            r11 = 2131628423(0x7f0e1187, float:1.8884138E38)
             java.lang.String r12 = "ViaBot"
             r13 = 2
             int r14 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
@@ -25273,7 +25427,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x0298:
             r8 = r4
             r11 = r21
-            r4 = 2131628392(0x7f0e1168, float:1.8884075E38)
+            r4 = 2131628423(0x7f0e1187, float:1.8884138E38)
             goto L_0x02b1
         L_0x029f:
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
@@ -25631,7 +25785,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.Object[] r8 = new java.lang.Object[r8]
             r14 = 0
             r8[r14] = r13
-            r14 = 2131628392(0x7f0e1168, float:1.8884075E38)
+            r14 = 2131628423(0x7f0e1187, float:1.8884138E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r14)
             r14 = 1
             r8[r14] = r11
@@ -25842,7 +25996,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r0 = r0 + r2
         L_0x0729:
             android.text.StaticLayout r10 = new android.text.StaticLayout
-            r2 = 2131626194(0x7f0e08d2, float:1.8879617E38)
+            r2 = 2131626193(0x7f0e08d1, float:1.8879615E38)
             java.lang.String r3 = "Loading"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r2)
             android.text.TextPaint r4 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint
@@ -26068,7 +26222,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r3 = 0
         L_0x08f3:
             if (r3 != 0) goto L_0x08fe
-            r3 = 2131626194(0x7f0e08d2, float:1.8879617E38)
+            r3 = 2131626193(0x7f0e08d1, float:1.8879615E38)
             java.lang.String r5 = "Loading"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
         L_0x08fe:
@@ -31422,32 +31576,22 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         float f4;
         float f5;
         boolean z3;
-        boolean z4;
         int i2;
-        boolean z5;
+        boolean z4;
         int i3;
+        boolean z5;
         boolean z6;
-        boolean z7;
         int i4;
         int i5;
         float f6;
         float f7;
-        boolean z8;
+        Paint paint;
         int i6;
+        int i7;
         float f8;
         float f9;
-        Paint paint;
-        boolean z9;
-        int i7;
-        int i8;
-        float var_;
-        boolean z10;
-        int i9;
-        float var_;
-        float var_;
-        float var_;
         Canvas canvas2 = canvas;
-        boolean z11 = z;
+        boolean z7 = z;
         StaticLayout staticLayout2 = staticLayout;
         if (((this.drawTime && !this.groupPhotoInvisible) || !shouldDrawTimeOnMedia()) && staticLayout2 != null) {
             MessageObject messageObject = this.currentMessageObject;
@@ -31502,9 +31646,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
                 float var_ = f4;
                 float var_ = f5;
-                float var_ = 6.5f;
                 if (shouldDrawTimeOnMedia()) {
-                    int i10 = -(this.drawCommentButton ? AndroidUtilities.dp(41.3f) : 0);
+                    int i8 = -(this.drawCommentButton ? AndroidUtilities.dp(41.3f) : 0);
                     if (this.currentMessageObject.shouldDrawWithoutBackground()) {
                         paint = getThemedPaint("paintChatActionBackground");
                     } else {
@@ -31513,26 +31656,25 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     int alpha = paint.getAlpha();
                     paint.setAlpha((int) (((float) alpha) * this.timeAlpha * var_));
                     Theme.chat_timePaint.setAlpha((int) (this.timeAlpha * 255.0f * var_));
-                    int i11 = this.documentAttachType;
+                    int i9 = this.documentAttachType;
                     float var_ = 4.0f;
-                    if (i11 == 7 || i11 == 6) {
-                        i7 = AndroidUtilities.dp(4.0f);
-                        z9 = false;
+                    if (i9 == 7 || i9 == 6) {
+                        i6 = AndroidUtilities.dp(4.0f);
+                        z3 = false;
                     } else {
                         int[] roundRadius = this.photoImage.getRoundRadius();
-                        i7 = Math.min(AndroidUtilities.dp(8.0f), Math.max(roundRadius[2], roundRadius[3]));
-                        z9 = SharedConfig.bubbleRadius >= 10;
+                        i6 = Math.min(AndroidUtilities.dp(8.0f), Math.max(roundRadius[2], roundRadius[3]));
+                        z3 = SharedConfig.bubbleRadius >= 10;
                     }
-                    if (z9) {
+                    if (z3) {
                         var_ = 6.0f;
                     }
                     float dp = var_ - ((float) AndroidUtilities.dp(var_));
                     float imageY2 = this.photoImage.getImageY2() + ((float) this.additionalTimeOffsetY);
                     float dp2 = imageY2 - ((float) AndroidUtilities.dp(23.0f));
-                    z3 = z9;
-                    this.rect.set(dp, dp2, dp + f3 + ((float) AndroidUtilities.dp((float) ((z9 ? 12 : 8) + (this.currentMessageObject.isOutOwner() ? 20 : 0)))), ((float) AndroidUtilities.dp(17.0f)) + dp2);
+                    this.rect.set(dp, dp2, dp + f3 + ((float) AndroidUtilities.dp((float) ((z3 ? 12 : 8) + (this.currentMessageObject.isOutOwner() ? 20 : 0)))), ((float) AndroidUtilities.dp(17.0f)) + dp2);
                     applyServiceShaderMatrix(getMeasuredWidth(), this.backgroundHeight, getX(), this.viewTop);
-                    float var_ = (float) i7;
+                    float var_ = (float) i6;
                     canvas2.drawRoundRect(this.rect, var_, var_, paint);
                     if (paint == getThemedPaint("paintChatActionBackground") && hasGradientService()) {
                         int alpha2 = Theme.chat_actionBackgroundGradientDarkenPaint.getAlpha();
@@ -31542,90 +31684,70 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
                     paint.setAlpha(alpha);
                     float var_ = -staticLayout2.getLineLeft(0);
-                    ReactionsLayoutInBubble reactionsLayoutInBubble2 = this.reactionsLayoutInBubble;
-                    if (reactionsLayoutInBubble2.isSmall) {
-                        if (shouldDrawTimeOnMedia()) {
-                            var_ = ((this.photoImage.getImageY2() + ((float) this.additionalTimeOffsetY)) - ((float) AndroidUtilities.dp(7.3f))) - ((float) staticLayout.getHeight());
-                        } else {
-                            if (this.pinnedBottom || this.pinnedTop) {
-                                var_ = 7.5f;
-                            }
-                            var_ = ((var_ - ((float) AndroidUtilities.dp(var_))) - ((float) staticLayout.getHeight())) + ((float) i10);
-                        }
-                        reactionsLayoutInBubble2.y = (int) var_;
-                        ReactionsLayoutInBubble reactionsLayoutInBubble3 = this.reactionsLayoutInBubble;
-                        reactionsLayoutInBubble3.y = (int) (((float) reactionsLayoutInBubble3.y) + ((((float) staticLayout.getHeight()) / 2.0f) - ((float) AndroidUtilities.dp(7.0f))));
-                        ReactionsLayoutInBubble reactionsLayoutInBubble4 = this.reactionsLayoutInBubble;
-                        reactionsLayoutInBubble4.x = (int) var_;
-                        reactionsLayoutInBubble4.draw(canvas2, this.transitionParams.animateChangeProgress);
+                    if (this.reactionsLayoutInBubble.isSmall) {
+                        updateReactionLayoutPosition();
+                        this.reactionsLayoutInBubble.draw(canvas2, this.transitionParams.animateChangeProgress);
                     }
                     if ((!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup) && (this.currentMessageObject.messageOwner.flags & 1024) == 0 && this.repliesLayout == null && !this.isPinned) {
-                        ReactionsLayoutInBubble reactionsLayoutInBubble5 = this.reactionsLayoutInBubble;
-                        var_ = var_ + (reactionsLayoutInBubble5.isSmall ? reactionsLayoutInBubble5.getCurrentWidth(this.transitionParams.animateChangeProgress) : 0.0f);
-                        i8 = i10;
+                        ReactionsLayoutInBubble reactionsLayoutInBubble2 = this.reactionsLayoutInBubble;
+                        f8 = var_ + (reactionsLayoutInBubble2.isSmall ? reactionsLayoutInBubble2.getCurrentWidth(this.transitionParams.animateChangeProgress) : 0.0f);
+                        i7 = i8;
                     } else {
                         float lineWidth = var_ + (((float) this.timeWidth) - staticLayout2.getLineWidth(0));
                         int createStatusDrawableParams = this.transitionParams.createStatusDrawableParams();
-                        int i12 = this.transitionParams.lastStatusDrawableParams;
-                        if (i12 >= 0 && i12 != createStatusDrawableParams && !this.statusDrawableAnimationInProgress) {
-                            createStatusDrawableAnimator(i12, createStatusDrawableParams, z11);
+                        int i10 = this.transitionParams.lastStatusDrawableParams;
+                        if (i10 >= 0 && i10 != createStatusDrawableParams && !this.statusDrawableAnimationInProgress) {
+                            createStatusDrawableAnimator(i10, createStatusDrawableParams, z7);
                         }
-                        boolean z12 = this.statusDrawableAnimationInProgress;
-                        if (z12) {
+                        boolean z8 = this.statusDrawableAnimationInProgress;
+                        if (z8) {
                             createStatusDrawableParams = this.animateToStatusDrawableParams;
                         }
-                        if ((createStatusDrawableParams & 4) != 0) {
-                            i9 = 8;
-                            z10 = true;
-                        } else {
-                            i9 = 8;
-                            z10 = false;
-                        }
-                        boolean z13 = (createStatusDrawableParams & i9) != 0;
-                        if (z12) {
-                            int i13 = this.animateFromStatusDrawableParams;
-                            boolean z14 = (i13 & 4) != 0;
-                            boolean z15 = (i13 & i9) != 0;
-                            float var_ = (float) i10;
+                        boolean z9 = (createStatusDrawableParams & 4) != 0;
+                        boolean z10 = (createStatusDrawableParams & 8) != 0;
+                        if (z8) {
+                            int i11 = this.animateFromStatusDrawableParams;
+                            boolean z11 = (i11 & 4) != 0;
+                            boolean z12 = (i11 & 8) != 0;
+                            float var_ = (float) i8;
                             Canvas canvas3 = canvas;
                             float var_ = var_;
                             float var_ = var_;
-                            var_ = lineWidth;
-                            i8 = i10;
-                            var_ = var_;
+                            f9 = lineWidth;
+                            i7 = i8;
                             float var_ = var_;
-                            boolean z16 = z2;
-                            drawClockOrErrorLayout(canvas3, z14, z15, var_, var_, var_, var_, 1.0f - this.statusDrawableProgress, z16);
-                            drawClockOrErrorLayout(canvas3, z10, z13, var_, var_, var_, var_, this.statusDrawableProgress, z16);
+                            float var_ = var_;
+                            boolean z13 = z2;
+                            drawClockOrErrorLayout(canvas3, z11, z12, var_, var_, var_, var_, 1.0f - this.statusDrawableProgress, z13);
+                            drawClockOrErrorLayout(canvas3, z9, z10, var_, var_, var_, var_, this.statusDrawableProgress, z13);
                             if (!this.currentMessageObject.isOutOwner()) {
-                                if (!z14 && !z15) {
+                                if (!z11 && !z12) {
                                     drawViewsAndRepliesLayout(canvas, var_, var_, var_, var_, 1.0f - this.statusDrawableProgress, z2);
                                 }
-                                if (!z10 && !z13) {
+                                if (!z9 && !z10) {
                                     drawViewsAndRepliesLayout(canvas, var_, var_, var_, var_, this.statusDrawableProgress, z2);
                                 }
                             }
                         } else {
-                            var_ = var_;
-                            var_ = lineWidth;
-                            i8 = i10;
-                            if (!this.currentMessageObject.isOutOwner() && !z10 && !z13) {
-                                drawViewsAndRepliesLayout(canvas, var_, var_, (float) i8, var_, 1.0f, z2);
+                            f9 = lineWidth;
+                            i7 = i8;
+                            if (!this.currentMessageObject.isOutOwner() && !z9 && !z10) {
+                                drawViewsAndRepliesLayout(canvas, var_, var_, (float) i7, var_, 1.0f, z2);
                             }
-                            drawClockOrErrorLayout(canvas, z10, z13, var_, var_, (float) i8, var_, 1.0f, z2);
+                            drawClockOrErrorLayout(canvas, z9, z10, var_, var_, (float) i7, var_, 1.0f, z2);
                         }
                         if (this.currentMessageObject.isOutOwner()) {
-                            drawViewsAndRepliesLayout(canvas, var_, var_, (float) i8, var_, 1.0f, z2);
+                            drawViewsAndRepliesLayout(canvas, var_, var_, (float) i7, var_, 1.0f, z2);
                         }
                         TransitionParams transitionParams3 = this.transitionParams;
                         transitionParams3.lastStatusDrawableParams = transitionParams3.createStatusDrawableParams();
-                        if (z10 && z11 && getParent() != null) {
+                        if (z9 && z7 && getParent() != null) {
                             ((View) getParent()).invalidate();
                         }
-                        var_ = var_;
+                        f8 = f9;
                     }
                     canvas.save();
-                    float var_ = var_ + var_;
+                    float var_ = var_ + f8;
                     this.drawTimeX = var_;
                     float dp3 = (imageY2 - ((float) AndroidUtilities.dp(7.3f))) - ((float) staticLayout.getHeight());
                     this.drawTimeY = dp3;
@@ -31633,10 +31755,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     staticLayout2.draw(canvas2);
                     canvas.restore();
                     Theme.chat_timePaint.setAlpha(255);
-                    i2 = i8;
-                    z4 = false;
+                    i2 = i7;
                 } else {
-                    float var_ = var_;
                     if (this.currentMessageObject.isSponsored()) {
                         i5 = -AndroidUtilities.dp(48.0f);
                         if (this.hasNewLineForTime) {
@@ -31645,100 +31765,91 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     } else {
                         i5 = -(this.drawCommentButton ? AndroidUtilities.dp(43.0f) : 0);
                     }
-                    int i14 = i5;
-                    z4 = false;
+                    int i12 = i5;
                     float var_ = -staticLayout2.getLineLeft(0);
-                    ReactionsLayoutInBubble reactionsLayoutInBubble6 = this.reactionsLayoutInBubble;
-                    if (reactionsLayoutInBubble6.isSmall) {
-                        if (!reactionsLayoutInBubble6.isEmpty) {
-                            if (shouldDrawTimeOnMedia()) {
-                                f9 = ((this.photoImage.getImageY2() + ((float) this.additionalTimeOffsetY)) - ((float) AndroidUtilities.dp(7.3f))) - ((float) staticLayout.getHeight());
-                            } else {
-                                f9 = ((var_ - ((float) AndroidUtilities.dp((this.pinnedBottom || this.pinnedTop) ? 7.5f : 6.5f))) - ((float) staticLayout.getHeight())) + ((float) i14);
-                            }
-                            reactionsLayoutInBubble6.y = (int) f9;
-                            ReactionsLayoutInBubble reactionsLayoutInBubble7 = this.reactionsLayoutInBubble;
-                            reactionsLayoutInBubble7.y = (int) (((float) reactionsLayoutInBubble7.y) + ((((float) staticLayout.getHeight()) / 2.0f) - ((float) AndroidUtilities.dp(7.0f))));
-                            f6 = var_;
-                            this.reactionsLayoutInBubble.x = (int) f6;
-                        } else {
-                            f6 = var_;
-                        }
+                    if (this.reactionsLayoutInBubble.isSmall) {
+                        updateReactionLayoutPosition();
                         this.reactionsLayoutInBubble.draw(canvas2, this.transitionParams.animateChangeProgress);
-                    } else {
-                        f6 = var_;
                     }
                     if ((!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup) && (this.currentMessageObject.messageOwner.flags & 1024) == 0 && this.repliesLayout == null && !this.transitionParams.animateReplies && !this.isPinned && !this.transitionParams.animatePinned) {
-                        ReactionsLayoutInBubble reactionsLayoutInBubble8 = this.reactionsLayoutInBubble;
-                        f7 = var_ + (reactionsLayoutInBubble8.isSmall ? reactionsLayoutInBubble8.getCurrentWidth(this.transitionParams.animateChangeProgress) : 0.0f);
+                        if (this.currentMessageObject.isOutOwner()) {
+                            ReactionsLayoutInBubble reactionsLayoutInBubble3 = this.reactionsLayoutInBubble;
+                            if (reactionsLayoutInBubble3.isSmall) {
+                                f7 = reactionsLayoutInBubble3.getCurrentWidth(this.transitionParams.animateChangeProgress);
+                                f6 = var_ + f7;
+                            }
+                        } else {
+                            ReactionsLayoutInBubble reactionsLayoutInBubble4 = this.reactionsLayoutInBubble;
+                            if (reactionsLayoutInBubble4.isSmall) {
+                                f7 = reactionsLayoutInBubble4.getCurrentWidth(1.0f);
+                                f6 = var_ + f7;
+                            }
+                        }
+                        f7 = 0.0f;
+                        f6 = var_ + f7;
                     } else {
                         float lineWidth2 = var_ + (((float) this.timeWidth) - staticLayout2.getLineWidth(0));
                         int createStatusDrawableParams2 = this.transitionParams.createStatusDrawableParams();
-                        int i15 = this.transitionParams.lastStatusDrawableParams;
-                        if (i15 >= 0 && i15 != createStatusDrawableParams2 && !this.statusDrawableAnimationInProgress) {
-                            createStatusDrawableAnimator(i15, createStatusDrawableParams2, z11);
+                        int i13 = this.transitionParams.lastStatusDrawableParams;
+                        if (i13 >= 0 && i13 != createStatusDrawableParams2 && !this.statusDrawableAnimationInProgress) {
+                            createStatusDrawableAnimator(i13, createStatusDrawableParams2, z7);
                         }
-                        boolean z17 = this.statusDrawableAnimationInProgress;
-                        if (z17) {
+                        boolean z14 = this.statusDrawableAnimationInProgress;
+                        if (z14) {
                             createStatusDrawableParams2 = this.animateToStatusDrawableParams;
                         }
-                        if ((createStatusDrawableParams2 & 4) != 0) {
-                            i6 = 8;
-                            z8 = true;
-                        } else {
-                            i6 = 8;
-                            z8 = false;
-                        }
-                        boolean z18 = (createStatusDrawableParams2 & i6) != 0;
-                        if (z17) {
-                            int i16 = this.animateFromStatusDrawableParams;
-                            boolean z19 = (i16 & 4) != 0;
-                            boolean z20 = (i16 & i6) != 0;
-                            float var_ = (float) i14;
+                        boolean z15 = (createStatusDrawableParams2 & 4) != 0;
+                        boolean z16 = (createStatusDrawableParams2 & 8) != 0;
+                        if (z14) {
+                            int i14 = this.animateFromStatusDrawableParams;
+                            boolean z17 = (i14 & 4) != 0;
+                            boolean z18 = (i14 & 8) != 0;
+                            float var_ = (float) i12;
                             Canvas canvas4 = canvas;
                             float var_ = var_;
                             float var_ = var_;
                             float var_ = var_;
-                            f8 = f6;
-                            boolean z21 = z2;
-                            drawClockOrErrorLayout(canvas4, z19, z20, var_, var_, var_, f6, 1.0f - this.statusDrawableProgress, z21);
-                            drawClockOrErrorLayout(canvas4, z8, z18, var_, var_, var_, f8, this.statusDrawableProgress, z21);
+                            float var_ = var_;
+                            float var_ = var_;
+                            boolean z19 = z2;
+                            drawClockOrErrorLayout(canvas4, z17, z18, var_, var_, var_, var_, 1.0f - this.statusDrawableProgress, z19);
+                            drawClockOrErrorLayout(canvas4, z15, z16, var_, var_, var_, var_, this.statusDrawableProgress, z19);
                             if (!this.currentMessageObject.isOutOwner()) {
-                                if (!z19 && !z20) {
-                                    drawViewsAndRepliesLayout(canvas, var_, var_, var_, f8, 1.0f - this.statusDrawableProgress, z2);
+                                if (!z17 && !z18) {
+                                    drawViewsAndRepliesLayout(canvas, var_, var_, var_, var_, 1.0f - this.statusDrawableProgress, z2);
                                 }
-                                if (!z8 && !z18) {
-                                    drawViewsAndRepliesLayout(canvas, var_, var_, var_, f8, this.statusDrawableProgress, z2);
+                                if (!z15 && !z16) {
+                                    drawViewsAndRepliesLayout(canvas, var_, var_, var_, var_, this.statusDrawableProgress, z2);
                                 }
                             }
                         } else {
-                            f8 = f6;
-                            if (!this.currentMessageObject.isOutOwner() && !z8 && !z18) {
-                                drawViewsAndRepliesLayout(canvas, var_, var_, (float) i14, f8, 1.0f, z2);
+                            if (!this.currentMessageObject.isOutOwner() && !z15 && !z16) {
+                                drawViewsAndRepliesLayout(canvas, var_, var_, (float) i12, var_, 1.0f, z2);
                             }
-                            drawClockOrErrorLayout(canvas, z8, z18, var_, var_, (float) i14, f8, 1.0f, z2);
+                            drawClockOrErrorLayout(canvas, z15, z16, var_, var_, (float) i12, var_, 1.0f, z2);
                         }
                         if (this.currentMessageObject.isOutOwner()) {
-                            drawViewsAndRepliesLayout(canvas, var_, var_, (float) i14, f8, 1.0f, z2);
+                            drawViewsAndRepliesLayout(canvas, var_, var_, (float) i12, var_, 1.0f, z2);
                         }
                         TransitionParams transitionParams4 = this.transitionParams;
                         transitionParams4.lastStatusDrawableParams = transitionParams4.createStatusDrawableParams();
-                        if (z8 && z11 && getParent() != null) {
+                        if (z15 && z7 && getParent() != null) {
                             ((View) getParent()).invalidate();
                         }
-                        ReactionsLayoutInBubble reactionsLayoutInBubble9 = this.reactionsLayoutInBubble;
-                        f7 = lineWidth2 - (reactionsLayoutInBubble9.isSmall ? reactionsLayoutInBubble9.getCurrentWidth(1.0f) - this.reactionsLayoutInBubble.getCurrentWidth(this.transitionParams.animateChangeProgress) : 0.0f);
+                        ReactionsLayoutInBubble reactionsLayoutInBubble5 = this.reactionsLayoutInBubble;
+                        f6 = lineWidth2 - (reactionsLayoutInBubble5.isSmall ? reactionsLayoutInBubble5.getCurrentWidth(1.0f) - this.reactionsLayoutInBubble.getCurrentWidth(this.transitionParams.animateChangeProgress) : 0.0f);
                     }
                     canvas.save();
+                    float var_ = 6.5f;
                     if (this.transitionParams.animateEditedEnter) {
                         TransitionParams transitionParams5 = this.transitionParams;
                         if (transitionParams5.animateChangeProgress != 1.0f) {
                             if (transitionParams5.animateEditedLayout != null) {
-                                float var_ = var_ + f7;
+                                float var_ = var_ + f6;
                                 if (this.pinnedBottom || this.pinnedTop) {
                                     var_ = 7.5f;
                                 }
-                                canvas2.translate(var_, ((var_ - ((float) AndroidUtilities.dp(var_))) - ((float) staticLayout.getHeight())) + ((float) i14));
+                                canvas2.translate(var_, ((var_ - ((float) AndroidUtilities.dp(var_))) - ((float) staticLayout.getHeight())) + ((float) i12));
                                 int alpha3 = Theme.chat_timePaint.getAlpha();
                                 Theme.chat_timePaint.setAlpha((int) (((float) alpha3) * this.transitionParams.animateChangeProgress));
                                 this.transitionParams.animateEditedLayout.draw(canvas2);
@@ -31747,13 +31858,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             } else {
                                 int alpha4 = Theme.chat_timePaint.getAlpha();
                                 canvas.save();
-                                float var_ = (float) i14;
-                                canvas2.translate(((float) this.transitionParams.animateFromTimeX) + f7, ((var_ - ((float) AndroidUtilities.dp((this.pinnedBottom || this.pinnedTop) ? 7.5f : 6.5f))) - ((float) staticLayout.getHeight())) + var_);
+                                float var_ = (float) i12;
+                                canvas2.translate(((float) this.transitionParams.animateFromTimeX) + f6, ((var_ - ((float) AndroidUtilities.dp((this.pinnedBottom || this.pinnedTop) ? 7.5f : 6.5f))) - ((float) staticLayout.getHeight())) + var_);
                                 float var_ = (float) alpha4;
                                 Theme.chat_timePaint.setAlpha((int) ((1.0f - this.transitionParams.animateChangeProgress) * var_));
                                 this.transitionParams.animateTimeLayout.draw(canvas2);
                                 canvas.restore();
-                                float var_ = var_ + f7;
+                                float var_ = var_ + f6;
                                 if (this.pinnedBottom || this.pinnedTop) {
                                     var_ = 7.5f;
                                 }
@@ -31763,88 +31874,86 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                 Theme.chat_timePaint.setAlpha(alpha4);
                             }
                             canvas.restore();
-                            i2 = i14;
+                            i2 = i12;
                             z3 = false;
                         }
                     }
-                    float var_ = var_ + f7;
+                    float var_ = var_ + f6;
                     this.drawTimeX = var_;
                     if (this.pinnedBottom || this.pinnedTop) {
                         var_ = 7.5f;
                     }
-                    float dp4 = ((var_ - ((float) AndroidUtilities.dp(var_))) - ((float) staticLayout.getHeight())) + ((float) i14);
+                    float dp4 = ((var_ - ((float) AndroidUtilities.dp(var_))) - ((float) staticLayout.getHeight())) + ((float) i12);
                     this.drawTimeY = dp4;
                     canvas2.translate(var_, dp4);
                     staticLayout2.draw(canvas2);
                     canvas.restore();
-                    i2 = i14;
+                    i2 = i12;
                     z3 = false;
                 }
                 if (this.currentMessageObject.isOutOwner()) {
                     int createStatusDrawableParams3 = this.transitionParams.createStatusDrawableParams();
-                    int i17 = this.transitionParams.lastStatusDrawableParams;
-                    if (i17 >= 0 && i17 != createStatusDrawableParams3 && !this.statusDrawableAnimationInProgress) {
-                        createStatusDrawableAnimator(i17, createStatusDrawableParams3, z11);
+                    int i15 = this.transitionParams.lastStatusDrawableParams;
+                    if (i15 >= 0 && i15 != createStatusDrawableParams3 && !this.statusDrawableAnimationInProgress) {
+                        createStatusDrawableAnimator(i15, createStatusDrawableParams3, z7);
                     }
                     if (this.statusDrawableAnimationInProgress) {
                         createStatusDrawableParams3 = this.animateToStatusDrawableParams;
                     }
-                    boolean z22 = (createStatusDrawableParams3 & 1) != 0;
-                    boolean z23 = (createStatusDrawableParams3 & 2) != 0;
-                    boolean z24 = (createStatusDrawableParams3 & 4) != 0;
+                    boolean z20 = (createStatusDrawableParams3 & 1) != 0;
+                    boolean z21 = (createStatusDrawableParams3 & 2) != 0;
+                    boolean z22 = (createStatusDrawableParams3 & 4) != 0;
                     if ((createStatusDrawableParams3 & 8) != 0) {
                         i3 = 16;
-                        z5 = true;
+                        z4 = true;
                     } else {
                         i3 = 16;
-                        z5 = false;
+                        z4 = false;
                     }
-                    boolean z25 = (createStatusDrawableParams3 & i3) != 0;
+                    boolean z23 = (createStatusDrawableParams3 & i3) != 0;
                     if (this.transitionYOffsetForDrawables != 0.0f) {
                         canvas.save();
                         canvas2.translate(0.0f, this.transitionYOffsetForDrawables);
-                        z6 = true;
+                        z5 = true;
                     } else {
-                        z6 = false;
+                        z5 = false;
                     }
                     if (this.statusDrawableAnimationInProgress) {
-                        int i18 = this.animateFromStatusDrawableParams;
-                        boolean z26 = (i18 & 1) != 0;
-                        boolean z27 = (i18 & 2) != 0;
-                        boolean z28 = (i18 & 4) != 0;
-                        if ((i18 & 8) != 0) {
+                        int i16 = this.animateFromStatusDrawableParams;
+                        boolean z24 = (i16 & 1) != 0;
+                        boolean z25 = (i16 & 2) != 0;
+                        boolean z26 = (i16 & 4) != 0;
+                        if ((i16 & 8) != 0) {
                             i4 = 16;
-                            z7 = true;
+                            z6 = true;
                         } else {
                             i4 = 16;
-                            z7 = false;
+                            z6 = false;
                         }
-                        if ((i18 & i4) != 0) {
-                            z4 = true;
-                        }
-                        if (z28 || z25 || z4 || !z27 || !z23 || z26 || !z22) {
+                        boolean z27 = (i16 & i4) != 0;
+                        if (z26 || z23 || z27 || !z25 || !z21 || z24 || !z20) {
                             float var_ = (float) i2;
                             Canvas canvas5 = canvas;
                             float var_ = var_;
-                            boolean z29 = z3;
+                            boolean z28 = z3;
                             float var_ = var_;
                             float var_ = var_;
                             float var_ = var_;
-                            boolean z30 = z2;
-                            drawStatusDrawable(canvas5, z26, z27, z28, z7, z4, var_, z29, var_, var_, 1.0f - this.statusDrawableProgress, false, z30);
-                            drawStatusDrawable(canvas5, z22, z23, z24, z5, z25, var_, z29, var_, var_, this.statusDrawableProgress, false, z30);
+                            boolean z29 = z2;
+                            drawStatusDrawable(canvas5, z24, z25, z26, z6, z27, var_, z28, var_, var_, 1.0f - this.statusDrawableProgress, false, z29);
+                            drawStatusDrawable(canvas5, z20, z21, z22, z4, z23, var_, z28, var_, var_, this.statusDrawableProgress, false, z29);
                         } else {
-                            drawStatusDrawable(canvas, z22, z23, z24, z5, z25, var_, z3, (float) i2, var_, this.statusDrawableProgress, true, z2);
+                            drawStatusDrawable(canvas, z20, z21, z22, z4, z23, var_, z3, (float) i2, var_, this.statusDrawableProgress, true, z2);
                         }
                     } else {
-                        drawStatusDrawable(canvas, z22, z23, z24, z5, z25, var_, z3, (float) i2, var_, 1.0f, false, z2);
+                        drawStatusDrawable(canvas, z20, z21, z22, z4, z23, var_, z3, (float) i2, var_, 1.0f, false, z2);
                     }
-                    if (z6) {
+                    if (z5) {
                         canvas.restore();
                     }
                     TransitionParams transitionParams6 = this.transitionParams;
                     transitionParams6.lastStatusDrawableParams = transitionParams6.createStatusDrawableParams();
-                    if (z && z24 && getParent() != null) {
+                    if (z && z22 && getParent() != null) {
                         ((View) getParent()).invalidate();
                     }
                 }

@@ -311,38 +311,6 @@ public class QrActivity extends BaseFragment {
             r7 = 34
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r1)
             r2.addView(r6, r1)
-            org.telegram.ui.QrActivity$2 r1 = new org.telegram.ui.QrActivity$2
-            android.app.Activity r6 = r21.getParentActivity()
-            android.view.Window r6 = r6.getWindow()
-            r1.<init>(r0, r6)
-            r0.themesViewController = r1
-            android.widget.FrameLayout r6 = r1.rootLayout
-            r0.themeLayout = r6
-            r1.onCreate()
-            org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
-            org.telegram.ui.QrActivity$$ExternalSyntheticLambda8 r6 = new org.telegram.ui.QrActivity$$ExternalSyntheticLambda8
-            r6.<init>(r0)
-            r1.setItemSelectedListener(r6)
-            org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
-            android.widget.TextView r1 = r1.titleView
-            r6 = 2131627422(0x7f0e0d9e, float:1.8882108E38)
-            java.lang.String r7 = "QrCode"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r1.setText(r6)
-            org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
-            org.telegram.ui.Components.FlickerLoadingView r1 = r1.progressView
-            r6 = 17
-            r1.setViewType(r6)
-            org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
-            android.widget.TextView r1 = r1.shareButton
-            org.telegram.ui.QrActivity$$ExternalSyntheticLambda3 r6 = new org.telegram.ui.QrActivity$$ExternalSyntheticLambda3
-            r6.<init>(r0)
-            r1.setOnClickListener(r6)
-            android.widget.FrameLayout r1 = r0.themeLayout
-            r6 = -2
-            r7 = 80
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r6, r7)
-            r2.addView(r1, r6)
             r1 = 1107296256(0x42000000, float:32.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -364,35 +332,67 @@ public class QrActivity extends BaseFragment {
             android.graphics.Paint r7 = new android.graphics.Paint
             r7.<init>(r10)
             r7.setColor(r5)
-            r5 = 1084227584(0x40a00000, float:5.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r8 = (float) r8
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r5 = (float) r5
-            r1.drawRoundRect(r6, r8, r5, r7)
-            android.graphics.PorterDuffXfermode r5 = new android.graphics.PorterDuffXfermode
-            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.DST_OUT
-            r5.<init>(r6)
-            r7.setXfermode(r5)
-            android.content.Context r5 = org.telegram.messenger.ApplicationLoader.applicationContext
-            android.content.res.Resources r5 = r5.getResources()
-            r6 = 2131165831(0x7var_, float:1.794589E38)
-            android.graphics.Bitmap r5 = android.graphics.BitmapFactory.decodeResource(r5, r6)
-            android.graphics.Bitmap r6 = r0.emojiThemeIcon
-            int r6 = r6.getWidth()
-            int r8 = r5.getWidth()
-            int r6 = r6 - r8
-            float r6 = (float) r6
-            r8 = 1056964608(0x3var_, float:0.5)
-            float r6 = r6 * r8
-            android.graphics.Bitmap r9 = r0.emojiThemeIcon
-            int r9 = r9.getHeight()
-            int r11 = r5.getHeight()
-            int r9 = r9 - r11
+            r8 = 1084227584(0x40a00000, float:5.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
             float r9 = (float) r9
-            float r9 = r9 * r8
-            r1.drawBitmap(r5, r6, r9, r7)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            float r8 = (float) r8
+            r1.drawRoundRect(r6, r9, r8, r7)
+            android.graphics.PorterDuffXfermode r6 = new android.graphics.PorterDuffXfermode
+            android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.DST_OUT
+            r6.<init>(r8)
+            r7.setXfermode(r6)
+            android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext
+            android.content.res.Resources r6 = r6.getResources()
+            r8 = 2131165831(0x7var_, float:1.794589E38)
+            android.graphics.Bitmap r6 = android.graphics.BitmapFactory.decodeResource(r6, r8)
+            android.graphics.Bitmap r8 = r0.emojiThemeIcon
+            int r8 = r8.getWidth()
+            int r9 = r6.getWidth()
+            int r8 = r8 - r9
+            float r8 = (float) r8
+            r9 = 1056964608(0x3var_, float:0.5)
+            float r8 = r8 * r9
+            android.graphics.Bitmap r11 = r0.emojiThemeIcon
+            int r11 = r11.getHeight()
+            int r12 = r6.getHeight()
+            int r11 = r11 - r12
+            float r11 = (float) r11
+            float r11 = r11 * r9
+            r1.drawBitmap(r6, r8, r11, r7)
             r1.setBitmap(r4)
+            org.telegram.ui.QrActivity$2 r1 = new org.telegram.ui.QrActivity$2
+            android.app.Activity r4 = r21.getParentActivity()
+            android.view.Window r4 = r4.getWindow()
+            r1.<init>(r0, r4)
+            r0.themesViewController = r1
+            android.widget.FrameLayout r4 = r1.rootLayout
+            r0.themeLayout = r4
+            r1.onCreate()
+            org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
+            org.telegram.ui.QrActivity$$ExternalSyntheticLambda8 r4 = new org.telegram.ui.QrActivity$$ExternalSyntheticLambda8
+            r4.<init>(r0)
+            r1.setItemSelectedListener(r4)
+            org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
+            android.widget.TextView r1 = r1.titleView
+            r4 = 2131627453(0x7f0e0dbd, float:1.888217E38)
+            java.lang.String r6 = "QrCode"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
+            r1.setText(r4)
+            org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
+            org.telegram.ui.Components.FlickerLoadingView r1 = r1.progressView
+            r4 = 17
+            r1.setViewType(r4)
+            org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
+            android.widget.TextView r1 = r1.shareButton
+            org.telegram.ui.QrActivity$$ExternalSyntheticLambda3 r4 = new org.telegram.ui.QrActivity$$ExternalSyntheticLambda3
+            r4.<init>(r0)
+            r1.setOnClickListener(r4)
+            android.widget.FrameLayout r1 = r0.themeLayout
+            r4 = -2
+            r6 = 80
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r4, r6)
+            r2.addView(r1, r4)
             org.telegram.ui.Components.MotionBackgroundDrawable r1 = r0.currMotionDrawable
             r1.setIndeterminateAnimation(r10)
             r0.fragmentView = r2
@@ -495,7 +495,7 @@ public class QrActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public void onDataLoaded(List<EmojiThemes> list) {
-        if (list != null && !list.isEmpty()) {
+        if (list != null && !list.isEmpty() && this.themesViewController != null) {
             int i = 0;
             list.set(0, this.homeTheme);
             ArrayList arrayList = new ArrayList(list.size());
@@ -660,10 +660,10 @@ public class QrActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$onItemSelected$5(boolean z, boolean z2, Pair pair) {
-        if (pair != null) {
+        if (pair != null && this.currentTheme.getTlTheme(z ? 1 : 0) != null) {
             long longValue = ((Long) pair.first).longValue();
             Bitmap bitmap = (Bitmap) pair.second;
-            if (longValue == this.currentTheme.getTlTheme(z ? 1 : 0).id && bitmap != null) {
+            if (longValue == this.currentTheme.getTlTheme(z).id && bitmap != null) {
                 onPatternLoaded(bitmap, this.currMotionDrawable.getIntensity(), z2);
             }
         }

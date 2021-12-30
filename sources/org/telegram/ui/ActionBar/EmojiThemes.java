@@ -180,12 +180,18 @@ public class EmojiThemes {
         EmojiThemes emojiThemes = new EmojiThemes();
         emojiThemes.emoji = "🏠";
         ThemeItem themeItem = new ThemeItem();
-        themeItem.themeInfo = getDefaultThemeInfo(false);
-        themeItem.accentId = 99;
+        Theme.ThemeInfo defaultThemeInfo = getDefaultThemeInfo(false);
+        themeItem.themeInfo = defaultThemeInfo;
+        if (defaultThemeInfo.getKey().equals("Blue")) {
+            themeItem.accentId = 99;
+        }
         emojiThemes.items.add(themeItem);
         ThemeItem themeItem2 = new ThemeItem();
-        themeItem2.themeInfo = getDefaultThemeInfo(true);
-        themeItem2.accentId = 0;
+        Theme.ThemeInfo defaultThemeInfo2 = getDefaultThemeInfo(true);
+        themeItem2.themeInfo = defaultThemeInfo2;
+        if (defaultThemeInfo2.getKey().equals("Night")) {
+            themeItem2.accentId = 0;
+        }
         emojiThemes.items.add(themeItem2);
         return emojiThemes;
     }

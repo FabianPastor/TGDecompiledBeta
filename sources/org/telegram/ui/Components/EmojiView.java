@@ -1900,7 +1900,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             r2.setBackground(r5)
         L_0x0749:
             android.widget.ImageView r2 = r0.stickerSettingsButton
-            r5 = 2131627816(0x7f0e0var_, float:1.8882907E38)
+            r5 = 2131627847(0x7f0e0var_, float:1.888297E38)
             java.lang.String r7 = "Settings"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r2.setContentDescription(r5)
@@ -1956,7 +1956,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r5)
             android.widget.ImageView r2 = r0.searchButton
-            r5 = 2131627654(0x7f0e0e86, float:1.8882579E38)
+            r5 = 2131627685(0x7f0e0ea5, float:1.8882641E38)
             java.lang.String r7 = "Search"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r2.setContentDescription(r5)
@@ -4875,7 +4875,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 java.util.ArrayList r0 = r0.recentStickers
                 if (r10 != r0) goto L_0x00cb
-                r10 = 2131627466(0x7f0e0dca, float:1.8882197E38)
+                r10 = 2131627497(0x7f0e0de9, float:1.888226E38)
                 java.lang.String r0 = "RecentStickers"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setText(r10, r1)
@@ -6829,7 +6829,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 android.widget.TextView r0 = new android.widget.TextView
                 android.content.Context r2 = r13.context
                 r0.<init>(r2)
-                r2 = 2131626580(0x7f0e0a54, float:1.88804E38)
+                r2 = 2131626579(0x7f0e0a53, float:1.8880398E38)
                 java.lang.String r3 = "NoStickersFound"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)

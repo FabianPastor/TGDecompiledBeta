@@ -531,7 +531,9 @@ public class SpoilerEffect extends Drawable {
     }
 
     public static void addSpoilers(View view, Layout layout, Stack<SpoilerEffect> stack, List<SpoilerEffect> list) {
-        addSpoilers(view, layout, (Spannable) layout.getText(), stack, list);
+        if (layout.getText() instanceof Spannable) {
+            addSpoilers(view, layout, (Spannable) layout.getText(), stack, list);
+        }
     }
 
     public static void addSpoilers(View view, Layout layout, Spannable spannable, Stack<SpoilerEffect> stack, List<SpoilerEffect> list) {

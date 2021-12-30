@@ -3543,7 +3543,6 @@
     <public type="string" name="FromChats_zero" id="NUM" />
     <public type="string" name="FromFormatted" id="NUM" />
     <public type="string" name="FromGalley" id="NUM" />
-    <public type="string" name="FromLanguageToLanguage" id="NUM" />
     <public type="string" name="FromYou" id="NUM" />
     <public type="string" name="FwdMessageToChats" id="NUM" />
     <public type="string" name="FwdMessageToGroup" id="NUM" />
@@ -5154,6 +5153,38 @@
     <public type="string" name="PublicSharesCount_two" id="NUM" />
     <public type="string" name="PublicSharesCount_zero" id="NUM" />
     <public type="string" name="Purple" id="NUM" />
+    <public type="string" name="PushChatReactAudio" id="NUM" />
+    <public type="string" name="PushChatReactContact" id="NUM" />
+    <public type="string" name="PushChatReactDoc" id="NUM" />
+    <public type="string" name="PushChatReactGame" id="NUM" />
+    <public type="string" name="PushChatReactGeo" id="NUM" />
+    <public type="string" name="PushChatReactGeoLive" id="NUM" />
+    <public type="string" name="PushChatReactGif" id="NUM" />
+    <public type="string" name="PushChatReactInvoice" id="NUM" />
+    <public type="string" name="PushChatReactNotext" id="NUM" />
+    <public type="string" name="PushChatReactPhoto" id="NUM" />
+    <public type="string" name="PushChatReactPoll" id="NUM" />
+    <public type="string" name="PushChatReactQuiz" id="NUM" />
+    <public type="string" name="PushChatReactRound" id="NUM" />
+    <public type="string" name="PushChatReactSticker" id="NUM" />
+    <public type="string" name="PushChatReactText" id="NUM" />
+    <public type="string" name="PushChatReactVideo" id="NUM" />
+    <public type="string" name="PushReactAudio" id="NUM" />
+    <public type="string" name="PushReactContect" id="NUM" />
+    <public type="string" name="PushReactDoc" id="NUM" />
+    <public type="string" name="PushReactGame" id="NUM" />
+    <public type="string" name="PushReactGeo" id="NUM" />
+    <public type="string" name="PushReactGeoLocation" id="NUM" />
+    <public type="string" name="PushReactGif" id="NUM" />
+    <public type="string" name="PushReactInvoice" id="NUM" />
+    <public type="string" name="PushReactNoText" id="NUM" />
+    <public type="string" name="PushReactPhoto" id="NUM" />
+    <public type="string" name="PushReactPoll" id="NUM" />
+    <public type="string" name="PushReactQuiz" id="NUM" />
+    <public type="string" name="PushReactRound" id="NUM" />
+    <public type="string" name="PushReactSticker" id="NUM" />
+    <public type="string" name="PushReactText" id="NUM" />
+    <public type="string" name="PushReactVideo" id="NUM" />
     <public type="string" name="QRCodeLinkHelpChannel" id="NUM" />
     <public type="string" name="QRCodeLinkHelpGroup" id="NUM" />
     <public type="string" name="QRCodePermissionNoCamera" id="NUM" />

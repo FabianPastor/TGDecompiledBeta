@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LanguageDetector;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -154,39 +155,45 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$1(View view, int i) {
         LocaleController.LocaleInfo localeInfo;
-        if (getParentActivity() != null && this.parentLayout != null && (view instanceof TextRadioCell)) {
-            boolean z = this.listView.getAdapter() == this.searchListViewAdapter;
-            if (!z) {
-                i -= 2;
-            }
-            if (z) {
-                localeInfo = this.searchResult.get(i);
-            } else if (this.unofficialLanguages.isEmpty() || i < 0 || i >= this.unofficialLanguages.size()) {
-                if (!this.unofficialLanguages.isEmpty()) {
-                    i -= this.unofficialLanguages.size() + 1;
-                }
-                localeInfo = this.sortedLanguages.get(i);
-            } else {
-                localeInfo = this.unofficialLanguages.get(i);
-            }
-            if (localeInfo != null) {
-                LocaleController.LocaleInfo currentLocaleInfo = LocaleController.getInstance().getCurrentLocaleInfo();
-                LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, this.currentAccount);
-                this.parentLayout.rebuildAllFragmentViews(false, false);
-                String str = localeInfo.pluralLangCode;
-                String str2 = currentLocaleInfo.pluralLangCode;
-                SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
-                HashSet<String> restrictedLanguages = RestrictedLanguagesSelectActivity.getRestrictedLanguages();
-                HashSet hashSet = new HashSet(restrictedLanguages);
-                if (restrictedLanguages.contains(str)) {
-                    Collection$EL.removeIf(hashSet, new LanguageSelectActivity$$ExternalSyntheticLambda5(str));
-                    if (!restrictedLanguages.contains(str2)) {
-                        hashSet.add(str2);
+        try {
+            if (getParentActivity() != null && this.parentLayout != null) {
+                if (view instanceof TextRadioCell) {
+                    boolean z = this.listView.getAdapter() == this.searchListViewAdapter;
+                    if (!z) {
+                        i -= 2;
+                    }
+                    if (z) {
+                        localeInfo = this.searchResult.get(i);
+                    } else if (this.unofficialLanguages.isEmpty() || i < 0 || i >= this.unofficialLanguages.size()) {
+                        if (!this.unofficialLanguages.isEmpty()) {
+                            i -= this.unofficialLanguages.size() + 1;
+                        }
+                        localeInfo = this.sortedLanguages.get(i);
+                    } else {
+                        localeInfo = this.unofficialLanguages.get(i);
+                    }
+                    if (localeInfo != null) {
+                        LocaleController.LocaleInfo currentLocaleInfo = LocaleController.getInstance().getCurrentLocaleInfo();
+                        LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, this.currentAccount);
+                        this.parentLayout.rebuildAllFragmentViews(false, false);
+                        String str = localeInfo.pluralLangCode;
+                        String str2 = currentLocaleInfo.pluralLangCode;
+                        SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+                        HashSet<String> restrictedLanguages = RestrictedLanguagesSelectActivity.getRestrictedLanguages();
+                        HashSet hashSet = new HashSet(restrictedLanguages);
+                        if (restrictedLanguages.contains(str)) {
+                            Collection$EL.removeIf(hashSet, new LanguageSelectActivity$$ExternalSyntheticLambda5(str));
+                            if (!restrictedLanguages.contains(str2)) {
+                                hashSet.add(str2);
+                            }
+                        }
+                        globalMainSettings.edit().putStringSet("translate_button_restricted_languages", hashSet).apply();
+                        finishFragment();
                     }
                 }
-                globalMainSettings.edit().putStringSet("translate_button_restricted_languages", hashSet).apply();
-                finishFragment();
             }
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
         }
     }
 
@@ -198,37 +205,45 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     /* access modifiers changed from: private */
     public /* synthetic */ boolean lambda$createView$3(View view, int i) {
         LocaleController.LocaleInfo localeInfo;
-        if (!(getParentActivity() == null || this.parentLayout == null || !(view instanceof TextRadioCell))) {
-            boolean z = this.listView.getAdapter() == this.searchListViewAdapter;
-            if (!z) {
-                i--;
-            }
-            if (z) {
-                localeInfo = this.searchResult.get(i);
-            } else if (this.unofficialLanguages.isEmpty() || i < 0 || i >= this.unofficialLanguages.size()) {
-                if (!this.unofficialLanguages.isEmpty()) {
-                    i -= this.unofficialLanguages.size() + 1;
+        try {
+            if (!(getParentActivity() == null || this.parentLayout == null)) {
+                if (view instanceof TextRadioCell) {
+                    boolean z = this.listView.getAdapter() == this.searchListViewAdapter;
+                    if (!z) {
+                        i--;
+                    }
+                    if (z) {
+                        localeInfo = this.searchResult.get(i);
+                    } else if (this.unofficialLanguages.isEmpty() || i < 0 || i >= this.unofficialLanguages.size()) {
+                        if (!this.unofficialLanguages.isEmpty()) {
+                            i -= this.unofficialLanguages.size() + 1;
+                        }
+                        localeInfo = this.sortedLanguages.get(i);
+                    } else {
+                        localeInfo = this.unofficialLanguages.get(i);
+                    }
+                    if (!(localeInfo == null || localeInfo.pathToFile == null)) {
+                        if (!localeInfo.isRemote() || localeInfo.serverIndex == Integer.MAX_VALUE) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+                            builder.setTitle(LocaleController.getString("DeleteLocalizationTitle", NUM));
+                            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteLocalizationText", NUM, localeInfo.name)));
+                            builder.setPositiveButton(LocaleController.getString("Delete", NUM), new LanguageSelectActivity$$ExternalSyntheticLambda0(this, localeInfo));
+                            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+                            AlertDialog create = builder.create();
+                            showDialog(create);
+                            TextView textView = (TextView) create.getButton(-1);
+                            if (textView != null) {
+                                textView.setTextColor(Theme.getColor("dialogTextRed2"));
+                            }
+                            return true;
+                        }
+                    }
                 }
-                localeInfo = this.sortedLanguages.get(i);
-            } else {
-                localeInfo = this.unofficialLanguages.get(i);
             }
-            if (!(localeInfo == null || localeInfo.pathToFile == null || (localeInfo.isRemote() && localeInfo.serverIndex != Integer.MAX_VALUE))) {
-                AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                builder.setTitle(LocaleController.getString("DeleteLocalizationTitle", NUM));
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteLocalizationText", NUM, localeInfo.name)));
-                builder.setPositiveButton(LocaleController.getString("Delete", NUM), new LanguageSelectActivity$$ExternalSyntheticLambda0(this, localeInfo));
-                builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-                AlertDialog create = builder.create();
-                showDialog(create);
-                TextView textView = (TextView) create.getButton(-1);
-                if (textView != null) {
-                    textView.setTextColor(Theme.getColor("dialogTextRed2"));
-                }
-                return true;
-            }
+            return false;
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
         }
-        return false;
     }
 
     /* access modifiers changed from: private */
@@ -376,6 +391,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
         public TranslateSettings(Context context) {
             super(context);
+            boolean z = true;
             setOrientation(1);
             this.preferences = MessagesController.getGlobalMainSettings();
             HeaderCell headerCell = new HeaderCell(context);
@@ -394,6 +410,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             this.doNotTranslateCell = textSettingsCell;
             textSettingsCell.setBackground(Theme.createSelectorWithBackgroundDrawable(Theme.getColor("windowBackgroundWhite"), Theme.getColor("listSelectorSDK21")));
             this.doNotTranslateCell.setOnClickListener(new LanguageSelectActivity$TranslateSettings$$ExternalSyntheticLambda2(this));
+            this.doNotTranslateCell.setClickable((!value || !LanguageDetector.hasSupport()) ? false : z);
             float f = 1.0f;
             this.doNotTranslateCell.setAlpha((!value || !LanguageDetector.hasSupport()) ? 0.0f : 1.0f);
             addView(this.doNotTranslateCell, LayoutHelper.createLinear(-1, -2));
@@ -458,6 +475,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 str = String.format(LocaleController.getPluralString("Languages", getRestrictedLanguages().size()), new Object[]{Integer.valueOf(getRestrictedLanguages().size())});
             }
             this.doNotTranslateCell.setTextAndValue(LocaleController.getString("DoNotTranslate", NUM), str, false);
+            this.doNotTranslateCell.setClickable(z);
             float[] fArr = new float[2];
             fArr[0] = this.doNotTranslateCell.getAlpha();
             float f = 1.0f;
@@ -598,7 +616,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 r3.<init>(r0)
                 int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 r3.setBackgroundColor(r2)
-                r2 = 2131626103(0x7f0e0877, float:1.8879433E38)
+                r2 = 2131626102(0x7f0e0876, float:1.887943E38)
                 java.lang.String r0 = "Language"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r0, r2)
                 r3.setText(r2)
@@ -763,7 +781,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r1 = new java.lang.Object[r1]
                 java.lang.String r4 = r0.name
                 r1[r2] = r4
-                r4 = 2131626106(0x7f0e087a, float:1.8879439E38)
+                r4 = 2131626105(0x7f0e0879, float:1.8879437E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r1[r3] = r4

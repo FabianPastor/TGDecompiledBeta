@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -76,7 +77,7 @@ import org.telegram.ui.PhotoViewer;
 
 public class ChatEditActivity extends BaseFragment implements ImageUpdater.ImageUpdaterDelegate, NotificationCenter.NotificationCenterDelegate {
     private TextCell adminCell;
-    private List<String> availableReactions;
+    private List<String> availableReactions = Collections.emptyList();
     private TLRPC$FileLocation avatar;
     /* access modifiers changed from: private */
     public AnimatorSet avatarAnimation;
@@ -601,7 +602,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r9.setHint(r12)
             goto L_0x01ca
         L_0x01be:
-            r12 = 2131625871(0x7f0e078f, float:1.8878962E38)
+            r12 = 2131625870(0x7f0e078e, float:1.887896E38)
             java.lang.String r15 = "GroupName"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r15, r12)
             r9.setHint(r12)
@@ -1180,7 +1181,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.ui.Cells.TextInfoPrivacyCell r4 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r4.<init>(r1)
             r0.stickersInfoCell3 = r4
-            r9 = 2131625877(0x7f0e0795, float:1.8878974E38)
+            r9 = 2131625876(0x7f0e0794, float:1.8878972E38)
             java.lang.String r11 = "GroupStickersInfo"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r4.setText(r9)

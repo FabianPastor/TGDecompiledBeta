@@ -4253,7 +4253,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r2.setTextColor(r0)
             r0 = 1097859072(0x41700000, float:15.0)
             r2.setTextSize(r14, r0)
-            r0 = 2131627758(0x7f0e0eee, float:1.888279E38)
+            r0 = 2131627789(0x7f0e0f0d, float:1.8882852E38)
             java.lang.String r1 = "SendMessageAsTitle"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r2.setText(r0)

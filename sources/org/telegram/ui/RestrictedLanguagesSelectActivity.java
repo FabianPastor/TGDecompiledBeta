@@ -523,7 +523,7 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
                 java.lang.Object[] r5 = new java.lang.Object[r5]
                 java.lang.String r6 = r0.name
                 r5[r2] = r6
-                r6 = 2131626106(0x7f0e087a, float:1.8879439E38)
+                r6 = 2131626105(0x7f0e0879, float:1.8879437E38)
                 java.lang.String r7 = "LanguageCustom"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 r5[r1] = r6

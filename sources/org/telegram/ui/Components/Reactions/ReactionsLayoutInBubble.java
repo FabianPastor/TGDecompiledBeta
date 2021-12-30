@@ -21,6 +21,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.tgnet.TLRPC$TL_messageReactions;
 import org.telegram.tgnet.TLRPC$TL_messageUserReaction;
@@ -543,8 +544,10 @@ public class ReactionsLayoutInBubble {
     }
 
     public boolean chekTouchEvent(MotionEvent motionEvent) {
+        MessageObject messageObject2;
+        TLRPC$Message tLRPC$Message;
         int i = 0;
-        if (this.isEmpty) {
+        if (this.isEmpty || (messageObject2 = this.messageObject) == null || (tLRPC$Message = messageObject2.messageOwner) == null || tLRPC$Message.reactions == null) {
             return false;
         }
         float x2 = motionEvent.getX() - ((float) this.x);
@@ -561,7 +564,7 @@ public class ReactionsLayoutInBubble {
                     this.lastY = motionEvent.getY();
                     this.lastSelectedButton = this.reactionButtons.get(i);
                     Runnable runnable = this.longPressRunnable;
-                    if (runnable != null) {
+                    if (runnable != null && this.messageObject.messageOwner.reactions.can_see_list) {
                         AndroidUtilities.cancelRunOnUIThread(runnable);
                         this.longPressRunnable = null;
                     }

@@ -817,7 +817,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = 2131165497(0x7var_, float:1.7945213E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.searchItem
-            r1 = 2131627654(0x7f0e0e86, float:1.8882579E38)
+            r1 = 2131627685(0x7f0e0ea5, float:1.8882641E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
