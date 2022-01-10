@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,40 +17,51 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.util.Property;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.util.Consumer;
-import androidx.dynamicanimation.animation.FloatPropertyCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SharedConfig;
+import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RecyclerListView;
 
-public class ReactionsContainerLayout extends FrameLayout {
-    public static final FloatPropertyCompat<ReactionsContainerLayout> TRANSITION_PROGRESS_VALUE = new FloatPropertyCompat<ReactionsContainerLayout>("transitionProgress") {
-        public float getValue(ReactionsContainerLayout reactionsContainerLayout) {
-            return reactionsContainerLayout.transitionProgress * 100.0f;
+public class ReactionsContainerLayout extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
+    public static final Property<ReactionsContainerLayout, Float> TRANSITION_PROGRESS_VALUE = new Property<ReactionsContainerLayout, Float>(Float.class, "transitionProgress") {
+        public Float get(ReactionsContainerLayout reactionsContainerLayout) {
+            return Float.valueOf(reactionsContainerLayout.transitionProgress);
         }
 
-        public void setValue(ReactionsContainerLayout reactionsContainerLayout, float f) {
-            reactionsContainerLayout.setTransitionProgress(f / 100.0f);
+        public void set(ReactionsContainerLayout reactionsContainerLayout, Float f) {
+            reactionsContainerLayout.setTransitionProgress(f.floatValue());
         }
     };
+    /* access modifiers changed from: private */
+    public final boolean animationEnabled;
     private Paint bgPaint = new Paint(1);
     private int bigCircleOffset;
     private float bigCircleRadius;
+    private int currentAccount;
     private ReactionsContainerDelegate delegate;
     HashSet<View> lastVisibleViews;
     HashSet<View> lastVisibleViewsTmp;
@@ -64,6 +76,7 @@ public class ReactionsContainerLayout extends FrameLayout {
     /* access modifiers changed from: private */
     public int[] location;
     private Path mPath = new Path();
+    private MessageObject messageObject;
     private float radius = ((float) AndroidUtilities.dp(72.0f));
     /* access modifiers changed from: private */
     public List<TLRPC$TL_availableReaction> reactionsList;
@@ -79,6 +92,7 @@ public class ReactionsContainerLayout extends FrameLayout {
     private float smallCircleRadius;
     /* access modifiers changed from: private */
     public float transitionProgress = 1.0f;
+    private long waitingLoadingChatId;
 
     public interface ReactionsContainerDelegate {
         void onReactionClicked(View view, TLRPC$TL_availableReaction tLRPC$TL_availableReaction);
@@ -88,8 +102,9 @@ public class ReactionsContainerLayout extends FrameLayout {
         new Random();
     }
 
-    public ReactionsContainerLayout(final Context context, Theme.ResourcesProvider resourcesProvider2) {
+    public ReactionsContainerLayout(final Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        boolean z = true;
         float dp = (float) AndroidUtilities.dp(8.0f);
         this.bigCircleRadius = dp;
         this.smallCircleRadius = dp / 2.0f;
@@ -101,6 +116,8 @@ public class ReactionsContainerLayout extends FrameLayout {
         this.lastVisibleViews = new HashSet<>();
         this.lastVisibleViewsTmp = new HashSet<>();
         this.resourcesProvider = resourcesProvider2;
+        this.currentAccount = i;
+        this.animationEnabled = (!MessagesController.getGlobalMainSettings().getBoolean("view_animations", true) || SharedConfig.getDevicePerformanceClass() == 0) ? false : z;
         this.shadow = ContextCompat.getDrawable(context, NUM).mutate();
         Rect rect2 = this.shadowPad;
         int dp2 = AndroidUtilities.dp(7.0f);
@@ -129,7 +146,7 @@ public class ReactionsContainerLayout extends FrameLayout {
         recyclerListView2.setOverScrollMode(2);
         AnonymousClass3 r0 = new RecyclerView.Adapter() {
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                ReactionHolderView reactionHolderView = new ReactionHolderView(ReactionsContainerLayout.this, context);
+                ReactionHolderView reactionHolderView = new ReactionHolderView(context);
                 int paddingTop = (ReactionsContainerLayout.this.getLayoutParams().height - ReactionsContainerLayout.this.getPaddingTop()) - ReactionsContainerLayout.this.getPaddingBottom();
                 reactionHolderView.setLayoutParams(new RecyclerView.LayoutParams(paddingTop - AndroidUtilities.dp(12.0f), paddingTop));
                 return new RecyclerListView.Holder(reactionHolderView);
@@ -210,8 +227,11 @@ public class ReactionsContainerLayout extends FrameLayout {
     }
 
     @SuppressLint({"NotifyDataSetChanged"})
-    public void setReactionsList(List<TLRPC$TL_availableReaction> list) {
+    private void setReactionsList(List<TLRPC$TL_availableReaction> list) {
         this.reactionsList = list;
+        if (((getLayoutParams().height - getPaddingTop()) - getPaddingBottom()) * list.size() < AndroidUtilities.dp(200.0f)) {
+            getLayoutParams().width = -2;
+        }
         this.listAdapter.notifyDataSetChanged();
     }
 
@@ -228,13 +248,17 @@ public class ReactionsContainerLayout extends FrameLayout {
         if (this.transitionProgress != 0.0f) {
             int i = 0;
             for (int i2 = 0; i2 < this.recyclerListView.getChildCount(); i2++) {
-                View childAt = this.recyclerListView.getChildAt(i2);
-                if (childAt.getX() + ((float) childAt.getMeasuredWidth()) > 0.0f && childAt.getX() < ((float) getWidth())) {
-                    if (!this.lastVisibleViewsTmp.contains(childAt)) {
-                        ((ReactionHolderView) childAt).play(i);
-                        i += 50;
+                ReactionHolderView reactionHolderView = (ReactionHolderView) this.recyclerListView.getChildAt(i2);
+                if (reactionHolderView.backupImageView.getImageReceiver().getLottieAnimation() != null) {
+                    if (reactionHolderView.getX() + (((float) reactionHolderView.getMeasuredWidth()) / 2.0f) > 0.0f && reactionHolderView.getX() + (((float) reactionHolderView.getMeasuredWidth()) / 2.0f) < ((float) this.recyclerListView.getWidth())) {
+                        if (!this.lastVisibleViewsTmp.contains(reactionHolderView)) {
+                            reactionHolderView.play(i);
+                            i += 30;
+                        }
+                        this.lastVisibleViews.add(reactionHolderView);
+                    } else if (!reactionHolderView.isEnter) {
+                        reactionHolderView.resetAnimation();
                     }
-                    this.lastVisibleViews.add(childAt);
                 }
             }
         }
@@ -358,6 +382,54 @@ public class ReactionsContainerLayout extends FrameLayout {
         invalidate();
     }
 
+    public void setMessage(MessageObject messageObject2, TLRPC$ChatFull tLRPC$ChatFull) {
+        List list;
+        this.messageObject = messageObject2;
+        if (!messageObject2.isForwardedChannelPost() || (tLRPC$ChatFull = MessagesController.getInstance(this.currentAccount).getChatFull(-messageObject2.getFromChatId())) != null) {
+            if (tLRPC$ChatFull != null) {
+                list = new ArrayList(tLRPC$ChatFull.available_reactions.size());
+                Iterator<String> it = tLRPC$ChatFull.available_reactions.iterator();
+                while (it.hasNext()) {
+                    String next = it.next();
+                    Iterator<TLRPC$TL_availableReaction> it2 = MediaDataController.getInstance(this.currentAccount).getEnabledReactionsList().iterator();
+                    while (true) {
+                        if (!it2.hasNext()) {
+                            break;
+                        }
+                        TLRPC$TL_availableReaction next2 = it2.next();
+                        if (next2.reaction.equals(next)) {
+                            list.add(next2);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                list = MediaDataController.getInstance(this.currentAccount).getEnabledReactionsList();
+            }
+            setReactionsList(list);
+            return;
+        }
+        this.waitingLoadingChatId = -messageObject2.getFromChatId();
+        MessagesController.getInstance(this.currentAccount).loadFullChat(-messageObject2.getFromChatId(), 0, true);
+        setVisibility(4);
+    }
+
+    public void startEnterAnimation() {
+        setTransitionProgress(0.0f);
+        setAlpha(1.0f);
+        ObjectAnimator duration = ObjectAnimator.ofFloat(this, TRANSITION_PROGRESS_VALUE, new float[]{0.0f, 1.0f}).setDuration(400);
+        duration.setInterpolator(new OvershootInterpolator(1.004f));
+        duration.start();
+    }
+
+    public int getTotalWidth() {
+        return (AndroidUtilities.dp(36.0f) * this.reactionsList.size()) + AndroidUtilities.dp(16.0f);
+    }
+
+    public int getItemsCount() {
+        return this.reactionsList.size();
+    }
+
     private final class LeftRightShadowsListener extends RecyclerView.OnScrollListener {
         private ValueAnimator leftAnimator;
         private boolean leftVisible;
@@ -387,11 +459,11 @@ public class ReactionsContainerLayout extends FrameLayout {
                 if (valueAnimator2 != null) {
                     valueAnimator2.cancel();
                 }
-                float access$800 = ReactionsContainerLayout.this.rightAlpha;
+                float access$900 = ReactionsContainerLayout.this.rightAlpha;
                 if (!z) {
                     f = 0.0f;
                 }
-                this.rightAnimator = startAnimator(access$800, f, new ReactionsContainerLayout$LeftRightShadowsListener$$ExternalSyntheticLambda2(this), new ReactionsContainerLayout$LeftRightShadowsListener$$ExternalSyntheticLambda3(this));
+                this.rightAnimator = startAnimator(access$900, f, new ReactionsContainerLayout$LeftRightShadowsListener$$ExternalSyntheticLambda2(this), new ReactionsContainerLayout$LeftRightShadowsListener$$ExternalSyntheticLambda3(this));
                 this.rightVisible = z;
             }
         }
@@ -434,39 +506,105 @@ public class ReactionsContainerLayout extends FrameLayout {
     public final class ReactionHolderView extends FrameLayout {
         public BackupImageView backupImageView;
         public TLRPC$TL_availableReaction currentReaction;
+        /* access modifiers changed from: private */
+        public boolean isEnter;
         Runnable playRunnable = new Runnable() {
             public void run() {
-                if (ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation() != null && !ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation().isRunning()) {
+                if (ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation() != null && !ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation().isRunning() && !ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation().isGeneratingCache()) {
                     ReactionHolderView.this.backupImageView.getImageReceiver().getLottieAnimation().start();
                 }
             }
         };
 
-        ReactionHolderView(ReactionsContainerLayout reactionsContainerLayout, Context context) {
+        ReactionHolderView(Context context) {
             super(context);
-            BackupImageView backupImageView2 = new BackupImageView(context);
-            this.backupImageView = backupImageView2;
-            backupImageView2.getImageReceiver().setAutoRepeat(0);
+            AnonymousClass2 r0 = new BackupImageView(context, ReactionsContainerLayout.this) {
+                public void invalidate() {
+                    super.invalidate();
+                    ReactionsContainerLayout.this.invalidate();
+                }
+            };
+            this.backupImageView = r0;
+            r0.getImageReceiver().setAutoRepeat(0);
+            this.backupImageView.getImageReceiver().setAllowStartLottieAnimation(false);
             addView(this.backupImageView, LayoutHelper.createFrame(34, 34, 17));
         }
 
         /* access modifiers changed from: private */
         public void setReaction(TLRPC$TL_availableReaction tLRPC$TL_availableReaction) {
-            this.currentReaction = tLRPC$TL_availableReaction;
-            this.backupImageView.getImageReceiver().setImage(ImageLocation.getForDocument(this.currentReaction.appear_animation), "80_80_nolimit", (ImageLocation) null, (String) null, DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.appear_animation, "windowBackgroundGray", 1.0f), 0, "tgs", tLRPC$TL_availableReaction, 0);
+            TLRPC$TL_availableReaction tLRPC$TL_availableReaction2 = this.currentReaction;
+            if (tLRPC$TL_availableReaction2 == null || !tLRPC$TL_availableReaction2.reaction.equals(tLRPC$TL_availableReaction.reaction)) {
+                resetAnimation();
+                this.currentReaction = tLRPC$TL_availableReaction;
+                this.backupImageView.getImageReceiver().setImage(ImageLocation.getForDocument(this.currentReaction.appear_animation), "60_60_nolimit", (ImageLocation) null, (String) null, DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.appear_animation, "windowBackgroundGray", 1.0f), 0, "tgs", tLRPC$TL_availableReaction, 0);
+            }
         }
 
-        public void play(int i) {
+        /* access modifiers changed from: protected */
+        public void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            resetAnimation();
+        }
+
+        public boolean play(int i) {
+            if (!ReactionsContainerLayout.this.animationEnabled) {
+                resetAnimation();
+                this.isEnter = true;
+                return false;
+            }
             AndroidUtilities.cancelRunOnUIThread(this.playRunnable);
-            if (this.backupImageView.getImageReceiver().getLottieAnimation() != null) {
-                this.backupImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(0, false);
-                if (i == 0) {
-                    this.playRunnable.run();
-                    return;
+            if (this.backupImageView.getImageReceiver().getLottieAnimation() == null || this.backupImageView.getImageReceiver().getLottieAnimation().isGeneratingCache() || this.isEnter) {
+                if (this.backupImageView.getImageReceiver().getLottieAnimation() != null && this.isEnter && !this.backupImageView.getImageReceiver().getLottieAnimation().isRunning() && !this.backupImageView.getImageReceiver().getLottieAnimation().isGeneratingCache()) {
+                    this.backupImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(this.backupImageView.getImageReceiver().getLottieAnimation().getFramesCount() - 1, false);
                 }
+                return false;
+            }
+            this.isEnter = true;
+            if (i == 0) {
+                this.backupImageView.getImageReceiver().getLottieAnimation().stop();
+                this.backupImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(0, false);
+                this.playRunnable.run();
+            } else {
                 this.backupImageView.getImageReceiver().getLottieAnimation().stop();
                 this.backupImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(0, false);
                 AndroidUtilities.runOnUIThread(this.playRunnable, (long) i);
+            }
+            return true;
+        }
+
+        public void resetAnimation() {
+            AndroidUtilities.cancelRunOnUIThread(this.playRunnable);
+            if (this.backupImageView.getImageReceiver().getLottieAnimation() != null && !this.backupImageView.getImageReceiver().getLottieAnimation().isGeneratingCache()) {
+                this.backupImageView.getImageReceiver().getLottieAnimation().stop();
+                if (ReactionsContainerLayout.this.animationEnabled) {
+                    this.backupImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(0, false, true);
+                } else {
+                    this.backupImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(this.backupImageView.getImageReceiver().getLottieAnimation().getFramesCount() - 1, false, true);
+                }
+            }
+            this.isEnter = false;
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoad);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoad);
+    }
+
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.chatInfoDidLoad) {
+            TLRPC$ChatFull tLRPC$ChatFull = objArr[0];
+            if (tLRPC$ChatFull.id == this.waitingLoadingChatId && getVisibility() != 0 && !tLRPC$ChatFull.available_reactions.isEmpty()) {
+                setMessage(this.messageObject, (TLRPC$ChatFull) null);
+                setVisibility(0);
+                startEnterAnimation();
             }
         }
     }

@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import org.telegram.ui.Components.TranslateAlert;
 
-public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda5 implements View.OnClickListener {
+public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda5 implements TranslateAlert.OnTranslationFail {
     public final /* synthetic */ TranslateAlert f$0;
 
     public /* synthetic */ TranslateAlert$$ExternalSyntheticLambda5(TranslateAlert translateAlert) {
         this.f$0 = translateAlert;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$new$5(view);
+    public final void run(boolean z) {
+        this.f$0.lambda$fetchNext$6(z);
     }
 }

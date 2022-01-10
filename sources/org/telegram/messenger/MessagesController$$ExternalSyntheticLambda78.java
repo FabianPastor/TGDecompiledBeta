@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_messages_chatFull;
+import android.util.SparseArray;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda78 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ TLRPC$TL_messages_chatFull f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ SparseArray f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda78(MessagesController messagesController, long j, TLRPC$TL_messages_chatFull tLRPC$TL_messages_chatFull, int i) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda78(MessagesController messagesController, SparseArray sparseArray) {
         this.f$0 = messagesController;
-        this.f$1 = j;
-        this.f$2 = tLRPC$TL_messages_chatFull;
-        this.f$3 = i;
+        this.f$1 = sparseArray;
     }
 
     public final void run() {
-        this.f$0.lambda$loadFullChat$39(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$getDifference$261(this.f$1);
     }
 }

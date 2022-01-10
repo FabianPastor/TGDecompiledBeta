@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -65,11 +66,23 @@ public class TextDetailCell extends FrameLayout {
 
     public void setImage(Drawable drawable) {
         this.imageView.setImageDrawable(drawable);
+        int i = 0;
         if (drawable == null) {
             this.imageView.setBackground((Drawable) null);
         } else {
             this.imageView.setBackground(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(48.0f), 0, Theme.getColor("listSelectorSDK21")));
         }
+        int dp = AndroidUtilities.dp(23.0f);
+        if (drawable != null) {
+            i = AndroidUtilities.dp(48.0f);
+        }
+        int i2 = dp + i;
+        if (LocaleController.isRTL) {
+            ((ViewGroup.MarginLayoutParams) this.textView.getLayoutParams()).leftMargin = i2;
+        } else {
+            ((ViewGroup.MarginLayoutParams) this.textView.getLayoutParams()).rightMargin = i2;
+        }
+        this.textView.requestLayout();
     }
 
     public void setImageClickListener(View.OnClickListener onClickListener) {

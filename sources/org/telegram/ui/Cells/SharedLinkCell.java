@@ -376,7 +376,7 @@ public class SharedLinkCell extends FrameLayout {
             java.lang.String r0 = r0.message
             android.text.SpannableStringBuilder r0 = android.text.SpannableStringBuilder.valueOf(r0)
             org.telegram.messenger.MessageObject r11 = r1.message
-            org.telegram.messenger.MediaDataController.addTextStyleRuns((org.telegram.messenger.MessageObject) r11, (android.text.Spannable) r0)
+            org.telegram.messenger.MediaDataController.addTextStyleRuns(r11, r0)
             goto L_0x0106
         L_0x00f7:
             org.telegram.messenger.MessageObject r0 = r1.message
@@ -384,7 +384,7 @@ public class SharedLinkCell extends FrameLayout {
             java.lang.String r0 = r0.message
             android.text.SpannableStringBuilder r0 = android.text.SpannableStringBuilder.valueOf(r0)
             org.telegram.messenger.MessageObject r11 = r1.message
-            org.telegram.messenger.MediaDataController.addTextStyleRuns((org.telegram.messenger.MessageObject) r11, (android.text.Spannable) r0)
+            org.telegram.messenger.MediaDataController.addTextStyleRuns(r11, r0)
         L_0x0106:
             r11 = r0
             boolean r0 = r10 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl     // Catch:{ Exception -> 0x02aa }
@@ -433,7 +433,7 @@ public class SharedLinkCell extends FrameLayout {
             java.lang.String r7 = r7.message     // Catch:{ Exception -> 0x02a7 }
             android.text.SpannableStringBuilder r7 = android.text.SpannableStringBuilder.valueOf(r7)     // Catch:{ Exception -> 0x02a7 }
             org.telegram.messenger.MessageObject r12 = r1.message     // Catch:{ Exception -> 0x02a7 }
-            org.telegram.messenger.MediaDataController.addTextStyleRuns((org.telegram.messenger.MessageObject) r12, (android.text.Spannable) r7)     // Catch:{ Exception -> 0x02a7 }
+            org.telegram.messenger.MediaDataController.addTextStyleRuns(r12, r7)     // Catch:{ Exception -> 0x02a7 }
         L_0x016c:
             r8 = r7
             goto L_0x01fa
@@ -497,7 +497,7 @@ public class SharedLinkCell extends FrameLayout {
             java.lang.String r7 = r7.message     // Catch:{ Exception -> 0x02a7 }
             android.text.SpannableStringBuilder r7 = android.text.SpannableStringBuilder.valueOf(r7)     // Catch:{ Exception -> 0x02a7 }
             org.telegram.messenger.MessageObject r12 = r1.message     // Catch:{ Exception -> 0x02a7 }
-            org.telegram.messenger.MediaDataController.addTextStyleRuns((org.telegram.messenger.MessageObject) r12, (android.text.Spannable) r7)     // Catch:{ Exception -> 0x02a7 }
+            org.telegram.messenger.MediaDataController.addTextStyleRuns(r12, r7)     // Catch:{ Exception -> 0x02a7 }
             goto L_0x016c
         L_0x01fa:
             r7 = r3

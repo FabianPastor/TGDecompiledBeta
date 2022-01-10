@@ -20,6 +20,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda27
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadDialogPhotos$61(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadDialogPhotos$60(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
     }
 }

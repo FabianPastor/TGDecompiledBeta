@@ -1557,7 +1557,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public void setCurrentFrame(int i, boolean z, boolean z2) {
-        if (i >= 0 && i <= this.metaData[0]) {
+        if (i >= 0 && i <= this.metaData[0] && this.currentFrame != i) {
             this.currentFrame = i;
             this.nextFrameIsLast = false;
             this.singleFrameDecoded = false;

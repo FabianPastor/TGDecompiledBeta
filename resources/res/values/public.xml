@@ -5984,7 +5984,6 @@
     <public type="string" name="TranslateMessages" id="NUM" />
     <public type="string" name="TranslateMessagesInfo1" id="NUM" />
     <public type="string" name="TranslateMessagesInfo2" id="NUM" />
-    <public type="string" name="TranslateMore" id="NUM" />
     <public type="string" name="TranslationFailedAlert1" id="NUM" />
     <public type="string" name="TranslationFailedAlert2" id="NUM" />
     <public type="string" name="TurnPasswordOff" id="NUM" />

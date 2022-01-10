@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda151 impl
     }
 
     public final void run() {
-        this.f$0.lambda$processSelectedOption$158(this.f$1, this.f$2);
+        this.f$0.lambda$didPressMessageUrl$185(this.f$1, this.f$2);
     }
 }

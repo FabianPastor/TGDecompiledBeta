@@ -5,7 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.view.View;
@@ -25,6 +27,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -95,6 +98,9 @@ public class ReactedUsersListView extends FrameLayout {
             this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
             this.listView.setClipToPadding(false);
         }
+        if (Build.VERSION.SDK_INT >= 29) {
+            this.listView.setVerticalScrollbarThumbDrawable(new ColorDrawable(Theme.getColor("listSelectorSDK21")));
+        }
         RecyclerListView recyclerListView = this.listView;
         AnonymousClass2 r8 = new RecyclerView.Adapter() {
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -111,7 +117,7 @@ public class ReactedUsersListView extends FrameLayout {
         };
         this.adapter = r8;
         recyclerListView.setAdapter(r8);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ReactedUsersListView$$ExternalSyntheticLambda4(this));
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ReactedUsersListView$$ExternalSyntheticLambda5(this));
         this.listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 if (ReactedUsersListView.this.isLoaded && ReactedUsersListView.this.canLoadMore && !ReactedUsersListView.this.isLoading && linearLayoutManager.findLastVisibleItemPosition() >= (ReactedUsersListView.this.adapter.getItemCount() - 1) - ReactedUsersListView.this.getLoadCount()) {
@@ -186,16 +192,17 @@ public class ReactedUsersListView extends FrameLayout {
         if (str2 != null) {
             tLRPC$TL_messages_getMessageReactionsList.flags |= 2;
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getMessageReactionsList, new ReactedUsersListView$$ExternalSyntheticLambda3(this), 64);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getMessageReactionsList, new ReactedUsersListView$$ExternalSyntheticLambda4(this), 64);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$load$4(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$load$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject instanceof TLRPC$TL_messages_messageReactionsList) {
             TLRPC$TL_messages_messageReactionsList tLRPC$TL_messages_messageReactionsList = (TLRPC$TL_messages_messageReactionsList) tLObject;
             Iterator<TLRPC$User> it = tLRPC$TL_messages_messageReactionsList.users.iterator();
             while (it.hasNext()) {
                 TLRPC$User next = it.next();
+                MessagesController.getInstance(this.currentAccount).putUser(next, false);
                 this.users.put(next.id, next);
             }
             int size = this.userReactions.size();
@@ -203,9 +210,9 @@ public class ReactedUsersListView extends FrameLayout {
             arrayList.addAll(this.userReactions);
             arrayList.addAll(tLRPC$TL_messages_messageReactionsList.reactions);
             if (this.onlySeenNow) {
-                Collections.sort(arrayList, ReactedUsersListView$$ExternalSyntheticLambda2.INSTANCE);
+                Collections.sort(arrayList, ReactedUsersListView$$ExternalSyntheticLambda3.INSTANCE);
             }
-            AndroidUtilities.runOnUIThread(new ReactedUsersListView$$ExternalSyntheticLambda1(this, arrayList, size, tLRPC$TL_messages_messageReactionsList));
+            AndroidUtilities.runOnUIThread(new ReactedUsersListView$$ExternalSyntheticLambda2(this, arrayList, size, tLRPC$TL_messages_messageReactionsList));
             return;
         }
         this.isLoading = false;
@@ -219,6 +226,11 @@ public class ReactedUsersListView extends FrameLayout {
             i = 0;
         }
         return zzdp$$ExternalSyntheticBackport0.m(i2, i);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$load$4(List list, int i, TLRPC$TL_messages_messageReactionsList tLRPC$TL_messages_messageReactionsList) {
+        NotificationCenter.getInstance(this.currentAccount).doOnIdle(new ReactedUsersListView$$ExternalSyntheticLambda1(this, list, i, tLRPC$TL_messages_messageReactionsList));
     }
 
     /* access modifiers changed from: private */
@@ -296,7 +308,7 @@ public class ReactedUsersListView extends FrameLayout {
             this.titleView.setTextSize(1, 16.0f);
             this.titleView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
             this.titleView.setEllipsize(TextUtils.TruncateAt.END);
-            addView(this.titleView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 65.0f, 0.0f, 44.0f, 0.0f));
+            addView(this.titleView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 58.0f, 0.0f, 44.0f, 0.0f));
             BackupImageView backupImageView2 = new BackupImageView(context);
             this.reactView = backupImageView2;
             addView(backupImageView2, LayoutHelper.createFrameRelatively(24.0f, 24.0f, 8388629, 0.0f, 0.0f, 12.0f, 0.0f));

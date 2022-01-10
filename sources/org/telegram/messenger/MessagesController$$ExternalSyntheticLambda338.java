@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda33
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$markMentionsAsRead$192(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$deleteParticipantFromChat$231(tLObject, tLRPC$TL_error);
     }
 }

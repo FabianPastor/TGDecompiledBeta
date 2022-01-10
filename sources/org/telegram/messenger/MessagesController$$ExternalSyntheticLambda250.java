@@ -18,6 +18,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda25
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$sendTyping$134(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$sendTyping$132(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
     }
 }

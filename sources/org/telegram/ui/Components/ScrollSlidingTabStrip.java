@@ -739,7 +739,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                     Object tag2 = stickerTabView.getTag(NUM);
                     Drawable drawable = tag instanceof Drawable ? (Drawable) tag : null;
                     if (tag2 instanceof TLRPC$Document) {
-                        stickerTabView.imageView.setImage(ImageLocation.getForDocument((TLRPC$Document) tag2), "36_36", drawable, (Object) null);
+                        stickerTabView.imageView.setImage(ImageLocation.getForDocument((TLRPC$Document) tag2), "36_36_nolimit", drawable, (Object) null);
                     } else {
                         stickerTabView.imageView.setImageDrawable(drawable);
                     }

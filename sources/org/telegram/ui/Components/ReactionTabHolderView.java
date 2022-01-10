@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
@@ -25,19 +26,25 @@ import org.telegram.ui.ActionBar.Theme;
 public class ReactionTabHolderView extends FrameLayout {
     private Paint bgPaint = new Paint(1);
     private TextView counterView;
+    Drawable drawable;
     private ImageView iconView;
     private Paint outlinePaint = new Paint(1);
     private float outlineProgress;
-    private Path path = new Path();
-    private float radius = ((float) AndroidUtilities.dp(32.0f));
+    private float radius;
     private BackupImageView reactView;
-    private RectF rect = new RectF();
+    private RectF rect;
 
     public ReactionTabHolderView(Context context) {
         super(context);
+        new Path();
+        this.rect = new RectF();
+        this.radius = (float) AndroidUtilities.dp(32.0f);
+        View view = new View(context);
+        view.setBackground(Theme.createSimpleSelectorRoundRectDrawable((int) this.radius, 0, Theme.getColor("chat_inReactionButtonTextSelected")));
+        addView(view, LayoutHelper.createFrame(-1, -1.0f));
         this.iconView = new ImageView(context);
         Drawable mutate = ContextCompat.getDrawable(context, NUM).mutate();
-        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("avatar_nameInMessageBlue"), PorterDuff.Mode.MULTIPLY));
+        this.drawable = mutate;
         this.iconView.setImageDrawable(mutate);
         addView(this.iconView, LayoutHelper.createFrameRelatively(24.0f, 24.0f, 8388627, 8.0f, 0.0f, 8.0f, 0.0f));
         BackupImageView backupImageView = new BackupImageView(context);
@@ -50,17 +57,18 @@ public class ReactionTabHolderView extends FrameLayout {
         addView(this.counterView, LayoutHelper.createFrameRelatively(-1.0f, -2.0f, 8388627, 40.0f, 0.0f, 8.0f, 0.0f));
         this.outlinePaint.setStyle(Paint.Style.STROKE);
         this.outlinePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
-        this.outlinePaint.setColor(Theme.getColor("avatar_nameInMessageBlue"));
-        this.bgPaint.setColor(Theme.getColor("avatar_nameInMessageBlue"));
-        this.bgPaint.setAlpha(16);
-        View view = new View(context);
-        view.setBackground(Theme.getSelectorDrawable(this.bgPaint.getColor(), false));
-        addView(view, LayoutHelper.createFrame(-1, -1.0f));
         setWillNotDraw(false);
+        setOutlineProgress(this.outlineProgress);
     }
 
     public void setOutlineProgress(float f) {
         this.outlineProgress = f;
+        int color = Theme.getColor("chat_inReactionButtonBackground");
+        int alphaComponent = ColorUtils.setAlphaComponent(Theme.getColor("chat_inReactionButtonBackground"), 16);
+        int blendARGB = ColorUtils.blendARGB(Theme.getColor("chat_inReactionButtonText"), Theme.getColor("chat_inReactionButtonTextSelected"), f);
+        this.bgPaint.setColor(ColorUtils.blendARGB(alphaComponent, color, f));
+        this.counterView.setTextColor(blendARGB);
+        this.drawable.setColorFilter(new PorterDuffColorFilter(blendARGB, PorterDuff.Mode.MULTIPLY));
         invalidate();
     }
 
@@ -85,24 +93,10 @@ public class ReactionTabHolderView extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void dispatchDraw(Canvas canvas) {
-        int save = canvas.save();
-        this.path.rewind();
         this.rect.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
-        Path path2 = this.path;
         RectF rectF = this.rect;
         float f = this.radius;
-        path2.addRoundRect(rectF, f, f, Path.Direction.CW);
-        canvas.clipPath(this.path);
-        RectF rectF2 = this.rect;
-        float f2 = this.radius;
-        canvas.drawRoundRect(rectF2, f2, f2, this.bgPaint);
+        canvas.drawRoundRect(rectF, f, f, this.bgPaint);
         super.dispatchDraw(canvas);
-        this.outlinePaint.setAlpha((int) (this.outlineProgress * 255.0f));
-        float strokeWidth = this.outlinePaint.getStrokeWidth();
-        this.rect.set(strokeWidth, strokeWidth, ((float) getWidth()) - strokeWidth, ((float) getHeight()) - strokeWidth);
-        RectF rectF3 = this.rect;
-        float f3 = this.radius;
-        canvas.drawRoundRect(rectF3, f3, f3, this.outlinePaint);
-        canvas.restoreToCount(save);
     }
 }

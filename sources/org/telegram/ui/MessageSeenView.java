@@ -227,7 +227,7 @@ public class MessageSeenView extends FrameLayout {
         if (this.peerIds.size() == 1 && this.users.get(0) != null) {
             this.titleView.setText(ContactsController.formatName(this.users.get(0).first_name, this.users.get(0).last_name));
         } else if (this.peerIds.size() == 0) {
-            this.titleView.setText(LocaleController.getString(LocaleController.getString("NobodyViewed", NUM)));
+            this.titleView.setText(LocaleController.getString("NobodyViewed", NUM));
         } else {
             this.titleView.setText(LocaleController.formatPluralString(this.isVoice ? "MessagePlayed" : "MessageSeen", this.peerIds.size()));
         }

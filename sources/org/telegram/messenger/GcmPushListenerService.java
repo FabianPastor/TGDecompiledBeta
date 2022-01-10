@@ -4597,7 +4597,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             goto L_0x1bed
         L_0x0abc:
             java.lang.String r1 = "YouHaveNewMessage"
-            r2 = 2131628797(0x7f0e12fd, float:1.8884897E38)
+            r2 = 2131628796(0x7f0e12fc, float:1.8884895E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ all -> 0x03ee }
             java.lang.String r2 = "SecretChatName"
             r3 = 2131627738(0x7f0e0eda, float:1.8882749E38)
@@ -5499,7 +5499,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         L_0x1166:
             r4 = r22
             java.lang.String r1 = "UserAcceptedToGroupPushWithGroup"
-            r2 = 2131628350(0x7f0e113e, float:1.888399E38)
+            r2 = 2131628349(0x7f0e113d, float:1.8883988E38)
             r5 = 2
             java.lang.Object[] r5 = new java.lang.Object[r5]     // Catch:{ all -> 0x03ee }
             r6 = 0
@@ -7161,7 +7161,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         }
     }
 
-    private String getReactedText(String str, String[] strArr) {
+    private String getReactedText(String str, Object[] objArr) {
         str.hashCode();
         char c = 65535;
         switch (str.hashCode()) {
@@ -7360,69 +7360,69 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         }
         switch (c) {
             case 0:
-                return LocaleController.formatString("PushChatReactContact", NUM, strArr);
+                return LocaleController.formatString("PushChatReactContact", NUM, objArr);
             case 1:
-                return LocaleController.formatString("PushReactGeoLocation", NUM, strArr);
+                return LocaleController.formatString("PushReactGeoLocation", NUM, objArr);
             case 2:
-                return LocaleController.formatString("PushChatReactNotext", NUM, strArr);
+                return LocaleController.formatString("PushChatReactNotext", NUM, objArr);
             case 3:
-                return LocaleController.formatString("PushReactNoText", NUM, strArr);
+                return LocaleController.formatString("PushReactNoText", NUM, objArr);
             case 4:
-                return LocaleController.formatString("PushChatReactInvoice", NUM, strArr);
+                return LocaleController.formatString("PushChatReactInvoice", NUM, objArr);
             case 5:
-                return LocaleController.formatString("PushReactContect", NUM, strArr);
+                return LocaleController.formatString("PushReactContect", NUM, objArr);
             case 6:
-                return LocaleController.formatString("PushChatReactSticker", NUM, strArr);
+                return LocaleController.formatString("PushChatReactSticker", NUM, objArr);
             case 7:
-                return LocaleController.formatString("PushReactGame", NUM, strArr);
+                return LocaleController.formatString("PushReactGame", NUM, objArr);
             case 8:
-                return LocaleController.formatString("PushReactPoll", NUM, strArr);
+                return LocaleController.formatString("PushReactPoll", NUM, objArr);
             case 9:
-                return LocaleController.formatString("PushReactQuiz", NUM, strArr);
+                return LocaleController.formatString("PushReactQuiz", NUM, objArr);
             case 10:
-                return LocaleController.formatString("PushReactText", NUM, strArr);
+                return LocaleController.formatString("PushReactText", NUM, objArr);
             case 11:
-                return LocaleController.formatString("PushReactInvoice", NUM, strArr);
+                return LocaleController.formatString("PushReactInvoice", NUM, objArr);
             case 12:
-                return LocaleController.formatString("PushChatReactDoc", NUM, strArr);
+                return LocaleController.formatString("PushChatReactDoc", NUM, objArr);
             case 13:
-                return LocaleController.formatString("PushChatReactGeo", NUM, strArr);
+                return LocaleController.formatString("PushChatReactGeo", NUM, objArr);
             case 14:
-                return LocaleController.formatString("PushChatReactGif", NUM, strArr);
+                return LocaleController.formatString("PushChatReactGif", NUM, objArr);
             case 15:
-                return LocaleController.formatString("PushReactSticker", NUM, strArr);
+                return LocaleController.formatString("PushReactSticker", NUM, objArr);
             case 16:
-                return LocaleController.formatString("PushChatReactAudio", NUM, strArr);
+                return LocaleController.formatString("PushChatReactAudio", NUM, objArr);
             case 17:
-                return LocaleController.formatString("PushChatReactPhoto", NUM, strArr);
+                return LocaleController.formatString("PushChatReactPhoto", NUM, objArr);
             case 18:
-                return LocaleController.formatString("PushChatReactRound", NUM, strArr);
+                return LocaleController.formatString("PushChatReactRound", NUM, objArr);
             case 19:
-                return LocaleController.formatString("PushChatReactVideo", NUM, strArr);
+                return LocaleController.formatString("PushChatReactVideo", NUM, objArr);
             case 20:
-                return LocaleController.formatString("PushChatReactGeoLive", NUM, strArr);
+                return LocaleController.formatString("PushChatReactGeoLive", NUM, objArr);
             case 21:
-                return LocaleController.formatString("PushReactAudio", NUM, strArr);
+                return LocaleController.formatString("PushReactAudio", NUM, objArr);
             case 22:
-                return LocaleController.formatString("PushReactPhoto", NUM, strArr);
+                return LocaleController.formatString("PushReactPhoto", NUM, objArr);
             case 23:
-                return LocaleController.formatString("PushReactRound", NUM, strArr);
+                return LocaleController.formatString("PushReactRound", NUM, objArr);
             case 24:
-                return LocaleController.formatString("PushReactVideo", NUM, strArr);
+                return LocaleController.formatString("PushReactVideo", NUM, objArr);
             case 25:
-                return LocaleController.formatString("PushReactDoc", NUM, strArr);
+                return LocaleController.formatString("PushReactDoc", NUM, objArr);
             case 26:
-                return LocaleController.formatString("PushReactGeo", NUM, strArr);
+                return LocaleController.formatString("PushReactGeo", NUM, objArr);
             case 27:
-                return LocaleController.formatString("PushReactGif", NUM, strArr);
+                return LocaleController.formatString("PushReactGif", NUM, objArr);
             case 28:
-                return LocaleController.formatString("PushChatReactGame", NUM, strArr);
+                return LocaleController.formatString("PushChatReactGame", NUM, objArr);
             case 29:
-                return LocaleController.formatString("PushChatReactPoll", NUM, strArr);
+                return LocaleController.formatString("PushChatReactPoll", NUM, objArr);
             case 30:
-                return LocaleController.formatString("PushChatReactQuiz", NUM, strArr);
+                return LocaleController.formatString("PushChatReactQuiz", NUM, objArr);
             case 31:
-                return LocaleController.formatString("PushChatReactText", NUM, strArr);
+                return LocaleController.formatString("PushChatReactText", NUM, objArr);
             default:
                 return null;
         }

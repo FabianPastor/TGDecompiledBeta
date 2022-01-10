@@ -8158,7 +8158,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.parentBlock = null;
             TLRPC$Document access$13100 = this.parentAdapter.getDocumentWithId(tLRPC$TL_pageBlockVideo.video_id);
             this.currentDocument = access$13100;
-            this.isGif = MessageObject.isGifDocument(access$13100);
+            this.isGif = MessageObject.isVideoDocument(access$13100) || MessageObject.isGifDocument(this.currentDocument);
             this.isFirst = z;
             this.channelCell.setVisibility(4);
             updateButtonState(false);

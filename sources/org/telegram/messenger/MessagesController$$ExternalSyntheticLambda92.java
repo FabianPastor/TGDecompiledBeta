@@ -1,23 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.Theme;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda92 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ Theme.ThemeAccent f$3;
-    public final /* synthetic */ Theme.ThemeInfo f$4;
+    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda92(MessagesController messagesController, String str, String str2, Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda92(MessagesController messagesController, ArrayList arrayList) {
         this.f$0 = messagesController;
-        this.f$1 = str;
-        this.f$2 = str2;
-        this.f$3 = themeAccent;
-        this.f$4 = themeInfo;
+        this.f$1 = arrayList;
     }
 
     public final void run() {
-        this.f$0.lambda$saveThemeToServer$88(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$generateJoinMessage$277(this.f$1);
     }
 }

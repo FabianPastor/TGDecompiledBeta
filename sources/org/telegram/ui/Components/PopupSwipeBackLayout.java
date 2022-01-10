@@ -177,90 +177,29 @@ public class PopupSwipeBackLayout extends FrameLayout {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:15:0x0064, code lost:
-        if (r5 > (r6 + ((r7 - ((float) r2.getMeasuredHeight())) * r9.transitionProgress))) goto L_0x0066;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean dispatchTouchEvent(android.view.MotionEvent r10) {
-        /*
-            r9 = this;
-            boolean r0 = r9.processTouchEvent(r10)
-            r1 = 1
-            if (r0 == 0) goto L_0x0008
-            return r1
-        L_0x0008:
-            int r0 = r9.currentForegroundIndex
-            if (r0 < 0) goto L_0x0087
-            int r2 = r9.getChildCount()
-            if (r0 < r2) goto L_0x0014
-            goto L_0x0087
-        L_0x0014:
-            r0 = 0
-            android.view.View r2 = r9.getChildAt(r0)
-            int r3 = r9.currentForegroundIndex
-            android.view.View r3 = r9.getChildAt(r3)
-            int r4 = r10.getActionMasked()
-            if (r4 != 0) goto L_0x006a
-            float r5 = r10.getX()
-            int r6 = r2.getMeasuredWidth()
-            float r6 = (float) r6
-            int r7 = r3.getMeasuredWidth()
-            int r8 = r2.getMeasuredWidth()
-            int r7 = r7 - r8
-            float r7 = (float) r7
-            float r8 = r9.transitionProgress
-            float r7 = r7 * r8
-            float r6 = r6 + r7
-            int r5 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r5 > 0) goto L_0x0066
-            float r5 = r10.getY()
-            int r6 = r2.getMeasuredHeight()
-            float r6 = (float) r6
-            float r7 = r9.overrideForegroundHeight
-            r8 = 0
-            int r8 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
-            if (r8 == 0) goto L_0x0052
-            goto L_0x0057
-        L_0x0052:
-            int r7 = r3.getMeasuredHeight()
-            float r7 = (float) r7
-        L_0x0057:
-            int r8 = r2.getMeasuredHeight()
-            float r8 = (float) r8
-            float r7 = r7 - r8
-            float r8 = r9.transitionProgress
-            float r7 = r7 * r8
-            float r6 = r6 + r7
-            int r5 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r5 <= 0) goto L_0x006a
-        L_0x0066:
-            r9.callOnClick()
-            return r1
-        L_0x006a:
-            float r5 = r9.transitionProgress
-            r6 = 1056964608(0x3var_, float:0.5)
-            int r5 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r5 <= 0) goto L_0x0073
-            r2 = r3
-        L_0x0073:
-            boolean r2 = r2.dispatchTouchEvent(r10)
-            if (r2 != 0) goto L_0x007c
-            if (r4 != 0) goto L_0x007c
-            return r1
-        L_0x007c:
-            if (r2 != 0) goto L_0x0086
-            boolean r10 = r9.onTouchEvent(r10)
-            if (r10 == 0) goto L_0x0085
-            goto L_0x0086
-        L_0x0085:
-            r1 = 0
-        L_0x0086:
-            return r1
-        L_0x0087:
-            boolean r10 = super.dispatchTouchEvent(r10)
-            return r10
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PopupSwipeBackLayout.dispatchTouchEvent(android.view.MotionEvent):boolean");
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        if (processTouchEvent(motionEvent)) {
+            return true;
+        }
+        int actionMasked = motionEvent.getActionMasked();
+        if (actionMasked != 0 || this.mRect.contains(motionEvent.getX(), motionEvent.getY())) {
+            int i = this.currentForegroundIndex;
+            if (i < 0 || i >= getChildCount()) {
+                return super.dispatchTouchEvent(motionEvent);
+            }
+            View childAt = getChildAt(0);
+            View childAt2 = getChildAt(this.currentForegroundIndex);
+            if (this.transitionProgress > 0.5f) {
+                childAt = childAt2;
+            }
+            boolean dispatchTouchEvent = childAt.dispatchTouchEvent(motionEvent);
+            if ((dispatchTouchEvent || actionMasked != 0) && !dispatchTouchEvent && !onTouchEvent(motionEvent)) {
+                return false;
+            }
+            return true;
+        }
+        callOnClick();
+        return true;
     }
 
     /* access modifiers changed from: protected */

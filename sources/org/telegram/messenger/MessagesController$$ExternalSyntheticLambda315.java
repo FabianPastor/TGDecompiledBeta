@@ -3,20 +3,17 @@ package org.telegram.messenger;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda315 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ Theme.ThemeInfo f$1;
-    public final /* synthetic */ Theme.ThemeAccent f$2;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda315(MessagesController messagesController, Theme.ThemeInfo themeInfo, Theme.ThemeAccent themeAccent) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda315(MessagesController messagesController, boolean z) {
         this.f$0 = messagesController;
-        this.f$1 = themeInfo;
-        this.f$2 = themeAccent;
+        this.f$1 = z;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$didReceivedNotification$23(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$updateTimerProc$116(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

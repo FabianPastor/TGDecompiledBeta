@@ -604,8 +604,13 @@ public class MediaDataController extends BaseController {
             ImageReceiver imageReceiver = new ImageReceiver();
             TLRPC$TL_availableReaction tLRPC$TL_availableReaction = (TLRPC$TL_availableReaction) list.get(i);
             imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.activate_animation), (String) null, (Drawable) null, (String) null, (Object) null, 1);
-            imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.appear_animation), (String) null, (Drawable) null, (String) null, (Object) null, 1);
-            new ImageReceiver().setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), (String) null, (Drawable) null, (String) null, (Object) null, 1);
+            ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver);
+            ImageReceiver imageReceiver2 = new ImageReceiver();
+            imageReceiver2.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.appear_animation), "60_60_nolimit", (Drawable) null, (String) null, (Object) null, 1);
+            ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver2);
+            ImageReceiver imageReceiver3 = new ImageReceiver();
+            imageReceiver3.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), (String) null, (Drawable) null, (String) null, (Object) null, 1);
+            ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver3);
         }
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.reactionsDidLoad, new Object[0]);
     }
@@ -7128,42 +7133,50 @@ public class MediaDataController extends BaseController {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.addStyleToText(org.telegram.ui.Components.TextStyleSpan, int, int, android.text.Spannable, boolean):void");
     }
 
-    public static void addTextStyleRuns(TLRPC$DraftMessage tLRPC$DraftMessage, Spannable spannable) {
-        addTextStyleRuns(tLRPC$DraftMessage.entities, tLRPC$DraftMessage.message, spannable);
+    public static void addTextStyleRuns(MessageObject messageObject, Spannable spannable) {
+        addTextStyleRuns(messageObject.messageOwner.entities, messageObject.messageText, spannable, -1);
     }
 
-    public static void addTextStyleRuns(MessageObject messageObject, Spannable spannable) {
-        addTextStyleRuns(messageObject.messageOwner.entities, messageObject.messageText, spannable);
+    public static void addTextStyleRuns(TLRPC$DraftMessage tLRPC$DraftMessage, Spannable spannable, int i) {
+        addTextStyleRuns(tLRPC$DraftMessage.entities, tLRPC$DraftMessage.message, spannable, i);
+    }
+
+    public static void addTextStyleRuns(MessageObject messageObject, Spannable spannable, int i) {
+        addTextStyleRuns(messageObject.messageOwner.entities, messageObject.messageText, spannable, i);
     }
 
     public static void addTextStyleRuns(ArrayList<TLRPC$MessageEntity> arrayList, CharSequence charSequence, Spannable spannable) {
+        addTextStyleRuns(arrayList, charSequence, spannable, -1);
+    }
+
+    public static void addTextStyleRuns(ArrayList<TLRPC$MessageEntity> arrayList, CharSequence charSequence, Spannable spannable, int i) {
         for (TextStyleSpan removeSpan : (TextStyleSpan[]) spannable.getSpans(0, spannable.length(), TextStyleSpan.class)) {
             spannable.removeSpan(removeSpan);
         }
-        Iterator<TextStyleSpan.TextStyleRun> it = getTextStyleRuns(arrayList, charSequence).iterator();
+        Iterator<TextStyleSpan.TextStyleRun> it = getTextStyleRuns(arrayList, charSequence, i).iterator();
         while (it.hasNext()) {
             TextStyleSpan.TextStyleRun next = it.next();
             addStyleToText(new TextStyleSpan(next), next.start, next.end, spannable, true);
         }
     }
 
-    public static ArrayList<TextStyleSpan.TextStyleRun> getTextStyleRuns(ArrayList<TLRPC$MessageEntity> arrayList, CharSequence charSequence) {
-        int i;
+    public static ArrayList<TextStyleSpan.TextStyleRun> getTextStyleRuns(ArrayList<TLRPC$MessageEntity> arrayList, CharSequence charSequence, int i) {
         int i2;
+        int i3;
         ArrayList<TextStyleSpan.TextStyleRun> arrayList2 = new ArrayList<>();
         ArrayList arrayList3 = new ArrayList(arrayList);
         Collections.sort(arrayList3, MediaDataController$$ExternalSyntheticLambda114.INSTANCE);
         int size = arrayList3.size();
-        for (int i3 = 0; i3 < size; i3++) {
-            TLRPC$MessageEntity tLRPC$MessageEntity = (TLRPC$MessageEntity) arrayList3.get(i3);
-            if (tLRPC$MessageEntity.length > 0 && (i = tLRPC$MessageEntity.offset) >= 0 && i < charSequence.length()) {
+        for (int i4 = 0; i4 < size; i4++) {
+            TLRPC$MessageEntity tLRPC$MessageEntity = (TLRPC$MessageEntity) arrayList3.get(i4);
+            if (tLRPC$MessageEntity.length > 0 && (i2 = tLRPC$MessageEntity.offset) >= 0 && i2 < charSequence.length()) {
                 if (tLRPC$MessageEntity.offset + tLRPC$MessageEntity.length > charSequence.length()) {
                     tLRPC$MessageEntity.length = charSequence.length() - tLRPC$MessageEntity.offset;
                 }
                 TextStyleSpan.TextStyleRun textStyleRun = new TextStyleSpan.TextStyleRun();
-                int i4 = tLRPC$MessageEntity.offset;
-                textStyleRun.start = i4;
-                textStyleRun.end = i4 + tLRPC$MessageEntity.length;
+                int i5 = tLRPC$MessageEntity.offset;
+                textStyleRun.start = i5;
+                textStyleRun.end = i5 + tLRPC$MessageEntity.length;
                 if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntitySpoiler) {
                     textStyleRun.flags = 256;
                 } else if (tLRPC$MessageEntity instanceof TLRPC$TL_messageEntityStrike) {
@@ -7188,63 +7201,64 @@ public class MediaDataController extends BaseController {
                     textStyleRun.flags = 128;
                     textStyleRun.urlEntity = tLRPC$MessageEntity;
                 }
+                textStyleRun.flags &= i;
                 int size2 = arrayList2.size();
-                int i5 = 0;
-                while (i2 < size2) {
-                    TextStyleSpan.TextStyleRun textStyleRun2 = arrayList2.get(i2);
-                    int i6 = textStyleRun.start;
-                    int i7 = textStyleRun2.start;
-                    if (i6 > i7) {
-                        int i8 = textStyleRun2.end;
-                        if (i6 < i8) {
-                            if (textStyleRun.end < i8) {
+                int i6 = 0;
+                while (i3 < size2) {
+                    TextStyleSpan.TextStyleRun textStyleRun2 = arrayList2.get(i3);
+                    int i7 = textStyleRun.start;
+                    int i8 = textStyleRun2.start;
+                    if (i7 > i8) {
+                        int i9 = textStyleRun2.end;
+                        if (i7 < i9) {
+                            if (textStyleRun.end < i9) {
                                 TextStyleSpan.TextStyleRun textStyleRun3 = new TextStyleSpan.TextStyleRun(textStyleRun);
                                 textStyleRun3.merge(textStyleRun2);
-                                int i9 = i2 + 1;
-                                arrayList2.add(i9, textStyleRun3);
+                                int i10 = i3 + 1;
+                                arrayList2.add(i10, textStyleRun3);
                                 TextStyleSpan.TextStyleRun textStyleRun4 = new TextStyleSpan.TextStyleRun(textStyleRun2);
                                 textStyleRun4.start = textStyleRun.end;
-                                i2 = i9 + 1;
+                                i3 = i10 + 1;
                                 size2 = size2 + 1 + 1;
-                                arrayList2.add(i2, textStyleRun4);
+                                arrayList2.add(i3, textStyleRun4);
                             } else {
                                 TextStyleSpan.TextStyleRun textStyleRun5 = new TextStyleSpan.TextStyleRun(textStyleRun);
                                 textStyleRun5.merge(textStyleRun2);
                                 textStyleRun5.end = textStyleRun2.end;
-                                i2++;
+                                i3++;
                                 size2++;
-                                arrayList2.add(i2, textStyleRun5);
+                                arrayList2.add(i3, textStyleRun5);
                             }
-                            int i10 = textStyleRun.start;
+                            int i11 = textStyleRun.start;
                             textStyleRun.start = textStyleRun2.end;
-                            textStyleRun2.end = i10;
+                            textStyleRun2.end = i11;
                         }
                     } else {
-                        int i11 = textStyleRun.end;
-                        if (i7 < i11) {
-                            int i12 = textStyleRun2.end;
-                            if (i11 == i12) {
+                        int i12 = textStyleRun.end;
+                        if (i8 < i12) {
+                            int i13 = textStyleRun2.end;
+                            if (i12 == i13) {
                                 textStyleRun2.merge(textStyleRun);
-                            } else if (i11 < i12) {
+                            } else if (i12 < i13) {
                                 TextStyleSpan.TextStyleRun textStyleRun6 = new TextStyleSpan.TextStyleRun(textStyleRun2);
                                 textStyleRun6.merge(textStyleRun);
                                 textStyleRun6.end = textStyleRun.end;
-                                i2++;
+                                i3++;
                                 size2++;
-                                arrayList2.add(i2, textStyleRun6);
+                                arrayList2.add(i3, textStyleRun6);
                                 textStyleRun2.start = textStyleRun.end;
                             } else {
                                 TextStyleSpan.TextStyleRun textStyleRun7 = new TextStyleSpan.TextStyleRun(textStyleRun);
                                 textStyleRun7.start = textStyleRun2.end;
-                                i2++;
+                                i3++;
                                 size2++;
-                                arrayList2.add(i2, textStyleRun7);
+                                arrayList2.add(i3, textStyleRun7);
                                 textStyleRun2.merge(textStyleRun);
                             }
-                            textStyleRun.end = i7;
+                            textStyleRun.end = i8;
                         }
                     }
-                    i5 = i2 + 1;
+                    i6 = i3 + 1;
                 }
                 if (textStyleRun.start < textStyleRun.end) {
                     arrayList2.add(textStyleRun);

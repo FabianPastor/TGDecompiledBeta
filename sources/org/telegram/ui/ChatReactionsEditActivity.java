@@ -183,24 +183,7 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$0(View view) {
-        boolean z = !this.enableReactionsCell.isChecked();
-        this.enableReactionsCell.setChecked(z);
-        int color = Theme.getColor(z ? "windowBackgroundChecked" : "windowBackgroundUnchecked");
-        if (z) {
-            this.enableReactionsCell.setBackgroundColorAnimated(z, color);
-        } else {
-            this.enableReactionsCell.setBackgroundColorAnimatedReverse(color);
-        }
-        if (z) {
-            Iterator<TLRPC$TL_availableReaction> it = this.availableReactions.iterator();
-            while (it.hasNext()) {
-                this.chatReactions.add(it.next().reaction);
-            }
-            this.listAdapter.notifyItemRangeInserted(1, this.availableReactions.size() + 1);
-            return;
-        }
-        this.chatReactions.clear();
-        this.listAdapter.notifyItemRangeRemoved(1, this.availableReactions.size() + 1);
+        setCheckedEnableReactionCell(!this.enableReactionsCell.isChecked());
     }
 
     /* access modifiers changed from: private */
@@ -213,8 +196,33 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
                 this.chatReactions.add(tLRPC$TL_availableReaction.reaction);
             } else {
                 this.chatReactions.remove(tLRPC$TL_availableReaction.reaction);
+                if (this.chatReactions.isEmpty()) {
+                    setCheckedEnableReactionCell(false);
+                }
             }
             availableReactionCell.setChecked(z, true);
+        }
+    }
+
+    private void setCheckedEnableReactionCell(boolean z) {
+        if (this.enableReactionsCell.isChecked() != z) {
+            this.enableReactionsCell.setChecked(z);
+            int color = Theme.getColor(z ? "windowBackgroundChecked" : "windowBackgroundUnchecked");
+            if (z) {
+                this.enableReactionsCell.setBackgroundColorAnimated(z, color);
+            } else {
+                this.enableReactionsCell.setBackgroundColorAnimatedReverse(color);
+            }
+            if (z) {
+                Iterator<TLRPC$TL_availableReaction> it = this.availableReactions.iterator();
+                while (it.hasNext()) {
+                    this.chatReactions.add(it.next().reaction);
+                }
+                this.listAdapter.notifyItemRangeInserted(1, this.availableReactions.size() + 1);
+                return;
+            }
+            this.chatReactions.clear();
+            this.listAdapter.notifyItemRangeRemoved(1, this.availableReactions.size() + 1);
         }
     }
 

@@ -6123,7 +6123,6 @@ public final class R {
         public static final int TranslateMessages = NUM;
         public static final int TranslateMessagesInfo1 = NUM;
         public static final int TranslateMessagesInfo2 = NUM;
-        public static final int TranslateMore = NUM;
         public static final int TranslationFailedAlert1 = NUM;
         public static final int TranslationFailedAlert2 = NUM;
         public static final int TurnPasswordOff = NUM;

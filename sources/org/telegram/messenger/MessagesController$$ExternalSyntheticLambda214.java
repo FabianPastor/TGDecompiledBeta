@@ -1,22 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesStorage;
-import org.telegram.tgnet.TLRPC$Dialog;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda214 implements MessagesStorage.IntCallback {
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda214 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$Dialog f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ long f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda214(MessagesController messagesController, TLRPC$Dialog tLRPC$Dialog, int i, long j) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda214(MessagesController messagesController) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$Dialog;
-        this.f$2 = i;
-        this.f$3 = j;
     }
 
-    public final void run(int i) {
-        this.f$0.lambda$updateInterfaceWithMessages$323(this.f$1, this.f$2, this.f$3, i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$didReceivedNotification$19(tLObject, tLRPC$TL_error);
     }
 }

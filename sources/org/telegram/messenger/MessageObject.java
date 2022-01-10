@@ -228,8 +228,8 @@ public class MessageObject {
     public TLRPC$MessageMedia previousMedia;
     public String previousMessage;
     public ArrayList<TLRPC$MessageEntity> previousMessageEntities;
+    public boolean reactionsChanged;
     public long reactionsLastCheckTime;
-    public boolean reactionsVisibleOnScreen;
     public MessageObject replyMessageObject;
     public boolean resendAsIs;
     public boolean scheduled;
@@ -2575,7 +2575,7 @@ public class MessageObject {
         L_0x04eb:
             r24 = r14
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
-            r5 = 2131628386(0x7f0e1162, float:1.8884063E38)
+            r5 = 2131628385(0x7f0e1161, float:1.8884061E38)
             java.lang.String r7 = "UserRestrictionsUntilForever"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r4.<init>(r5)
@@ -5058,7 +5058,7 @@ public class MessageObject {
             org.telegram.messenger.MessageObject r1 = r8.replyMessageObject
             r2 = r0
             android.text.Spannable r2 = (android.text.Spannable) r2
-            org.telegram.messenger.MediaDataController.addTextStyleRuns((org.telegram.messenger.MessageObject) r1, (android.text.Spannable) r2)
+            org.telegram.messenger.MediaDataController.addTextStyleRuns(r1, r2)
             r1 = 2131624161(0x7f0e00e1, float:1.8875494E38)
             java.lang.String r2 = "ActionPinnedText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
@@ -6519,7 +6519,7 @@ public class MessageObject {
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
             if (r2 == 0) goto L_0x07ae
-            r2 = 2131628874(0x7f0e134a, float:1.8885053E38)
+            r2 = 2131628873(0x7f0e1349, float:1.888505E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -6685,7 +6685,7 @@ public class MessageObject {
         L_0x08eb:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
             if (r11 == 0) goto L_0x08ff
-            r0 = 2131628796(0x7f0e12fc, float:1.8884895E38)
+            r0 = 2131628795(0x7f0e12fb, float:1.8884893E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"
@@ -7151,7 +7151,7 @@ public class MessageObject {
             r6.messageText = r0
             goto L_0x0f0f
         L_0x0cc6:
-            r0 = 2131628348(0x7f0e113c, float:1.8883986E38)
+            r0 = 2131628347(0x7f0e113b, float:1.8883984E38)
             java.lang.String r1 = "UserAcceptedToGroupAction"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
@@ -7303,7 +7303,7 @@ public class MessageObject {
         L_0x0e06:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaUnsupported
             if (r0 == 0) goto L_0x0e17
-            r0 = 2131628305(0x7f0e1111, float:1.8883899E38)
+            r0 = 2131628304(0x7f0e1110, float:1.8883897E38)
             java.lang.String r1 = "UnsupportedMedia"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -12638,6 +12638,7 @@ public class MessageObject {
                 tLRPC$TL_messageUserReaction.user_id = UserConfig.getInstance(this.currentAccount).getClientUserId();
                 tLRPC$TL_messageUserReaction.reaction = str;
             }
+            this.reactionsChanged = true;
             return true;
         }
         tLRPC$TL_reactionCount.chosen = false;
@@ -12656,6 +12657,7 @@ public class MessageObject {
                 i5++;
             }
         }
+        this.reactionsChanged = true;
         return false;
     }
 }

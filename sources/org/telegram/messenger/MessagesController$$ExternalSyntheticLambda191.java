@@ -1,19 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.Theme;
-
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda191 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ Theme.ThemeInfo f$1;
-    public final /* synthetic */ Theme.ThemeAccent f$2;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda191(MessagesController messagesController, Theme.ThemeInfo themeInfo, Theme.ThemeAccent themeAccent) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda191(MessagesController messagesController, boolean z) {
         this.f$0 = messagesController;
-        this.f$1 = themeInfo;
-        this.f$2 = themeAccent;
+        this.f$1 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$26(this.f$1, this.f$2);
+        this.f$0.lambda$checkPromoInfo$124(this.f$1);
     }
 }

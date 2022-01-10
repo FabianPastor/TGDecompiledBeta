@@ -21,6 +21,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda157 impl
     }
 
     public final void run(String str) {
-        ChatActivity.lambda$createMenu$130(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, str);
+        ChatActivity.lambda$createMenu$131(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, str);
     }
 }

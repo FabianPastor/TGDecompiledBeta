@@ -20,6 +20,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -1507,7 +1508,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 public void onAnimationEnd(Animator animator) {
                     if (PagerIndicatorView.this.isIndicatorVisible) {
                         if (ProfileActivity.this.searchItem != null) {
-                            ProfileActivity.this.searchItem.setVisibility(8);
+                            ProfileActivity.this.searchItem.setClickable(false);
                         }
                         if (ProfileActivity.this.editItemVisible) {
                             ProfileActivity.this.editItem.setVisibility(8);
@@ -1526,7 +1527,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                 public void onAnimationStart(Animator animator) {
                     if (ProfileActivity.this.searchItem != null && !this.val$expanded) {
-                        ProfileActivity.this.searchItem.setVisibility(0);
+                        ProfileActivity.this.searchItem.setClickable(true);
                     }
                     if (ProfileActivity.this.editItemVisible) {
                         ProfileActivity.this.editItem.setVisibility(0);
@@ -2134,132 +2135,136 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             long r1 = r13.userId
             org.telegram.messenger.UserConfig r3 = r34.getUserConfig()
             long r3 = r3.clientUserId
-            int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r5 != 0) goto L_0x00da
-            org.telegram.messenger.UserConfig r1 = r34.getUserConfig()
-            org.telegram.tgnet.TLRPC$User r1 = r1.getCurrentUser()
-            java.lang.String r1 = r1.username
-            boolean r1 = android.text.TextUtils.isEmpty(r1)
-            if (r1 != 0) goto L_0x00da
+            r5 = 8
+            int r6 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
+            if (r6 != 0) goto L_0x00db
             r1 = 37
             r2 = 2131165831(0x7var_, float:1.794589E38)
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r3 = r34.getResourceProvider()
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem(r1, r2, r3)
             r13.qrItem = r1
+            boolean r2 = r34.isQrNeedVisible()
+            if (r2 == 0) goto L_0x00c8
+            r2 = 0
+            goto L_0x00ca
+        L_0x00c8:
+            r2 = 8
+        L_0x00ca:
+            r1.setVisibility(r2)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r13.qrItem
             r2 = 2131624453(0x7f0e0205, float:1.8876086E38)
             java.lang.String r3 = "AuthAnotherClientScan"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
-        L_0x00da:
+        L_0x00db:
             org.telegram.ui.Components.ImageUpdater r1 = r13.imageUpdater
-            r2 = 8
-            if (r1 == 0) goto L_0x011f
+            if (r1 == 0) goto L_0x011e
             r1 = 32
-            r3 = 2131165497(0x7var_, float:1.7945213E38)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r3)
+            r2 = 2131165497(0x7var_, float:1.7945213E38)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setIsSearchField(r14)
-            org.telegram.ui.ProfileActivity$6 r3 = new org.telegram.ui.ProfileActivity$6
-            r3.<init>()
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setActionBarMenuItemSearchListener(r3)
+            org.telegram.ui.ProfileActivity$6 r2 = new org.telegram.ui.ProfileActivity$6
+            r2.<init>()
+            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setActionBarMenuItemSearchListener(r2)
             r13.searchItem = r1
-            java.lang.String r3 = "SearchInSettings"
-            r4 = 2131627708(0x7f0e0ebc, float:1.8882688E38)
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r3, r4)
-            r1.setContentDescription(r5)
+            java.lang.String r2 = "SearchInSettings"
+            r3 = 2131627708(0x7f0e0ebc, float:1.8882688E38)
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            r1.setContentDescription(r4)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r13.searchItem
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
-            r1.setSearchFieldHint(r3)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
+            r1.setSearchFieldHint(r2)
             org.telegram.ui.Components.SharedMediaLayout r1 = r13.sharedMediaLayout
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.getSearchItem()
-            r1.setVisibility(r2)
+            r1.setVisibility(r5)
             boolean r1 = r13.expandPhoto
-            if (r1 == 0) goto L_0x011f
+            if (r1 == 0) goto L_0x011e
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r13.searchItem
-            r1.setVisibility(r2)
-        L_0x011f:
+            r1.setVisibility(r5)
+        L_0x011e:
             r1 = 16
-            r3 = 2131166034(0x7var_, float:1.7946302E38)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r3)
+            r2 = 2131166034(0x7var_, float:1.7946302E38)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r2)
             r13.videoCallItem = r1
-            r3 = 2131628427(0x7f0e118b, float:1.8884146E38)
-            java.lang.String r4 = "VideoCall"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r1.setContentDescription(r3)
-            long r3 = r13.chatId
-            r1 = 15
-            int r5 = (r3 > r17 ? 1 : (r3 == r17 ? 0 : -1))
-            if (r5 == 0) goto L_0x016d
-            r3 = 2131165904(0x7var_d0, float:1.7946038E38)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r3)
+            r2 = 2131628426(0x7f0e118a, float:1.8884144E38)
+            java.lang.String r3 = "VideoCall"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setContentDescription(r2)
+            long r1 = r13.chatId
+            r3 = 15
+            int r4 = (r1 > r17 ? 1 : (r1 == r17 ? 0 : -1))
+            if (r4 == 0) goto L_0x016c
+            r1 = 2131165904(0x7var_d0, float:1.7946038E38)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r3, (int) r1)
             r13.callItem = r1
             org.telegram.tgnet.TLRPC$Chat r1 = r13.currentChat
             boolean r1 = org.telegram.messenger.ChatObject.isChannelOrGiga(r1)
-            if (r1 == 0) goto L_0x015e
+            if (r1 == 0) goto L_0x015d
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r13.callItem
-            r3 = 2131628537(0x7f0e11f9, float:1.888437E38)
-            java.lang.String r4 = "VoipChannelVoiceChat"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r1.setContentDescription(r3)
-            goto L_0x0182
-        L_0x015e:
+            r2 = 2131628536(0x7f0e11f8, float:1.8884367E38)
+            java.lang.String r3 = "VoipChannelVoiceChat"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setContentDescription(r2)
+            goto L_0x0181
+        L_0x015d:
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r13.callItem
-            r3 = 2131628663(0x7f0e1277, float:1.8884625E38)
-            java.lang.String r4 = "VoipGroupVoiceChat"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r1.setContentDescription(r3)
-            goto L_0x0182
-        L_0x016d:
-            r3 = 2131165507(0x7var_, float:1.7945233E38)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r3)
+            r2 = 2131628662(0x7f0e1276, float:1.8884623E38)
+            java.lang.String r3 = "VoipGroupVoiceChat"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setContentDescription(r2)
+            goto L_0x0181
+        L_0x016c:
+            r1 = 2131165507(0x7var_, float:1.7945233E38)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r3, (int) r1)
             r13.callItem = r1
-            r3 = 2131624656(0x7f0e02d0, float:1.8876498E38)
-            java.lang.String r4 = "Call"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r1.setContentDescription(r3)
-        L_0x0182:
+            r2 = 2131624656(0x7f0e02d0, float:1.8876498E38)
+            java.lang.String r3 = "Call"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setContentDescription(r2)
+        L_0x0181:
             r1 = 12
-            r3 = 2131165477(0x7var_, float:1.7945172E38)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r3)
+            r2 = 2131165477(0x7var_, float:1.7945172E38)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r2)
             r13.editItem = r1
-            r3 = 2131625335(0x7f0e0577, float:1.8877875E38)
-            java.lang.String r4 = "Edit"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r1.setContentDescription(r3)
+            r2 = 2131625335(0x7f0e0577, float:1.8877875E38)
+            java.lang.String r3 = "Edit"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setContentDescription(r2)
             r1 = 10
-            r3 = 2131165494(0x7var_, float:1.7945207E38)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r1, (int) r3)
+            r2 = 2131165494(0x7var_, float:1.7945207E38)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r1, (int) r2)
             r13.otherItem = r0
             r1 = 2131623987(0x7f0e0033, float:1.887514E38)
-            java.lang.String r3 = "AccDescrMoreOptions"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
+            java.lang.String r2 = "AccDescrMoreOptions"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
-            if (r0 == 0) goto L_0x01da
+            if (r0 == 0) goto L_0x01d9
             org.telegram.ui.Components.ImageUpdater r0 = r13.imageUpdater
-            if (r0 == 0) goto L_0x01da
+            if (r0 == 0) goto L_0x01d9
             androidx.recyclerview.widget.LinearLayoutManager r0 = r13.layoutManager
             int r0 = r0.findFirstVisibleItemPosition()
             androidx.recyclerview.widget.LinearLayoutManager r1 = r13.layoutManager
             android.view.View r1 = r1.findViewByPosition(r0)
-            if (r1 == 0) goto L_0x01cf
+            if (r1 == 0) goto L_0x01ce
             r1.getTop()
             org.telegram.ui.Components.RecyclerListView r1 = r13.listView
             r1.getPaddingTop()
-            goto L_0x01d0
-        L_0x01cf:
+            goto L_0x01cf
+        L_0x01ce:
             r0 = -1
-        L_0x01d0:
+        L_0x01cf:
             org.telegram.ui.Components.RLottieImageView r1 = r13.writeButton
             java.lang.Object r8 = r1.getTag()
             r10 = r0
             r11 = r8
             r0 = 0
-            goto L_0x01dd
-        L_0x01da:
+            goto L_0x01dc
+        L_0x01d9:
             r0 = 0
             r10 = -1
             r11 = 0
-        L_0x01dd:
+        L_0x01dc:
             r13.createActionBarMenu(r0)
             org.telegram.ui.ProfileActivity$ListAdapter r0 = new org.telegram.ui.ProfileActivity$ListAdapter
             r12 = r35
@@ -2286,8 +2291,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0.setVerticalScrollBarEnabled(r1)
             org.telegram.ui.ProfileActivity$9 r0 = new org.telegram.ui.ProfileActivity$9
             r0.<init>()
-            org.telegram.ui.Components.RecyclerListView r3 = r13.listView
-            r3.setItemAnimator(r0)
+            org.telegram.ui.Components.RecyclerListView r2 = r13.listView
+            r2.setItemAnimator(r0)
             r0.setSupportsChangeAnimations(r1)
             r0.setDelayAnimations(r1)
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
@@ -2299,8 +2304,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r13.layoutManager = r0
             r0.setOrientation(r14)
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
-            androidx.recyclerview.widget.LinearLayoutManager r3 = r13.layoutManager
-            r0.setLayoutManager(r3)
+            androidx.recyclerview.widget.LinearLayoutManager r2 = r13.layoutManager
+            r0.setLayoutManager(r2)
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
             r0.setGlowColor(r1)
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
@@ -2308,111 +2313,111 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0.setAdapter(r1)
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
             r1 = 51
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r1)
-            r15.addView(r0, r3)
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r1)
+            r15.addView(r0, r2)
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
-            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda33 r3 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda33
-            r4 = r24
-            r3.<init>(r13, r4)
-            r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListenerExtended) r3)
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda33 r2 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda33
+            r3 = r24
+            r2.<init>(r13, r3)
+            r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListenerExtended) r2)
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
-            org.telegram.ui.ProfileActivity$11 r3 = new org.telegram.ui.ProfileActivity$11
-            r3.<init>()
-            r0.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r3)
+            org.telegram.ui.ProfileActivity$11 r2 = new org.telegram.ui.ProfileActivity$11
+            r2.<init>()
+            r0.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r13.searchItem
-            java.lang.String r3 = "avatar_backgroundActionBarBlue"
-            if (r0 == 0) goto L_0x02fe
+            java.lang.String r2 = "avatar_backgroundActionBarBlue"
+            if (r0 == 0) goto L_0x02fd
             org.telegram.ui.Components.RecyclerListView r0 = new org.telegram.ui.Components.RecyclerListView
             r0.<init>(r12)
             r13.searchListView = r0
-            r4 = 0
-            r0.setVerticalScrollBarEnabled(r4)
+            r3 = 0
+            r0.setVerticalScrollBarEnabled(r3)
             org.telegram.ui.Components.RecyclerListView r0 = r13.searchListView
-            androidx.recyclerview.widget.LinearLayoutManager r5 = new androidx.recyclerview.widget.LinearLayoutManager
-            r5.<init>(r12, r14, r4)
-            r0.setLayoutManager(r5)
+            androidx.recyclerview.widget.LinearLayoutManager r4 = new androidx.recyclerview.widget.LinearLayoutManager
+            r4.<init>(r12, r14, r3)
+            r0.setLayoutManager(r4)
             org.telegram.ui.Components.RecyclerListView r0 = r13.searchListView
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r0.setGlowColor(r4)
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r0.setGlowColor(r3)
             org.telegram.ui.Components.RecyclerListView r0 = r13.searchListView
-            org.telegram.ui.ProfileActivity$SearchAdapter r4 = r13.searchAdapter
-            r0.setAdapter(r4)
+            org.telegram.ui.ProfileActivity$SearchAdapter r3 = r13.searchAdapter
+            r0.setAdapter(r3)
             org.telegram.ui.Components.RecyclerListView r0 = r13.searchListView
-            r4 = 0
-            r0.setItemAnimator(r4)
+            r3 = 0
+            r0.setItemAnimator(r3)
             org.telegram.ui.Components.RecyclerListView r0 = r13.searchListView
-            r0.setVisibility(r2)
+            r0.setVisibility(r5)
             org.telegram.ui.Components.RecyclerListView r0 = r13.searchListView
-            r0.setLayoutAnimation(r4)
+            r0.setLayoutAnimation(r3)
             org.telegram.ui.Components.RecyclerListView r0 = r13.searchListView
-            java.lang.String r5 = "windowBackgroundWhite"
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-            r0.setBackgroundColor(r5)
+            java.lang.String r4 = "windowBackgroundWhite"
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            r0.setBackgroundColor(r4)
             org.telegram.ui.Components.RecyclerListView r0 = r13.searchListView
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r1)
-            r15.addView(r0, r5)
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r1)
+            r15.addView(r0, r4)
             org.telegram.ui.Components.RecyclerListView r0 = r13.searchListView
-            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda32 r5 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda32
-            r5.<init>(r13)
-            r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r5)
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda32 r4 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda32
+            r4.<init>(r13)
+            r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r4)
             org.telegram.ui.Components.RecyclerListView r0 = r13.searchListView
-            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda34 r5 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda34
-            r5.<init>(r13)
-            r0.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r5)
+            org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda34 r4 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda34
+            r4.<init>(r13)
+            r0.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r4)
             org.telegram.ui.Components.RecyclerListView r0 = r13.searchListView
-            org.telegram.ui.ProfileActivity$12 r5 = new org.telegram.ui.ProfileActivity$12
-            r5.<init>()
-            r0.setOnScrollListener(r5)
+            org.telegram.ui.ProfileActivity$12 r4 = new org.telegram.ui.ProfileActivity$12
+            r4.<init>()
+            r0.setOnScrollListener(r4)
             org.telegram.ui.Components.RecyclerListView r0 = r13.searchListView
             r0.setAnimateEmptyView(r14, r14)
             org.telegram.ui.Components.StickerEmptyView r0 = new org.telegram.ui.Components.StickerEmptyView
-            r0.<init>(r12, r4, r14)
+            r0.<init>(r12, r3, r14)
             r13.emptyView = r0
             r0.setAnimateLayoutChange(r14)
             org.telegram.ui.Components.StickerEmptyView r0 = r13.emptyView
             android.widget.TextView r0 = r0.subtitle
-            r0.setVisibility(r2)
+            r0.setVisibility(r5)
             org.telegram.ui.Components.StickerEmptyView r0 = r13.emptyView
-            r0.setVisibility(r2)
+            r0.setVisibility(r5)
             org.telegram.ui.Components.StickerEmptyView r0 = r13.emptyView
             r15.addView(r0)
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r13.searchAdapter
             r0.loadFaqWebPage()
-        L_0x02fe:
-            long r4 = r13.banFromGroup
+        L_0x02fd:
+            long r3 = r13.banFromGroup
             java.lang.String r19 = "fonts/rmedium.ttf"
             r20 = 1111490560(0x42400000, float:48.0)
-            int r0 = (r4 > r17 ? 1 : (r4 == r17 ? 0 : -1))
-            if (r0 == 0) goto L_0x03af
+            int r0 = (r3 > r17 ? 1 : (r3 == r17 ? 0 : -1))
+            if (r0 == 0) goto L_0x03ae
             org.telegram.messenger.MessagesController r0 = r34.getMessagesController()
-            long r4 = r13.banFromGroup
-            java.lang.Long r2 = java.lang.Long.valueOf(r4)
-            org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r2)
-            org.telegram.tgnet.TLRPC$ChannelParticipant r2 = r13.currentChannelParticipant
-            if (r2 != 0) goto L_0x033d
-            org.telegram.tgnet.TLRPC$TL_channels_getParticipant r2 = new org.telegram.tgnet.TLRPC$TL_channels_getParticipant
-            r2.<init>()
+            long r3 = r13.banFromGroup
+            java.lang.Long r3 = java.lang.Long.valueOf(r3)
+            org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r3)
+            org.telegram.tgnet.TLRPC$ChannelParticipant r3 = r13.currentChannelParticipant
+            if (r3 != 0) goto L_0x033c
+            org.telegram.tgnet.TLRPC$TL_channels_getParticipant r3 = new org.telegram.tgnet.TLRPC$TL_channels_getParticipant
+            r3.<init>()
             org.telegram.tgnet.TLRPC$InputChannel r4 = org.telegram.messenger.MessagesController.getInputChannel((org.telegram.tgnet.TLRPC$Chat) r0)
-            r2.channel = r4
+            r3.channel = r4
             org.telegram.messenger.MessagesController r4 = r34.getMessagesController()
             long r5 = r13.userId
             org.telegram.tgnet.TLRPC$InputPeer r4 = r4.getInputPeer((long) r5)
-            r2.participant = r4
+            r3.participant = r4
             org.telegram.tgnet.ConnectionsManager r4 = r34.getConnectionsManager()
             org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda28 r5 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda28
             r5.<init>(r13)
-            r4.sendRequest(r2, r5)
-        L_0x033d:
-            org.telegram.ui.ProfileActivity$13 r2 = new org.telegram.ui.ProfileActivity$13
-            r2.<init>(r13, r12)
+            r4.sendRequest(r3, r5)
+        L_0x033c:
+            org.telegram.ui.ProfileActivity$13 r3 = new org.telegram.ui.ProfileActivity$13
+            r3.<init>(r13, r12)
             r4 = 0
-            r2.setWillNotDraw(r4)
+            r3.setWillNotDraw(r4)
             r4 = 83
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r1, r4)
-            r15.addView(r2, r4)
+            r15.addView(r3, r4)
             org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda13 r4 = new org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda13
             r4.<init>(r13, r0)
-            r2.setOnClickListener(r4)
+            r3.setOnClickListener(r4)
             android.widget.TextView r0 = new android.widget.TextView
             r0.<init>(r12)
             java.lang.String r4 = "windowBackgroundWhiteRedText"
@@ -2436,26 +2441,26 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r32 = 0
             r33 = 0
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r27, r28, r29, r30, r31, r32, r33)
-            r2.addView(r0, r4)
+            r3.addView(r0, r4)
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r16)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r20)
             r5 = 0
-            r0.setPadding(r5, r2, r5, r4)
+            r0.setPadding(r5, r3, r5, r4)
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r20)
-            r0.setBottomGlowOffset(r2)
-            goto L_0x03b9
-        L_0x03af:
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r20)
+            r0.setBottomGlowOffset(r3)
+            goto L_0x03b8
+        L_0x03ae:
             r5 = 0
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r16)
-            r0.setPadding(r5, r2, r5, r5)
-        L_0x03b9:
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            r0.setPadding(r5, r3, r5, r5)
+        L_0x03b8:
             org.telegram.ui.ProfileActivity$TopView r0 = new org.telegram.ui.ProfileActivity$TopView
             r0.<init>(r12)
             r13.topView = r0
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r0.setBackgroundColor(r2)
             org.telegram.ui.ProfileActivity$TopView r0 = r13.topView
             r15.addView(r0)
@@ -2560,21 +2565,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0 = 0
             r13.showAvatarProgress(r0, r0)
             org.telegram.ui.Components.ProfileGalleryView r0 = r13.avatarsViewPager
-            if (r0 == 0) goto L_0x04cf
+            if (r0 == 0) goto L_0x04ce
             r0.onDestroy()
-        L_0x04cf:
+        L_0x04ce:
             org.telegram.ui.ProfileActivity$OverlaysView r0 = new org.telegram.ui.ProfileActivity$OverlaysView
             r0.<init>(r12)
             r13.overlaysView = r0
             org.telegram.ui.Components.ProfileGalleryView r5 = new org.telegram.ui.Components.ProfileGalleryView
             long r0 = r13.userId
             int r2 = (r0 > r17 ? 1 : (r0 == r17 ? 0 : -1))
-            if (r2 == 0) goto L_0x04df
-            goto L_0x04e2
-        L_0x04df:
+            if (r2 == 0) goto L_0x04de
+            goto L_0x04e1
+        L_0x04de:
             long r0 = r13.chatId
             long r0 = -r0
-        L_0x04e2:
+        L_0x04e1:
             r2 = r0
             org.telegram.ui.ActionBar.ActionBar r4 = r13.actionBar
             org.telegram.ui.Components.RecyclerListView r1 = r13.listView
@@ -2614,36 +2619,36 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBar r0 = r13.actionBar
             r15.addView(r0)
             r0 = 0
-        L_0x0537:
+        L_0x0536:
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r13.nameTextView
             int r2 = r1.length
             r3 = 2
-            if (r0 >= r2) goto L_0x05f9
+            if (r0 >= r2) goto L_0x05f8
             int r2 = r13.playProfileAnimation
-            if (r2 != 0) goto L_0x0547
-            if (r0 != 0) goto L_0x0547
+            if (r2 != 0) goto L_0x0546
+            if (r0 != 0) goto L_0x0546
             r1 = 1
             r2 = 0
-            goto L_0x05f5
-        L_0x0547:
+            goto L_0x05f4
+        L_0x0546:
             org.telegram.ui.ActionBar.SimpleTextView r2 = new org.telegram.ui.ActionBar.SimpleTextView
             r2.<init>(r12)
             r1[r0] = r2
             r1 = 1
-            if (r0 != r1) goto L_0x055f
+            if (r0 != r1) goto L_0x055e
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r13.nameTextView
             r1 = r1[r0]
             java.lang.String r2 = "profile_title"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r1.setTextColor(r2)
-            goto L_0x056c
-        L_0x055f:
+            goto L_0x056b
+        L_0x055e:
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r13.nameTextView
             r1 = r1[r0]
             java.lang.String r2 = "actionBarDefaultTitle"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r1.setTextColor(r2)
-        L_0x056c:
+        L_0x056b:
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r13.nameTextView
             r1 = r1[r0]
             r2 = 18
@@ -2671,39 +2676,39 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r1.setPivotY(r2)
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r13.nameTextView
             r1 = r1[r0]
-            if (r0 != 0) goto L_0x05ae
+            if (r0 != 0) goto L_0x05ad
             r4 = 0
-            goto L_0x05b0
-        L_0x05ae:
+            goto L_0x05af
+        L_0x05ad:
             r4 = 1065353216(0x3var_, float:1.0)
-        L_0x05b0:
+        L_0x05af:
             r1.setAlpha(r4)
             r1 = 1
-            if (r0 != r1) goto L_0x05c4
+            if (r0 != r1) goto L_0x05c3
             org.telegram.ui.ActionBar.SimpleTextView[] r4 = r13.nameTextView
             r4 = r4[r0]
             r4.setScrollNonFitText(r1)
             org.telegram.ui.ActionBar.SimpleTextView[] r4 = r13.nameTextView
             r4 = r4[r0]
             r4.setImportantForAccessibility(r3)
-        L_0x05c4:
-            if (r0 != 0) goto L_0x05d8
+        L_0x05c3:
+            if (r0 != 0) goto L_0x05d7
             r3 = 48
             boolean r4 = r13.callItemVisible
-            if (r4 == 0) goto L_0x05d5
+            if (r4 == 0) goto L_0x05d4
             long r4 = r13.userId
             int r6 = (r4 > r17 ? 1 : (r4 == r17 ? 0 : -1))
-            if (r6 == 0) goto L_0x05d5
+            if (r6 == 0) goto L_0x05d4
             r4 = 48
-            goto L_0x05d6
-        L_0x05d5:
+            goto L_0x05d5
+        L_0x05d4:
             r4 = 0
-        L_0x05d6:
+        L_0x05d5:
             int r3 = r3 + r4
-            goto L_0x05d9
-        L_0x05d8:
+            goto L_0x05d8
+        L_0x05d7:
             r3 = 0
-        L_0x05d9:
+        L_0x05d8:
             android.widget.FrameLayout r4 = r13.avatarContainer2
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r13.nameTextView
             r5 = r5[r0]
@@ -2717,16 +2722,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r28 = r3
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r23, r24, r25, r26, r27, r28, r29)
             r4.addView(r5, r3)
-        L_0x05f5:
+        L_0x05f4:
             int r0 = r0 + 1
-            goto L_0x0537
-        L_0x05f9:
+            goto L_0x0536
+        L_0x05f8:
             r2 = 0
             r0 = 0
-        L_0x05fb:
+        L_0x05fa:
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r13.onlineTextView
             int r4 = r1.length
-            if (r0 >= r4) goto L_0x0663
+            if (r0 >= r4) goto L_0x0662
             org.telegram.ui.ActionBar.SimpleTextView r4 = new org.telegram.ui.ActionBar.SimpleTextView
             r4.<init>(r12)
             r1[r0] = r4
@@ -2745,21 +2750,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r1.setGravity(r4)
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r13.onlineTextView
             r1 = r1[r0]
-            if (r0 == 0) goto L_0x0631
-            if (r0 != r3) goto L_0x062e
-            goto L_0x0631
-        L_0x062e:
+            if (r0 == 0) goto L_0x0630
+            if (r0 != r3) goto L_0x062d
+            goto L_0x0630
+        L_0x062d:
             r4 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0632
-        L_0x0631:
+            goto L_0x0631
+        L_0x0630:
             r4 = 0
-        L_0x0632:
+        L_0x0631:
             r1.setAlpha(r4)
-            if (r0 <= 0) goto L_0x063e
+            if (r0 <= 0) goto L_0x063d
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r13.onlineTextView
             r1 = r1[r0]
             r1.setImportantForAccessibility(r3)
-        L_0x063e:
+        L_0x063d:
             android.widget.FrameLayout r1 = r13.avatarContainer2
             org.telegram.ui.ActionBar.SimpleTextView[] r4 = r13.onlineTextView
             r4 = r4[r0]
@@ -2768,19 +2773,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r25 = 51
             r26 = 1122762752(0x42eCLASSNAME, float:118.0)
             r27 = 0
-            if (r0 != 0) goto L_0x0653
+            if (r0 != 0) goto L_0x0652
             r28 = 1111490560(0x42400000, float:48.0)
-            goto L_0x0657
-        L_0x0653:
+            goto L_0x0656
+        L_0x0652:
             r5 = 1090519040(0x41000000, float:8.0)
             r28 = 1090519040(0x41000000, float:8.0)
-        L_0x0657:
+        L_0x0656:
             r29 = 0
             android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r23, r24, r25, r26, r27, r28, r29)
             r1.addView(r4, r5)
             int r0 = r0 + 1
-            goto L_0x05fb
-        L_0x0663:
+            goto L_0x05fa
+        L_0x0662:
             org.telegram.ui.ProfileActivity$18 r0 = new org.telegram.ui.ProfileActivity$18
             r0.<init>(r13, r12, r12)
             r13.mediaCounterTextView = r0
@@ -2823,12 +2828,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r1.setIconSize(r0, r5)
             org.telegram.ui.Components.RLottieImageView r0 = r13.writeButton
-            r0.setBackgroundDrawable(r1)
+            r0.setBackground(r1)
             long r0 = r13.userId
             int r5 = (r0 > r17 ? 1 : (r0 == r17 ? 0 : -1))
-            if (r5 == 0) goto L_0x0738
+            if (r5 == 0) goto L_0x0737
             org.telegram.ui.Components.ImageUpdater r0 = r13.imageUpdater
-            if (r0 == 0) goto L_0x0721
+            if (r0 == 0) goto L_0x0720
             org.telegram.ui.Components.RLottieDrawable r0 = new org.telegram.ui.Components.RLottieDrawable
             r24 = 2131558412(0x7f0d000c, float:1.874214E38)
             int r26 = org.telegram.messenger.AndroidUtilities.dp(r4)
@@ -2853,8 +2858,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r5 = 0
             r0.setPadding(r1, r5, r5, r4)
-            goto L_0x074e
-        L_0x0721:
+            goto L_0x074d
+        L_0x0720:
             org.telegram.ui.Components.RLottieImageView r0 = r13.writeButton
             r1 = 2131166031(0x7var_f, float:1.7946296E38)
             r0.setImageResource(r1)
@@ -2863,17 +2868,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             java.lang.String r4 = "AccDescrOpenChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setContentDescription(r1)
-            goto L_0x074e
-        L_0x0738:
+            goto L_0x074d
+        L_0x0737:
             org.telegram.ui.Components.RLottieImageView r0 = r13.writeButton
             r1 = 2131166027(0x7var_b, float:1.7946288E38)
             r0.setImageResource(r1)
             org.telegram.ui.Components.RLottieImageView r0 = r13.writeButton
-            r1 = 2131628459(0x7f0e11ab, float:1.8884211E38)
+            r1 = 2131628458(0x7f0e11aa, float:1.888421E38)
             java.lang.String r4 = "ViewDiscussion"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setContentDescription(r1)
-        L_0x074e:
+        L_0x074d:
             org.telegram.ui.Components.RLottieImageView r0 = r13.writeButton
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
             java.lang.String r4 = "profile_actionIcon"
@@ -2901,8 +2906,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0 = 0
             r13.needLayout(r0)
             r1 = -1
-            if (r10 == r1) goto L_0x07ac
-            if (r11 == 0) goto L_0x07ac
+            if (r10 == r1) goto L_0x07ab
+            if (r11 == 0) goto L_0x07ab
             org.telegram.ui.Components.RLottieImageView r1 = r13.writeButton
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r1.setTag(r0)
@@ -2913,7 +2918,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0.setScaleY(r1)
             org.telegram.ui.Components.RLottieImageView r0 = r13.writeButton
             r0.setAlpha(r2)
-        L_0x07ac:
+        L_0x07ab:
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
             org.telegram.ui.ProfileActivity$19 r1 = new org.telegram.ui.ProfileActivity$19
             r1.<init>()
@@ -2967,15 +2972,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0.setForwardRestrictedHint(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
             r1 = 21
-            if (r0 < r1) goto L_0x083a
+            if (r0 < r1) goto L_0x0839
             android.app.Activity r0 = r34.getParentActivity()
             android.view.Window r0 = r0.getWindow()
             android.view.View r0 = r0.getDecorView()
             android.view.ViewGroup r0 = (android.view.ViewGroup) r0
-            goto L_0x083b
-        L_0x083a:
+            goto L_0x083a
+        L_0x0839:
             r0 = r15
-        L_0x083b:
+        L_0x083a:
             org.telegram.ui.ProfileActivity$21 r1 = new org.telegram.ui.ProfileActivity$21
             r1.<init>(r0, r15)
             r13.pinchToZoomHelper = r1
@@ -3399,10 +3404,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         this.avatarImage.setRoundRadius((int) AndroidUtilities.lerp(AndroidUtilities.dpf2(21.0f), 0.0f, lerp));
         ActionBarMenuItem actionBarMenuItem = this.searchItem;
         if (actionBarMenuItem != null) {
-            actionBarMenuItem.setAlpha(1.0f - lerp);
+            float f = 1.0f - lerp;
+            actionBarMenuItem.setAlpha(f);
+            this.searchItem.setScaleY(f);
+            this.searchItem.setVisibility(0);
             ActionBarMenuItem actionBarMenuItem2 = this.searchItem;
-            actionBarMenuItem2.setVisibility(actionBarMenuItem2.getAlpha() == 0.0f ? 8 : 0);
-            if (this.qrItem != null && this.searchItem.getVisibility() == 0) {
+            actionBarMenuItem2.setClickable(actionBarMenuItem2.getAlpha() > 0.5f);
+            if (this.qrItem != null) {
                 float dp = ((float) AndroidUtilities.dp(48.0f)) * lerp;
                 this.qrItem.setTranslationX(dp);
                 this.avatarsViewPagerIndicatorView.setTranslationX(dp - ((float) AndroidUtilities.dp(48.0f)));
@@ -3425,24 +3433,24 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
         float dpf2 = AndroidUtilities.dpf2(8.0f);
         float dpvar_ = AndroidUtilities.dpf2(16.0f) - ((float) this.nameTextView[1].getLeft());
-        float f = (float) currentActionBarHeight;
-        float dpvar_ = ((this.extraHeight + f) - AndroidUtilities.dpf2(38.0f)) - ((float) this.nameTextView[1].getBottom());
-        float f2 = this.nameX;
-        float f3 = this.nameY;
-        float f4 = 1.0f - lerp;
-        float f5 = f4 * f4;
-        float f6 = f4 * 2.0f * lerp;
-        float f7 = lerp * lerp;
-        float f8 = (f2 * f5) + ((dpf2 + f2 + ((dpvar_ - f2) / 2.0f)) * f6) + (dpvar_ * f7);
-        float f9 = (f3 * f5) + ((dpf2 + f3 + ((dpvar_ - f3) / 2.0f)) * f6) + (dpvar_ * f7);
+        float f2 = (float) currentActionBarHeight;
+        float dpvar_ = ((this.extraHeight + f2) - AndroidUtilities.dpf2(38.0f)) - ((float) this.nameTextView[1].getBottom());
+        float f3 = this.nameX;
+        float f4 = this.nameY;
+        float f5 = 1.0f - lerp;
+        float f6 = f5 * f5;
+        float f7 = f5 * 2.0f * lerp;
+        float f8 = lerp * lerp;
+        float f9 = (f3 * f6) + ((dpf2 + f3 + ((dpvar_ - f3) / 2.0f)) * f7) + (dpvar_ * f8);
+        float var_ = (f4 * f6) + ((dpf2 + f4 + ((dpvar_ - f4) / 2.0f)) * f7) + (dpvar_ * f8);
         float dpvar_ = AndroidUtilities.dpf2(16.0f) - ((float) this.onlineTextView[1].getLeft());
-        float dpvar_ = ((this.extraHeight + f) - AndroidUtilities.dpf2(18.0f)) - ((float) this.onlineTextView[1].getBottom());
+        float dpvar_ = ((this.extraHeight + f2) - AndroidUtilities.dpf2(18.0f)) - ((float) this.onlineTextView[1].getBottom());
         float var_ = this.onlineX;
         float var_ = this.onlineY;
-        float var_ = (var_ * f5) + ((dpf2 + var_ + ((dpvar_ - var_) / 2.0f)) * f6) + (dpvar_ * f7);
-        float var_ = (f5 * var_) + (f6 * (dpf2 + var_ + ((dpvar_ - var_) / 2.0f))) + (f7 * dpvar_);
-        this.nameTextView[1].setTranslationX(f8);
-        this.nameTextView[1].setTranslationY(f9);
+        float var_ = (var_ * f6) + ((dpf2 + var_ + ((dpvar_ - var_) / 2.0f)) * f7) + (dpvar_ * f8);
+        float var_ = (f6 * var_) + (f7 * (dpf2 + var_ + ((dpvar_ - var_) / 2.0f))) + (f8 * dpvar_);
+        this.nameTextView[1].setTranslationX(f9);
+        this.nameTextView[1].setTranslationY(var_);
         this.onlineTextView[1].setTranslationX(var_);
         this.onlineTextView[1].setTranslationY(var_);
         this.mediaCounterTextView.setTranslationX(var_);
@@ -3466,7 +3474,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         this.avatarImage.setForegroundAlpha(lerp);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.avatarContainer.getLayoutParams();
         layoutParams.width = (int) AndroidUtilities.lerp(AndroidUtilities.dpf2(42.0f), ((float) this.listView.getMeasuredWidth()) / this.avatarScale, lerp);
-        layoutParams.height = (int) AndroidUtilities.lerp(AndroidUtilities.dpf2(42.0f), (this.extraHeight + f) / this.avatarScale, lerp);
+        layoutParams.height = (int) AndroidUtilities.lerp(AndroidUtilities.dpf2(42.0f), (this.extraHeight + f2) / this.avatarScale, lerp);
         layoutParams.leftMargin = (int) AndroidUtilities.lerp(AndroidUtilities.dpf2(64.0f), 0.0f, lerp);
         this.avatarContainer.requestLayout();
     }
@@ -4613,10 +4621,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 this.qrItemAnimation = animatorSet4;
                                 if (z3) {
                                     animatorSet4.setInterpolator(new DecelerateInterpolator());
-                                    this.qrItemAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.qrItem, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.qrItem, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.avatarsViewPagerIndicatorView, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(48.0f))})});
+                                    this.qrItemAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.qrItem, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.qrItem, View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.avatarsViewPagerIndicatorView, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(48.0f))})});
                                 } else {
                                     animatorSet4.setInterpolator(new AccelerateInterpolator());
-                                    this.qrItemAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.qrItem, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.qrItem, View.TRANSLATION_X, new float[]{(float) AndroidUtilities.dp(48.0f)}), ObjectAnimator.ofFloat(this.avatarsViewPagerIndicatorView, View.TRANSLATION_X, new float[]{0.0f})});
+                                    this.qrItemAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.qrItem, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.qrItem, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.avatarsViewPagerIndicatorView, View.TRANSLATION_X, new float[]{0.0f})});
                                 }
                                 this.qrItemAnimation.setDuration(150);
                                 this.qrItemAnimation.addListener(new AnimatorListenerAdapter() {
@@ -4627,8 +4635,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 this.qrItemAnimation.start();
                             } else {
                                 this.qrItem.setAlpha(z3 ? 1.0f : 0.0f);
-                                this.qrItem.setTranslationX(z3 ? 0.0f : (float) AndroidUtilities.dp(48.0f));
-                                this.avatarsViewPagerIndicatorView.setTranslationX(z3 ? 0.0f : (float) (-AndroidUtilities.dp(48.0f)));
+                                float dp = ((float) AndroidUtilities.dp(48.0f)) * this.qrItem.getAlpha();
+                                this.qrItem.setTranslationX(dp);
+                                this.avatarsViewPagerIndicatorView.setTranslationX(dp - ((float) AndroidUtilities.dp(48.0f)));
                             }
                         }
                     }
@@ -4751,11 +4760,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     layoutParams2.height = (int) f4;
                     this.avatarsViewPager.requestLayout();
                     if (!this.expandAnimator.isRunning()) {
-                        float dp = (!this.openAnimationInProgress || this.playProfileAnimation != 2) ? 0.0f : (-(1.0f - this.animationProgress)) * ((float) AndroidUtilities.dp(50.0f));
+                        float dp2 = (!this.openAnimationInProgress || this.playProfileAnimation != 2) ? 0.0f : (-(1.0f - this.animationProgress)) * ((float) AndroidUtilities.dp(50.0f));
                         this.nameTextView[1].setTranslationX(AndroidUtilities.dpf2(16.0f) - ((float) this.nameTextView[1].getLeft()));
-                        this.nameTextView[1].setTranslationY(((f4 - AndroidUtilities.dpf2(38.0f)) - ((float) this.nameTextView[1].getBottom())) + dp);
+                        this.nameTextView[1].setTranslationY(((f4 - AndroidUtilities.dpf2(38.0f)) - ((float) this.nameTextView[1].getBottom())) + dp2);
                         this.onlineTextView[1].setTranslationX(AndroidUtilities.dpf2(16.0f) - ((float) this.onlineTextView[1].getLeft()));
-                        this.onlineTextView[1].setTranslationY(((f4 - AndroidUtilities.dpf2(18.0f)) - ((float) this.onlineTextView[1].getBottom())) + dp);
+                        this.onlineTextView[1].setTranslationY(((f4 - AndroidUtilities.dpf2(18.0f)) - ((float) this.onlineTextView[1].getBottom())) + dp2);
                         this.mediaCounterTextView.setTranslationX(this.onlineTextView[1].getTranslationX());
                         this.mediaCounterTextView.setTranslationY(this.onlineTextView[1].getTranslationY());
                     }
@@ -4813,9 +4822,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     this.avatarContainer.setScaleY(this.avatarScale);
                     this.avatarContainer.setTranslationX(this.avatarX);
                     this.avatarContainer.setTranslationY((float) Math.ceil((double) this.avatarY));
-                    float dp2 = (((float) AndroidUtilities.dp(42.0f)) * this.avatarScale) - ((float) AndroidUtilities.dp(42.0f));
-                    this.timeItem.setTranslationX(this.avatarContainer.getX() + ((float) AndroidUtilities.dp(16.0f)) + dp2);
-                    this.timeItem.setTranslationY(this.avatarContainer.getY() + ((float) AndroidUtilities.dp(15.0f)) + dp2);
+                    float dp3 = (((float) AndroidUtilities.dp(42.0f)) * this.avatarScale) - ((float) AndroidUtilities.dp(42.0f));
+                    this.timeItem.setTranslationX(this.avatarContainer.getX() + ((float) AndroidUtilities.dp(16.0f)) + dp3);
+                    this.timeItem.setTranslationY(this.avatarContainer.getY() + ((float) AndroidUtilities.dp(15.0f)) + dp3);
                 }
                 this.nameX = AndroidUtilities.density * -21.0f * min;
                 this.nameY = ((float) Math.floor((double) this.avatarY)) + ((float) AndroidUtilities.dp(1.3f)) + (((float) AndroidUtilities.dp(7.0f)) * min);
@@ -7128,23 +7137,25 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     /* JADX WARNING: Removed duplicated region for block: B:290:0x061e  */
     /* JADX WARNING: Removed duplicated region for block: B:291:0x0620  */
     /* JADX WARNING: Removed duplicated region for block: B:294:0x0625  */
+    /* JADX WARNING: Removed duplicated region for block: B:305:0x0665  */
+    /* JADX WARNING: Removed duplicated region for block: B:322:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateProfileData() {
         /*
             r26 = this;
             r0 = r26
             android.widget.FrameLayout r1 = r0.avatarContainer
-            if (r1 == 0) goto L_0x065f
+            if (r1 == 0) goto L_0x067a
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r0.nameTextView
             if (r1 != 0) goto L_0x000c
-            goto L_0x065f
+            goto L_0x067a
         L_0x000c:
             org.telegram.tgnet.ConnectionsManager r1 = r26.getConnectionsManager()
             int r1 = r1.getConnectionState()
             r2 = 2
             r4 = 1
             if (r1 != r2) goto L_0x0022
-            r1 = 2131628752(0x7f0e12d0, float:1.8884806E38)
+            r1 = 2131628751(0x7f0e12cf, float:1.8884804E38)
             java.lang.String r5 = "WaitingForNetwork"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
@@ -7157,7 +7168,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x002e:
             r5 = 5
             if (r1 != r5) goto L_0x003b
-            r1 = 2131628320(0x7f0e1120, float:1.888393E38)
+            r1 = 2131628319(0x7f0e111f, float:1.8883927E38)
             java.lang.String r5 = "Updating"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
@@ -7454,11 +7465,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             boolean r2 = org.telegram.ui.PhotoViewer.isShowingImage((org.telegram.tgnet.TLRPC$FileLocation) r6)
             r2 = r2 ^ r4
             r1.setVisible(r2, r10)
-            goto L_0x065f
+            goto L_0x0660
         L_0x0273:
             long r5 = r0.chatId
             int r3 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
-            if (r3 == 0) goto L_0x065f
+            if (r3 == 0) goto L_0x0660
             org.telegram.messenger.MessagesController r3 = r26.getMessagesController()
             long r5 = r0.chatId
             java.lang.Long r5 = java.lang.Long.valueOf(r5)
@@ -7608,7 +7619,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x03c3:
             boolean r2 = org.telegram.messenger.ChatObject.isKickedFromChat(r3)
             if (r2 == 0) goto L_0x03d4
-            r2 = 2131628801(0x7f0e1301, float:1.8884905E38)
+            r2 = 2131628800(0x7f0e1300, float:1.8884903E38)
             java.lang.String r5 = "YouWereKicked"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r2)
         L_0x03d2:
@@ -7617,7 +7628,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x03d4:
             boolean r2 = org.telegram.messenger.ChatObject.isLeftFromChat(r3)
             if (r2 == 0) goto L_0x03e4
-            r2 = 2131628798(0x7f0e12fe, float:1.8884899E38)
+            r2 = 2131628797(0x7f0e12fd, float:1.8884897E38)
             java.lang.String r5 = "YouLeft"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r2)
             goto L_0x03d2
@@ -7954,7 +7965,25 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r2 = r2 ^ r3
             r3 = 0
             r1.setVisible(r2, r3)
-        L_0x065f:
+            goto L_0x0661
+        L_0x0660:
+            r3 = 0
+        L_0x0661:
+            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.qrItem
+            if (r1 == 0) goto L_0x067a
+            float r2 = r0.searchTransitionProgress
+            r4 = 1056964608(0x3var_, float:0.5)
+            int r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
+            if (r2 <= 0) goto L_0x0675
+            boolean r2 = r26.isQrNeedVisible()
+            if (r2 == 0) goto L_0x0675
+            r10 = 0
+            goto L_0x0677
+        L_0x0675:
+            r10 = 8
+        L_0x0677:
+            r1.setVisibility(r10)
+        L_0x067a:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateProfileData():void");
@@ -8036,7 +8065,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r0.videoCallItemVisible = r3
         L_0x0077:
             boolean r3 = r0.isBot
-            r5 = 2131628282(0x7f0e10fa, float:1.8883852E38)
+            r5 = 2131628281(0x7f0e10f9, float:1.888385E38)
             java.lang.String r6 = "Unblock"
             r10 = 2131165742(0x7var_e, float:1.794571E38)
             r11 = 2
@@ -8301,7 +8330,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
             r3 = 22
             r5 = 2131165763(0x7var_, float:1.7945752E38)
-            r6 = 2131628459(0x7f0e11ab, float:1.8884211E38)
+            r6 = 2131628458(0x7f0e11aa, float:1.888421E38)
             java.lang.String r7 = "ViewDiscussion"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r2.addSubItem(r3, r5, r6)
@@ -8689,7 +8718,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
         ActionBarMenuItem actionBarMenuItem2 = this.qrItem;
         if (actionBarMenuItem2 != null) {
-            actionBarMenuItem2.setVisibility(i2);
+            actionBarMenuItem2.setVisibility((!isQrNeedVisible() || this.searchTransitionProgress <= 0.5f) ? 8 : 0);
         }
         this.searchItem.setVisibility(i2);
         FrameLayout searchContainer = this.searchItem.getSearchContainer();
@@ -8766,28 +8795,30 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
         int i = 8;
         this.searchItem.getSearchContainer().setVisibility(this.searchTransitionProgress < 0.5f ? 0 : 8);
-        if (this.searchTransitionProgress > 0.5f) {
-            i = 0;
-        }
+        int i2 = this.searchTransitionProgress > 0.5f ? 0 : 8;
         ActionBarMenuItem actionBarMenuItem = this.otherItem;
         if (actionBarMenuItem != null) {
-            actionBarMenuItem.setVisibility(i);
+            actionBarMenuItem.setVisibility(i2);
             this.otherItem.setAlpha(f2);
         }
         ActionBarMenuItem actionBarMenuItem2 = this.qrItem;
         if (actionBarMenuItem2 != null) {
             actionBarMenuItem2.setAlpha(f2);
-            this.qrItem.setVisibility(i);
+            ActionBarMenuItem actionBarMenuItem3 = this.qrItem;
+            if (this.searchTransitionProgress > 0.5f && isQrNeedVisible()) {
+                i = 0;
+            }
+            actionBarMenuItem3.setVisibility(i);
         }
-        this.searchItem.setVisibility(i);
+        this.searchItem.setVisibility(i2);
         ActionBar actionBar = this.actionBar;
         if (this.searchTransitionProgress >= 0.5f) {
             z2 = false;
         }
         actionBar.onSearchFieldVisibilityChanged(z2);
-        ActionBarMenuItem actionBarMenuItem3 = this.otherItem;
-        if (actionBarMenuItem3 != null) {
-            actionBarMenuItem3.setAlpha(f2);
+        ActionBarMenuItem actionBarMenuItem4 = this.otherItem;
+        if (actionBarMenuItem4 != null) {
+            actionBarMenuItem4.setAlpha(f2);
         }
         this.searchItem.setAlpha(f2);
         this.topView.invalidate();
@@ -8800,11 +8831,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         int i2 = z ? 8 : 0;
         this.listView.setVisibility(i2);
         this.searchListView.setVisibility(z ? 0 : 8);
-        FrameLayout searchContainer = this.searchItem.getSearchContainer();
-        if (!z) {
-            i = 8;
-        }
-        searchContainer.setVisibility(i);
+        this.searchItem.getSearchContainer().setVisibility(z ? 0 : 8);
         this.actionBar.onSearchFieldVisibilityChanged(z);
         this.avatarContainer.setVisibility(i2);
         this.nameTextView[1].setVisibility(i2);
@@ -8817,7 +8844,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         ActionBarMenuItem actionBarMenuItem2 = this.qrItem;
         if (actionBarMenuItem2 != null) {
             actionBarMenuItem2.setAlpha(1.0f);
-            this.qrItem.setVisibility(i2);
+            ActionBarMenuItem actionBarMenuItem3 = this.qrItem;
+            if (z || !isQrNeedVisible()) {
+                i = 8;
+            }
+            actionBarMenuItem3.setVisibility(i);
         }
         this.searchItem.setVisibility(i2);
         this.avatarContainer.setAlpha(1.0f);
@@ -9417,7 +9448,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (r3 == r7) goto L_0x0a31
                 r8 = 2
                 r9 = 0
-                r11 = 2131628351(0x7f0e113f, float:1.8883992E38)
+                r11 = 2131628350(0x7f0e113e, float:1.888399E38)
                 java.lang.String r12 = "UserBio"
                 r13 = 0
                 r14 = 0
@@ -9676,7 +9707,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x02e2
             L_0x0252:
                 r3 = 3600(0xe10, float:5.045E-42)
-                r4 = 2131628780(0x7f0e12ec, float:1.8884862E38)
+                r4 = 2131628779(0x7f0e12eb, float:1.888486E38)
                 java.lang.String r5 = "WillUnmuteIn"
                 if (r2 >= r3) goto L_0x026e
                 java.lang.Object[] r3 = new java.lang.Object[r7]
@@ -9800,7 +9831,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int r3 = r3.unblockRow
                 java.lang.String r8 = "windowBackgroundWhiteRedText5"
                 if (r2 != r3) goto L_0x0364
-                r2 = 2131628282(0x7f0e10fa, float:1.8883852E38)
+                r2 = 2131628281(0x7f0e10f9, float:1.888385E38)
                 java.lang.String r3 = "Unblock"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2, r14)
@@ -10372,7 +10403,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             L_0x088c:
                 java.lang.String r3 = "-"
             L_0x088e:
-                r4 = 2131628389(0x7f0e1165, float:1.888407E38)
+                r4 = 2131628388(0x7f0e1164, float:1.8884067E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r0.setTextAndValue(r3, r4, r14)
                 goto L_0x0a28
@@ -10478,11 +10509,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.String r3 = r4.toString()
                 goto L_0x09ab
             L_0x09a2:
-                r3 = 2131628393(0x7f0e1169, float:1.8884077E38)
+                r3 = 2131628392(0x7f0e1168, float:1.8884075E38)
                 java.lang.String r4 = "UsernameEmpty"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             L_0x09ab:
-                r4 = 2131628389(0x7f0e1165, float:1.888407E38)
+                r4 = 2131628388(0x7f0e1164, float:1.8884067E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r0.setTextAndValue(r3, r4, r7)
                 r0.setContentDescriptionValueFirst(r7)
@@ -10502,7 +10533,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x09f1
             L_0x09d8:
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r12, r11)
-                r4 = 2131628352(0x7f0e1140, float:1.8883994E38)
+                r4 = 2131628351(0x7f0e113f, float:1.8883992E38)
                 java.lang.String r5 = "UserBioDetail"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r0.setTextAndValue(r3, r4, r14)
@@ -11988,6 +12019,23 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             bundle.putLong("user_id", this.userId);
             presentFragment(new QrActivity(bundle));
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onBecomeFullyVisible() {
+        super.onBecomeFullyVisible();
+        try {
+            Drawable mutate = this.fragmentView.getContext().getResources().getDrawable(NUM).mutate();
+            mutate.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
+            CombinedDrawable combinedDrawable = new CombinedDrawable(mutate, Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("profile_actionBackground"), Theme.getColor("profile_actionPressedBackground")), 0, 0);
+            combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
+            this.writeButton.setBackground(combinedDrawable);
+        } catch (Exception unused) {
+        }
+    }
+
+    private boolean isQrNeedVisible() {
+        return !TextUtils.isEmpty(getUserConfig().getCurrentUser().username);
     }
 
     private class DiffCallback extends DiffUtil.Callback {

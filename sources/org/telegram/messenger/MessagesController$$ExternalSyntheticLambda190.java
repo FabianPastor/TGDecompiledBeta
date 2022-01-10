@@ -1,26 +1,19 @@
 package org.telegram.messenger;
 
-import android.os.Bundle;
-import org.telegram.tgnet.TLObject;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda190 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ AlertDialog f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ BaseFragment f$3;
-    public final /* synthetic */ Bundle f$4;
+    public final /* synthetic */ Theme.ThemeInfo f$1;
+    public final /* synthetic */ Theme.ThemeAccent f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda190(MessagesController messagesController, AlertDialog alertDialog, TLObject tLObject, BaseFragment baseFragment, Bundle bundle) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda190(MessagesController messagesController, Theme.ThemeInfo themeInfo, Theme.ThemeAccent themeAccent) {
         this.f$0 = messagesController;
-        this.f$1 = alertDialog;
-        this.f$2 = tLObject;
-        this.f$3 = baseFragment;
-        this.f$4 = bundle;
+        this.f$1 = themeInfo;
+        this.f$2 = themeAccent;
     }
 
     public final void run() {
-        this.f$0.lambda$checkCanOpenChat$324(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$didReceivedNotification$26(this.f$1, this.f$2);
     }
 }

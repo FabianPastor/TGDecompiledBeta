@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda24
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$migrateDialogs$167(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadPinnedDialogs$275(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

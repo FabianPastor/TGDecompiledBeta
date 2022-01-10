@@ -10598,7 +10598,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r1 = "Proxy"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r3.setTitle(r0)
-            r0 = 2131628344(0x7f0e1138, float:1.8883978E38)
+            r0 = 2131628343(0x7f0e1137, float:1.8883976E38)
             java.lang.String r1 = "UseProxyTelegramError"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r3.setMessage(r0)
@@ -10783,11 +10783,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r5 = (org.telegram.ui.ActionBar.BaseFragment) r5
             org.telegram.ui.ActionBar.AlertDialog$Builder r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r7.<init>((android.content.Context) r8)
-            r9 = 2131628311(0x7f0e1117, float:1.8883911E38)
+            r9 = 2131628310(0x7f0e1116, float:1.888391E38)
             java.lang.String r10 = "UpdateContactsTitle"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r7.setTitle(r9)
-            r9 = 2131628310(0x7f0e1116, float:1.888391E38)
+            r9 = 2131628309(0x7f0e1115, float:1.8883907E38)
             java.lang.String r10 = "UpdateContactsMessage"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r7.setMessage(r9)
@@ -11322,7 +11322,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             long r0 = r0.longValue()
             int r2 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
             if (r2 <= 0) goto L_0x076a
-            r0 = 2131628819(0x7f0e1313, float:1.8884941E38)
+            r0 = 2131628818(0x7f0e1312, float:1.888494E38)
             java.lang.String r1 = "YourNameChanged"
             goto L_0x076f
         L_0x076a:
@@ -11347,7 +11347,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             long r0 = r0.longValue()
             int r2 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
             if (r2 <= 0) goto L_0x079c
-            r0 = 2131628802(0x7f0e1302, float:1.8884907E38)
+            r0 = 2131628801(0x7f0e1301, float:1.8884905E38)
             java.lang.String r1 = "YourBioChanged"
             goto L_0x07a1
         L_0x079c:
