@@ -1,14 +1,16 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.Theme;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$Dialog;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda204 implements Runnable {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda204 INSTANCE = new MessagesController$$ExternalSyntheticLambda204();
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda204 implements Comparator {
+    public final /* synthetic */ MessagesController f$0;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda204() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda204(MessagesController messagesController) {
+        this.f$0 = messagesController;
     }
 
-    public final void run() {
-        Theme.checkAutoNightThemeConditions();
+    public final int compare(Object obj, Object obj2) {
+        return this.f$0.lambda$new$1((TLRPC$Dialog) obj, (TLRPC$Dialog) obj2);
     }
 }

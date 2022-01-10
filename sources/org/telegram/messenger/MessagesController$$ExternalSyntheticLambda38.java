@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda38
     }
 
     public final void run() {
-        this.f$0.lambda$sendTyping$133(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$sendTyping$131(this.f$1, this.f$2, this.f$3);
     }
 }

@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 7.0.3
-SHA1-Digest-Manifest: W5M2HcVS0r25Dtkg3O5eYzDVmLA=
+SHA1-Digest-Manifest: jZLr6Lq/2xekfX5BsFibwTT6euU=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: zTWmYXCRWDFrzCC6J6t7tWed9+Q=
+SHA1-Digest: oye3X5uPfQVvhJv7alah8eX65KM=
 
 Name: META-INF/androidx.annotation_annotation-experimental.version
 SHA1-Digest: 4Tx/OE4OYuecGI9+583MUWSivc0=
@@ -106,13 +106,13 @@ Name: assets/arctic.attheme
 SHA1-Digest: gXU0P3+k5sFAqyl1o4DKr6G3jyQ=
 
 Name: assets/bluebubbles.attheme
-SHA1-Digest: JoafpJDtIggrMBL06LTPvMxXGFo=
+SHA1-Digest: NE3hBTMRkLeZtVxkFNn7aJV+rrc=
 
 Name: assets/countries.txt
 SHA1-Digest: TgKwRWkFRuCT6aDcijIMY+MWNxc=
 
 Name: assets/darkblue.attheme
-SHA1-Digest: umTXC2RIRy+qSB1FSfEHsI4N9+o=
+SHA1-Digest: qqRuALqTw7sp2MV5uK8Khxsk40k=
 
 Name: assets/day.attheme
 SHA1-Digest: sznWDmp7+tCgw7U4ehYMVt2cY6I=
@@ -10522,7 +10522,7 @@ Name: assets/langid_model.smfb.jpg
 SHA1-Digest: dBIGh0HnzEaa8IdUApv1BYPXsQc=
 
 Name: assets/night.attheme
-SHA1-Digest: yy58ZK/49RpBUzshSicwSj1esEg=
+SHA1-Digest: ukHchTvN+JTnY4zZnb9QD5jmPYo=
 
 Name: assets/secureid_ocr_nn.dat
 SHA1-Digest: NqKe5SgnDZ6x81LrUFDah/g9v14=
@@ -10531,13 +10531,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: DGqe1fsRa496lMl3U+bDzDkAmIE=
+SHA1-Digest: hSLH7xv0S3ez8RkQkesLAL9i/wQ=
 
 Name: classes2.dex
 SHA1-Digest: 36T5fF4fKXMlz8rTcVCf3dRcpnw=
 
 Name: classes3.dex
-SHA1-Digest: /jRU4AwNnLUSZ/QoruD1LS42wv8=
+SHA1-Digest: OUHns57CsY6A+1fKZtBtJCIjsSU=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -23092,7 +23092,7 @@ Name: res/zyk.png
 SHA1-Digest: R1ETFGzpnEN9RA4iva3SYHXPrP4=
 
 Name: resources.arsc
-SHA1-Digest: hn4EV+lkcvtzYsOV7gG4ayuR0SY=
+SHA1-Digest: wVYOK5fBaQpLxYWB4u1uvKe5mGs=
 
 Name: transport-api.properties
 SHA1-Digest: /JnnuH3pAnVsbL2i4WeJtM5GCqI=

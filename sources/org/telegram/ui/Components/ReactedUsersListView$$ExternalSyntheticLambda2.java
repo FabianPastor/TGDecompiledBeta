@@ -1,15 +1,22 @@
 package org.telegram.ui.Components;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$TL_messageUserReaction;
+import java.util.List;
+import org.telegram.tgnet.TLRPC$TL_messages_messageReactionsList;
 
-public final /* synthetic */ class ReactedUsersListView$$ExternalSyntheticLambda2 implements Comparator {
-    public static final /* synthetic */ ReactedUsersListView$$ExternalSyntheticLambda2 INSTANCE = new ReactedUsersListView$$ExternalSyntheticLambda2();
+public final /* synthetic */ class ReactedUsersListView$$ExternalSyntheticLambda2 implements Runnable {
+    public final /* synthetic */ ReactedUsersListView f$0;
+    public final /* synthetic */ List f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ TLRPC$TL_messages_messageReactionsList f$3;
 
-    private /* synthetic */ ReactedUsersListView$$ExternalSyntheticLambda2() {
+    public /* synthetic */ ReactedUsersListView$$ExternalSyntheticLambda2(ReactedUsersListView reactedUsersListView, List list, int i, TLRPC$TL_messages_messageReactionsList tLRPC$TL_messages_messageReactionsList) {
+        this.f$0 = reactedUsersListView;
+        this.f$1 = list;
+        this.f$2 = i;
+        this.f$3 = tLRPC$TL_messages_messageReactionsList;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return ReactedUsersListView.lambda$load$1((TLRPC$TL_messageUserReaction) obj, (TLRPC$TL_messageUserReaction) obj2);
+    public final void run() {
+        this.f$0.lambda$load$4(this.f$1, this.f$2, this.f$3);
     }
 }

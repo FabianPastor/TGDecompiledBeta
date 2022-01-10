@@ -1,26 +1,19 @@
 package org.telegram.messenger;
 
-import java.io.File;
-import org.telegram.tgnet.TLRPC$TL_wallPaperSettings;
-import org.telegram.tgnet.TLRPC$WallPaper;
-import org.telegram.ui.ActionBar.Theme;
+import org.telegram.tgnet.TLRPC$messages_Dialogs;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda175 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$WallPaper f$1;
-    public final /* synthetic */ TLRPC$TL_wallPaperSettings f$2;
-    public final /* synthetic */ Theme.OverrideWallpaperInfo f$3;
-    public final /* synthetic */ File f$4;
+    public final /* synthetic */ TLRPC$messages_Dialogs f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda175(MessagesController messagesController, TLRPC$WallPaper tLRPC$WallPaper, TLRPC$TL_wallPaperSettings tLRPC$TL_wallPaperSettings, Theme.OverrideWallpaperInfo overrideWallpaperInfo, File file) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda175(MessagesController messagesController, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$WallPaper;
-        this.f$2 = tLRPC$TL_wallPaperSettings;
-        this.f$3 = overrideWallpaperInfo;
-        this.f$4 = file;
+        this.f$1 = tLRPC$messages_Dialogs;
+        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$20(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$migrateDialogs$163(this.f$1, this.f$2);
     }
 }

@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda20
     }
 
     public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$new$1((TLRPC$Dialog) obj, (TLRPC$Dialog) obj2);
+        return this.f$0.lambda$new$2((TLRPC$Dialog) obj, (TLRPC$Dialog) obj2);
     }
 }

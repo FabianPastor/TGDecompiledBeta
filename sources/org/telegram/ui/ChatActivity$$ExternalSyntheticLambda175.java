@@ -12,7 +12,7 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda175 impl
     }
 
     public final void onComplete(Object obj) {
-        this.f$0.lambda$setChatThemeEmoticon$192((EmojiThemes) obj);
+        this.f$0.lambda$setChatThemeEmoticon$193((EmojiThemes) obj);
     }
 
     public /* synthetic */ void onError(TLRPC$TL_error tLRPC$TL_error) {

@@ -2,6 +2,7 @@ package org.telegram.ui;
 
 import android.view.View;
 import java.util.ArrayList;
+import org.telegram.ui.Components.TranslateAlert;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda65 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
@@ -10,17 +11,19 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda65 imple
     public final /* synthetic */ String[] f$3;
     public final /* synthetic */ String f$4;
     public final /* synthetic */ CharSequence f$5;
+    public final /* synthetic */ TranslateAlert.OnLinkPress f$6;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda65(ChatActivity chatActivity, int i, ArrayList arrayList, String[] strArr, String str, CharSequence charSequence) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda65(ChatActivity chatActivity, int i, ArrayList arrayList, String[] strArr, String str, CharSequence charSequence, TranslateAlert.OnLinkPress onLinkPress) {
         this.f$0 = chatActivity;
         this.f$1 = i;
         this.f$2 = arrayList;
         this.f$3 = strArr;
         this.f$4 = str;
         this.f$5 = charSequence;
+        this.f$6 = onLinkPress;
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createMenu$132(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
+        this.f$0.lambda$createMenu$133(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, view);
     }
 }

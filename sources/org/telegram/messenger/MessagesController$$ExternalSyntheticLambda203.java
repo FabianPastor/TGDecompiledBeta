@@ -1,15 +1,14 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
+import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda203 implements Runnable {
-    public final /* synthetic */ TLObject f$0;
+    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda203 INSTANCE = new MessagesController$$ExternalSyntheticLambda203();
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda203(TLObject tLObject) {
-        this.f$0 = tLObject;
+    private /* synthetic */ MessagesController$$ExternalSyntheticLambda203() {
     }
 
     public final void run() {
-        MessagesController.lambda$performLogout$239(this.f$0);
+        Theme.checkAutoNightThemeConditions();
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class TranslateAlert$$ExternalSyntheticLambda1 impl
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$openTo$6(valueAnimator);
+        this.f$0.lambda$openTo$4(valueAnimator);
     }
 }

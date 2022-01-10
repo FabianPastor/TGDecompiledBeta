@@ -17,6 +17,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda188 impl
     }
 
     public final void onReactionClicked(View view, TLRPC$TL_availableReaction tLRPC$TL_availableReaction) {
-        this.f$0.lambda$createMenu$135(this.f$1, this.f$2, view, tLRPC$TL_availableReaction);
+        this.f$0.lambda$createMenu$136(this.f$1, this.f$2, view, tLRPC$TL_availableReaction);
     }
 }

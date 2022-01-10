@@ -1,19 +1,23 @@
 package org.telegram.ui;
 
+import org.telegram.ui.Components.ReactionsContainerLayout;
+
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda117 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
     public final /* synthetic */ int f$1;
     public final /* synthetic */ int f$2;
     public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ ReactionsContainerLayout f$4;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda117(ChatActivity chatActivity, int i, int i2, boolean z) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda117(ChatActivity chatActivity, int i, int i2, boolean z, ReactionsContainerLayout reactionsContainerLayout) {
         this.f$0 = chatActivity;
         this.f$1 = i;
         this.f$2 = i2;
         this.f$3 = z;
+        this.f$4 = reactionsContainerLayout;
     }
 
     public final void run() {
-        this.f$0.lambda$deleteHistory$2(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$createMenu$138(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

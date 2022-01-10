@@ -17,6 +17,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda12
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$22(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$didReceivedNotification$24(this.f$1, this.f$2, this.f$3);
     }
 }

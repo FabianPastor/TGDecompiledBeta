@@ -88,6 +88,7 @@ public class CounterView extends View {
         private final Theme.ResourcesProvider resourcesProvider;
         /* access modifiers changed from: private */
         public boolean reverseAnimation;
+        public boolean shortFormat;
         private int textColor;
         /* access modifiers changed from: private */
         public String textColorKey = "chat_goDownButtonCounter";
@@ -161,9 +162,9 @@ public class CounterView extends View {
                 if (!z2) {
                     this.currentCount = i2;
                     if (i2 != 0) {
-                        String valueOf = String.valueOf(i);
-                        this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(valueOf)));
-                        this.countLayout = new StaticLayout(valueOf, this.textPaint, this.countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                        String stringOfCCount = getStringOfCCount(i);
+                        this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(stringOfCCount)));
+                        this.countLayout = new StaticLayout(stringOfCCount, this.textPaint, this.countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                         View view3 = this.parent;
                         if (view3 != null) {
                             view3.invalidate();
@@ -175,7 +176,7 @@ public class CounterView extends View {
                         return;
                     }
                 }
-                String valueOf2 = String.valueOf(i);
+                String stringOfCCount2 = getStringOfCCount(i);
                 if (z2) {
                     ValueAnimator valueAnimator2 = this.countAnimator;
                     if (valueAnimator2 != null) {
@@ -216,13 +217,13 @@ public class CounterView extends View {
                         this.countAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
                     }
                     if (this.countLayout != null) {
-                        String valueOf3 = String.valueOf(this.currentCount);
-                        if (valueOf3.length() == valueOf2.length()) {
-                            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(valueOf3);
-                            SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder(valueOf2);
-                            SpannableStringBuilder spannableStringBuilder3 = new SpannableStringBuilder(valueOf2);
-                            for (int i3 = 0; i3 < valueOf3.length(); i3++) {
-                                if (valueOf3.charAt(i3) == valueOf2.charAt(i3)) {
+                        String stringOfCCount3 = getStringOfCCount(this.currentCount);
+                        if (stringOfCCount3.length() == stringOfCCount2.length()) {
+                            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(stringOfCCount3);
+                            SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder(stringOfCCount2);
+                            SpannableStringBuilder spannableStringBuilder3 = new SpannableStringBuilder(stringOfCCount2);
+                            for (int i3 = 0; i3 < stringOfCCount3.length(); i3++) {
+                                if (stringOfCCount3.charAt(i3) == stringOfCCount2.charAt(i3)) {
                                     int i4 = i3 + 1;
                                     spannableStringBuilder.setSpan(new EmptyStubSpan(), i3, i4, 0);
                                     spannableStringBuilder2.setSpan(new EmptyStubSpan(), i3, i4, 0);
@@ -230,7 +231,7 @@ public class CounterView extends View {
                                     spannableStringBuilder3.setSpan(new EmptyStubSpan(), i3, i3 + 1, 0);
                                 }
                             }
-                            int max = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(valueOf3)));
+                            int max = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(stringOfCCount3)));
                             StaticLayout staticLayout = r9;
                             StaticLayout staticLayout2 = new StaticLayout(spannableStringBuilder, this.textPaint, max, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                             this.countOldLayout = staticLayout;
@@ -246,8 +247,8 @@ public class CounterView extends View {
                     this.countAnimator.start();
                 }
                 if (i2 > 0) {
-                    this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(valueOf2)));
-                    this.countLayout = new StaticLayout(valueOf2, this.textPaint, this.countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                    this.countWidth = Math.max(AndroidUtilities.dp(12.0f), (int) Math.ceil((double) this.textPaint.measureText(stringOfCCount2)));
+                    this.countLayout = new StaticLayout(stringOfCCount2, this.textPaint, this.countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                 }
                 this.currentCount = i2;
                 View view4 = this.parent;
@@ -264,6 +265,13 @@ public class CounterView extends View {
             if (view != null) {
                 view.invalidate();
             }
+        }
+
+        private String getStringOfCCount(int i) {
+            if (this.shortFormat) {
+                return AndroidUtilities.formatWholeNumber(i, 0);
+            }
+            return String.valueOf(i);
         }
 
         public void draw(Canvas canvas) {

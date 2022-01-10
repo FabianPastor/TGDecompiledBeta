@@ -570,8 +570,10 @@ public class ThemeSmallPreviewView extends FrameLayout implements NotificationCe
         if (this.backupImageView.getImageReceiver().getLottieAnimation() != null) {
             AndroidUtilities.cancelRunOnUIThread(this.animationCancelRunnable);
             this.backupImageView.setVisibility(0);
-            this.backupImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(0, false);
-            this.backupImageView.getImageReceiver().getLottieAnimation().start();
+            if (!this.backupImageView.getImageReceiver().getLottieAnimation().isRunning) {
+                this.backupImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(0, true);
+                this.backupImageView.getImageReceiver().getLottieAnimation().start();
+            }
             this.backupImageView.animate().scaleX(2.0f).scaleY(2.0f).setDuration(300).setInterpolator(AndroidUtilities.overshootInterpolator).start();
             ThemeSmallPreviewView$$ExternalSyntheticLambda1 themeSmallPreviewView$$ExternalSyntheticLambda1 = new ThemeSmallPreviewView$$ExternalSyntheticLambda1(this);
             this.animationCancelRunnable = themeSmallPreviewView$$ExternalSyntheticLambda1;

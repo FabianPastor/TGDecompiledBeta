@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda174 impl
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        ChatActivity.lambda$markSponsoredAsRead$187(tLObject, tLRPC$TL_error);
+        ChatActivity.lambda$markSponsoredAsRead$188(tLObject, tLRPC$TL_error);
     }
 }
