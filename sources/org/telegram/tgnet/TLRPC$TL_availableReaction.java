@@ -1,9 +1,11 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_availableReaction extends TLObject {
-    public static int constructor = 35486795;
+    public static int constructor = -NUM;
     public TLRPC$Document activate_animation;
     public TLRPC$Document appear_animation;
+    public TLRPC$Document around_animation;
+    public TLRPC$Document center_icon;
     public TLRPC$Document effect_animation;
     public int flags;
     public boolean inactive;
@@ -40,6 +42,12 @@ public class TLRPC$TL_availableReaction extends TLObject {
         this.select_animation = TLRPC$Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.activate_animation = TLRPC$Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.effect_animation = TLRPC$Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        if ((this.flags & 2) != 0) {
+            this.around_animation = TLRPC$Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
+        if ((this.flags & 2) != 0) {
+            this.center_icon = TLRPC$Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -54,5 +62,11 @@ public class TLRPC$TL_availableReaction extends TLObject {
         this.select_animation.serializeToStream(abstractSerializedData);
         this.activate_animation.serializeToStream(abstractSerializedData);
         this.effect_animation.serializeToStream(abstractSerializedData);
+        if ((this.flags & 2) != 0) {
+            this.around_animation.serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 2) != 0) {
+            this.center_icon.serializeToStream(abstractSerializedData);
+        }
     }
 }

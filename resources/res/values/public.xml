@@ -2904,7 +2904,6 @@
     <public type="string" name="Days_zero" id="NUM" />
     <public type="string" name="Deactivate" id="NUM" />
     <public type="string" name="DebugClearLogs" id="NUM" />
-    <public type="string" name="DebugDrawSnowInChat" id="NUM" />
     <public type="string" name="DebugMenu" id="NUM" />
     <public type="string" name="DebugMenuCallSettings" id="NUM" />
     <public type="string" name="DebugMenuCheckAppUpdate" id="NUM" />

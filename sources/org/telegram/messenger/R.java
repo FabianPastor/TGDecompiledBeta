@@ -3043,7 +3043,6 @@ public final class R {
         public static final int Days_zero = NUM;
         public static final int Deactivate = NUM;
         public static final int DebugClearLogs = NUM;
-        public static final int DebugDrawSnowInChat = NUM;
         public static final int DebugMenu = NUM;
         public static final int DebugMenuCallSettings = NUM;
         public static final int DebugMenuCheckAppUpdate = NUM;

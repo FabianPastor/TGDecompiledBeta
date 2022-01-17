@@ -1826,7 +1826,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
                 android.content.Context r4 = r4.getContext()
                 r5.<init>(r4)
-                r4 = 2131627711(0x7f0e0ebf, float:1.8882694E38)
+                r4 = 2131627710(0x7f0e0ebe, float:1.8882692E38)
                 java.lang.String r0 = "SearchMessages"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                 r5.setText(r4)

@@ -198,5 +198,6 @@ public class TLRPC$TL_message extends TLRPC$Message {
         if ((this.flags & 33554432) != 0) {
             abstractSerializedData.writeInt32(this.ttl_period);
         }
+        writeAttachPath(abstractSerializedData);
     }
 }

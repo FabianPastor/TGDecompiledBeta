@@ -1228,7 +1228,6 @@
     <string name="Days_zero">%1$d days</string>
     <string name="Deactivate">DELETE NOW</string>
     <string name="DebugClearLogs">Clear Logs</string>
-    <string name="DebugDrawSnowInChat">Snow in chat</string>
     <string name="DebugMenu">Debug Menu</string>
     <string name="DebugMenuCallSettings">Call settings</string>
     <string name="DebugMenuCheckAppUpdate">Check app update</string>

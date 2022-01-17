@@ -167,6 +167,7 @@ public class AndroidUtilities {
     public static Integer photoSize = null;
     private static int prevOrientation = -10;
     public static final RectF rectTmp = new RectF();
+    public static final Rect rectTmp2 = new Rect();
     public static int roundMessageInset;
     public static int roundMessageSize;
     private static Paint roundPaint;
@@ -1192,27 +1193,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131627174(0x7f0e0ca6, float:1.8881605E38)
+                r0 = 2131627173(0x7f0e0ca5, float:1.8881603E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131627175(0x7f0e0ca7, float:1.8881607E38)
+                r0 = 2131627174(0x7f0e0ca6, float:1.8881605E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131627166(0x7f0e0c9e, float:1.8881589E38)
+                r0 = 2131627165(0x7f0e0c9d, float:1.8881587E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131627165(0x7f0e0c9d, float:1.8881587E38)
+                r0 = 2131627164(0x7f0e0c9c, float:1.8881585E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131627167(0x7f0e0c9f, float:1.888159E38)
+                r0 = 2131627166(0x7f0e0c9e, float:1.8881589E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -3342,7 +3343,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0157
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0157
-            r7 = 2131626772(0x7f0e0b14, float:1.888079E38)
+            r7 = 2131626771(0x7f0e0b13, float:1.8880788E38)
             java.lang.String r8 = "OK"
             r9 = 2131624301(0x7f0e016d, float:1.8875778E38)
             java.lang.String r10 = "AppName"
@@ -3365,7 +3366,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625999(0x7f0e080f, float:1.8879222E38)
+            r1 = 2131625998(0x7f0e080e, float:1.887922E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3449,7 +3450,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626537(0x7f0e0a29, float:1.8880313E38)
+            r1 = 2131626536(0x7f0e0a28, float:1.888031E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3531,7 +3532,7 @@ public class AndroidUtilities {
             java.lang.String r8 = "ApkRestricted"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setMessage(r7)
-            r7 = 2131627159(0x7f0e0CLASSNAME, float:1.8881575E38)
+            r7 = 2131627158(0x7f0e0CLASSNAME, float:1.8881573E38)
             java.lang.String r8 = "PermissionOpenSettings"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.messenger.AndroidUtilities$$ExternalSyntheticLambda0 r8 = new org.telegram.messenger.AndroidUtilities$$ExternalSyntheticLambda0

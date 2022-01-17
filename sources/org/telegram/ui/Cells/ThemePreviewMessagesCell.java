@@ -208,7 +208,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                                 ReactionsEffectOverlay.removeCurrent(false);
                                 if (selectReaction) {
                                     ThemePreviewMessagesCell themePreviewMessagesCell = ThemePreviewMessagesCell.this;
-                                    ReactionsEffectOverlay.show(themePreviewMessagesCell.fragment, (ReactionsContainerLayout) null, themePreviewMessagesCell.cells[1], motionEvent.getX(), motionEvent.getY(), MediaDataController.getInstance(AnonymousClass1.this.val$currentAccount).getDoubleTapReaction(), AnonymousClass1.this.val$currentAccount);
+                                    ReactionsEffectOverlay.show(themePreviewMessagesCell.fragment, (ReactionsContainerLayout) null, themePreviewMessagesCell.cells[1], motionEvent.getX(), motionEvent.getY(), MediaDataController.getInstance(AnonymousClass1.this.val$currentAccount).getDoubleTapReaction(), AnonymousClass1.this.val$currentAccount, 0);
                                     ReactionsEffectOverlay.startAnimation();
                                 }
                                 AnonymousClass1.this.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -363,6 +363,10 @@ public class ThemePreviewMessagesCell extends LinearLayout {
 
                     public /* synthetic */ boolean hasSelectedMessages() {
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$hasSelectedMessages(this);
+                    }
+
+                    public /* synthetic */ void invalidateBlur() {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$invalidateBlur(this);
                     }
 
                     public /* synthetic */ boolean isLandscape() {

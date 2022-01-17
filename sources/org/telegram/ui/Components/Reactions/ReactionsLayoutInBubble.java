@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -33,6 +34,7 @@ import org.telegram.ui.Components.AvatarsDarawable;
 import org.telegram.ui.Components.CounterView;
 
 public class ReactionsLayoutInBubble {
+    private static int animationUniq;
     private static final ButtonsComparator comparator = new ButtonsComparator();
     /* access modifiers changed from: private */
     public static Paint paint = new Paint(1);
@@ -40,6 +42,7 @@ public class ReactionsLayoutInBubble {
     public static TextPaint textPaint = new TextPaint(1);
     private boolean animateMove;
     private boolean animateWidth;
+    HashMap<String, ImageReceiver> animatedReactions = new HashMap<>();
     boolean attached;
     int currentAccount;
     public boolean drawServiceShaderBackground;
@@ -517,13 +520,36 @@ public class ReactionsLayoutInBubble {
         }
 
         private void drawImage(Canvas canvas) {
+            boolean z = false;
             if (!this.drawImage || (this.realCount <= 1 && ReactionsEffectOverlay.isPlaying(ReactionsLayoutInBubble.this.messageObject.getId(), ReactionsLayoutInBubble.this.messageObject.getGroupId(), this.reaction) && this.isSelected)) {
                 this.imageReceiver.setAlpha(0.0f);
                 this.imageReceiver.draw(canvas);
                 this.lastImageDrawn = false;
                 return;
             }
-            this.imageReceiver.draw(canvas);
+            ImageReceiver imageReceiver2 = ReactionsLayoutInBubble.this.animatedReactions.get(this.reaction);
+            if (imageReceiver2 != null) {
+                imageReceiver2.setAlpha(this.imageReceiver.getAlpha());
+                imageReceiver2.setImageCoords(this.imageReceiver.getImageX() - (this.imageReceiver.getImageWidth() / 2.0f), this.imageReceiver.getImageY() - (this.imageReceiver.getImageWidth() / 2.0f), this.imageReceiver.getImageWidth() * 2.0f, this.imageReceiver.getImageHeight() * 2.0f);
+                imageReceiver2.draw(canvas);
+                if (imageReceiver2.getLottieAnimation() == null || !imageReceiver2.getLottieAnimation().hasBitmap()) {
+                    z = true;
+                }
+                if (imageReceiver2.getLottieAnimation() != null && !imageReceiver2.getLottieAnimation().isRunning()) {
+                    float alpha = imageReceiver2.getAlpha() - 0.08f;
+                    if (alpha < 0.0f) {
+                        imageReceiver2.onDetachedFromWindow();
+                        ReactionsLayoutInBubble.this.animatedReactions.remove(this.reaction);
+                    } else {
+                        imageReceiver2.setAlpha(alpha);
+                    }
+                }
+            } else {
+                z = true;
+            }
+            if (z) {
+                this.imageReceiver.draw(canvas);
+            }
             this.lastImageDrawn = true;
         }
 
@@ -689,5 +715,26 @@ public class ReactionsLayoutInBubble {
         for (int i = 0; i < this.reactionButtons.size(); i++) {
             this.reactionButtons.get(i).detach();
         }
+        if (!this.animatedReactions.isEmpty()) {
+            for (ImageReceiver onDetachedFromWindow : this.animatedReactions.values()) {
+                onDetachedFromWindow.onDetachedFromWindow();
+            }
+        }
+        this.animatedReactions.clear();
+    }
+
+    public void animateReaction(String str) {
+        TLRPC$TL_availableReaction tLRPC$TL_availableReaction;
+        ImageReceiver imageReceiver = new ImageReceiver();
+        imageReceiver.setParentView(this.parentView);
+        int i = animationUniq;
+        animationUniq = i + 1;
+        imageReceiver.setUniqKeyPrefix(Integer.toString(i));
+        if (!(str == null || (tLRPC$TL_availableReaction = MediaDataController.getInstance(this.currentAccount).getReactionsMap().get(str)) == null)) {
+            imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.center_icon), "40_40_nolimit", (Drawable) null, "tgs", tLRPC$TL_availableReaction, 1);
+        }
+        imageReceiver.setAutoRepeat(0);
+        imageReceiver.onAttachedToWindow();
+        this.animatedReactions.put(str, imageReceiver);
     }
 }

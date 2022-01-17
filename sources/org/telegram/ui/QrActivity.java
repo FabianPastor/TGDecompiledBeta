@@ -388,7 +388,7 @@ public class QrActivity extends BaseFragment {
             r1.setItemSelectedListener(r4)
             org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
             android.widget.TextView r1 = r1.titleView
-            r4 = 2131627453(0x7f0e0dbd, float:1.888217E38)
+            r4 = 2131627452(0x7f0e0dbc, float:1.8882169E38)
             java.lang.String r6 = "QrCode"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r1.setText(r4)
