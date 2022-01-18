@@ -536,7 +536,7 @@ public class MediaDataController extends BaseController {
             r0 = r3
             r3 = r6
         L_0x0064:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0073 }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0, (boolean) r2)     // Catch:{ all -> 0x0073 }
             if (r3 == 0) goto L_0x006c
             r3.dispose()
         L_0x006c:
@@ -609,8 +609,14 @@ public class MediaDataController extends BaseController {
             imageReceiver2.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.appear_animation), "60_60_nolimit", (Drawable) null, (String) null, (Object) null, 1);
             ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver2);
             ImageReceiver imageReceiver3 = new ImageReceiver();
-            imageReceiver3.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), (String) null, (Drawable) null, (String) null, (Object) null, 1);
+            imageReceiver3.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.around_animation), (String) null, (Drawable) null, (String) null, (Object) null, 1);
             ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver3);
+            ImageReceiver imageReceiver4 = new ImageReceiver();
+            imageReceiver4.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.center_icon), (String) null, (Drawable) null, (String) null, (Object) null, 1);
+            ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver4);
+            ImageReceiver imageReceiver5 = new ImageReceiver();
+            imageReceiver5.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), (String) null, (Drawable) null, (String) null, (Object) null, 1);
+            ImageLoader.getInstance().loadImageForImageReceiver(imageReceiver5);
         }
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.reactionsDidLoad, new Object[0]);
     }
@@ -4889,7 +4895,7 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02c9 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02c9 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02c9 }
-            r10 = 2131626487(0x7f0e09f7, float:1.8880212E38)
+            r10 = 2131626486(0x7f0e09f6, float:1.888021E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02c9 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02c9 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02c9 }
@@ -5590,7 +5596,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0074
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627539(0x7f0e0e13, float:1.8882345E38)
+            r9 = 2131627538(0x7f0e0e12, float:1.8882343E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
         L_0x0071:
             r9 = r4
@@ -5600,7 +5606,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0084
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627672(0x7f0e0e98, float:1.8882615E38)
+            r9 = 2131627671(0x7f0e0e97, float:1.8882613E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
             goto L_0x0071
         L_0x0084:

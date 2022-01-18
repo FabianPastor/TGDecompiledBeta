@@ -18,6 +18,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda145 impl
     }
 
     public final void run() {
-        this.f$0.lambda$migrateToNewChat$104(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$migrateToNewChat$105(this.f$1, this.f$2, this.f$3);
     }
 }

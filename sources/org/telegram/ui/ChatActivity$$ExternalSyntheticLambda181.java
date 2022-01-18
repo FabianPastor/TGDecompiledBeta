@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda181 impl
     }
 
     public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$createView$38(this.f$1, z, i);
+        this.f$0.lambda$createView$39(this.f$1, z, i);
     }
 }

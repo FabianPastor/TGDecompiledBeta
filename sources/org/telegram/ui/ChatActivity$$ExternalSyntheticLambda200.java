@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda200 impl
     }
 
     public final void getClipTopBottom(float[] fArr) {
-        this.f$0.lambda$createView$62(fArr);
+        this.f$0.lambda$createView$63(fArr);
     }
 }

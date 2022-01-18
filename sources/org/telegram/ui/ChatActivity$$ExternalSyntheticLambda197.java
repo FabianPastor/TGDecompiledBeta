@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda197 impl
     }
 
     public final void didAddToContacts() {
-        this.f$0.lambda$createView$30();
+        this.f$0.lambda$createView$31();
     }
 }

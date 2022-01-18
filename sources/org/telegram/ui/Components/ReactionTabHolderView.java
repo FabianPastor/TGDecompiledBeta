@@ -30,6 +30,7 @@ public class ReactionTabHolderView extends FrameLayout {
     private ImageView iconView;
     private Paint outlinePaint = new Paint(1);
     private float outlineProgress;
+    View overlaySelectorView;
     private float radius;
     private BackupImageView reactView;
     private RectF rect;
@@ -40,7 +41,7 @@ public class ReactionTabHolderView extends FrameLayout {
         this.rect = new RectF();
         this.radius = (float) AndroidUtilities.dp(32.0f);
         View view = new View(context);
-        view.setBackground(Theme.createSimpleSelectorRoundRectDrawable((int) this.radius, 0, Theme.getColor("chat_inReactionButtonTextSelected")));
+        this.overlaySelectorView = view;
         addView(view, LayoutHelper.createFrame(-1, -1.0f));
         this.iconView = new ImageView(context);
         Drawable mutate = ContextCompat.getDrawable(context, NUM).mutate();
@@ -69,6 +70,11 @@ public class ReactionTabHolderView extends FrameLayout {
         this.bgPaint.setColor(ColorUtils.blendARGB(alphaComponent, color, f));
         this.counterView.setTextColor(blendARGB);
         this.drawable.setColorFilter(new PorterDuffColorFilter(blendARGB, PorterDuff.Mode.MULTIPLY));
+        if (f == 1.0f) {
+            this.overlaySelectorView.setBackground(Theme.createSimpleSelectorRoundRectDrawable((int) this.radius, 0, ColorUtils.setAlphaComponent(Theme.getColor("chat_inReactionButtonTextSelected"), 76)));
+        } else if (f == 0.0f) {
+            this.overlaySelectorView.setBackground(Theme.createSimpleSelectorRoundRectDrawable((int) this.radius, 0, ColorUtils.setAlphaComponent(color, 76)));
+        }
         invalidate();
     }
 

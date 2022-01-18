@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda183 impl
     }
 
     public final void onGreetings(TLRPC$Document tLRPC$Document) {
-        this.f$0.lambda$createView$20(tLRPC$Document);
+        this.f$0.lambda$createView$22(tLRPC$Document);
     }
 }

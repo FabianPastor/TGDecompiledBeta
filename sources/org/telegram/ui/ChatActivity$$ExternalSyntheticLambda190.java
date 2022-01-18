@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda190 impl
     }
 
     public final boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-        return ChatActivity.lambda$showChatThemeBottomSheet$191(motionEvent);
+        return ChatActivity.lambda$showChatThemeBottomSheet$192(motionEvent);
     }
 }

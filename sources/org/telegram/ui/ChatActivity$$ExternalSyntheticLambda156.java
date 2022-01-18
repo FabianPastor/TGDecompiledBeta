@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda156 impl
     }
 
     public final void run(Exception exc) {
-        ChatActivity.lambda$createMenu$132(this.f$0, this.f$1, exc);
+        ChatActivity.lambda$createMenu$133(this.f$0, this.f$1, exc);
     }
 }

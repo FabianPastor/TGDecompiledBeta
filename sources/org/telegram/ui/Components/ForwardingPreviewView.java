@@ -1205,6 +1205,10 @@ public class ForwardingPreviewView extends FrameLayout {
                     return ChatMessageCell.ChatMessageCellDelegate.CC.$default$hasSelectedMessages(this);
                 }
 
+                public /* synthetic */ void invalidateBlur() {
+                    ChatMessageCell.ChatMessageCellDelegate.CC.$default$invalidateBlur(this);
+                }
+
                 public /* synthetic */ boolean isLandscape() {
                     return ChatMessageCell.ChatMessageCellDelegate.CC.$default$isLandscape(this);
                 }

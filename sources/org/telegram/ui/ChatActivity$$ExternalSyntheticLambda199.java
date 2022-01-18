@@ -14,7 +14,7 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda199 impl
     }
 
     public final void didSelectUsers(ArrayList arrayList, int i) {
-        this.f$0.lambda$createView$29(this.f$1, arrayList, i);
+        this.f$0.lambda$createView$30(this.f$1, arrayList, i);
     }
 
     public /* synthetic */ void needAddBot(TLRPC$User tLRPC$User) {

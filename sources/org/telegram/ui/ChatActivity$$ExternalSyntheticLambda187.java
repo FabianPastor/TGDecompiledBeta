@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda187 impl
     }
 
     public final void onProfileSelected(ReactedUsersListView reactedUsersListView, long j) {
-        this.f$0.lambda$createMenu$123(reactedUsersListView, j);
+        this.f$0.lambda$createMenu$124(reactedUsersListView, j);
     }
 }

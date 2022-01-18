@@ -111,6 +111,7 @@ import org.telegram.tgnet.TLRPC$TL_channels_toggleSlowMode;
 import org.telegram.tgnet.TLRPC$TL_channels_updateUsername;
 import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
 import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
+import org.telegram.tgnet.TLRPC$TL_chatFull;
 import org.telegram.tgnet.TLRPC$TL_chatInviteExported;
 import org.telegram.tgnet.TLRPC$TL_chatOnlines;
 import org.telegram.tgnet.TLRPC$TL_config;
@@ -9461,10 +9462,10 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:139:0x03b3, code lost:
-        if (r1[0] >= 136) goto L_0x03b8;
+        if (r1[0] >= 137) goto L_0x03b8;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:144:0x03c2, code lost:
-        if (org.telegram.messenger.Utilities.bytesToInt(r1) < 136) goto L_0x03c7;
+        if (org.telegram.messenger.Utilities.bytesToInt(r1) < 137) goto L_0x03c7;
      */
     /* JADX WARNING: Removed duplicated region for block: B:110:0x0307  */
     /* JADX WARNING: Removed duplicated region for block: B:115:0x0312  */
@@ -9946,7 +9947,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r40 == 0) goto L_0x0419
             r6 = r36
             boolean r7 = r6.legacy
-            r1 = 136(0x88, float:1.9E-43)
+            r1 = 137(0x89, float:1.92E-43)
             if (r7 == 0) goto L_0x039b
             int r7 = r6.layer
             if (r7 >= r1) goto L_0x039b
@@ -9968,17 +9969,17 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r7 != r0) goto L_0x03b6
             r7 = 0
             byte r0 = r1[r7]
-            r7 = 136(0x88, float:1.9E-43)
+            r7 = 137(0x89, float:1.92E-43)
             if (r0 < r7) goto L_0x03c7
             goto L_0x03b8
         L_0x03b6:
-            r7 = 136(0x88, float:1.9E-43)
+            r7 = 137(0x89, float:1.92E-43)
         L_0x03b8:
             int r0 = r1.length
             r7 = 4
             if (r0 != r7) goto L_0x03d3
             int r0 = org.telegram.messenger.Utilities.bytesToInt(r1)
-            r1 = 136(0x88, float:1.9E-43)
+            r1 = 137(0x89, float:1.92E-43)
             if (r0 >= r1) goto L_0x03d3
             goto L_0x03c7
         L_0x03c5:
@@ -26581,6 +26582,12 @@ public class MessagesController extends BaseController implements NotificationCe
             processUpdates((TLRPC$Updates) tLObject, false);
             TLRPC$ChatFull chatFull = getChatFull(j);
             if (chatFull != null) {
+                if (chatFull instanceof TLRPC$TL_chatFull) {
+                    chatFull.flags |= 262144;
+                }
+                if (chatFull instanceof TLRPC$TL_channelFull) {
+                    chatFull.flags |= NUM;
+                }
                 chatFull.available_reactions = new ArrayList<>(list);
                 getMessagesStorage().updateChatInfo(chatFull, false);
             }

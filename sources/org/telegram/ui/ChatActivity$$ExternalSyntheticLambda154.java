@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda154 impl
     }
 
     public final void run() {
-        ChatActivity.lambda$processSelectedOption$152(this.f$0);
+        ChatActivity.lambda$processSelectedOption$153(this.f$0);
     }
 }

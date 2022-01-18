@@ -17,6 +17,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda133 impl
     }
 
     public final void run() {
-        this.f$0.lambda$onFragmentCreate$5(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$onFragmentCreate$7(this.f$1, this.f$2, this.f$3);
     }
 }

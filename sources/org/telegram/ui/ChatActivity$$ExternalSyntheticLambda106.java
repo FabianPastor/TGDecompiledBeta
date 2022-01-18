@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda106 impl
     }
 
     public final void run() {
-        this.f$0.lambda$createDeleteMessagesAlert$117();
+        this.f$0.inlineUpdate2();
     }
 }

@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda99 imple
     }
 
     public final void run() {
-        this.f$0.lambda$showFieldPanel$84();
+        this.f$0.lambda$didReceivedNotification$96();
     }
 }

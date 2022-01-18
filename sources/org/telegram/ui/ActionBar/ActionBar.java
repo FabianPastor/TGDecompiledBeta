@@ -38,6 +38,7 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EllipsizeSpanAnimator;
 import org.telegram.ui.Components.FireworksEffect;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.SnowflakesEffect;
 
 public class ActionBar extends FrameLayout {
@@ -63,9 +64,12 @@ public class ActionBar extends FrameLayout {
     private SimpleTextView additionalSubtitleTextView;
     private boolean allowOverlayTitle;
     private ImageView backButtonImageView;
+    Paint blurScrimPaint;
+    boolean blurredBackground;
     private boolean castShadows;
     private boolean centerScale;
     private boolean clipContent;
+    SizeNotifierFrameLayout contentView;
     EllipsizeSpanAnimator ellipsizeSpanAnimator;
     private int extraHeight;
     private FireworksEffect fireworksEffect;
@@ -93,6 +97,7 @@ public class ActionBar extends FrameLayout {
     public Object[] overlayTitleToSet;
     protected BaseFragment parentFragment;
     private Rect rect;
+    Rect rectTmp;
     private final Theme.ResourcesProvider resourcesProvider;
     AnimatorSet searchVisibleAnimator;
     private SnowflakesEffect snowflakesEffect;
@@ -138,6 +143,8 @@ public class ActionBar extends FrameLayout {
         this.castShadows = true;
         this.titleColorToSet = 0;
         this.ellipsizeSpanAnimator = new EllipsizeSpanAnimator(this);
+        this.blurScrimPaint = new Paint();
+        this.rectTmp = new Rect();
         this.resourcesProvider = resourcesProvider2;
         setOnClickListener(new ActionBar$$ExternalSyntheticLambda1(this));
     }
@@ -1991,5 +1998,22 @@ public class ActionBar extends FrameLayout {
             color = num;
         }
         return color != null ? color.intValue() : Theme.getColor(str);
+    }
+
+    public void setDrawBlurBackground(SizeNotifierFrameLayout sizeNotifierFrameLayout) {
+        this.blurredBackground = true;
+        this.contentView = sizeNotifierFrameLayout;
+        sizeNotifierFrameLayout.blurBehindViews.add(this);
+        setBackground((Drawable) null);
+    }
+
+    /* access modifiers changed from: protected */
+    public void dispatchDraw(Canvas canvas) {
+        if (this.blurredBackground) {
+            this.rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            this.blurScrimPaint.setColor(this.actionBarColor);
+            this.contentView.drawBlur(canvas, 0.0f, this.rectTmp, this.blurScrimPaint, true);
+        }
+        super.dispatchDraw(canvas);
     }
 }

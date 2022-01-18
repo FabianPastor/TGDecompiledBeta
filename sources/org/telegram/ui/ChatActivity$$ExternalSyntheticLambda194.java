@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda194 impl
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createMenu$126(this.f$1, view, i);
+        this.f$0.lambda$createMenu$127(this.f$1, view, i);
     }
 }

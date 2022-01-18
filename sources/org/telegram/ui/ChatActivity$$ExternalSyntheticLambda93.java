@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda93 imple
     }
 
     public final void run() {
-        this.f$0.checkEditTimer();
+        this.f$0.showChecksHint();
     }
 }

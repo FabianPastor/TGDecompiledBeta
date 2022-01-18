@@ -759,39 +759,36 @@ public class ImageLoader {
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Code restructure failed: missing block: B:100:0x0172, code lost:
-            r1 = false;
+        /* JADX WARNING: Code restructure failed: missing block: B:100:0x0173, code lost:
+            r2 = move-exception;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:91:0x015e, code lost:
-            if (r5 != -1) goto L_0x0172;
+        /* JADX WARNING: Code restructure failed: missing block: B:101:0x0174, code lost:
+            r1 = r2;
+            r2 = true;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:93:?, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:93:0x0163, code lost:
+            if (r5 != -1) goto L_0x0177;
+         */
+        /* JADX WARNING: Code restructure failed: missing block: B:95:?, code lost:
             r2 = r11.imageSize;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:94:0x0162, code lost:
-            if (r2 == 0) goto L_0x0179;
+        /* JADX WARNING: Code restructure failed: missing block: B:96:0x0167, code lost:
+            if (r2 == 0) goto L_0x017e;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:95:0x0164, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:97:0x0169, code lost:
             reportProgress((long) r2, (long) r2);
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:96:0x016a, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:98:0x016f, code lost:
             r2 = move-exception;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:97:0x016b, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:99:0x0170, code lost:
             r1 = r2;
             r2 = true;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:98:0x016e, code lost:
-            r2 = move-exception;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:99:0x016f, code lost:
-            r1 = r2;
-            r2 = true;
-         */
-        /* JADX WARNING: Removed duplicated region for block: B:111:0x0183 A[Catch:{ all -> 0x0189 }] */
-        /* JADX WARNING: Removed duplicated region for block: B:117:0x0191 A[Catch:{ all -> 0x0195 }] */
-        /* JADX WARNING: Removed duplicated region for block: B:120:0x0198 A[SYNTHETIC, Splitter:B:120:0x0198] */
-        /* JADX WARNING: Removed duplicated region for block: B:50:0x00e9 A[SYNTHETIC, Splitter:B:50:0x00e9] */
+        /* JADX WARNING: Removed duplicated region for block: B:113:0x0188 A[Catch:{ all -> 0x018e }] */
+        /* JADX WARNING: Removed duplicated region for block: B:119:0x0196 A[Catch:{ all -> 0x019a }] */
+        /* JADX WARNING: Removed duplicated region for block: B:122:0x019d A[SYNTHETIC, Splitter:B:122:0x019d] */
+        /* JADX WARNING: Removed duplicated region for block: B:52:0x00ee A[SYNTHETIC, Splitter:B:52:0x00ee] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public java.lang.Boolean doInBackground(java.lang.Void... r12) {
             /*
@@ -800,7 +797,7 @@ public class ImageLoader {
                 r0 = 0
                 r1 = 1
                 r2 = 0
-                if (r12 != 0) goto L_0x00e2
+                if (r12 != 0) goto L_0x00e7
                 org.telegram.messenger.ImageLoader$CacheImage r12 = r11.cacheImage     // Catch:{ all -> 0x00a5 }
                 org.telegram.messenger.ImageLocation r12 = r12.imageLocation     // Catch:{ all -> 0x00a5 }
                 java.lang.String r12 = r12.path     // Catch:{ all -> 0x00a5 }
@@ -857,7 +854,7 @@ public class ImageLoader {
                 java.net.HttpURLConnection r12 = r11.httpConnection     // Catch:{ all -> 0x00a5 }
                 r12.setInstanceFollowRedirects(r1)     // Catch:{ all -> 0x00a5 }
                 boolean r12 = r11.isCancelled()     // Catch:{ all -> 0x00a5 }
-                if (r12 != 0) goto L_0x00e2
+                if (r12 != 0) goto L_0x00e7
                 java.net.HttpURLConnection r12 = r11.httpConnection     // Catch:{ all -> 0x00a5 }
                 r12.connect()     // Catch:{ all -> 0x00a5 }
                 java.net.HttpURLConnection r12 = r11.httpConnection     // Catch:{ all -> 0x00a5 }
@@ -868,7 +865,7 @@ public class ImageLoader {
                 java.lang.String r5 = "rws"
                 r3.<init>(r4, r5)     // Catch:{ all -> 0x00a0 }
                 r11.fileOutputStream = r3     // Catch:{ all -> 0x00a0 }
-                goto L_0x00e3
+                goto L_0x00e8
             L_0x00a0:
                 r3 = move-exception
                 r10 = r3
@@ -891,7 +888,7 @@ public class ImageLoader {
                 r11.canRetry = r2
             L_0x00ba:
                 r4 = 0
-                goto L_0x00dd
+                goto L_0x00e2
             L_0x00bc:
                 boolean r4 = r12 instanceof java.net.SocketException
                 if (r4 == 0) goto L_0x00d5
@@ -909,142 +906,146 @@ public class ImageLoader {
                 r11.canRetry = r2
                 goto L_0x00ba
             L_0x00dc:
+                boolean r4 = r12 instanceof java.lang.InterruptedException
+                if (r4 == 0) goto L_0x00e1
+                goto L_0x00ba
+            L_0x00e1:
                 r4 = 1
-            L_0x00dd:
+            L_0x00e2:
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r12, (boolean) r4)
                 r12 = r3
-                goto L_0x00e3
-            L_0x00e2:
+                goto L_0x00e8
+            L_0x00e7:
                 r12 = r0
-            L_0x00e3:
+            L_0x00e8:
                 boolean r3 = r11.isCancelled()
-                if (r3 != 0) goto L_0x017f
-                java.net.HttpURLConnection r3 = r11.httpConnection     // Catch:{ Exception -> 0x0100 }
-                if (r3 == 0) goto L_0x0104
-                int r3 = r3.getResponseCode()     // Catch:{ Exception -> 0x0100 }
+                if (r3 != 0) goto L_0x0184
+                java.net.HttpURLConnection r3 = r11.httpConnection     // Catch:{ Exception -> 0x0105 }
+                if (r3 == 0) goto L_0x0109
+                int r3 = r3.getResponseCode()     // Catch:{ Exception -> 0x0105 }
                 r4 = 200(0xc8, float:2.8E-43)
-                if (r3 == r4) goto L_0x0104
+                if (r3 == r4) goto L_0x0109
                 r4 = 202(0xca, float:2.83E-43)
-                if (r3 == r4) goto L_0x0104
+                if (r3 == r4) goto L_0x0109
                 r4 = 304(0x130, float:4.26E-43)
-                if (r3 == r4) goto L_0x0104
-                r11.canRetry = r2     // Catch:{ Exception -> 0x0100 }
-                goto L_0x0104
-            L_0x0100:
+                if (r3 == r4) goto L_0x0109
+                r11.canRetry = r2     // Catch:{ Exception -> 0x0105 }
+                goto L_0x0109
+            L_0x0105:
                 r3 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
-            L_0x0104:
+            L_0x0109:
                 int r3 = r11.imageSize
-                if (r3 != 0) goto L_0x0139
+                if (r3 != 0) goto L_0x013e
                 java.net.HttpURLConnection r3 = r11.httpConnection
-                if (r3 == 0) goto L_0x0139
-                java.util.Map r3 = r3.getHeaderFields()     // Catch:{ Exception -> 0x0135 }
-                if (r3 == 0) goto L_0x0139
+                if (r3 == 0) goto L_0x013e
+                java.util.Map r3 = r3.getHeaderFields()     // Catch:{ Exception -> 0x013a }
+                if (r3 == 0) goto L_0x013e
                 java.lang.String r4 = "content-Length"
-                java.lang.Object r3 = r3.get(r4)     // Catch:{ Exception -> 0x0135 }
-                java.util.List r3 = (java.util.List) r3     // Catch:{ Exception -> 0x0135 }
-                if (r3 == 0) goto L_0x0139
-                boolean r4 = r3.isEmpty()     // Catch:{ Exception -> 0x0135 }
-                if (r4 != 0) goto L_0x0139
-                java.lang.Object r3 = r3.get(r2)     // Catch:{ Exception -> 0x0135 }
-                java.lang.String r3 = (java.lang.String) r3     // Catch:{ Exception -> 0x0135 }
-                if (r3 == 0) goto L_0x0139
-                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ Exception -> 0x0135 }
-                int r3 = r3.intValue()     // Catch:{ Exception -> 0x0135 }
-                r11.imageSize = r3     // Catch:{ Exception -> 0x0135 }
-                goto L_0x0139
-            L_0x0135:
+                java.lang.Object r3 = r3.get(r4)     // Catch:{ Exception -> 0x013a }
+                java.util.List r3 = (java.util.List) r3     // Catch:{ Exception -> 0x013a }
+                if (r3 == 0) goto L_0x013e
+                boolean r4 = r3.isEmpty()     // Catch:{ Exception -> 0x013a }
+                if (r4 != 0) goto L_0x013e
+                java.lang.Object r3 = r3.get(r2)     // Catch:{ Exception -> 0x013a }
+                java.lang.String r3 = (java.lang.String) r3     // Catch:{ Exception -> 0x013a }
+                if (r3 == 0) goto L_0x013e
+                java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ Exception -> 0x013a }
+                int r3 = r3.intValue()     // Catch:{ Exception -> 0x013a }
+                r11.imageSize = r3     // Catch:{ Exception -> 0x013a }
+                goto L_0x013e
+            L_0x013a:
                 r3 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
-            L_0x0139:
-                if (r12 == 0) goto L_0x017f
+            L_0x013e:
+                if (r12 == 0) goto L_0x0184
                 r3 = 8192(0x2000, float:1.14794E-41)
-                byte[] r3 = new byte[r3]     // Catch:{ all -> 0x017b }
+                byte[] r3 = new byte[r3]     // Catch:{ all -> 0x0180 }
                 r4 = 0
-            L_0x0140:
-                boolean r5 = r11.isCancelled()     // Catch:{ all -> 0x017b }
-                if (r5 == 0) goto L_0x0147
-                goto L_0x0172
-            L_0x0147:
-                int r5 = r12.read(r3)     // Catch:{ Exception -> 0x0174 }
-                if (r5 <= 0) goto L_0x015d
+            L_0x0145:
+                boolean r5 = r11.isCancelled()     // Catch:{ all -> 0x0180 }
+                if (r5 == 0) goto L_0x014c
+                goto L_0x0177
+            L_0x014c:
+                int r5 = r12.read(r3)     // Catch:{ Exception -> 0x0179 }
+                if (r5 <= 0) goto L_0x0162
                 int r4 = r4 + r5
-                java.io.RandomAccessFile r6 = r11.fileOutputStream     // Catch:{ Exception -> 0x0174 }
-                r6.write(r3, r2, r5)     // Catch:{ Exception -> 0x0174 }
-                int r5 = r11.imageSize     // Catch:{ Exception -> 0x0174 }
-                if (r5 == 0) goto L_0x0140
-                long r6 = (long) r4     // Catch:{ Exception -> 0x0174 }
-                long r8 = (long) r5     // Catch:{ Exception -> 0x0174 }
-                r11.reportProgress(r6, r8)     // Catch:{ Exception -> 0x0174 }
-                goto L_0x0140
-            L_0x015d:
+                java.io.RandomAccessFile r6 = r11.fileOutputStream     // Catch:{ Exception -> 0x0179 }
+                r6.write(r3, r2, r5)     // Catch:{ Exception -> 0x0179 }
+                int r5 = r11.imageSize     // Catch:{ Exception -> 0x0179 }
+                if (r5 == 0) goto L_0x0145
+                long r6 = (long) r4     // Catch:{ Exception -> 0x0179 }
+                long r8 = (long) r5     // Catch:{ Exception -> 0x0179 }
+                r11.reportProgress(r6, r8)     // Catch:{ Exception -> 0x0179 }
+                goto L_0x0145
+            L_0x0162:
                 r3 = -1
-                if (r5 != r3) goto L_0x0172
-                int r2 = r11.imageSize     // Catch:{ Exception -> 0x016e, all -> 0x016a }
-                if (r2 == 0) goto L_0x0179
-                long r3 = (long) r2     // Catch:{ Exception -> 0x016e, all -> 0x016a }
-                long r5 = (long) r2     // Catch:{ Exception -> 0x016e, all -> 0x016a }
-                r11.reportProgress(r3, r5)     // Catch:{ Exception -> 0x016e, all -> 0x016a }
-                goto L_0x0179
-            L_0x016a:
+                if (r5 != r3) goto L_0x0177
+                int r2 = r11.imageSize     // Catch:{ Exception -> 0x0173, all -> 0x016f }
+                if (r2 == 0) goto L_0x017e
+                long r3 = (long) r2     // Catch:{ Exception -> 0x0173, all -> 0x016f }
+                long r5 = (long) r2     // Catch:{ Exception -> 0x0173, all -> 0x016f }
+                r11.reportProgress(r3, r5)     // Catch:{ Exception -> 0x0173, all -> 0x016f }
+                goto L_0x017e
+            L_0x016f:
                 r2 = move-exception
                 r1 = r2
                 r2 = 1
-                goto L_0x017c
-            L_0x016e:
+                goto L_0x0181
+            L_0x0173:
                 r2 = move-exception
                 r1 = r2
                 r2 = 1
-                goto L_0x0175
-            L_0x0172:
+                goto L_0x017a
+            L_0x0177:
                 r1 = 0
-                goto L_0x0179
-            L_0x0174:
-                r1 = move-exception
-            L_0x0175:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x017b }
-                r1 = r2
+                goto L_0x017e
             L_0x0179:
-                r2 = r1
-                goto L_0x017f
-            L_0x017b:
                 r1 = move-exception
-            L_0x017c:
+            L_0x017a:
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)     // Catch:{ all -> 0x0180 }
+                r1 = r2
+            L_0x017e:
+                r2 = r1
+                goto L_0x0184
+            L_0x0180:
+                r1 = move-exception
+            L_0x0181:
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-            L_0x017f:
-                java.io.RandomAccessFile r1 = r11.fileOutputStream     // Catch:{ all -> 0x0189 }
-                if (r1 == 0) goto L_0x018d
-                r1.close()     // Catch:{ all -> 0x0189 }
-                r11.fileOutputStream = r0     // Catch:{ all -> 0x0189 }
-                goto L_0x018d
-            L_0x0189:
+            L_0x0184:
+                java.io.RandomAccessFile r1 = r11.fileOutputStream     // Catch:{ all -> 0x018e }
+                if (r1 == 0) goto L_0x0192
+                r1.close()     // Catch:{ all -> 0x018e }
+                r11.fileOutputStream = r0     // Catch:{ all -> 0x018e }
+                goto L_0x0192
+            L_0x018e:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x018d:
-                java.net.HttpURLConnection r0 = r11.httpConnection     // Catch:{ all -> 0x0195 }
-                if (r0 == 0) goto L_0x0196
-                r0.disconnect()     // Catch:{ all -> 0x0195 }
-                goto L_0x0196
-            L_0x0195:
-            L_0x0196:
-                if (r12 == 0) goto L_0x01a0
-                r12.close()     // Catch:{ all -> 0x019c }
-                goto L_0x01a0
-            L_0x019c:
+            L_0x0192:
+                java.net.HttpURLConnection r0 = r11.httpConnection     // Catch:{ all -> 0x019a }
+                if (r0 == 0) goto L_0x019b
+                r0.disconnect()     // Catch:{ all -> 0x019a }
+                goto L_0x019b
+            L_0x019a:
+            L_0x019b:
+                if (r12 == 0) goto L_0x01a5
+                r12.close()     // Catch:{ all -> 0x01a1 }
+                goto L_0x01a5
+            L_0x01a1:
                 r12 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)
-            L_0x01a0:
-                if (r2 == 0) goto L_0x01b6
+            L_0x01a5:
+                if (r2 == 0) goto L_0x01bb
                 org.telegram.messenger.ImageLoader$CacheImage r12 = r11.cacheImage
                 java.io.File r0 = r12.tempFilePath
-                if (r0 == 0) goto L_0x01b6
+                if (r0 == 0) goto L_0x01bb
                 java.io.File r12 = r12.finalFilePath
                 boolean r12 = r0.renameTo(r12)
-                if (r12 != 0) goto L_0x01b6
+                if (r12 != 0) goto L_0x01bb
                 org.telegram.messenger.ImageLoader$CacheImage r12 = r11.cacheImage
                 java.io.File r0 = r12.tempFilePath
                 r12.finalFilePath = r0
-            L_0x01b6:
+            L_0x01bb:
                 java.lang.Boolean r12 = java.lang.Boolean.valueOf(r2)
                 return r12
             */
@@ -1600,7 +1601,7 @@ public class ImageLoader {
                 r0 = move-exception
                 r5 = 0
             L_0x01d2:
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0221 }
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0, (boolean) r10)     // Catch:{ all -> 0x0221 }
                 if (r5 == 0) goto L_0x01e0
                 r5.close()     // Catch:{ Exception -> 0x01db }
                 goto L_0x01e0

@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda158 impl
     }
 
     public final void run(boolean z) {
-        this.f$0.lambda$createView$57(z);
+        this.f$0.lambda$createView$58(z);
     }
 }

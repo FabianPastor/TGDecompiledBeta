@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda185 impl
     }
 
     public final void onSwipeBackProgress(PopupSwipeBackLayout popupSwipeBackLayout, float f, float f2) {
-        ChatActivity.lambda$createMenu$137(this.f$0, popupSwipeBackLayout, f, f2);
+        ChatActivity.lambda$createMenu$138(this.f$0, popupSwipeBackLayout, f, f2);
     }
 }

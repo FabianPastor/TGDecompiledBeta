@@ -14,6 +14,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda196 impl
     }
 
     public final void run(URLSpan uRLSpan) {
-        this.f$0.lambda$createMenu$130(this.f$1, uRLSpan);
+        this.f$0.lambda$createMenu$131(this.f$1, uRLSpan);
     }
 }
