@@ -2,14 +2,16 @@ package org.telegram.ui.Components;
 
 import android.view.View;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda27 implements View.OnLongClickListener {
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda27 implements View.OnClickListener {
     public final /* synthetic */ ChatActivityEnterView f$0;
+    public final /* synthetic */ SizeNotifierFrameLayout f$1;
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda27(ChatActivityEnterView chatActivityEnterView) {
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda27(ChatActivityEnterView chatActivityEnterView, SizeNotifierFrameLayout sizeNotifierFrameLayout) {
         this.f$0 = chatActivityEnterView;
+        this.f$1 = sizeNotifierFrameLayout;
     }
 
-    public final boolean onLongClick(View view) {
-        return this.f$0.onSendLongClick(view);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$14(this.f$1, view);
     }
 }

@@ -1,19 +1,20 @@
 package org.telegram.ui;
 
-import android.text.style.URLSpan;
-import android.view.View;
-import org.telegram.ui.Components.TranslateAlert;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_sendScheduledMessages;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda196 implements TranslateAlert.OnLinkPress {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda196 implements RequestDelegate {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ View f$1;
+    public final /* synthetic */ TLRPC$TL_messages_sendScheduledMessages f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda196(ChatActivity chatActivity, View view) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda196(ChatActivity chatActivity, TLRPC$TL_messages_sendScheduledMessages tLRPC$TL_messages_sendScheduledMessages) {
         this.f$0 = chatActivity;
-        this.f$1 = view;
+        this.f$1 = tLRPC$TL_messages_sendScheduledMessages;
     }
 
-    public final void run(URLSpan uRLSpan) {
-        this.f$0.lambda$createMenu$130(this.f$1, uRLSpan);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$processSelectedOption$188(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

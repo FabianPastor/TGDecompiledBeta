@@ -11,6 +11,7 @@ public class TLRPC$TL_stickerSet extends TLRPC$StickerSet {
         this.official = (readInt32 & 4) != 0;
         this.masks = (readInt32 & 8) != 0;
         this.animated = (readInt32 & 32) != 0;
+        this.gifs = (readInt32 & 64) != 0;
         if ((readInt32 & 1) != 0) {
             this.installed_date = abstractSerializedData.readInt32(z);
         }
@@ -57,7 +58,9 @@ public class TLRPC$TL_stickerSet extends TLRPC$StickerSet {
         this.flags = i3;
         int i4 = this.animated ? i3 | 32 : i3 & -33;
         this.flags = i4;
-        abstractSerializedData.writeInt32(i4);
+        int i5 = this.gifs ? i4 | 64 : i4 & -65;
+        this.flags = i5;
+        abstractSerializedData.writeInt32(i5);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt32(this.installed_date);
         }
@@ -69,8 +72,8 @@ public class TLRPC$TL_stickerSet extends TLRPC$StickerSet {
             abstractSerializedData.writeInt32(NUM);
             int size = this.thumbs.size();
             abstractSerializedData.writeInt32(size);
-            for (int i5 = 0; i5 < size; i5++) {
-                this.thumbs.get(i5).serializeToStream(abstractSerializedData);
+            for (int i6 = 0; i6 < size; i6++) {
+                this.thumbs.get(i6).serializeToStream(abstractSerializedData);
             }
         }
         if ((this.flags & 16) != 0) {

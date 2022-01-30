@@ -22,7 +22,6 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.SparseIntArray;
 import android.util.StateSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -42,6 +41,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.GestureDetectorFixDoubleTap;
 
 public class RecyclerListView extends RecyclerView {
     private static int[] attributes;
@@ -1594,7 +1594,7 @@ public class RecyclerListView extends RecyclerView {
         }
 
         public RecyclerListViewItemClickListener(Context context) {
-            GestureDetectorFixDoubleTap unused = RecyclerListView.this.gestureDetector = new GestureDetectorFixDoubleTap(context, new GestureDetector.SimpleOnGestureListener(RecyclerListView.this) {
+            GestureDetectorFixDoubleTap unused = RecyclerListView.this.gestureDetector = new GestureDetectorFixDoubleTap(context, new GestureDetectorFixDoubleTap.OnGestureListener(RecyclerListView.this) {
                 private View doubleTapView;
 
                 public boolean onDown(MotionEvent motionEvent) {
@@ -1602,14 +1602,13 @@ public class RecyclerListView extends RecyclerView {
                 }
 
                 public boolean onSingleTapUp(MotionEvent motionEvent) {
-                    if (RecyclerListView.this.currentChildView == null) {
-                        return false;
+                    if (RecyclerListView.this.currentChildView != null) {
+                        if (RecyclerListView.this.onItemClickListenerExtended == null || !RecyclerListView.this.onItemClickListenerExtended.hasDoubleTap(RecyclerListView.this.currentChildView, RecyclerListView.this.currentChildPosition)) {
+                            onPressItem(RecyclerListView.this.currentChildView, motionEvent);
+                        } else {
+                            this.doubleTapView = RecyclerListView.this.currentChildView;
+                        }
                     }
-                    if (RecyclerListView.this.onItemClickListenerExtended == null || !RecyclerListView.this.onItemClickListenerExtended.hasDoubleTap(RecyclerListView.this.currentChildView, RecyclerListView.this.currentChildPosition)) {
-                        onPressItem(RecyclerListView.this.currentChildView, motionEvent);
-                        return true;
-                    }
-                    this.doubleTapView = RecyclerListView.this.currentChildView;
                     return false;
                 }
 
@@ -1701,6 +1700,10 @@ public class RecyclerListView extends RecyclerView {
                             }
                         }
                     }
+                }
+
+                public boolean hasDoubleTap() {
+                    return RecyclerListView.this.onItemLongClickListenerExtended != null;
                 }
             });
             RecyclerListView.this.gestureDetector.setIsLongpressEnabled(false);
@@ -2637,6 +2640,7 @@ public class RecyclerListView extends RecyclerView {
                 Theme.setMaskDrawableRad(this.selectorDrawable, i == 0 ? this.topBottomSelectorRadius : 0, i == getAdapter().getItemCount() + -2 ? this.topBottomSelectorRadius : 0);
             }
             this.selectorRect.set(view.getLeft(), view.getTop(), view.getRight(), view.getBottom() - selectionBottomPadding);
+            this.selectorRect.offset((int) view.getTranslationX(), (int) view.getTranslationY());
             boolean isEnabled = view.isEnabled();
             if (this.isChildViewEnabled != isEnabled) {
                 this.isChildViewEnabled = isEnabled;

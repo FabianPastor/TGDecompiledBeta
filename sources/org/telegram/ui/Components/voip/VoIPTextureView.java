@@ -98,6 +98,11 @@ public class VoIPTextureView extends FrameLayout {
                 super.onFirstFrameRendered();
                 VoIPTextureView.this.onFirstFrameRendered();
             }
+
+            /* access modifiers changed from: protected */
+            public void onSizeChanged(int i, int i2, int i3, int i4) {
+                super.onSizeChanged(i, i2, i3, i4);
+            }
         };
         this.renderer = r5;
         r5.setFpsReduction(30.0f);
@@ -333,6 +338,9 @@ public class VoIPTextureView extends FrameLayout {
         super.onMeasure(i, i2);
         updateRendererSize();
         super.onMeasure(i, i2);
+        if (!this.applyRotation) {
+            this.renderer.updateRotation();
+        }
     }
 
     /* access modifiers changed from: protected */
@@ -351,6 +359,9 @@ public class VoIPTextureView extends FrameLayout {
         super.onLayout(z, i, i2, i3, i4);
         if (this.blurRenderer != null) {
             this.scaleTextureToFillBlur = Math.max(((float) getMeasuredHeight()) / ((float) this.blurRenderer.getMeasuredHeight()), ((float) getMeasuredWidth()) / ((float) this.blurRenderer.getMeasuredWidth()));
+        }
+        if (!this.applyRotation) {
+            this.renderer.updateRotation();
         }
         if (this.scaleType == SCALE_TYPE_NONE) {
             TextureView textureView = this.blurRenderer;
@@ -560,7 +571,7 @@ public class VoIPTextureView extends FrameLayout {
 
     public void updateRotation() {
         if (!this.applyRotation) {
-            this.renderer.setScreenRotation(((WindowManager) getContext().getSystemService("window")).getDefaultDisplay().getRotation());
+            ((WindowManager) getContext().getSystemService("window")).getDefaultDisplay();
         }
     }
 }

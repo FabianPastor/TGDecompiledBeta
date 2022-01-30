@@ -732,10 +732,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
         }
 
         public int getItemCount() {
-            if (ChatAttachAlertAudioLayout.this.audioEntries.isEmpty()) {
-                return 1;
-            }
-            return ChatAttachAlertAudioLayout.this.audioEntries.size() + (ChatAttachAlertAudioLayout.this.audioEntries.isEmpty() ? 0 : 2);
+            return ChatAttachAlertAudioLayout.this.audioEntries.size() + 1 + (ChatAttachAlertAudioLayout.this.audioEntries.isEmpty() ^ true ? 1 : 0);
         }
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
@@ -901,10 +898,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
         }
 
         public int getItemCount() {
-            if (this.searchResult.isEmpty()) {
-                return 1;
-            }
-            return this.searchResult.size() + (this.searchResult.isEmpty() ? 0 : 2);
+            return this.searchResult.size() + 1 + (this.searchResult.isEmpty() ^ true ? 1 : 0);
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

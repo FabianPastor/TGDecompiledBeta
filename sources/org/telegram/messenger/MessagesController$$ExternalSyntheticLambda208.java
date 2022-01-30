@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.messenger.MessagesController;
+import org.telegram.tgnet.TLObject;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda208 implements Comparator {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda208 INSTANCE = new MessagesController$$ExternalSyntheticLambda208();
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda208 implements Runnable {
+    public final /* synthetic */ TLObject f$0;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda208() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda208(TLObject tLObject) {
+        this.f$0 = tLObject;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MessagesController.lambda$processLoadedDialogFilters$7((MessagesController.DialogFilter) obj, (MessagesController.DialogFilter) obj2);
+    public final void run() {
+        MessagesController.lambda$performLogout$243(this.f$0);
     }
 }

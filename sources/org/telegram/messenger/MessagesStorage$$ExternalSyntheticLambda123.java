@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda123 i
     }
 
     public final void run() {
-        this.f$0.lambda$updateMessageVerifyFlags$149(this.f$1);
+        this.f$0.lambda$updateMessageVerifyFlags$151(this.f$1);
     }
 }

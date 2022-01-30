@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.telegram.ui.Adapters.DialogsAdapter;
 import org.telegram.ui.Cells.DialogCell;
+import org.telegram.ui.Cells.DialogsEmptyCell;
 
 public class DialogsItemAnimator extends SimpleItemAnimator {
     private static TimeInterpolator sDefaultInterpolator = new DecelerateInterpolator();
@@ -35,10 +36,6 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     ArrayList<RecyclerView.ViewHolder> mRemoveAnimations = new ArrayList<>();
     private DialogCell removingDialog;
     private int topClip;
-
-    public boolean canReuseUpdatedViewHolder(RecyclerView.ViewHolder viewHolder, List<Object> list) {
-        return false;
-    }
 
     /* access modifiers changed from: protected */
     public void onAllAnimationsDone() {
@@ -691,5 +688,9 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         for (int size = list.size() - 1; size >= 0; size--) {
             list.get(size).itemView.animate().cancel();
         }
+    }
+
+    public boolean canReuseUpdatedViewHolder(RecyclerView.ViewHolder viewHolder, List<Object> list) {
+        return viewHolder.itemView instanceof DialogsEmptyCell;
     }
 }

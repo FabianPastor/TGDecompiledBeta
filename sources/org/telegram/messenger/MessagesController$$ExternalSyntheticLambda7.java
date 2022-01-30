@@ -1,13 +1,17 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda7 implements Runnable {
-    public final /* synthetic */ MessagesController f$0;
+import androidx.core.util.Consumer;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda7(MessagesController messagesController) {
-        this.f$0 = messagesController;
+public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda7 implements Runnable {
+    public final /* synthetic */ Consumer f$0;
+    public final /* synthetic */ int f$1;
+
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda7(Consumer consumer, int i) {
+        this.f$0 = consumer;
+        this.f$1 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$loadRemoteFilters$12();
+        this.f$0.accept(Integer.valueOf(this.f$1));
     }
 }

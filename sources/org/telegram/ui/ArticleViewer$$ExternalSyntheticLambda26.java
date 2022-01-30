@@ -12,6 +12,6 @@ public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda26 impl
     }
 
     public final void run() {
-        this.f$0.lambda$processSearch$26(this.f$1, this.f$2);
+        this.f$0.lambda$processSearch$27(this.f$1, this.f$2);
     }
 }

@@ -24,8 +24,8 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
+import org.telegram.tgnet.TLRPC$TL_messagePeerReaction;
 import org.telegram.tgnet.TLRPC$TL_messageReactions;
-import org.telegram.tgnet.TLRPC$TL_messageUserReaction;
 import org.telegram.tgnet.TLRPC$TL_reactionCount;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
@@ -40,6 +40,8 @@ public class ReactionsLayoutInBubble {
     public static Paint paint = new Paint(1);
     /* access modifiers changed from: private */
     public static TextPaint textPaint = new TextPaint(1);
+    private int animateFromTotalHeight;
+    private boolean animateHeight;
     private boolean animateMove;
     private boolean animateWidth;
     HashMap<String, ImageReceiver> animatedReactions = new HashMap<>();
@@ -49,9 +51,11 @@ public class ReactionsLayoutInBubble {
     public int fromWidth;
     private float fromX;
     private float fromY;
+    public boolean hasUnreadReactions;
     public int height;
     public boolean isEmpty;
     public boolean isSmall;
+    private int lastDrawTotalHeight;
     HashMap<String, ReactionButton> lastDrawingReactionButtons = new HashMap<>();
     HashMap<String, ReactionButton> lastDrawingReactionButtonsTmp = new HashMap<>();
     private int lastDrawnWidth;
@@ -94,6 +98,7 @@ public class ReactionsLayoutInBubble {
         for (int i = 0; i < this.reactionButtons.size(); i++) {
             this.reactionButtons.get(i).detach();
         }
+        this.hasUnreadReactions = false;
         this.reactionButtons.clear();
         if (messageObject2 != null) {
             TLRPC$TL_messageReactions tLRPC$TL_messageReactions = messageObject2.messageOwner.reactions;
@@ -110,16 +115,16 @@ public class ReactionsLayoutInBubble {
                     TLRPC$TL_reactionCount tLRPC$TL_reactionCount = messageObject2.messageOwner.reactions.results.get(i4);
                     ReactionButton reactionButton = new ReactionButton(tLRPC$TL_reactionCount);
                     this.reactionButtons.add(reactionButton);
-                    if (!z && messageObject2.messageOwner.reactions.recent_reactons != null) {
+                    if (!z && messageObject2.messageOwner.reactions.recent_reactions != null) {
                         ArrayList arrayList = null;
                         if (tLRPC$TL_reactionCount.count <= 3 && i2 <= 3) {
-                            for (int i5 = 0; i5 < messageObject2.messageOwner.reactions.recent_reactons.size(); i5++) {
-                                TLRPC$TL_messageUserReaction tLRPC$TL_messageUserReaction = messageObject2.messageOwner.reactions.recent_reactons.get(i5);
-                                if (tLRPC$TL_messageUserReaction.reaction.equals(tLRPC$TL_reactionCount.reaction) && MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(tLRPC$TL_messageUserReaction.user_id)) != null) {
+                            for (int i5 = 0; i5 < messageObject2.messageOwner.reactions.recent_reactions.size(); i5++) {
+                                TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction = messageObject2.messageOwner.reactions.recent_reactions.get(i5);
+                                if (tLRPC$TL_messagePeerReaction.reaction.equals(tLRPC$TL_reactionCount.reaction) && MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(MessageObject.getPeerId(tLRPC$TL_messagePeerReaction.peer_id))) != null) {
                                     if (arrayList == null) {
                                         arrayList = new ArrayList();
                                     }
-                                    arrayList.add(MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(tLRPC$TL_messageUserReaction.user_id)));
+                                    arrayList.add(MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(MessageObject.getPeerId(tLRPC$TL_messagePeerReaction.peer_id))));
                                 }
                             }
                             reactionButton.setUsers(arrayList);
@@ -153,6 +158,7 @@ public class ReactionsLayoutInBubble {
                 buttonsComparator.currentAccount = this.currentAccount;
                 Collections.sort(this.reactionButtons, buttonsComparator);
             }
+            this.hasUnreadReactions = MessageObject.hasUnreadReactions(messageObject2.messageOwner);
         }
         this.isEmpty = this.reactionButtons.isEmpty();
     }
@@ -161,6 +167,7 @@ public class ReactionsLayoutInBubble {
         this.height = 0;
         this.width = 0;
         this.positionOffsetY = 0;
+        this.totalHeight = 0;
         if (!this.isEmpty) {
             int i2 = 0;
             int i3 = 0;
@@ -267,6 +274,7 @@ public class ReactionsLayoutInBubble {
         this.lastDrawnX = (float) this.x;
         this.lastDrawnY = (float) this.y;
         this.lastDrawnWidth = this.width;
+        this.lastDrawTotalHeight = this.totalHeight;
     }
 
     public boolean animateChange() {
@@ -335,11 +343,17 @@ public class ReactionsLayoutInBubble {
             }
         }
         int i8 = this.lastDrawnWidth;
-        if (i8 == this.width) {
+        if (i8 != this.width) {
+            this.animateWidth = true;
+            this.fromWidth = i8;
+            z = true;
+        }
+        int i9 = this.lastDrawTotalHeight;
+        if (i9 == this.totalHeight) {
             return z;
         }
-        this.animateWidth = true;
-        this.fromWidth = i8;
+        this.animateHeight = true;
+        this.animateFromTotalHeight = i9;
         return true;
     }
 
@@ -350,6 +364,7 @@ public class ReactionsLayoutInBubble {
         this.outButtons.clear();
         this.animateMove = false;
         this.animateWidth = false;
+        this.animateHeight = false;
         for (int i2 = 0; i2 < this.reactionButtons.size(); i2++) {
             this.reactionButtons.get(i2).animationType = 0;
         }
@@ -684,6 +699,13 @@ public class ReactionsLayoutInBubble {
         return (float) this.width;
     }
 
+    public float getCurrentTotalHeight(float f) {
+        if (this.animateHeight) {
+            return (((float) this.animateFromTotalHeight) * (1.0f - f)) + (((float) this.totalHeight) * f);
+        }
+        return (float) this.totalHeight;
+    }
+
     private static class ButtonsComparator implements Comparator<ReactionButton> {
         int currentAccount;
 
@@ -725,16 +747,18 @@ public class ReactionsLayoutInBubble {
 
     public void animateReaction(String str) {
         TLRPC$TL_availableReaction tLRPC$TL_availableReaction;
-        ImageReceiver imageReceiver = new ImageReceiver();
-        imageReceiver.setParentView(this.parentView);
-        int i = animationUniq;
-        animationUniq = i + 1;
-        imageReceiver.setUniqKeyPrefix(Integer.toString(i));
-        if (!(str == null || (tLRPC$TL_availableReaction = MediaDataController.getInstance(this.currentAccount).getReactionsMap().get(str)) == null)) {
-            imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.center_icon), "40_40_nolimit", (Drawable) null, "tgs", tLRPC$TL_availableReaction, 1);
+        if (this.animatedReactions.get(str) == null) {
+            ImageReceiver imageReceiver = new ImageReceiver();
+            imageReceiver.setParentView(this.parentView);
+            int i = animationUniq;
+            animationUniq = i + 1;
+            imageReceiver.setUniqKeyPrefix(Integer.toString(i));
+            if (!(str == null || (tLRPC$TL_availableReaction = MediaDataController.getInstance(this.currentAccount).getReactionsMap().get(str)) == null)) {
+                imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.center_icon), "40_40_nolimit", (Drawable) null, "tgs", tLRPC$TL_availableReaction, 1);
+            }
+            imageReceiver.setAutoRepeat(0);
+            imageReceiver.onAttachedToWindow();
+            this.animatedReactions.put(str, imageReceiver);
         }
-        imageReceiver.setAutoRepeat(0);
-        imageReceiver.onAttachedToWindow();
-        this.animatedReactions.put(str, imageReceiver);
     }
 }

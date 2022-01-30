@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import android.animation.ValueAnimator;
+import android.view.View;
+import java.util.Comparator;
 import org.telegram.ui.ProfileActivity;
 
-public final /* synthetic */ class ProfileActivity$9$$ExternalSyntheticLambda0 implements ValueAnimator.AnimatorUpdateListener {
-    public final /* synthetic */ ProfileActivity.AnonymousClass9 f$0;
+public final /* synthetic */ class ProfileActivity$9$$ExternalSyntheticLambda0 implements Comparator {
+    public static final /* synthetic */ ProfileActivity$9$$ExternalSyntheticLambda0 INSTANCE = new ProfileActivity$9$$ExternalSyntheticLambda0();
 
-    public /* synthetic */ ProfileActivity$9$$ExternalSyntheticLambda0(ProfileActivity.AnonymousClass9 r1) {
-        this.f$0 = r1;
+    private /* synthetic */ ProfileActivity$9$$ExternalSyntheticLambda0() {
     }
 
-    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$runPendingAnimations$0(valueAnimator);
+    public final int compare(Object obj, Object obj2) {
+        return ProfileActivity.AnonymousClass9.lambda$$0((View) obj, (View) obj2);
     }
 }

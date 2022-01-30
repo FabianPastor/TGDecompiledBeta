@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda37 implements DialogInterface.OnShowListener {
-    public final /* synthetic */ EditTextBoldCursor f$0;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda37 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ Runnable f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda37(EditTextBoldCursor editTextBoldCursor) {
-        this.f$0 = editTextBoldCursor;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda37(Runnable runnable) {
+        this.f$0 = runnable;
     }
 
-    public final void onShow(DialogInterface dialogInterface) {
-        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda72(this.f$0));
+    public final void onDismiss(DialogInterface dialogInterface) {
+        AlertsCreator.lambda$createReportAlert$66(this.f$0, dialogInterface);
     }
 }

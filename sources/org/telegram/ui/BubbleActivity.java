@@ -290,8 +290,12 @@ public class BubbleActivity extends Activity implements ActionBarLayout.ActionBa
             if (!z) {
                 showPermissionErrorAlert(LocaleController.getString("PermissionNoCamera", NUM));
             }
-        } else if (i == 2 && z) {
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.locationPermissionGranted, new Object[0]);
+        } else if (i == 2) {
+            if (z) {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.locationPermissionGranted, new Object[0]);
+            } else {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.locationPermissionDenied, new Object[0]);
+            }
         }
         if (this.actionBarLayout.fragmentsStack.size() != 0) {
             ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;

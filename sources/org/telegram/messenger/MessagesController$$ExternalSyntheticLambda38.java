@@ -4,16 +4,14 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda38
     public final /* synthetic */ MessagesController f$0;
     public final /* synthetic */ int f$1;
     public final /* synthetic */ long f$2;
-    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda38(MessagesController messagesController, int i, long j, int i2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda38(MessagesController messagesController, int i, long j) {
         this.f$0 = messagesController;
         this.f$1 = i;
         this.f$2 = j;
-        this.f$3 = i2;
     }
 
     public final void run() {
-        this.f$0.lambda$sendTyping$131(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$markDialogAsReadNow$195(this.f$1, this.f$2);
     }
 }

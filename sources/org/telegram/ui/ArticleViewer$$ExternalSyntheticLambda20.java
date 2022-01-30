@@ -8,6 +8,6 @@ public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda20 impl
     }
 
     public final void run() {
-        this.f$0.lambda$open$30();
+        this.f$0.lambda$setParentActivity$13();
     }
 }

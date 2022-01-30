@@ -5,11 +5,12 @@ public class TLRPC$TL_updateMessageReactions extends TLRPC$Update {
     public int msg_id;
     public TLRPC$Peer peer;
     public TLRPC$TL_messageReactions reactions;
+    public boolean updateUnreadState = true;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.peer = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.msg_id = abstractSerializedData.readInt32(z);
-        this.reactions = TLRPC$TL_messageReactions.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        this.reactions = TLRPC$MessageReactions.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {

@@ -12,6 +12,6 @@ public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda25 impl
     }
 
     public final void run() {
-        this.f$0.lambda$open$31(this.f$1);
+        this.f$0.lambda$open$32(this.f$1);
     }
 }

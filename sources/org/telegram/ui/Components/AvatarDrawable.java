@@ -14,6 +14,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatInvite;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -132,6 +133,8 @@ public class AvatarDrawable extends Drawable {
             setInfo((TLRPC$User) tLObject);
         } else if (tLObject instanceof TLRPC$Chat) {
             setInfo((TLRPC$Chat) tLObject);
+        } else if (tLObject instanceof TLRPC$ChatInvite) {
+            setInfo((TLRPC$ChatInvite) tLObject);
         }
     }
 
@@ -185,6 +188,12 @@ public class AvatarDrawable extends Drawable {
     public void setInfo(TLRPC$Chat tLRPC$Chat) {
         if (tLRPC$Chat != null) {
             setInfo(tLRPC$Chat.id, tLRPC$Chat.title, (String) null, (String) null);
+        }
+    }
+
+    public void setInfo(TLRPC$ChatInvite tLRPC$ChatInvite) {
+        if (tLRPC$ChatInvite != null) {
+            setInfo(0, tLRPC$ChatInvite.title, (String) null, (String) null);
         }
     }
 

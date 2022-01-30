@@ -1,12 +1,15 @@
 package org.telegram.messenger;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda7 implements GenericProvider {
+import java.util.Comparator;
+import org.telegram.messenger.AndroidUtilities;
+
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda7 implements Comparator {
     public static final /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda7 INSTANCE = new AndroidUtilities$$ExternalSyntheticLambda7();
 
     private /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda7() {
     }
 
-    public final Object provide(Object obj) {
-        return AndroidUtilities.lambda$formatSpannable$6((Integer) obj);
+    public final int compare(Object obj, Object obj2) {
+        return AndroidUtilities.lambda$pruneOverlaps$1((AndroidUtilities.LinkSpec) obj, (AndroidUtilities.LinkSpec) obj2);
     }
 }

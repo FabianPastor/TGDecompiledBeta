@@ -1,13 +1,16 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda72 implements Runnable {
-    public final /* synthetic */ EditTextBoldCursor f$0;
+import android.view.KeyEvent;
+import android.widget.TextView;
+import org.telegram.messenger.AndroidUtilities;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda72(EditTextBoldCursor editTextBoldCursor) {
-        this.f$0 = editTextBoldCursor;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda72 implements TextView.OnEditorActionListener {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda72 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda72();
+
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda72() {
     }
 
-    public final void run() {
-        AlertsCreator.lambda$createThemeCreateDialog$99(this.f$0);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return AndroidUtilities.hideKeyboard(textView);
     }
 }

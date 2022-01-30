@@ -3186,22 +3186,22 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r4 = 0
                 r12 = 0
             L_0x0072:
-                r5 = 2131628008(0x7f0e0fe8, float:1.8883297E38)
+                r5 = 2131628014(0x7f0e0fee, float:1.8883309E38)
                 java.lang.String r6 = "StatisticOpenProfile"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                 r1.add(r5)
-                r5 = 2131165699(0x7var_, float:1.7945622E38)
+                r5 = 2131165701(0x7var_, float:1.7945627E38)
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r6 = r16
                 r6.add(r5)
                 r5 = 2
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r2.add(r5)
-                r5 = 2131628010(0x7f0e0fea, float:1.88833E38)
+                r5 = 2131628016(0x7f0e0ff0, float:1.8883313E38)
                 java.lang.String r9 = "StatisticSearchUserHistory"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
                 r1.add(r5)
-                r5 = 2131165661(0x7var_dd, float:1.7945545E38)
+                r5 = 2131165663(0x7var_df, float:1.794555E38)
                 java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
                 r6.add(r5)
                 r5 = 1
@@ -3316,11 +3316,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r5 = 0
             L_0x018c:
                 if (r5 == 0) goto L_0x0194
-                r0 = 2131627827(0x7f0e0var_, float:1.888293E38)
+                r0 = 2131627831(0x7f0e0var_, float:1.8882938E38)
                 java.lang.String r9 = "SetAsAdmin"
                 goto L_0x0199
             L_0x0194:
-                r0 = 2131625354(0x7f0e058a, float:1.8877914E38)
+                r0 = 2131625357(0x7f0e058d, float:1.887792E38)
                 java.lang.String r9 = "EditAdminRights"
             L_0x0199:
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r9, r0)

@@ -30,6 +30,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda21 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$showBlockReportSpamAlert$7(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, dialogInterface, i);
+        AlertsCreator.lambda$showBlockReportSpamAlert$8(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, dialogInterface, i);
     }
 }

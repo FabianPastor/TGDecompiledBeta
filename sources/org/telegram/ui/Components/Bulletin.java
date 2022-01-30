@@ -42,7 +42,7 @@ import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.DialogsActivity;
 
-public final class Bulletin {
+public class Bulletin {
     /* access modifiers changed from: private */
     public static final HashMap<FrameLayout, Delegate> delegates = new HashMap<>();
     @SuppressLint({"StaticFieldLeak"})
@@ -54,7 +54,7 @@ public final class Bulletin {
     /* access modifiers changed from: private */
     public Delegate currentDelegate;
     private int duration;
-    private final Runnable hideRunnable = new Bulletin$$ExternalSyntheticLambda2(this);
+    private final Runnable hideRunnable;
     /* access modifiers changed from: private */
     public final Layout layout;
     /* access modifiers changed from: private */
@@ -127,7 +127,15 @@ public final class Bulletin {
         }
     }
 
+    private Bulletin() {
+        this.hideRunnable = new Bulletin$$ExternalSyntheticLambda2(this);
+        this.layout = null;
+        this.parentLayout = null;
+        this.containerLayout = null;
+    }
+
     private Bulletin(final FrameLayout frameLayout, Layout layout2, int i) {
+        this.hideRunnable = new Bulletin$$ExternalSyntheticLambda2(this);
         this.layout = layout2;
         this.parentLayout = new ParentLayout(layout2) {
             /* access modifiers changed from: protected */
@@ -231,20 +239,22 @@ public final class Bulletin {
 
     /* access modifiers changed from: private */
     public void setCanHide(boolean z) {
-        if (this.canHide != z) {
+        Layout layout2;
+        if (this.canHide != z && (layout2 = this.layout) != null) {
             this.canHide = z;
             if (z) {
-                this.layout.postDelayed(this.hideRunnable, (long) this.duration);
+                layout2.postDelayed(this.hideRunnable, (long) this.duration);
             } else {
-                this.layout.removeCallbacks(this.hideRunnable);
+                layout2.removeCallbacks(this.hideRunnable);
             }
         }
     }
 
     /* access modifiers changed from: private */
     public void ensureLayoutTransitionCreated() {
-        if (this.layoutTransition == null) {
-            this.layoutTransition = this.layout.createTransition();
+        Layout layout2 = this.layout;
+        if (layout2 != null && this.layoutTransition == null) {
+            this.layoutTransition = layout2.createTransition();
         }
     }
 
@@ -257,20 +267,21 @@ public final class Bulletin {
     }
 
     public void hide(boolean z, long j) {
-        if (this.showing) {
+        Layout layout2 = this.layout;
+        if (layout2 != null && this.showing) {
             this.showing = false;
             if (visibleBulletin == this) {
                 visibleBulletin = null;
             }
             int i = this.currentBottomOffset;
             this.currentBottomOffset = 0;
-            if (ViewCompat.isLaidOut(this.layout)) {
+            if (ViewCompat.isLaidOut(layout2)) {
                 this.layout.removeCallbacks(this.hideRunnable);
                 if (z) {
-                    Layout layout2 = this.layout;
-                    layout2.transitionRunning = true;
-                    layout2.delegate = this.currentDelegate;
-                    layout2.invalidate();
+                    Layout layout3 = this.layout;
+                    layout3.transitionRunning = true;
+                    layout3.delegate = this.currentDelegate;
+                    layout3.invalidate();
                     if (j >= 0) {
                         Layout.DefaultTransition defaultTransition = new Layout.DefaultTransition();
                         defaultTransition.duration = j;
@@ -279,9 +290,9 @@ public final class Bulletin {
                         ensureLayoutTransitionCreated();
                     }
                     Layout.Transition transition = this.layoutTransition;
-                    Layout layout3 = this.layout;
-                    layout3.getClass();
-                    transition.animateExit(layout3, new Bulletin$$ExternalSyntheticLambda1(layout3), new Bulletin$$ExternalSyntheticLambda3(this), new Bulletin$$ExternalSyntheticLambda0(this), i);
+                    Layout layout4 = this.layout;
+                    layout4.getClass();
+                    transition.animateExit(layout4, new Bulletin$$ExternalSyntheticLambda1(layout4), new Bulletin$$ExternalSyntheticLambda3(this), new Bulletin$$ExternalSyntheticLambda0(this), i);
                     return;
                 }
             }
@@ -1234,6 +1245,16 @@ public final class Bulletin {
             Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
             Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
             return color != null ? color.intValue() : Theme.getColor(str);
+        }
+    }
+
+    public static class EmptyBulletin extends Bulletin {
+        public Bulletin show() {
+            return this;
+        }
+
+        public EmptyBulletin() {
+            super();
         }
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda0 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$checkScrollAnimated$27(valueAnimator);
+        this.f$0.lambda$checkScrollAnimated$28(valueAnimator);
     }
 }

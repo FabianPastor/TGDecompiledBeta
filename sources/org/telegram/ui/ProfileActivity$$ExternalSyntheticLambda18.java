@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
+import android.animation.AnimatorSet;
 
 public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda18 implements Runnable {
-    public final /* synthetic */ ProfileActivity f$0;
-    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ AnimatorSet f$0;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda18(ProfileActivity profileActivity, TLObject tLObject) {
-        this.f$0 = profileActivity;
-        this.f$1 = tLObject;
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda18(AnimatorSet animatorSet) {
+        this.f$0 = animatorSet;
     }
 
     public final void run() {
-        this.f$0.lambda$createView$7(this.f$1);
+        this.f$0.start();
     }
 }

@@ -1,15 +1,21 @@
 package org.telegram.ui;
 
-import org.telegram.ui.PinchToZoomHelper;
+import org.telegram.tgnet.ResultCallback;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.ActionBar.EmojiThemes;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda200 implements PinchToZoomHelper.ClipBoundsListener {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda200 implements ResultCallback {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda200(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void getClipTopBottom(float[] fArr) {
-        this.f$0.lambda$createView$62(fArr);
+    public final void onComplete(Object obj) {
+        this.f$0.lambda$setChatThemeEmoticon$219((EmojiThemes) obj);
+    }
+
+    public /* synthetic */ void onError(TLRPC$TL_error tLRPC$TL_error) {
+        ResultCallback.CC.$default$onError((ResultCallback) this, tLRPC$TL_error);
     }
 }

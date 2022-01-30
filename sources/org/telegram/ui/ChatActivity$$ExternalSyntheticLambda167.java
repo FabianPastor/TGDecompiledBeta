@@ -1,36 +1,28 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessageObject;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_getDiscussionMessage;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$messages_Messages;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda167 implements RequestDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda167 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ MessageObject f$3;
-    public final /* synthetic */ Runnable f$4;
-    public final /* synthetic */ TLRPC$TL_messages_getDiscussionMessage f$5;
-    public final /* synthetic */ TLRPC$Chat f$6;
-    public final /* synthetic */ int f$7;
-    public final /* synthetic */ MessageObject f$8;
+    public final /* synthetic */ TLRPC$messages_Messages f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ int f$3;
+    public final /* synthetic */ ChatActivity f$4;
+    public final /* synthetic */ int f$5;
+    public final /* synthetic */ ArrayList f$6;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda167(ChatActivity chatActivity, int i, int i2, MessageObject messageObject, Runnable runnable, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i3, MessageObject messageObject2) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda167(ChatActivity chatActivity, TLRPC$messages_Messages tLRPC$messages_Messages, long j, int i, ChatActivity chatActivity2, int i2, ArrayList arrayList) {
         this.f$0 = chatActivity;
-        this.f$1 = i;
-        this.f$2 = i2;
-        this.f$3 = messageObject;
-        this.f$4 = runnable;
-        this.f$5 = tLRPC$TL_messages_getDiscussionMessage;
-        this.f$6 = tLRPC$Chat;
-        this.f$7 = i3;
-        this.f$8 = messageObject2;
+        this.f$1 = tLRPC$messages_Messages;
+        this.f$2 = j;
+        this.f$3 = i;
+        this.f$4 = chatActivity2;
+        this.f$5 = i2;
+        this.f$6 = arrayList;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$openDiscussionMessageChat$174(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.lambda$processLoadedDiscussionMessage$193(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
     }
 }

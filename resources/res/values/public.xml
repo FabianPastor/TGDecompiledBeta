@@ -479,6 +479,8 @@
     <public type="drawable" name="googlepay_button_no_shadow_background_image" id="NUM" />
     <public type="drawable" name="googlepay_button_overlay" id="NUM" />
     <public type="drawable" name="gradient_bottom" id="NUM" />
+    <public type="drawable" name="gradient_left" id="NUM" />
+    <public type="drawable" name="gradient_right" id="NUM" />
     <public type="drawable" name="gradient_top" id="NUM" />
     <public type="drawable" name="greydivider" id="NUM" />
     <public type="drawable" name="greydivider_bottom" id="NUM" />
@@ -1057,6 +1059,8 @@
     <public type="drawable" name="qr_at_small" id="NUM" />
     <public type="drawable" name="qr_flashlight" id="NUM" />
     <public type="drawable" name="qr_gallery" id="NUM" />
+    <public type="drawable" name="reactionbutton" id="NUM" />
+    <public type="drawable" name="reactionchatslist" id="NUM" />
     <public type="drawable" name="reactions_bubble_shadow" id="NUM" />
     <public type="drawable" name="redcircle" id="NUM" />
     <public type="drawable" name="regbtn2" id="NUM" />
@@ -1758,6 +1762,7 @@
     <public type="string" name="AccDescrProfilePicture" id="NUM" />
     <public type="string" name="AccDescrQuizCorrectAnswer" id="NUM" />
     <public type="string" name="AccDescrQuizExplanation" id="NUM" />
+    <public type="string" name="AccDescrReactionMentionDown" id="NUM" />
     <public type="string" name="AccDescrReceivedDate" id="NUM" />
     <public type="string" name="AccDescrRepeatList" id="NUM" />
     <public type="string" name="AccDescrRepeatOff" id="NUM" />
@@ -2347,6 +2352,7 @@
     <public type="string" name="BlockedUsersCount_zero" id="NUM" />
     <public type="string" name="BlockedUsersInfo" id="NUM" />
     <public type="string" name="Blue" id="NUM" />
+    <public type="string" name="BlurInChat" id="NUM" />
     <public type="string" name="BlurLinear" id="NUM" />
     <public type="string" name="BlurOff" id="NUM" />
     <public type="string" name="BlurRadial" id="NUM" />
@@ -3008,6 +3014,7 @@
     <public type="string" name="Deletions_two" id="NUM" />
     <public type="string" name="Deletions_zero" id="NUM" />
     <public type="string" name="DescriptionInfo" id="NUM" />
+    <public type="string" name="DescriptionMore" id="NUM" />
     <public type="string" name="DescriptionOptionalPlaceholder" id="NUM" />
     <public type="string" name="DescriptionPlaceholder" id="NUM" />
     <public type="string" name="DeviceStorage" id="NUM" />
@@ -3529,6 +3536,7 @@
     <public type="string" name="ForwardedVideo_zero" id="NUM" />
     <public type="string" name="ForwardingFromNameAndMessage" id="NUM" />
     <public type="string" name="ForwardingFromNames" id="NUM" />
+    <public type="string" name="ForwardsRestrictedInfoBot" id="NUM" />
     <public type="string" name="ForwardsRestrictedInfoChannel" id="NUM" />
     <public type="string" name="ForwardsRestrictedInfoGroup" id="NUM" />
     <public type="string" name="FreeOfTotal" id="NUM" />
@@ -5659,6 +5667,8 @@
     <public type="string" name="ShowCaption" id="NUM" />
     <public type="string" name="ShowForwardingOptions" id="NUM" />
     <public type="string" name="ShowInChat" id="NUM" />
+    <public type="string" name="ShowLess" id="NUM" />
+    <public type="string" name="ShowMore" id="NUM" />
     <public type="string" name="ShowNotificationsFor" id="NUM" />
     <public type="string" name="ShowNotificationsForInfo" id="NUM" />
     <public type="string" name="ShowSenderNames" id="NUM" />

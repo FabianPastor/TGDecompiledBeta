@@ -1,11 +1,14 @@
 package org.telegram.ui.Cells;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
@@ -13,11 +16,15 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.tgnet.TLRPC$TL_messageMediaVenue;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class LocationCell extends FrameLayout {
+    private static FlickerLoadingView globalGradientView;
     private TextView addressTextView;
     private ShapeDrawable circleDrawable;
+    private float enterAlpha = 0.0f;
+    private ValueAnimator enterAnimator;
     private BackupImageView imageView;
     private TextView nameTextView;
     private boolean needDivider;
@@ -62,6 +69,9 @@ public class LocationCell extends FrameLayout {
         TextView textView4 = this.addressTextView;
         boolean z4 = LocaleController.isRTL;
         addView(textView4, LayoutHelper.createFrame(-2, -2.0f, (!z4 ? 3 : i) | 48, (float) (z4 ? 16 : 73), 35.0f, (float) (z4 ? 73 : i2), 0.0f));
+        this.imageView.setAlpha(this.enterAlpha);
+        this.nameTextView.setAlpha(this.enterAlpha);
+        this.addressTextView.setAlpha(this.enterAlpha);
     }
 
     /* access modifiers changed from: protected */
@@ -104,20 +114,74 @@ public class LocationCell extends FrameLayout {
     public void setLocation(TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, String str, String str2, int i, boolean z) {
         this.needDivider = z;
         this.circleDrawable.getPaint().setColor(getColorForIndex(i));
-        this.nameTextView.setText(tLRPC$TL_messageMediaVenue.title);
+        if (tLRPC$TL_messageMediaVenue != null) {
+            this.nameTextView.setText(tLRPC$TL_messageMediaVenue.title);
+        }
         if (str2 != null) {
             this.addressTextView.setText(str2);
-        } else {
+        } else if (tLRPC$TL_messageMediaVenue != null) {
             this.addressTextView.setText(tLRPC$TL_messageMediaVenue.address);
         }
-        this.imageView.setImage(str, (String) null, (Drawable) null);
-        setWillNotDraw(!z);
+        if (str != null) {
+            this.imageView.setImage(str, (String) null, (Drawable) null);
+        }
+        setWillNotDraw(false);
+        setClickable(tLRPC$TL_messageMediaVenue == null);
+        ValueAnimator valueAnimator = this.enterAnimator;
+        if (valueAnimator != null) {
+            valueAnimator.cancel();
+        }
+        boolean z2 = tLRPC$TL_messageMediaVenue == null;
+        float f = this.enterAlpha;
+        float f2 = z2 ? 0.0f : 1.0f;
+        long abs = (long) (Math.abs(f - f2) * 150.0f);
+        this.enterAnimator = ValueAnimator.ofFloat(new float[]{f, f2});
+        this.enterAnimator.addUpdateListener(new LocationCell$$ExternalSyntheticLambda0(this, SystemClock.elapsedRealtime(), abs, f, f2));
+        ValueAnimator valueAnimator2 = this.enterAnimator;
+        if (z2) {
+            abs = Long.MAX_VALUE;
+        }
+        valueAnimator2.setDuration(abs);
+        this.enterAnimator.start();
+        this.imageView.setAlpha(f);
+        this.nameTextView.setAlpha(f);
+        this.addressTextView.setAlpha(f);
+        invalidate();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$setLocation$0(long j, long j2, float f, float f2, ValueAnimator valueAnimator) {
+        float f3 = 1.0f;
+        float min = Math.min(Math.max(((float) (SystemClock.elapsedRealtime() - j)) / ((float) j2), 0.0f), 1.0f);
+        if (j2 > 0) {
+            f3 = min;
+        }
+        float lerp = AndroidUtilities.lerp(f, f2, f3);
+        this.enterAlpha = lerp;
+        this.imageView.setAlpha(lerp);
+        this.nameTextView.setAlpha(this.enterAlpha);
+        this.addressTextView.setAlpha(this.enterAlpha);
+        invalidate();
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        if (globalGradientView == null) {
+            FlickerLoadingView flickerLoadingView = new FlickerLoadingView(getContext());
+            globalGradientView = flickerLoadingView;
+            flickerLoadingView.setIsSingleCell(true);
+        }
+        globalGradientView.setParentSize(getMeasuredWidth(), getMeasuredHeight(), (float) ((-(getParent() instanceof ViewGroup ? ((ViewGroup) getParent()).indexOfChild(this) : 0)) * AndroidUtilities.dp(56.0f)));
+        globalGradientView.setViewType(4);
+        globalGradientView.updateColors();
+        globalGradientView.updateGradient();
+        canvas.saveLayerAlpha(0.0f, 0.0f, (float) getWidth(), (float) getHeight(), (int) ((1.0f - this.enterAlpha) * 255.0f), 31);
+        canvas.translate((float) AndroidUtilities.dp(2.0f), (float) ((getMeasuredHeight() - AndroidUtilities.dp(56.0f)) / 2));
+        globalGradientView.draw(canvas);
+        canvas.restore();
+        super.onDraw(canvas);
         if (this.needDivider) {
-            canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), Theme.dividerPaint);
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) (LocaleController.isRTL ? getWidth() - AndroidUtilities.dp(72.0f) : getWidth()), (float) (getHeight() - 1), Theme.dividerPaint);
         }
     }
 

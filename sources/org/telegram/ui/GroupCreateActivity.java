@@ -375,7 +375,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         this.addToGroup = bundle.getBoolean("addToGroup", false);
         this.chatAddType = bundle.getInt("chatAddType", 0);
         this.chatId = bundle.getLong("chatId");
-        this.channelId = (long) bundle.getInt("channelId");
+        this.channelId = bundle.getLong("channelId");
         if (this.isAlwaysShare || this.isNeverShare || this.addToGroup) {
             this.maxCount = 0;
         } else {
@@ -1387,7 +1387,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 r1 = 8
                 r4.setVisibility(r1)
                 android.widget.TextView r4 = r5.title
-                r1 = 2131626523(0x7f0e0a1b, float:1.8880285E38)
+                r1 = 2131626527(0x7f0e0a1f, float:1.8880293E38)
                 java.lang.String r2 = "NoContacts"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r4.setText(r1)

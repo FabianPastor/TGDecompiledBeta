@@ -7,6 +7,6 @@ public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda8 im
     }
 
     public final Object provide(Object obj) {
-        return AndroidUtilities.lambda$formatSpannableSimple$5((Integer) obj);
+        return AndroidUtilities.lambda$formatSpannable$6((Integer) obj);
     }
 }

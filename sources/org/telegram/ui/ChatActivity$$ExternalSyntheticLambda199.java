@@ -1,23 +1,16 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.GroupCreateActivity;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda199 implements GroupCreateActivity.ContactsAddActivityDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ long f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda199 implements RequestDelegate {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda199 INSTANCE = new ChatActivity$$ExternalSyntheticLambda199();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda199(ChatActivity chatActivity, long j) {
-        this.f$0 = chatActivity;
-        this.f$1 = j;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda199() {
     }
 
-    public final void didSelectUsers(ArrayList arrayList, int i) {
-        this.f$0.lambda$createView$29(this.f$1, arrayList, i);
-    }
-
-    public /* synthetic */ void needAddBot(TLRPC$User tLRPC$User) {
-        GroupCreateActivity.ContactsAddActivityDelegate.CC.$default$needAddBot(this, tLRPC$User);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        ChatActivity.lambda$markSponsoredAsRead$214(tLObject, tLRPC$TL_error);
     }
 }

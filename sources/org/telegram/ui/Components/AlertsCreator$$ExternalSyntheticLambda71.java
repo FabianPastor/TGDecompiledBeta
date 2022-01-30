@@ -1,15 +1,20 @@
 package org.telegram.ui.Components;
 
+import android.content.DialogInterface;
+import android.view.KeyEvent;
+import android.widget.TextView;
 import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda71 implements Runnable {
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda71 implements TextView.OnEditorActionListener {
     public final /* synthetic */ AlertDialog f$0;
+    public final /* synthetic */ DialogInterface.OnClickListener f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda71(AlertDialog alertDialog) {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda71(AlertDialog alertDialog, DialogInterface.OnClickListener onClickListener) {
         this.f$0 = alertDialog;
+        this.f$1 = onClickListener;
     }
 
-    public final void run() {
-        AlertsCreator.lambda$performAskAQuestion$13(this.f$0);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return AlertsCreator.lambda$createChangeNameAlert$30(this.f$0, this.f$1, textView, i, keyEvent);
     }
 }

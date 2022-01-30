@@ -180,7 +180,7 @@ public final class FloatingToolbar {
                 SubMenu subMenu = item.getSubMenu();
                 if (subMenu != null) {
                     arrayList.addAll(getVisibleAndEnabledMenuItems(subMenu));
-                } else {
+                } else if (item.getItemId() != 16908353) {
                     arrayList.add(item);
                 }
             }
@@ -764,7 +764,8 @@ public final class FloatingToolbar {
             boolean z = true;
             while (!linkedList.isEmpty()) {
                 MenuItem menuItem = (MenuItem) linkedList.peek();
-                View access$2000 = FloatingToolbar.this.createMenuItemButton(this.mContext, menuItem, this.mIconTextSpacing);
+                boolean z2 = linkedList.size() == 1;
+                View access$2000 = FloatingToolbar.this.createMenuItemButton(this.mContext, menuItem, this.mIconTextSpacing, z, z2);
                 if (access$2000 instanceof LinearLayout) {
                     ((LinearLayout) access$2000).setGravity(17);
                 }
@@ -773,7 +774,6 @@ public final class FloatingToolbar {
                     Double.isNaN(paddingStart);
                     access$2000.setPaddingRelative((int) (paddingStart * 1.5d), access$2000.getPaddingTop(), access$2000.getPaddingEnd(), access$2000.getPaddingBottom());
                 }
-                boolean z2 = linkedList.size() == 1;
                 if (z2) {
                     int paddingStart2 = access$2000.getPaddingStart();
                     int paddingTop = access$2000.getPaddingTop();
@@ -1048,7 +1048,7 @@ public final class FloatingToolbar {
                 setVerticalScrollBarEnabled(false);
                 setOutlineProvider(new ViewOutlineProvider(this, floatingToolbarPopup) {
                     public void getOutline(View view, Outline outline) {
-                        outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.dp(6.0f));
+                        outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight() + AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f));
                     }
                 });
                 setClipToOutline(true);
@@ -1116,7 +1116,7 @@ public final class FloatingToolbar {
             }
 
             private View createMenuButton(MenuItem menuItem) {
-                View access$2000 = FloatingToolbar.this.createMenuItemButton(this.mContext, menuItem, this.mIconTextSpacing);
+                View access$2000 = FloatingToolbar.this.createMenuItemButton(this.mContext, menuItem, this.mIconTextSpacing, false, false);
                 int i = this.mSidePadding;
                 access$2000.setPadding(i, 0, i, 0);
                 return access$2000;
@@ -1125,7 +1125,7 @@ public final class FloatingToolbar {
     }
 
     /* access modifiers changed from: private */
-    public View createMenuItemButton(Context context, MenuItem menuItem, int i) {
+    public View createMenuItemButton(Context context, MenuItem menuItem, int i, boolean z, boolean z2) {
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setLayoutParams(new ViewGroup.LayoutParams(-2, -2));
         linearLayout.setOrientation(0);
@@ -1141,16 +1141,25 @@ public final class FloatingToolbar {
         textView.setFocusable(false);
         textView.setImportantForAccessibility(2);
         textView.setFocusableInTouchMode(false);
+        int color = Theme.getColor("listSelectorSDK21");
         int i2 = this.currentStyle;
         if (i2 == 0) {
             textView.setTextColor(getThemedColor("dialogTextBlack"));
-            linearLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         } else if (i2 == 2) {
             textView.setTextColor(-328966);
-            linearLayout.setBackgroundDrawable(Theme.getSelectorDrawable(NUM, false));
+            color = NUM;
         } else if (i2 == 1) {
             textView.setTextColor(getThemedColor("windowBackgroundWhiteBlackText"));
-            linearLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        }
+        if (z) {
+            int i3 = 6;
+            int i4 = z ? 6 : 0;
+            if (!z) {
+                i3 = 0;
+            }
+            linearLayout.setBackgroundDrawable(Theme.createRadSelectorDrawable(color, i4, 0, 0, i3));
+        } else {
+            linearLayout.setBackgroundDrawable(Theme.getSelectorDrawable(color, false));
         }
         textView.setPaddingRelative(AndroidUtilities.dp(11.0f), 0, 0, 0);
         linearLayout.addView(textView, new LinearLayout.LayoutParams(-2, AndroidUtilities.dp(48.0f)));

@@ -1134,7 +1134,7 @@ public class SharedConfig {
         edit.commit();
     }
 
-    public static void toggleDebugChatBlur() {
+    public static void toggleChatBlur() {
         chatBlur = !chatBlur;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("chatBlur", chatBlur);

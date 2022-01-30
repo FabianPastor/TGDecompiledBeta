@@ -8,6 +8,6 @@ public final /* synthetic */ class DialogsSearchAdapter$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$clearRecentSearch$7();
+        this.f$0.lambda$searchDialogsInternal$9();
     }
 }

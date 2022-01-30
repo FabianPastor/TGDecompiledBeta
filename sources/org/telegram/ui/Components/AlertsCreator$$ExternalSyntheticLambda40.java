@@ -1,18 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import android.widget.LinearLayout;
+import android.content.DialogInterface;
+import org.telegram.messenger.AndroidUtilities;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda40 implements View.OnClickListener {
-    public final /* synthetic */ LinearLayout f$0;
-    public final /* synthetic */ int[] f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda40 implements DialogInterface.OnShowListener {
+    public final /* synthetic */ EditTextBoldCursor f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda40(LinearLayout linearLayout, int[] iArr) {
-        this.f$0 = linearLayout;
-        this.f$1 = iArr;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda40(EditTextBoldCursor editTextBoldCursor) {
+        this.f$0 = editTextBoldCursor;
     }
 
-    public final void onClick(View view) {
-        AlertsCreator.lambda$createColorSelectDialog$66(this.f$0, this.f$1, view);
+    public final void onShow(DialogInterface dialogInterface) {
+        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda75(this.f$0));
     }
 }

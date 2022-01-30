@@ -1,17 +1,14 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.AlertsCreator;
+import java.util.Comparator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda179 implements AlertsCreator.ScheduleDatePickerDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ Object f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda179 implements Comparator {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda179 INSTANCE = new ChatActivity$$ExternalSyntheticLambda179();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda179(ChatActivity chatActivity, Object obj) {
-        this.f$0 = chatActivity;
-        this.f$1 = obj;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda179() {
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$createView$37(this.f$1, z, i);
+    public final int compare(Object obj, Object obj2) {
+        return ((Integer) obj2).compareTo((Integer) obj);
     }
 }

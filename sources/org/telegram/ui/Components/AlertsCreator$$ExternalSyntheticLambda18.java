@@ -13,6 +13,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda18 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createTTLAlert$86(this.f$0, this.f$1, dialogInterface, i);
+        AlertsCreator.lambda$createTTLAlert$88(this.f$0, this.f$1, dialogInterface, i);
     }
 }

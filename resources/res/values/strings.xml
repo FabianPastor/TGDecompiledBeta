@@ -82,6 +82,7 @@
     <string name="AccDescrProfilePicture">Profile picture</string>
     <string name="AccDescrQuizCorrectAnswer">Correct answer</string>
     <string name="AccDescrQuizExplanation">Explanation</string>
+    <string name="AccDescrReactionMentionDown">Go to next unread reactions</string>
     <string name="AccDescrReceivedDate">Received %s</string>
     <string name="AccDescrRepeatList">Repeat, playlist</string>
     <string name="AccDescrRepeatOff">Repeat, off</string>
@@ -671,6 +672,7 @@
     <string name="BlockedUsersCount_zero">%1$d blocked users</string>
     <string name="BlockedUsersInfo">Blocked users will not be able to contact you and will not see your Last Seen time.</string>
     <string name="Blue">Blue</string>
+    <string name="BlurInChat">Blur in chat</string>
     <string name="BlurLinear">Linear</string>
     <string name="BlurOff">Off</string>
     <string name="BlurRadial">Radial</string>
@@ -1332,6 +1334,7 @@
     <string name="Deletions_two">%1$d deletions</string>
     <string name="Deletions_zero">%1$d deletions</string>
     <string name="DescriptionInfo">You can provide an optional description for your channel.</string>
+    <string name="DescriptionMore">more</string>
     <string name="DescriptionOptionalPlaceholder">Description (optional)</string>
     <string name="DescriptionPlaceholder">Description</string>
     <string name="DeviceStorage">Device storage</string>
@@ -1853,6 +1856,7 @@
     <string name="ForwardedVideo_zero">%1$d forwarded videos</string>
     <string name="ForwardingFromNameAndMessage">%s: %s</string>
     <string name="ForwardingFromNames">From %s</string>
+    <string name="ForwardsRestrictedInfoBot">Copying and forwarding is not allowed from this bot.</string>
     <string name="ForwardsRestrictedInfoChannel">Сopying and forwarding is not allowed in this channel.</string>
     <string name="ForwardsRestrictedInfoGroup">Сopying and forwarding is not allowed in this group.</string>
     <string name="FreeOfTotal">Free %1$s of %2$s</string>
@@ -3983,6 +3987,8 @@
     <string name="ShowCaption">Show caption</string>
     <string name="ShowForwardingOptions">Show forwarding options</string>
     <string name="ShowInChat">Show in chat</string>
+    <string name="ShowLess">Show less</string>
+    <string name="ShowMore">Show more</string>
     <string name="ShowNotificationsFor">Show notifications for</string>
     <string name="ShowNotificationsForInfo">Turn this off if you want to receive notifications only from your active account.</string>
     <string name="ShowSenderNames">Show senders’ names</string>

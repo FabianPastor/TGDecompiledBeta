@@ -331,10 +331,6 @@ public class RecyclerAnimationScrollHelper {
         this.animationCallback = animationCallback2;
     }
 
-    public int getScrollDirection() {
-        return this.scrollDirection;
-    }
-
     public static abstract class AnimatableAdapter extends RecyclerListView.SelectionAdapter {
         public boolean animationRunning;
         private ArrayList<Integer> rangeInserted = new ArrayList<>();

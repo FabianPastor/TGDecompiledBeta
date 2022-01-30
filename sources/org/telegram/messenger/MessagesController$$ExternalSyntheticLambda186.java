@@ -1,21 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$updates_Difference;
+import org.telegram.tgnet.TLRPC$messages_Dialogs;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda186 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$updates_Difference f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ TLRPC$messages_Dialogs f$1;
+    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda186(MessagesController messagesController, TLRPC$updates_Difference tLRPC$updates_Difference, int i, int i2) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda186(MessagesController messagesController, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, boolean z) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$updates_Difference;
-        this.f$2 = i;
-        this.f$3 = i2;
+        this.f$1 = tLRPC$messages_Dialogs;
+        this.f$2 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$getDifference$259(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$processDialogsUpdate$183(this.f$1, this.f$2);
     }
 }

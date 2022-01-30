@@ -1,14 +1,22 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
+import java.util.concurrent.CountDownLatch;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda155 implements Comparator {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda155 INSTANCE = new ChatActivity$$ExternalSyntheticLambda155();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda155 implements Runnable {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ MessagesStorage f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ CountDownLatch f$3;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda155() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda155(ChatActivity chatActivity, MessagesStorage messagesStorage, int i, CountDownLatch countDownLatch) {
+        this.f$0 = chatActivity;
+        this.f$1 = messagesStorage;
+        this.f$2 = i;
+        this.f$3 = countDownLatch;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return ((Integer) obj2).compareTo((Integer) obj);
+    public final void run() {
+        this.f$0.lambda$onFragmentCreate$8(this.f$1, this.f$2, this.f$3);
     }
 }

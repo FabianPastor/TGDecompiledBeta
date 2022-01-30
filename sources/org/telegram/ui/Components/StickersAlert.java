@@ -130,6 +130,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     private boolean lastNameAvailable;
     /* access modifiers changed from: private */
     public GridLayoutManager layoutManager;
+    private Runnable onDismissListener;
     private ActionBarMenuItem optionsButton;
     private Activity parentActivity;
     /* access modifiers changed from: private */
@@ -1406,7 +1407,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r2 = r0.set
             boolean r2 = r2.masks
-            r3 = 2131627522(0x7f0e0e02, float:1.888231E38)
+            r3 = 2131627526(0x7f0e0e06, float:1.8882319E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r2 == 0) goto L_0x00d1
             java.lang.Object[] r2 = new java.lang.Object[r6]
@@ -1443,7 +1444,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         L_0x0103:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r3 = r0.set
-            r7 = 2131624232(0x7f0e0128, float:1.8875638E38)
+            r7 = 2131624233(0x7f0e0129, float:1.887564E38)
             java.lang.String r8 = "AddStickersCount"
             if (r3 == 0) goto L_0x0129
             boolean r3 = r3.masks
@@ -1490,7 +1491,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             if (r0 == 0) goto L_0x0171
             goto L_0x0189
         L_0x0171:
-            r0 = 2131625978(0x7f0e07fa, float:1.887918E38)
+            r0 = 2131625982(0x7f0e07fe, float:1.8879187E38)
             java.lang.String r1 = "ImportStickersProcessing"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -1502,7 +1503,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         L_0x0189:
             org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda10 r0 = new org.telegram.ui.Components.StickersAlert$$ExternalSyntheticLambda10
             r0.<init>(r12)
-            r1 = 2131625965(0x7f0e07ed, float:1.8879153E38)
+            r1 = 2131625969(0x7f0e07f1, float:1.887916E38)
             java.lang.Object[] r3 = new java.lang.Object[r6]
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$ImportingSticker> r7 = r12.importingStickersPaths
             if (r7 == 0) goto L_0x0198
@@ -1521,7 +1522,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.setEnabled(r6)
             goto L_0x01cc
         L_0x01b7:
-            r0 = 2131625010(0x7f0e0432, float:1.8877216E38)
+            r0 = 2131625012(0x7f0e0434, float:1.887722E38)
             java.lang.String r1 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -1921,8 +1922,16 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 4);
     }
 
+    public void setOnDismissListener(Runnable runnable) {
+        this.onDismissListener = runnable;
+    }
+
     public void dismiss() {
         super.dismiss();
+        Runnable runnable = this.onDismissListener;
+        if (runnable != null) {
+            runnable.run();
+        }
         if (this.reqId != 0) {
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.reqId, true);
             this.reqId = 0;

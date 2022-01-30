@@ -14,6 +14,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Property;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -775,7 +776,7 @@ public class PhonebookShareAlert extends BottomSheet {
             int r7 = r0.getThemedColor(r7)
             r4.setBackgroundColor(r7)
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            r7 = 2131165487(0x7var_f, float:1.7945193E38)
+            r7 = 2131165489(0x7var_, float:1.7945197E38)
             r4.setBackButtonImage(r7)
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
             java.lang.String r7 = "dialogTextBlack"
@@ -794,9 +795,9 @@ public class PhonebookShareAlert extends BottomSheet {
             r7 = 0
             r4.setAlpha(r7)
             boolean r4 = r0.isImport
-            r8 = 2131624212(0x7f0e0114, float:1.8875597E38)
+            r8 = 2131624213(0x7f0e0115, float:1.88756E38)
             java.lang.String r10 = "AddContactPhonebookTitle"
-            r11 = 2131627860(0x7f0e0var_, float:1.8882996E38)
+            r11 = 2131627864(0x7f0e0var_, float:1.8883004E38)
             java.lang.String r12 = "ShareContactTitle"
             if (r4 == 0) goto L_0x023b
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
@@ -994,7 +995,9 @@ public class PhonebookShareAlert extends BottomSheet {
         if (i == 0) {
             try {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", vcardItem.getValue(false)));
-                Toast.makeText(this.parentFragment.getParentActivity(), LocaleController.getString("TextCopied", NUM), 0).show();
+                if (Build.VERSION.SDK_INT < 31) {
+                    Toast.makeText(this.parentFragment.getParentActivity(), LocaleController.getString("TextCopied", NUM), 0).show();
+                }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
@@ -1031,7 +1034,9 @@ public class PhonebookShareAlert extends BottomSheet {
                     simpleLayout.textView.setText(LocaleController.getString("TextCopied", NUM));
                     simpleLayout.imageView.setImageResource(NUM);
                 }
-                Bulletin.make((FrameLayout) this.containerView, (Bulletin.Layout) simpleLayout, 1500).show();
+                if (Build.VERSION.SDK_INT < 31) {
+                    Bulletin.make((FrameLayout) this.containerView, (Bulletin.Layout) simpleLayout, 1500).show();
+                }
             }
         }
         return true;

@@ -531,14 +531,49 @@ public class ActionBar extends FrameLayout {
             this.actionMode = null;
         }
         this.actionModeTag = str;
-        AnonymousClass1 r4 = new ActionBarMenu(getContext(), this) {
+        AnonymousClass1 r2 = new ActionBarMenu(getContext(), this) {
             public void setBackgroundColor(int i) {
-                super.setBackgroundColor(ActionBar.this.actionModeColor = i);
+                int unused = ActionBar.this.actionModeColor = i;
+                ActionBar actionBar = ActionBar.this;
+                if (!actionBar.blurredBackground) {
+                    super.setBackgroundColor(actionBar.actionModeColor);
+                }
+            }
+
+            /* access modifiers changed from: protected */
+            public void dispatchDraw(Canvas canvas) {
+                ActionBar actionBar = ActionBar.this;
+                if (actionBar.blurredBackground) {
+                    actionBar.rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                    ActionBar actionBar2 = ActionBar.this;
+                    actionBar2.blurScrimPaint.setColor(actionBar2.actionModeColor);
+                    ActionBar actionBar3 = ActionBar.this;
+                    actionBar3.contentView.drawBlur(canvas, 0.0f, actionBar3.rectTmp, actionBar3.blurScrimPaint, true);
+                }
+                super.dispatchDraw(canvas);
+            }
+
+            /* access modifiers changed from: protected */
+            public void onAttachedToWindow() {
+                super.onAttachedToWindow();
+                SizeNotifierFrameLayout sizeNotifierFrameLayout = ActionBar.this.contentView;
+                if (sizeNotifierFrameLayout != null) {
+                    sizeNotifierFrameLayout.blurBehindViews.add(this);
+                }
+            }
+
+            /* access modifiers changed from: protected */
+            public void onDetachedFromWindow() {
+                super.onDetachedFromWindow();
+                SizeNotifierFrameLayout sizeNotifierFrameLayout = ActionBar.this.contentView;
+                if (sizeNotifierFrameLayout != null) {
+                    sizeNotifierFrameLayout.blurBehindViews.remove(this);
+                }
             }
         };
-        this.actionMode = r4;
-        r4.isActionMode = true;
-        r4.setClickable(true);
+        this.actionMode = r2;
+        r2.isActionMode = true;
+        r2.setClickable(true);
         this.actionMode.setBackgroundColor(getThemedColor("actionBarActionModeDefault"));
         addView(this.actionMode, indexOfChild(this.backButtonImageView));
         this.actionMode.setPadding(0, this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0, 0, 0);
@@ -549,18 +584,6 @@ public class ActionBar extends FrameLayout {
         layoutParams.gravity = 5;
         this.actionMode.setLayoutParams(layoutParams);
         this.actionMode.setVisibility(4);
-        if (this.occupyStatusBar && z && this.actionModeTop == null) {
-            View view = new View(getContext());
-            this.actionModeTop = view;
-            view.setBackgroundColor(getThemedColor("actionBarActionModeDefaultTop"));
-            addView(this.actionModeTop);
-            FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.actionModeTop.getLayoutParams();
-            layoutParams2.height = AndroidUtilities.statusBarHeight;
-            layoutParams2.width = -1;
-            layoutParams2.gravity = 51;
-            this.actionModeTop.setLayoutParams(layoutParams2);
-            this.actionModeTop.setVisibility(4);
-        }
         return this.actionMode;
     }
 

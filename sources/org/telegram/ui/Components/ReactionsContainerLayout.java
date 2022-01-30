@@ -14,7 +14,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Region;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.util.Property;
@@ -201,21 +200,17 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                     if (Float.isNaN(min)) {
                         min = 1.0f;
                     }
-                    childAt.setScaleX(min);
-                    childAt.setScaleY(min);
+                    ((ReactionHolderView) childAt).sideScale = min;
                     View childAt2 = recyclerView.getChildAt(recyclerView.getChildCount() - 1);
                     childAt2.getLocationInWindow(ReactionsContainerLayout.this.location);
                     float min2 = ((1.0f - Math.min(1.0f, (-Math.min((float) ((i3 + recyclerView.getWidth()) - (ReactionsContainerLayout.this.location[0] + childAt2.getWidth())), 0.0f)) / ((float) childAt2.getWidth()))) * 0.39999998f) + 0.6f;
                     if (Float.isNaN(min2)) {
                         min2 = 1.0f;
                     }
-                    childAt2.setScaleX(min2);
-                    childAt2.setScaleY(min2);
+                    ((ReactionHolderView) childAt2).sideScale = min2;
                 }
                 for (int i4 = 1; i4 < ReactionsContainerLayout.this.recyclerListView.getChildCount() - 1; i4++) {
-                    View childAt3 = ReactionsContainerLayout.this.recyclerListView.getChildAt(i4);
-                    childAt3.setScaleX(1.0f);
-                    childAt3.setScaleY(1.0f);
+                    ((ReactionHolderView) ReactionsContainerLayout.this.recyclerListView.getChildAt(i4)).sideScale = 1.0f;
                 }
                 ReactionsContainerLayout.this.invalidate();
             }
@@ -273,26 +268,10 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         float max = (Math.max(0.25f, Math.min(this.transitionProgress, 1.0f)) - 0.25f) / 0.75f;
         float f7 = this.bigCircleRadius * max;
         float f8 = this.smallCircleRadius * max;
-        float width = (float) (LocaleController.isRTL ? this.bigCircleOffset : getWidth() - this.bigCircleOffset);
-        float height = (float) (getHeight() - getPaddingBottom());
-        float dp = (float) AndroidUtilities.dp(3.0f);
-        float f9 = dp * max;
-        this.shadow.setBounds((int) ((width - f7) - f9), (int) ((height - f7) - f9), (int) (width + f7 + f9), (int) (height + f7 + f9));
-        this.shadow.draw(canvas2);
-        canvas2.drawCircle(width, height, f7, this.bgPaint);
-        float width2 = LocaleController.isRTL ? ((float) this.bigCircleOffset) - this.bigCircleRadius : ((float) (getWidth() - this.bigCircleOffset)) + this.bigCircleRadius;
-        float height2 = (((float) getHeight()) - this.smallCircleRadius) - dp;
-        float var_ = ((float) (-AndroidUtilities.dp(1.0f))) * max;
-        this.shadow.setBounds((int) ((width2 - f7) - var_), (int) ((height2 - f7) - var_), (int) (width2 + f7 + var_), (int) (height2 + f7 + var_));
-        this.shadow.draw(canvas2);
-        canvas2.drawCircle(width2, height2, f8, this.bgPaint);
-        float var_ = this.pressedProgress;
-        this.pressedViewScale = (var_ * 2.0f) + 1.0f;
-        this.otherViewsScale = 1.0f - (var_ * 0.15f);
+        float f9 = this.pressedProgress;
+        this.pressedViewScale = (f9 * 2.0f) + 1.0f;
+        this.otherViewsScale = 1.0f - (f9 * 0.15f);
         int save = canvas.save();
-        this.mPath.rewind();
-        this.mPath.addCircle((float) (LocaleController.isRTL ? this.bigCircleOffset : getWidth() - this.bigCircleOffset), (float) (getHeight() - getPaddingBottom()), f7, Path.Direction.CW);
-        canvas2.clipPath(this.mPath, Region.Op.DIFFERENCE);
         if (LocaleController.isRTL) {
             f2 = (float) getWidth();
             f = 0.125f;
@@ -316,9 +295,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         this.rect.set(((float) getPaddingLeft()) + (((float) (getWidth() - getPaddingRight())) * f4), ((float) getPaddingTop()) + (((float) this.recyclerListView.getMeasuredHeight()) * (1.0f - this.otherViewsScale)), ((float) (getWidth() - getPaddingRight())) * f3, (float) (getHeight() - getPaddingBottom()));
         this.radius = this.rect.height() / 2.0f;
         Drawable drawable = this.shadow;
-        int width3 = getWidth() - getPaddingRight();
+        int width = getWidth() - getPaddingRight();
         Rect rect2 = this.shadowPad;
-        drawable.setBounds((int) ((((float) getPaddingLeft()) + (((float) (width3 + rect2.right)) * f4)) - ((float) rect2.left)), getPaddingTop() - this.shadowPad.top, (int) (((float) ((getWidth() - getPaddingRight()) + this.shadowPad.right)) * f3), (getHeight() - getPaddingBottom()) + this.shadowPad.bottom);
+        drawable.setBounds((int) ((((float) getPaddingLeft()) + (((float) (width + rect2.right)) * f4)) - ((float) rect2.left)), getPaddingTop() - this.shadowPad.top, (int) (((float) ((getWidth() - getPaddingRight()) + this.shadowPad.right)) * f3), (getHeight() - getPaddingBottom()) + this.shadowPad.bottom);
         this.shadow.draw(canvas2);
         canvas2.restoreToCount(save);
         int save2 = canvas.save();
@@ -363,20 +342,6 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         canvas2.clipPath(this.mPath);
         canvas2.translate(((float) ((LocaleController.isRTL ? -1 : 1) * getWidth())) * (1.0f - this.transitionProgress), 0.0f);
         super.dispatchDraw(canvas);
-        canvas2.restoreToCount(save3);
-        int save4 = canvas.save();
-        if (LocaleController.isRTL) {
-            f3 = Math.max(0.25f, Math.min(1.0f, this.transitionProgress));
-        } else {
-            f4 = 1.0f - Math.max(0.25f, Math.min(1.0f, this.transitionProgress));
-        }
-        this.rect.set(((float) getPaddingLeft()) + (((float) (getWidth() - getPaddingRight())) * f4), (float) getPaddingTop(), ((float) (getWidth() - getPaddingRight())) * f3, (float) (getHeight() - getPaddingBottom()));
-        this.mPath.rewind();
-        Path path2 = this.mPath;
-        RectF rectF3 = this.rect;
-        float var_ = this.radius;
-        path2.addRoundRect(rectF3, var_, var_, Path.Direction.CW);
-        canvas2.clipPath(this.mPath);
         Paint paint = this.leftShadowPaint;
         if (paint != null) {
             paint.setAlpha((int) (this.leftAlpha * this.transitionProgress * 255.0f));
@@ -387,7 +352,23 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
             paint2.setAlpha((int) (this.rightAlpha * this.transitionProgress * 255.0f));
             canvas2.drawRect(this.rect, this.rightShadowPaint);
         }
-        canvas2.restoreToCount(save4);
+        canvas2.restoreToCount(save3);
+        canvas.save();
+        canvas2.clipRect(0.0f, this.rect.bottom, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+        float width2 = (float) (LocaleController.isRTL ? this.bigCircleOffset : getWidth() - this.bigCircleOffset);
+        float height = (float) (getHeight() - getPaddingBottom());
+        float dp = (float) AndroidUtilities.dp(3.0f);
+        float var_ = dp * max;
+        this.shadow.setBounds((int) ((width2 - f7) - var_), (int) ((height - f7) - var_), (int) (width2 + f7 + var_), (int) (height + f7 + var_));
+        this.shadow.draw(canvas2);
+        canvas2.drawCircle(width2, height, f7, this.bgPaint);
+        float width3 = LocaleController.isRTL ? ((float) this.bigCircleOffset) - this.bigCircleRadius : ((float) (getWidth() - this.bigCircleOffset)) + this.bigCircleRadius;
+        float height2 = (((float) getHeight()) - this.smallCircleRadius) - dp;
+        float var_ = ((float) (-AndroidUtilities.dp(1.0f))) * max;
+        this.shadow.setBounds((int) ((width3 - f7) - var_), (int) ((height2 - f7) - var_), (int) (width3 + f7 + var_), (int) (f7 + height2 + var_));
+        this.shadow.draw(canvas2);
+        canvas2.drawCircle(width3, height2, f8, this.bgPaint);
+        canvas.restore();
     }
 
     private void checkPressedProgress(Canvas canvas, ReactionHolderView reactionHolderView) {
@@ -431,6 +412,8 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         reactionHolderView.setPivotY(reactionHolderView.backupImageView.getY() + ((float) reactionHolderView.backupImageView.getMeasuredHeight()));
         reactionHolderView.setScaleX(this.otherViewsScale);
         reactionHolderView.setScaleY(this.otherViewsScale);
+        reactionHolderView.backupImageView.setScaleX(reactionHolderView.sideScale);
+        reactionHolderView.backupImageView.setScaleY(reactionHolderView.sideScale);
         reactionHolderView.pressedBackupImageView.setVisibility(4);
         reactionHolderView.backupImageView.setAlpha(1.0f);
     }
@@ -604,6 +587,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         public BackupImageView pressedBackupImageView;
         float pressedX;
         float pressedY;
+        public float sideScale = 1.0f;
 
         ReactionHolderView(Context context) {
             super(context);
@@ -692,7 +676,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 this.pressed = true;
                 this.pressedX = motionEvent.getX();
                 this.pressedY = motionEvent.getY();
-                AndroidUtilities.runOnUIThread(this.longPressRunnable, (long) ViewConfiguration.getLongPressTimeout());
+                if (this.sideScale == 1.0f) {
+                    AndroidUtilities.runOnUIThread(this.longPressRunnable, (long) ViewConfiguration.getLongPressTimeout());
+                }
             }
             float scaledTouchSlop = ((float) ViewConfiguration.get(getContext()).getScaledTouchSlop()) * 2.0f;
             if ((motionEvent.getAction() == 2 && (Math.abs(this.pressedX - motionEvent.getX()) > scaledTouchSlop || Math.abs(this.pressedY - motionEvent.getY()) > scaledTouchSlop)) || motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {

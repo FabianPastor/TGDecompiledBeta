@@ -1,17 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesStorage;
+import org.telegram.tgnet.TLObject;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda160 implements MessagesStorage.IntCallback {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda160 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda160(ChatActivity chatActivity, boolean z) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda160(ChatActivity chatActivity, TLObject tLObject) {
         this.f$0 = chatActivity;
-        this.f$1 = z;
+        this.f$1 = tLObject;
     }
 
-    public final void run(int i) {
-        this.f$0.lambda$processSelectedOption$144(this.f$1, i);
+    public final void run() {
+        this.f$0.lambda$startEditingMessageObject$158(this.f$1);
     }
 }

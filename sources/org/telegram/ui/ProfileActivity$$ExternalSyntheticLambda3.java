@@ -1,15 +1,21 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda3 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda3 implements ValueAnimator.AnimatorUpdateListener {
     public final /* synthetic */ ProfileActivity f$0;
+    public final /* synthetic */ ValueAnimator f$1;
+    public final /* synthetic */ float f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda3(ProfileActivity profileActivity) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda3(ProfileActivity profileActivity, ValueAnimator valueAnimator, float f, boolean z) {
         this.f$0 = profileActivity;
+        this.f$1 = valueAnimator;
+        this.f$2 = f;
+        this.f$3 = z;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$createView$2(dialogInterface, i);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$searchExpandTransition$30(this.f$1, this.f$2, this.f$3, valueAnimator);
     }
 }

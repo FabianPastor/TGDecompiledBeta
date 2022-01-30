@@ -26,6 +26,7 @@ import org.telegram.ui.Components.ReactionsContainerLayout;
 public class ReactionsEffectOverlay {
     @SuppressLint({"StaticFieldLeak"})
     public static ReactionsEffectOverlay currentOverlay;
+    public static ReactionsEffectOverlay currentShortOverlay;
     private static int uniqPrefix;
     float animateInProgress;
     float animateOutProgress;
@@ -34,7 +35,6 @@ public class ReactionsEffectOverlay {
     private ChatMessageCell cell;
     /* access modifiers changed from: private */
     public final FrameLayout container;
-    private final int currentAccount;
     /* access modifiers changed from: private */
     public float dismissProgress;
     /* access modifiers changed from: private */
@@ -45,7 +45,8 @@ public class ReactionsEffectOverlay {
     public final AnimationView emojiImageView;
     /* access modifiers changed from: private */
     public final AnimationView emojiStaticImageView;
-    private final BaseFragment fragment;
+    /* access modifiers changed from: private */
+    public boolean finished;
     private final long groupId;
     /* access modifiers changed from: private */
     public ReactionsContainerLayout.ReactionHolderView holderView;
@@ -85,12 +86,10 @@ public class ReactionsEffectOverlay {
         int i3 = i2;
         ChatActivity chatActivity = null;
         this.holderView = null;
-        this.fragment = baseFragment2;
         this.messageId = chatMessageCell.getMessageObject().getId();
         this.groupId = chatMessageCell.getMessageObject().getGroupId();
         this.reaction = str2;
         this.animationType = i3;
-        this.currentAccount = i;
         this.cell = chatMessageCell2;
         ReactionsLayoutInBubble.ReactionButton reactionButton = chatMessageCell2.getReactionButton(str2);
         final ChatActivity chatActivity2 = baseFragment2 instanceof ChatActivity ? (ChatActivity) baseFragment2 : chatActivity;
@@ -106,9 +105,6 @@ public class ReactionsEffectOverlay {
                     i4++;
                 }
             }
-        }
-        if (i3 == 1) {
-            chatMessageCell2.reactionsLayoutInBubble.animateReaction(str2);
         }
         ReactionsContainerLayout.ReactionHolderView reactionHolderView = this.holderView;
         boolean z2 = (reactionHolderView == null && (f == 0.0f || f2 == 0.0f)) ? false : true;
@@ -153,15 +149,15 @@ public class ReactionsEffectOverlay {
         FrameLayout frameLayout = new FrameLayout(context2);
         this.container = frameLayout;
         int i8 = i7;
-        int i9 = i6 >> 1;
         final BaseFragment baseFragment3 = baseFragment;
-        int i10 = i6;
+        int i9 = i6 >> 1;
         AnonymousClass1 r15 = r0;
         final ChatMessageCell chatMessageCell3 = chatMessageCell;
-        int i11 = i5;
+        int i10 = i6;
         final String str3 = str;
-        FrameLayout frameLayout2 = frameLayout;
+        int i11 = i5;
         final int i12 = i8;
+        FrameLayout frameLayout2 = frameLayout;
         final int i13 = i2;
         final boolean z3 = z2;
         final float f7 = f6;
@@ -199,7 +195,7 @@ public class ReactionsEffectOverlay {
                     }
                     BaseFragment baseFragment = baseFragment3;
                     if (baseFragment instanceof ChatActivity) {
-                        chatMessageCell = ((ChatActivity) baseFragment).findMessageCell(ReactionsEffectOverlay.this.messageId);
+                        chatMessageCell = ((ChatActivity) baseFragment).findMessageCell(ReactionsEffectOverlay.this.messageId, false);
                     } else {
                         chatMessageCell = chatMessageCell3;
                     }
@@ -322,14 +318,24 @@ public class ReactionsEffectOverlay {
                                 } else {
                                     reactionsEffectOverlay2.animateOutProgress = var_ + (16.0f / (i5 == 2 ? 350.0f : 220.0f));
                                 }
-                                if (reactionsEffectOverlay2.animateOutProgress >= 1.0f) {
-                                    reactionsEffectOverlay2.animateOutProgress = 1.0f;
-                                    ReactionsEffectOverlay.currentOverlay = null;
+                                if (reactionsEffectOverlay2.animateOutProgress > 0.7f && !reactionsEffectOverlay2.finished) {
+                                    ReactionsEffectOverlay.startShortAnimation();
+                                }
+                                if (ReactionsEffectOverlay.this.animateOutProgress >= 1.0f) {
+                                    int i6 = i13;
+                                    if (i6 == 0 || i6 == 2) {
+                                        chatMessageCell3.reactionsLayoutInBubble.animateReaction(str3);
+                                    }
+                                    ReactionsEffectOverlay.this.animateOutProgress = 1.0f;
+                                    if (i13 == 1) {
+                                        ReactionsEffectOverlay.currentShortOverlay = null;
+                                    } else {
+                                        ReactionsEffectOverlay.currentOverlay = null;
+                                    }
                                     chatMessageCell3.invalidate();
                                     if (!(chatMessageCell3.getCurrentMessagesGroup() == null || chatMessageCell3.getParent() == null)) {
                                         ((View) chatMessageCell3.getParent()).invalidate();
                                     }
-                                    ReactionsEffectOverlay.this.onAnimationFinished();
                                     AndroidUtilities.runOnUIThread(new ReactionsEffectOverlay$1$$ExternalSyntheticLambda0(this));
                                 }
                             }
@@ -477,19 +483,18 @@ public class ReactionsEffectOverlay {
         }
     }
 
-    /* access modifiers changed from: private */
-    public void onAnimationFinished() {
-        int i = this.animationType;
-        if (i == 2 || i == 0) {
-            show(this.fragment, (ReactionsContainerLayout) null, this.cell, 0.0f, 0.0f, this.reaction, this.currentAccount, 1);
-            startAnimation();
-        }
-    }
-
     public static void show(BaseFragment baseFragment, ReactionsContainerLayout reactionsContainerLayout, ChatMessageCell chatMessageCell, float f, float f2, String str, int i, int i2) {
-        if (chatMessageCell != null && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
+        int i3 = i2;
+        if (chatMessageCell != null && str != null && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
+            if (i3 == 2 || i3 == 0) {
+                show(baseFragment, (ReactionsContainerLayout) null, chatMessageCell, 0.0f, 0.0f, str, i, 1);
+            }
             ReactionsEffectOverlay reactionsEffectOverlay = new ReactionsEffectOverlay(baseFragment.getParentActivity(), baseFragment, reactionsContainerLayout, chatMessageCell, f, f2, str, i, i2);
-            currentOverlay = reactionsEffectOverlay;
+            if (i3 == 1) {
+                currentShortOverlay = reactionsEffectOverlay;
+            } else {
+                currentOverlay = reactionsEffectOverlay;
+            }
             WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
             layoutParams.height = -1;
             layoutParams.width = -1;
@@ -510,6 +515,19 @@ public class ReactionsEffectOverlay {
         ReactionsEffectOverlay reactionsEffectOverlay = currentOverlay;
         if (reactionsEffectOverlay != null) {
             reactionsEffectOverlay.started = true;
+            return;
+        }
+        startShortAnimation();
+        ReactionsEffectOverlay reactionsEffectOverlay2 = currentShortOverlay;
+        if (reactionsEffectOverlay2 != null) {
+            reactionsEffectOverlay2.cell.reactionsLayoutInBubble.animateReaction(reactionsEffectOverlay2.reaction);
+        }
+    }
+
+    public static void startShortAnimation() {
+        ReactionsEffectOverlay reactionsEffectOverlay = currentShortOverlay;
+        if (reactionsEffectOverlay != null && !reactionsEffectOverlay.started) {
+            reactionsEffectOverlay.started = true;
             if (reactionsEffectOverlay.animationType == 1) {
                 reactionsEffectOverlay.cell.performHapticFeedback(3);
             }
@@ -517,17 +535,22 @@ public class ReactionsEffectOverlay {
     }
 
     public static void removeCurrent(boolean z) {
-        ReactionsEffectOverlay reactionsEffectOverlay = currentOverlay;
-        if (reactionsEffectOverlay != null) {
-            if (z) {
-                try {
-                    reactionsEffectOverlay.windowManager.removeView(reactionsEffectOverlay.windowView);
-                } catch (Exception unused) {
+        int i = 0;
+        while (i < 2) {
+            ReactionsEffectOverlay reactionsEffectOverlay = i == 0 ? currentOverlay : currentShortOverlay;
+            if (reactionsEffectOverlay != null) {
+                if (z) {
+                    try {
+                        reactionsEffectOverlay.windowManager.removeView(reactionsEffectOverlay.windowView);
+                    } catch (Exception unused) {
+                    }
+                } else {
+                    reactionsEffectOverlay.dismissed = true;
                 }
-            } else {
-                reactionsEffectOverlay.dismissed = true;
             }
+            i++;
         }
+        currentShortOverlay = null;
         currentOverlay = null;
     }
 

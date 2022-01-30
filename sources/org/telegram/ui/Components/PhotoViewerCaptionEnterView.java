@@ -20,7 +20,6 @@ import android.text.TextWatcher;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -154,7 +153,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.emojiButton.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, 0);
         this.emojiButton.setAlpha(0.58f);
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48, 83));
-        this.emojiButton.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda4(this));
+        this.emojiButton.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda5(this));
         this.emojiButton.setContentDescription(LocaleController.getString("Emoji", NUM));
         ImageView imageView2 = this.emojiButton;
         ReplaceableIconDrawable replaceableIconDrawable = new ReplaceableIconDrawable(context2);
@@ -209,7 +208,9 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
         };
         this.messageEditText = r7;
-        r7.setDelegate(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda8(this));
+        r7.setOnFocusChangeListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda6(this));
+        this.messageEditText.setSelectAllOnFocus(false);
+        this.messageEditText.setDelegate(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda9(this));
         this.messageEditText.setWindowView(this.windowView);
         this.messageEditText.setHint(LocaleController.getString("AddCaption", NUM));
         this.messageEditText.setImeOptions(NUM);
@@ -228,8 +229,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.messageEditText.setHighlightColor(NUM);
         this.messageEditText.setHintTextColor(-NUM);
         frameLayout.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 83, 52.0f, 0.0f, 6.0f, 0.0f));
-        this.messageEditText.setOnKeyListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda6(this));
-        this.messageEditText.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda5(this));
+        this.messageEditText.setOnKeyListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda7(this));
+        this.messageEditText.setOnClickListener(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda4(this));
         this.messageEditText.addTextChangedListener(new TextWatcher() {
             boolean processChange = false;
 
@@ -486,12 +487,23 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1() {
+    public /* synthetic */ void lambda$new$1(View view, boolean z) {
+        if (z) {
+            try {
+                EditTextCaption editTextCaption = this.messageEditText;
+                editTextCaption.setSelection(editTextCaption.length(), this.messageEditText.length());
+            } catch (Exception unused) {
+            }
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$2() {
         this.messageEditText.invalidateEffects();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$2(View view, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$new$3(View view, int i, KeyEvent keyEvent) {
         if (i == 4) {
             if (this.windowView != null && hideActionMode()) {
                 return true;
@@ -507,14 +519,14 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$3(View view) {
+    public /* synthetic */ void lambda$new$4(View view) {
         if (isPopupShowing()) {
             showPopup((AndroidUtilities.isInMultiwindow || AndroidUtilities.usingHardwareInput) ? 0 : 2, false);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$4(View view) {
+    public /* synthetic */ void lambda$new$5(View view) {
         if (this.captionMaxLength - this.codePointCount < 0) {
             AndroidUtilities.shakeView(this.captionLimitView, 2.0f, 0);
             Vibrator vibrator = (Vibrator) this.captionLimitView.getContext().getSystemService("vibrator");
@@ -587,12 +599,12 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDraw$5(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onDraw$6(ValueAnimator valueAnimator) {
         this.messageEditText.setOffsetY(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDraw$6(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onDraw$7(ValueAnimator valueAnimator) {
         this.offset = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
@@ -816,7 +828,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         if (editTextCaption != null) {
             if (z) {
                 if (!editTextCaption.isFocused()) {
-                    this.messageEditText.postDelayed(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda7(this), 600);
+                    this.messageEditText.postDelayed(new PhotoViewerCaptionEnterView$$ExternalSyntheticLambda8(this), 600);
                 }
             } else if (editTextCaption.isFocused() && !this.keyboardVisible) {
                 this.messageEditText.clearFocus();
@@ -825,7 +837,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setFieldFocused$7() {
+    public /* synthetic */ void lambda$setFieldFocused$8() {
         EditTextCaption editTextCaption = this.messageEditText;
         if (editTextCaption != null) {
             try {
@@ -919,7 +931,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showPopup$8(float f, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showPopup$9(float f, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.emojiPadding = (int) floatValue;
         float f2 = f - floatValue;
@@ -942,25 +954,13 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     public void openKeyboard() {
-        int i;
-        try {
-            i = this.messageEditText.getSelectionStart();
-        } catch (Exception e) {
-            int length = this.messageEditText.length();
-            FileLog.e((Throwable) e);
-            i = length;
-        }
-        MotionEvent obtain = MotionEvent.obtain(0, 0, 0, 0.0f, 0.0f, 0);
-        this.messageEditText.onTouchEvent(obtain);
-        obtain.recycle();
-        MotionEvent obtain2 = MotionEvent.obtain(0, 0, 1, 0.0f, 0.0f, 0);
-        this.messageEditText.onTouchEvent(obtain2);
-        obtain2.recycle();
+        this.messageEditText.requestFocus();
         AndroidUtilities.showKeyboard(this.messageEditText);
         try {
-            this.messageEditText.setSelection(i);
-        } catch (Exception e2) {
-            FileLog.e((Throwable) e2);
+            EditTextCaption editTextCaption = this.messageEditText;
+            editTextCaption.setSelection(editTextCaption.length(), this.messageEditText.length());
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
         }
     }
 

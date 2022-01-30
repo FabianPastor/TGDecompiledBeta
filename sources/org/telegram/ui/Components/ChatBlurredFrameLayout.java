@@ -13,7 +13,7 @@ public class ChatBlurredFrameLayout extends FrameLayout {
     public int backgroundColor;
     public int backgroundPaddingBottom;
     public int backgroundPaddingTop;
-    Paint backgroundPaint;
+    protected Paint backgroundPaint;
     ChatActivity chatActivity;
     public boolean drawBlur = true;
     public boolean isTopView = true;
@@ -66,8 +66,8 @@ public class ChatBlurredFrameLayout extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
-        ChatActivity chatActivity2;
-        if (SharedConfig.chatBlurEnabled() && (chatActivity2 = this.chatActivity) != null) {
+        ChatActivity chatActivity2 = this.chatActivity;
+        if (chatActivity2 != null) {
             chatActivity2.contentView.blurBehindViews.remove(this);
         }
         super.onDetachedFromWindow();

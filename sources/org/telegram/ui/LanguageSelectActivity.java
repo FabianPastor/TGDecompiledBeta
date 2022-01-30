@@ -518,12 +518,20 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
         /* access modifiers changed from: package-private */
         public void updateHeight() {
-            int height = LanguageSelectActivity.this.searching ? 0 : height();
+            int i = 0;
+            this.header.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x, NUM), 0);
+            this.showButtonCheck.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x, NUM), 0);
+            this.doNotTranslateCell.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x, NUM), 0);
+            this.info.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x, NUM), 0);
+            this.info2.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x, NUM), 0);
+            if (!LanguageSelectActivity.this.searching) {
+                i = height();
+            }
             if (getLayoutParams() == null) {
-                setLayoutParams(new RecyclerView.LayoutParams(-1, height));
-            } else if (getLayoutParams().height != height) {
+                setLayoutParams(new RecyclerView.LayoutParams(-1, i));
+            } else if (getLayoutParams().height != i) {
                 RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) getLayoutParams();
-                layoutParams.height = height;
+                layoutParams.height = i;
                 setLayoutParams(layoutParams);
             }
         }
@@ -616,7 +624,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 r3.<init>(r0)
                 int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 r3.setBackgroundColor(r2)
-                r2 = 2131626101(0x7f0e0875, float:1.8879429E38)
+                r2 = 2131626105(0x7f0e0879, float:1.8879437E38)
                 java.lang.String r0 = "Language"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r0, r2)
                 r3.setText(r2)
@@ -701,13 +709,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 int r0 = r0.size()
                 if (r12 != r0) goto L_0x0057
                 android.content.Context r12 = r10.mContext
-                r0 = 2131165467(0x7var_b, float:1.7945152E38)
+                r0 = 2131165469(0x7var_d, float:1.7945156E38)
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r0, (java.lang.String) r1)
                 r11.setBackgroundDrawable(r12)
                 goto L_0x0136
             L_0x0057:
                 android.content.Context r12 = r10.mContext
-                r0 = 2131165468(0x7var_c, float:1.7945154E38)
+                r0 = 2131165470(0x7var_e, float:1.7945158E38)
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r0, (java.lang.String) r1)
                 r11.setBackgroundDrawable(r12)
                 goto L_0x0136
@@ -781,7 +789,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r1 = new java.lang.Object[r1]
                 java.lang.String r4 = r0.name
                 r1[r2] = r4
-                r4 = 2131626104(0x7f0e0878, float:1.8879435E38)
+                r4 = 2131626108(0x7f0e087c, float:1.8879443E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r1[r3] = r4

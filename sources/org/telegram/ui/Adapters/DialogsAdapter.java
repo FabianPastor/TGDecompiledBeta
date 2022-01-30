@@ -60,6 +60,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     private boolean hasHints;
     private boolean isOnlySelect;
     private boolean isReordering;
+    public int lastDialogsEmptyType = -1;
     private long lastSortTime;
     private Context mContext;
     /* access modifiers changed from: private */
@@ -370,8 +371,12 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         return null;
     }
 
-    public void notifyDataSetChanged() {
+    public void updateHasHints() {
         this.hasHints = this.folderId == 0 && this.dialogsType == 0 && !this.isOnlySelect && !MessagesController.getInstance(this.currentAccount).hintDialogs.isEmpty();
+    }
+
+    public void notifyDataSetChanged() {
+        updateHasHints();
         super.notifyDataSetChanged();
     }
 
@@ -433,7 +438,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r14 = 5
             r0 = -1
             java.lang.String r1 = "windowBackgroundGrayShadow"
-            r2 = 2131165467(0x7var_b, float:1.7945152E38)
+            r2 = 2131165469(0x7var_d, float:1.7945156E38)
             java.lang.String r3 = "windowBackgroundGray"
             r4 = 1
             switch(r15) {
@@ -537,7 +542,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            r1 = 2131627498(0x7f0e0dea, float:1.8882262E38)
+            r1 = 2131627502(0x7f0e0dee, float:1.888227E38)
             java.lang.String r2 = "RecentlyViewed"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r5.setText(r1)
@@ -552,7 +557,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             java.lang.String r2 = "windowBackgroundWhiteBlueHeader"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r1.setTextColor(r2)
-            r2 = 2131627499(0x7f0e0deb, float:1.8882264E38)
+            r2 = 2131627503(0x7f0e0def, float:1.8882272E38)
             java.lang.String r3 = "RecentlyViewedHide"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -624,6 +629,11 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
     }
 
+    public int dialogsEmptyType() {
+        int i = this.dialogsType;
+        return (i == 7 || i == 8) ? MessagesController.getInstance(this.currentAccount).isDialogsEndReached(this.folderId) ? 2 : 3 : this.onlineContacts != null ? 1 : 0;
+    }
+
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         int itemViewType = viewHolder.getItemViewType();
         boolean z = true;
@@ -648,26 +658,17 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         } else if (itemViewType == 4) {
             ((DialogMeUrlCell) viewHolder.itemView).setRecentMeUrl((TLRPC$RecentMeUrl) getItem(i));
         } else if (itemViewType == 5) {
-            DialogsEmptyCell dialogsEmptyCell = (DialogsEmptyCell) viewHolder.itemView;
-            int i2 = this.dialogsType;
-            if (i2 != 7 && i2 != 8) {
-                if (this.onlineContacts == null) {
-                    z = false;
-                }
-                dialogsEmptyCell.setType(z ? 1 : 0);
-            } else if (MessagesController.getInstance(this.currentAccount).isDialogsEndReached(this.folderId)) {
-                dialogsEmptyCell.setType(2);
-            } else {
-                dialogsEmptyCell.setType(3);
-            }
+            int dialogsEmptyType = dialogsEmptyType();
+            this.lastDialogsEmptyType = dialogsEmptyType;
+            ((DialogsEmptyCell) viewHolder.itemView).setType(dialogsEmptyType);
         } else if (itemViewType == 6) {
             UserCell userCell = (UserCell) viewHolder.itemView;
-            int i3 = this.dialogsCount;
-            userCell.setData(MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.onlineContacts.get(i3 == 0 ? i - 3 : (i - i3) - 2).user_id)), (CharSequence) null, (CharSequence) null, 0);
+            int i2 = this.dialogsCount;
+            userCell.setData(MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.onlineContacts.get(i2 == 0 ? i - 3 : (i - i2) - 2).user_id)), (CharSequence) null, (CharSequence) null, 0);
         } else if (itemViewType == 7) {
             HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
-            int i4 = this.dialogsType;
-            if (i4 != 11 && i4 != 12 && i4 != 13) {
+            int i3 = this.dialogsType;
+            if (i3 != 11 && i3 != 12 && i3 != 13) {
                 headerCell.setText(LocaleController.getString("YourContacts", NUM));
             } else if (i == 0) {
                 headerCell.setText(LocaleController.getString("ImportHeader", NUM));

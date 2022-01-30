@@ -1,30 +1,22 @@
 package org.telegram.ui;
 
-import android.view.View;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
-import androidx.viewpager.widget.ViewPager;
-import java.util.concurrent.atomic.AtomicBoolean;
-import org.telegram.ui.Components.ReactionTabHolderView;
+import android.content.DialogInterface;
+import org.telegram.messenger.MessagesController;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda36 implements View.OnClickListener {
-    public final /* synthetic */ ViewPager f$0;
-    public final /* synthetic */ int f$1;
-    public final /* synthetic */ LinearLayout f$2;
-    public final /* synthetic */ AtomicBoolean f$3;
-    public final /* synthetic */ HorizontalScrollView f$4;
-    public final /* synthetic */ ReactionTabHolderView f$5;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda36 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ MessagesController f$1;
+    public final /* synthetic */ CharSequence f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda36(ViewPager viewPager, int i, LinearLayout linearLayout, AtomicBoolean atomicBoolean, HorizontalScrollView horizontalScrollView, ReactionTabHolderView reactionTabHolderView) {
-        this.f$0 = viewPager;
-        this.f$1 = i;
-        this.f$2 = linearLayout;
-        this.f$3 = atomicBoolean;
-        this.f$4 = horizontalScrollView;
-        this.f$5 = reactionTabHolderView;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda36(ChatActivity chatActivity, MessagesController messagesController, CharSequence charSequence, boolean z) {
+        this.f$0 = chatActivity;
+        this.f$1 = messagesController;
+        this.f$2 = charSequence;
+        this.f$3 = z;
     }
 
-    public final void onClick(View view) {
-        ChatActivity.lambda$createMenu$122(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$searchLinks$88(this.f$1, this.f$2, this.f$3, dialogInterface, i);
     }
 }

@@ -19,6 +19,6 @@ public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda36 impl
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadChannel$37(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadChannel$38(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
     }
 }

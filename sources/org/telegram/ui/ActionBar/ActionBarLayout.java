@@ -1767,12 +1767,12 @@ public class ActionBarLayout extends FrameLayout {
         }
     }
 
-    public void showLastFragment() {
+    public void showFragment(int i) {
         ViewGroup viewGroup;
         ViewGroup viewGroup2;
         if (!this.fragmentsStack.isEmpty()) {
-            for (int i = 0; i < this.fragmentsStack.size() - 1; i++) {
-                BaseFragment baseFragment = this.fragmentsStack.get(i);
+            for (int i2 = 0; i2 < i; i2++) {
+                BaseFragment baseFragment = this.fragmentsStack.get(i2);
                 ActionBar actionBar = baseFragment.actionBar;
                 if (!(actionBar == null || !actionBar.shouldAddToContainer() || (viewGroup2 = (ViewGroup) baseFragment.actionBar.getParent()) == null)) {
                     viewGroup2.removeView(baseFragment.actionBar);
@@ -1784,8 +1784,7 @@ public class ActionBarLayout extends FrameLayout {
                     viewGroup.removeView(baseFragment.fragmentView);
                 }
             }
-            ArrayList<BaseFragment> arrayList = this.fragmentsStack;
-            BaseFragment baseFragment2 = arrayList.get(arrayList.size() - 1);
+            BaseFragment baseFragment2 = this.fragmentsStack.get(i);
             baseFragment2.setParentLayout(this);
             View view2 = baseFragment2.fragmentView;
             if (view2 == null) {
@@ -1815,6 +1814,12 @@ public class ActionBarLayout extends FrameLayout {
             if (!baseFragment2.hasOwnBackground && view2.getBackground() == null) {
                 view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             }
+        }
+    }
+
+    public void showLastFragment() {
+        if (!this.fragmentsStack.isEmpty()) {
+            showFragment(this.fragmentsStack.size() - 1);
         }
     }
 

@@ -16,6 +16,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda25 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createCallDialogAlert$21(this.f$0, this.f$1, this.f$2, dialogInterface, i);
+        AlertsCreator.lambda$createCallDialogAlert$22(this.f$0, this.f$1, this.f$2, dialogInterface, i);
     }
 }
