@@ -305,6 +305,24 @@ public class MessageObject {
         return this.messageOwner.reactions.recent_reactions.get(0);
     }
 
+    public void markReactionsAsRead() {
+        TLRPC$TL_messageReactions tLRPC$TL_messageReactions = this.messageOwner.reactions;
+        if (tLRPC$TL_messageReactions != null && tLRPC$TL_messageReactions.recent_reactions != null) {
+            boolean z = false;
+            for (int i = 0; i < this.messageOwner.reactions.recent_reactions.size(); i++) {
+                if (this.messageOwner.reactions.recent_reactions.get(i).unread) {
+                    this.messageOwner.reactions.recent_reactions.get(i).unread = false;
+                    z = true;
+                }
+            }
+            if (z) {
+                MessagesStorage instance = MessagesStorage.getInstance(this.currentAccount);
+                TLRPC$Message tLRPC$Message = this.messageOwner;
+                instance.markMessageReactionsAsRead(tLRPC$Message.dialog_id, tLRPC$Message.id, true);
+            }
+        }
+    }
+
     public static class VCardData {
         private String company;
         private ArrayList<String> emails = new ArrayList<>();

@@ -2,12 +2,12 @@ package org.telegram.ui;
 
 import org.telegram.ui.ChatActivity;
 
-public final /* synthetic */ class ChatActivity$62$$ExternalSyntheticLambda0 implements Runnable {
-    public final /* synthetic */ ChatActivity.AnonymousClass62 f$0;
+public final /* synthetic */ class ChatActivity$63$$ExternalSyntheticLambda0 implements Runnable {
+    public final /* synthetic */ ChatActivity.AnonymousClass63 f$0;
     public final /* synthetic */ boolean f$1;
     public final /* synthetic */ int f$2;
 
-    public /* synthetic */ ChatActivity$62$$ExternalSyntheticLambda0(ChatActivity.AnonymousClass62 r1, boolean z, int i) {
+    public /* synthetic */ ChatActivity$63$$ExternalSyntheticLambda0(ChatActivity.AnonymousClass63 r1, boolean z, int i) {
         this.f$0 = r1;
         this.f$1 = z;
         this.f$2 = i;

@@ -1,17 +1,23 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Cells.ChatMessageCell;
+import org.telegram.messenger.MessageObject;
+import org.telegram.ui.ActionBar.ActionBarLayout;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda169 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ ChatMessageCell f$1;
+    public final /* synthetic */ BaseFragment f$1;
+    public final /* synthetic */ MessageObject f$2;
+    public final /* synthetic */ ActionBarLayout f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda169(ChatActivity chatActivity, ChatMessageCell chatMessageCell) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda169(ChatActivity chatActivity, BaseFragment baseFragment, MessageObject messageObject, ActionBarLayout actionBarLayout) {
         this.f$0 = chatActivity;
-        this.f$1 = chatMessageCell;
+        this.f$1 = baseFragment;
+        this.f$2 = messageObject;
+        this.f$3 = actionBarLayout;
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$112(this.f$1);
+        this.f$0.lambda$migrateToNewChat$118(this.f$1, this.f$2, this.f$3);
     }
 }

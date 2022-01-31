@@ -19,7 +19,8 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda83 impl
     public final /* synthetic */ BaseFragment f$1;
     public final /* synthetic */ boolean f$10;
     public final /* synthetic */ Runnable f$11;
-    public final /* synthetic */ Theme.ResourcesProvider f$12;
+    public final /* synthetic */ Runnable f$12;
+    public final /* synthetic */ Theme.ResourcesProvider f$13;
     public final /* synthetic */ TLRPC$User f$2;
     public final /* synthetic */ TLRPC$Chat f$3;
     public final /* synthetic */ TLRPC$EncryptedChat f$4;
@@ -29,7 +30,7 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda83 impl
     public final /* synthetic */ SparseArray[] f$8;
     public final /* synthetic */ MessageObject.GroupedMessages f$9;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda83(AlertDialog[] alertDialogArr, BaseFragment baseFragment, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$ChatFull tLRPC$ChatFull, long j, MessageObject messageObject, SparseArray[] sparseArrayArr, MessageObject.GroupedMessages groupedMessages, boolean z, Runnable runnable, Theme.ResourcesProvider resourcesProvider) {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda83(AlertDialog[] alertDialogArr, BaseFragment baseFragment, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$ChatFull tLRPC$ChatFull, long j, MessageObject messageObject, SparseArray[] sparseArrayArr, MessageObject.GroupedMessages groupedMessages, boolean z, Runnable runnable, Runnable runnable2, Theme.ResourcesProvider resourcesProvider) {
         this.f$0 = alertDialogArr;
         this.f$1 = baseFragment;
         this.f$2 = tLRPC$User;
@@ -42,10 +43,11 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda83 impl
         this.f$9 = groupedMessages;
         this.f$10 = z;
         this.f$11 = runnable;
-        this.f$12 = resourcesProvider;
+        this.f$12 = runnable2;
+        this.f$13 = resourcesProvider;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda79(this.f$0, tLObject, tLRPC$TL_error, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12));
+        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda79(this.f$0, tLObject, tLRPC$TL_error, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13));
     }
 }

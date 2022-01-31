@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
@@ -15,6 +16,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.ChatActivity;
@@ -35,6 +37,7 @@ public class ReactionsEffectOverlay {
     private ChatMessageCell cell;
     /* access modifiers changed from: private */
     public final FrameLayout container;
+    private ViewGroup decorView;
     /* access modifiers changed from: private */
     public float dismissProgress;
     /* access modifiers changed from: private */
@@ -60,10 +63,10 @@ public class ReactionsEffectOverlay {
     private final String reaction;
     /* access modifiers changed from: private */
     public boolean started;
+    private boolean useWindow;
     /* access modifiers changed from: private */
     public boolean wasScrolled;
-    /* access modifiers changed from: private */
-    public WindowManager windowManager;
+    private WindowManager windowManager;
     FrameLayout windowView;
 
     static /* synthetic */ float access$116(ReactionsEffectOverlay reactionsEffectOverlay, float f) {
@@ -347,18 +350,12 @@ public class ReactionsEffectOverlay {
 
             /* access modifiers changed from: private */
             public /* synthetic */ void lambda$dispatchDraw$0() {
-                try {
-                    ReactionsEffectOverlay.this.windowManager.removeView(ReactionsEffectOverlay.this.windowView);
-                } catch (Exception unused) {
-                }
+                ReactionsEffectOverlay.this.removeCurrentView();
             }
 
             /* access modifiers changed from: private */
             public /* synthetic */ void lambda$dispatchDraw$1() {
-                try {
-                    ReactionsEffectOverlay.this.windowManager.removeView(ReactionsEffectOverlay.this.windowView);
-                } catch (Exception unused) {
-                }
+                ReactionsEffectOverlay.this.removeCurrentView();
             }
         };
         this.windowView = r15;
@@ -480,33 +477,62 @@ public class ReactionsEffectOverlay {
             ((FrameLayout.LayoutParams) animationView.getLayoutParams()).leftMargin = i26;
             frameLayout3.setPivotX((float) i23);
             frameLayout3.setPivotY((float) i24);
+            return;
+        }
+        this.dismissed = true;
+    }
+
+    /* access modifiers changed from: private */
+    public void removeCurrentView() {
+        try {
+            if (this.useWindow) {
+                this.windowManager.removeView(this.windowView);
+            } else {
+                this.decorView.removeView(this.windowView);
+            }
+        } catch (Exception unused) {
         }
     }
 
     public static void show(BaseFragment baseFragment, ReactionsContainerLayout reactionsContainerLayout, ChatMessageCell chatMessageCell, float f, float f2, String str, int i, int i2) {
+        ActionBarPopupWindow actionBarPopupWindow;
+        BaseFragment baseFragment2 = baseFragment;
         int i3 = i2;
-        if (chatMessageCell != null && str != null && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
-            if (i3 == 2 || i3 == 0) {
-                show(baseFragment, (ReactionsContainerLayout) null, chatMessageCell, 0.0f, 0.0f, str, i, 1);
-            }
-            ReactionsEffectOverlay reactionsEffectOverlay = new ReactionsEffectOverlay(baseFragment.getParentActivity(), baseFragment, reactionsContainerLayout, chatMessageCell, f, f2, str, i, i2);
-            if (i3 == 1) {
-                currentShortOverlay = reactionsEffectOverlay;
-            } else {
-                currentOverlay = reactionsEffectOverlay;
-            }
-            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-            layoutParams.height = -1;
-            layoutParams.width = -1;
-            layoutParams.type = 1000;
-            layoutParams.flags = 65816;
-            layoutParams.format = -3;
-            WindowManager windowManager2 = baseFragment.getParentActivity().getWindowManager();
-            reactionsEffectOverlay.windowManager = windowManager2;
-            windowManager2.addView(reactionsEffectOverlay.windowView, layoutParams);
-            chatMessageCell.invalidate();
-            if (chatMessageCell.getCurrentMessagesGroup() != null && chatMessageCell.getParent() != null) {
-                ((View) chatMessageCell.getParent()).invalidate();
+        if (chatMessageCell != null && str != null && baseFragment2 != null && baseFragment.getParentActivity() != null) {
+            boolean z = true;
+            if (MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
+                if (i3 == 2 || i3 == 0) {
+                    show(baseFragment, (ReactionsContainerLayout) null, chatMessageCell, 0.0f, 0.0f, str, i, 1);
+                }
+                ReactionsEffectOverlay reactionsEffectOverlay = new ReactionsEffectOverlay(baseFragment.getParentActivity(), baseFragment, reactionsContainerLayout, chatMessageCell, f, f2, str, i, i2);
+                if (i3 == 1) {
+                    currentShortOverlay = reactionsEffectOverlay;
+                } else {
+                    currentOverlay = reactionsEffectOverlay;
+                }
+                if (!(baseFragment2 instanceof ChatActivity) || (actionBarPopupWindow = ((ChatActivity) baseFragment2).scrimPopupWindow) == null || !actionBarPopupWindow.isShowing()) {
+                    z = false;
+                }
+                reactionsEffectOverlay.useWindow = z;
+                if (z) {
+                    WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                    layoutParams.height = -1;
+                    layoutParams.width = -1;
+                    layoutParams.type = 1000;
+                    layoutParams.flags = 65816;
+                    layoutParams.format = -3;
+                    WindowManager windowManager2 = baseFragment.getParentActivity().getWindowManager();
+                    reactionsEffectOverlay.windowManager = windowManager2;
+                    windowManager2.addView(reactionsEffectOverlay.windowView, layoutParams);
+                } else {
+                    FrameLayout frameLayout = (FrameLayout) baseFragment.getParentActivity().getWindow().getDecorView();
+                    reactionsEffectOverlay.decorView = frameLayout;
+                    frameLayout.addView(reactionsEffectOverlay.windowView);
+                }
+                chatMessageCell.invalidate();
+                if (chatMessageCell.getCurrentMessagesGroup() != null && chatMessageCell.getParent() != null) {
+                    ((View) chatMessageCell.getParent()).invalidate();
+                }
             }
         }
     }
@@ -540,10 +566,7 @@ public class ReactionsEffectOverlay {
             ReactionsEffectOverlay reactionsEffectOverlay = i == 0 ? currentOverlay : currentShortOverlay;
             if (reactionsEffectOverlay != null) {
                 if (z) {
-                    try {
-                        reactionsEffectOverlay.windowManager.removeView(reactionsEffectOverlay.windowView);
-                    } catch (Exception unused) {
-                    }
+                    reactionsEffectOverlay.removeCurrentView();
                 } else {
                     reactionsEffectOverlay.dismissed = true;
                 }

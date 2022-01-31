@@ -95,6 +95,11 @@ public class MotionBackgroundDrawable extends Drawable {
         useSoftLight = z;
     }
 
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0() {
+        updateAnimation(true);
+    }
+
     public MotionBackgroundDrawable() {
         this.colors = new int[]{-12423849, -531317, -7888252, -133430};
         this.interpolator = new CubicBezierInterpolator(0.33d, 0.0d, 0.0d, 1.0d);
@@ -360,7 +365,7 @@ public class MotionBackgroundDrawable extends Drawable {
         }
         if (this.postInvalidateParent) {
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.invalidateMotionBackground, new Object[0]);
-            updateAnimation();
+            updateAnimation(false);
             AndroidUtilities.cancelRunOnUIThread(this.updateAnimationRunnable);
             AndroidUtilities.runOnUIThread(this.updateAnimationRunnable, 16);
         }
@@ -544,7 +549,7 @@ public class MotionBackgroundDrawable extends Drawable {
             }
         }
         canvas.restore();
-        updateAnimation();
+        updateAnimation(true);
     }
 
     public void drawPattern(Canvas canvas) {
@@ -674,7 +679,7 @@ public class MotionBackgroundDrawable extends Drawable {
             }
         }
         canvas.restore();
-        updateAnimation();
+        updateAnimation(true);
     }
 
     public void draw(Canvas canvas) {
@@ -837,10 +842,10 @@ public class MotionBackgroundDrawable extends Drawable {
             }
         }
         canvas.restore();
-        updateAnimation();
+        updateAnimation(true);
     }
 
-    public void updateAnimation() {
+    public void updateAnimation(boolean z) {
         float f;
         float f2;
         long elapsedRealtime = SystemClock.elapsedRealtime();
@@ -850,14 +855,14 @@ public class MotionBackgroundDrawable extends Drawable {
         }
         this.lastUpdateTime = elapsedRealtime;
         if (j > 1) {
-            boolean z = this.isIndeterminateAnimation;
-            if (z && this.posAnimationProgress == 1.0f) {
+            boolean z2 = this.isIndeterminateAnimation;
+            if (z2 && this.posAnimationProgress == 1.0f) {
                 this.posAnimationProgress = 0.0f;
             }
             float f3 = this.posAnimationProgress;
             if (f3 < 1.0f) {
-                boolean z2 = this.postInvalidateParent || this.rotatingPreview;
-                if (z) {
+                boolean z3 = this.postInvalidateParent || this.rotatingPreview;
+                if (z2) {
                     float f4 = f3 + (((float) j) / 12000.0f);
                     this.posAnimationProgress = f4;
                     if (f4 >= 1.0f) {
@@ -867,7 +872,7 @@ public class MotionBackgroundDrawable extends Drawable {
                     int i = (int) (f5 / 0.125f);
                     this.phase = i;
                     f = 1.0f - ((f5 - (((float) i) * 0.125f)) / 0.125f);
-                    z2 = true;
+                    z3 = true;
                 } else {
                     if (this.rotatingPreview) {
                         float interpolation = this.interpolator.getInterpolation(f3);
@@ -931,7 +936,7 @@ public class MotionBackgroundDrawable extends Drawable {
                     }
                     f = f2;
                 }
-                if (z2) {
+                if (z3) {
                     Bitmap bitmap = this.currentBitmap;
                     Utilities.generateGradient(bitmap, true, this.phase, f, bitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
                     this.invalidateLegacy = true;
@@ -949,7 +954,9 @@ public class MotionBackgroundDrawable extends Drawable {
                         this.gradientCanvas.drawBitmap(this.gradientToBitmap[2], 0.0f, 0.0f, this.paint3);
                     }
                 }
-                invalidateParent();
+                if (z) {
+                    invalidateParent();
+                }
             }
         }
     }

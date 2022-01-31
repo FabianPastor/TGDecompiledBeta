@@ -200,7 +200,7 @@ public class StickerSetCell extends FrameLayout {
         } else {
             imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document, tLRPC$TL_messages_stickerSet.set.thumb_version);
         }
-        if (!z2 || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
+        if ((!z2 || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) && !MessageObject.isVideoSticker(tLRPC$Document)) {
             if (imageLocation == null || imageLocation.imageType != 1) {
                 this.imageView.setImage(imageLocation, "50_50", "webp", (Drawable) svgThumb, (Object) tLRPC$TL_messages_stickerSet);
             } else {

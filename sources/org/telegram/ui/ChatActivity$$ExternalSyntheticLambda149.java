@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda149 impl
     }
 
     public final void run() {
-        this.f$0.lambda$updateMessagesVisiblePart$96(this.f$1);
+        this.f$0.lambda$unpinMessage$161(this.f$1);
     }
 }

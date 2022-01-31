@@ -334,7 +334,8 @@ public class AboutLinkCell extends FrameLayout {
         this.rippleBackground = Theme.createRadSelectorDrawable(Theme.getColor("listSelectorSDK21"), 0, 0);
         TextView textView = new TextView(context2);
         this.valueTextView = textView;
-        textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        textView.setVisibility(8);
+        this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
@@ -401,6 +402,14 @@ public class AboutLinkCell extends FrameLayout {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0(View view) {
         updateCollapse(true, true);
+    }
+
+    private void setShowMoreMarginBottom(int i) {
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.showMoreTextBackgroundView.getLayoutParams();
+        if (layoutParams.bottomMargin != i) {
+            layoutParams.bottomMargin = i;
+            this.showMoreTextBackgroundView.setLayoutParams(layoutParams);
+        }
     }
 
     public void draw(Canvas canvas) {
@@ -752,7 +761,7 @@ public class AboutLinkCell extends FrameLayout {
         if (spannableStringBuilder != null && (i != this.lastMaxWidth || z)) {
             StaticLayout makeTextLayout = makeTextLayout(spannableStringBuilder, i);
             this.textLayout = makeTextLayout;
-            this.shouldExpand = makeTextLayout.getLineCount() >= 4;
+            this.shouldExpand = makeTextLayout.getLineCount() >= 4 && this.valueTextView.getVisibility() != 0;
             if (this.textLayout.getLineCount() >= 3 && this.shouldExpand) {
                 int max = Math.max(this.textLayout.getLineStart(2), this.textLayout.getLineEnd(2));
                 if (this.stringBuilder.charAt(max - 1) == 10) {
@@ -792,6 +801,11 @@ public class AboutLinkCell extends FrameLayout {
             }
             this.lastMaxWidth = i;
             this.container.setMinimumHeight(textHeight());
+            if (this.shouldExpand) {
+                int textHeight = textHeight() - AndroidUtilities.dp(8.0f);
+                StaticLayout staticLayout = this.textLayout;
+                setShowMoreMarginBottom((textHeight - staticLayout.getLineBottom(staticLayout.getLineCount() - 1)) - this.showMoreTextBackgroundView.getPaddingBottom());
+            }
         }
         TextView textView = this.showMoreTextView;
         if (!this.shouldExpand) {

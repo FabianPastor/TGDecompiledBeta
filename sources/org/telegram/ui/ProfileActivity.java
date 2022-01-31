@@ -2145,111 +2145,93 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         return true;
     }
 
-    /* JADX WARNING: type inference failed for: r10v0, types: [org.telegram.tgnet.TLRPC$User] */
+    /* JADX WARNING: type inference failed for: r9v0, types: [org.telegram.tgnet.TLRPC$User] */
     /* access modifiers changed from: private */
+    /* JADX WARNING: Code restructure failed: missing block: B:7:0x0011, code lost:
+        r0 = r10.fragmentsStack;
+     */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$createActionBar$1(org.telegram.ui.ChatActivity.PulledDialog r8, org.telegram.tgnet.TLRPC$Chat r9, org.telegram.tgnet.TLRPC$User r10, android.view.View r11) {
+    public /* synthetic */ void lambda$createActionBar$1(org.telegram.ui.ChatActivity.PulledDialog r7, org.telegram.tgnet.TLRPC$Chat r8, org.telegram.tgnet.TLRPC$User r9, android.view.View r10) {
         /*
-            r7 = this;
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r1 = r7.scrimPopupWindow
-            if (r1 == 0) goto L_0x0007
-            r1.dismiss()
+            r6 = this;
+            org.telegram.ui.ActionBar.ActionBarPopupWindow r10 = r6.scrimPopupWindow
+            if (r10 == 0) goto L_0x0007
+            r10.dismiss()
         L_0x0007:
-            int r1 = r8.stackIndex
-            if (r1 < 0) goto L_0x0095
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r7.getParentLayout()
-            int r2 = r8.stackIndex
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r1.fragmentsStack
-            int r3 = r3.size()
-            if (r2 < r3) goto L_0x001b
-            r2 = 0
-            goto L_0x0025
-        L_0x001b:
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r1.fragmentsStack
-            int r3 = r8.stackIndex
-            java.lang.Object r2 = r2.get(r3)
-            org.telegram.ui.ActionBar.BaseFragment r2 = (org.telegram.ui.ActionBar.BaseFragment) r2
-        L_0x0025:
-            boolean r3 = r2 instanceof org.telegram.ui.ChatActivity
-            if (r3 == 0) goto L_0x0057
-            org.telegram.ui.ChatActivity r2 = (org.telegram.ui.ChatActivity) r2
-            long r2 = r2.getDialogId()
-            long r4 = r8.dialogId
-            int r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r6 == 0) goto L_0x0057
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r1.fragmentsStack
-            int r2 = r2.size()
-            int r2 = r2 + -2
-        L_0x003d:
-            int r3 = r8.stackIndex
-            if (r2 <= r3) goto L_0x0047
-            r1.removeFragmentFromStack((int) r2)
-            int r2 = r2 + -1
-            goto L_0x003d
-        L_0x0047:
-            if (r9 == 0) goto L_0x004b
-            r1 = r9
-            goto L_0x004c
-        L_0x004b:
-            r1 = r10
+            int r10 = r7.stackIndex
+            if (r10 < 0) goto L_0x007e
+            org.telegram.ui.ActionBar.ActionBarLayout r10 = r6.getParentLayout()
+            if (r10 == 0) goto L_0x0029
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r10.fragmentsStack
+            if (r0 == 0) goto L_0x0029
+            int r1 = r7.stackIndex
+            int r0 = r0.size()
+            if (r1 < r0) goto L_0x001e
+            goto L_0x0029
+        L_0x001e:
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r10.fragmentsStack
+            int r1 = r7.stackIndex
+            java.lang.Object r0 = r0.get(r1)
+            org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0
+            goto L_0x002a
+        L_0x0029:
+            r0 = 0
+        L_0x002a:
+            boolean r1 = r0 instanceof org.telegram.ui.ChatActivity
+            if (r1 == 0) goto L_0x004c
+            org.telegram.ui.ChatActivity r0 = (org.telegram.ui.ChatActivity) r0
+            long r0 = r0.getDialogId()
+            long r2 = r7.dialogId
+            int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+            if (r4 == 0) goto L_0x004c
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r10.fragmentsStack
+            int r0 = r0.size()
+            int r0 = r0 + -2
+        L_0x0042:
+            int r1 = r7.stackIndex
+            if (r0 <= r1) goto L_0x007e
+            r10.removeFragmentFromStack((int) r0)
+            int r0 = r0 + -1
+            goto L_0x0042
         L_0x004c:
-            long r2 = r8.dialogId
-            int r4 = r8.folderId
-            int r5 = r8.filterId
-            r0 = r7
-            org.telegram.ui.ChatActivity.goTo(r0, r1, r2, r4, r5)
-            goto L_0x00a4
-        L_0x0057:
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r1.fragmentsStack
-            int r2 = r2.size()
-            int r2 = r2 + -2
-        L_0x005f:
-            int r3 = r8.stackIndex
-            if (r2 <= r3) goto L_0x0073
-            if (r2 < 0) goto L_0x0070
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r1.fragmentsStack
-            int r3 = r3.size()
-            if (r2 >= r3) goto L_0x0070
-            r1.removeFragmentFromStack((int) r2)
-        L_0x0070:
-            int r2 = r2 + -1
-            goto L_0x005f
-        L_0x0073:
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = r1.fragmentsStack
-            int r2 = r2.size()
-            if (r3 >= r2) goto L_0x0085
-            int r0 = r8.stackIndex
-            r1.showFragment(r0)
-            r0 = 1
-            r1.closeLastFragment(r0)
-            goto L_0x00a4
-        L_0x0085:
-            if (r9 == 0) goto L_0x0089
+            if (r10 == 0) goto L_0x007e
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r10.fragmentsStack
+            if (r0 == 0) goto L_0x007e
+            int r0 = r0.size()
+            int r0 = r0 + -2
+        L_0x0058:
+            int r1 = r7.stackIndex
+            if (r0 <= r1) goto L_0x006c
+            if (r0 < 0) goto L_0x0069
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r10.fragmentsStack
+            int r1 = r1.size()
+            if (r0 >= r1) goto L_0x0069
+            r10.removeFragmentFromStack((int) r0)
+        L_0x0069:
+            int r0 = r0 + -1
+            goto L_0x0058
+        L_0x006c:
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r10.fragmentsStack
+            int r0 = r0.size()
+            if (r1 >= r0) goto L_0x007e
+            int r7 = r7.stackIndex
+            r10.showFragment(r7)
+            r7 = 1
+            r10.closeLastFragment(r7)
+            return
+        L_0x007e:
+            if (r8 == 0) goto L_0x0082
+            r1 = r8
+            goto L_0x0083
+        L_0x0082:
             r1 = r9
-            goto L_0x008a
-        L_0x0089:
-            r1 = r10
-        L_0x008a:
-            long r2 = r8.dialogId
-            int r4 = r8.folderId
-            int r5 = r8.filterId
-            r0 = r7
+        L_0x0083:
+            long r2 = r7.dialogId
+            int r4 = r7.folderId
+            int r5 = r7.filterId
+            r0 = r6
             org.telegram.ui.ChatActivity.goTo(r0, r1, r2, r4, r5)
-            goto L_0x00a4
-        L_0x0095:
-            if (r9 == 0) goto L_0x0099
-            r1 = r9
-            goto L_0x009a
-        L_0x0099:
-            r1 = r10
-        L_0x009a:
-            long r2 = r8.dialogId
-            int r4 = r8.folderId
-            int r5 = r8.filterId
-            r0 = r7
-            org.telegram.ui.ChatActivity.goTo(r0, r1, r2, r4, r5)
-        L_0x00a4:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.lambda$createActionBar$1(org.telegram.ui.ChatActivity$PulledDialog, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$User, android.view.View):void");

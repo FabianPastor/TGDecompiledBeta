@@ -3864,7 +3864,7 @@ public class MediaDataController extends BaseController {
             if (z) {
                 return 2;
             }
-            if (z2 && !z3) {
+            if (z2 && !z3 && !z4) {
                 return 0;
             }
             if (z4) {

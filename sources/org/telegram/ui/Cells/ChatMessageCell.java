@@ -1002,13 +1002,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     public void markReactionsAsRead() {
-        TLRPC$TL_messageReactions tLRPC$TL_messageReactions;
         this.reactionsLayoutInBubble.hasUnreadReactions = false;
         MessageObject messageObject = this.currentMessageObject;
-        if (messageObject != null && (tLRPC$TL_messageReactions = messageObject.messageOwner.reactions) != null && tLRPC$TL_messageReactions.recent_reactions != null) {
-            for (int i = 0; i < this.currentMessageObject.messageOwner.reactions.recent_reactions.size(); i++) {
-                this.currentMessageObject.messageOwner.reactions.recent_reactions.get(i).unread = false;
-            }
+        if (messageObject != null) {
+            messageObject.markReactionsAsRead();
         }
     }
 

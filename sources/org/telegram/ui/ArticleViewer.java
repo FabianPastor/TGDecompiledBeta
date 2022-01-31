@@ -8608,7 +8608,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.messenger.ImageReceiver r0 = r9.imageView
                 org.telegram.tgnet.TLRPC$Document r1 = r9.currentDocument
                 org.telegram.messenger.ImageLocation r18 = org.telegram.messenger.ImageLocation.getForDocument(r1)
-                r19 = 0
                 r20 = 0
                 r21 = 0
                 org.telegram.tgnet.TLRPC$Document r1 = r9.currentDocument
@@ -8620,6 +8619,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.ui.ArticleViewer$WebpageAdapter r4 = r9.parentAdapter
                 org.telegram.tgnet.TLRPC$WebPage r27 = r4.currentPage
                 r28 = 1
+                java.lang.String r19 = "g"
                 java.lang.String r23 = "80_80_b"
                 r17 = r0
                 r25 = r1

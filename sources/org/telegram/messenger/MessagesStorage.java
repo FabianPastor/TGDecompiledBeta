@@ -220,14 +220,43 @@ public class MessagesStorage extends BaseController {
 
     /* renamed from: markMessageReactionsAsReadInternal */
     public void lambda$markMessageReactionsAsRead$1(long j, int i) {
+        NativeByteBuffer byteBufferValue;
         try {
             SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("UPDATE reaction_mentions SET state = 0 WHERE message_id = ? AND dialog_id = ?");
             executeFast.bindInteger(1, i);
             executeFast.bindLong(2, j);
             executeFast.step();
             executeFast.dispose();
-        } catch (SQLiteException e) {
-            e.printStackTrace();
+            SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM messages_v2 WHERE uid = %d AND mid = %d", new Object[]{Long.valueOf(j), Integer.valueOf(i)}), new Object[0]);
+            TLRPC$Message tLRPC$Message = null;
+            if (queryFinalized.next() && (byteBufferValue = queryFinalized.byteBufferValue(0)) != null) {
+                tLRPC$Message = TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                tLRPC$Message.readAttachPath(byteBufferValue, getUserConfig().clientUserId);
+                byteBufferValue.reuse();
+                TLRPC$TL_messageReactions tLRPC$TL_messageReactions = tLRPC$Message.reactions;
+                if (!(tLRPC$TL_messageReactions == null || tLRPC$TL_messageReactions.recent_reactions == null)) {
+                    for (int i2 = 0; i2 < tLRPC$Message.reactions.recent_reactions.size(); i2++) {
+                        tLRPC$Message.reactions.recent_reactions.get(i2).unread = false;
+                    }
+                }
+            }
+            queryFinalized.dispose();
+            if (tLRPC$Message != null) {
+                SQLitePreparedStatement executeFast2 = getMessagesStorage().getDatabase().executeFast(String.format(Locale.US, "UPDATE messages_v2 SET data = ? WHERE uid = %d AND mid = %d", new Object[]{Long.valueOf(j), Integer.valueOf(i)}));
+                try {
+                    NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$Message.getObjectSize());
+                    tLRPC$Message.serializeToStream(nativeByteBuffer);
+                    executeFast2.bindByteBuffer(1, nativeByteBuffer);
+                    executeFast2.step();
+                    executeFast2.dispose();
+                    nativeByteBuffer.reuse();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            getMessagesStorage().getDatabase().executeFast("UPDATE reaction_mentions SET state = 0 WHERE uid = %d AND ");
+        } catch (SQLiteException e2) {
+            e2.printStackTrace();
         }
     }
 
@@ -18769,7 +18798,7 @@ public class MessagesStorage extends BaseController {
             r0.postRunnable(r3)
             org.telegram.SQLite.SQLiteDatabase r0 = r1.database     // Catch:{ Exception -> 0x0118 }
             java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x0118 }
-            java.lang.String r3 = "DELETE FROM randoms WHERE random_id = %d AND mid = %d AND uid = %d"
+            java.lang.String r3 = "DELETE FROM randoms_v2 WHERE random_id = %d AND mid = %d AND uid = %d"
             java.lang.Object[] r4 = new java.lang.Object[r13]     // Catch:{ Exception -> 0x0118 }
             java.lang.Long r7 = java.lang.Long.valueOf(r20)     // Catch:{ Exception -> 0x0118 }
             r4[r6] = r7     // Catch:{ Exception -> 0x0118 }

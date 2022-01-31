@@ -967,16 +967,19 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     private void updateDrawableRadius(Drawable drawable) {
         if (drawable != null) {
-            if ((!hasRoundRadius() && this.gradientShader == null) || !(drawable instanceof BitmapDrawable)) {
-                setDrawableShader(drawable, (BitmapShader) null);
-            } else if (!(drawable instanceof RLottieDrawable)) {
-                if (drawable instanceof AnimatedFileDrawable) {
-                    ((AnimatedFileDrawable) drawable).setRoundRadius(this.roundRadius);
-                    return;
+            if ((hasRoundRadius() || this.gradientShader != null) && (drawable instanceof BitmapDrawable)) {
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+                if (!(bitmapDrawable instanceof RLottieDrawable)) {
+                    if (bitmapDrawable instanceof AnimatedFileDrawable) {
+                        ((AnimatedFileDrawable) drawable).setRoundRadius(this.roundRadius);
+                    } else if (bitmapDrawable.getBitmap() != null) {
+                        Bitmap bitmap = bitmapDrawable.getBitmap();
+                        Shader.TileMode tileMode = Shader.TileMode.CLAMP;
+                        setDrawableShader(drawable, new BitmapShader(bitmap, tileMode, tileMode));
+                    }
                 }
-                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-                Shader.TileMode tileMode = Shader.TileMode.CLAMP;
-                setDrawableShader(drawable, new BitmapShader(bitmap, tileMode, tileMode));
+            } else {
+                setDrawableShader(drawable, (BitmapShader) null);
             }
         }
     }

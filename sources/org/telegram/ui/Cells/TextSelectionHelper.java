@@ -1808,11 +1808,11 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                         menu.getItem(1).setVisible(true);
                     }
                 }
-                if (LanguageDetector.hasSupport()) {
-                    LanguageDetector.detectLanguage(TextSelectionHelper.this.getSelectedText().toString(), new TextSelectionHelper$4$$ExternalSyntheticLambda2(this, menu), new TextSelectionHelper$4$$ExternalSyntheticLambda1(this, menu));
-                } else {
+                if (!LanguageDetector.hasSupport() || TextSelectionHelper.this.getSelectedText() == null) {
                     this.translateFromLanguage = null;
                     updateTranslateButton(menu);
+                } else {
+                    LanguageDetector.detectLanguage(TextSelectionHelper.this.getSelectedText().toString(), new TextSelectionHelper$4$$ExternalSyntheticLambda2(this, menu), new TextSelectionHelper$4$$ExternalSyntheticLambda1(this, menu));
                 }
                 return true;
             }

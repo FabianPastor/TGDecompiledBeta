@@ -9401,7 +9401,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             this.updateLayout.setVisibility(4);
             this.updateLayout.setTranslationY((float) AndroidUtilities.dp(44.0f));
             if (Build.VERSION.SDK_INT >= 21) {
-                this.updateLayout.setBackground(Theme.getSelectorDrawable(NUM, (String) null));
+                this.updateLayout.setBackground(Theme.getSelectorDrawable(NUM, false));
             }
             this.sideMenuContainer.addView(this.updateLayout, LayoutHelper.createFrame(-1, 44, 83));
             this.updateLayout.setOnClickListener(new LaunchActivity$$ExternalSyntheticLambda13(this));

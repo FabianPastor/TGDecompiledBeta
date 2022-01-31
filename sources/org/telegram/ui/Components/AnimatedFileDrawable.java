@@ -951,4 +951,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     public long getStartTime() {
         return (long) (this.startTime * 1000.0f);
     }
+
+    public boolean isRecycled() {
+        return this.isRecycled;
+    }
 }

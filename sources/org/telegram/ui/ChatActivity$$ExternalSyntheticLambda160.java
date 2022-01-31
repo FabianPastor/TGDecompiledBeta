@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda160 impl
     }
 
     public final void run() {
-        this.f$0.lambda$startEditingMessageObject$158(this.f$1);
+        this.f$0.lambda$createMenu$133(this.f$1);
     }
 }

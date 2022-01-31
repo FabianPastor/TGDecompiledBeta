@@ -183,6 +183,9 @@ public class DialogCell extends BaseCell {
     private boolean promoDialog;
     private int reactionMentionCount;
     private int reactionMentionLeft;
+    private ValueAnimator reactionsMentionsAnimator;
+    /* access modifiers changed from: private */
+    public float reactionsMentionsChangeProgress;
     private RectF rect;
     private float reorderIconProgress;
     private final Theme.ResourcesProvider resourcesProvider;
@@ -285,6 +288,7 @@ public class DialogCell extends BaseCell {
         this.spoilersPool = new Stack<>();
         this.spoilers = new ArrayList();
         this.countChangeProgress = 1.0f;
+        this.reactionsMentionsChangeProgress = 1.0f;
         this.rect = new RectF();
         this.lastStatusDrawableParams = -1;
         this.resourcesProvider = resourcesProvider2;
@@ -572,15 +576,16 @@ public class DialogCell extends BaseCell {
     /* JADX WARNING: Code restructure failed: missing block: B:280:0x066c, code lost:
         if (r2.kicked != false) goto L_0x063c;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:1004:0x17cd A[Catch:{ Exception -> 0x184e }] */
-    /* JADX WARNING: Removed duplicated region for block: B:1019:0x1823 A[Catch:{ Exception -> 0x184e }] */
-    /* JADX WARNING: Removed duplicated region for block: B:1020:0x1826 A[Catch:{ Exception -> 0x184e }] */
-    /* JADX WARNING: Removed duplicated region for block: B:1027:0x1859  */
-    /* JADX WARNING: Removed duplicated region for block: B:1075:0x1991  */
-    /* JADX WARNING: Removed duplicated region for block: B:1111:0x1a30 A[Catch:{ Exception -> 0x1a5b }] */
-    /* JADX WARNING: Removed duplicated region for block: B:1114:0x1a4b A[Catch:{ Exception -> 0x1a5b }] */
-    /* JADX WARNING: Removed duplicated region for block: B:1122:0x1a67  */
-    /* JADX WARNING: Removed duplicated region for block: B:1138:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:1003:0x17c9 A[Catch:{ Exception -> 0x186a }] */
+    /* JADX WARNING: Removed duplicated region for block: B:1008:0x17e9 A[Catch:{ Exception -> 0x186a }] */
+    /* JADX WARNING: Removed duplicated region for block: B:1023:0x183f A[Catch:{ Exception -> 0x186a }] */
+    /* JADX WARNING: Removed duplicated region for block: B:1024:0x1842 A[Catch:{ Exception -> 0x186a }] */
+    /* JADX WARNING: Removed duplicated region for block: B:1031:0x1875  */
+    /* JADX WARNING: Removed duplicated region for block: B:1079:0x19ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:1115:0x1a4c A[Catch:{ Exception -> 0x1a77 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:1118:0x1a67 A[Catch:{ Exception -> 0x1a77 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:1126:0x1a83  */
+    /* JADX WARNING: Removed duplicated region for block: B:1143:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:136:0x039c  */
     /* JADX WARNING: Removed duplicated region for block: B:254:0x061c  */
     /* JADX WARNING: Removed duplicated region for block: B:282:0x0672  */
@@ -630,8 +635,8 @@ public class DialogCell extends BaseCell {
     /* JADX WARNING: Removed duplicated region for block: B:941:0x16bd  */
     /* JADX WARNING: Removed duplicated region for block: B:984:0x1778  */
     /* JADX WARNING: Removed duplicated region for block: B:985:0x1781  */
-    /* JADX WARNING: Removed duplicated region for block: B:995:0x17a7 A[Catch:{ Exception -> 0x184e }] */
-    /* JADX WARNING: Removed duplicated region for block: B:996:0x17af A[ADDED_TO_REGION, Catch:{ Exception -> 0x184e }] */
+    /* JADX WARNING: Removed duplicated region for block: B:995:0x17a7 A[Catch:{ Exception -> 0x186a }] */
+    /* JADX WARNING: Removed duplicated region for block: B:996:0x17b0 A[ADDED_TO_REGION, Catch:{ Exception -> 0x186a }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void buildLayout() {
         /*
@@ -3605,12 +3610,12 @@ public class DialogCell extends BaseCell {
         L_0x1668:
             boolean r0 = r1.drawReactionMention
             if (r0 == 0) goto L_0x154c
-            r0 = 1107296256(0x42000000, float:32.0)
+            r0 = 1109917696(0x42280000, float:42.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             boolean r5 = org.telegram.messenger.LocaleController.isRTL
             if (r5 != 0) goto L_0x169d
             int r0 = r40.getMeasuredWidth()
-            r5 = 1107296256(0x42000000, float:32.0)
+            r5 = 1109917696(0x42280000, float:42.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r0 = r0 - r5
             int r5 = r1.mentionWidth
@@ -3769,121 +3774,136 @@ public class DialogCell extends BaseCell {
             float r4 = (float) r4
             r0.setImageY(r4)
         L_0x1796:
-            boolean r0 = r1.useForceThreeLines     // Catch:{ Exception -> 0x184e }
+            boolean r0 = r1.useForceThreeLines     // Catch:{ Exception -> 0x186a }
             if (r0 != 0) goto L_0x179e
-            boolean r4 = org.telegram.messenger.SharedConfig.useThreeLinesLayout     // Catch:{ Exception -> 0x184e }
-            if (r4 == 0) goto L_0x17af
+            boolean r4 = org.telegram.messenger.SharedConfig.useThreeLinesLayout     // Catch:{ Exception -> 0x186a }
+            if (r4 == 0) goto L_0x17b0
         L_0x179e:
-            int r4 = r1.currentDialogFolderId     // Catch:{ Exception -> 0x184e }
-            if (r4 == 0) goto L_0x17af
-            int r4 = r1.currentDialogFolderDialogsCount     // Catch:{ Exception -> 0x184e }
+            int r4 = r1.currentDialogFolderId     // Catch:{ Exception -> 0x186a }
+            if (r4 == 0) goto L_0x17b0
+            int r4 = r1.currentDialogFolderDialogsCount     // Catch:{ Exception -> 0x186a }
             r5 = 1
-            if (r4 <= r5) goto L_0x17af
-            android.text.TextPaint[] r0 = org.telegram.ui.ActionBar.Theme.dialogs_messagePaint     // Catch:{ Exception -> 0x184e }
-            int r2 = r1.paintIndex     // Catch:{ Exception -> 0x184e }
-            r10 = r0[r2]     // Catch:{ Exception -> 0x184e }
-            r2 = 0
-            goto L_0x17c9
-        L_0x17af:
-            if (r0 != 0) goto L_0x17b5
-            boolean r0 = org.telegram.messenger.SharedConfig.useThreeLinesLayout     // Catch:{ Exception -> 0x184e }
-            if (r0 == 0) goto L_0x17b7
-        L_0x17b5:
-            if (r7 == 0) goto L_0x17c4
-        L_0x17b7:
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r16)     // Catch:{ Exception -> 0x184e }
+            if (r4 <= r5) goto L_0x17b0
+            android.text.TextPaint[] r0 = org.telegram.ui.ActionBar.Theme.dialogs_messagePaint     // Catch:{ Exception -> 0x186a }
+            int r2 = r1.paintIndex     // Catch:{ Exception -> 0x186a }
+            r10 = r0[r2]     // Catch:{ Exception -> 0x186a }
+            r2 = r7
+            r7 = 0
+            goto L_0x17c5
+        L_0x17b0:
+            if (r0 != 0) goto L_0x17b6
+            boolean r0 = org.telegram.messenger.SharedConfig.useThreeLinesLayout     // Catch:{ Exception -> 0x186a }
+            if (r0 == 0) goto L_0x17b8
+        L_0x17b6:
+            if (r7 == 0) goto L_0x17c5
+        L_0x17b8:
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r16)     // Catch:{ Exception -> 0x186a }
             int r0 = r3 - r0
-            float r0 = (float) r0     // Catch:{ Exception -> 0x184e }
-            android.text.TextUtils$TruncateAt r4 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x184e }
-            java.lang.CharSequence r2 = android.text.TextUtils.ellipsize(r2, r10, r0, r4)     // Catch:{ Exception -> 0x184e }
-        L_0x17c4:
-            r39 = r7
-            r7 = r2
-            r2 = r39
-        L_0x17c9:
-            boolean r0 = r1.useForceThreeLines     // Catch:{ Exception -> 0x184e }
-            if (r0 != 0) goto L_0x1805
-            boolean r0 = org.telegram.messenger.SharedConfig.useThreeLinesLayout     // Catch:{ Exception -> 0x184e }
-            if (r0 == 0) goto L_0x17d2
-            goto L_0x1805
-        L_0x17d2:
-            boolean r0 = r1.hasMessageThumb     // Catch:{ Exception -> 0x184e }
-            if (r0 == 0) goto L_0x17ed
-            r2 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ Exception -> 0x184e }
+            float r0 = (float) r0     // Catch:{ Exception -> 0x186a }
+            android.text.TextUtils$TruncateAt r4 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x186a }
+            java.lang.CharSequence r2 = android.text.TextUtils.ellipsize(r2, r10, r0, r4)     // Catch:{ Exception -> 0x186a }
+        L_0x17c5:
+            boolean r0 = r2 instanceof android.text.Spannable     // Catch:{ Exception -> 0x186a }
+            if (r0 == 0) goto L_0x17e5
+            r0 = r2
+            android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x186a }
+            int r4 = r0.length()     // Catch:{ Exception -> 0x186a }
+            java.lang.Class<android.text.style.ClickableSpan> r5 = android.text.style.ClickableSpan.class
+            r6 = 0
+            java.lang.Object[] r4 = r0.getSpans(r6, r4, r5)     // Catch:{ Exception -> 0x186a }
+            android.text.style.ClickableSpan[] r4 = (android.text.style.ClickableSpan[]) r4     // Catch:{ Exception -> 0x186a }
+            int r5 = r4.length     // Catch:{ Exception -> 0x186a }
+            r6 = 0
+        L_0x17db:
+            if (r6 >= r5) goto L_0x17e5
+            r9 = r4[r6]     // Catch:{ Exception -> 0x186a }
+            r0.removeSpan(r9)     // Catch:{ Exception -> 0x186a }
+            int r6 = r6 + 1
+            goto L_0x17db
+        L_0x17e5:
+            boolean r0 = r1.useForceThreeLines     // Catch:{ Exception -> 0x186a }
+            if (r0 != 0) goto L_0x1821
+            boolean r0 = org.telegram.messenger.SharedConfig.useThreeLinesLayout     // Catch:{ Exception -> 0x186a }
+            if (r0 == 0) goto L_0x17ee
+            goto L_0x1821
+        L_0x17ee:
+            boolean r0 = r1.hasMessageThumb     // Catch:{ Exception -> 0x186a }
+            if (r0 == 0) goto L_0x1809
+            r4 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ Exception -> 0x186a }
             int r0 = r0 + r11
             int r3 = r3 + r0
-            boolean r0 = org.telegram.messenger.LocaleController.isRTL     // Catch:{ Exception -> 0x184e }
-            if (r0 == 0) goto L_0x17ed
-            int r0 = r1.messageLeft     // Catch:{ Exception -> 0x184e }
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ Exception -> 0x184e }
-            int r2 = r11 + r4
-            int r0 = r0 - r2
-            r1.messageLeft = r0     // Catch:{ Exception -> 0x184e }
-        L_0x17ed:
-            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x184e }
-            android.text.Layout$Alignment r33 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x184e }
+            boolean r0 = org.telegram.messenger.LocaleController.isRTL     // Catch:{ Exception -> 0x186a }
+            if (r0 == 0) goto L_0x1809
+            int r0 = r1.messageLeft     // Catch:{ Exception -> 0x186a }
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ Exception -> 0x186a }
+            int r4 = r11 + r5
+            int r0 = r0 - r4
+            r1.messageLeft = r0     // Catch:{ Exception -> 0x186a }
+        L_0x1809:
+            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x186a }
+            android.text.Layout$Alignment r33 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x186a }
             r34 = 1065353216(0x3var_, float:1.0)
             r35 = 0
             r36 = 0
             r29 = r0
-            r30 = r7
+            r30 = r2
             r31 = r10
             r32 = r3
-            r29.<init>(r30, r31, r32, r33, r34, r35, r36)     // Catch:{ Exception -> 0x184e }
-            r1.messageLayout = r0     // Catch:{ Exception -> 0x184e }
-            goto L_0x1838
-        L_0x1805:
-            boolean r0 = r1.hasMessageThumb     // Catch:{ Exception -> 0x184e }
-            if (r0 == 0) goto L_0x1812
-            if (r2 == 0) goto L_0x1812
+            r29.<init>(r30, r31, r32, r33, r34, r35, r36)     // Catch:{ Exception -> 0x186a }
+            r1.messageLayout = r0     // Catch:{ Exception -> 0x186a }
+            goto L_0x1854
+        L_0x1821:
+            boolean r0 = r1.hasMessageThumb     // Catch:{ Exception -> 0x186a }
+            if (r0 == 0) goto L_0x182e
+            if (r7 == 0) goto L_0x182e
             r4 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ Exception -> 0x184e }
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ Exception -> 0x186a }
             int r3 = r3 + r0
-        L_0x1812:
-            android.text.Layout$Alignment r32 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x184e }
+        L_0x182e:
+            android.text.Layout$Alignment r32 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x186a }
             r33 = 1065353216(0x3var_, float:1.0)
             r0 = 1065353216(0x3var_, float:1.0)
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)     // Catch:{ Exception -> 0x184e }
-            float r0 = (float) r0     // Catch:{ Exception -> 0x184e }
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)     // Catch:{ Exception -> 0x186a }
+            float r0 = (float) r0     // Catch:{ Exception -> 0x186a }
             r35 = 0
-            android.text.TextUtils$TruncateAt r36 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x184e }
-            if (r2 == 0) goto L_0x1826
+            android.text.TextUtils$TruncateAt r36 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x186a }
+            if (r7 == 0) goto L_0x1842
             r38 = 1
-            goto L_0x1828
-        L_0x1826:
+            goto L_0x1844
+        L_0x1842:
             r38 = 2
-        L_0x1828:
-            r29 = r7
+        L_0x1844:
+            r29 = r2
             r30 = r10
             r31 = r3
             r34 = r0
             r37 = r3
-            android.text.StaticLayout r0 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r29, r30, r31, r32, r33, r34, r35, r36, r37, r38)     // Catch:{ Exception -> 0x184e }
-            r1.messageLayout = r0     // Catch:{ Exception -> 0x184e }
-        L_0x1838:
-            java.util.Stack<org.telegram.ui.Components.spoilers.SpoilerEffect> r0 = r1.spoilersPool     // Catch:{ Exception -> 0x184e }
-            java.util.List<org.telegram.ui.Components.spoilers.SpoilerEffect> r2 = r1.spoilers     // Catch:{ Exception -> 0x184e }
-            r0.addAll(r2)     // Catch:{ Exception -> 0x184e }
-            java.util.List<org.telegram.ui.Components.spoilers.SpoilerEffect> r0 = r1.spoilers     // Catch:{ Exception -> 0x184e }
-            r0.clear()     // Catch:{ Exception -> 0x184e }
-            android.text.StaticLayout r0 = r1.messageLayout     // Catch:{ Exception -> 0x184e }
-            java.util.Stack<org.telegram.ui.Components.spoilers.SpoilerEffect> r2 = r1.spoilersPool     // Catch:{ Exception -> 0x184e }
-            java.util.List<org.telegram.ui.Components.spoilers.SpoilerEffect> r4 = r1.spoilers     // Catch:{ Exception -> 0x184e }
-            org.telegram.ui.Components.spoilers.SpoilerEffect.addSpoilers(r1, r0, r2, r4)     // Catch:{ Exception -> 0x184e }
-            goto L_0x1855
-        L_0x184e:
+            android.text.StaticLayout r0 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r29, r30, r31, r32, r33, r34, r35, r36, r37, r38)     // Catch:{ Exception -> 0x186a }
+            r1.messageLayout = r0     // Catch:{ Exception -> 0x186a }
+        L_0x1854:
+            java.util.Stack<org.telegram.ui.Components.spoilers.SpoilerEffect> r0 = r1.spoilersPool     // Catch:{ Exception -> 0x186a }
+            java.util.List<org.telegram.ui.Components.spoilers.SpoilerEffect> r2 = r1.spoilers     // Catch:{ Exception -> 0x186a }
+            r0.addAll(r2)     // Catch:{ Exception -> 0x186a }
+            java.util.List<org.telegram.ui.Components.spoilers.SpoilerEffect> r0 = r1.spoilers     // Catch:{ Exception -> 0x186a }
+            r0.clear()     // Catch:{ Exception -> 0x186a }
+            android.text.StaticLayout r0 = r1.messageLayout     // Catch:{ Exception -> 0x186a }
+            java.util.Stack<org.telegram.ui.Components.spoilers.SpoilerEffect> r2 = r1.spoilersPool     // Catch:{ Exception -> 0x186a }
+            java.util.List<org.telegram.ui.Components.spoilers.SpoilerEffect> r4 = r1.spoilers     // Catch:{ Exception -> 0x186a }
+            org.telegram.ui.Components.spoilers.SpoilerEffect.addSpoilers(r1, r0, r2, r4)     // Catch:{ Exception -> 0x186a }
+            goto L_0x1871
+        L_0x186a:
             r0 = move-exception
             r2 = 0
             r1.messageLayout = r2
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x1855:
+        L_0x1871:
             boolean r0 = org.telegram.messenger.LocaleController.isRTL
-            if (r0 == 0) goto L_0x1991
+            if (r0 == 0) goto L_0x19ad
             android.text.StaticLayout r0 = r1.nameLayout
-            if (r0 == 0) goto L_0x191a
+            if (r0 == 0) goto L_0x1936
             int r0 = r0.getLineCount()
-            if (r0 <= 0) goto L_0x191a
+            if (r0 <= 0) goto L_0x1936
             android.text.StaticLayout r0 = r1.nameLayout
             r2 = 0
             float r0 = r0.getLineLeft(r2)
@@ -3892,11 +3912,11 @@ public class DialogCell extends BaseCell {
             double r4 = (double) r4
             double r4 = java.lang.Math.ceil(r4)
             boolean r2 = r1.dialogMuted
-            if (r2 == 0) goto L_0x18a7
+            if (r2 == 0) goto L_0x18c3
             boolean r2 = r1.drawVerified
-            if (r2 != 0) goto L_0x18a7
+            if (r2 != 0) goto L_0x18c3
             int r2 = r1.drawScam
-            if (r2 != 0) goto L_0x18a7
+            if (r2 != 0) goto L_0x18c3
             int r2 = r1.nameLeft
             double r6 = (double) r2
             double r9 = (double) r8
@@ -3916,10 +3936,10 @@ public class DialogCell extends BaseCell {
             double r6 = r6 - r9
             int r2 = (int) r6
             r1.nameMuteLeft = r2
-            goto L_0x1902
-        L_0x18a7:
+            goto L_0x191e
+        L_0x18c3:
             boolean r2 = r1.drawVerified
-            if (r2 == 0) goto L_0x18d1
+            if (r2 == 0) goto L_0x18ed
             int r2 = r1.nameLeft
             double r6 = (double) r2
             double r9 = (double) r8
@@ -3939,10 +3959,10 @@ public class DialogCell extends BaseCell {
             double r6 = r6 - r9
             int r2 = (int) r6
             r1.nameMuteLeft = r2
-            goto L_0x1902
-        L_0x18d1:
+            goto L_0x191e
+        L_0x18ed:
             int r2 = r1.drawScam
-            if (r2 == 0) goto L_0x1902
+            if (r2 == 0) goto L_0x191e
             int r2 = r1.nameLeft
             double r6 = (double) r2
             double r9 = (double) r8
@@ -3957,25 +3977,25 @@ public class DialogCell extends BaseCell {
             double r6 = r6 - r9
             int r2 = r1.drawScam
             r9 = 1
-            if (r2 != r9) goto L_0x18f4
+            if (r2 != r9) goto L_0x1910
             org.telegram.ui.Components.ScamDrawable r2 = org.telegram.ui.ActionBar.Theme.dialogs_scamDrawable
-            goto L_0x18f6
-        L_0x18f4:
+            goto L_0x1912
+        L_0x1910:
             org.telegram.ui.Components.ScamDrawable r2 = org.telegram.ui.ActionBar.Theme.dialogs_fakeDrawable
-        L_0x18f6:
+        L_0x1912:
             int r2 = r2.getIntrinsicWidth()
             double r9 = (double) r2
             java.lang.Double.isNaN(r9)
             double r6 = r6 - r9
             int r2 = (int) r6
             r1.nameMuteLeft = r2
-        L_0x1902:
+        L_0x191e:
             r2 = 0
             int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 != 0) goto L_0x191a
+            if (r0 != 0) goto L_0x1936
             double r6 = (double) r8
             int r0 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r0 >= 0) goto L_0x191a
+            if (r0 >= 0) goto L_0x1936
             int r0 = r1.nameLeft
             double r8 = (double) r0
             java.lang.Double.isNaN(r6)
@@ -3984,21 +4004,21 @@ public class DialogCell extends BaseCell {
             double r8 = r8 + r6
             int r0 = (int) r8
             r1.nameLeft = r0
-        L_0x191a:
+        L_0x1936:
             android.text.StaticLayout r0 = r1.messageLayout
-            if (r0 == 0) goto L_0x195b
+            if (r0 == 0) goto L_0x1977
             int r0 = r0.getLineCount()
-            if (r0 <= 0) goto L_0x195b
+            if (r0 <= 0) goto L_0x1977
             r2 = 2147483647(0x7fffffff, float:NaN)
             r2 = 0
             r4 = 2147483647(0x7fffffff, float:NaN)
-        L_0x192b:
-            if (r2 >= r0) goto L_0x1951
+        L_0x1947:
+            if (r2 >= r0) goto L_0x196d
             android.text.StaticLayout r5 = r1.messageLayout
             float r5 = r5.getLineLeft(r2)
             r6 = 0
             int r5 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r5 != 0) goto L_0x1950
+            if (r5 != 0) goto L_0x196c
             android.text.StaticLayout r5 = r1.messageLayout
             float r5 = r5.getLineWidth(r2)
             double r5 = (double) r5
@@ -4009,33 +4029,33 @@ public class DialogCell extends BaseCell {
             int r5 = (int) r7
             int r4 = java.lang.Math.min(r4, r5)
             int r2 = r2 + 1
-            goto L_0x192b
-        L_0x1950:
+            goto L_0x1947
+        L_0x196c:
             r4 = 0
-        L_0x1951:
+        L_0x196d:
             r0 = 2147483647(0x7fffffff, float:NaN)
-            if (r4 == r0) goto L_0x195b
+            if (r4 == r0) goto L_0x1977
             int r0 = r1.messageLeft
             int r0 = r0 + r4
             r1.messageLeft = r0
-        L_0x195b:
+        L_0x1977:
             android.text.StaticLayout r0 = r1.messageNameLayout
-            if (r0 == 0) goto L_0x1a1b
+            if (r0 == 0) goto L_0x1a37
             int r0 = r0.getLineCount()
-            if (r0 <= 0) goto L_0x1a1b
+            if (r0 <= 0) goto L_0x1a37
             android.text.StaticLayout r0 = r1.messageNameLayout
             r2 = 0
             float r0 = r0.getLineLeft(r2)
             r4 = 0
             int r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r0 != 0) goto L_0x1a1b
+            if (r0 != 0) goto L_0x1a37
             android.text.StaticLayout r0 = r1.messageNameLayout
             float r0 = r0.getLineWidth(r2)
             double r4 = (double) r0
             double r4 = java.lang.Math.ceil(r4)
             double r2 = (double) r3
             int r0 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
-            if (r0 >= 0) goto L_0x1a1b
+            if (r0 >= 0) goto L_0x1a37
             int r0 = r1.messageNameLeft
             double r6 = (double) r0
             java.lang.Double.isNaN(r2)
@@ -4044,25 +4064,25 @@ public class DialogCell extends BaseCell {
             double r6 = r6 + r2
             int r0 = (int) r6
             r1.messageNameLeft = r0
-            goto L_0x1a1b
-        L_0x1991:
+            goto L_0x1a37
+        L_0x19ad:
             android.text.StaticLayout r0 = r1.nameLayout
-            if (r0 == 0) goto L_0x19e0
+            if (r0 == 0) goto L_0x19fc
             int r0 = r0.getLineCount()
-            if (r0 <= 0) goto L_0x19e0
+            if (r0 <= 0) goto L_0x19fc
             android.text.StaticLayout r0 = r1.nameLayout
             r2 = 0
             float r0 = r0.getLineRight(r2)
             float r3 = (float) r8
             int r3 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r3 != 0) goto L_0x19c5
+            if (r3 != 0) goto L_0x19e1
             android.text.StaticLayout r3 = r1.nameLayout
             float r3 = r3.getLineWidth(r2)
             double r2 = (double) r3
             double r2 = java.lang.Math.ceil(r2)
             double r4 = (double) r8
             int r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r6 >= 0) goto L_0x19c5
+            if (r6 >= 0) goto L_0x19e1
             int r6 = r1.nameLeft
             double r6 = (double) r6
             java.lang.Double.isNaN(r4)
@@ -4071,14 +4091,14 @@ public class DialogCell extends BaseCell {
             double r6 = r6 - r4
             int r2 = (int) r6
             r1.nameLeft = r2
-        L_0x19c5:
+        L_0x19e1:
             boolean r2 = r1.dialogMuted
-            if (r2 != 0) goto L_0x19d1
+            if (r2 != 0) goto L_0x19ed
             boolean r2 = r1.drawVerified
-            if (r2 != 0) goto L_0x19d1
+            if (r2 != 0) goto L_0x19ed
             int r2 = r1.drawScam
-            if (r2 == 0) goto L_0x19e0
-        L_0x19d1:
+            if (r2 == 0) goto L_0x19fc
+        L_0x19ed:
             int r2 = r1.nameLeft
             float r2 = (float) r2
             float r2 = r2 + r0
@@ -4088,31 +4108,31 @@ public class DialogCell extends BaseCell {
             float r2 = r2 + r0
             int r0 = (int) r2
             r1.nameMuteLeft = r0
-        L_0x19e0:
+        L_0x19fc:
             android.text.StaticLayout r0 = r1.messageLayout
-            if (r0 == 0) goto L_0x1a03
+            if (r0 == 0) goto L_0x1a1f
             int r0 = r0.getLineCount()
-            if (r0 <= 0) goto L_0x1a03
+            if (r0 <= 0) goto L_0x1a1f
             r2 = 1325400064(0x4var_, float:2.14748365E9)
             r3 = 0
-        L_0x19ed:
-            if (r3 >= r0) goto L_0x19fc
+        L_0x1a09:
+            if (r3 >= r0) goto L_0x1a18
             android.text.StaticLayout r4 = r1.messageLayout
             float r4 = r4.getLineLeft(r3)
             float r2 = java.lang.Math.min(r2, r4)
             int r3 = r3 + 1
-            goto L_0x19ed
-        L_0x19fc:
+            goto L_0x1a09
+        L_0x1a18:
             int r0 = r1.messageLeft
             float r0 = (float) r0
             float r0 = r0 - r2
             int r0 = (int) r0
             r1.messageLeft = r0
-        L_0x1a03:
+        L_0x1a1f:
             android.text.StaticLayout r0 = r1.messageNameLayout
-            if (r0 == 0) goto L_0x1a1b
+            if (r0 == 0) goto L_0x1a37
             int r0 = r0.getLineCount()
-            if (r0 <= 0) goto L_0x1a1b
+            if (r0 <= 0) goto L_0x1a37
             int r0 = r1.messageNameLeft
             float r0 = (float) r0
             android.text.StaticLayout r2 = r1.messageNameLayout
@@ -4121,73 +4141,73 @@ public class DialogCell extends BaseCell {
             float r0 = r0 - r2
             int r0 = (int) r0
             r1.messageNameLeft = r0
-        L_0x1a1b:
+        L_0x1a37:
             android.text.StaticLayout r0 = r1.messageLayout
-            if (r0 == 0) goto L_0x1a5f
+            if (r0 == 0) goto L_0x1a7b
             boolean r2 = r1.hasMessageThumb
-            if (r2 == 0) goto L_0x1a5f
-            java.lang.CharSequence r0 = r0.getText()     // Catch:{ Exception -> 0x1a5b }
-            int r0 = r0.length()     // Catch:{ Exception -> 0x1a5b }
+            if (r2 == 0) goto L_0x1a7b
+            java.lang.CharSequence r0 = r0.getText()     // Catch:{ Exception -> 0x1a77 }
+            int r0 = r0.length()     // Catch:{ Exception -> 0x1a77 }
             r5 = r23
             r2 = 1
-            if (r5 < r0) goto L_0x1a32
+            if (r5 < r0) goto L_0x1a4e
             int r5 = r0 + -1
-        L_0x1a32:
-            android.text.StaticLayout r0 = r1.messageLayout     // Catch:{ Exception -> 0x1a5b }
-            float r0 = r0.getPrimaryHorizontal(r5)     // Catch:{ Exception -> 0x1a5b }
-            android.text.StaticLayout r3 = r1.messageLayout     // Catch:{ Exception -> 0x1a5b }
+        L_0x1a4e:
+            android.text.StaticLayout r0 = r1.messageLayout     // Catch:{ Exception -> 0x1a77 }
+            float r0 = r0.getPrimaryHorizontal(r5)     // Catch:{ Exception -> 0x1a77 }
+            android.text.StaticLayout r3 = r1.messageLayout     // Catch:{ Exception -> 0x1a77 }
             int r5 = r5 + r2
-            float r2 = r3.getPrimaryHorizontal(r5)     // Catch:{ Exception -> 0x1a5b }
-            float r0 = java.lang.Math.min(r0, r2)     // Catch:{ Exception -> 0x1a5b }
-            double r2 = (double) r0     // Catch:{ Exception -> 0x1a5b }
-            double r2 = java.lang.Math.ceil(r2)     // Catch:{ Exception -> 0x1a5b }
-            int r0 = (int) r2     // Catch:{ Exception -> 0x1a5b }
-            if (r0 == 0) goto L_0x1a52
+            float r2 = r3.getPrimaryHorizontal(r5)     // Catch:{ Exception -> 0x1a77 }
+            float r0 = java.lang.Math.min(r0, r2)     // Catch:{ Exception -> 0x1a77 }
+            double r2 = (double) r0     // Catch:{ Exception -> 0x1a77 }
+            double r2 = java.lang.Math.ceil(r2)     // Catch:{ Exception -> 0x1a77 }
+            int r0 = (int) r2     // Catch:{ Exception -> 0x1a77 }
+            if (r0 == 0) goto L_0x1a6e
             r2 = 1077936128(0x40400000, float:3.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ Exception -> 0x1a5b }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ Exception -> 0x1a77 }
             int r0 = r0 + r2
-        L_0x1a52:
-            org.telegram.messenger.ImageReceiver r2 = r1.thumbImage     // Catch:{ Exception -> 0x1a5b }
-            int r3 = r1.messageLeft     // Catch:{ Exception -> 0x1a5b }
+        L_0x1a6e:
+            org.telegram.messenger.ImageReceiver r2 = r1.thumbImage     // Catch:{ Exception -> 0x1a77 }
+            int r3 = r1.messageLeft     // Catch:{ Exception -> 0x1a77 }
             int r3 = r3 + r0
-            r2.setImageX(r3)     // Catch:{ Exception -> 0x1a5b }
-            goto L_0x1a5f
-        L_0x1a5b:
+            r2.setImageX(r3)     // Catch:{ Exception -> 0x1a77 }
+            goto L_0x1a7b
+        L_0x1a77:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x1a5f:
+        L_0x1a7b:
             android.text.StaticLayout r0 = r1.messageLayout
-            if (r0 == 0) goto L_0x1aad
+            if (r0 == 0) goto L_0x1ac9
             int r2 = r1.printingStringType
-            if (r2 < 0) goto L_0x1aad
-            if (r25 < 0) goto L_0x1a84
+            if (r2 < 0) goto L_0x1ac9
+            if (r25 < 0) goto L_0x1aa0
             int r11 = r25 + 1
             java.lang.CharSequence r0 = r0.getText()
             int r0 = r0.length()
-            if (r11 >= r0) goto L_0x1a84
+            if (r11 >= r0) goto L_0x1aa0
             android.text.StaticLayout r0 = r1.messageLayout
             r2 = r25
             float r0 = r0.getPrimaryHorizontal(r2)
             android.text.StaticLayout r2 = r1.messageLayout
             float r2 = r2.getPrimaryHorizontal(r11)
-            goto L_0x1a92
-        L_0x1a84:
+            goto L_0x1aae
+        L_0x1aa0:
             android.text.StaticLayout r0 = r1.messageLayout
             r2 = 0
             float r0 = r0.getPrimaryHorizontal(r2)
             android.text.StaticLayout r2 = r1.messageLayout
             r3 = 1
             float r2 = r2.getPrimaryHorizontal(r3)
-        L_0x1a92:
+        L_0x1aae:
             int r3 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r3 >= 0) goto L_0x1a9e
+            if (r3 >= 0) goto L_0x1aba
             int r2 = r1.messageLeft
             float r2 = (float) r2
             float r2 = r2 + r0
             int r0 = (int) r2
             r1.statusDrawableLeft = r0
-            goto L_0x1aad
-        L_0x1a9e:
+            goto L_0x1ac9
+        L_0x1aba:
             int r0 = r1.messageLeft
             float r0 = (float) r0
             float r0 = r0 + r2
@@ -4197,7 +4217,7 @@ public class DialogCell extends BaseCell {
             float r0 = r0 + r2
             int r0 = (int) r0
             r1.statusDrawableLeft = r0
-        L_0x1aad:
+        L_0x1ac9:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DialogCell.buildLayout():void");
@@ -4402,695 +4422,754 @@ public class DialogCell extends BaseCell {
         update(i, true);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:127:0x01ee  */
-    /* JADX WARNING: Removed duplicated region for block: B:151:0x0249  */
-    /* JADX WARNING: Removed duplicated region for block: B:88:0x0191  */
-    /* JADX WARNING: Removed duplicated region for block: B:89:0x0193  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x0198  */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x01f6  */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0251  */
+    /* JADX WARNING: Removed duplicated region for block: B:275:0x0554  */
+    /* JADX WARNING: Removed duplicated region for block: B:276:0x0558  */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x055d  */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x0199  */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x019b  */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x01a0  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void update(int r19, boolean r20) {
+    public void update(int r25, boolean r26) {
         /*
-            r18 = this;
-            r0 = r18
+            r24 = this;
+            r0 = r24
             org.telegram.ui.Cells.DialogCell$CustomDialog r1 = r0.customDialog
-            r2 = 0
-            r3 = 1
-            r4 = 0
-            if (r1 == 0) goto L_0x003c
-            int r5 = r1.date
-            r0.lastMessageDate = r5
-            int r5 = r1.unread_count
-            if (r5 == 0) goto L_0x0012
+            r3 = 0
+            r4 = 1
+            r5 = 0
+            if (r1 == 0) goto L_0x003d
+            int r6 = r1.date
+            r0.lastMessageDate = r6
+            int r6 = r1.unread_count
+            if (r6 == 0) goto L_0x0012
             goto L_0x0013
         L_0x0012:
-            r3 = 0
+            r4 = 0
         L_0x0013:
-            r0.lastUnreadState = r3
-            r0.unreadCount = r5
-            boolean r3 = r1.pinned
-            r0.drawPin = r3
-            boolean r3 = r1.muted
-            r0.dialogMuted = r3
-            org.telegram.ui.Components.AvatarDrawable r3 = r0.avatarDrawable
-            int r4 = r1.id
-            long r4 = (long) r4
-            java.lang.String r1 = r1.name
-            r3.setInfo(r4, r1, r2)
-            org.telegram.messenger.ImageReceiver r6 = r0.avatarImage
-            r7 = 0
-            org.telegram.ui.Components.AvatarDrawable r9 = r0.avatarDrawable
-            r10 = 0
-            r11 = 0
-            java.lang.String r8 = "50_50"
-            r6.setImage(r7, r8, r9, r10, r11)
-            org.telegram.messenger.ImageReceiver r1 = r0.thumbImage
-            r1.setImageBitmap((android.graphics.drawable.Drawable) r2)
-            goto L_0x04e1
-        L_0x003c:
-            int r1 = r0.unreadCount
-            boolean r5 = r0.markUnread
-            boolean r6 = r0.isDialogCell
-            if (r6 == 0) goto L_0x0108
-            int r6 = r0.currentAccount
-            org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
-            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r6 = r6.dialogs_dict
-            long r7 = r0.currentDialogId
-            java.lang.Object r6 = r6.get(r7)
-            org.telegram.tgnet.TLRPC$Dialog r6 = (org.telegram.tgnet.TLRPC$Dialog) r6
-            if (r6 == 0) goto L_0x00fd
-            if (r19 != 0) goto L_0x010a
-            int r7 = r0.currentAccount
-            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
-            long r8 = r6.id
-            boolean r7 = r7.isClearingDialog(r8)
-            r0.clearingDialog = r7
-            int r7 = r0.currentAccount
-            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
-            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r7 = r7.dialogMessage
-            long r8 = r6.id
-            java.lang.Object r7 = r7.get(r8)
-            org.telegram.messenger.MessageObject r7 = (org.telegram.messenger.MessageObject) r7
-            r0.message = r7
-            if (r7 == 0) goto L_0x0082
-            boolean r7 = r7.isUnread()
-            if (r7 == 0) goto L_0x0082
-            r7 = 1
-            goto L_0x0083
-        L_0x0082:
-            r7 = 0
-        L_0x0083:
-            r0.lastUnreadState = r7
-            boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_dialogFolder
-            if (r7 == 0) goto L_0x0098
-            int r7 = r0.currentAccount
-            org.telegram.messenger.MessagesStorage r7 = org.telegram.messenger.MessagesStorage.getInstance(r7)
-            int r7 = r7.getArchiveUnreadCount()
-            r0.unreadCount = r7
-            r0.mentionCount = r4
-            goto L_0x00a4
-        L_0x0098:
-            int r7 = r6.unread_count
-            r0.unreadCount = r7
-            int r7 = r6.unread_mentions_count
-            r0.mentionCount = r7
-            int r7 = r6.unread_reactions_count
-            r0.reactionMentionCount = r7
-        L_0x00a4:
-            boolean r7 = r6.unread_mark
-            r0.markUnread = r7
-            org.telegram.messenger.MessageObject r7 = r0.message
-            if (r7 == 0) goto L_0x00b1
-            org.telegram.tgnet.TLRPC$Message r7 = r7.messageOwner
-            int r7 = r7.edit_date
-            goto L_0x00b2
-        L_0x00b1:
-            r7 = 0
-        L_0x00b2:
-            r0.currentEditDate = r7
-            int r7 = r6.last_message_date
-            r0.lastMessageDate = r7
-            int r7 = r0.dialogsType
-            r8 = 7
-            r9 = 8
-            if (r7 == r8) goto L_0x00d0
-            if (r7 != r9) goto L_0x00c2
-            goto L_0x00d0
-        L_0x00c2:
-            int r7 = r0.currentDialogFolderId
-            if (r7 != 0) goto L_0x00cc
-            boolean r6 = r6.pinned
-            if (r6 == 0) goto L_0x00cc
-            r6 = 1
-            goto L_0x00cd
-        L_0x00cc:
-            r6 = 0
-        L_0x00cd:
-            r0.drawPin = r6
-            goto L_0x00f2
-        L_0x00d0:
-            int r7 = r0.currentAccount
-            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
-            org.telegram.messenger.MessagesController$DialogFilter[] r7 = r7.selectedDialogFilter
-            int r8 = r0.dialogsType
-            if (r8 != r9) goto L_0x00de
-            r8 = 1
-            goto L_0x00df
-        L_0x00de:
-            r8 = 0
-        L_0x00df:
-            r7 = r7[r8]
-            if (r7 == 0) goto L_0x00ef
-            org.telegram.messenger.support.LongSparseIntArray r7 = r7.pinnedDialogs
-            long r8 = r6.id
-            int r6 = r7.indexOfKey(r8)
-            if (r6 < 0) goto L_0x00ef
-            r6 = 1
-            goto L_0x00f0
-        L_0x00ef:
-            r6 = 0
-        L_0x00f0:
-            r0.drawPin = r6
-        L_0x00f2:
-            org.telegram.messenger.MessageObject r6 = r0.message
-            if (r6 == 0) goto L_0x010a
-            org.telegram.tgnet.TLRPC$Message r6 = r6.messageOwner
-            int r6 = r6.send_state
-            r0.lastSendState = r6
-            goto L_0x010a
-        L_0x00fd:
-            r0.unreadCount = r4
-            r0.mentionCount = r4
-            r0.currentEditDate = r4
-            r0.lastMessageDate = r4
-            r0.clearingDialog = r4
-            goto L_0x010a
-        L_0x0108:
+            r0.lastUnreadState = r4
+            r0.unreadCount = r6
+            boolean r4 = r1.pinned
             r0.drawPin = r4
-        L_0x010a:
-            if (r19 == 0) goto L_0x024d
-            org.telegram.tgnet.TLRPC$User r6 = r0.user
-            if (r6 == 0) goto L_0x012d
-            int r6 = org.telegram.messenger.MessagesController.UPDATE_MASK_STATUS
-            r6 = r19 & r6
-            if (r6 == 0) goto L_0x012d
-            int r6 = r0.currentAccount
-            org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
-            org.telegram.tgnet.TLRPC$User r7 = r0.user
-            long r7 = r7.id
-            java.lang.Long r7 = java.lang.Long.valueOf(r7)
-            org.telegram.tgnet.TLRPC$User r6 = r6.getUser(r7)
-            r0.user = r6
-            r18.invalidate()
-        L_0x012d:
-            boolean r6 = r0.isDialogCell
-            if (r6 == 0) goto L_0x0157
-            int r6 = org.telegram.messenger.MessagesController.UPDATE_MASK_USER_PRINT
-            r6 = r19 & r6
-            if (r6 == 0) goto L_0x0157
-            int r6 = r0.currentAccount
-            org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
-            long r7 = r0.currentDialogId
-            java.lang.CharSequence r6 = r6.getPrintingString(r7, r4, r3)
-            java.lang.CharSequence r7 = r0.lastPrintString
-            if (r7 == 0) goto L_0x0149
-            if (r6 == 0) goto L_0x0155
-        L_0x0149:
-            if (r7 != 0) goto L_0x014d
-            if (r6 != 0) goto L_0x0155
-        L_0x014d:
-            if (r7 == 0) goto L_0x0157
-            boolean r6 = r7.equals(r6)
-            if (r6 != 0) goto L_0x0157
-        L_0x0155:
-            r6 = 1
-            goto L_0x0158
-        L_0x0157:
-            r6 = 0
-        L_0x0158:
-            if (r6 != 0) goto L_0x016b
-            int r7 = org.telegram.messenger.MessagesController.UPDATE_MASK_MESSAGE_TEXT
-            r7 = r19 & r7
-            if (r7 == 0) goto L_0x016b
-            org.telegram.messenger.MessageObject r7 = r0.message
-            if (r7 == 0) goto L_0x016b
-            java.lang.CharSequence r7 = r7.messageText
-            java.lang.CharSequence r8 = r0.lastMessageString
-            if (r7 == r8) goto L_0x016b
-            r6 = 1
-        L_0x016b:
-            if (r6 != 0) goto L_0x0199
-            int r7 = org.telegram.messenger.MessagesController.UPDATE_MASK_CHAT
-            r7 = r19 & r7
-            if (r7 == 0) goto L_0x0199
-            org.telegram.tgnet.TLRPC$Chat r7 = r0.chat
-            if (r7 == 0) goto L_0x0199
-            int r7 = r0.currentAccount
-            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
-            org.telegram.tgnet.TLRPC$Chat r8 = r0.chat
-            long r8 = r8.id
-            java.lang.Long r8 = java.lang.Long.valueOf(r8)
-            org.telegram.tgnet.TLRPC$Chat r7 = r7.getChat(r8)
-            boolean r8 = r7.call_active
-            if (r8 == 0) goto L_0x0193
-            boolean r7 = r7.call_not_empty
-            if (r7 == 0) goto L_0x0193
-            r7 = 1
-            goto L_0x0194
-        L_0x0193:
-            r7 = 0
-        L_0x0194:
-            boolean r8 = r0.hasCall
-            if (r7 == r8) goto L_0x0199
-            r6 = 1
-        L_0x0199:
-            if (r6 != 0) goto L_0x01a6
-            int r7 = org.telegram.messenger.MessagesController.UPDATE_MASK_AVATAR
-            r7 = r19 & r7
-            if (r7 == 0) goto L_0x01a6
-            org.telegram.tgnet.TLRPC$Chat r7 = r0.chat
-            if (r7 != 0) goto L_0x01a6
-            r6 = 1
-        L_0x01a6:
-            if (r6 != 0) goto L_0x01b3
-            int r7 = org.telegram.messenger.MessagesController.UPDATE_MASK_NAME
-            r7 = r19 & r7
-            if (r7 == 0) goto L_0x01b3
-            org.telegram.tgnet.TLRPC$Chat r7 = r0.chat
-            if (r7 != 0) goto L_0x01b3
-            r6 = 1
-        L_0x01b3:
-            if (r6 != 0) goto L_0x01c0
-            int r7 = org.telegram.messenger.MessagesController.UPDATE_MASK_CHAT_AVATAR
-            r7 = r19 & r7
-            if (r7 == 0) goto L_0x01c0
-            org.telegram.tgnet.TLRPC$User r7 = r0.user
-            if (r7 != 0) goto L_0x01c0
-            r6 = 1
-        L_0x01c0:
-            if (r6 != 0) goto L_0x01cd
-            int r7 = org.telegram.messenger.MessagesController.UPDATE_MASK_CHAT_NAME
-            r7 = r19 & r7
-            if (r7 == 0) goto L_0x01cd
-            org.telegram.tgnet.TLRPC$User r7 = r0.user
-            if (r7 != 0) goto L_0x01cd
-            r6 = 1
-        L_0x01cd:
-            if (r6 != 0) goto L_0x0230
-            int r7 = org.telegram.messenger.MessagesController.UPDATE_MASK_READ_DIALOG_MESSAGE
-            r7 = r19 & r7
-            if (r7 == 0) goto L_0x0230
-            org.telegram.messenger.MessageObject r7 = r0.message
-            if (r7 == 0) goto L_0x01ea
-            boolean r8 = r0.lastUnreadState
-            boolean r7 = r7.isUnread()
-            if (r8 == r7) goto L_0x01ea
-            org.telegram.messenger.MessageObject r6 = r0.message
-            boolean r6 = r6.isUnread()
-            r0.lastUnreadState = r6
-            r6 = 1
-        L_0x01ea:
-            boolean r7 = r0.isDialogCell
-            if (r7 == 0) goto L_0x0230
-            int r7 = r0.currentAccount
-            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
-            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r7 = r7.dialogs_dict
-            long r8 = r0.currentDialogId
-            java.lang.Object r7 = r7.get(r8)
-            org.telegram.tgnet.TLRPC$Dialog r7 = (org.telegram.tgnet.TLRPC$Dialog) r7
-            boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_dialogFolder
-            if (r8 == 0) goto L_0x020e
-            int r8 = r0.currentAccount
-            org.telegram.messenger.MessagesStorage r8 = org.telegram.messenger.MessagesStorage.getInstance(r8)
-            int r8 = r8.getArchiveUnreadCount()
-        L_0x020c:
-            r9 = 0
-            goto L_0x0217
-        L_0x020e:
-            if (r7 == 0) goto L_0x0215
-            int r8 = r7.unread_count
-            int r9 = r7.unread_mentions_count
-            goto L_0x0217
-        L_0x0215:
-            r8 = 0
-            goto L_0x020c
-        L_0x0217:
-            if (r7 == 0) goto L_0x0230
-            int r10 = r0.unreadCount
-            if (r10 != r8) goto L_0x0227
-            boolean r10 = r0.markUnread
-            boolean r11 = r7.unread_mark
-            if (r10 != r11) goto L_0x0227
-            int r10 = r0.mentionCount
-            if (r10 == r9) goto L_0x0230
-        L_0x0227:
-            r0.unreadCount = r8
-            r0.mentionCount = r9
-            boolean r6 = r7.unread_mark
-            r0.markUnread = r6
-            r6 = 1
-        L_0x0230:
-            if (r6 != 0) goto L_0x0247
-            int r7 = org.telegram.messenger.MessagesController.UPDATE_MASK_SEND_STATE
-            r7 = r19 & r7
-            if (r7 == 0) goto L_0x0247
-            org.telegram.messenger.MessageObject r7 = r0.message
-            if (r7 == 0) goto L_0x0247
-            int r8 = r0.lastSendState
-            org.telegram.tgnet.TLRPC$Message r7 = r7.messageOwner
-            int r7 = r7.send_state
-            if (r8 == r7) goto L_0x0247
-            r0.lastSendState = r7
-            r6 = 1
-        L_0x0247:
-            if (r6 != 0) goto L_0x024d
-            r18.invalidate()
-            return
-        L_0x024d:
-            r0.user = r2
-            r0.chat = r2
-            r0.encryptedChat = r2
-            int r2 = r0.currentDialogFolderId
-            r6 = 0
-            if (r2 == 0) goto L_0x026a
+            boolean r4 = r1.muted
             r0.dialogMuted = r4
-            org.telegram.messenger.MessageObject r2 = r18.findFolderTopMessage()
-            r0.message = r2
-            if (r2 == 0) goto L_0x0268
-            long r8 = r2.getDialogId()
-            goto L_0x0283
-        L_0x0268:
-            r8 = r6
-            goto L_0x0283
-        L_0x026a:
-            boolean r2 = r0.isDialogCell
-            if (r2 == 0) goto L_0x027e
-            int r2 = r0.currentAccount
-            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
-            long r8 = r0.currentDialogId
-            boolean r2 = r2.isDialogMuted(r8)
-            if (r2 == 0) goto L_0x027e
-            r2 = 1
-            goto L_0x027f
-        L_0x027e:
-            r2 = 0
-        L_0x027f:
-            r0.dialogMuted = r2
-            long r8 = r0.currentDialogId
-        L_0x0283:
-            int r2 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1))
-            if (r2 == 0) goto L_0x032a
-            boolean r2 = org.telegram.messenger.DialogObject.isEncryptedDialog(r8)
-            if (r2 == 0) goto L_0x02b8
-            int r2 = r0.currentAccount
-            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
-            int r6 = org.telegram.messenger.DialogObject.getEncryptedChatId(r8)
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            org.telegram.tgnet.TLRPC$EncryptedChat r2 = r2.getEncryptedChat(r6)
-            r0.encryptedChat = r2
-            if (r2 == 0) goto L_0x0302
-            int r2 = r0.currentAccount
-            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
-            org.telegram.tgnet.TLRPC$EncryptedChat r6 = r0.encryptedChat
-            long r6 = r6.user_id
-            java.lang.Long r6 = java.lang.Long.valueOf(r6)
-            org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r6)
-            r0.user = r2
-            goto L_0x0302
-        L_0x02b8:
-            boolean r2 = org.telegram.messenger.DialogObject.isUserDialog(r8)
-            if (r2 == 0) goto L_0x02cf
-            int r2 = r0.currentAccount
-            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
-            java.lang.Long r6 = java.lang.Long.valueOf(r8)
-            org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r6)
-            r0.user = r2
-            goto L_0x0302
-        L_0x02cf:
-            int r2 = r0.currentAccount
-            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
-            long r6 = -r8
-            java.lang.Long r6 = java.lang.Long.valueOf(r6)
-            org.telegram.tgnet.TLRPC$Chat r2 = r2.getChat(r6)
-            r0.chat = r2
-            boolean r6 = r0.isDialogCell
-            if (r6 != 0) goto L_0x0302
-            if (r2 == 0) goto L_0x0302
-            org.telegram.tgnet.TLRPC$InputChannel r2 = r2.migrated_to
-            if (r2 == 0) goto L_0x0302
-            int r2 = r0.currentAccount
-            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
-            org.telegram.tgnet.TLRPC$Chat r6 = r0.chat
-            org.telegram.tgnet.TLRPC$InputChannel r6 = r6.migrated_to
-            long r6 = r6.channel_id
-            java.lang.Long r6 = java.lang.Long.valueOf(r6)
-            org.telegram.tgnet.TLRPC$Chat r2 = r2.getChat(r6)
-            if (r2 == 0) goto L_0x0302
-            r0.chat = r2
-        L_0x0302:
-            boolean r2 = r0.useMeForMyMessages
-            if (r2 == 0) goto L_0x032a
-            org.telegram.tgnet.TLRPC$User r2 = r0.user
-            if (r2 == 0) goto L_0x032a
-            org.telegram.messenger.MessageObject r2 = r0.message
-            boolean r2 = r2.isOutOwner()
-            if (r2 == 0) goto L_0x032a
-            int r2 = r0.currentAccount
-            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
-            int r6 = r0.currentAccount
-            org.telegram.messenger.UserConfig r6 = org.telegram.messenger.UserConfig.getInstance(r6)
-            long r6 = r6.clientUserId
-            java.lang.Long r6 = java.lang.Long.valueOf(r6)
-            org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r6)
-            r0.user = r2
-        L_0x032a:
-            int r2 = r0.currentDialogFolderId
-            r6 = 2
-            if (r2 == 0) goto L_0x0347
-            org.telegram.ui.Components.RLottieDrawable r2 = org.telegram.ui.ActionBar.Theme.dialogs_archiveAvatarDrawable
-            r2.setCallback(r0)
-            org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
-            r2.setAvatarType(r6)
+            org.telegram.ui.Components.AvatarDrawable r4 = r0.avatarDrawable
+            int r5 = r1.id
+            long r5 = (long) r5
+            java.lang.String r1 = r1.name
+            r4.setInfo(r5, r1, r3)
             org.telegram.messenger.ImageReceiver r7 = r0.avatarImage
             r8 = 0
-            r9 = 0
             org.telegram.ui.Components.AvatarDrawable r10 = r0.avatarDrawable
             r11 = 0
-            org.telegram.tgnet.TLRPC$User r12 = r0.user
-            r13 = 0
-            r7.setImage(r8, r9, r10, r11, r12, r13)
-            goto L_0x03a8
-        L_0x0347:
-            org.telegram.tgnet.TLRPC$User r2 = r0.user
-            if (r2 == 0) goto L_0x0396
-            org.telegram.ui.Components.AvatarDrawable r7 = r0.avatarDrawable
-            r7.setInfo((org.telegram.tgnet.TLRPC$User) r2)
-            org.telegram.tgnet.TLRPC$User r2 = r0.user
-            boolean r2 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r2)
-            if (r2 == 0) goto L_0x036d
-            org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
-            r7 = 12
-            r2.setAvatarType(r7)
-            org.telegram.messenger.ImageReceiver r8 = r0.avatarImage
-            r9 = 0
-            r10 = 0
-            org.telegram.ui.Components.AvatarDrawable r11 = r0.avatarDrawable
             r12 = 0
-            org.telegram.tgnet.TLRPC$User r13 = r0.user
-            r14 = 0
-            r8.setImage(r9, r10, r11, r12, r13, r14)
-            goto L_0x03a8
-        L_0x036d:
-            org.telegram.tgnet.TLRPC$User r2 = r0.user
-            boolean r2 = org.telegram.messenger.UserObject.isUserSelf(r2)
-            if (r2 == 0) goto L_0x038c
-            boolean r2 = r0.useMeForMyMessages
-            if (r2 != 0) goto L_0x038c
-            org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
-            r2.setAvatarType(r3)
-            org.telegram.messenger.ImageReceiver r7 = r0.avatarImage
-            r8 = 0
+            java.lang.String r9 = "50_50"
+            r7.setImage(r8, r9, r10, r11, r12)
+            org.telegram.messenger.ImageReceiver r1 = r0.thumbImage
+            r1.setImageBitmap((android.graphics.drawable.Drawable) r3)
+        L_0x003a:
+            r1 = 0
+            goto L_0x0547
+        L_0x003d:
+            int r1 = r0.unreadCount
+            int r6 = r0.reactionMentionCount
+            if (r6 == 0) goto L_0x0045
+            r6 = 1
+            goto L_0x0046
+        L_0x0045:
+            r6 = 0
+        L_0x0046:
+            boolean r7 = r0.markUnread
+            boolean r8 = r0.isDialogCell
+            if (r8 == 0) goto L_0x0110
+            int r8 = r0.currentAccount
+            org.telegram.messenger.MessagesController r8 = org.telegram.messenger.MessagesController.getInstance(r8)
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r8 = r8.dialogs_dict
+            long r9 = r0.currentDialogId
+            java.lang.Object r8 = r8.get(r9)
+            org.telegram.tgnet.TLRPC$Dialog r8 = (org.telegram.tgnet.TLRPC$Dialog) r8
+            if (r8 == 0) goto L_0x0105
+            if (r25 != 0) goto L_0x0112
+            int r9 = r0.currentAccount
+            org.telegram.messenger.MessagesController r9 = org.telegram.messenger.MessagesController.getInstance(r9)
+            long r10 = r8.id
+            boolean r9 = r9.isClearingDialog(r10)
+            r0.clearingDialog = r9
+            int r9 = r0.currentAccount
+            org.telegram.messenger.MessagesController r9 = org.telegram.messenger.MessagesController.getInstance(r9)
+            androidx.collection.LongSparseArray<org.telegram.messenger.MessageObject> r9 = r9.dialogMessage
+            long r10 = r8.id
+            java.lang.Object r9 = r9.get(r10)
+            org.telegram.messenger.MessageObject r9 = (org.telegram.messenger.MessageObject) r9
+            r0.message = r9
+            if (r9 == 0) goto L_0x008a
+            boolean r9 = r9.isUnread()
+            if (r9 == 0) goto L_0x008a
+            r9 = 1
+            goto L_0x008b
+        L_0x008a:
             r9 = 0
-            org.telegram.ui.Components.AvatarDrawable r10 = r0.avatarDrawable
+        L_0x008b:
+            r0.lastUnreadState = r9
+            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_dialogFolder
+            if (r9 == 0) goto L_0x00a0
+            int r9 = r0.currentAccount
+            org.telegram.messenger.MessagesStorage r9 = org.telegram.messenger.MessagesStorage.getInstance(r9)
+            int r9 = r9.getArchiveUnreadCount()
+            r0.unreadCount = r9
+            r0.mentionCount = r5
+            goto L_0x00ac
+        L_0x00a0:
+            int r9 = r8.unread_count
+            r0.unreadCount = r9
+            int r9 = r8.unread_mentions_count
+            r0.mentionCount = r9
+            int r9 = r8.unread_reactions_count
+            r0.reactionMentionCount = r9
+        L_0x00ac:
+            boolean r9 = r8.unread_mark
+            r0.markUnread = r9
+            org.telegram.messenger.MessageObject r9 = r0.message
+            if (r9 == 0) goto L_0x00b9
+            org.telegram.tgnet.TLRPC$Message r9 = r9.messageOwner
+            int r9 = r9.edit_date
+            goto L_0x00ba
+        L_0x00b9:
+            r9 = 0
+        L_0x00ba:
+            r0.currentEditDate = r9
+            int r9 = r8.last_message_date
+            r0.lastMessageDate = r9
+            int r9 = r0.dialogsType
+            r10 = 7
+            r11 = 8
+            if (r9 == r10) goto L_0x00d8
+            if (r9 != r11) goto L_0x00ca
+            goto L_0x00d8
+        L_0x00ca:
+            int r9 = r0.currentDialogFolderId
+            if (r9 != 0) goto L_0x00d4
+            boolean r8 = r8.pinned
+            if (r8 == 0) goto L_0x00d4
+            r8 = 1
+            goto L_0x00d5
+        L_0x00d4:
+            r8 = 0
+        L_0x00d5:
+            r0.drawPin = r8
+            goto L_0x00fa
+        L_0x00d8:
+            int r9 = r0.currentAccount
+            org.telegram.messenger.MessagesController r9 = org.telegram.messenger.MessagesController.getInstance(r9)
+            org.telegram.messenger.MessagesController$DialogFilter[] r9 = r9.selectedDialogFilter
+            int r10 = r0.dialogsType
+            if (r10 != r11) goto L_0x00e6
+            r10 = 1
+            goto L_0x00e7
+        L_0x00e6:
+            r10 = 0
+        L_0x00e7:
+            r9 = r9[r10]
+            if (r9 == 0) goto L_0x00f7
+            org.telegram.messenger.support.LongSparseIntArray r9 = r9.pinnedDialogs
+            long r10 = r8.id
+            int r8 = r9.indexOfKey(r10)
+            if (r8 < 0) goto L_0x00f7
+            r8 = 1
+            goto L_0x00f8
+        L_0x00f7:
+            r8 = 0
+        L_0x00f8:
+            r0.drawPin = r8
+        L_0x00fa:
+            org.telegram.messenger.MessageObject r8 = r0.message
+            if (r8 == 0) goto L_0x0112
+            org.telegram.tgnet.TLRPC$Message r8 = r8.messageOwner
+            int r8 = r8.send_state
+            r0.lastSendState = r8
+            goto L_0x0112
+        L_0x0105:
+            r0.unreadCount = r5
+            r0.mentionCount = r5
+            r0.currentEditDate = r5
+            r0.lastMessageDate = r5
+            r0.clearingDialog = r5
+            goto L_0x0112
+        L_0x0110:
+            r0.drawPin = r5
+        L_0x0112:
+            if (r25 == 0) goto L_0x0255
+            org.telegram.tgnet.TLRPC$User r8 = r0.user
+            if (r8 == 0) goto L_0x0135
+            int r8 = org.telegram.messenger.MessagesController.UPDATE_MASK_STATUS
+            r8 = r25 & r8
+            if (r8 == 0) goto L_0x0135
+            int r8 = r0.currentAccount
+            org.telegram.messenger.MessagesController r8 = org.telegram.messenger.MessagesController.getInstance(r8)
+            org.telegram.tgnet.TLRPC$User r9 = r0.user
+            long r9 = r9.id
+            java.lang.Long r9 = java.lang.Long.valueOf(r9)
+            org.telegram.tgnet.TLRPC$User r8 = r8.getUser(r9)
+            r0.user = r8
+            r24.invalidate()
+        L_0x0135:
+            boolean r8 = r0.isDialogCell
+            if (r8 == 0) goto L_0x015f
+            int r8 = org.telegram.messenger.MessagesController.UPDATE_MASK_USER_PRINT
+            r8 = r25 & r8
+            if (r8 == 0) goto L_0x015f
+            int r8 = r0.currentAccount
+            org.telegram.messenger.MessagesController r8 = org.telegram.messenger.MessagesController.getInstance(r8)
+            long r9 = r0.currentDialogId
+            java.lang.CharSequence r8 = r8.getPrintingString(r9, r5, r4)
+            java.lang.CharSequence r9 = r0.lastPrintString
+            if (r9 == 0) goto L_0x0151
+            if (r8 == 0) goto L_0x015d
+        L_0x0151:
+            if (r9 != 0) goto L_0x0155
+            if (r8 != 0) goto L_0x015d
+        L_0x0155:
+            if (r9 == 0) goto L_0x015f
+            boolean r8 = r9.equals(r8)
+            if (r8 != 0) goto L_0x015f
+        L_0x015d:
+            r8 = 1
+            goto L_0x0160
+        L_0x015f:
+            r8 = 0
+        L_0x0160:
+            if (r8 != 0) goto L_0x0173
+            int r9 = org.telegram.messenger.MessagesController.UPDATE_MASK_MESSAGE_TEXT
+            r9 = r25 & r9
+            if (r9 == 0) goto L_0x0173
+            org.telegram.messenger.MessageObject r9 = r0.message
+            if (r9 == 0) goto L_0x0173
+            java.lang.CharSequence r9 = r9.messageText
+            java.lang.CharSequence r10 = r0.lastMessageString
+            if (r9 == r10) goto L_0x0173
+            r8 = 1
+        L_0x0173:
+            if (r8 != 0) goto L_0x01a1
+            int r9 = org.telegram.messenger.MessagesController.UPDATE_MASK_CHAT
+            r9 = r25 & r9
+            if (r9 == 0) goto L_0x01a1
+            org.telegram.tgnet.TLRPC$Chat r9 = r0.chat
+            if (r9 == 0) goto L_0x01a1
+            int r9 = r0.currentAccount
+            org.telegram.messenger.MessagesController r9 = org.telegram.messenger.MessagesController.getInstance(r9)
+            org.telegram.tgnet.TLRPC$Chat r10 = r0.chat
+            long r10 = r10.id
+            java.lang.Long r10 = java.lang.Long.valueOf(r10)
+            org.telegram.tgnet.TLRPC$Chat r9 = r9.getChat(r10)
+            boolean r10 = r9.call_active
+            if (r10 == 0) goto L_0x019b
+            boolean r9 = r9.call_not_empty
+            if (r9 == 0) goto L_0x019b
+            r9 = 1
+            goto L_0x019c
+        L_0x019b:
+            r9 = 0
+        L_0x019c:
+            boolean r10 = r0.hasCall
+            if (r9 == r10) goto L_0x01a1
+            r8 = 1
+        L_0x01a1:
+            if (r8 != 0) goto L_0x01ae
+            int r9 = org.telegram.messenger.MessagesController.UPDATE_MASK_AVATAR
+            r9 = r25 & r9
+            if (r9 == 0) goto L_0x01ae
+            org.telegram.tgnet.TLRPC$Chat r9 = r0.chat
+            if (r9 != 0) goto L_0x01ae
+            r8 = 1
+        L_0x01ae:
+            if (r8 != 0) goto L_0x01bb
+            int r9 = org.telegram.messenger.MessagesController.UPDATE_MASK_NAME
+            r9 = r25 & r9
+            if (r9 == 0) goto L_0x01bb
+            org.telegram.tgnet.TLRPC$Chat r9 = r0.chat
+            if (r9 != 0) goto L_0x01bb
+            r8 = 1
+        L_0x01bb:
+            if (r8 != 0) goto L_0x01c8
+            int r9 = org.telegram.messenger.MessagesController.UPDATE_MASK_CHAT_AVATAR
+            r9 = r25 & r9
+            if (r9 == 0) goto L_0x01c8
+            org.telegram.tgnet.TLRPC$User r9 = r0.user
+            if (r9 != 0) goto L_0x01c8
+            r8 = 1
+        L_0x01c8:
+            if (r8 != 0) goto L_0x01d5
+            int r9 = org.telegram.messenger.MessagesController.UPDATE_MASK_CHAT_NAME
+            r9 = r25 & r9
+            if (r9 == 0) goto L_0x01d5
+            org.telegram.tgnet.TLRPC$User r9 = r0.user
+            if (r9 != 0) goto L_0x01d5
+            r8 = 1
+        L_0x01d5:
+            if (r8 != 0) goto L_0x0238
+            int r9 = org.telegram.messenger.MessagesController.UPDATE_MASK_READ_DIALOG_MESSAGE
+            r9 = r25 & r9
+            if (r9 == 0) goto L_0x0238
+            org.telegram.messenger.MessageObject r9 = r0.message
+            if (r9 == 0) goto L_0x01f2
+            boolean r10 = r0.lastUnreadState
+            boolean r9 = r9.isUnread()
+            if (r10 == r9) goto L_0x01f2
+            org.telegram.messenger.MessageObject r8 = r0.message
+            boolean r8 = r8.isUnread()
+            r0.lastUnreadState = r8
+            r8 = 1
+        L_0x01f2:
+            boolean r9 = r0.isDialogCell
+            if (r9 == 0) goto L_0x0238
+            int r9 = r0.currentAccount
+            org.telegram.messenger.MessagesController r9 = org.telegram.messenger.MessagesController.getInstance(r9)
+            androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r9 = r9.dialogs_dict
+            long r10 = r0.currentDialogId
+            java.lang.Object r9 = r9.get(r10)
+            org.telegram.tgnet.TLRPC$Dialog r9 = (org.telegram.tgnet.TLRPC$Dialog) r9
+            boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$TL_dialogFolder
+            if (r10 == 0) goto L_0x0216
+            int r10 = r0.currentAccount
+            org.telegram.messenger.MessagesStorage r10 = org.telegram.messenger.MessagesStorage.getInstance(r10)
+            int r10 = r10.getArchiveUnreadCount()
+        L_0x0214:
             r11 = 0
-            org.telegram.tgnet.TLRPC$User r12 = r0.user
+            goto L_0x021f
+        L_0x0216:
+            if (r9 == 0) goto L_0x021d
+            int r10 = r9.unread_count
+            int r11 = r9.unread_mentions_count
+            goto L_0x021f
+        L_0x021d:
+            r10 = 0
+            goto L_0x0214
+        L_0x021f:
+            if (r9 == 0) goto L_0x0238
+            int r12 = r0.unreadCount
+            if (r12 != r10) goto L_0x022f
+            boolean r12 = r0.markUnread
+            boolean r13 = r9.unread_mark
+            if (r12 != r13) goto L_0x022f
+            int r12 = r0.mentionCount
+            if (r12 == r11) goto L_0x0238
+        L_0x022f:
+            r0.unreadCount = r10
+            r0.mentionCount = r11
+            boolean r8 = r9.unread_mark
+            r0.markUnread = r8
+            r8 = 1
+        L_0x0238:
+            if (r8 != 0) goto L_0x024f
+            int r9 = org.telegram.messenger.MessagesController.UPDATE_MASK_SEND_STATE
+            r9 = r25 & r9
+            if (r9 == 0) goto L_0x024f
+            org.telegram.messenger.MessageObject r9 = r0.message
+            if (r9 == 0) goto L_0x024f
+            int r10 = r0.lastSendState
+            org.telegram.tgnet.TLRPC$Message r9 = r9.messageOwner
+            int r9 = r9.send_state
+            if (r10 == r9) goto L_0x024f
+            r0.lastSendState = r9
+            r8 = 1
+        L_0x024f:
+            if (r8 != 0) goto L_0x0255
+            r24.invalidate()
+            return
+        L_0x0255:
+            r0.user = r3
+            r0.chat = r3
+            r0.encryptedChat = r3
+            int r3 = r0.currentDialogFolderId
+            r8 = 0
+            if (r3 == 0) goto L_0x0272
+            r0.dialogMuted = r5
+            org.telegram.messenger.MessageObject r3 = r24.findFolderTopMessage()
+            r0.message = r3
+            if (r3 == 0) goto L_0x0270
+            long r10 = r3.getDialogId()
+            goto L_0x028b
+        L_0x0270:
+            r10 = r8
+            goto L_0x028b
+        L_0x0272:
+            boolean r3 = r0.isDialogCell
+            if (r3 == 0) goto L_0x0286
+            int r3 = r0.currentAccount
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
+            long r10 = r0.currentDialogId
+            boolean r3 = r3.isDialogMuted(r10)
+            if (r3 == 0) goto L_0x0286
+            r3 = 1
+            goto L_0x0287
+        L_0x0286:
+            r3 = 0
+        L_0x0287:
+            r0.dialogMuted = r3
+            long r10 = r0.currentDialogId
+        L_0x028b:
+            int r3 = (r10 > r8 ? 1 : (r10 == r8 ? 0 : -1))
+            if (r3 == 0) goto L_0x0332
+            boolean r3 = org.telegram.messenger.DialogObject.isEncryptedDialog(r10)
+            if (r3 == 0) goto L_0x02c0
+            int r3 = r0.currentAccount
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
+            int r8 = org.telegram.messenger.DialogObject.getEncryptedChatId(r10)
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            org.telegram.tgnet.TLRPC$EncryptedChat r3 = r3.getEncryptedChat(r8)
+            r0.encryptedChat = r3
+            if (r3 == 0) goto L_0x030a
+            int r3 = r0.currentAccount
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
+            org.telegram.tgnet.TLRPC$EncryptedChat r8 = r0.encryptedChat
+            long r8 = r8.user_id
+            java.lang.Long r8 = java.lang.Long.valueOf(r8)
+            org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r8)
+            r0.user = r3
+            goto L_0x030a
+        L_0x02c0:
+            boolean r3 = org.telegram.messenger.DialogObject.isUserDialog(r10)
+            if (r3 == 0) goto L_0x02d7
+            int r3 = r0.currentAccount
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
+            java.lang.Long r8 = java.lang.Long.valueOf(r10)
+            org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r8)
+            r0.user = r3
+            goto L_0x030a
+        L_0x02d7:
+            int r3 = r0.currentAccount
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
+            long r8 = -r10
+            java.lang.Long r8 = java.lang.Long.valueOf(r8)
+            org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r8)
+            r0.chat = r3
+            boolean r8 = r0.isDialogCell
+            if (r8 != 0) goto L_0x030a
+            if (r3 == 0) goto L_0x030a
+            org.telegram.tgnet.TLRPC$InputChannel r3 = r3.migrated_to
+            if (r3 == 0) goto L_0x030a
+            int r3 = r0.currentAccount
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
+            org.telegram.tgnet.TLRPC$Chat r8 = r0.chat
+            org.telegram.tgnet.TLRPC$InputChannel r8 = r8.migrated_to
+            long r8 = r8.channel_id
+            java.lang.Long r8 = java.lang.Long.valueOf(r8)
+            org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r8)
+            if (r3 == 0) goto L_0x030a
+            r0.chat = r3
+        L_0x030a:
+            boolean r3 = r0.useMeForMyMessages
+            if (r3 == 0) goto L_0x0332
+            org.telegram.tgnet.TLRPC$User r3 = r0.user
+            if (r3 == 0) goto L_0x0332
+            org.telegram.messenger.MessageObject r3 = r0.message
+            boolean r3 = r3.isOutOwner()
+            if (r3 == 0) goto L_0x0332
+            int r3 = r0.currentAccount
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
+            int r8 = r0.currentAccount
+            org.telegram.messenger.UserConfig r8 = org.telegram.messenger.UserConfig.getInstance(r8)
+            long r8 = r8.clientUserId
+            java.lang.Long r8 = java.lang.Long.valueOf(r8)
+            org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r8)
+            r0.user = r3
+        L_0x0332:
+            int r3 = r0.currentDialogFolderId
+            r8 = 2
+            if (r3 == 0) goto L_0x034f
+            org.telegram.ui.Components.RLottieDrawable r3 = org.telegram.ui.ActionBar.Theme.dialogs_archiveAvatarDrawable
+            r3.setCallback(r0)
+            org.telegram.ui.Components.AvatarDrawable r3 = r0.avatarDrawable
+            r3.setAvatarType(r8)
+            org.telegram.messenger.ImageReceiver r9 = r0.avatarImage
+            r10 = 0
+            r11 = 0
+            org.telegram.ui.Components.AvatarDrawable r12 = r0.avatarDrawable
             r13 = 0
-            r7.setImage(r8, r9, r10, r11, r12, r13)
-            goto L_0x03a8
-        L_0x038c:
-            org.telegram.messenger.ImageReceiver r2 = r0.avatarImage
-            org.telegram.tgnet.TLRPC$User r7 = r0.user
-            org.telegram.ui.Components.AvatarDrawable r8 = r0.avatarDrawable
-            r2.setForUserOrChat(r7, r8)
-            goto L_0x03a8
-        L_0x0396:
-            org.telegram.tgnet.TLRPC$Chat r2 = r0.chat
-            if (r2 == 0) goto L_0x03a8
-            org.telegram.ui.Components.AvatarDrawable r7 = r0.avatarDrawable
-            r7.setInfo((org.telegram.tgnet.TLRPC$Chat) r2)
-            org.telegram.messenger.ImageReceiver r2 = r0.avatarImage
-            org.telegram.tgnet.TLRPC$Chat r7 = r0.chat
-            org.telegram.ui.Components.AvatarDrawable r8 = r0.avatarDrawable
-            r2.setForUserOrChat(r7, r8)
-        L_0x03a8:
-            if (r20 == 0) goto L_0x04e1
-            int r2 = r0.unreadCount
-            if (r1 != r2) goto L_0x03b2
-            boolean r2 = r0.markUnread
-            if (r5 == r2) goto L_0x04e1
-        L_0x03b2:
-            long r7 = java.lang.System.currentTimeMillis()
-            long r9 = r0.lastDialogChangedTime
-            long r7 = r7 - r9
-            r9 = 100
-            int r2 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r2 <= 0) goto L_0x04e1
+            org.telegram.tgnet.TLRPC$User r14 = r0.user
+            r15 = 0
+            r9.setImage(r10, r11, r12, r13, r14, r15)
+            goto L_0x03b1
+        L_0x034f:
+            org.telegram.tgnet.TLRPC$User r3 = r0.user
+            if (r3 == 0) goto L_0x039f
+            org.telegram.ui.Components.AvatarDrawable r9 = r0.avatarDrawable
+            r9.setInfo((org.telegram.tgnet.TLRPC$User) r3)
+            org.telegram.tgnet.TLRPC$User r3 = r0.user
+            boolean r3 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r3)
+            if (r3 == 0) goto L_0x0376
+            org.telegram.ui.Components.AvatarDrawable r3 = r0.avatarDrawable
+            r9 = 12
+            r3.setAvatarType(r9)
+            org.telegram.messenger.ImageReceiver r10 = r0.avatarImage
+            r11 = 0
+            r12 = 0
+            org.telegram.ui.Components.AvatarDrawable r13 = r0.avatarDrawable
+            r14 = 0
+            org.telegram.tgnet.TLRPC$User r15 = r0.user
+            r16 = 0
+            r10.setImage(r11, r12, r13, r14, r15, r16)
+            goto L_0x03b1
+        L_0x0376:
+            org.telegram.tgnet.TLRPC$User r3 = r0.user
+            boolean r3 = org.telegram.messenger.UserObject.isUserSelf(r3)
+            if (r3 == 0) goto L_0x0395
+            boolean r3 = r0.useMeForMyMessages
+            if (r3 != 0) goto L_0x0395
+            org.telegram.ui.Components.AvatarDrawable r3 = r0.avatarDrawable
+            r3.setAvatarType(r4)
+            org.telegram.messenger.ImageReceiver r9 = r0.avatarImage
+            r10 = 0
+            r11 = 0
+            org.telegram.ui.Components.AvatarDrawable r12 = r0.avatarDrawable
+            r13 = 0
+            org.telegram.tgnet.TLRPC$User r14 = r0.user
+            r15 = 0
+            r9.setImage(r10, r11, r12, r13, r14, r15)
+            goto L_0x03b1
+        L_0x0395:
+            org.telegram.messenger.ImageReceiver r3 = r0.avatarImage
+            org.telegram.tgnet.TLRPC$User r9 = r0.user
+            org.telegram.ui.Components.AvatarDrawable r10 = r0.avatarDrawable
+            r3.setForUserOrChat(r9, r10)
+            goto L_0x03b1
+        L_0x039f:
+            org.telegram.tgnet.TLRPC$Chat r3 = r0.chat
+            if (r3 == 0) goto L_0x03b1
+            org.telegram.ui.Components.AvatarDrawable r9 = r0.avatarDrawable
+            r9.setInfo((org.telegram.tgnet.TLRPC$Chat) r3)
+            org.telegram.messenger.ImageReceiver r3 = r0.avatarImage
+            org.telegram.tgnet.TLRPC$Chat r9 = r0.chat
+            org.telegram.ui.Components.AvatarDrawable r10 = r0.avatarDrawable
+            r3.setForUserOrChat(r9, r10)
+        L_0x03b1:
+            r9 = 150(0x96, double:7.4E-322)
+            r11 = 220(0xdc, double:1.087E-321)
+            if (r26 == 0) goto L_0x04f0
+            int r3 = r0.unreadCount
+            if (r1 != r3) goto L_0x03bf
+            boolean r3 = r0.markUnread
+            if (r7 == r3) goto L_0x04f0
+        L_0x03bf:
+            long r13 = java.lang.System.currentTimeMillis()
+            long r2 = r0.lastDialogChangedTime
+            long r13 = r13 - r2
+            r2 = 100
+            int r16 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1))
+            if (r16 <= 0) goto L_0x04f0
             android.animation.ValueAnimator r2 = r0.countAnimator
-            if (r2 == 0) goto L_0x03c6
+            if (r2 == 0) goto L_0x03d3
             r2.cancel()
-        L_0x03c6:
-            float[] r2 = new float[r6]
+        L_0x03d3:
+            float[] r2 = new float[r8]
             r2 = {0, NUM} // fill-array
             android.animation.ValueAnimator r2 = android.animation.ValueAnimator.ofFloat(r2)
             r0.countAnimator = r2
-            org.telegram.ui.Cells.DialogCell$$ExternalSyntheticLambda1 r6 = new org.telegram.ui.Cells.DialogCell$$ExternalSyntheticLambda1
-            r6.<init>(r0)
-            r2.addUpdateListener(r6)
+            org.telegram.ui.Cells.DialogCell$$ExternalSyntheticLambda2 r3 = new org.telegram.ui.Cells.DialogCell$$ExternalSyntheticLambda2
+            r3.<init>(r0)
+            r2.addUpdateListener(r3)
             android.animation.ValueAnimator r2 = r0.countAnimator
-            org.telegram.ui.Cells.DialogCell$1 r6 = new org.telegram.ui.Cells.DialogCell$1
-            r6.<init>()
-            r2.addListener(r6)
-            if (r1 == 0) goto L_0x03e9
+            org.telegram.ui.Cells.DialogCell$1 r3 = new org.telegram.ui.Cells.DialogCell$1
+            r3.<init>()
+            r2.addListener(r3)
+            if (r1 == 0) goto L_0x03f6
             boolean r2 = r0.markUnread
-            if (r2 == 0) goto L_0x03f0
-        L_0x03e9:
+            if (r2 == 0) goto L_0x03fd
+        L_0x03f6:
             boolean r2 = r0.markUnread
-            if (r2 != 0) goto L_0x0412
-            if (r5 != 0) goto L_0x03f0
-            goto L_0x0412
-        L_0x03f0:
+            if (r2 != 0) goto L_0x041d
+            if (r7 != 0) goto L_0x03fd
+            goto L_0x041d
+        L_0x03fd:
             int r2 = r0.unreadCount
-            if (r2 != 0) goto L_0x0403
+            if (r2 != 0) goto L_0x040e
             android.animation.ValueAnimator r2 = r0.countAnimator
-            r5 = 150(0x96, double:7.4E-322)
-            r2.setDuration(r5)
+            r2.setDuration(r9)
             android.animation.ValueAnimator r2 = r0.countAnimator
-            org.telegram.ui.Components.CubicBezierInterpolator r5 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-            r2.setInterpolator(r5)
-            goto L_0x0423
-        L_0x0403:
+            org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
+            r2.setInterpolator(r3)
+            goto L_0x042c
+        L_0x040e:
             android.animation.ValueAnimator r2 = r0.countAnimator
-            r5 = 430(0x1ae, double:2.124E-321)
-            r2.setDuration(r5)
+            r13 = 430(0x1ae, double:2.124E-321)
+            r2.setDuration(r13)
             android.animation.ValueAnimator r2 = r0.countAnimator
-            org.telegram.ui.Components.CubicBezierInterpolator r5 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-            r2.setInterpolator(r5)
-            goto L_0x0423
-        L_0x0412:
+            org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
+            r2.setInterpolator(r3)
+            goto L_0x042c
+        L_0x041d:
             android.animation.ValueAnimator r2 = r0.countAnimator
-            r5 = 220(0xdc, double:1.087E-321)
-            r2.setDuration(r5)
+            r2.setDuration(r11)
             android.animation.ValueAnimator r2 = r0.countAnimator
-            android.view.animation.OvershootInterpolator r5 = new android.view.animation.OvershootInterpolator
-            r5.<init>()
-            r2.setInterpolator(r5)
-        L_0x0423:
+            android.view.animation.OvershootInterpolator r3 = new android.view.animation.OvershootInterpolator
+            r3.<init>()
+            r2.setInterpolator(r3)
+        L_0x042c:
             boolean r2 = r0.drawCount
-            if (r2 == 0) goto L_0x04cc
+            if (r2 == 0) goto L_0x04da
             android.text.StaticLayout r2 = r0.countLayout
-            if (r2 == 0) goto L_0x04cc
+            if (r2 == 0) goto L_0x04da
             java.lang.String r2 = java.lang.String.valueOf(r1)
-            int r5 = r0.unreadCount
-            java.lang.String r5 = java.lang.String.valueOf(r5)
-            int r6 = r2.length()
-            int r7 = r5.length()
-            if (r6 != r7) goto L_0x04c8
-            android.text.SpannableStringBuilder r9 = new android.text.SpannableStringBuilder
-            r9.<init>(r2)
-            android.text.SpannableStringBuilder r6 = new android.text.SpannableStringBuilder
-            r6.<init>(r5)
+            int r3 = r0.unreadCount
+            java.lang.String r3 = java.lang.String.valueOf(r3)
+            int r7 = r2.length()
+            int r13 = r3.length()
+            if (r7 != r13) goto L_0x04d6
             android.text.SpannableStringBuilder r7 = new android.text.SpannableStringBuilder
-            r7.<init>(r5)
-            r8 = 0
-        L_0x044f:
-            int r10 = r2.length()
-            if (r8 >= r10) goto L_0x047f
-            char r10 = r2.charAt(r8)
-            char r11 = r5.charAt(r8)
-            if (r10 != r11) goto L_0x0472
-            org.telegram.ui.Components.EmptyStubSpan r10 = new org.telegram.ui.Components.EmptyStubSpan
-            r10.<init>()
-            int r11 = r8 + 1
-            r9.setSpan(r10, r8, r11, r4)
-            org.telegram.ui.Components.EmptyStubSpan r10 = new org.telegram.ui.Components.EmptyStubSpan
-            r10.<init>()
-            r6.setSpan(r10, r8, r11, r4)
-            goto L_0x047c
-        L_0x0472:
-            org.telegram.ui.Components.EmptyStubSpan r10 = new org.telegram.ui.Components.EmptyStubSpan
-            r10.<init>()
-            int r11 = r8 + 1
-            r7.setSpan(r10, r8, r11, r4)
-        L_0x047c:
-            int r8 = r8 + 1
-            goto L_0x044f
-        L_0x047f:
-            r5 = 1094713344(0x41400000, float:12.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            android.text.TextPaint r8 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
-            float r2 = r8.measureText(r2)
-            double r10 = (double) r2
-            double r10 = java.lang.Math.ceil(r10)
-            int r2 = (int) r10
-            int r2 = java.lang.Math.max(r5, r2)
-            android.text.StaticLayout r5 = new android.text.StaticLayout
-            android.text.TextPaint r10 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
-            android.text.Layout$Alignment r12 = android.text.Layout.Alignment.ALIGN_CENTER
-            r13 = 1065353216(0x3var_, float:1.0)
-            r14 = 0
-            r15 = 0
-            r8 = r5
-            r11 = r2
-            r8.<init>(r9, r10, r11, r12, r13, r14, r15)
-            r0.countOldLayout = r5
-            android.text.StaticLayout r5 = new android.text.StaticLayout
-            android.text.TextPaint r12 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
-            android.text.Layout$Alignment r14 = android.text.Layout.Alignment.ALIGN_CENTER
-            r15 = 1065353216(0x3var_, float:1.0)
-            r16 = 0
-            r17 = 0
-            r10 = r5
-            r11 = r7
-            r13 = r2
-            r10.<init>(r11, r12, r13, r14, r15, r16, r17)
-            r0.countAnimationStableLayout = r5
-            android.text.StaticLayout r5 = new android.text.StaticLayout
-            android.text.TextPaint r12 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
-            android.text.Layout$Alignment r14 = android.text.Layout.Alignment.ALIGN_CENTER
-            r10 = r5
-            r11 = r6
-            r10.<init>(r11, r12, r13, r14, r15, r16, r17)
-            r0.countAnimationInLayout = r5
-            goto L_0x04cc
-        L_0x04c8:
+            r7.<init>(r2)
+            android.text.SpannableStringBuilder r13 = new android.text.SpannableStringBuilder
+            r13.<init>(r3)
+            android.text.SpannableStringBuilder r14 = new android.text.SpannableStringBuilder
+            r14.<init>(r3)
+            r4 = 0
+        L_0x0458:
+            int r15 = r2.length()
+            if (r4 >= r15) goto L_0x048a
+            char r15 = r2.charAt(r4)
+            char r9 = r3.charAt(r4)
+            if (r15 != r9) goto L_0x047b
+            org.telegram.ui.Components.EmptyStubSpan r9 = new org.telegram.ui.Components.EmptyStubSpan
+            r9.<init>()
+            int r10 = r4 + 1
+            r7.setSpan(r9, r4, r10, r5)
+            org.telegram.ui.Components.EmptyStubSpan r9 = new org.telegram.ui.Components.EmptyStubSpan
+            r9.<init>()
+            r13.setSpan(r9, r4, r10, r5)
+            goto L_0x0485
+        L_0x047b:
+            org.telegram.ui.Components.EmptyStubSpan r9 = new org.telegram.ui.Components.EmptyStubSpan
+            r9.<init>()
+            int r10 = r4 + 1
+            r14.setSpan(r9, r4, r10, r5)
+        L_0x0485:
+            int r4 = r4 + 1
+            r9 = 150(0x96, double:7.4E-322)
+            goto L_0x0458
+        L_0x048a:
+            r3 = 1094713344(0x41400000, float:12.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            android.text.TextPaint r4 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
+            float r2 = r4.measureText(r2)
+            double r9 = (double) r2
+            double r9 = java.lang.Math.ceil(r9)
+            int r2 = (int) r9
+            int r2 = java.lang.Math.max(r3, r2)
+            android.text.StaticLayout r3 = new android.text.StaticLayout
+            android.text.TextPaint r18 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
+            android.text.Layout$Alignment r20 = android.text.Layout.Alignment.ALIGN_CENTER
+            r21 = 1065353216(0x3var_, float:1.0)
+            r22 = 0
+            r23 = 0
+            r16 = r3
+            r17 = r7
+            r19 = r2
+            r16.<init>(r17, r18, r19, r20, r21, r22, r23)
+            r0.countOldLayout = r3
+            android.text.StaticLayout r3 = new android.text.StaticLayout
+            android.text.TextPaint r18 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
+            android.text.Layout$Alignment r20 = android.text.Layout.Alignment.ALIGN_CENTER
+            r16 = r3
+            r17 = r14
+            r16.<init>(r17, r18, r19, r20, r21, r22, r23)
+            r0.countAnimationStableLayout = r3
+            android.text.StaticLayout r3 = new android.text.StaticLayout
+            android.text.TextPaint r18 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
+            android.text.Layout$Alignment r20 = android.text.Layout.Alignment.ALIGN_CENTER
+            r16 = r3
+            r17 = r13
+            r16.<init>(r17, r18, r19, r20, r21, r22, r23)
+            r0.countAnimationInLayout = r3
+            goto L_0x04da
+        L_0x04d6:
             android.text.StaticLayout r2 = r0.countLayout
             r0.countOldLayout = r2
-        L_0x04cc:
+        L_0x04da:
             int r2 = r0.countWidth
             r0.countWidthOld = r2
             int r2 = r0.countLeft
             r0.countLeftOld = r2
             int r2 = r0.unreadCount
-            if (r2 <= r1) goto L_0x04d9
-            goto L_0x04da
-        L_0x04d9:
-            r3 = 0
-        L_0x04da:
-            r0.countAnimationIncrement = r3
+            if (r2 <= r1) goto L_0x04e8
+            r1 = 1
+            goto L_0x04e9
+        L_0x04e8:
+            r1 = 0
+        L_0x04e9:
+            r0.countAnimationIncrement = r1
             android.animation.ValueAnimator r1 = r0.countAnimator
             r1.start()
-        L_0x04e1:
-            int r1 = r18.getMeasuredWidth()
-            if (r1 != 0) goto L_0x04f2
-            int r1 = r18.getMeasuredHeight()
-            if (r1 == 0) goto L_0x04ee
-            goto L_0x04f2
-        L_0x04ee:
-            r18.requestLayout()
-            goto L_0x04f5
-        L_0x04f2:
-            r18.buildLayout()
-        L_0x04f5:
-            if (r20 != 0) goto L_0x0501
-            boolean r1 = r0.dialogMuted
-            if (r1 == 0) goto L_0x04fe
-            r1 = 1065353216(0x3var_, float:1.0)
-            goto L_0x04ff
-        L_0x04fe:
+        L_0x04f0:
+            int r1 = r0.reactionMentionCount
+            if (r1 == 0) goto L_0x04f6
+            r4 = 1
+            goto L_0x04f7
+        L_0x04f6:
+            r4 = 0
+        L_0x04f7:
+            if (r26 == 0) goto L_0x003a
+            if (r4 == r6) goto L_0x003a
+            android.animation.ValueAnimator r1 = r0.reactionsMentionsAnimator
+            if (r1 == 0) goto L_0x0502
+            r1.cancel()
+        L_0x0502:
             r1 = 0
-        L_0x04ff:
-            r0.dialogMutedProgress = r1
-        L_0x0501:
-            r18.invalidate()
+            r0.reactionsMentionsChangeProgress = r1
+            float[] r2 = new float[r8]
+            r2 = {0, NUM} // fill-array
+            android.animation.ValueAnimator r2 = android.animation.ValueAnimator.ofFloat(r2)
+            r0.reactionsMentionsAnimator = r2
+            org.telegram.ui.Cells.DialogCell$$ExternalSyntheticLambda0 r3 = new org.telegram.ui.Cells.DialogCell$$ExternalSyntheticLambda0
+            r3.<init>(r0)
+            r2.addUpdateListener(r3)
+            android.animation.ValueAnimator r2 = r0.reactionsMentionsAnimator
+            org.telegram.ui.Cells.DialogCell$2 r3 = new org.telegram.ui.Cells.DialogCell$2
+            r3.<init>()
+            r2.addListener(r3)
+            if (r4 == 0) goto L_0x0534
+            android.animation.ValueAnimator r2 = r0.reactionsMentionsAnimator
+            r2.setDuration(r11)
+            android.animation.ValueAnimator r2 = r0.reactionsMentionsAnimator
+            android.view.animation.OvershootInterpolator r3 = new android.view.animation.OvershootInterpolator
+            r3.<init>()
+            r2.setInterpolator(r3)
+            goto L_0x0542
+        L_0x0534:
+            android.animation.ValueAnimator r2 = r0.reactionsMentionsAnimator
+            r3 = 150(0x96, double:7.4E-322)
+            r2.setDuration(r3)
+            android.animation.ValueAnimator r2 = r0.reactionsMentionsAnimator
+            org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
+            r2.setInterpolator(r3)
+        L_0x0542:
+            android.animation.ValueAnimator r2 = r0.reactionsMentionsAnimator
+            r2.start()
+        L_0x0547:
+            int r2 = r24.getMeasuredWidth()
+            if (r2 != 0) goto L_0x0558
+            int r2 = r24.getMeasuredHeight()
+            if (r2 == 0) goto L_0x0554
+            goto L_0x0558
+        L_0x0554:
+            r24.requestLayout()
+            goto L_0x055b
+        L_0x0558:
+            r24.buildLayout()
+        L_0x055b:
+            if (r26 != 0) goto L_0x056e
+            boolean r2 = r0.dialogMuted
+            if (r2 == 0) goto L_0x0564
+            r2 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0565
+        L_0x0564:
+            r2 = 0
+        L_0x0565:
+            r0.dialogMutedProgress = r2
+            android.animation.ValueAnimator r1 = r0.countAnimator
+            if (r1 == 0) goto L_0x056e
+            r1.cancel()
+        L_0x056e:
+            r24.invalidate()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DialogCell.update(int, boolean):void");
@@ -5099,6 +5178,12 @@ public class DialogCell extends BaseCell {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$update$0(ValueAnimator valueAnimator) {
         this.countChangeProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        invalidate();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$update$1(ValueAnimator valueAnimator) {
+        this.reactionsMentionsChangeProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
@@ -5146,6 +5231,9 @@ public class DialogCell extends BaseCell {
     /* JADX WARNING: Code restructure failed: missing block: B:205:0x0697, code lost:
         if (r0.type == 2) goto L_0x06b2;
      */
+    /* JADX WARNING: Code restructure failed: missing block: B:508:0x0e14, code lost:
+        if (r8.reactionsMentionsChangeProgress != 1.0f) goto L_0x0e19;
+     */
     /* JADX WARNING: Removed duplicated region for block: B:185:0x0622  */
     /* JADX WARNING: Removed duplicated region for block: B:186:0x0631  */
     /* JADX WARNING: Removed duplicated region for block: B:197:0x0671  */
@@ -5164,28 +5252,32 @@ public class DialogCell extends BaseCell {
     /* JADX WARNING: Removed duplicated region for block: B:369:0x09bf  */
     /* JADX WARNING: Removed duplicated region for block: B:407:0x0a5c  */
     /* JADX WARNING: Removed duplicated region for block: B:408:0x0aa9  */
-    /* JADX WARNING: Removed duplicated region for block: B:493:0x0d52  */
-    /* JADX WARNING: Removed duplicated region for block: B:505:0x0e08  */
-    /* JADX WARNING: Removed duplicated region for block: B:514:0x0e91  */
-    /* JADX WARNING: Removed duplicated region for block: B:524:0x0ec6  */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0efe  */
-    /* JADX WARNING: Removed duplicated region for block: B:540:0x0f1b  */
-    /* JADX WARNING: Removed duplicated region for block: B:580:0x0fe4  */
-    /* JADX WARNING: Removed duplicated region for block: B:655:0x1285  */
-    /* JADX WARNING: Removed duplicated region for block: B:660:0x1299  */
-    /* JADX WARNING: Removed duplicated region for block: B:666:0x12ae  */
-    /* JADX WARNING: Removed duplicated region for block: B:674:0x12c8  */
-    /* JADX WARNING: Removed duplicated region for block: B:684:0x12f4  */
-    /* JADX WARNING: Removed duplicated region for block: B:705:0x1359  */
-    /* JADX WARNING: Removed duplicated region for block: B:715:0x13b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:721:0x13c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:730:0x13e1  */
-    /* JADX WARNING: Removed duplicated region for block: B:738:0x140b  */
-    /* JADX WARNING: Removed duplicated region for block: B:749:0x143b  */
-    /* JADX WARNING: Removed duplicated region for block: B:755:0x144f  */
-    /* JADX WARNING: Removed duplicated region for block: B:765:0x1477  */
-    /* JADX WARNING: Removed duplicated region for block: B:775:0x1499  */
-    /* JADX WARNING: Removed duplicated region for block: B:778:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:495:0x0d58  */
+    /* JADX WARNING: Removed duplicated region for block: B:507:0x0e0e  */
+    /* JADX WARNING: Removed duplicated region for block: B:509:0x0e17  */
+    /* JADX WARNING: Removed duplicated region for block: B:514:0x0e4f  */
+    /* JADX WARNING: Removed duplicated region for block: B:515:0x0e52  */
+    /* JADX WARNING: Removed duplicated region for block: B:518:0x0e5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:525:0x0ec2  */
+    /* JADX WARNING: Removed duplicated region for block: B:535:0x0ef7  */
+    /* JADX WARNING: Removed duplicated region for block: B:540:0x0f2f  */
+    /* JADX WARNING: Removed duplicated region for block: B:551:0x0f4c  */
+    /* JADX WARNING: Removed duplicated region for block: B:591:0x1015  */
+    /* JADX WARNING: Removed duplicated region for block: B:666:0x12b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:671:0x12ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:677:0x12df  */
+    /* JADX WARNING: Removed duplicated region for block: B:685:0x12f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:695:0x1325  */
+    /* JADX WARNING: Removed duplicated region for block: B:716:0x138a  */
+    /* JADX WARNING: Removed duplicated region for block: B:726:0x13e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:732:0x13f8  */
+    /* JADX WARNING: Removed duplicated region for block: B:741:0x1412  */
+    /* JADX WARNING: Removed duplicated region for block: B:749:0x143c  */
+    /* JADX WARNING: Removed duplicated region for block: B:760:0x146c  */
+    /* JADX WARNING: Removed duplicated region for block: B:766:0x1480  */
+    /* JADX WARNING: Removed duplicated region for block: B:776:0x14a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:786:0x14ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:789:? A[RETURN, SYNTHETIC] */
     @android.annotation.SuppressLint({"DrawAllocation"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onDraw(android.graphics.Canvas r31) {
@@ -6612,21 +6704,24 @@ public class DialogCell extends BaseCell {
             org.telegram.ui.Cells.BaseCell.setDrawableBounds((android.graphics.drawable.Drawable) r0, (int) r1, (int) r2)
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.dialogs_errorDrawable
             r0.draw(r9)
-            goto L_0x0e8b
+            goto L_0x0ebc
         L_0x0aa9:
             boolean r0 = r8.drawCount
-            if (r0 != 0) goto L_0x0adc
+            if (r0 != 0) goto L_0x0ae2
             boolean r6 = r8.drawMention
-            if (r6 != 0) goto L_0x0adc
+            if (r6 != 0) goto L_0x0ae2
             float r6 = r8.countChangeProgress
             int r6 = (r6 > r14 ? 1 : (r6 == r14 ? 0 : -1))
-            if (r6 != 0) goto L_0x0adc
+            if (r6 != 0) goto L_0x0ae2
             boolean r6 = r8.drawReactionMention
-            if (r6 == 0) goto L_0x0abc
-            goto L_0x0adc
-        L_0x0abc:
+            if (r6 != 0) goto L_0x0ae2
+            float r6 = r8.reactionsMentionsChangeProgress
+            int r6 = (r6 > r14 ? 1 : (r6 == r14 ? 0 : -1))
+            if (r6 == 0) goto L_0x0ac2
+            goto L_0x0ae2
+        L_0x0ac2:
             boolean r0 = r8.drawPin
-            if (r0 == 0) goto L_0x0e8b
+            if (r0 == 0) goto L_0x0ebc
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedDrawable
             float r2 = r8.reorderIconProgress
             float r5 = r14 - r2
@@ -6639,43 +6734,43 @@ public class DialogCell extends BaseCell {
             org.telegram.ui.Cells.BaseCell.setDrawableBounds((android.graphics.drawable.Drawable) r0, (int) r1, (int) r2)
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedDrawable
             r0.draw(r9)
-            goto L_0x0e8b
-        L_0x0adc:
-            if (r0 != 0) goto L_0x0ae9
+            goto L_0x0ebc
+        L_0x0ae2:
+            if (r0 != 0) goto L_0x0aef
             float r0 = r8.countChangeProgress
             int r0 = (r0 > r14 ? 1 : (r0 == r14 ? 0 : -1))
-            if (r0 == 0) goto L_0x0ae5
-            goto L_0x0ae9
-        L_0x0ae5:
+            if (r0 == 0) goto L_0x0aeb
+            goto L_0x0aef
+        L_0x0aeb:
             r1 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0d4e
-        L_0x0ae9:
+            goto L_0x0d54
+        L_0x0aef:
             int r0 = r8.unreadCount
-            if (r0 != 0) goto L_0x0af6
+            if (r0 != 0) goto L_0x0afc
             boolean r6 = r8.markUnread
-            if (r6 != 0) goto L_0x0af6
+            if (r6 != 0) goto L_0x0afc
             float r6 = r8.countChangeProgress
             float r6 = r14 - r6
-            goto L_0x0af8
-        L_0x0af6:
+            goto L_0x0afe
+        L_0x0afc:
             float r6 = r8.countChangeProgress
-        L_0x0af8:
+        L_0x0afe:
             android.text.StaticLayout r7 = r8.countOldLayout
-            if (r7 == 0) goto L_0x0CLASSNAME
-            if (r0 != 0) goto L_0x0b00
-            goto L_0x0CLASSNAME
-        L_0x0b00:
+            if (r7 == 0) goto L_0x0c7a
+            if (r0 != 0) goto L_0x0b06
+            goto L_0x0c7a
+        L_0x0b06:
             boolean r0 = r8.dialogMuted
-            if (r0 != 0) goto L_0x0b0c
+            if (r0 != 0) goto L_0x0b12
             int r0 = r8.currentDialogFolderId
-            if (r0 == 0) goto L_0x0b09
-            goto L_0x0b0c
-        L_0x0b09:
+            if (r0 == 0) goto L_0x0b0f
+            goto L_0x0b12
+        L_0x0b0f:
             android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_countPaint
-            goto L_0x0b0e
-        L_0x0b0c:
+            goto L_0x0b14
+        L_0x0b12:
             android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_countGrayPaint
-        L_0x0b0e:
+        L_0x0b14:
             float r7 = r8.reorderIconProgress
             float r7 = r14 - r7
             float r7 = r7 * r1
@@ -6689,12 +6784,12 @@ public class DialogCell extends BaseCell {
             r7.setAlpha(r15)
             float r7 = r6 * r16
             int r15 = (r7 > r14 ? 1 : (r7 == r14 ? 0 : -1))
-            if (r15 <= 0) goto L_0x0b2d
+            if (r15 <= 0) goto L_0x0b33
             r15 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0b2e
-        L_0x0b2d:
+            goto L_0x0b34
+        L_0x0b33:
             r15 = r7
-        L_0x0b2e:
+        L_0x0b34:
             int r4 = r8.countLeft
             float r4 = (float) r4
             float r4 = r4 * r15
@@ -6728,15 +6823,15 @@ public class DialogCell extends BaseCell {
             r2.set(r11, r1, r5, r14)
             r1 = 1056964608(0x3var_, float:0.5)
             int r1 = (r6 > r1 ? 1 : (r6 == r1 ? 0 : -1))
-            if (r1 > 0) goto L_0x0b7c
+            if (r1 > 0) goto L_0x0b82
             r1 = 1036831949(0x3dcccccd, float:0.1)
             org.telegram.ui.Components.CubicBezierInterpolator r2 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT
             float r2 = r2.getInterpolation(r7)
             float r2 = r2 * r1
             r1 = 1065353216(0x3var_, float:1.0)
             float r2 = r2 + r1
-            goto L_0x0b92
-        L_0x0b7c:
+            goto L_0x0b98
+        L_0x0b82:
             r1 = 1065353216(0x3var_, float:1.0)
             r2 = 1036831949(0x3dcccccd, float:0.1)
             org.telegram.ui.Components.CubicBezierInterpolator r5 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_IN
@@ -6747,7 +6842,7 @@ public class DialogCell extends BaseCell {
             float r5 = r5.getInterpolation(r6)
             float r5 = r5 * r2
             float r2 = r5 + r1
-        L_0x0b92:
+        L_0x0b98:
             r31.save()
             android.graphics.RectF r1 = r8.rect
             float r1 = r1.centerX()
@@ -6761,7 +6856,7 @@ public class DialogCell extends BaseCell {
             float r2 = r2 * r5
             r9.drawRoundRect(r1, r6, r2, r0)
             android.text.StaticLayout r0 = r8.countAnimationStableLayout
-            if (r0 == 0) goto L_0x0bcb
+            if (r0 == 0) goto L_0x0bd1
             r31.save()
             int r0 = r8.countTop
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
@@ -6771,7 +6866,7 @@ public class DialogCell extends BaseCell {
             android.text.StaticLayout r0 = r8.countAnimationStableLayout
             r0.draw(r9)
             r31.restore()
-        L_0x0bcb:
+        L_0x0bd1:
             android.text.TextPaint r0 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
             int r0 = r0.getAlpha()
             android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
@@ -6780,16 +6875,16 @@ public class DialogCell extends BaseCell {
             int r5 = (int) r5
             r1.setAlpha(r5)
             android.text.StaticLayout r1 = r8.countAnimationInLayout
-            if (r1 == 0) goto L_0x0CLASSNAME
+            if (r1 == 0) goto L_0x0c0e
             r31.save()
             boolean r1 = r8.countAnimationIncrement
-            if (r1 == 0) goto L_0x0bea
+            if (r1 == 0) goto L_0x0bf0
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r22)
-            goto L_0x0bef
-        L_0x0bea:
+            goto L_0x0bf5
+        L_0x0bf0:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r22)
             int r1 = -r1
-        L_0x0bef:
+        L_0x0bf5:
             float r1 = (float) r1
             float r1 = r1 * r25
             int r5 = r8.countTop
@@ -6802,19 +6897,19 @@ public class DialogCell extends BaseCell {
             android.text.StaticLayout r1 = r8.countAnimationInLayout
             r1.draw(r9)
             r31.restore()
-            goto L_0x0CLASSNAME
-        L_0x0CLASSNAME:
+            goto L_0x0c3b
+        L_0x0c0e:
             android.text.StaticLayout r1 = r8.countLayout
-            if (r1 == 0) goto L_0x0CLASSNAME
+            if (r1 == 0) goto L_0x0c3b
             r31.save()
             boolean r1 = r8.countAnimationIncrement
-            if (r1 == 0) goto L_0x0CLASSNAME
+            if (r1 == 0) goto L_0x0c1e
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r22)
-            goto L_0x0c1d
-        L_0x0CLASSNAME:
+            goto L_0x0CLASSNAME
+        L_0x0c1e:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r22)
             int r1 = -r1
-        L_0x0c1d:
+        L_0x0CLASSNAME:
             float r1 = (float) r1
             float r1 = r1 * r25
             int r5 = r8.countTop
@@ -6827,20 +6922,20 @@ public class DialogCell extends BaseCell {
             android.text.StaticLayout r1 = r8.countLayout
             r1.draw(r9)
             r31.restore()
-        L_0x0CLASSNAME:
+        L_0x0c3b:
             android.text.StaticLayout r1 = r8.countOldLayout
-            if (r1 == 0) goto L_0x0c6a
+            if (r1 == 0) goto L_0x0CLASSNAME
             android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
             float r2 = r2 * r25
             int r2 = (int) r2
             r1.setAlpha(r2)
             r31.save()
             boolean r1 = r8.countAnimationIncrement
-            if (r1 == 0) goto L_0x0c4e
+            if (r1 == 0) goto L_0x0CLASSNAME
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r22)
             int r1 = -r1
             goto L_0x0CLASSNAME
-        L_0x0c4e:
+        L_0x0CLASSNAME:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r22)
         L_0x0CLASSNAME:
             float r1 = (float) r1
@@ -6855,28 +6950,28 @@ public class DialogCell extends BaseCell {
             android.text.StaticLayout r1 = r8.countOldLayout
             r1.draw(r9)
             r31.restore()
-        L_0x0c6a:
+        L_0x0CLASSNAME:
             android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
             r1.setAlpha(r0)
             r31.restore()
-            goto L_0x0ae5
-        L_0x0CLASSNAME:
-            if (r0 != 0) goto L_0x0CLASSNAME
-            goto L_0x0CLASSNAME
-        L_0x0CLASSNAME:
+            goto L_0x0aeb
+        L_0x0c7a:
+            if (r0 != 0) goto L_0x0c7d
+            goto L_0x0c7f
+        L_0x0c7d:
             android.text.StaticLayout r7 = r8.countLayout
-        L_0x0CLASSNAME:
+        L_0x0c7f:
             boolean r0 = r8.dialogMuted
-            if (r0 != 0) goto L_0x0CLASSNAME
+            if (r0 != 0) goto L_0x0c8b
             int r0 = r8.currentDialogFolderId
             if (r0 == 0) goto L_0x0CLASSNAME
-            goto L_0x0CLASSNAME
+            goto L_0x0c8b
         L_0x0CLASSNAME:
             android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_countPaint
-            goto L_0x0CLASSNAME
-        L_0x0CLASSNAME:
+            goto L_0x0c8d
+        L_0x0c8b:
             android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_countGrayPaint
-        L_0x0CLASSNAME:
+        L_0x0c8d:
             float r1 = r8.reorderIconProgress
             r2 = 1065353216(0x3var_, float:1.0)
             float r5 = r2 - r1
@@ -6911,9 +7006,9 @@ public class DialogCell extends BaseCell {
             r2.set(r4, r5, r1, r11)
             r1 = 1065353216(0x3var_, float:1.0)
             int r2 = (r6 > r1 ? 1 : (r6 == r1 ? 0 : -1))
-            if (r2 == 0) goto L_0x0d1f
+            if (r2 == 0) goto L_0x0d25
             boolean r2 = r8.drawPin
-            if (r2 == 0) goto L_0x0d0d
+            if (r2 == 0) goto L_0x0d13
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedDrawable
             float r4 = r8.reorderIconProgress
             float r5 = r1 - r4
@@ -6939,21 +7034,21 @@ public class DialogCell extends BaseCell {
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedDrawable
             r1.draw(r9)
             r31.restore()
-        L_0x0d0d:
+        L_0x0d13:
             r31.save()
             android.graphics.RectF r1 = r8.rect
             float r1 = r1.centerX()
             android.graphics.RectF r2 = r8.rect
             float r2 = r2.centerY()
             r9.scale(r6, r6, r1, r2)
-        L_0x0d1f:
+        L_0x0d25:
             android.graphics.RectF r1 = r8.rect
             float r2 = org.telegram.messenger.AndroidUtilities.density
             r4 = 1094189056(0x41380000, float:11.5)
             float r5 = r2 * r4
             float r2 = r2 * r4
             r9.drawRoundRect(r1, r5, r2, r0)
-            if (r7 == 0) goto L_0x0d45
+            if (r7 == 0) goto L_0x0d4b
             r31.save()
             int r0 = r8.countLeft
             float r0 = (float) r0
@@ -6964,14 +7059,14 @@ public class DialogCell extends BaseCell {
             r9.translate(r0, r1)
             r7.draw(r9)
             r31.restore()
-        L_0x0d45:
+        L_0x0d4b:
             r1 = 1065353216(0x3var_, float:1.0)
             int r0 = (r6 > r1 ? 1 : (r6 == r1 ? 0 : -1))
-            if (r0 == 0) goto L_0x0d4e
+            if (r0 == 0) goto L_0x0d54
             r31.restore()
-        L_0x0d4e:
+        L_0x0d54:
             boolean r0 = r8.drawMention
-            if (r0 == 0) goto L_0x0e04
+            if (r0 == 0) goto L_0x0e0a
             android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_countPaint
             float r2 = r8.reorderIconProgress
             float r5 = r1 - r2
@@ -6999,14 +7094,14 @@ public class DialogCell extends BaseCell {
             float r5 = (float) r5
             r1.set(r2, r4, r0, r5)
             boolean r0 = r8.dialogMuted
-            if (r0 == 0) goto L_0x0d90
+            if (r0 == 0) goto L_0x0d96
             int r0 = r8.folderId
-            if (r0 == 0) goto L_0x0d90
+            if (r0 == 0) goto L_0x0d96
             android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_countGrayPaint
-            goto L_0x0d92
-        L_0x0d90:
+            goto L_0x0d98
+        L_0x0d96:
             android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_countPaint
-        L_0x0d92:
+        L_0x0d98:
             android.graphics.RectF r1 = r8.rect
             float r2 = org.telegram.messenger.AndroidUtilities.density
             r4 = 1094189056(0x41380000, float:11.5)
@@ -7014,7 +7109,7 @@ public class DialogCell extends BaseCell {
             float r2 = r2 * r4
             r9.drawRoundRect(r1, r5, r2, r0)
             android.text.StaticLayout r0 = r8.mentionLayout
-            if (r0 == 0) goto L_0x0dcd
+            if (r0 == 0) goto L_0x0dd3
             android.text.TextPaint r0 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
             float r1 = r8.reorderIconProgress
             r2 = 1065353216(0x3var_, float:1.0)
@@ -7034,8 +7129,8 @@ public class DialogCell extends BaseCell {
             android.text.StaticLayout r0 = r8.mentionLayout
             r0.draw(r9)
             r31.restore()
-            goto L_0x0e04
-        L_0x0dcd:
+            goto L_0x0e0a
+        L_0x0dd3:
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.dialogs_mentionDrawable
             float r1 = r8.reorderIconProgress
             r2 = 1065353216(0x3var_, float:1.0)
@@ -7059,13 +7154,20 @@ public class DialogCell extends BaseCell {
             org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r1, r2, r4, r5)
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.dialogs_mentionDrawable
             r0.draw(r9)
-        L_0x0e04:
+        L_0x0e0a:
             boolean r0 = r8.drawReactionMention
-            if (r0 == 0) goto L_0x0e8b
+            if (r0 != 0) goto L_0x0e17
+            float r0 = r8.reactionsMentionsChangeProgress
+            r1 = 1065353216(0x3var_, float:1.0)
+            int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
+            if (r0 == 0) goto L_0x0ebc
+            goto L_0x0e19
+        L_0x0e17:
+            r1 = 1065353216(0x3var_, float:1.0)
+        L_0x0e19:
             android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_countPaint
-            float r1 = r8.reorderIconProgress
-            r2 = 1065353216(0x3var_, float:1.0)
-            float r5 = r2 - r1
+            float r2 = r8.reorderIconProgress
+            float r5 = r1 - r2
             r1 = 1132396544(0x437var_, float:255.0)
             float r5 = r5 * r1
             int r1 = (int) r5
@@ -7078,8 +7180,7 @@ public class DialogCell extends BaseCell {
             float r2 = (float) r0
             int r4 = r8.countTop
             float r4 = (float) r4
-            r5 = 1103101952(0x41CLASSNAME, float:24.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r0 = r0 + r5
             float r0 = (float) r0
             int r5 = r8.countTop
@@ -7088,14 +7189,31 @@ public class DialogCell extends BaseCell {
             float r3 = (float) r5
             r1.set(r2, r4, r0, r3)
             boolean r0 = r8.dialogMuted
-            if (r0 == 0) goto L_0x0e45
+            if (r0 == 0) goto L_0x0e52
             int r0 = r8.folderId
-            if (r0 == 0) goto L_0x0e45
+            if (r0 == 0) goto L_0x0e52
             android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_countGrayPaint
-            goto L_0x0e47
-        L_0x0e45:
+            goto L_0x0e54
+        L_0x0e52:
             android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_countPaint
-        L_0x0e47:
+        L_0x0e54:
+            r31.save()
+            float r1 = r8.reactionsMentionsChangeProgress
+            r2 = 1065353216(0x3var_, float:1.0)
+            int r3 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+            if (r3 == 0) goto L_0x0e75
+            boolean r3 = r8.drawReactionMention
+            if (r3 == 0) goto L_0x0e64
+            goto L_0x0e66
+        L_0x0e64:
+            float r1 = r2 - r1
+        L_0x0e66:
+            android.graphics.RectF r2 = r8.rect
+            float r2 = r2.centerX()
+            android.graphics.RectF r3 = r8.rect
+            float r3 = r3.centerY()
+            r9.scale(r1, r1, r2, r3)
+        L_0x0e75:
             android.graphics.RectF r1 = r8.rect
             float r2 = org.telegram.messenger.AndroidUtilities.density
             r3 = 1094189056(0x41380000, float:11.5)
@@ -7112,10 +7230,10 @@ public class DialogCell extends BaseCell {
             r0.setAlpha(r1)
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.dialogs_reactionsMentionDrawable
             int r1 = r8.reactionMentionLeft
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r1 = r1 - r3
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r16)
+            int r1 = r1 - r2
             int r2 = r8.countTop
-            r3 = 1078774989(0x404ccccd, float:3.2)
+            r3 = 1081291571(0x40733333, float:3.8)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r2 = r2 + r3
             r3 = 1098907648(0x41800000, float:16.0)
@@ -7125,10 +7243,11 @@ public class DialogCell extends BaseCell {
             org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r1, r2, r3, r4)
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.dialogs_reactionsMentionDrawable
             r0.draw(r9)
-        L_0x0e8b:
+            r31.restore()
+        L_0x0ebc:
             boolean r0 = r8.animatingArchiveAvatar
             r7 = 1126825984(0x432a0000, float:170.0)
-            if (r0 == 0) goto L_0x0eaf
+            if (r0 == 0) goto L_0x0ee0
             r31.save()
             org.telegram.ui.Cells.DialogCell$BounceInterpolator r0 = r8.interpolator
             float r1 = r8.animatingArchiveAvatarProgress
@@ -7141,23 +7260,23 @@ public class DialogCell extends BaseCell {
             org.telegram.messenger.ImageReceiver r2 = r8.avatarImage
             float r2 = r2.getCenterY()
             r9.scale(r0, r0, r1, r2)
-        L_0x0eaf:
+        L_0x0ee0:
             int r0 = r8.currentDialogFolderId
-            if (r0 == 0) goto L_0x0ebd
+            if (r0 == 0) goto L_0x0eee
             org.telegram.ui.Components.PullForegroundDrawable r0 = r8.archivedChatsDrawable
-            if (r0 == 0) goto L_0x0ebd
+            if (r0 == 0) goto L_0x0eee
             boolean r0 = r0.isDraw()
-            if (r0 != 0) goto L_0x0ec2
-        L_0x0ebd:
+            if (r0 != 0) goto L_0x0ef3
+        L_0x0eee:
             org.telegram.messenger.ImageReceiver r0 = r8.avatarImage
             r0.draw(r9)
-        L_0x0ec2:
+        L_0x0ef3:
             boolean r0 = r8.hasMessageThumb
-            if (r0 == 0) goto L_0x0efa
+            if (r0 == 0) goto L_0x0f2b
             org.telegram.messenger.ImageReceiver r0 = r8.thumbImage
             r0.draw(r9)
             boolean r0 = r8.drawPlay
-            if (r0 == 0) goto L_0x0efa
+            if (r0 == 0) goto L_0x0f2b
             org.telegram.messenger.ImageReceiver r0 = r8.thumbImage
             float r0 = r0.getCenterX()
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.dialogs_playDrawable
@@ -7179,49 +7298,49 @@ public class DialogCell extends BaseCell {
             org.telegram.ui.Cells.BaseCell.setDrawableBounds((android.graphics.drawable.Drawable) r2, (int) r0, (int) r1)
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.dialogs_playDrawable
             r0.draw(r9)
-        L_0x0efa:
+        L_0x0f2b:
             boolean r0 = r8.animatingArchiveAvatar
             if (r0 == 0) goto L_0x0var_
             r31.restore()
         L_0x0var_:
             boolean r0 = r8.isDialogCell
-            if (r0 == 0) goto L_0x0fe1
+            if (r0 == 0) goto L_0x1012
             int r0 = r8.currentDialogFolderId
-            if (r0 != 0) goto L_0x0fe1
+            if (r0 != 0) goto L_0x1012
             org.telegram.tgnet.TLRPC$User r0 = r8.user
             r1 = 1086324736(0x40CLASSNAME, float:6.0)
-            if (r0 == 0) goto L_0x0fe4
+            if (r0 == 0) goto L_0x1015
             boolean r0 = org.telegram.messenger.MessagesController.isSupportUser(r0)
-            if (r0 != 0) goto L_0x0fe4
+            if (r0 != 0) goto L_0x1015
             org.telegram.tgnet.TLRPC$User r0 = r8.user
             boolean r0 = r0.bot
-            if (r0 != 0) goto L_0x0fe4
+            if (r0 != 0) goto L_0x1015
             boolean r0 = r30.isOnline()
             if (r0 != 0) goto L_0x0var_
             float r2 = r8.onlineProgress
             r3 = 0
             int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r2 == 0) goto L_0x0fdd
+            if (r2 == 0) goto L_0x100e
         L_0x0var_:
             org.telegram.messenger.ImageReceiver r2 = r8.avatarImage
             float r2 = r2.getImageY2()
             boolean r3 = r8.useForceThreeLines
-            if (r3 != 0) goto L_0x0f3a
+            if (r3 != 0) goto L_0x0f6b
             boolean r3 = org.telegram.messenger.SharedConfig.useThreeLinesLayout
             if (r3 == 0) goto L_0x0var_
-            goto L_0x0f3a
+            goto L_0x0f6b
         L_0x0var_:
             r15 = 1090519040(0x41000000, float:8.0)
-            goto L_0x0f3c
-        L_0x0f3a:
+            goto L_0x0f6d
+        L_0x0f6b:
             r15 = 1086324736(0x40CLASSNAME, float:6.0)
-        L_0x0f3c:
+        L_0x0f6d:
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r15)
             float r3 = (float) r3
             float r2 = r2 - r3
             int r2 = (int) r2
             boolean r3 = org.telegram.messenger.LocaleController.isRTL
-            if (r3 == 0) goto L_0x0f5f
+            if (r3 == 0) goto L_0x0var_
             org.telegram.messenger.ImageReceiver r3 = r8.avatarImage
             float r3 = r3.getImageX()
             boolean r4 = r8.useForceThreeLines
@@ -7235,22 +7354,22 @@ public class DialogCell extends BaseCell {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
             float r1 = (float) r1
             float r3 = r3 + r1
-            goto L_0x0var_
-        L_0x0f5f:
+            goto L_0x0fa7
+        L_0x0var_:
             org.telegram.messenger.ImageReceiver r3 = r8.avatarImage
             float r3 = r3.getImageX2()
             boolean r4 = r8.useForceThreeLines
-            if (r4 != 0) goto L_0x0var_
+            if (r4 != 0) goto L_0x0fa1
             boolean r4 = org.telegram.messenger.SharedConfig.useThreeLinesLayout
-            if (r4 == 0) goto L_0x0f6e
-            goto L_0x0var_
-        L_0x0f6e:
+            if (r4 == 0) goto L_0x0f9f
+            goto L_0x0fa1
+        L_0x0f9f:
             r21 = 1086324736(0x40CLASSNAME, float:6.0)
-        L_0x0var_:
+        L_0x0fa1:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
             float r1 = (float) r1
             float r3 = r3 - r1
-        L_0x0var_:
+        L_0x0fa7:
             int r1 = (int) r3
             android.graphics.Paint r3 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r4 = r8.resourcesProvider
@@ -7277,120 +7396,120 @@ public class DialogCell extends BaseCell {
             float r3 = r3 * r4
             android.graphics.Paint r4 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
             r9.drawCircle(r1, r2, r3, r4)
-            if (r0 == 0) goto L_0x0fc8
+            if (r0 == 0) goto L_0x0ff9
             float r0 = r8.onlineProgress
             r1 = 1065353216(0x3var_, float:1.0)
             int r2 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r2 >= 0) goto L_0x0fdd
+            if (r2 >= 0) goto L_0x100e
             float r2 = (float) r12
             float r2 = r2 / r19
             float r0 = r0 + r2
             r8.onlineProgress = r0
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 <= 0) goto L_0x0fdb
+            if (r0 <= 0) goto L_0x100c
             r8.onlineProgress = r1
-            goto L_0x0fdb
-        L_0x0fc8:
+            goto L_0x100c
+        L_0x0ff9:
             float r0 = r8.onlineProgress
             r1 = 0
             int r2 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0fdd
+            if (r2 <= 0) goto L_0x100e
             float r2 = (float) r12
             float r2 = r2 / r19
             float r0 = r0 - r2
             r8.onlineProgress = r0
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 >= 0) goto L_0x0fdb
+            if (r0 >= 0) goto L_0x100c
             r8.onlineProgress = r1
-        L_0x0fdb:
+        L_0x100c:
             r6 = 1
-            goto L_0x0fdf
-        L_0x0fdd:
+            goto L_0x1010
+        L_0x100e:
             r6 = r20
-        L_0x0fdf:
+        L_0x1010:
             r20 = r6
-        L_0x0fe1:
+        L_0x1012:
             r2 = 0
-            goto L_0x12c2
-        L_0x0fe4:
+            goto L_0x12f3
+        L_0x1015:
             org.telegram.tgnet.TLRPC$Chat r0 = r8.chat
-            if (r0 == 0) goto L_0x0fe1
+            if (r0 == 0) goto L_0x1012
             boolean r2 = r0.call_active
-            if (r2 == 0) goto L_0x0ff2
+            if (r2 == 0) goto L_0x1023
             boolean r0 = r0.call_not_empty
-            if (r0 == 0) goto L_0x0ff2
+            if (r0 == 0) goto L_0x1023
             r6 = 1
-            goto L_0x0ff3
-        L_0x0ff2:
+            goto L_0x1024
+        L_0x1023:
             r6 = 0
-        L_0x0ff3:
+        L_0x1024:
             r8.hasCall = r6
-            if (r6 != 0) goto L_0x0ffe
+            if (r6 != 0) goto L_0x102f
             float r0 = r8.chatCallProgress
             r2 = 0
             int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 == 0) goto L_0x0fe1
-        L_0x0ffe:
+            if (r0 == 0) goto L_0x1012
+        L_0x102f:
             org.telegram.ui.Components.CheckBox2 r0 = r8.checkBox
-            if (r0 == 0) goto L_0x1013
+            if (r0 == 0) goto L_0x1044
             boolean r0 = r0.isChecked()
-            if (r0 == 0) goto L_0x1013
+            if (r0 == 0) goto L_0x1044
             org.telegram.ui.Components.CheckBox2 r0 = r8.checkBox
             float r0 = r0.getProgress()
             r2 = 1065353216(0x3var_, float:1.0)
             float r5 = r2 - r0
-            goto L_0x1015
-        L_0x1013:
+            goto L_0x1046
+        L_0x1044:
             r5 = 1065353216(0x3var_, float:1.0)
-        L_0x1015:
+        L_0x1046:
             org.telegram.messenger.ImageReceiver r0 = r8.avatarImage
             float r0 = r0.getImageY2()
             boolean r2 = r8.useForceThreeLines
-            if (r2 != 0) goto L_0x1027
+            if (r2 != 0) goto L_0x1058
             boolean r2 = org.telegram.messenger.SharedConfig.useThreeLinesLayout
-            if (r2 == 0) goto L_0x1024
-            goto L_0x1027
-        L_0x1024:
+            if (r2 == 0) goto L_0x1055
+            goto L_0x1058
+        L_0x1055:
             r15 = 1090519040(0x41000000, float:8.0)
-            goto L_0x1029
-        L_0x1027:
+            goto L_0x105a
+        L_0x1058:
             r15 = 1086324736(0x40CLASSNAME, float:6.0)
-        L_0x1029:
+        L_0x105a:
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r15)
             float r2 = (float) r2
             float r0 = r0 - r2
             int r0 = (int) r0
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            if (r2 == 0) goto L_0x104c
+            if (r2 == 0) goto L_0x107d
             org.telegram.messenger.ImageReceiver r2 = r8.avatarImage
             float r2 = r2.getImageX()
             boolean r3 = r8.useForceThreeLines
-            if (r3 != 0) goto L_0x1045
+            if (r3 != 0) goto L_0x1076
             boolean r3 = org.telegram.messenger.SharedConfig.useThreeLinesLayout
-            if (r3 == 0) goto L_0x1043
-            goto L_0x1045
-        L_0x1043:
+            if (r3 == 0) goto L_0x1074
+            goto L_0x1076
+        L_0x1074:
             r21 = 1086324736(0x40CLASSNAME, float:6.0)
-        L_0x1045:
+        L_0x1076:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
             float r1 = (float) r1
             float r2 = r2 + r1
-            goto L_0x1063
-        L_0x104c:
+            goto L_0x1094
+        L_0x107d:
             org.telegram.messenger.ImageReceiver r2 = r8.avatarImage
             float r2 = r2.getImageX2()
             boolean r3 = r8.useForceThreeLines
-            if (r3 != 0) goto L_0x105d
+            if (r3 != 0) goto L_0x108e
             boolean r3 = org.telegram.messenger.SharedConfig.useThreeLinesLayout
-            if (r3 == 0) goto L_0x105b
-            goto L_0x105d
-        L_0x105b:
+            if (r3 == 0) goto L_0x108c
+            goto L_0x108e
+        L_0x108c:
             r21 = 1086324736(0x40CLASSNAME, float:6.0)
-        L_0x105d:
+        L_0x108e:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
             float r1 = (float) r1
             float r2 = r2 - r1
-        L_0x1063:
+        L_0x1094:
             int r1 = (int) r2
             android.graphics.Paint r2 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r3 = r8.resourcesProvider
@@ -7424,7 +7543,7 @@ public class DialogCell extends BaseCell {
             int r4 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r10, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r4)
             r3.setColor(r4)
             int r3 = r8.progressStage
-            if (r3 != 0) goto L_0x10d8
+            if (r3 != 0) goto L_0x1109
             r4 = 1065353216(0x3var_, float:1.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r3 = (float) r3
@@ -7439,16 +7558,16 @@ public class DialogCell extends BaseCell {
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r16)
             float r6 = (float) r6
             float r11 = r8.innerProgress
-        L_0x10d0:
+        L_0x1101:
             float r6 = r6 * r11
             float r4 = r4 - r6
             r6 = r4
-        L_0x10d4:
+        L_0x1105:
             r4 = 1065353216(0x3var_, float:1.0)
-            goto L_0x11d5
-        L_0x10d8:
+            goto L_0x1206
+        L_0x1109:
             r4 = 1
-            if (r3 != r4) goto L_0x10ff
+            if (r3 != r4) goto L_0x1130
             r4 = 1084227584(0x40a00000, float:5.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r3 = (float) r3
@@ -7463,14 +7582,14 @@ public class DialogCell extends BaseCell {
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r17)
             float r11 = (float) r11
             float r14 = r8.innerProgress
-        L_0x10fa:
+        L_0x112b:
             float r11 = r11 * r14
             float r6 = r6 + r11
-            goto L_0x11d5
-        L_0x10ff:
+            goto L_0x1206
+        L_0x1130:
             r4 = 1065353216(0x3var_, float:1.0)
             r6 = 2
-            if (r3 != r6) goto L_0x1122
+            if (r3 != r6) goto L_0x1153
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r3 = (float) r3
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r16)
@@ -7484,10 +7603,10 @@ public class DialogCell extends BaseCell {
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r17)
             float r6 = (float) r6
             float r11 = r8.innerProgress
-            goto L_0x10d0
-        L_0x1122:
+            goto L_0x1101
+        L_0x1153:
             r4 = 3
-            if (r3 != r4) goto L_0x1145
+            if (r3 != r4) goto L_0x1176
             r3 = 1077936128(0x40400000, float:3.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             float r3 = (float) r3
@@ -7502,11 +7621,11 @@ public class DialogCell extends BaseCell {
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r16)
             float r11 = (float) r11
             float r14 = r8.innerProgress
-            goto L_0x10fa
-        L_0x1145:
+            goto L_0x112b
+        L_0x1176:
             r4 = 1065353216(0x3var_, float:1.0)
             r6 = 4
-            if (r3 != r6) goto L_0x1169
+            if (r3 != r6) goto L_0x119a
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r3 = (float) r3
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r17)
@@ -7520,10 +7639,10 @@ public class DialogCell extends BaseCell {
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r16)
             float r6 = (float) r6
             float r11 = r8.innerProgress
-            goto L_0x10d0
-        L_0x1169:
+            goto L_0x1101
+        L_0x119a:
             r4 = 5
-            if (r3 != r4) goto L_0x118d
+            if (r3 != r4) goto L_0x11be
             r4 = 1084227584(0x40a00000, float:5.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r3 = (float) r3
@@ -7538,11 +7657,11 @@ public class DialogCell extends BaseCell {
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r17)
             float r11 = (float) r11
             float r14 = r8.innerProgress
-            goto L_0x10fa
-        L_0x118d:
+            goto L_0x112b
+        L_0x11be:
             r4 = 1065353216(0x3var_, float:1.0)
             r6 = 6
-            if (r3 != r6) goto L_0x11b4
+            if (r3 != r6) goto L_0x11e5
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r3 = (float) r3
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r17)
@@ -7558,8 +7677,8 @@ public class DialogCell extends BaseCell {
             float r14 = r8.innerProgress
             float r11 = r11 * r14
             float r6 = r6 - r11
-            goto L_0x10d4
-        L_0x11b4:
+            goto L_0x1105
+        L_0x11e5:
             r4 = 1084227584(0x40a00000, float:5.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r3 = (float) r3
@@ -7574,20 +7693,20 @@ public class DialogCell extends BaseCell {
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r16)
             float r11 = (float) r11
             float r14 = r8.innerProgress
-            goto L_0x10fa
-        L_0x11d5:
+            goto L_0x112b
+        L_0x1206:
             float r11 = r8.chatCallProgress
             int r11 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
-            if (r11 < 0) goto L_0x11df
+            if (r11 < 0) goto L_0x1210
             int r11 = (r5 > r4 ? 1 : (r5 == r4 ? 0 : -1))
-            if (r11 >= 0) goto L_0x11eb
-        L_0x11df:
+            if (r11 >= 0) goto L_0x121c
+        L_0x1210:
             r31.save()
             float r4 = r8.chatCallProgress
             float r11 = r4 * r5
             float r4 = r4 * r5
             r9.scale(r11, r4, r2, r0)
-        L_0x11eb:
+        L_0x121c:
             android.graphics.RectF r2 = r8.rect
             r4 = 1065353216(0x3var_, float:1.0)
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r4)
@@ -7646,12 +7765,12 @@ public class DialogCell extends BaseCell {
             r9.drawRoundRect(r0, r2, r3, r4)
             float r0 = r8.chatCallProgress
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 < 0) goto L_0x1272
+            if (r0 < 0) goto L_0x12a3
             int r0 = (r5 > r1 ? 1 : (r5 == r1 ? 0 : -1))
-            if (r0 >= 0) goto L_0x1275
-        L_0x1272:
+            if (r0 >= 0) goto L_0x12a6
+        L_0x12a3:
             r31.restore()
-        L_0x1275:
+        L_0x12a6:
             float r0 = r8.innerProgress
             float r1 = (float) r12
             r2 = 1137180672(0x43CLASSNAME, float:400.0)
@@ -7660,7 +7779,7 @@ public class DialogCell extends BaseCell {
             r8.innerProgress = r0
             r2 = 1065353216(0x3var_, float:1.0)
             int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 < 0) goto L_0x1295
+            if (r0 < 0) goto L_0x12c6
             r2 = 0
             r8.innerProgress = r2
             int r0 = r8.progressStage
@@ -7668,51 +7787,51 @@ public class DialogCell extends BaseCell {
             int r0 = r0 + r2
             r8.progressStage = r0
             r2 = 8
-            if (r0 < r2) goto L_0x1295
+            if (r0 < r2) goto L_0x12c6
             r2 = 0
             r8.progressStage = r2
-        L_0x1295:
+        L_0x12c6:
             boolean r0 = r8.hasCall
-            if (r0 == 0) goto L_0x12ae
+            if (r0 == 0) goto L_0x12df
             float r0 = r8.chatCallProgress
             r2 = 1065353216(0x3var_, float:1.0)
             int r3 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r3 >= 0) goto L_0x12ac
+            if (r3 >= 0) goto L_0x12dd
             float r1 = r1 / r19
             float r0 = r0 + r1
             r8.chatCallProgress = r0
             int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 <= 0) goto L_0x12ac
+            if (r0 <= 0) goto L_0x12dd
             r8.chatCallProgress = r2
-        L_0x12ac:
+        L_0x12dd:
             r2 = 0
-            goto L_0x12c0
-        L_0x12ae:
+            goto L_0x12f1
+        L_0x12df:
             float r0 = r8.chatCallProgress
             r2 = 0
             int r3 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r3 <= 0) goto L_0x12c0
+            if (r3 <= 0) goto L_0x12f1
             float r1 = r1 / r19
             float r0 = r0 - r1
             r8.chatCallProgress = r0
             int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 >= 0) goto L_0x12c0
+            if (r0 >= 0) goto L_0x12f1
             r8.chatCallProgress = r2
-        L_0x12c0:
+        L_0x12f1:
             r20 = 1
-        L_0x12c2:
+        L_0x12f3:
             float r0 = r8.translationX
             int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 == 0) goto L_0x12cb
+            if (r0 == 0) goto L_0x12fc
             r31.restore()
-        L_0x12cb:
+        L_0x12fc:
             int r0 = r8.currentDialogFolderId
-            if (r0 == 0) goto L_0x12f0
+            if (r0 == 0) goto L_0x1321
             float r0 = r8.translationX
             int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 != 0) goto L_0x12f0
+            if (r0 != 0) goto L_0x1321
             org.telegram.ui.Components.PullForegroundDrawable r0 = r8.archivedChatsDrawable
-            if (r0 == 0) goto L_0x12f0
+            if (r0 == 0) goto L_0x1321
             r31.save()
             int r0 = r30.getMeasuredWidth()
             int r1 = r30.getMeasuredHeight()
@@ -7721,32 +7840,32 @@ public class DialogCell extends BaseCell {
             org.telegram.ui.Components.PullForegroundDrawable r0 = r8.archivedChatsDrawable
             r0.draw(r9)
             r31.restore()
-        L_0x12f0:
+        L_0x1321:
             boolean r0 = r8.useSeparator
-            if (r0 == 0) goto L_0x1351
+            if (r0 == 0) goto L_0x1382
             boolean r0 = r8.fullSeparator
-            if (r0 != 0) goto L_0x1314
+            if (r0 != 0) goto L_0x1345
             int r0 = r8.currentDialogFolderId
-            if (r0 == 0) goto L_0x1304
+            if (r0 == 0) goto L_0x1335
             boolean r0 = r8.archiveHidden
-            if (r0 == 0) goto L_0x1304
+            if (r0 == 0) goto L_0x1335
             boolean r0 = r8.fullSeparator2
-            if (r0 == 0) goto L_0x1314
-        L_0x1304:
+            if (r0 == 0) goto L_0x1345
+        L_0x1335:
             boolean r0 = r8.fullSeparator2
-            if (r0 == 0) goto L_0x130d
+            if (r0 == 0) goto L_0x133e
             boolean r0 = r8.archiveHidden
-            if (r0 != 0) goto L_0x130d
-            goto L_0x1314
-        L_0x130d:
+            if (r0 != 0) goto L_0x133e
+            goto L_0x1345
+        L_0x133e:
             r0 = 1116733440(0x42900000, float:72.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            goto L_0x1315
-        L_0x1314:
+            goto L_0x1346
+        L_0x1345:
             r1 = 0
-        L_0x1315:
+        L_0x1346:
             boolean r0 = org.telegram.messenger.LocaleController.isRTL
-            if (r0 == 0) goto L_0x1336
+            if (r0 == 0) goto L_0x1367
             r2 = 0
             int r0 = r30.getMeasuredHeight()
             r3 = 1
@@ -7762,8 +7881,8 @@ public class DialogCell extends BaseCell {
             r1 = r31
             r3 = r0
             r1.drawLine(r2, r3, r4, r5, r6)
-            goto L_0x1351
-        L_0x1336:
+            goto L_0x1382
+        L_0x1367:
             float r2 = (float) r1
             int r0 = r30.getMeasuredHeight()
             r11 = 1
@@ -7777,20 +7896,20 @@ public class DialogCell extends BaseCell {
             android.graphics.Paint r6 = org.telegram.ui.ActionBar.Theme.dividerPaint
             r1 = r31
             r1.drawLine(r2, r3, r4, r5, r6)
-            goto L_0x1352
-        L_0x1351:
+            goto L_0x1383
+        L_0x1382:
             r11 = 1
-        L_0x1352:
+        L_0x1383:
             float r0 = r8.clipProgress
             r1 = 0
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 == 0) goto L_0x13a2
+            if (r0 == 0) goto L_0x13d3
             int r0 = android.os.Build.VERSION.SDK_INT
             r1 = 24
-            if (r0 == r1) goto L_0x1363
+            if (r0 == r1) goto L_0x1394
             r31.restore()
-            goto L_0x13a2
-        L_0x1363:
+            goto L_0x13d3
+        L_0x1394:
             android.graphics.Paint r0 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r1 = r8.resourcesProvider
             int r1 = org.telegram.ui.ActionBar.Theme.getColor((java.lang.String) r10, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r1)
@@ -7821,168 +7940,168 @@ public class DialogCell extends BaseCell {
             android.graphics.Paint r6 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint
             r1 = r31
             r1.drawRect(r2, r3, r4, r5, r6)
-        L_0x13a2:
+        L_0x13d3:
             boolean r0 = r8.drawReorder
-            if (r0 != 0) goto L_0x13b0
+            if (r0 != 0) goto L_0x13e1
             float r1 = r8.reorderIconProgress
             r2 = 0
             int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r1 == 0) goto L_0x13ae
-            goto L_0x13b0
-        L_0x13ae:
+            if (r1 == 0) goto L_0x13df
+            goto L_0x13e1
+        L_0x13df:
             r1 = 0
-            goto L_0x13db
-        L_0x13b0:
-            if (r0 == 0) goto L_0x13c7
+            goto L_0x140c
+        L_0x13e1:
+            if (r0 == 0) goto L_0x13f8
             float r0 = r8.reorderIconProgress
             r1 = 1065353216(0x3var_, float:1.0)
             int r2 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r2 >= 0) goto L_0x13ae
+            if (r2 >= 0) goto L_0x13df
             float r2 = (float) r12
             float r2 = r2 / r7
             float r0 = r0 + r2
             r8.reorderIconProgress = r0
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 <= 0) goto L_0x13c5
+            if (r0 <= 0) goto L_0x13f6
             r8.reorderIconProgress = r1
-        L_0x13c5:
+        L_0x13f6:
             r1 = 0
-            goto L_0x13d9
-        L_0x13c7:
+            goto L_0x140a
+        L_0x13f8:
             float r0 = r8.reorderIconProgress
             r1 = 0
             int r2 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r2 <= 0) goto L_0x13db
+            if (r2 <= 0) goto L_0x140c
             float r2 = (float) r12
             float r2 = r2 / r7
             float r0 = r0 - r2
             r8.reorderIconProgress = r0
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 >= 0) goto L_0x13d9
+            if (r0 >= 0) goto L_0x140a
             r8.reorderIconProgress = r1
-        L_0x13d9:
+        L_0x140a:
             r6 = 1
-            goto L_0x13dd
-        L_0x13db:
+            goto L_0x140e
+        L_0x140c:
             r6 = r20
-        L_0x13dd:
+        L_0x140e:
             boolean r0 = r8.archiveHidden
-            if (r0 == 0) goto L_0x140b
+            if (r0 == 0) goto L_0x143c
             float r0 = r8.archiveBackgroundProgress
             int r2 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r2 <= 0) goto L_0x1437
+            if (r2 <= 0) goto L_0x1468
             float r2 = (float) r12
             r3 = 1130758144(0x43660000, float:230.0)
             float r2 = r2 / r3
             float r0 = r0 - r2
             r8.archiveBackgroundProgress = r0
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 >= 0) goto L_0x13f4
+            if (r0 >= 0) goto L_0x1425
             r8.archiveBackgroundProgress = r1
-        L_0x13f4:
+        L_0x1425:
             org.telegram.ui.Components.AvatarDrawable r0 = r8.avatarDrawable
             int r0 = r0.getAvatarType()
             r1 = 2
-            if (r0 != r1) goto L_0x1436
+            if (r0 != r1) goto L_0x1467
             org.telegram.ui.Components.AvatarDrawable r0 = r8.avatarDrawable
             org.telegram.ui.Components.CubicBezierInterpolator r1 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT_QUINT
             float r2 = r8.archiveBackgroundProgress
             float r1 = r1.getInterpolation(r2)
             r0.setArchivedAvatarHiddenProgress(r1)
-            goto L_0x1436
-        L_0x140b:
+            goto L_0x1467
+        L_0x143c:
             float r0 = r8.archiveBackgroundProgress
             r1 = 1065353216(0x3var_, float:1.0)
             int r2 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r2 >= 0) goto L_0x1437
+            if (r2 >= 0) goto L_0x1468
             float r2 = (float) r12
             r3 = 1130758144(0x43660000, float:230.0)
             float r2 = r2 / r3
             float r0 = r0 + r2
             r8.archiveBackgroundProgress = r0
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 <= 0) goto L_0x1420
+            if (r0 <= 0) goto L_0x1451
             r8.archiveBackgroundProgress = r1
-        L_0x1420:
+        L_0x1451:
             org.telegram.ui.Components.AvatarDrawable r0 = r8.avatarDrawable
             int r0 = r0.getAvatarType()
             r1 = 2
-            if (r0 != r1) goto L_0x1436
+            if (r0 != r1) goto L_0x1467
             org.telegram.ui.Components.AvatarDrawable r0 = r8.avatarDrawable
             org.telegram.ui.Components.CubicBezierInterpolator r1 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT_QUINT
             float r2 = r8.archiveBackgroundProgress
             float r1 = r1.getInterpolation(r2)
             r0.setArchivedAvatarHiddenProgress(r1)
-        L_0x1436:
+        L_0x1467:
             r6 = 1
-        L_0x1437:
+        L_0x1468:
             boolean r0 = r8.animatingArchiveAvatar
-            if (r0 == 0) goto L_0x144b
+            if (r0 == 0) goto L_0x147c
             float r0 = r8.animatingArchiveAvatarProgress
             float r1 = (float) r12
             float r0 = r0 + r1
             r8.animatingArchiveAvatarProgress = r0
             int r0 = (r0 > r7 ? 1 : (r0 == r7 ? 0 : -1))
-            if (r0 < 0) goto L_0x144a
+            if (r0 < 0) goto L_0x147b
             r8.animatingArchiveAvatarProgress = r7
             r1 = 0
             r8.animatingArchiveAvatar = r1
-        L_0x144a:
+        L_0x147b:
             r6 = 1
-        L_0x144b:
+        L_0x147c:
             boolean r0 = r8.drawRevealBackground
-            if (r0 == 0) goto L_0x1477
+            if (r0 == 0) goto L_0x14a8
             float r0 = r8.currentRevealBounceProgress
             r1 = 1065353216(0x3var_, float:1.0)
             int r2 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r2 >= 0) goto L_0x1463
+            if (r2 >= 0) goto L_0x1494
             float r2 = (float) r12
             float r2 = r2 / r7
             float r0 = r0 + r2
             r8.currentRevealBounceProgress = r0
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 <= 0) goto L_0x1463
+            if (r0 <= 0) goto L_0x1494
             r8.currentRevealBounceProgress = r1
             r6 = 1
-        L_0x1463:
+        L_0x1494:
             float r0 = r8.currentRevealProgress
             int r2 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r2 >= 0) goto L_0x1497
+            if (r2 >= 0) goto L_0x14c8
             float r2 = (float) r12
             r3 = 1133903872(0x43960000, float:300.0)
             float r2 = r2 / r3
             float r0 = r0 + r2
             r8.currentRevealProgress = r0
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 <= 0) goto L_0x1496
+            if (r0 <= 0) goto L_0x14c7
             r8.currentRevealProgress = r1
-            goto L_0x1496
-        L_0x1477:
+            goto L_0x14c7
+        L_0x14a8:
             r1 = 1065353216(0x3var_, float:1.0)
             float r0 = r8.currentRevealBounceProgress
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
             r1 = 0
-            if (r0 != 0) goto L_0x1483
+            if (r0 != 0) goto L_0x14b4
             r8.currentRevealBounceProgress = r1
             r6 = 1
-        L_0x1483:
+        L_0x14b4:
             float r0 = r8.currentRevealProgress
             int r2 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r2 <= 0) goto L_0x1497
+            if (r2 <= 0) goto L_0x14c8
             float r2 = (float) r12
             r3 = 1133903872(0x43960000, float:300.0)
             float r2 = r2 / r3
             float r0 = r0 - r2
             r8.currentRevealProgress = r0
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 >= 0) goto L_0x1496
+            if (r0 >= 0) goto L_0x14c7
             r8.currentRevealProgress = r1
-        L_0x1496:
+        L_0x14c7:
             r6 = 1
-        L_0x1497:
-            if (r6 == 0) goto L_0x149c
+        L_0x14c8:
+            if (r6 == 0) goto L_0x14cd
             r30.invalidate()
-        L_0x149c:
+        L_0x14cd:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DialogCell.onDraw(android.graphics.Canvas):void");
@@ -7997,7 +8116,7 @@ public class DialogCell extends BaseCell {
         this.statusDrawableAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
         this.animateFromStatusDrawableParams = i;
         this.animateToStatusDrawableParams = i2;
-        this.statusDrawableAnimator.addUpdateListener(new DialogCell$$ExternalSyntheticLambda0(this));
+        this.statusDrawableAnimator.addUpdateListener(new DialogCell$$ExternalSyntheticLambda1(this));
         this.statusDrawableAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 int i = (DialogCell.this.drawClock ? 1 : 0) + (DialogCell.this.drawCheck1 ? 2 : 0) + (DialogCell.this.drawCheck2 ? 4 : 0);
@@ -8017,7 +8136,7 @@ public class DialogCell extends BaseCell {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createStatusDrawableAnimator$1(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$createStatusDrawableAnimator$2(ValueAnimator valueAnimator) {
         this.statusDrawableProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }

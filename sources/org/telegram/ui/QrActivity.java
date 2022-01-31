@@ -940,7 +940,7 @@ public class QrActivity extends BaseFragment {
             Bitmap bitmap2 = this.contentBitmap;
             if (bitmap2 != null) {
                 canvas.drawBitmap(bitmap2, 0.0f, 0.0f, this.bitmapGradientPaint);
-                this.gradientDrawable.updateAnimation();
+                this.gradientDrawable.updateAnimation(true);
             }
         }
 
