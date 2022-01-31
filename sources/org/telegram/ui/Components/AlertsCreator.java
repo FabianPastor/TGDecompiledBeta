@@ -181,42 +181,42 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$createCalendarPickerDialog$55(View view, MotionEvent motionEvent) {
+    public static /* synthetic */ boolean lambda$createCalendarPickerDialog$56(View view, MotionEvent motionEvent) {
         return true;
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createChangeBioAlert$22(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$createChangeBioAlert$23(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createChangeNameAlert$26(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$createChangeNameAlert$27(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$createDatePickerDialog$49(View view, MotionEvent motionEvent) {
+    public static /* synthetic */ boolean lambda$createDatePickerDialog$50(View view, MotionEvent motionEvent) {
         return true;
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDeleteMessagesAlert$95(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$createDeleteMessagesAlert$97(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createReportAlert$63(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$createReportAlert$65(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$createScheduleDatePickerDialog$40(View view, MotionEvent motionEvent) {
+    public static /* synthetic */ boolean lambda$createScheduleDatePickerDialog$41(View view, MotionEvent motionEvent) {
         return true;
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createThemeCreateDialog$97(DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$createThemeCreateDialog$100(DialogInterface dialogInterface, int i) {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$sendReport$62(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$sendReport$63(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     public static Dialog processError(int i, TLRPC$TL_error tLRPC$TL_error, BaseFragment baseFragment, TLObject tLObject, Object... objArr) {
@@ -501,7 +501,7 @@ public class AlertsCreator {
         builder.setMessage(str);
         builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
         if (z) {
-            builder.setNegativeButton(LocaleController.getString("UpdateApp", NUM), new AlertsCreator$$ExternalSyntheticLambda9(context));
+            builder.setNegativeButton(LocaleController.getString("UpdateApp", NUM), new AlertsCreator$$ExternalSyntheticLambda10(context));
         }
         return builder.show();
     }
@@ -657,13 +657,18 @@ public class AlertsCreator {
         return create;
     }
 
-    public static void showBlockReportSpamReplyAlert(ChatActivity chatActivity, MessageObject messageObject, long j, Theme.ResourcesProvider resourcesProvider) {
+    public static void showBlockReportSpamReplyAlert(ChatActivity chatActivity, MessageObject messageObject, long j, Theme.ResourcesProvider resourcesProvider, Runnable runnable) {
+        long j2 = j;
+        Theme.ResourcesProvider resourcesProvider2 = resourcesProvider;
+        Runnable runnable2 = runnable;
         if (chatActivity != null && chatActivity.getParentActivity() != null && messageObject != null) {
             AccountInstance accountInstance = chatActivity.getAccountInstance();
-            TLRPC$User user = j > 0 ? accountInstance.getMessagesController().getUser(Long.valueOf(j)) : null;
-            TLRPC$Chat chat = j < 0 ? accountInstance.getMessagesController().getChat(Long.valueOf(-j)) : null;
+            TLRPC$User user = j2 > 0 ? accountInstance.getMessagesController().getUser(Long.valueOf(j)) : null;
+            TLRPC$Chat chat = j2 < 0 ? accountInstance.getMessagesController().getChat(Long.valueOf(-j2)) : null;
             if (user != null || chat != null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(chatActivity.getParentActivity(), resourcesProvider);
+                AlertDialog.Builder builder = new AlertDialog.Builder(chatActivity.getParentActivity(), resourcesProvider2);
+                builder.setDimEnabled(runnable2 == null);
+                builder.setOnPreDismissListener(new AlertsCreator$$ExternalSyntheticLambda37(runnable2));
                 builder.setTitle(LocaleController.getString("BlockUser", NUM));
                 if (user != null) {
                     builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BlockUserReplyAlert", NUM, UserObject.getFirstName(user))));
@@ -672,13 +677,13 @@ public class AlertsCreator {
                 }
                 LinearLayout linearLayout = new LinearLayout(chatActivity.getParentActivity());
                 linearLayout.setOrientation(1);
-                CheckBoxCell[] checkBoxCellArr = {new CheckBoxCell(chatActivity.getParentActivity(), 1, resourcesProvider)};
+                CheckBoxCell[] checkBoxCellArr = {new CheckBoxCell(chatActivity.getParentActivity(), 1, resourcesProvider2)};
                 checkBoxCellArr[0].setBackgroundDrawable(Theme.getSelectorDrawable(false));
                 checkBoxCellArr[0].setTag(0);
                 checkBoxCellArr[0].setText(LocaleController.getString("DeleteReportSpam", NUM), "", true, false);
                 checkBoxCellArr[0].setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
                 linearLayout.addView(checkBoxCellArr[0], LayoutHelper.createLinear(-1, -2));
-                checkBoxCellArr[0].setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda53(checkBoxCellArr));
+                checkBoxCellArr[0].setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda57(checkBoxCellArr));
                 builder.setCustomViewOffset(12);
                 builder.setView(linearLayout);
                 builder.setPositiveButton(LocaleController.getString("BlockAndDeleteReplies", NUM), new AlertsCreator$$ExternalSyntheticLambda20(user, accountInstance, chatActivity, chat, messageObject, checkBoxCellArr, resourcesProvider));
@@ -694,13 +699,20 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showBlockReportSpamReplyAlert$3(CheckBoxCell[] checkBoxCellArr, View view) {
+    public static /* synthetic */ void lambda$showBlockReportSpamReplyAlert$3(Runnable runnable, DialogInterface dialogInterface) {
+        if (runnable != null) {
+            runnable.run();
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$showBlockReportSpamReplyAlert$4(CheckBoxCell[] checkBoxCellArr, View view) {
         Integer num = (Integer) view.getTag();
         checkBoxCellArr[num.intValue()].setChecked(!checkBoxCellArr[num.intValue()].isChecked(), true);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showBlockReportSpamReplyAlert$5(TLRPC$User tLRPC$User, AccountInstance accountInstance, ChatActivity chatActivity, TLRPC$Chat tLRPC$Chat, MessageObject messageObject, CheckBoxCell[] checkBoxCellArr, Theme.ResourcesProvider resourcesProvider, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$showBlockReportSpamReplyAlert$6(TLRPC$User tLRPC$User, AccountInstance accountInstance, ChatActivity chatActivity, TLRPC$Chat tLRPC$Chat, MessageObject messageObject, CheckBoxCell[] checkBoxCellArr, Theme.ResourcesProvider resourcesProvider, DialogInterface dialogInterface, int i) {
         if (tLRPC$User != null) {
             accountInstance.getMessagesStorage().deleteUserChatHistory(chatActivity.getDialogId(), tLRPC$User.id);
         } else {
@@ -716,11 +728,11 @@ public class AlertsCreator {
                 chatActivity.getUndoView().showWithAction(0, 74, (Runnable) null);
             }
         }
-        accountInstance.getConnectionsManager().sendRequest(tLRPC$TL_contacts_blockFromReplies, new AlertsCreator$$ExternalSyntheticLambda79(accountInstance));
+        accountInstance.getConnectionsManager().sendRequest(tLRPC$TL_contacts_blockFromReplies, new AlertsCreator$$ExternalSyntheticLambda82(accountInstance));
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showBlockReportSpamReplyAlert$4(AccountInstance accountInstance, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$showBlockReportSpamReplyAlert$5(AccountInstance accountInstance, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject instanceof TLRPC$Updates) {
             accountInstance.getMessagesController().processUpdates((TLRPC$Updates) tLObject, false);
         }
@@ -770,14 +782,14 @@ public class AlertsCreator {
             r4 = 1
         L_0x004a:
             if (r20 == 0) goto L_0x0132
-            r1 = 2131624596(0x7f0e0294, float:1.8876376E38)
+            r1 = 2131624597(0x7f0e0295, float:1.8876378E38)
             java.lang.Object[] r8 = new java.lang.Object[r5]
             java.lang.String r14 = org.telegram.messenger.UserObject.getFirstName(r20)
             r8[r6] = r14
             java.lang.String r14 = "BlockUserTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r14, r1, r8)
             r11.setTitle(r1)
-            r1 = 2131624590(0x7f0e028e, float:1.8876364E38)
+            r1 = 2131624591(0x7f0e028f, float:1.8876366E38)
             java.lang.Object[] r8 = new java.lang.Object[r5]
             java.lang.String r14 = org.telegram.messenger.UserObject.getFirstName(r20)
             r8[r6] = r14
@@ -785,7 +797,7 @@ public class AlertsCreator {
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r14, r1, r8)
             android.text.SpannableStringBuilder r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1)
             r11.setMessage(r1)
-            r1 = 2131624588(0x7f0e028c, float:1.887636E38)
+            r1 = 2131624589(0x7f0e028d, float:1.8876362E38)
             java.lang.String r8 = "BlockContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r1)
             r8 = 2
@@ -815,7 +827,7 @@ public class AlertsCreator {
             java.lang.String r8 = ""
             if (r13 != 0) goto L_0x00ce
             r12 = r14[r13]
-            r5 = 2131625252(0x7f0e0524, float:1.8877707E38)
+            r5 = 2131625254(0x7f0e0526, float:1.887771E38)
             r16 = r1
             java.lang.String r1 = "DeleteReportSpam"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)
@@ -825,7 +837,7 @@ public class AlertsCreator {
         L_0x00ce:
             r16 = r1
             r1 = r14[r13]
-            r12 = 2131625261(0x7f0e052d, float:1.8877725E38)
+            r12 = 2131625263(0x7f0e052f, float:1.887773E38)
             java.lang.Object[] r5 = new java.lang.Object[r6]
             java.lang.String r2 = "DeleteThisChat"
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r2, r12, r5)
@@ -856,7 +868,7 @@ public class AlertsCreator {
             android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r5, r2)
             r15.addView(r1, r2)
             r1 = r14[r13]
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda54 r2 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda54
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda56 r2 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda56
             r2.<init>(r14)
             r1.setOnClickListener(r2)
         L_0x0119:
@@ -877,7 +889,7 @@ public class AlertsCreator {
         L_0x0132:
             if (r7 == 0) goto L_0x0171
             if (r23 == 0) goto L_0x0171
-            r2 = 2131627577(0x7f0e0e39, float:1.8882422E38)
+            r2 = 2131627581(0x7f0e0e3d, float:1.888243E38)
             java.lang.String r4 = "ReportUnrelatedGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r11.setTitle(r2)
@@ -886,7 +898,7 @@ public class AlertsCreator {
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelLocation
             if (r2 == 0) goto L_0x0164
             org.telegram.tgnet.TLRPC$TL_channelLocation r1 = (org.telegram.tgnet.TLRPC$TL_channelLocation) r1
-            r2 = 2131627578(0x7f0e0e3a, float:1.8882424E38)
+            r2 = 2131627582(0x7f0e0e3e, float:1.8882433E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             java.lang.String r1 = r1.address
@@ -897,13 +909,13 @@ public class AlertsCreator {
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0164:
-            r1 = 2131627579(0x7f0e0e3b, float:1.8882426E38)
+            r1 = 2131627583(0x7f0e0e3f, float:1.8882435E38)
             java.lang.String r2 = "ReportUnrelatedGroupTextNoAddress"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0171:
-            r1 = 2131627570(0x7f0e0e32, float:1.8882408E38)
+            r1 = 2131627574(0x7f0e0e36, float:1.8882416E38)
             java.lang.String r2 = "ReportSpamTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setTitle(r1)
@@ -911,18 +923,18 @@ public class AlertsCreator {
             if (r1 == 0) goto L_0x0194
             boolean r1 = r7.megagroup
             if (r1 != 0) goto L_0x0194
-            r1 = 2131627566(0x7f0e0e2e, float:1.88824E38)
+            r1 = 2131627570(0x7f0e0e32, float:1.8882408E38)
             java.lang.String r2 = "ReportSpamAlertChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0194:
-            r1 = 2131627567(0x7f0e0e2f, float:1.8882402E38)
+            r1 = 2131627571(0x7f0e0e33, float:1.888241E38)
             java.lang.String r2 = "ReportSpamAlertGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
         L_0x01a0:
-            r1 = 2131627548(0x7f0e0e1c, float:1.8882364E38)
+            r1 = 2131627552(0x7f0e0e20, float:1.8882372E38)
             java.lang.String r2 = "ReportChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r12 = r1
@@ -938,7 +950,7 @@ public class AlertsCreator {
             r10 = r25
             r1.<init>(r2, r3, r4, r5, r7, r8, r9, r10)
             r11.setPositiveButton(r12, r13)
-            r1 = 2131624695(0x7f0e02f7, float:1.8876577E38)
+            r1 = 2131624697(0x7f0e02f9, float:1.8876581E38)
             java.lang.String r2 = "Cancel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r2 = 0
@@ -959,13 +971,13 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showBlockReportSpamAlert$6(CheckBoxCell[] checkBoxCellArr, View view) {
+    public static /* synthetic */ void lambda$showBlockReportSpamAlert$7(CheckBoxCell[] checkBoxCellArr, View view) {
         Integer num = (Integer) view.getTag();
         checkBoxCellArr[num.intValue()].setChecked(!checkBoxCellArr[num.intValue()].isChecked(), true);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showBlockReportSpamAlert$7(TLRPC$User tLRPC$User, AccountInstance accountInstance, CheckBoxCell[] checkBoxCellArr, long j, TLRPC$Chat tLRPC$Chat, TLRPC$EncryptedChat tLRPC$EncryptedChat, boolean z, MessagesStorage.IntCallback intCallback, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$showBlockReportSpamAlert$8(TLRPC$User tLRPC$User, AccountInstance accountInstance, CheckBoxCell[] checkBoxCellArr, long j, TLRPC$Chat tLRPC$Chat, TLRPC$EncryptedChat tLRPC$EncryptedChat, boolean z, MessagesStorage.IntCallback intCallback, DialogInterface dialogInterface, int i) {
         TLRPC$User tLRPC$User2 = tLRPC$User;
         long j2 = j;
         MessagesStorage.IntCallback intCallback2 = intCallback;
@@ -1055,7 +1067,7 @@ public class AlertsCreator {
                     iArr = iArr2;
                     drawable = drawable2;
                     strArr = strArr2;
-                    textView.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda38(j, i2, isGlobalNotificationsEnabled, intCallback2, i, baseFragment, arrayList, intCallback, builder));
+                    textView.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda41(j, i2, isGlobalNotificationsEnabled, intCallback2, i, baseFragment, arrayList, intCallback, builder));
                 }
                 i6 = i3 + 1;
                 linearLayout2 = linearLayout;
@@ -1082,7 +1094,7 @@ public class AlertsCreator {
     /* JADX WARNING: Removed duplicated region for block: B:68:0x01af  */
     /* JADX WARNING: Removed duplicated region for block: B:71:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static /* synthetic */ void lambda$showCustomNotificationsDialog$8(long r18, int r20, boolean r21, org.telegram.messenger.MessagesStorage.IntCallback r22, int r23, org.telegram.ui.ActionBar.BaseFragment r24, java.util.ArrayList r25, org.telegram.messenger.MessagesStorage.IntCallback r26, org.telegram.ui.ActionBar.AlertDialog.Builder r27, android.view.View r28) {
+    public static /* synthetic */ void lambda$showCustomNotificationsDialog$9(long r18, int r20, boolean r21, org.telegram.messenger.MessagesStorage.IntCallback r22, int r23, org.telegram.ui.ActionBar.BaseFragment r24, java.util.ArrayList r25, org.telegram.messenger.MessagesStorage.IntCallback r26, org.telegram.ui.ActionBar.AlertDialog.Builder r27, android.view.View r28) {
         /*
             r0 = r18
             r2 = r22
@@ -1294,7 +1306,7 @@ public class AlertsCreator {
         L_0x01b6:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$showCustomNotificationsDialog$8(long, int, boolean, org.telegram.messenger.MessagesStorage$IntCallback, int, org.telegram.ui.ActionBar.BaseFragment, java.util.ArrayList, org.telegram.messenger.MessagesStorage$IntCallback, org.telegram.ui.ActionBar.AlertDialog$Builder, android.view.View):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$showCustomNotificationsDialog$9(long, int, boolean, org.telegram.messenger.MessagesStorage$IntCallback, int, org.telegram.ui.ActionBar.BaseFragment, java.util.ArrayList, org.telegram.messenger.MessagesStorage$IntCallback, org.telegram.ui.ActionBar.AlertDialog$Builder, android.view.View):void");
     }
 
     public static AlertDialog showSecretLocationAlert(Context context, int i, Runnable runnable, boolean z, Theme.ResourcesProvider resourcesProvider) {
@@ -1327,7 +1339,7 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue((String) arrayList.get(i3), SharedConfig.mapPreviewType == ((Integer) arrayList2.get(i3)).intValue());
             linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda41(arrayList2, runnable, builder));
+            radioColorCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda44(arrayList2, runnable, builder));
         }
         if (!z) {
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -1340,7 +1352,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showSecretLocationAlert$9(ArrayList arrayList, Runnable runnable, AlertDialog.Builder builder, View view) {
+    public static /* synthetic */ void lambda$showSecretLocationAlert$10(ArrayList arrayList, Runnable runnable, AlertDialog.Builder builder, View view) {
         SharedConfig.setSecretMapPreviewType(((Integer) arrayList.get(((Integer) view.getTag()).intValue())).intValue());
         if (runnable != null) {
             runnable.run();
@@ -1438,11 +1450,11 @@ public class AlertsCreator {
             android.app.Activity r1 = r12.getParentActivity()
             r2 = r17
             r10.<init>(r1, r2)
-            r1 = 2131626804(0x7f0e0b34, float:1.8880855E38)
+            r1 = 2131626808(0x7f0e0b38, float:1.8880863E38)
             java.lang.String r2 = "OpenUrlTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r10.setTitle(r1)
-            r1 = 2131626801(0x7f0e0b31, float:1.8880848E38)
+            r1 = 2131626805(0x7f0e0b35, float:1.8880857E38)
             java.lang.String r2 = "OpenUrlAlert2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r2 = "%"
@@ -1462,7 +1474,7 @@ public class AlertsCreator {
         L_0x009f:
             r10.setMessage(r11)
             r10.setMessageTextViewClickable(r9)
-            r0 = 2131626786(0x7f0e0b22, float:1.8880818E38)
+            r0 = 2131626790(0x7f0e0b26, float:1.8880826E38)
             java.lang.String r1 = "Open"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda24 r9 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda24
@@ -1472,7 +1484,7 @@ public class AlertsCreator {
             r6 = r15
             r1.<init>(r2, r3, r4, r6)
             r10.setPositiveButton(r0, r9)
-            r0 = 2131624695(0x7f0e02f7, float:1.8876577E38)
+            r0 = 2131624697(0x7f0e02f9, float:1.8876581E38)
             java.lang.String r1 = "Cancel"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setNegativeButton(r0, r8)
@@ -1496,7 +1508,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showOpenUrlAlert$10(BaseFragment baseFragment, String str, long j, boolean z, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$showOpenUrlAlert$11(BaseFragment baseFragment, String str, long j, boolean z, DialogInterface dialogInterface, int i) {
         Browser.openUrl((Context) baseFragment.getParentActivity(), str, j == 0, z);
     }
 
@@ -1564,7 +1576,7 @@ public class AlertsCreator {
             AlertDialog alertDialog = new AlertDialog(baseFragment.getParentActivity(), 3);
             alertDialog.setCanCacnel(false);
             alertDialog.show();
-            ConnectionsManager.getInstance(currentAccount).sendRequest(new TLRPC$TL_help_getSupport(), new AlertsCreator$$ExternalSyntheticLambda78(mainSettings, alertDialog, currentAccount, baseFragment));
+            ConnectionsManager.getInstance(currentAccount).sendRequest(new TLRPC$TL_help_getSupport(), new AlertsCreator$$ExternalSyntheticLambda81(mainSettings, alertDialog, currentAccount, baseFragment));
             return;
         }
         MessagesController.getInstance(currentAccount).putUser(tLRPC$User, true);
@@ -1574,16 +1586,16 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$performAskAQuestion$14(SharedPreferences sharedPreferences, AlertDialog alertDialog, int i, BaseFragment baseFragment, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$performAskAQuestion$15(SharedPreferences sharedPreferences, AlertDialog alertDialog, int i, BaseFragment baseFragment, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
-            AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda70(sharedPreferences, (TLRPC$TL_help_support) tLObject, alertDialog, i, baseFragment));
+            AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda73(sharedPreferences, (TLRPC$TL_help_support) tLObject, alertDialog, i, baseFragment));
             return;
         }
-        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda71(alertDialog));
+        AndroidUtilities.runOnUIThread(new AlertsCreator$$ExternalSyntheticLambda74(alertDialog));
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$performAskAQuestion$12(SharedPreferences sharedPreferences, TLRPC$TL_help_support tLRPC$TL_help_support, AlertDialog alertDialog, int i, BaseFragment baseFragment) {
+    public static /* synthetic */ void lambda$performAskAQuestion$13(SharedPreferences sharedPreferences, TLRPC$TL_help_support tLRPC$TL_help_support, AlertDialog alertDialog, int i, BaseFragment baseFragment) {
         SharedPreferences.Editor edit = sharedPreferences.edit();
         edit.putLong("support_id2", tLRPC$TL_help_support.user.id);
         SerializedData serializedData = new SerializedData();
@@ -1606,7 +1618,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$performAskAQuestion$13(AlertDialog alertDialog) {
+    public static /* synthetic */ void lambda$performAskAQuestion$14(AlertDialog alertDialog) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -1679,7 +1691,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createImportDialogAlert$15(Runnable runnable, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$createImportDialogAlert$16(Runnable runnable, DialogInterface dialogInterface, int i) {
         if (runnable != null) {
             runnable.run();
         }
@@ -1825,14 +1837,14 @@ public class AlertsCreator {
             if (r10 == 0) goto L_0x00f9
             r27 = r1
             r26 = r10
-            r10 = 2131624992(0x7f0e0420, float:1.887718E38)
+            r10 = 2131624994(0x7f0e0422, float:1.8877183E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r13.setText(r1)
             goto L_0x0175
         L_0x00f9:
             r27 = r1
             r26 = r10
-            r1 = 2131624991(0x7f0e041f, float:1.8877177E38)
+            r1 = 2131624993(0x7f0e0421, float:1.8877181E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r13.setText(r10)
             goto L_0x0175
@@ -1845,18 +1857,18 @@ public class AlertsCreator {
             if (r1 == 0) goto L_0x0133
             boolean r1 = r8.megagroup
             if (r1 == 0) goto L_0x0126
-            r1 = 2131625242(0x7f0e051a, float:1.8877686E38)
+            r1 = 2131625244(0x7f0e051c, float:1.887769E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r1)
             r13.setText(r1)
             goto L_0x0175
         L_0x0126:
-            r1 = 2131624769(0x7f0e0341, float:1.8876727E38)
+            r1 = 2131624771(0x7f0e0343, float:1.8876731E38)
             java.lang.String r10 = "ChannelDeleteMenu"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r1)
             r13.setText(r1)
             goto L_0x0175
         L_0x0133:
-            r1 = 2131625242(0x7f0e051a, float:1.8877686E38)
+            r1 = 2131625244(0x7f0e051c, float:1.887769E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r1)
             r13.setText(r1)
             goto L_0x0175
@@ -1866,22 +1878,22 @@ public class AlertsCreator {
             if (r1 == 0) goto L_0x0160
             boolean r1 = r8.megagroup
             if (r1 == 0) goto L_0x0155
-            r1 = 2131626142(0x7f0e089e, float:1.8879512E38)
+            r1 = 2131626146(0x7f0e08a2, float:1.887952E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r6, r1)
             r13.setText(r10)
             goto L_0x0175
         L_0x0155:
-            r10 = 2131626140(0x7f0e089c, float:1.8879508E38)
+            r10 = 2131626144(0x7f0e08a0, float:1.8879516E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r14, r10)
             r13.setText(r1)
             goto L_0x0175
         L_0x0160:
-            r1 = 2131626142(0x7f0e089e, float:1.8879512E38)
+            r1 = 2131626146(0x7f0e08a2, float:1.887952E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r6, r1)
             r13.setText(r10)
             goto L_0x0175
         L_0x016b:
-            r1 = 2131625221(0x7f0e0505, float:1.8877644E38)
+            r1 = 2131625223(0x7f0e0507, float:1.8877648E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r5, r1)
             r13.setText(r10)
         L_0x0175:
@@ -2011,14 +2023,14 @@ public class AlertsCreator {
             boolean r0 = r8.megagroup
             if (r0 != 0) goto L_0x024d
             r0 = r25[r5]
-            r14 = 2131625218(0x7f0e0502, float:1.8877638E38)
+            r14 = 2131625220(0x7f0e0504, float:1.8877642E38)
             java.lang.String r11 = "DeleteChannelForAll"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r14)
             r0.setText(r11, r10, r5, r5)
             goto L_0x025b
         L_0x024d:
             r0 = r25[r5]
-            r11 = 2131625235(0x7f0e0513, float:1.8877672E38)
+            r11 = 2131625237(0x7f0e0515, float:1.8877676E38)
             java.lang.String r14 = "DeleteGroupForAll"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r14, r11)
             r0.setText(r11, r10, r5, r5)
@@ -2034,14 +2046,14 @@ public class AlertsCreator {
             r11[r5] = r17
             java.lang.String r14 = "ClearHistoryOptionAlso"
             r27 = r1
-            r1 = 2131624995(0x7f0e0423, float:1.8877185E38)
+            r1 = 2131624997(0x7f0e0425, float:1.887719E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r14, r1, r11)
             r0.setText(r1, r10, r5, r5)
             goto L_0x0293
         L_0x027a:
             r27 = r1
             r0 = r25[r5]
-            r1 = 2131625244(0x7f0e051c, float:1.887769E38)
+            r1 = 2131625246(0x7f0e051e, float:1.8877695E38)
             r11 = 1
             java.lang.Object[] r14 = new java.lang.Object[r11]
             java.lang.String r11 = org.telegram.messenger.UserObject.getFirstName(r40)
@@ -2080,7 +2092,7 @@ public class AlertsCreator {
             r15.addView(r0, r1)
             r0 = 0
             r1 = r25[r0]
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda56 r0 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda56
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda61 r0 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda61
             r0.<init>(r13)
             r1.setOnClickListener(r0)
             goto L_0x02dd
@@ -2126,14 +2138,14 @@ public class AlertsCreator {
             if (r38 == 0) goto L_0x034d
             boolean r0 = org.telegram.messenger.UserObject.isUserSelf(r40)
             if (r0 == 0) goto L_0x033b
-            r0 = 2131625203(0x7f0e04f3, float:1.8877607E38)
+            r0 = 2131625205(0x7f0e04f5, float:1.8877611E38)
             java.lang.String r1 = "DeleteAllMessagesSavedAlert"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             r7.setText(r0)
             goto L_0x04f0
         L_0x033b:
-            r0 = 2131625202(0x7f0e04f2, float:1.8877605E38)
+            r0 = 2131625204(0x7f0e04f4, float:1.887761E38)
             java.lang.String r1 = "DeleteAllMessagesAlert"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
@@ -2143,7 +2155,7 @@ public class AlertsCreator {
             if (r36 == 0) goto L_0x03f0
             if (r4 == 0) goto L_0x03a3
             if (r41 == 0) goto L_0x036f
-            r0 = 2131624358(0x7f0e01a6, float:1.8875893E38)
+            r0 = 2131624359(0x7f0e01a7, float:1.8875895E38)
             r1 = 1
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r40)
@@ -2158,14 +2170,14 @@ public class AlertsCreator {
             long r0 = r4.id
             int r5 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
             if (r5 != 0) goto L_0x0387
-            r0 = 2131624356(0x7f0e01a4, float:1.887589E38)
+            r0 = 2131624357(0x7f0e01a5, float:1.8875891E38)
             java.lang.String r1 = "AreYouSureClearHistorySavedMessages"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             r7.setText(r0)
             goto L_0x04f0
         L_0x0387:
-            r0 = 2131624359(0x7f0e01a7, float:1.8875895E38)
+            r0 = 2131624360(0x7f0e01a8, float:1.8875898E38)
             r1 = 1
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r40)
@@ -2188,19 +2200,19 @@ public class AlertsCreator {
         L_0x03b6:
             boolean r0 = r8.megagroup
             if (r0 == 0) goto L_0x03c8
-            r0 = 2131624355(0x7f0e01a3, float:1.8875887E38)
+            r0 = 2131624356(0x7f0e01a4, float:1.887589E38)
             java.lang.String r1 = "AreYouSureClearHistoryGroup"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r7.setText(r0)
             goto L_0x04f0
         L_0x03c8:
-            r0 = 2131624353(0x7f0e01a1, float:1.8875883E38)
+            r0 = 2131624354(0x7f0e01a2, float:1.8875885E38)
             java.lang.String r1 = "AreYouSureClearHistoryChannel"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r7.setText(r0)
             goto L_0x04f0
         L_0x03d6:
-            r0 = 2131624357(0x7f0e01a5, float:1.8875891E38)
+            r0 = 2131624358(0x7f0e01a6, float:1.8875893E38)
             r1 = 1
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = r8.title
@@ -2217,19 +2229,19 @@ public class AlertsCreator {
             if (r0 == 0) goto L_0x0418
             boolean r0 = r8.megagroup
             if (r0 == 0) goto L_0x040a
-            r0 = 2131624360(0x7f0e01a8, float:1.8875898E38)
+            r0 = 2131624361(0x7f0e01a9, float:1.88759E38)
             java.lang.String r1 = "AreYouSureDeleteAndExit"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r7.setText(r0)
             goto L_0x04f0
         L_0x040a:
-            r0 = 2131624361(0x7f0e01a9, float:1.88759E38)
+            r0 = 2131624362(0x7f0e01aa, float:1.8875902E38)
             java.lang.String r1 = "AreYouSureDeleteAndExitChannel"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r7.setText(r0)
             goto L_0x04f0
         L_0x0418:
-            r0 = 2131624360(0x7f0e01a8, float:1.8875898E38)
+            r0 = 2131624361(0x7f0e01a9, float:1.88759E38)
             java.lang.String r1 = "AreYouSureDeleteAndExit"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r7.setText(r0)
@@ -2237,7 +2249,7 @@ public class AlertsCreator {
         L_0x0426:
             if (r4 == 0) goto L_0x049c
             if (r41 == 0) goto L_0x0446
-            r0 = 2131624379(0x7f0e01bb, float:1.8875936E38)
+            r0 = 2131624380(0x7f0e01bc, float:1.8875938E38)
             r1 = 1
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r40)
@@ -2252,7 +2264,7 @@ public class AlertsCreator {
             long r0 = r4.id
             int r5 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
             if (r5 != 0) goto L_0x045e
-            r0 = 2131624376(0x7f0e01b8, float:1.887593E38)
+            r0 = 2131624377(0x7f0e01b9, float:1.8875932E38)
             java.lang.String r1 = "AreYouSureDeleteThisChatSavedMessages"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
@@ -2263,7 +2275,7 @@ public class AlertsCreator {
             if (r0 == 0) goto L_0x0481
             boolean r0 = r4.support
             if (r0 != 0) goto L_0x0481
-            r0 = 2131624377(0x7f0e01b9, float:1.8875932E38)
+            r0 = 2131624378(0x7f0e01ba, float:1.8875934E38)
             r1 = 1
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r40)
@@ -2277,7 +2289,7 @@ public class AlertsCreator {
         L_0x0481:
             r1 = 1
             r3 = 0
-            r0 = 2131624380(0x7f0e01bc, float:1.8875938E38)
+            r0 = 2131624381(0x7f0e01bd, float:1.887594E38)
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r40)
             r1[r3] = r2
@@ -2291,7 +2303,7 @@ public class AlertsCreator {
             if (r0 == 0) goto L_0x04d8
             boolean r0 = r8.megagroup
             if (r0 == 0) goto L_0x04bf
-            r0 = 2131626300(0x7f0e093c, float:1.8879832E38)
+            r0 = 2131626304(0x7f0e0940, float:1.887984E38)
             r1 = 1
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = r8.title
@@ -2305,7 +2317,7 @@ public class AlertsCreator {
         L_0x04bf:
             r1 = 1
             r3 = 0
-            r0 = 2131624781(0x7f0e034d, float:1.8876751E38)
+            r0 = 2131624783(0x7f0e034f, float:1.8876755E38)
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = r8.title
             r1[r3] = r2
@@ -2317,7 +2329,7 @@ public class AlertsCreator {
         L_0x04d8:
             r1 = 1
             r3 = 0
-            r0 = 2131624362(0x7f0e01aa, float:1.8875902E38)
+            r0 = 2131624363(0x7f0e01ab, float:1.8875904E38)
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = r8.title
             r1[r3] = r2
@@ -2327,7 +2339,7 @@ public class AlertsCreator {
             r7.setText(r0)
         L_0x04f0:
             if (r38 == 0) goto L_0x04fe
-            r0 = 2131625198(0x7f0e04ee, float:1.8877597E38)
+            r0 = 2131625200(0x7f0e04f0, float:1.8877601E38)
             java.lang.String r1 = "DeleteAll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x04fb:
@@ -2336,11 +2348,11 @@ public class AlertsCreator {
         L_0x04fe:
             if (r36 == 0) goto L_0x0512
             if (r26 == 0) goto L_0x050a
-            r0 = 2131624992(0x7f0e0420, float:1.887718E38)
+            r0 = 2131624994(0x7f0e0422, float:1.8877183E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r12, r0)
             goto L_0x04fb
         L_0x050a:
-            r0 = 2131624991(0x7f0e041f, float:1.8877177E38)
+            r0 = 2131624993(0x7f0e0421, float:1.8877181E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r9, r0)
             goto L_0x04fb
         L_0x0512:
@@ -2349,17 +2361,17 @@ public class AlertsCreator {
             if (r0 == 0) goto L_0x0532
             boolean r0 = r8.megagroup
             if (r0 == 0) goto L_0x0528
-            r0 = 2131625241(0x7f0e0519, float:1.8877684E38)
+            r0 = 2131625243(0x7f0e051b, float:1.8877688E38)
             java.lang.String r1 = "DeleteMega"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x04fb
         L_0x0528:
-            r0 = 2131624765(0x7f0e033d, float:1.8876719E38)
+            r0 = 2131624767(0x7f0e033f, float:1.8876723E38)
             java.lang.String r1 = "ChannelDelete"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x04fb
         L_0x0532:
-            r0 = 2131625241(0x7f0e0519, float:1.8877684E38)
+            r0 = 2131625243(0x7f0e051b, float:1.8877688E38)
             java.lang.String r1 = "DeleteMega"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x04fb
@@ -2368,17 +2380,17 @@ public class AlertsCreator {
             if (r0 == 0) goto L_0x0558
             boolean r0 = r8.megagroup
             if (r0 == 0) goto L_0x054e
-            r0 = 2131626142(0x7f0e089e, float:1.8879512E38)
+            r0 = 2131626146(0x7f0e08a2, float:1.887952E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
             goto L_0x04fb
         L_0x054e:
             r1 = r27
-            r0 = 2131626140(0x7f0e089c, float:1.8879508E38)
+            r0 = 2131626144(0x7f0e08a0, float:1.8879516E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x04fb
         L_0x0558:
             r1 = r16
-            r0 = 2131625221(0x7f0e0505, float:1.8877644E38)
+            r0 = 2131625223(0x7f0e0507, float:1.8877648E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x04fb
         L_0x0562:
@@ -2400,7 +2412,7 @@ public class AlertsCreator {
             r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12)
             r0 = r19
             r0.setPositiveButton(r15, r14)
-            r1 = 2131624695(0x7f0e02f7, float:1.8876577E38)
+            r1 = 2131624697(0x7f0e02f9, float:1.8876581E38)
             java.lang.String r2 = "Cancel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r2 = 0
@@ -2422,13 +2434,13 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createClearOrDeleteDialogAlert$16(boolean[] zArr, View view) {
+    public static /* synthetic */ void lambda$createClearOrDeleteDialogAlert$17(boolean[] zArr, View view) {
         zArr[0] = !zArr[0];
         ((CheckBoxCell) view).setChecked(zArr[0], true);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createClearOrDeleteDialogAlert$18(boolean z, boolean z2, boolean z3, TLRPC$User tLRPC$User, BaseFragment baseFragment, boolean z4, boolean z5, TLRPC$Chat tLRPC$Chat, boolean z6, MessagesStorage.BooleanCallback booleanCallback, Theme.ResourcesProvider resourcesProvider, boolean[] zArr, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$createClearOrDeleteDialogAlert$19(boolean z, boolean z2, boolean z3, TLRPC$User tLRPC$User, BaseFragment baseFragment, boolean z4, boolean z5, TLRPC$Chat tLRPC$Chat, boolean z6, MessagesStorage.BooleanCallback booleanCallback, Theme.ResourcesProvider resourcesProvider, boolean[] zArr, DialogInterface dialogInterface, int i) {
         TLRPC$User tLRPC$User2 = tLRPC$User;
         MessagesStorage.BooleanCallback booleanCallback2 = booleanCallback;
         boolean z7 = false;
@@ -2437,7 +2449,7 @@ public class AlertsCreator {
                 createClearOrDeleteDialogAlert(baseFragment, z4, z5, true, tLRPC$Chat, tLRPC$User, false, z6, booleanCallback, resourcesProvider);
                 return;
             } else if (tLRPC$User2 != null && zArr[0]) {
-                MessagesStorage.getInstance(baseFragment.getCurrentAccount()).getMessagesCount(tLRPC$User2.id, new AlertsCreator$$ExternalSyntheticLambda77(baseFragment, z4, z5, tLRPC$Chat, tLRPC$User, z6, booleanCallback, resourcesProvider, zArr));
+                MessagesStorage.getInstance(baseFragment.getCurrentAccount()).getMessagesCount(tLRPC$User2.id, new AlertsCreator$$ExternalSyntheticLambda80(baseFragment, z4, z5, tLRPC$Chat, tLRPC$User, z6, booleanCallback, resourcesProvider, zArr));
                 return;
             }
         }
@@ -2450,7 +2462,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createClearOrDeleteDialogAlert$17(BaseFragment baseFragment, boolean z, boolean z2, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, boolean z3, MessagesStorage.BooleanCallback booleanCallback, Theme.ResourcesProvider resourcesProvider, boolean[] zArr, int i) {
+    public static /* synthetic */ void lambda$createClearOrDeleteDialogAlert$18(BaseFragment baseFragment, boolean z, boolean z2, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, boolean z3, MessagesStorage.BooleanCallback booleanCallback, Theme.ResourcesProvider resourcesProvider, boolean[] zArr, int i) {
         MessagesStorage.BooleanCallback booleanCallback2 = booleanCallback;
         if (i >= 50) {
             createClearOrDeleteDialogAlert(baseFragment, z, z2, true, tLRPC$Chat, tLRPC$User, false, z3, booleanCallback, resourcesProvider);
@@ -2518,7 +2530,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createClearDaysDialogAlert$19(boolean[] zArr, View view) {
+    public static /* synthetic */ void lambda$createClearDaysDialogAlert$20(boolean[] zArr, View view) {
         zArr[0] = !zArr[0];
         ((CheckBoxCell) view).setChecked(zArr[0], true);
     }
@@ -2581,7 +2593,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createCallDialogAlert$21(BaseFragment baseFragment, TLRPC$User tLRPC$User, boolean z, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$createCallDialogAlert$22(BaseFragment baseFragment, TLRPC$User tLRPC$User, boolean z, DialogInterface dialogInterface, int i) {
         TLRPC$UserFull userFull = baseFragment.getMessagesController().getUserFull(tLRPC$User.id);
         VoIPHelper.startCall(tLRPC$User, z, userFull != null && userFull.video_calls_available, baseFragment.getParentActivity(), userFull, baseFragment.getAccountInstance());
     }
@@ -2674,14 +2686,14 @@ public class AlertsCreator {
         editText.requestFocus();
         AndroidUtilities.showKeyboard(editText);
         AlertDialog create = builder.create();
-        editText.setOnEditorActionListener(new AlertsCreator$$ExternalSyntheticLambda67(j2, create, alertsCreator$$ExternalSyntheticLambda2));
+        editText.setOnEditorActionListener(new AlertsCreator$$ExternalSyntheticLambda70(j2, create, alertsCreator$$ExternalSyntheticLambda2));
         create.setBackgroundColor(Theme.getColor("voipgroup_dialogBackground"));
         create.show();
         create.setTextColor(Theme.getColor("voipgroup_actionBarItems"));
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createChangeBioAlert$23(long j, int i, EditText editText, DialogInterface dialogInterface, int i2) {
+    public static /* synthetic */ void lambda$createChangeBioAlert$24(long j, int i, EditText editText, DialogInterface dialogInterface, int i2) {
         long j2 = j;
         String str = "";
         if (j2 > 0) {
@@ -2704,7 +2716,7 @@ public class AlertsCreator {
             tLRPC$TL_account_updateProfile.about = trim;
             tLRPC$TL_account_updateProfile.flags = 4 | tLRPC$TL_account_updateProfile.flags;
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 2, Long.valueOf(j));
-            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_account_updateProfile, AlertsCreator$$ExternalSyntheticLambda84.INSTANCE, 2);
+            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_account_updateProfile, AlertsCreator$$ExternalSyntheticLambda87.INSTANCE, 2);
         } else {
             long j3 = -j2;
             TLRPC$ChatFull chatFull = MessagesController.getInstance(i).getChatFull(j3);
@@ -2732,7 +2744,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$createChangeBioAlert$25(long j, AlertDialog alertDialog, DialogInterface.OnClickListener onClickListener, TextView textView, int i, KeyEvent keyEvent) {
+    public static /* synthetic */ boolean lambda$createChangeBioAlert$26(long j, AlertDialog alertDialog, DialogInterface.OnClickListener onClickListener, TextView textView, int i, KeyEvent keyEvent) {
         if ((i != 6 && (j <= 0 || keyEvent.getKeyCode() != 66)) || !alertDialog.isShowing()) {
             return false;
         }
@@ -2825,16 +2837,16 @@ public class AlertsCreator {
         create.setBackgroundColor(Theme.getColor("voipgroup_dialogBackground"));
         create.show();
         create.setTextColor(Theme.getColor("voipgroup_actionBarItems"));
-        AlertsCreator$$ExternalSyntheticLambda68 alertsCreator$$ExternalSyntheticLambda68 = new AlertsCreator$$ExternalSyntheticLambda68(create, alertsCreator$$ExternalSyntheticLambda11);
+        AlertsCreator$$ExternalSyntheticLambda71 alertsCreator$$ExternalSyntheticLambda71 = new AlertsCreator$$ExternalSyntheticLambda71(create, alertsCreator$$ExternalSyntheticLambda11);
         if (editText != null) {
-            editText.setOnEditorActionListener(alertsCreator$$ExternalSyntheticLambda68);
+            editText.setOnEditorActionListener(alertsCreator$$ExternalSyntheticLambda71);
         } else {
-            editText2.setOnEditorActionListener(alertsCreator$$ExternalSyntheticLambda68);
+            editText2.setOnEditorActionListener(alertsCreator$$ExternalSyntheticLambda71);
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createChangeNameAlert$27(EditText editText, long j, int i, EditText editText2, DialogInterface dialogInterface, int i2) {
+    public static /* synthetic */ void lambda$createChangeNameAlert$28(EditText editText, long j, int i, EditText editText2, DialogInterface dialogInterface, int i2) {
         if (editText.getText() != null) {
             if (j > 0) {
                 TLRPC$User user = MessagesController.getInstance(i).getUser(Long.valueOf(j));
@@ -2863,7 +2875,7 @@ public class AlertsCreator {
                     UserConfig.getInstance(i).saveConfig(true);
                     NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
                     NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(MessagesController.UPDATE_MASK_NAME));
-                    ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_account_updateProfile, AlertsCreator$$ExternalSyntheticLambda83.INSTANCE);
+                    ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_account_updateProfile, AlertsCreator$$ExternalSyntheticLambda86.INSTANCE);
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 3, Long.valueOf(j));
                 } else {
                     dialogInterface.dismiss();
@@ -2889,13 +2901,13 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createChangeNameAlert$28(EditText editText, EditText editText2, DialogInterface dialogInterface) {
+    public static /* synthetic */ void lambda$createChangeNameAlert$29(EditText editText, EditText editText2, DialogInterface dialogInterface) {
         AndroidUtilities.hideKeyboard(editText);
         AndroidUtilities.hideKeyboard(editText2);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$createChangeNameAlert$29(AlertDialog alertDialog, DialogInterface.OnClickListener onClickListener, TextView textView, int i, KeyEvent keyEvent) {
+    public static /* synthetic */ boolean lambda$createChangeNameAlert$30(AlertDialog alertDialog, DialogInterface.OnClickListener onClickListener, TextView textView, int i, KeyEvent keyEvent) {
         if ((i != 6 && keyEvent.getKeyCode() != 66) || !alertDialog.isShowing()) {
             return false;
         }
@@ -2933,7 +2945,7 @@ public class AlertsCreator {
             textView2.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
             linearLayout.addView(textView2, LayoutHelper.createLinear(-1, 48, 0, 24, 15, 16, 24));
             builder.setCustomView(linearLayout);
-            textView2.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda45(builder.show()));
+            textView2.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda48(builder.show()));
         }
     }
 
@@ -2983,7 +2995,7 @@ public class AlertsCreator {
                         }
                         checkBoxCellArr[i4].setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
                         linearLayout.addView(checkBoxCellArr[i4], LayoutHelper.createLinear(-1, 48));
-                        checkBoxCellArr[i4].setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda60(zArr, i4));
+                        checkBoxCellArr[i4].setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda63(zArr, i4));
                     }
                     i4++;
                 }
@@ -3000,7 +3012,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createBlockDialogAlert$31(boolean[] zArr, int i, View view) {
+    public static /* synthetic */ void lambda$createBlockDialogAlert$32(boolean[] zArr, int i, View view) {
         zArr[i] = !zArr[i];
         ((CheckBoxCell) view).setChecked(zArr[i], true);
     }
@@ -3018,13 +3030,13 @@ public class AlertsCreator {
         NumberPicker numberPicker2 = new NumberPicker(context);
         NumberPicker numberPicker3 = new NumberPicker(context);
         linearLayout.addView(numberPicker2, LayoutHelper.createLinear(0, -2, 0.3f));
-        numberPicker2.setOnScrollListener(new AlertsCreator$$ExternalSyntheticLambda99(z2, numberPicker2, numberPicker, numberPicker3));
+        numberPicker2.setOnScrollListener(new AlertsCreator$$ExternalSyntheticLambda102(z2, numberPicker2, numberPicker, numberPicker3));
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(11);
         linearLayout.addView(numberPicker, LayoutHelper.createLinear(0, -2, 0.3f));
-        numberPicker.setFormatter(AlertsCreator$$ExternalSyntheticLambda89.INSTANCE);
-        numberPicker.setOnValueChangedListener(new AlertsCreator$$ExternalSyntheticLambda105(numberPicker2, numberPicker, numberPicker3));
-        numberPicker.setOnScrollListener(new AlertsCreator$$ExternalSyntheticLambda100(z2, numberPicker2, numberPicker, numberPicker3));
+        numberPicker.setFormatter(AlertsCreator$$ExternalSyntheticLambda92.INSTANCE);
+        numberPicker.setOnValueChangedListener(new AlertsCreator$$ExternalSyntheticLambda107(numberPicker2, numberPicker, numberPicker3));
+        numberPicker.setOnScrollListener(new AlertsCreator$$ExternalSyntheticLambda101(z2, numberPicker2, numberPicker, numberPicker3));
         Calendar instance = Calendar.getInstance();
         instance.setTimeInMillis(System.currentTimeMillis());
         int i8 = instance.get(1);
@@ -3032,8 +3044,8 @@ public class AlertsCreator {
         numberPicker3.setMaxValue(i8 + i2);
         numberPicker3.setValue(i8 + i3);
         linearLayout.addView(numberPicker3, LayoutHelper.createLinear(0, -2, 0.4f));
-        numberPicker3.setOnValueChangedListener(new AlertsCreator$$ExternalSyntheticLambda104(numberPicker2, numberPicker, numberPicker3));
-        numberPicker3.setOnScrollListener(new AlertsCreator$$ExternalSyntheticLambda98(z2, numberPicker2, numberPicker, numberPicker3));
+        numberPicker3.setOnValueChangedListener(new AlertsCreator$$ExternalSyntheticLambda108(numberPicker2, numberPicker, numberPicker3));
+        numberPicker3.setOnScrollListener(new AlertsCreator$$ExternalSyntheticLambda103(z2, numberPicker2, numberPicker, numberPicker3));
         updateDayPicker(numberPicker2, numberPicker, numberPicker3);
         if (z2) {
             checkPickerDate(numberPicker2, numberPicker, numberPicker3);
@@ -3052,14 +3064,14 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDatePickerDialog$33(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i) {
+    public static /* synthetic */ void lambda$createDatePickerDialog$34(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i) {
         if (z && i == 0) {
             checkPickerDate(numberPicker, numberPicker2, numberPicker3);
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ String lambda$createDatePickerDialog$34(int i) {
+    public static /* synthetic */ String lambda$createDatePickerDialog$35(int i) {
         Calendar instance = Calendar.getInstance();
         instance.set(5, 1);
         instance.set(2, i);
@@ -3067,21 +3079,21 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDatePickerDialog$36(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i) {
+    public static /* synthetic */ void lambda$createDatePickerDialog$37(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i) {
         if (z && i == 0) {
             checkPickerDate(numberPicker, numberPicker2, numberPicker3);
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDatePickerDialog$38(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i) {
+    public static /* synthetic */ void lambda$createDatePickerDialog$39(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i) {
         if (z && i == 0) {
             checkPickerDate(numberPicker, numberPicker2, numberPicker3);
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDatePickerDialog$39(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, DatePickerDelegate datePickerDelegate, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$createDatePickerDialog$40(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, DatePickerDelegate datePickerDelegate, DialogInterface dialogInterface, int i) {
         if (z) {
             checkPickerDate(numberPicker, numberPicker2, numberPicker3);
         }
@@ -3431,7 +3443,7 @@ public class AlertsCreator {
         textView.setTextSize(1, 20.0f);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 12.0f, 0.0f, 0.0f));
-        textView.setOnTouchListener(AlertsCreator$$ExternalSyntheticLambda64.INSTANCE);
+        textView.setOnTouchListener(AlertsCreator$$ExternalSyntheticLambda68.INSTANCE);
         if (!DialogObject.isUserDialog(j) || j == clientUserId || (user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(Long.valueOf(j))) == null || user.bot || (tLRPC$UserStatus = user.status) == null || tLRPC$UserStatus.expires <= 0) {
             ScheduleDatePickerDelegate scheduleDatePickerDelegate2 = scheduleDatePickerDelegate;
             r26 = r5;
@@ -3452,8 +3464,8 @@ public class AlertsCreator {
             actionBarMenuItem.setBackgroundDrawable(Theme.createSelectorDrawable(scheduleDatePickerColors2.iconSelectorColor, 1));
             frameLayout.addView(actionBarMenuItem, LayoutHelper.createFrame(40, 40.0f, 53, 0.0f, 8.0f, 5.0f, 0.0f));
             actionBarMenuItem.addSubItem(1, LocaleController.formatString("ScheduleWhenOnline", NUM, str));
-            actionBarMenuItem.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda42(actionBarMenuItem, scheduleDatePickerColors2));
-            actionBarMenuItem.setDelegate(new AlertsCreator$$ExternalSyntheticLambda86(scheduleDatePickerDelegate, builder));
+            actionBarMenuItem.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda45(actionBarMenuItem, scheduleDatePickerColors2));
+            actionBarMenuItem.setDelegate(new AlertsCreator$$ExternalSyntheticLambda89(scheduleDatePickerDelegate, builder));
             actionBarMenuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         }
         LinearLayout linearLayout = new LinearLayout(context2);
@@ -3475,27 +3487,27 @@ public class AlertsCreator {
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(365);
         numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setFormatter(new AlertsCreator$$ExternalSyntheticLambda87(currentTimeMillis, instance, i2));
+        numberPicker.setFormatter(new AlertsCreator$$ExternalSyntheticLambda90(currentTimeMillis, instance, i2));
         Calendar calendar2 = instance;
         AnonymousClass9 r35 = r3;
-        AlertsCreator$$ExternalSyntheticLambda102 alertsCreator$$ExternalSyntheticLambda102 = r0;
+        AlertsCreator$$ExternalSyntheticLambda105 alertsCreator$$ExternalSyntheticLambda105 = r0;
         AnonymousClass8 r44 = r8;
         AnonymousClass10 r19 = r13;
         AnonymousClass7 r132 = r9;
-        AlertsCreator$$ExternalSyntheticLambda102 alertsCreator$$ExternalSyntheticLambda1022 = new AlertsCreator$$ExternalSyntheticLambda102(r3, r13, clientUserId, j, numberPicker, r9, r44);
-        numberPicker.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda102);
+        AlertsCreator$$ExternalSyntheticLambda105 alertsCreator$$ExternalSyntheticLambda1052 = new AlertsCreator$$ExternalSyntheticLambda105(r3, r13, clientUserId, j, numberPicker, r9, r44);
+        numberPicker.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda105);
         r132.setMinValue(0);
         r132.setMaxValue(23);
         linearLayout.addView(r132, LayoutHelper.createLinear(0, 270, 0.2f));
-        r132.setFormatter(AlertsCreator$$ExternalSyntheticLambda90.INSTANCE);
-        r132.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda102);
+        r132.setFormatter(AlertsCreator$$ExternalSyntheticLambda95.INSTANCE);
+        r132.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda105);
         AnonymousClass8 r82 = r44;
         r82.setMinValue(0);
         r82.setMaxValue(59);
         r82.setValue(0);
-        r82.setFormatter(AlertsCreator$$ExternalSyntheticLambda95.INSTANCE);
+        r82.setFormatter(AlertsCreator$$ExternalSyntheticLambda100.INSTANCE);
         linearLayout.addView(r82, LayoutHelper.createLinear(0, 270, 0.3f));
-        r82.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda102);
+        r82.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda105);
         if (j2 <= 0 || j2 == NUM) {
             calendar = calendar2;
         } else {
@@ -3529,19 +3541,19 @@ public class AlertsCreator {
         AnonymousClass9 r10 = r6;
         NumberPicker numberPicker2 = numberPicker;
         ScheduleDatePickerColors scheduleDatePickerColors4 = scheduleDatePickerColors3;
-        AlertsCreator$$ExternalSyntheticLambda61 alertsCreator$$ExternalSyntheticLambda61 = r0;
-        AlertsCreator$$ExternalSyntheticLambda61 alertsCreator$$ExternalSyntheticLambda612 = new AlertsCreator$$ExternalSyntheticLambda61(zArr, clientUserId, j, numberPicker2, r132, r82, calendar, scheduleDatePickerDelegate, builder2);
-        r14.setOnClickListener(alertsCreator$$ExternalSyntheticLambda61);
+        AlertsCreator$$ExternalSyntheticLambda64 alertsCreator$$ExternalSyntheticLambda64 = r0;
+        AlertsCreator$$ExternalSyntheticLambda64 alertsCreator$$ExternalSyntheticLambda642 = new AlertsCreator$$ExternalSyntheticLambda64(zArr, clientUserId, j, numberPicker2, r132, r82, calendar, scheduleDatePickerDelegate, builder2);
+        r14.setOnClickListener(alertsCreator$$ExternalSyntheticLambda64);
         BottomSheet.Builder builder3 = builder2;
         builder3.setCustomView(r10);
         BottomSheet show = builder3.show();
-        show.setOnDismissListener(new AlertsCreator$$ExternalSyntheticLambda36(runnable, zArr));
+        show.setOnDismissListener(new AlertsCreator$$ExternalSyntheticLambda39(runnable, zArr));
         show.setBackgroundColor(scheduleDatePickerColors.backgroundColor);
         return builder3;
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createScheduleDatePickerDialog$41(ActionBarMenuItem actionBarMenuItem, ScheduleDatePickerColors scheduleDatePickerColors, View view) {
+    public static /* synthetic */ void lambda$createScheduleDatePickerDialog$42(ActionBarMenuItem actionBarMenuItem, ScheduleDatePickerColors scheduleDatePickerColors, View view) {
         actionBarMenuItem.toggleSubMenu();
         actionBarMenuItem.setPopupItemsColor(scheduleDatePickerColors.subMenuTextColor, false);
         actionBarMenuItem.setupPopupRadialSelectors(scheduleDatePickerColors.subMenuSelectorColor);
@@ -3549,7 +3561,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createScheduleDatePickerDialog$42(ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, int i) {
+    public static /* synthetic */ void lambda$createScheduleDatePickerDialog$43(ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, int i) {
         if (i == 1) {
             scheduleDatePickerDelegate.didSelectDate(true, NUM);
             builder.getDismissRunnable().run();
@@ -3557,7 +3569,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ String lambda$createScheduleDatePickerDialog$43(long j, Calendar calendar, int i, int i2) {
+    public static /* synthetic */ String lambda$createScheduleDatePickerDialog$44(long j, Calendar calendar, int i, int i2) {
         if (i2 == 0) {
             return LocaleController.getString("MessageScheduleToday", NUM);
         }
@@ -3570,7 +3582,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createScheduleDatePickerDialog$44(LinearLayout linearLayout, TextView textView, long j, long j2, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i, int i2) {
+    public static /* synthetic */ void lambda$createScheduleDatePickerDialog$45(LinearLayout linearLayout, TextView textView, long j, long j2, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i, int i2) {
         try {
             linearLayout.performHapticFeedback(3, 2);
         } catch (Exception unused) {
@@ -3579,7 +3591,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createScheduleDatePickerDialog$47(boolean[] zArr, long j, long j2, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, View view) {
+    public static /* synthetic */ void lambda$createScheduleDatePickerDialog$48(boolean[] zArr, long j, long j2, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, View view) {
         Calendar calendar2 = calendar;
         zArr[0] = false;
         boolean checkScheduleDate = checkScheduleDate((TextView) null, (TextView) null, j == j2 ? 1 : 0, numberPicker, numberPicker2, numberPicker3);
@@ -3594,7 +3606,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createScheduleDatePickerDialog$48(Runnable runnable, boolean[] zArr, DialogInterface dialogInterface) {
+    public static /* synthetic */ void lambda$createScheduleDatePickerDialog$49(Runnable runnable, boolean[] zArr, DialogInterface dialogInterface) {
         if (runnable != null && zArr[0]) {
             runnable.run();
         }
@@ -3664,7 +3676,7 @@ public class AlertsCreator {
         textView.setTextSize(1, 20.0f);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 12.0f, 0.0f, 0.0f));
-        textView.setOnTouchListener(AlertsCreator$$ExternalSyntheticLambda66.INSTANCE);
+        textView.setOnTouchListener(AlertsCreator$$ExternalSyntheticLambda69.INSTANCE);
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(0);
         linearLayout.setWeightSum(1.0f);
@@ -3682,20 +3694,20 @@ public class AlertsCreator {
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(365);
         numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setFormatter(new AlertsCreator$$ExternalSyntheticLambda88(currentTimeMillis, instance, i));
-        AlertsCreator$$ExternalSyntheticLambda103 alertsCreator$$ExternalSyntheticLambda103 = new AlertsCreator$$ExternalSyntheticLambda103(r14, numberPicker, r11, r12);
-        numberPicker.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda103);
+        numberPicker.setFormatter(new AlertsCreator$$ExternalSyntheticLambda91(currentTimeMillis, instance, i));
+        AlertsCreator$$ExternalSyntheticLambda106 alertsCreator$$ExternalSyntheticLambda106 = new AlertsCreator$$ExternalSyntheticLambda106(r14, numberPicker, r11, r12);
+        numberPicker.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda106);
         r11.setMinValue(0);
         r11.setMaxValue(23);
         linearLayout.addView(r11, LayoutHelper.createLinear(0, 270, 0.2f));
-        r11.setFormatter(AlertsCreator$$ExternalSyntheticLambda93.INSTANCE);
-        r11.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda103);
+        r11.setFormatter(AlertsCreator$$ExternalSyntheticLambda97.INSTANCE);
+        r11.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda106);
         r12.setMinValue(0);
         r12.setMaxValue(59);
         r12.setValue(0);
-        r12.setFormatter(AlertsCreator$$ExternalSyntheticLambda97.INSTANCE);
+        r12.setFormatter(AlertsCreator$$ExternalSyntheticLambda93.INSTANCE);
         linearLayout.addView(r12, LayoutHelper.createLinear(0, 270, 0.3f));
-        r12.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda103);
+        r12.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda106);
         if (j <= 0 || j == NUM) {
             r22 = r14;
         } else {
@@ -3725,14 +3737,14 @@ public class AlertsCreator {
         r0.setText(LocaleController.getString("SetTimeLimit", NUM));
         AnonymousClass13 r142 = r22;
         r142.addView(r0, LayoutHelper.createLinear(-1, 48, 83, 16, 15, 16, 16));
-        r0.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda46(numberPicker, r11, r12, instance, scheduleDatePickerDelegate, builder));
+        r0.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda49(numberPicker, r11, r12, instance, scheduleDatePickerDelegate, builder));
         builder.setCustomView(r142);
         builder.show().setBackgroundColor(scheduleDatePickerColors.backgroundColor);
         return builder;
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ String lambda$createDatePickerDialog$50(long j, Calendar calendar, int i, int i2) {
+    public static /* synthetic */ String lambda$createDatePickerDialog$51(long j, Calendar calendar, int i, int i2) {
         if (i2 == 0) {
             return LocaleController.getString("MessageScheduleToday", NUM);
         }
@@ -3745,7 +3757,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDatePickerDialog$51(LinearLayout linearLayout, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i, int i2) {
+    public static /* synthetic */ void lambda$createDatePickerDialog$52(LinearLayout linearLayout, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i, int i2) {
         try {
             linearLayout.performHapticFeedback(3, 2);
         } catch (Exception unused) {
@@ -3754,7 +3766,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDatePickerDialog$54(NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, View view) {
+    public static /* synthetic */ void lambda$createDatePickerDialog$55(NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, View view) {
         boolean checkScheduleDate = checkScheduleDate((TextView) null, (TextView) null, 0, numberPicker, numberPicker2, numberPicker3);
         calendar.setTimeInMillis(System.currentTimeMillis() + (((long) numberPicker.getValue()) * 24 * 3600 * 1000));
         calendar.set(11, numberPicker2.getValue());
@@ -3880,7 +3892,7 @@ public class AlertsCreator {
         textView.setTextSize(1, 20.0f);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 12.0f, 0.0f, 0.0f));
-        textView.setOnTouchListener(AlertsCreator$$ExternalSyntheticLambda65.INSTANCE);
+        textView.setOnTouchListener(AlertsCreator$$ExternalSyntheticLambda67.INSTANCE);
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(0);
         linearLayout.setWeightSum(1.0f);
@@ -3895,18 +3907,18 @@ public class AlertsCreator {
         numberPicker.setMinValue(1);
         numberPicker.setMaxValue(31);
         numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setFormatter(AlertsCreator$$ExternalSyntheticLambda92.INSTANCE);
-        AlertsCreator$$ExternalSyntheticLambda101 alertsCreator$$ExternalSyntheticLambda101 = r0;
+        numberPicker.setFormatter(AlertsCreator$$ExternalSyntheticLambda99.INSTANCE);
+        AlertsCreator$$ExternalSyntheticLambda104 alertsCreator$$ExternalSyntheticLambda104 = r0;
         AnonymousClass16 r24 = r4;
         LinearLayout linearLayout2 = linearLayout;
-        AlertsCreator$$ExternalSyntheticLambda101 alertsCreator$$ExternalSyntheticLambda1012 = new AlertsCreator$$ExternalSyntheticLambda101(r15, j, numberPicker, numberPicker2, numberPicker3);
-        numberPicker.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda1012);
+        AlertsCreator$$ExternalSyntheticLambda104 alertsCreator$$ExternalSyntheticLambda1042 = new AlertsCreator$$ExternalSyntheticLambda104(r15, j, numberPicker, numberPicker2, numberPicker3);
+        numberPicker.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda1042);
         numberPicker2.setMinValue(0);
         numberPicker2.setMaxValue(11);
         numberPicker2.setWrapSelectorWheel(false);
         linearLayout2.addView(numberPicker2, LayoutHelper.createLinear(0, 270, 0.5f));
-        numberPicker2.setFormatter(AlertsCreator$$ExternalSyntheticLambda91.INSTANCE);
-        numberPicker2.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda1012);
+        numberPicker2.setFormatter(AlertsCreator$$ExternalSyntheticLambda96.INSTANCE);
+        numberPicker2.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda1042);
         Calendar instance = Calendar.getInstance();
         instance.setTimeInMillis(j2);
         int i = instance.get(1);
@@ -3915,9 +3927,9 @@ public class AlertsCreator {
         numberPicker3.setMinValue(i);
         numberPicker3.setMaxValue(i2);
         numberPicker3.setWrapSelectorWheel(false);
-        numberPicker3.setFormatter(AlertsCreator$$ExternalSyntheticLambda96.INSTANCE);
+        numberPicker3.setFormatter(AlertsCreator$$ExternalSyntheticLambda98.INSTANCE);
         linearLayout2.addView(numberPicker3, LayoutHelper.createLinear(0, 270, 0.25f));
-        numberPicker3.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda1012);
+        numberPicker3.setOnValueChangedListener(alertsCreator$$ExternalSyntheticLambda1042);
         numberPicker.setValue(31);
         numberPicker2.setValue(12);
         numberPicker3.setValue(i2);
@@ -3931,18 +3943,18 @@ public class AlertsCreator {
         r5.setText(LocaleController.getString("JumpToDate", NUM));
         r5.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton", resourcesProvider2), Theme.getColor("featuredStickers_addButtonPressed", resourcesProvider2)));
         r15.addView(r5, LayoutHelper.createLinear(-1, 48, 83, 16, 15, 16, 16));
-        r5.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda39(j, numberPicker, numberPicker2, numberPicker3, instance, intCallback, builder));
+        r5.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda42(j, numberPicker, numberPicker2, numberPicker3, instance, intCallback, builder));
         builder.setCustomView(r15);
         return builder;
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ String lambda$createCalendarPickerDialog$56(int i) {
+    public static /* synthetic */ String lambda$createCalendarPickerDialog$57(int i) {
         return "" + i;
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createCalendarPickerDialog$57(LinearLayout linearLayout, long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i, int i2) {
+    public static /* synthetic */ void lambda$createCalendarPickerDialog$58(LinearLayout linearLayout, long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i, int i2) {
         try {
             linearLayout.performHapticFeedback(3, 2);
         } catch (Exception unused) {
@@ -3951,7 +3963,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ String lambda$createCalendarPickerDialog$58(int i) {
+    public static /* synthetic */ String lambda$createCalendarPickerDialog$59(int i) {
         switch (i) {
             case 0:
                 return LocaleController.getString("January", NUM);
@@ -3981,7 +3993,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createCalendarPickerDialog$60(long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, MessagesStorage.IntCallback intCallback, BottomSheet.Builder builder, View view) {
+    public static /* synthetic */ void lambda$createCalendarPickerDialog$61(long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, MessagesStorage.IntCallback intCallback, BottomSheet.Builder builder, View view) {
         checkCalendarDate(j, numberPicker, numberPicker2, numberPicker3);
         calendar.set(1, numberPicker3.getValue());
         calendar.set(2, numberPicker2.getValue());
@@ -4004,7 +4016,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createMuteAlert$61(long j, BaseFragment baseFragment, Theme.ResourcesProvider resourcesProvider, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$createMuteAlert$62(long j, BaseFragment baseFragment, Theme.ResourcesProvider resourcesProvider, DialogInterface dialogInterface, int i) {
         int i2 = 2;
         if (i == 0) {
             i2 = 0;
@@ -4037,20 +4049,23 @@ public class AlertsCreator {
         } else if (i == 5) {
             tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonOther();
         }
-        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_report, AlertsCreator$$ExternalSyntheticLambda82.INSTANCE);
+        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_report, AlertsCreator$$ExternalSyntheticLambda84.INSTANCE);
     }
 
-    public static void createReportAlert(Context context, long j, int i, BaseFragment baseFragment) {
-        createReportAlert(context, j, i, baseFragment, (Theme.ResourcesProvider) null);
+    public static void createReportAlert(Context context, long j, int i, BaseFragment baseFragment, Runnable runnable) {
+        createReportAlert(context, j, i, baseFragment, (Theme.ResourcesProvider) null, runnable);
     }
 
-    public static void createReportAlert(Context context, long j, int i, BaseFragment baseFragment, Theme.ResourcesProvider resourcesProvider) {
+    public static void createReportAlert(Context context, long j, int i, BaseFragment baseFragment, Theme.ResourcesProvider resourcesProvider, Runnable runnable) {
         CharSequence[] charSequenceArr;
         int[] iArr;
         Context context2 = context;
         BaseFragment baseFragment2 = baseFragment;
+        Runnable runnable2 = runnable;
         if (context2 != null && baseFragment2 != null) {
             BottomSheet.Builder builder = new BottomSheet.Builder(context2, true, resourcesProvider);
+            builder.setDimBehind(runnable2 == null);
+            builder.setOnPreDismissListener(new AlertsCreator$$ExternalSyntheticLambda36(runnable2));
             builder.setTitle(LocaleController.getString("ReportChat", NUM), true);
             if (i != 0) {
                 iArr = new int[]{NUM, NUM, NUM, NUM, NUM};
@@ -4061,6 +4076,13 @@ public class AlertsCreator {
             }
             builder.setItems(charSequenceArr, iArr, new AlertsCreator$$ExternalSyntheticLambda1(i, baseFragment, context, j, resourcesProvider));
             baseFragment2.showDialog(builder.create());
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$createReportAlert$64(Runnable runnable, DialogInterface dialogInterface) {
+        if (runnable != null) {
+            runnable.run();
         }
     }
 
@@ -4082,7 +4104,7 @@ public class AlertsCreator {
      */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static /* synthetic */ void lambda$createReportAlert$64(int r10, org.telegram.ui.ActionBar.BaseFragment r11, android.content.Context r12, long r13, org.telegram.ui.ActionBar.Theme.ResourcesProvider r15, android.content.DialogInterface r16, int r17) {
+    public static /* synthetic */ void lambda$createReportAlert$66(int r10, org.telegram.ui.ActionBar.BaseFragment r11, android.content.Context r12, long r13, org.telegram.ui.ActionBar.Theme.ResourcesProvider r15, android.content.DialogInterface r16, int r17) {
         /*
             r7 = r11
             r0 = r17
@@ -4207,7 +4229,7 @@ public class AlertsCreator {
         L_0x00cd:
             int r0 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda81 r1 = org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda81.INSTANCE
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda85 r1 = org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda85.INSTANCE
             r0.sendRequest(r3, r1)
             boolean r0 = r7 instanceof org.telegram.ui.ChatActivity
             if (r0 == 0) goto L_0x00ec
@@ -4227,7 +4249,7 @@ public class AlertsCreator {
         L_0x00f8:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$createReportAlert$64(int, org.telegram.ui.ActionBar.BaseFragment, android.content.Context, long, org.telegram.ui.ActionBar.Theme$ResourcesProvider, android.content.DialogInterface, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$createReportAlert$66(int, org.telegram.ui.ActionBar.BaseFragment, android.content.Context, long, org.telegram.ui.ActionBar.Theme$ResourcesProvider, android.content.DialogInterface, int):void");
     }
 
     private static String getFloodWaitString(String str) {
@@ -4559,7 +4581,7 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(iArr2[i4], iArr2[i4]);
             radioColorCell.setTextAndValue(strArr[i4], i2 == TextColorCell.colorsToSave[i4]);
             linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda40(linearLayout, iArr));
+            radioColorCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda43(linearLayout, iArr));
             i4++;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity2);
@@ -4574,7 +4596,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createColorSelectDialog$66(LinearLayout linearLayout, int[] iArr, View view) {
+    public static /* synthetic */ void lambda$createColorSelectDialog$68(LinearLayout linearLayout, int[] iArr, View view) {
         int childCount = linearLayout.getChildCount();
         for (int i = 0; i < childCount; i++) {
             RadioColorCell radioColorCell = (RadioColorCell) linearLayout.getChildAt(i);
@@ -4584,7 +4606,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createColorSelectDialog$67(long j, int[] iArr, int i, Runnable runnable, DialogInterface dialogInterface, int i2) {
+    public static /* synthetic */ void lambda$createColorSelectDialog$69(long j, int[] iArr, int i, Runnable runnable, DialogInterface dialogInterface, int i2) {
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (j != 0) {
             edit.putInt("color_" + j, iArr[0]);
@@ -4606,7 +4628,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createColorSelectDialog$68(long j, int i, Runnable runnable, DialogInterface dialogInterface, int i2) {
+    public static /* synthetic */ void lambda$createColorSelectDialog$70(long j, int i, Runnable runnable, DialogInterface dialogInterface, int i2) {
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (j != 0) {
             edit.putInt("color_" + j, 0);
@@ -4624,7 +4646,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createColorSelectDialog$69(long j, Runnable runnable, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$createColorSelectDialog$71(long j, Runnable runnable, DialogInterface dialogInterface, int i) {
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         edit.remove("color_" + j);
         edit.commit();
@@ -4681,9 +4703,9 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr2[i2], iArr[i] == i2);
             linearLayout.addView(radioColorCell);
-            AlertsCreator$$ExternalSyntheticLambda49 alertsCreator$$ExternalSyntheticLambda49 = r1;
-            AlertsCreator$$ExternalSyntheticLambda49 alertsCreator$$ExternalSyntheticLambda492 = new AlertsCreator$$ExternalSyntheticLambda49(iArr, j, str, builder, runnable);
-            radioColorCell.setOnClickListener(alertsCreator$$ExternalSyntheticLambda49);
+            AlertsCreator$$ExternalSyntheticLambda52 alertsCreator$$ExternalSyntheticLambda52 = r1;
+            AlertsCreator$$ExternalSyntheticLambda52 alertsCreator$$ExternalSyntheticLambda522 = new AlertsCreator$$ExternalSyntheticLambda52(iArr, j, str, builder, runnable);
+            radioColorCell.setOnClickListener(alertsCreator$$ExternalSyntheticLambda52);
             i2++;
             i = 0;
         }
@@ -4694,7 +4716,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createVibrationSelectDialog$70(int[] iArr, long j, String str, AlertDialog.Builder builder, Runnable runnable, View view) {
+    public static /* synthetic */ void lambda$createVibrationSelectDialog$72(int[] iArr, long j, String str, AlertDialog.Builder builder, Runnable runnable, View view) {
         iArr[0] = ((Integer) view.getTag()).intValue();
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (j != 0) {
@@ -4764,7 +4786,7 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(resourcesProvider2 != null ? resourcesProvider2.getColorOrDefault("radioBackground") : Theme.getColor("radioBackground"), resourcesProvider2 != null ? resourcesProvider2.getColorOrDefault("dialogRadioBackgroundChecked") : Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr[i2], iArr[0] == i2);
             linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda51(iArr, linearLayout));
+            radioColorCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda54(iArr, linearLayout));
             i2++;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(activity2, resourcesProvider2);
@@ -4776,7 +4798,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createLocationUpdateDialog$71(int[] iArr, LinearLayout linearLayout, View view) {
+    public static /* synthetic */ void lambda$createLocationUpdateDialog$73(int[] iArr, LinearLayout linearLayout, View view) {
         iArr[0] = ((Integer) view.getTag()).intValue();
         int childCount = linearLayout.getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -4788,7 +4810,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createLocationUpdateDialog$72(int[] iArr, MessagesStorage.IntCallback intCallback, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$createLocationUpdateDialog$74(int[] iArr, MessagesStorage.IntCallback intCallback, DialogInterface dialogInterface, int i) {
         int i2;
         if (iArr[0] == 0) {
             i2 = 900;
@@ -4825,13 +4847,13 @@ public class AlertsCreator {
         builder.setTopView(frameLayout);
         builder.setTopViewAspectRatio(0.37820512f);
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("PermissionBackgroundLocation", NUM)));
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), new AlertsCreator$$ExternalSyntheticLambda8(activity));
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), new AlertsCreator$$ExternalSyntheticLambda7(activity));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new AlertsCreator$$ExternalSyntheticLambda12(runnable));
         return builder;
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createBackgroundLocationPermissionDialog$73(Activity activity, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$createBackgroundLocationPermissionDialog$75(Activity activity, DialogInterface dialogInterface, int i) {
         if (activity.checkSelfPermission("android.permission.ACCESS_BACKGROUND_LOCATION") != 0) {
             activity.requestPermissions(new String[]{"android.permission.ACCESS_BACKGROUND_LOCATION"}, 30);
         }
@@ -4878,7 +4900,7 @@ public class AlertsCreator {
         builder.setTopView(frameLayout);
         builder.setTitle(LocaleController.getString("PermissionDrawAboveOtherAppsTitle", NUM));
         builder.setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", NUM));
-        builder.setPositiveButton(LocaleController.getString("Enable", NUM), new AlertsCreator$$ExternalSyntheticLambda7(activity));
+        builder.setPositiveButton(LocaleController.getString("Enable", NUM), new AlertsCreator$$ExternalSyntheticLambda8(activity));
         builder.notDrawBackgroundOnTopView(true);
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), onClickListener);
         builder.setTopViewAspectRatio(0.50427353f);
@@ -4886,7 +4908,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDrawOverlayPermissionDialog$75(Activity activity, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$createDrawOverlayPermissionDialog$77(Activity activity, DialogInterface dialogInterface, int i) {
         if (activity != null && Build.VERSION.SDK_INT >= 23) {
             try {
                 activity.startActivity(new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse("package:" + activity.getPackageName())));
@@ -4924,7 +4946,7 @@ public class AlertsCreator {
         builder.setTopView(r8);
         builder.setTitle(LocaleController.getString("PermissionDrawAboveOtherAppsGroupCallTitle", NUM));
         builder.setMessage(LocaleController.getString("PermissionDrawAboveOtherAppsGroupCall", NUM));
-        builder.setPositiveButton(LocaleController.getString("Enable", NUM), new AlertsCreator$$ExternalSyntheticLambda10(context2));
+        builder.setPositiveButton(LocaleController.getString("Enable", NUM), new AlertsCreator$$ExternalSyntheticLambda9(context2));
         builder.notDrawBackgroundOnTopView(true);
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setTopViewAspectRatio(0.5769231f);
@@ -4932,7 +4954,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDrawOverlayGroupCallPermissionDialog$76(Context context, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$createDrawOverlayGroupCallPermissionDialog$78(Context context, DialogInterface dialogInterface, int i) {
         if (context != null) {
             try {
                 if (Build.VERSION.SDK_INT >= 23) {
@@ -4954,8 +4976,8 @@ public class AlertsCreator {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
         builder.setTopImage(NUM, Theme.getColor("dialogTopBackground"));
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("ContactsPermissionAlert", NUM)));
-        builder.setPositiveButton(LocaleController.getString("ContactsPermissionAlertContinue", NUM), new AlertsCreator$$ExternalSyntheticLambda16(intCallback));
-        builder.setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), new AlertsCreator$$ExternalSyntheticLambda17(intCallback));
+        builder.setPositiveButton(LocaleController.getString("ContactsPermissionAlertContinue", NUM), new AlertsCreator$$ExternalSyntheticLambda17(intCallback));
+        builder.setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), new AlertsCreator$$ExternalSyntheticLambda16(intCallback));
         return builder;
     }
 
@@ -4994,7 +5016,7 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr[i3], iArr[0] == i3);
             linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda50(iArr, linearLayout));
+            radioColorCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda53(iArr, linearLayout));
             i3++;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) launchActivity2);
@@ -5007,7 +5029,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createFreeSpaceDialog$79(int[] iArr, LinearLayout linearLayout, View view) {
+    public static /* synthetic */ void lambda$createFreeSpaceDialog$81(int[] iArr, LinearLayout linearLayout, View view) {
         int intValue = ((Integer) view.getTag()).intValue();
         if (intValue == 0) {
             iArr[0] = 3;
@@ -5114,10 +5136,10 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr[i5], iArr[i4] == i5);
             linearLayout.addView(radioColorCell);
-            AlertsCreator$$ExternalSyntheticLambda48 alertsCreator$$ExternalSyntheticLambda48 = r1;
+            AlertsCreator$$ExternalSyntheticLambda51 alertsCreator$$ExternalSyntheticLambda51 = r1;
             AlertDialog.Builder builder2 = builder;
-            AlertsCreator$$ExternalSyntheticLambda48 alertsCreator$$ExternalSyntheticLambda482 = new AlertsCreator$$ExternalSyntheticLambda48(iArr, j, i, notificationsSettings, builder2, runnable);
-            radioColorCell.setOnClickListener(alertsCreator$$ExternalSyntheticLambda48);
+            AlertsCreator$$ExternalSyntheticLambda51 alertsCreator$$ExternalSyntheticLambda512 = new AlertsCreator$$ExternalSyntheticLambda51(iArr, j, i, notificationsSettings, builder2, runnable);
+            radioColorCell.setOnClickListener(alertsCreator$$ExternalSyntheticLambda51);
             i5++;
             activity2 = activity;
             linearLayout = linearLayout;
@@ -5133,7 +5155,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createPrioritySelectDialog$82(int[] iArr, long j, int i, SharedPreferences sharedPreferences, AlertDialog.Builder builder, Runnable runnable, View view) {
+    public static /* synthetic */ void lambda$createPrioritySelectDialog$84(int[] iArr, long j, int i, SharedPreferences sharedPreferences, AlertDialog.Builder builder, Runnable runnable, View view) {
         int i2 = 0;
         iArr[0] = ((Integer) view.getTag()).intValue();
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
@@ -5197,7 +5219,7 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr[i2], iArr[0] == i2);
             linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda47(iArr, i, builder, runnable));
+            radioColorCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda50(iArr, i, builder, runnable));
             i2++;
         }
         builder.setTitle(LocaleController.getString("PopupNotification", NUM));
@@ -5207,7 +5229,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createPopupSelectDialog$83(int[] iArr, int i, AlertDialog.Builder builder, Runnable runnable, View view) {
+    public static /* synthetic */ void lambda$createPopupSelectDialog$85(int[] iArr, int i, AlertDialog.Builder builder, Runnable runnable, View view) {
         iArr[0] = ((Integer) view.getTag()).intValue();
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (i == 1) {
@@ -5236,7 +5258,7 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr[i2], i == i2);
             linearLayout.addView(radioColorCell);
-            radioColorCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda43(builder, onClickListener));
+            radioColorCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda46(builder, onClickListener));
             i2++;
         }
         builder.setTitle(str);
@@ -5246,7 +5268,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createSingleChoiceDialog$84(AlertDialog.Builder builder, DialogInterface.OnClickListener onClickListener, View view) {
+    public static /* synthetic */ void lambda$createSingleChoiceDialog$86(AlertDialog.Builder builder, DialogInterface.OnClickListener onClickListener, View view) {
         int intValue = ((Integer) view.getTag()).intValue();
         builder.getDismissRunnable().run();
         onClickListener.onClick((DialogInterface) null, intValue);
@@ -5281,7 +5303,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ String lambda$createTTLAlert$85(int i) {
+    public static /* synthetic */ String lambda$createTTLAlert$87(int i) {
         if (i == 0) {
             return LocaleController.getString("ShortMessageLifetimeForever", NUM);
         }
@@ -5304,7 +5326,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createTTLAlert$86(TLRPC$EncryptedChat tLRPC$EncryptedChat, NumberPicker numberPicker, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$createTTLAlert$88(TLRPC$EncryptedChat tLRPC$EncryptedChat, NumberPicker numberPicker, DialogInterface dialogInterface, int i) {
         int i2 = tLRPC$EncryptedChat.ttl;
         int value = numberPicker.getValue();
         if (value >= 0 && value < 16) {
@@ -5342,7 +5364,7 @@ public class AlertsCreator {
                 accountSelectCell.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f), 0);
                 accountSelectCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                 linearLayout.addView(accountSelectCell, LayoutHelper.createLinear(-1, 50));
-                accountSelectCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda52(alertDialogArr, dismissRunnable, accountSelectDelegate));
+                accountSelectCell.setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda55(alertDialogArr, dismissRunnable, accountSelectDelegate));
             }
         }
         builder.setTitle(LocaleController.getString("SelectAccount", NUM));
@@ -5354,7 +5376,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createAccountSelectDialog$87(AlertDialog[] alertDialogArr, Runnable runnable, AccountSelectDelegate accountSelectDelegate, View view) {
+    public static /* synthetic */ void lambda$createAccountSelectDialog$89(AlertDialog[] alertDialogArr, Runnable runnable, AccountSelectDelegate accountSelectDelegate, View view) {
         if (alertDialogArr[0] != null) {
             alertDialogArr[0].setOnDismissListener((DialogInterface.OnDismissListener) null);
         }
@@ -5362,971 +5384,1052 @@ public class AlertsCreator {
         accountSelectDelegate.didSelectAccount(((AccountSelectCell) view).getAccountNumber());
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x019d  */
-    /* JADX WARNING: Removed duplicated region for block: B:101:0x019f  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static void createDeleteMessagesAlert(org.telegram.ui.ActionBar.BaseFragment r42, org.telegram.tgnet.TLRPC$User r43, org.telegram.tgnet.TLRPC$Chat r44, org.telegram.tgnet.TLRPC$EncryptedChat r45, org.telegram.tgnet.TLRPC$ChatFull r46, long r47, org.telegram.messenger.MessageObject r49, android.util.SparseArray<org.telegram.messenger.MessageObject>[] r50, org.telegram.messenger.MessageObject.GroupedMessages r51, boolean r52, int r53, java.lang.Runnable r54, org.telegram.ui.ActionBar.Theme.ResourcesProvider r55) {
+    /*  JADX ERROR: JadxRuntimeException in pass: IfRegionVisitor
+        jadx.core.utils.exceptions.JadxRuntimeException: Don't wrap MOVE or CONST insns: 0x0673: MOVE  (r9v4 int) = (r23v1 int)
+        	at jadx.core.dex.instructions.args.InsnArg.wrapArg(InsnArg.java:164)
+        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.assignInline(CodeShrinkVisitor.java:133)
+        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.checkInline(CodeShrinkVisitor.java:118)
+        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.shrinkBlock(CodeShrinkVisitor.java:65)
+        	at jadx.core.dex.visitors.shrink.CodeShrinkVisitor.shrinkMethod(CodeShrinkVisitor.java:43)
+        	at jadx.core.dex.visitors.regions.TernaryMod.makeTernaryInsn(TernaryMod.java:122)
+        	at jadx.core.dex.visitors.regions.TernaryMod.visitRegion(TernaryMod.java:34)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:73)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterativeStepInternal(DepthRegionTraversal.java:78)
+        	at jadx.core.dex.visitors.regions.DepthRegionTraversal.traverseIterative(DepthRegionTraversal.java:27)
+        	at jadx.core.dex.visitors.regions.IfRegionVisitor.visit(IfRegionVisitor.java:31)
+        */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x01af  */
+    /* JADX WARNING: Removed duplicated region for block: B:106:0x01b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:179:0x0364  */
+    /* JADX WARNING: Removed duplicated region for block: B:180:0x0369  */
+    /* JADX WARNING: Removed duplicated region for block: B:183:0x0371  */
+    /* JADX WARNING: Removed duplicated region for block: B:184:0x0376  */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0054  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x005e  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x0075  */
+    /* JADX WARNING: Removed duplicated region for block: B:304:0x0640  */
+    /* JADX WARNING: Removed duplicated region for block: B:305:0x064d  */
+    /* JADX WARNING: Removed duplicated region for block: B:334:0x070c  */
+    /* JADX WARNING: Removed duplicated region for block: B:335:0x0714  */
+    /* JADX WARNING: Removed duplicated region for block: B:338:0x0744  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x008c  */
+    /* JADX WARNING: Removed duplicated region for block: B:371:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x00e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x00e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x00e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x00f0  */
+    public static void createDeleteMessagesAlert(org.telegram.ui.ActionBar.BaseFragment r43, org.telegram.tgnet.TLRPC$User r44, org.telegram.tgnet.TLRPC$Chat r45, org.telegram.tgnet.TLRPC$EncryptedChat r46, org.telegram.tgnet.TLRPC$ChatFull r47, long r48, org.telegram.messenger.MessageObject r50, android.util.SparseArray<org.telegram.messenger.MessageObject>[] r51, org.telegram.messenger.MessageObject.GroupedMessages r52, boolean r53, int r54, java.lang.Runnable r55, java.lang.Runnable r56, org.telegram.ui.ActionBar.Theme.ResourcesProvider r57) {
         /*
-            r15 = r42
-            r3 = r43
-            r4 = r44
-            r5 = r45
-            r9 = r49
-            r11 = r51
-            r0 = r53
-            r14 = r55
-            if (r15 == 0) goto L_0x06f8
-            if (r3 != 0) goto L_0x001a
-            if (r4 != 0) goto L_0x001a
-            if (r5 != 0) goto L_0x001a
-            goto L_0x06f8
-        L_0x001a:
-            android.app.Activity r1 = r42.getParentActivity()
-            if (r1 != 0) goto L_0x0021
+            r15 = r43
+            r3 = r44
+            r14 = r45
+            r7 = r46
+            r9 = r50
+            r11 = r52
+            r0 = r54
+            r13 = r56
+            r12 = r57
+            if (r15 == 0) goto L_0x074d
+            if (r3 != 0) goto L_0x001c
+            if (r14 != 0) goto L_0x001c
+            if (r7 != 0) goto L_0x001c
+            goto L_0x074d
+        L_0x001c:
+            android.app.Activity r1 = r43.getParentActivity()
+            if (r1 != 0) goto L_0x0023
             return
-        L_0x0021:
-            int r13 = r42.getCurrentAccount()
+        L_0x0023:
+            int r10 = r43.getCurrentAccount()
             org.telegram.ui.ActionBar.AlertDialog$Builder r2 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            r2.<init>(r1, r14)
-            r6 = 1
-            r7 = 0
-            if (r11 == 0) goto L_0x0035
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r8 = r11.messages
-            int r8 = r8.size()
-            goto L_0x0046
-        L_0x0035:
-            if (r9 == 0) goto L_0x0039
+            r2.<init>(r1, r12)
             r8 = 1
-            goto L_0x0046
-        L_0x0039:
-            r8 = r50[r7]
-            int r8 = r8.size()
-            r10 = r50[r6]
-            int r10 = r10.size()
-            int r8 = r8 + r10
-        L_0x0046:
-            if (r5 == 0) goto L_0x0054
-            int r10 = r5.id
-            r32 = r8
-            long r7 = (long) r10
-            long r7 = org.telegram.messenger.DialogObject.makeEncryptedDialogId(r7)
-        L_0x0051:
-            r21 = r7
-            goto L_0x005f
-        L_0x0054:
-            r32 = r8
-            if (r3 == 0) goto L_0x005b
-            long r7 = r3.id
-            goto L_0x0051
+            r6 = 0
+            if (r13 != 0) goto L_0x0032
+            r4 = 1
+            goto L_0x0033
+        L_0x0032:
+            r4 = 0
+        L_0x0033:
+            r2.setDimEnabled(r4)
+            if (r11 == 0) goto L_0x0040
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r11.messages
+            int r4 = r4.size()
+        L_0x003e:
+            r5 = r4
+            goto L_0x0052
+        L_0x0040:
+            if (r9 == 0) goto L_0x0044
+            r5 = 1
+            goto L_0x0052
+        L_0x0044:
+            r4 = r51[r6]
+            int r4 = r4.size()
+            r5 = r51[r8]
+            int r5 = r5.size()
+            int r4 = r4 + r5
+            goto L_0x003e
+        L_0x0052:
+            if (r7 == 0) goto L_0x005e
+            int r4 = r7.id
+            long r6 = (long) r4
+            long r6 = org.telegram.messenger.DialogObject.makeEncryptedDialogId(r6)
         L_0x005b:
-            long r7 = r4.id
-            long r7 = -r7
-            goto L_0x0051
-        L_0x005f:
-            org.telegram.tgnet.ConnectionsManager r7 = org.telegram.tgnet.ConnectionsManager.getInstance(r13)
-            int r7 = r7.getCurrentTime()
-            r8 = 86400(0x15180, float:1.21072E-40)
-            r10 = 2
-            if (r9 == 0) goto L_0x0086
-            boolean r16 = r49.isDice()
-            if (r16 == 0) goto L_0x0082
-            org.telegram.tgnet.TLRPC$Message r12 = r9.messageOwner
-            int r12 = r12.date
-            int r12 = r7 - r12
-            int r12 = java.lang.Math.abs(r12)
-            if (r12 <= r8) goto L_0x0080
-            goto L_0x0082
-        L_0x0080:
-            r12 = 0
-            goto L_0x0083
-        L_0x0082:
-            r12 = 1
-        L_0x0083:
-            r17 = r12
-            goto L_0x00ba
-        L_0x0086:
-            r12 = 0
-            r17 = 0
-        L_0x0089:
-            if (r12 >= r10) goto L_0x00ba
-            r10 = 0
+            r17 = r6
+            goto L_0x0067
+        L_0x005e:
+            if (r3 == 0) goto L_0x0063
+            long r6 = r3.id
+            goto L_0x005b
+        L_0x0063:
+            long r6 = r14.id
+            long r6 = -r6
+            goto L_0x005b
+        L_0x0067:
+            org.telegram.tgnet.ConnectionsManager r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r10)
+            int r4 = r4.getCurrentTime()
+            r6 = 86400(0x15180, float:1.21072E-40)
+            r7 = 2
+            if (r9 == 0) goto L_0x008c
+            boolean r19 = r50.isDice()
+            if (r19 == 0) goto L_0x008a
+            org.telegram.tgnet.TLRPC$Message r8 = r9.messageOwner
+            int r8 = r8.date
+            int r8 = r4 - r8
+            int r8 = java.lang.Math.abs(r8)
+            if (r8 <= r6) goto L_0x0088
+            goto L_0x008a
+        L_0x0088:
+            r6 = 0
+            goto L_0x00d4
+        L_0x008a:
+            r6 = 1
+            goto L_0x00d4
         L_0x008c:
-            r18 = r50[r12]
-            int r6 = r18.size()
-            if (r10 >= r6) goto L_0x00b5
-            r6 = r50[r12]
-            java.lang.Object r6 = r6.valueAt(r10)
+            r8 = 0
+            r20 = 0
+        L_0x008f:
+            if (r8 >= r7) goto L_0x00d2
+            r7 = 0
+        L_0x0092:
+            r21 = r51[r8]
+            int r6 = r21.size()
+            if (r7 >= r6) goto L_0x00c6
+            r6 = r51[r8]
+            java.lang.Object r6 = r6.valueAt(r7)
             org.telegram.messenger.MessageObject r6 = (org.telegram.messenger.MessageObject) r6
-            boolean r18 = r6.isDice()
-            if (r18 == 0) goto L_0x00b3
+            boolean r21 = r6.isDice()
+            if (r21 == 0) goto L_0x00c0
             org.telegram.tgnet.TLRPC$Message r6 = r6.messageOwner
             int r6 = r6.date
-            int r6 = r7 - r6
+            int r6 = r4 - r6
             int r6 = java.lang.Math.abs(r6)
-            if (r6 <= r8) goto L_0x00af
-            goto L_0x00b3
-        L_0x00af:
-            int r10 = r10 + 1
-            r6 = 1
-            goto L_0x008c
-        L_0x00b3:
-            r17 = 1
-        L_0x00b5:
-            int r12 = r12 + 1
-            r6 = 1
-            r10 = 2
-            goto L_0x0089
-        L_0x00ba:
-            r6 = 3
-            boolean[] r8 = new boolean[r6]
-            r10 = 1
-            boolean[] r12 = new boolean[r10]
-            if (r3 == 0) goto L_0x00cc
-            org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r13)
-            boolean r10 = r10.canRevokePmInbox
-            if (r10 == 0) goto L_0x00cc
-            r10 = 1
-            goto L_0x00cd
-        L_0x00cc:
-            r10 = 0
-        L_0x00cd:
-            if (r3 == 0) goto L_0x00d6
-            org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r13)
-            int r6 = r6.revokeTimePmLimit
-            goto L_0x00dc
-        L_0x00d6:
-            org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r13)
-            int r6 = r6.revokeTimeLimit
-        L_0x00dc:
-            if (r5 != 0) goto L_0x00eb
-            if (r3 == 0) goto L_0x00eb
-            if (r10 == 0) goto L_0x00eb
-            r11 = 2147483647(0x7fffffff, float:NaN)
-            if (r6 != r11) goto L_0x00eb
-            r19 = r12
-            r11 = 1
-            goto L_0x00ee
-        L_0x00eb:
-            r19 = r12
-            r11 = 0
-        L_0x00ee:
-            java.lang.String r12 = "DeleteMessagesOption"
-            r33 = r11
-            r24 = 1098907648(0x41800000, float:16.0)
-            r25 = 1090519040(0x41000000, float:8.0)
-            java.lang.String r11 = ""
-            r26 = r10
-            if (r4 == 0) goto L_0x042f
-            boolean r10 = r4.megagroup
-            if (r10 == 0) goto L_0x042f
-            if (r52 != 0) goto L_0x042f
-            boolean r10 = org.telegram.messenger.ChatObject.canBlockUsers(r44)
+            r11 = 86400(0x15180, float:1.21072E-40)
+            if (r6 <= r11) goto L_0x00b8
+            goto L_0x00c3
+        L_0x00b8:
+            int r7 = r7 + 1
+            r11 = r52
+            r6 = 86400(0x15180, float:1.21072E-40)
+            goto L_0x0092
+        L_0x00c0:
+            r11 = 86400(0x15180, float:1.21072E-40)
+        L_0x00c3:
+            r20 = 1
+            goto L_0x00c9
+        L_0x00c6:
+            r11 = 86400(0x15180, float:1.21072E-40)
+        L_0x00c9:
+            int r8 = r8 + 1
+            r11 = r52
+            r6 = 86400(0x15180, float:1.21072E-40)
+            r7 = 2
+            goto L_0x008f
+        L_0x00d2:
+            r6 = r20
+        L_0x00d4:
+            r7 = 3
+            boolean[] r11 = new boolean[r7]
+            r8 = 1
+            boolean[] r7 = new boolean[r8]
+            if (r3 == 0) goto L_0x00e6
+            org.telegram.messenger.MessagesController r8 = org.telegram.messenger.MessagesController.getInstance(r10)
+            boolean r8 = r8.canRevokePmInbox
+            if (r8 == 0) goto L_0x00e6
+            r8 = 1
+            goto L_0x00e7
+        L_0x00e6:
+            r8 = 0
+        L_0x00e7:
+            if (r3 == 0) goto L_0x00f0
+            org.telegram.messenger.MessagesController r12 = org.telegram.messenger.MessagesController.getInstance(r10)
+            int r12 = r12.revokeTimePmLimit
+            goto L_0x00f6
+        L_0x00f0:
+            org.telegram.messenger.MessagesController r12 = org.telegram.messenger.MessagesController.getInstance(r10)
+            int r12 = r12.revokeTimeLimit
+        L_0x00f6:
+            if (r46 != 0) goto L_0x0104
+            if (r3 == 0) goto L_0x0104
+            if (r8 == 0) goto L_0x0104
+            r13 = 2147483647(0x7fffffff, float:NaN)
+            if (r12 != r13) goto L_0x0104
+            r21 = 1
+            goto L_0x0106
+        L_0x0104:
+            r21 = 0
+        L_0x0106:
+            java.lang.String r13 = "DeleteMessagesOption"
+            r23 = 1098907648(0x41800000, float:16.0)
+            r24 = 1090519040(0x41000000, float:8.0)
+            java.lang.String r15 = ""
+            r25 = r5
+            if (r14 == 0) goto L_0x0446
+            boolean r5 = r14.megagroup
+            if (r5 == 0) goto L_0x0446
+            if (r53 != 0) goto L_0x0446
+            boolean r5 = org.telegram.messenger.ChatObject.canBlockUsers(r45)
             r26 = 0
-            if (r9 == 0) goto L_0x01a5
-            org.telegram.tgnet.TLRPC$Message r3 = r9.messageOwner
-            org.telegram.tgnet.TLRPC$MessageAction r5 = r3.action
-            r28 = r12
-            if (r5 == 0) goto L_0x0125
-            boolean r12 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageActionEmpty
-            if (r12 != 0) goto L_0x0125
-            boolean r12 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatDeleteUser
-            if (r12 != 0) goto L_0x0125
-            boolean r12 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatJoinedByLink
-            if (r12 != 0) goto L_0x0125
-            boolean r5 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatAddUser
-            if (r5 == 0) goto L_0x0123
-            goto L_0x0125
-        L_0x0123:
-            r5 = r11
-            goto L_0x0176
-        L_0x0125:
-            org.telegram.tgnet.TLRPC$Peer r3 = r3.from_id
-            r5 = r11
-            long r11 = r3.user_id
-            int r29 = (r11 > r26 ? 1 : (r11 == r26 ? 0 : -1))
-            if (r29 == 0) goto L_0x0142
-            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r13)
-            org.telegram.tgnet.TLRPC$Message r11 = r9.messageOwner
-            org.telegram.tgnet.TLRPC$Peer r11 = r11.from_id
-            long r11 = r11.user_id
-            java.lang.Long r11 = java.lang.Long.valueOf(r11)
-            org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r11)
-        L_0x0140:
-            r11 = 0
-            goto L_0x0178
-        L_0x0142:
-            long r11 = r3.channel_id
-            int r29 = (r11 > r26 ? 1 : (r11 == r26 ? 0 : -1))
-            if (r29 == 0) goto L_0x015d
-            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r13)
-            org.telegram.tgnet.TLRPC$Message r11 = r9.messageOwner
-            org.telegram.tgnet.TLRPC$Peer r11 = r11.from_id
-            long r11 = r11.channel_id
-            java.lang.Long r11 = java.lang.Long.valueOf(r11)
-            org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r11)
-        L_0x015a:
-            r11 = r3
+            if (r9 == 0) goto L_0x01b6
+            org.telegram.tgnet.TLRPC$Message r8 = r9.messageOwner
+            org.telegram.tgnet.TLRPC$MessageAction r3 = r8.action
+            r28 = r7
+            if (r3 == 0) goto L_0x0138
+            boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionEmpty
+            if (r7 != 0) goto L_0x0138
+            boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatDeleteUser
+            if (r7 != 0) goto L_0x0138
+            boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatJoinedByLink
+            if (r7 != 0) goto L_0x0138
+            boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatAddUser
+            if (r3 == 0) goto L_0x0188
+        L_0x0138:
+            org.telegram.tgnet.TLRPC$Peer r3 = r8.from_id
+            long r7 = r3.user_id
+            int r29 = (r7 > r26 ? 1 : (r7 == r26 ? 0 : -1))
+            if (r29 == 0) goto L_0x0154
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r10)
+            org.telegram.tgnet.TLRPC$Message r7 = r9.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r7 = r7.from_id
+            long r7 = r7.user_id
+            java.lang.Long r7 = java.lang.Long.valueOf(r7)
+            org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r7)
+        L_0x0152:
+            r7 = 0
+            goto L_0x018a
+        L_0x0154:
+            long r7 = r3.channel_id
+            int r29 = (r7 > r26 ? 1 : (r7 == r26 ? 0 : -1))
+            if (r29 == 0) goto L_0x016f
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r10)
+            org.telegram.tgnet.TLRPC$Message r7 = r9.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r7 = r7.from_id
+            long r7 = r7.channel_id
+            java.lang.Long r7 = java.lang.Long.valueOf(r7)
+            org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r7)
+        L_0x016c:
+            r7 = r3
             r3 = 0
-            goto L_0x0178
-        L_0x015d:
-            long r11 = r3.chat_id
-            int r3 = (r11 > r26 ? 1 : (r11 == r26 ? 0 : -1))
-            if (r3 == 0) goto L_0x0176
-            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r13)
-            org.telegram.tgnet.TLRPC$Message r11 = r9.messageOwner
-            org.telegram.tgnet.TLRPC$Peer r11 = r11.from_id
-            long r11 = r11.chat_id
-            java.lang.Long r11 = java.lang.Long.valueOf(r11)
-            org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r11)
-            goto L_0x015a
-        L_0x0176:
+            goto L_0x018a
+        L_0x016f:
+            long r7 = r3.chat_id
+            int r3 = (r7 > r26 ? 1 : (r7 == r26 ? 0 : -1))
+            if (r3 == 0) goto L_0x0188
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r10)
+            org.telegram.tgnet.TLRPC$Message r7 = r9.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r7 = r7.from_id
+            long r7 = r7.chat_id
+            java.lang.Long r7 = java.lang.Long.valueOf(r7)
+            org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r7)
+            goto L_0x016c
+        L_0x0188:
             r3 = 0
-            goto L_0x0140
-        L_0x0178:
-            boolean r12 = r49.isSendError()
-            if (r12 != 0) goto L_0x019f
-            long r26 = r49.getDialogId()
-            int r12 = (r26 > r47 ? 1 : (r26 == r47 ? 0 : -1))
-            if (r12 != 0) goto L_0x019f
-            org.telegram.tgnet.TLRPC$Message r12 = r9.messageOwner
-            org.telegram.tgnet.TLRPC$MessageAction r12 = r12.action
-            if (r12 == 0) goto L_0x0190
-            boolean r12 = r12 instanceof org.telegram.tgnet.TLRPC$TL_messageActionEmpty
-            if (r12 == 0) goto L_0x019f
-        L_0x0190:
-            boolean r12 = r49.isOut()
-            if (r12 == 0) goto L_0x019f
-            org.telegram.tgnet.TLRPC$Message r12 = r9.messageOwner
-            int r12 = r12.date
-            int r7 = r7 - r12
-            if (r7 > r6) goto L_0x019f
-            r12 = 1
-            goto L_0x01a0
-        L_0x019f:
-            r12 = 0
-        L_0x01a0:
-            r27 = r5
-            r5 = r12
-            goto L_0x023b
-        L_0x01a5:
-            r5 = r11
-            r28 = r12
+            goto L_0x0152
+        L_0x018a:
+            boolean r8 = r50.isSendError()
+            if (r8 != 0) goto L_0x01b1
+            long r26 = r50.getDialogId()
+            int r8 = (r26 > r48 ? 1 : (r26 == r48 ? 0 : -1))
+            if (r8 != 0) goto L_0x01b1
+            org.telegram.tgnet.TLRPC$Message r8 = r9.messageOwner
+            org.telegram.tgnet.TLRPC$MessageAction r8 = r8.action
+            if (r8 == 0) goto L_0x01a2
+            boolean r8 = r8 instanceof org.telegram.tgnet.TLRPC$TL_messageActionEmpty
+            if (r8 == 0) goto L_0x01b1
+        L_0x01a2:
+            boolean r8 = r50.isOut()
+            if (r8 == 0) goto L_0x01b1
+            org.telegram.tgnet.TLRPC$Message r8 = r9.messageOwner
+            int r8 = r8.date
+            int r4 = r4 - r8
+            if (r4 > r12) goto L_0x01b1
+            r4 = 1
+            goto L_0x01b2
+        L_0x01b1:
+            r4 = 0
+        L_0x01b2:
+            r26 = r13
+            goto L_0x024e
+        L_0x01b6:
+            r28 = r7
             r3 = 1
             r29 = -1
-        L_0x01ab:
-            if (r3 < 0) goto L_0x01e4
-            r11 = 0
-        L_0x01ae:
-            r12 = r50[r3]
-            int r12 = r12.size()
-            r36 = -2
-            if (r11 >= r12) goto L_0x01dc
-            r12 = r50[r3]
-            java.lang.Object r12 = r12.valueAt(r11)
-            org.telegram.messenger.MessageObject r12 = (org.telegram.messenger.MessageObject) r12
-            r34 = -1
-            int r31 = (r29 > r34 ? 1 : (r29 == r34 ? 0 : -1))
-            if (r31 != 0) goto L_0x01ca
-            long r29 = r12.getFromChatId()
-        L_0x01ca:
-            int r31 = (r29 > r26 ? 1 : (r29 == r26 ? 0 : -1))
-            if (r31 < 0) goto L_0x01da
-            long r38 = r12.getSenderId()
-            int r12 = (r29 > r38 ? 1 : (r29 == r38 ? 0 : -1))
-            if (r12 == 0) goto L_0x01d7
-            goto L_0x01da
-        L_0x01d7:
-            int r11 = r11 + 1
-            goto L_0x01ae
+        L_0x01bb:
+            if (r3 < 0) goto L_0x01f4
+            r7 = 0
+        L_0x01be:
+            r8 = r51[r3]
+            int r8 = r8.size()
+            r33 = -2
+            if (r7 >= r8) goto L_0x01ec
+            r8 = r51[r3]
+            java.lang.Object r8 = r8.valueAt(r7)
+            org.telegram.messenger.MessageObject r8 = (org.telegram.messenger.MessageObject) r8
+            r31 = -1
+            int r35 = (r29 > r31 ? 1 : (r29 == r31 ? 0 : -1))
+            if (r35 != 0) goto L_0x01da
+            long r29 = r8.getFromChatId()
         L_0x01da:
-            r29 = r36
-        L_0x01dc:
-            int r11 = (r29 > r36 ? 1 : (r29 == r36 ? 0 : -1))
-            if (r11 != 0) goto L_0x01e1
-            goto L_0x01e4
-        L_0x01e1:
-            int r3 = r3 + -1
-            goto L_0x01ab
-        L_0x01e4:
-            r3 = 1
-            r12 = 0
-        L_0x01e6:
-            if (r3 < 0) goto L_0x0222
-            r11 = r12
-            r12 = 0
-        L_0x01ea:
-            r26 = r50[r3]
-            r27 = r5
-            int r5 = r26.size()
-            if (r12 >= r5) goto L_0x021a
-            r5 = r50[r3]
-            java.lang.Object r5 = r5.valueAt(r12)
-            org.telegram.messenger.MessageObject r5 = (org.telegram.messenger.MessageObject) r5
-            r9 = 1
-            if (r3 != r9) goto L_0x0213
-            boolean r9 = r5.isOut()
-            if (r9 == 0) goto L_0x0213
-            org.telegram.tgnet.TLRPC$Message r5 = r5.messageOwner
-            org.telegram.tgnet.TLRPC$MessageAction r9 = r5.action
-            if (r9 != 0) goto L_0x0213
-            int r5 = r5.date
-            int r5 = r7 - r5
-            if (r5 > r6) goto L_0x0213
-            int r11 = r11 + 1
-        L_0x0213:
-            int r12 = r12 + 1
-            r9 = r49
-            r5 = r27
+            int r35 = (r29 > r26 ? 1 : (r29 == r26 ? 0 : -1))
+            if (r35 < 0) goto L_0x01ea
+            long r35 = r8.getSenderId()
+            int r8 = (r29 > r35 ? 1 : (r29 == r35 ? 0 : -1))
+            if (r8 == 0) goto L_0x01e7
             goto L_0x01ea
-        L_0x021a:
+        L_0x01e7:
+            int r7 = r7 + 1
+            goto L_0x01be
+        L_0x01ea:
+            r29 = r33
+        L_0x01ec:
+            int r7 = (r29 > r33 ? 1 : (r29 == r33 ? 0 : -1))
+            if (r7 != 0) goto L_0x01f1
+            goto L_0x01f4
+        L_0x01f1:
             int r3 = r3 + -1
-            r9 = r49
-            r12 = r11
-            r5 = r27
-            goto L_0x01e6
-        L_0x0222:
-            r27 = r5
-            r34 = -1
-            int r3 = (r29 > r34 ? 1 : (r29 == r34 ? 0 : -1))
-            if (r3 == 0) goto L_0x0238
-            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r13)
-            java.lang.Long r5 = java.lang.Long.valueOf(r29)
-            org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r5)
-            r5 = r12
-            goto L_0x023a
-        L_0x0238:
-            r5 = r12
+            goto L_0x01bb
+        L_0x01f4:
             r3 = 0
-        L_0x023a:
-            r11 = 0
-        L_0x023b:
-            if (r3 == 0) goto L_0x024e
-            long r6 = r3.id
-            org.telegram.messenger.UserConfig r9 = org.telegram.messenger.UserConfig.getInstance(r13)
-            long r29 = r9.getClientUserId()
-            int r9 = (r6 > r29 ? 1 : (r6 == r29 ? 0 : -1))
-            if (r9 != 0) goto L_0x024c
+            r7 = 1
+        L_0x01f6:
+            if (r7 < 0) goto L_0x0230
+            r8 = 0
+        L_0x01f9:
+            r26 = r51[r7]
+            int r9 = r26.size()
+            if (r8 >= r9) goto L_0x0229
+            r9 = r51[r7]
+            java.lang.Object r9 = r9.valueAt(r8)
+            org.telegram.messenger.MessageObject r9 = (org.telegram.messenger.MessageObject) r9
+            r26 = r13
+            r13 = 1
+            if (r7 != r13) goto L_0x0222
+            boolean r13 = r9.isOut()
+            if (r13 == 0) goto L_0x0222
+            org.telegram.tgnet.TLRPC$Message r9 = r9.messageOwner
+            org.telegram.tgnet.TLRPC$MessageAction r13 = r9.action
+            if (r13 != 0) goto L_0x0222
+            int r9 = r9.date
+            int r9 = r4 - r9
+            if (r9 > r12) goto L_0x0222
+            int r3 = r3 + 1
+        L_0x0222:
+            int r8 = r8 + 1
+            r9 = r50
+            r13 = r26
+            goto L_0x01f9
+        L_0x0229:
+            r26 = r13
+            int r7 = r7 + -1
+            r9 = r50
+            goto L_0x01f6
+        L_0x0230:
+            r26 = r13
+            r7 = -1
+            int r4 = (r29 > r7 ? 1 : (r29 == r7 ? 0 : -1))
+            if (r4 == 0) goto L_0x024b
+            org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r10)
+            java.lang.Long r7 = java.lang.Long.valueOf(r29)
+            org.telegram.tgnet.TLRPC$User r4 = r4.getUser(r7)
+            r7 = 0
+            r42 = r4
+            r4 = r3
+            r3 = r42
             goto L_0x024e
-        L_0x024c:
-            r6 = 1
-            goto L_0x0257
+        L_0x024b:
+            r4 = r3
+            r3 = 0
+            r7 = 0
         L_0x024e:
-            if (r11 == 0) goto L_0x03aa
-            boolean r6 = org.telegram.messenger.ChatObject.hasAdminRights(r11)
-            if (r6 != 0) goto L_0x03aa
-            goto L_0x024c
-        L_0x0257:
-            if (r0 != r6) goto L_0x02c2
-            boolean r7 = r4.creator
-            if (r7 != 0) goto L_0x02c2
-            if (r3 == 0) goto L_0x02c2
-            org.telegram.ui.ActionBar.AlertDialog[] r12 = new org.telegram.ui.ActionBar.AlertDialog[r6]
+            if (r3 == 0) goto L_0x0261
+            long r8 = r3.id
+            org.telegram.messenger.UserConfig r12 = org.telegram.messenger.UserConfig.getInstance(r10)
+            long r12 = r12.getClientUserId()
+            int r27 = (r8 > r12 ? 1 : (r8 == r12 ? 0 : -1))
+            if (r27 != 0) goto L_0x025f
+            goto L_0x0261
+        L_0x025f:
+            r6 = 1
+            goto L_0x026a
+        L_0x0261:
+            if (r7 == 0) goto L_0x03b9
+            boolean r8 = org.telegram.messenger.ChatObject.hasAdminRights(r7)
+            if (r8 != 0) goto L_0x03b9
+            goto L_0x025f
+        L_0x026a:
+            if (r0 != r6) goto L_0x02db
+            boolean r8 = r14.creator
+            if (r8 != 0) goto L_0x02db
+            if (r3 == 0) goto L_0x02db
+            org.telegram.ui.ActionBar.AlertDialog[] r15 = new org.telegram.ui.ActionBar.AlertDialog[r6]
             org.telegram.ui.ActionBar.AlertDialog r0 = new org.telegram.ui.ActionBar.AlertDialog
             r2 = 3
             r0.<init>(r1, r2)
             r1 = 0
-            r12[r1] = r0
-            org.telegram.tgnet.TLRPC$TL_channels_getParticipant r11 = new org.telegram.tgnet.TLRPC$TL_channels_getParticipant
-            r11.<init>()
-            org.telegram.tgnet.TLRPC$InputChannel r0 = org.telegram.messenger.MessagesController.getInputChannel((org.telegram.tgnet.TLRPC$Chat) r44)
-            r11.channel = r0
+            r15[r1] = r0
+            org.telegram.tgnet.TLRPC$TL_channels_getParticipant r13 = new org.telegram.tgnet.TLRPC$TL_channels_getParticipant
+            r13.<init>()
+            org.telegram.tgnet.TLRPC$InputChannel r0 = org.telegram.messenger.MessagesController.getInputChannel((org.telegram.tgnet.TLRPC$Chat) r45)
+            r13.channel = r0
             org.telegram.tgnet.TLRPC$InputPeer r0 = org.telegram.messenger.MessagesController.getInputPeer((org.telegram.tgnet.TLRPC$User) r3)
-            r11.participant = r0
-            org.telegram.tgnet.ConnectionsManager r10 = org.telegram.tgnet.ConnectionsManager.getInstance(r13)
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda80 r9 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda80
-            r0 = r9
-            r1 = r12
-            r2 = r42
-            r3 = r43
-            r4 = r44
-            r5 = r45
-            r6 = r46
-            r7 = r47
-            r15 = r9
-            r9 = r49
+            r13.participant = r0
+            org.telegram.tgnet.ConnectionsManager r12 = org.telegram.tgnet.ConnectionsManager.getInstance(r10)
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda83 r11 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda83
+            r0 = r11
+            r1 = r15
+            r2 = r43
+            r3 = r44
+            r4 = r45
+            r5 = r46
+            r6 = r47
+            r7 = r48
+            r9 = r50
+            r14 = r10
+            r10 = r51
+            r37 = r11
+            r11 = r52
+            r38 = r12
             r16 = r15
-            r15 = r10
-            r10 = r50
-            r17 = r15
-            r15 = r11
-            r11 = r51
-            r40 = r12
-            r12 = r52
-            r41 = r13
-            r13 = r54
-            r14 = r55
-            r0.<init>(r1, r2, r3, r4, r5, r6, r7, r9, r10, r11, r12, r13, r14)
-            r1 = r16
-            r0 = r17
-            int r0 = r0.sendRequest(r15, r1)
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda75 r1 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda75
-            r9 = r42
-            r2 = r40
-            r13 = r41
-            r1.<init>(r2, r13, r0, r9)
+            r15 = r57
+            r12 = r53
+            r39 = r13
+            r13 = r55
+            r40 = r14
+            r14 = r56
+            r41 = r16
+            r0.<init>(r1, r2, r3, r4, r5, r6, r7, r9, r10, r11, r12, r13, r14, r15)
+            r2 = r37
+            r1 = r38
+            r0 = r39
+            int r0 = r1.sendRequest(r0, r2)
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda78 r1 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda78
+            r13 = r43
+            r9 = r40
+            r2 = r41
+            r1.<init>(r2, r9, r0, r13)
             r2 = 1000(0x3e8, double:4.94E-321)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r2)
             return
-        L_0x02c2:
-            r9 = r15
-            r15 = r19
+        L_0x02db:
+            r13 = r43
+            r9 = r10
+            r10 = r15
+            r15 = r57
             android.widget.FrameLayout r6 = new android.widget.FrameLayout
             r6.<init>(r1)
-            if (r3 == 0) goto L_0x02d5
-            java.lang.String r7 = r3.first_name
+            if (r3 == 0) goto L_0x02f1
+            java.lang.String r8 = r3.first_name
             java.lang.String r12 = r3.last_name
-            java.lang.String r7 = org.telegram.messenger.ContactsController.formatName(r7, r12)
-            goto L_0x02d7
-        L_0x02d5:
-            java.lang.String r7 = r11.title
-        L_0x02d7:
-            r18 = r3
+            java.lang.String r8 = org.telegram.messenger.ContactsController.formatName(r8, r12)
+            goto L_0x02f3
+        L_0x02f1:
+            java.lang.String r8 = r7.title
+        L_0x02f3:
+            r27 = r3
             r3 = 3
             r12 = 0
-            r17 = 0
-        L_0x02dd:
-            if (r12 >= r3) goto L_0x03a1
+            r20 = 0
+        L_0x02f9:
+            if (r12 >= r3) goto L_0x03ad
             r3 = 2
-            if (r0 == r3) goto L_0x02e4
-            if (r10 != 0) goto L_0x02f1
-        L_0x02e4:
-            if (r12 != 0) goto L_0x02f1
-            r48 = r7
-            r16 = r10
-            r26 = r11
-            r0 = r12
-            r10 = r27
-            goto L_0x0392
-        L_0x02f1:
+            if (r0 == r3) goto L_0x0300
+            if (r5 != 0) goto L_0x030a
+        L_0x0300:
+            if (r12 != 0) goto L_0x030a
+            r29 = r5
+            r30 = r7
+            r49 = r8
+            goto L_0x03a0
+        L_0x030a:
             org.telegram.ui.Cells.CheckBoxCell r3 = new org.telegram.ui.Cells.CheckBoxCell
             r0 = 1
-            r3.<init>(r1, r0, r14)
-            r47 = 0
-            android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r47)
+            r3.<init>(r1, r0, r15)
+            r48 = 0
+            android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r48)
             r3.setBackgroundDrawable(r0)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r12)
             r3.setTag(r0)
-            if (r12 != 0) goto L_0x0320
-            r0 = 2131625215(0x7f0e04ff, float:1.8877632E38)
-            r16 = r10
-            java.lang.String r10 = "DeleteBanUser"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r10, r0)
-            r26 = r11
-            r10 = r27
-            r11 = 0
-            r3.setText(r0, r10, r11, r11)
-            r48 = r7
-            r0 = r12
-            goto L_0x0352
-        L_0x0320:
-            r16 = r10
-            r26 = r11
-            r10 = r27
+            if (r12 != 0) goto L_0x0336
+            r0 = 2131625217(0x7f0e0501, float:1.8877636E38)
+            r29 = r5
+            java.lang.String r5 = "DeleteBanUser"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r0)
+            r5 = 0
+            r3.setText(r0, r10, r5, r5)
+            r30 = r7
+        L_0x0333:
+            r49 = r8
+            goto L_0x0360
+        L_0x0336:
+            r29 = r5
             r0 = 1
-            r11 = 0
-            if (r12 != r0) goto L_0x033b
-            r0 = 2131625252(0x7f0e0524, float:1.8877707E38)
-            r20 = r12
-            java.lang.String r12 = "DeleteReportSpam"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r12, r0)
-            r3.setText(r0, r10, r11, r11)
-            r48 = r7
-            goto L_0x0350
-        L_0x033b:
-            r20 = r12
-            r12 = 1
-            java.lang.Object[] r0 = new java.lang.Object[r12]
-            r0[r11] = r7
-            java.lang.String r12 = "DeleteAllFrom"
-            r48 = r7
-            r7 = 2131625201(0x7f0e04f1, float:1.8877603E38)
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r12, r7, r0)
-            r3.setText(r0, r10, r11, r11)
-        L_0x0350:
-            r0 = r20
-        L_0x0352:
-            boolean r7 = org.telegram.messenger.LocaleController.isRTL
-            if (r7 == 0) goto L_0x035b
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r24)
-            goto L_0x035f
-        L_0x035b:
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r25)
-        L_0x035f:
-            boolean r11 = org.telegram.messenger.LocaleController.isRTL
-            if (r11 == 0) goto L_0x0368
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r25)
-            goto L_0x036c
-        L_0x0368:
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r24)
-        L_0x036c:
-            r12 = 0
-            r3.setPadding(r7, r12, r11, r12)
-            r34 = -1
-            r35 = 1111490560(0x42400000, float:48.0)
-            r36 = 51
+            r5 = 0
+            if (r12 != r0) goto L_0x034b
+            r0 = 2131625254(0x7f0e0526, float:1.887771E38)
+            r30 = r7
+            java.lang.String r7 = "DeleteReportSpam"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r7, r0)
+            r3.setText(r0, r10, r5, r5)
+            goto L_0x0333
+        L_0x034b:
+            r30 = r7
+            r7 = 1
+            java.lang.Object[] r0 = new java.lang.Object[r7]
+            r0[r5] = r8
+            java.lang.String r7 = "DeleteAllFrom"
+            r49 = r8
+            r8 = 2131625203(0x7f0e04f3, float:1.8877607E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r7, r8, r0)
+            r3.setText(r0, r10, r5, r5)
+        L_0x0360:
+            boolean r0 = org.telegram.messenger.LocaleController.isRTL
+            if (r0 == 0) goto L_0x0369
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            goto L_0x036d
+        L_0x0369:
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r24)
+        L_0x036d:
+            boolean r5 = org.telegram.messenger.LocaleController.isRTL
+            if (r5 == 0) goto L_0x0376
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r24)
+            goto L_0x037a
+        L_0x0376:
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r23)
+        L_0x037a:
+            r7 = 0
+            r3.setPadding(r0, r7, r5, r7)
+            r31 = -1
+            r32 = 1111490560(0x42400000, float:48.0)
+            r33 = 51
+            r34 = 0
+            int r0 = r20 * 48
+            float r0 = (float) r0
+            r36 = 0
             r37 = 0
-            int r11 = r17 * 48
-            float r11 = (float) r11
-            r39 = 0
-            r40 = 0
-            r38 = r11
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r34, r35, r36, r37, r38, r39, r40)
-            r6.addView(r3, r11)
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda57 r11 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda57
-            r11.<init>(r8)
-            r3.setOnClickListener(r11)
-            int r17 = r17 + 1
-        L_0x0392:
-            int r12 = r0 + 1
-            r7 = r48
-            r0 = r53
-            r27 = r10
-            r10 = r16
-            r11 = r26
+            r35 = r0
+            android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
+            r6.addView(r3, r0)
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda60 r0 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda60
+            r0.<init>(r11)
+            r3.setOnClickListener(r0)
+            int r20 = r20 + 1
+        L_0x03a0:
+            int r12 = r12 + 1
+            r8 = r49
+            r0 = r54
+            r5 = r29
+            r7 = r30
             r3 = 3
-            goto L_0x02dd
-        L_0x03a1:
-            r26 = r11
+            goto L_0x02f9
+        L_0x03ad:
+            r30 = r7
             r2.setView(r6)
-            r3 = r18
-            goto L_0x041e
-        L_0x03aa:
-            r18 = r3
-            r26 = r11
-            r9 = r15
-            r15 = r19
-            r10 = r27
-            if (r5 <= 0) goto L_0x041d
-            if (r17 == 0) goto L_0x041d
+            r3 = r27
+            r5 = r28
+            r0 = 0
+            goto L_0x0433
+        L_0x03b9:
+            r13 = r43
+            r27 = r3
+            r30 = r7
+            r9 = r10
+            r10 = r15
+            r15 = r57
+            if (r4 <= 0) goto L_0x042f
+            if (r6 == 0) goto L_0x042f
             android.widget.FrameLayout r0 = new android.widget.FrameLayout
             r0.<init>(r1)
             org.telegram.ui.Cells.CheckBoxCell r3 = new org.telegram.ui.Cells.CheckBoxCell
-            r6 = 1
-            r3.<init>(r1, r6, r14)
+            r5 = 1
+            r3.<init>(r1, r5, r15)
             r1 = 0
-            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
-            r3.setBackgroundDrawable(r6)
-            r11 = r28
-            r6 = 2131625243(0x7f0e051b, float:1.8877688E38)
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
-            r3.setText(r6, r10, r1, r1)
-            boolean r6 = org.telegram.messenger.LocaleController.isRTL
-            if (r6 == 0) goto L_0x03df
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r24)
-            goto L_0x03e3
-        L_0x03df:
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r25)
-        L_0x03e3:
-            boolean r7 = org.telegram.messenger.LocaleController.isRTL
-            if (r7 == 0) goto L_0x03ec
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r25)
-            goto L_0x03f0
-        L_0x03ec:
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r24)
-        L_0x03f0:
-            r1 = 0
-            r3.setPadding(r6, r1, r7, r1)
-            r34 = -1
-            r35 = 1111490560(0x42400000, float:48.0)
-            r36 = 51
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
+            r3.setBackgroundDrawable(r5)
+            r7 = r26
+            r5 = 2131625245(0x7f0e051d, float:1.8877693E38)
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
+            r3.setText(r5, r10, r1, r1)
+            boolean r1 = org.telegram.messenger.LocaleController.isRTL
+            if (r1 == 0) goto L_0x03ef
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            goto L_0x03f3
+        L_0x03ef:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r24)
+        L_0x03f3:
+            boolean r5 = org.telegram.messenger.LocaleController.isRTL
+            if (r5 == 0) goto L_0x03fc
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r24)
+            goto L_0x0400
+        L_0x03fc:
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r23)
+        L_0x0400:
+            r6 = 0
+            r3.setPadding(r1, r6, r5, r6)
+            r31 = -1
+            r32 = 1111490560(0x42400000, float:48.0)
+            r33 = 51
+            r34 = 0
+            r35 = 0
+            r36 = 0
             r37 = 0
-            r38 = 0
-            r39 = 0
-            r40 = 0
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r34, r35, r36, r37, r38, r39, r40)
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
             r0.addView(r3, r1)
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda55 r1 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda55
-            r1.<init>(r15)
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda59 r1 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda59
+            r5 = r28
+            r1.<init>(r5)
             r3.setOnClickListener(r1)
             r2.setView(r0)
             r0 = 9
             r2.setCustomViewOffset(r0)
-            r3 = r18
-            r7 = 1
-            goto L_0x041f
-        L_0x041d:
-            r3 = 0
-        L_0x041e:
-            r7 = 0
-        L_0x041f:
-            r0 = r43
-            r48 = r8
-            r41 = r13
-            r27 = r26
-            r8 = r32
-            r26 = r3
-            r3 = r7
-            r7 = 0
-            goto L_0x05c9
+            r3 = r27
+            r0 = 1
+            goto L_0x0433
         L_0x042f:
-            r10 = r11
-            r11 = r12
-            r9 = r15
-            r15 = r19
-            if (r52 != 0) goto L_0x05ba
-            boolean r0 = org.telegram.messenger.ChatObject.isChannel(r44)
-            if (r0 != 0) goto L_0x05ba
-            if (r45 != 0) goto L_0x05ba
-            r0 = r43
-            r3 = r8
-            if (r0 == 0) goto L_0x0459
-            long r8 = r0.id
-            org.telegram.messenger.UserConfig r5 = org.telegram.messenger.UserConfig.getInstance(r13)
-            long r18 = r5.getClientUserId()
-            int r5 = (r8 > r18 ? 1 : (r8 == r18 ? 0 : -1))
-            if (r5 == 0) goto L_0x0459
-            boolean r5 = r0.bot
-            if (r5 == 0) goto L_0x045b
-            boolean r5 = r0.support
-            if (r5 != 0) goto L_0x045b
-        L_0x0459:
-            if (r4 == 0) goto L_0x0512
-        L_0x045b:
-            r5 = r49
-            if (r5 == 0) goto L_0x04a4
-            boolean r8 = r49.isSendError()
-            if (r8 != 0) goto L_0x0496
-            org.telegram.tgnet.TLRPC$Message r8 = r5.messageOwner
-            org.telegram.tgnet.TLRPC$MessageAction r8 = r8.action
-            if (r8 == 0) goto L_0x047f
-            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_messageActionEmpty
-            if (r9 != 0) goto L_0x047f
-            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPhoneCall
-            if (r9 != 0) goto L_0x047f
-            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPinMessage
-            if (r9 != 0) goto L_0x047f
-            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_messageActionGeoProximityReached
-            if (r9 != 0) goto L_0x047f
-            boolean r8 = r8 instanceof org.telegram.tgnet.TLRPC$TL_messageActionSetChatTheme
-            if (r8 == 0) goto L_0x0496
-        L_0x047f:
-            boolean r8 = r49.isOut()
-            if (r8 != 0) goto L_0x048d
-            if (r26 != 0) goto L_0x048d
-            boolean r8 = org.telegram.messenger.ChatObject.hasAdminRights(r44)
-            if (r8 == 0) goto L_0x0496
-        L_0x048d:
-            org.telegram.tgnet.TLRPC$Message r8 = r5.messageOwner
-            int r8 = r8.date
-            int r7 = r7 - r8
-            if (r7 > r6) goto L_0x0496
-            r6 = 1
-            goto L_0x0497
-        L_0x0496:
-            r6 = 0
-        L_0x0497:
-            boolean r7 = r49.isOut()
+            r5 = r28
+            r0 = 0
+            r3 = 0
+        L_0x0433:
+            r20 = r0
+            r1 = r2
+            r15 = r3
+            r3 = r4
+            r7 = r5
+            r40 = r9
+            r26 = r11
+            r6 = r25
+            r2 = 0
             r8 = 1
-            r7 = r7 ^ r8
-            r48 = r3
-            r12 = r6
-            r41 = r13
-            goto L_0x0518
-        L_0x04a4:
-            r8 = 0
             r9 = 0
-            r16 = 1
-        L_0x04a8:
-            if (r16 < 0) goto L_0x050b
-            r12 = 0
-        L_0x04ab:
-            r18 = r50[r16]
-            int r5 = r18.size()
-            if (r12 >= r5) goto L_0x0502
-            r5 = r50[r16]
-            java.lang.Object r5 = r5.valueAt(r12)
-            org.telegram.messenger.MessageObject r5 = (org.telegram.messenger.MessageObject) r5
-            r48 = r3
-            org.telegram.tgnet.TLRPC$Message r3 = r5.messageOwner
+            r0 = r44
+            goto L_0x05fd
+        L_0x0446:
+            r5 = r7
+            r9 = r10
+            r7 = r13
+            r10 = r15
+            r13 = r43
+            r15 = r57
+            if (r53 != 0) goto L_0x05ea
+            boolean r0 = org.telegram.messenger.ChatObject.isChannel(r45)
+            if (r0 != 0) goto L_0x05ea
+            if (r46 != 0) goto L_0x05ea
+            r0 = r44
+            r20 = r2
+            if (r0 == 0) goto L_0x0474
+            long r2 = r0.id
+            org.telegram.messenger.UserConfig r26 = org.telegram.messenger.UserConfig.getInstance(r9)
+            long r26 = r26.getClientUserId()
+            int r28 = (r2 > r26 ? 1 : (r2 == r26 ? 0 : -1))
+            if (r28 == 0) goto L_0x0474
+            boolean r2 = r0.bot
+            if (r2 == 0) goto L_0x0476
+            boolean r2 = r0.support
+            if (r2 != 0) goto L_0x0476
+        L_0x0474:
+            if (r14 == 0) goto L_0x0535
+        L_0x0476:
+            r2 = r50
+            if (r2 == 0) goto L_0x04c2
+            boolean r3 = r50.isSendError()
+            if (r3 != 0) goto L_0x04b3
+            org.telegram.tgnet.TLRPC$Message r3 = r2.messageOwner
             org.telegram.tgnet.TLRPC$MessageAction r3 = r3.action
-            r41 = r13
-            if (r3 == 0) goto L_0x04d6
-            boolean r13 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionEmpty
-            if (r13 != 0) goto L_0x04d6
-            boolean r13 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPhoneCall
-            if (r13 != 0) goto L_0x04d6
-            boolean r13 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPinMessage
-            if (r13 != 0) goto L_0x04d6
-            boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionGeoProximityReached
-            if (r3 != 0) goto L_0x04d6
-            goto L_0x04f9
-        L_0x04d6:
-            boolean r3 = r5.isOut()
-            if (r3 != 0) goto L_0x04e6
-            if (r26 != 0) goto L_0x04e6
-            if (r4 == 0) goto L_0x04f9
-            boolean r3 = org.telegram.messenger.ChatObject.canBlockUsers(r44)
-            if (r3 == 0) goto L_0x04f9
-        L_0x04e6:
-            org.telegram.tgnet.TLRPC$Message r3 = r5.messageOwner
+            r26 = r11
+            if (r3 == 0) goto L_0x049c
+            boolean r11 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionEmpty
+            if (r11 != 0) goto L_0x049c
+            boolean r11 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPhoneCall
+            if (r11 != 0) goto L_0x049c
+            boolean r11 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPinMessage
+            if (r11 != 0) goto L_0x049c
+            boolean r11 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionGeoProximityReached
+            if (r11 != 0) goto L_0x049c
+            boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionSetChatTheme
+            if (r3 == 0) goto L_0x04b5
+        L_0x049c:
+            boolean r3 = r50.isOut()
+            if (r3 != 0) goto L_0x04aa
+            if (r8 != 0) goto L_0x04aa
+            boolean r3 = org.telegram.messenger.ChatObject.hasAdminRights(r45)
+            if (r3 == 0) goto L_0x04b5
+        L_0x04aa:
+            org.telegram.tgnet.TLRPC$Message r3 = r2.messageOwner
             int r3 = r3.date
-            int r3 = r7 - r3
-            if (r3 > r6) goto L_0x04f9
-            int r9 = r9 + 1
-            if (r8 != 0) goto L_0x04f9
-            boolean r3 = r5.isOut()
-            if (r3 != 0) goto L_0x04f9
+            int r4 = r4 - r3
+            if (r4 > r12) goto L_0x04b5
+            r3 = 1
+            goto L_0x04b6
+        L_0x04b3:
+            r26 = r11
+        L_0x04b5:
+            r3 = 0
+        L_0x04b6:
+            boolean r4 = r50.isOut()
             r8 = 1
-        L_0x04f9:
-            int r12 = r12 + 1
-            r3 = r48
-            r5 = r49
-            r13 = r41
-            goto L_0x04ab
-        L_0x0502:
-            r48 = r3
-            r41 = r13
-            int r16 = r16 + -1
-            r5 = r49
-            goto L_0x04a8
-        L_0x050b:
-            r48 = r3
-            r41 = r13
-            r7 = r8
-            r12 = r9
-            goto L_0x0518
-        L_0x0512:
-            r48 = r3
-            r41 = r13
-            r7 = 0
-            r12 = 0
-        L_0x0518:
-            if (r12 <= 0) goto L_0x05b5
-            if (r17 == 0) goto L_0x05b5
-            if (r0 == 0) goto L_0x0524
-            boolean r3 = org.telegram.messenger.UserObject.isDeleted(r43)
-            if (r3 != 0) goto L_0x05b5
-        L_0x0524:
-            android.widget.FrameLayout r3 = new android.widget.FrameLayout
-            r3.<init>(r1)
+            r4 = r4 ^ r8
+            r28 = r5
+            r40 = r9
+            goto L_0x053d
+        L_0x04c2:
+            r26 = r11
+            r3 = 1
+            r11 = 0
+            r27 = 0
+        L_0x04c8:
+            if (r3 < 0) goto L_0x052d
+            r2 = 0
+        L_0x04cb:
+            r28 = r51[r3]
+            int r13 = r28.size()
+            if (r2 >= r13) goto L_0x0522
+            r13 = r51[r3]
+            java.lang.Object r13 = r13.valueAt(r2)
+            org.telegram.messenger.MessageObject r13 = (org.telegram.messenger.MessageObject) r13
+            r40 = r9
+            org.telegram.tgnet.TLRPC$Message r9 = r13.messageOwner
+            org.telegram.tgnet.TLRPC$MessageAction r9 = r9.action
+            r28 = r5
+            if (r9 == 0) goto L_0x04f6
+            boolean r5 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionEmpty
+            if (r5 != 0) goto L_0x04f6
+            boolean r5 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPhoneCall
+            if (r5 != 0) goto L_0x04f6
+            boolean r5 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPinMessage
+            if (r5 != 0) goto L_0x04f6
+            boolean r5 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionGeoProximityReached
+            if (r5 != 0) goto L_0x04f6
+            goto L_0x0519
+        L_0x04f6:
+            boolean r5 = r13.isOut()
+            if (r5 != 0) goto L_0x0506
+            if (r8 != 0) goto L_0x0506
+            if (r14 == 0) goto L_0x0519
+            boolean r5 = org.telegram.messenger.ChatObject.canBlockUsers(r45)
+            if (r5 == 0) goto L_0x0519
+        L_0x0506:
+            org.telegram.tgnet.TLRPC$Message r5 = r13.messageOwner
+            int r5 = r5.date
+            int r5 = r4 - r5
+            if (r5 > r12) goto L_0x0519
+            int r27 = r27 + 1
+            if (r11 != 0) goto L_0x0519
+            boolean r5 = r13.isOut()
+            if (r5 != 0) goto L_0x0519
+            r11 = 1
+        L_0x0519:
+            int r2 = r2 + 1
+            r13 = r43
+            r5 = r28
+            r9 = r40
+            goto L_0x04cb
+        L_0x0522:
+            r28 = r5
+            r40 = r9
+            int r3 = r3 + -1
+            r13 = r43
+            r2 = r50
+            goto L_0x04c8
+        L_0x052d:
+            r28 = r5
+            r40 = r9
+            r4 = r11
+            r3 = r27
+            goto L_0x053d
+        L_0x0535:
+            r28 = r5
+            r40 = r9
+            r26 = r11
+            r3 = 0
+            r4 = 0
+        L_0x053d:
+            if (r3 <= 0) goto L_0x05e0
+            if (r6 == 0) goto L_0x05e0
+            if (r0 == 0) goto L_0x0549
+            boolean r2 = org.telegram.messenger.UserObject.isDeleted(r44)
+            if (r2 != 0) goto L_0x05e0
+        L_0x0549:
+            android.widget.FrameLayout r2 = new android.widget.FrameLayout
+            r2.<init>(r1)
             org.telegram.ui.Cells.CheckBoxCell r5 = new org.telegram.ui.Cells.CheckBoxCell
-            r6 = 1
-            r5.<init>(r1, r6, r14)
+            r8 = 1
+            r5.<init>(r1, r8, r15)
             r1 = 0
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
-            r5.setBackgroundDrawable(r8)
-            if (r33 == 0) goto L_0x0550
-            r8 = 2131625244(0x7f0e051c, float:1.887769E38)
-            java.lang.Object[] r9 = new java.lang.Object[r6]
-            java.lang.String r6 = org.telegram.messenger.UserObject.getFirstName(r43)
-            r9[r1] = r6
-            java.lang.String r6 = "DeleteMessagesOptionAlso"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r6, r8, r9)
+            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
+            r5.setBackgroundDrawable(r6)
+            if (r21 == 0) goto L_0x0575
+            r6 = 2131625246(0x7f0e051e, float:1.8877695E38)
+            java.lang.Object[] r7 = new java.lang.Object[r8]
+            java.lang.String r9 = org.telegram.messenger.UserObject.getFirstName(r44)
+            r7[r1] = r9
+            java.lang.String r9 = "DeleteMessagesOptionAlso"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r9, r6, r7)
             r5.setText(r6, r10, r1, r1)
-            r8 = r32
-            goto L_0x056f
-        L_0x0550:
-            r8 = r32
-            if (r4 == 0) goto L_0x0565
-            if (r7 != 0) goto L_0x0558
-            if (r12 != r8) goto L_0x0565
-        L_0x0558:
-            r6 = 2131625230(0x7f0e050e, float:1.8877662E38)
+            r6 = r25
+            goto L_0x0594
+        L_0x0575:
+            r6 = r25
+            if (r14 == 0) goto L_0x058a
+            if (r4 != 0) goto L_0x057d
+            if (r3 != r6) goto L_0x058a
+        L_0x057d:
+            r7 = 2131625232(0x7f0e0510, float:1.8877666E38)
             java.lang.String r9 = "DeleteForAll"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
-            r5.setText(r6, r10, r1, r1)
-            goto L_0x056f
-        L_0x0565:
-            r6 = 2131625243(0x7f0e051b, float:1.8877688E38)
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
-            r5.setText(r6, r10, r1, r1)
-        L_0x056f:
-            boolean r6 = org.telegram.messenger.LocaleController.isRTL
-            if (r6 == 0) goto L_0x0578
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r24)
-            goto L_0x057c
-        L_0x0578:
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r25)
-        L_0x057c:
-            boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            if (r9 == 0) goto L_0x0585
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r25)
-            goto L_0x0589
-        L_0x0585:
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r24)
-        L_0x0589:
-            r1 = 0
-            r5.setPadding(r6, r1, r9, r1)
-            r23 = -1
-            r24 = 1111490560(0x42400000, float:48.0)
-            r25 = 51
-            r26 = 0
-            r27 = 0
-            r28 = 0
-            r29 = 0
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r23, r24, r25, r26, r27, r28, r29)
-            r3.addView(r5, r6)
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda59 r6 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda59
-            r6.<init>(r15)
-            r5.setOnClickListener(r6)
-            r2.setView(r3)
-            r3 = 9
-            r2.setCustomViewOffset(r3)
-            r5 = r12
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
+            r5.setText(r7, r10, r1, r1)
+            goto L_0x0594
+        L_0x058a:
+            r9 = 2131625245(0x7f0e051d, float:1.8877693E38)
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r9)
+            r5.setText(r7, r10, r1, r1)
+        L_0x0594:
+            boolean r1 = org.telegram.messenger.LocaleController.isRTL
+            if (r1 == 0) goto L_0x059d
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            goto L_0x05a1
+        L_0x059d:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r24)
+        L_0x05a1:
+            boolean r7 = org.telegram.messenger.LocaleController.isRTL
+            if (r7 == 0) goto L_0x05aa
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r24)
+            goto L_0x05ae
+        L_0x05aa:
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r23)
+        L_0x05ae:
+            r9 = 0
+            r5.setPadding(r1, r9, r7, r9)
+            r29 = -1
+            r30 = 1111490560(0x42400000, float:48.0)
+            r31 = 51
+            r32 = 0
+            r33 = 0
+            r34 = 0
+            r35 = 0
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r2.addView(r5, r1)
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda62 r1 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda62
+            r7 = r28
+            r1.<init>(r7)
+            r5.setOnClickListener(r1)
+            r1 = r20
+            r1.setView(r2)
+            r2 = 9
+            r1.setCustomViewOffset(r2)
+            r2 = r4
+            r15 = 0
+            r20 = 1
+            goto L_0x05fb
+        L_0x05e0:
+            r1 = r20
+            r6 = r25
+            r7 = r28
+            r8 = 1
+            r9 = 0
+            r2 = r4
+            goto L_0x05f8
+        L_0x05ea:
+            r0 = r44
+            r1 = r2
+            r7 = r5
+            r40 = r9
+            r26 = r11
+            r6 = r25
+            r8 = 1
+            r9 = 0
+            r2 = 0
+            r3 = 0
+        L_0x05f8:
+            r15 = 0
+            r20 = 0
+        L_0x05fb:
+            r30 = 0
+        L_0x05fd:
+            r4 = 2131625195(0x7f0e04eb, float:1.8877591E38)
+            java.lang.String r5 = "Delete"
+            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda14 r12 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda14
+            r4 = r12
+            r11 = r6
+            r5 = r50
+            r22 = 0
+            r6 = r52
+            r16 = r7
+            r9 = 2
+            r7 = r46
+            r10 = 1
+            r8 = r40
+            r0 = 1
+            r9 = r17
+            r0 = r11
+            r17 = r26
+            r11 = r16
+            r23 = r3
+            r3 = r12
+            r12 = r53
+            r48 = r2
+            r2 = r13
+            r13 = r51
+            r14 = r15
+            r15 = r30
+            r16 = r17
+            r17 = r45
+            r18 = r47
+            r19 = r55
+            r4.<init>(r5, r6, r7, r8, r9, r11, r12, r13, r14, r15, r16, r17, r18, r19)
+            r1.setPositiveButton(r2, r3)
+            java.lang.String r2 = "messages"
             r3 = 1
-            goto L_0x05c5
-        L_0x05b5:
-            r8 = r32
-            r5 = r12
-            r3 = 0
-            goto L_0x05c5
-        L_0x05ba:
-            r0 = r43
-            r48 = r8
-            r41 = r13
-            r8 = r32
-            r3 = 0
-            r5 = 0
-            r7 = 0
-        L_0x05c5:
-            r26 = 0
-            r27 = 0
-        L_0x05c9:
-            r6 = 2131625193(0x7f0e04e9, float:1.8877587E38)
-            java.lang.String r9 = "Delete"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda14 r9 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda14
-            r16 = r9
-            r17 = r49
-            r18 = r51
-            r19 = r45
-            r20 = r41
-            r23 = r15
-            r24 = r52
-            r25 = r50
-            r28 = r48
-            r29 = r44
-            r30 = r46
-            r31 = r54
-            r16.<init>(r17, r18, r19, r20, r21, r23, r24, r25, r26, r27, r28, r29, r30, r31)
-            r2.setPositiveButton(r6, r9)
-            java.lang.String r6 = "messages"
-            r9 = 1
-            if (r8 != r9) goto L_0x0604
-            r10 = 2131625254(0x7f0e0526, float:1.887771E38)
-            java.lang.String r11 = "DeleteSingleMessagesTitle"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r2.setTitle(r10)
-            goto L_0x0619
-        L_0x0604:
-            r10 = 2131625248(0x7f0e0520, float:1.8877699E38)
-            java.lang.Object[] r11 = new java.lang.Object[r9]
-            java.lang.String r9 = org.telegram.messenger.LocaleController.formatPluralString(r6, r8)
-            r1 = 0
-            r11[r1] = r9
-            java.lang.String r1 = "DeleteMessagesTitle"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r10, r11)
-            r2.setTitle(r1)
-        L_0x0619:
-            r1 = 2131624373(0x7f0e01b5, float:1.8875924E38)
-            java.lang.String r9 = "AreYouSureDeleteSingleMessage"
-            r10 = 2131624365(0x7f0e01ad, float:1.8875908E38)
-            java.lang.String r11 = "AreYouSureDeleteFewMessages"
-            if (r4 == 0) goto L_0x0658
-            if (r7 == 0) goto L_0x0658
-            if (r3 == 0) goto L_0x0643
-            if (r5 == r8) goto L_0x0643
+            if (r0 != r3) goto L_0x064d
+            r4 = 2131625256(0x7f0e0528, float:1.8877715E38)
+            java.lang.String r5 = "DeleteSingleMessagesTitle"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r1.setTitle(r4)
+            goto L_0x0661
+        L_0x064d:
+            r4 = 2131625250(0x7f0e0522, float:1.8877703E38)
+            java.lang.Object[] r5 = new java.lang.Object[r3]
+            java.lang.String r3 = org.telegram.messenger.LocaleController.formatPluralString(r2, r0)
+            r5[r22] = r3
+            java.lang.String r3 = "DeleteMessagesTitle"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r3, r4, r5)
+            r1.setTitle(r3)
+        L_0x0661:
+            r3 = 2131624374(0x7f0e01b6, float:1.8875926E38)
+            java.lang.String r4 = "AreYouSureDeleteSingleMessage"
+            r5 = 2131624366(0x7f0e01ae, float:1.887591E38)
+            java.lang.String r6 = "AreYouSureDeleteFewMessages"
+            r7 = r45
+            if (r7 == 0) goto L_0x06a3
+            if (r48 == 0) goto L_0x06a3
+            if (r20 == 0) goto L_0x068e
+            r9 = r23
+            if (r9 == r0) goto L_0x068e
+            r0 = 2131625249(0x7f0e0521, float:1.88777E38)
+            r7 = 1
+            java.lang.Object[] r3 = new java.lang.Object[r7]
+            java.lang.String r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r9)
+            r3[r22] = r2
+            java.lang.String r2 = "DeleteMessagesTextGroupPart"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r3)
+            r1.setMessage(r0)
+            goto L_0x071b
+        L_0x068e:
+            r7 = 1
+            if (r0 != r7) goto L_0x069a
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r1.setMessage(r0)
+            goto L_0x071b
+        L_0x069a:
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r5)
+            r1.setMessage(r0)
+            goto L_0x071b
+        L_0x06a3:
+            r9 = r23
+            if (r20 == 0) goto L_0x06e4
+            if (r21 != 0) goto L_0x06e4
+            if (r9 == r0) goto L_0x06e4
+            if (r7 == 0) goto L_0x06c3
+            r0 = 2131625248(0x7f0e0520, float:1.8877699E38)
+            r3 = 1
+            java.lang.Object[] r3 = new java.lang.Object[r3]
+            java.lang.String r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r9)
+            r3[r22] = r2
+            java.lang.String r2 = "DeleteMessagesTextGroup"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r3)
+            r1.setMessage(r0)
+            goto L_0x071b
+        L_0x06c3:
             r0 = 2131625247(0x7f0e051f, float:1.8877697E38)
-            r3 = 1
-            java.lang.Object[] r1 = new java.lang.Object[r3]
-            java.lang.String r3 = org.telegram.messenger.LocaleController.formatPluralString(r6, r5)
-            r4 = 0
-            r1[r4] = r3
-            java.lang.String r3 = "DeleteMessagesTextGroupPart"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r3, r0, r1)
-            r2.setMessage(r0)
-            goto L_0x06d0
-        L_0x0643:
-            r3 = 1
-            if (r8 != r3) goto L_0x064f
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r9, r1)
-            r2.setMessage(r0)
-            goto L_0x06d0
-        L_0x064f:
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r2.setMessage(r0)
-            goto L_0x06d0
-        L_0x0658:
-            if (r3 == 0) goto L_0x0699
-            if (r33 != 0) goto L_0x0699
-            if (r5 == r8) goto L_0x0699
-            if (r4 == 0) goto L_0x0677
-            r0 = 2131625246(0x7f0e051e, float:1.8877695E38)
-            r1 = 1
-            java.lang.Object[] r1 = new java.lang.Object[r1]
-            java.lang.String r3 = org.telegram.messenger.LocaleController.formatPluralString(r6, r5)
-            r4 = 0
-            r1[r4] = r3
-            java.lang.String r3 = "DeleteMessagesTextGroup"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r3, r0, r1)
-            r2.setMessage(r0)
-            goto L_0x06d0
-        L_0x0677:
-            r4 = 0
-            r1 = 2131625245(0x7f0e051d, float:1.8877693E38)
             r3 = 2
             java.lang.Object[] r3 = new java.lang.Object[r3]
-            java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r6, r5)
-            r3[r4] = r5
-            java.lang.String r0 = org.telegram.messenger.UserObject.getFirstName(r43)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r9)
+            r3[r22] = r2
+            java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r44)
             r4 = 1
-            r3[r4] = r0
-            java.lang.String r0 = "DeleteMessagesText"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r3)
+            r3[r4] = r2
+            java.lang.String r2 = "DeleteMessagesText"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r3)
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
-            r2.setMessage(r0)
-            goto L_0x06d0
-        L_0x0699:
-            if (r4 == 0) goto L_0x06be
-            boolean r0 = r4.megagroup
-            if (r0 == 0) goto L_0x06be
-            if (r52 != 0) goto L_0x06be
-            r0 = 1
-            if (r8 != r0) goto L_0x06b1
-            r0 = 2131624374(0x7f0e01b6, float:1.8875926E38)
-            java.lang.String r1 = "AreYouSureDeleteSingleMessageMega"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r2.setMessage(r0)
-            goto L_0x06d0
-        L_0x06b1:
-            r0 = 2131624366(0x7f0e01ae, float:1.887591E38)
-            java.lang.String r1 = "AreYouSureDeleteFewMessagesMega"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r2.setMessage(r0)
-            goto L_0x06d0
-        L_0x06be:
-            r0 = 1
-            if (r8 != r0) goto L_0x06c9
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r9, r1)
-            r2.setMessage(r0)
-            goto L_0x06d0
-        L_0x06c9:
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r2.setMessage(r0)
-        L_0x06d0:
-            r0 = 2131624695(0x7f0e02f7, float:1.8876577E38)
-            java.lang.String r1 = "Cancel"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r1 = 0
-            r2.setNegativeButton(r0, r1)
-            org.telegram.ui.ActionBar.AlertDialog r0 = r2.create()
-            r1 = r42
+            r1.setMessage(r0)
+            goto L_0x071b
+        L_0x06e4:
+            if (r7 == 0) goto L_0x0709
+            boolean r2 = r7.megagroup
+            if (r2 == 0) goto L_0x0709
+            if (r53 != 0) goto L_0x0709
+            r2 = 1
+            if (r0 != r2) goto L_0x06fc
+            r0 = 2131624375(0x7f0e01b7, float:1.8875928E38)
+            java.lang.String r2 = "AreYouSureDeleteSingleMessageMega"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
+            r1.setMessage(r0)
+            goto L_0x071b
+        L_0x06fc:
+            r0 = 2131624367(0x7f0e01af, float:1.8875912E38)
+            java.lang.String r2 = "AreYouSureDeleteFewMessagesMega"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
+            r1.setMessage(r0)
+            goto L_0x071b
+        L_0x0709:
+            r2 = 1
+            if (r0 != r2) goto L_0x0714
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r1.setMessage(r0)
+            goto L_0x071b
+        L_0x0714:
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r5)
+            r1.setMessage(r0)
+        L_0x071b:
+            r0 = 2131624697(0x7f0e02f9, float:1.8876581E38)
+            java.lang.String r2 = "Cancel"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
+            r2 = 0
+            r1.setNegativeButton(r0, r2)
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda38 r0 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda38
+            r2 = r56
+            r0.<init>(r2)
+            r1.setOnPreDismissListener(r0)
+            org.telegram.ui.ActionBar.AlertDialog r0 = r1.create()
+            r1 = r43
             r1.showDialog(r0)
             r1 = -1
             android.view.View r0 = r0.getButton(r1)
             android.widget.TextView r0 = (android.widget.TextView) r0
-            if (r0 == 0) goto L_0x06f8
+            if (r0 == 0) goto L_0x074d
             java.lang.String r1 = "dialogTextRed2"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setTextColor(r1)
-        L_0x06f8:
+        L_0x074d:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.createDeleteMessagesAlert(org.telegram.ui.ActionBar.BaseFragment, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$EncryptedChat, org.telegram.tgnet.TLRPC$ChatFull, long, org.telegram.messenger.MessageObject, android.util.SparseArray[], org.telegram.messenger.MessageObject$GroupedMessages, boolean, int, java.lang.Runnable, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.createDeleteMessagesAlert(org.telegram.ui.ActionBar.BaseFragment, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$EncryptedChat, org.telegram.tgnet.TLRPC$ChatFull, long, org.telegram.messenger.MessageObject, android.util.SparseArray[], org.telegram.messenger.MessageObject$GroupedMessages, boolean, int, java.lang.Runnable, java.lang.Runnable, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDeleteMessagesAlert$88(AlertDialog[] alertDialogArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, BaseFragment baseFragment, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$ChatFull tLRPC$ChatFull, long j, MessageObject messageObject, SparseArray[] sparseArrayArr, MessageObject.GroupedMessages groupedMessages, boolean z, Runnable runnable, Theme.ResourcesProvider resourcesProvider) {
+    public static /* synthetic */ void lambda$createDeleteMessagesAlert$90(AlertDialog[] alertDialogArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, BaseFragment baseFragment, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$ChatFull tLRPC$ChatFull, long j, MessageObject messageObject, SparseArray[] sparseArrayArr, MessageObject.GroupedMessages groupedMessages, boolean z, Runnable runnable, Runnable runnable2, Theme.ResourcesProvider resourcesProvider) {
         int i;
         TLRPC$TL_error tLRPC$TL_error2 = tLRPC$TL_error;
         int i2 = 0;
@@ -6344,11 +6447,11 @@ public class AlertsCreator {
         } else {
             i = (tLRPC$TL_error2 == null || !"USER_NOT_PARTICIPANT".equals(tLRPC$TL_error2.text)) ? 2 : 0;
         }
-        createDeleteMessagesAlert(baseFragment, tLRPC$User, tLRPC$Chat, tLRPC$EncryptedChat, tLRPC$ChatFull, j, messageObject, sparseArrayArr, groupedMessages, z, i, runnable, resourcesProvider);
+        createDeleteMessagesAlert(baseFragment, tLRPC$User, tLRPC$Chat, tLRPC$EncryptedChat, tLRPC$ChatFull, j, messageObject, sparseArrayArr, groupedMessages, z, i, runnable, runnable2, resourcesProvider);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDeleteMessagesAlert$91(AlertDialog[] alertDialogArr, int i, int i2, BaseFragment baseFragment) {
+    public static /* synthetic */ void lambda$createDeleteMessagesAlert$93(AlertDialog[] alertDialogArr, int i, int i2, BaseFragment baseFragment) {
         if (alertDialogArr[0] != null) {
             alertDialogArr[0].setOnCancelListener(new AlertsCreator$$ExternalSyntheticLambda0(i, i2));
             baseFragment.showDialog(alertDialogArr[0]);
@@ -6356,7 +6459,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDeleteMessagesAlert$92(boolean[] zArr, View view) {
+    public static /* synthetic */ void lambda$createDeleteMessagesAlert$94(boolean[] zArr, View view) {
         if (view.isEnabled()) {
             CheckBoxCell checkBoxCell = (CheckBoxCell) view;
             Integer num = (Integer) checkBoxCell.getTag();
@@ -6366,19 +6469,19 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDeleteMessagesAlert$93(boolean[] zArr, View view) {
+    public static /* synthetic */ void lambda$createDeleteMessagesAlert$95(boolean[] zArr, View view) {
         zArr[0] = !zArr[0];
         ((CheckBoxCell) view).setChecked(zArr[0], true);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDeleteMessagesAlert$94(boolean[] zArr, View view) {
+    public static /* synthetic */ void lambda$createDeleteMessagesAlert$96(boolean[] zArr, View view) {
         zArr[0] = !zArr[0];
         ((CheckBoxCell) view).setChecked(zArr[0], true);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createDeleteMessagesAlert$96(MessageObject messageObject, MessageObject.GroupedMessages groupedMessages, TLRPC$EncryptedChat tLRPC$EncryptedChat, int i, long j, boolean[] zArr, boolean z, SparseArray[] sparseArrayArr, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, boolean[] zArr2, TLRPC$Chat tLRPC$Chat2, TLRPC$ChatFull tLRPC$ChatFull, Runnable runnable, DialogInterface dialogInterface, int i2) {
+    public static /* synthetic */ void lambda$createDeleteMessagesAlert$98(MessageObject messageObject, MessageObject.GroupedMessages groupedMessages, TLRPC$EncryptedChat tLRPC$EncryptedChat, int i, long j, boolean[] zArr, boolean z, SparseArray[] sparseArrayArr, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, boolean[] zArr2, TLRPC$Chat tLRPC$Chat2, TLRPC$ChatFull tLRPC$ChatFull, Runnable runnable, DialogInterface dialogInterface, int i2) {
         ArrayList<Integer> arrayList;
         int i3;
         ArrayList arrayList2;
@@ -6466,12 +6569,19 @@ public class AlertsCreator {
                     tLRPC$TL_channels_reportSpam.participant = MessagesController.getInputPeer(tLRPC$Chat);
                 }
                 tLRPC$TL_channels_reportSpam.id = arrayList;
-                ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_channels_reportSpam, AlertsCreator$$ExternalSyntheticLambda85.INSTANCE);
+                ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_channels_reportSpam, AlertsCreator$$ExternalSyntheticLambda88.INSTANCE);
             }
             if (zArr2[2]) {
                 MessagesController.getInstance(i).deleteUserChannelHistory(tLRPC$Chat4, tLRPC$User2, tLRPC$Chat3, i3);
             }
         }
+        if (runnable != null) {
+            runnable.run();
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$createDeleteMessagesAlert$99(Runnable runnable, DialogInterface dialogInterface) {
         if (runnable != null) {
             runnable.run();
         }
@@ -6513,25 +6623,25 @@ public class AlertsCreator {
             editTextBoldCursor.setCursorWidth(1.5f);
             editTextBoldCursor.setPadding(0, AndroidUtilities.dp(4.0f), 0, 0);
             linearLayout.addView(editTextBoldCursor, LayoutHelper.createLinear(-1, 36, 51, 24, 6, 24, 0));
-            editTextBoldCursor.setOnEditorActionListener(AlertsCreator$$ExternalSyntheticLambda69.INSTANCE);
+            editTextBoldCursor.setOnEditorActionListener(AlertsCreator$$ExternalSyntheticLambda72.INSTANCE);
             editTextBoldCursor.setText(generateThemeName(themeAccent));
             editTextBoldCursor.setSelection(editTextBoldCursor.length());
             AlertDialog create = builder.create();
-            create.setOnShowListener(new AlertsCreator$$ExternalSyntheticLambda37(editTextBoldCursor));
+            create.setOnShowListener(new AlertsCreator$$ExternalSyntheticLambda40(editTextBoldCursor));
             baseFragment2.showDialog(create);
             editTextBoldCursor.requestFocus();
-            create.getButton(-1).setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda44(baseFragment, editTextBoldCursor, themeAccent, themeInfo, create));
+            create.getButton(-1).setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda47(baseFragment, editTextBoldCursor, themeAccent, themeInfo, create));
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createThemeCreateDialog$99(EditTextBoldCursor editTextBoldCursor) {
+    public static /* synthetic */ void lambda$createThemeCreateDialog$102(EditTextBoldCursor editTextBoldCursor) {
         editTextBoldCursor.requestFocus();
         AndroidUtilities.showKeyboard(editTextBoldCursor);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$createThemeCreateDialog$103(BaseFragment baseFragment, EditTextBoldCursor editTextBoldCursor, Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, AlertDialog alertDialog, View view) {
+    public static /* synthetic */ void lambda$createThemeCreateDialog$106(BaseFragment baseFragment, EditTextBoldCursor editTextBoldCursor, Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, AlertDialog alertDialog, View view) {
         if (baseFragment.getParentActivity() != null) {
             if (editTextBoldCursor.length() == 0) {
                 Vibrator vibrator = (Vibrator) ApplicationLoader.applicationContext.getSystemService("vibrator");
@@ -6548,7 +6658,7 @@ public class AlertsCreator {
             if (themeAccent != null) {
                 themeInfo.setCurrentAccentId(themeAccent.id);
                 Theme.refreshThemeColors();
-                Utilities.searchQueue.postRunnable(new AlertsCreator$$ExternalSyntheticLambda74(editTextBoldCursor, alertDialog, baseFragment));
+                Utilities.searchQueue.postRunnable(new AlertsCreator$$ExternalSyntheticLambda77(editTextBoldCursor, alertDialog, baseFragment));
                 return;
             }
             processCreate(editTextBoldCursor, alertDialog, baseFragment);
@@ -6723,17 +6833,17 @@ public class AlertsCreator {
         actionBarPopupWindow.setSoftInputMode(0);
         actionBarPopupWindow.setFocusable(true);
         actionBarPopupWindowLayout.setFocusableInTouchMode(true);
-        actionBarPopupWindowLayout.setOnKeyListener(new AlertsCreator$$ExternalSyntheticLambda62(actionBarPopupWindow));
+        actionBarPopupWindowLayout.setOnKeyListener(new AlertsCreator$$ExternalSyntheticLambda65(actionBarPopupWindow));
         actionBarPopupWindowLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x - AndroidUtilities.dp(40.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, Integer.MIN_VALUE));
         actionBarPopupWindow.showAsDropDown(view, i, i2);
         actionBarPopupWindowLayout.updateRadialSelectors();
         actionBarPopupWindow.startAnimation();
-        actionBarPopupWindowLayout.setOnTouchListener(new AlertsCreator$$ExternalSyntheticLambda63(actionBarPopupWindow, rect));
+        actionBarPopupWindowLayout.setOnTouchListener(new AlertsCreator$$ExternalSyntheticLambda66(actionBarPopupWindow, rect));
         return actionBarPopupWindow;
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$showPopupMenu$104(ActionBarPopupWindow actionBarPopupWindow, View view, int i, KeyEvent keyEvent) {
+    public static /* synthetic */ boolean lambda$showPopupMenu$107(ActionBarPopupWindow actionBarPopupWindow, View view, int i, KeyEvent keyEvent) {
         if (i != 82 || keyEvent.getRepeatCount() != 0 || keyEvent.getAction() != 1 || !actionBarPopupWindow.isShowing()) {
             return false;
         }
@@ -6742,7 +6852,7 @@ public class AlertsCreator {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$showPopupMenu$105(ActionBarPopupWindow actionBarPopupWindow, Rect rect, View view, MotionEvent motionEvent) {
+    public static /* synthetic */ boolean lambda$showPopupMenu$108(ActionBarPopupWindow actionBarPopupWindow, Rect rect, View view, MotionEvent motionEvent) {
         if (motionEvent.getActionMasked() != 0 || actionBarPopupWindow == null || !actionBarPopupWindow.isShowing()) {
             return false;
         }

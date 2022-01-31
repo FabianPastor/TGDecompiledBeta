@@ -1,16 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.PopupSwipeBackLayout;
-import org.telegram.ui.Components.ReactionsContainerLayout;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda185 implements PopupSwipeBackLayout.OnSwipeBackProgressListener {
-    public final /* synthetic */ ReactionsContainerLayout f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda185 implements MessagesStorage.IntCallback {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda185(ReactionsContainerLayout reactionsContainerLayout) {
-        this.f$0 = reactionsContainerLayout;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda185(ChatActivity chatActivity, boolean z) {
+        this.f$0 = chatActivity;
+        this.f$1 = z;
     }
 
-    public final void onSwipeBackProgress(PopupSwipeBackLayout popupSwipeBackLayout, float f, float f2) {
-        ChatActivity.lambda$createMenu$138(this.f$0, popupSwipeBackLayout, f, f2);
+    public final void run(int i) {
+        this.f$0.lambda$processSelectedOption$165(this.f$1, i);
     }
 }

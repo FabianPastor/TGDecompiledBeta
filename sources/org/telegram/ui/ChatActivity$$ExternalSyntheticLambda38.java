@@ -1,18 +1,20 @@
 package org.telegram.ui;
 
-import android.view.View;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
+import android.content.DialogInterface;
+import org.telegram.tgnet.TLRPC$TL_payments_bankCardData;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda38 implements View.OnClickListener {
-    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$0;
-    public final /* synthetic */ int[] f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda38 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLRPC$TL_payments_bankCardData f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda38(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int[] iArr) {
-        this.f$0 = actionBarPopupWindowLayout;
-        this.f$1 = iArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda38(ChatActivity chatActivity, TLRPC$TL_payments_bankCardData tLRPC$TL_payments_bankCardData, String str) {
+        this.f$0 = chatActivity;
+        this.f$1 = tLRPC$TL_payments_bankCardData;
+        this.f$2 = str;
     }
 
-    public final void onClick(View view) {
-        this.f$0.getSwipeBack().openForeground(this.f$1[0]);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        this.f$0.lambda$didPressMessageUrl$207(this.f$1, this.f$2, dialogInterface, i);
     }
 }

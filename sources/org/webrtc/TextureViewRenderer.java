@@ -31,7 +31,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
     private VideoSink parentSink;
     private RendererCommon.RendererEvents rendererEvents;
     private final String resourceName;
-    private boolean rotateTextureWitchScreen;
+    private boolean rotateTextureWithScreen;
     public int rotatedFrameHeight;
     public int rotatedFrameWidth;
     private int screenRotation;
@@ -300,7 +300,6 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
         updateSurfaceSize();
     }
 
-    /* access modifiers changed from: private */
     public void updateRotation() {
         View view;
         float f;
@@ -339,7 +338,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
     public void setMirror(boolean z) {
         if (this.mirror != z) {
             this.mirror = z;
-            if (this.rotateTextureWitchScreen) {
+            if (this.rotateTextureWithScreen) {
                 onRotationChanged();
             } else {
                 this.eglRenderer.setMirror(z);
@@ -381,7 +380,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
     public void onMeasure(int i, int i2) {
         Point point;
         ThreadUtils.checkIsOnMainThread();
-        if (!this.isCamera && this.rotateTextureWitchScreen) {
+        if (!this.isCamera && this.rotateTextureWithScreen) {
             updateVideoSizes();
         }
         int i3 = this.maxTextureSize;
@@ -506,7 +505,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
             r0.onFrameResolutionChanged(r8, r9, r10)
         L_0x0007:
             r7.textureRotation = r10
-            boolean r0 = r7.rotateTextureWitchScreen
+            boolean r0 = r7.rotateTextureWithScreen
             r1 = -180(0xffffffffffffff4c, float:NaN)
             r2 = 180(0xb4, float:2.52E-43)
             if (r0 == 0) goto L_0x0039
@@ -620,7 +619,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
         int i2;
         int i3 = this.videoHeight;
         if (i3 != 0 && (i = this.videoWidth) != 0) {
-            if (!this.rotateTextureWitchScreen) {
+            if (!this.rotateTextureWithScreen) {
                 int i4 = this.textureRotation - OrientationHelper.cameraOrientation;
                 int i5 = (i4 == 0 || i4 == 180 || i4 == -180) ? this.videoWidth : this.videoHeight;
                 i3 = (i4 == 0 || i4 == 180 || i4 == -180) ? this.videoHeight : this.videoWidth;
@@ -662,9 +661,9 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
         requestLayout();
     }
 
-    public void setRotateTextureWitchScreen(boolean z) {
-        if (this.rotateTextureWitchScreen != z) {
-            this.rotateTextureWitchScreen = z;
+    public void setRotateTextureWithScreen(boolean z) {
+        if (this.rotateTextureWithScreen != z) {
+            this.rotateTextureWithScreen = z;
             requestLayout();
         }
     }
@@ -696,6 +695,18 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
         }
         this.eglRenderer.setRotation(i3);
         this.eglRenderer.setMirror(this.mirror);
+    }
+
+    public void setRotation(float f) {
+        super.setRotation(f);
+    }
+
+    public void setRotationY(float f) {
+        super.setRotationY(f);
+    }
+
+    public void setRotationX(float f) {
+        super.setRotationX(f);
     }
 
     private void postOrRun(Runnable runnable) {

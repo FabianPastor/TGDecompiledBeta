@@ -1,21 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.ResultCallback;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.ui.ActionBar.EmojiThemes;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda175 implements ResultCallback {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda175 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda175(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda175(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i) {
         this.f$0 = chatActivity;
+        this.f$1 = alertDialogArr;
+        this.f$2 = i;
     }
 
-    public final void onComplete(Object obj) {
-        this.f$0.lambda$setChatThemeEmoticon$194((EmojiThemes) obj);
-    }
-
-    public /* synthetic */ void onError(TLRPC$TL_error tLRPC$TL_error) {
-        ResultCallback.CC.$default$onError((ResultCallback) this, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.lambda$showRequestUrlAlert$205(this.f$1, this.f$2);
     }
 }

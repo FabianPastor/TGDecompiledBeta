@@ -10,6 +10,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda59 impl
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createDeleteMessagesAlert$94(this.f$0, view);
+        AlertsCreator.lambda$createDeleteMessagesAlert$95(this.f$0, view);
     }
 }

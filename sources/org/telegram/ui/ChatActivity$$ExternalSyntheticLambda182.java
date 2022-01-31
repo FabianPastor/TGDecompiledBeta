@@ -1,22 +1,26 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$TL_document;
-import org.telegram.ui.Components.AlertsCreator;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import org.telegram.messenger.LanguageDetector;
+import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda182 implements AlertsCreator.ScheduleDatePickerDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLRPC$TL_document f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ Object f$3;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda182 implements LanguageDetector.StringCallback {
+    public final /* synthetic */ String[] f$0;
+    public final /* synthetic */ String f$1;
+    public final /* synthetic */ ActionBarMenuSubItem f$2;
+    public final /* synthetic */ AtomicBoolean f$3;
+    public final /* synthetic */ AtomicReference f$4;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda182(ChatActivity chatActivity, TLRPC$TL_document tLRPC$TL_document, String str, Object obj) {
-        this.f$0 = chatActivity;
-        this.f$1 = tLRPC$TL_document;
-        this.f$2 = str;
-        this.f$3 = obj;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda182(String[] strArr, String str, ActionBarMenuSubItem actionBarMenuSubItem, AtomicBoolean atomicBoolean, AtomicReference atomicReference) {
+        this.f$0 = strArr;
+        this.f$1 = str;
+        this.f$2 = actionBarMenuSubItem;
+        this.f$3 = atomicBoolean;
+        this.f$4 = atomicReference;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$createView$37(this.f$1, this.f$2, this.f$3, z, i);
+    public final void run(String str) {
+        ChatActivity.lambda$createMenu$146(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, str);
     }
 }

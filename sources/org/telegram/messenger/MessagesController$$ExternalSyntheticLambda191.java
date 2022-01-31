@@ -1,15 +1,17 @@
 package org.telegram.messenger;
 
+import org.telegram.tgnet.TLRPC$updates_Difference;
+
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda191 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ TLRPC$updates_Difference f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda191(MessagesController messagesController, boolean z) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda191(MessagesController messagesController, TLRPC$updates_Difference tLRPC$updates_Difference) {
         this.f$0 = messagesController;
-        this.f$1 = z;
+        this.f$1 = tLRPC$updates_Difference;
     }
 
     public final void run() {
-        this.f$0.lambda$checkPromoInfo$124(this.f$1);
+        this.f$0.lambda$getDifference$265(this.f$1);
     }
 }

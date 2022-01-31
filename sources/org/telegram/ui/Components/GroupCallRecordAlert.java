@@ -65,13 +65,13 @@ public class GroupCallRecordAlert extends BottomSheet {
             r4.<init>(r5)
             boolean r5 = org.telegram.messenger.ChatObject.isChannelOrGiga(r21)
             if (r5 == 0) goto L_0x0053
-            r5 = 2131628517(0x7f0e11e5, float:1.8884329E38)
+            r5 = 2131628523(0x7f0e11eb, float:1.8884341E38)
             java.lang.String r6 = "VoipChannelRecordVoiceChat"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r4.setText(r5)
             goto L_0x005f
         L_0x0053:
-            r5 = 2131628713(0x7f0e12a9, float:1.8884726E38)
+            r5 = 2131628719(0x7f0e12af, float:1.8884739E38)
             java.lang.String r6 = "VoipRecordVoiceChat"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r4.setText(r5)
@@ -115,7 +115,7 @@ public class GroupCallRecordAlert extends BottomSheet {
             android.widget.TextView r4 = new android.widget.TextView
             android.content.Context r8 = r19.getContext()
             r4.<init>(r8)
-            r8 = 2131628714(0x7f0e12aa, float:1.8884728E38)
+            r8 = 2131628720(0x7f0e12b0, float:1.888474E38)
             java.lang.String r11 = "VoipRecordVoiceChatInfo"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r11, r8)
             r4.setText(r8)
@@ -246,7 +246,7 @@ public class GroupCallRecordAlert extends BottomSheet {
             android.graphics.Typeface r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
             r3.setTypeface(r8)
             android.widget.TextView r3 = r0.positiveButton
-            r8 = 2131628712(0x7f0e12a8, float:1.8884724E38)
+            r8 = 2131628718(0x7f0e12ae, float:1.8884737E38)
             java.lang.String r9 = "VoipRecordStart"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r3.setText(r8)
@@ -330,7 +330,7 @@ public class GroupCallRecordAlert extends BottomSheet {
             if (r3 != 0) goto L_0x02a2
             android.widget.TextView[] r8 = r0.titles
             r8 = r8[r3]
-            r9 = 2131628709(0x7f0e12a5, float:1.8884718E38)
+            r9 = 2131628715(0x7f0e12ab, float:1.888473E38)
             java.lang.String r10 = "VoipRecordAudio"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setText(r9)
@@ -339,7 +339,7 @@ public class GroupCallRecordAlert extends BottomSheet {
             if (r3 != r7) goto L_0x02b5
             android.widget.TextView[] r8 = r0.titles
             r8 = r8[r3]
-            r9 = 2131628711(0x7f0e12a7, float:1.8884722E38)
+            r9 = 2131628717(0x7f0e12ad, float:1.8884735E38)
             java.lang.String r10 = "VoipRecordPortrait"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setText(r9)
@@ -347,7 +347,7 @@ public class GroupCallRecordAlert extends BottomSheet {
         L_0x02b5:
             android.widget.TextView[] r8 = r0.titles
             r8 = r8[r3]
-            r9 = 2131628710(0x7f0e12a6, float:1.888472E38)
+            r9 = 2131628716(0x7f0e12ac, float:1.8884733E38)
             java.lang.String r10 = "VoipRecordLandscape"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setText(r9)

@@ -33,6 +33,7 @@ public class SendLocationCell extends FrameLayout {
             AndroidUtilities.runOnUIThread(SendLocationCell.this.invalidateRunnable, 1000);
         }
     };
+    private boolean live;
     /* access modifiers changed from: private */
     public RectF rect;
     private final Theme.ResourcesProvider resourcesProvider;
@@ -41,6 +42,7 @@ public class SendLocationCell extends FrameLayout {
     public SendLocationCell(Context context, boolean z, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         this.resourcesProvider = resourcesProvider2;
+        this.live = z;
         ImageView imageView2 = new ImageView(context);
         this.imageView = imageView2;
         imageView2.setTag(z ? "location_sendLiveLocationBackgroundlocation_sendLiveLocationIcon" : "location_sendLocationBackgroundlocation_sendLocationIcon");
@@ -103,7 +105,9 @@ public class SendLocationCell extends FrameLayout {
             }
             imageView2.setAlpha(f);
         }
-        checkText();
+        if (this.live) {
+            checkText();
+        }
     }
 
     /* access modifiers changed from: protected */
@@ -132,7 +136,9 @@ public class SendLocationCell extends FrameLayout {
 
     public void setDialogId(long j) {
         this.dialogId = j;
-        checkText();
+        if (this.live) {
+            checkText();
+        }
     }
 
     /* access modifiers changed from: private */

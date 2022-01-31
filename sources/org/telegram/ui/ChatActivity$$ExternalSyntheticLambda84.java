@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda84 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import android.view.View;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda84(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda84 implements View.OnClickListener {
+    public final /* synthetic */ boolean[] f$0;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda84(boolean[] zArr) {
+        this.f$0 = zArr;
     }
 
-    public final void run() {
-        this.f$0.lambda$checkListViewPaddings$114();
+    public final void onClick(View view) {
+        ChatActivity.lambda$processSelectedOption$168(this.f$0, view);
     }
 }

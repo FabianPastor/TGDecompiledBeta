@@ -87,7 +87,7 @@ public class TLRPC$TL_message extends TLRPC$Message {
             this.grouped_id = abstractSerializedData.readInt64(z);
         }
         if ((this.flags & 1048576) != 0) {
-            this.reactions = TLRPC$TL_messageReactions.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.reactions = TLRPC$MessageReactions.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 4194304) != 0) {
             int readInt324 = abstractSerializedData.readInt32(z);

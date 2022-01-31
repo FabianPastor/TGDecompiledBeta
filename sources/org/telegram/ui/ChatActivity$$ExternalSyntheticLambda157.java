@@ -1,26 +1,22 @@
 package org.telegram.ui;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
-import org.telegram.messenger.LanguageDetector;
-import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
+import java.util.concurrent.CountDownLatch;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda157 implements LanguageDetector.StringCallback {
-    public final /* synthetic */ String[] f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ ActionBarMenuSubItem f$2;
-    public final /* synthetic */ AtomicBoolean f$3;
-    public final /* synthetic */ AtomicReference f$4;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda157 implements Runnable {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ MessagesStorage f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ CountDownLatch f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda157(String[] strArr, String str, ActionBarMenuSubItem actionBarMenuSubItem, AtomicBoolean atomicBoolean, AtomicReference atomicReference) {
-        this.f$0 = strArr;
-        this.f$1 = str;
-        this.f$2 = actionBarMenuSubItem;
-        this.f$3 = atomicBoolean;
-        this.f$4 = atomicReference;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda157(ChatActivity chatActivity, MessagesStorage messagesStorage, long j, CountDownLatch countDownLatch) {
+        this.f$0 = chatActivity;
+        this.f$1 = messagesStorage;
+        this.f$2 = j;
+        this.f$3 = countDownLatch;
     }
 
-    public final void run(String str) {
-        ChatActivity.lambda$createMenu$132(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, str);
+    public final void run() {
+        this.f$0.lambda$onFragmentCreate$7(this.f$1, this.f$2, this.f$3);
     }
 }

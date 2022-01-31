@@ -1,14 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.ui.ActionBar.Theme;
-
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda203 implements Runnable {
-    public static final /* synthetic */ MessagesController$$ExternalSyntheticLambda203 INSTANCE = new MessagesController$$ExternalSyntheticLambda203();
+    public final /* synthetic */ MessagesController f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ long f$3;
 
-    private /* synthetic */ MessagesController$$ExternalSyntheticLambda203() {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda203(MessagesController messagesController, boolean z, boolean z2, long j) {
+        this.f$0 = messagesController;
+        this.f$1 = z;
+        this.f$2 = z2;
+        this.f$3 = j;
     }
 
     public final void run() {
-        Theme.checkAutoNightThemeConditions();
+        this.f$0.lambda$setLastCreatedDialogId$35(this.f$1, this.f$2, this.f$3);
     }
 }

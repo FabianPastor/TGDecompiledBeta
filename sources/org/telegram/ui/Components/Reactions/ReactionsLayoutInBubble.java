@@ -24,8 +24,8 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
+import org.telegram.tgnet.TLRPC$TL_messagePeerReaction;
 import org.telegram.tgnet.TLRPC$TL_messageReactions;
-import org.telegram.tgnet.TLRPC$TL_messageUserReaction;
 import org.telegram.tgnet.TLRPC$TL_reactionCount;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
@@ -51,6 +51,7 @@ public class ReactionsLayoutInBubble {
     public int fromWidth;
     private float fromX;
     private float fromY;
+    public boolean hasUnreadReactions;
     public int height;
     public boolean isEmpty;
     public boolean isSmall;
@@ -97,6 +98,7 @@ public class ReactionsLayoutInBubble {
         for (int i = 0; i < this.reactionButtons.size(); i++) {
             this.reactionButtons.get(i).detach();
         }
+        this.hasUnreadReactions = false;
         this.reactionButtons.clear();
         if (messageObject2 != null) {
             TLRPC$TL_messageReactions tLRPC$TL_messageReactions = messageObject2.messageOwner.reactions;
@@ -113,16 +115,16 @@ public class ReactionsLayoutInBubble {
                     TLRPC$TL_reactionCount tLRPC$TL_reactionCount = messageObject2.messageOwner.reactions.results.get(i4);
                     ReactionButton reactionButton = new ReactionButton(tLRPC$TL_reactionCount);
                     this.reactionButtons.add(reactionButton);
-                    if (!z && messageObject2.messageOwner.reactions.recent_reactons != null) {
+                    if (!z && messageObject2.messageOwner.reactions.recent_reactions != null) {
                         ArrayList arrayList = null;
                         if (tLRPC$TL_reactionCount.count <= 3 && i2 <= 3) {
-                            for (int i5 = 0; i5 < messageObject2.messageOwner.reactions.recent_reactons.size(); i5++) {
-                                TLRPC$TL_messageUserReaction tLRPC$TL_messageUserReaction = messageObject2.messageOwner.reactions.recent_reactons.get(i5);
-                                if (tLRPC$TL_messageUserReaction.reaction.equals(tLRPC$TL_reactionCount.reaction) && MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(tLRPC$TL_messageUserReaction.user_id)) != null) {
+                            for (int i5 = 0; i5 < messageObject2.messageOwner.reactions.recent_reactions.size(); i5++) {
+                                TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction = messageObject2.messageOwner.reactions.recent_reactions.get(i5);
+                                if (tLRPC$TL_messagePeerReaction.reaction.equals(tLRPC$TL_reactionCount.reaction) && MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(MessageObject.getPeerId(tLRPC$TL_messagePeerReaction.peer_id))) != null) {
                                     if (arrayList == null) {
                                         arrayList = new ArrayList();
                                     }
-                                    arrayList.add(MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(tLRPC$TL_messageUserReaction.user_id)));
+                                    arrayList.add(MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(MessageObject.getPeerId(tLRPC$TL_messagePeerReaction.peer_id))));
                                 }
                             }
                             reactionButton.setUsers(arrayList);
@@ -156,6 +158,7 @@ public class ReactionsLayoutInBubble {
                 buttonsComparator.currentAccount = this.currentAccount;
                 Collections.sort(this.reactionButtons, buttonsComparator);
             }
+            this.hasUnreadReactions = MessageObject.hasUnreadReactions(messageObject2.messageOwner);
         }
         this.isEmpty = this.reactionButtons.isEmpty();
     }

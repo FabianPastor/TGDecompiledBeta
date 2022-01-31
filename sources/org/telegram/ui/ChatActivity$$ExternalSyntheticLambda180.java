@@ -1,20 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessageObject;
-import org.telegram.ui.Components.AlertsCreator;
+import java.util.Comparator;
+import org.telegram.ui.ChatActivity;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda180 implements AlertsCreator.ScheduleDatePickerDelegate {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessageObject.GroupedMessages f$1;
-    public final /* synthetic */ MessageObject f$2;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda180 implements Comparator {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda180 INSTANCE = new ChatActivity$$ExternalSyntheticLambda180();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda180(ChatActivity chatActivity, MessageObject.GroupedMessages groupedMessages, MessageObject messageObject) {
-        this.f$0 = chatActivity;
-        this.f$1 = groupedMessages;
-        this.f$2 = messageObject;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda180() {
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$processSelectedOption$165(this.f$1, this.f$2, z, i);
+    public final int compare(Object obj, Object obj2) {
+        return ChatActivity.lambda$getStackedHistoryDialogs$71((ChatActivity.PulledDialog) obj, (ChatActivity.PulledDialog) obj2);
     }
 }

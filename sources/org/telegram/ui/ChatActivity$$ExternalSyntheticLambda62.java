@@ -4,14 +4,12 @@ import android.view.View;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda62 implements View.OnClickListener {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda62(ChatActivity chatActivity, int i) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda62(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = i;
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$14(this.f$1, view);
+        this.f$0.lambda$updateInfoTopView$73(view);
     }
 }

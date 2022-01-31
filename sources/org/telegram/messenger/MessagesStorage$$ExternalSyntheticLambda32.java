@@ -16,6 +16,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda32 im
     }
 
     public final void run() {
-        this.f$0.lambda$saveDiffParams$31(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$saveDiffParams$33(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

@@ -91,7 +91,7 @@ public class MessageSeenView extends FrameLayout {
         long j = 0;
         TLRPC$Peer tLRPC$Peer = messageObject.messageOwner.from_id;
         ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_getMessageReadParticipants, new MessageSeenView$$ExternalSyntheticLambda5(this, tLRPC$Peer != null ? tLRPC$Peer.user_id : j, i, tLRPC$Chat));
-        setBackground(Theme.createRadSelectorDrawable(Theme.getColor("dialogButtonSelector"), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f)));
+        setBackground(Theme.createRadSelectorDrawable(Theme.getColor("dialogButtonSelector"), 6, 0));
         setEnabled(false);
     }
 

@@ -1,19 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
-import org.telegram.ui.Components.ReactedUsersListView;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda186 implements ReactedUsersListView.OnHeightChangedListener {
-    public final /* synthetic */ ActionBarPopupWindow.ActionBarPopupWindowLayout f$0;
-    public final /* synthetic */ int[] f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda186 implements RequestDelegate {
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda186(ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout, int[] iArr) {
-        this.f$0 = actionBarPopupWindowLayout;
-        this.f$1 = iArr;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda186(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void onHeightChanged(ReactedUsersListView reactedUsersListView, int i) {
-        this.f$0.getSwipeBack().setNewForegroundHeight(this.f$1[0], AndroidUtilities.dp(52.0f) + i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$processSelectedOption$173(tLObject, tLRPC$TL_error);
     }
 }

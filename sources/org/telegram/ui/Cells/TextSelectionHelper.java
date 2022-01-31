@@ -35,6 +35,9 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Emoji;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LanguageDetector;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
@@ -98,6 +101,8 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     float movingOffsetX;
     float movingOffsetY;
     protected boolean multiselect;
+    /* access modifiers changed from: private */
+    public OnTranslateListener onTranslateListener = null;
     /* access modifiers changed from: private */
     public boolean parentIsScrolling;
     protected RecyclerListView parentRecyclerView;
@@ -306,6 +311,10 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     public static class IgnoreCopySpannable {
     }
 
+    public interface OnTranslateListener {
+        void run(CharSequence charSequence, String str, String str2, Runnable runnable);
+    }
+
     public interface SelectableView {
         int getBottom();
 
@@ -375,6 +384,10 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     /* access modifiers changed from: protected */
     public boolean selectLayout(int i, int i2) {
         return false;
+    }
+
+    public void setOnTranslate(OnTranslateListener onTranslateListener2) {
+        this.onTranslateListener = onTranslateListener2;
     }
 
     public void setParentView(ViewGroup viewGroup) {
@@ -1774,9 +1787,12 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
 
     private ActionMode.Callback createActionCallback() {
         final AnonymousClass4 r0 = new ActionMode.Callback() {
+            private String translateFromLanguage = null;
+
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 menu.add(0, 16908321, 0, 17039361);
                 menu.add(0, 16908319, 1, 17039373);
+                menu.add(0, 3, 2, LocaleController.getString("TranslateMessage", NUM));
                 return true;
             }
 
@@ -1792,7 +1808,70 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                         menu.getItem(1).setVisible(true);
                     }
                 }
+                if (!LanguageDetector.hasSupport() || TextSelectionHelper.this.getSelectedText() == null) {
+                    this.translateFromLanguage = null;
+                    updateTranslateButton(menu);
+                } else {
+                    LanguageDetector.detectLanguage(TextSelectionHelper.this.getSelectedText().toString(), new TextSelectionHelper$4$$ExternalSyntheticLambda2(this, menu), new TextSelectionHelper$4$$ExternalSyntheticLambda1(this, menu));
+                }
                 return true;
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$onPrepareActionMode$0(Menu menu, String str) {
+                this.translateFromLanguage = str;
+                updateTranslateButton(menu);
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$onPrepareActionMode$1(Menu menu, Exception exc) {
+                FileLog.e("mlkit: failed to detect language in selection");
+                FileLog.e((Throwable) exc);
+                this.translateFromLanguage = null;
+                updateTranslateButton(menu);
+            }
+
+            /* JADX WARNING: Code restructure failed: missing block: B:2:0x0019, code lost:
+                r1 = r2.translateFromLanguage;
+             */
+            /* Code decompiled incorrectly, please refer to instructions dump. */
+            private void updateTranslateButton(android.view.Menu r3) {
+                /*
+                    r2 = this;
+                    org.telegram.messenger.LocaleController r0 = org.telegram.messenger.LocaleController.getInstance()
+                    java.util.Locale r0 = r0.getCurrentLocale()
+                    java.lang.String r0 = r0.getLanguage()
+                    r1 = 2
+                    android.view.MenuItem r3 = r3.getItem(r1)
+                    org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                    org.telegram.ui.Cells.TextSelectionHelper$OnTranslateListener r1 = r1.onTranslateListener
+                    if (r1 == 0) goto L_0x0041
+                    java.lang.String r1 = r2.translateFromLanguage
+                    if (r1 == 0) goto L_0x0039
+                    boolean r0 = r1.equals(r0)
+                    if (r0 == 0) goto L_0x002d
+                    java.lang.String r0 = r2.translateFromLanguage
+                    java.lang.String r1 = "und"
+                    boolean r0 = r0.equals(r1)
+                    if (r0 == 0) goto L_0x0039
+                L_0x002d:
+                    java.util.HashSet r0 = org.telegram.ui.RestrictedLanguagesSelectActivity.getRestrictedLanguages()
+                    java.lang.String r1 = r2.translateFromLanguage
+                    boolean r0 = r0.contains(r1)
+                    if (r0 == 0) goto L_0x003f
+                L_0x0039:
+                    boolean r0 = org.telegram.messenger.LanguageDetector.hasSupport()
+                    if (r0 != 0) goto L_0x0041
+                L_0x003f:
+                    r0 = 1
+                    goto L_0x0042
+                L_0x0041:
+                    r0 = 0
+                L_0x0042:
+                    r3.setVisible(r0)
+                    return
+                */
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.TextSelectionHelper.AnonymousClass4.updateTranslateButton(android.view.Menu):void");
             }
 
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
@@ -1800,7 +1879,13 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                     return true;
                 }
                 int itemId = menuItem.getItemId();
-                if (itemId == 16908319) {
+                if (itemId == 3) {
+                    if (TextSelectionHelper.this.onTranslateListener != null) {
+                        TextSelectionHelper.this.onTranslateListener.run(TextSelectionHelper.this.getSelectedText(), this.translateFromLanguage, LocaleController.getInstance().getCurrentLocale().getLanguage(), new TextSelectionHelper$4$$ExternalSyntheticLambda0(this));
+                    }
+                    TextSelectionHelper.this.hideActions();
+                    return true;
+                } else if (itemId == 16908319) {
                     TextSelectionHelper textSelectionHelper = TextSelectionHelper.this;
                     CharSequence text = textSelectionHelper.getText(textSelectionHelper.selectedView, false);
                     if (text == null) {
@@ -1820,6 +1905,11 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                     TextSelectionHelper.this.copyText();
                     return true;
                 }
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$onActionItemClicked$2() {
+                TextSelectionHelper.this.showActions();
             }
 
             public void onDestroyActionMode(ActionMode actionMode) {
@@ -1878,9 +1968,9 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
 
     /* access modifiers changed from: private */
     public void copyText() {
-        CharSequence textForCopy;
-        if (isSelectionMode() && (textForCopy = getTextForCopy()) != null) {
-            ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", textForCopy));
+        CharSequence selectedText;
+        if (isSelectionMode() && (selectedText = getSelectedText()) != null) {
+            ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", selectedText));
             hideActions();
             clear(true);
             Callback callback2 = this.callback;
@@ -1891,7 +1981,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     }
 
     /* access modifiers changed from: protected */
-    public CharSequence getTextForCopy() {
+    public CharSequence getSelectedText() {
         CharSequence text = getText(this.selectedView, false);
         if (text != null) {
             return text.subSequence(this.selectionStart, this.selectionEnd);
@@ -2906,7 +2996,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         }
 
         /* access modifiers changed from: protected */
-        public CharSequence getTextForCopy() {
+        public CharSequence getSelectedText() {
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
             int i = this.startViewPosition;
             while (true) {

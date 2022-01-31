@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda136 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda136(ChatActivity chatActivity, TLObject tLObject) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda136(ChatActivity chatActivity, int i) {
         this.f$0 = chatActivity;
-        this.f$1 = tLObject;
+        this.f$1 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$createMenu$119(this.f$1);
+        this.f$0.lambda$processNewMessages$117(this.f$1);
     }
 }

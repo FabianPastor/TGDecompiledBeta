@@ -121,6 +121,7 @@ public class StickerEmojiCell extends FrameLayout {
         SendMessagesHelper.ImportingSticker importingSticker2 = importingSticker;
         String str4 = str;
         this.currentEmoji = str4;
+        TLRPC$PhotoSize tLRPC$PhotoSize = null;
         float f = 1.0f;
         if (importingSticker2 != null) {
             this.stickerPath = importingSticker2;
@@ -154,7 +155,9 @@ public class StickerEmojiCell extends FrameLayout {
         } else if (tLRPC$Document2 != null) {
             this.sticker = tLRPC$Document2;
             this.parentObject = obj;
-            TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
+            if (!MessageObject.isVideoSticker(tLRPC$Document)) {
+                tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
+            }
             boolean z3 = this.fromEmojiPanel;
             String str5 = z3 ? "emptyListPlaceholder" : "windowBackgroundGray";
             if (z3) {
@@ -164,21 +167,21 @@ public class StickerEmojiCell extends FrameLayout {
             if (MessageObject.canAutoplayAnimatedSticker(tLRPC$Document)) {
                 if (svgThumb != null) {
                     this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "66_66", (String) null, (Drawable) svgThumb, this.parentObject);
-                } else if (closestPhotoSizeWithSize != null) {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "66_66", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, 0, this.parentObject);
+                } else if (tLRPC$PhotoSize != null) {
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "66_66", ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$Document2), (String) null, 0, this.parentObject);
                 } else {
                     this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "66_66", (String) null, (Drawable) null, this.parentObject);
                 }
             } else if (svgThumb != null) {
-                if (closestPhotoSizeWithSize != null) {
-                    this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, "webp", (Drawable) svgThumb, this.parentObject);
+                if (tLRPC$PhotoSize != null) {
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$Document2), "66_66", "webp", (Drawable) svgThumb, this.parentObject);
                 } else {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, "webp", (Drawable) svgThumb, this.parentObject);
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "66_66", "webp", (Drawable) svgThumb, this.parentObject);
                 }
-            } else if (closestPhotoSizeWithSize != null) {
-                this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, "webp", (Drawable) null, this.parentObject);
+            } else if (tLRPC$PhotoSize != null) {
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$Document2), "66_66", "webp", (Drawable) null, this.parentObject);
             } else {
-                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, "webp", (Drawable) null, this.parentObject);
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "66_66", "webp", (Drawable) null, this.parentObject);
             }
             if (str4 != null) {
                 TextView textView2 = this.emojiTextView;
@@ -260,7 +263,7 @@ public class StickerEmojiCell extends FrameLayout {
                 if (j3 > 1050) {
                     this.time = 1050;
                 }
-                float interpolation = (interpolator.getInterpolation(((float) this.time) / 1050.0f) * 0.5f) + 0.5f;
+                float interpolation = (interpolator.getInterpolation(((float) this.time) / 150.0f) * 0.5f) + 0.5f;
                 this.alpha = interpolation;
                 if (interpolation >= 1.0f) {
                     this.changingAlpha = false;

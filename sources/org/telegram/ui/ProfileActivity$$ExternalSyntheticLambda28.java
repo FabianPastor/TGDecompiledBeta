@@ -1,17 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import java.util.Comparator;
 
-public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda28 implements RequestDelegate {
+public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda28 implements Comparator {
     public final /* synthetic */ ProfileActivity f$0;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda28(ProfileActivity profileActivity) {
+    public /* synthetic */ ProfileActivity$$ExternalSyntheticLambda28(ProfileActivity profileActivity, int i) {
         this.f$0 = profileActivity;
+        this.f$1 = i;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$createView$8(tLObject, tLRPC$TL_error);
+    public final int compare(Object obj, Object obj2) {
+        return this.f$0.lambda$updateOnlineCount$29(this.f$1, (Integer) obj, (Integer) obj2);
     }
 }

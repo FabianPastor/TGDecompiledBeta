@@ -138,10 +138,7 @@ public class Browser {
         if (z) {
             return str.equals("telegra.ph") || str.equals("te.legra.ph") || str.equals("graph.org");
         }
-        if (str.contains("telegra.ph") || str.contains("te.legra.ph") || str.contains("graph.org")) {
-            return true;
-        }
-        return false;
+        return str.matches("^(https?://)?(te\\.?legra\\.ph|graph\\.org).*");
     }
 
     /* JADX WARNING: Can't wrap try/catch for region: R(12:58|(3:59|60|(3:64|65|(4:66|67|(3:69|(2:71|124)(1:125)|72)(0)|75)))|73|75|76|(3:78|(4:81|(2:82|(1:127)(2:84|(3:129|86|128)(1:87)))|88|79)|126)(3:89|(4:92|(2:96|131)(1:132)|97|90)|130)|98|(3:100|(3:103|104|101)|133)|105|107|108|(2:113|114)) */
@@ -485,7 +482,7 @@ public class Browser {
             org.telegram.messenger.support.customtabs.CustomTabsSession r3 = getSession()     // Catch:{ Exception -> 0x0309 }
             r2.<init>(r3)     // Catch:{ Exception -> 0x0309 }
             java.lang.String r3 = "CopyLink"
-            r4 = 2131625096(0x7f0e0488, float:1.887739E38)
+            r4 = 2131625098(0x7f0e048a, float:1.8877394E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0309 }
             r2.addMenuItem(r3, r1)     // Catch:{ Exception -> 0x0309 }
             java.lang.String r1 = "actionBarBrowser"
@@ -497,7 +494,7 @@ public class Browser {
             r3 = 2131165243(0x7var_b, float:1.7944698E38)
             android.graphics.Bitmap r1 = android.graphics.BitmapFactory.decodeResource(r1, r3)     // Catch:{ Exception -> 0x0309 }
             java.lang.String r3 = "ShareFile"
-            r4 = 2131627861(0x7f0e0var_, float:1.8882998E38)
+            r4 = 2131627865(0x7f0e0var_, float:1.8883006E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0309 }
             android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0309 }
             r5 = 0

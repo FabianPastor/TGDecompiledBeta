@@ -454,18 +454,14 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                             this.this$0.textureView.scaleType = VoIPTextureView.SCALE_TYPE_FIT;
                         } else {
                             GroupCallMiniTextureView groupCallMiniTextureView2 = this.this$0;
-                            boolean z2 = groupCallMiniTextureView2.showingInFullscreen;
-                            if (z2) {
+                            if (groupCallMiniTextureView2.showingInFullscreen) {
+                                groupCallMiniTextureView2.textureView.scaleType = VoIPTextureView.SCALE_TYPE_FIT;
+                            } else if (groupCallRenderersContainer2.inFullscreenMode) {
+                                groupCallMiniTextureView2.textureView.scaleType = VoIPTextureView.SCALE_TYPE_FILL;
+                            } else if (groupCallMiniTextureView2.participant.presentation) {
                                 groupCallMiniTextureView2.textureView.scaleType = VoIPTextureView.SCALE_TYPE_FIT;
                             } else {
-                                boolean z3 = groupCallRenderersContainer2.inFullscreenMode;
-                                if (z3 && !z2) {
-                                    groupCallMiniTextureView2.textureView.scaleType = VoIPTextureView.SCALE_TYPE_FILL;
-                                } else if (!z3) {
-                                    groupCallMiniTextureView2.textureView.scaleType = groupCallMiniTextureView2.participant.presentation ? VoIPTextureView.SCALE_TYPE_FIT : VoIPTextureView.SCALE_TYPE_ADAPTIVE;
-                                } else {
-                                    groupCallMiniTextureView2.textureView.scaleType = VoIPTextureView.SCALE_TYPE_FIT;
-                                }
+                                groupCallMiniTextureView2.textureView.scaleType = VoIPTextureView.SCALE_TYPE_ADAPTIVE;
                             }
                         }
                         boolean unused = this.this$0.checkScale = false;
@@ -1603,7 +1599,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             r2.setMirror(r4)
             org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
             org.webrtc.TextureViewRenderer r2 = r2.renderer
-            r2.setRotateTextureWitchScreen(r8)
+            r2.setRotateTextureWithScreen(r8)
             org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
             org.webrtc.TextureViewRenderer r2 = r2.renderer
             r2.setUseCameraRotation(r8)
@@ -1614,7 +1610,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             r2.setMirror(r9)
             org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
             org.webrtc.TextureViewRenderer r2 = r2.renderer
-            r2.setRotateTextureWitchScreen(r8)
+            r2.setRotateTextureWithScreen(r8)
             org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
             org.webrtc.TextureViewRenderer r2 = r2.renderer
             r2.setUseCameraRotation(r9)

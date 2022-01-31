@@ -121,7 +121,8 @@ public class BottomSheet extends Dialog {
     protected View nestedScrollChild;
     /* access modifiers changed from: private */
     public DialogInterface.OnClickListener onClickListener;
-    private DialogInterface.OnDismissListener onHideListener;
+    /* access modifiers changed from: private */
+    public DialogInterface.OnDismissListener onHideListener;
     protected Interpolator openInterpolator;
     private boolean openNoDelay;
     /* access modifiers changed from: private */
@@ -1716,6 +1717,9 @@ public class BottomSheet extends Dialog {
 
                 /* access modifiers changed from: private */
                 public /* synthetic */ void lambda$onAnimationEnd$0() {
+                    if (BottomSheet.this.onHideListener != null) {
+                        BottomSheet.this.onHideListener.onDismiss(BottomSheet.this);
+                    }
                     try {
                         BottomSheet.super.dismiss();
                     } catch (Exception e) {
@@ -1907,6 +1911,11 @@ public class BottomSheet extends Dialog {
 
         public Runnable getDismissRunnable() {
             return this.bottomSheet.dismissRunnable;
+        }
+
+        public Builder setOnPreDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+            this.bottomSheet.setOnHideListener(onDismissListener);
+            return this;
         }
     }
 

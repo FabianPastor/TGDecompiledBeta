@@ -1,17 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$TL_channels_channelParticipant;
+import org.telegram.tgnet.TLRPC$Chat;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda142 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$TL_channels_channelParticipant f$1;
+    public final /* synthetic */ TLRPC$Chat f$1;
+    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda142(MessagesController messagesController, TLRPC$TL_channels_channelParticipant tLRPC$TL_channels_channelParticipant) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda142(MessagesController messagesController, TLRPC$Chat tLRPC$Chat, boolean z, int i) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$TL_channels_channelParticipant;
+        this.f$1 = tLRPC$Chat;
+        this.f$2 = z;
+        this.f$3 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$checkChatInviter$281(this.f$1);
+        this.f$0.lambda$startShortPoll$254(this.f$1, this.f$2, this.f$3);
     }
 }

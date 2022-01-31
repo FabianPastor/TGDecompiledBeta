@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda101 impl
     }
 
     public final void run() {
-        this.f$0.lambda$onFragmentCreate$12();
+        this.f$0.lambda$scrollToMessageId$98();
     }
 }

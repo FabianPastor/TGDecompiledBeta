@@ -1,21 +1,22 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import androidx.collection.LongSparseArray;
+import org.telegram.tgnet.TLRPC$updates_Difference;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda193 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ ArrayList f$3;
+    public final /* synthetic */ TLRPC$updates_Difference f$1;
+    public final /* synthetic */ LongSparseArray f$2;
+    public final /* synthetic */ LongSparseArray f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda193(MessagesController messagesController, boolean z, long j, ArrayList arrayList) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda193(MessagesController messagesController, TLRPC$updates_Difference tLRPC$updates_Difference, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         this.f$0 = messagesController;
-        this.f$1 = z;
-        this.f$2 = j;
-        this.f$3 = arrayList;
+        this.f$1 = tLRPC$updates_Difference;
+        this.f$2 = longSparseArray;
+        this.f$3 = longSparseArray2;
     }
 
     public final void run() {
-        this.f$0.lambda$processUpdates$286(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$getDifference$270(this.f$1, this.f$2, this.f$3);
     }
 }

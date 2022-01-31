@@ -1,26 +1,7 @@
 package org.telegram.tgnet;
 
-import java.util.ArrayList;
-
-public class TLRPC$TL_messageReactions extends TLObject {
+public class TLRPC$TL_messageReactions extends TLRPC$MessageReactions {
     public static int constructor = NUM;
-    public boolean can_see_list;
-    public int flags;
-    public boolean min;
-    public ArrayList<TLRPC$TL_messageUserReaction> recent_reactons = new ArrayList<>();
-    public ArrayList<TLRPC$TL_reactionCount> results = new ArrayList<>();
-
-    public static TLRPC$TL_messageReactions TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_messageReactions tLRPC$TL_messageReactions = new TLRPC$TL_messageReactions();
-            tLRPC$TL_messageReactions.readParams(abstractSerializedData, z);
-            return tLRPC$TL_messageReactions;
-        } else if (!z) {
-            return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_messageReactions", new Object[]{Integer.valueOf(i)}));
-        }
-    }
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -46,9 +27,9 @@ public class TLRPC$TL_messageReactions extends TLObject {
                 if (readInt324 == NUM) {
                     int readInt325 = abstractSerializedData.readInt32(z);
                     while (i < readInt325) {
-                        TLRPC$TL_messageUserReaction TLdeserialize2 = TLRPC$TL_messageUserReaction.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                        TLRPC$TL_messagePeerReaction TLdeserialize2 = TLRPC$MessagePeerReaction.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                         if (TLdeserialize2 != null) {
-                            this.recent_reactons.add(TLdeserialize2);
+                            this.recent_reactions.add(TLdeserialize2);
                             i++;
                         } else {
                             return;
@@ -78,10 +59,10 @@ public class TLRPC$TL_messageReactions extends TLObject {
         }
         if ((this.flags & 2) != 0) {
             abstractSerializedData.writeInt32(NUM);
-            int size2 = this.recent_reactons.size();
+            int size2 = this.recent_reactions.size();
             abstractSerializedData.writeInt32(size2);
             for (int i4 = 0; i4 < size2; i4++) {
-                this.recent_reactons.get(i4).serializeToStream(abstractSerializedData);
+                this.recent_reactions.get(i4).serializeToStream(abstractSerializedData);
             }
         }
     }

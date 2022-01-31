@@ -8,6 +8,7 @@ public abstract class TLRPC$StickerSet extends TLObject {
     public boolean archived;
     public int count;
     public int flags;
+    public boolean gifs;
     public int hash;
     public long id;
     public boolean installed;

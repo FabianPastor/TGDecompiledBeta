@@ -10,6 +10,6 @@ public final /* synthetic */ class ProfileActivity$$ExternalSyntheticLambda0 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$createView$13(valueAnimator);
+        this.f$0.lambda$onCustomTransitionAnimation$28(valueAnimator);
     }
 }

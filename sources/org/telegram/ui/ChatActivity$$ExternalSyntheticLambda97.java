@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda97 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
+import android.view.View;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda97(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda97 implements Runnable {
+    public final /* synthetic */ View f$0;
+
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda97(View view) {
+        this.f$0 = view;
     }
 
     public final void run() {
-        this.f$0.inlineUpdate1();
+        this.f$0.performHapticFeedback(3, 2);
     }
 }

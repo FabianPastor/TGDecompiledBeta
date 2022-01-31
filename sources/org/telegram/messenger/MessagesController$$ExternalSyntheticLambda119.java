@@ -1,31 +1,45 @@
 package org.telegram.messenger;
 
-import android.util.SparseIntArray;
-import androidx.collection.LongSparseArray;
-import org.telegram.messenger.support.LongSparseIntArray;
+import android.util.SparseArray;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import org.telegram.tgnet.TLRPC$messages_Dialogs;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda119 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ LongSparseIntArray f$1;
-    public final /* synthetic */ LongSparseIntArray f$2;
-    public final /* synthetic */ SparseIntArray f$3;
-    public final /* synthetic */ LongSparseArray f$4;
-    public final /* synthetic */ LongSparseArray f$5;
-    public final /* synthetic */ LongSparseArray f$6;
-    public final /* synthetic */ LongSparseIntArray f$7;
+    public final /* synthetic */ HashMap f$1;
+    public final /* synthetic */ HashMap f$10;
+    public final /* synthetic */ HashSet f$11;
+    public final /* synthetic */ HashMap f$12;
+    public final /* synthetic */ HashMap f$13;
+    public final /* synthetic */ TLRPC$messages_Dialogs f$2;
+    public final /* synthetic */ TLRPC$messages_Dialogs f$3;
+    public final /* synthetic */ ArrayList f$4;
+    public final /* synthetic */ ArrayList f$5;
+    public final /* synthetic */ ArrayList f$6;
+    public final /* synthetic */ SparseArray f$7;
+    public final /* synthetic */ ArrayList f$8;
+    public final /* synthetic */ HashMap f$9;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda119(MessagesController messagesController, LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, SparseIntArray sparseIntArray, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, LongSparseArray longSparseArray3, LongSparseIntArray longSparseIntArray3) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda119(MessagesController messagesController, HashMap hashMap, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, SparseArray sparseArray, ArrayList arrayList4, HashMap hashMap2, HashMap hashMap3, HashSet hashSet, HashMap hashMap4, HashMap hashMap5) {
         this.f$0 = messagesController;
-        this.f$1 = longSparseIntArray;
-        this.f$2 = longSparseIntArray2;
-        this.f$3 = sparseIntArray;
-        this.f$4 = longSparseArray;
-        this.f$5 = longSparseArray2;
-        this.f$6 = longSparseArray3;
-        this.f$7 = longSparseIntArray3;
+        this.f$1 = hashMap;
+        this.f$2 = tLRPC$messages_Dialogs;
+        this.f$3 = tLRPC$messages_Dialogs2;
+        this.f$4 = arrayList;
+        this.f$5 = arrayList2;
+        this.f$6 = arrayList3;
+        this.f$7 = sparseArray;
+        this.f$8 = arrayList4;
+        this.f$9 = hashMap2;
+        this.f$10 = hashMap3;
+        this.f$11 = hashSet;
+        this.f$12 = hashMap4;
+        this.f$13 = hashMap5;
     }
 
     public final void run() {
-        this.f$0.lambda$processUpdateArray$312(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+        this.f$0.lambda$loadFilterPeers$11(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13);
     }
 }

@@ -22,6 +22,6 @@ public final /* synthetic */ class ArticleViewer$$ExternalSyntheticLambda34 impl
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$open$29(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$open$30(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
     }
 }

@@ -189,7 +189,6 @@ public class CounterView extends View {
                     this.countAnimator.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             CounterDrawable counterDrawable = CounterDrawable.this;
-                            counterDrawable.animationType = -1;
                             counterDrawable.countChangeProgress = 1.0f;
                             StaticLayout unused = counterDrawable.countOldLayout = null;
                             StaticLayout unused2 = CounterDrawable.this.countAnimationStableLayout = null;
@@ -201,6 +200,7 @@ public class CounterView extends View {
                                 }
                                 CounterDrawable.this.parent.invalidate();
                             }
+                            CounterDrawable.this.animationType = -1;
                         }
                     });
                     if (this.currentCount <= 0) {
@@ -463,5 +463,23 @@ public class CounterView extends View {
             Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
             return color != null ? color.intValue() : Theme.getColor(str);
         }
+    }
+
+    public float getEnterProgress() {
+        int i;
+        CounterDrawable counterDrawable2 = this.counterDrawable;
+        float f = counterDrawable2.countChangeProgress;
+        if (f != 1.0f && ((i = counterDrawable2.animationType) == 0 || i == 1)) {
+            return i == 0 ? f : 1.0f - f;
+        }
+        if (counterDrawable2.currentCount == 0) {
+            return 0.0f;
+        }
+        return 1.0f;
+    }
+
+    public boolean isInOutAnimation() {
+        int i = this.counterDrawable.animationType;
+        return i == 0 || i == 1;
     }
 }

@@ -460,6 +460,8 @@ public final class R {
         public static final int googlepay_button_no_shadow_background_image = NUM;
         public static final int googlepay_button_overlay = NUM;
         public static final int gradient_bottom = NUM;
+        public static final int gradient_left = NUM;
+        public static final int gradient_right = NUM;
         public static final int gradient_top = NUM;
         public static final int greydivider = NUM;
         public static final int greydivider_bottom = NUM;
@@ -1038,6 +1040,8 @@ public final class R {
         public static final int qr_at_small = NUM;
         public static final int qr_flashlight = NUM;
         public static final int qr_gallery = NUM;
+        public static final int reactionbutton = NUM;
+        public static final int reactionchatslist = NUM;
         public static final int reactions_bubble_shadow = NUM;
         public static final int redcircle = NUM;
         public static final int regbtn2 = NUM;
@@ -1897,6 +1901,7 @@ public final class R {
         public static final int AccDescrProfilePicture = NUM;
         public static final int AccDescrQuizCorrectAnswer = NUM;
         public static final int AccDescrQuizExplanation = NUM;
+        public static final int AccDescrReactionMentionDown = NUM;
         public static final int AccDescrReceivedDate = NUM;
         public static final int AccDescrRepeatList = NUM;
         public static final int AccDescrRepeatOff = NUM;
@@ -2486,6 +2491,7 @@ public final class R {
         public static final int BlockedUsersCount_zero = NUM;
         public static final int BlockedUsersInfo = NUM;
         public static final int Blue = NUM;
+        public static final int BlurInChat = NUM;
         public static final int BlurLinear = NUM;
         public static final int BlurOff = NUM;
         public static final int BlurRadial = NUM;
@@ -3147,6 +3153,7 @@ public final class R {
         public static final int Deletions_two = NUM;
         public static final int Deletions_zero = NUM;
         public static final int DescriptionInfo = NUM;
+        public static final int DescriptionMore = NUM;
         public static final int DescriptionOptionalPlaceholder = NUM;
         public static final int DescriptionPlaceholder = NUM;
         public static final int DeviceStorage = NUM;
@@ -3668,6 +3675,7 @@ public final class R {
         public static final int ForwardedVideo_zero = NUM;
         public static final int ForwardingFromNameAndMessage = NUM;
         public static final int ForwardingFromNames = NUM;
+        public static final int ForwardsRestrictedInfoBot = NUM;
         public static final int ForwardsRestrictedInfoChannel = NUM;
         public static final int ForwardsRestrictedInfoGroup = NUM;
         public static final int FreeOfTotal = NUM;
@@ -5798,6 +5806,8 @@ public final class R {
         public static final int ShowCaption = NUM;
         public static final int ShowForwardingOptions = NUM;
         public static final int ShowInChat = NUM;
+        public static final int ShowLess = NUM;
+        public static final int ShowMore = NUM;
         public static final int ShowNotificationsFor = NUM;
         public static final int ShowNotificationsForInfo = NUM;
         public static final int ShowSenderNames = NUM;

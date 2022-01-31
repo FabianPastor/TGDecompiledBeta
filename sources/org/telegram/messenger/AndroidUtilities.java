@@ -10,6 +10,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,7 +50,6 @@ import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.DisplayMetrics;
 import android.util.StateSet;
-import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -92,6 +92,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
@@ -151,6 +152,7 @@ public class AndroidUtilities {
     private static int[] documentMediaIcons = {NUM, NUM, NUM, NUM};
     public static boolean firstConfigurationWas;
     private static WeakReference<BaseFragment> flagSecureFragment;
+    private static final HashMap<Window, ArrayList<Long>> flagSecureReasons = new HashMap<>();
     private static boolean hasCallPermissions = (Build.VERSION.SDK_INT >= 23);
     public static boolean incorrectDisplaySizeFix;
     public static boolean isInMultiwindow;
@@ -386,8 +388,8 @@ public class AndroidUtilities {
         if (context instanceof Activity) {
             return (Activity) context;
         }
-        if (context instanceof ContextThemeWrapper) {
-            return findActivity(((ContextThemeWrapper) context).getBaseContext());
+        if (context instanceof ContextWrapper) {
+            return findActivity(((ContextWrapper) context).getBaseContext());
         }
         return null;
     }
@@ -489,7 +491,7 @@ public class AndroidUtilities {
 
     private static void pruneOverlaps(ArrayList<LinkSpec> arrayList) {
         int i;
-        Collections.sort(arrayList, AndroidUtilities$$ExternalSyntheticLambda6.INSTANCE);
+        Collections.sort(arrayList, AndroidUtilities$$ExternalSyntheticLambda7.INSTANCE);
         int size = arrayList.size();
         int i2 = 0;
         while (i2 < size - 1) {
@@ -1064,7 +1066,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131625068(0x7f0e046c, float:1.8877334E38)
+                r0 = 2131625070(0x7f0e046e, float:1.8877338E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1076,12 +1078,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131625069(0x7f0e046d, float:1.8877336E38)
+                r0 = 2131625071(0x7f0e046f, float:1.887734E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131625070(0x7f0e046e, float:1.8877338E38)
+                r0 = 2131625072(0x7f0e0470, float:1.8877342E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1199,27 +1201,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131627173(0x7f0e0ca5, float:1.8881603E38)
+                r0 = 2131627177(0x7f0e0ca9, float:1.8881611E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131627174(0x7f0e0ca6, float:1.8881605E38)
+                r0 = 2131627178(0x7f0e0caa, float:1.8881613E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131627165(0x7f0e0c9d, float:1.8881587E38)
+                r0 = 2131627169(0x7f0e0ca1, float:1.8881595E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131627164(0x7f0e0c9c, float:1.8881585E38)
+                r0 = 2131627168(0x7f0e0ca0, float:1.8881593E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131627166(0x7f0e0c9e, float:1.8881589E38)
+                r0 = 2131627170(0x7f0e0ca2, float:1.8881597E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -3319,9 +3321,9 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0157
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0157
-            r7 = 2131626771(0x7f0e0b13, float:1.8880788E38)
+            r7 = 2131626775(0x7f0e0b17, float:1.8880796E38)
             java.lang.String r8 = "OK"
-            r9 = 2131624301(0x7f0e016d, float:1.8875778E38)
+            r9 = 2131624302(0x7f0e016e, float:1.887578E38)
             java.lang.String r10 = "AppName"
             r11 = 1
             if (r2 == 0) goto L_0x00a4
@@ -3342,7 +3344,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625998(0x7f0e080e, float:1.887922E38)
+            r1 = 2131626002(0x7f0e0812, float:1.8879228E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3426,7 +3428,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626536(0x7f0e0a28, float:1.888031E38)
+            r1 = 2131626540(0x7f0e0a2c, float:1.888032E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3500,21 +3502,21 @@ public class AndroidUtilities {
             if (r2 != 0) goto L_0x0096
             org.telegram.ui.ActionBar.AlertDialog$Builder r6 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r6.<init>(r9, r10)
-            r7 = 2131624301(0x7f0e016d, float:1.8875778E38)
+            r7 = 2131624302(0x7f0e016e, float:1.887578E38)
             java.lang.String r8 = "AppName"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setTitle(r7)
-            r7 = 2131624299(0x7f0e016b, float:1.8875774E38)
+            r7 = 2131624300(0x7f0e016c, float:1.8875776E38)
             java.lang.String r8 = "ApkRestricted"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setMessage(r7)
-            r7 = 2131627158(0x7f0e0CLASSNAME, float:1.8881573E38)
+            r7 = 2131627162(0x7f0e0c9a, float:1.888158E38)
             java.lang.String r8 = "PermissionOpenSettings"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.messenger.AndroidUtilities$$ExternalSyntheticLambda0 r8 = new org.telegram.messenger.AndroidUtilities$$ExternalSyntheticLambda0
             r8.<init>(r9)
             r6.setPositiveButton(r7, r8)
-            r7 = 2131624695(0x7f0e02f7, float:1.8876577E38)
+            r7 = 2131624697(0x7f0e02f9, float:1.8876581E38)
             java.lang.String r8 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setNegativeButton(r7, r5)
@@ -3599,14 +3601,14 @@ public class AndroidUtilities {
     }
 
     public static SpannableStringBuilder formatSpannableSimple(String str, CharSequence... charSequenceArr) {
-        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda8.INSTANCE, charSequenceArr);
+        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda9.INSTANCE, charSequenceArr);
     }
 
     public static SpannableStringBuilder formatSpannable(String str, CharSequence... charSequenceArr) {
         if (str.contains("%s")) {
             return formatSpannableSimple(str, charSequenceArr);
         }
-        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda7.INSTANCE, charSequenceArr);
+        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda8.INSTANCE, charSequenceArr);
     }
 
     /* access modifiers changed from: private */
@@ -4406,6 +4408,42 @@ public class AndroidUtilities {
         }
     }
 
+    public static Runnable registerFlagSecure(Window window) {
+        ArrayList arrayList;
+        long random = (long) (Math.random() * 9.99999999E8d);
+        HashMap<Window, ArrayList<Long>> hashMap = flagSecureReasons;
+        if (hashMap.containsKey(window)) {
+            arrayList = hashMap.get(window);
+        } else {
+            ArrayList arrayList2 = new ArrayList();
+            hashMap.put(window, arrayList2);
+            arrayList = arrayList2;
+        }
+        arrayList.add(Long.valueOf(random));
+        updateFlagSecure(window);
+        return new AndroidUtilities$$ExternalSyntheticLambda6(arrayList, random, window);
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ void lambda$registerFlagSecure$9(ArrayList arrayList, long j, Window window) {
+        arrayList.remove(Long.valueOf(j));
+        updateFlagSecure(window);
+    }
+
+    private static void updateFlagSecure(Window window) {
+        if (Build.VERSION.SDK_INT >= 23 && window != null) {
+            HashMap<Window, ArrayList<Long>> hashMap = flagSecureReasons;
+            if (hashMap.containsKey(window) && hashMap.get(window).size() > 0) {
+                try {
+                    window.setFlags(8192, 8192);
+                } catch (Exception unused) {
+                }
+            } else {
+                window.clearFlags(8192);
+            }
+        }
+    }
+
     public static void openSharing(BaseFragment baseFragment, String str) {
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
             baseFragment.showDialog(new ShareAlert(baseFragment.getParentActivity(), (ArrayList<MessageObject>) null, str, false, str, false));
@@ -4576,7 +4614,7 @@ public class AndroidUtilities {
                 Field declaredField = baseFragment.getClass().getDeclaredField("listView");
                 declaredField.setAccessible(true);
                 RecyclerListView recyclerListView = (RecyclerListView) declaredField.get(baseFragment);
-                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda9(baseFragment, str, recyclerListView));
+                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda10(baseFragment, str, recyclerListView));
                 declaredField.setAccessible(false);
             } catch (Throwable unused) {
             }
@@ -4584,7 +4622,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$scrollToFragmentRow$9(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
+    public static /* synthetic */ int lambda$scrollToFragmentRow$10(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
         int i = -1;
         try {
             Field declaredField = baseFragment.getClass().getDeclaredField(str);

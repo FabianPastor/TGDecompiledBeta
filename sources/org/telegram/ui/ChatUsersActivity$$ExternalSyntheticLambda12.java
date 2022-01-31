@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.MessagesStorage;
+import java.util.Comparator;
+import org.telegram.tgnet.TLObject;
 
-public final /* synthetic */ class ChatUsersActivity$$ExternalSyntheticLambda12 implements MessagesStorage.LongCallback {
+public final /* synthetic */ class ChatUsersActivity$$ExternalSyntheticLambda12 implements Comparator {
     public final /* synthetic */ ChatUsersActivity f$0;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatUsersActivity$$ExternalSyntheticLambda12(ChatUsersActivity chatUsersActivity) {
+    public /* synthetic */ ChatUsersActivity$$ExternalSyntheticLambda12(ChatUsersActivity chatUsersActivity, int i) {
         this.f$0 = chatUsersActivity;
+        this.f$1 = i;
     }
 
-    public final void run(long j) {
-        this.f$0.lambda$processDone$13(j);
+    public final int compare(Object obj, Object obj2) {
+        return this.f$0.lambda$sortUsers$17(this.f$1, (TLObject) obj, (TLObject) obj2);
     }
 }

@@ -534,7 +534,11 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             iArr[2] = i4;
         }
         if (i4 != 0) {
-            arrayList = messagesController.dialogFiltersById.get(i4).dialogs;
+            MessagesController.DialogFilter dialogFilter = messagesController.dialogFiltersById.get(i4);
+            if (dialogFilter == null) {
+                return null;
+            }
+            arrayList = dialogFilter.dialogs;
         } else {
             arrayList = messagesController.getDialogs(i);
         }

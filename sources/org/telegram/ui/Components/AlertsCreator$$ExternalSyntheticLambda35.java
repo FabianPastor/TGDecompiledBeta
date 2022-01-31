@@ -13,6 +13,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda35 impl
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        AlertsCreator.lambda$createChangeNameAlert$28(this.f$0, this.f$1, dialogInterface);
+        AlertsCreator.lambda$createChangeNameAlert$29(this.f$0, this.f$1, dialogInterface);
     }
 }

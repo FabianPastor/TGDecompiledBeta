@@ -35,7 +35,7 @@ public class SharedConfig {
     public static boolean autoplayVideo = true;
     public static int badPasscodeTries = 0;
     public static int bubbleRadius = 10;
-    public static boolean chatBlur = false;
+    public static boolean chatBlur = true;
     public static boolean chatBubbles = (Build.VERSION.SDK_INT >= 30);
     private static int chatSwipeAction = 0;
     private static boolean configLoaded = false;
@@ -490,7 +490,7 @@ public class SharedConfig {
             boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x0363 }
             pauseMusicOnRecord = r2     // Catch:{ all -> 0x0363 }
             java.lang.String r2 = "chatBlur"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x0363 }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x0363 }
             chatBlur = r2     // Catch:{ all -> 0x0363 }
             java.lang.String r2 = "streamAllVideo"
             boolean r7 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ all -> 0x0363 }
@@ -1134,7 +1134,7 @@ public class SharedConfig {
         edit.commit();
     }
 
-    public static void toggleDebugChatBlur() {
+    public static void toggleChatBlur() {
         chatBlur = !chatBlur;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("chatBlur", chatBlur);

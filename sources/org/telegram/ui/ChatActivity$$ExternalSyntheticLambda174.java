@@ -1,16 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda174 implements RequestDelegate {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda174 INSTANCE = new ChatActivity$$ExternalSyntheticLambda174();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda174 implements Runnable {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ int f$2;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda174() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda174(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i) {
+        this.f$0 = chatActivity;
+        this.f$1 = alertDialogArr;
+        this.f$2 = i;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        ChatActivity.lambda$markSponsoredAsRead$189(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.lambda$processSelectedOption$184(this.f$1, this.f$2);
     }
 }

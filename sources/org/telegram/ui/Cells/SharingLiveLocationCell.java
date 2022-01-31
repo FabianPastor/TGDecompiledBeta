@@ -140,7 +140,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         this.distanceTextView.setText(str);
     }
 
-    public void setDialog(MessageObject messageObject, Location location2) {
+    public void setDialog(MessageObject messageObject, Location location2, boolean z) {
         String str;
         long fromChatId = messageObject.getFromChatId();
         if (messageObject.isForwarded()) {
@@ -191,8 +191,10 @@ public class SharingLiveLocationCell extends FrameLayout {
             }
         } else if (str2 != null) {
             this.distanceTextView.setText(str2);
-        } else {
+        } else if (!z) {
             this.distanceTextView.setText(LocaleController.getString("Loading", NUM));
+        } else {
+            this.distanceTextView.setText("");
         }
     }
 

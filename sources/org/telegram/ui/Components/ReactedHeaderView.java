@@ -283,7 +283,7 @@ public class ReactedHeaderView extends FrameLayout {
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_reactionCount> r12 = r12.results
             int r12 = r12.size()
             if (r12 != r1) goto L_0x00cc
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_messageUserReaction> r12 = r13.reactions
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_messagePeerReaction> r12 = r13.reactions
             boolean r12 = r12.isEmpty()
             if (r12 != 0) goto L_0x00cc
             int r12 = r11.currentAccount
@@ -297,9 +297,9 @@ public class ReactedHeaderView extends FrameLayout {
             r10 = r4
             org.telegram.tgnet.TLRPC$TL_availableReaction r10 = (org.telegram.tgnet.TLRPC$TL_availableReaction) r10
             java.lang.String r4 = r10.reaction
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_messageUserReaction> r5 = r13.reactions
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_messagePeerReaction> r5 = r13.reactions
             java.lang.Object r5 = r5.get(r2)
-            org.telegram.tgnet.TLRPC$TL_messageUserReaction r5 = (org.telegram.tgnet.TLRPC$TL_messageUserReaction) r5
+            org.telegram.tgnet.TLRPC$TL_messagePeerReaction r5 = (org.telegram.tgnet.TLRPC$TL_messagePeerReaction) r5
             java.lang.String r5 = r5.reaction
             boolean r4 = r4.equals(r5)
             if (r4 == 0) goto L_0x007d

@@ -1,7 +1,6 @@
 package org.telegram.ui.Adapters;
 
 import android.location.Location;
-import android.os.Build;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DialogObject;
@@ -38,6 +37,7 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
     protected ArrayList<TLRPC$TL_messageMediaVenue> places = new ArrayList<>();
     private boolean searchInProgress;
     private Runnable searchRunnable;
+    protected boolean searched = false;
     protected boolean searching;
     private boolean searchingUser;
 
@@ -99,7 +99,7 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$searchBotUser$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
-            AndroidUtilities.runOnUIThread(new BaseLocationAdapter$$ExternalSyntheticLambda3(this, tLObject));
+            AndroidUtilities.runOnUIThread(new BaseLocationAdapter$$ExternalSyntheticLambda2(this, tLObject));
         }
     }
 
@@ -139,9 +139,9 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
                         this.currentRequestNum = 0;
                     }
                 }
-                int itemCount = getItemCount();
-                boolean z3 = this.searching;
+                getItemCount();
                 this.searching = true;
+                this.searched = true;
                 TLObject userOrChat = MessagesController.getInstance(this.currentAccount).getUserOrChat(MessagesController.getInstance(this.currentAccount).venueSearchBot);
                 if (userOrChat instanceof TLRPC$User) {
                     TLRPC$User tLRPC$User = (TLRPC$User) userOrChat;
@@ -160,16 +160,7 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
                         tLRPC$TL_messages_getInlineBotResults.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(this.dialogId);
                     }
                     this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getInlineBotResults, new BaseLocationAdapter$$ExternalSyntheticLambda5(this, str));
-                    if (!z2 || Build.VERSION.SDK_INT < 19) {
-                        notifyDataSetChanged();
-                    } else if (!this.places.isEmpty() && !z3) {
-                        int size = this.places.size() + 1;
-                        int i = itemCount - size;
-                        notifyItemInserted(i);
-                        notifyItemRangeRemoved(i, size);
-                    } else if (!z3) {
-                        notifyItemChanged(getItemCount() - 1);
-                    }
+                    notifyDataSetChanged();
                 } else if (z) {
                     searchBotUser();
                 }
@@ -179,18 +170,18 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$searchPlacesWithQuery$5(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new BaseLocationAdapter$$ExternalSyntheticLambda2(this, str, tLRPC$TL_error, tLObject));
+        AndroidUtilities.runOnUIThread(new BaseLocationAdapter$$ExternalSyntheticLambda3(this, tLRPC$TL_error, str, tLObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$searchPlacesWithQuery$4(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
-        this.currentRequestNum = 0;
-        this.searching = false;
-        this.places.clear();
-        this.iconUrls.clear();
-        this.searchInProgress = false;
-        this.lastFoundQuery = str;
+    public /* synthetic */ void lambda$searchPlacesWithQuery$4(TLRPC$TL_error tLRPC$TL_error, String str, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
+            this.currentRequestNum = 0;
+            this.searching = false;
+            this.places.clear();
+            this.iconUrls.clear();
+            this.searchInProgress = false;
+            this.lastFoundQuery = str;
             TLRPC$messages_BotResults tLRPC$messages_BotResults = (TLRPC$messages_BotResults) tLObject;
             int size = tLRPC$messages_BotResults.results.size();
             for (int i = 0; i < size; i++) {

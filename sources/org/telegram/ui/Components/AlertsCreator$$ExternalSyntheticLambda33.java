@@ -9,6 +9,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda33 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createThemeCreateDialog$97(dialogInterface, i);
+        AlertsCreator.lambda$createThemeCreateDialog$100(dialogInterface, i);
     }
 }

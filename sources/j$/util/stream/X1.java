@@ -37,7 +37,7 @@ final class X1 extends CLASSNAMEb2 implements CLASSNAMEv1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public y m538spliterator() {
+    public y m537spliterator() {
         return N.b();
     }
 }

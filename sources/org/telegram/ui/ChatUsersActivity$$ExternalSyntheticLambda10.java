@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatUsersActivity$$ExternalSyntheticLambda10 
     }
 
     public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$sortAdmins$3((TLObject) obj, (TLObject) obj2);
+        return this.f$0.lambda$onOwnerChaged$4((TLObject) obj, (TLObject) obj2);
     }
 }

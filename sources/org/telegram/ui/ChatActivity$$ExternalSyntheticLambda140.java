@@ -1,17 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$TL_error;
-
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda140 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ boolean f$3;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda140(ChatActivity chatActivity, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda140(ChatActivity chatActivity, int i, int i2, boolean z) {
         this.f$0 = chatActivity;
-        this.f$1 = tLRPC$TL_error;
+        this.f$1 = i;
+        this.f$2 = i2;
+        this.f$3 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$processSelectedOption$163(this.f$1);
+        this.f$0.lambda$deleteHistory$3(this.f$1, this.f$2, this.f$3);
     }
 }

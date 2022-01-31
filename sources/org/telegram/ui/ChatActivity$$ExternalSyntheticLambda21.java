@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda21 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$openAnotherForward$67(dialogInterface, i);
+        this.f$0.lambda$createView$43(dialogInterface, i);
     }
 }

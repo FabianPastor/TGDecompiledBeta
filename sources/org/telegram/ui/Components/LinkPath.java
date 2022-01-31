@@ -4,6 +4,8 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Build;
 import android.text.Layout;
+import java.util.ArrayList;
+import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 
 public class LinkPath extends Path {
@@ -11,16 +13,24 @@ public class LinkPath extends Path {
     private int baselineShift;
     private Layout currentLayout;
     private int currentLine;
+    private final int halfRadius;
     private float heightOffset;
     private float lastTop = -1.0f;
     private int lineHeight;
-    private RectF rect;
+    private final int radius;
+    private ArrayList<RectF> rects = new ArrayList<>();
     private boolean useRoundRect;
 
     public LinkPath() {
+        int dp = AndroidUtilities.dp(4.0f);
+        this.radius = dp;
+        this.halfRadius = dp >> 1;
     }
 
     public LinkPath(boolean z) {
+        int dp = AndroidUtilities.dp(4.0f);
+        this.radius = dp;
+        this.halfRadius = dp >> 1;
         this.useRoundRect = z;
     }
 
@@ -89,11 +99,10 @@ public class LinkPath extends Path {
             float var_ = f6;
             float var_ = f7;
             if (this.useRoundRect) {
-                if (this.rect == null) {
-                    this.rect = new RectF();
-                }
-                this.rect.set(var_ - ((float) AndroidUtilities.dp(4.0f)), var_, f9 + ((float) AndroidUtilities.dp(4.0f)), var_);
-                super.addRoundRect(this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), direction);
+                RectF rectF = new RectF();
+                int i2 = this.halfRadius;
+                rectF.set(var_ - ((float) i2), var_, f9 + ((float) i2), var_);
+                this.rects.add(rectF);
                 return;
             }
             super.addRect(var_, var_, f9, var_, direction);
@@ -103,6 +112,44 @@ public class LinkPath extends Path {
     public void reset() {
         if (this.allowReset) {
             super.reset();
+            this.rects.clear();
+        }
+    }
+
+    private boolean containsPoint(float f, float f2) {
+        Iterator<RectF> it = this.rects.iterator();
+        while (it.hasNext()) {
+            if (it.next().contains(f, f2)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void onPathEnd() {
+        if (this.useRoundRect) {
+            super.reset();
+            int size = this.rects.size();
+            for (int i = 0; i < size; i++) {
+                float[] fArr = new float[8];
+                RectF rectF = this.rects.get(i);
+                float f = 0.0f;
+                float f2 = containsPoint(rectF.left, rectF.top - ((float) this.radius)) ? 0.0f : (float) this.radius;
+                fArr[1] = f2;
+                fArr[0] = f2;
+                float f3 = containsPoint(rectF.right, rectF.top - ((float) this.radius)) ? 0.0f : (float) this.radius;
+                fArr[3] = f3;
+                fArr[2] = f3;
+                float f4 = containsPoint(rectF.right, rectF.bottom + ((float) this.radius)) ? 0.0f : (float) this.radius;
+                fArr[5] = f4;
+                fArr[4] = f4;
+                if (!containsPoint(rectF.left, rectF.bottom + ((float) this.radius))) {
+                    f = (float) this.radius;
+                }
+                fArr[7] = f;
+                fArr[6] = f;
+                super.addRoundRect(rectF, fArr, Path.Direction.CW);
+            }
         }
     }
 }

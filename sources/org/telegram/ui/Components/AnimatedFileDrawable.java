@@ -26,10 +26,11 @@ import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.TLRPC$Document;
 
 public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
-    private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2, new ThreadPoolExecutor.DiscardPolicy());
+    private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(16, new ThreadPoolExecutor.DiscardPolicy());
     private static float[] radii = new float[8];
     private static final Handler uiHandler = new Handler(Looper.getMainLooper());
     private RectF actualDrawRect;
@@ -59,9 +60,11 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     /* access modifiers changed from: private */
     public boolean invalidateParentViewWithSecond;
     private boolean invalidatePath;
+    private boolean invalidateTaskIsRunning;
     /* access modifiers changed from: private */
     public volatile boolean isRecycled;
     private volatile boolean isRunning;
+    public final boolean isWebmSticker;
     /* access modifiers changed from: private */
     public long lastFrameDecodeTime;
     private long lastFrameTime;
@@ -161,6 +164,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0() {
         View view;
+        this.invalidateTaskIsRunning = false;
         if (!this.secondParentViews.isEmpty()) {
             int size = this.secondParentViews.size();
             for (int i = 0; i < size; i++) {
@@ -322,7 +326,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                         } else {
                             AnimatedFileDrawable animatedFileDrawable2 = AnimatedFileDrawable.this;
                             float unused2 = animatedFileDrawable2.scaleFactor = Math.max(((float) animatedFileDrawable2.renderingWidth) / ((float) AnimatedFileDrawable.this.metaData[0]), ((float) AnimatedFileDrawable.this.renderingHeight) / ((float) AnimatedFileDrawable.this.metaData[1]));
-                            if (AnimatedFileDrawable.this.scaleFactor <= 0.0f || ((double) AnimatedFileDrawable.this.scaleFactor) > 0.7d) {
+                            AnimatedFileDrawable animatedFileDrawable3 = AnimatedFileDrawable.this;
+                            if (animatedFileDrawable3.isWebmSticker || animatedFileDrawable3.scaleFactor <= 0.0f || ((double) AnimatedFileDrawable.this.scaleFactor) > 0.7d) {
                                 float unused3 = AnimatedFileDrawable.this.scaleFactor = 1.0f;
                             }
                         }
@@ -336,13 +341,13 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                             }
                         }
                         if (AnimatedFileDrawable.this.backgroundBitmap == null && AnimatedFileDrawable.this.metaData[0] > 0 && AnimatedFileDrawable.this.metaData[1] > 0) {
-                            AnimatedFileDrawable animatedFileDrawable3 = AnimatedFileDrawable.this;
-                            Bitmap unused5 = animatedFileDrawable3.backgroundBitmap = Bitmap.createBitmap((int) (((float) animatedFileDrawable3.metaData[0]) * AnimatedFileDrawable.this.scaleFactor), (int) (((float) AnimatedFileDrawable.this.metaData[1]) * AnimatedFileDrawable.this.scaleFactor), Bitmap.Config.ARGB_8888);
+                            AnimatedFileDrawable animatedFileDrawable4 = AnimatedFileDrawable.this;
+                            Bitmap unused5 = animatedFileDrawable4.backgroundBitmap = Bitmap.createBitmap((int) (((float) animatedFileDrawable4.metaData[0]) * AnimatedFileDrawable.this.scaleFactor), (int) (((float) AnimatedFileDrawable.this.metaData[1]) * AnimatedFileDrawable.this.scaleFactor), Bitmap.Config.ARGB_8888);
                             if (AnimatedFileDrawable.this.backgroundShader == null && AnimatedFileDrawable.this.backgroundBitmap != null && AnimatedFileDrawable.this.hasRoundRadius()) {
-                                AnimatedFileDrawable animatedFileDrawable4 = AnimatedFileDrawable.this;
+                                AnimatedFileDrawable animatedFileDrawable5 = AnimatedFileDrawable.this;
                                 Bitmap access$300 = AnimatedFileDrawable.this.backgroundBitmap;
                                 Shader.TileMode tileMode = Shader.TileMode.CLAMP;
-                                BitmapShader unused6 = animatedFileDrawable4.backgroundShader = new BitmapShader(access$300, tileMode, tileMode);
+                                BitmapShader unused6 = animatedFileDrawable5.backgroundShader = new BitmapShader(access$300, tileMode, tileMode);
                             }
                         }
                     } catch (Throwable th) {
@@ -367,11 +372,11 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                             return;
                         }
                         if (z) {
-                            AnimatedFileDrawable animatedFileDrawable5 = AnimatedFileDrawable.this;
-                            int unused9 = animatedFileDrawable5.lastTimeStamp = animatedFileDrawable5.metaData[3];
+                            AnimatedFileDrawable animatedFileDrawable6 = AnimatedFileDrawable.this;
+                            int unused9 = animatedFileDrawable6.lastTimeStamp = animatedFileDrawable6.metaData[3];
                         }
-                        AnimatedFileDrawable animatedFileDrawable6 = AnimatedFileDrawable.this;
-                        int unused10 = animatedFileDrawable6.backgroundBitmapTime = animatedFileDrawable6.metaData[3];
+                        AnimatedFileDrawable animatedFileDrawable7 = AnimatedFileDrawable.this;
+                        int unused10 = animatedFileDrawable7.backgroundBitmapTime = animatedFileDrawable7.metaData[3];
                     }
                 }
                 AndroidUtilities.runOnUIThread(AnimatedFileDrawable.this.uiRunnable);
@@ -383,6 +388,11 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         this.currentAccount = i;
         this.renderingHeight = i3;
         this.renderingWidth = i2;
+        boolean isVideoSticker = MessageObject.isVideoSticker(tLRPC$Document);
+        this.isWebmSticker = isVideoSticker;
+        if (isVideoSticker) {
+            this.useSharedQueue = true;
+        }
         getPaint().setFlags(3);
         if (j4 == 0 || (tLRPC$Document == null && imageLocation == null)) {
             j3 = 0;
@@ -402,7 +412,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             } else {
                 float max = Math.max(((float) i4) / ((float) iArr[0]), ((float) i5) / ((float) iArr[1]));
                 this.scaleFactor = max;
-                if (max <= 0.0f || ((double) max) > 0.7d) {
+                if (isVideoSticker || max <= 0.0f || ((double) max) > 0.7d) {
                     this.scaleFactor = 1.0f;
                 }
             }
@@ -578,7 +588,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     public void setUseSharedQueue(boolean z) {
-        this.useSharedQueue = z;
+        if (!this.isWebmSticker) {
+            this.useSharedQueue = z;
+        }
     }
 
     /* access modifiers changed from: protected */
@@ -744,7 +756,6 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                     this.applyTransformation = false;
                 }
                 if (hasRoundRadius()) {
-                    Math.max(this.scaleX, this.scaleY);
                     if (this.renderingShader == null) {
                         Bitmap bitmap4 = this.backgroundBitmap;
                         Shader.TileMode tileMode = Shader.TileMode.CLAMP;
@@ -805,7 +816,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                     canvas2.scale(this.scaleX, this.scaleY);
                     canvas2.drawBitmap(this.renderingBitmap, 0.0f, 0.0f, getPaint());
                 }
-                if (this.isRunning) {
+                if (this.isRunning && !this.invalidateTaskIsRunning) {
+                    this.invalidateTaskIsRunning = true;
                     long max = Math.max(1, (((long) this.invalidateAfter) - (currentTimeMillis - this.lastFrameTime)) - 17);
                     Handler handler = uiHandler;
                     handler.removeCallbacks(this.mInvalidateTask);
@@ -938,5 +950,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
 
     public long getStartTime() {
         return (long) (this.startTime * 1000.0f);
+    }
+
+    public boolean isRecycled() {
+        return this.isRecycled;
     }
 }

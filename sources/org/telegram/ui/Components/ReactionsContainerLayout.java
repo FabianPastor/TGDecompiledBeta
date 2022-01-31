@@ -587,7 +587,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         public BackupImageView pressedBackupImageView;
         float pressedX;
         float pressedY;
-        public float sideScale;
+        public float sideScale = 1.0f;
 
         ReactionHolderView(Context context) {
             super(context);

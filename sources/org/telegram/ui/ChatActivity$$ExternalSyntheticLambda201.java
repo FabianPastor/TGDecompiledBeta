@@ -1,17 +1,19 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.tgnet.TLRPC$TL_messageMediaPoll;
-import org.telegram.ui.PollCreateActivity;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda201 implements PollCreateActivity.PollCreateActivityDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda201 implements ThemeDescription.ThemeDescriptionDelegate {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda201(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void sendPoll(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
-        this.f$0.lambda$openPollCreate$77(tLRPC$TL_messageMediaPoll, hashMap, z, i);
+    public final void didSetColor() {
+        this.f$0.lambda$getThemeDescriptions$215();
+    }
+
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

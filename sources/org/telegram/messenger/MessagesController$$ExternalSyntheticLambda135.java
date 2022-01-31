@@ -1,24 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesController;
-import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLObject;
+import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda135 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ TLRPC$Chat f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ int f$3;
-    public final /* synthetic */ MessagesController.MessagesLoadedCallback f$4;
+    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ Theme.ThemeInfo f$2;
+    public final /* synthetic */ Theme.ThemeAccent f$3;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda135(MessagesController messagesController, TLRPC$Chat tLRPC$Chat, long j, int i, MessagesController.MessagesLoadedCallback messagesLoadedCallback) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda135(MessagesController messagesController, TLObject tLObject, Theme.ThemeInfo themeInfo, Theme.ThemeAccent themeAccent) {
         this.f$0 = messagesController;
-        this.f$1 = tLRPC$Chat;
-        this.f$2 = j;
-        this.f$3 = i;
-        this.f$4 = messagesLoadedCallback;
+        this.f$1 = tLObject;
+        this.f$2 = themeInfo;
+        this.f$3 = themeAccent;
     }
 
     public final void run() {
-        this.f$0.lambda$ensureMessagesLoaded$330(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$didReceivedNotification$27(this.f$1, this.f$2, this.f$3);
     }
 }
