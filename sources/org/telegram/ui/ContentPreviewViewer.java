@@ -60,7 +60,8 @@ public class ContentPreviewViewer {
     /* access modifiers changed from: private */
     public boolean animateY;
     private ColorDrawable backgroundDrawable = new ColorDrawable(NUM);
-    private ImageReceiver centerImage = new ImageReceiver();
+    /* access modifiers changed from: private */
+    public ImageReceiver centerImage = new ImageReceiver();
     /* access modifiers changed from: private */
     public boolean clearsInputField;
     /* access modifiers changed from: private */
@@ -977,7 +978,7 @@ public class ContentPreviewViewer {
         int i = UserConfig.selectedAccount;
         this.currentAccount = i;
         this.centerImage.setCurrentAccount(i);
-        this.centerImage.setLayerNum(7);
+        this.centerImage.setLayerNum(Integer.MAX_VALUE);
         if (this.parentActivity != activity) {
             this.parentActivity = activity;
             this.slideUpDrawable = activity.getResources().getDrawable(NUM);
@@ -990,9 +991,21 @@ public class ContentPreviewViewer {
                 this.windowView.setFitsSystemWindows(true);
                 this.windowView.setOnApplyWindowInsetsListener(new ContentPreviewViewer$$ExternalSyntheticLambda0(this));
             }
-            FrameLayoutDrawer frameLayoutDrawer = new FrameLayoutDrawer(activity);
-            this.containerView = frameLayoutDrawer;
-            frameLayoutDrawer.setFocusable(false);
+            AnonymousClass2 r3 = new FrameLayoutDrawer(activity) {
+                /* access modifiers changed from: protected */
+                public void onAttachedToWindow() {
+                    super.onAttachedToWindow();
+                    ContentPreviewViewer.this.centerImage.onAttachedToWindow();
+                }
+
+                /* access modifiers changed from: protected */
+                public void onDetachedFromWindow() {
+                    super.onDetachedFromWindow();
+                    ContentPreviewViewer.this.centerImage.onDetachedFromWindow();
+                }
+            };
+            this.containerView = r3;
+            r3.setFocusable(false);
             this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
             this.containerView.setOnTouchListener(new ContentPreviewViewer$$ExternalSyntheticLambda1(this));
             WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();

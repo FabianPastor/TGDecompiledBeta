@@ -4479,12 +4479,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             if (!tLRPC$StickerSetCovered.covers.isEmpty()) {
                 tLRPC$Document = tLRPC$StickerSetCovered.covers.get(0);
             }
-            TLObject closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$StickerSetCovered.set.thumbs, 90);
+            Object closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$StickerSetCovered.set.thumbs, 90);
             SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$StickerSetCovered.set.thumbs, "emptyListPlaceholder", 0.2f);
             if (svgThumb != null) {
                 svgThumb.overrideWidthAndHeight(512, 512);
             }
-            if (closestPhotoSizeWithSize == null) {
+            if (closestPhotoSizeWithSize == null || MessageObject.isVideoSticker(tLRPC$Document)) {
                 closestPhotoSizeWithSize = tLRPC$Document;
             }
             boolean z = closestPhotoSizeWithSize instanceof TLRPC$Document;
@@ -4497,7 +4497,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
             ImageLocation imageLocation = forSticker;
             if (imageLocation != null) {
-                if (!z || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
+                if (!z || (!MessageObject.isAnimatedStickerDocument(tLRPC$Document, true) && !MessageObject.isVideoSticker(tLRPC$Document))) {
                     if (imageLocation.imageType == 1) {
                         backupImageView.setImage(imageLocation, "30_30", "tgs", (Drawable) svgThumb, (Object) tLRPC$StickerSetCovered);
                     } else {

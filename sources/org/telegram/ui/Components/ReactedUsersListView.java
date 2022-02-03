@@ -323,14 +323,20 @@ public class ReactedUsersListView extends FrameLayout {
 
         /* access modifiers changed from: package-private */
         public void setUserReaction(TLRPC$TL_messagePeerReaction tLRPC$TL_messagePeerReaction) {
-            TLRPC$TL_availableReaction tLRPC$TL_availableReaction;
             TLRPC$User tLRPC$User = (TLRPC$User) ReactedUsersListView.this.users.get(MessageObject.getPeerId(tLRPC$TL_messagePeerReaction.peer_id));
             this.avatarDrawable.setInfo(tLRPC$User);
             this.titleView.setText(UserObject.getUserName(tLRPC$User));
             this.avatarView.setImage(ImageLocation.getForUser(tLRPC$User, 1), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
-            if (tLRPC$TL_messagePeerReaction.reaction != null && (tLRPC$TL_availableReaction = MediaDataController.getInstance(ReactedUsersListView.this.currentAccount).getReactionsMap().get(tLRPC$TL_messagePeerReaction.reaction)) != null) {
-                this.reactView.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), "50_50", "webp", (Drawable) DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon.thumbs, "windowBackgroundGray", 1.0f), (Object) tLRPC$TL_availableReaction);
+            if (tLRPC$TL_messagePeerReaction.reaction != null) {
+                TLRPC$TL_availableReaction tLRPC$TL_availableReaction = MediaDataController.getInstance(ReactedUsersListView.this.currentAccount).getReactionsMap().get(tLRPC$TL_messagePeerReaction.reaction);
+                if (tLRPC$TL_availableReaction != null) {
+                    this.reactView.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), "50_50", "webp", (Drawable) DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon.thumbs, "windowBackgroundGray", 1.0f), (Object) tLRPC$TL_availableReaction);
+                    return;
+                }
+                this.reactView.setImageDrawable((Drawable) null);
+                return;
             }
+            this.reactView.setImageDrawable((Drawable) null);
         }
 
         /* access modifiers changed from: protected */

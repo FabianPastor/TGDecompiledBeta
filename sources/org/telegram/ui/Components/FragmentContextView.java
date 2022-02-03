@@ -1100,6 +1100,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame() - 1, false, true);
                 this.muteButton.invalidate();
                 this.frameLayout.setBackground((Drawable) null);
+                this.frameLayout.setBackgroundColor(0);
                 this.importingImageView.setVisibility(8);
                 this.importingImageView.stopAnimation();
                 Theme.getFragmentContextViewWavesDrawable().addParent(this);

@@ -793,12 +793,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     r0 = 0
                     r1 = 0
                 L_0x0006:
-                    if (r1 >= r10) goto L_0x00d2
+                    if (r1 >= r10) goto L_0x00d8
                     android.view.View r2 = r9.getChildAt(r1)
                     int r3 = r2.getVisibility()
                     r4 = 8
                     if (r3 != r4) goto L_0x0016
-                    goto L_0x00ce
+                    goto L_0x00d4
                 L_0x0016:
                     android.view.ViewGroup$LayoutParams r3 = r2.getLayoutParams()
                     android.widget.FrameLayout$LayoutParams r3 = (android.widget.FrameLayout.LayoutParams) r3
@@ -893,18 +893,23 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 L_0x00bc:
                     org.telegram.ui.ChannelAdminLogActivity r6 = org.telegram.ui.ChannelAdminLogActivity.this
                     org.telegram.ui.ActionBar.ActionBar r6 = r6.actionBar
-                    if (r2 != r6) goto L_0x00c9
+                    if (r2 != r6) goto L_0x00ca
                     int r6 = r9.getPaddingTop()
                 L_0x00c8:
                     int r3 = r3 - r6
-                L_0x00c9:
+                    goto L_0x00cf
+                L_0x00ca:
+                    android.view.View r6 = r9.backgroundView
+                    if (r2 != r6) goto L_0x00cf
+                    r3 = 0
+                L_0x00cf:
                     int r4 = r4 + r7
                     int r5 = r5 + r3
                     r2.layout(r7, r3, r4, r5)
-                L_0x00ce:
+                L_0x00d4:
                     int r1 = r1 + 1
                     goto L_0x0006
-                L_0x00d2:
+                L_0x00d8:
                     org.telegram.ui.ChannelAdminLogActivity r10 = org.telegram.ui.ChannelAdminLogActivity.this
                     r10.updateMessagesVisisblePart()
                     r9.notifyHeightChanged()
