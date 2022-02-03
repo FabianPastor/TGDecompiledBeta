@@ -10,7 +10,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ChatActivity;
 
 public class ChatBlurredFrameLayout extends FrameLayout {
-    public int backgroundColor;
+    public int backgroundColor = 0;
     public int backgroundPaddingBottom;
     public int backgroundPaddingTop;
     protected Paint backgroundPaint;
@@ -26,7 +26,7 @@ public class ChatBlurredFrameLayout extends FrameLayout {
     /* access modifiers changed from: protected */
     public void dispatchDraw(Canvas canvas) {
         SizeNotifierFrameLayout sizeNotifierFrameLayout;
-        if (SharedConfig.chatBlurEnabled() && this.chatActivity != null && this.drawBlur) {
+        if (SharedConfig.chatBlurEnabled() && this.chatActivity != null && this.drawBlur && this.backgroundColor != 0) {
             if (this.backgroundPaint == null) {
                 this.backgroundPaint = new Paint();
             }

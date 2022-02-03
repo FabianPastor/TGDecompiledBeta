@@ -797,9 +797,10 @@ public class MessagesController extends BaseController implements NotificationCe
 
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$getNextReactionMention$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, Consumer consumer) {
+        ArrayList<TLRPC$Message> arrayList;
         TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
         int i = 0;
-        if (tLRPC$TL_error != null && !tLRPC$messages_Messages.messages.isEmpty()) {
+        if (!(tLRPC$TL_error == null || tLRPC$messages_Messages == null || (arrayList = tLRPC$messages_Messages.messages) == null || arrayList.isEmpty())) {
             i = tLRPC$messages_Messages.messages.get(0).id;
         }
         AndroidUtilities.runOnUIThread(new MessagesController$$ExternalSyntheticLambda7(consumer, i));

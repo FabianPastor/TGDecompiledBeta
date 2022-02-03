@@ -815,42 +815,90 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 return false;
             }
             ChatMessageCell chatMessageCell = (ChatMessageCell) view;
-            if (chatMessageCell.getMessageObject().isSending() || chatMessageCell.getMessageObject().isEditing() || chatMessageCell.getMessageObject().type == 16 || ChatActivity.this.actionBar.isActionModeShowed() || ChatActivity.this.isSecretChat() || ChatActivity.this.isInScheduleMode()) {
+            if (chatMessageCell.getMessageObject().isSending() || chatMessageCell.getMessageObject().isEditing() || chatMessageCell.getMessageObject().type == 16 || ChatActivity.this.actionBar.isActionModeShowed() || ChatActivity.this.isSecretChat() || ChatActivity.this.isInScheduleMode() || chatMessageCell.getMessageObject().isSponsored()) {
                 return false;
             }
             return true;
         }
 
-        public void onDoubleTap(View view, int i, float f, float f2) {
-            TLRPC$ChatFull tLRPC$ChatFull;
-            if ((view instanceof ChatMessageCell) && ChatActivity.this.getParentActivity() != null && !ChatActivity.this.isSecretChat() && !ChatActivity.this.isInScheduleMode()) {
-                MessageObject primaryMessageObject = ((ChatMessageCell) view).getPrimaryMessageObject();
-                boolean z = false;
-                ReactionsEffectOverlay.removeCurrent(false);
-                TLRPC$TL_availableReaction tLRPC$TL_availableReaction = ChatActivity.this.getMediaDataController().getReactionsMap().get(ChatActivity.this.getMediaDataController().getDoubleTapReaction());
-                if (tLRPC$TL_availableReaction != null) {
-                    boolean z2 = true;
-                    if (ChatActivity.this.dialog_id >= 0) {
-                        z = true;
-                    }
-                    if (!z && (tLRPC$ChatFull = ChatActivity.this.chatInfo) != null) {
-                        Iterator<String> it = tLRPC$ChatFull.available_reactions.iterator();
-                        while (true) {
-                            if (it.hasNext()) {
-                                if (it.next().equals(tLRPC$TL_availableReaction.reaction)) {
-                                    break;
-                                }
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    z2 = z;
-                    if (z2) {
-                        ChatActivity.this.selectReaction(primaryMessageObject, (ReactionsContainerLayout) null, f, f2, tLRPC$TL_availableReaction, true, false);
-                    }
-                }
-            }
+        /* JADX WARNING: Removed duplicated region for block: B:25:0x0084 A[RETURN] */
+        /* JADX WARNING: Removed duplicated region for block: B:26:0x0085  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public void onDoubleTap(android.view.View r9, int r10, float r11, float r12) {
+            /*
+                r8 = this;
+                boolean r10 = r9 instanceof org.telegram.ui.Cells.ChatMessageCell
+                if (r10 == 0) goto L_0x008f
+                org.telegram.ui.ChatActivity r10 = org.telegram.ui.ChatActivity.this
+                android.app.Activity r10 = r10.getParentActivity()
+                if (r10 == 0) goto L_0x008f
+                org.telegram.ui.ChatActivity r10 = org.telegram.ui.ChatActivity.this
+                boolean r10 = r10.isSecretChat()
+                if (r10 != 0) goto L_0x008f
+                org.telegram.ui.ChatActivity r10 = org.telegram.ui.ChatActivity.this
+                boolean r10 = r10.isInScheduleMode()
+                if (r10 == 0) goto L_0x001e
+                goto L_0x008f
+            L_0x001e:
+                org.telegram.ui.Cells.ChatMessageCell r9 = (org.telegram.ui.Cells.ChatMessageCell) r9
+                org.telegram.messenger.MessageObject r1 = r9.getPrimaryMessageObject()
+                r10 = 0
+                org.telegram.ui.Components.Reactions.ReactionsEffectOverlay.removeCurrent(r10)
+                org.telegram.ui.ChatActivity r0 = org.telegram.ui.ChatActivity.this
+                org.telegram.messenger.MediaDataController r0 = r0.getMediaDataController()
+                java.util.HashMap r0 = r0.getReactionsMap()
+                org.telegram.ui.ChatActivity r2 = org.telegram.ui.ChatActivity.this
+                org.telegram.messenger.MediaDataController r2 = r2.getMediaDataController()
+                java.lang.String r2 = r2.getDoubleTapReaction()
+                java.lang.Object r0 = r0.get(r2)
+                r5 = r0
+                org.telegram.tgnet.TLRPC$TL_availableReaction r5 = (org.telegram.tgnet.TLRPC$TL_availableReaction) r5
+                if (r5 == 0) goto L_0x008f
+                org.telegram.messenger.MessageObject r9 = r9.getMessageObject()
+                boolean r9 = r9.isSponsored()
+                if (r9 == 0) goto L_0x0050
+                goto L_0x008f
+            L_0x0050:
+                org.telegram.ui.ChatActivity r9 = org.telegram.ui.ChatActivity.this
+                long r2 = r9.dialog_id
+                r6 = 0
+                r9 = 1
+                int r0 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
+                if (r0 < 0) goto L_0x005e
+                r10 = 1
+            L_0x005e:
+                if (r10 != 0) goto L_0x0081
+                org.telegram.ui.ChatActivity r0 = org.telegram.ui.ChatActivity.this
+                org.telegram.tgnet.TLRPC$ChatFull r0 = r0.chatInfo
+                if (r0 == 0) goto L_0x0081
+                java.util.ArrayList<java.lang.String> r0 = r0.available_reactions
+                java.util.Iterator r0 = r0.iterator()
+            L_0x006c:
+                boolean r2 = r0.hasNext()
+                if (r2 == 0) goto L_0x0081
+                java.lang.Object r2 = r0.next()
+                java.lang.String r2 = (java.lang.String) r2
+                java.lang.String r3 = r5.reaction
+                boolean r2 = r2.equals(r3)
+                if (r2 == 0) goto L_0x006c
+                goto L_0x0082
+            L_0x0081:
+                r9 = r10
+            L_0x0082:
+                if (r9 != 0) goto L_0x0085
+                return
+            L_0x0085:
+                org.telegram.ui.ChatActivity r0 = org.telegram.ui.ChatActivity.this
+                r2 = 0
+                r6 = 1
+                r7 = 0
+                r3 = r11
+                r4 = r12
+                r0.selectReaction(r1, r2, r3, r4, r5, r6, r7)
+            L_0x008f:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.AnonymousClass8.onDoubleTap(android.view.View, int, float, float):void");
         }
     };
     RecyclerListView.OnItemLongClickListenerExtended onItemLongClickListener = new RecyclerListView.OnItemLongClickListenerExtended() {
