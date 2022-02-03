@@ -30,15 +30,11 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.TLRPC$Document;
 
 public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
-    private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(16, new ThreadPoolExecutor.DiscardPolicy());
+    private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(8, new ThreadPoolExecutor.DiscardPolicy());
     private static float[] radii = new float[8];
     private static final Handler uiHandler = new Handler(Looper.getMainLooper());
     private RectF actualDrawRect;
     private boolean applyTransformation;
-    /* access modifiers changed from: private */
-    public int averageCount;
-    /* access modifiers changed from: private */
-    public long averageTime;
     /* access modifiers changed from: private */
     public Bitmap backgroundBitmap;
     /* access modifiers changed from: private */
@@ -161,18 +157,6 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     static /* synthetic */ int access$1010(AnimatedFileDrawable animatedFileDrawable) {
         int i = animatedFileDrawable.pendingRemoveLoadingFramesReset;
         animatedFileDrawable.pendingRemoveLoadingFramesReset = i - 1;
-        return i;
-    }
-
-    static /* synthetic */ long access$4114(AnimatedFileDrawable animatedFileDrawable, long j) {
-        long j2 = animatedFileDrawable.averageTime + j;
-        animatedFileDrawable.averageTime = j2;
-        return j2;
-    }
-
-    static /* synthetic */ int access$4208(AnimatedFileDrawable animatedFileDrawable) {
-        int i = animatedFileDrawable.averageCount;
-        animatedFileDrawable.averageCount = i + 1;
         return i;
     }
 
@@ -346,7 +330,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         this.loadFrameRunnable = new Runnable() {
             public void run() {
                 if (!AnimatedFileDrawable.this.isRecycled) {
-                    boolean z = true;
+                    boolean z = false;
                     if (!AnimatedFileDrawable.this.decoderCreated && AnimatedFileDrawable.this.nativePtr == 0) {
                         AnimatedFileDrawable animatedFileDrawable = AnimatedFileDrawable.this;
                         animatedFileDrawable.nativePtr = AnimatedFileDrawable.createDecoder(animatedFileDrawable.path.getAbsolutePath(), AnimatedFileDrawable.this.metaData, AnimatedFileDrawable.this.currentAccount, AnimatedFileDrawable.this.streamFileSize, AnimatedFileDrawable.this.stream, false);
@@ -387,28 +371,20 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                             AnimatedFileDrawable.this.stream.reset();
                         }
                         AnimatedFileDrawable.seekToMs(AnimatedFileDrawable.this.nativePtr, access$2300, true);
-                    } else {
-                        z = false;
+                        z = true;
                     }
                     if (AnimatedFileDrawable.this.backgroundBitmap != null) {
                         long unused5 = AnimatedFileDrawable.this.lastFrameDecodeTime = System.currentTimeMillis();
-                        long currentTimeMillis = System.currentTimeMillis();
                         if (AnimatedFileDrawable.getVideoFrame(AnimatedFileDrawable.this.nativePtr, AnimatedFileDrawable.this.backgroundBitmap, AnimatedFileDrawable.this.metaData, AnimatedFileDrawable.this.backgroundBitmap.getRowBytes(), false, AnimatedFileDrawable.this.startTime, AnimatedFileDrawable.this.endTime) == 0) {
                             AndroidUtilities.runOnUIThread(AnimatedFileDrawable.this.uiRunnableNoFrame);
                             return;
                         }
-                        AnimatedFileDrawable.access$4114(AnimatedFileDrawable.this, System.currentTimeMillis() - currentTimeMillis);
-                        AnimatedFileDrawable.access$4208(AnimatedFileDrawable.this);
-                        if (AnimatedFileDrawable.this.averageCount >= 50) {
-                            long unused6 = AnimatedFileDrawable.this.averageTime = 0;
-                            int unused7 = AnimatedFileDrawable.this.averageCount = 0;
-                        }
                         if (z) {
                             AnimatedFileDrawable animatedFileDrawable4 = AnimatedFileDrawable.this;
-                            int unused8 = animatedFileDrawable4.lastTimeStamp = animatedFileDrawable4.metaData[3];
+                            int unused6 = animatedFileDrawable4.lastTimeStamp = animatedFileDrawable4.metaData[3];
                         }
                         AnimatedFileDrawable animatedFileDrawable5 = AnimatedFileDrawable.this;
-                        int unused9 = animatedFileDrawable5.backgroundBitmapTime = animatedFileDrawable5.metaData[3];
+                        int unused7 = animatedFileDrawable5.backgroundBitmapTime = animatedFileDrawable5.metaData[3];
                     }
                 }
                 AndroidUtilities.runOnUIThread(AnimatedFileDrawable.this.uiRunnable);

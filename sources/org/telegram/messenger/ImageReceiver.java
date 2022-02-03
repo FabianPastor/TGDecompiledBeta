@@ -317,6 +317,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     }
 
     public ImageReceiver(View view) {
+        this.useRoundForThumb = true;
         this.allowStartAnimation = true;
         this.allowStartLottieAnimation = true;
         this.autoRepeat = 1;
