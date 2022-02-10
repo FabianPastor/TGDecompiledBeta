@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda98 im
     }
 
     public final void run() {
-        this.f$0.lambda$getDialogFolderId$176(this.f$1, this.f$2);
+        this.f$0.lambda$getDialogFolderId$177(this.f$1, this.f$2);
     }
 }

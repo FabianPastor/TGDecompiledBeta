@@ -25116,7 +25116,7 @@ public class MessagesController extends BaseController implements NotificationCe
         getMessagesStorage().updateDialogsWithDeletedMessages(j2, -j, new ArrayList(), getMessagesStorage().markMessagesAsDeleted(j, i, false, true), false);
     }
 
-    private void checkUnreadReactions(long j, SparseBooleanArray sparseBooleanArray) {
+    public void checkUnreadReactions(long j, SparseBooleanArray sparseBooleanArray) {
         getMessagesStorage().getStorageQueue().postRunnable(new MessagesController$$ExternalSyntheticLambda85(this, sparseBooleanArray, j));
     }
 
@@ -25208,25 +25208,29 @@ public class MessagesController extends BaseController implements NotificationCe
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$checkUnreadReactions$321(long j, int i, ArrayList arrayList) {
         TLRPC$Dialog tLRPC$Dialog = this.dialogs_dict.get(j);
-        if (tLRPC$Dialog != null) {
-            tLRPC$Dialog.unread_reactions_count = i;
-            getMessagesStorage().updateUnreadReactionsCount(j, i);
-            getNotificationCenter().postNotificationName(NotificationCenter.dialogsUnreadReactionsCounterChanged, Long.valueOf(j), Integer.valueOf(i), arrayList);
+        if (tLRPC$Dialog == null) {
+            getMessagesStorage().updateDialogUnreadReactions(j, i, false);
+            return;
         }
+        tLRPC$Dialog.unread_reactions_count = i;
+        getMessagesStorage().updateUnreadReactionsCount(j, i);
+        getNotificationCenter().postNotificationName(NotificationCenter.dialogsUnreadReactionsCounterChanged, Long.valueOf(j), Integer.valueOf(i), arrayList);
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$checkUnreadReactions$323(long j, int i, ArrayList arrayList) {
         TLRPC$Dialog tLRPC$Dialog = this.dialogs_dict.get(j);
-        if (tLRPC$Dialog != null) {
-            int i2 = tLRPC$Dialog.unread_reactions_count + i;
-            tLRPC$Dialog.unread_reactions_count = i2;
-            if (i2 < 0) {
-                tLRPC$Dialog.unread_reactions_count = 0;
-            }
-            getMessagesStorage().updateUnreadReactionsCount(j, tLRPC$Dialog.unread_reactions_count);
-            getNotificationCenter().postNotificationName(NotificationCenter.dialogsUnreadReactionsCounterChanged, Long.valueOf(j), Integer.valueOf(tLRPC$Dialog.unread_reactions_count), arrayList);
+        if (tLRPC$Dialog == null) {
+            getMessagesStorage().updateDialogUnreadReactions(j, i, true);
+            return;
         }
+        int i2 = tLRPC$Dialog.unread_reactions_count + i;
+        tLRPC$Dialog.unread_reactions_count = i2;
+        if (i2 < 0) {
+            tLRPC$Dialog.unread_reactions_count = 0;
+        }
+        getMessagesStorage().updateUnreadReactionsCount(j, tLRPC$Dialog.unread_reactions_count);
+        getNotificationCenter().postNotificationName(NotificationCenter.dialogsUnreadReactionsCounterChanged, Long.valueOf(j), Integer.valueOf(tLRPC$Dialog.unread_reactions_count), arrayList);
     }
 
     public boolean isDialogMuted(long j) {

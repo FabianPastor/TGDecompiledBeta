@@ -8,7 +8,9 @@ import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
+import android.view.animation.Interpolator;
 import androidx.core.graphics.ColorUtils;
+import androidx.recyclerview.widget.ChatListItemAnimator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -574,6 +576,8 @@ public class ReactionsLayoutInBubble {
                 if (this.avatarsDarawable == null) {
                     AvatarsDarawable avatarsDarawable2 = new AvatarsDarawable(ReactionsLayoutInBubble.this.parentView, false);
                     this.avatarsDarawable = avatarsDarawable2;
+                    avatarsDarawable2.transitionDuration = 250;
+                    Interpolator interpolator = ChatListItemAnimator.DEFAULT_INTERPOLATOR;
                     avatarsDarawable2.setSize(AndroidUtilities.dp(20.0f));
                     this.avatarsDarawable.width = AndroidUtilities.dp(100.0f);
                     AvatarsDarawable avatarsDarawable3 = this.avatarsDarawable;

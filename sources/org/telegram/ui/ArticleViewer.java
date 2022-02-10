@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
@@ -624,7 +625,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.searchPath.setCurrentLayout(this.textLayout, searchResult.index, 0.0f);
                     this.searchPath.setBaselineShift(0);
                     this.textLayout.getSelectionPath(searchResult.index, searchResult.index + ArticleViewer.this.searchText.length(), this.searchPath);
-                    this.searchPath.onPathEnd();
                     this.searchPath.setAllowReset(true);
                 }
             } else {
@@ -1420,12 +1420,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         int color = Theme.getColor("windowBackgroundWhite");
         webpageSearchPaint.setColor((((((float) Color.red(color)) * 0.2126f) + (((float) Color.green(color)) * 0.7152f)) + (((float) Color.blue(color)) * 0.0722f)) / 255.0f <= 0.705f ? -3041234 : -6551);
         webpageUrlPaint.setColor(Theme.getColor("windowBackgroundWhiteLinkSelection") & NUM);
+        Paint paint3 = webpageUrlPaint;
+        CornerPathEffect cornerPathEffect = LinkPath.roundedEffect;
+        paint3.setPathEffect(cornerPathEffect);
         urlPaint.setColor(Theme.getColor("windowBackgroundWhiteLinkSelection") & NUM);
+        urlPaint.setPathEffect(cornerPathEffect);
         tableHalfLinePaint.setColor(Theme.getColor("windowBackgroundWhiteInputField"));
         tableLinePaint.setColor(Theme.getColor("windowBackgroundWhiteInputField"));
         photoBackgroundPaint.setColor(NUM);
         dividerPaint.setColor(Theme.getColor("divider"));
-        webpageMarkPaint.setColor(Theme.getColor("windowBackgroundWhiteLinkSelection") & NUM);
+        webpageMarkPaint.setColor(NUM & Theme.getColor("windowBackgroundWhiteLinkSelection"));
+        webpageMarkPaint.setPathEffect(cornerPathEffect);
         int color2 = Theme.getColor("switchTrack");
         int red = Color.red(color2);
         int green = Color.green(color2);
@@ -3301,8 +3306,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:136:0x035d */
-    /* JADX WARNING: Removed duplicated region for block: B:146:0x037a A[Catch:{ Exception -> 0x03bb }] */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:136:0x035a */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x0377 A[Catch:{ Exception -> 0x03b5 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public org.telegram.ui.ArticleViewer.DrawingText createLayoutForText(android.view.View r23, java.lang.CharSequence r24, org.telegram.tgnet.TLRPC$RichText r25, int r26, int r27, org.telegram.tgnet.TLRPC$PageBlock r28, android.text.Layout.Alignment r29, int r30, org.telegram.ui.ArticleViewer.WebpageAdapter r31) {
         /*
@@ -3636,7 +3641,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             goto L_0x0254
         L_0x02a3:
             boolean r0 = r3 instanceof android.text.Spanned
-            if (r0 == 0) goto L_0x03bf
+            if (r0 == 0) goto L_0x03b9
             android.text.Spanned r3 = (android.text.Spanned) r3
             int r0 = r3.length()     // Catch:{ Exception -> 0x02fa }
             java.lang.Class<org.telegram.ui.Components.AnchorSpan> r4 = org.telegram.ui.Components.AnchorSpan.class
@@ -3674,31 +3679,31 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x02fa:
             r4 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             r6 = 0
-            int r8 = r3.length()     // Catch:{ Exception -> 0x035c }
+            int r8 = r3.length()     // Catch:{ Exception -> 0x0359 }
             java.lang.Class<org.telegram.ui.Components.TextPaintWebpageUrlSpan> r12 = org.telegram.ui.Components.TextPaintWebpageUrlSpan.class
-            java.lang.Object[] r8 = r3.getSpans(r2, r8, r12)     // Catch:{ Exception -> 0x035c }
-            org.telegram.ui.Components.TextPaintWebpageUrlSpan[] r8 = (org.telegram.ui.Components.TextPaintWebpageUrlSpan[]) r8     // Catch:{ Exception -> 0x035c }
-            if (r8 == 0) goto L_0x035c
-            int r12 = r8.length     // Catch:{ Exception -> 0x035c }
-            if (r12 <= 0) goto L_0x035c
-            org.telegram.ui.Components.LinkPath r12 = new org.telegram.ui.Components.LinkPath     // Catch:{ Exception -> 0x035c }
-            r12.<init>(r5)     // Catch:{ Exception -> 0x035c }
-            r12.setAllowReset(r2)     // Catch:{ Exception -> 0x035d }
+            java.lang.Object[] r8 = r3.getSpans(r2, r8, r12)     // Catch:{ Exception -> 0x0359 }
+            org.telegram.ui.Components.TextPaintWebpageUrlSpan[] r8 = (org.telegram.ui.Components.TextPaintWebpageUrlSpan[]) r8     // Catch:{ Exception -> 0x0359 }
+            if (r8 == 0) goto L_0x0359
+            int r12 = r8.length     // Catch:{ Exception -> 0x0359 }
+            if (r12 <= 0) goto L_0x0359
+            org.telegram.ui.Components.LinkPath r12 = new org.telegram.ui.Components.LinkPath     // Catch:{ Exception -> 0x0359 }
+            r12.<init>(r5)     // Catch:{ Exception -> 0x0359 }
+            r12.setAllowReset(r2)     // Catch:{ Exception -> 0x035a }
             r13 = 0
         L_0x0317:
-            int r14 = r8.length     // Catch:{ Exception -> 0x035d }
-            if (r13 >= r14) goto L_0x0358
-            r14 = r8[r13]     // Catch:{ Exception -> 0x035d }
-            int r14 = r3.getSpanStart(r14)     // Catch:{ Exception -> 0x035d }
-            r15 = r8[r13]     // Catch:{ Exception -> 0x035d }
-            int r15 = r3.getSpanEnd(r15)     // Catch:{ Exception -> 0x035d }
-            r12.setCurrentLayout(r1, r14, r6)     // Catch:{ Exception -> 0x035d }
-            r16 = r8[r13]     // Catch:{ Exception -> 0x035d }
-            android.text.TextPaint r16 = r16.getTextPaint()     // Catch:{ Exception -> 0x035d }
+            int r14 = r8.length     // Catch:{ Exception -> 0x035a }
+            if (r13 >= r14) goto L_0x0355
+            r14 = r8[r13]     // Catch:{ Exception -> 0x035a }
+            int r14 = r3.getSpanStart(r14)     // Catch:{ Exception -> 0x035a }
+            r15 = r8[r13]     // Catch:{ Exception -> 0x035a }
+            int r15 = r3.getSpanEnd(r15)     // Catch:{ Exception -> 0x035a }
+            r12.setCurrentLayout(r1, r14, r6)     // Catch:{ Exception -> 0x035a }
+            r16 = r8[r13]     // Catch:{ Exception -> 0x035a }
+            android.text.TextPaint r16 = r16.getTextPaint()     // Catch:{ Exception -> 0x035a }
             if (r16 == 0) goto L_0x033a
-            r16 = r8[r13]     // Catch:{ Exception -> 0x035d }
-            android.text.TextPaint r0 = r16.getTextPaint()     // Catch:{ Exception -> 0x035d }
-            int r0 = r0.baselineShift     // Catch:{ Exception -> 0x035d }
+            r16 = r8[r13]     // Catch:{ Exception -> 0x035a }
+            android.text.TextPaint r0 = r16.getTextPaint()     // Catch:{ Exception -> 0x035a }
+            int r0 = r0.baselineShift     // Catch:{ Exception -> 0x035a }
             goto L_0x033b
         L_0x033a:
             r0 = 0
@@ -3710,81 +3715,79 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x0342:
             r16 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
         L_0x0344:
-            int r16 = org.telegram.messenger.AndroidUtilities.dp(r16)     // Catch:{ Exception -> 0x035d }
+            int r16 = org.telegram.messenger.AndroidUtilities.dp(r16)     // Catch:{ Exception -> 0x035a }
             int r0 = r0 + r16
             goto L_0x034c
         L_0x034b:
             r0 = 0
         L_0x034c:
-            r12.setBaselineShift(r0)     // Catch:{ Exception -> 0x035d }
-            r1.getSelectionPath(r14, r15, r12)     // Catch:{ Exception -> 0x035d }
-            r12.onPathEnd()     // Catch:{ Exception -> 0x035d }
+            r12.setBaselineShift(r0)     // Catch:{ Exception -> 0x035a }
+            r1.getSelectionPath(r14, r15, r12)     // Catch:{ Exception -> 0x035a }
             int r13 = r13 + 1
             goto L_0x0317
-        L_0x0358:
-            r12.setAllowReset(r5)     // Catch:{ Exception -> 0x035d }
-            goto L_0x035d
-        L_0x035c:
+        L_0x0355:
+            r12.setAllowReset(r5)     // Catch:{ Exception -> 0x035a }
+            goto L_0x035a
+        L_0x0359:
             r12 = r11
-        L_0x035d:
-            int r0 = r3.length()     // Catch:{ Exception -> 0x03bc }
+        L_0x035a:
+            int r0 = r3.length()     // Catch:{ Exception -> 0x03b6 }
             java.lang.Class<org.telegram.ui.Components.TextPaintMarkSpan> r8 = org.telegram.ui.Components.TextPaintMarkSpan.class
-            java.lang.Object[] r0 = r3.getSpans(r2, r0, r8)     // Catch:{ Exception -> 0x03bc }
-            org.telegram.ui.Components.TextPaintMarkSpan[] r0 = (org.telegram.ui.Components.TextPaintMarkSpan[]) r0     // Catch:{ Exception -> 0x03bc }
-            if (r0 == 0) goto L_0x03bc
-            int r8 = r0.length     // Catch:{ Exception -> 0x03bc }
-            if (r8 <= 0) goto L_0x03bc
-            org.telegram.ui.Components.LinkPath r8 = new org.telegram.ui.Components.LinkPath     // Catch:{ Exception -> 0x03bc }
-            r8.<init>(r5)     // Catch:{ Exception -> 0x03bc }
-            r8.setAllowReset(r2)     // Catch:{ Exception -> 0x03bb }
+            java.lang.Object[] r0 = r3.getSpans(r2, r0, r8)     // Catch:{ Exception -> 0x03b6 }
+            org.telegram.ui.Components.TextPaintMarkSpan[] r0 = (org.telegram.ui.Components.TextPaintMarkSpan[]) r0     // Catch:{ Exception -> 0x03b6 }
+            if (r0 == 0) goto L_0x03b6
+            int r8 = r0.length     // Catch:{ Exception -> 0x03b6 }
+            if (r8 <= 0) goto L_0x03b6
+            org.telegram.ui.Components.LinkPath r8 = new org.telegram.ui.Components.LinkPath     // Catch:{ Exception -> 0x03b6 }
+            r8.<init>(r5)     // Catch:{ Exception -> 0x03b6 }
+            r8.setAllowReset(r2)     // Catch:{ Exception -> 0x03b5 }
             r11 = 0
-        L_0x0377:
-            int r13 = r0.length     // Catch:{ Exception -> 0x03bb }
-            if (r11 >= r13) goto L_0x03b8
-            r13 = r0[r11]     // Catch:{ Exception -> 0x03bb }
-            int r13 = r3.getSpanStart(r13)     // Catch:{ Exception -> 0x03bb }
-            r14 = r0[r11]     // Catch:{ Exception -> 0x03bb }
-            int r14 = r3.getSpanEnd(r14)     // Catch:{ Exception -> 0x03bb }
-            r8.setCurrentLayout(r1, r13, r6)     // Catch:{ Exception -> 0x03bb }
-            r15 = r0[r11]     // Catch:{ Exception -> 0x03bb }
-            android.text.TextPaint r15 = r15.getTextPaint()     // Catch:{ Exception -> 0x03bb }
-            if (r15 == 0) goto L_0x039a
-            r15 = r0[r11]     // Catch:{ Exception -> 0x03bb }
-            android.text.TextPaint r15 = r15.getTextPaint()     // Catch:{ Exception -> 0x03bb }
-            int r15 = r15.baselineShift     // Catch:{ Exception -> 0x03bb }
-            goto L_0x039b
-        L_0x039a:
+        L_0x0374:
+            int r13 = r0.length     // Catch:{ Exception -> 0x03b5 }
+            if (r11 >= r13) goto L_0x03b2
+            r13 = r0[r11]     // Catch:{ Exception -> 0x03b5 }
+            int r13 = r3.getSpanStart(r13)     // Catch:{ Exception -> 0x03b5 }
+            r14 = r0[r11]     // Catch:{ Exception -> 0x03b5 }
+            int r14 = r3.getSpanEnd(r14)     // Catch:{ Exception -> 0x03b5 }
+            r8.setCurrentLayout(r1, r13, r6)     // Catch:{ Exception -> 0x03b5 }
+            r15 = r0[r11]     // Catch:{ Exception -> 0x03b5 }
+            android.text.TextPaint r15 = r15.getTextPaint()     // Catch:{ Exception -> 0x03b5 }
+            if (r15 == 0) goto L_0x0397
+            r15 = r0[r11]     // Catch:{ Exception -> 0x03b5 }
+            android.text.TextPaint r15 = r15.getTextPaint()     // Catch:{ Exception -> 0x03b5 }
+            int r15 = r15.baselineShift     // Catch:{ Exception -> 0x03b5 }
+            goto L_0x0398
+        L_0x0397:
             r15 = 0
-        L_0x039b:
-            if (r15 == 0) goto L_0x03ab
-            if (r15 <= 0) goto L_0x03a2
+        L_0x0398:
+            if (r15 == 0) goto L_0x03a8
+            if (r15 <= 0) goto L_0x039f
             r16 = 1084227584(0x40a00000, float:5.0)
-            goto L_0x03a4
-        L_0x03a2:
+            goto L_0x03a1
+        L_0x039f:
             r16 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-        L_0x03a4:
-            int r16 = org.telegram.messenger.AndroidUtilities.dp(r16)     // Catch:{ Exception -> 0x03bb }
+        L_0x03a1:
+            int r16 = org.telegram.messenger.AndroidUtilities.dp(r16)     // Catch:{ Exception -> 0x03b5 }
             int r15 = r15 + r16
-            goto L_0x03ac
-        L_0x03ab:
+            goto L_0x03a9
+        L_0x03a8:
             r15 = 0
-        L_0x03ac:
-            r8.setBaselineShift(r15)     // Catch:{ Exception -> 0x03bb }
-            r1.getSelectionPath(r13, r14, r8)     // Catch:{ Exception -> 0x03bb }
-            r8.onPathEnd()     // Catch:{ Exception -> 0x03bb }
+        L_0x03a9:
+            r8.setBaselineShift(r15)     // Catch:{ Exception -> 0x03b5 }
+            r1.getSelectionPath(r13, r14, r8)     // Catch:{ Exception -> 0x03b5 }
             int r11 = r11 + 1
-            goto L_0x0377
-        L_0x03b8:
-            r8.setAllowReset(r5)     // Catch:{ Exception -> 0x03bb }
-        L_0x03bb:
+            goto L_0x0374
+        L_0x03b2:
+            r8.setAllowReset(r5)     // Catch:{ Exception -> 0x03b5 }
+        L_0x03b5:
             r11 = r8
-        L_0x03bc:
+        L_0x03b6:
             r0 = r11
             r11 = r12
-            goto L_0x03c0
-        L_0x03bf:
+            goto L_0x03ba
+        L_0x03b9:
             r0 = r11
-        L_0x03c0:
+        L_0x03ba:
             org.telegram.ui.ArticleViewer$DrawingText r2 = new org.telegram.ui.ArticleViewer$DrawingText
             r2.<init>()
             r2.textLayout = r1
@@ -3818,10 +3821,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:95:0x01aa, code lost:
-        if (r0.isShowing() == false) goto L_0x01ac;
+    /* JADX WARNING: Code restructure failed: missing block: B:95:0x01a5, code lost:
+        if (r0.isShowing() == false) goto L_0x01a7;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x01b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x01ac  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean checkLayoutForLinks(org.telegram.ui.ArticleViewer.WebpageAdapter r17, android.view.MotionEvent r18, android.view.View r19, org.telegram.ui.ArticleViewer.DrawingText r20, int r21, int r22) {
         /*
@@ -3833,23 +3836,23 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r22
             android.animation.AnimatorSet r5 = r1.pageSwitchAnimation
             r6 = 0
-            if (r5 != 0) goto L_0x01e4
-            if (r2 == 0) goto L_0x01e4
+            if (r5 != 0) goto L_0x01df
+            if (r2 == 0) goto L_0x01df
             org.telegram.ui.Cells.TextSelectionHelper$ArticleTextSelectionHelper r5 = r1.textSelectionHelper
             boolean r5 = r5.isSelectable(r2)
             if (r5 != 0) goto L_0x001b
-            goto L_0x01e4
+            goto L_0x01df
         L_0x001b:
             r1.pressedLinkOwnerView = r2
             r5 = 1
-            if (r0 == 0) goto L_0x01b4
+            if (r0 == 0) goto L_0x01af
             android.text.StaticLayout r7 = r0.textLayout
             float r8 = r18.getX()
             int r8 = (int) r8
             float r9 = r18.getY()
             int r9 = (int) r9
             int r10 = r18.getAction()
-            if (r10 != 0) goto L_0x0115
+            if (r10 != 0) goto L_0x0110
             r10 = 1325400064(0x4var_, float:2.14748365E9)
             int r11 = r7.getLineCount()
             r12 = 0
@@ -3868,77 +3871,77 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             float r13 = (float) r3
             float r13 = r13 + r10
             int r10 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1))
-            if (r10 < 0) goto L_0x01ae
+            if (r10 < 0) goto L_0x01a9
             float r13 = r13 + r14
             int r10 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1))
-            if (r10 > 0) goto L_0x01ae
-            if (r9 < r4) goto L_0x01ae
+            if (r10 > 0) goto L_0x01a9
+            if (r9 < r4) goto L_0x01a9
             int r10 = r7.getHeight()
             int r10 = r10 + r4
-            if (r9 > r10) goto L_0x01ae
+            if (r9 > r10) goto L_0x01a9
             r1.pressedLinkOwnerLayout = r0
             r1.pressedLinkOwnerView = r2
             r1.pressedLayoutY = r4
             java.lang.CharSequence r0 = r7.getText()
             boolean r0 = r0 instanceof android.text.Spannable
-            if (r0 == 0) goto L_0x01ae
+            if (r0 == 0) goto L_0x01a9
             int r8 = r8 - r3
             int r9 = r9 - r4
-            int r0 = r7.getLineForVertical(r9)     // Catch:{ Exception -> 0x010f }
-            float r3 = (float) r8     // Catch:{ Exception -> 0x010f }
-            int r4 = r7.getOffsetForHorizontal(r0, r3)     // Catch:{ Exception -> 0x010f }
-            float r8 = r7.getLineLeft(r0)     // Catch:{ Exception -> 0x010f }
+            int r0 = r7.getLineForVertical(r9)     // Catch:{ Exception -> 0x010a }
+            float r3 = (float) r8     // Catch:{ Exception -> 0x010a }
+            int r4 = r7.getOffsetForHorizontal(r0, r3)     // Catch:{ Exception -> 0x010a }
+            float r8 = r7.getLineLeft(r0)     // Catch:{ Exception -> 0x010a }
             int r9 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1))
-            if (r9 > 0) goto L_0x01ae
-            float r0 = r7.getLineWidth(r0)     // Catch:{ Exception -> 0x010f }
+            if (r9 > 0) goto L_0x01a9
+            float r0 = r7.getLineWidth(r0)     // Catch:{ Exception -> 0x010a }
             float r8 = r8 + r0
             int r0 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1))
-            if (r0 < 0) goto L_0x01ae
-            java.lang.CharSequence r0 = r7.getText()     // Catch:{ Exception -> 0x010f }
-            android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x010f }
+            if (r0 < 0) goto L_0x01a9
+            java.lang.CharSequence r0 = r7.getText()     // Catch:{ Exception -> 0x010a }
+            android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x010a }
             java.lang.Class<org.telegram.ui.Components.TextPaintUrlSpan> r3 = org.telegram.ui.Components.TextPaintUrlSpan.class
-            java.lang.Object[] r3 = r0.getSpans(r4, r4, r3)     // Catch:{ Exception -> 0x010f }
-            org.telegram.ui.Components.TextPaintUrlSpan[] r3 = (org.telegram.ui.Components.TextPaintUrlSpan[]) r3     // Catch:{ Exception -> 0x010f }
-            if (r3 == 0) goto L_0x01ae
-            int r4 = r3.length     // Catch:{ Exception -> 0x010f }
-            if (r4 <= 0) goto L_0x01ae
-            r4 = r3[r6]     // Catch:{ Exception -> 0x010f }
-            r1.pressedLink = r4     // Catch:{ Exception -> 0x010f }
-            int r4 = r0.getSpanStart(r4)     // Catch:{ Exception -> 0x010f }
-            org.telegram.ui.Components.TextPaintUrlSpan r8 = r1.pressedLink     // Catch:{ Exception -> 0x010f }
-            int r8 = r0.getSpanEnd(r8)     // Catch:{ Exception -> 0x010f }
+            java.lang.Object[] r3 = r0.getSpans(r4, r4, r3)     // Catch:{ Exception -> 0x010a }
+            org.telegram.ui.Components.TextPaintUrlSpan[] r3 = (org.telegram.ui.Components.TextPaintUrlSpan[]) r3     // Catch:{ Exception -> 0x010a }
+            if (r3 == 0) goto L_0x01a9
+            int r4 = r3.length     // Catch:{ Exception -> 0x010a }
+            if (r4 <= 0) goto L_0x01a9
+            r4 = r3[r6]     // Catch:{ Exception -> 0x010a }
+            r1.pressedLink = r4     // Catch:{ Exception -> 0x010a }
+            int r4 = r0.getSpanStart(r4)     // Catch:{ Exception -> 0x010a }
+            org.telegram.ui.Components.TextPaintUrlSpan r8 = r1.pressedLink     // Catch:{ Exception -> 0x010a }
+            int r8 = r0.getSpanEnd(r8)     // Catch:{ Exception -> 0x010a }
             r9 = 1
         L_0x00b1:
-            int r10 = r3.length     // Catch:{ Exception -> 0x010f }
+            int r10 = r3.length     // Catch:{ Exception -> 0x010a }
             if (r9 >= r10) goto L_0x00c9
-            r10 = r3[r9]     // Catch:{ Exception -> 0x010f }
-            int r11 = r0.getSpanStart(r10)     // Catch:{ Exception -> 0x010f }
-            int r13 = r0.getSpanEnd(r10)     // Catch:{ Exception -> 0x010f }
+            r10 = r3[r9]     // Catch:{ Exception -> 0x010a }
+            int r11 = r0.getSpanStart(r10)     // Catch:{ Exception -> 0x010a }
+            int r13 = r0.getSpanEnd(r10)     // Catch:{ Exception -> 0x010a }
             if (r4 > r11) goto L_0x00c2
             if (r13 <= r8) goto L_0x00c6
         L_0x00c2:
-            r1.pressedLink = r10     // Catch:{ Exception -> 0x010f }
+            r1.pressedLink = r10     // Catch:{ Exception -> 0x010a }
             r4 = r11
             r8 = r13
         L_0x00c6:
             int r9 = r9 + 1
             goto L_0x00b1
         L_0x00c9:
-            org.telegram.ui.Components.LinkPath r0 = r1.urlPath     // Catch:{ Exception -> 0x0109 }
-            r0.setUseRoundRect(r5)     // Catch:{ Exception -> 0x0109 }
-            org.telegram.ui.Components.LinkPath r0 = r1.urlPath     // Catch:{ Exception -> 0x0109 }
-            r0.setCurrentLayout(r7, r4, r12)     // Catch:{ Exception -> 0x0109 }
-            org.telegram.ui.Components.TextPaintUrlSpan r0 = r1.pressedLink     // Catch:{ Exception -> 0x0109 }
-            android.text.TextPaint r0 = r0.getTextPaint()     // Catch:{ Exception -> 0x0109 }
+            org.telegram.ui.Components.LinkPath r0 = r1.urlPath     // Catch:{ Exception -> 0x0104 }
+            r0.setUseRoundRect(r5)     // Catch:{ Exception -> 0x0104 }
+            org.telegram.ui.Components.LinkPath r0 = r1.urlPath     // Catch:{ Exception -> 0x0104 }
+            r0.setCurrentLayout(r7, r4, r12)     // Catch:{ Exception -> 0x0104 }
+            org.telegram.ui.Components.TextPaintUrlSpan r0 = r1.pressedLink     // Catch:{ Exception -> 0x0104 }
+            android.text.TextPaint r0 = r0.getTextPaint()     // Catch:{ Exception -> 0x0104 }
             if (r0 == 0) goto L_0x00e4
-            org.telegram.ui.Components.TextPaintUrlSpan r0 = r1.pressedLink     // Catch:{ Exception -> 0x0109 }
-            android.text.TextPaint r0 = r0.getTextPaint()     // Catch:{ Exception -> 0x0109 }
-            int r0 = r0.baselineShift     // Catch:{ Exception -> 0x0109 }
+            org.telegram.ui.Components.TextPaintUrlSpan r0 = r1.pressedLink     // Catch:{ Exception -> 0x0104 }
+            android.text.TextPaint r0 = r0.getTextPaint()     // Catch:{ Exception -> 0x0104 }
+            int r0 = r0.baselineShift     // Catch:{ Exception -> 0x0104 }
             goto L_0x00e5
         L_0x00e4:
             r0 = 0
         L_0x00e5:
-            org.telegram.ui.Components.LinkPath r3 = r1.urlPath     // Catch:{ Exception -> 0x0109 }
+            org.telegram.ui.Components.LinkPath r3 = r1.urlPath     // Catch:{ Exception -> 0x0104 }
             if (r0 == 0) goto L_0x00f6
             if (r0 <= 0) goto L_0x00ee
             r9 = 1084227584(0x40a00000, float:5.0)
@@ -3946,137 +3949,135 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x00ee:
             r9 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
         L_0x00f0:
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ Exception -> 0x0109 }
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ Exception -> 0x0104 }
             int r0 = r0 + r9
             goto L_0x00f7
         L_0x00f6:
             r0 = 0
         L_0x00f7:
-            r3.setBaselineShift(r0)     // Catch:{ Exception -> 0x0109 }
-            org.telegram.ui.Components.LinkPath r0 = r1.urlPath     // Catch:{ Exception -> 0x0109 }
-            r7.getSelectionPath(r4, r8, r0)     // Catch:{ Exception -> 0x0109 }
-            org.telegram.ui.Components.LinkPath r0 = r1.urlPath     // Catch:{ Exception -> 0x0109 }
-            r0.onPathEnd()     // Catch:{ Exception -> 0x0109 }
-            r19.invalidate()     // Catch:{ Exception -> 0x0109 }
-            goto L_0x01ae
-        L_0x0109:
+            r3.setBaselineShift(r0)     // Catch:{ Exception -> 0x0104 }
+            org.telegram.ui.Components.LinkPath r0 = r1.urlPath     // Catch:{ Exception -> 0x0104 }
+            r7.getSelectionPath(r4, r8, r0)     // Catch:{ Exception -> 0x0104 }
+            r19.invalidate()     // Catch:{ Exception -> 0x0104 }
+            goto L_0x01a9
+        L_0x0104:
             r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x010f }
-            goto L_0x01ae
-        L_0x010f:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x010a }
+            goto L_0x01a9
+        L_0x010a:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x01ae
-        L_0x0115:
+            goto L_0x01a9
+        L_0x0110:
             int r0 = r18.getAction()
-            if (r0 != r5) goto L_0x019b
+            if (r0 != r5) goto L_0x0196
             org.telegram.ui.Components.TextPaintUrlSpan r0 = r1.pressedLink
-            if (r0 == 0) goto L_0x01ae
+            if (r0 == 0) goto L_0x01a9
             java.lang.String r0 = r0.getUrl()
-            if (r0 == 0) goto L_0x01ac
+            if (r0 == 0) goto L_0x01a7
             org.telegram.ui.ActionBar.BottomSheet r3 = r1.linkSheet
             r4 = 0
-            if (r3 == 0) goto L_0x012f
+            if (r3 == 0) goto L_0x012a
             r3.dismiss()
             r1.linkSheet = r4
-        L_0x012f:
+        L_0x012a:
             r3 = 35
             int r3 = r0.lastIndexOf(r3)
             r7 = -1
-            if (r3 == r7) goto L_0x018e
+            if (r3 == r7) goto L_0x0189
             org.telegram.tgnet.TLRPC$WebPage r4 = r17.currentPage
             org.telegram.tgnet.TLRPC$Page r4 = r4.cached_page
             java.lang.String r4 = r4.url
             boolean r4 = android.text.TextUtils.isEmpty(r4)
-            if (r4 != 0) goto L_0x0153
+            if (r4 != 0) goto L_0x014e
             org.telegram.tgnet.TLRPC$WebPage r4 = r17.currentPage
             org.telegram.tgnet.TLRPC$Page r4 = r4.cached_page
             java.lang.String r4 = r4.url
             java.lang.String r4 = r4.toLowerCase()
-            goto L_0x015d
-        L_0x0153:
+            goto L_0x0158
+        L_0x014e:
             org.telegram.tgnet.TLRPC$WebPage r4 = r17.currentPage
             java.lang.String r4 = r4.url
             java.lang.String r4 = r4.toLowerCase()
-        L_0x015d:
+        L_0x0158:
             int r3 = r3 + r5
-            java.lang.String r3 = r0.substring(r3)     // Catch:{ Exception -> 0x0169 }
+            java.lang.String r3 = r0.substring(r3)     // Catch:{ Exception -> 0x0164 }
             java.lang.String r7 = "UTF-8"
-            java.lang.String r3 = java.net.URLDecoder.decode(r3, r7)     // Catch:{ Exception -> 0x0169 }
-            goto L_0x016b
-        L_0x0169:
+            java.lang.String r3 = java.net.URLDecoder.decode(r3, r7)     // Catch:{ Exception -> 0x0164 }
+            goto L_0x0166
+        L_0x0164:
             java.lang.String r3 = ""
-        L_0x016b:
+        L_0x0166:
             java.lang.String r0 = r0.toLowerCase()
             boolean r0 = r0.contains(r4)
-            if (r0 == 0) goto L_0x018b
-            boolean r0 = android.text.TextUtils.isEmpty(r3)
             if (r0 == 0) goto L_0x0186
+            boolean r0 = android.text.TextUtils.isEmpty(r3)
+            if (r0 == 0) goto L_0x0181
             androidx.recyclerview.widget.LinearLayoutManager[] r0 = r1.layoutManager
             r0 = r0[r6]
             r0.scrollToPositionWithOffset(r6, r6)
             r16.checkScrollAnimated()
-            goto L_0x0189
-        L_0x0186:
+            goto L_0x0184
+        L_0x0181:
             r1.scrollToAnchor(r3)
-        L_0x0189:
+        L_0x0184:
             r0 = 1
-            goto L_0x018c
-        L_0x018b:
+            goto L_0x0187
+        L_0x0186:
             r0 = 0
-        L_0x018c:
+        L_0x0187:
             r4 = r3
-            goto L_0x018f
-        L_0x018e:
+            goto L_0x018a
+        L_0x0189:
             r0 = 0
-        L_0x018f:
-            if (r0 != 0) goto L_0x01ac
+        L_0x018a:
+            if (r0 != 0) goto L_0x01a7
             org.telegram.ui.Components.TextPaintUrlSpan r0 = r1.pressedLink
             java.lang.String r0 = r0.getUrl()
             r1.openWebpageUrl(r0, r4)
-            goto L_0x01ac
-        L_0x019b:
+            goto L_0x01a7
+        L_0x0196:
             int r0 = r18.getAction()
             r3 = 3
-            if (r0 != r3) goto L_0x01ae
+            if (r0 != r3) goto L_0x01a9
             org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r1.popupWindow
-            if (r0 == 0) goto L_0x01ac
+            if (r0 == 0) goto L_0x01a7
             boolean r0 = r0.isShowing()
-            if (r0 != 0) goto L_0x01ae
-        L_0x01ac:
+            if (r0 != 0) goto L_0x01a9
+        L_0x01a7:
             r0 = 1
-            goto L_0x01af
-        L_0x01ae:
+            goto L_0x01aa
+        L_0x01a9:
             r0 = 0
-        L_0x01af:
-            if (r0 == 0) goto L_0x01b4
+        L_0x01aa:
+            if (r0 == 0) goto L_0x01af
             r16.removePressedLink()
-        L_0x01b4:
+        L_0x01af:
             int r0 = r18.getAction()
-            if (r0 != 0) goto L_0x01c5
+            if (r0 != 0) goto L_0x01c0
             float r0 = r18.getX()
             float r3 = r18.getY()
             r1.startCheckLongPress(r0, r3, r2)
-        L_0x01c5:
+        L_0x01c0:
             int r0 = r18.getAction()
-            if (r0 == 0) goto L_0x01d5
+            if (r0 == 0) goto L_0x01d0
             int r0 = r18.getAction()
             r3 = 2
-            if (r0 == r3) goto L_0x01d5
+            if (r0 == r3) goto L_0x01d0
             r16.cancelCheckLongPress()
-        L_0x01d5:
+        L_0x01d0:
             boolean r0 = r2 instanceof org.telegram.ui.ArticleViewer.BlockDetailsCell
-            if (r0 == 0) goto L_0x01df
+            if (r0 == 0) goto L_0x01da
             org.telegram.ui.Components.TextPaintUrlSpan r0 = r1.pressedLink
-            if (r0 == 0) goto L_0x01de
+            if (r0 == 0) goto L_0x01d9
             r6 = 1
-        L_0x01de:
+        L_0x01d9:
             return r6
-        L_0x01df:
+        L_0x01da:
             org.telegram.ui.ArticleViewer$DrawingText r0 = r1.pressedLinkOwnerLayout
-            if (r0 == 0) goto L_0x01e4
+            if (r0 == 0) goto L_0x01df
             r6 = 1
-        L_0x01e4:
+        L_0x01df:
             return r6
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.checkLayoutForLinks(org.telegram.ui.ArticleViewer$WebpageAdapter, android.view.MotionEvent, android.view.View, org.telegram.ui.ArticleViewer$DrawingText, int, int):boolean");

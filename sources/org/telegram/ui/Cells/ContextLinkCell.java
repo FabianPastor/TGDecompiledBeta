@@ -1218,9 +1218,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (this.drawLinkImageView) {
-            this.linkImageView.onDetachedFromWindow();
-        }
+        this.linkImageView.onDetachedFromWindow();
         this.radialProgress.onDetachedFromWindow();
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
@@ -1228,7 +1226,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (this.drawLinkImageView && this.linkImageView.onAttachedToWindow()) {
+        if (this.linkImageView.onAttachedToWindow()) {
             updateButtonState(false, false);
         }
         this.radialProgress.onAttachedToWindow();

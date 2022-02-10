@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import androidx.core.util.Consumer;
-import java.util.List;
-import org.telegram.ui.Components.ReactedUsersListView;
+import android.widget.PopupWindow;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda96 implements Consumer {
-    public final /* synthetic */ ReactedUsersListView f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda96 implements PopupWindow.OnDismissListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda96(ReactedUsersListView reactedUsersListView) {
-        this.f$0 = reactedUsersListView;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda96(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void accept(Object obj) {
-        this.f$0.setSeenUsers((List) obj);
+    public final void onDismiss() {
+        this.f$0.lambda$createView$38();
     }
 }

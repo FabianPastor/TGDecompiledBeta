@@ -1,9 +1,9 @@
 package org.telegram.ui;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
+import android.view.ViewGroup;
 import java.util.ArrayList;
 import org.telegram.messenger.NotificationCenter;
 
@@ -11,6 +11,7 @@ import org.telegram.messenger.NotificationCenter;
 public class MessageEnterTransitionContainer extends View {
     private final int currentAccount;
     Runnable hideRunnable = new MessageEnterTransitionContainer$$ExternalSyntheticLambda0(this);
+    private final ViewGroup parent;
     private ArrayList<Transition> transitions = new ArrayList<>();
 
     public interface Transition {
@@ -22,8 +23,9 @@ public class MessageEnterTransitionContainer extends View {
         setVisibility(8);
     }
 
-    public MessageEnterTransitionContainer(Context context, int i) {
-        super(context);
+    public MessageEnterTransitionContainer(ViewGroup viewGroup, int i) {
+        super(viewGroup.getContext());
+        this.parent = viewGroup;
         this.currentAccount = i;
     }
 
@@ -31,12 +33,14 @@ public class MessageEnterTransitionContainer extends View {
     public void addTransition(Transition transition) {
         this.transitions.add(transition);
         checkVisibility();
+        this.parent.invalidate();
     }
 
     /* access modifiers changed from: package-private */
     public void removeTransition(Transition transition) {
         this.transitions.remove(transition);
         checkVisibility();
+        this.parent.invalidate();
     }
 
     /* access modifiers changed from: protected */
@@ -56,5 +60,9 @@ public class MessageEnterTransitionContainer extends View {
             NotificationCenter.getInstance(this.currentAccount).removeDelayed(this.hideRunnable);
             setVisibility(0);
         }
+    }
+
+    public boolean isRunning() {
+        return this.transitions.size() > 0;
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda63 im
     }
 
     public final void run() {
-        this.f$0.lambda$resetMentionsCount$77(this.f$1, this.f$2);
+        this.f$0.lambda$resetMentionsCount$78(this.f$1, this.f$2);
     }
 }

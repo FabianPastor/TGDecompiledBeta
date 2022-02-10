@@ -1085,7 +1085,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r6 = 2131625584(0x7f0e0670, float:1.887838E38)
             java.lang.String r7 = "ExternalFolderInfo"
             r8 = 2131165423(0x7var_ef, float:1.7945063E38)
-            r9 = 2131627687(0x7f0e0ea7, float:1.8882645E38)
+            r9 = 2131627689(0x7f0e0ea9, float:1.888265E38)
             java.lang.String r10 = "SdCard"
             if (r5 != 0) goto L_0x0044
             java.lang.String r5 = "mounted_ro"

@@ -32,7 +32,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
@@ -112,10 +111,6 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
 
     public interface ReactionsContainerDelegate {
         void onReactionClicked(View view, TLRPC$TL_availableReaction tLRPC$TL_availableReaction, boolean z);
-    }
-
-    static {
-        new Random();
     }
 
     public ReactionsContainerLayout(final Context context, int i, Theme.ResourcesProvider resourcesProvider2) {

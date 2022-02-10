@@ -169,7 +169,7 @@ public class SearchAdapterHelper {
             if (str.length() > 0) {
                 TLRPC$TL_contacts_search tLRPC$TL_contacts_search = new TLRPC$TL_contacts_search();
                 tLRPC$TL_contacts_search.q = str3;
-                tLRPC$TL_contacts_search.limit = 10;
+                tLRPC$TL_contacts_search.limit = 20;
                 SearchAdapterHelper$$ExternalSyntheticLambda6 searchAdapterHelper$$ExternalSyntheticLambda6 = r0;
                 SearchAdapterHelper$$ExternalSyntheticLambda6 searchAdapterHelper$$ExternalSyntheticLambda62 = new SearchAdapterHelper$$ExternalSyntheticLambda6(this, i2, z2, z5, z3, z4, str);
                 arrayList.add(new Pair(tLRPC$TL_contacts_search, searchAdapterHelper$$ExternalSyntheticLambda6));

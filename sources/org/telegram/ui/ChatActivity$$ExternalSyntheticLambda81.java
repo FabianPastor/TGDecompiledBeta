@@ -1,21 +1,16 @@
 package org.telegram.ui;
 
 import android.view.View;
-import android.widget.FrameLayout;
-import org.telegram.ui.Components.ChatActivityEnterTopView;
+import org.telegram.ui.Cells.CheckBoxCell;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda81 implements View.OnClickListener {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ ChatActivityEnterTopView.EditViewButton f$1;
-    public final /* synthetic */ FrameLayout f$2;
+    public final /* synthetic */ CheckBoxCell[] f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda81(ChatActivity chatActivity, ChatActivityEnterTopView.EditViewButton editViewButton, FrameLayout frameLayout) {
-        this.f$0 = chatActivity;
-        this.f$1 = editViewButton;
-        this.f$2 = frameLayout;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda81(CheckBoxCell[] checkBoxCellArr) {
+        this.f$0 = checkBoxCellArr;
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$53(this.f$1, this.f$2, view);
+        ChatActivity.lambda$showRequestUrlAlert$205(this.f$0, view);
     }
 }

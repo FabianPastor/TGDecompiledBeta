@@ -16,6 +16,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda108 i
     }
 
     public final void run() {
-        this.f$0.lambda$getChannelPtsSync$189(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$getChannelPtsSync$190(this.f$1, this.f$2, this.f$3);
     }
 }

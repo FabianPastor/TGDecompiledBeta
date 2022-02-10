@@ -3555,6 +3555,8 @@
     <string name="ReactionsCount_two">%1$d reactions</string>
     <string name="ReactionsCount_zero">%1$d reactions</string>
     <string name="ReactionsOff">Off</string>
+    <string name="ReadAllMentions">Read all mentions</string>
+    <string name="ReadAllReactions">Read all reactions</string>
     <string name="Recent">Recent</string>
     <string name="RecentFiles">Recent files</string>
     <string name="RecentFilesAZ">Files A-Z</string>

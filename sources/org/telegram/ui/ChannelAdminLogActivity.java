@@ -1882,7 +1882,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r2.putExtra(r5, r0)
         L_0x0209:
             android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131627865(0x7f0e0var_, float:1.8883006E38)
+            r3 = 2131627867(0x7f0e0f5b, float:1.888301E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
@@ -2768,16 +2768,16 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                     Toast.makeText(ChannelAdminLogActivity.this.getParentActivity(), LocaleController.getString("TextCopied", NUM), 0).show();
                                 }
                             } else if (characterStyle instanceof URLSpanUserMention) {
-                                long intValue = (long) Utilities.parseInt(((URLSpanUserMention) characterStyle).getURL()).intValue();
-                                if (intValue > 0) {
-                                    TLRPC$User user = MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).getUser(Long.valueOf(intValue));
+                                long longValue = Utilities.parseLong(((URLSpanUserMention) characterStyle).getURL()).longValue();
+                                if (longValue > 0) {
+                                    TLRPC$User user = MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).getUser(Long.valueOf(longValue));
                                     if (user != null) {
                                         MessagesController.openChatOrProfileWith(user, (TLRPC$Chat) null, ChannelAdminLogActivity.this, 0, false);
                                         return;
                                     }
                                     return;
                                 }
-                                TLRPC$Chat chat = MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).getChat(Long.valueOf(-intValue));
+                                TLRPC$Chat chat = MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).getChat(Long.valueOf(-longValue));
                                 if (chat != null) {
                                     MessagesController.openChatOrProfileWith((TLRPC$User) null, chat, ChannelAdminLogActivity.this, 0, false);
                                 }

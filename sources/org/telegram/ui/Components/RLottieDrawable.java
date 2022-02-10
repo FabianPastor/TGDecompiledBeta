@@ -154,12 +154,18 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     /* access modifiers changed from: protected */
     public void recycleResources() {
-        if (this.renderingBitmap != null) {
-            this.renderingBitmap.recycle();
+        try {
+            if (this.renderingBitmap != null) {
+                this.renderingBitmap.recycle();
+                this.renderingBitmap = null;
+            }
+            if (this.backgroundBitmap != null) {
+                this.backgroundBitmap.recycle();
+                this.backgroundBitmap = null;
+            }
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
             this.renderingBitmap = null;
-        }
-        if (this.backgroundBitmap != null) {
-            this.backgroundBitmap.recycle();
             this.backgroundBitmap = null;
         }
     }

@@ -1,6 +1,7 @@
 package org.telegram.tgnet;
 
 import java.util.ArrayList;
+import org.telegram.messenger.FileLoader;
 
 public abstract class TLRPC$Document extends TLObject {
     public long access_hash;
@@ -8,6 +9,7 @@ public abstract class TLRPC$Document extends TLObject {
     public int date;
     public int dc_id;
     public String file_name;
+    public String file_name_fixed;
     public byte[] file_reference;
     public int flags;
     public long id;
@@ -57,6 +59,7 @@ public abstract class TLRPC$Document extends TLObject {
         if (tLRPC$Document != null || !z) {
             if (tLRPC$Document != null) {
                 tLRPC$Document.readParams(abstractSerializedData, z);
+                tLRPC$Document.file_name_fixed = FileLoader.getDocumentFileName(tLRPC$Document);
             }
             return tLRPC$Document;
         }

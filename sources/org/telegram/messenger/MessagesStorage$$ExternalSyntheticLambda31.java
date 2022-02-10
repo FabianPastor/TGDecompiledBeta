@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda31 im
     }
 
     public final void run() {
-        this.f$0.lambda$setMessageSeq$155(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$setMessageSeq$156(this.f$1, this.f$2, this.f$3);
     }
 }

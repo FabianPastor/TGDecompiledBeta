@@ -1,18 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
+import android.view.MotionEvent;
 import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda219 implements RecyclerListView.OnItemClickListener {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ MessageSeenView f$1;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda219 implements RecyclerListView.OnInterceptTouchListener {
+    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda219 INSTANCE = new ChatActivity$$ExternalSyntheticLambda219();
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda219(ChatActivity chatActivity, MessageSeenView messageSeenView) {
-        this.f$0 = chatActivity;
-        this.f$1 = messageSeenView;
+    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda219() {
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$createMenu$141(this.f$1, view, i);
+    public final boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        return ChatActivity.lambda$showChatThemeBottomSheet$221(motionEvent);
     }
 }

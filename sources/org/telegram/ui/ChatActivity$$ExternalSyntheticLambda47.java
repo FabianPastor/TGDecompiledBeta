@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda47 imple
     }
 
     public final void onShow(DialogInterface dialogInterface) {
-        this.f$0.lambda$scrollToMessageId$99(dialogInterface);
+        this.f$0.lambda$scrollToMessageId$103(dialogInterface);
     }
 }

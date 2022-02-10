@@ -112,7 +112,7 @@ public class StaticLayoutEx {
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(charSequence2.subSequence(0, Math.max(0, i8 - 3)));
             spannableStringBuilder.append("…");
             if (i6 >= 23) {
-                return StaticLayout.Builder.obtain(spannableStringBuilder, 0, spannableStringBuilder.length(), textPaint2, i9).setAlignment(alignment2).setLineSpacing(f4, f3).setIncludePad(z).setEllipsizedWidth(i10).setMaxLines(i7).setBreakStrategy(z2 ? 1 : 0).setHyphenationFrequency(0).build();
+                return StaticLayout.Builder.obtain(spannableStringBuilder, 0, spannableStringBuilder.length(), textPaint2, i9).setAlignment(alignment2).setLineSpacing(f4, f3).setIncludePad(z).setEllipsize(truncateAt).setEllipsizedWidth(i10).setMaxLines(i7).setBreakStrategy(z2 ? 1 : 0).setHyphenationFrequency(0).build();
             }
             boolean z4 = z;
             return new StaticLayout(spannableStringBuilder, textPaint, i3, alignment, f, f2, z);

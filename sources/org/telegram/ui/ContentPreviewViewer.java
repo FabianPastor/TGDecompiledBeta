@@ -1114,7 +1114,12 @@ public class ContentPreviewViewer {
                         AndroidUtilities.runOnUIThread(this.showSheetRunnable, 1300);
                     }
                     this.currentStickerSet = tLRPC$InputStickerSet;
-                    this.centerImage.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90), tLRPC$Document2), (String) null, "webp", (Object) this.currentStickerSet, 1);
+                    TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
+                    if (MessageObject.isVideoStickerDocument(tLRPC$Document)) {
+                        this.centerImage.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize2, tLRPC$Document2), (String) null, (Drawable) null, 0, "webp", this.currentStickerSet, 1);
+                    } else {
+                        this.centerImage.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize2, tLRPC$Document2), (String) null, "webp", (Object) this.currentStickerSet, 1);
+                    }
                     int i4 = 0;
                     while (true) {
                         if (i4 >= tLRPC$Document2.attributes.size()) {

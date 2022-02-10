@@ -5374,6 +5374,8 @@ public final class R {
         public static final int ReactionsCount_two = NUM;
         public static final int ReactionsCount_zero = NUM;
         public static final int ReactionsOff = NUM;
+        public static final int ReadAllMentions = NUM;
+        public static final int ReadAllReactions = NUM;
         public static final int Recent = NUM;
         public static final int RecentFiles = NUM;
         public static final int RecentFilesAZ = NUM;

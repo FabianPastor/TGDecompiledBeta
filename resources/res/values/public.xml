@@ -5235,6 +5235,8 @@
     <public type="string" name="ReactionsCount_two" id="NUM" />
     <public type="string" name="ReactionsCount_zero" id="NUM" />
     <public type="string" name="ReactionsOff" id="NUM" />
+    <public type="string" name="ReadAllMentions" id="NUM" />
+    <public type="string" name="ReadAllReactions" id="NUM" />
     <public type="string" name="Recent" id="NUM" />
     <public type="string" name="RecentFiles" id="NUM" />
     <public type="string" name="RecentFilesAZ" id="NUM" />

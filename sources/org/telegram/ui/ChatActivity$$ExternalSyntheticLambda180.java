@@ -1,15 +1,19 @@
 package org.telegram.ui;
 
-import java.util.Comparator;
-import org.telegram.ui.ChatActivity;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda180 implements Comparator {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda180 INSTANCE = new ChatActivity$$ExternalSyntheticLambda180();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda180 implements Runnable {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ int f$2;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda180() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda180(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i) {
+        this.f$0 = chatActivity;
+        this.f$1 = alertDialogArr;
+        this.f$2 = i;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return ChatActivity.lambda$getStackedHistoryDialogs$71((ChatActivity.PulledDialog) obj, (ChatActivity.PulledDialog) obj2);
+    public final void run() {
+        this.f$0.lambda$showRequestUrlAlert$209(this.f$1, this.f$2);
     }
 }

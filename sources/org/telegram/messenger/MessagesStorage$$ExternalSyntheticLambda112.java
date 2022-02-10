@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda112 i
     }
 
     public final void run() {
-        this.f$0.lambda$putWebPages$145(this.f$1);
+        this.f$0.lambda$getDialogs$174(this.f$1);
     }
 }

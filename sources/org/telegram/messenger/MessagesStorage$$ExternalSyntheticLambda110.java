@@ -16,6 +16,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda110 i
     }
 
     public final void run() {
-        this.f$0.lambda$hasInviteMeMessage$103(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$hasInviteMeMessage$104(this.f$1, this.f$2, this.f$3);
     }
 }

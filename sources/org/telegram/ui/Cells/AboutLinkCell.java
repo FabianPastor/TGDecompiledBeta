@@ -592,7 +592,6 @@ public class AboutLinkCell extends FrameLayout {
                         this.urlPathOffset.set(i, i2);
                         this.urlPath.setCurrentLayout(staticLayout, spanStart, 0.0f);
                         staticLayout.getSelectionPath(spanStart, spannable.getSpanEnd(this.pressedLink), this.urlPath);
-                        this.urlPath.onPathEnd();
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);
                     }

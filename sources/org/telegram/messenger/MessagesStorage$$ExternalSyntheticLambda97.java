@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda97 im
     }
 
     public final void run() {
-        this.f$0.lambda$getMessagesCount$118(this.f$1, this.f$2);
+        this.f$0.lambda$getDialogMaxMessageId$188(this.f$1, this.f$2);
     }
 }

@@ -50,6 +50,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     public boolean decoderCreated;
     /* access modifiers changed from: private */
     public boolean destroyWhenDone;
+    private final TLRPC$Document document;
     private final Rect dstRect;
     /* access modifiers changed from: private */
     public float endTime;
@@ -57,10 +58,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     public boolean forceDecodeAfterNextFrame;
     /* access modifiers changed from: private */
     public int invalidateAfter;
-    /* access modifiers changed from: private */
-    public boolean invalidateParentViewWithSecond;
+    private boolean invalidateParentViewWithSecond;
     private boolean invalidatePath;
-    private boolean invalidateTaskIsRunning;
     /* access modifiers changed from: private */
     public volatile boolean isRecycled;
     private volatile boolean isRunning;
@@ -73,7 +72,6 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private Runnable loadFrameRunnable;
     /* access modifiers changed from: private */
     public Runnable loadFrameTask;
-    protected final Runnable mInvalidateTask;
     private final Runnable mStartTask;
     /* access modifiers changed from: private */
     public final int[] metaData;
@@ -84,9 +82,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     public int nextRenderingBitmapTime;
     /* access modifiers changed from: private */
     public BitmapShader nextRenderingShader;
+    private View parentView;
     /* access modifiers changed from: private */
-    public View parentView;
-    private ArrayList<View> parents;
+    public ArrayList<View> parents;
     /* access modifiers changed from: private */
     public File path;
     /* access modifiers changed from: private */
@@ -154,7 +152,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         return -2;
     }
 
-    static /* synthetic */ int access$1010(AnimatedFileDrawable animatedFileDrawable) {
+    static /* synthetic */ int access$1110(AnimatedFileDrawable animatedFileDrawable) {
         int i = animatedFileDrawable.pendingRemoveLoadingFramesReset;
         animatedFileDrawable.pendingRemoveLoadingFramesReset = i - 1;
         return i;
@@ -163,7 +161,6 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0() {
         View view;
-        this.invalidateTaskIsRunning = false;
         if (!this.secondParentViews.isEmpty()) {
             int size = this.secondParentViews.size();
             for (int i = 0; i < size; i++) {
@@ -214,6 +211,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
 
     public AnimatedFileDrawable(File file, boolean z, long j, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, long j2, int i, boolean z2, int i2, int i3) {
         long j3 = j;
+        TLRPC$Document tLRPC$Document2 = tLRPC$Document;
         long j4 = j2;
         this.invalidateAfter = 50;
         int[] iArr = new int[5];
@@ -232,7 +230,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         this.secondParentViews = new ArrayList<>();
         this.parents = new ArrayList<>();
         this.invalidatePath = true;
-        this.mInvalidateTask = new AnimatedFileDrawable$$ExternalSyntheticLambda0(this);
+        new AnimatedFileDrawable$$ExternalSyntheticLambda0(this);
         this.uiRunnableNoFrame = new Runnable() {
             public void run() {
                 if (AnimatedFileDrawable.this.destroyWhenDone && AnimatedFileDrawable.this.nativePtr != 0) {
@@ -257,6 +255,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                 }
                 Runnable unused4 = AnimatedFileDrawable.this.loadFrameTask = null;
                 AnimatedFileDrawable.this.scheduleNextGetFrame();
+                for (int i = 0; i < AnimatedFileDrawable.this.parents.size(); i++) {
+                    ((View) AnimatedFileDrawable.this.parents.get(i)).invalidate();
+                }
             }
         };
         this.uiRunnable = new Runnable() {
@@ -287,7 +288,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                 if (AnimatedFileDrawable.this.pendingRemoveLoadingFramesReset <= 0) {
                     boolean unused4 = AnimatedFileDrawable.this.pendingRemoveLoading = true;
                 } else {
-                    AnimatedFileDrawable.access$1010(AnimatedFileDrawable.this);
+                    AnimatedFileDrawable.access$1110(AnimatedFileDrawable.this);
                 }
                 if (!AnimatedFileDrawable.this.forceDecodeAfterNextFrame) {
                     boolean unused5 = AnimatedFileDrawable.this.singleFrameDecoded = true;
@@ -321,8 +322,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                         ((View) AnimatedFileDrawable.this.secondParentViews.get(i)).invalidate();
                     }
                 }
-                if ((AnimatedFileDrawable.this.secondParentViews.isEmpty() || AnimatedFileDrawable.this.invalidateParentViewWithSecond) && AnimatedFileDrawable.this.parentView != null) {
-                    AnimatedFileDrawable.this.parentView.invalidate();
+                for (int i2 = 0; i2 < AnimatedFileDrawable.this.parents.size(); i2++) {
+                    ((View) AnimatedFileDrawable.this.parents.get(i2)).invalidate();
                 }
                 AnimatedFileDrawable.this.scheduleNextGetFrame();
             }
@@ -363,14 +364,14 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                     }
                     if (AnimatedFileDrawable.this.pendingSeekTo >= 0) {
                         AnimatedFileDrawable.this.metaData[3] = (int) AnimatedFileDrawable.this.pendingSeekTo;
-                        long access$2300 = AnimatedFileDrawable.this.pendingSeekTo;
+                        long access$2400 = AnimatedFileDrawable.this.pendingSeekTo;
                         synchronized (AnimatedFileDrawable.this.sync) {
                             long unused4 = AnimatedFileDrawable.this.pendingSeekTo = -1;
                         }
                         if (AnimatedFileDrawable.this.stream != null) {
                             AnimatedFileDrawable.this.stream.reset();
                         }
-                        AnimatedFileDrawable.seekToMs(AnimatedFileDrawable.this.nativePtr, access$2300, true);
+                        AnimatedFileDrawable.seekToMs(AnimatedFileDrawable.this.nativePtr, access$2400, true);
                         z = true;
                     }
                     if (AnimatedFileDrawable.this.backgroundBitmap != null) {
@@ -396,13 +397,14 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         this.currentAccount = i;
         this.renderingHeight = i3;
         this.renderingWidth = i2;
-        boolean isVideoSticker = MessageObject.isVideoSticker(tLRPC$Document);
-        this.isWebmSticker = isVideoSticker;
-        if (isVideoSticker) {
+        this.document = tLRPC$Document2;
+        boolean z3 = MessageObject.isWebM(tLRPC$Document) || MessageObject.isVideoSticker(tLRPC$Document);
+        this.isWebmSticker = z3;
+        if (z3) {
             this.useSharedQueue = true;
         }
         getPaint().setFlags(3);
-        if (!(j3 == 0 || (tLRPC$Document == null && imageLocation == null))) {
+        if (!(j3 == 0 || (tLRPC$Document2 == null && imageLocation == null))) {
             this.stream = new AnimatedFileDrawableStream(tLRPC$Document, imageLocation, obj, i, z2);
         }
         if (z) {
@@ -463,7 +465,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     public void addParent(View view) {
-        if (!this.parents.contains(view)) {
+        if (view != null && !this.parents.contains(view)) {
             this.parents.add(view);
             if (this.isRunning) {
                 scheduleNextGetFrame();
@@ -612,7 +614,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     public void start() {
-        if (!this.isRunning) {
+        if (!this.isRunning && this.parents.size() != 0) {
             this.isRunning = true;
             scheduleNextGetFrame();
             runOnUiThread(this.mStartTask);
@@ -725,9 +727,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
 
     public void draw(Canvas canvas) {
         Bitmap bitmap;
-        Canvas canvas2 = canvas;
         if ((this.nativePtr != 0 || !this.decoderCreated) && !this.destroyWhenDone) {
             long currentTimeMillis = System.currentTimeMillis();
+            int i = 0;
             if (this.isRunning) {
                 Bitmap bitmap2 = this.renderingBitmap;
                 if (bitmap2 == null && this.nextRenderingBitmap == null) {
@@ -757,9 +759,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                     int height = this.renderingBitmap.getHeight();
                     int[] iArr = this.metaData;
                     if (iArr[2] == 90 || iArr[2] == 270) {
-                        int i = height;
+                        int i2 = height;
                         height = width;
-                        width = i;
+                        width = i2;
                     }
                     this.dstRect.set(getBounds());
                     this.scaleX = ((float) this.dstRect.width()) / ((float) width);
@@ -793,47 +795,39 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                     this.renderingShader.setLocalMatrix(this.shaderMatrix);
                     if (this.invalidatePath) {
                         this.invalidatePath = false;
-                        int i2 = 0;
                         while (true) {
                             int[] iArr3 = this.roundRadius;
-                            if (i2 >= iArr3.length) {
+                            if (i >= iArr3.length) {
                                 break;
                             }
                             float[] fArr = radii;
-                            int i3 = i2 * 2;
-                            fArr[i3] = (float) iArr3[i2];
-                            fArr[i3 + 1] = (float) iArr3[i2];
-                            i2++;
+                            int i3 = i * 2;
+                            fArr[i3] = (float) iArr3[i];
+                            fArr[i3 + 1] = (float) iArr3[i];
+                            i++;
                         }
                         this.roundPath.reset();
                         this.roundPath.addRoundRect(this.actualDrawRect, radii, Path.Direction.CW);
                         this.roundPath.close();
                     }
-                    canvas2.drawPath(this.roundPath, paint);
-                } else {
-                    Rect rect2 = this.dstRect;
-                    canvas2.translate((float) rect2.left, (float) rect2.top);
-                    int[] iArr4 = this.metaData;
-                    if (iArr4[2] == 90) {
-                        canvas2.rotate(90.0f);
-                        canvas2.translate(0.0f, (float) (-this.dstRect.width()));
-                    } else if (iArr4[2] == 180) {
-                        canvas2.rotate(180.0f);
-                        canvas2.translate((float) (-this.dstRect.width()), (float) (-this.dstRect.height()));
-                    } else if (iArr4[2] == 270) {
-                        canvas2.rotate(270.0f);
-                        canvas2.translate((float) (-this.dstRect.height()), 0.0f);
-                    }
-                    canvas2.scale(this.scaleX, this.scaleY);
-                    canvas2.drawBitmap(this.renderingBitmap, 0.0f, 0.0f, getPaint());
+                    canvas.drawPath(this.roundPath, paint);
+                    return;
                 }
-                if (this.isRunning && !this.invalidateTaskIsRunning) {
-                    this.invalidateTaskIsRunning = true;
-                    long max = Math.max(1, (((long) this.invalidateAfter) - (currentTimeMillis - this.lastFrameTime)) - 17);
-                    Handler handler = uiHandler;
-                    handler.removeCallbacks(this.mInvalidateTask);
-                    handler.postDelayed(this.mInvalidateTask, Math.min(max, (long) this.invalidateAfter));
+                Rect rect2 = this.dstRect;
+                canvas.translate((float) rect2.left, (float) rect2.top);
+                int[] iArr4 = this.metaData;
+                if (iArr4[2] == 90) {
+                    canvas.rotate(90.0f);
+                    canvas.translate(0.0f, (float) (-this.dstRect.width()));
+                } else if (iArr4[2] == 180) {
+                    canvas.rotate(180.0f);
+                    canvas.translate((float) (-this.dstRect.width()), (float) (-this.dstRect.height()));
+                } else if (iArr4[2] == 270) {
+                    canvas.rotate(270.0f);
+                    canvas.translate((float) (-this.dstRect.height()), 0.0f);
                 }
+                canvas.scale(this.scaleX, this.scaleY);
+                canvas.drawBitmap(this.renderingBitmap, 0.0f, 0.0f, getPaint());
             }
         }
     }
@@ -924,20 +918,21 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         if (animatedFileDrawableStream != null) {
             File file = this.path;
             long j = this.streamFileSize;
-            TLRPC$Document document = animatedFileDrawableStream.getDocument();
+            TLRPC$Document document2 = animatedFileDrawableStream.getDocument();
             ImageLocation location = this.stream.getLocation();
             Object parentObject = this.stream.getParentObject();
             long j2 = this.pendingSeekToUI;
             int i = this.currentAccount;
             AnimatedFileDrawableStream animatedFileDrawableStream2 = this.stream;
-            animatedFileDrawable = new AnimatedFileDrawable(file, false, j, document, location, parentObject, j2, i, animatedFileDrawableStream2 != null && animatedFileDrawableStream2.isPreview());
+            animatedFileDrawable = new AnimatedFileDrawable(file, false, j, document2, location, parentObject, j2, i, animatedFileDrawableStream2 != null && animatedFileDrawableStream2.isPreview());
         } else {
             File file2 = this.path;
             long j3 = this.streamFileSize;
+            TLRPC$Document tLRPC$Document = this.document;
             long j4 = this.pendingSeekToUI;
             int i2 = this.currentAccount;
             AnimatedFileDrawableStream animatedFileDrawableStream3 = this.stream;
-            animatedFileDrawable = new AnimatedFileDrawable(file2, false, j3, (TLRPC$Document) null, (ImageLocation) null, (Object) null, j4, i2, animatedFileDrawableStream3 != null && animatedFileDrawableStream3.isPreview());
+            animatedFileDrawable = new AnimatedFileDrawable(file2, false, j3, tLRPC$Document, (ImageLocation) null, (Object) null, j4, i2, animatedFileDrawableStream3 != null && animatedFileDrawableStream3.isPreview());
         }
         AnimatedFileDrawable animatedFileDrawable2 = animatedFileDrawable;
         int[] iArr = animatedFileDrawable2.metaData;
