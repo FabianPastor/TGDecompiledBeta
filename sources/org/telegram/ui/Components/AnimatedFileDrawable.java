@@ -564,6 +564,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                 dispatchQueue.recycle();
                 this.decodeQueue = null;
             }
+            getPaint().setShader((Shader) null);
         } else {
             this.destroyWhenDone = true;
         }

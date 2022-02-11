@@ -110,7 +110,7 @@ public class AnimatedFileDrawableStream implements FileLoadOperationStream {
         r13 = move-exception;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:47:0x0087, code lost:
-        org.telegram.messenger.FileLog.e((java.lang.Throwable) r13);
+        org.telegram.messenger.FileLog.e((java.lang.Throwable) r13, false);
      */
     /* JADX WARNING: Code restructure failed: missing block: B:48:0x008a, code lost:
         return r0;
@@ -206,7 +206,7 @@ public class AnimatedFileDrawableStream implements FileLoadOperationStream {
             goto L_0x008a
         L_0x0086:
             r13 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13, (boolean) r2)
         L_0x008a:
             return r0
         L_0x008b:

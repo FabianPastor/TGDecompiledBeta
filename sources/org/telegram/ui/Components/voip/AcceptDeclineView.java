@@ -71,7 +71,7 @@ public class AcceptDeclineView extends View {
     public interface Listener {
         void onAccept();
 
-        void onDicline();
+        void onDecline();
     }
 
     public AcceptDeclineView(Context context) {
@@ -253,7 +253,7 @@ public class AcceptDeclineView extends View {
             if (r12 <= 0) goto L_0x0134
         L_0x00ef:
             org.telegram.ui.Components.voip.AcceptDeclineView$Listener r12 = r11.listener
-            r12.onDicline()
+            r12.onDecline()
             goto L_0x0134
         L_0x00f5:
             float[] r0 = new float[r3]
@@ -596,7 +596,7 @@ public class AcceptDeclineView extends View {
                     if (i == 0) {
                         listener.onAccept();
                     } else if (i == 1) {
-                        listener.onDicline();
+                        listener.onDecline();
                     }
                 }
             };

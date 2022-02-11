@@ -1189,6 +1189,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             if (this.dimEnabled) {
                 layoutParams.dimAmount = 0.6f;
                 layoutParams.flags |= 2;
+            } else {
+                layoutParams.dimAmount = 0.0f;
+                layoutParams.flags ^= 2;
             }
             int i10 = AndroidUtilities.displaySize.x;
             this.lastScreenWidth = i10;

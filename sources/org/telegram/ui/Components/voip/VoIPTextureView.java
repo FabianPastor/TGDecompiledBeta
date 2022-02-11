@@ -338,9 +338,7 @@ public class VoIPTextureView extends FrameLayout {
         super.onMeasure(i, i2);
         updateRendererSize();
         super.onMeasure(i, i2);
-        if (!this.applyRotation) {
-            this.renderer.updateRotation();
-        }
+        this.renderer.updateRotation();
     }
 
     /* access modifiers changed from: protected */

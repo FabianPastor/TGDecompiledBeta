@@ -201,7 +201,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         this.val$type = r5;
                         this.gestureDetector = new GestureDetector(r3, new GestureDetector.SimpleOnGestureListener() {
                             public boolean onDoubleTap(MotionEvent motionEvent) {
-                                boolean selectReaction = AnonymousClass1.this.getMessageObject().selectReaction(MediaDataController.getInstance(AnonymousClass1.this.val$currentAccount).getDoubleTapReaction(), false);
+                                boolean selectReaction = AnonymousClass1.this.getMessageObject().selectReaction(MediaDataController.getInstance(AnonymousClass1.this.val$currentAccount).getDoubleTapReaction(), false, false);
                                 AnonymousClass1 r1 = AnonymousClass1.this;
                                 r1.setMessageObject(r1.getMessageObject(), (MessageObject.GroupedMessages) null, false, false);
                                 AnonymousClass1.this.requestLayout();

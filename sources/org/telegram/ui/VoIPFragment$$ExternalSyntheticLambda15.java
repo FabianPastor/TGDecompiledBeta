@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda15 imple
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$7(view);
+        this.f$0.lambda$setMicrohoneAction$23(view);
     }
 }

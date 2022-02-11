@@ -1,19 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.ImageReceiver;
+import android.animation.Animator;
 
-public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda28 implements ImageReceiver.ImageReceiverDelegate {
+public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda28 implements Runnable {
     public final /* synthetic */ VoIPFragment f$0;
+    public final /* synthetic */ Animator f$1;
 
-    public /* synthetic */ VoIPFragment$$ExternalSyntheticLambda28(VoIPFragment voIPFragment) {
+    public /* synthetic */ VoIPFragment$$ExternalSyntheticLambda28(VoIPFragment voIPFragment, Animator animator) {
         this.f$0 = voIPFragment;
+        this.f$1 = animator;
     }
 
-    public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
-        this.f$0.lambda$createView$4(imageReceiver, z, z2, z3);
-    }
-
-    public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
-        ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
+    public final void run() {
+        this.f$0.lambda$startTransitionFromPiP$13(this.f$1);
     }
 }

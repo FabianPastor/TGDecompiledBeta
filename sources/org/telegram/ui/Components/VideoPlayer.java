@@ -332,7 +332,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         }
     }
 
-    private void ensurePleyaerCreated() {
+    private void ensurePlayerCreated() {
         DefaultRenderersFactory defaultRenderersFactory;
         DefaultLoadControl defaultLoadControl = new DefaultLoadControl(new DefaultAllocator(true, 65536), 15000, 50000, 100, 5000, -1, true);
         if (this.player == null) {
@@ -439,7 +439,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             r6 = 0
             r0.audioPlayerReady = r6
             r0.videoPlayerReady = r6
-            r18.ensurePleyaerCreated()
+            r18.ensurePlayerCreated()
             r7 = 0
             r8 = r7
             r9 = 0
@@ -588,7 +588,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             r3 = 0
         L_0x0024:
             r8.isStreaming = r3
-            r8.ensurePleyaerCreated()
+            r8.ensurePlayerCreated()
             r10.hashCode()
             r3 = -1
             int r4 = r10.hashCode()
@@ -944,6 +944,10 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
                 simpleExoPlayer.setRepeatMode(z ? 2 : 0);
             }
         }
+    }
+
+    public boolean isLooping() {
+        return this.looping;
     }
 
     /* access modifiers changed from: private */

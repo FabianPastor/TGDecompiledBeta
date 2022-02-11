@@ -1579,6 +1579,7 @@
     <public type="raw" name="ic_mute" id="NUM" />
     <public type="raw" name="ic_pin" id="NUM" />
     <public type="raw" name="ic_save_to_gallery" id="NUM" />
+    <public type="raw" name="ic_save_to_gifs" id="NUM" />
     <public type="raw" name="ic_save_to_music" id="NUM" />
     <public type="raw" name="ic_unban" id="NUM" />
     <public type="raw" name="ic_unmute" id="NUM" />
@@ -3573,6 +3574,7 @@
     <public type="string" name="GetQRCode" id="NUM" />
     <public type="string" name="GettingLinkInfo" id="NUM" />
     <public type="string" name="GifCaption" id="NUM" />
+    <public type="string" name="GifSavedHint" id="NUM" />
     <public type="string" name="GifSavedToDownloadsHint" id="NUM" />
     <public type="string" name="GifsTab2" id="NUM" />
     <public type="string" name="GigagroupAlertLearnMore" id="NUM" />

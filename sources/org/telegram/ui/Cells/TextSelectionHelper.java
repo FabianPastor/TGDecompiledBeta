@@ -1808,7 +1808,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                         menu.getItem(1).setVisible(true);
                     }
                 }
-                if (!LanguageDetector.hasSupport() || TextSelectionHelper.this.getSelectedText() == null) {
+                if (TextSelectionHelper.this.onTranslateListener == null || !LanguageDetector.hasSupport() || TextSelectionHelper.this.getSelectedText() == null) {
                     this.translateFromLanguage = null;
                     updateTranslateButton(menu);
                 } else {

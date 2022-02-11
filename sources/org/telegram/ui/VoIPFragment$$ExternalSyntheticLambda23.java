@@ -8,6 +8,6 @@ public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda23 imple
     }
 
     public final void run() {
-        this.f$0.lambda$startTransitionFromPiP$13();
+        this.f$0.lambda$startTransitionFromPiP$14();
     }
 }

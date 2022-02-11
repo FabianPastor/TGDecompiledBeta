@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda96 imple
     }
 
     public final void onDismiss() {
-        this.f$0.lambda$createView$38();
+        this.f$0.lambda$createView$50();
     }
 }

@@ -194,6 +194,10 @@ public class MessageSeenView extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
+        View view = (View) getParent();
+        if (view != null && view.getWidth() > 0) {
+            i = View.MeasureSpec.makeMeasureSpec(view.getWidth(), NUM);
+        }
         if (this.flickerLoadingView.getVisibility() == 0) {
             this.ignoreLayout = true;
             this.flickerLoadingView.setVisibility(8);

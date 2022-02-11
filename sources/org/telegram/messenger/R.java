@@ -1712,6 +1712,7 @@ public final class R {
         public static final int ic_mute = NUM;
         public static final int ic_pin = NUM;
         public static final int ic_save_to_gallery = NUM;
+        public static final int ic_save_to_gifs = NUM;
         public static final int ic_save_to_music = NUM;
         public static final int ic_unban = NUM;
         public static final int ic_unmute = NUM;
@@ -3712,6 +3713,7 @@ public final class R {
         public static final int GetQRCode = NUM;
         public static final int GettingLinkInfo = NUM;
         public static final int GifCaption = NUM;
+        public static final int GifSavedHint = NUM;
         public static final int GifSavedToDownloadsHint = NUM;
         public static final int GifsTab2 = NUM;
         public static final int GigagroupAlertLearnMore = NUM;

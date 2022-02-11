@@ -1,14 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.NumberPicker;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda64 implements NumberPicker.Formatter {
-    public static final /* synthetic */ PhotoViewer$$ExternalSyntheticLambda64 INSTANCE = new PhotoViewer$$ExternalSyntheticLambda64();
+public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda64 implements AlertsCreator.ScheduleDatePickerDelegate {
+    public final /* synthetic */ PhotoViewer f$0;
 
-    private /* synthetic */ PhotoViewer$$ExternalSyntheticLambda64() {
+    public /* synthetic */ PhotoViewer$$ExternalSyntheticLambda64(PhotoViewer photoViewer) {
+        this.f$0 = photoViewer;
     }
 
-    public final String format(int i) {
-        return PhotoViewer.lambda$setParentActivity$25(i);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.sendPressed(z, i);
     }
 }

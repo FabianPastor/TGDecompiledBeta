@@ -769,18 +769,18 @@ public final class FloatingToolbar {
                 if (access$2000 instanceof LinearLayout) {
                     ((LinearLayout) access$2000).setGravity(17);
                 }
-                if (z) {
-                    double paddingStart = (double) access$2000.getPaddingStart();
-                    Double.isNaN(paddingStart);
-                    access$2000.setPaddingRelative((int) (paddingStart * 1.5d), access$2000.getPaddingTop(), access$2000.getPaddingEnd(), access$2000.getPaddingBottom());
+                double d = 1.5d;
+                double d2 = z ? 1.5d : 1.0d;
+                double paddingStart = (double) access$2000.getPaddingStart();
+                Double.isNaN(paddingStart);
+                int i3 = (int) (d2 * paddingStart);
+                int paddingTop = access$2000.getPaddingTop();
+                if (!z2) {
+                    d = 1.0d;
                 }
-                if (z2) {
-                    int paddingStart2 = access$2000.getPaddingStart();
-                    int paddingTop = access$2000.getPaddingTop();
-                    double paddingEnd = (double) access$2000.getPaddingEnd();
-                    Double.isNaN(paddingEnd);
-                    access$2000.setPaddingRelative(paddingStart2, paddingTop, (int) (paddingEnd * 1.5d), access$2000.getPaddingBottom());
-                }
+                double paddingEnd = (double) access$2000.getPaddingEnd();
+                Double.isNaN(paddingEnd);
+                access$2000.setPaddingRelative(i3, paddingTop, (int) (d * paddingEnd), access$2000.getPaddingBottom());
                 access$2000.measure(0, 0);
                 int min = Math.min(access$2000.getMeasuredWidth(), i);
                 boolean z3 = min <= i2 - this.mOverflowButtonSize.getWidth();
@@ -1151,13 +1151,15 @@ public final class FloatingToolbar {
         } else if (i2 == 1) {
             textView.setTextColor(getThemedColor("windowBackgroundWhiteBlackText"));
         }
-        if (z) {
+        if (z || z2) {
             int i3 = 6;
             int i4 = z ? 6 : 0;
+            int i5 = z2 ? 6 : 0;
+            int i6 = z2 ? 6 : 0;
             if (!z) {
                 i3 = 0;
             }
-            linearLayout.setBackgroundDrawable(Theme.createRadSelectorDrawable(color, i4, 0, 0, i3));
+            linearLayout.setBackgroundDrawable(Theme.createRadSelectorDrawable(color, i4, i5, i6, i3));
         } else {
             linearLayout.setBackgroundDrawable(Theme.getSelectorDrawable(color, false));
         }

@@ -270,7 +270,7 @@ public class QrActivity extends BaseFragment {
             r0.logoImageView = r6
             r6.setAutoRepeat(r10)
             org.telegram.ui.Components.RLottieImageView r6 = r0.logoImageView
-            r7 = 2131558483(0x7f0d0053, float:1.8742283E38)
+            r7 = 2131558484(0x7f0d0054, float:1.8742285E38)
             r8 = 60
             r6.setAnimation(r7, r8, r8)
             org.telegram.ui.Components.RLottieImageView r6 = r0.logoImageView
@@ -388,7 +388,7 @@ public class QrActivity extends BaseFragment {
             r1.setItemSelectedListener(r4)
             org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
             android.widget.TextView r1 = r1.titleView
-            r4 = 2131627456(0x7f0e0dc0, float:1.8882177E38)
+            r4 = 2131627457(0x7f0e0dc1, float:1.8882179E38)
             java.lang.String r6 = "QrCode"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r1.setText(r4)

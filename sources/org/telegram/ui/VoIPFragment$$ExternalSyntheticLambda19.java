@@ -1,14 +1,18 @@
 package org.telegram.ui;
 
 import android.view.View;
+import org.telegram.messenger.voip.VoIPService;
 
 public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda19 implements View.OnClickListener {
-    public static final /* synthetic */ VoIPFragment$$ExternalSyntheticLambda19 INSTANCE = new VoIPFragment$$ExternalSyntheticLambda19();
+    public final /* synthetic */ VoIPFragment f$0;
+    public final /* synthetic */ VoIPService f$1;
 
-    private /* synthetic */ VoIPFragment$$ExternalSyntheticLambda19() {
+    public /* synthetic */ VoIPFragment$$ExternalSyntheticLambda19(VoIPFragment voIPFragment, VoIPService voIPService) {
+        this.f$0 = voIPFragment;
+        this.f$1 = voIPService;
     }
 
     public final void onClick(View view) {
-        VoIPFragment.lambda$updateButtons$21(view);
+        this.f$0.lambda$setVideoAction$25(this.f$1, view);
     }
 }

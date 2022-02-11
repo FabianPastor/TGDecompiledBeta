@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda108 impl
     }
 
     public final void run() {
-        this.f$0.lambda$processSelectedOption$168();
+        this.f$0.lambda$showGigagroupConvertAlert$120();
     }
 }

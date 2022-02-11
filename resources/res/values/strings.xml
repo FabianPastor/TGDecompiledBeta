@@ -1893,6 +1893,7 @@
     <string name="GetQRCode">Get QR code</string>
     <string name="GettingLinkInfo">Getting Link Info...</string>
     <string name="GifCaption">GIF Caption</string>
+    <string name="GifSavedHint">Added to saved GIFs</string>
     <string name="GifSavedToDownloadsHint">GIF saved to downloads</string>
     <string name="GifsTab2">GIFs</string>
     <string name="GigagroupAlertLearnMore">LEARN MORE</string>

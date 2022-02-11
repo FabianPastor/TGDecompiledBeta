@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda4 implem
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$updateViewState$16(dialogInterface, i);
+        this.f$0.lambda$requestInlinePermissions$30(dialogInterface, i);
     }
 }

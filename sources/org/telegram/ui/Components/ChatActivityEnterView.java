@@ -3078,7 +3078,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r2 = 8
             r0.setVisibility(r2)
             android.widget.ImageView r0 = r7.scheduledButton
-            r2 = 2131627684(0x7f0e0ea4, float:1.888264E38)
+            r2 = 2131627685(0x7f0e0ea5, float:1.8882641E38)
             java.lang.String r5 = "ScheduledMessages"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r0.setContentDescription(r2)
@@ -3793,7 +3793,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             java.lang.String r1 = "chat_messagePanelSend"
             int r1 = r7.getThemedColor(r1)
             android.view.View r6 = r7.sendButton
-            r9 = 2131627771(0x7f0e0efb, float:1.8882816E38)
+            r9 = 2131627772(0x7f0e0efc, float:1.8882818E38)
             java.lang.String r11 = "Send"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setContentDescription(r9)
@@ -4217,7 +4217,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r2.setTextColor(r0)
             r0 = 1097859072(0x41700000, float:15.0)
             r2.setTextSize(r14, r0)
-            r0 = 2131627794(0x7f0e0var_, float:1.8882862E38)
+            r0 = 2131627795(0x7f0e0var_, float:1.8882865E38)
             java.lang.String r1 = "SendMessageAsTitle"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r2.setText(r0)
@@ -9436,6 +9436,10 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
 
     public View getAudioVideoButtonContainer() {
         return this.audioVideoButtonContainer;
+    }
+
+    public View getEmojiButton() {
+        return this.emojiButton[0];
     }
 
     public EmojiView getEmojiView() {
