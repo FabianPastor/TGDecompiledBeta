@@ -1900,7 +1900,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             r2.setBackground(r5)
         L_0x0749:
             android.widget.ImageView r2 = r0.stickerSettingsButton
-            r5 = 2131627850(0x7f0e0f4a, float:1.8882976E38)
+            r5 = 2131627853(0x7f0e0f4d, float:1.8882982E38)
             java.lang.String r7 = "Settings"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r2.setContentDescription(r5)
@@ -1956,7 +1956,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r5)
             android.widget.ImageView r2 = r0.searchButton
-            r5 = 2131627688(0x7f0e0ea8, float:1.8882648E38)
+            r5 = 2131627691(0x7f0e0eab, float:1.8882654E38)
             java.lang.String r7 = "Search"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r2.setContentDescription(r5)
@@ -2539,8 +2539,32 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     public void setTranslationY(float f) {
         super.setTranslationY(f);
-        updateBottomTabContainerPosition();
         updateStickerTabsPosition();
+        updateBottomTabContainerPosition();
+    }
+
+    private void updateBottomTabContainerPosition() {
+        View view;
+        int i;
+        if (this.bottomTabContainer.getTag() == null) {
+            EmojiViewDelegate emojiViewDelegate = this.delegate;
+            if (emojiViewDelegate == null || !emojiViewDelegate.isSearchOpened()) {
+                ViewPager viewPager = this.pager;
+                if ((viewPager == null || viewPager.getCurrentItem() != 0) && (view = (View) getParent()) != null) {
+                    float y = getY() - ((float) view.getHeight());
+                    if (getLayoutParams().height > 0) {
+                        i = getLayoutParams().height;
+                    } else {
+                        i = getMeasuredHeight();
+                    }
+                    float f = y + ((float) i);
+                    if (((float) this.bottomTabContainer.getTop()) - f < 0.0f) {
+                        f = (float) this.bottomTabContainer.getTop();
+                    }
+                    this.bottomTabContainer.setTranslationY(-f);
+                }
+            }
+        }
     }
 
     /* access modifiers changed from: private */
@@ -2569,27 +2593,6 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 return;
             }
             this.stickersTab.expandStickers(this.lastStickersX, true);
-        }
-    }
-
-    private void updateBottomTabContainerPosition() {
-        View view;
-        int i;
-        if (this.bottomTabContainer.getTag() == null) {
-            EmojiViewDelegate emojiViewDelegate = this.delegate;
-            if ((emojiViewDelegate == null || !emojiViewDelegate.isSearchOpened()) && (view = (View) getParent()) != null) {
-                float y = getY() - ((float) view.getHeight());
-                if (getLayoutParams().height > 0) {
-                    i = getLayoutParams().height;
-                } else {
-                    i = getMeasuredHeight();
-                }
-                float f = y + ((float) i);
-                if (((float) this.bottomTabContainer.getTop()) - f < 0.0f) {
-                    f = (float) this.bottomTabContainer.getTop();
-                }
-                this.bottomTabContainer.setTranslationY(-f);
-            }
         }
     }
 
@@ -4018,16 +4021,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 EmojiViewDelegate emojiViewDelegate = this.delegate;
                 if (emojiViewDelegate != null && emojiViewDelegate.isSearchOpened()) {
                     this.bottomTabContainer.setTranslationY((float) AndroidUtilities.dp(49.0f));
-                } else if (this.bottomTabContainer.getTag() == null) {
-                    if (i6 <= this.lastNotifyHeight) {
-                        this.bottomTabContainer.setTranslationY(0.0f);
-                    } else {
-                        float y = (getY() + ((float) getMeasuredHeight())) - ((float) view.getHeight());
-                        if (((float) this.bottomTabContainer.getTop()) - y < 0.0f) {
-                            y = (float) this.bottomTabContainer.getTop();
-                        }
-                        this.bottomTabContainer.setTranslationY(-y);
-                    }
+                } else if (this.bottomTabContainer.getTag() == null && i6 <= this.lastNotifyHeight) {
+                    this.bottomTabContainer.setTranslationY(0.0f);
                 }
                 this.lastNotifyHeight = i6;
                 this.lastNotifyHeight2 = height;
@@ -4875,7 +4870,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 java.util.ArrayList r0 = r0.recentStickers
                 if (r10 != r0) goto L_0x00cb
-                r10 = 2131627500(0x7f0e0dec, float:1.8882266E38)
+                r10 = 2131627503(0x7f0e0def, float:1.8882272E38)
                 java.lang.String r0 = "RecentStickers"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setText(r10, r1)
@@ -6829,7 +6824,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 android.widget.TextView r0 = new android.widget.TextView
                 android.content.Context r2 = r13.context
                 r0.<init>(r2)
-                r2 = 2131626582(0x7f0e0a56, float:1.8880404E38)
+                r2 = 2131626583(0x7f0e0a57, float:1.8880406E38)
                 java.lang.String r3 = "NoStickersFound"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)

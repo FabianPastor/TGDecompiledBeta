@@ -693,8 +693,8 @@ public class SpoilerEffect extends Drawable {
         canvas.clipPath(tempPath, Region.Op.DIFFERENCE);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:10:0x0044, code lost:
-        if (r5 != r6) goto L_0x0046;
+    /* JADX WARNING: Code restructure failed: missing block: B:11:0x0045, code lost:
+        if (r5 != r6) goto L_0x0047;
      */
     @android.annotation.SuppressLint({"WrongConstant"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -706,26 +706,27 @@ public class SpoilerEffect extends Drawable {
             r3 = r28
             r11 = r29
             boolean r4 = r28.isEmpty()
-            if (r4 == 0) goto L_0x0013
+            if (r4 == 0) goto L_0x0014
             r2.draw(r11)
-        L_0x0013:
+            return
+        L_0x0014:
             java.lang.Object r4 = r26.get()
             android.text.Layout r4 = (android.text.Layout) r4
             r13 = 0
-            if (r4 == 0) goto L_0x0046
+            if (r4 == 0) goto L_0x0047
             java.lang.CharSequence r5 = r27.getText()
             java.lang.String r5 = r5.toString()
             java.lang.CharSequence r6 = r4.getText()
             java.lang.String r6 = r6.toString()
             boolean r5 = r5.equals(r6)
-            if (r5 == 0) goto L_0x0046
+            if (r5 == 0) goto L_0x0047
             int r5 = r27.getWidth()
             int r6 = r4.getWidth()
-            if (r5 != r6) goto L_0x0046
+            if (r5 != r6) goto L_0x0047
             int r5 = r27.getHeight()
             int r6 = r4.getHeight()
-            if (r5 == r6) goto L_0x0121
-        L_0x0046:
+            if (r5 == r6) goto L_0x0122
+        L_0x0047:
             android.text.SpannableStringBuilder r15 = new android.text.SpannableStringBuilder
             java.lang.CharSequence r4 = r27.getText()
             r15.<init>(r4)
@@ -737,19 +738,19 @@ public class SpoilerEffect extends Drawable {
             org.telegram.ui.Components.TextStyleSpan[] r5 = (org.telegram.ui.Components.TextStyleSpan[]) r5
             int r6 = r5.length
             r7 = 0
-        L_0x0063:
-            if (r7 >= r6) goto L_0x00c9
+        L_0x0064:
+            if (r7 >= r6) goto L_0x00ca
             r8 = r5[r7]
             boolean r9 = r8.isSpoiler()
-            if (r9 == 0) goto L_0x00bd
+            if (r9 == 0) goto L_0x00be
             int r9 = r4.getSpanStart(r8)
             int r10 = r4.getSpanEnd(r8)
             java.lang.Class<org.telegram.messenger.Emoji$EmojiSpan> r14 = org.telegram.messenger.Emoji.EmojiSpan.class
             java.lang.Object[] r14 = r4.getSpans(r9, r10, r14)
             org.telegram.messenger.Emoji$EmojiSpan[] r14 = (org.telegram.messenger.Emoji.EmojiSpan[]) r14
             int r12 = r14.length
-        L_0x007e:
-            if (r13 >= r12) goto L_0x00a0
+        L_0x007f:
+            if (r13 >= r12) goto L_0x00a1
             r16 = r5
             r5 = r14[r13]
             r17 = r6
@@ -763,8 +764,8 @@ public class SpoilerEffect extends Drawable {
             r5 = r16
             r6 = r17
             r12 = r18
-            goto L_0x007e
-        L_0x00a0:
+            goto L_0x007f
+        L_0x00a1:
             r16 = r5
             r17 = r6
             android.text.style.ForegroundColorSpan r5 = new android.text.style.ForegroundColorSpan
@@ -775,20 +776,20 @@ public class SpoilerEffect extends Drawable {
             int r10 = r4.getSpanFlags(r8)
             r15.setSpan(r5, r6, r9, r10)
             r15.removeSpan(r8)
-            goto L_0x00c1
-        L_0x00bd:
+            goto L_0x00c2
+        L_0x00be:
             r16 = r5
             r17 = r6
-        L_0x00c1:
+        L_0x00c2:
             int r7 = r7 + 1
             r5 = r16
             r6 = r17
             r13 = 0
-            goto L_0x0063
-        L_0x00c9:
+            goto L_0x0064
+        L_0x00ca:
             int r4 = android.os.Build.VERSION.SDK_INT
             r5 = 24
-            if (r4 < r5) goto L_0x0100
+            if (r4 < r5) goto L_0x0101
             int r4 = r15.length()
             android.text.TextPaint r5 = r27.getPaint()
             int r6 = r27.getWidth()
@@ -803,8 +804,8 @@ public class SpoilerEffect extends Drawable {
             float r6 = r27.getSpacingMultiplier()
             android.text.StaticLayout$Builder r4 = r4.setLineSpacing(r5, r6)
             android.text.StaticLayout r4 = r4.build()
-            goto L_0x011c
-        L_0x0100:
+            goto L_0x011d
+        L_0x0101:
             android.text.StaticLayout r4 = new android.text.StaticLayout
             android.text.TextPaint r16 = r27.getPaint()
             int r17 = r27.getWidth()
@@ -814,31 +815,31 @@ public class SpoilerEffect extends Drawable {
             r21 = 0
             r14 = r4
             r14.<init>(r15, r16, r17, r18, r19, r20, r21)
-        L_0x011c:
+        L_0x011d:
             r5 = r26
             r5.set(r4)
-        L_0x0121:
+        L_0x0122:
             boolean r5 = r28.isEmpty()
             r12 = 0
-            if (r5 != 0) goto L_0x0138
+            if (r5 != 0) goto L_0x0139
             r29.save()
             r5 = r25
             float r5 = (float) r5
             r11.translate(r12, r5)
             r4.draw(r11)
             r29.restore()
-            goto L_0x013b
-        L_0x0138:
+            goto L_0x013c
+        L_0x0139:
             r2.draw(r11)
-        L_0x013b:
+        L_0x013c:
             boolean r4 = r28.isEmpty()
-            if (r4 != 0) goto L_0x0268
+            if (r4 != 0) goto L_0x0269
             android.graphics.Path r4 = tempPath
             r4.rewind()
             java.util.Iterator r4 = r28.iterator()
-        L_0x014a:
+        L_0x014b:
             boolean r5 = r4.hasNext()
-            if (r5 == 0) goto L_0x0172
+            if (r5 == 0) goto L_0x0173
             java.lang.Object r5 = r4.next()
             org.telegram.ui.Components.spoilers.SpoilerEffect r5 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r5
             android.graphics.Rect r5 = r5.getBounds()
@@ -855,30 +856,30 @@ public class SpoilerEffect extends Drawable {
             r16 = r6
             r17 = r5
             r13.addRect(r14, r15, r16, r17, r18)
-            goto L_0x014a
-        L_0x0172:
+            goto L_0x014b
+        L_0x0173:
             boolean r4 = r28.isEmpty()
             r5 = -1082130432(0xffffffffbvar_, float:-1.0)
-            if (r4 != 0) goto L_0x01ba
+            if (r4 != 0) goto L_0x01bb
             r4 = 0
             java.lang.Object r6 = r3.get(r4)
             org.telegram.ui.Components.spoilers.SpoilerEffect r6 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r6
             float r4 = r6.rippleProgress
             int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-            if (r4 == 0) goto L_0x01ba
+            if (r4 == 0) goto L_0x01bb
             r29.save()
             android.graphics.Path r4 = tempPath
             r11.clipPath(r4)
             android.graphics.Path r4 = tempPath
             r4.rewind()
             boolean r4 = r28.isEmpty()
-            if (r4 != 0) goto L_0x01a6
+            if (r4 != 0) goto L_0x01a7
             r4 = 0
             java.lang.Object r6 = r3.get(r4)
             org.telegram.ui.Components.spoilers.SpoilerEffect r6 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r6
             android.graphics.Path r4 = tempPath
             r6.getRipplePath(r4)
-        L_0x01a6:
+        L_0x01a7:
             android.graphics.Path r4 = tempPath
             r11.clipPath(r4)
             int r4 = r22.getPaddingTop()
@@ -887,19 +888,19 @@ public class SpoilerEffect extends Drawable {
             r11.translate(r12, r4)
             r2.draw(r11)
             r29.restore()
-        L_0x01ba:
+        L_0x01bb:
             r2 = 0
             java.lang.Object r4 = r3.get(r2)
             org.telegram.ui.Components.spoilers.SpoilerEffect r4 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r4
             float r2 = r4.rippleProgress
             int r2 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
-            if (r2 == 0) goto L_0x01c9
+            if (r2 == 0) goto L_0x01ca
             r2 = 1
-            goto L_0x01ca
-        L_0x01c9:
-            r2 = 0
+            goto L_0x01cb
         L_0x01ca:
-            if (r2 == 0) goto L_0x01e1
+            r2 = 0
+        L_0x01cb:
+            if (r2 == 0) goto L_0x01e2
             r5 = 0
             r6 = 0
             int r4 = r22.getMeasuredWidth()
@@ -910,42 +911,42 @@ public class SpoilerEffect extends Drawable {
             r10 = 31
             r4 = r29
             r4.saveLayer(r5, r6, r7, r8, r9, r10)
-            goto L_0x01e4
-        L_0x01e1:
+            goto L_0x01e5
+        L_0x01e2:
             r29.save()
-        L_0x01e4:
+        L_0x01e5:
             int r4 = r22.getPaddingTop()
             int r4 = -r4
             float r4 = (float) r4
             r11.translate(r12, r4)
             java.util.Iterator r4 = r28.iterator()
-        L_0x01f1:
+        L_0x01f2:
             boolean r5 = r4.hasNext()
-            if (r5 == 0) goto L_0x022e
+            if (r5 == 0) goto L_0x022f
             java.lang.Object r5 = r4.next()
             org.telegram.ui.Components.spoilers.SpoilerEffect r5 = (org.telegram.ui.Components.spoilers.SpoilerEffect) r5
             r6 = r23
             r5.setInvalidateParent(r6)
             android.view.View r7 = r5.getParentView()
-            if (r7 == r0) goto L_0x020b
+            if (r7 == r0) goto L_0x020c
             r5.setParentView(r0)
-        L_0x020b:
+        L_0x020c:
             boolean r7 = r5.shouldInvalidateColor()
-            if (r7 == 0) goto L_0x0227
+            if (r7 == 0) goto L_0x0228
             android.text.TextPaint r7 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
             int r7 = r7.getColor()
             float r8 = r5.getRippleProgress()
             float r8 = java.lang.Math.max(r12, r8)
             int r7 = androidx.core.graphics.ColorUtils.blendARGB(r1, r7, r8)
             r5.setColor(r7)
-            goto L_0x022a
-        L_0x0227:
+            goto L_0x022b
+        L_0x0228:
             r5.setColor(r1)
-        L_0x022a:
+        L_0x022b:
             r5.draw(r11)
-            goto L_0x01f1
-        L_0x022e:
-            if (r2 == 0) goto L_0x0265
+            goto L_0x01f2
+        L_0x022f:
+            if (r2 == 0) goto L_0x0266
             android.graphics.Path r0 = tempPath
             r0.rewind()
             r0 = 0
@@ -954,7 +955,7 @@ public class SpoilerEffect extends Drawable {
             android.graphics.Path r1 = tempPath
             r0.getRipplePath(r1)
             android.graphics.Paint r0 = xRefPaint
-            if (r0 != 0) goto L_0x025e
+            if (r0 != 0) goto L_0x025f
             android.graphics.Paint r0 = new android.graphics.Paint
             r1 = 1
             r0.<init>(r1)
@@ -966,13 +967,13 @@ public class SpoilerEffect extends Drawable {
             android.graphics.PorterDuff$Mode r2 = android.graphics.PorterDuff.Mode.CLEAR
             r1.<init>(r2)
             r0.setXfermode(r1)
-        L_0x025e:
+        L_0x025f:
             android.graphics.Path r0 = tempPath
             android.graphics.Paint r1 = xRefPaint
             r11.drawPath(r0, r1)
-        L_0x0265:
+        L_0x0266:
             r29.restore()
-        L_0x0268:
+        L_0x0269:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.spoilers.SpoilerEffect.renderWithRipple(android.view.View, boolean, int, int, java.util.concurrent.atomic.AtomicReference, android.text.Layout, java.util.List, android.graphics.Canvas):void");

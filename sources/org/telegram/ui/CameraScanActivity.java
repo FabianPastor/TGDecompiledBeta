@@ -397,7 +397,6 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                             }
                             linkPath2.setBaselineShift(i3);
                             getLayout().getSelectionPath(spanStart, spanEnd, this.textPath);
-                            this.textPath.onPathEnd();
                         }
                         this.textPath.setAllowReset(true);
                     }

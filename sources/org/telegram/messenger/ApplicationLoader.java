@@ -12,7 +12,10 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -39,6 +42,9 @@ public class ApplicationLoader extends Application {
     public static volatile boolean externalInterfacePaused = true;
     public static boolean hasPlayServices = false;
     public static volatile boolean isScreenOn = false;
+    /* access modifiers changed from: private */
+    public static int lastKnownNetworkType = -1;
+    private static long lastNetworkCheckTypeTime = 0;
     public static volatile boolean mainInterfacePaused = true;
     public static volatile boolean mainInterfacePausedStageQueue = true;
     public static volatile long mainInterfacePausedStageQueueTime = 0;
@@ -273,6 +279,18 @@ public class ApplicationLoader extends Application {
                     connectivityManager = (ConnectivityManager) applicationContext.getSystemService("connectivity");
                 }
                 currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                if (Build.VERSION.SDK_INT >= 24) {
+                    connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
+                        public void onAvailable(Network network) {
+                            int unused = ApplicationLoader.lastKnownNetworkType = -1;
+                        }
+
+                        public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
+                            super.onCapabilitiesChanged(network, networkCapabilities);
+                            int unused = ApplicationLoader.lastKnownNetworkType = -1;
+                        }
+                    });
+                }
             } catch (Throwable unused) {
             }
         }
@@ -331,6 +349,7 @@ public class ApplicationLoader extends Application {
     }
 
     public static int getAutodownloadNetworkType() {
+        int i;
         try {
             ensureCurrentNetworkGet(false);
             if (currentNetworkInfo == null) {
@@ -344,10 +363,16 @@ public class ApplicationLoader extends Application {
                     return 0;
                 }
             }
-            if (connectivityManager.isActiveNetworkMetered()) {
-                return 0;
+            if (Build.VERSION.SDK_INT >= 24 && (((i = lastKnownNetworkType) == 0 || i == 1) && System.currentTimeMillis() - lastNetworkCheckTypeTime < 5000)) {
+                return lastKnownNetworkType;
             }
-            return 1;
+            if (connectivityManager.isActiveNetworkMetered()) {
+                lastKnownNetworkType = 0;
+            } else {
+                lastKnownNetworkType = 1;
+            }
+            lastNetworkCheckTypeTime = System.currentTimeMillis();
+            return lastKnownNetworkType;
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }

@@ -1218,16 +1218,18 @@ public class TranslateAlert extends Dialog {
     }
 
     public String languageName(String str) {
-        LocaleController.LocaleInfo builtinLanguageByPlural;
-        if (str == null || str.equals("und") || str.equals("auto") || (builtinLanguageByPlural = LocaleController.getInstance().getBuiltinLanguageByPlural(str)) == null) {
+        if (str == null || str.equals("und") || str.equals("auto")) {
             return null;
         }
-        boolean z = false;
-        try {
-            z = LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode.equals("en");
-        } catch (Exception unused) {
+        LocaleController.LocaleInfo builtinLanguageByPlural = LocaleController.getInstance().getBuiltinLanguageByPlural(str);
+        LocaleController.LocaleInfo currentLocaleInfo = LocaleController.getInstance().getCurrentLocaleInfo();
+        if (builtinLanguageByPlural == null) {
+            return null;
         }
-        return z ? builtinLanguageByPlural.nameEnglish : builtinLanguageByPlural.name;
+        if (currentLocaleInfo != null && "en".equals(currentLocaleInfo.pluralLangCode)) {
+            return builtinLanguageByPlural.nameEnglish;
+        }
+        return builtinLanguageByPlural.name;
     }
 
     public void updateSourceLanguage() {

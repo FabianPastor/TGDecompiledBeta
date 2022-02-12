@@ -1,19 +1,22 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda201 implements ThemeDescription.ThemeDescriptionDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda201 implements RequestDelegate {
     public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ AlertDialog[] f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda201(ChatActivity chatActivity) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda201(ChatActivity chatActivity, AlertDialog[] alertDialogArr, String str) {
         this.f$0 = chatActivity;
+        this.f$1 = alertDialogArr;
+        this.f$2 = str;
     }
 
-    public final void didSetColor() {
-        this.f$0.lambda$getThemeDescriptions$215();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$didPressMessageUrl$213(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

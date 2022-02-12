@@ -540,6 +540,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 this.currentExt = str10;
                 this.currentParentObject = null;
                 this.currentCacheType = 0;
+                this.roundPaint.setShader((Shader) null);
                 this.staticThumbDrawable = drawable2;
                 this.currentAlpha = 1.0f;
                 this.previousAlpha = 1.0f;
@@ -707,6 +708,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             this.mediaShader = null;
             this.legacyShader = null;
             this.legacyCanvas = null;
+            this.roundPaint.setShader((Shader) null);
             Bitmap bitmap2 = this.legacyBitmap;
             if (bitmap2 != null) {
                 bitmap2.recycle();
@@ -872,6 +874,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             rLottieDrawable.setAllowDecodeSingleFrame(true);
         }
         this.thumbShader = null;
+        this.roundPaint.setShader((Shader) null);
         this.staticThumbDrawable = drawable;
         updateDrawableRadius(drawable);
         this.currentMediaLocation = null;
@@ -1016,6 +1019,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         if (this.staticThumbDrawable != null) {
             this.staticThumbDrawable = null;
             this.thumbShader = null;
+            this.roundPaint.setShader((Shader) null);
         }
         clearImage();
         if (this.isPressed == 0) {
@@ -1179,10 +1183,6 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 } else {
                     i5 = bitmapDrawable.getIntrinsicWidth();
                     i4 = bitmapDrawable.getIntrinsicHeight();
-                }
-                View view = this.parentView;
-                if (view != null) {
-                    view.invalidate();
                 }
             } else {
                 Bitmap bitmap = bitmapDrawable.getBitmap();
@@ -3260,6 +3260,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         this.currentThumbKey = null;
         this.currentThumbDrawable = null;
         this.thumbShader = null;
+        this.roundPaint.setShader((Shader) null);
         BitmapDrawable bitmapDrawable = new BitmapDrawable((Resources) null, bitmap);
         this.staticThumbDrawable = bitmapDrawable;
         this.crossfadeWithThumb = true;

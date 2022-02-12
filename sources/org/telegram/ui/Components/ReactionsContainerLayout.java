@@ -32,7 +32,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
@@ -114,10 +113,6 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         void onReactionClicked(View view, TLRPC$TL_availableReaction tLRPC$TL_availableReaction, boolean z);
     }
 
-    static {
-        new Random();
-    }
-
     public ReactionsContainerLayout(final Context context, int i, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
         boolean z = true;
@@ -144,7 +139,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         this.shadow.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelShadow"), PorterDuff.Mode.MULTIPLY));
         AnonymousClass2 r7 = new RecyclerListView(context) {
             public boolean drawChild(Canvas canvas, View view, long j) {
-                if (ReactionsContainerLayout.this.pressedReaction == null || !((ReactionHolderView) view).currentReaction.equals(ReactionsContainerLayout.this.pressedReaction)) {
+                if (ReactionsContainerLayout.this.pressedReaction == null || !((ReactionHolderView) view).currentReaction.reaction.equals(ReactionsContainerLayout.this.pressedReaction)) {
                     return super.drawChild(canvas, view, j);
                 }
                 return true;
@@ -394,6 +389,16 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 }
             }
             canvas.save();
+            float x = this.recyclerListView.getX() + reactionHolderView.getX();
+            float measuredWidth = ((((float) reactionHolderView.getMeasuredWidth()) * reactionHolderView.getScaleX()) - ((float) reactionHolderView.getMeasuredWidth())) / 2.0f;
+            float f = x - measuredWidth;
+            if (f < 0.0f) {
+                reactionHolderView.setTranslationX(-f);
+            } else if (((float) reactionHolderView.getMeasuredWidth()) + x + measuredWidth > ((float) getMeasuredWidth())) {
+                reactionHolderView.setTranslationX(((((float) getMeasuredWidth()) - x) - ((float) reactionHolderView.getMeasuredWidth())) - measuredWidth);
+            } else {
+                reactionHolderView.setTranslationX(0.0f);
+            }
             canvas.translate(this.recyclerListView.getX() + reactionHolderView.getX(), this.recyclerListView.getY() + reactionHolderView.getY());
             canvas.scale(reactionHolderView.getScaleX(), reactionHolderView.getScaleY(), reactionHolderView.getPivotX(), reactionHolderView.getPivotY());
             reactionHolderView.draw(canvas);
@@ -401,13 +406,13 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
             return;
         }
         int childAdapterPosition = this.recyclerListView.getChildAdapterPosition(reactionHolderView);
-        float measuredWidth = ((((float) reactionHolderView.getMeasuredWidth()) * (this.pressedViewScale - 1.0f)) / 3.0f) - ((((float) reactionHolderView.getMeasuredWidth()) * (1.0f - this.otherViewsScale)) * ((float) (Math.abs(this.pressedReactionPosition - childAdapterPosition) - 1)));
+        float measuredWidth2 = ((((float) reactionHolderView.getMeasuredWidth()) * (this.pressedViewScale - 1.0f)) / 3.0f) - ((((float) reactionHolderView.getMeasuredWidth()) * (1.0f - this.otherViewsScale)) * ((float) (Math.abs(this.pressedReactionPosition - childAdapterPosition) - 1)));
         if (childAdapterPosition < this.pressedReactionPosition) {
             reactionHolderView.setPivotX(0.0f);
-            reactionHolderView.setTranslationX(-measuredWidth);
+            reactionHolderView.setTranslationX(-measuredWidth2);
         } else {
             reactionHolderView.setPivotX((float) reactionHolderView.getMeasuredWidth());
-            reactionHolderView.setTranslationX(measuredWidth);
+            reactionHolderView.setTranslationX(measuredWidth2);
         }
         reactionHolderView.setPivotY(reactionHolderView.backupImageView.getY() + ((float) reactionHolderView.backupImageView.getMeasuredHeight()));
         reactionHolderView.setScaleX(this.otherViewsScale);

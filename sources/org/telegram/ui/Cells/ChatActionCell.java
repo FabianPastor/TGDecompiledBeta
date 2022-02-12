@@ -187,9 +187,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             } else {
                 str = LocaleController.formatString("MessageScheduledOn", NUM, LocaleController.formatDateChat((long) i));
             }
+            this.customDate = i;
             CharSequence charSequence = this.customText;
             if (charSequence == null || !TextUtils.equals(str, charSequence)) {
-                this.customDate = i;
                 this.customText = str;
                 updateTextInternal(z2);
             }

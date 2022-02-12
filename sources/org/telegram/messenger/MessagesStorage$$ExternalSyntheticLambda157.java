@@ -16,6 +16,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda157 i
     }
 
     public final void run() {
-        this.f$0.lambda$addRecentLocalFile$54(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$addRecentLocalFile$55(this.f$1, this.f$2, this.f$3);
     }
 }

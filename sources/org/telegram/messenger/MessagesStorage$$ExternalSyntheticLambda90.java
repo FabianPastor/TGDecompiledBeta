@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda90 im
     }
 
     public final void run() {
-        this.f$0.lambda$createTaskForSecretChat$80(this.f$1, this.f$2);
+        this.f$0.lambda$updateChannelUsers$89(this.f$1, this.f$2);
     }
 }

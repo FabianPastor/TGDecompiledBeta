@@ -94,7 +94,7 @@ public class SharedConfig {
     public static long pushStringGetTimeEnd = 0;
     public static long pushStringGetTimeStart = 0;
     public static String pushStringStatus = "";
-    public static boolean raiseToSpeak = true;
+    public static boolean raiseToSpeak = false;
     public static int repeatMode = 0;
     public static boolean roundCamera16to9 = true;
     public static boolean saveIncomingPhotos = false;
@@ -422,7 +422,7 @@ public class SharedConfig {
             int r2 = r1.getInt(r2, r6)     // Catch:{ all -> 0x0363 }
             mapPreviewType = r2     // Catch:{ all -> 0x0363 }
             java.lang.String r2 = "raise_to_speak"
-            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x0363 }
+            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x0363 }
             raiseToSpeak = r2     // Catch:{ all -> 0x0363 }
             java.lang.String r2 = "custom_tabs"
             boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x0363 }

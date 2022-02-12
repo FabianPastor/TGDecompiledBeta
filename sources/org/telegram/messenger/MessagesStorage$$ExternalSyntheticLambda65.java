@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda65 im
     }
 
     public final void run() {
-        this.f$0.lambda$updateRepliesMaxReadId$149(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$updateRepliesMaxReadId$150(this.f$1, this.f$2, this.f$3);
     }
 }

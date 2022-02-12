@@ -127,7 +127,7 @@ public class MessageSeenView extends FrameLayout {
                 updateView();
             } else if (ChatObject.isChannel(tLRPC$Chat)) {
                 TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants = new TLRPC$TL_channels_getParticipants();
-                tLRPC$TL_channels_getParticipants.limit = 50;
+                tLRPC$TL_channels_getParticipants.limit = MessagesController.getInstance(i).chatReadMarkSizeThreshold;
                 tLRPC$TL_channels_getParticipants.offset = 0;
                 tLRPC$TL_channels_getParticipants.filter = new TLRPC$TL_channelParticipantsRecent();
                 tLRPC$TL_channels_getParticipants.channel = MessagesController.getInstance(i).getInputChannel(tLRPC$Chat.id);
@@ -194,6 +194,10 @@ public class MessageSeenView extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
+        View view = (View) getParent();
+        if (view != null && view.getWidth() > 0) {
+            i = View.MeasureSpec.makeMeasureSpec(view.getWidth(), NUM);
+        }
         if (this.flickerLoadingView.getVisibility() == 0) {
             this.ignoreLayout = true;
             this.flickerLoadingView.setVisibility(8);

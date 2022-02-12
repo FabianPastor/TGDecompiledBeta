@@ -12,6 +12,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda3 impleme
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setVideoPlayerControlVisible$45(this.f$1, valueAnimator);
+        this.f$0.lambda$setVideoPlayerControlVisible$46(this.f$1, valueAnimator);
     }
 }

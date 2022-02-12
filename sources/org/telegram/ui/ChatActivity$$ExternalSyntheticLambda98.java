@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import java.util.concurrent.atomic.AtomicReference;
+import android.widget.PopupWindow;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda98 implements Runnable {
-    public final /* synthetic */ AtomicReference f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda98 implements PopupWindow.OnDismissListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda98(AtomicReference atomicReference) {
-        this.f$0 = atomicReference;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda98(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        ChatActivity.lambda$createMenu$150(this.f$0);
+    public final void onDismiss() {
+        this.f$0.lambda$createView$13();
     }
 }

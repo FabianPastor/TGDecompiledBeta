@@ -34,7 +34,8 @@ public class AvatarsDarawable {
     private int overrideSize;
     private Paint paint = new Paint(1);
     View parent;
-    Random random = new Random();
+    Random random;
+    public long transitionDuration = 220;
     float transitionProgress = 1.0f;
     ValueAnimator transitionProgressAnimator;
     boolean updateAfterTransition;
@@ -123,7 +124,7 @@ public class AvatarsDarawable {
                 AvatarsDarawable.this.transitionProgressAnimator = null;
             }
         });
-        this.transitionProgressAnimator.setDuration(220);
+        this.transitionProgressAnimator.setDuration(this.transitionDuration);
         this.transitionProgressAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
         this.transitionProgressAnimator.start();
         invalidate();
@@ -215,6 +216,8 @@ public class AvatarsDarawable {
     }
 
     public AvatarsDarawable(View view, boolean z) {
+        CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;
+        this.random = new Random();
         this.parent = view;
         for (int i = 0; i < 3; i++) {
             this.currentStates[i] = new DrawingState();

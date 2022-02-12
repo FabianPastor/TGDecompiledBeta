@@ -8,6 +8,6 @@ public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda25 imple
     }
 
     public final void run() {
-        this.f$0.lambda$onRequestPermissionsResultInternal$27();
+        this.f$0.lambda$new$2();
     }
 }

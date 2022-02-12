@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda177 i
     }
 
     public final void run() {
-        this.f$0.lambda$cleanup$7(this.f$1);
+        this.f$0.lambda$cleanup$8(this.f$1);
     }
 }

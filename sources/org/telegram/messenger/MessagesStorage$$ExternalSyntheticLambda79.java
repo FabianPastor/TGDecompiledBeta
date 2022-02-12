@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda79 im
     }
 
     public final void run() {
-        this.f$0.lambda$setDialogFlags$35(this.f$1, this.f$2);
+        this.f$0.lambda$deleteUserChatHistory$58(this.f$1, this.f$2);
     }
 }

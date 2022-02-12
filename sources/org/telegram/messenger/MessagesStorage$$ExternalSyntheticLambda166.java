@@ -19,6 +19,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda166 i
     }
 
     public final void run() {
-        this.f$0.lambda$replaceMessageIfExists$170(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$replaceMessageIfExists$171(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

@@ -1,16 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.PopupSwipeBackLayout;
-import org.telegram.ui.Components.ReactionsContainerLayout;
+import org.telegram.tgnet.TLRPC$BotInlineResult;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda210 implements PopupSwipeBackLayout.OnSwipeBackProgressListener {
-    public final /* synthetic */ ReactionsContainerLayout f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda210 implements AlertsCreator.ScheduleDatePickerDelegate {
+    public final /* synthetic */ ChatActivity f$0;
+    public final /* synthetic */ TLRPC$BotInlineResult f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda210(ReactionsContainerLayout reactionsContainerLayout) {
-        this.f$0 = reactionsContainerLayout;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda210(ChatActivity chatActivity, TLRPC$BotInlineResult tLRPC$BotInlineResult) {
+        this.f$0 = chatActivity;
+        this.f$1 = tLRPC$BotInlineResult;
     }
 
-    public final void onSwipeBackProgress(PopupSwipeBackLayout popupSwipeBackLayout, float f, float f2) {
-        ChatActivity.lambda$createMenu$154(this.f$0, popupSwipeBackLayout, f, f2);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.lambda$createView$43(this.f$1, z, i);
     }
 }

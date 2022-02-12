@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda100 i
     }
 
     public final void run() {
-        this.f$0.lambda$createPendingTask$10(this.f$1, this.f$2);
+        this.f$0.lambda$createPendingTask$11(this.f$1, this.f$2);
     }
 }

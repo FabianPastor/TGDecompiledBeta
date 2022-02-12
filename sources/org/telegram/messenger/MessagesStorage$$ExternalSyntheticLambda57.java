@@ -16,6 +16,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda57 im
     }
 
     public final void run() {
-        this.f$0.lambda$hasAuthMessage$134(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$hasAuthMessage$135(this.f$1, this.f$2, this.f$3);
     }
 }

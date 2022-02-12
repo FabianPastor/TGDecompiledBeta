@@ -561,11 +561,15 @@ public class AboutLinkCell extends FrameLayout {
             }
             checkTextLayout(this.lastMaxWidth, true);
             updateHeight();
+            int visibility = this.valueTextView.getVisibility();
             if (TextUtils.isEmpty(str2)) {
                 this.valueTextView.setVisibility(8);
             } else {
                 this.valueTextView.setText(str2);
                 this.valueTextView.setVisibility(0);
+            }
+            if (visibility != this.valueTextView.getVisibility()) {
+                checkTextLayout(this.lastMaxWidth, true);
             }
             requestLayout();
         }
@@ -592,7 +596,6 @@ public class AboutLinkCell extends FrameLayout {
                         this.urlPathOffset.set(i, i2);
                         this.urlPath.setCurrentLayout(staticLayout, spanStart, 0.0f);
                         staticLayout.getSelectionPath(spanStart, spannable.getSpanEnd(this.pressedLink), this.urlPath);
-                        this.urlPath.onPathEnd();
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);
                     }
@@ -710,11 +713,15 @@ public class AboutLinkCell extends FrameLayout {
         this.container.invalidate();
     }
 
+    private int fromHeight() {
+        return Math.min(COLLAPSED_HEIGHT + (this.valueTextView.getVisibility() == 0 ? AndroidUtilities.dp(20.0f) : 0), textHeight());
+    }
+
     private int updateHeight() {
         int textHeight = textHeight();
-        float min = (float) Math.min(COLLAPSED_HEIGHT, textHeight);
+        float fromHeight = (float) fromHeight();
         if (this.shouldExpand) {
-            textHeight = (int) AndroidUtilities.lerp(min, (float) textHeight, this.expandT);
+            textHeight = (int) AndroidUtilities.lerp(fromHeight, (float) textHeight, this.expandT);
         }
         setHeight(textHeight);
         return textHeight;
@@ -761,7 +768,7 @@ public class AboutLinkCell extends FrameLayout {
         if (spannableStringBuilder != null && (i != this.lastMaxWidth || z)) {
             StaticLayout makeTextLayout = makeTextLayout(spannableStringBuilder, i);
             this.textLayout = makeTextLayout;
-            this.shouldExpand = makeTextLayout.getLineCount() >= 4 && this.valueTextView.getVisibility() != 0;
+            this.shouldExpand = makeTextLayout.getLineCount() >= 4;
             if (this.textLayout.getLineCount() >= 3 && this.shouldExpand) {
                 int max = Math.max(this.textLayout.getLineStart(2), this.textLayout.getLineEnd(2));
                 if (this.stringBuilder.charAt(max - 1) == 10) {
@@ -801,10 +808,10 @@ public class AboutLinkCell extends FrameLayout {
             }
             this.lastMaxWidth = i;
             this.container.setMinimumHeight(textHeight());
-            if (this.shouldExpand) {
-                int textHeight = textHeight() - AndroidUtilities.dp(8.0f);
-                StaticLayout staticLayout = this.textLayout;
-                setShowMoreMarginBottom((textHeight - staticLayout.getLineBottom(staticLayout.getLineCount() - 1)) - this.showMoreTextBackgroundView.getPaddingBottom());
+            if (this.shouldExpand && this.firstThreeLinesLayout != null) {
+                int fromHeight = fromHeight() - AndroidUtilities.dp(8.0f);
+                StaticLayout staticLayout = this.firstThreeLinesLayout;
+                setShowMoreMarginBottom((((fromHeight - staticLayout.getLineBottom(staticLayout.getLineCount() - 1)) - this.showMoreTextBackgroundView.getPaddingBottom()) - this.showMoreTextView.getPaddingBottom()) - (this.showMoreTextView.getLayout() == null ? 0 : this.showMoreTextView.getLayout().getHeight() - this.showMoreTextView.getLayout().getLineBottom(this.showMoreTextView.getLineCount() - 1)));
             }
         }
         TextView textView = this.showMoreTextView;

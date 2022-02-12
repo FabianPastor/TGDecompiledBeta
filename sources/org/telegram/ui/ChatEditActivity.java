@@ -602,7 +602,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r9.setHint(r12)
             goto L_0x01ca
         L_0x01be:
-            r12 = 2131625873(0x7f0e0791, float:1.8878966E38)
+            r12 = 2131625874(0x7f0e0792, float:1.8878968E38)
             java.lang.String r15 = "GroupName"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r15, r12)
             r9.setHint(r12)
@@ -1181,7 +1181,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.ui.Cells.TextInfoPrivacyCell r4 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r4.<init>(r1)
             r0.stickersInfoCell3 = r4
-            r9 = 2131625879(0x7f0e0797, float:1.8878978E38)
+            r9 = 2131625880(0x7f0e0798, float:1.887898E38)
             java.lang.String r11 = "GroupStickersInfo"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r4.setText(r9)

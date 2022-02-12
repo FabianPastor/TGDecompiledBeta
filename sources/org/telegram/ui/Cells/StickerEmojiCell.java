@@ -155,7 +155,7 @@ public class StickerEmojiCell extends FrameLayout {
         } else if (tLRPC$Document2 != null) {
             this.sticker = tLRPC$Document2;
             this.parentObject = obj;
-            if (!MessageObject.isVideoSticker(tLRPC$Document)) {
+            if (!MessageObject.isVideoSticker(tLRPC$Document) || !MessageObject.canAutoplayAnimatedSticker(tLRPC$Document)) {
                 tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
             }
             boolean z3 = this.fromEmojiPanel;

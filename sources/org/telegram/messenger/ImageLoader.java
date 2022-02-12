@@ -906,7 +906,7 @@ public class ImageLoader {
                 r11.canRetry = r2
                 goto L_0x00ba
             L_0x00dc:
-                boolean r4 = r12 instanceof java.lang.InterruptedException
+                boolean r4 = r12 instanceof java.io.InterruptedIOException
                 if (r4 == 0) goto L_0x00e1
                 goto L_0x00ba
             L_0x00e1:

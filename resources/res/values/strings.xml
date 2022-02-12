@@ -1893,6 +1893,7 @@
     <string name="GetQRCode">Get QR code</string>
     <string name="GettingLinkInfo">Getting Link Info...</string>
     <string name="GifCaption">GIF Caption</string>
+    <string name="GifSavedHint">Added to saved GIFs</string>
     <string name="GifSavedToDownloadsHint">GIF saved to downloads</string>
     <string name="GifsTab2">GIFs</string>
     <string name="GigagroupAlertLearnMore">LEARN MORE</string>
@@ -3555,6 +3556,8 @@
     <string name="ReactionsCount_two">%1$d reactions</string>
     <string name="ReactionsCount_zero">%1$d reactions</string>
     <string name="ReactionsOff">Off</string>
+    <string name="ReadAllMentions">Read all mentions</string>
+    <string name="ReadAllReactions">Read all reactions</string>
     <string name="Recent">Recent</string>
     <string name="RecentFiles">Recent files</string>
     <string name="RecentFilesAZ">Files A-Z</string>

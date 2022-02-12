@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda110 impl
     }
 
     public final void run() {
-        this.f$0.lambda$checkListViewPaddings$127();
+        this.f$0.lambda$new$5();
     }
 }

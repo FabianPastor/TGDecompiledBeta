@@ -17,6 +17,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda102 i
     }
 
     public final void run() {
-        this.f$0.lambda$updateMessagePollResults$72(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$updateMessagePollResults$73(this.f$1, this.f$2, this.f$3);
     }
 }

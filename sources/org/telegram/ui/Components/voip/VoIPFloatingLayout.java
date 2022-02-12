@@ -798,7 +798,7 @@ public class VoIPFloatingLayout extends FrameLayout {
         r4 = r7.lastInsets;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void saveRelatedPosition() {
+    public void saveRelativePosition() {
         /*
             r7 = this;
             int r0 = r7.getMeasuredWidth()
@@ -882,7 +882,7 @@ public class VoIPFloatingLayout extends FrameLayout {
         L_0x008d:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPFloatingLayout.saveRelatedPosition():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPFloatingLayout.saveRelativePosition():void");
     }
 
     public void restoreRelativePosition() {

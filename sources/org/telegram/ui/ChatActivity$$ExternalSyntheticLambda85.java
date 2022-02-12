@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda85 imple
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.lambda$createView$37(view);
+        return this.f$0.lambda$createView$39(view);
     }
 }

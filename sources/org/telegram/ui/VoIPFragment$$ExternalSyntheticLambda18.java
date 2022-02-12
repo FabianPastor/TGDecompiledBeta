@@ -13,6 +13,6 @@ public final /* synthetic */ class VoIPFragment$$ExternalSyntheticLambda18 imple
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$setVideoAction$24(this.f$1, view);
+        this.f$0.lambda$setFrontalCameraAction$27(this.f$1, view);
     }
 }

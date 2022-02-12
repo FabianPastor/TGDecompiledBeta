@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
+import android.widget.PopupWindow;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda97 implements Runnable {
-    public final /* synthetic */ View f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda97 implements PopupWindow.OnDismissListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda97(View view) {
-        this.f$0 = view;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda97(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final void run() {
-        this.f$0.performHapticFeedback(3, 2);
+    public final void onDismiss() {
+        this.f$0.lambda$createView$38();
     }
 }
