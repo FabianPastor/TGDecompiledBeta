@@ -629,6 +629,7 @@ public class MediaDataController extends BaseController {
     public /* synthetic */ void lambda$putReactionsToCache$4(ArrayList arrayList, int i, int i2) {
         if (arrayList != null) {
             try {
+                getMessagesStorage().getDatabase().executeFast("DELETE FROM reactions").stepThis().dispose();
                 SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO reactions VALUES(?, ?, ?)");
                 executeFast.requery();
                 int i3 = 4;

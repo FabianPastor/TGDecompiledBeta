@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda39 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$checkRecordLocked$195(this.f$1, dialogInterface, i);
+        this.f$0.lambda$checkRecordLocked$194(this.f$1, dialogInterface, i);
     }
 }

@@ -2721,7 +2721,6 @@ public class Theme {
         public float patternIntensity;
         public boolean patternMotion;
         public String patternSlug = "";
-        private float[] tempHSV = new float[3];
         public TLRPC$InputFile uploadedFile;
         public TLRPC$InputFile uploadedThumb;
         public String uploadingFile;
@@ -2730,784 +2729,562 @@ public class Theme {
         ThemeAccent() {
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v25, resolved type: java.lang.Object} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v5, resolved type: java.lang.Integer} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v55, resolved type: java.lang.Object} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v4, resolved type: java.lang.Integer} */
         /* JADX WARNING: Multi-variable type inference failed */
+        /* JADX WARNING: Removed duplicated region for block: B:130:0x0461  */
+        /* JADX WARNING: Removed duplicated region for block: B:136:0x048b  */
+        /* JADX WARNING: Removed duplicated region for block: B:137:0x0493  */
+        /* JADX WARNING: Removed duplicated region for block: B:142:0x04a1  */
+        /* JADX WARNING: Removed duplicated region for block: B:143:0x04a9  */
+        /* JADX WARNING: Removed duplicated region for block: B:148:0x04b7  */
+        /* JADX WARNING: Removed duplicated region for block: B:149:0x04bf  */
+        /* JADX WARNING: Removed duplicated region for block: B:154:0x04cd  */
+        /* JADX WARNING: Removed duplicated region for block: B:155:0x04d5  */
+        /* JADX WARNING: Removed duplicated region for block: B:160:0x04e2  */
+        /* JADX WARNING: Removed duplicated region for block: B:162:0x04ed  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public boolean fillAccentColors(java.util.HashMap<java.lang.String, java.lang.Integer> r19, java.util.HashMap<java.lang.String, java.lang.Integer> r20) {
+        public boolean fillAccentColors(java.util.HashMap<java.lang.String, java.lang.Integer> r17, java.util.HashMap<java.lang.String, java.lang.Integer> r18) {
             /*
-                r18 = this;
-                r0 = r18
-                r1 = r19
-                r2 = r20
+                r16 = this;
+                r0 = r16
+                r1 = r17
+                r2 = r18
                 r3 = 1
                 float[] r4 = org.telegram.ui.ActionBar.Theme.getTempHsv(r3)
                 r5 = 2
-                float[] r6 = org.telegram.ui.ActionBar.Theme.getTempHsv(r5)
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r7 = r0.parentTheme
-                int r7 = r7.accentBaseColor
-                android.graphics.Color.colorToHSV(r7, r4)
+                float[] r5 = org.telegram.ui.ActionBar.Theme.getTempHsv(r5)
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r6 = r0.parentTheme
+                int r6 = r6.accentBaseColor
+                android.graphics.Color.colorToHSV(r6, r4)
+                int r6 = r0.accentColor
+                android.graphics.Color.colorToHSV(r6, r5)
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r6 = r0.parentTheme
+                boolean r6 = r6.isDark()
                 int r7 = r0.accentColor
-                android.graphics.Color.colorToHSV(r7, r6)
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r7 = r0.parentTheme
-                boolean r7 = r7.isDark()
-                int r8 = r0.accentColor
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r9 = r0.parentTheme
-                int r9 = r9.accentBaseColor
-                if (r8 != r9) goto L_0x002e
-                int r8 = r0.accentColor2
-                if (r8 == 0) goto L_0x0096
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = r0.parentTheme
+                int r8 = r8.accentBaseColor
+                if (r7 != r8) goto L_0x002e
+                int r7 = r0.accentColor2
+                if (r7 == 0) goto L_0x0096
             L_0x002e:
-                java.util.HashSet r8 = new java.util.HashSet
-                java.util.Set r9 = r19.keySet()
-                r8.<init>(r9)
-                java.util.HashMap r9 = org.telegram.ui.ActionBar.Theme.defaultColors
-                java.util.Set r9 = r9.keySet()
-                r8.addAll(r9)
-                java.util.HashSet r9 = org.telegram.ui.ActionBar.Theme.themeAccentExclusionKeys
-                r8.removeAll(r9)
-                java.util.Iterator r8 = r8.iterator()
+                java.util.HashSet r7 = new java.util.HashSet
+                java.util.Set r8 = r17.keySet()
+                r7.<init>(r8)
+                java.util.HashMap r8 = org.telegram.ui.ActionBar.Theme.defaultColors
+                java.util.Set r8 = r8.keySet()
+                r7.addAll(r8)
+                java.util.HashSet r8 = org.telegram.ui.ActionBar.Theme.themeAccentExclusionKeys
+                r7.removeAll(r8)
+                java.util.Iterator r7 = r7.iterator()
             L_0x004d:
-                boolean r9 = r8.hasNext()
-                if (r9 == 0) goto L_0x0096
-                java.lang.Object r9 = r8.next()
-                java.lang.String r9 = (java.lang.String) r9
-                java.lang.Object r10 = r1.get(r9)
-                java.lang.Integer r10 = (java.lang.Integer) r10
-                if (r10 != 0) goto L_0x0074
-                java.util.HashMap r11 = org.telegram.ui.ActionBar.Theme.fallbackKeys
-                java.lang.Object r11 = r11.get(r9)
-                java.lang.String r11 = (java.lang.String) r11
-                if (r11 == 0) goto L_0x0074
-                java.lang.Object r11 = r1.get(r11)
-                if (r11 == 0) goto L_0x0074
+                boolean r8 = r7.hasNext()
+                if (r8 == 0) goto L_0x0096
+                java.lang.Object r8 = r7.next()
+                java.lang.String r8 = (java.lang.String) r8
+                java.lang.Object r9 = r1.get(r8)
+                java.lang.Integer r9 = (java.lang.Integer) r9
+                if (r9 != 0) goto L_0x0074
+                java.util.HashMap r10 = org.telegram.ui.ActionBar.Theme.fallbackKeys
+                java.lang.Object r10 = r10.get(r8)
+                java.lang.String r10 = (java.lang.String) r10
+                if (r10 == 0) goto L_0x0074
+                java.lang.Object r10 = r1.get(r10)
+                if (r10 == 0) goto L_0x0074
                 goto L_0x004d
             L_0x0074:
-                if (r10 != 0) goto L_0x0080
-                java.util.HashMap r10 = org.telegram.ui.ActionBar.Theme.defaultColors
-                java.lang.Object r10 = r10.get(r9)
-                java.lang.Integer r10 = (java.lang.Integer) r10
+                if (r9 != 0) goto L_0x0080
+                java.util.HashMap r9 = org.telegram.ui.ActionBar.Theme.defaultColors
+                java.lang.Object r9 = r9.get(r8)
+                java.lang.Integer r9 = (java.lang.Integer) r9
             L_0x0080:
-                int r11 = r10.intValue()
-                int r11 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r4, r6, r11, r7)
-                int r10 = r10.intValue()
-                if (r11 == r10) goto L_0x004d
-                java.lang.Integer r10 = java.lang.Integer.valueOf(r11)
-                r2.put(r9, r10)
+                int r10 = r9.intValue()
+                int r10 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r4, r5, r10, r6)
+                int r9 = r9.intValue()
+                if (r10 == r9) goto L_0x004d
+                java.lang.Integer r9 = java.lang.Integer.valueOf(r10)
+                r2.put(r8, r9)
                 goto L_0x004d
             L_0x0096:
-                int r8 = r0.myMessagesAccentColor
-                r9 = 1060403937(0x3var_ae1, float:0.705)
-                java.lang.String r10 = "chat_outBubble"
-                if (r8 != 0) goto L_0x00a3
-                int r12 = r0.accentColor
-                if (r12 == 0) goto L_0x0113
+                int r7 = r0.myMessagesAccentColor
+                r8 = 1060403937(0x3var_ae1, float:0.705)
+                java.lang.String r9 = "chat_outBubble"
+                if (r7 != 0) goto L_0x00a3
+                int r11 = r0.accentColor
+                if (r11 == 0) goto L_0x0113
             L_0x00a3:
-                int r12 = r0.myMessagesGradientAccentColor1
-                if (r12 == 0) goto L_0x0113
-                if (r8 == 0) goto L_0x00aa
+                int r11 = r0.myMessagesGradientAccentColor1
+                if (r11 == 0) goto L_0x0113
+                if (r7 == 0) goto L_0x00aa
                 goto L_0x00ac
             L_0x00aa:
-                int r8 = r0.accentColor
+                int r7 = r0.accentColor
             L_0x00ac:
-                java.lang.Object r12 = r1.get(r10)
-                java.lang.Integer r12 = (java.lang.Integer) r12
-                if (r12 != 0) goto L_0x00be
-                java.util.HashMap r12 = org.telegram.ui.ActionBar.Theme.defaultColors
-                java.lang.Object r12 = r12.get(r10)
-                java.lang.Integer r12 = (java.lang.Integer) r12
+                java.lang.Object r11 = r1.get(r9)
+                java.lang.Integer r11 = (java.lang.Integer) r11
+                if (r11 != 0) goto L_0x00be
+                java.util.HashMap r11 = org.telegram.ui.ActionBar.Theme.defaultColors
+                java.lang.Object r11 = r11.get(r9)
+                java.lang.Integer r11 = (java.lang.Integer) r11
             L_0x00be:
-                int r13 = r12.intValue()
-                int r13 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r4, r6, r13, r7)
-                int r13 = org.telegram.messenger.AndroidUtilities.getColorDistance(r8, r13)
-                int r14 = r0.myMessagesGradientAccentColor1
-                int r14 = org.telegram.messenger.AndroidUtilities.getColorDistance(r8, r14)
+                int r12 = r11.intValue()
+                int r12 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r4, r5, r12, r6)
+                int r12 = org.telegram.messenger.AndroidUtilities.getColorDistance(r7, r12)
+                int r13 = r0.myMessagesGradientAccentColor1
+                int r13 = org.telegram.messenger.AndroidUtilities.getColorDistance(r7, r13)
+                int r14 = r0.myMessagesGradientAccentColor2
+                if (r14 == 0) goto L_0x00f6
+                int r14 = r0.myMessagesAccentColor
+                int r15 = r0.myMessagesGradientAccentColor1
+                int r14 = org.telegram.messenger.AndroidUtilities.getAverageColor(r14, r15)
                 int r15 = r0.myMessagesGradientAccentColor2
-                if (r15 == 0) goto L_0x00f6
-                int r15 = r0.myMessagesAccentColor
-                int r5 = r0.myMessagesGradientAccentColor1
-                int r5 = org.telegram.messenger.AndroidUtilities.getAverageColor(r15, r5)
-                int r15 = r0.myMessagesGradientAccentColor2
-                int r5 = org.telegram.messenger.AndroidUtilities.getAverageColor(r5, r15)
+                int r14 = org.telegram.messenger.AndroidUtilities.getAverageColor(r14, r15)
                 int r15 = r0.myMessagesGradientAccentColor3
                 if (r15 == 0) goto L_0x00ea
-                int r5 = org.telegram.messenger.AndroidUtilities.getAverageColor(r5, r15)
+                int r14 = org.telegram.messenger.AndroidUtilities.getAverageColor(r14, r15)
             L_0x00ea:
-                float r5 = org.telegram.messenger.AndroidUtilities.computePerceivedBrightness(r5)
-                int r5 = (r5 > r9 ? 1 : (r5 == r9 ? 0 : -1))
-                if (r5 <= 0) goto L_0x00f4
-                r5 = 1
+                float r14 = org.telegram.messenger.AndroidUtilities.computePerceivedBrightness(r14)
+                int r14 = (r14 > r8 ? 1 : (r14 == r8 ? 0 : -1))
+                if (r14 <= 0) goto L_0x00f4
+                r14 = 1
                 goto L_0x00fe
             L_0x00f4:
-                r5 = 0
+                r14 = 0
                 goto L_0x00fe
             L_0x00f6:
-                int r5 = r0.myMessagesAccentColor
+                int r14 = r0.myMessagesAccentColor
                 int r15 = r0.myMessagesGradientAccentColor1
-                boolean r5 = org.telegram.ui.ActionBar.Theme.useBlackText(r5, r15)
+                boolean r14 = org.telegram.ui.ActionBar.Theme.useBlackText(r14, r15)
             L_0x00fe:
-                if (r5 == 0) goto L_0x0109
-                r5 = 35000(0x88b8, float:4.9045E-41)
-                if (r13 > r5) goto L_0x0109
-                if (r14 > r5) goto L_0x0109
-                r5 = 1
+                if (r14 == 0) goto L_0x0109
+                r14 = 35000(0x88b8, float:4.9045E-41)
+                if (r12 > r14) goto L_0x0109
+                if (r13 > r14) goto L_0x0109
+                r12 = 1
                 goto L_0x010a
             L_0x0109:
-                r5 = 0
+                r12 = 0
             L_0x010a:
-                int r12 = r12.intValue()
-                int r8 = org.telegram.ui.ActionBar.Theme.getAccentColor(r4, r12, r8)
+                int r11 = r11.intValue()
+                int r7 = org.telegram.ui.ActionBar.Theme.getAccentColor(r4, r11, r7)
                 goto L_0x0114
             L_0x0113:
-                r5 = 0
+                r12 = 0
             L_0x0114:
-                if (r8 == 0) goto L_0x0126
-                org.telegram.ui.ActionBar.Theme$ThemeInfo r12 = r0.parentTheme
-                int r12 = r12.accentBaseColor
-                if (r12 == 0) goto L_0x011e
-                if (r8 != r12) goto L_0x0124
+                if (r7 == 0) goto L_0x0126
+                org.telegram.ui.ActionBar.Theme$ThemeInfo r11 = r0.parentTheme
+                int r11 = r11.accentBaseColor
+                if (r11 == 0) goto L_0x011e
+                if (r7 != r11) goto L_0x0124
             L_0x011e:
-                int r12 = r0.accentColor
-                if (r12 == 0) goto L_0x0126
-                if (r12 == r8) goto L_0x0126
+                int r11 = r0.accentColor
+                if (r11 == 0) goto L_0x0126
+                if (r11 == r7) goto L_0x0126
             L_0x0124:
-                r12 = 1
+                r11 = 1
                 goto L_0x0127
             L_0x0126:
-                r12 = 0
+                r11 = 0
             L_0x0127:
-                if (r12 != 0) goto L_0x012d
+                if (r11 != 0) goto L_0x012d
                 int r13 = r0.accentColor2
-                if (r13 == 0) goto L_0x01e7
+                if (r13 == 0) goto L_0x01e6
             L_0x012d:
                 int r13 = r0.accentColor2
                 if (r13 == 0) goto L_0x0135
-                android.graphics.Color.colorToHSV(r13, r6)
+                android.graphics.Color.colorToHSV(r13, r5)
                 goto L_0x0138
             L_0x0135:
-                android.graphics.Color.colorToHSV(r8, r6)
+                android.graphics.Color.colorToHSV(r7, r5)
             L_0x0138:
                 java.util.HashSet r13 = org.telegram.ui.ActionBar.Theme.myMessagesColorKeys
                 java.util.Iterator r13 = r13.iterator()
             L_0x0140:
                 boolean r14 = r13.hasNext()
-                if (r14 == 0) goto L_0x018e
+                if (r14 == 0) goto L_0x018d
                 java.lang.Object r14 = r13.next()
                 java.lang.String r14 = (java.lang.String) r14
                 java.lang.Object r15 = r1.get(r14)
                 java.lang.Integer r15 = (java.lang.Integer) r15
                 if (r15 != 0) goto L_0x0167
-                java.util.HashMap r3 = org.telegram.ui.ActionBar.Theme.fallbackKeys
-                java.lang.Object r3 = r3.get(r14)
-                java.lang.String r3 = (java.lang.String) r3
-                if (r3 == 0) goto L_0x0167
-                java.lang.Object r3 = r1.get(r3)
-                if (r3 == 0) goto L_0x0167
-                goto L_0x0176
+                java.util.HashMap r10 = org.telegram.ui.ActionBar.Theme.fallbackKeys
+                java.lang.Object r10 = r10.get(r14)
+                java.lang.String r10 = (java.lang.String) r10
+                if (r10 == 0) goto L_0x0167
+                java.lang.Object r10 = r1.get(r10)
+                if (r10 == 0) goto L_0x0167
+                goto L_0x0140
             L_0x0167:
                 if (r15 != 0) goto L_0x0174
-                java.util.HashMap r3 = org.telegram.ui.ActionBar.Theme.defaultColors
-                java.lang.Object r3 = r3.get(r14)
-                r15 = r3
+                java.util.HashMap r10 = org.telegram.ui.ActionBar.Theme.defaultColors
+                java.lang.Object r10 = r10.get(r14)
+                r15 = r10
                 java.lang.Integer r15 = (java.lang.Integer) r15
             L_0x0174:
-                if (r15 != 0) goto L_0x0178
-            L_0x0176:
-                r3 = 1
+                if (r15 != 0) goto L_0x0177
                 goto L_0x0140
-            L_0x0178:
-                int r3 = r15.intValue()
-                int r3 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r4, r6, r3, r7)
+            L_0x0177:
+                int r10 = r15.intValue()
+                int r10 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r4, r5, r10, r6)
                 int r15 = r15.intValue()
-                if (r3 == r15) goto L_0x0176
-                java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-                r2.put(r14, r3)
-                goto L_0x0176
-            L_0x018e:
-                if (r12 == 0) goto L_0x01e7
-                android.graphics.Color.colorToHSV(r8, r6)
-                java.util.HashSet r3 = org.telegram.ui.ActionBar.Theme.myMessagesBubblesColorKeys
-                java.util.Iterator r3 = r3.iterator()
-            L_0x019b:
-                boolean r8 = r3.hasNext()
-                if (r8 == 0) goto L_0x01e7
-                java.lang.Object r8 = r3.next()
-                java.lang.String r8 = (java.lang.String) r8
-                java.lang.Object r12 = r1.get(r8)
-                java.lang.Integer r12 = (java.lang.Integer) r12
-                if (r12 != 0) goto L_0x01c2
+                if (r10 == r15) goto L_0x0140
+                java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
+                r2.put(r14, r10)
+                goto L_0x0140
+            L_0x018d:
+                if (r11 == 0) goto L_0x01e6
+                android.graphics.Color.colorToHSV(r7, r5)
+                java.util.HashSet r7 = org.telegram.ui.ActionBar.Theme.myMessagesBubblesColorKeys
+                java.util.Iterator r7 = r7.iterator()
+            L_0x019a:
+                boolean r10 = r7.hasNext()
+                if (r10 == 0) goto L_0x01e6
+                java.lang.Object r10 = r7.next()
+                java.lang.String r10 = (java.lang.String) r10
+                java.lang.Object r11 = r1.get(r10)
+                java.lang.Integer r11 = (java.lang.Integer) r11
+                if (r11 != 0) goto L_0x01c1
                 java.util.HashMap r13 = org.telegram.ui.ActionBar.Theme.fallbackKeys
-                java.lang.Object r13 = r13.get(r8)
+                java.lang.Object r13 = r13.get(r10)
                 java.lang.String r13 = (java.lang.String) r13
-                if (r13 == 0) goto L_0x01c2
+                if (r13 == 0) goto L_0x01c1
                 java.lang.Object r13 = r1.get(r13)
-                if (r13 == 0) goto L_0x01c2
-                goto L_0x019b
-            L_0x01c2:
-                if (r12 != 0) goto L_0x01ce
-                java.util.HashMap r12 = org.telegram.ui.ActionBar.Theme.defaultColors
-                java.lang.Object r12 = r12.get(r8)
-                java.lang.Integer r12 = (java.lang.Integer) r12
-            L_0x01ce:
-                if (r12 != 0) goto L_0x01d1
-                goto L_0x019b
-            L_0x01d1:
-                int r13 = r12.intValue()
-                int r13 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r4, r6, r13, r7)
-                int r12 = r12.intValue()
-                if (r13 == r12) goto L_0x019b
-                java.lang.Integer r12 = java.lang.Integer.valueOf(r13)
-                r2.put(r8, r12)
-                goto L_0x019b
-            L_0x01e7:
+                if (r13 == 0) goto L_0x01c1
+                goto L_0x019a
+            L_0x01c1:
+                if (r11 != 0) goto L_0x01cd
+                java.util.HashMap r11 = org.telegram.ui.ActionBar.Theme.defaultColors
+                java.lang.Object r11 = r11.get(r10)
+                java.lang.Integer r11 = (java.lang.Integer) r11
+            L_0x01cd:
+                if (r11 != 0) goto L_0x01d0
+                goto L_0x019a
+            L_0x01d0:
+                int r13 = r11.intValue()
+                int r13 = org.telegram.ui.ActionBar.Theme.changeColorAccent(r4, r5, r13, r6)
+                int r11 = r11.intValue()
+                if (r13 == r11) goto L_0x019a
+                java.lang.Integer r11 = java.lang.Integer.valueOf(r13)
+                r2.put(r10, r11)
+                goto L_0x019a
+            L_0x01e6:
                 r1 = -1
-                java.lang.String r3 = "chat_outLoader"
-                java.lang.String r4 = "chat_outTimeSelectedText"
-                if (r5 != 0) goto L_0x0425
-                int r6 = r0.myMessagesGradientAccentColor1
-                if (r6 == 0) goto L_0x0425
-                int r8 = r0.myMessagesGradientAccentColor2
-                if (r8 == 0) goto L_0x0216
-                int r8 = r0.myMessagesAccentColor
-                int r6 = org.telegram.messenger.AndroidUtilities.getAverageColor(r8, r6)
-                int r8 = r0.myMessagesGradientAccentColor2
-                int r6 = org.telegram.messenger.AndroidUtilities.getAverageColor(r6, r8)
-                int r8 = r0.myMessagesGradientAccentColor3
-                if (r8 == 0) goto L_0x020a
-                int r6 = org.telegram.messenger.AndroidUtilities.getAverageColor(r6, r8)
-            L_0x020a:
-                float r6 = org.telegram.messenger.AndroidUtilities.computePerceivedBrightness(r6)
-                int r6 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
-                if (r6 <= 0) goto L_0x0214
-                r6 = 1
-                goto L_0x021c
-            L_0x0214:
-                r6 = 0
-                goto L_0x021c
-            L_0x0216:
-                int r8 = r0.myMessagesAccentColor
-                boolean r6 = org.telegram.ui.ActionBar.Theme.useBlackText(r8, r6)
-            L_0x021c:
-                if (r6 == 0) goto L_0x0227
-                r6 = -14606047(0xfffffffffvar_, float:-2.1417772E38)
-                r8 = -11184811(0xfffffffffvar_, float:-2.8356863E38)
-                r9 = 1291845632(0x4d000000, float:1.34217728E8)
-                goto L_0x022e
-            L_0x0227:
-                r8 = -1118482(0xffffffffffeeeeee, float:NaN)
-                r9 = 1308622847(0x4dffffff, float:5.3687088E8)
-                r6 = -1
-            L_0x022e:
-                int r12 = r0.accentColor2
-                if (r12 != 0) goto L_0x0401
-                java.lang.Integer r12 = java.lang.Integer.valueOf(r9)
-                java.lang.String r13 = "chat_outAudioProgress"
-                r2.put(r13, r12)
-                java.lang.Integer r12 = java.lang.Integer.valueOf(r9)
-                java.lang.String r13 = "chat_outAudioSelectedProgress"
-                r2.put(r13, r12)
-                java.lang.Integer r12 = java.lang.Integer.valueOf(r9)
-                java.lang.String r13 = "chat_outAudioSeekbar"
-                r2.put(r13, r12)
-                java.lang.Integer r12 = java.lang.Integer.valueOf(r9)
-                java.lang.String r13 = "chat_outAudioCacheSeekbar"
-                r2.put(r13, r12)
-                java.lang.Integer r12 = java.lang.Integer.valueOf(r9)
-                java.lang.String r13 = "chat_outAudioSeekbarSelected"
-                r2.put(r13, r12)
-                java.lang.Integer r12 = java.lang.Integer.valueOf(r6)
-                java.lang.String r13 = "chat_outAudioSeekbarFill"
-                r2.put(r13, r12)
-                java.lang.Integer r12 = java.lang.Integer.valueOf(r9)
-                java.lang.String r13 = "chat_outVoiceSeekbar"
-                r2.put(r13, r12)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
-                java.lang.String r12 = "chat_outVoiceSeekbarSelected"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outVoiceSeekbarFill"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_messageLinkOut"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outForwardedNameText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outViaBotNameText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outReplyLine"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outReplyNameText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outPreviewLine"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outSiteNameText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outInstant"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outInstantSelected"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outPreviewInstantText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outPreviewInstantSelectedText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outViews"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outViewsSelected"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outAudioTitleText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outFileNameText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outContactNameText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outAudioPerfomerText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outAudioPerfomerSelectedText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outSentCheck"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outSentCheckSelected"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outSentCheckRead"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outSentCheckReadSelected"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outSentClock"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outSentClockSelected"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outMenu"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outMenuSelected"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                java.lang.String r12 = "chat_outTimeText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r6)
-                r2.put(r4, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r8)
-                java.lang.String r12 = "chat_outAudioDurationText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r8)
-                java.lang.String r12 = "chat_outAudioDurationSelectedText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r8)
-                java.lang.String r12 = "chat_outContactPhoneText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r8)
-                java.lang.String r12 = "chat_outContactPhoneSelectedText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r8)
-                java.lang.String r12 = "chat_outFileInfoText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r8)
-                java.lang.String r12 = "chat_outFileInfoSelectedText"
-                r2.put(r12, r9)
-                java.lang.Integer r9 = java.lang.Integer.valueOf(r8)
-                java.lang.String r12 = "chat_outVenueInfoText"
-                r2.put(r12, r9)
-                java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-                java.lang.String r9 = "chat_outVenueInfoSelectedText"
-                r2.put(r9, r8)
-                java.lang.Integer r8 = java.lang.Integer.valueOf(r6)
-                r2.put(r3, r8)
-                java.lang.Integer r8 = java.lang.Integer.valueOf(r6)
-                java.lang.String r9 = "chat_outLoaderSelected"
-                r2.put(r9, r8)
-                int r8 = r0.myMessagesAccentColor
-                java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-                java.lang.String r9 = "chat_outFileProgress"
-                r2.put(r9, r8)
-                int r8 = r0.myMessagesAccentColor
-                java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-                java.lang.String r9 = "chat_outFileProgressSelected"
-                r2.put(r9, r8)
-                int r8 = r0.myMessagesAccentColor
-                java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-                java.lang.String r9 = "chat_outMediaIcon"
-                r2.put(r9, r8)
-                int r8 = r0.myMessagesAccentColor
-                java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-                java.lang.String r9 = "chat_outMediaIconSelected"
-                r2.put(r9, r8)
-            L_0x0401:
-                java.lang.Integer r8 = java.lang.Integer.valueOf(r6)
-                java.lang.String r9 = "chat_outReplyMessageText"
-                r2.put(r9, r8)
-                java.lang.Integer r8 = java.lang.Integer.valueOf(r6)
-                java.lang.String r9 = "chat_outReplyMediaMessageText"
-                r2.put(r9, r8)
-                java.lang.Integer r8 = java.lang.Integer.valueOf(r6)
-                java.lang.String r9 = "chat_outReplyMediaMessageSelectedText"
-                r2.put(r9, r8)
-                java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-                java.lang.String r8 = "chat_messageTextOut"
-                r2.put(r8, r6)
-            L_0x0425:
-                if (r5 == 0) goto L_0x0442
-                boolean r6 = r2.containsKey(r3)
-                if (r6 == 0) goto L_0x0438
-                java.lang.Object r3 = r2.get(r3)
-                java.lang.Integer r3 = (java.lang.Integer) r3
-                int r3 = r3.intValue()
-                goto L_0x0439
-            L_0x0438:
-                r3 = 0
-            L_0x0439:
-                int r1 = org.telegram.messenger.AndroidUtilities.getColorDistance(r1, r3)
-                r3 = 5000(0x1388, float:7.006E-42)
-                if (r1 >= r3) goto L_0x0442
+                java.lang.String r4 = "chat_outLoader"
+                if (r12 != 0) goto L_0x0424
+                int r5 = r0.myMessagesGradientAccentColor1
+                if (r5 == 0) goto L_0x0424
+                int r7 = r0.myMessagesGradientAccentColor2
+                if (r7 == 0) goto L_0x0213
+                int r7 = r0.myMessagesAccentColor
+                int r5 = org.telegram.messenger.AndroidUtilities.getAverageColor(r7, r5)
+                int r7 = r0.myMessagesGradientAccentColor2
+                int r5 = org.telegram.messenger.AndroidUtilities.getAverageColor(r5, r7)
+                int r7 = r0.myMessagesGradientAccentColor3
+                if (r7 == 0) goto L_0x0207
+                int r5 = org.telegram.messenger.AndroidUtilities.getAverageColor(r5, r7)
+            L_0x0207:
+                float r5 = org.telegram.messenger.AndroidUtilities.computePerceivedBrightness(r5)
+                int r5 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
+                if (r5 <= 0) goto L_0x0211
+                r5 = 1
+                goto L_0x0219
+            L_0x0211:
                 r5 = 0
+                goto L_0x0219
+            L_0x0213:
+                int r7 = r0.myMessagesAccentColor
+                boolean r5 = org.telegram.ui.ActionBar.Theme.useBlackText(r7, r5)
+            L_0x0219:
+                if (r5 == 0) goto L_0x0224
+                r5 = -14606047(0xfffffffffvar_, float:-2.1417772E38)
+                r7 = -11184811(0xfffffffffvar_, float:-2.8356863E38)
+                r8 = 1291845632(0x4d000000, float:1.34217728E8)
+                goto L_0x022b
+            L_0x0224:
+                r7 = -1118482(0xffffffffffeeeeee, float:NaN)
+                r8 = 1308622847(0x4dffffff, float:5.3687088E8)
+                r5 = -1
+            L_0x022b:
+                int r10 = r0.accentColor2
+                if (r10 != 0) goto L_0x0400
+                java.lang.Integer r10 = java.lang.Integer.valueOf(r8)
+                java.lang.String r11 = "chat_outAudioProgress"
+                r2.put(r11, r10)
+                java.lang.Integer r10 = java.lang.Integer.valueOf(r8)
+                java.lang.String r11 = "chat_outAudioSelectedProgress"
+                r2.put(r11, r10)
+                java.lang.Integer r10 = java.lang.Integer.valueOf(r8)
+                java.lang.String r11 = "chat_outAudioSeekbar"
+                r2.put(r11, r10)
+                java.lang.Integer r10 = java.lang.Integer.valueOf(r8)
+                java.lang.String r11 = "chat_outAudioCacheSeekbar"
+                r2.put(r11, r10)
+                java.lang.Integer r10 = java.lang.Integer.valueOf(r8)
+                java.lang.String r11 = "chat_outAudioSeekbarSelected"
+                r2.put(r11, r10)
+                java.lang.Integer r10 = java.lang.Integer.valueOf(r5)
+                java.lang.String r11 = "chat_outAudioSeekbarFill"
+                r2.put(r11, r10)
+                java.lang.Integer r10 = java.lang.Integer.valueOf(r8)
+                java.lang.String r11 = "chat_outVoiceSeekbar"
+                r2.put(r11, r10)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+                java.lang.String r10 = "chat_outVoiceSeekbarSelected"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outVoiceSeekbarFill"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_messageLinkOut"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outForwardedNameText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outViaBotNameText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outReplyLine"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outReplyNameText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outPreviewLine"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outSiteNameText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outInstant"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outInstantSelected"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outPreviewInstantText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outPreviewInstantSelectedText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outViews"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outViewsSelected"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outAudioTitleText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outFileNameText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outContactNameText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outAudioPerfomerText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outAudioPerfomerSelectedText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outSentCheck"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outSentCheckSelected"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outSentCheckRead"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outSentCheckReadSelected"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outSentClock"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outSentClockSelected"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outMenu"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outMenuSelected"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outTimeText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+                java.lang.String r10 = "chat_outTimeSelectedText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r7)
+                java.lang.String r10 = "chat_outAudioDurationText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r7)
+                java.lang.String r10 = "chat_outAudioDurationSelectedText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r7)
+                java.lang.String r10 = "chat_outContactPhoneText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r7)
+                java.lang.String r10 = "chat_outContactPhoneSelectedText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r7)
+                java.lang.String r10 = "chat_outFileInfoText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r7)
+                java.lang.String r10 = "chat_outFileInfoSelectedText"
+                r2.put(r10, r8)
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r7)
+                java.lang.String r10 = "chat_outVenueInfoText"
+                r2.put(r10, r8)
+                java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
+                java.lang.String r8 = "chat_outVenueInfoSelectedText"
+                r2.put(r8, r7)
+                java.lang.Integer r7 = java.lang.Integer.valueOf(r5)
+                r2.put(r4, r7)
+                java.lang.Integer r7 = java.lang.Integer.valueOf(r5)
+                java.lang.String r8 = "chat_outLoaderSelected"
+                r2.put(r8, r7)
+                int r7 = r0.myMessagesAccentColor
+                java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
+                java.lang.String r8 = "chat_outFileProgress"
+                r2.put(r8, r7)
+                int r7 = r0.myMessagesAccentColor
+                java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
+                java.lang.String r8 = "chat_outFileProgressSelected"
+                r2.put(r8, r7)
+                int r7 = r0.myMessagesAccentColor
+                java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
+                java.lang.String r8 = "chat_outMediaIcon"
+                r2.put(r8, r7)
+                int r7 = r0.myMessagesAccentColor
+                java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
+                java.lang.String r8 = "chat_outMediaIconSelected"
+                r2.put(r8, r7)
+            L_0x0400:
+                java.lang.Integer r7 = java.lang.Integer.valueOf(r5)
+                java.lang.String r8 = "chat_outReplyMessageText"
+                r2.put(r8, r7)
+                java.lang.Integer r7 = java.lang.Integer.valueOf(r5)
+                java.lang.String r8 = "chat_outReplyMediaMessageText"
+                r2.put(r8, r7)
+                java.lang.Integer r7 = java.lang.Integer.valueOf(r5)
+                java.lang.String r8 = "chat_outReplyMediaMessageSelectedText"
+                r2.put(r8, r7)
+                java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
+                java.lang.String r7 = "chat_messageTextOut"
+                r2.put(r7, r5)
+            L_0x0424:
+                if (r12 == 0) goto L_0x0442
+                boolean r5 = r2.containsKey(r4)
+                if (r5 == 0) goto L_0x0437
+                java.lang.Object r4 = r2.get(r4)
+                java.lang.Integer r4 = (java.lang.Integer) r4
+                int r4 = r4.intValue()
+                goto L_0x0438
+            L_0x0437:
+                r4 = 0
+            L_0x0438:
+                int r1 = org.telegram.messenger.AndroidUtilities.getColorDistance(r1, r4)
+                r4 = 5000(0x1388, float:7.006E-42)
+                if (r1 >= r4) goto L_0x0442
+                r10 = 0
+                goto L_0x0443
             L_0x0442:
+                r10 = r12
+            L_0x0443:
                 int r1 = r0.myMessagesAccentColor
-                java.lang.String r3 = "chat_outBubbleGradient3"
-                java.lang.String r6 = "chat_outBubbleGradient2"
-                java.lang.String r8 = "chat_outBubbleGradient"
-                if (r1 == 0) goto L_0x0481
-                int r9 = r0.myMessagesGradientAccentColor1
-                if (r9 == 0) goto L_0x0481
+                if (r1 == 0) goto L_0x0482
+                int r4 = r0.myMessagesGradientAccentColor1
+                if (r4 == 0) goto L_0x0482
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-                r2.put(r10, r1)
+                r2.put(r9, r1)
                 int r1 = r0.myMessagesGradientAccentColor1
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-                r2.put(r8, r1)
+                java.lang.String r4 = "chat_outBubbleGradient"
+                r2.put(r4, r1)
                 int r1 = r0.myMessagesGradientAccentColor2
-                if (r1 == 0) goto L_0x0476
+                if (r1 == 0) goto L_0x0477
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-                r2.put(r6, r1)
+                java.lang.String r4 = "chat_outBubbleGradient2"
+                r2.put(r4, r1)
                 int r1 = r0.myMessagesGradientAccentColor3
-                if (r1 == 0) goto L_0x0476
+                if (r1 == 0) goto L_0x0477
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-                r2.put(r3, r1)
-            L_0x0476:
+                java.lang.String r4 = "chat_outBubbleGradient3"
+                r2.put(r4, r1)
+            L_0x0477:
                 boolean r1 = r0.myMessagesAnimated
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-                java.lang.String r9 = "chat_outBubbleGradientAnimated"
-                r2.put(r9, r1)
-            L_0x0481:
-                long r12 = r0.backgroundOverrideColor
-                int r1 = (int) r12
-                java.lang.String r9 = "chat_wallpaper"
-                r14 = 0
-                if (r1 == 0) goto L_0x0492
-                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-                r2.put(r9, r1)
-                goto L_0x0499
-            L_0x0492:
-                int r1 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1))
-                if (r1 == 0) goto L_0x0499
-                r2.remove(r9)
-            L_0x0499:
-                long r12 = r0.backgroundGradientOverrideColor1
-                int r1 = (int) r12
-                java.lang.String r11 = "chat_wallpaper_gradient_to"
-                if (r1 == 0) goto L_0x04a8
-                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-                r2.put(r11, r1)
-                goto L_0x04af
-            L_0x04a8:
-                int r1 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1))
-                if (r1 == 0) goto L_0x04af
-                r2.remove(r11)
-            L_0x04af:
-                long r12 = r0.backgroundGradientOverrideColor2
-                int r1 = (int) r12
-                java.lang.String r14 = "key_chat_wallpaper_gradient_to2"
-                if (r1 == 0) goto L_0x04be
-                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-                r2.put(r14, r1)
-                goto L_0x04c7
-            L_0x04be:
-                r16 = 0
-                int r1 = (r12 > r16 ? 1 : (r12 == r16 ? 0 : -1))
-                if (r1 == 0) goto L_0x04c7
-                r2.remove(r14)
-            L_0x04c7:
-                long r12 = r0.backgroundGradientOverrideColor3
-                int r1 = (int) r12
-                java.lang.String r15 = "key_chat_wallpaper_gradient_to3"
-                if (r1 == 0) goto L_0x04d6
-                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-                r2.put(r15, r1)
-                goto L_0x04df
-            L_0x04d6:
-                r16 = 0
-                int r1 = (r12 > r16 ? 1 : (r12 == r16 ? 0 : -1))
-                if (r1 == 0) goto L_0x04df
-                r2.remove(r15)
-            L_0x04df:
-                int r1 = r0.backgroundRotation
-                r12 = 45
-                if (r1 == r12) goto L_0x04ee
-                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
-                java.lang.String r12 = "chat_wallpaper_gradient_rotation"
-                r2.put(r12, r1)
-            L_0x04ee:
-                if (r7 != 0) goto L_0x0648
-                r1 = 3
-                if (r7 == 0) goto L_0x0503
-                java.lang.String[] r10 = new java.lang.String[r1]
-                r12 = 0
-                r10[r12] = r8
-                r8 = 1
-                r10[r8] = r6
-                r6 = 2
-                r10[r6] = r3
-                int r3 = r0.averageColor(r2, r10)
-                goto L_0x0518
-            L_0x0503:
-                boolean r3 = r2.containsKey(r10)
-                if (r3 == 0) goto L_0x0514
-                java.lang.Object r3 = r2.get(r10)
-                java.lang.Integer r3 = (java.lang.Integer) r3
-                int r3 = r3.intValue()
-                goto L_0x0518
-            L_0x0514:
-                int r3 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            L_0x0518:
-                java.lang.String r6 = "chat_inBubbleSelected"
-                boolean r8 = r2.containsKey(r6)
-                if (r8 == 0) goto L_0x052b
-                java.lang.Object r8 = r2.get(r6)
-                java.lang.Integer r8 = (java.lang.Integer) r8
-                int r8 = r8.intValue()
-                goto L_0x052f
-            L_0x052b:
-                int r8 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            L_0x052f:
-                if (r7 == 0) goto L_0x0533
-                r7 = r3
-                goto L_0x0534
-            L_0x0533:
-                r7 = 0
-            L_0x0534:
-                if (r7 != 0) goto L_0x0546
-                java.lang.String[] r7 = new java.lang.String[r1]
-                r10 = 0
-                r7[r10] = r11
-                r11 = 1
-                r7[r11] = r14
-                r12 = 2
-                r7[r12] = r15
-                int r7 = r0.averageColor(r2, r7)
-                goto L_0x0548
-            L_0x0546:
-                r10 = 0
-                r11 = 1
-            L_0x0548:
-                if (r7 != 0) goto L_0x0552
-                java.lang.String[] r7 = new java.lang.String[r11]
-                r7[r10] = r9
-                int r7 = r0.averageColor(r2, r7)
-            L_0x0552:
-                java.lang.String r9 = "chat_selectedBackground"
-                boolean r10 = r2.containsKey(r9)
-                if (r10 == 0) goto L_0x0565
-                java.lang.Object r10 = r2.get(r9)
-                java.lang.Integer r10 = (java.lang.Integer) r10
-                int r10 = r10.intValue()
-                goto L_0x0569
-            L_0x0565:
-                int r10 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            L_0x0569:
-                int r10 = r0.applyHue(r10, r7)
-                r11 = 1036831949(0x3dcccccd, float:0.1)
-                int r10 = r0.darkenColor(r10, r11)
-                int r11 = android.graphics.Color.alpha(r10)
-                float r11 = (float) r11
-                r12 = 1061997773(0x3f4ccccd, float:0.8)
-                float r11 = r11 * r12
-                int r11 = (int) r11
-                int r12 = android.graphics.Color.red(r10)
-                int r13 = android.graphics.Color.green(r10)
-                int r10 = android.graphics.Color.blue(r10)
-                int r10 = android.graphics.Color.argb(r11, r12, r13, r10)
-                java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
-                r2.put(r9, r10)
-                int r9 = r0.bubbleSelectedOverlay(r3)
-                java.lang.Integer r10 = java.lang.Integer.valueOf(r9)
-                java.lang.String r11 = "chat_outBubbleGradientSelectedOverlay"
-                r2.put(r11, r10)
-                int r8 = r0.applyHue(r8, r7)
-                r10 = 1025758986(0x3d23d70a, float:0.04)
-                r11 = 0
-                int r8 = r0.shiftHSV(r8, r11, r10, r11)
-                java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
-                r2.put(r6, r8)
-                r6 = 9
-                java.lang.String[] r8 = new java.lang.String[r6]
-                java.lang.String r10 = "chat_inTimeSelectedText"
-                r12 = 0
-                r8[r12] = r10
-                java.lang.String r10 = "chat_adminSelectedText"
-                r13 = 1
-                r8[r13] = r10
-                java.lang.String r10 = "chat_inAudioDurationSelectedText"
-                r13 = 2
-                r8[r13] = r10
-                java.lang.String r10 = "chat_inAudioPerfomerSelectedText"
-                r8[r1] = r10
-                r1 = 4
-                java.lang.String r10 = "chat_inFileInfoSelectedText"
-                r8[r1] = r10
-                r1 = 5
-                java.lang.String r10 = "chat_inContactPhoneSelectedText"
-                r8[r1] = r10
-                r1 = 6
-                java.lang.String r10 = "chat_inPreviewInstantSelectedText"
-                r8[r1] = r10
-                r1 = 7
-                java.lang.String r10 = "chat_inVenueInfoSelectedText"
-                r8[r1] = r10
-                r1 = 8
-                java.lang.String r10 = "chat_inReplyMediaMessageSelectedText"
-                r8[r1] = r10
-            L_0x05e7:
-                if (r12 >= r6) goto L_0x060e
-                r1 = r8[r12]
-                boolean r10 = r2.containsKey(r1)
-                if (r10 == 0) goto L_0x05fc
-                java.lang.Object r10 = r2.get(r1)
-                java.lang.Integer r10 = (java.lang.Integer) r10
-                int r10 = r10.intValue()
-                goto L_0x0600
-            L_0x05fc:
-                int r10 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-            L_0x0600:
-                int r10 = r0.applyHue(r10, r7)
-                java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
-                r2.put(r1, r10)
-                int r12 = r12 + 1
-                goto L_0x05e7
-            L_0x060e:
-                boolean r1 = r2.containsKey(r4)
-                if (r1 == 0) goto L_0x061f
-                java.lang.Object r1 = r2.get(r4)
-                java.lang.Integer r1 = (java.lang.Integer) r1
-                int r1 = r1.intValue()
-                goto L_0x0623
-            L_0x061f:
-                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            L_0x0623:
-                int r3 = r0.mix(r3, r9)
-                double r6 = androidx.core.graphics.ColorUtils.calculateContrast(r1, r3)
-                r3 = 1017370378(0x3ca3d70a, float:0.02)
-                r8 = 1008981770(0x3CLASSNAMEd70a, float:0.01)
-                r9 = 4611235658464650854(0x3ffeNUM, double:1.9)
-                int r12 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
-                if (r12 >= 0) goto L_0x063d
-                r11 = -1110651699(0xffffffffbdcccccd, float:-0.1)
-            L_0x063d:
-                int r1 = r0.shiftHSV(r1, r3, r8, r11)
-                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                java.lang.String r4 = "chat_outBubbleGradientAnimated"
                 r2.put(r4, r1)
-            L_0x0648:
-                r1 = 1
-                r1 = r1 ^ r5
+            L_0x0482:
+                long r4 = r0.backgroundOverrideColor
+                int r1 = (int) r4
+                java.lang.String r7 = "chat_wallpaper"
+                r8 = 0
+                if (r1 == 0) goto L_0x0493
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                r2.put(r7, r1)
+                goto L_0x049a
+            L_0x0493:
+                int r1 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
+                if (r1 == 0) goto L_0x049a
+                r2.remove(r7)
+            L_0x049a:
+                long r4 = r0.backgroundGradientOverrideColor1
+                int r1 = (int) r4
+                java.lang.String r7 = "chat_wallpaper_gradient_to"
+                if (r1 == 0) goto L_0x04a9
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                r2.put(r7, r1)
+                goto L_0x04b0
+            L_0x04a9:
+                int r1 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
+                if (r1 == 0) goto L_0x04b0
+                r2.remove(r7)
+            L_0x04b0:
+                long r4 = r0.backgroundGradientOverrideColor2
+                int r1 = (int) r4
+                java.lang.String r7 = "key_chat_wallpaper_gradient_to2"
+                if (r1 == 0) goto L_0x04bf
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                r2.put(r7, r1)
+                goto L_0x04c6
+            L_0x04bf:
+                int r1 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
+                if (r1 == 0) goto L_0x04c6
+                r2.remove(r7)
+            L_0x04c6:
+                long r4 = r0.backgroundGradientOverrideColor3
+                int r1 = (int) r4
+                java.lang.String r7 = "key_chat_wallpaper_gradient_to3"
+                if (r1 == 0) goto L_0x04d5
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                r2.put(r7, r1)
+                goto L_0x04dc
+            L_0x04d5:
+                int r1 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
+                if (r1 == 0) goto L_0x04dc
+                r2.remove(r7)
+            L_0x04dc:
+                int r1 = r0.backgroundRotation
+                r4 = 45
+                if (r1 == r4) goto L_0x04eb
+                java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+                java.lang.String r4 = "chat_wallpaper_gradient_rotation"
+                r2.put(r4, r1)
+            L_0x04eb:
+                if (r6 != 0) goto L_0x04f2
+                java.lang.String r1 = "chat_selectedBackground"
+                r2.remove(r1)
+            L_0x04f2:
+                r1 = r10 ^ 1
                 return r1
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.ThemeAccent.fillAccentColors(java.util.HashMap, java.util.HashMap):boolean");
-        }
-
-        private int bubbleSelectedOverlay(int i) {
-            Color.colorToHSV(i, this.tempHSV);
-            float[] fArr = this.tempHSV;
-            if (fArr[1] > 0.0f) {
-                fArr[1] = Math.max(0.0f, Math.min(1.0f, fArr[1] + 0.6f));
-                float[] fArr2 = this.tempHSV;
-                fArr2[2] = Math.max(0.0f, Math.min(1.0f, fArr2[2] - 0.05f));
-            } else {
-                fArr[2] = Math.max(0.0f, Math.min(1.0f, fArr[2] - 0.6f));
-            }
-            return Color.HSVToColor(30, this.tempHSV);
-        }
-
-        private int applyHue(int i, int i2) {
-            Color.colorToHSV(i2, this.tempHSV);
-            float[] fArr = this.tempHSV;
-            float f = fArr[0];
-            Color.colorToHSV(i, fArr);
-            this.tempHSV[0] = f;
-            return Color.HSVToColor(Color.alpha(i), this.tempHSV);
-        }
-
-        private int shiftHSV(int i, float f, float f2, float f3) {
-            Color.colorToHSV(i, this.tempHSV);
-            float[] fArr = this.tempHSV;
-            fArr[0] = fArr[0] + f;
-            fArr[1] = fArr[1] + f2;
-            fArr[2] = fArr[2] + f3;
-            return Color.HSVToColor(Color.alpha(i), this.tempHSV);
-        }
-
-        private int darkenColor(int i, float f) {
-            Color.colorToHSV(i, this.tempHSV);
-            float[] fArr = this.tempHSV;
-            fArr[2] = Math.max(0.0f, Math.min(1.0f, fArr[2] - f));
-            return Color.HSVToColor(Color.alpha(i), this.tempHSV);
-        }
-
-        private int mix(int i, int i2) {
-            float alpha = ((float) Color.alpha(i2)) / 255.0f;
-            float alpha2 = ((float) Color.alpha(i)) / 255.0f;
-            float f = 1.0f - alpha;
-            float f2 = (alpha2 * f) + alpha;
-            if (f2 == 0.0f) {
-                return 0;
-            }
-            return Color.argb((int) (255.0f * f2), (int) (((((float) Color.red(i2)) * alpha) + ((((float) Color.red(i)) * alpha2) * f)) / f2), (int) (((((float) Color.green(i2)) * alpha) + ((((float) Color.green(i)) * alpha2) * f)) / f2), (int) (((((float) Color.blue(i2)) * alpha) + ((((float) Color.blue(i)) * alpha2) * f)) / f2));
-        }
-
-        private int averageColor(HashMap<String, Integer> hashMap, int i, String... strArr) {
-            int i2 = 0;
-            int i3 = 0;
-            int i4 = 0;
-            int i5 = 0;
-            for (int i6 = 0; i6 < strArr.length; i6++) {
-                if (hashMap.containsKey(strArr[i6])) {
-                    try {
-                        int intValue = hashMap.get(strArr[i6]).intValue();
-                        i3 += Color.red(intValue);
-                        i4 += Color.green(intValue);
-                        i5 += Color.blue(intValue);
-                        i2++;
-                    } catch (Exception unused) {
-                    }
-                }
-            }
-            if (i2 == 0) {
-                return 0;
-            }
-            return Color.argb(i, i3 / i2, i4 / i2, i5 / i2);
-        }
-
-        private int averageColor(HashMap<String, Integer> hashMap, String... strArr) {
-            return averageColor(hashMap, 255, strArr);
         }
 
         public File getPathToWallpaper() {
@@ -16836,11 +16613,11 @@ public class Theme {
                 return;
             }
             chat_actionBackgroundPaint.setShader(serviceBitmapShader);
-            chat_actionBackgroundSelectedPaint.setShader(serviceBitmapShader);
             ColorMatrix colorMatrix = new ColorMatrix();
             colorMatrix.setSaturation(((MotionBackgroundDrawable) drawable).getIntensity() >= 0 ? 1.8f : 0.5f);
             chat_actionBackgroundPaint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
             chat_actionBackgroundPaint.setAlpha(127);
+            chat_actionBackgroundSelectedPaint.setShader(serviceBitmapShader);
             chat_actionBackgroundSelectedPaint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
             chat_actionBackgroundSelectedPaint.setAlpha(200);
         }

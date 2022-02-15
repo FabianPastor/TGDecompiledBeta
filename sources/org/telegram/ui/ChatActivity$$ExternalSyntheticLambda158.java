@@ -5,15 +5,15 @@ import org.telegram.messenger.MessageObject;
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda158 implements Runnable {
     public final /* synthetic */ ChatActivity f$0;
     public final /* synthetic */ MessageObject f$1;
-    public final /* synthetic */ int f$2;
+    public final /* synthetic */ boolean f$2;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda158(ChatActivity chatActivity, MessageObject messageObject, int i) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda158(ChatActivity chatActivity, MessageObject messageObject, boolean z) {
         this.f$0 = chatActivity;
         this.f$1 = messageObject;
-        this.f$2 = i;
+        this.f$2 = z;
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$113(this.f$1, this.f$2);
+        this.f$0.lambda$updateMessageAnimated$160(this.f$1, this.f$2);
     }
 }

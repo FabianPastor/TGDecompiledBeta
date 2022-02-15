@@ -40,6 +40,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Components.BackButtonMenu;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.GroupCallPip;
 import org.telegram.ui.Components.LayoutHelper;
@@ -106,6 +107,7 @@ public class ActionBarLayout extends FrameLayout {
     public View previewMenu;
     /* access modifiers changed from: private */
     public boolean previewOpenAnimationInProgress;
+    public ArrayList<BackButtonMenu.PulledDialog> pulledDialogs;
     private boolean rebuildAfterAnimation;
     private boolean rebuildLastAfterAnimation;
     private Rect rect = new Rect();

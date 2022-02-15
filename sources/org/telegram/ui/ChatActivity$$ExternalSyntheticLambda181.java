@@ -1,22 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
 import org.telegram.ui.ActionBar.AlertDialog;
 
 public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda181 implements Runnable {
-    public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ AlertDialog[] f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ String f$3;
+    public final /* synthetic */ AlertDialog[] f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda181(ChatActivity chatActivity, AlertDialog[] alertDialogArr, TLObject tLObject, String str) {
-        this.f$0 = chatActivity;
-        this.f$1 = alertDialogArr;
-        this.f$2 = tLObject;
-        this.f$3 = str;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda181(AlertDialog[] alertDialogArr) {
+        this.f$0 = alertDialogArr;
     }
 
     public final void run() {
-        this.f$0.lambda$didPressMessageUrl$212(this.f$1, this.f$2, this.f$3);
+        ChatActivity.lambda$processSelectedOption$179(this.f$0);
     }
 }

@@ -1,21 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.ResultCallback;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.ui.ActionBar.EmojiThemes;
+import org.telegram.ui.ActionBar.ThemeDescription;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda204 implements ResultCallback {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda204 implements ThemeDescription.ThemeDescriptionDelegate {
     public final /* synthetic */ ChatActivity f$0;
 
     public /* synthetic */ ChatActivity$$ExternalSyntheticLambda204(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
     }
 
-    public final void onComplete(Object obj) {
-        this.f$0.lambda$setChatThemeEmoticon$223((EmojiThemes) obj);
+    public final void didSetColor() {
+        this.f$0.lambda$getThemeDescriptions$218();
     }
 
-    public /* synthetic */ void onError(TLRPC$TL_error tLRPC$TL_error) {
-        ResultCallback.CC.$default$onError((ResultCallback) this, tLRPC$TL_error);
+    public /* synthetic */ void onAnimationProgress(float f) {
+        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
     }
 }

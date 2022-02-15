@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.ui.Components.ChatGreetingsView;
+import org.telegram.ui.Components.PopupSwipeBackLayout;
+import org.telegram.ui.Components.ReactionsContainerLayout;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda213 implements ChatGreetingsView.Listener {
-    public final /* synthetic */ ChatActivity f$0;
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda213 implements PopupSwipeBackLayout.OnSwipeBackProgressListener {
+    public final /* synthetic */ ReactionsContainerLayout f$0;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda213(ChatActivity chatActivity) {
-        this.f$0 = chatActivity;
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda213(ReactionsContainerLayout reactionsContainerLayout) {
+        this.f$0 = reactionsContainerLayout;
     }
 
-    public final void onGreetings(TLRPC$Document tLRPC$Document) {
-        this.f$0.lambda$createView$24(tLRPC$Document);
+    public final void onSwipeBackProgress(PopupSwipeBackLayout popupSwipeBackLayout, float f, float f2) {
+        ChatActivity.lambda$createMenu$157(this.f$0, popupSwipeBackLayout, f, f2);
     }
 }

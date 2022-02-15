@@ -657,7 +657,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private StaticLayout videoInfoLayout;
     VideoPlayerRewinder videoPlayerRewinder;
     private RadialProgress2 videoRadialProgress;
-    private float viewTop;
+    public float viewTop;
     /* access modifiers changed from: private */
     public StaticLayout viewsLayout;
     private int viewsTextWidth;
