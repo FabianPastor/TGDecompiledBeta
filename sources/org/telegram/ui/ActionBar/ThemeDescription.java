@@ -288,7 +288,9 @@ public class ThemeDescription {
             if ((this.changeFlags & FLAG_BACKGROUND) != 0) {
                 Drawable background = this.viewToInvalidate.getBackground();
                 if (background instanceof MessageBackgroundDrawable) {
-                    ((MessageBackgroundDrawable) background).setColor(i);
+                    MessageBackgroundDrawable messageBackgroundDrawable = (MessageBackgroundDrawable) background;
+                    messageBackgroundDrawable.setColor(i);
+                    messageBackgroundDrawable.setCustomPaint((Paint) null);
                 } else {
                     this.viewToInvalidate.setBackgroundColor(i);
                 }
@@ -624,6 +626,7 @@ public class ThemeDescription {
                                             Drawable background3 = view2.getBackground();
                                             if (background3 instanceof MessageBackgroundDrawable) {
                                                 ((MessageBackgroundDrawable) background3).setColor(i);
+                                                ((MessageBackgroundDrawable) background3).setCustomPaint((Paint) null);
                                             } else {
                                                 view2.setBackgroundColor(i);
                                             }

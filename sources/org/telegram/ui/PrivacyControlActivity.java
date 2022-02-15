@@ -204,6 +204,10 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             ChatMessageCell chatMessageCell = new ChatMessageCell(context);
             this.cell = chatMessageCell;
             chatMessageCell.setDelegate(new ChatMessageCell.ChatMessageCellDelegate(this, privacyControlActivity) {
+                public /* synthetic */ boolean canDrawOutboundsContent() {
+                    return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canDrawOutboundsContent(this);
+                }
+
                 public /* synthetic */ boolean canPerformActions() {
                     return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canPerformActions(this);
                 }

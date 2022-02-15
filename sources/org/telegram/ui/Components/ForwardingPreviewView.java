@@ -1101,6 +1101,10 @@ public class ForwardingPreviewView extends FrameLayout {
             boolean z = true;
             chatMessageCell.setMessageObject(ForwardingPreviewView.this.forwardingMessagesParams.previewMessages.get(i), forwardingMessagesParams.groupedMessagesMap.get(forwardingMessagesParams.previewMessages.get(i).getGroupId()), true, true);
             chatMessageCell.setDelegate(new ChatMessageCell.ChatMessageCellDelegate(this) {
+                public /* synthetic */ boolean canDrawOutboundsContent() {
+                    return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canDrawOutboundsContent(this);
+                }
+
                 public /* synthetic */ boolean canPerformActions() {
                     return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canPerformActions(this);
                 }

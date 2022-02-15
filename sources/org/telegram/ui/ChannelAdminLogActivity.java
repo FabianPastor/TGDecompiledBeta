@@ -2564,6 +2564,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }
                 ChatMessageCell chatMessageCell3 = chatMessageCell2;
                 chatMessageCell3.setDelegate(new ChatMessageCell.ChatMessageCellDelegate() {
+                    public /* synthetic */ boolean canDrawOutboundsContent() {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canDrawOutboundsContent(this);
+                    }
+
                     public boolean canPerformActions() {
                         return true;
                     }

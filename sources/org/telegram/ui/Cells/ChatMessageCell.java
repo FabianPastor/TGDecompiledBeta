@@ -657,7 +657,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private StaticLayout videoInfoLayout;
     VideoPlayerRewinder videoPlayerRewinder;
     private RadialProgress2 videoRadialProgress;
-    private float viewTop;
+    public float viewTop;
     /* access modifiers changed from: private */
     public StaticLayout viewsLayout;
     private int viewsTextWidth;
@@ -678,6 +678,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
         /* renamed from: org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate$-CC  reason: invalid class name */
         public final /* synthetic */ class CC {
+            public static boolean $default$canDrawOutboundsContent(ChatMessageCellDelegate chatMessageCellDelegate) {
+                return true;
+            }
+
             public static boolean $default$canPerformActions(ChatMessageCellDelegate chatMessageCellDelegate) {
                 return false;
             }
@@ -801,6 +805,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             public static void $default$videoTimerReached(ChatMessageCellDelegate chatMessageCellDelegate) {
             }
         }
+
+        boolean canDrawOutboundsContent();
 
         boolean canPerformActions();
 
@@ -27685,6 +27691,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 drawContent(canvas);
                 if (z) {
                     canvas.restore();
+                }
+                ChatMessageCellDelegate chatMessageCellDelegate = this.delegate;
+                if (chatMessageCellDelegate == null || chatMessageCellDelegate.canDrawOutboundsContent()) {
+                    drawOutboundsContent(canvas);
                 }
                 if (this.replyNameLayout != null) {
                     float f = 12.0f;

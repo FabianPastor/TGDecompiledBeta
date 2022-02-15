@@ -18,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -706,6 +707,16 @@ public class AndroidUtilities {
         d8 = d6;
         d6 = d3;
         return new int[]{(int) (d6 * 255.0d), (int) (d9 * 255.0d), (int) (d8 * 255.0d)};
+    }
+
+    public static void lightColorMatrix(ColorMatrix colorMatrix, float f) {
+        if (colorMatrix != null) {
+            float[] array = colorMatrix.getArray();
+            array[4] = array[4] + f;
+            array[9] = array[9] + f;
+            array[14] = array[14] + f;
+            colorMatrix.set(array);
+        }
     }
 
     public static void requestAdjustResize(Activity activity, int i) {

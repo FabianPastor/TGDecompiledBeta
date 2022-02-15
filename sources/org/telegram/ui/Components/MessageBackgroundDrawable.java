@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 public class MessageBackgroundDrawable extends Drawable {
     private boolean animationInProgress;
     private float currentAnimationProgress;
+    private Paint customPaint = null;
     private float finalRadius;
     private boolean isSelected;
     private long lastAnimationTime;
@@ -32,6 +33,10 @@ public class MessageBackgroundDrawable extends Drawable {
 
     public void setColor(int i) {
         this.paint.setColor(i);
+    }
+
+    public void setCustomPaint(Paint paint2) {
+        this.customPaint = paint2;
     }
 
     public void setSelected(boolean z, boolean z2) {
@@ -122,13 +127,13 @@ public class MessageBackgroundDrawable extends Drawable {
         this.paint.setAlpha(i);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:12:0x0044, code lost:
-        if (r6 >= 0.0f) goto L_0x0056;
+    /* JADX WARNING: Code restructure failed: missing block: B:15:0x0049, code lost:
+        if (r6 >= 0.0f) goto L_0x005b;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:16:0x0051, code lost:
-        if (r6 >= 0.0f) goto L_0x0056;
+    /* JADX WARNING: Code restructure failed: missing block: B:19:0x0056, code lost:
+        if (r6 >= 0.0f) goto L_0x005b;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x00a6  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00b0  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void draw(android.graphics.Canvas r10) {
         /*
@@ -137,25 +142,30 @@ public class MessageBackgroundDrawable extends Drawable {
             r1 = 1065353216(0x3var_, float:1.0)
             r2 = 0
             int r3 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r3 != 0) goto L_0x0013
+            if (r3 != 0) goto L_0x0018
             android.graphics.Rect r0 = r9.getBounds()
+            android.graphics.Paint r3 = r9.customPaint
+            if (r3 == 0) goto L_0x0012
+            goto L_0x0014
+        L_0x0012:
             android.graphics.Paint r3 = r9.paint
+        L_0x0014:
             r10.drawRect(r0, r3)
-            goto L_0x0069
-        L_0x0013:
+            goto L_0x0073
+        L_0x0018:
             int r3 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r3 == 0) goto L_0x0069
+            if (r3 == 0) goto L_0x0073
             boolean r3 = r9.isSelected
-            if (r3 == 0) goto L_0x0022
+            if (r3 == 0) goto L_0x0027
             org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT_QUINT
             float r0 = r3.getInterpolation(r0)
-            goto L_0x002c
-        L_0x0022:
+            goto L_0x0031
+        L_0x0027:
             org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT_QUINT
             float r0 = r1 - r0
             float r0 = r3.getInterpolation(r0)
             float r0 = r1 - r0
-        L_0x002c:
+        L_0x0031:
             android.graphics.Rect r3 = r9.getBounds()
             int r4 = r3.centerX()
             float r4 = (float) r4
@@ -163,23 +173,23 @@ public class MessageBackgroundDrawable extends Drawable {
             float r3 = (float) r3
             float r5 = r9.touchOverrideX
             int r6 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
-            if (r6 < 0) goto L_0x0047
+            if (r6 < 0) goto L_0x004c
             float r6 = r9.touchOverrideY
             int r7 = (r6 > r2 ? 1 : (r6 == r2 ? 0 : -1))
-            if (r7 < 0) goto L_0x0047
-            goto L_0x0056
-        L_0x0047:
+            if (r7 < 0) goto L_0x004c
+            goto L_0x005b
+        L_0x004c:
             float r5 = r9.touchX
             int r6 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
-            if (r6 < 0) goto L_0x0054
+            if (r6 < 0) goto L_0x0059
             float r6 = r9.touchY
             int r7 = (r6 > r2 ? 1 : (r6 == r2 ? 0 : -1))
-            if (r7 < 0) goto L_0x0054
-            goto L_0x0056
-        L_0x0054:
+            if (r7 < 0) goto L_0x0059
+            goto L_0x005b
+        L_0x0059:
             r6 = r3
             r5 = r4
-        L_0x0056:
+        L_0x005b:
             float r7 = r1 - r0
             float r5 = r5 - r4
             float r5 = r5 * r7
@@ -189,57 +199,62 @@ public class MessageBackgroundDrawable extends Drawable {
             float r3 = r3 + r7
             float r5 = r9.finalRadius
             float r5 = r5 * r0
+            android.graphics.Paint r0 = r9.customPaint
+            if (r0 == 0) goto L_0x006e
+            goto L_0x0070
+        L_0x006e:
             android.graphics.Paint r0 = r9.paint
+        L_0x0070:
             r10.drawCircle(r4, r3, r5, r0)
-        L_0x0069:
+        L_0x0073:
             boolean r10 = r9.animationInProgress
-            if (r10 == 0) goto L_0x00b5
+            if (r10 == 0) goto L_0x00bf
             long r3 = android.os.SystemClock.elapsedRealtime()
             long r5 = r9.lastAnimationTime
             long r5 = r3 - r5
             r7 = 20
             int r10 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-            if (r10 <= 0) goto L_0x007d
+            if (r10 <= 0) goto L_0x0087
             r5 = 17
-        L_0x007d:
+        L_0x0087:
             r9.lastAnimationTime = r3
             boolean r10 = r9.isSelected
             r0 = 1
             r3 = 1131413504(0x43700000, float:240.0)
             r4 = 0
-            if (r10 == 0) goto L_0x0095
+            if (r10 == 0) goto L_0x009f
             float r10 = r9.currentAnimationProgress
             float r2 = (float) r5
             float r2 = r2 / r3
             float r10 = r10 + r2
             r9.currentAnimationProgress = r10
             int r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1))
-            if (r10 < 0) goto L_0x00a3
+            if (r10 < 0) goto L_0x00ad
             r9.currentAnimationProgress = r1
-            goto L_0x00a4
-        L_0x0095:
+            goto L_0x00ae
+        L_0x009f:
             float r10 = r9.currentAnimationProgress
             float r1 = (float) r5
             float r1 = r1 / r3
             float r10 = r10 - r1
             r9.currentAnimationProgress = r10
             int r10 = (r10 > r2 ? 1 : (r10 == r2 ? 0 : -1))
-            if (r10 > 0) goto L_0x00a3
+            if (r10 > 0) goto L_0x00ad
             r9.currentAnimationProgress = r2
-            goto L_0x00a4
-        L_0x00a3:
+            goto L_0x00ae
+        L_0x00ad:
             r0 = 0
-        L_0x00a4:
-            if (r0 == 0) goto L_0x00b2
+        L_0x00ae:
+            if (r0 == 0) goto L_0x00bc
             r10 = -1082130432(0xffffffffbvar_, float:-1.0)
             r9.touchX = r10
             r9.touchY = r10
             r9.touchOverrideX = r10
             r9.touchOverrideY = r10
             r9.animationInProgress = r4
-        L_0x00b2:
+        L_0x00bc:
             r9.invalidate()
-        L_0x00b5:
+        L_0x00bf:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MessageBackgroundDrawable.draw(android.graphics.Canvas):void");

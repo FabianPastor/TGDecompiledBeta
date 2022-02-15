@@ -1,24 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$User;
+import java.util.ArrayList;
 
 public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda32 implements Runnable {
     public final /* synthetic */ DialogsActivity f$0;
-    public final /* synthetic */ TLRPC$Chat f$1;
-    public final /* synthetic */ long f$2;
-    public final /* synthetic */ boolean f$3;
-    public final /* synthetic */ TLRPC$User f$4;
+    public final /* synthetic */ int f$1;
+    public final /* synthetic */ ArrayList f$2;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda32(DialogsActivity dialogsActivity, TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$User tLRPC$User) {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda32(DialogsActivity dialogsActivity, int i, ArrayList arrayList) {
         this.f$0 = dialogsActivity;
-        this.f$1 = tLRPC$Chat;
-        this.f$2 = j;
-        this.f$3 = z;
-        this.f$4 = tLRPC$User;
+        this.f$1 = i;
+        this.f$2 = arrayList;
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$33(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$performSelectedDialogsAction$25(this.f$1, this.f$2);
     }
 }

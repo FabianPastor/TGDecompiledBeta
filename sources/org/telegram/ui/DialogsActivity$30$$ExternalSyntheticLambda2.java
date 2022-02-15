@@ -4,10 +4,10 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.ui.Components.FiltersListBottomSheet;
 import org.telegram.ui.DialogsActivity;
 
-public final /* synthetic */ class DialogsActivity$27$$ExternalSyntheticLambda2 implements FiltersListBottomSheet.FiltersListBottomSheetDelegate {
-    public final /* synthetic */ DialogsActivity.AnonymousClass27 f$0;
+public final /* synthetic */ class DialogsActivity$30$$ExternalSyntheticLambda2 implements FiltersListBottomSheet.FiltersListBottomSheetDelegate {
+    public final /* synthetic */ DialogsActivity.AnonymousClass30 f$0;
 
-    public /* synthetic */ DialogsActivity$27$$ExternalSyntheticLambda2(DialogsActivity.AnonymousClass27 r1) {
+    public /* synthetic */ DialogsActivity$30$$ExternalSyntheticLambda2(DialogsActivity.AnonymousClass30 r1) {
         this.f$0 = r1;
     }
 

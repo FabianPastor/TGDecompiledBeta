@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -29,6 +30,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
@@ -76,6 +78,7 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import j$.util.Comparator$CC;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1352,25 +1355,25 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         return f2;
     }
 
-    static /* synthetic */ int access$24110(ChatActivity chatActivity) {
+    static /* synthetic */ int access$24210(ChatActivity chatActivity) {
         int i = chatActivity.newMentionsCount;
         chatActivity.newMentionsCount = i - 1;
         return i;
     }
 
-    static /* synthetic */ int access$27808(ChatActivity chatActivity) {
+    static /* synthetic */ int access$27908(ChatActivity chatActivity) {
         int i = chatActivity.scheduledMessagesCount;
         chatActivity.scheduledMessagesCount = i + 1;
         return i;
     }
 
-    static /* synthetic */ int access$27812(ChatActivity chatActivity, int i) {
+    static /* synthetic */ int access$27912(ChatActivity chatActivity, int i) {
         int i2 = chatActivity.scheduledMessagesCount + i;
         chatActivity.scheduledMessagesCount = i2;
         return i2;
     }
 
-    static /* synthetic */ int access$32304(ChatActivity chatActivity) {
+    static /* synthetic */ int access$32404(ChatActivity chatActivity) {
         int i = chatActivity.pinBullerinTag + 1;
         chatActivity.pinBullerinTag = i;
         return i;
@@ -3205,9 +3208,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             pinchToZoomHelper2.clear();
         }
         this.chatThemeBottomSheet = null;
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        if (!(actionBarLayout == null || (arrayList = actionBarLayout.fragmentsStack) == null)) {
-            BackButtonMenu.clearPulledDialogs(this.currentAccount, arrayList.indexOf(this) - (replacingChatActivity ^ true ? 1 : 0));
+        ActionBarLayout parentLayout = getParentLayout();
+        if (!(parentLayout == null || (arrayList = parentLayout.fragmentsStack) == null)) {
+            BackButtonMenu.clearPulledDialogs(this, arrayList.indexOf(this) - (replacingChatActivity ^ true ? 1 : 0));
         }
         replacingChatActivity = false;
     }
@@ -8238,11 +8241,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void addToPulledDialogsMyself() {
-        BackButtonMenu.addToPulledDialogs(this.currentAccount, getParentLayout().fragmentsStack.indexOf(this), this.currentChat, this.currentUser, this.dialog_id, this.dialogFilterId, this.dialogFolderId);
+        if (getParentLayout() != null) {
+            BackButtonMenu.addToPulledDialogs(this, getParentLayout().fragmentsStack.indexOf(this), this.currentChat, this.currentUser, this.dialog_id, this.dialogFilterId, this.dialogFolderId);
+        }
     }
 
     private void addToPulledDialogs(TLRPC$Chat tLRPC$Chat, long j, int i, int i2) {
-        BackButtonMenu.addToPulledDialogs(this.currentAccount, getParentLayout().fragmentsStack.indexOf(this), tLRPC$Chat, (TLRPC$User) null, j, i, i2);
+        if (getParentLayout() != null) {
+            BackButtonMenu.addToPulledDialogs(this, getParentLayout().fragmentsStack.indexOf(this), tLRPC$Chat, (TLRPC$User) null, j, i, i2);
+        }
     }
 
     private void setPullingDownTransition(boolean z) {
@@ -8509,10 +8516,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             ChatActivity.this.pinBulletin.hide();
                         }
                         boolean unused = ChatActivity.this.showPinBulletin = true;
-                        int access$32304 = ChatActivity.access$32304(ChatActivity.this);
-                        int access$32400 = ChatActivity.this.getPinnedMessagesCount();
+                        int access$32404 = ChatActivity.access$32404(ChatActivity.this);
+                        int access$32500 = ChatActivity.this.getPinnedMessagesCount();
                         ChatActivity chatActivity = ChatActivity.this;
-                        Bulletin unused2 = chatActivity.pinBulletin = BulletinFactory.createUnpinAllMessagesBulletin(chatActivity, access$32400, z2, new ChatActivity$60$$ExternalSyntheticLambda1(this, z2, arrayList, arrayList2, access$32400, access$32304), new ChatActivity$60$$ExternalSyntheticLambda0(this, z2, access$32304), ChatActivity.this.themeDelegate);
+                        Bulletin unused2 = chatActivity.pinBulletin = BulletinFactory.createUnpinAllMessagesBulletin(chatActivity, access$32500, z2, new ChatActivity$60$$ExternalSyntheticLambda1(this, z2, arrayList, arrayList2, access$32500, access$32404), new ChatActivity$60$$ExternalSyntheticLambda0(this, z2, access$32404), ChatActivity.this.themeDelegate);
                         return;
                     }
                     MessageObject messageObject = (MessageObject) ChatActivity.this.pinnedMessageObjects.get(Integer.valueOf(ChatActivity.this.currentPinnedMessageId));
@@ -9540,7 +9547,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 if (ChatActivity.this.scheduledMessagesCount == -1) {
                                     int unused2 = ChatActivity.this.scheduledMessagesCount = 0;
                                 }
-                                ChatActivity.access$27812(ChatActivity.this, selectedPhotos.size());
+                                ChatActivity.access$27912(ChatActivity.this, selectedPhotos.size());
                                 ChatActivity.this.updateScheduledInterface(true);
                                 return;
                             }
@@ -16119,7 +16126,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             MediaController.PhotoEntry photoEntry = new MediaController.PhotoEntry(0, 0, 0, str, 0, true, 0, 0, 0);
             photoEntry.caption = str3;
             arrayList.add(photoEntry);
-            PhotoViewer.getInstance().openPhotoForSelect(arrayList, 0, 2, false, new PhotoViewer.EmptyPhotoViewerProvider() {
+            PhotoViewer.getInstance().openPhotoForSelect(arrayList, 0, 0, false, new PhotoViewer.EmptyPhotoViewerProvider() {
                 public boolean canScrollAway() {
                     return false;
                 }
@@ -16151,6 +16158,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 Uri uri = sendingMediaInfo.uri;
                 if (uri != null) {
                     str = AndroidUtilities.getPath(uri);
+                    if (str == null) {
+                        try {
+                            Bitmap decodeStream = BitmapFactory.decodeStream(ApplicationLoader.applicationContext.getContentResolver().openInputStream(sendingMediaInfo.uri), (Rect) null, new BitmapFactory.Options());
+                            File file = new File(FileLoader.getDirectory(4), "-2147483648_" + SharedConfig.getLastLocalId() + ".webp");
+                            decodeStream.compress(Bitmap.CompressFormat.WEBP, 100, new FileOutputStream(file));
+                            SharedConfig.saveConfig();
+                            str = file.getPath();
+                        } catch (Exception unused) {
+                        }
+                    }
                 }
             }
             String str2 = str;
@@ -16161,7 +16178,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 FileLog.e((Throwable) e);
                 i = 0;
             }
-            MediaController.PhotoEntry photoEntry = new MediaController.PhotoEntry(0, 0, 0, str2, i, false, 0, 0, 0);
+            MediaController.PhotoEntry photoEntry = new MediaController.PhotoEntry(0, 0, 0, str2, i, sendingMediaInfo.isVideo, 0, 0, 0);
             if (i2 == arrayList.size() - 1 && charSequence2 != null) {
                 photoEntry.caption = charSequence2;
             }
@@ -16174,7 +16191,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             final boolean[] zArr = new boolean[arrayList2.size()];
             Arrays.fill(zArr, true);
             PhotoViewer.getInstance().setParentActivity(getParentActivity(), this.themeDelegate);
-            PhotoViewer.getInstance().openPhotoForSelect(new ArrayList(arrayList2), arrayList2.size() - 1, 0, false, new PhotoViewer.EmptyPhotoViewerProvider() {
+            PhotoViewer.getInstance().openPhotoForSelect(new ArrayList(arrayList2), arrayList2.size() - 1, 2, false, new PhotoViewer.EmptyPhotoViewerProvider() {
                 public boolean canScrollAway() {
                     return false;
                 }
@@ -16298,9 +16315,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
 
                         public MessageObject getEditingMessageObject() {
-                            MessageObject access$28900 = ChatActivity.this.editingMessageObject;
+                            MessageObject access$29000 = ChatActivity.this.editingMessageObject;
                             MessageObject messageObject = messageObject2;
-                            if (access$28900 == messageObject) {
+                            if (access$29000 == messageObject) {
                                 return messageObject;
                             }
                             return null;
@@ -26644,18 +26661,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             if (arrayList4.isEmpty()) {
                                 this.messagesByDays.remove(messageObject3.dateKey);
                                 this.messages.remove(indexOf2);
-                                int access$35600 = this.chatAdapter.loadingUpRow;
-                                int access$35500 = this.chatAdapter.loadingDownRow;
+                                int access$35700 = this.chatAdapter.loadingUpRow;
+                                int access$35600 = this.chatAdapter.loadingDownRow;
                                 ChatActivityAdapter chatActivityAdapter4 = this.chatAdapter;
                                 chatActivityAdapter4.notifyItemRemoved(chatActivityAdapter4.messagesStartRow + indexOf2);
                                 if (this.messages.isEmpty()) {
-                                    if (access$35600 >= 0) {
+                                    if (access$35700 >= 0) {
                                         i2 = 0;
                                         this.chatAdapter.notifyItemRemoved(0);
                                     } else {
                                         i2 = 0;
                                     }
-                                    if (access$35500 >= 0) {
+                                    if (access$35600 >= 0) {
                                         this.chatAdapter.notifyItemRemoved(i2);
                                     }
                                     updateReplyMessageOwners(messageObject3.getId(), messageObject2);
@@ -27600,11 +27617,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             int i = 0;
                             ChatActivity.this.closePinned.setVisibility(z6 ? 0 : 4);
                             ChatActivity.this.pinnedListButton.setVisibility(z7 ? 0 : 4);
-                            RadialProgressView access$36900 = ChatActivity.this.pinnedProgress;
+                            RadialProgressView access$37000 = ChatActivity.this.pinnedProgress;
                             if (!ChatActivity.this.pinnedPorgressIsShowing) {
                                 i = 4;
                             }
-                            access$36900.setVisibility(i);
+                            access$37000.setVisibility(i);
                         }
                     });
                     this.pinnedListAnimator.start();
@@ -39402,7 +39419,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 boolean r1 = r0.isRoundVideo()
                 if (r1 != 0) goto L_0x022e
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
-                org.telegram.ui.ChatActivity.access$24110(r1)
+                org.telegram.ui.ChatActivity.access$24210(r1)
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 int r1 = r1.newMentionsCount
                 if (r1 > 0) goto L_0x01e8
@@ -46764,9 +46781,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         private HashMap<String, Integer> currentColors = new HashMap<>();
         private final HashMap<String, Drawable> currentDrawables = new HashMap<>();
         private final HashMap<String, Paint> currentPaints = new HashMap<>();
+        int currentSelectedBackgroundColor;
         int currentServiceColor;
         boolean drawServiceGradient;
-        private boolean isDark = Theme.getActiveTheme().isDark();
+        /* access modifiers changed from: private */
+        public boolean isDark = Theme.getActiveTheme().isDark();
         private Paint paint = new Paint();
         private AnimatorSet patternAlphaAnimator;
         private ValueAnimator patternIntensityAnimator;
@@ -47223,10 +47242,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             boolean z = false;
             int i = AndroidUtilities.calcDrawableColor(drawable)[0];
             Integer currentColor = getCurrentColor("chat_serviceBackground");
+            Integer currentColor2 = getCurrentColor("chat_selectedBackground");
             if (currentColor == null) {
                 currentColor = Integer.valueOf(i);
             }
+            if (currentColor2 == null) {
+                currentColor2 = Integer.valueOf(i);
+            }
             this.currentServiceColor = currentColor.intValue();
+            this.currentSelectedBackgroundColor = currentColor2.intValue();
             if ((drawable instanceof MotionBackgroundDrawable) && SharedConfig.getDevicePerformanceClass() != 0) {
                 z = true;
             }
@@ -47250,6 +47274,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             Paint paint2 = getPaint("paintChatActionBackground");
             Paint paint3 = getPaint("paintChatActionBackgroundSelected");
+            Paint paint4 = getPaint("paintChatMessageBackgroundSelected");
             if (paint2 == null) {
                 return;
             }
@@ -47262,12 +47287,26 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 paint3.setAlpha(127);
                 paint3.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
                 paint3.setShader(this.serviceShaderSource);
+                if (paint4 == null) {
+                    paint4 = new Paint(1);
+                    this.currentPaints.put("paintChatMessageBackgroundSelected", paint4);
+                }
+                ColorMatrix colorMatrix2 = new ColorMatrix();
+                colorMatrix2.setSaturation(0.98f);
+                AndroidUtilities.lightColorMatrix(colorMatrix2, -60.0f);
+                paint4.setAlpha(90);
+                paint4.setColorFilter(new ColorMatrixColorFilter(colorMatrix2));
+                paint4.setShader(this.serviceShaderSource);
                 return;
             }
             paint2.setColorFilter((ColorFilter) null);
             paint2.setShader((Shader) null);
             paint3.setColorFilter((ColorFilter) null);
             paint3.setShader((Shader) null);
+            if (paint4 != null) {
+                paint4.setColorFilter((ColorFilter) null);
+                paint4.setShader((Shader) null);
+            }
         }
 
         /* access modifiers changed from: private */
@@ -47277,6 +47316,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (!this.currentPaints.isEmpty()) {
                 Paint paint2 = getPaint("paintChatActionBackground");
                 Paint paint3 = getPaint("paintChatActionBackgroundSelected");
+                Paint paint4 = getPaint("paintChatMessageBackgroundSelected");
                 int i = this.currentServiceColor;
                 int i2 = -1;
                 int currentColorOrDefault = this.drawServiceGradient ? -1 : getCurrentColorOrDefault("chat_serviceText", true);
@@ -47296,9 +47336,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     paint2.setColor(i);
                     paint3.setColor(i);
                 }
-                Paint paint4 = getPaint("paintChatActionText");
-                if (paint4 != null) {
-                    ((TextPaint) paint4).linkColor = currentColorOrDefault2;
+                Paint paint5 = getPaint("paintChatActionText");
+                if (paint5 != null) {
+                    ((TextPaint) paint5).linkColor = currentColorOrDefault2;
                     getPaint("paintChatActionText").setColor(currentColorOrDefault);
                     getPaint("paintChatBotButton").setColor(currentColorOrDefault3);
                 }
@@ -47322,6 +47362,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (paint2 != null) {
                             paint2.setShader(this.serviceShaderSource);
                             paint3.setShader(this.serviceShaderSource);
+                        }
+                        if (paint4 != null) {
+                            paint4.setShader(this.serviceShaderSource);
                             return;
                         }
                         return;
@@ -47333,6 +47376,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (paint2 != null) {
                         paint2.setShader(this.serviceShader);
                         paint3.setShader(this.serviceShader);
+                    }
+                    if (paint4 != null) {
+                        paint4.setShader(this.serviceShader);
                     }
                 }
             }

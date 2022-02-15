@@ -261,6 +261,10 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                     }
                 };
                 this.cells[i5].setDelegate(new ChatMessageCell.ChatMessageCellDelegate(this) {
+                    public /* synthetic */ boolean canDrawOutboundsContent() {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canDrawOutboundsContent(this);
+                    }
+
                     public /* synthetic */ boolean canPerformActions() {
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canPerformActions(this);
                     }
