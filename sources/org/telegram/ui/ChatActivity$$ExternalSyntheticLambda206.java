@@ -1,18 +1,15 @@
 package org.telegram.ui;
 
-import android.net.Uri;
-import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Adapters.StickersAdapter;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda206 implements AlertsCreator.ScheduleDatePickerDelegate {
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda206 implements StickersAdapter.StickersAdapterDelegate {
     public final /* synthetic */ ChatActivity f$0;
-    public final /* synthetic */ Uri f$1;
 
-    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda206(ChatActivity chatActivity, Uri uri) {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda206(ChatActivity chatActivity) {
         this.f$0 = chatActivity;
-        this.f$1 = uri;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$onActivityResultFragment$110(this.f$1, z, i);
+    public final void needChangePanelVisibility(boolean z) {
+        this.f$0.lambda$initStickers$85(z);
     }
 }

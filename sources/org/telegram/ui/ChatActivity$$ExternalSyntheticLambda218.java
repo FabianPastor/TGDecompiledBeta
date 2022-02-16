@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
 
-public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda218 implements RecyclerListView.OnInterceptTouchListener {
-    public static final /* synthetic */ ChatActivity$$ExternalSyntheticLambda218 INSTANCE = new ChatActivity$$ExternalSyntheticLambda218();
+public final /* synthetic */ class ChatActivity$$ExternalSyntheticLambda218 implements RecyclerAnimationScrollHelper.ScrollListener {
+    public final /* synthetic */ ChatActivity f$0;
 
-    private /* synthetic */ ChatActivity$$ExternalSyntheticLambda218() {
+    public /* synthetic */ ChatActivity$$ExternalSyntheticLambda218(ChatActivity chatActivity) {
+        this.f$0 = chatActivity;
     }
 
-    public final boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-        return ChatActivity.lambda$showChatThemeBottomSheet$220(motionEvent);
+    public final void onScroll() {
+        this.f$0.invalidateMessagesVisiblePart();
     }
 }
