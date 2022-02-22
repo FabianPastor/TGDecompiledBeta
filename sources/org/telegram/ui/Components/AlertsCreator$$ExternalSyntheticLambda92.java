@@ -1,14 +1,19 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.NumberPicker;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda92 implements NumberPicker.Formatter {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda92 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda92();
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda92 implements ActionBarMenuItem.ActionBarMenuItemDelegate {
+    public final /* synthetic */ AlertsCreator.ScheduleDatePickerDelegate f$0;
+    public final /* synthetic */ BottomSheet.Builder f$1;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda92() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda92(AlertsCreator.ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder) {
+        this.f$0 = scheduleDatePickerDelegate;
+        this.f$1 = builder;
     }
 
-    public final String format(int i) {
-        return AlertsCreator.lambda$createDatePickerDialog$35(i);
+    public final void onItemClick(int i) {
+        AlertsCreator.lambda$createScheduleDatePickerDialog$46(this.f$0, this.f$1, i);
     }
 }

@@ -1,15 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.messenger.MessagesController;
+import java.util.ArrayList;
 
-public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda192 implements Comparator {
-    public static final /* synthetic */ MessagesStorage$$ExternalSyntheticLambda192 INSTANCE = new MessagesStorage$$ExternalSyntheticLambda192();
+public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda192 implements Runnable {
+    public final /* synthetic */ MessagesStorage f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ ArrayList f$2;
 
-    private /* synthetic */ MessagesStorage$$ExternalSyntheticLambda192() {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda192(MessagesStorage messagesStorage, boolean z, ArrayList arrayList) {
+        this.f$0 = messagesStorage;
+        this.f$1 = z;
+        this.f$2 = arrayList;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MessagesStorage.lambda$processLoadedFilterPeersInternal$44((MessagesController.DialogFilter) obj, (MessagesController.DialogFilter) obj2);
+    public final void run() {
+        this.f$0.lambda$putContacts$113(this.f$1, this.f$2);
     }
 }

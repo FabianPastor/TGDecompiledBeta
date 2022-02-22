@@ -1,26 +1,22 @@
 package org.telegram.ui.Components;
 
-import android.content.SharedPreferences;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda81 implements RequestDelegate {
-    public final /* synthetic */ SharedPreferences f$0;
-    public final /* synthetic */ AlertDialog f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda81 implements Runnable {
+    public final /* synthetic */ AlertDialog[] f$0;
+    public final /* synthetic */ int f$1;
     public final /* synthetic */ int f$2;
     public final /* synthetic */ BaseFragment f$3;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda81(SharedPreferences sharedPreferences, AlertDialog alertDialog, int i, BaseFragment baseFragment) {
-        this.f$0 = sharedPreferences;
-        this.f$1 = alertDialog;
-        this.f$2 = i;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda81(AlertDialog[] alertDialogArr, int i, int i2, BaseFragment baseFragment) {
+        this.f$0 = alertDialogArr;
+        this.f$1 = i;
+        this.f$2 = i2;
         this.f$3 = baseFragment;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AlertsCreator.lambda$performAskAQuestion$15(this.f$0, this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+    public final void run() {
+        AlertsCreator.lambda$createDeleteMessagesAlert$96(this.f$0, this.f$1, this.f$2, this.f$3);
     }
 }

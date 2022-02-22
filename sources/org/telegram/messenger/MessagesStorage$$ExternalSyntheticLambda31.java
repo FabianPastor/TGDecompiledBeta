@@ -3,17 +3,13 @@ package org.telegram.messenger;
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda31 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
     public final /* synthetic */ int f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ int f$3;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda31(MessagesStorage messagesStorage, int i, int i2, int i3) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda31(MessagesStorage messagesStorage, int i) {
         this.f$0 = messagesStorage;
         this.f$1 = i;
-        this.f$2 = i2;
-        this.f$3 = i3;
     }
 
     public final void run() {
-        this.f$0.lambda$setMessageSeq$156(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$checkIfFolderEmpty$186(this.f$1);
     }
 }

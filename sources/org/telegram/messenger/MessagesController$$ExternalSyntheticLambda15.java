@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda15
     }
 
     public final void run() {
-        this.f$0.lambda$toogleChannelSignatures$223();
+        this.f$0.lambda$migrateDialogs$170();
     }
 }

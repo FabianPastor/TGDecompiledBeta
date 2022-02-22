@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$ChatParticipants;
+import org.telegram.messenger.MessagesController;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda155 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ TLRPC$ChatParticipants f$1;
+    public final /* synthetic */ MessagesController.DialogFilter f$1;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda155(MessagesStorage messagesStorage, TLRPC$ChatParticipants tLRPC$ChatParticipants) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda155(MessagesStorage messagesStorage, MessagesController.DialogFilter dialogFilter) {
         this.f$0 = messagesStorage;
-        this.f$1 = tLRPC$ChatParticipants;
+        this.f$1 = dialogFilter;
     }
 
     public final void run() {
-        this.f$0.lambda$updateChatParticipants$86(this.f$1);
+        this.f$0.lambda$deleteDialogFilter$52(this.f$1);
     }
 }

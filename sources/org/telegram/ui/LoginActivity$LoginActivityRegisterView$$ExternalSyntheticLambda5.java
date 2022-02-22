@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$Exte
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$new$5(dialogInterface);
+        this.f$0.lambda$new$6(dialogInterface);
     }
 }

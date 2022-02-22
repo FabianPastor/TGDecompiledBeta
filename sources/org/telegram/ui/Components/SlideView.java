@@ -9,6 +9,10 @@ public class SlideView extends LinearLayout {
         return "";
     }
 
+    public boolean hasCustomKeyboard() {
+        return false;
+    }
+
     public boolean needBackButton() {
         return false;
     }
@@ -21,6 +25,9 @@ public class SlideView extends LinearLayout {
     }
 
     public void onDestroyActivity() {
+    }
+
+    public void onHide() {
     }
 
     public void onNextPressed(String str) {
@@ -36,6 +43,9 @@ public class SlideView extends LinearLayout {
     }
 
     public void setParams(Bundle bundle, boolean z) {
+    }
+
+    public void updateColors() {
     }
 
     public SlideView(Context context) {

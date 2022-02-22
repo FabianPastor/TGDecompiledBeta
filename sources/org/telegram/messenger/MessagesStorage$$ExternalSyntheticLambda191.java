@@ -1,15 +1,23 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.messenger.MessagesController;
+import java.util.concurrent.CountDownLatch;
 
-public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda191 implements Comparator {
-    public static final /* synthetic */ MessagesStorage$$ExternalSyntheticLambda191 INSTANCE = new MessagesStorage$$ExternalSyntheticLambda191();
+public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda191 implements Runnable {
+    public final /* synthetic */ MessagesStorage f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ Integer[] f$3;
+    public final /* synthetic */ CountDownLatch f$4;
 
-    private /* synthetic */ MessagesStorage$$ExternalSyntheticLambda191() {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda191(MessagesStorage messagesStorage, boolean z, long j, Integer[] numArr, CountDownLatch countDownLatch) {
+        this.f$0 = messagesStorage;
+        this.f$1 = z;
+        this.f$2 = j;
+        this.f$3 = numArr;
+        this.f$4 = countDownLatch;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MessagesStorage.lambda$loadDialogFilters$40((MessagesController.DialogFilter) obj, (MessagesController.DialogFilter) obj2);
+    public final void run() {
+        this.f$0.lambda$getDialogReadMax$195(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

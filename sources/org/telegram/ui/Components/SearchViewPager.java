@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -55,6 +56,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
     private FilteredSearchView.Delegate filteredSearchViewDelegate;
     private final int folderId;
     private ActionBarMenuItem forwardItem;
+    SizeNotifierFrameLayout fragmentView;
     private ActionBarMenuItem gotoItem;
     private boolean isActionModeShowed;
     private RecyclerItemsEnterAnimator itemsEnterAnimator;
@@ -87,10 +89,10 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         return true;
     }
 
-    public SearchViewPager(Context context, final BaseFragment baseFragment, int i, int i2, int i3, final ChatPreviewDelegate chatPreviewDelegate) {
+    public SearchViewPager(Context context, final DialogsActivity dialogsActivity, int i, int i2, int i3, final ChatPreviewDelegate chatPreviewDelegate) {
         super(context);
         this.folderId = i3;
-        this.parent = baseFragment;
+        this.parent = dialogsActivity;
         this.dialogsSearchAdapter = new DialogsSearchAdapter(context, i, i2) {
             public void notifyDataSetChanged() {
                 RecyclerListView recyclerListView;
@@ -105,22 +107,23 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 }
             }
         };
-        RecyclerListView recyclerListView = new RecyclerListView(context);
-        this.searchListView = recyclerListView;
-        recyclerListView.setPivotY(0.0f);
+        this.fragmentView = (SizeNotifierFrameLayout) dialogsActivity.getFragmentView();
+        BlurredRecyclerView blurredRecyclerView = new BlurredRecyclerView(context);
+        this.searchListView = blurredRecyclerView;
+        blurredRecyclerView.setPivotY(0.0f);
         this.searchListView.setAdapter(this.dialogsSearchAdapter);
         this.searchListView.setVerticalScrollBarEnabled(true);
         this.searchListView.setInstantClick(true);
         this.searchListView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
-        RecyclerListView recyclerListView2 = this.searchListView;
+        RecyclerListView recyclerListView = this.searchListView;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.searchLayoutManager = linearLayoutManager;
-        recyclerListView2.setLayoutManager(linearLayoutManager);
+        recyclerListView.setLayoutManager(linearLayoutManager);
         this.searchListView.setAnimateEmptyView(true, 0);
         this.searchListView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
-                    AndroidUtilities.hideKeyboard(baseFragment.getParentActivity().getCurrentFocus());
+                    AndroidUtilities.hideKeyboard(dialogsActivity.getParentActivity().getCurrentFocus());
                 }
             }
 
@@ -130,6 +133,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 if (abs > 0 && SearchViewPager.this.searchLayoutManager.findLastVisibleItemPosition() == itemCount - 1 && !SearchViewPager.this.dialogsSearchAdapter.isMessagesSearchEndReached()) {
                     SearchViewPager.this.dialogsSearchAdapter.loadMoreSearchMessages();
                 }
+                SearchViewPager.this.fragmentView.invalidateBlur();
             }
         });
         FilteredSearchView filteredSearchView = new FilteredSearchView(this.parent);
@@ -159,37 +163,71 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         this.searchContainer.addView(this.searchListView);
         this.searchContainer.addView(this.noMediaFiltersSearchView);
         this.searchListView.setEmptyView(this.emptyView);
+        this.searchListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+                super.onScrolled(recyclerView, i, i2);
+                SearchViewPager.this.fragmentView.invalidateBlur();
+            }
+        });
         this.itemsEnterAnimator = new RecyclerItemsEnterAnimator(this.searchListView, true);
         setAdapter(new ViewPagerFixed.Adapter() {
-            public int getItemViewType(int i) {
-                if (i == 0) {
-                    return 1;
-                }
-                return i + 2;
-            }
-
             public String getItemTitle(int i) {
                 if (i == 0) {
                     return LocaleController.getString("SearchAllChatsShort", NUM);
                 }
-                return FiltersView.filters[i - 1].title;
+                int i2 = 1;
+                if (BuildVars.DEBUG_PRIVATE_VERSION && i == 1) {
+                    return LocaleController.getString("DownloadsTabs", NUM);
+                }
+                FiltersView.MediaFilterData[] mediaFilterDataArr = FiltersView.filters;
+                if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                    i2 = 2;
+                }
+                return mediaFilterDataArr[i - i2].title;
             }
 
             public int getItemCount() {
                 if (SearchViewPager.this.showOnlyDialogsAdapter) {
                     return 1;
                 }
-                return 1 + FiltersView.filters.length;
+                return (BuildVars.DEBUG_PRIVATE_VERSION ? 1 : 0) + FiltersView.filters.length + 1;
             }
 
             public View createView(int i) {
                 if (i == 1) {
                     return SearchViewPager.this.searchContainer;
                 }
+                if (i == 2) {
+                    SearchViewPager searchViewPager = SearchViewPager.this;
+                    SearchDownloadsContainer searchDownloadsContainer = new SearchDownloadsContainer(searchViewPager.parent, searchViewPager.currentAccount);
+                    searchDownloadsContainer.recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+                            super.onScrolled(recyclerView, i, i2);
+                            SearchViewPager.this.fragmentView.invalidateBlur();
+                        }
+                    });
+                    return searchDownloadsContainer;
+                }
                 FilteredSearchView filteredSearchView = new FilteredSearchView(SearchViewPager.this.parent);
                 filteredSearchView.setChatPreviewDelegate(chatPreviewDelegate);
                 filteredSearchView.setUiCallback(SearchViewPager.this);
+                filteredSearchView.recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+                        super.onScrolled(recyclerView, i, i2);
+                        SearchViewPager.this.fragmentView.invalidateBlur();
+                    }
+                });
                 return filteredSearchView;
+            }
+
+            public int getItemViewType(int i) {
+                if (i == 0) {
+                    return 1;
+                }
+                if (!BuildVars.DEBUG_PRIVATE_VERSION || i != 1) {
+                    return i + 3;
+                }
+                return 2;
             }
 
             public void bindView(View view, int i, int i2) {
@@ -207,12 +245,11 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
     /* access modifiers changed from: private */
     public void search(View view, int i, String str, boolean z) {
         boolean z2;
-        boolean z3;
         View view2 = view;
         long j = 0;
         long j2 = 0;
         long j3 = 0;
-        boolean z4 = false;
+        boolean z3 = false;
         for (int i2 = 0; i2 < this.currentSearchFilters.size(); i2++) {
             FiltersView.MediaFilterData mediaFilterData = this.currentSearchFilters.get(i2);
             int i3 = mediaFilterData.filterType;
@@ -230,13 +267,13 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 j2 = j4;
                 j3 = j5;
             } else if (i3 == 7) {
-                z4 = true;
+                z3 = true;
             }
         }
         if (view2 == this.searchContainer) {
             if (j == 0 && j2 == 0 && j3 == 0) {
                 this.lastSearchScrolledToTop = false;
-                this.dialogsSearchAdapter.searchDialogs(str, z4 ? 1 : 0);
+                this.dialogsSearchAdapter.searchDialogs(str, z3 ? 1 : 0);
                 this.dialogsSearchAdapter.setFiltersDelegate(this.filteredSearchViewDelegate, false);
                 this.noMediaFiltersSearchView.animate().setListener((Animator.AnimatorListener) null).cancel();
                 this.noMediaFiltersSearchView.setDelegate((FilteredSearchView.Delegate) null, false);
@@ -258,6 +295,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 this.noMediaFiltersSearchView.setTag((Object) null);
             } else {
                 String str2 = str;
+                boolean z4 = true;
                 this.noMediaFiltersSearchView.setTag(1);
                 this.noMediaFiltersSearchView.setDelegate(this.filteredSearchViewDelegate, false);
                 this.noMediaFiltersSearchView.animate().setListener((Animator.AnimatorListener) null).cancel();
@@ -269,14 +307,13 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                     if (this.noMediaFiltersSearchView.getVisibility() != 0) {
                         this.noMediaFiltersSearchView.setVisibility(0);
                         this.noMediaFiltersSearchView.setAlpha(0.0f);
-                        z3 = true;
                     } else {
-                        z3 = z;
+                        z4 = z;
                     }
                     this.noMediaFiltersSearchView.animate().alpha(1.0f).setDuration(150).start();
-                    z2 = z3;
+                    z2 = z4;
                 }
-                this.noMediaFiltersSearchView.search(j, j2, j3, (FiltersView.MediaFilterData) null, z4, str, z2);
+                this.noMediaFiltersSearchView.search(j, j2, j3, (FiltersView.MediaFilterData) null, z3, str, z2);
                 this.emptyView.setVisibility(8);
             }
             this.emptyView.setKeyboardHeight(this.keyboardSize, false);
@@ -284,9 +321,13 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             return;
         }
         String str3 = str;
-        FilteredSearchView filteredSearchView = (FilteredSearchView) view2;
-        filteredSearchView.setKeyboardHeight(this.keyboardSize, false);
-        filteredSearchView.search(j, j2, j3, FiltersView.filters[i - 1], z4, str, z);
+        if (view2 instanceof FilteredSearchView) {
+            FilteredSearchView filteredSearchView = (FilteredSearchView) view2;
+            filteredSearchView.setKeyboardHeight(this.keyboardSize, false);
+            filteredSearchView.search(j, j2, j3, FiltersView.filters[i - (BuildVars.DEBUG_PRIVATE_VERSION ? 2 : 1)], z3, str, z);
+        } else if (view2 instanceof SearchDownloadsContainer) {
+            ((SearchDownloadsContainer) view2).update(false);
+        }
     }
 
     public void onResume() {
@@ -759,6 +800,11 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.attached = false;
+    }
+
+    /* access modifiers changed from: protected */
+    public void invalidateBlur() {
+        this.fragmentView.invalidateBlur();
     }
 
     public void cancelEnterAnimation() {

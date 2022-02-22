@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.content.Context;
-import android.content.DialogInterface;
+import android.view.View;
 
-public final /* synthetic */ class BlockingUpdateView$$ExternalSyntheticLambda0 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ Context f$0;
+public final /* synthetic */ class BlockingUpdateView$$ExternalSyntheticLambda0 implements View.OnClickListener {
+    public final /* synthetic */ BlockingUpdateView f$0;
 
-    public /* synthetic */ BlockingUpdateView$$ExternalSyntheticLambda0(Context context) {
-        this.f$0 = context;
+    public /* synthetic */ BlockingUpdateView$$ExternalSyntheticLambda0(BlockingUpdateView blockingUpdateView) {
+        this.f$0 = blockingUpdateView;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        BlockingUpdateView.lambda$checkApkInstallPermissions$2(this.f$0, dialogInterface, i);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$0(view);
     }
 }

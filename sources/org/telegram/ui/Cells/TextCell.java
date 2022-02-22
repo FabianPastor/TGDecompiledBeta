@@ -145,6 +145,7 @@ public class TextCell extends FrameLayout {
     }
 
     public void setText(String str, boolean z) {
+        this.imageLeft = 21;
         this.textView.setText(str);
         this.valueTextView.setText((CharSequence) null);
         this.imageView.setVisibility(8);
@@ -155,6 +156,8 @@ public class TextCell extends FrameLayout {
     }
 
     public void setTextAndIcon(String str, int i, boolean z) {
+        this.imageLeft = 21;
+        this.offsetFromImage = 71;
         this.textView.setText(str);
         this.valueTextView.setText((CharSequence) null);
         this.imageView.setImageResource(i);
@@ -189,7 +192,13 @@ public class TextCell extends FrameLayout {
         this.offsetFromImage = i;
     }
 
+    public void setImageLeft(int i) {
+        this.imageLeft = i;
+    }
+
     public void setTextAndValue(String str, String str2, boolean z) {
+        this.imageLeft = 21;
+        this.offsetFromImage = 71;
         this.textView.setText(str);
         this.valueTextView.setText(str2);
         this.valueTextView.setVisibility(0);
@@ -200,6 +209,8 @@ public class TextCell extends FrameLayout {
     }
 
     public void setTextAndValueAndIcon(String str, String str2, int i, boolean z) {
+        this.imageLeft = 21;
+        this.offsetFromImage = 71;
         this.textView.setText(str);
         this.valueTextView.setText(str2);
         this.valueTextView.setVisibility(0);
@@ -212,6 +223,8 @@ public class TextCell extends FrameLayout {
     }
 
     public void setTextAndValueDrawable(String str, Drawable drawable, boolean z) {
+        this.imageLeft = 21;
+        this.offsetFromImage = 71;
         this.textView.setText(str);
         this.valueTextView.setText((CharSequence) null);
         this.valueImageView.setVisibility(0);

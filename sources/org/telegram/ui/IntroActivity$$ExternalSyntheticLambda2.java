@@ -1,19 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$LangPackString;
+import android.view.View;
+import org.telegram.ui.Components.RLottieImageView;
 
-public final /* synthetic */ class IntroActivity$$ExternalSyntheticLambda2 implements Runnable {
+public final /* synthetic */ class IntroActivity$$ExternalSyntheticLambda2 implements View.OnClickListener {
     public final /* synthetic */ IntroActivity f$0;
-    public final /* synthetic */ TLRPC$LangPackString f$1;
-    public final /* synthetic */ String f$2;
+    public final /* synthetic */ RLottieImageView f$1;
 
-    public /* synthetic */ IntroActivity$$ExternalSyntheticLambda2(IntroActivity introActivity, TLRPC$LangPackString tLRPC$LangPackString, String str) {
+    public /* synthetic */ IntroActivity$$ExternalSyntheticLambda2(IntroActivity introActivity, RLottieImageView rLottieImageView) {
         this.f$0 = introActivity;
-        this.f$1 = tLRPC$LangPackString;
-        this.f$2 = str;
+        this.f$1 = rLottieImageView;
     }
 
-    public final void run() {
-        this.f$0.lambda$checkContinueText$2(this.f$1, this.f$2);
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$0(this.f$1, view);
     }
 }

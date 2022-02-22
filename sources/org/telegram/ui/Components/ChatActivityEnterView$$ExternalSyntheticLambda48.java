@@ -1,27 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.MessageObject;
-import org.telegram.tgnet.TLRPC$Document;
+import org.telegram.messenger.MediaController;
 import org.telegram.ui.Components.AlertsCreator;
 
 public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda48 implements AlertsCreator.ScheduleDatePickerDelegate {
-    public final /* synthetic */ ChatActivityEnterView f$0;
-    public final /* synthetic */ TLRPC$Document f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ Object f$3;
-    public final /* synthetic */ MessageObject.SendAnimationData f$4;
-    public final /* synthetic */ boolean f$5;
+    public static final /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda48 INSTANCE = new ChatActivityEnterView$$ExternalSyntheticLambda48();
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda48(ChatActivityEnterView chatActivityEnterView, TLRPC$Document tLRPC$Document, String str, Object obj, MessageObject.SendAnimationData sendAnimationData, boolean z) {
-        this.f$0 = chatActivityEnterView;
-        this.f$1 = tLRPC$Document;
-        this.f$2 = str;
-        this.f$3 = obj;
-        this.f$4 = sendAnimationData;
-        this.f$5 = z;
+    private /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda48() {
     }
 
     public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$onStickerSelected$46(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, z, i);
+        MediaController.getInstance().stopRecording(1, z, i);
     }
 }

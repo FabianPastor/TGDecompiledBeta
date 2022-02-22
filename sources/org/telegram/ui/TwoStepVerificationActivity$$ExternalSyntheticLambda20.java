@@ -15,6 +15,6 @@ public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheti
     }
 
     public final void run() {
-        this.f$0.lambda$clearPassword$22(this.f$1, this.f$2);
+        this.f$0.lambda$processDone$31(this.f$1, this.f$2);
     }
 }

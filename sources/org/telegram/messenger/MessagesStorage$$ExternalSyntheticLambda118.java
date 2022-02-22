@@ -1,23 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.concurrent.CountDownLatch;
+import androidx.collection.LongSparseArray;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda118 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ Object[] f$3;
-    public final /* synthetic */ CountDownLatch f$4;
+    public final /* synthetic */ LongSparseArray f$1;
+    public final /* synthetic */ LongSparseArray f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda118(MessagesStorage messagesStorage, String str, int i, Object[] objArr, CountDownLatch countDownLatch) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda118(MessagesStorage messagesStorage, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         this.f$0 = messagesStorage;
-        this.f$1 = str;
-        this.f$2 = i;
-        this.f$3 = objArr;
-        this.f$4 = countDownLatch;
+        this.f$1 = longSparseArray;
+        this.f$2 = longSparseArray2;
     }
 
     public final void run() {
-        this.f$0.lambda$getSentFile$124(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$getNewTask$81(this.f$1, this.f$2);
     }
 }

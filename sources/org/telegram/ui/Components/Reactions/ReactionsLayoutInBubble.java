@@ -42,6 +42,8 @@ public class ReactionsLayoutInBubble {
     public static Paint paint = new Paint(1);
     /* access modifiers changed from: private */
     public static TextPaint textPaint = new TextPaint(1);
+    /* access modifiers changed from: private */
+    public static final Comparator<TLRPC$User> usersComparator = ReactionsLayoutInBubble$$ExternalSyntheticLambda1.INSTANCE;
     private int animateFromTotalHeight;
     private boolean animateHeight;
     private boolean animateMove;
@@ -82,6 +84,11 @@ public class ReactionsLayoutInBubble {
     public int width;
     public int x;
     public int y;
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$static$0(TLRPC$User tLRPC$User, TLRPC$User tLRPC$User2) {
+        return (int) (tLRPC$User.id - tLRPC$User2.id);
+    }
 
     public ReactionsLayoutInBubble(ChatMessageCell chatMessageCell) {
         this.parentView = chatMessageCell;
@@ -296,7 +303,7 @@ public class ReactionsLayoutInBubble {
             if (remove != null) {
                 int i3 = reactionButton.x;
                 int i4 = remove.x;
-                if (i3 == i4 && reactionButton.y == remove.y && reactionButton.width == remove.width && reactionButton.count == remove.count && reactionButton.backgroundColor == remove.backgroundColor) {
+                if (i3 == i4 && reactionButton.y == remove.y && reactionButton.width == remove.width && reactionButton.count == remove.count && reactionButton.backgroundColor == remove.backgroundColor && reactionButton.avatarsDarawable == null && remove.avatarsDarawable == null) {
                     reactionButton.animationType = 0;
                 } else {
                     reactionButton.animateFromX = i4;
@@ -471,7 +478,7 @@ public class ReactionsLayoutInBubble {
             if (ReactionsLayoutInBubble.this.isSmall) {
                 this.imageReceiver.setAlpha(f2);
                 this.imageReceiver.setImageCoords(0.0f, 0.0f, (float) AndroidUtilities.dp(14.0f), (float) AndroidUtilities.dp(14.0f));
-                drawImage(canvas);
+                drawImage(canvas, f2);
                 return;
             }
             updateColors(f);
@@ -510,7 +517,7 @@ public class ReactionsLayoutInBubble {
             }
             canvas.drawRoundRect(rectF, f3, f3, ReactionsLayoutInBubble.paint);
             this.imageReceiver.setImageCoords((float) AndroidUtilities.dp(8.0f), ((float) (this.height - AndroidUtilities.dp(20.0f))) / 2.0f, (float) AndroidUtilities.dp(20.0f), (float) AndroidUtilities.dp(20.0f));
-            drawImage(canvas);
+            drawImage(canvas, f2);
             if (!(this.count == 0 && this.counterDrawable.countChangeProgress == 1.0f)) {
                 canvas.save();
                 canvas.translate((float) (AndroidUtilities.dp(8.0f) + AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(2.0f)), 0.0f);
@@ -536,7 +543,7 @@ public class ReactionsLayoutInBubble {
             this.lastDrawnBackgroundColor = ColorUtils.blendARGB(this.fromBackgroundColor, this.backgroundColor, f);
         }
 
-        private void drawImage(Canvas canvas) {
+        private void drawImage(Canvas canvas, float f) {
             boolean z = false;
             if (!this.drawImage || (this.realCount <= 1 && ReactionsEffectOverlay.isPlaying(ReactionsLayoutInBubble.this.messageObject.getId(), ReactionsLayoutInBubble.this.messageObject.getGroupId(), this.reaction) && this.isSelected)) {
                 this.imageReceiver.setAlpha(0.0f);
@@ -546,21 +553,28 @@ public class ReactionsLayoutInBubble {
             }
             ImageReceiver imageReceiver2 = ReactionsLayoutInBubble.this.animatedReactions.get(this.reaction);
             if (imageReceiver2 != null) {
-                imageReceiver2.setAlpha(this.imageReceiver.getAlpha());
-                imageReceiver2.setImageCoords(this.imageReceiver.getImageX() - (this.imageReceiver.getImageWidth() / 2.0f), this.imageReceiver.getImageY() - (this.imageReceiver.getImageWidth() / 2.0f), this.imageReceiver.getImageWidth() * 2.0f, this.imageReceiver.getImageHeight() * 2.0f);
-                imageReceiver2.draw(canvas);
                 if (imageReceiver2.getLottieAnimation() == null || !imageReceiver2.getLottieAnimation().hasBitmap()) {
                     z = true;
                 }
-                if (imageReceiver2.getLottieAnimation() != null && !imageReceiver2.getLottieAnimation().isRunning()) {
+                if (f != 1.0f) {
+                    imageReceiver2.setAlpha(f);
+                    if (f <= 0.0f) {
+                        imageReceiver2.onDetachedFromWindow();
+                        ReactionsLayoutInBubble.this.animatedReactions.remove(this.reaction);
+                    }
+                } else if (imageReceiver2.getLottieAnimation() != null && !imageReceiver2.getLottieAnimation().isRunning()) {
                     float alpha = imageReceiver2.getAlpha() - 0.08f;
-                    if (alpha < 0.0f) {
+                    if (alpha <= 0.0f) {
                         imageReceiver2.onDetachedFromWindow();
                         ReactionsLayoutInBubble.this.animatedReactions.remove(this.reaction);
                     } else {
                         imageReceiver2.setAlpha(alpha);
                     }
+                    ReactionsLayoutInBubble.this.parentView.invalidate();
+                    z = true;
                 }
+                imageReceiver2.setImageCoords(this.imageReceiver.getImageX() - (this.imageReceiver.getImageWidth() / 2.0f), this.imageReceiver.getImageY() - (this.imageReceiver.getImageWidth() / 2.0f), this.imageReceiver.getImageWidth() * 2.0f, this.imageReceiver.getImageHeight() * 2.0f);
+                imageReceiver2.draw(canvas);
             } else {
                 z = true;
             }
@@ -573,6 +587,7 @@ public class ReactionsLayoutInBubble {
         public void setUsers(ArrayList<TLRPC$User> arrayList) {
             this.users = arrayList;
             if (arrayList != null) {
+                Collections.sort(arrayList, ReactionsLayoutInBubble.usersComparator);
                 if (this.avatarsDarawable == null) {
                     AvatarsDarawable avatarsDarawable2 = new AvatarsDarawable(ReactionsLayoutInBubble.this.parentView, false);
                     this.avatarsDarawable = avatarsDarawable2;
@@ -678,7 +693,7 @@ public class ReactionsLayoutInBubble {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$chekTouchEvent$0(ReactionButton reactionButton) {
+    public /* synthetic */ void lambda$chekTouchEvent$1(ReactionButton reactionButton) {
         this.parentView.getDelegate().didPressReaction(this.parentView, reactionButton.reactionCount, true);
         this.longPressRunnable = null;
     }

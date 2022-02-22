@@ -37,6 +37,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
+import org.telegram.ui.Components.spoilers.SpoilersTextView;
 
 public class AlertDialog extends Dialog implements Drawable.Callback {
     /* access modifiers changed from: private */
@@ -149,8 +150,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public int topHeight;
     /* access modifiers changed from: private */
     public RLottieImageView topImageView;
-    /* access modifiers changed from: private */
-    public int topResId;
+    private int topResId;
     /* access modifiers changed from: private */
     public View topView;
     /* access modifiers changed from: private */
@@ -887,9 +887,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             linearLayout.setOrientation(1);
             this.contentScrollView.addView(this.scrollContainer, new FrameLayout.LayoutParams(-1, -2));
         }
-        TextView textView4 = new TextView(getContext());
-        this.messageTextView = textView4;
-        textView4.setTextColor(getThemedColor("dialogTextBlack"));
+        SpoilersTextView spoilersTextView = new SpoilersTextView(getContext());
+        this.messageTextView = spoilersTextView;
+        spoilersTextView.setTextColor(getThemedColor("dialogTextBlack"));
         this.messageTextView.setTextSize(1, 16.0f);
         this.messageTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
         this.messageTextView.setLinkTextColor(getThemedColor("dialogTextLink"));
@@ -909,9 +909,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.messageTextView.setLines(1);
             this.messageTextView.setEllipsize(TextUtils.TruncateAt.END);
             FrameLayout frameLayout3 = this.progressViewContainer;
-            TextView textView5 = this.messageTextView;
+            TextView textView4 = this.messageTextView;
             boolean z2 = LocaleController.isRTL;
-            frameLayout3.addView(textView5, LayoutHelper.createFrame(-2, -2.0f, (z2 ? 5 : 3) | 16, (float) (z2 ? 0 : 62), 0.0f, (float) (z2 ? 62 : 0), 0.0f));
+            frameLayout3.addView(textView4, LayoutHelper.createFrame(-2, -2.0f, (z2 ? 5 : 3) | 16, (float) (z2 ? 0 : 62), 0.0f, (float) (z2 ? 62 : 0), 0.0f));
         } else if (i7 == 2) {
             r1.addView(this.messageTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, this.title == null ? 19 : 0, 24, 20));
             LineProgressView lineProgressView2 = new LineProgressView(getContext());
@@ -920,9 +920,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.lineProgressView.setProgressColor(getThemedColor("dialogLineProgress"));
             this.lineProgressView.setBackColor(getThemedColor("dialogLineProgressBackground"));
             r1.addView(this.lineProgressView, LayoutHelper.createLinear(-1, 4, 19, 24, 0, 24, 0));
-            TextView textView6 = new TextView(getContext());
-            this.lineProgressViewPercent = textView6;
-            textView6.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextView textView5 = new TextView(getContext());
+            this.lineProgressViewPercent = textView5;
+            textView5.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.lineProgressViewPercent.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
             this.lineProgressViewPercent.setTextColor(getThemedColor("dialogTextGray2"));
             this.lineProgressViewPercent.setTextSize(1, 14.0f);
@@ -988,7 +988,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 if (charSequence4 != null) {
                     measureText = (int) (((float) measureText) + textPaint.measureText(charSequence4, 0, charSequence4.length()) + ((float) AndroidUtilities.dp(10.0f)));
                 }
-                if (measureText > AndroidUtilities.dp(320.0f)) {
+                if (measureText > AndroidUtilities.displaySize.x - AndroidUtilities.dp(110.0f)) {
                     this.verticalButtons = true;
                 }
             }
@@ -1384,7 +1384,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         this.lineProgressViewPercent.setText(String.format("%d%%", new Object[]{Integer.valueOf(this.currentProgress)}));
     }
 
-    public void setCanCacnel(boolean z) {
+    public void setCanCancel(boolean z) {
         this.canCacnel = z;
     }
 
@@ -1570,12 +1570,6 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
         public Builder setSubtitle(CharSequence charSequence) {
             CharSequence unused = this.alertDialog.subtitle = charSequence;
-            return this;
-        }
-
-        public Builder setTopImage(int i, int i2) {
-            int unused = this.alertDialog.topResId = i;
-            int unused2 = this.alertDialog.topBackgroundColor = i2;
             return this;
         }
 

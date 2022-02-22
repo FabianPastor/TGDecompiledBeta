@@ -5632,7 +5632,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v56, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v101, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v367, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v360, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v362, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v102, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v103, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v53, resolved type: int} */
@@ -5642,13 +5642,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v59, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v55, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v110, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v402, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v404, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v376, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v111, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v57, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v380, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v112, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v407, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v409, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v113, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v382, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v61, resolved type: int} */
@@ -5664,56 +5664,56 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v125, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v126, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v127, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v489, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v491, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v423, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v494, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v496, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v436, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v132, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v133, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v134, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v438, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v496, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v497, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v439, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v498, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v499, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v440, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v445, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v500, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v501, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v490, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v668, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v670, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v671, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v440, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v503, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v491, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v674, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v676, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v677, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v32, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v502, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v504, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v176, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v503, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v505, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v177, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v494, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v502, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v534, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v495, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v503, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v716, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v817, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v542, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v828, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v608, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v609, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v536, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v504, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v718, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v819, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v543, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v830, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v610, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v829, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v548, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v832, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v616, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v617, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v611, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v612, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v831, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v549, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v834, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v618, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v619, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v561, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v620, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v621, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v562, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v563, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v564, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v565, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v110, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v111, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v112, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v565, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v566, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v227, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v51, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v52, resolved type: int} */
@@ -5724,26 +5724,26 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v166, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v237, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v238, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v753, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v754, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v240, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v755, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v241, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v756, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v240, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v757, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v241, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v758, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v759, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v760, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v150, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v151, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v759, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v761, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v67, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v165, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v760, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v762, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v9, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v10, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v11, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v79, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v13, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v762, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v764, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v15, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v16, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v17, resolved type: int} */
@@ -5752,24 +5752,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v18, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v19, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v20, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v798, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v804, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v14, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v814, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v820, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v15, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v816, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v822, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v17, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v18, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v19, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v20, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v21, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v839, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v569, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v840, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v571, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v841, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v573, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v842, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v575, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v845, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v570, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v846, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v572, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v847, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v574, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v848, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v576, resolved type: int} */
     /* JADX WARNING: type inference failed for: r5v46, types: [android.graphics.drawable.BitmapDrawable, org.telegram.tgnet.TLRPC$PhotoSize] */
     /* JADX WARNING: type inference failed for: r5v256 */
     /* JADX WARNING: type inference failed for: r5v259 */
@@ -5777,14 +5777,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX WARNING: Code restructure failed: missing block: B:1298:0x1980, code lost:
         if (r4 != 8) goto L_0x1985;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:2360:0x356e, code lost:
-        if (r0 < (r1.timeWidth + org.telegram.messenger.AndroidUtilities.dp((float) ((r71.isOutOwner() ? 20 : 0) + 20)))) goto L_0x3570;
+    /* JADX WARNING: Code restructure failed: missing block: B:2367:0x358e, code lost:
+        if (r0 < (r1.timeWidth + org.telegram.messenger.AndroidUtilities.dp((float) ((r71.isOutOwner() ? 20 : 0) + 20)))) goto L_0x3590;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:2888:0x40be, code lost:
-        if (r5.isSmall == false) goto L_0x40c0;
+    /* JADX WARNING: Code restructure failed: missing block: B:2895:0x40e6, code lost:
+        if (r5.isSmall == false) goto L_0x40e8;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:3409:0x4ce6, code lost:
-        if (r0 == 3) goto L_0x4cea;
+    /* JADX WARNING: Code restructure failed: missing block: B:3416:0x4d0e, code lost:
+        if (r0 == 3) goto L_0x4d12;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:39:0x008a, code lost:
         if (r1.isPlayingRound != (org.telegram.messenger.MediaController.getInstance().isPlayingMessage(r1.currentMessageObject) && (r7 = r1.delegate) != null && !r7.keyboardIsOpened())) goto L_0x0090;
@@ -5850,106 +5850,106 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX WARNING: Removed duplicated region for block: B:214:0x02ab  */
     /* JADX WARNING: Removed duplicated region for block: B:2156:0x2var_  */
     /* JADX WARNING: Removed duplicated region for block: B:215:0x02ad  */
-    /* JADX WARNING: Removed duplicated region for block: B:2286:0x31e4  */
     /* JADX WARNING: Removed duplicated region for block: B:228:0x02ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:2293:0x3204  */
     /* JADX WARNING: Removed duplicated region for block: B:229:0x02cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:2301:0x3213  */
-    /* JADX WARNING: Removed duplicated region for block: B:2333:0x341d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2383:0x363b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2308:0x3233  */
+    /* JADX WARNING: Removed duplicated region for block: B:2340:0x343d  */
     /* JADX WARNING: Removed duplicated region for block: B:238:0x02e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:2394:0x3653  */
-    /* JADX WARNING: Removed duplicated region for block: B:2397:0x3662  */
-    /* JADX WARNING: Removed duplicated region for block: B:2399:0x3674  */
+    /* JADX WARNING: Removed duplicated region for block: B:2390:0x365b  */
     /* JADX WARNING: Removed duplicated region for block: B:239:0x02e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:2422:0x36f8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2401:0x3673  */
+    /* JADX WARNING: Removed duplicated region for block: B:2404:0x3682  */
+    /* JADX WARNING: Removed duplicated region for block: B:2406:0x3694  */
+    /* JADX WARNING: Removed duplicated region for block: B:2429:0x3718  */
     /* JADX WARNING: Removed duplicated region for block: B:242:0x02ea  */
     /* JADX WARNING: Removed duplicated region for block: B:243:0x02ef  */
     /* JADX WARNING: Removed duplicated region for block: B:250:0x0316  */
-    /* JADX WARNING: Removed duplicated region for block: B:2510:0x394f  */
-    /* JADX WARNING: Removed duplicated region for block: B:2515:0x397d  */
-    /* JADX WARNING: Removed duplicated region for block: B:2539:0x3a33  */
-    /* JADX WARNING: Removed duplicated region for block: B:2540:0x3a55  */
-    /* JADX WARNING: Removed duplicated region for block: B:2593:0x3b4c  */
-    /* JADX WARNING: Removed duplicated region for block: B:2596:0x3b56  */
-    /* JADX WARNING: Removed duplicated region for block: B:2601:0x3b61  */
-    /* JADX WARNING: Removed duplicated region for block: B:2623:0x3bb9  */
-    /* JADX WARNING: Removed duplicated region for block: B:2624:0x3bbd  */
-    /* JADX WARNING: Removed duplicated region for block: B:2631:0x3bcb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2632:0x3bd0  */
-    /* JADX WARNING: Removed duplicated region for block: B:2657:0x3c1b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2517:0x3977  */
+    /* JADX WARNING: Removed duplicated region for block: B:2522:0x39a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2546:0x3a5b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2547:0x3a7d  */
+    /* JADX WARNING: Removed duplicated region for block: B:2600:0x3b74  */
+    /* JADX WARNING: Removed duplicated region for block: B:2603:0x3b7e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2608:0x3b89  */
+    /* JADX WARNING: Removed duplicated region for block: B:2630:0x3be1  */
+    /* JADX WARNING: Removed duplicated region for block: B:2631:0x3be5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2638:0x3bf3  */
+    /* JADX WARNING: Removed duplicated region for block: B:2639:0x3bf8  */
     /* JADX WARNING: Removed duplicated region for block: B:2664:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:2665:0x3CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:2690:0x3cad  */
-    /* JADX WARNING: Removed duplicated region for block: B:2697:0x3cef  */
-    /* JADX WARNING: Removed duplicated region for block: B:2700:0x3cfb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2703:0x3d28  */
-    /* JADX WARNING: Removed duplicated region for block: B:2704:0x3d2b  */
-    /* JADX WARNING: Removed duplicated region for block: B:2707:0x3d33  */
-    /* JADX WARNING: Removed duplicated region for block: B:2708:0x3d36  */
-    /* JADX WARNING: Removed duplicated region for block: B:2711:0x3d40  */
-    /* JADX WARNING: Removed duplicated region for block: B:2714:0x3d47  */
-    /* JADX WARNING: Removed duplicated region for block: B:2715:0x3d59  */
-    /* JADX WARNING: Removed duplicated region for block: B:2725:0x3d83  */
+    /* JADX WARNING: Removed duplicated region for block: B:2671:0x3c6a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2672:0x3CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:2697:0x3cd5  */
+    /* JADX WARNING: Removed duplicated region for block: B:2704:0x3d17  */
+    /* JADX WARNING: Removed duplicated region for block: B:2707:0x3d23  */
+    /* JADX WARNING: Removed duplicated region for block: B:2710:0x3d50  */
+    /* JADX WARNING: Removed duplicated region for block: B:2711:0x3d53  */
+    /* JADX WARNING: Removed duplicated region for block: B:2714:0x3d5b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2715:0x3d5e  */
+    /* JADX WARNING: Removed duplicated region for block: B:2718:0x3d68  */
+    /* JADX WARNING: Removed duplicated region for block: B:2721:0x3d6f  */
+    /* JADX WARNING: Removed duplicated region for block: B:2722:0x3d81  */
     /* JADX WARNING: Removed duplicated region for block: B:272:0x035c  */
+    /* JADX WARNING: Removed duplicated region for block: B:2732:0x3dab  */
     /* JADX WARNING: Removed duplicated region for block: B:275:0x038a  */
     /* JADX WARNING: Removed duplicated region for block: B:283:0x03b6  */
-    /* JADX WARNING: Removed duplicated region for block: B:2877:0x408a  */
-    /* JADX WARNING: Removed duplicated region for block: B:2894:0x40d8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2898:0x40e7 A[SYNTHETIC, Splitter:B:2898:0x40e7] */
-    /* JADX WARNING: Removed duplicated region for block: B:2943:0x4208  */
-    /* JADX WARNING: Removed duplicated region for block: B:2978:0x42eb  */
-    /* JADX WARNING: Removed duplicated region for block: B:2987:0x430b  */
-    /* JADX WARNING: Removed duplicated region for block: B:2993:0x4329  */
-    /* JADX WARNING: Removed duplicated region for block: B:2996:0x4336 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:3020:0x43ee  */
-    /* JADX WARNING: Removed duplicated region for block: B:3021:0x4419  */
-    /* JADX WARNING: Removed duplicated region for block: B:3024:0x4433  */
-    /* JADX WARNING: Removed duplicated region for block: B:3028:0x443d  */
-    /* JADX WARNING: Removed duplicated region for block: B:3032:0x4445 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:2884:0x40b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:2901:0x4100  */
+    /* JADX WARNING: Removed duplicated region for block: B:2905:0x410f A[SYNTHETIC, Splitter:B:2905:0x410f] */
+    /* JADX WARNING: Removed duplicated region for block: B:2950:0x4230  */
+    /* JADX WARNING: Removed duplicated region for block: B:2985:0x4313  */
+    /* JADX WARNING: Removed duplicated region for block: B:2994:0x4333  */
+    /* JADX WARNING: Removed duplicated region for block: B:3000:0x4351  */
+    /* JADX WARNING: Removed duplicated region for block: B:3003:0x435e A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:3027:0x4416  */
+    /* JADX WARNING: Removed duplicated region for block: B:3028:0x4441  */
+    /* JADX WARNING: Removed duplicated region for block: B:3031:0x445b  */
+    /* JADX WARNING: Removed duplicated region for block: B:3035:0x4465  */
+    /* JADX WARNING: Removed duplicated region for block: B:3039:0x446d A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:303:0x0470  */
-    /* JADX WARNING: Removed duplicated region for block: B:3045:0x4460  */
     /* JADX WARNING: Removed duplicated region for block: B:304:0x0472  */
-    /* JADX WARNING: Removed duplicated region for block: B:3066:0x44a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:3070:0x44aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:3052:0x4488  */
+    /* JADX WARNING: Removed duplicated region for block: B:3073:0x44ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:3077:0x44d2  */
     /* JADX WARNING: Removed duplicated region for block: B:307:0x0477  */
-    /* JADX WARNING: Removed duplicated region for block: B:3080:0x4560  */
+    /* JADX WARNING: Removed duplicated region for block: B:3087:0x4588  */
     /* JADX WARNING: Removed duplicated region for block: B:322:0x04c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:3234:0x4949  */
-    /* JADX WARNING: Removed duplicated region for block: B:3237:0x495a  */
     /* JADX WARNING: Removed duplicated region for block: B:323:0x04cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:3255:0x49a8  */
-    /* JADX WARNING: Removed duplicated region for block: B:3260:0x49c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:3267:0x49f2  */
-    /* JADX WARNING: Removed duplicated region for block: B:3270:0x49f9  */
-    /* JADX WARNING: Removed duplicated region for block: B:3273:0x4a06  */
-    /* JADX WARNING: Removed duplicated region for block: B:3274:0x4a16  */
-    /* JADX WARNING: Removed duplicated region for block: B:3277:0x4a29  */
-    /* JADX WARNING: Removed duplicated region for block: B:3314:0x4aba  */
-    /* JADX WARNING: Removed duplicated region for block: B:3336:0x4b2e A[SYNTHETIC, Splitter:B:3336:0x4b2e] */
-    /* JADX WARNING: Removed duplicated region for block: B:3359:0x4bbb  */
-    /* JADX WARNING: Removed duplicated region for block: B:3366:0x4bc9  */
-    /* JADX WARNING: Removed duplicated region for block: B:3371:0x4bdf  */
-    /* JADX WARNING: Removed duplicated region for block: B:3378:0x4bfa  */
-    /* JADX WARNING: Removed duplicated region for block: B:3417:0x4d15  */
-    /* JADX WARNING: Removed duplicated region for block: B:3420:0x4d1c  */
-    /* JADX WARNING: Removed duplicated region for block: B:3434:0x4d5a  */
-    /* JADX WARNING: Removed duplicated region for block: B:3441:0x4d77  */
-    /* JADX WARNING: Removed duplicated region for block: B:3504:0x4f8e  */
-    /* JADX WARNING: Removed duplicated region for block: B:3513:0x4faf  */
-    /* JADX WARNING: Removed duplicated region for block: B:3514:0x4fb9  */
-    /* JADX WARNING: Removed duplicated region for block: B:3529:0x4fee  */
-    /* JADX WARNING: Removed duplicated region for block: B:3530:0x4ffd  */
-    /* JADX WARNING: Removed duplicated region for block: B:3535:0x501a  */
-    /* JADX WARNING: Removed duplicated region for block: B:3538:0x5025  */
-    /* JADX WARNING: Removed duplicated region for block: B:3545:0x5058  */
-    /* JADX WARNING: Removed duplicated region for block: B:3547:0x5060  */
-    /* JADX WARNING: Removed duplicated region for block: B:3597:0x50dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:3603:0x50eb  */
-    /* JADX WARNING: Removed duplicated region for block: B:3614:0x510b  */
-    /* JADX WARNING: Removed duplicated region for block: B:3629:0x5157  */
-    /* JADX WARNING: Removed duplicated region for block: B:3630:0x515b  */
-    /* JADX WARNING: Removed duplicated region for block: B:3649:0x03cb A[EDGE_INSN: B:3649:0x03cb->B:287:0x03cb ?: BREAK  , SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:3727:0x3c6b A[EDGE_INSN: B:3727:0x3c6b->B:2672:0x3c6b ?: BREAK  , SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:3241:0x4971  */
+    /* JADX WARNING: Removed duplicated region for block: B:3244:0x4982  */
+    /* JADX WARNING: Removed duplicated region for block: B:3262:0x49d0  */
+    /* JADX WARNING: Removed duplicated region for block: B:3267:0x49ef  */
+    /* JADX WARNING: Removed duplicated region for block: B:3274:0x4a1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:3277:0x4a21  */
+    /* JADX WARNING: Removed duplicated region for block: B:3280:0x4a2e  */
+    /* JADX WARNING: Removed duplicated region for block: B:3281:0x4a3e  */
+    /* JADX WARNING: Removed duplicated region for block: B:3284:0x4a51  */
+    /* JADX WARNING: Removed duplicated region for block: B:3321:0x4ae2  */
+    /* JADX WARNING: Removed duplicated region for block: B:3343:0x4b56 A[SYNTHETIC, Splitter:B:3343:0x4b56] */
+    /* JADX WARNING: Removed duplicated region for block: B:3366:0x4be3  */
+    /* JADX WARNING: Removed duplicated region for block: B:3373:0x4bf1  */
+    /* JADX WARNING: Removed duplicated region for block: B:3378:0x4CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:3385:0x4CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:3424:0x4d3d  */
+    /* JADX WARNING: Removed duplicated region for block: B:3427:0x4d44  */
+    /* JADX WARNING: Removed duplicated region for block: B:3441:0x4d82  */
+    /* JADX WARNING: Removed duplicated region for block: B:3448:0x4d9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:3511:0x4fb6  */
+    /* JADX WARNING: Removed duplicated region for block: B:3520:0x4fd7  */
+    /* JADX WARNING: Removed duplicated region for block: B:3521:0x4fe1  */
+    /* JADX WARNING: Removed duplicated region for block: B:3536:0x5016  */
+    /* JADX WARNING: Removed duplicated region for block: B:3537:0x5025  */
+    /* JADX WARNING: Removed duplicated region for block: B:3542:0x5042  */
+    /* JADX WARNING: Removed duplicated region for block: B:3545:0x504d  */
+    /* JADX WARNING: Removed duplicated region for block: B:3552:0x5080  */
+    /* JADX WARNING: Removed duplicated region for block: B:3554:0x5088  */
+    /* JADX WARNING: Removed duplicated region for block: B:3604:0x5104  */
+    /* JADX WARNING: Removed duplicated region for block: B:3610:0x5113  */
+    /* JADX WARNING: Removed duplicated region for block: B:3621:0x5133  */
+    /* JADX WARNING: Removed duplicated region for block: B:3636:0x517f  */
+    /* JADX WARNING: Removed duplicated region for block: B:3637:0x5183  */
+    /* JADX WARNING: Removed duplicated region for block: B:3656:0x03cb A[EDGE_INSN: B:3656:0x03cb->B:287:0x03cb ?: BREAK  , SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:3734:0x3CLASSNAME A[EDGE_INSN: B:3734:0x3CLASSNAME->B:2679:0x3CLASSNAME ?: BREAK  , SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:410:0x06aa  */
     /* JADX WARNING: Removed duplicated region for block: B:415:0x06da  */
     /* JADX WARNING: Removed duplicated region for block: B:62:0x00cc  */
@@ -6273,7 +6273,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             goto L_0x01d4
         L_0x01d0:
             r20 = 1065353216(0x3var_, float:1.0)
-            goto L_0x5109
+            goto L_0x5131
         L_0x01d4:
             boolean r4 = r1.isPinned
             r1.wasPinned = r4
@@ -6764,7 +6764,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x0566:
             boolean r2 = r1.isRepliesChat
             if (r2 == 0) goto L_0x0577
-            r2 = 2131628468(0x7f0e11b4, float:1.888423E38)
+            r2 = 2131628541(0x7f0e11fd, float:1.8884378E38)
             java.lang.String r3 = "ViewInChat"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x0573:
@@ -6775,7 +6775,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
             if (r2 == 0) goto L_0x058e
             if (r0 != 0) goto L_0x0587
-            r2 = 2131626143(0x7f0e089f, float:1.8879514E38)
+            r2 = 2131626179(0x7f0e08c3, float:1.8879587E38)
             java.lang.String r3 = "LeaveAComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x05a0
@@ -6785,7 +6785,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             goto L_0x05a0
         L_0x058e:
             if (r0 != 0) goto L_0x059a
-            r2 = 2131626143(0x7f0e089f, float:1.8879514E38)
+            r2 = 2131626179(0x7f0e08c3, float:1.8879587E38)
             java.lang.String r3 = "LeaveAComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x05a0
@@ -7583,7 +7583,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r5 = r5 + 1
             goto L_0x0b74
         L_0x0b9c:
-            r3 = 2131626778(0x7f0e0b1a, float:1.8880802E38)
+            r3 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
             r5 = 2
             java.lang.Object[] r7 = new java.lang.Object[r5]
             r5 = 1
@@ -8045,7 +8045,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r50 = r6
             r6 = 11
             if (r15 != r6) goto L_0x0edd
-            r0 = 2131628544(0x7f0e1200, float:1.8884384E38)
+            r0 = 2131628617(0x7f0e1249, float:1.8884532E38)
             java.lang.String r6 = "VoipChannelVoiceChat"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
         L_0x0edb:
@@ -8054,14 +8054,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x0edd:
             r6 = 9
             if (r15 != r6) goto L_0x0eeb
-            r0 = 2131628670(0x7f0e127e, float:1.888464E38)
+            r0 = 2131628743(0x7f0e12c7, float:1.8884787E38)
             java.lang.String r6 = "VoipGroupVoiceChat"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
             goto L_0x0edb
         L_0x0eeb:
             r6 = 6
             if (r15 != r6) goto L_0x0ef8
-            r0 = 2131624867(0x7f0e03a3, float:1.8876926E38)
+            r0 = 2131624872(0x7f0e03a8, float:1.8876936E38)
             java.lang.String r6 = "ChatBackground"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
             goto L_0x0edb
@@ -8069,7 +8069,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.String r6 = "telegram_theme"
             boolean r0 = r6.equals(r0)
             if (r0 == 0) goto L_0x0f0a
-            r0 = 2131625030(0x7f0e0446, float:1.8877256E38)
+            r0 = 2131625036(0x7f0e044c, float:1.8877269E38)
             java.lang.String r6 = "ColorTheme"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
             goto L_0x0edb
@@ -10466,7 +10466,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r2 = 1
         L_0x1fb9:
             if (r2 == 0) goto L_0x1fe8
-            r2 = 2131624408(0x7f0e01d8, float:1.8875995E38)
+            r2 = 2131624410(0x7f0e01da, float:1.8875999E38)
             java.lang.String r3 = "AttachGame"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r4 = r2.toUpperCase()
@@ -10497,7 +10497,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r12 = 4
             r4 = r4 & r12
             if (r4 == 0) goto L_0x2006
-            r3 = 2131627098(0x7f0e0c5a, float:1.888145E38)
+            r3 = 2131627143(0x7f0e0CLASSNAME, float:1.8881542E38)
             java.lang.String r4 = "PaymentReceipt"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             java.lang.String r3 = r3.toUpperCase()
@@ -10505,13 +10505,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x2006:
             boolean r3 = r3.test
             if (r3 == 0) goto L_0x2018
-            r3 = 2131627116(0x7f0e0c6c, float:1.8881487E38)
+            r3 = 2131627161(0x7f0e0CLASSNAME, float:1.8881579E38)
             java.lang.String r4 = "PaymentTestInvoice"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             java.lang.String r3 = r3.toUpperCase()
             goto L_0x2025
         L_0x2018:
-            r3 = 2131627085(0x7f0e0c4d, float:1.8881424E38)
+            r3 = 2131627130(0x7f0e0c7a, float:1.8881516E38)
             java.lang.String r4 = "PaymentInvoice"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             java.lang.String r3 = r3.toUpperCase()
@@ -10696,24 +10696,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x21a9
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x219f
-            r4 = 2131624674(0x7f0e02e2, float:1.8876534E38)
+            r4 = 2131624677(0x7f0e02e5, float:1.887654E38)
             java.lang.String r5 = "CallMessageVideoOutgoingMissed"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2210
         L_0x219f:
-            r4 = 2131624668(0x7f0e02dc, float:1.8876522E38)
+            r4 = 2131624671(0x7f0e02df, float:1.8876528E38)
             java.lang.String r5 = "CallMessageOutgoingMissed"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2210
         L_0x21a9:
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x21b7
-            r4 = 2131624673(0x7f0e02e1, float:1.8876532E38)
+            r4 = 2131624676(0x7f0e02e4, float:1.8876538E38)
             java.lang.String r5 = "CallMessageVideoOutgoing"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2210
         L_0x21b7:
-            r4 = 2131624667(0x7f0e02db, float:1.887652E38)
+            r4 = 2131624670(0x7f0e02de, float:1.8876526E38)
             java.lang.String r5 = "CallMessageOutgoing"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2210
@@ -10721,12 +10721,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x21db
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x21d1
-            r4 = 2131624672(0x7f0e02e0, float:1.887653E38)
+            r4 = 2131624675(0x7f0e02e3, float:1.8876536E38)
             java.lang.String r5 = "CallMessageVideoIncomingMissed"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2210
         L_0x21d1:
-            r4 = 2131624666(0x7f0e02da, float:1.8876518E38)
+            r4 = 2131624669(0x7f0e02dd, float:1.8876524E38)
             java.lang.String r5 = "CallMessageIncomingMissed"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2210
@@ -10736,24 +10736,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x21f9
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x21ef
-            r4 = 2131624671(0x7f0e02df, float:1.8876528E38)
+            r4 = 2131624674(0x7f0e02e2, float:1.8876534E38)
             java.lang.String r5 = "CallMessageVideoIncomingDeclined"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2210
         L_0x21ef:
-            r4 = 2131624665(0x7f0e02d9, float:1.8876516E38)
+            r4 = 2131624668(0x7f0e02dc, float:1.8876522E38)
             java.lang.String r5 = "CallMessageIncomingDeclined"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2210
         L_0x21f9:
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x2207
-            r4 = 2131624670(0x7f0e02de, float:1.8876526E38)
+            r4 = 2131624673(0x7f0e02e1, float:1.8876532E38)
             java.lang.String r5 = "CallMessageVideoIncoming"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2210
         L_0x2207:
-            r4 = 2131624664(0x7f0e02d8, float:1.8876514E38)
+            r4 = 2131624667(0x7f0e02db, float:1.887652E38)
             java.lang.String r5 = "CallMessageIncoming"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x2210:
@@ -10972,7 +10972,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.String r0 = r3.format(r0)
             goto L_0x238b
         L_0x23c9:
-            r0 = 2131626775(0x7f0e0b17, float:1.8880796E38)
+            r0 = 2131626812(0x7f0e0b3c, float:1.888087E38)
             java.lang.String r3 = "NumberUnknown"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             goto L_0x238b
@@ -11526,7 +11526,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x280f:
             boolean r4 = r1.pollClosed
             if (r4 == 0) goto L_0x281d
-            r4 = 2131625691(0x7f0e06db, float:1.8878597E38)
+            r4 = 2131625717(0x7f0e06f5, float:1.887865E38)
             java.lang.String r5 = "FinalResults"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2852
@@ -11536,24 +11536,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r5 == 0) goto L_0x283b
             boolean r4 = r4.public_voters
             if (r4 == 0) goto L_0x2831
-            r4 = 2131627466(0x7f0e0dca, float:1.8882197E38)
+            r4 = 2131627523(0x7f0e0e03, float:1.8882313E38)
             java.lang.String r5 = "QuizPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2852
         L_0x2831:
-            r4 = 2131624292(0x7f0e0164, float:1.887576E38)
+            r4 = 2131624294(0x7f0e0166, float:1.8875764E38)
             java.lang.String r5 = "AnonymousQuizPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2852
         L_0x283b:
             boolean r4 = r4.public_voters
             if (r4 == 0) goto L_0x2849
-            r4 = 2131627412(0x7f0e0d94, float:1.8882088E38)
+            r4 = 2131627468(0x7f0e0dcc, float:1.8882201E38)
             java.lang.String r5 = "PublicPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2852
         L_0x2849:
-            r4 = 2131624291(0x7f0e0163, float:1.8875758E38)
+            r4 = 2131624293(0x7f0e0165, float:1.8875762E38)
             java.lang.String r5 = "AnonymousPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x2852:
@@ -11629,7 +11629,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$PollResults r4 = r2.results
             int r4 = r4.total_voters
             if (r4 != 0) goto L_0x28e8
-            r4 = 2131626588(0x7f0e0a5c, float:1.8880416E38)
+            r4 = 2131626625(0x7f0e0a81, float:1.8880491E38)
             java.lang.String r6 = "NoVotesQuiz"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             goto L_0x28ee
@@ -11645,7 +11645,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$PollResults r4 = r2.results
             int r4 = r4.total_voters
             if (r4 != 0) goto L_0x2906
-            r4 = 2131626587(0x7f0e0a5b, float:1.8880414E38)
+            r4 = 2131626624(0x7f0e0a80, float:1.888049E38)
             java.lang.String r6 = "NoVotes"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             goto L_0x290c
@@ -12258,19 +12258,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x2d89:
             if (r12 >= r3) goto L_0x2dc1
             if (r12 != 0) goto L_0x2d97
-            r3 = 2131627264(0x7f0e0d00, float:1.8881788E38)
+            r3 = 2131627320(0x7f0e0d38, float:1.8881901E38)
             java.lang.String r4 = "PollViewResults"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             goto L_0x2dad
         L_0x2d97:
             r3 = 1
             if (r12 != r3) goto L_0x2da4
-            r3 = 2131627262(0x7f0e0cfe, float:1.8881783E38)
+            r3 = 2131627318(0x7f0e0d36, float:1.8881897E38)
             java.lang.String r4 = "PollSubmitVotes"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             goto L_0x2dad
         L_0x2da4:
-            r3 = 2131626587(0x7f0e0a5b, float:1.8880414E38)
+            r3 = 2131626624(0x7f0e0a80, float:1.888049E38)
             java.lang.String r4 = "NoVotes"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
         L_0x2dad:
@@ -12370,7 +12370,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x2e5c:
             r15 = 8
             r20 = 1065353216(0x3var_, float:1.0)
-            goto L_0x4a9c
+            goto L_0x4ac4
         L_0x2e62:
             org.telegram.tgnet.TLRPC$Message r0 = r14.messageOwner
             org.telegram.tgnet.TLRPC$MessageFwdHeader r0 = r0.fwd_from
@@ -12491,7 +12491,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r0.setForcePreview(r2)
             int r0 = r14.type
             r2 = 9
-            if (r0 != r2) goto L_0x31e4
+            if (r0 != r2) goto L_0x3204
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
             if (r0 == 0) goto L_0x2f4a
             int r0 = org.telegram.messenger.AndroidUtilities.getMinTabletSide()
@@ -12759,9 +12759,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x312c:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r3 = r1.reactionsLayoutInBubble
             boolean r4 = r3.isSmall
-            if (r4 != 0) goto L_0x31da
+            if (r4 != 0) goto L_0x31fa
             boolean r4 = r3.isEmpty
-            if (r4 != 0) goto L_0x31da
+            if (r4 != 0) goto L_0x31fa
             boolean r4 = r1.drawPhotoImage
             if (r4 != 0) goto L_0x3143
             int r4 = r3.positionOffsetY
@@ -12782,13 +12782,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r35)
             int r4 = r4 + r5
             r3.positionOffsetY = r4
-            goto L_0x3189
+            goto L_0x31a9
         L_0x315f:
             boolean r3 = r1.drawPhotoImage
-            if (r3 != 0) goto L_0x3189
+            if (r3 != 0) goto L_0x318a
             java.lang.CharSequence r3 = r14.caption
             boolean r3 = android.text.TextUtils.isEmpty(r3)
-            if (r3 != 0) goto L_0x3189
+            if (r3 != 0) goto L_0x318a
             android.text.StaticLayout r3 = r1.docTitleLayout
             if (r3 == 0) goto L_0x3176
             int r3 = r3.getLineCount()
@@ -12797,14 +12797,29 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x3176:
             org.telegram.messenger.MessageObject r3 = r1.currentMessageObject
             boolean r3 = r3.hasValidReplyMessageObject()
-            if (r3 == 0) goto L_0x3189
+            if (r3 == 0) goto L_0x318a
         L_0x317e:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r3 = r1.reactionsLayoutInBubble
             int r4 = r3.positionOffsetY
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r35)
             int r4 = r4 + r5
             r3.positionOffsetY = r4
-        L_0x3189:
+            goto L_0x31a9
+        L_0x318a:
+            boolean r3 = r1.drawPhotoImage
+            if (r3 != 0) goto L_0x31a9
+            java.lang.CharSequence r3 = r14.caption
+            boolean r3 = android.text.TextUtils.isEmpty(r3)
+            if (r3 != 0) goto L_0x31a9
+            org.telegram.messenger.MessageObject r3 = r1.currentMessageObject
+            boolean r3 = r3.isOutOwner()
+            if (r3 != 0) goto L_0x31a9
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r3 = r1.reactionsLayoutInBubble
+            int r4 = r3.positionOffsetY
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r35)
+            int r4 = r4 + r5
+            r3.positionOffsetY = r4
+        L_0x31a9:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r3 = r1.reactionsLayoutInBubble
             int r4 = r3.height
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r33)
@@ -12812,15 +12827,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r3.totalHeight = r4
             r70.measureTime(r71)
             boolean r3 = r1.drawPhotoImage
-            if (r3 == 0) goto L_0x31aa
+            if (r3 == 0) goto L_0x31ca
             android.text.StaticLayout r3 = r1.captionLayout
-            if (r3 != 0) goto L_0x31aa
+            if (r3 != 0) goto L_0x31ca
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r3 = r1.reactionsLayoutInBubble
             int r4 = r3.totalHeight
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r33)
             int r4 = r4 + r5
             r3.totalHeight = r4
-        L_0x31aa:
+        L_0x31ca:
             int r3 = r1.backgroundWidth
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r4 = r1.reactionsLayoutInBubble
             int r4 = r4.lastLineX
@@ -12829,7 +12844,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r3 = r3 - r4
             int r4 = r1.timeWidth
-            if (r3 >= r4) goto L_0x31d2
+            if (r3 >= r4) goto L_0x31f2
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r3 = r1.reactionsLayoutInBubble
             int r4 = r3.totalHeight
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r34)
@@ -12840,24 +12855,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r34)
             int r4 = r4 - r5
             r3.positionOffsetY = r4
-        L_0x31d2:
+        L_0x31f2:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r3 = r1.reactionsLayoutInBubble
             int r3 = r3.totalHeight
             r4 = 0
             int r12 = r4 + r3
-            goto L_0x31db
-        L_0x31da:
+            goto L_0x31fb
+        L_0x31fa:
             r12 = 0
-        L_0x31db:
+        L_0x31fb:
             r13 = 1
             r15 = 8
             r20 = 1065353216(0x3var_, float:1.0)
-        L_0x31e0:
+        L_0x3200:
             r66 = 0
-            goto L_0x4934
-        L_0x31e4:
+            goto L_0x495c
+        L_0x3204:
             r2 = 4
-            if (r0 != r2) goto L_0x3719
+            if (r0 != r2) goto L_0x3739
             org.telegram.tgnet.TLRPC$Message r0 = r14.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             org.telegram.tgnet.TLRPC$GeoPoint r0 = r0.geo
@@ -12865,68 +12880,68 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             double r6 = r0._long
             long r11 = r71.getDialogId()
             int r4 = (int) r11
-            if (r4 != 0) goto L_0x3209
+            if (r4 != 0) goto L_0x3229
             int r4 = org.telegram.messenger.SharedConfig.mapPreviewType
-            if (r4 != 0) goto L_0x31fd
-            goto L_0x3209
-        L_0x31fd:
+            if (r4 != 0) goto L_0x321d
+            goto L_0x3229
+        L_0x321d:
             r8 = 1
-            if (r4 != r8) goto L_0x3203
+            if (r4 != r8) goto L_0x3223
             r47 = 4
-            goto L_0x320b
-        L_0x3203:
+            goto L_0x322b
+        L_0x3223:
             r8 = 3
-            if (r4 != r8) goto L_0x3209
+            if (r4 != r8) goto L_0x3229
             r47 = 1
-            goto L_0x320b
-        L_0x3209:
+            goto L_0x322b
+        L_0x3229:
             r47 = -1
-        L_0x320b:
+        L_0x322b:
             org.telegram.tgnet.TLRPC$Message r4 = r14.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r4 = r4.media
             boolean r8 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeoLive
-            if (r8 == 0) goto L_0x341d
+            if (r8 == 0) goto L_0x343d
             boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r4 == 0) goto L_0x3235
+            if (r4 == 0) goto L_0x3255
             int r4 = org.telegram.messenger.AndroidUtilities.getMinTabletSide()
-            if (r22 == 0) goto L_0x3220
-            goto L_0x3222
-        L_0x3220:
+            if (r22 == 0) goto L_0x3240
+            goto L_0x3242
+        L_0x3240:
             r5 = 1112014848(0x42480000, float:50.0)
-        L_0x3222:
+        L_0x3242:
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = r4 - r5
             r5 = 1133543424(0x43908000, float:289.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = java.lang.Math.min(r4, r5)
             r1.backgroundWidth = r4
-            goto L_0x3250
-        L_0x3235:
+            goto L_0x3270
+        L_0x3255:
             int r4 = r70.getParentWidth()
-            if (r22 == 0) goto L_0x323c
-            goto L_0x323e
-        L_0x323c:
+            if (r22 == 0) goto L_0x325c
+            goto L_0x325e
+        L_0x325c:
             r5 = 1112014848(0x42480000, float:50.0)
-        L_0x323e:
+        L_0x325e:
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = r4 - r5
             r5 = 1133543424(0x43908000, float:289.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = java.lang.Math.min(r4, r5)
             r1.backgroundWidth = r4
-        L_0x3250:
+        L_0x3270:
             int r4 = r1.backgroundWidth
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r24)
             int r4 = r4 - r5
             r1.backgroundWidth = r4
             boolean r4 = r70.checkNeedDrawShareButton(r71)
-            if (r4 == 0) goto L_0x326a
+            if (r4 == 0) goto L_0x328a
             int r4 = r1.backgroundWidth
             r5 = 1101004800(0x41a00000, float:20.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = r4 - r5
             r1.backgroundWidth = r4
-        L_0x326a:
+        L_0x328a:
             int r4 = r1.backgroundWidth
             r5 = 1108606976(0x42140000, float:37.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
@@ -13023,7 +13038,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.currentWebFile = r0
             boolean r0 = r70.isCurrentLocationTimeExpired(r71)
             r1.locationExpired = r0
-            if (r0 != 0) goto L_0x3366
+            if (r0 != 0) goto L_0x3386
             org.telegram.messenger.ImageReceiver r0 = r1.photoImage
             r2 = 1
             r0.setCrossfadeWithOldImage(r2)
@@ -13035,17 +13050,17 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r6 = 1000(0x3e8, double:4.94E-321)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r6)
             r1.scheduledInvalidate = r2
-            goto L_0x3372
-        L_0x3366:
+            goto L_0x3392
+        L_0x3386:
             int r0 = r1.backgroundWidth
             r2 = 1091567616(0x41100000, float:9.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 - r2
             r1.backgroundWidth = r0
             r12 = 0
-        L_0x3372:
+        L_0x3392:
             android.text.StaticLayout r0 = new android.text.StaticLayout
-            r2 = 2131624414(0x7f0e01de, float:1.8876007E38)
+            r2 = 2131624416(0x7f0e01e0, float:1.8876011E38)
             java.lang.String r3 = "AttachLiveLocation"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             android.text.TextPaint r3 = org.telegram.ui.ActionBar.Theme.chat_locationTitlePaint
@@ -13064,30 +13079,30 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.docTitleLayout = r0
             r70.updateCurrentUserAndChat()
             org.telegram.tgnet.TLRPC$User r0 = r1.currentUser
-            if (r0 == 0) goto L_0x33b3
+            if (r0 == 0) goto L_0x33d3
             org.telegram.ui.Components.AvatarDrawable r2 = r1.contactAvatarDrawable
             r2.setInfo((org.telegram.tgnet.TLRPC$User) r0)
             org.telegram.messenger.ImageReceiver r0 = r1.locationImageReceiver
             org.telegram.tgnet.TLRPC$User r2 = r1.currentUser
             org.telegram.ui.Components.AvatarDrawable r3 = r1.contactAvatarDrawable
             r0.setForUserOrChat(r2, r3)
-            goto L_0x33e3
-        L_0x33b3:
+            goto L_0x3403
+        L_0x33d3:
             org.telegram.tgnet.TLRPC$Chat r0 = r1.currentChat
-            if (r0 == 0) goto L_0x33ce
+            if (r0 == 0) goto L_0x33ee
             org.telegram.tgnet.TLRPC$ChatPhoto r2 = r0.photo
-            if (r2 == 0) goto L_0x33bf
+            if (r2 == 0) goto L_0x33df
             org.telegram.tgnet.TLRPC$FileLocation r2 = r2.photo_small
             r1.currentPhoto = r2
-        L_0x33bf:
+        L_0x33df:
             org.telegram.ui.Components.AvatarDrawable r2 = r1.contactAvatarDrawable
             r2.setInfo((org.telegram.tgnet.TLRPC$Chat) r0)
             org.telegram.messenger.ImageReceiver r0 = r1.locationImageReceiver
             org.telegram.tgnet.TLRPC$Chat r2 = r1.currentChat
             org.telegram.ui.Components.AvatarDrawable r3 = r1.contactAvatarDrawable
             r0.setForUserOrChat(r2, r3)
-            goto L_0x33e3
-        L_0x33ce:
+            goto L_0x3403
+        L_0x33ee:
             org.telegram.messenger.ImageReceiver r0 = r1.locationImageReceiver
             r39 = 0
             r40 = 0
@@ -13098,18 +13113,18 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r38 = r0
             r41 = r2
             r38.setImage(r39, r40, r41, r42, r43, r44)
-        L_0x33e3:
+        L_0x3403:
             android.text.StaticLayout r0 = new android.text.StaticLayout
             r14 = r71
             org.telegram.tgnet.TLRPC$Message r2 = r14.messageOwner
             int r3 = r2.edit_date
-            if (r3 == 0) goto L_0x33ef
+            if (r3 == 0) goto L_0x340f
             long r2 = (long) r3
-            goto L_0x33f2
-        L_0x33ef:
+            goto L_0x3412
+        L_0x340f:
             int r2 = r2.date
             long r2 = (long) r2
-        L_0x33f2:
+        L_0x3412:
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatLocationUpdateDate(r2)
             android.text.TextPaint r3 = org.telegram.ui.ActionBar.Theme.chat_locationAddressPaint
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r25)
@@ -13130,52 +13145,52 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r11 = r8
             r8 = 2
             r10 = 0
-            goto L_0x3634
-        L_0x341d:
+            goto L_0x3654
+        L_0x343d:
             java.lang.String r4 = r4.title
             boolean r4 = android.text.TextUtils.isEmpty(r4)
-            if (r4 != 0) goto L_0x3586
+            if (r4 != 0) goto L_0x35a6
             boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r4 == 0) goto L_0x3447
+            if (r4 == 0) goto L_0x3467
             int r4 = org.telegram.messenger.AndroidUtilities.getMinTabletSide()
-            if (r22 == 0) goto L_0x3432
-            goto L_0x3434
-        L_0x3432:
+            if (r22 == 0) goto L_0x3452
+            goto L_0x3454
+        L_0x3452:
             r5 = 1112014848(0x42480000, float:50.0)
-        L_0x3434:
+        L_0x3454:
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = r4 - r5
             r5 = 1133543424(0x43908000, float:289.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = java.lang.Math.min(r4, r5)
             r1.backgroundWidth = r4
-            goto L_0x3462
-        L_0x3447:
+            goto L_0x3482
+        L_0x3467:
             int r4 = r70.getParentWidth()
-            if (r22 == 0) goto L_0x344e
-            goto L_0x3450
-        L_0x344e:
+            if (r22 == 0) goto L_0x346e
+            goto L_0x3470
+        L_0x346e:
             r5 = 1112014848(0x42480000, float:50.0)
-        L_0x3450:
+        L_0x3470:
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = r4 - r5
             r5 = 1133543424(0x43908000, float:289.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = java.lang.Math.min(r4, r5)
             r1.backgroundWidth = r4
-        L_0x3462:
+        L_0x3482:
             int r4 = r1.backgroundWidth
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r24)
             int r4 = r4 - r5
             r1.backgroundWidth = r4
             boolean r4 = r70.checkNeedDrawShareButton(r71)
-            if (r4 == 0) goto L_0x347c
+            if (r4 == 0) goto L_0x349c
             int r4 = r1.backgroundWidth
             r5 = 1101004800(0x41a00000, float:20.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = r4 - r5
             r1.backgroundWidth = r4
-        L_0x347c:
+        L_0x349c:
             int r4 = r1.backgroundWidth
             r5 = 1107820544(0x42080000, float:34.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
@@ -13245,7 +13260,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             java.lang.String r0 = r0.address
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x357d
+            if (r0 != 0) goto L_0x359d
             org.telegram.tgnet.TLRPC$Message r0 = r14.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             java.lang.String r0 = r0.address
@@ -13277,89 +13292,89 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             float r2 = r2.getLineLeft(r3)
             r10 = 0
             int r2 = (r2 > r10 ? 1 : (r2 == r10 ? 0 : -1))
-            if (r2 <= 0) goto L_0x3557
+            if (r2 <= 0) goto L_0x3577
             r13 = 1
-            goto L_0x3558
-        L_0x3557:
+            goto L_0x3578
+        L_0x3577:
             r13 = 0
-        L_0x3558:
-            if (r13 != 0) goto L_0x3570
+        L_0x3578:
+            if (r13 != 0) goto L_0x3590
             int r2 = r1.timeWidth
             boolean r3 = r71.isOutOwner()
-            if (r3 == 0) goto L_0x3565
+            if (r3 == 0) goto L_0x3585
             r3 = 20
-            goto L_0x3566
-        L_0x3565:
+            goto L_0x3586
+        L_0x3585:
             r3 = 0
-        L_0x3566:
+        L_0x3586:
             int r3 = r3 + 20
             float r3 = (float) r3
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r2 = r2 + r3
-            if (r0 >= r2) goto L_0x3581
-        L_0x3570:
-            if (r13 == 0) goto L_0x3575
+            if (r0 >= r2) goto L_0x35a1
+        L_0x3590:
+            if (r13 == 0) goto L_0x3595
             r0 = 1092616192(0x41200000, float:10.0)
-            goto L_0x3577
-        L_0x3575:
+            goto L_0x3597
+        L_0x3595:
             r0 = 1090519040(0x41000000, float:8.0)
-        L_0x3577:
+        L_0x3597:
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r12 = r12 + r0
-            goto L_0x3581
-        L_0x357d:
+            goto L_0x35a1
+        L_0x359d:
             r2 = 0
             r10 = 0
             r1.infoLayout = r2
-        L_0x3581:
+        L_0x35a1:
             r0 = r5
             r11 = r8
             r8 = 2
-            goto L_0x3634
-        L_0x3586:
+            goto L_0x3654
+        L_0x35a6:
             r9 = 1112014848(0x42480000, float:50.0)
             r10 = 0
             boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r4 == 0) goto L_0x35ab
+            if (r4 == 0) goto L_0x35cb
             int r4 = org.telegram.messenger.AndroidUtilities.getMinTabletSide()
-            if (r22 == 0) goto L_0x3596
-            goto L_0x3598
-        L_0x3596:
+            if (r22 == 0) goto L_0x35b6
+            goto L_0x35b8
+        L_0x35b6:
             r5 = 1112014848(0x42480000, float:50.0)
-        L_0x3598:
+        L_0x35b8:
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = r4 - r5
             r5 = 1133543424(0x43908000, float:289.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = java.lang.Math.min(r4, r5)
             r1.backgroundWidth = r4
-            goto L_0x35c6
-        L_0x35ab:
+            goto L_0x35e6
+        L_0x35cb:
             int r4 = r70.getParentWidth()
-            if (r22 == 0) goto L_0x35b2
-            goto L_0x35b4
-        L_0x35b2:
+            if (r22 == 0) goto L_0x35d2
+            goto L_0x35d4
+        L_0x35d2:
             r5 = 1112014848(0x42480000, float:50.0)
-        L_0x35b4:
+        L_0x35d4:
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = r4 - r5
             r5 = 1133543424(0x43908000, float:289.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = java.lang.Math.min(r4, r5)
             r1.backgroundWidth = r4
-        L_0x35c6:
+        L_0x35e6:
             int r4 = r1.backgroundWidth
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r24)
             int r4 = r4 - r5
             r1.backgroundWidth = r4
             boolean r4 = r70.checkNeedDrawShareButton(r71)
-            if (r4 == 0) goto L_0x35e0
+            if (r4 == 0) goto L_0x3600
             int r4 = r1.backgroundWidth
             r5 = 1101004800(0x41a00000, float:20.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = r4 - r5
             r1.backgroundWidth = r4
-        L_0x35e0:
+        L_0x3600:
             int r4 = r1.backgroundWidth
             r5 = 1107820544(0x42080000, float:34.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
@@ -13403,39 +13418,39 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r0 = r4
             r11 = r5
             r12 = 0
-        L_0x3634:
+        L_0x3654:
             long r2 = r71.getDialogId()
             int r3 = (int) r2
-            if (r3 != 0) goto L_0x3653
+            if (r3 != 0) goto L_0x3673
             int r2 = org.telegram.messenger.SharedConfig.mapPreviewType
-            if (r2 != 0) goto L_0x3643
+            if (r2 != 0) goto L_0x3663
             r1.currentMapProvider = r8
-        L_0x3641:
+        L_0x3661:
             r2 = -1
-            goto L_0x365e
-        L_0x3643:
+            goto L_0x367e
+        L_0x3663:
             r3 = 1
-            if (r2 != r3) goto L_0x3649
+            if (r2 != r3) goto L_0x3669
             r1.currentMapProvider = r3
-            goto L_0x3641
-        L_0x3649:
+            goto L_0x3661
+        L_0x3669:
             r4 = 3
-            if (r2 != r4) goto L_0x364f
+            if (r2 != r4) goto L_0x366f
             r1.currentMapProvider = r3
-            goto L_0x3641
-        L_0x364f:
+            goto L_0x3661
+        L_0x366f:
             r2 = -1
             r1.currentMapProvider = r2
-            goto L_0x365e
-        L_0x3653:
+            goto L_0x367e
+        L_0x3673:
             r2 = -1
             int r3 = r14.currentAccount
             org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
             int r3 = r3.mapProvider
             r1.currentMapProvider = r3
-        L_0x365e:
+        L_0x367e:
             int r3 = r1.currentMapProvider
-            if (r3 != r2) goto L_0x3674
+            if (r3 != r2) goto L_0x3694
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             r3 = 0
             r4 = 0
@@ -13445,24 +13460,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r7 = r71
             r15 = 0
             r2.setImage(r3, r4, r5, r6, r7, r8)
-        L_0x366f:
+        L_0x368f:
             r13 = 8
             r20 = 1065353216(0x3var_, float:1.0)
-            goto L_0x36c2
-        L_0x3674:
+            goto L_0x36e2
+        L_0x3694:
             r2 = 2
             r15 = 0
-            if (r3 != r2) goto L_0x369d
+            if (r3 != r2) goto L_0x36bd
             org.telegram.messenger.WebFile r2 = r1.currentWebFile
-            if (r2 == 0) goto L_0x366f
+            if (r2 == 0) goto L_0x368f
             org.telegram.messenger.WebFile r2 = r1.lastWebFile
-            if (r2 != 0) goto L_0x3682
+            if (r2 != 0) goto L_0x36a2
             r5 = 0
-            goto L_0x3687
-        L_0x3682:
+            goto L_0x36a7
+        L_0x36a2:
             org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForWebFile(r2)
             r5 = r2
-        L_0x3687:
+        L_0x36a7:
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.messenger.WebFile r3 = r1.currentWebFile
             org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForWebFile(r3)
@@ -13474,36 +13489,36 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r13 = 8
             r20 = 1065353216(0x3var_, float:1.0)
             r2.setImage((org.telegram.messenger.ImageLocation) r3, (java.lang.String) r4, (org.telegram.messenger.ImageLocation) r5, (java.lang.String) r6, (android.graphics.drawable.Drawable) r7, (java.lang.Object) r8, (int) r9)
-            goto L_0x36c2
-        L_0x369d:
+            goto L_0x36e2
+        L_0x36bd:
             r2 = 3
             r13 = 8
             r20 = 1065353216(0x3var_, float:1.0)
-            if (r3 == r2) goto L_0x36a7
+            if (r3 == r2) goto L_0x36c7
             r2 = 4
-            if (r3 != r2) goto L_0x36b5
-        L_0x36a7:
+            if (r3 != r2) goto L_0x36d5
+        L_0x36c7:
             org.telegram.messenger.ImageLoader r2 = org.telegram.messenger.ImageLoader.getInstance()
             java.lang.String r3 = r1.currentUrl
             org.telegram.messenger.WebFile r4 = r1.currentWebFile
             r2.addTestWebFile(r3, r4)
             r2 = 1
             r1.addedForTest = r2
-        L_0x36b5:
+        L_0x36d5:
             java.lang.String r4 = r1.currentUrl
-            if (r4 == 0) goto L_0x36c2
+            if (r4 == 0) goto L_0x36e2
             org.telegram.messenger.ImageReceiver r3 = r1.photoImage
             r5 = 0
             r6 = 0
             r7 = 0
             r8 = 0
             r3.setImage(r4, r5, r6, r7, r8)
-        L_0x36c2:
+        L_0x36e2:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r2 = r1.reactionsLayoutInBubble
             boolean r3 = r2.isSmall
-            if (r3 != 0) goto L_0x3713
+            if (r3 != 0) goto L_0x3733
             boolean r3 = r2.isEmpty
-            if (r3 != 0) goto L_0x3713
+            if (r3 != 0) goto L_0x3733
             int r3 = r1.backgroundWidth
             r4 = 1098907648(0x41800000, float:16.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
@@ -13523,7 +13538,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r2 = r2 + r3
             int r3 = r1.backgroundWidth
-            if (r2 <= r3) goto L_0x370e
+            if (r2 <= r3) goto L_0x372e
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r2 = r1.reactionsLayoutInBubble
             int r3 = r2.totalHeight
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r34)
@@ -13534,100 +13549,100 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r34)
             int r3 = r3 - r4
             r2.positionOffsetY = r3
-        L_0x370e:
+        L_0x372e:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r2 = r1.reactionsLayoutInBubble
             int r2 = r2.totalHeight
             int r12 = r12 + r2
-        L_0x3713:
+        L_0x3733:
             r2 = r11
             r13 = 1
-        L_0x3715:
+        L_0x3735:
             r15 = 8
-            goto L_0x31e0
-        L_0x3719:
+            goto L_0x3200
+        L_0x3739:
             r13 = 8
             r15 = 0
             r20 = 1065353216(0x3var_, float:1.0)
             boolean r0 = r71.isAnyKindOfSticker()
-            if (r0 == 0) goto L_0x3a5b
+            if (r0 == 0) goto L_0x3a83
             r2 = 0
             r1.drawBackground = r2
             int r0 = r14.type
             r2 = 13
-            if (r0 != r2) goto L_0x372f
+            if (r0 != r2) goto L_0x374f
             r0 = 1
-            goto L_0x3730
-        L_0x372f:
+            goto L_0x3750
+        L_0x374f:
             r0 = 0
-        L_0x3730:
+        L_0x3750:
             r12 = 0
-        L_0x3731:
+        L_0x3751:
             org.telegram.tgnet.TLRPC$Document r2 = r71.getDocument()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r2 = r2.attributes
             int r2 = r2.size()
-            if (r12 >= r2) goto L_0x375e
+            if (r12 >= r2) goto L_0x377e
             org.telegram.tgnet.TLRPC$Document r2 = r71.getDocument()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r2 = r2.attributes
             java.lang.Object r2 = r2.get(r12)
             org.telegram.tgnet.TLRPC$DocumentAttribute r2 = (org.telegram.tgnet.TLRPC$DocumentAttribute) r2
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeImageSize
-            if (r3 == 0) goto L_0x3752
+            if (r3 == 0) goto L_0x3772
             int r12 = r2.w
             int r2 = r2.h
-            goto L_0x3760
-        L_0x3752:
+            goto L_0x3780
+        L_0x3772:
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeVideo
-            if (r3 == 0) goto L_0x375b
+            if (r3 == 0) goto L_0x377b
             int r12 = r2.w
             int r2 = r2.h
-            goto L_0x3760
-        L_0x375b:
+            goto L_0x3780
+        L_0x377b:
             int r12 = r12 + 1
-            goto L_0x3731
-        L_0x375e:
+            goto L_0x3751
+        L_0x377e:
             r2 = 0
             r12 = 0
-        L_0x3760:
+        L_0x3780:
             boolean r3 = r71.isAnimatedSticker()
-            if (r3 != 0) goto L_0x376c
+            if (r3 != 0) goto L_0x378c
             boolean r3 = r71.isVideoSticker()
-            if (r3 == 0) goto L_0x3774
-        L_0x376c:
-            if (r12 != 0) goto L_0x3774
-            if (r2 != 0) goto L_0x3774
+            if (r3 == 0) goto L_0x3794
+        L_0x378c:
+            if (r12 != 0) goto L_0x3794
+            if (r2 != 0) goto L_0x3794
             r12 = 512(0x200, float:7.175E-43)
             r2 = 512(0x200, float:7.175E-43)
-        L_0x3774:
+        L_0x3794:
             boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r3 == 0) goto L_0x3783
+            if (r3 == 0) goto L_0x37a3
             int r3 = org.telegram.messenger.AndroidUtilities.getMinTabletSide()
             float r3 = (float) r3
             r4 = 1053609165(0x3ecccccd, float:0.4)
-            goto L_0x3792
-        L_0x3783:
+            goto L_0x37b2
+        L_0x37a3:
             int r3 = r70.getParentWidth()
             android.graphics.Point r4 = org.telegram.messenger.AndroidUtilities.displaySize
             int r4 = r4.y
             int r3 = java.lang.Math.min(r3, r4)
             float r3 = (float) r3
             r4 = 1056964608(0x3var_, float:0.5)
-        L_0x3792:
+        L_0x37b2:
             float r3 = r3 * r4
             int r3 = (int) r3
             float r4 = (float) r3
             r9 = r3
             boolean r3 = r71.isAnimatedEmoji()
-            if (r3 != 0) goto L_0x37c8
+            if (r3 != 0) goto L_0x37e8
             boolean r3 = r71.isDice()
-            if (r3 == 0) goto L_0x37a4
-            goto L_0x37c8
-        L_0x37a4:
-            if (r12 != 0) goto L_0x37af
+            if (r3 == 0) goto L_0x37c4
+            goto L_0x37e8
+        L_0x37c4:
+            if (r12 != 0) goto L_0x37cf
             int r2 = (int) r4
             r3 = 1120403456(0x42CLASSNAME, float:100.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r12 = r2 + r3
-        L_0x37af:
+        L_0x37cf:
             float r2 = (float) r2
             float r3 = (float) r9
             float r5 = (float) r12
@@ -13636,19 +13651,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r2 = (int) r2
             float r5 = (float) r2
             int r6 = (r5 > r4 ? 1 : (r5 == r4 ? 0 : -1))
-            if (r6 <= 0) goto L_0x37c5
+            if (r6 <= 0) goto L_0x37e5
             float r2 = r4 / r5
             float r3 = r3 * r2
             int r2 = (int) r3
             int r3 = (int) r4
             r10 = r2
             r11 = r3
-            goto L_0x37e5
-        L_0x37c5:
+            goto L_0x3805
+        L_0x37e5:
             r11 = r2
             r10 = r9
-            goto L_0x37e5
-        L_0x37c8:
+            goto L_0x3805
+        L_0x37e8:
             int r3 = r1.currentAccount
             org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
             float r3 = r3.animatedEmojisZoom
@@ -13667,7 +13682,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r2 = (int) r2
             r11 = r2
             r10 = r5
-        L_0x37e5:
+        L_0x3805:
             float r2 = (float) r10
             float r3 = org.telegram.messenger.AndroidUtilities.density
             float r2 = r2 / r3
@@ -13676,29 +13691,29 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             float r4 = r4 / r3
             int r3 = (int) r4
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r4 = r1.delegate
-            if (r4 == 0) goto L_0x37f9
+            if (r4 == 0) goto L_0x3819
             boolean r4 = r4.shouldRepeatSticker(r14)
-            if (r4 == 0) goto L_0x37f9
+            if (r4 == 0) goto L_0x3819
             r4 = 1
-            goto L_0x37fa
-        L_0x37f9:
+            goto L_0x381a
+        L_0x3819:
             r4 = 0
-        L_0x37fa:
+        L_0x381a:
             org.telegram.messenger.MessageObject r5 = r1.currentMessageObject
             android.graphics.drawable.BitmapDrawable r5 = r5.strippedThumb
-            if (r5 != 0) goto L_0x380b
+            if (r5 != 0) goto L_0x382b
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r5 = r14.photoThumbs
             r6 = 40
             org.telegram.tgnet.TLRPC$PhotoSize r5 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r5, r6)
             r1.currentPhotoObjectThumb = r5
-            goto L_0x380d
-        L_0x380b:
+            goto L_0x382d
+        L_0x382b:
             r1.currentPhotoObjectThumbStripped = r5
-        L_0x380d:
+        L_0x382d:
             org.telegram.tgnet.TLObject r5 = r14.photoThumbsObject
             r1.photoParentObject = r5
             boolean r5 = r71.isDice()
-            if (r5 == 0) goto L_0x388d
+            if (r5 == 0) goto L_0x38ad
             java.util.Locale r4 = java.util.Locale.US
             r5 = 4
             java.lang.Object[] r6 = new java.lang.Object[r5]
@@ -13723,43 +13738,43 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r4 = r1.currentAccount
             org.telegram.messenger.MediaDataController r4 = org.telegram.messenger.MediaDataController.getInstance(r4)
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r4 = r4.getStickerSetByEmojiOrName(r3)
-            if (r4 == 0) goto L_0x3886
+            if (r4 == 0) goto L_0x38a6
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r5 = r4.documents
             int r5 = r5.size()
-            if (r5 <= 0) goto L_0x3886
+            if (r5 <= 0) goto L_0x38a6
             org.telegram.messenger.MessageObject r5 = r1.currentMessageObject
             int r5 = r5.getDiceValue()
-            if (r5 > 0) goto L_0x3886
+            if (r5 > 0) goto L_0x38a6
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r4 = r4.documents
             r5 = 0
             java.lang.Object r4 = r4.get(r5)
             org.telegram.tgnet.TLRPC$Document r4 = (org.telegram.tgnet.TLRPC$Document) r4
             java.lang.String r5 = "🎰"
             boolean r3 = r5.equals(r3)
-            if (r3 == 0) goto L_0x387a
+            if (r3 == 0) goto L_0x389a
             r3 = 0
             r1.currentPhotoObjectThumb = r3
-            goto L_0x3884
-        L_0x387a:
+            goto L_0x38a4
+        L_0x389a:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r4.thumbs
             r5 = 40
             org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r5)
             r1.currentPhotoObjectThumb = r3
-        L_0x3884:
+        L_0x38a4:
             r1.photoParentObject = r4
-        L_0x3886:
+        L_0x38a6:
             r40 = r2
             r49 = r14
-        L_0x388a:
+        L_0x38aa:
             r2 = 6
-            goto L_0x3932
-        L_0x388d:
+            goto L_0x395a
+        L_0x38ad:
             boolean r5 = r71.isAnimatedEmoji()
-            if (r5 == 0) goto L_0x38d9
+            if (r5 == 0) goto L_0x38fd
             java.util.Locale r5 = java.util.Locale.US
             java.lang.StringBuilder r6 = new java.lang.StringBuilder
             r6.<init>()
-            java.lang.String r7 = "%d_%d_nr_%s"
+            java.lang.String r7 = "%d_%d_nr_messageId=%d"
             r6.append(r7)
             java.lang.String r7 = r14.emojiAnimatedStickerColor
             r6.append(r7)
@@ -13772,31 +13787,32 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.Integer r2 = java.lang.Integer.valueOf(r3)
             r3 = 1
             r8[r3] = r2
-            java.lang.String r2 = r71.toString()
+            int r2 = r71.getId()
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r3 = 2
             r8[r3] = r2
             java.lang.String r2 = java.lang.String.format(r5, r6, r8)
             org.telegram.messenger.ImageReceiver r3 = r1.photoImage
-            if (r4 == 0) goto L_0x38ca
+            if (r4 == 0) goto L_0x38ee
             r4 = 2
-            goto L_0x38cb
-        L_0x38ca:
+            goto L_0x38ef
+        L_0x38ee:
             r4 = 3
-        L_0x38cb:
+        L_0x38ef:
             r3.setAutoRepeat(r4)
             org.telegram.tgnet.TLRPC$Document r3 = r14.emojiAnimatedSticker
             org.telegram.tgnet.TLRPC$InputStickerSet r3 = org.telegram.messenger.MessageObject.getInputStickerSet((org.telegram.tgnet.TLRPC$Document) r3)
             r40 = r2
             r49 = r3
-            goto L_0x388a
-        L_0x38d9:
+            goto L_0x38aa
+        L_0x38fd:
             boolean r5 = org.telegram.messenger.SharedConfig.loopStickers
-            if (r5 != 0) goto L_0x3912
-            if (r0 == 0) goto L_0x38e6
+            if (r5 != 0) goto L_0x393a
+            if (r0 == 0) goto L_0x390a
             boolean r5 = r71.isVideoSticker()
-            if (r5 != 0) goto L_0x38e6
-            goto L_0x3912
-        L_0x38e6:
+            if (r5 != 0) goto L_0x390a
+            goto L_0x393a
+        L_0x390a:
             java.util.Locale r5 = java.util.Locale.US
             r6 = 3
             java.lang.Object[] r7 = new java.lang.Object[r6]
@@ -13806,21 +13822,22 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.Integer r2 = java.lang.Integer.valueOf(r3)
             r3 = 1
             r7[r3] = r2
-            java.lang.String r2 = r71.toString()
+            int r2 = r71.getId()
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r6 = 2
             r7[r6] = r2
-            java.lang.String r2 = "%d_%d_nr_%s"
+            java.lang.String r2 = "%d_%d_nr_messageId=%d"
             java.lang.String r2 = java.lang.String.format(r5, r2, r7)
             org.telegram.messenger.ImageReceiver r3 = r1.photoImage
-            if (r4 == 0) goto L_0x390c
+            if (r4 == 0) goto L_0x3934
             r4 = 2
-            goto L_0x390d
-        L_0x390c:
+            goto L_0x3935
+        L_0x3934:
             r4 = 3
-        L_0x390d:
+        L_0x3935:
             r3.setAutoRepeat(r4)
-            goto L_0x3886
-        L_0x3912:
+            goto L_0x38a6
+        L_0x393a:
             r6 = 2
             java.util.Locale r4 = java.util.Locale.US
             java.lang.Object[] r5 = new java.lang.Object[r6]
@@ -13834,8 +13851,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.String r2 = java.lang.String.format(r4, r2, r5)
             org.telegram.messenger.ImageReceiver r4 = r1.photoImage
             r4.setAutoRepeat(r3)
-            goto L_0x3886
-        L_0x3932:
+            goto L_0x38a6
+        L_0x395a:
             r1.documentAttachType = r2
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r32)
             int r2 = r10 - r2
@@ -13847,7 +13864,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r3 = 0
             r2.setRoundRadius((int) r3)
             boolean r2 = r71.isVideoSticker()
-            if (r2 == 0) goto L_0x397d
+            if (r2 == 0) goto L_0x39a5
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.tgnet.TLRPC$Document r3 = r71.getDocument()
             org.telegram.messenger.ImageLocation r42 = org.telegram.messenger.ImageLocation.getForDocument(r3)
@@ -13856,46 +13873,46 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.messenger.SvgHelper$SvgDrawable r3 = r14.pathThumb
             org.telegram.tgnet.TLRPC$Document r4 = r71.getDocument()
             int r4 = r4.size
-            if (r0 == 0) goto L_0x396c
+            if (r0 == 0) goto L_0x3994
             java.lang.String r0 = "webp"
             r48 = r0
-            goto L_0x396e
-        L_0x396c:
+            goto L_0x3996
+        L_0x3994:
             r48 = 0
-        L_0x396e:
+        L_0x3996:
             r50 = 1
             java.lang.String r43 = "g"
             r41 = r2
             r46 = r3
             r47 = r4
             r41.setImage(r42, r43, r44, r45, r46, r47, r48, r49, r50)
-            goto L_0x3a2d
-        L_0x397d:
+            goto L_0x3a55
+        L_0x39a5:
             org.telegram.messenger.SvgHelper$SvgDrawable r2 = r14.pathThumb
-            if (r2 == 0) goto L_0x39ab
+            if (r2 == 0) goto L_0x39d3
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.tgnet.TLRPC$Document r3 = r71.getDocument()
             org.telegram.messenger.ImageLocation r39 = org.telegram.messenger.ImageLocation.getForDocument(r3)
             org.telegram.messenger.SvgHelper$SvgDrawable r3 = r14.pathThumb
             org.telegram.tgnet.TLRPC$Document r4 = r71.getDocument()
             int r4 = r4.size
-            if (r0 == 0) goto L_0x399a
+            if (r0 == 0) goto L_0x39c2
             java.lang.String r0 = "webp"
             r43 = r0
-            goto L_0x399c
-        L_0x399a:
+            goto L_0x39c4
+        L_0x39c2:
             r43 = 0
-        L_0x399c:
+        L_0x39c4:
             r45 = 1
             r38 = r2
             r41 = r3
             r42 = r4
             r44 = r49
             r38.setImage((org.telegram.messenger.ImageLocation) r39, (java.lang.String) r40, (android.graphics.drawable.Drawable) r41, (int) r42, (java.lang.String) r43, (java.lang.Object) r44, (int) r45)
-            goto L_0x3a2d
-        L_0x39ab:
+            goto L_0x3a55
+        L_0x39d3:
             boolean r2 = r14.attachPathExists
-            if (r2 == 0) goto L_0x39e2
+            if (r2 == 0) goto L_0x3a0a
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.tgnet.TLRPC$Message r3 = r14.messageOwner
             java.lang.String r3 = r3.attachPath
@@ -13906,13 +13923,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             android.graphics.drawable.BitmapDrawable r3 = r1.currentPhotoObjectThumbStripped
             org.telegram.tgnet.TLRPC$Document r4 = r71.getDocument()
             int r4 = r4.size
-            if (r0 == 0) goto L_0x39d0
+            if (r0 == 0) goto L_0x39f8
             java.lang.String r0 = "webp"
             r45 = r0
-            goto L_0x39d2
-        L_0x39d0:
+            goto L_0x39fa
+        L_0x39f8:
             r45 = 0
-        L_0x39d2:
+        L_0x39fa:
             r47 = 1
             java.lang.String r42 = "b1"
             r38 = r2
@@ -13920,13 +13937,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r44 = r4
             r46 = r49
             r38.setImage(r39, r40, r41, r42, r43, r44, r45, r46, r47)
-            goto L_0x3a2d
-        L_0x39e2:
+            goto L_0x3a55
+        L_0x3a0a:
             org.telegram.tgnet.TLRPC$Document r2 = r71.getDocument()
             long r2 = r2.id
             r4 = 0
             int r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r6 == 0) goto L_0x3a21
+            if (r6 == 0) goto L_0x3a49
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.tgnet.TLRPC$Document r3 = r71.getDocument()
             org.telegram.messenger.ImageLocation r39 = org.telegram.messenger.ImageLocation.getForDocument(r3)
@@ -13936,13 +13953,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             android.graphics.drawable.BitmapDrawable r3 = r1.currentPhotoObjectThumbStripped
             org.telegram.tgnet.TLRPC$Document r4 = r71.getDocument()
             int r4 = r4.size
-            if (r0 == 0) goto L_0x3a0f
+            if (r0 == 0) goto L_0x3a37
             java.lang.String r0 = "webp"
             r45 = r0
-            goto L_0x3a11
-        L_0x3a0f:
+            goto L_0x3a39
+        L_0x3a37:
             r45 = 0
-        L_0x3a11:
+        L_0x3a39:
             r47 = 1
             java.lang.String r42 = "b1"
             r38 = r2
@@ -13950,8 +13967,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r44 = r4
             r46 = r49
             r38.setImage(r39, r40, r41, r42, r43, r44, r45, r46, r47)
-            goto L_0x3a2d
-        L_0x3a21:
+            goto L_0x3a55
+        L_0x3a49:
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             r3 = 0
             r4 = 0
@@ -13960,10 +13977,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r8 = 0
             r7 = r71
             r2.setImage(r3, r4, r5, r6, r7, r8)
-        L_0x3a2d:
+        L_0x3a55:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r1.reactionsLayoutInBubble
             boolean r2 = r0.isSmall
-            if (r2 != 0) goto L_0x3a55
+            if (r2 != 0) goto L_0x3a7d
             r0.measure(r9)
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r1.reactionsLayoutInBubble
             r2 = 1
@@ -13980,15 +13997,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r24)
             int r2 = r2 + r3
             r0.positionOffsetY = r2
-            goto L_0x3a56
-        L_0x3a55:
+            goto L_0x3a7e
+        L_0x3a7d:
             r12 = 0
-        L_0x3a56:
+        L_0x3a7e:
             r0 = r10
             r2 = r11
             r13 = 0
-            goto L_0x3715
-        L_0x3a5b:
+            goto L_0x3735
+        L_0x3a83:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r0 = r14.photoThumbs
             int r2 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
             org.telegram.tgnet.TLRPC$PhotoSize r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r2)
@@ -13997,116 +14014,116 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.photoParentObject = r0
             int r0 = r14.type
             r2 = 5
-            if (r0 != r2) goto L_0x3a7c
+            if (r0 != r2) goto L_0x3aa4
             org.telegram.tgnet.TLRPC$Document r0 = r71.getDocument()
             r1.documentAttach = r0
             r2 = 7
             r1.documentAttachType = r2
             r0 = 0
             r12 = 0
-            goto L_0x3ad1
-        L_0x3a7c:
+            goto L_0x3af9
+        L_0x3aa4:
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x3a8f
+            if (r0 == 0) goto L_0x3ab7
             int r0 = org.telegram.messenger.AndroidUtilities.getMinTabletSide()
-        L_0x3a86:
+        L_0x3aae:
             float r0 = (float) r0
             r2 = 1060320051(0x3var_, float:0.7)
             float r0 = r0 * r2
             int r12 = (int) r0
             r0 = 0
-            goto L_0x3ad1
-        L_0x3a8f:
+            goto L_0x3af9
+        L_0x3ab7:
             org.telegram.tgnet.TLRPC$PhotoSize r0 = r1.currentPhotoObject
-            if (r0 == 0) goto L_0x3ac4
+            if (r0 == 0) goto L_0x3aec
             int r2 = r14.type
             r3 = 1
-            if (r2 == r3) goto L_0x3a9d
+            if (r2 == r3) goto L_0x3ac5
             r3 = 3
-            if (r2 == r3) goto L_0x3a9d
-            if (r2 != r13) goto L_0x3ac4
-        L_0x3a9d:
+            if (r2 == r3) goto L_0x3ac5
+            if (r2 != r13) goto L_0x3aec
+        L_0x3ac5:
             int r2 = r0.w
             int r0 = r0.h
-            if (r2 < r0) goto L_0x3ac4
+            if (r2 < r0) goto L_0x3aec
             int r0 = r70.getParentWidth()
             android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
             int r2 = r2.y
             int r0 = java.lang.Math.min(r0, r2)
             boolean r2 = r70.checkNeedDrawShareButton(r71)
-            if (r2 == 0) goto L_0x3ab8
+            if (r2 == 0) goto L_0x3ae0
             r12 = 10
-            goto L_0x3ab9
-        L_0x3ab8:
+            goto L_0x3ae1
+        L_0x3ae0:
             r12 = 0
-        L_0x3ab9:
+        L_0x3ae1:
             int r12 = r12 + 64
             float r2 = (float) r12
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r12 = r0 - r2
             r0 = 1
-            goto L_0x3ad1
-        L_0x3ac4:
+            goto L_0x3af9
+        L_0x3aec:
             int r0 = r70.getParentWidth()
             android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
             int r2 = r2.y
             int r0 = java.lang.Math.min(r0, r2)
-            goto L_0x3a86
-        L_0x3ad1:
+            goto L_0x3aae
+        L_0x3af9:
             r2 = 1120403456(0x42CLASSNAME, float:100.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r2 = r2 + r12
-            if (r0 != 0) goto L_0x3b02
+            if (r0 != 0) goto L_0x3b2a
             int r0 = r14.type
             r3 = 5
-            if (r0 == r3) goto L_0x3aec
+            if (r0 == r3) goto L_0x3b14
             boolean r0 = r70.checkNeedDrawShareButton(r71)
-            if (r0 == 0) goto L_0x3aec
+            if (r0 == 0) goto L_0x3b14
             r0 = 1101004800(0x41a00000, float:20.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r12 = r12 - r0
-        L_0x3aec:
+        L_0x3b14:
             int r0 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-            if (r12 <= r0) goto L_0x3af7
+            if (r12 <= r0) goto L_0x3b1f
             int r0 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
             r12 = r0
-        L_0x3af7:
+        L_0x3b1f:
             int r0 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-            if (r2 <= r0) goto L_0x3b0b
+            if (r2 <= r0) goto L_0x3b33
             int r2 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-            goto L_0x3b0b
-        L_0x3b02:
-            if (r22 == 0) goto L_0x3b0b
+            goto L_0x3b33
+        L_0x3b2a:
+            if (r22 == 0) goto L_0x3b33
             r0 = 1112539136(0x42500000, float:52.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r12 = r12 - r0
-        L_0x3b0b:
+        L_0x3b33:
             int r0 = r14.type
             r3 = 1
-            if (r0 != r3) goto L_0x3b1e
+            if (r0 != r3) goto L_0x3b46
             r70.updateSecretTimeText(r71)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r0 = r14.photoThumbs
             r3 = 40
             org.telegram.tgnet.TLRPC$PhotoSize r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r3)
             r1.currentPhotoObjectThumb = r0
-            goto L_0x3b32
-        L_0x3b1e:
+            goto L_0x3b5a
+        L_0x3b46:
             r3 = 3
-            if (r0 == r3) goto L_0x3b34
-            if (r0 != r13) goto L_0x3b24
-            goto L_0x3b34
-        L_0x3b24:
+            if (r0 == r3) goto L_0x3b5c
+            if (r0 != r13) goto L_0x3b4c
+            goto L_0x3b5c
+        L_0x3b4c:
             r3 = 5
-            if (r0 != r3) goto L_0x3b32
+            if (r0 != r3) goto L_0x3b5a
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r0 = r14.photoThumbs
             r3 = 40
             org.telegram.tgnet.TLRPC$PhotoSize r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r3)
             r1.currentPhotoObjectThumb = r0
-            goto L_0x3b45
-        L_0x3b32:
+            goto L_0x3b6d
+        L_0x3b5a:
             r0 = 0
-            goto L_0x3b46
-        L_0x3b34:
+            goto L_0x3b6e
+        L_0x3b5c:
             r3 = 0
             r1.createDocumentLayout(r3, r14)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r0 = r14.photoThumbs
@@ -14114,70 +14131,70 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$PhotoSize r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r3)
             r1.currentPhotoObjectThumb = r0
             r70.updateSecretTimeText(r71)
-        L_0x3b45:
+        L_0x3b6d:
             r0 = 1
-        L_0x3b46:
+        L_0x3b6e:
             org.telegram.messenger.MessageObject r3 = r1.currentMessageObject
             android.graphics.drawable.BitmapDrawable r3 = r3.strippedThumb
-            if (r3 == 0) goto L_0x3b51
+            if (r3 == 0) goto L_0x3b79
             r4 = 0
             r1.currentPhotoObjectThumb = r4
             r1.currentPhotoObjectThumbStripped = r3
-        L_0x3b51:
+        L_0x3b79:
             int r3 = r14.type
             r4 = 5
-            if (r3 != r4) goto L_0x3b61
+            if (r3 != r4) goto L_0x3b89
             boolean r3 = r1.isPlayingRound
-            if (r3 == 0) goto L_0x3b5d
+            if (r3 == 0) goto L_0x3b85
             int r3 = org.telegram.messenger.AndroidUtilities.roundPlayingMessageSize
-            goto L_0x3b5f
-        L_0x3b5d:
+            goto L_0x3b87
+        L_0x3b85:
             int r3 = org.telegram.messenger.AndroidUtilities.roundMessageSize
-        L_0x3b5f:
+        L_0x3b87:
             r4 = r3
-            goto L_0x3bab
-        L_0x3b61:
+            goto L_0x3bd3
+        L_0x3b89:
             org.telegram.tgnet.TLRPC$PhotoSize r3 = r1.currentPhotoObject
-            if (r3 == 0) goto L_0x3b66
-            goto L_0x3b68
-        L_0x3b66:
+            if (r3 == 0) goto L_0x3b8e
+            goto L_0x3b90
+        L_0x3b8e:
             org.telegram.tgnet.TLRPC$PhotoSize r3 = r1.currentPhotoObjectThumb
-        L_0x3b68:
-            if (r3 == 0) goto L_0x3b73
+        L_0x3b90:
+            if (r3 == 0) goto L_0x3b9b
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
-            if (r4 != 0) goto L_0x3b73
+            if (r4 != 0) goto L_0x3b9b
             int r4 = r3.w
             int r3 = r3.h
-            goto L_0x3b9c
-        L_0x3b73:
+            goto L_0x3bc4
+        L_0x3b9b:
             org.telegram.tgnet.TLRPC$Document r3 = r1.documentAttach
-            if (r3 == 0) goto L_0x3b9a
+            if (r3 == 0) goto L_0x3bc2
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r3 = r3.attributes
             int r3 = r3.size()
             r4 = 0
             r5 = 0
             r6 = 0
-        L_0x3b80:
-            if (r4 >= r3) goto L_0x3b97
+        L_0x3ba8:
+            if (r4 >= r3) goto L_0x3bbf
             org.telegram.tgnet.TLRPC$Document r7 = r1.documentAttach
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r7 = r7.attributes
             java.lang.Object r7 = r7.get(r4)
             org.telegram.tgnet.TLRPC$DocumentAttribute r7 = (org.telegram.tgnet.TLRPC$DocumentAttribute) r7
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeVideo
-            if (r8 == 0) goto L_0x3b94
+            if (r8 == 0) goto L_0x3bbc
             int r5 = r7.w
             int r6 = r7.h
-        L_0x3b94:
+        L_0x3bbc:
             int r4 = r4 + 1
-            goto L_0x3b80
-        L_0x3b97:
+            goto L_0x3ba8
+        L_0x3bbf:
             r4 = r5
             r3 = r6
-            goto L_0x3b9c
-        L_0x3b9a:
+            goto L_0x3bc4
+        L_0x3bc2:
             r3 = 0
             r4 = 0
-        L_0x3b9c:
+        L_0x3bc4:
             org.telegram.ui.Components.Point r3 = getMessageSize(r4, r3, r12, r2)
             float r4 = r3.x
             int r4 = (int) r4
@@ -14186,84 +14203,84 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r69 = r4
             r4 = r3
             r3 = r69
-        L_0x3bab:
+        L_0x3bd3:
             org.telegram.tgnet.TLRPC$PhotoSize r5 = r1.currentPhotoObject
-            if (r5 == 0) goto L_0x3bbd
+            if (r5 == 0) goto L_0x3be5
             java.lang.String r5 = r5.type
             java.lang.String r6 = "s"
             boolean r5 = r6.equals(r5)
-            if (r5 == 0) goto L_0x3bbd
+            if (r5 == 0) goto L_0x3be5
             r5 = 0
             r1.currentPhotoObject = r5
-            goto L_0x3bbe
-        L_0x3bbd:
+            goto L_0x3be6
+        L_0x3be5:
             r5 = 0
-        L_0x3bbe:
+        L_0x3be6:
             org.telegram.tgnet.TLRPC$PhotoSize r6 = r1.currentPhotoObject
-            if (r6 == 0) goto L_0x3bd2
+            if (r6 == 0) goto L_0x3bfa
             org.telegram.tgnet.TLRPC$PhotoSize r7 = r1.currentPhotoObjectThumb
-            if (r6 != r7) goto L_0x3bd2
+            if (r6 != r7) goto L_0x3bfa
             int r6 = r14.type
             r7 = 1
-            if (r6 != r7) goto L_0x3bd0
+            if (r6 != r7) goto L_0x3bf8
             r1.currentPhotoObjectThumb = r5
             r1.currentPhotoObjectThumbStripped = r5
-            goto L_0x3bd2
-        L_0x3bd0:
+            goto L_0x3bfa
+        L_0x3bf8:
             r1.currentPhotoObject = r5
-        L_0x3bd2:
-            if (r0 == 0) goto L_0x3bfb
+        L_0x3bfa:
+            if (r0 == 0) goto L_0x3CLASSNAME
             boolean r0 = r71.needDrawBluredPreview()
-            if (r0 != 0) goto L_0x3bfb
+            if (r0 != 0) goto L_0x3CLASSNAME
             org.telegram.tgnet.TLRPC$PhotoSize r0 = r1.currentPhotoObject
-            if (r0 == 0) goto L_0x3be2
+            if (r0 == 0) goto L_0x3c0a
             org.telegram.tgnet.TLRPC$PhotoSize r5 = r1.currentPhotoObjectThumb
-            if (r0 != r5) goto L_0x3bfb
-        L_0x3be2:
+            if (r0 != r5) goto L_0x3CLASSNAME
+        L_0x3c0a:
             org.telegram.tgnet.TLRPC$PhotoSize r0 = r1.currentPhotoObjectThumb
-            if (r0 == 0) goto L_0x3bf0
+            if (r0 == 0) goto L_0x3CLASSNAME
             java.lang.String r0 = r0.type
             java.lang.String r5 = "m"
             boolean r0 = r5.equals(r0)
-            if (r0 != 0) goto L_0x3bfb
-        L_0x3bf0:
+            if (r0 != 0) goto L_0x3CLASSNAME
+        L_0x3CLASSNAME:
             org.telegram.messenger.ImageReceiver r0 = r1.photoImage
             r5 = 1
             r0.setNeedsQualityThumb(r5)
             org.telegram.messenger.ImageReceiver r0 = r1.photoImage
             r0.setShouldGenerateQualityThumb(r5)
-        L_0x3bfb:
+        L_0x3CLASSNAME:
             org.telegram.messenger.MessageObject$GroupedMessages r0 = r1.currentMessagesGroup
-            if (r0 != 0) goto L_0x3CLASSNAME
+            if (r0 != 0) goto L_0x3c2e
             java.lang.CharSequence r0 = r14.caption
-            if (r0 == 0) goto L_0x3CLASSNAME
+            if (r0 == 0) goto L_0x3c2e
             r5 = 0
             r1.mediaBackground = r5
+        L_0x3c2e:
+            if (r3 == 0) goto L_0x3CLASSNAME
+            if (r4 != 0) goto L_0x3CLASSNAME
         L_0x3CLASSNAME:
-            if (r3 == 0) goto L_0x3c0a
-            if (r4 != 0) goto L_0x3c6b
-        L_0x3c0a:
             int r0 = r14.type
-            if (r0 != r13) goto L_0x3c6b
+            if (r0 != r13) goto L_0x3CLASSNAME
             r0 = 0
-        L_0x3c0f:
+        L_0x3CLASSNAME:
             org.telegram.tgnet.TLRPC$Document r5 = r71.getDocument()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r5 = r5.attributes
             int r5 = r5.size()
-            if (r0 >= r5) goto L_0x3c6b
+            if (r0 >= r5) goto L_0x3CLASSNAME
             org.telegram.tgnet.TLRPC$Document r5 = r71.getDocument()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r5 = r5.attributes
             java.lang.Object r5 = r5.get(r0)
             org.telegram.tgnet.TLRPC$DocumentAttribute r5 = (org.telegram.tgnet.TLRPC$DocumentAttribute) r5
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeImageSize
-            if (r6 != 0) goto L_0x3CLASSNAME
+            if (r6 != 0) goto L_0x3c5b
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeVideo
             if (r6 == 0) goto L_0x3CLASSNAME
-            goto L_0x3CLASSNAME
+            goto L_0x3c5b
         L_0x3CLASSNAME:
             int r0 = r0 + 1
-            goto L_0x3c0f
-        L_0x3CLASSNAME:
+            goto L_0x3CLASSNAME
+        L_0x3c5b:
             int r0 = r5.w
             float r3 = (float) r0
             float r4 = (float) r12
@@ -14282,7 +14299,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             float r0 = (float) r0
             float r0 = r0 / r3
             int r3 = (int) r0
-            goto L_0x3c6c
+            goto L_0x3CLASSNAME
         L_0x3CLASSNAME:
             r2 = 1123024896(0x42var_, float:120.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
@@ -14306,59 +14323,59 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r2 = r3
         L_0x3CLASSNAME:
             r3 = r0
-            goto L_0x3c6c
-        L_0x3c6b:
+            goto L_0x3CLASSNAME
+        L_0x3CLASSNAME:
             r2 = r4
-        L_0x3c6c:
+        L_0x3CLASSNAME:
             if (r3 == 0) goto L_0x3CLASSNAME
-            if (r2 != 0) goto L_0x3CLASSNAME
+            if (r2 != 0) goto L_0x3c9f
         L_0x3CLASSNAME:
             r0 = 1125515264(0x43160000, float:150.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r0)
             r3 = r2
-        L_0x3CLASSNAME:
+        L_0x3c9f:
             int r0 = r14.type
             r4 = 3
-            if (r0 != r4) goto L_0x3CLASSNAME
+            if (r0 != r4) goto L_0x3cb8
             int r0 = r1.infoWidth
             r4 = 1109393408(0x42200000, float:40.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r0 = r0 + r4
-            if (r3 >= r0) goto L_0x3CLASSNAME
+            if (r3 >= r0) goto L_0x3cb8
             int r0 = r1.infoWidth
             r3 = 1109393408(0x42200000, float:40.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r3 = r3 + r0
-        L_0x3CLASSNAME:
+        L_0x3cb8:
             android.text.StaticLayout r0 = r1.commentLayout
-            if (r0 == 0) goto L_0x3ca9
+            if (r0 == 0) goto L_0x3cd1
             int r0 = r1.drawSideButton
             r4 = 3
-            if (r0 == r4) goto L_0x3ca9
+            if (r0 == r4) goto L_0x3cd1
             int r0 = r1.totalCommentWidth
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r35)
             int r0 = r0 + r4
-            if (r3 >= r0) goto L_0x3ca9
+            if (r3 >= r0) goto L_0x3cd1
             int r0 = r1.totalCommentWidth
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r35)
             int r3 = r3 + r0
-        L_0x3ca9:
+        L_0x3cd1:
             org.telegram.messenger.MessageObject$GroupedMessages r0 = r1.currentMessagesGroup
-            if (r0 == 0) goto L_0x3cef
+            if (r0 == 0) goto L_0x3d17
             int r0 = r70.getGroupPhotosWidth()
             r4 = 0
             r12 = 0
-        L_0x3cb3:
+        L_0x3cdb:
             org.telegram.messenger.MessageObject$GroupedMessages r5 = r1.currentMessagesGroup
             java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r5 = r5.posArray
             int r5 = r5.size()
-            if (r12 >= r5) goto L_0x3ce5
+            if (r12 >= r5) goto L_0x3d0d
             org.telegram.messenger.MessageObject$GroupedMessages r5 = r1.currentMessagesGroup
             java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r5 = r5.posArray
             java.lang.Object r5 = r5.get(r12)
             org.telegram.messenger.MessageObject$GroupedMessagePosition r5 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r5
             byte r6 = r5.minY
-            if (r6 != 0) goto L_0x3ce5
+            if (r6 != 0) goto L_0x3d0d
             double r6 = (double) r4
             int r4 = r5.pw
             int r5 = r5.leftSpanOffset
@@ -14374,21 +14391,21 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             double r6 = r6 + r4
             int r4 = (int) r6
             int r12 = r12 + 1
-            goto L_0x3cb3
-        L_0x3ce5:
+            goto L_0x3cdb
+        L_0x3d0d:
             r0 = 1108082688(0x420CLASSNAME, float:35.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r4 = r4 - r0
             r1.availableTimeWidth = r4
-            goto L_0x3cf6
-        L_0x3cef:
+            goto L_0x3d1e
+        L_0x3d17:
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r32)
             int r12 = r12 - r0
             r1.availableTimeWidth = r12
-        L_0x3cf6:
+        L_0x3d1e:
             int r0 = r14.type
             r4 = 5
-            if (r0 != r4) goto L_0x3d1d
+            if (r0 != r4) goto L_0x3d45
             int r0 = org.telegram.messenger.AndroidUtilities.roundMessageSize
             double r4 = (double) r0
             android.text.TextPaint r0 = org.telegram.ui.ActionBar.Theme.chat_audioTimePaint
@@ -14405,33 +14422,33 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             double r4 = r4 - r6
             int r0 = (int) r4
             r1.availableTimeWidth = r0
-        L_0x3d1d:
+        L_0x3d45:
             r70.measureTime(r71)
             int r0 = r1.timeWidth
             int r4 = org.telegram.messenger.SharedConfig.bubbleRadius
             r5 = 10
-            if (r4 < r5) goto L_0x3d2b
+            if (r4 < r5) goto L_0x3d53
             r4 = 22
-            goto L_0x3d2d
-        L_0x3d2b:
+            goto L_0x3d55
+        L_0x3d53:
             r4 = 18
-        L_0x3d2d:
+        L_0x3d55:
             boolean r5 = r71.isOutOwner()
-            if (r5 == 0) goto L_0x3d36
+            if (r5 == 0) goto L_0x3d5e
             r12 = 20
-            goto L_0x3d37
-        L_0x3d36:
+            goto L_0x3d5f
+        L_0x3d5e:
             r12 = 0
-        L_0x3d37:
+        L_0x3d5f:
             int r4 = r4 + r12
             float r4 = (float) r4
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r4 = r4 + r0
-            if (r3 >= r4) goto L_0x3d41
+            if (r3 >= r4) goto L_0x3d69
             r3 = r4
-        L_0x3d41:
+        L_0x3d69:
             boolean r0 = r71.isRoundVideo()
-            if (r0 == 0) goto L_0x3d59
+            if (r0 == 0) goto L_0x3d81
             int r2 = java.lang.Math.min(r3, r2)
             r3 = 0
             r1.drawBackground = r3
@@ -14440,30 +14457,30 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r0.setRoundRadius((int) r3)
             r3 = r2
             r21 = 0
-            goto L_0x3d7f
-        L_0x3d59:
+            goto L_0x3da7
+        L_0x3d81:
             boolean r0 = r71.needDrawBluredPreview()
-            if (r0 == 0) goto L_0x3d7d
+            if (r0 == 0) goto L_0x3da5
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x3d6a
+            if (r0 == 0) goto L_0x3d92
             int r0 = org.telegram.messenger.AndroidUtilities.getMinTabletSide()
-            goto L_0x3d76
-        L_0x3d6a:
+            goto L_0x3d9e
+        L_0x3d92:
             int r0 = r70.getParentWidth()
             android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
             int r2 = r2.y
             int r0 = java.lang.Math.min(r0, r2)
-        L_0x3d76:
+        L_0x3d9e:
             float r0 = (float) r0
             r2 = 1056964608(0x3var_, float:0.5)
             float r0 = r0 * r2
             int r2 = (int) r0
             r3 = r2
-        L_0x3d7d:
+        L_0x3da5:
             r21 = 1
-        L_0x3d7f:
+        L_0x3da7:
             org.telegram.messenger.MessageObject$GroupedMessages r0 = r1.currentMessagesGroup
-            if (r0 == 0) goto L_0x408a
+            if (r0 == 0) goto L_0x40b2
             int r0 = r70.getParentWidth()
             android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
             int r2 = r2.y
@@ -14484,37 +14501,37 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r3 = (int) r5
             org.telegram.messenger.MessageObject$GroupedMessagePosition r5 = r1.currentPosition
             byte r5 = r5.minY
-            if (r5 == 0) goto L_0x3e46
+            if (r5 == 0) goto L_0x3e6e
             boolean r5 = r71.isOutOwner()
-            if (r5 == 0) goto L_0x3dbd
+            if (r5 == 0) goto L_0x3de5
             org.telegram.messenger.MessageObject$GroupedMessagePosition r5 = r1.currentPosition
             int r5 = r5.flags
             r6 = 1
             r5 = r5 & r6
-            if (r5 != 0) goto L_0x3dcb
-        L_0x3dbd:
+            if (r5 != 0) goto L_0x3df3
+        L_0x3de5:
             boolean r5 = r71.isOutOwner()
-            if (r5 != 0) goto L_0x3e46
+            if (r5 != 0) goto L_0x3e6e
             org.telegram.messenger.MessageObject$GroupedMessagePosition r5 = r1.currentPosition
             int r5 = r5.flags
             r6 = 2
             r5 = r5 & r6
-            if (r5 == 0) goto L_0x3e46
-        L_0x3dcb:
+            if (r5 == 0) goto L_0x3e6e
+        L_0x3df3:
             r5 = 0
             r6 = 0
             r12 = 0
-        L_0x3dce:
+        L_0x3df6:
             org.telegram.messenger.MessageObject$GroupedMessages r7 = r1.currentMessagesGroup
             java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r7 = r7.posArray
             int r7 = r7.size()
-            if (r12 >= r7) goto L_0x3e44
+            if (r12 >= r7) goto L_0x3e6c
             org.telegram.messenger.MessageObject$GroupedMessages r7 = r1.currentMessagesGroup
             java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r7 = r7.posArray
             java.lang.Object r7 = r7.get(r12)
             org.telegram.messenger.MessageObject$GroupedMessagePosition r7 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r7
             byte r8 = r7.minY
-            if (r8 != 0) goto L_0x3e0d
+            if (r8 != 0) goto L_0x3e35
             double r8 = (double) r5
             int r5 = r7.pw
             float r5 = (float) r5
@@ -14524,26 +14541,26 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             double r10 = (double) r5
             double r10 = java.lang.Math.ceil(r10)
             int r5 = r7.leftSpanOffset
-            if (r5 == 0) goto L_0x3e04
+            if (r5 == 0) goto L_0x3e2c
             float r5 = (float) r5
             r7 = 1148846080(0x447a0000, float:1000.0)
             float r5 = r5 / r7
             float r5 = r5 * r2
             double r13 = (double) r5
             double r13 = java.lang.Math.ceil(r13)
-            goto L_0x3e06
-        L_0x3e04:
+            goto L_0x3e2e
+        L_0x3e2c:
             r13 = 0
-        L_0x3e06:
+        L_0x3e2e:
             double r10 = r10 + r13
             java.lang.Double.isNaN(r8)
             double r8 = r8 + r10
             int r5 = (int) r8
-            goto L_0x3e3d
-        L_0x3e0d:
+            goto L_0x3e65
+        L_0x3e35:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r9 = r1.currentPosition
             byte r9 = r9.minY
-            if (r8 != r9) goto L_0x3e3a
+            if (r8 != r9) goto L_0x3e62
             double r8 = (double) r6
             int r6 = r7.pw
             float r6 = (float) r6
@@ -14553,53 +14570,53 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             double r10 = (double) r6
             double r10 = java.lang.Math.ceil(r10)
             int r6 = r7.leftSpanOffset
-            if (r6 == 0) goto L_0x3e31
+            if (r6 == 0) goto L_0x3e59
             float r6 = (float) r6
             r7 = 1148846080(0x447a0000, float:1000.0)
             float r6 = r6 / r7
             float r6 = r6 * r2
             double r6 = (double) r6
             double r6 = java.lang.Math.ceil(r6)
-            goto L_0x3e33
-        L_0x3e31:
+            goto L_0x3e5b
+        L_0x3e59:
             r6 = 0
-        L_0x3e33:
+        L_0x3e5b:
             double r10 = r10 + r6
             java.lang.Double.isNaN(r8)
             double r8 = r8 + r10
             int r6 = (int) r8
-            goto L_0x3e3d
-        L_0x3e3a:
-            if (r8 <= r9) goto L_0x3e3d
-            goto L_0x3e44
-        L_0x3e3d:
+            goto L_0x3e65
+        L_0x3e62:
+            if (r8 <= r9) goto L_0x3e65
+            goto L_0x3e6c
+        L_0x3e65:
             int r12 = r12 + 1
             r14 = r71
             r13 = 8
-            goto L_0x3dce
-        L_0x3e44:
+            goto L_0x3df6
+        L_0x3e6c:
             int r5 = r5 - r6
             int r3 = r3 + r5
-        L_0x3e46:
+        L_0x3e6e:
             r5 = 1091567616(0x41100000, float:9.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r3 = r3 - r5
             boolean r5 = r1.isAvatarVisible
-            if (r5 == 0) goto L_0x3e58
+            if (r5 == 0) goto L_0x3e80
             r5 = 1111490560(0x42400000, float:48.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r3 = r3 - r5
-        L_0x3e58:
+        L_0x3e80:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r5 = r1.currentPosition
             float[] r6 = r5.siblingHeights
-            if (r6 == 0) goto L_0x3e88
+            if (r6 == 0) goto L_0x3eb0
             r5 = 0
             r12 = 0
-        L_0x3e60:
+        L_0x3e88:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r6 = r1.currentPosition
             float[] r7 = r6.siblingHeights
             int r8 = r7.length
-            if (r12 >= r8) goto L_0x3e75
+            if (r12 >= r8) goto L_0x3e9d
             r6 = r7[r12]
             float r6 = r6 * r0
             double r6 = (double) r6
@@ -14607,8 +14624,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r6 = (int) r6
             int r5 = r5 + r6
             int r12 = r12 + 1
-            goto L_0x3e60
-        L_0x3e75:
+            goto L_0x3e88
+        L_0x3e9d:
             byte r0 = r6.maxY
             byte r6 = r6.minY
             int r0 = r0 - r6
@@ -14618,53 +14635,53 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r6 = java.lang.Math.round(r7)
             int r0 = r0 * r6
             int r5 = r5 + r0
-            goto L_0x3e92
-        L_0x3e88:
+            goto L_0x3eba
+        L_0x3eb0:
             float r5 = r5.ph
             float r0 = r0 * r5
             double r5 = (double) r0
             double r5 = java.lang.Math.ceil(r5)
             int r5 = (int) r5
-        L_0x3e92:
+        L_0x3eba:
             r1.backgroundWidth = r3
             org.telegram.messenger.MessageObject$GroupedMessagePosition r0 = r1.currentPosition
             int r0 = r0.flags
             r6 = r0 & 2
-            if (r6 == 0) goto L_0x3ea6
+            if (r6 == 0) goto L_0x3ece
             r6 = r0 & 1
-            if (r6 == 0) goto L_0x3ea6
+            if (r6 == 0) goto L_0x3ece
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r33)
-        L_0x3ea4:
+        L_0x3ecc:
             int r3 = r3 - r0
-            goto L_0x3ec5
-        L_0x3ea6:
+            goto L_0x3eed
+        L_0x3ece:
             r6 = r0 & 2
-            if (r6 != 0) goto L_0x3eb5
+            if (r6 != 0) goto L_0x3edd
             r6 = r0 & 1
-            if (r6 != 0) goto L_0x3eb5
+            if (r6 != 0) goto L_0x3edd
             r0 = 1093664768(0x41300000, float:11.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            goto L_0x3ea4
-        L_0x3eb5:
+            goto L_0x3ecc
+        L_0x3edd:
             r6 = 2
             r0 = r0 & r6
-            if (r0 == 0) goto L_0x3ebe
+            if (r0 == 0) goto L_0x3ee6
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r35)
-            goto L_0x3ea4
-        L_0x3ebe:
+            goto L_0x3ecc
+        L_0x3ee6:
             r0 = 1091567616(0x41100000, float:9.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            goto L_0x3ea4
-        L_0x3ec5:
+            goto L_0x3ecc
+        L_0x3eed:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r0 = r1.currentPosition
             boolean r0 = r0.edge
-            if (r0 != 0) goto L_0x3ed1
+            if (r0 != 0) goto L_0x3ef9
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r35)
             int r0 = r0 + r3
-            goto L_0x3ed2
-        L_0x3ed1:
+            goto L_0x3efa
+        L_0x3ef9:
             r0 = r3
-        L_0x3ed2:
+        L_0x3efa:
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r35)
             int r6 = r0 - r6
             r7 = 0
@@ -14672,18 +14689,18 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.messenger.MessageObject$GroupedMessagePosition r6 = r1.currentPosition
             int r7 = r6.flags
             r8 = r7 & 8
-            if (r8 != 0) goto L_0x3ef2
+            if (r8 != 0) goto L_0x3f1a
             org.telegram.messenger.MessageObject$GroupedMessages r8 = r1.currentMessagesGroup
             boolean r8 = r8.hasSibling
-            if (r8 == 0) goto L_0x3eee
+            if (r8 == 0) goto L_0x3var_
             r8 = 4
             r7 = r7 & r8
-            if (r7 != 0) goto L_0x3eee
-            goto L_0x3ef2
-        L_0x3eee:
+            if (r7 != 0) goto L_0x3var_
+            goto L_0x3f1a
+        L_0x3var_:
             r72 = r5
-            goto L_0x4082
-        L_0x3ef2:
+            goto L_0x40aa
+        L_0x3f1a:
             int r6 = r1.getAdditionalWidthForPosition(r6)
             int r12 = r12 + r6
             org.telegram.messenger.MessageObject$GroupedMessages r6 = r1.currentMessagesGroup
@@ -14692,7 +14709,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r7 = r12
             r12 = 0
         L_0x3var_:
-            if (r12 >= r6) goto L_0x407f
+            if (r12 >= r6) goto L_0x40a7
             org.telegram.messenger.MessageObject$GroupedMessages r8 = r1.currentMessagesGroup
             java.util.ArrayList<org.telegram.messenger.MessageObject> r8 = r8.messages
             java.lang.Object r8 = r8.get(r12)
@@ -14702,11 +14719,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.Object r9 = r9.get(r12)
             org.telegram.messenger.MessageObject$GroupedMessagePosition r9 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r9
             org.telegram.messenger.MessageObject$GroupedMessagePosition r10 = r1.currentPosition
-            if (r9 == r10) goto L_0x4062
+            if (r9 == r10) goto L_0x408a
             int r10 = r9.flags
             r11 = 8
             r10 = r10 & r11
-            if (r10 == 0) goto L_0x4062
+            if (r10 == 0) goto L_0x408a
             int r3 = r9.pw
             float r3 = (float) r3
             r10 = 1148846080(0x447a0000, float:1000.0)
@@ -14716,35 +14733,35 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             double r10 = java.lang.Math.ceil(r10)
             int r3 = (int) r10
             byte r10 = r9.minY
-            if (r10 == 0) goto L_0x3fde
+            if (r10 == 0) goto L_0x4006
             boolean r10 = r71.isOutOwner()
             if (r10 == 0) goto L_0x3var_
             int r10 = r9.flags
             r11 = 1
             r10 = r10 & r11
-            if (r10 != 0) goto L_0x3f4c
+            if (r10 != 0) goto L_0x3var_
         L_0x3var_:
             boolean r10 = r71.isOutOwner()
-            if (r10 != 0) goto L_0x3fde
+            if (r10 != 0) goto L_0x4006
             int r10 = r9.flags
             r11 = 2
             r10 = r10 & r11
-            if (r10 == 0) goto L_0x3fde
-        L_0x3f4c:
+            if (r10 == 0) goto L_0x4006
+        L_0x3var_:
             r10 = 0
             r11 = 0
             r13 = 0
-        L_0x3f4f:
+        L_0x3var_:
             org.telegram.messenger.MessageObject$GroupedMessages r14 = r1.currentMessagesGroup
             java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r14 = r14.posArray
             int r14 = r14.size()
-            if (r10 >= r14) goto L_0x3fd5
+            if (r10 >= r14) goto L_0x3ffd
             org.telegram.messenger.MessageObject$GroupedMessages r14 = r1.currentMessagesGroup
             java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r14 = r14.posArray
             java.lang.Object r14 = r14.get(r10)
             org.telegram.messenger.MessageObject$GroupedMessagePosition r14 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r14
             byte r15 = r14.minY
-            if (r15 != 0) goto L_0x3var_
+            if (r15 != 0) goto L_0x3fbd
             r72 = r5
             r73 = r6
             double r5 = (double) r11
@@ -14757,29 +14774,29 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             double r11 = (double) r11
             double r11 = java.lang.Math.ceil(r11)
             int r14 = r14.leftSpanOffset
-            if (r14 == 0) goto L_0x3f8b
+            if (r14 == 0) goto L_0x3fb3
             float r14 = (float) r14
             r15 = 1148846080(0x447a0000, float:1000.0)
             float r14 = r14 / r15
             float r14 = r14 * r2
             double r14 = (double) r14
             double r14 = java.lang.Math.ceil(r14)
-            goto L_0x3f8d
-        L_0x3f8b:
+            goto L_0x3fb5
+        L_0x3fb3:
             r14 = 0
-        L_0x3f8d:
+        L_0x3fb5:
             double r11 = r11 + r14
             java.lang.Double.isNaN(r5)
             double r5 = r5 + r11
             int r5 = (int) r5
             r11 = r5
-            goto L_0x3fca
-        L_0x3var_:
+            goto L_0x3ff2
+        L_0x3fbd:
             r72 = r5
             r73 = r6
             r23 = r12
             byte r5 = r9.minY
-            if (r15 != r5) goto L_0x3fc7
+            if (r15 != r5) goto L_0x3fef
             double r5 = (double) r13
             int r12 = r14.pw
             float r12 = (float) r12
@@ -14789,363 +14806,363 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             double r12 = (double) r12
             double r12 = java.lang.Math.ceil(r12)
             int r14 = r14.leftSpanOffset
-            if (r14 == 0) goto L_0x3fbd
+            if (r14 == 0) goto L_0x3fe5
             float r14 = (float) r14
             r15 = 1148846080(0x447a0000, float:1000.0)
             float r14 = r14 / r15
             float r14 = r14 * r2
             double r14 = (double) r14
             double r14 = java.lang.Math.ceil(r14)
-            goto L_0x3fbf
-        L_0x3fbd:
+            goto L_0x3fe7
+        L_0x3fe5:
             r14 = 0
-        L_0x3fbf:
+        L_0x3fe7:
             double r12 = r12 + r14
             java.lang.Double.isNaN(r5)
             double r5 = r5 + r12
             int r5 = (int) r5
             r13 = r5
-            goto L_0x3fca
-        L_0x3fc7:
-            if (r15 <= r5) goto L_0x3fca
-            goto L_0x3fdb
-        L_0x3fca:
+            goto L_0x3ff2
+        L_0x3fef:
+            if (r15 <= r5) goto L_0x3ff2
+            goto L_0x4003
+        L_0x3ff2:
             int r10 = r10 + 1
             r5 = r72
             r6 = r73
             r12 = r23
             r15 = 0
-            goto L_0x3f4f
-        L_0x3fd5:
+            goto L_0x3var_
+        L_0x3ffd:
             r72 = r5
             r73 = r6
             r23 = r12
-        L_0x3fdb:
+        L_0x4003:
             int r11 = r11 - r13
             int r3 = r3 + r11
-            goto L_0x3fe4
-        L_0x3fde:
+            goto L_0x400c
+        L_0x4006:
             r72 = r5
             r73 = r6
             r23 = r12
-        L_0x3fe4:
+        L_0x400c:
             r5 = 1091567616(0x41100000, float:9.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r3 = r3 - r5
             int r5 = r9.flags
             r6 = r5 & 2
-            if (r6 == 0) goto L_0x3ffb
+            if (r6 == 0) goto L_0x4023
             r6 = r5 & 1
-            if (r6 == 0) goto L_0x3ffb
+            if (r6 == 0) goto L_0x4023
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r33)
-        L_0x3ff9:
+        L_0x4021:
             int r3 = r3 - r5
-            goto L_0x401a
-        L_0x3ffb:
+            goto L_0x4042
+        L_0x4023:
             r6 = r5 & 2
-            if (r6 != 0) goto L_0x400a
+            if (r6 != 0) goto L_0x4032
             r6 = r5 & 1
-            if (r6 != 0) goto L_0x400a
+            if (r6 != 0) goto L_0x4032
             r5 = 1093664768(0x41300000, float:11.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            goto L_0x3ff9
-        L_0x400a:
+            goto L_0x4021
+        L_0x4032:
             r5 = r5 & 2
-            if (r5 == 0) goto L_0x4013
+            if (r5 == 0) goto L_0x403b
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r35)
-            goto L_0x3ff9
-        L_0x4013:
+            goto L_0x4021
+        L_0x403b:
             r5 = 1091567616(0x41100000, float:9.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            goto L_0x3ff9
-        L_0x401a:
+            goto L_0x4021
+        L_0x4042:
             boolean r5 = r1.isChat
-            if (r5 == 0) goto L_0x4039
+            if (r5 == 0) goto L_0x4061
             boolean r5 = r1.isThreadPost
-            if (r5 != 0) goto L_0x4039
+            if (r5 != 0) goto L_0x4061
             boolean r5 = r8.isOutOwner()
-            if (r5 != 0) goto L_0x4039
+            if (r5 != 0) goto L_0x4061
             boolean r5 = r8.needDrawAvatar()
-            if (r5 == 0) goto L_0x4039
+            if (r5 == 0) goto L_0x4061
             boolean r5 = r9.edge
-            if (r5 == 0) goto L_0x4039
+            if (r5 == 0) goto L_0x4061
             r5 = 1111490560(0x42400000, float:48.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r3 = r3 - r5
-        L_0x4039:
+        L_0x4061:
             int r5 = r1.getAdditionalWidthForPosition(r9)
             int r3 = r3 + r5
             boolean r5 = r9.edge
-            if (r5 != 0) goto L_0x4047
+            if (r5 != 0) goto L_0x406f
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r35)
             int r3 = r3 + r5
-        L_0x4047:
+        L_0x406f:
             int r7 = r7 + r3
             byte r5 = r9.minX
             org.telegram.messenger.MessageObject$GroupedMessagePosition r6 = r1.currentPosition
             byte r6 = r6.minX
-            if (r5 < r6) goto L_0x405c
+            if (r5 < r6) goto L_0x4084
             org.telegram.messenger.MessageObject$GroupedMessages r5 = r1.currentMessagesGroup
             boolean r5 = r5.hasSibling
-            if (r5 == 0) goto L_0x4068
+            if (r5 == 0) goto L_0x4090
             byte r5 = r9.minY
             byte r6 = r9.maxY
-            if (r5 == r6) goto L_0x4068
-        L_0x405c:
+            if (r5 == r6) goto L_0x4090
+        L_0x4084:
             int r5 = r1.captionOffsetX
             int r5 = r5 - r3
             r1.captionOffsetX = r5
-            goto L_0x4068
-        L_0x4062:
+            goto L_0x4090
+        L_0x408a:
             r72 = r5
             r73 = r6
             r23 = r12
-        L_0x4068:
+        L_0x4090:
             java.lang.CharSequence r5 = r8.caption
-            if (r5 == 0) goto L_0x4076
+            if (r5 == 0) goto L_0x409e
             java.lang.CharSequence r6 = r1.currentCaption
-            if (r6 == 0) goto L_0x4074
+            if (r6 == 0) goto L_0x409c
             r6 = 0
             r1.currentCaption = r6
-            goto L_0x4081
-        L_0x4074:
+            goto L_0x40a9
+        L_0x409c:
             r1.currentCaption = r5
-        L_0x4076:
+        L_0x409e:
             int r12 = r23 + 1
             r5 = r72
             r6 = r73
             r15 = 0
             goto L_0x3var_
-        L_0x407f:
+        L_0x40a7:
             r72 = r5
-        L_0x4081:
+        L_0x40a9:
             r12 = r7
-        L_0x4082:
+        L_0x40aa:
             r14 = r71
             r15 = r72
             r2 = r3
             r13 = 0
             r3 = r0
-            goto L_0x40e3
-        L_0x408a:
+            goto L_0x410b
+        L_0x40b2:
             java.lang.CharSequence r0 = r14.caption
             r1.currentCaption = r0
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x4099
+            if (r0 == 0) goto L_0x40c1
             int r0 = org.telegram.messenger.AndroidUtilities.getMinTabletSide()
-            goto L_0x40a5
-        L_0x4099:
+            goto L_0x40cd
+        L_0x40c1:
             int r0 = r70.getParentWidth()
             android.graphics.Point r5 = org.telegram.messenger.AndroidUtilities.displaySize
             int r5 = r5.y
             int r0 = java.lang.Math.min(r0, r5)
-        L_0x40a5:
+        L_0x40cd:
             float r0 = (float) r0
             r5 = 1059481190(0x3var_, float:0.65)
             float r0 = r0 * r5
             int r0 = (int) r0
             boolean r5 = r71.needDrawBluredPreview()
-            if (r5 != 0) goto L_0x40c5
+            if (r5 != 0) goto L_0x40ed
             java.lang.CharSequence r5 = r1.currentCaption
-            if (r5 != 0) goto L_0x40c0
+            if (r5 != 0) goto L_0x40e8
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r5 = r1.reactionsLayoutInBubble
             boolean r6 = r5.isEmpty
-            if (r6 != 0) goto L_0x40c5
+            if (r6 != 0) goto L_0x40ed
             boolean r5 = r5.isSmall
-            if (r5 != 0) goto L_0x40c5
-        L_0x40c0:
-            if (r3 >= r0) goto L_0x40c5
+            if (r5 != 0) goto L_0x40ed
+        L_0x40e8:
+            if (r3 >= r0) goto L_0x40ed
             r12 = r0
             r13 = 1
-            goto L_0x40cd
-        L_0x40c5:
+            goto L_0x40f5
+        L_0x40ed:
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r35)
             int r0 = r3 - r0
             r12 = r0
             r13 = 0
-        L_0x40cd:
+        L_0x40f5:
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r33)
             int r0 = r0 + r3
             r1.backgroundWidth = r0
             boolean r5 = r1.mediaBackground
-            if (r5 != 0) goto L_0x40e1
+            if (r5 != 0) goto L_0x4109
             r5 = 1091567616(0x41100000, float:9.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r0 = r0 + r5
             r1.backgroundWidth = r0
-        L_0x40e1:
+        L_0x4109:
             r15 = r2
             r2 = r3
-        L_0x40e3:
+        L_0x410b:
             java.lang.CharSequence r0 = r1.currentCaption
-            if (r0 == 0) goto L_0x4200
-            int r0 = r70.getExtraTextX()     // Catch:{ Exception -> 0x41f5 }
+            if (r0 == 0) goto L_0x4228
+            int r0 = r70.getExtraTextX()     // Catch:{ Exception -> 0x421d }
             r5 = 2
             int r0 = r0 * 2
             int r12 = r12 - r0
-            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x41f5 }
+            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x421d }
             r5 = 24
-            if (r0 < r5) goto L_0x4118
-            java.lang.CharSequence r0 = r1.currentCaption     // Catch:{ Exception -> 0x41f5 }
-            int r5 = r0.length()     // Catch:{ Exception -> 0x41f5 }
-            android.text.TextPaint r6 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint     // Catch:{ Exception -> 0x41f5 }
+            if (r0 < r5) goto L_0x4140
+            java.lang.CharSequence r0 = r1.currentCaption     // Catch:{ Exception -> 0x421d }
+            int r5 = r0.length()     // Catch:{ Exception -> 0x421d }
+            android.text.TextPaint r6 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint     // Catch:{ Exception -> 0x421d }
             r7 = 0
-            android.text.StaticLayout$Builder r0 = android.text.StaticLayout.Builder.obtain(r0, r7, r5, r6, r12)     // Catch:{ Exception -> 0x41f5 }
+            android.text.StaticLayout$Builder r0 = android.text.StaticLayout.Builder.obtain(r0, r7, r5, r6, r12)     // Catch:{ Exception -> 0x421d }
             r5 = 1
-            android.text.StaticLayout$Builder r0 = r0.setBreakStrategy(r5)     // Catch:{ Exception -> 0x41f5 }
-            android.text.StaticLayout$Builder r0 = r0.setHyphenationFrequency(r7)     // Catch:{ Exception -> 0x41f5 }
-            android.text.Layout$Alignment r5 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x41f5 }
-            android.text.StaticLayout$Builder r0 = r0.setAlignment(r5)     // Catch:{ Exception -> 0x41f5 }
-            android.text.StaticLayout r0 = r0.build()     // Catch:{ Exception -> 0x41f5 }
-            r1.captionLayout = r0     // Catch:{ Exception -> 0x41f5 }
-            goto L_0x4131
-        L_0x4118:
-            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x41f5 }
-            java.lang.CharSequence r5 = r1.currentCaption     // Catch:{ Exception -> 0x41f5 }
-            android.text.TextPaint r40 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint     // Catch:{ Exception -> 0x41f5 }
-            android.text.Layout$Alignment r42 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x41f5 }
+            android.text.StaticLayout$Builder r0 = r0.setBreakStrategy(r5)     // Catch:{ Exception -> 0x421d }
+            android.text.StaticLayout$Builder r0 = r0.setHyphenationFrequency(r7)     // Catch:{ Exception -> 0x421d }
+            android.text.Layout$Alignment r5 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x421d }
+            android.text.StaticLayout$Builder r0 = r0.setAlignment(r5)     // Catch:{ Exception -> 0x421d }
+            android.text.StaticLayout r0 = r0.build()     // Catch:{ Exception -> 0x421d }
+            r1.captionLayout = r0     // Catch:{ Exception -> 0x421d }
+            goto L_0x4159
+        L_0x4140:
+            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x421d }
+            java.lang.CharSequence r5 = r1.currentCaption     // Catch:{ Exception -> 0x421d }
+            android.text.TextPaint r40 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint     // Catch:{ Exception -> 0x421d }
+            android.text.Layout$Alignment r42 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x421d }
             r43 = 1065353216(0x3var_, float:1.0)
             r44 = 0
             r45 = 0
             r38 = r0
             r39 = r5
             r41 = r12
-            r38.<init>(r39, r40, r41, r42, r43, r44, r45)     // Catch:{ Exception -> 0x41f5 }
-            r1.captionLayout = r0     // Catch:{ Exception -> 0x41f5 }
-        L_0x4131:
-            r70.updateCaptionSpoilers()     // Catch:{ Exception -> 0x41f5 }
-            android.text.StaticLayout r0 = r1.captionLayout     // Catch:{ Exception -> 0x41f5 }
-            int r0 = r0.getLineCount()     // Catch:{ Exception -> 0x41f5 }
-            if (r0 <= 0) goto L_0x4200
-            if (r13 == 0) goto L_0x4171
+            r38.<init>(r39, r40, r41, r42, r43, r44, r45)     // Catch:{ Exception -> 0x421d }
+            r1.captionLayout = r0     // Catch:{ Exception -> 0x421d }
+        L_0x4159:
+            r70.updateCaptionSpoilers()     // Catch:{ Exception -> 0x421d }
+            android.text.StaticLayout r0 = r1.captionLayout     // Catch:{ Exception -> 0x421d }
+            int r0 = r0.getLineCount()     // Catch:{ Exception -> 0x421d }
+            if (r0 <= 0) goto L_0x4228
+            if (r13 == 0) goto L_0x4199
             r5 = 0
-            r1.captionWidth = r5     // Catch:{ Exception -> 0x41f5 }
+            r1.captionWidth = r5     // Catch:{ Exception -> 0x421d }
             r5 = 0
-        L_0x4142:
-            if (r5 >= r0) goto L_0x416a
-            int r6 = r1.captionWidth     // Catch:{ Exception -> 0x41f5 }
-            double r6 = (double) r6     // Catch:{ Exception -> 0x41f5 }
-            android.text.StaticLayout r8 = r1.captionLayout     // Catch:{ Exception -> 0x41f5 }
-            float r8 = r8.getLineWidth(r5)     // Catch:{ Exception -> 0x41f5 }
-            double r8 = (double) r8     // Catch:{ Exception -> 0x41f5 }
-            double r8 = java.lang.Math.ceil(r8)     // Catch:{ Exception -> 0x41f5 }
-            double r6 = java.lang.Math.max(r6, r8)     // Catch:{ Exception -> 0x41f5 }
-            int r6 = (int) r6     // Catch:{ Exception -> 0x41f5 }
-            r1.captionWidth = r6     // Catch:{ Exception -> 0x41f5 }
-            android.text.StaticLayout r6 = r1.captionLayout     // Catch:{ Exception -> 0x41f5 }
-            float r6 = r6.getLineLeft(r5)     // Catch:{ Exception -> 0x41f5 }
+        L_0x416a:
+            if (r5 >= r0) goto L_0x4192
+            int r6 = r1.captionWidth     // Catch:{ Exception -> 0x421d }
+            double r6 = (double) r6     // Catch:{ Exception -> 0x421d }
+            android.text.StaticLayout r8 = r1.captionLayout     // Catch:{ Exception -> 0x421d }
+            float r8 = r8.getLineWidth(r5)     // Catch:{ Exception -> 0x421d }
+            double r8 = (double) r8     // Catch:{ Exception -> 0x421d }
+            double r8 = java.lang.Math.ceil(r8)     // Catch:{ Exception -> 0x421d }
+            double r6 = java.lang.Math.max(r6, r8)     // Catch:{ Exception -> 0x421d }
+            int r6 = (int) r6     // Catch:{ Exception -> 0x421d }
+            r1.captionWidth = r6     // Catch:{ Exception -> 0x421d }
+            android.text.StaticLayout r6 = r1.captionLayout     // Catch:{ Exception -> 0x421d }
+            float r6 = r6.getLineLeft(r5)     // Catch:{ Exception -> 0x421d }
             r7 = 0
             int r6 = (r6 > r7 ? 1 : (r6 == r7 ? 0 : -1))
-            if (r6 == 0) goto L_0x4167
-            r1.captionWidth = r12     // Catch:{ Exception -> 0x41f5 }
-            goto L_0x416a
-        L_0x4167:
+            if (r6 == 0) goto L_0x418f
+            r1.captionWidth = r12     // Catch:{ Exception -> 0x421d }
+            goto L_0x4192
+        L_0x418f:
             int r5 = r5 + 1
-            goto L_0x4142
-        L_0x416a:
-            int r0 = r1.captionWidth     // Catch:{ Exception -> 0x41f5 }
-            if (r0 <= r12) goto L_0x4173
-            r1.captionWidth = r12     // Catch:{ Exception -> 0x41f5 }
-            goto L_0x4173
-        L_0x4171:
-            r1.captionWidth = r12     // Catch:{ Exception -> 0x41f5 }
-        L_0x4173:
-            android.text.StaticLayout r0 = r1.captionLayout     // Catch:{ Exception -> 0x41f5 }
-            int r0 = r0.getHeight()     // Catch:{ Exception -> 0x41f5 }
-            r1.captionHeight = r0     // Catch:{ Exception -> 0x41f5 }
+            goto L_0x416a
+        L_0x4192:
+            int r0 = r1.captionWidth     // Catch:{ Exception -> 0x421d }
+            if (r0 <= r12) goto L_0x419b
+            r1.captionWidth = r12     // Catch:{ Exception -> 0x421d }
+            goto L_0x419b
+        L_0x4199:
+            r1.captionWidth = r12     // Catch:{ Exception -> 0x421d }
+        L_0x419b:
+            android.text.StaticLayout r0 = r1.captionLayout     // Catch:{ Exception -> 0x421d }
+            int r0 = r0.getHeight()     // Catch:{ Exception -> 0x421d }
+            r1.captionHeight = r0     // Catch:{ Exception -> 0x421d }
             r5 = 1091567616(0x41100000, float:9.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)     // Catch:{ Exception -> 0x41f5 }
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)     // Catch:{ Exception -> 0x421d }
             int r0 = r0 + r5
-            r1.addedCaptionHeight = r0     // Catch:{ Exception -> 0x41f5 }
-            org.telegram.messenger.MessageObject$GroupedMessagePosition r5 = r1.currentPosition     // Catch:{ Exception -> 0x41f5 }
-            if (r5 == 0) goto L_0x4198
-            int r5 = r5.flags     // Catch:{ Exception -> 0x41f5 }
+            r1.addedCaptionHeight = r0     // Catch:{ Exception -> 0x421d }
+            org.telegram.messenger.MessageObject$GroupedMessagePosition r5 = r1.currentPosition     // Catch:{ Exception -> 0x421d }
+            if (r5 == 0) goto L_0x41c0
+            int r5 = r5.flags     // Catch:{ Exception -> 0x421d }
             r6 = 8
             r5 = r5 & r6
-            if (r5 == 0) goto L_0x4190
-            goto L_0x4198
-        L_0x4190:
+            if (r5 == 0) goto L_0x41b8
+            goto L_0x41c0
+        L_0x41b8:
             r5 = 0
-            r1.captionLayout = r5     // Catch:{ Exception -> 0x41f5 }
-            r70.updateCaptionSpoilers()     // Catch:{ Exception -> 0x41f5 }
-            goto L_0x4200
-        L_0x4198:
+            r1.captionLayout = r5     // Catch:{ Exception -> 0x421d }
+            r70.updateCaptionSpoilers()     // Catch:{ Exception -> 0x421d }
+            goto L_0x4228
+        L_0x41c0:
             r5 = 0
             int r6 = r5 + r0
-            int r0 = r1.captionWidth     // Catch:{ Exception -> 0x41f0 }
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r35)     // Catch:{ Exception -> 0x41f0 }
+            int r0 = r1.captionWidth     // Catch:{ Exception -> 0x4218 }
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r35)     // Catch:{ Exception -> 0x4218 }
             int r5 = r3 - r5
-            int r0 = java.lang.Math.max(r0, r5)     // Catch:{ Exception -> 0x41f0 }
-            android.text.StaticLayout r5 = r1.captionLayout     // Catch:{ Exception -> 0x41f0 }
-            int r7 = r5.getLineCount()     // Catch:{ Exception -> 0x41f0 }
+            int r0 = java.lang.Math.max(r0, r5)     // Catch:{ Exception -> 0x4218 }
+            android.text.StaticLayout r5 = r1.captionLayout     // Catch:{ Exception -> 0x4218 }
+            int r7 = r5.getLineCount()     // Catch:{ Exception -> 0x4218 }
             r8 = 1
             int r7 = r7 - r8
-            float r5 = r5.getLineWidth(r7)     // Catch:{ Exception -> 0x41f0 }
-            android.text.StaticLayout r7 = r1.captionLayout     // Catch:{ Exception -> 0x41f0 }
-            int r9 = r7.getLineCount()     // Catch:{ Exception -> 0x41f0 }
+            float r5 = r5.getLineWidth(r7)     // Catch:{ Exception -> 0x4218 }
+            android.text.StaticLayout r7 = r1.captionLayout     // Catch:{ Exception -> 0x4218 }
+            int r9 = r7.getLineCount()     // Catch:{ Exception -> 0x4218 }
             int r9 = r9 - r8
-            float r7 = r7.getLineLeft(r9)     // Catch:{ Exception -> 0x41f0 }
+            float r7 = r7.getLineLeft(r9)     // Catch:{ Exception -> 0x4218 }
             float r5 = r5 + r7
-            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r7 = r1.reactionsLayoutInBubble     // Catch:{ Exception -> 0x41f0 }
-            boolean r8 = r7.isEmpty     // Catch:{ Exception -> 0x41f0 }
-            if (r8 != 0) goto L_0x41c9
-            boolean r7 = r7.isSmall     // Catch:{ Exception -> 0x41f0 }
-            if (r7 == 0) goto L_0x41fe
-        L_0x41c9:
-            boolean r7 = r70.shouldDrawTimeOnMedia()     // Catch:{ Exception -> 0x41f0 }
-            if (r7 != 0) goto L_0x41fe
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r25)     // Catch:{ Exception -> 0x41f0 }
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r7 = r1.reactionsLayoutInBubble     // Catch:{ Exception -> 0x4218 }
+            boolean r8 = r7.isEmpty     // Catch:{ Exception -> 0x4218 }
+            if (r8 != 0) goto L_0x41f1
+            boolean r7 = r7.isSmall     // Catch:{ Exception -> 0x4218 }
+            if (r7 == 0) goto L_0x4226
+        L_0x41f1:
+            boolean r7 = r70.shouldDrawTimeOnMedia()     // Catch:{ Exception -> 0x4218 }
+            if (r7 != 0) goto L_0x4226
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r25)     // Catch:{ Exception -> 0x4218 }
             int r0 = r0 + r7
-            float r0 = (float) r0     // Catch:{ Exception -> 0x41f0 }
+            float r0 = (float) r0     // Catch:{ Exception -> 0x4218 }
             float r0 = r0 - r5
-            int r5 = r70.getExtraTimeX()     // Catch:{ Exception -> 0x41f0 }
+            int r5 = r70.getExtraTimeX()     // Catch:{ Exception -> 0x4218 }
             int r5 = r5 + r4
-            float r5 = (float) r5     // Catch:{ Exception -> 0x41f0 }
+            float r5 = (float) r5     // Catch:{ Exception -> 0x4218 }
             int r0 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-            if (r0 >= 0) goto L_0x41fe
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r32)     // Catch:{ Exception -> 0x41f0 }
+            if (r0 >= 0) goto L_0x4226
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r32)     // Catch:{ Exception -> 0x4218 }
             int r6 = r6 + r0
-            int r0 = r1.addedCaptionHeight     // Catch:{ Exception -> 0x41f0 }
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r32)     // Catch:{ Exception -> 0x41f0 }
+            int r0 = r1.addedCaptionHeight     // Catch:{ Exception -> 0x4218 }
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r32)     // Catch:{ Exception -> 0x4218 }
             int r0 = r0 + r5
-            r1.addedCaptionHeight = r0     // Catch:{ Exception -> 0x41f0 }
+            r1.addedCaptionHeight = r0     // Catch:{ Exception -> 0x4218 }
             r0 = 1
-            goto L_0x4202
-        L_0x41f0:
+            goto L_0x422a
+        L_0x4218:
             r0 = move-exception
             r5 = r0
             r0 = r12
             r12 = r6
-            goto L_0x41f9
-        L_0x41f5:
+            goto L_0x4221
+        L_0x421d:
             r0 = move-exception
             r5 = r0
             r0 = r12
             r12 = 0
-        L_0x41f9:
+        L_0x4221:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)
             r6 = r12
             r12 = r0
-        L_0x41fe:
+        L_0x4226:
             r0 = 0
-            goto L_0x4202
-        L_0x4200:
+            goto L_0x422a
+        L_0x4228:
             r0 = 0
             r6 = 0
-        L_0x4202:
+        L_0x422a:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r5 = r1.reactionsLayoutInBubble
             boolean r5 = r5.isSmall
-            if (r5 != 0) goto L_0x42d3
+            if (r5 != 0) goto L_0x42fb
             int r5 = r1.backgroundWidth
             r7 = 1103101952(0x41CLASSNAME, float:24.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r5 = r5 - r7
-            if (r5 <= r12) goto L_0x4215
+            if (r5 <= r12) goto L_0x423d
             r5 = 1
-            goto L_0x4216
-        L_0x4215:
+            goto L_0x423e
+        L_0x423d:
             r5 = 0
-        L_0x4216:
+        L_0x423e:
             int r7 = r1.backgroundWidth
             r8 = 1108344832(0x42100000, float:36.0)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
@@ -15155,23 +15172,23 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r8.measure(r7)
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r8 = r1.reactionsLayoutInBubble
             boolean r8 = r8.isEmpty
-            if (r8 != 0) goto L_0x42d3
+            if (r8 != 0) goto L_0x42fb
             boolean r8 = r70.shouldDrawTimeOnMedia()
-            if (r8 == 0) goto L_0x4239
+            if (r8 == 0) goto L_0x4261
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r8 = r1.reactionsLayoutInBubble
             r9 = 1
             r8.drawServiceShaderBackground = r9
-        L_0x4239:
+        L_0x4261:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r8 = r1.reactionsLayoutInBubble
             int r8 = r8.height
             android.text.StaticLayout r9 = r1.captionLayout
-            if (r9 != 0) goto L_0x424c
+            if (r9 != 0) goto L_0x4274
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r34)
             int r8 = r8 + r9
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r24)
             int r8 = r8 + r9
-            goto L_0x425c
-        L_0x424c:
+            goto L_0x4284
+        L_0x4274:
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r34)
             int r8 = r8 + r9
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r9 = r1.reactionsLayoutInBubble
@@ -15179,12 +15196,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r34)
             int r10 = r10 + r11
             r9.positionOffsetY = r10
-        L_0x425c:
+        L_0x4284:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r9 = r1.reactionsLayoutInBubble
             r9.totalHeight = r8
             int r6 = r6 + r8
             boolean r8 = r70.shouldDrawTimeOnMedia()
-            if (r8 != 0) goto L_0x42d3
+            if (r8 != 0) goto L_0x42fb
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r8 = r1.reactionsLayoutInBubble
             int r8 = r8.width
             int r8 = r8 + r4
@@ -15197,14 +15214,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r8 = r8.lastLineX
             float r8 = (float) r8
             boolean r9 = r70.shouldDrawTimeOnMedia()
-            if (r9 != 0) goto L_0x42bc
+            if (r9 != 0) goto L_0x42e4
             float r7 = (float) r7
             float r7 = r7 - r8
             int r8 = r70.getExtraTimeX()
             int r8 = r8 + r4
             float r8 = (float) r8
             int r7 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
-            if (r7 >= 0) goto L_0x42bc
+            if (r7 >= 0) goto L_0x42e4
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r32)
             int r6 = r6 + r0
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r1.reactionsLayoutInBubble
@@ -15217,34 +15234,34 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r32)
             int r4 = r4 - r7
             r0.positionOffsetY = r4
-            if (r5 != 0) goto L_0x42b8
+            if (r5 != 0) goto L_0x42e0
             int r0 = r1.captionWidth
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r4 = r1.reactionsLayoutInBubble
             int r4 = r4.width
-            if (r0 >= r4) goto L_0x42b8
+            if (r0 >= r4) goto L_0x42e0
             r1.captionWidth = r4
-        L_0x42b8:
+        L_0x42e0:
             r0 = r6
             r23 = 1
-            goto L_0x42d6
-        L_0x42bc:
-            if (r5 != 0) goto L_0x42d3
+            goto L_0x42fe
+        L_0x42e4:
+            if (r5 != 0) goto L_0x42fb
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r5 = r1.reactionsLayoutInBubble
             int r7 = r5.lastLineX
             int r8 = r7 + r4
             int r9 = r1.captionWidth
-            if (r8 <= r9) goto L_0x42cb
+            if (r8 <= r9) goto L_0x42f3
             int r7 = r7 + r4
             r1.captionWidth = r7
-        L_0x42cb:
+        L_0x42f3:
             int r4 = r5.width
             int r5 = r1.captionWidth
-            if (r4 <= r5) goto L_0x42d3
+            if (r4 <= r5) goto L_0x42fb
             r1.captionWidth = r4
-        L_0x42d3:
+        L_0x42fb:
             r23 = r0
             r0 = r6
-        L_0x42d6:
+        L_0x42fe:
             android.text.TextPaint r4 = org.telegram.ui.ActionBar.Theme.chat_infoPaint
             java.lang.String r5 = "100%"
             float r4 = r4.measureText(r5)
@@ -15254,34 +15271,34 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             float r4 = r4 + r5
             int r4 = (int) r4
             org.telegram.messenger.MessageObject$GroupedMessages r5 = r1.currentMessagesGroup
-            if (r5 != 0) goto L_0x430b
+            if (r5 != 0) goto L_0x4333
             int r5 = r1.documentAttachType
             r12 = 4
-            if (r5 == r12) goto L_0x42f3
+            if (r5 == r12) goto L_0x431b
             r6 = 2
-            if (r5 != r6) goto L_0x430c
-        L_0x42f3:
-            if (r3 >= r4) goto L_0x430c
+            if (r5 != r6) goto L_0x4334
+        L_0x431b:
+            if (r3 >= r4) goto L_0x4334
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r33)
             int r3 = r3 + r4
             r1.backgroundWidth = r3
             boolean r5 = r1.mediaBackground
-            if (r5 != 0) goto L_0x4309
+            if (r5 != 0) goto L_0x4331
             r5 = 1091567616(0x41100000, float:9.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r3 = r3 + r5
             r1.backgroundWidth = r3
-        L_0x4309:
+        L_0x4331:
             r3 = r4
-            goto L_0x430c
-        L_0x430b:
+            goto L_0x4334
+        L_0x4333:
             r12 = 4
-        L_0x430c:
-            if (r13 == 0) goto L_0x4332
+        L_0x4334:
+            if (r13 == 0) goto L_0x435a
             int r4 = r1.captionWidth
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r35)
             int r4 = r4 + r5
-            if (r3 >= r4) goto L_0x4332
+            if (r3 >= r4) goto L_0x435a
             int r3 = r1.captionWidth
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r35)
             int r3 = r3 + r4
@@ -15289,18 +15306,18 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r4 = r4 + r3
             r1.backgroundWidth = r4
             boolean r5 = r1.mediaBackground
-            if (r5 != 0) goto L_0x4332
+            if (r5 != 0) goto L_0x435a
             r5 = 1091567616(0x41100000, float:9.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r4 = r4 + r5
             r1.backgroundWidth = r4
-        L_0x4332:
+        L_0x435a:
             r26 = r3
-            if (r17 != 0) goto L_0x43ab
-            if (r16 != 0) goto L_0x43ab
-            if (r19 == 0) goto L_0x433b
-            goto L_0x43ab
-        L_0x433b:
+            if (r17 != 0) goto L_0x43d3
+            if (r16 != 0) goto L_0x43d3
+            if (r19 == 0) goto L_0x4363
+            goto L_0x43d3
+        L_0x4363:
             java.util.Locale r3 = java.util.Locale.US
             r4 = 2
             java.lang.Object[] r5 = new java.lang.Object[r4]
@@ -15321,14 +15338,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.String r2 = "%d_%d"
             java.lang.String r2 = java.lang.String.format(r3, r2, r5)
             boolean r3 = r71.needDrawBluredPreview()
-            if (r3 != 0) goto L_0x43a8
+            if (r3 != 0) goto L_0x43d0
             java.lang.String r3 = r1.currentPhotoFilter
             boolean r3 = r2.equals(r3)
-            if (r3 != 0) goto L_0x43a8
+            if (r3 != 0) goto L_0x43d0
             org.telegram.tgnet.TLRPC$PhotoSize r3 = r1.currentPhotoObject
             org.telegram.tgnet.TLObject r4 = r1.photoParentObject
             org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForObject(r3, r4)
-            if (r3 == 0) goto L_0x43a8
+            if (r3 == 0) goto L_0x43d0
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
             r4.<init>()
             org.telegram.tgnet.TLObject r5 = r1.photoParentObject
@@ -15343,16 +15360,16 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.String r3 = r4.toString()
             org.telegram.messenger.ImageLoader r4 = org.telegram.messenger.ImageLoader.getInstance()
             boolean r3 = r4.isInMemCache(r3, r7)
-            if (r3 == 0) goto L_0x43a8
+            if (r3 == 0) goto L_0x43d0
             org.telegram.tgnet.TLRPC$PhotoSize r3 = r1.currentPhotoObject
             r1.currentPhotoObjectThumb = r3
             java.lang.String r3 = r1.currentPhotoFilter
             r1.currentPhotoFilterThumb = r3
             r1.currentPhotoFilter = r2
-        L_0x43a8:
+        L_0x43d0:
             r11 = 0
-            goto L_0x442e
-        L_0x43ab:
+            goto L_0x4456
+        L_0x43d3:
             java.util.Locale r3 = java.util.Locale.US
             r4 = 2
             java.lang.Object[] r5 = new java.lang.Object[r4]
@@ -15375,20 +15392,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.currentPhotoFilterThumb = r2
             r1.currentPhotoFilter = r2
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r14.photoThumbs
-            if (r2 == 0) goto L_0x43dc
+            if (r2 == 0) goto L_0x4404
             int r2 = r2.size()
-            if (r2 > r4) goto L_0x43e8
-        L_0x43dc:
+            if (r2 > r4) goto L_0x4410
+        L_0x4404:
             int r2 = r14.type
             r3 = 3
-            if (r2 == r3) goto L_0x43e8
+            if (r2 == r3) goto L_0x4410
             r3 = 8
-            if (r2 == r3) goto L_0x43e8
+            if (r2 == r3) goto L_0x4410
             r3 = 5
-            if (r2 != r3) goto L_0x442e
-        L_0x43e8:
+            if (r2 != r3) goto L_0x4456
+        L_0x4410:
             boolean r2 = r71.needDrawBluredPreview()
-            if (r2 == 0) goto L_0x4419
+            if (r2 == 0) goto L_0x4441
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             java.lang.String r3 = r1.currentPhotoFilter
@@ -15405,8 +15422,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r2.append(r3)
             java.lang.String r2 = r2.toString()
             r1.currentPhotoFilterThumb = r2
-            goto L_0x442e
-        L_0x4419:
+            goto L_0x4456
+        L_0x4441:
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             java.lang.String r3 = r1.currentPhotoFilterThumb
@@ -15415,91 +15432,91 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r2.append(r3)
             java.lang.String r2 = r2.toString()
             r1.currentPhotoFilterThumb = r2
-        L_0x442e:
+        L_0x4456:
             int r2 = r14.type
             r3 = 3
-            if (r2 == r3) goto L_0x443d
+            if (r2 == r3) goto L_0x4465
             r13 = 8
             r10 = 5
-            if (r2 == r13) goto L_0x4440
-            if (r2 != r10) goto L_0x443b
-            goto L_0x4440
-        L_0x443b:
+            if (r2 == r13) goto L_0x4468
+            if (r2 != r10) goto L_0x4463
+            goto L_0x4468
+        L_0x4463:
             r3 = 0
-            goto L_0x4441
-        L_0x443d:
+            goto L_0x4469
+        L_0x4465:
             r10 = 5
             r13 = 8
-        L_0x4440:
+        L_0x4468:
             r3 = 1
-        L_0x4441:
+        L_0x4469:
             org.telegram.tgnet.TLRPC$PhotoSize r4 = r1.currentPhotoObject
-            if (r4 == 0) goto L_0x444f
-            if (r3 != 0) goto L_0x444f
+            if (r4 == 0) goto L_0x4477
+            if (r3 != 0) goto L_0x4477
             int r5 = r4.size
-            if (r5 != 0) goto L_0x444f
+            if (r5 != 0) goto L_0x4477
             r9 = -1
             r4.size = r9
-            goto L_0x4450
-        L_0x444f:
+            goto L_0x4478
+        L_0x4477:
             r9 = -1
-        L_0x4450:
+        L_0x4478:
             org.telegram.tgnet.TLRPC$PhotoSize r4 = r1.currentPhotoObjectThumb
-            if (r4 == 0) goto L_0x445c
-            if (r3 != 0) goto L_0x445c
+            if (r4 == 0) goto L_0x4484
+            if (r3 != 0) goto L_0x4484
             int r3 = r4.size
-            if (r3 != 0) goto L_0x445c
+            if (r3 != 0) goto L_0x4484
             r4.size = r9
-        L_0x445c:
+        L_0x4484:
             boolean r3 = org.telegram.messenger.SharedConfig.autoplayVideo
-            if (r3 == 0) goto L_0x44a2
+            if (r3 == 0) goto L_0x44ca
             r8 = 3
-            if (r2 != r8) goto L_0x44a0
+            if (r2 != r8) goto L_0x44c8
             boolean r2 = r71.needDrawBluredPreview()
-            if (r2 != 0) goto L_0x44a0
+            if (r2 != 0) goto L_0x44c8
             org.telegram.messenger.MessageObject r2 = r1.currentMessageObject
             boolean r2 = r2.mediaExists
-            if (r2 != 0) goto L_0x4483
+            if (r2 != 0) goto L_0x44ab
             boolean r2 = r71.canStreamVideo()
-            if (r2 == 0) goto L_0x44a0
+            if (r2 == 0) goto L_0x44c8
             int r2 = r1.currentAccount
             org.telegram.messenger.DownloadController r2 = org.telegram.messenger.DownloadController.getInstance(r2)
             org.telegram.messenger.MessageObject r3 = r1.currentMessageObject
             boolean r2 = r2.canDownloadMedia((org.telegram.messenger.MessageObject) r3)
-            if (r2 == 0) goto L_0x44a0
-        L_0x4483:
+            if (r2 == 0) goto L_0x44c8
+        L_0x44ab:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r2 = r1.currentPosition
-            if (r2 == 0) goto L_0x449a
+            if (r2 == 0) goto L_0x44c2
             int r2 = r2.flags
             r3 = r2 & 1
             r18 = 2
-            if (r3 == 0) goto L_0x4495
+            if (r3 == 0) goto L_0x44bd
             r2 = r2 & 2
-            if (r2 == 0) goto L_0x4495
+            if (r2 == 0) goto L_0x44bd
             r2 = 1
-            goto L_0x4496
-        L_0x4495:
+            goto L_0x44be
+        L_0x44bd:
             r2 = 0
-        L_0x4496:
+        L_0x44be:
             r1.autoPlayingMedia = r2
             r2 = 1
-            goto L_0x44a6
-        L_0x449a:
+            goto L_0x44ce
+        L_0x44c2:
             r2 = 1
             r18 = 2
             r1.autoPlayingMedia = r2
-            goto L_0x44a6
-        L_0x44a0:
+            goto L_0x44ce
+        L_0x44c8:
             r2 = 1
-            goto L_0x44a4
-        L_0x44a2:
+            goto L_0x44cc
+        L_0x44ca:
             r2 = 1
             r8 = 3
-        L_0x44a4:
+        L_0x44cc:
             r18 = 2
-        L_0x44a6:
+        L_0x44ce:
             boolean r3 = r1.autoPlayingMedia
-            if (r3 == 0) goto L_0x4560
+            if (r3 == 0) goto L_0x4588
             org.telegram.messenger.ImageReceiver r3 = r1.photoImage
             r3.setAllowStartAnimation(r2)
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
@@ -15507,9 +15524,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$Document r2 = r71.getDocument()
             org.telegram.messenger.MessageObject r3 = r1.currentMessageObject
             org.telegram.messenger.VideoEditedInfo r3 = r3.videoEditedInfo
-            if (r3 == 0) goto L_0x4524
+            if (r3 == 0) goto L_0x454c
             boolean r3 = r3.canAutoPlaySourceVideo()
-            if (r3 == 0) goto L_0x4524
+            if (r3 == 0) goto L_0x454c
             org.telegram.messenger.ImageReceiver r3 = r1.photoImage
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
             org.telegram.messenger.VideoEditedInfo r4 = r4.videoEditedInfo
@@ -15554,16 +15571,16 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r8 = 1000(0x3e8, double:4.94E-321)
             long r6 = r6 / r8
             r2.setMediaStartEndTime(r4, r6)
-            goto L_0x492b
-        L_0x4524:
+            goto L_0x4953
+        L_0x454c:
             r27 = r15
             r15 = 8
-            if (r16 != 0) goto L_0x4532
-            if (r19 != 0) goto L_0x4532
+            if (r16 != 0) goto L_0x455a
+            if (r19 != 0) goto L_0x455a
             org.telegram.messenger.ImageReceiver r3 = r1.photoImage
             r4 = 1
             r3.setCrossfadeWithOldImage(r4)
-        L_0x4532:
+        L_0x455a:
             org.telegram.messenger.ImageReceiver r3 = r1.photoImage
             org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForDocument(r2)
             org.telegram.tgnet.TLRPC$PhotoSize r5 = r1.currentPhotoObject
@@ -15584,64 +15601,64 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r4 = r12
             r12 = r71
             r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13)
-            goto L_0x492b
-        L_0x4560:
+            goto L_0x4953
+        L_0x4588:
             r27 = r15
             r15 = 8
             int r2 = r14.type
             r3 = 1
-            if (r2 != r3) goto L_0x4632
+            if (r2 != r3) goto L_0x465a
             boolean r2 = r14.useCustomPhoto
-            if (r2 == 0) goto L_0x457f
+            if (r2 == 0) goto L_0x45a7
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             android.content.res.Resources r3 = r70.getResources()
-            r4 = 2131166145(0x7var_c1, float:1.7946527E38)
+            r4 = 2131166147(0x7var_c3, float:1.7946531E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             r2.setImageBitmap((android.graphics.drawable.Drawable) r3)
-            goto L_0x492b
-        L_0x457f:
+            goto L_0x4953
+        L_0x45a7:
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r1.currentPhotoObject
-            if (r2 == 0) goto L_0x462a
+            if (r2 == 0) goto L_0x4652
             java.lang.String r2 = org.telegram.messenger.FileLoader.getAttachFileName(r2)
             boolean r3 = r14.mediaExists
-            if (r3 == 0) goto L_0x4596
+            if (r3 == 0) goto L_0x45be
             int r3 = r1.currentAccount
             org.telegram.messenger.DownloadController r3 = org.telegram.messenger.DownloadController.getInstance(r3)
             r3.removeLoadingFileObserver(r1)
             r13 = 1
-            goto L_0x4597
-        L_0x4596:
+            goto L_0x45bf
+        L_0x45be:
             r13 = 0
-        L_0x4597:
-            if (r13 != 0) goto L_0x45ee
+        L_0x45bf:
+            if (r13 != 0) goto L_0x4616
             org.telegram.messenger.MessageObject r3 = r1.currentMessageObject
             boolean r3 = r3.loadingCancelled
-            if (r3 != 0) goto L_0x45ad
+            if (r3 != 0) goto L_0x45d5
             int r3 = r1.currentAccount
             org.telegram.messenger.DownloadController r3 = org.telegram.messenger.DownloadController.getInstance(r3)
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
             boolean r3 = r3.canDownloadMedia((org.telegram.messenger.MessageObject) r4)
-            if (r3 != 0) goto L_0x45ee
-        L_0x45ad:
+            if (r3 != 0) goto L_0x4616
+        L_0x45d5:
             int r3 = r1.currentAccount
             org.telegram.messenger.FileLoader r3 = org.telegram.messenger.FileLoader.getInstance(r3)
             boolean r2 = r3.isLoadingFile(r2)
-            if (r2 == 0) goto L_0x45ba
-            goto L_0x45ee
-        L_0x45ba:
+            if (r2 == 0) goto L_0x45e2
+            goto L_0x4616
+        L_0x45e2:
             r2 = 1
             r1.photoNotSet = r2
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r1.currentPhotoObjectThumb
-            if (r2 != 0) goto L_0x45ce
+            if (r2 != 0) goto L_0x45f6
             android.graphics.drawable.BitmapDrawable r3 = r1.currentPhotoObjectThumbStripped
-            if (r3 == 0) goto L_0x45c6
-            goto L_0x45ce
-        L_0x45c6:
+            if (r3 == 0) goto L_0x45ee
+            goto L_0x45f6
+        L_0x45ee:
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             r3 = 0
             r2.setImageBitmap((android.graphics.drawable.Drawable) r3)
-            goto L_0x492b
-        L_0x45ce:
+            goto L_0x4953
+        L_0x45f6:
             org.telegram.messenger.ImageReceiver r4 = r1.photoImage
             r5 = 0
             r6 = 0
@@ -15653,15 +15670,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r11 = 0
             org.telegram.messenger.MessageObject r12 = r1.currentMessageObject
             boolean r2 = r12.shouldEncryptPhotoOrVideo()
-            if (r2 == 0) goto L_0x45e8
+            if (r2 == 0) goto L_0x4610
             r13 = 2
-            goto L_0x45e9
-        L_0x45e8:
+            goto L_0x4611
+        L_0x4610:
             r13 = 0
-        L_0x45e9:
+        L_0x4611:
             r4.setImage(r5, r6, r7, r8, r9, r10, r11, r12, r13)
-            goto L_0x492b
-        L_0x45ee:
+            goto L_0x4953
+        L_0x4616:
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.tgnet.TLRPC$PhotoSize r3 = r1.currentPhotoObject
             org.telegram.tgnet.TLObject r4 = r1.photoParentObject
@@ -15677,12 +15694,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r43 = 0
             org.telegram.messenger.MessageObject r7 = r1.currentMessageObject
             boolean r8 = r7.shouldEncryptPhotoOrVideo()
-            if (r8 == 0) goto L_0x4617
+            if (r8 == 0) goto L_0x463f
             r45 = 2
-            goto L_0x4619
-        L_0x4617:
+            goto L_0x4641
+        L_0x463f:
             r45 = 0
-        L_0x4619:
+        L_0x4641:
             r36 = r2
             r38 = r3
             r40 = r4
@@ -15690,24 +15707,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r42 = r6
             r44 = r7
             r36.setImage(r37, r38, r39, r40, r41, r42, r43, r44, r45)
-            goto L_0x492b
-        L_0x462a:
+            goto L_0x4953
+        L_0x4652:
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             r3 = 0
             r2.setImageBitmap((android.graphics.drawable.Drawable) r3)
-            goto L_0x492b
-        L_0x4632:
-            if (r2 == r15) goto L_0x46c9
+            goto L_0x4953
+        L_0x465a:
+            if (r2 == r15) goto L_0x46f1
             r3 = 5
-            if (r2 != r3) goto L_0x4639
-            goto L_0x46c9
-        L_0x4639:
+            if (r2 != r3) goto L_0x4661
+            goto L_0x46f1
+        L_0x4661:
             org.telegram.messenger.VideoEditedInfo r4 = r14.videoEditedInfo
-            if (r4 == 0) goto L_0x4686
-            if (r2 != r3) goto L_0x4686
+            if (r4 == 0) goto L_0x46ae
+            if (r2 != r3) goto L_0x46ae
             org.telegram.messenger.MessageObject r2 = r1.currentMessageObject
             boolean r2 = r2.needDrawBluredPreview()
-            if (r2 != 0) goto L_0x4686
+            if (r2 != 0) goto L_0x46ae
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.messenger.VideoEditedInfo r3 = r14.videoEditedInfo
             java.lang.String r3 = r3.originalPath
@@ -15722,12 +15739,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r9 = 0
             org.telegram.messenger.MessageObject r10 = r1.currentMessageObject
             boolean r10 = r10.shouldEncryptPhotoOrVideo()
-            if (r10 == 0) goto L_0x466b
+            if (r10 == 0) goto L_0x4693
             r11 = 2
-            goto L_0x466c
-        L_0x466b:
+            goto L_0x4694
+        L_0x4693:
             r11 = 0
-        L_0x466c:
+        L_0x4694:
             r10 = r71
             r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11)
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
@@ -15740,19 +15757,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r8 = 1000(0x3e8, double:4.94E-321)
             long r6 = r6 / r8
             r2.setMediaStartEndTime(r4, r6)
-            goto L_0x492b
-        L_0x4686:
-            if (r16 != 0) goto L_0x469d
+            goto L_0x4953
+        L_0x46ae:
+            if (r16 != 0) goto L_0x46c5
             org.telegram.messenger.MessageObject r2 = r1.currentMessageObject
             boolean r2 = r2.needDrawBluredPreview()
-            if (r2 != 0) goto L_0x469d
+            if (r2 != 0) goto L_0x46c5
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             r3 = 1
             r2.setCrossfadeWithOldImage(r3)
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             r3 = 250(0xfa, float:3.5E-43)
             r2.setCrossfadeDuration(r3)
-        L_0x469d:
+        L_0x46c5:
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.tgnet.TLRPC$PhotoSize r3 = r1.currentPhotoObject
             org.telegram.tgnet.TLObject r4 = r1.photoParentObject
@@ -15767,113 +15784,113 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r9 = 0
             org.telegram.messenger.MessageObject r10 = r1.currentMessageObject
             boolean r10 = r10.shouldEncryptPhotoOrVideo()
-            if (r10 == 0) goto L_0x46c1
+            if (r10 == 0) goto L_0x46e9
             r11 = 2
-            goto L_0x46c2
-        L_0x46c1:
+            goto L_0x46ea
+        L_0x46e9:
             r11 = 0
-        L_0x46c2:
+        L_0x46ea:
             r10 = r71
             r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11)
-            goto L_0x492b
-        L_0x46c9:
+            goto L_0x4953
+        L_0x46f1:
             org.telegram.tgnet.TLRPC$Document r2 = r71.getDocument()
             java.lang.String r2 = org.telegram.messenger.FileLoader.getAttachFileName(r2)
             boolean r3 = r14.attachPathExists
-            if (r3 == 0) goto L_0x46e0
+            if (r3 == 0) goto L_0x4708
             int r3 = r1.currentAccount
             org.telegram.messenger.DownloadController r3 = org.telegram.messenger.DownloadController.getInstance(r3)
             r3.removeLoadingFileObserver(r1)
             r13 = 1
-            goto L_0x46e7
-        L_0x46e0:
+            goto L_0x470f
+        L_0x4708:
             boolean r3 = r14.mediaExists
-            if (r3 == 0) goto L_0x46e6
+            if (r3 == 0) goto L_0x470e
             r13 = 2
-            goto L_0x46e7
-        L_0x46e6:
+            goto L_0x470f
+        L_0x470e:
             r13 = 0
-        L_0x46e7:
+        L_0x470f:
             org.telegram.tgnet.TLRPC$Document r3 = r71.getDocument()
             boolean r4 = r71.hasValidGroupId()
             boolean r4 = org.telegram.messenger.MessageObject.isGifDocument(r3, r4)
-            if (r4 != 0) goto L_0x46fd
+            if (r4 != 0) goto L_0x4725
             int r4 = r14.type
             r5 = 5
-            if (r4 != r5) goto L_0x46fb
-            goto L_0x46fd
-        L_0x46fb:
+            if (r4 != r5) goto L_0x4723
+            goto L_0x4725
+        L_0x4723:
             r12 = 0
-            goto L_0x4709
-        L_0x46fd:
+            goto L_0x4731
+        L_0x4725:
             int r4 = r1.currentAccount
             org.telegram.messenger.DownloadController r4 = org.telegram.messenger.DownloadController.getInstance(r4)
             org.telegram.messenger.MessageObject r5 = r1.currentMessageObject
             boolean r12 = r4.canDownloadMedia((org.telegram.messenger.MessageObject) r5)
-        L_0x4709:
+        L_0x4731:
             org.telegram.tgnet.TLRPC$VideoSize r4 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r3)
             boolean r5 = r71.hasValidGroupId()
             boolean r5 = org.telegram.messenger.MessageObject.isGifDocument(r3, r5)
-            if (r5 == 0) goto L_0x471b
+            if (r5 == 0) goto L_0x4743
             org.telegram.messenger.VideoEditedInfo r5 = r14.videoEditedInfo
-            if (r5 == 0) goto L_0x4727
-        L_0x471b:
+            if (r5 == 0) goto L_0x474f
+        L_0x4743:
             boolean r5 = r71.isSending()
-            if (r5 != 0) goto L_0x48af
+            if (r5 != 0) goto L_0x48d7
             boolean r5 = r71.isEditing()
-            if (r5 != 0) goto L_0x48af
-        L_0x4727:
-            if (r13 != 0) goto L_0x4737
+            if (r5 != 0) goto L_0x48d7
+        L_0x474f:
+            if (r13 != 0) goto L_0x475f
             int r5 = r1.currentAccount
             org.telegram.messenger.FileLoader r5 = org.telegram.messenger.FileLoader.getInstance(r5)
             boolean r2 = r5.isLoadingFile(r2)
-            if (r2 != 0) goto L_0x4737
-            if (r12 == 0) goto L_0x48af
-        L_0x4737:
+            if (r2 != 0) goto L_0x475f
+            if (r12 == 0) goto L_0x48d7
+        L_0x475f:
             r2 = 1
-            if (r13 == r2) goto L_0x4801
+            if (r13 == r2) goto L_0x4829
             boolean r5 = r71.needDrawBluredPreview()
-            if (r5 != 0) goto L_0x4801
-            if (r13 != 0) goto L_0x474a
+            if (r5 != 0) goto L_0x4829
+            if (r13 != 0) goto L_0x4772
             boolean r5 = r71.canStreamVideo()
-            if (r5 == 0) goto L_0x4801
-            if (r12 == 0) goto L_0x4801
-        L_0x474a:
+            if (r5 == 0) goto L_0x4829
+            if (r12 == 0) goto L_0x4829
+        L_0x4772:
             r1.autoPlayingMedia = r2
-            if (r16 != 0) goto L_0x475a
+            if (r16 != 0) goto L_0x4782
             org.telegram.messenger.ImageReceiver r5 = r1.photoImage
             r5.setCrossfadeWithOldImage(r2)
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             r5 = 250(0xfa, float:3.5E-43)
             r2.setCrossfadeDuration(r5)
-        L_0x475a:
-            if (r13 != 0) goto L_0x47a1
-            if (r4 == 0) goto L_0x47a1
+        L_0x4782:
+            if (r13 != 0) goto L_0x47c9
+            if (r4 == 0) goto L_0x47c9
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r1.currentPhotoObject
-            if (r2 == 0) goto L_0x4766
+            if (r2 == 0) goto L_0x478e
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r1.currentPhotoObjectThumb
-            if (r2 != 0) goto L_0x47a1
-        L_0x4766:
+            if (r2 != 0) goto L_0x47c9
+        L_0x478e:
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForDocument(r3)
             org.telegram.tgnet.TLRPC$Document r6 = r1.documentAttach
             org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$VideoSize) r4, (org.telegram.tgnet.TLRPC$Document) r6)
             r7 = 0
             org.telegram.tgnet.TLRPC$PhotoSize r4 = r1.currentPhotoObject
-            if (r4 == 0) goto L_0x4778
-            goto L_0x477a
-        L_0x4778:
+            if (r4 == 0) goto L_0x47a0
+            goto L_0x47a2
+        L_0x47a0:
             org.telegram.tgnet.TLRPC$PhotoSize r4 = r1.currentPhotoObjectThumb
-        L_0x477a:
+        L_0x47a2:
             org.telegram.tgnet.TLRPC$Document r8 = r1.documentAttach
             org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r4, (org.telegram.tgnet.TLRPC$Document) r8)
             org.telegram.tgnet.TLRPC$PhotoSize r4 = r1.currentPhotoObject
-            if (r4 == 0) goto L_0x4787
+            if (r4 == 0) goto L_0x47af
             java.lang.String r4 = r1.currentPhotoFilter
-            goto L_0x4789
-        L_0x4787:
+            goto L_0x47b1
+        L_0x47af:
             java.lang.String r4 = r1.currentPhotoFilterThumb
-        L_0x4789:
+        L_0x47b1:
             r9 = r4
             android.graphics.drawable.BitmapDrawable r10 = r1.currentPhotoObjectThumbStripped
             int r11 = r3.size
@@ -15890,14 +15907,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r11 = r12
             r12 = r71
             r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13)
-            goto L_0x492b
-        L_0x47a1:
+            goto L_0x4953
+        L_0x47c9:
             boolean r2 = r1.isRoundVideo
-            if (r2 == 0) goto L_0x47d6
-            if (r16 != 0) goto L_0x47d6
+            if (r2 == 0) goto L_0x47fe
+            if (r16 != 0) goto L_0x47fe
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             boolean r2 = r2.hasStaticThumb()
-            if (r2 == 0) goto L_0x47d6
+            if (r2 == 0) goto L_0x47fe
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForDocument(r3)
             org.telegram.tgnet.TLRPC$PhotoSize r5 = r1.currentPhotoObject
@@ -15916,8 +15933,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r4 = r12
             r12 = r71
             r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13)
-            goto L_0x492b
-        L_0x47d6:
+            goto L_0x4953
+        L_0x47fe:
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForDocument(r3)
             org.telegram.tgnet.TLRPC$PhotoSize r5 = r1.currentPhotoObject
@@ -15937,18 +15954,18 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r4 = r12
             r12 = r71
             r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13)
-            goto L_0x492b
-        L_0x4801:
-            if (r13 != r2) goto L_0x4836
+            goto L_0x4953
+        L_0x4829:
+            if (r13 != r2) goto L_0x485e
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             boolean r3 = r71.isSendError()
-            if (r3 == 0) goto L_0x480d
+            if (r3 == 0) goto L_0x4835
             r3 = 0
-            goto L_0x4811
-        L_0x480d:
+            goto L_0x4839
+        L_0x4835:
             org.telegram.tgnet.TLRPC$Message r3 = r14.messageOwner
             java.lang.String r3 = r3.attachPath
-        L_0x4811:
+        L_0x4839:
             org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForPath(r3)
             r4 = 0
             org.telegram.tgnet.TLRPC$PhotoSize r5 = r1.currentPhotoObject
@@ -15965,14 +15982,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r13 = 0
             r12 = r71
             r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13)
-            goto L_0x492b
-        L_0x4836:
-            if (r4 == 0) goto L_0x487e
+            goto L_0x4953
+        L_0x485e:
+            if (r4 == 0) goto L_0x48a6
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r1.currentPhotoObject
-            if (r2 == 0) goto L_0x4840
+            if (r2 == 0) goto L_0x4868
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r1.currentPhotoObjectThumb
-            if (r2 != 0) goto L_0x487e
-        L_0x4840:
+            if (r2 != 0) goto L_0x48a6
+        L_0x4868:
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForDocument(r3)
             r6 = 0
@@ -15980,20 +15997,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.messenger.ImageLocation r7 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$VideoSize) r4, (org.telegram.tgnet.TLRPC$Document) r7)
             r8 = 0
             org.telegram.tgnet.TLRPC$PhotoSize r4 = r1.currentPhotoObject
-            if (r4 == 0) goto L_0x4853
-            goto L_0x4855
-        L_0x4853:
+            if (r4 == 0) goto L_0x487b
+            goto L_0x487d
+        L_0x487b:
             org.telegram.tgnet.TLRPC$PhotoSize r4 = r1.currentPhotoObjectThumb
-        L_0x4855:
+        L_0x487d:
             org.telegram.tgnet.TLRPC$Document r9 = r1.documentAttach
             org.telegram.messenger.ImageLocation r9 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r4, (org.telegram.tgnet.TLRPC$Document) r9)
             org.telegram.tgnet.TLRPC$PhotoSize r4 = r1.currentPhotoObject
-            if (r4 == 0) goto L_0x4862
+            if (r4 == 0) goto L_0x488a
             java.lang.String r4 = r1.currentPhotoFilter
-            goto L_0x4864
-        L_0x4862:
+            goto L_0x488c
+        L_0x488a:
             java.lang.String r4 = r1.currentPhotoFilterThumb
-        L_0x4864:
+        L_0x488c:
             r10 = r4
             android.graphics.drawable.BitmapDrawable r11 = r1.currentPhotoObjectThumbStripped
             int r12 = r3.size
@@ -16011,8 +16028,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r12 = r71
             r13 = r18
             r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13)
-            goto L_0x492b
-        L_0x487e:
+            goto L_0x4953
+        L_0x48a6:
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForDocument(r3)
             r5 = 0
@@ -16039,16 +16056,16 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r11 = r12
             r12 = r71
             r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13)
-            goto L_0x492b
-        L_0x48af:
+            goto L_0x4953
+        L_0x48d7:
             org.telegram.messenger.VideoEditedInfo r2 = r14.videoEditedInfo
-            if (r2 == 0) goto L_0x48f4
+            if (r2 == 0) goto L_0x491c
             int r2 = r14.type
             r3 = 5
-            if (r2 != r3) goto L_0x48f4
+            if (r2 != r3) goto L_0x491c
             org.telegram.messenger.MessageObject r2 = r1.currentMessageObject
             boolean r2 = r2.needDrawBluredPreview()
-            if (r2 != 0) goto L_0x48f4
+            if (r2 != 0) goto L_0x491c
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.messenger.VideoEditedInfo r3 = r14.videoEditedInfo
             java.lang.String r3 = r3.originalPath
@@ -16074,19 +16091,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r8 = 1000(0x3e8, double:4.94E-321)
             long r6 = r6 / r8
             r2.setMediaStartEndTime(r4, r6)
-            goto L_0x492b
-        L_0x48f4:
-            if (r16 != 0) goto L_0x490b
+            goto L_0x4953
+        L_0x491c:
+            if (r16 != 0) goto L_0x4933
             org.telegram.messenger.MessageObject r2 = r1.currentMessageObject
             boolean r2 = r2.needDrawBluredPreview()
-            if (r2 != 0) goto L_0x490b
+            if (r2 != 0) goto L_0x4933
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             r3 = 1
             r2.setCrossfadeWithOldImage(r3)
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             r3 = 250(0xfa, float:3.5E-43)
             r2.setCrossfadeDuration(r3)
-        L_0x490b:
+        L_0x4933:
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             org.telegram.tgnet.TLRPC$PhotoSize r3 = r1.currentPhotoObject
             org.telegram.tgnet.TLObject r4 = r1.photoParentObject
@@ -16102,48 +16119,48 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r11 = 0
             r10 = r71
             r2.setImage(r3, r4, r5, r6, r7, r8, r9, r10, r11)
-        L_0x492b:
+        L_0x4953:
             r12 = r0
             r13 = r21
             r66 = r23
             r0 = r26
             r2 = r27
-        L_0x4934:
+        L_0x495c:
             r70.setMessageObjectInternal(r71)
             boolean r3 = r1.drawForwardedName
-            if (r3 == 0) goto L_0x495a
+            if (r3 == 0) goto L_0x4982
             boolean r3 = r71.needDrawForwarded()
-            if (r3 == 0) goto L_0x495a
+            if (r3 == 0) goto L_0x4982
             org.telegram.messenger.MessageObject$GroupedMessagePosition r3 = r1.currentPosition
-            if (r3 == 0) goto L_0x4949
+            if (r3 == 0) goto L_0x4971
             byte r3 = r3.minY
-            if (r3 != 0) goto L_0x495a
-        L_0x4949:
+            if (r3 != 0) goto L_0x4982
+        L_0x4971:
             int r3 = r14.type
             r4 = 5
-            if (r3 == r4) goto L_0x4979
+            if (r3 == r4) goto L_0x49a1
             int r3 = r1.namesOffset
             r4 = 1084227584(0x40a00000, float:5.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r3 = r3 + r4
             r1.namesOffset = r3
-            goto L_0x4979
-        L_0x495a:
+            goto L_0x49a1
+        L_0x4982:
             boolean r3 = r1.drawNameLayout
-            if (r3 == 0) goto L_0x4979
+            if (r3 == 0) goto L_0x49a1
             int r3 = r71.getReplyMsgId()
-            if (r3 == 0) goto L_0x496e
+            if (r3 == 0) goto L_0x4996
             boolean r3 = r1.isThreadChat
-            if (r3 == 0) goto L_0x4979
+            if (r3 == 0) goto L_0x49a1
             int r3 = r71.getReplyTopMsgId()
-            if (r3 != 0) goto L_0x4979
-        L_0x496e:
+            if (r3 != 0) goto L_0x49a1
+        L_0x4996:
             int r3 = r1.namesOffset
             r4 = 1088421888(0x40e00000, float:7.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r3 = r3 + r4
             r1.namesOffset = r3
-        L_0x4979:
+        L_0x49a1:
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r32)
             int r3 = r3 + r2
             int r4 = r1.namesOffset
@@ -16151,22 +16168,22 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r3 = r3 + r12
             r1.totalHeight = r3
             org.telegram.messenger.MessageObject$GroupedMessagePosition r3 = r1.currentPosition
-            if (r3 == 0) goto L_0x49a0
+            if (r3 == 0) goto L_0x49c8
             int r3 = r3.flags
             r3 = r3 & r15
-            if (r3 != 0) goto L_0x49a0
+            if (r3 != 0) goto L_0x49c8
             org.telegram.messenger.MessageObject r3 = r1.currentMessageObject
             boolean r3 = r3.isDocument()
-            if (r3 != 0) goto L_0x49a0
+            if (r3 != 0) goto L_0x49c8
             int r3 = r1.totalHeight
             r4 = 1077936128(0x40400000, float:3.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r3 = r3 - r4
             r1.totalHeight = r3
-        L_0x49a0:
+        L_0x49c8:
             org.telegram.messenger.MessageObject r3 = r1.currentMessageObject
             boolean r3 = r3.isDice()
-            if (r3 == 0) goto L_0x49bb
+            if (r3 == 0) goto L_0x49e3
             int r3 = r1.totalHeight
             r4 = 1101529088(0x41a80000, float:21.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
@@ -16175,12 +16192,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r3 = 1101529088(0x41a80000, float:21.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r1.additionalTimeOffsetY = r3
-        L_0x49bb:
+        L_0x49e3:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r3 = r1.currentPosition
-            if (r3 == 0) goto L_0x49f2
+            if (r3 == 0) goto L_0x4a1a
             org.telegram.messenger.MessageObject r3 = r1.currentMessageObject
             boolean r3 = r3.isDocument()
-            if (r3 != 0) goto L_0x49f2
+            if (r3 != 0) goto L_0x4a1a
             org.telegram.messenger.MessageObject$GroupedMessagePosition r3 = r1.currentPosition
             int r3 = r1.getAdditionalWidthForPosition(r3)
             int r0 = r0 + r3
@@ -16188,114 +16205,114 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r3 = r3.flags
             r4 = 4
             r3 = r3 & r4
-            if (r3 != 0) goto L_0x49e3
+            if (r3 != 0) goto L_0x4a0b
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r24)
             int r2 = r2 + r3
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r24)
             r5 = 0
             int r12 = 0 - r3
-            goto L_0x49e5
-        L_0x49e3:
+            goto L_0x4a0d
+        L_0x4a0b:
             r5 = 0
             r12 = 0
-        L_0x49e5:
+        L_0x4a0d:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r3 = r1.currentPosition
             int r3 = r3.flags
             r3 = r3 & r15
-            if (r3 != 0) goto L_0x49f5
+            if (r3 != 0) goto L_0x4a1d
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r20)
             int r2 = r2 + r3
-            goto L_0x49f5
-        L_0x49f2:
+            goto L_0x4a1d
+        L_0x4a1a:
             r4 = 4
             r5 = 0
             r12 = 0
-        L_0x49f5:
+        L_0x4a1d:
             boolean r3 = r1.drawPinnedTop
-            if (r3 == 0) goto L_0x4a02
+            if (r3 == 0) goto L_0x4a2a
             int r3 = r1.namesOffset
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r20)
             int r3 = r3 - r6
             r1.namesOffset = r3
-        L_0x4a02:
+        L_0x4a2a:
             int r3 = r1.namesOffset
-            if (r3 <= 0) goto L_0x4a16
+            if (r3 <= 0) goto L_0x4a3e
             r3 = 1088421888(0x40e00000, float:7.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r6 = r1.totalHeight
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r25)
             int r6 = r6 - r7
             r1.totalHeight = r6
-            goto L_0x4a25
-        L_0x4a16:
+            goto L_0x4a4d
+        L_0x4a3e:
             r3 = 1084227584(0x40a00000, float:5.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r6 = r1.totalHeight
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r24)
             int r6 = r6 - r7
             r1.totalHeight = r6
-        L_0x4a25:
+        L_0x4a4d:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r6 = r1.currentPosition
-            if (r6 == 0) goto L_0x4a8a
+            if (r6 == 0) goto L_0x4ab2
             org.telegram.messenger.MessageObject$GroupedMessages r6 = r1.currentMessagesGroup
             boolean r7 = r6.isDocuments
-            if (r7 == 0) goto L_0x4a8a
+            if (r7 == 0) goto L_0x4ab2
             java.util.ArrayList<org.telegram.messenger.MessageObject> r6 = r6.messages
             int r6 = r6.size()
             r7 = 1
-            if (r6 <= r7) goto L_0x4a8a
+            if (r6 <= r7) goto L_0x4ab2
             org.telegram.messenger.MessageObject$GroupedMessagePosition r6 = r1.currentPosition
             int r6 = r6.flags
             r6 = r6 & r4
-            if (r6 != 0) goto L_0x4a71
+            if (r6 != 0) goto L_0x4a99
             int r6 = r1.totalHeight
             boolean r7 = r1.drawPhotoImage
-            if (r7 == 0) goto L_0x4a48
+            if (r7 == 0) goto L_0x4a70
             r7 = 1077936128(0x40400000, float:3.0)
-            goto L_0x4a4a
-        L_0x4a48:
+            goto L_0x4a72
+        L_0x4a70:
             r7 = 1086324736(0x40CLASSNAME, float:6.0)
-        L_0x4a4a:
+        L_0x4a72:
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r6 = r6 - r7
             r1.totalHeight = r6
             int r6 = r1.mediaOffsetY
             boolean r7 = r1.drawPhotoImage
-            if (r7 == 0) goto L_0x4a5a
+            if (r7 == 0) goto L_0x4a82
             r7 = 1077936128(0x40400000, float:3.0)
-            goto L_0x4a5c
-        L_0x4a5a:
+            goto L_0x4a84
+        L_0x4a82:
             r7 = 1086324736(0x40CLASSNAME, float:6.0)
-        L_0x4a5c:
+        L_0x4a84:
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r6 = r6 - r7
             r1.mediaOffsetY = r6
             boolean r6 = r1.drawPhotoImage
-            if (r6 == 0) goto L_0x4a6a
+            if (r6 == 0) goto L_0x4a92
             r6 = 1077936128(0x40400000, float:3.0)
-            goto L_0x4a6c
-        L_0x4a6a:
+            goto L_0x4a94
+        L_0x4a92:
             r6 = 1086324736(0x40CLASSNAME, float:6.0)
-        L_0x4a6c:
+        L_0x4a94:
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r3 = r3 - r6
-        L_0x4a71:
+        L_0x4a99:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r6 = r1.currentPosition
             int r6 = r6.flags
             r6 = r6 & r15
-            if (r6 != 0) goto L_0x4a8a
+            if (r6 != 0) goto L_0x4ab2
             int r6 = r1.totalHeight
             boolean r7 = r1.drawPhotoImage
-            if (r7 == 0) goto L_0x4a81
+            if (r7 == 0) goto L_0x4aa9
             r7 = 1077936128(0x40400000, float:3.0)
-            goto L_0x4a83
-        L_0x4a81:
+            goto L_0x4aab
+        L_0x4aa9:
             r7 = 1086324736(0x40CLASSNAME, float:6.0)
-        L_0x4a83:
+        L_0x4aab:
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r6 = r6 - r7
             r1.totalHeight = r6
-        L_0x4a8a:
+        L_0x4ab2:
             org.telegram.messenger.ImageReceiver r6 = r1.photoImage
             int r7 = r1.namesOffset
             int r3 = r3 + r7
@@ -16307,191 +16324,191 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r6.setImageCoords(r7, r3, r0, r2)
             r70.invalidate()
             r12 = r66
-        L_0x4a9c:
+        L_0x4ac4:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r0 = r1.currentPosition
-            if (r0 == 0) goto L_0x4ab0
+            if (r0 == 0) goto L_0x4ad8
             org.telegram.messenger.MessageObject r0 = r1.currentMessageObject
             boolean r0 = r0.isMusic()
-            if (r0 != 0) goto L_0x4ab0
+            if (r0 != 0) goto L_0x4ad8
             org.telegram.messenger.MessageObject r0 = r1.currentMessageObject
             boolean r0 = r0.isDocument()
-            if (r0 == 0) goto L_0x4bbb
-        L_0x4ab0:
+            if (r0 == 0) goto L_0x4be3
+        L_0x4ad8:
             boolean r0 = r71.isAnyKindOfSticker()
-            if (r0 != 0) goto L_0x4bbb
+            if (r0 != 0) goto L_0x4be3
             int r0 = r1.addedCaptionHeight
-            if (r0 != 0) goto L_0x4bbb
+            if (r0 != 0) goto L_0x4be3
             boolean r0 = r14.isRestrictedMessage
-            if (r0 != 0) goto L_0x4b29
+            if (r0 != 0) goto L_0x4b51
             android.text.StaticLayout r0 = r1.captionLayout
-            if (r0 != 0) goto L_0x4b29
+            if (r0 != 0) goto L_0x4b51
             java.lang.CharSequence r0 = r14.caption
-            if (r0 == 0) goto L_0x4b29
-            r1.currentCaption = r0     // Catch:{ Exception -> 0x4b23 }
-            int r0 = r1.backgroundWidth     // Catch:{ Exception -> 0x4b23 }
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r31)     // Catch:{ Exception -> 0x4b23 }
+            if (r0 == 0) goto L_0x4b51
+            r1.currentCaption = r0     // Catch:{ Exception -> 0x4b4b }
+            int r0 = r1.backgroundWidth     // Catch:{ Exception -> 0x4b4b }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r31)     // Catch:{ Exception -> 0x4b4b }
             int r0 = r0 - r2
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r35)     // Catch:{ Exception -> 0x4b23 }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r35)     // Catch:{ Exception -> 0x4b4b }
             int r0 = r0 - r2
-            int r2 = r70.getExtraTextX()     // Catch:{ Exception -> 0x4b23 }
+            int r2 = r70.getExtraTextX()     // Catch:{ Exception -> 0x4b4b }
             r3 = 2
             int r2 = r2 * 2
             int r0 = r0 - r2
-            int r2 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x4b21 }
+            int r2 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x4b49 }
             r6 = 24
-            if (r2 < r6) goto L_0x4b04
-            java.lang.CharSequence r2 = r14.caption     // Catch:{ Exception -> 0x4b21 }
-            int r6 = r2.length()     // Catch:{ Exception -> 0x4b21 }
-            android.text.TextPaint r7 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint     // Catch:{ Exception -> 0x4b21 }
-            android.text.StaticLayout$Builder r0 = android.text.StaticLayout.Builder.obtain(r2, r5, r6, r7, r0)     // Catch:{ Exception -> 0x4b21 }
+            if (r2 < r6) goto L_0x4b2c
+            java.lang.CharSequence r2 = r14.caption     // Catch:{ Exception -> 0x4b49 }
+            int r6 = r2.length()     // Catch:{ Exception -> 0x4b49 }
+            android.text.TextPaint r7 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint     // Catch:{ Exception -> 0x4b49 }
+            android.text.StaticLayout$Builder r0 = android.text.StaticLayout.Builder.obtain(r2, r5, r6, r7, r0)     // Catch:{ Exception -> 0x4b49 }
             r2 = 1
-            android.text.StaticLayout$Builder r0 = r0.setBreakStrategy(r2)     // Catch:{ Exception -> 0x4b21 }
-            android.text.StaticLayout$Builder r0 = r0.setHyphenationFrequency(r5)     // Catch:{ Exception -> 0x4b21 }
-            android.text.Layout$Alignment r2 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x4b21 }
-            android.text.StaticLayout$Builder r0 = r0.setAlignment(r2)     // Catch:{ Exception -> 0x4b21 }
-            android.text.StaticLayout r0 = r0.build()     // Catch:{ Exception -> 0x4b21 }
-            r1.captionLayout = r0     // Catch:{ Exception -> 0x4b21 }
-            goto L_0x4b1d
-        L_0x4b04:
-            android.text.StaticLayout r2 = new android.text.StaticLayout     // Catch:{ Exception -> 0x4b21 }
-            java.lang.CharSequence r6 = r14.caption     // Catch:{ Exception -> 0x4b21 }
-            android.text.TextPaint r38 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint     // Catch:{ Exception -> 0x4b21 }
-            android.text.Layout$Alignment r40 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x4b21 }
+            android.text.StaticLayout$Builder r0 = r0.setBreakStrategy(r2)     // Catch:{ Exception -> 0x4b49 }
+            android.text.StaticLayout$Builder r0 = r0.setHyphenationFrequency(r5)     // Catch:{ Exception -> 0x4b49 }
+            android.text.Layout$Alignment r2 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x4b49 }
+            android.text.StaticLayout$Builder r0 = r0.setAlignment(r2)     // Catch:{ Exception -> 0x4b49 }
+            android.text.StaticLayout r0 = r0.build()     // Catch:{ Exception -> 0x4b49 }
+            r1.captionLayout = r0     // Catch:{ Exception -> 0x4b49 }
+            goto L_0x4b45
+        L_0x4b2c:
+            android.text.StaticLayout r2 = new android.text.StaticLayout     // Catch:{ Exception -> 0x4b49 }
+            java.lang.CharSequence r6 = r14.caption     // Catch:{ Exception -> 0x4b49 }
+            android.text.TextPaint r38 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint     // Catch:{ Exception -> 0x4b49 }
+            android.text.Layout$Alignment r40 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x4b49 }
             r41 = 1065353216(0x3var_, float:1.0)
             r42 = 0
             r43 = 0
             r36 = r2
             r37 = r6
             r39 = r0
-            r36.<init>(r37, r38, r39, r40, r41, r42, r43)     // Catch:{ Exception -> 0x4b21 }
-            r1.captionLayout = r2     // Catch:{ Exception -> 0x4b21 }
-        L_0x4b1d:
-            r70.updateCaptionSpoilers()     // Catch:{ Exception -> 0x4b21 }
-            goto L_0x4b2a
-        L_0x4b21:
+            r36.<init>(r37, r38, r39, r40, r41, r42, r43)     // Catch:{ Exception -> 0x4b49 }
+            r1.captionLayout = r2     // Catch:{ Exception -> 0x4b49 }
+        L_0x4b45:
+            r70.updateCaptionSpoilers()     // Catch:{ Exception -> 0x4b49 }
+            goto L_0x4b52
+        L_0x4b49:
             r0 = move-exception
-            goto L_0x4b25
-        L_0x4b23:
+            goto L_0x4b4d
+        L_0x4b4b:
             r0 = move-exception
             r3 = 2
-        L_0x4b25:
+        L_0x4b4d:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x4b2a
-        L_0x4b29:
+            goto L_0x4b52
+        L_0x4b51:
             r3 = 2
-        L_0x4b2a:
+        L_0x4b52:
             android.text.StaticLayout r0 = r1.captionLayout
-            if (r0 == 0) goto L_0x4bbc
-            int r0 = r1.backgroundWidth     // Catch:{ Exception -> 0x4bb6 }
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r31)     // Catch:{ Exception -> 0x4bb6 }
+            if (r0 == 0) goto L_0x4be4
+            int r0 = r1.backgroundWidth     // Catch:{ Exception -> 0x4bde }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r31)     // Catch:{ Exception -> 0x4bde }
             int r0 = r0 - r2
-            android.text.StaticLayout r2 = r1.captionLayout     // Catch:{ Exception -> 0x4bb6 }
-            if (r2 == 0) goto L_0x4bbc
-            int r2 = r2.getLineCount()     // Catch:{ Exception -> 0x4bb6 }
-            if (r2 <= 0) goto L_0x4bbc
-            r1.captionWidth = r0     // Catch:{ Exception -> 0x4bb6 }
-            android.text.StaticLayout r2 = r1.captionLayout     // Catch:{ Exception -> 0x4bb6 }
-            int r2 = r2.getHeight()     // Catch:{ Exception -> 0x4bb6 }
-            r1.captionHeight = r2     // Catch:{ Exception -> 0x4bb6 }
-            int r6 = r1.totalHeight     // Catch:{ Exception -> 0x4bb6 }
+            android.text.StaticLayout r2 = r1.captionLayout     // Catch:{ Exception -> 0x4bde }
+            if (r2 == 0) goto L_0x4be4
+            int r2 = r2.getLineCount()     // Catch:{ Exception -> 0x4bde }
+            if (r2 <= 0) goto L_0x4be4
+            r1.captionWidth = r0     // Catch:{ Exception -> 0x4bde }
+            android.text.StaticLayout r2 = r1.captionLayout     // Catch:{ Exception -> 0x4bde }
+            int r2 = r2.getHeight()     // Catch:{ Exception -> 0x4bde }
+            r1.captionHeight = r2     // Catch:{ Exception -> 0x4bde }
+            int r6 = r1.totalHeight     // Catch:{ Exception -> 0x4bde }
             r7 = 1091567616(0x41100000, float:9.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)     // Catch:{ Exception -> 0x4bb6 }
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)     // Catch:{ Exception -> 0x4bde }
             int r2 = r2 + r7
             int r6 = r6 + r2
-            r1.totalHeight = r6     // Catch:{ Exception -> 0x4bb6 }
-            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r2 = r1.reactionsLayoutInBubble     // Catch:{ Exception -> 0x4bb6 }
-            boolean r6 = r2.isEmpty     // Catch:{ Exception -> 0x4bb6 }
-            if (r6 != 0) goto L_0x4b5f
-            boolean r2 = r2.isSmall     // Catch:{ Exception -> 0x4bb6 }
-            if (r2 == 0) goto L_0x4bbc
-        L_0x4b5f:
-            org.telegram.messenger.MessageObject$GroupedMessagePosition r2 = r1.currentPosition     // Catch:{ Exception -> 0x4bb6 }
-            if (r2 == 0) goto L_0x4b68
-            int r2 = r2.flags     // Catch:{ Exception -> 0x4bb6 }
+            r1.totalHeight = r6     // Catch:{ Exception -> 0x4bde }
+            org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r2 = r1.reactionsLayoutInBubble     // Catch:{ Exception -> 0x4bde }
+            boolean r6 = r2.isEmpty     // Catch:{ Exception -> 0x4bde }
+            if (r6 != 0) goto L_0x4b87
+            boolean r2 = r2.isSmall     // Catch:{ Exception -> 0x4bde }
+            if (r2 == 0) goto L_0x4be4
+        L_0x4b87:
+            org.telegram.messenger.MessageObject$GroupedMessagePosition r2 = r1.currentPosition     // Catch:{ Exception -> 0x4bde }
+            if (r2 == 0) goto L_0x4b90
+            int r2 = r2.flags     // Catch:{ Exception -> 0x4bde }
             r2 = r2 & r15
-            if (r2 == 0) goto L_0x4bbc
-        L_0x4b68:
-            int r2 = r1.timeWidth     // Catch:{ Exception -> 0x4bb6 }
-            boolean r6 = r71.isOutOwner()     // Catch:{ Exception -> 0x4bb6 }
-            if (r6 == 0) goto L_0x4b77
+            if (r2 == 0) goto L_0x4be4
+        L_0x4b90:
+            int r2 = r1.timeWidth     // Catch:{ Exception -> 0x4bde }
+            boolean r6 = r71.isOutOwner()     // Catch:{ Exception -> 0x4bde }
+            if (r6 == 0) goto L_0x4b9f
             r6 = 1101004800(0x41a00000, float:20.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)     // Catch:{ Exception -> 0x4bb6 }
-            goto L_0x4b78
-        L_0x4b77:
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)     // Catch:{ Exception -> 0x4bde }
+            goto L_0x4ba0
+        L_0x4b9f:
             r6 = 0
-        L_0x4b78:
+        L_0x4ba0:
             int r2 = r2 + r6
-            int r6 = r70.getExtraTimeX()     // Catch:{ Exception -> 0x4bb6 }
+            int r6 = r70.getExtraTimeX()     // Catch:{ Exception -> 0x4bde }
             int r2 = r2 + r6
-            android.text.StaticLayout r6 = r1.captionLayout     // Catch:{ Exception -> 0x4bb6 }
-            int r7 = r6.getLineCount()     // Catch:{ Exception -> 0x4bb6 }
+            android.text.StaticLayout r6 = r1.captionLayout     // Catch:{ Exception -> 0x4bde }
+            int r7 = r6.getLineCount()     // Catch:{ Exception -> 0x4bde }
             r8 = 1
             int r7 = r7 - r8
-            float r6 = r6.getLineWidth(r7)     // Catch:{ Exception -> 0x4bb6 }
-            android.text.StaticLayout r7 = r1.captionLayout     // Catch:{ Exception -> 0x4bb6 }
-            int r9 = r7.getLineCount()     // Catch:{ Exception -> 0x4bb6 }
+            float r6 = r6.getLineWidth(r7)     // Catch:{ Exception -> 0x4bde }
+            android.text.StaticLayout r7 = r1.captionLayout     // Catch:{ Exception -> 0x4bde }
+            int r9 = r7.getLineCount()     // Catch:{ Exception -> 0x4bde }
             int r9 = r9 - r8
-            float r7 = r7.getLineLeft(r9)     // Catch:{ Exception -> 0x4bb6 }
+            float r7 = r7.getLineLeft(r9)     // Catch:{ Exception -> 0x4bde }
             float r6 = r6 + r7
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r33)     // Catch:{ Exception -> 0x4bb6 }
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r33)     // Catch:{ Exception -> 0x4bde }
             int r0 = r0 - r7
-            float r0 = (float) r0     // Catch:{ Exception -> 0x4bb6 }
+            float r0 = (float) r0     // Catch:{ Exception -> 0x4bde }
             float r0 = r0 - r6
-            float r2 = (float) r2     // Catch:{ Exception -> 0x4bb6 }
+            float r2 = (float) r2     // Catch:{ Exception -> 0x4bde }
             int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 >= 0) goto L_0x4bbc
-            int r0 = r1.totalHeight     // Catch:{ Exception -> 0x4bb6 }
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r32)     // Catch:{ Exception -> 0x4bb6 }
+            if (r0 >= 0) goto L_0x4be4
+            int r0 = r1.totalHeight     // Catch:{ Exception -> 0x4bde }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r32)     // Catch:{ Exception -> 0x4bde }
             int r0 = r0 + r2
-            r1.totalHeight = r0     // Catch:{ Exception -> 0x4bb6 }
-            int r0 = r1.captionHeight     // Catch:{ Exception -> 0x4bb6 }
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r32)     // Catch:{ Exception -> 0x4bb6 }
+            r1.totalHeight = r0     // Catch:{ Exception -> 0x4bde }
+            int r0 = r1.captionHeight     // Catch:{ Exception -> 0x4bde }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r32)     // Catch:{ Exception -> 0x4bde }
             int r0 = r0 + r2
-            r1.captionHeight = r0     // Catch:{ Exception -> 0x4bb6 }
+            r1.captionHeight = r0     // Catch:{ Exception -> 0x4bde }
             r12 = 2
-            goto L_0x4bbc
-        L_0x4bb6:
+            goto L_0x4be4
+        L_0x4bde:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x4bbc
-        L_0x4bbb:
+            goto L_0x4be4
+        L_0x4be3:
             r3 = 2
-        L_0x4bbc:
+        L_0x4be4:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r0 = r1.currentPosition
-            if (r0 == 0) goto L_0x4bc5
+            if (r0 == 0) goto L_0x4bed
             int r0 = r0.flags
             r0 = r0 & r15
-            if (r0 == 0) goto L_0x4bdf
-        L_0x4bc5:
+            if (r0 == 0) goto L_0x4CLASSNAME
+        L_0x4bed:
             android.text.StaticLayout r0 = r1.captionLayout
-            if (r0 != 0) goto L_0x4bdf
+            if (r0 != 0) goto L_0x4CLASSNAME
             int r0 = r1.widthBeforeNewTimeLine
             r2 = -1
-            if (r0 == r2) goto L_0x4be0
+            if (r0 == r2) goto L_0x4CLASSNAME
             int r6 = r1.availableTimeWidth
             int r6 = r6 - r0
             int r0 = r1.timeWidth
-            if (r6 >= r0) goto L_0x4be0
+            if (r6 >= r0) goto L_0x4CLASSNAME
             int r0 = r1.totalHeight
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r32)
             int r0 = r0 + r6
             r1.totalHeight = r0
-            goto L_0x4be0
-        L_0x4bdf:
+            goto L_0x4CLASSNAME
+        L_0x4CLASSNAME:
             r2 = -1
-        L_0x4be0:
+        L_0x4CLASSNAME:
             org.telegram.messenger.MessageObject r0 = r1.currentMessageObject
             long r6 = r0.eventId
             r8 = 0
             int r10 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r10 == 0) goto L_0x4d15
+            if (r10 == 0) goto L_0x4d3d
             boolean r0 = r0.isMediaEmpty()
-            if (r0 != 0) goto L_0x4d15
+            if (r0 != 0) goto L_0x4d3d
             org.telegram.messenger.MessageObject r0 = r1.currentMessageObject
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             org.telegram.tgnet.TLRPC$WebPage r0 = r0.webpage
-            if (r0 == 0) goto L_0x4d15
+            if (r0 == 0) goto L_0x4d3d
             int r0 = r1.backgroundWidth
             r6 = 1109655552(0x42240000, float:41.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
@@ -16503,209 +16520,209 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             org.telegram.tgnet.TLRPC$WebPage r7 = r0.webpage
-            android.text.TextPaint r0 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint     // Catch:{ Exception -> 0x4CLASSNAME }
-            java.lang.String r8 = r7.site_name     // Catch:{ Exception -> 0x4CLASSNAME }
-            float r0 = r0.measureText(r8)     // Catch:{ Exception -> 0x4CLASSNAME }
+            android.text.TextPaint r0 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint     // Catch:{ Exception -> 0x4c8b }
+            java.lang.String r8 = r7.site_name     // Catch:{ Exception -> 0x4c8b }
+            float r0 = r0.measureText(r8)     // Catch:{ Exception -> 0x4c8b }
             float r0 = r0 + r20
-            double r8 = (double) r0     // Catch:{ Exception -> 0x4CLASSNAME }
-            double r8 = java.lang.Math.ceil(r8)     // Catch:{ Exception -> 0x4CLASSNAME }
-            int r0 = (int) r8     // Catch:{ Exception -> 0x4CLASSNAME }
-            r1.siteNameWidth = r0     // Catch:{ Exception -> 0x4CLASSNAME }
-            android.text.StaticLayout r8 = new android.text.StaticLayout     // Catch:{ Exception -> 0x4CLASSNAME }
-            java.lang.String r9 = r7.site_name     // Catch:{ Exception -> 0x4CLASSNAME }
-            android.text.TextPaint r38 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint     // Catch:{ Exception -> 0x4CLASSNAME }
-            int r39 = java.lang.Math.min(r0, r6)     // Catch:{ Exception -> 0x4CLASSNAME }
-            android.text.Layout$Alignment r40 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x4CLASSNAME }
+            double r8 = (double) r0     // Catch:{ Exception -> 0x4c8b }
+            double r8 = java.lang.Math.ceil(r8)     // Catch:{ Exception -> 0x4c8b }
+            int r0 = (int) r8     // Catch:{ Exception -> 0x4c8b }
+            r1.siteNameWidth = r0     // Catch:{ Exception -> 0x4c8b }
+            android.text.StaticLayout r8 = new android.text.StaticLayout     // Catch:{ Exception -> 0x4c8b }
+            java.lang.String r9 = r7.site_name     // Catch:{ Exception -> 0x4c8b }
+            android.text.TextPaint r38 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint     // Catch:{ Exception -> 0x4c8b }
+            int r39 = java.lang.Math.min(r0, r6)     // Catch:{ Exception -> 0x4c8b }
+            android.text.Layout$Alignment r40 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x4c8b }
             r41 = 1065353216(0x3var_, float:1.0)
             r42 = 0
             r43 = 0
             r36 = r8
             r37 = r9
-            r36.<init>(r37, r38, r39, r40, r41, r42, r43)     // Catch:{ Exception -> 0x4CLASSNAME }
-            r1.siteNameLayout = r8     // Catch:{ Exception -> 0x4CLASSNAME }
-            float r0 = r8.getLineLeft(r5)     // Catch:{ Exception -> 0x4CLASSNAME }
+            r36.<init>(r37, r38, r39, r40, r41, r42, r43)     // Catch:{ Exception -> 0x4c8b }
+            r1.siteNameLayout = r8     // Catch:{ Exception -> 0x4c8b }
+            float r0 = r8.getLineLeft(r5)     // Catch:{ Exception -> 0x4c8b }
             r8 = 0
             int r0 = (r0 > r8 ? 1 : (r0 == r8 ? 0 : -1))
             if (r0 == 0) goto L_0x4CLASSNAME
             r0 = 1
-            goto L_0x4c4a
-        L_0x4CLASSNAME:
-            r0 = 0
-        L_0x4c4a:
-            r1.siteNameRtl = r0     // Catch:{ Exception -> 0x4CLASSNAME }
-            android.text.StaticLayout r0 = r1.siteNameLayout     // Catch:{ Exception -> 0x4CLASSNAME }
-            int r8 = r0.getLineCount()     // Catch:{ Exception -> 0x4CLASSNAME }
-            r9 = 1
-            int r8 = r8 - r9
-            int r0 = r0.getLineBottom(r8)     // Catch:{ Exception -> 0x4CLASSNAME }
-            int r8 = r1.linkPreviewHeight     // Catch:{ Exception -> 0x4CLASSNAME }
-            int r8 = r8 + r0
-            r1.linkPreviewHeight = r8     // Catch:{ Exception -> 0x4CLASSNAME }
-            int r8 = r1.totalHeight     // Catch:{ Exception -> 0x4CLASSNAME }
-            int r8 = r8 + r0
-            r1.totalHeight = r8     // Catch:{ Exception -> 0x4CLASSNAME }
             goto L_0x4CLASSNAME
         L_0x4CLASSNAME:
+            r0 = 0
+        L_0x4CLASSNAME:
+            r1.siteNameRtl = r0     // Catch:{ Exception -> 0x4c8b }
+            android.text.StaticLayout r0 = r1.siteNameLayout     // Catch:{ Exception -> 0x4c8b }
+            int r8 = r0.getLineCount()     // Catch:{ Exception -> 0x4c8b }
+            r9 = 1
+            int r8 = r8 - r9
+            int r0 = r0.getLineBottom(r8)     // Catch:{ Exception -> 0x4c8b }
+            int r8 = r1.linkPreviewHeight     // Catch:{ Exception -> 0x4c8b }
+            int r8 = r8 + r0
+            r1.linkPreviewHeight = r8     // Catch:{ Exception -> 0x4c8b }
+            int r8 = r1.totalHeight     // Catch:{ Exception -> 0x4c8b }
+            int r8 = r8 + r0
+            r1.totalHeight = r8     // Catch:{ Exception -> 0x4c8b }
+            goto L_0x4c8f
+        L_0x4c8b:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x4CLASSNAME:
-            r1.descriptionX = r5     // Catch:{ Exception -> 0x4cdc }
-            int r0 = r1.linkPreviewHeight     // Catch:{ Exception -> 0x4cdc }
-            if (r0 == 0) goto L_0x4CLASSNAME
-            int r0 = r1.totalHeight     // Catch:{ Exception -> 0x4cdc }
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r25)     // Catch:{ Exception -> 0x4cdc }
+        L_0x4c8f:
+            r1.descriptionX = r5     // Catch:{ Exception -> 0x4d04 }
+            int r0 = r1.linkPreviewHeight     // Catch:{ Exception -> 0x4d04 }
+            if (r0 == 0) goto L_0x4c9e
+            int r0 = r1.totalHeight     // Catch:{ Exception -> 0x4d04 }
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r25)     // Catch:{ Exception -> 0x4d04 }
             int r0 = r0 + r8
-            r1.totalHeight = r0     // Catch:{ Exception -> 0x4cdc }
-        L_0x4CLASSNAME:
-            java.lang.String r0 = r7.description     // Catch:{ Exception -> 0x4cdc }
-            android.text.TextPaint r37 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint     // Catch:{ Exception -> 0x4cdc }
-            android.text.Layout$Alignment r39 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x4cdc }
+            r1.totalHeight = r0     // Catch:{ Exception -> 0x4d04 }
+        L_0x4c9e:
+            java.lang.String r0 = r7.description     // Catch:{ Exception -> 0x4d04 }
+            android.text.TextPaint r37 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint     // Catch:{ Exception -> 0x4d04 }
+            android.text.Layout$Alignment r39 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x4d04 }
             r40 = 1065353216(0x3var_, float:1.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r20)     // Catch:{ Exception -> 0x4cdc }
-            float r7 = (float) r7     // Catch:{ Exception -> 0x4cdc }
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r20)     // Catch:{ Exception -> 0x4d04 }
+            float r7 = (float) r7     // Catch:{ Exception -> 0x4d04 }
             r42 = 0
-            android.text.TextUtils$TruncateAt r43 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x4cdc }
+            android.text.TextUtils$TruncateAt r43 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x4d04 }
             r45 = 6
             r36 = r0
             r38 = r6
             r41 = r7
             r44 = r6
-            android.text.StaticLayout r0 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r36, r37, r38, r39, r40, r41, r42, r43, r44, r45)     // Catch:{ Exception -> 0x4cdc }
-            r1.descriptionLayout = r0     // Catch:{ Exception -> 0x4cdc }
-            int r6 = r0.getLineCount()     // Catch:{ Exception -> 0x4cdc }
+            android.text.StaticLayout r0 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r36, r37, r38, r39, r40, r41, r42, r43, r44, r45)     // Catch:{ Exception -> 0x4d04 }
+            r1.descriptionLayout = r0     // Catch:{ Exception -> 0x4d04 }
+            int r6 = r0.getLineCount()     // Catch:{ Exception -> 0x4d04 }
             r7 = 1
             int r6 = r6 - r7
-            int r0 = r0.getLineBottom(r6)     // Catch:{ Exception -> 0x4cdc }
-            int r6 = r1.linkPreviewHeight     // Catch:{ Exception -> 0x4cdc }
+            int r0 = r0.getLineBottom(r6)     // Catch:{ Exception -> 0x4d04 }
+            int r6 = r1.linkPreviewHeight     // Catch:{ Exception -> 0x4d04 }
             int r6 = r6 + r0
-            r1.linkPreviewHeight = r6     // Catch:{ Exception -> 0x4cdc }
-            int r6 = r1.totalHeight     // Catch:{ Exception -> 0x4cdc }
+            r1.linkPreviewHeight = r6     // Catch:{ Exception -> 0x4d04 }
+            int r6 = r1.totalHeight     // Catch:{ Exception -> 0x4d04 }
             int r6 = r6 + r0
-            r1.totalHeight = r6     // Catch:{ Exception -> 0x4cdc }
+            r1.totalHeight = r6     // Catch:{ Exception -> 0x4d04 }
             r0 = 0
             r6 = 0
-        L_0x4cad:
-            android.text.StaticLayout r7 = r1.descriptionLayout     // Catch:{ Exception -> 0x4cdc }
-            int r7 = r7.getLineCount()     // Catch:{ Exception -> 0x4cdc }
-            if (r0 >= r7) goto L_0x4cd7
-            android.text.StaticLayout r7 = r1.descriptionLayout     // Catch:{ Exception -> 0x4cdc }
-            float r7 = r7.getLineLeft(r0)     // Catch:{ Exception -> 0x4cdc }
-            double r7 = (double) r7     // Catch:{ Exception -> 0x4cdc }
-            double r7 = java.lang.Math.ceil(r7)     // Catch:{ Exception -> 0x4cdc }
-            int r7 = (int) r7     // Catch:{ Exception -> 0x4cdc }
-            if (r7 == 0) goto L_0x4cd3
-            int r8 = r1.descriptionX     // Catch:{ Exception -> 0x4cdc }
-            if (r8 != 0) goto L_0x4ccb
+        L_0x4cd5:
+            android.text.StaticLayout r7 = r1.descriptionLayout     // Catch:{ Exception -> 0x4d04 }
+            int r7 = r7.getLineCount()     // Catch:{ Exception -> 0x4d04 }
+            if (r0 >= r7) goto L_0x4cff
+            android.text.StaticLayout r7 = r1.descriptionLayout     // Catch:{ Exception -> 0x4d04 }
+            float r7 = r7.getLineLeft(r0)     // Catch:{ Exception -> 0x4d04 }
+            double r7 = (double) r7     // Catch:{ Exception -> 0x4d04 }
+            double r7 = java.lang.Math.ceil(r7)     // Catch:{ Exception -> 0x4d04 }
+            int r7 = (int) r7     // Catch:{ Exception -> 0x4d04 }
+            if (r7 == 0) goto L_0x4cfb
+            int r8 = r1.descriptionX     // Catch:{ Exception -> 0x4d04 }
+            if (r8 != 0) goto L_0x4cf3
             int r7 = -r7
-            r1.descriptionX = r7     // Catch:{ Exception -> 0x4cdc }
-            goto L_0x4cd4
-        L_0x4ccb:
+            r1.descriptionX = r7     // Catch:{ Exception -> 0x4d04 }
+            goto L_0x4cfc
+        L_0x4cf3:
             int r7 = -r7
-            int r7 = java.lang.Math.max(r8, r7)     // Catch:{ Exception -> 0x4cdc }
-            r1.descriptionX = r7     // Catch:{ Exception -> 0x4cdc }
-            goto L_0x4cd4
-        L_0x4cd3:
+            int r7 = java.lang.Math.max(r8, r7)     // Catch:{ Exception -> 0x4d04 }
+            r1.descriptionX = r7     // Catch:{ Exception -> 0x4d04 }
+            goto L_0x4cfc
+        L_0x4cfb:
             r6 = 1
-        L_0x4cd4:
+        L_0x4cfc:
             int r0 = r0 + 1
-            goto L_0x4cad
-        L_0x4cd7:
-            if (r6 == 0) goto L_0x4ce0
-            r1.descriptionX = r5     // Catch:{ Exception -> 0x4cdc }
-            goto L_0x4ce0
-        L_0x4cdc:
+            goto L_0x4cd5
+        L_0x4cff:
+            if (r6 == 0) goto L_0x4d08
+            r1.descriptionX = r5     // Catch:{ Exception -> 0x4d04 }
+            goto L_0x4d08
+        L_0x4d04:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x4ce0:
+        L_0x4d08:
             int r0 = r14.type
             r6 = 1
-            if (r0 == r6) goto L_0x4ce9
+            if (r0 == r6) goto L_0x4d11
             r6 = 3
-            if (r0 != r6) goto L_0x4cf5
-            goto L_0x4cea
-        L_0x4ce9:
+            if (r0 != r6) goto L_0x4d1d
+            goto L_0x4d12
+        L_0x4d11:
             r6 = 3
-        L_0x4cea:
+        L_0x4d12:
             int r0 = r1.totalHeight
             r7 = 1086324736(0x40CLASSNAME, float:6.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r0 = r0 + r7
             r1.totalHeight = r0
-        L_0x4cf5:
+        L_0x4d1d:
             int r0 = r1.totalHeight
             r7 = 1099431936(0x41880000, float:17.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r0 = r0 + r7
             r1.totalHeight = r0
-            if (r12 == 0) goto L_0x4d16
+            if (r12 == 0) goto L_0x4d3e
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r32)
             int r0 = r0 - r7
             r1.totalHeight = r0
-            if (r12 != r3) goto L_0x4d16
+            if (r12 != r3) goto L_0x4d3e
             int r0 = r1.captionHeight
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r32)
             int r0 = r0 - r7
             r1.captionHeight = r0
-            goto L_0x4d16
-        L_0x4d15:
+            goto L_0x4d3e
+        L_0x4d3d:
             r6 = 3
-        L_0x4d16:
+        L_0x4d3e:
             boolean r0 = r71.isSponsored()
-            if (r0 == 0) goto L_0x4d53
+            if (r0 == 0) goto L_0x4d7b
             r7 = 1
             r1.drawInstantView = r7
             int r0 = r14.sponsoredChannelPost
-            if (r0 == 0) goto L_0x4d28
+            if (r0 == 0) goto L_0x4d50
             r0 = 12
             r1.drawInstantViewType = r0
-            goto L_0x4d2a
-        L_0x4d28:
+            goto L_0x4d52
+        L_0x4d50:
             r1.drawInstantViewType = r7
-        L_0x4d2a:
+        L_0x4d52:
             org.telegram.tgnet.TLRPC$Message r0 = r14.messageOwner
             org.telegram.tgnet.TLRPC$Peer r0 = r0.from_id
             long r7 = org.telegram.messenger.MessageObject.getPeerId(r0)
             r9 = 0
             int r0 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r0 <= 0) goto L_0x4d50
+            if (r0 <= 0) goto L_0x4d78
             int r0 = r1.currentAccount
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             java.lang.Long r7 = java.lang.Long.valueOf(r7)
             org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r7)
-            if (r0 == 0) goto L_0x4d50
+            if (r0 == 0) goto L_0x4d78
             boolean r0 = r0.bot
-            if (r0 == 0) goto L_0x4d50
+            if (r0 == 0) goto L_0x4d78
             r0 = 10
             r1.drawInstantViewType = r0
-        L_0x4d50:
+        L_0x4d78:
             r70.createInstantViewButton()
-        L_0x4d53:
+        L_0x4d7b:
             java.util.ArrayList<org.telegram.ui.Cells.ChatMessageCell$BotButton> r0 = r1.botButtons
             r0.clear()
-            if (r16 == 0) goto L_0x4d67
+            if (r16 == 0) goto L_0x4d8f
             java.util.HashMap<java.lang.String, org.telegram.ui.Cells.ChatMessageCell$BotButton> r0 = r1.botButtonsByData
             r0.clear()
             java.util.HashMap<java.lang.String, org.telegram.ui.Cells.ChatMessageCell$BotButton> r0 = r1.botButtonsByPosition
             r0.clear()
             r7 = 0
             r1.botButtonsLayout = r7
-        L_0x4d67:
+        L_0x4d8f:
             boolean r0 = r14.isRestrictedMessage
-            if (r0 != 0) goto L_0x4var_
+            if (r0 != 0) goto L_0x4fad
             org.telegram.messenger.MessageObject$GroupedMessagePosition r0 = r1.currentPosition
-            if (r0 != 0) goto L_0x4var_
+            if (r0 != 0) goto L_0x4fad
             org.telegram.tgnet.TLRPC$Message r0 = r14.messageOwner
             org.telegram.tgnet.TLRPC$ReplyMarkup r0 = r0.reply_markup
             boolean r7 = r0 instanceof org.telegram.tgnet.TLRPC$TL_replyInlineMarkup
-            if (r7 == 0) goto L_0x4var_
+            if (r7 == 0) goto L_0x4fad
             boolean r7 = r0 instanceof org.telegram.tgnet.TLRPC$TL_replyInlineMarkup
-            if (r7 == 0) goto L_0x4d82
+            if (r7 == 0) goto L_0x4daa
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_keyboardButtonRow> r0 = r0.rows
             int r0 = r0.size()
-            goto L_0x4d83
-        L_0x4d82:
+            goto L_0x4dab
+        L_0x4daa:
             r0 = 1
-        L_0x4d83:
+        L_0x4dab:
             r7 = 1111490560(0x42400000, float:48.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r7 = r7 * r0
@@ -16715,30 +16732,30 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.substractBackgroundHeight = r7
             int r7 = r1.backgroundWidth
             boolean r8 = r1.mediaBackground
-            if (r8 == 0) goto L_0x4d9c
+            if (r8 == 0) goto L_0x4dc4
             r11 = 0
-            goto L_0x4d9e
-        L_0x4d9c:
+            goto L_0x4dc6
+        L_0x4dc4:
             r11 = 1091567616(0x41100000, float:9.0)
-        L_0x4d9e:
+        L_0x4dc6:
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r11)
             int r7 = r7 - r8
             r1.widthForButtons = r7
             int r8 = r14.wantedBotKeyboardWidth
-            if (r8 <= r7) goto L_0x4de2
-            if (r22 == 0) goto L_0x4dae
+            if (r8 <= r7) goto L_0x4e0a
+            if (r22 == 0) goto L_0x4dd6
             r7 = 1115160576(0x42780000, float:62.0)
-            goto L_0x4db0
-        L_0x4dae:
+            goto L_0x4dd8
+        L_0x4dd6:
             r7 = 1092616192(0x41200000, float:10.0)
-        L_0x4db0:
+        L_0x4dd8:
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r7 = -r7
             boolean r8 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r8 == 0) goto L_0x4dc0
+            if (r8 == 0) goto L_0x4de8
             int r8 = org.telegram.messenger.AndroidUtilities.getMinTabletSide()
-            goto L_0x4dd3
-        L_0x4dc0:
+            goto L_0x4dfb
+        L_0x4de8:
             int r8 = r70.getParentWidth()
             android.graphics.Point r9 = org.telegram.messenger.AndroidUtilities.displaySize
             int r9 = r9.y
@@ -16746,46 +16763,46 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r9 = 1084227584(0x40a00000, float:5.0)
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
             int r8 = r8 - r9
-        L_0x4dd3:
+        L_0x4dfb:
             int r7 = r7 + r8
             int r8 = r1.backgroundWidth
             int r9 = r14.wantedBotKeyboardWidth
             int r7 = java.lang.Math.min(r9, r7)
             int r7 = java.lang.Math.max(r8, r7)
             r1.widthForButtons = r7
-        L_0x4de2:
+        L_0x4e0a:
             java.util.HashMap r7 = new java.util.HashMap
             java.util.HashMap<java.lang.String, org.telegram.ui.Cells.ChatMessageCell$BotButton> r8 = r1.botButtonsByData
             r7.<init>(r8)
             java.lang.StringBuilder r8 = r14.botButtonsLayout
-            if (r8 == 0) goto L_0x4e03
+            if (r8 == 0) goto L_0x4e2b
             java.lang.String r9 = r1.botButtonsLayout
-            if (r9 == 0) goto L_0x4e03
+            if (r9 == 0) goto L_0x4e2b
             java.lang.String r8 = r8.toString()
             boolean r8 = r9.equals(r8)
-            if (r8 == 0) goto L_0x4e03
+            if (r8 == 0) goto L_0x4e2b
             java.util.HashMap r8 = new java.util.HashMap
             java.util.HashMap<java.lang.String, org.telegram.ui.Cells.ChatMessageCell$BotButton> r9 = r1.botButtonsByPosition
             r8.<init>(r9)
-            goto L_0x4e0e
-        L_0x4e03:
+            goto L_0x4e36
+        L_0x4e2b:
             java.lang.StringBuilder r8 = r14.botButtonsLayout
-            if (r8 == 0) goto L_0x4e0d
+            if (r8 == 0) goto L_0x4e35
             java.lang.String r8 = r8.toString()
             r1.botButtonsLayout = r8
-        L_0x4e0d:
+        L_0x4e35:
             r8 = 0
-        L_0x4e0e:
+        L_0x4e36:
             java.util.HashMap<java.lang.String, org.telegram.ui.Cells.ChatMessageCell$BotButton> r9 = r1.botButtonsByData
             r9.clear()
             org.telegram.tgnet.TLRPC$Message r9 = r14.messageOwner
             org.telegram.tgnet.TLRPC$ReplyMarkup r9 = r9.reply_markup
             boolean r9 = r9 instanceof org.telegram.tgnet.TLRPC$TL_replyInlineMarkup
-            if (r9 == 0) goto L_0x4var_
+            if (r9 == 0) goto L_0x4fa9
             r9 = 0
             r12 = 0
-        L_0x4e1d:
-            if (r12 >= r0) goto L_0x4f7f
+        L_0x4e45:
+            if (r12 >= r0) goto L_0x4fa7
             org.telegram.tgnet.TLRPC$Message r10 = r14.messageOwner
             org.telegram.tgnet.TLRPC$ReplyMarkup r10 = r10.reply_markup
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_keyboardButtonRow> r10 = r10.rows
@@ -16793,11 +16810,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$TL_keyboardButtonRow r10 = (org.telegram.tgnet.TLRPC$TL_keyboardButtonRow) r10
             java.util.ArrayList<org.telegram.tgnet.TLRPC$KeyboardButton> r11 = r10.buttons
             int r11 = r11.size()
-            if (r11 != 0) goto L_0x4e37
-        L_0x4e33:
+            if (r11 != 0) goto L_0x4e5f
+        L_0x4e5b:
             r72 = r7
-            goto L_0x4var_
-        L_0x4e37:
+            goto L_0x4f9c
+        L_0x4e5f:
             int r15 = r1.widthForButtons
             r18 = 1084227584(0x40a00000, float:5.0)
             int r18 = org.telegram.messenger.AndroidUtilities.dp(r18)
@@ -16808,10 +16825,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r15 = r15 - r18
             int r15 = r15 / r11
             r11 = 0
-        L_0x4e4d:
+        L_0x4e75:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$KeyboardButton> r6 = r10.buttons
             int r6 = r6.size()
-            if (r11 >= r6) goto L_0x4e33
+            if (r11 >= r6) goto L_0x4e5b
             org.telegram.ui.Cells.ChatMessageCell$BotButton r6 = new org.telegram.ui.Cells.ChatMessageCell$BotButton
             r2 = 0
             r6.<init>()
@@ -16829,26 +16846,26 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r3.append(r5)
             r3.append(r11)
             java.lang.String r3 = r3.toString()
-            if (r8 == 0) goto L_0x4e8d
+            if (r8 == 0) goto L_0x4eb5
             java.lang.Object r5 = r8.get(r3)
             org.telegram.ui.Cells.ChatMessageCell$BotButton r5 = (org.telegram.ui.Cells.ChatMessageCell.BotButton) r5
-            goto L_0x4e93
-        L_0x4e8d:
+            goto L_0x4ebb
+        L_0x4eb5:
             java.lang.Object r5 = r7.get(r2)
             org.telegram.ui.Cells.ChatMessageCell$BotButton r5 = (org.telegram.ui.Cells.ChatMessageCell.BotButton) r5
-        L_0x4e93:
-            if (r5 == 0) goto L_0x4eab
+        L_0x4ebb:
+            if (r5 == 0) goto L_0x4ed3
             float r4 = r5.progressAlpha
             float unused = r6.progressAlpha = r4
             int r4 = r5.angle
             int unused = r6.angle = r4
             long r4 = r5.lastUpdateTime
             long unused = r6.lastUpdateTime = r4
-            goto L_0x4eb2
-        L_0x4eab:
+            goto L_0x4eda
+        L_0x4ed3:
             long r4 = java.lang.System.currentTimeMillis()
             long unused = r6.lastUpdateTime = r4
-        L_0x4eb2:
+        L_0x4eda:
             java.util.HashMap<java.lang.String, org.telegram.ui.Cells.ChatMessageCell$BotButton> r4 = r1.botButtonsByData
             r4.put(r2, r6)
             java.util.HashMap<java.lang.String, org.telegram.ui.Cells.ChatMessageCell$BotButton> r2 = r1.botButtonsByPosition
@@ -16874,20 +16891,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             android.text.TextPaint r2 = (android.text.TextPaint) r2
             org.telegram.tgnet.TLRPC$KeyboardButton r3 = r6.button
             boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_keyboardButtonBuy
-            if (r3 == 0) goto L_0x4f0e
+            if (r3 == 0) goto L_0x4var_
             org.telegram.tgnet.TLRPC$Message r3 = r14.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r3.media
             int r3 = r3.flags
             r4 = 4
             r3 = r3 & r4
-            if (r3 == 0) goto L_0x4f0e
-            r3 = 2131627098(0x7f0e0c5a, float:1.888145E38)
+            if (r3 == 0) goto L_0x4var_
+            r3 = 2131627143(0x7f0e0CLASSNAME, float:1.8881542E38)
             java.lang.String r4 = "PaymentReceipt"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r39 = r3
             r72 = r7
-            goto L_0x4var_
-        L_0x4f0e:
+            goto L_0x4f5c
+        L_0x4var_:
             org.telegram.tgnet.TLRPC$KeyboardButton r3 = r6.button
             java.lang.String r3 = r3.text
             android.graphics.Paint$FontMetricsInt r4 = r2.getFontMetricsInt()
@@ -16902,7 +16919,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END
             java.lang.CharSequence r3 = android.text.TextUtils.ellipsize(r3, r2, r4, r5)
             r39 = r3
-        L_0x4var_:
+        L_0x4f5c:
             android.text.StaticLayout r3 = new android.text.StaticLayout
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r35)
             int r41 = r15 - r4
@@ -16920,20 +16937,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r2 = r2.size()
             r3 = 1
             int r2 = r2 - r3
-            if (r11 != r2) goto L_0x4f6a
+            if (r11 != r2) goto L_0x4var_
             int r2 = r6.x
             int r3 = r6.width
             int r2 = r2 + r3
             int r9 = java.lang.Math.max(r9, r2)
-        L_0x4f6a:
+        L_0x4var_:
             int r11 = r11 + 1
             r7 = r72
             r2 = -1
             r3 = 2
             r4 = 4
             r5 = 0
-            goto L_0x4e4d
-        L_0x4var_:
+            goto L_0x4e75
+        L_0x4f9c:
             int r12 = r12 + 1
             r7 = r72
             r2 = -1
@@ -16941,72 +16958,72 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r4 = 4
             r5 = 0
             r6 = 3
-            goto L_0x4e1d
-        L_0x4f7f:
+            goto L_0x4e45
+        L_0x4fa7:
             r12 = r9
-            goto L_0x4var_
-        L_0x4var_:
+            goto L_0x4faa
+        L_0x4fa9:
             r12 = 0
-        L_0x4var_:
+        L_0x4faa:
             r1.widthForButtons = r12
-            goto L_0x4f8a
-        L_0x4var_:
+            goto L_0x4fb2
+        L_0x4fad:
             r2 = 0
             r1.substractBackgroundHeight = r2
             r1.keyboardHeight = r2
-        L_0x4f8a:
+        L_0x4fb2:
             boolean r0 = r1.drawCommentButton
-            if (r0 == 0) goto L_0x4fa7
+            if (r0 == 0) goto L_0x4fcf
             int r0 = r1.totalHeight
             boolean r2 = r70.shouldDrawTimeOnMedia()
-            if (r2 == 0) goto L_0x4f9a
+            if (r2 == 0) goto L_0x4fc2
             r2 = 1109734195(0x42253333, float:41.3)
-            goto L_0x4f9c
-        L_0x4f9a:
+            goto L_0x4fc4
+        L_0x4fc2:
             r2 = 1110179840(0x422CLASSNAME, float:43.0)
-        L_0x4f9c:
+        L_0x4fc4:
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 + r2
             r1.totalHeight = r0
             r2 = 1
             r1.createSelectorDrawable(r2)
-        L_0x4fa7:
+        L_0x4fcf:
             boolean r0 = r1.drawPinnedBottom
-            if (r0 == 0) goto L_0x4fb9
+            if (r0 == 0) goto L_0x4fe1
             boolean r2 = r1.drawPinnedTop
-            if (r2 == 0) goto L_0x4fb9
+            if (r2 == 0) goto L_0x4fe1
             int r0 = r1.totalHeight
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r25)
             int r0 = r0 - r2
             r1.totalHeight = r0
-            goto L_0x4fde
-        L_0x4fb9:
-            if (r0 == 0) goto L_0x4fc5
+            goto L_0x5006
+        L_0x4fe1:
+            if (r0 == 0) goto L_0x4fed
             int r0 = r1.totalHeight
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r20)
             int r0 = r0 - r2
             r1.totalHeight = r0
-            goto L_0x4fde
-        L_0x4fc5:
+            goto L_0x5006
+        L_0x4fed:
             boolean r0 = r1.drawPinnedTop
-            if (r0 == 0) goto L_0x4fde
+            if (r0 == 0) goto L_0x5006
             boolean r0 = r1.pinnedBottom
-            if (r0 == 0) goto L_0x4fde
+            if (r0 == 0) goto L_0x5006
             org.telegram.messenger.MessageObject$GroupedMessagePosition r0 = r1.currentPosition
-            if (r0 == 0) goto L_0x4fde
+            if (r0 == 0) goto L_0x5006
             float[] r0 = r0.siblingHeights
-            if (r0 != 0) goto L_0x4fde
+            if (r0 != 0) goto L_0x5006
             int r0 = r1.totalHeight
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r20)
             int r0 = r0 - r2
             r1.totalHeight = r0
-        L_0x4fde:
+        L_0x5006:
             boolean r0 = r71.isAnyKindOfSticker()
-            if (r0 == 0) goto L_0x4ffd
+            if (r0 == 0) goto L_0x5025
             int r0 = r1.totalHeight
             r2 = 1116471296(0x428CLASSNAME, float:70.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            if (r0 >= r2) goto L_0x4ffd
+            if (r0 >= r2) goto L_0x5025
             r0 = 1116471296(0x428CLASSNAME, float:70.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r2 = r1.totalHeight
@@ -17014,10 +17031,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.additionalTimeOffsetY = r0
             int r2 = r2 + r0
             r1.totalHeight = r2
-            goto L_0x5016
-        L_0x4ffd:
+            goto L_0x503e
+        L_0x5025:
             boolean r0 = r71.isAnimatedEmoji()
-            if (r0 == 0) goto L_0x5016
+            if (r0 == 0) goto L_0x503e
             r0 = 1098907648(0x41800000, float:16.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             r1.additionalTimeOffsetY = r0
@@ -17026,19 +17043,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 + r2
             r1.totalHeight = r0
-        L_0x5016:
+        L_0x503e:
             boolean r0 = r1.drawPhotoImage
-            if (r0 != 0) goto L_0x5020
+            if (r0 != 0) goto L_0x5048
             org.telegram.messenger.ImageReceiver r0 = r1.photoImage
             r2 = 0
             r0.setImageBitmap((android.graphics.drawable.Drawable) r2)
-        L_0x5020:
+        L_0x5048:
             int r0 = r1.documentAttachType
             r2 = 5
-            if (r0 != r2) goto L_0x5058
+            if (r0 != r2) goto L_0x5080
             org.telegram.tgnet.TLRPC$Document r0 = r1.documentAttach
             boolean r0 = org.telegram.messenger.MessageObject.isDocumentHasThumb(r0)
-            if (r0 == 0) goto L_0x503f
+            if (r0 == 0) goto L_0x5067
             org.telegram.tgnet.TLRPC$Document r0 = r1.documentAttach
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r0 = r0.thumbs
             r2 = 90
@@ -17046,147 +17063,147 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.ui.Components.RadialProgress2 r2 = r1.radialProgress
             org.telegram.tgnet.TLRPC$Document r3 = r1.documentAttach
             r2.setImageOverlay(r0, r3, r14)
-            goto L_0x505e
-        L_0x503f:
+            goto L_0x5086
+        L_0x5067:
             r2 = 1
             java.lang.String r0 = r14.getArtworkUrl(r2)
             boolean r2 = android.text.TextUtils.isEmpty(r0)
-            if (r2 != 0) goto L_0x5051
+            if (r2 != 0) goto L_0x5079
             org.telegram.ui.Components.RadialProgress2 r2 = r1.radialProgress
             r2.setImageOverlay(r0)
             r2 = 0
-            goto L_0x505e
-        L_0x5051:
+            goto L_0x5086
+        L_0x5079:
             org.telegram.ui.Components.RadialProgress2 r0 = r1.radialProgress
             r2 = 0
             r0.setImageOverlay(r2, r2, r2)
-            goto L_0x505e
-        L_0x5058:
+            goto L_0x5086
+        L_0x5080:
             r2 = 0
             org.telegram.ui.Components.RadialProgress2 r0 = r1.radialProgress
             r0.setImageOverlay(r2, r2, r2)
-        L_0x505e:
-            if (r13 == 0) goto L_0x5109
+        L_0x5086:
+            if (r13 == 0) goto L_0x5131
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r24)
             int r2 = org.telegram.messenger.SharedConfig.bubbleRadius
             r3 = 2
-            if (r2 <= r3) goto L_0x5070
+            if (r2 <= r3) goto L_0x5098
             int r2 = r2 - r3
             float r2 = (float) r2
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            goto L_0x5075
-        L_0x5070:
+            goto L_0x509d
+        L_0x5098:
             float r2 = (float) r2
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-        L_0x5075:
+        L_0x509d:
             r3 = 1077936128(0x40400000, float:3.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r3 = java.lang.Math.min(r3, r2)
-            if (r0 <= r2) goto L_0x5082
+            if (r0 <= r2) goto L_0x50aa
             r0 = r2
-        L_0x5082:
+        L_0x50aa:
             boolean r4 = r1.hasLinkPreview
-            if (r4 != 0) goto L_0x508e
+            if (r4 != 0) goto L_0x50b6
             boolean r4 = r1.hasGamePreview
-            if (r4 != 0) goto L_0x508e
+            if (r4 != 0) goto L_0x50b6
             boolean r4 = r1.hasInvoicePreview
-            if (r4 == 0) goto L_0x508f
-        L_0x508e:
+            if (r4 == 0) goto L_0x50b7
+        L_0x50b6:
             r2 = r0
-        L_0x508f:
+        L_0x50b7:
             android.text.StaticLayout[] r4 = r1.forwardedNameLayout
             r5 = 0
             r4 = r4[r5]
-            if (r4 != 0) goto L_0x50a1
+            if (r4 != 0) goto L_0x50c9
             android.text.StaticLayout r4 = r1.replyNameLayout
-            if (r4 != 0) goto L_0x50a1
+            if (r4 != 0) goto L_0x50c9
             boolean r4 = r1.drawNameLayout
-            if (r4 == 0) goto L_0x509f
-            goto L_0x50a1
-        L_0x509f:
+            if (r4 == 0) goto L_0x50c7
+            goto L_0x50c9
+        L_0x50c7:
             r4 = r2
-            goto L_0x50a2
-        L_0x50a1:
+            goto L_0x50ca
+        L_0x50c9:
             r4 = r0
-        L_0x50a2:
+        L_0x50ca:
             android.text.StaticLayout r5 = r1.captionLayout
-            if (r5 != 0) goto L_0x50aa
+            if (r5 != 0) goto L_0x50d2
             boolean r5 = r1.drawCommentButton
-            if (r5 == 0) goto L_0x50ab
-        L_0x50aa:
+            if (r5 == 0) goto L_0x50d3
+        L_0x50d2:
             r2 = r0
-        L_0x50ab:
+        L_0x50d3:
             int r5 = r1.documentAttachType
             r6 = 1
-            if (r5 != r6) goto L_0x50b3
+            if (r5 != r6) goto L_0x50db
             r5 = r0
             r6 = r5
-            goto L_0x50b5
-        L_0x50b3:
+            goto L_0x50dd
+        L_0x50db:
             r6 = r2
             r5 = r4
-        L_0x50b5:
+        L_0x50dd:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r7 = r1.currentPosition
-            if (r7 == 0) goto L_0x50d7
+            if (r7 == 0) goto L_0x50ff
             org.telegram.messenger.MessageObject$GroupedMessages r8 = r1.currentMessagesGroup
-            if (r8 == 0) goto L_0x50d7
+            if (r8 == 0) goto L_0x50ff
             int r7 = r7.flags
             r8 = r7 & 2
-            if (r8 != 0) goto L_0x50c5
+            if (r8 != 0) goto L_0x50ed
             r5 = r0
             r6 = r5
-        L_0x50c5:
+        L_0x50ed:
             r8 = r7 & 1
-            if (r8 != 0) goto L_0x50cb
+            if (r8 != 0) goto L_0x50f3
             r2 = r0
             r4 = r2
-        L_0x50cb:
+        L_0x50f3:
             r8 = r7 & 8
-            if (r8 != 0) goto L_0x50d1
+            if (r8 != 0) goto L_0x50f9
             r2 = r0
             r6 = r2
-        L_0x50d1:
+        L_0x50f9:
             r8 = 4
             r7 = r7 & r8
-            if (r7 != 0) goto L_0x50d7
+            if (r7 != 0) goto L_0x50ff
             r5 = r0
-            goto L_0x50d8
-        L_0x50d7:
+            goto L_0x5100
+        L_0x50ff:
             r0 = r4
-        L_0x50d8:
+        L_0x5100:
             boolean r4 = r1.pinnedTop
-            if (r4 == 0) goto L_0x50e7
+            if (r4 == 0) goto L_0x510f
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
             boolean r4 = r4.isOutOwner()
-            if (r4 == 0) goto L_0x50e6
+            if (r4 == 0) goto L_0x510e
             r5 = r3
-            goto L_0x50e7
-        L_0x50e6:
+            goto L_0x510f
+        L_0x510e:
             r0 = r3
-        L_0x50e7:
+        L_0x510f:
             boolean r4 = r1.pinnedBottom
-            if (r4 == 0) goto L_0x50f6
+            if (r4 == 0) goto L_0x511e
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
             boolean r4 = r4.isOutOwner()
-            if (r4 == 0) goto L_0x50f5
+            if (r4 == 0) goto L_0x511d
             r6 = r3
-            goto L_0x50f6
-        L_0x50f5:
+            goto L_0x511e
+        L_0x511d:
             r2 = r3
-        L_0x50f6:
+        L_0x511e:
             boolean r4 = r1.mediaBackground
-            if (r4 != 0) goto L_0x5103
+            if (r4 != 0) goto L_0x512b
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
             boolean r4 = r4.isOutOwner()
-            if (r4 != 0) goto L_0x5103
-            goto L_0x5104
-        L_0x5103:
+            if (r4 != 0) goto L_0x512b
+            goto L_0x512c
+        L_0x512b:
             r3 = r2
-        L_0x5104:
+        L_0x512c:
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             r2.setRoundRadius(r0, r5, r6, r3)
-        L_0x5109:
-            if (r16 == 0) goto L_0x514e
+        L_0x5131:
+            if (r16 == 0) goto L_0x5176
             r2 = 0
             r1.currentUrl = r2
             r1.currentWebFile = r2
@@ -17198,11 +17215,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.lastLoadingSizeTotal = r3
             r1.selectedBackgroundProgress = r2
             android.animation.ValueAnimator r0 = r1.statusDrawableAnimator
-            if (r0 == 0) goto L_0x5129
+            if (r0 == 0) goto L_0x5151
             r0.removeAllListeners()
             android.animation.ValueAnimator r0 = r1.statusDrawableAnimator
             r0.cancel()
-        L_0x5129:
+        L_0x5151:
             org.telegram.ui.Cells.ChatMessageCell$TransitionParams r0 = r1.transitionParams
             r2 = -1
             r0.lastStatusDrawableParams = r2
@@ -17210,49 +17227,49 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.statusDrawableAnimationInProgress = r2
             int r0 = r1.documentAttachType
             r2 = 5
-            if (r0 != r2) goto L_0x5148
+            if (r0 != r2) goto L_0x5170
             org.telegram.messenger.MediaController r0 = org.telegram.messenger.MediaController.getInstance()
             org.telegram.messenger.MessageObject r2 = r1.currentMessageObject
             boolean r0 = r0.isPlayingMessage(r2)
-            if (r0 == 0) goto L_0x5145
+            if (r0 == 0) goto L_0x516d
             r11 = 1065353216(0x3var_, float:1.0)
-            goto L_0x5146
-        L_0x5145:
+            goto L_0x516e
+        L_0x516d:
             r11 = 0
-        L_0x5146:
+        L_0x516e:
             r1.toSeekBarProgress = r11
-        L_0x5148:
+        L_0x5170:
             org.telegram.ui.Components.SeekBarWaveform r0 = r1.seekBarWaveform
             r2 = 0
             r0.setProgress(r2)
-        L_0x514e:
+        L_0x5176:
             r70.updateWaveform()
-            if (r19 == 0) goto L_0x515b
+            if (r19 == 0) goto L_0x5183
             boolean r0 = r14.cancelEditing
-            if (r0 != 0) goto L_0x515b
+            if (r0 != 0) goto L_0x5183
             r2 = 1
             r3 = 0
             r13 = 1
-            goto L_0x515e
-        L_0x515b:
+            goto L_0x5186
+        L_0x5183:
             r2 = 1
             r3 = 0
             r13 = 0
-        L_0x515e:
+        L_0x5186:
             r1.updateButtonState(r3, r13, r2)
             org.telegram.messenger.MessageObject r0 = r1.currentMessageObject
             boolean r0 = r0.loadingCancelled
-            if (r0 != 0) goto L_0x5198
+            if (r0 != 0) goto L_0x51c0
             int r0 = r1.buttonState
             r2 = 2
-            if (r0 != r2) goto L_0x5198
+            if (r0 != r2) goto L_0x51c0
             int r0 = r1.documentAttachType
             r2 = 3
-            if (r0 != r2) goto L_0x5198
+            if (r0 != r2) goto L_0x51c0
             int r0 = r1.currentAccount
             org.telegram.messenger.DownloadController r0 = org.telegram.messenger.DownloadController.getInstance(r0)
             boolean r0 = r0.canDownloadMedia((org.telegram.messenger.MessageObject) r14)
-            if (r0 == 0) goto L_0x5198
+            if (r0 == 0) goto L_0x51c0
             int r0 = r1.currentAccount
             org.telegram.messenger.FileLoader r0 = org.telegram.messenger.FileLoader.getInstance(r0)
             org.telegram.tgnet.TLRPC$Document r2 = r1.documentAttach
@@ -17265,17 +17282,17 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.ui.Components.RadialProgress2 r0 = r1.radialProgress
             int r2 = r70.getIconForCurrentState()
             r0.setIcon(r2, r5, r5)
-        L_0x5198:
+        L_0x51c0:
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r1.delegate
-            if (r0 == 0) goto L_0x51af
+            if (r0 == 0) goto L_0x51d7
             org.telegram.ui.Cells.TextSelectionHelper$ChatListTextSelectionHelper r0 = r0.getTextSelectionHelper()
-            if (r0 == 0) goto L_0x51af
-            if (r16 != 0) goto L_0x51af
-            if (r17 == 0) goto L_0x51af
+            if (r0 == 0) goto L_0x51d7
+            if (r16 != 0) goto L_0x51d7
+            if (r17 == 0) goto L_0x51d7
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r1.delegate
             org.telegram.ui.Cells.TextSelectionHelper$ChatListTextSelectionHelper r0 = r0.getTextSelectionHelper()
             r0.checkDataChanged(r14)
-        L_0x51af:
+        L_0x51d7:
             android.util.SparseArray<android.graphics.Rect> r0 = r1.accessibilityVirtualViewBounds
             r0.clear()
             org.telegram.ui.Cells.ChatMessageCell$TransitionParams r0 = r1.transitionParams
@@ -24292,6 +24309,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if (i == 0) {
             this.miniButtonState = 1;
             this.radialProgress.setProgress(0.0f, false);
+            this.currentMessageObject.putInDownloadsStore = true;
             int i2 = this.documentAttachType;
             if (i2 == 3 || i2 == 5) {
                 FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, 0);
@@ -24323,6 +24341,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         String str;
         TLRPC$PhotoSize tLRPC$PhotoSize;
         boolean z3 = z;
+        MessageObject messageObject = this.currentMessageObject;
+        if (messageObject != null) {
+            messageObject.putInDownloadsStore = true;
+        }
         int i = this.buttonState;
         int i2 = 2;
         if (i == 0 && (!this.drawVideoImageButton || z2)) {
@@ -24359,8 +24381,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 str = ((tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) || "s".equals(tLRPC$PhotoSize.type)) ? this.currentPhotoFilterThumb : this.currentPhotoFilter;
             }
             String str2 = str;
-            MessageObject messageObject = this.currentMessageObject;
-            int i4 = messageObject.type;
+            MessageObject messageObject2 = this.currentMessageObject;
+            int i4 = messageObject2.type;
             if (i4 == 1) {
                 this.photoImage.setForceLoading(true);
                 ImageReceiver imageReceiver = this.photoImage;
@@ -24370,20 +24392,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 String str4 = this.currentPhotoFilterThumb;
                 BitmapDrawable bitmapDrawable = this.currentPhotoObjectThumbStripped;
                 int i5 = this.currentPhotoObject.size;
-                MessageObject messageObject2 = this.currentMessageObject;
-                imageReceiver.setImage(forObject, str3, forObject2, str4, bitmapDrawable, i5, (String) null, messageObject2, messageObject2.shouldEncryptPhotoOrVideo() ? 2 : 0);
+                MessageObject messageObject3 = this.currentMessageObject;
+                imageReceiver.setImage(forObject, str3, forObject2, str4, bitmapDrawable, i5, (String) null, messageObject3, messageObject3.shouldEncryptPhotoOrVideo() ? 2 : 0);
             } else if (i4 == 8) {
                 FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 1, 0);
                 if (this.currentMessageObject.loadedFileSize > 0) {
                     createLoadingProgressLayout(this.documentAttach);
                 }
             } else if (this.isRoundVideo) {
-                if (messageObject.isSecretMedia()) {
+                if (messageObject2.isSecretMedia()) {
                     FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 1);
                 } else {
-                    MessageObject messageObject3 = this.currentMessageObject;
-                    messageObject3.gifState = 2.0f;
-                    TLRPC$Document document = messageObject3.getDocument();
+                    MessageObject messageObject4 = this.currentMessageObject;
+                    messageObject4.gifState = 2.0f;
+                    TLRPC$Document document = messageObject4.getDocument();
                     this.photoImage.setForceLoading(true);
                     this.photoImage.setImage(ImageLocation.getForDocument(document), (String) null, ImageLocation.getForObject(tLRPC$PhotoSize, document), str2, document.size, (String) null, this.currentMessageObject, 0);
                 }
@@ -24397,14 +24419,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (i6 == 4) {
                     FileLoader instance = FileLoader.getInstance(this.currentAccount);
                     TLRPC$Document tLRPC$Document = this.documentAttach;
-                    MessageObject messageObject4 = this.currentMessageObject;
-                    if (!messageObject4.shouldEncryptPhotoOrVideo()) {
+                    MessageObject messageObject5 = this.currentMessageObject;
+                    if (!messageObject5.shouldEncryptPhotoOrVideo()) {
                         i2 = 0;
                     }
-                    instance.loadFile(tLRPC$Document, messageObject4, 1, i2);
-                    MessageObject messageObject5 = this.currentMessageObject;
-                    if (messageObject5.loadedFileSize > 0) {
-                        createLoadingProgressLayout(messageObject5.getDocument());
+                    instance.loadFile(tLRPC$Document, messageObject5, 1, i2);
+                    MessageObject messageObject6 = this.currentMessageObject;
+                    if (messageObject6.loadedFileSize > 0) {
+                        createLoadingProgressLayout(messageObject6.getDocument());
                     }
                 } else if (i4 != 0 || i6 == 0) {
                     this.photoImage.setForceLoading(true);
@@ -24412,10 +24434,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 } else if (i6 == 2) {
                     this.photoImage.setForceLoading(true);
                     this.photoImage.setImage(ImageLocation.getForDocument(this.documentAttach), (String) null, ImageLocation.getForDocument(this.currentPhotoObject, this.documentAttach), this.currentPhotoFilterThumb, this.documentAttach.size, (String) null, this.currentMessageObject, 0);
-                    MessageObject messageObject6 = this.currentMessageObject;
-                    messageObject6.gifState = 2.0f;
-                    if (messageObject6.loadedFileSize > 0) {
-                        createLoadingProgressLayout(messageObject6.getDocument());
+                    MessageObject messageObject7 = this.currentMessageObject;
+                    messageObject7.gifState = 2.0f;
+                    if (messageObject7.loadedFileSize > 0) {
+                        createLoadingProgressLayout(messageObject7.getDocument());
                     }
                 } else if (i6 == 1) {
                     FileLoader.getInstance(this.currentAccount).loadFile(this.documentAttach, this.currentMessageObject, 0, 0);
@@ -24441,13 +24463,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     invalidate();
                 }
             } else if (!this.currentMessageObject.isOut() || this.drawVideoImageButton || (!this.currentMessageObject.isSending() && !this.currentMessageObject.isEditing())) {
-                MessageObject messageObject7 = this.currentMessageObject;
-                messageObject7.loadingCancelled = true;
+                MessageObject messageObject8 = this.currentMessageObject;
+                messageObject8.loadingCancelled = true;
                 int i8 = this.documentAttachType;
                 if (i8 == 2 || i8 == 4 || i8 == 1 || i8 == 8) {
                     FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.documentAttach);
                 } else {
-                    int i9 = messageObject7.type;
+                    int i9 = messageObject8.type;
                     if (i9 == 0 || i9 == 1 || i9 == 8 || i9 == 5) {
                         ImageLoader.getInstance().cancelForceLoadingForImageReceiver(this.photoImage);
                         this.photoImage.cancelLoadImage();
@@ -24501,7 +24523,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (i11 != 3 && i11 != 5) {
                 return;
             }
-            if ((!this.currentMessageObject.isOut() || (!this.currentMessageObject.isSending() && !this.currentMessageObject.isEditing())) && !this.currentMessageObject.isSendError()) {
+            if ((!messageObject.isOut() || (!this.currentMessageObject.isSending() && !this.currentMessageObject.isEditing())) && !this.currentMessageObject.isSendError()) {
                 this.currentMessageObject.loadingCancelled = true;
                 FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.documentAttach);
                 this.buttonState = 2;
@@ -25160,7 +25182,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r11 == 0) goto L_0x007e
             int r10 = r10.date
             int r4 = r4.date
-            r11 = 2131625992(0x7f0e0808, float:1.8879208E38)
+            r11 = 2131626027(0x7f0e082b, float:1.8879279E38)
             java.lang.String r12 = "ImportedMessage"
             if (r10 != r4) goto L_0x005c
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r12, r11)
@@ -25304,7 +25326,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             boolean r2 = r2.isSponsored()
             r10 = 2147483646(0x7ffffffe, float:NaN)
             if (r2 == 0) goto L_0x0183
-            r2 = 2131627987(0x7f0e0fd3, float:1.8883254E38)
+            r2 = 2131628058(0x7f0e101a, float:1.8883398E38)
             java.lang.String r13 = "SponsoredMessage"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r13, r2)
             goto L_0x01d5
@@ -25323,7 +25345,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r2 == 0) goto L_0x01c4
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
-            r15 = 2131625394(0x7f0e05b2, float:1.8877995E38)
+            r15 = 2131625417(0x7f0e05c9, float:1.8878041E38)
             java.lang.String r6 = "EditedMessage"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r15)
             r2.append(r6)
@@ -25823,7 +25845,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             long r6 = r0.via_bot_id
             java.lang.String r8 = "@"
             r9 = 0
-            r11 = 2131628430(0x7f0e118e, float:1.8884152E38)
+            r11 = 2131628503(0x7f0e11d7, float:1.88843E38)
             java.lang.String r12 = "ViaBot"
             r13 = 2
             int r14 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
@@ -25960,7 +25982,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
             boolean r4 = r4.isForwardedChannelPost()
             if (r4 == 0) goto L_0x0233
-            r4 = 2131625300(0x7f0e0554, float:1.8877804E38)
+            r4 = 2131625319(0x7f0e0567, float:1.8877843E38)
             java.lang.String r5 = "DiscussChannel"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             android.text.TextPaint r5 = org.telegram.ui.ActionBar.Theme.chat_adminPaint
@@ -25994,7 +26016,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x027c
             int r5 = r4.length()
             if (r5 != 0) goto L_0x026a
-            r4 = 2131624863(0x7f0e039f, float:1.8876918E38)
+            r4 = 2131624868(0x7f0e03a4, float:1.8876928E38)
             java.lang.String r5 = "ChatAdmin"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x026a:
@@ -26062,7 +26084,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x02dd:
             r8 = r4
             r11 = r21
-            r4 = 2131628430(0x7f0e118e, float:1.8884152E38)
+            r4 = 2131628503(0x7f0e11d7, float:1.88843E38)
             goto L_0x02f6
         L_0x02e4:
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
@@ -26374,10 +26396,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r4 = r4 - r8
             r1.forwardedNameWidth = r4
         L_0x054e:
-            r4 = 2131625801(0x7f0e0749, float:1.887882E38)
+            r4 = 2131625836(0x7f0e076c, float:1.8878891E38)
             java.lang.String r8 = "From"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
-            r8 = 2131625809(0x7f0e0751, float:1.8878836E38)
+            r8 = 2131625844(0x7f0e0774, float:1.8878907E38)
             java.lang.String r12 = "FromFormatted"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r12, r8)
             java.lang.String r12 = "%1$s"
@@ -26420,7 +26442,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.Object[] r8 = new java.lang.Object[r8]
             r14 = 0
             r8[r14] = r13
-            r14 = 2131628430(0x7f0e118e, float:1.8884152E38)
+            r14 = 2131628503(0x7f0e11d7, float:1.88843E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r14)
             r14 = 1
             r8[r14] = r11
@@ -26631,7 +26653,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r0 = r0 + r2
         L_0x076e:
             android.text.StaticLayout r10 = new android.text.StaticLayout
-            r2 = 2131626197(0x7f0e08d5, float:1.8879623E38)
+            r2 = 2131626233(0x7f0e08f9, float:1.8879696E38)
             java.lang.String r3 = "Loading"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r2)
             android.text.TextPaint r4 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint
@@ -26857,7 +26879,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r3 = 0
         L_0x0938:
             if (r3 != 0) goto L_0x0943
-            r3 = 2131626197(0x7f0e08d5, float:1.8879623E38)
+            r3 = 2131626233(0x7f0e08f9, float:1.8879696E38)
             java.lang.String r5 = "Loading"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
         L_0x0943:
@@ -27068,10 +27090,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.currentForwardNameString = r3
         L_0x0ae2:
             java.lang.String r3 = r40.getForwardedMessageText(r41)
-            r5 = 2131625801(0x7f0e0749, float:1.887882E38)
+            r5 = 2131625836(0x7f0e076c, float:1.8878891E38)
             java.lang.String r6 = "From"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r6 = 2131625809(0x7f0e0751, float:1.8878836E38)
+            r6 = 2131625844(0x7f0e0774, float:1.8878907E38)
             java.lang.String r7 = "FromFormatted"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             java.lang.String r7 = "%1$s"
@@ -27693,7 +27715,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     canvas.restore();
                 }
                 ChatMessageCellDelegate chatMessageCellDelegate = this.delegate;
-                if (chatMessageCellDelegate == null || chatMessageCellDelegate.canDrawOutboundsContent()) {
+                if (chatMessageCellDelegate == null || chatMessageCellDelegate.canDrawOutboundsContent() || getAlpha() != 1.0f) {
                     drawOutboundsContent(canvas);
                 }
                 if (this.replyNameLayout != null) {
@@ -28929,7 +28951,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     public boolean hasOutboundsContent() {
-        return (!this.transitionParams.transitionBotButtons.isEmpty() && this.transitionParams.animateBotButtonsChanged) || !this.botButtons.isEmpty() || this.drawSideButton != 0;
+        if (getAlpha() != 1.0f) {
+            return false;
+        }
+        if ((this.transitionParams.transitionBotButtons.isEmpty() || !this.transitionParams.animateBotButtonsChanged) && this.botButtons.isEmpty() && this.drawSideButton == 0) {
+            return false;
+        }
+        return true;
     }
 
     public void drawOutboundsContent(Canvas canvas) {
@@ -38109,6 +38137,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     public void setAlpha(float f) {
+        boolean z = true;
+        boolean z2 = f == 1.0f;
+        if (getAlpha() != 1.0f) {
+            z = false;
+        }
+        if (z2 != z) {
+            invalidate();
+        }
         if (this.ALPHA_PROPERTY_WORKAROUND) {
             this.alphaInternal = f;
             invalidate();
@@ -38519,7 +38555,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 org.telegram.ui.Cells.ChatMessageCell r3 = org.telegram.ui.Cells.ChatMessageCell.this
                 android.text.StaticLayout r3 = r3.timeLayout
                 if (r3 == 0) goto L_0x0162
-                r3 = 2131625394(0x7f0e05b2, float:1.8877995E38)
+                r3 = 2131625417(0x7f0e05c9, float:1.8878041E38)
                 java.lang.String r6 = "EditedMessage"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
                 org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this

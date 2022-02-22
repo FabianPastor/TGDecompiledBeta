@@ -11,6 +11,6 @@ public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSynthe
     }
 
     public final void didLoadSearchResult(ArrayList arrayList) {
-        this.f$0.lambda$new$13(arrayList);
+        this.f$0.updatePlacesMarkers(arrayList);
     }
 }

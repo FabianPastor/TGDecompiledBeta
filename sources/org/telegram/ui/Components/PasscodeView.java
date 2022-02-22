@@ -45,6 +45,7 @@ import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.FingerprintController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
@@ -811,6 +812,9 @@ public class PasscodeView extends FrameLayout {
         SharedConfig.badPasscodeTries = 0;
         this.passwordEditText.clearFocus();
         AndroidUtilities.hideKeyboard(this.passwordEditText);
+        if (Build.VERSION.SDK_INT >= 23 && FingerprintController.isKeyReady()) {
+            FingerprintController.deleteInvalidKey();
+        }
         SharedConfig.appLocked = false;
         SharedConfig.saveConfig();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode, new Object[0]);
@@ -966,7 +970,7 @@ public class PasscodeView extends FrameLayout {
             }
             try {
                 FingerprintManagerCompat from = FingerprintManagerCompat.from(ApplicationLoader.applicationContext);
-                if (from.isHardwareDetected() && from.hasEnrolledFingerprints()) {
+                if (FingerprintController.isKeyReady() && !FingerprintController.checkDeviceFingerprintsChanged() && from.isHardwareDetected() && from.hasEnrolledFingerprints()) {
                     RelativeLayout relativeLayout = new RelativeLayout(getContext());
                     relativeLayout.setPadding(AndroidUtilities.dp(24.0f), 0, AndroidUtilities.dp(24.0f), 0);
                     TextView textView = new TextView(getContext());
@@ -1089,7 +1093,7 @@ public class PasscodeView extends FrameLayout {
             }
             try {
                 FingerprintManagerCompat from = FingerprintManagerCompat.from(ApplicationLoader.applicationContext);
-                if (!from.isHardwareDetected() || !from.hasEnrolledFingerprints()) {
+                if (!FingerprintController.isKeyReady() || FingerprintController.checkDeviceFingerprintsChanged() || !from.isHardwareDetected() || !from.hasEnrolledFingerprints()) {
                     this.fingerprintView.setVisibility(8);
                 } else {
                     this.fingerprintView.setVisibility(0);
@@ -1200,81 +1204,80 @@ public class PasscodeView extends FrameLayout {
                 getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     public void onGlobalLayout() {
                         int i;
-                        int i2;
-                        int i3;
+                        float f;
                         View view;
-                        int i4;
+                        int i2;
                         final AnimatorSet animatorSet;
                         char c;
-                        float f = 1.0f;
+                        float f2 = 1.0f;
                         PasscodeView.this.setAlpha(1.0f);
                         PasscodeView.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        float f2 = 0.0f;
+                        float f3 = 0.0f;
                         PasscodeView.this.imageView.setProgress(0.0f);
                         PasscodeView.this.imageView.playAnimation();
                         AndroidUtilities.runOnUIThread(new PasscodeView$9$$ExternalSyntheticLambda1(this), 350);
                         AnimatorSet animatorSet2 = new AnimatorSet();
                         ArrayList arrayList = new ArrayList();
                         Point point = AndroidUtilities.displaySize;
-                        int i5 = point.x;
-                        int i6 = point.y;
-                        int i7 = Build.VERSION.SDK_INT;
+                        int i3 = point.x;
+                        int i4 = point.y;
+                        int i5 = Build.VERSION.SDK_INT;
                         char c2 = 0;
-                        int i8 = i6 + (i7 >= 21 ? AndroidUtilities.statusBarHeight : 0);
-                        if (i7 >= 21) {
-                            int i9 = i4;
-                            int i10 = (i5 - i9) * (i5 - i9);
+                        int i6 = i4 + (i5 >= 21 ? AndroidUtilities.statusBarHeight : 0);
+                        if (i5 >= 21) {
+                            int i7 = i4;
+                            int i8 = (i3 - i7) * (i3 - i7);
+                            int i9 = i5;
+                            double sqrt = Math.sqrt((double) (i8 + ((i6 - i9) * (i6 - i9))));
+                            int i10 = i4;
                             int i11 = i5;
-                            double sqrt = Math.sqrt((double) (i10 + ((i8 - i11) * (i8 - i11))));
+                            double sqrt2 = Math.sqrt((double) ((i10 * i10) + ((i6 - i11) * (i6 - i11))));
                             int i12 = i4;
                             int i13 = i5;
-                            double sqrt2 = Math.sqrt((double) ((i12 * i12) + ((i8 - i13) * (i8 - i13))));
+                            double sqrt3 = Math.sqrt((double) ((i12 * i12) + (i13 * i13)));
                             int i14 = i4;
-                            int i15 = i5;
-                            double sqrt3 = Math.sqrt((double) ((i14 * i14) + (i15 * i15)));
-                            int i16 = i4;
-                            int i17 = (i5 - i16) * (i5 - i16);
-                            int i18 = i5;
-                            double max = Math.max(Math.max(Math.max(sqrt, sqrt2), sqrt3), Math.sqrt((double) (i17 + (i18 * i18))));
+                            int i15 = (i3 - i14) * (i3 - i14);
+                            int i16 = i5;
+                            double max = Math.max(Math.max(Math.max(sqrt, sqrt2), sqrt3), Math.sqrt((double) (i15 + (i16 * i16))));
                             PasscodeView.this.innerAnimators.clear();
                             int childCount = PasscodeView.this.numbersFrameLayout.getChildCount();
-                            int i19 = -1;
-                            int i20 = -1;
-                            while (i20 < childCount) {
-                                if (i20 == i19) {
+                            int i17 = -1;
+                            int i18 = -1;
+                            while (i18 < childCount) {
+                                if (i18 == i17) {
                                     view = PasscodeView.this.passcodeTextView;
                                 } else {
-                                    view = PasscodeView.this.numbersFrameLayout.getChildAt(i20);
+                                    view = PasscodeView.this.numbersFrameLayout.getChildAt(i18);
                                 }
                                 if ((view instanceof TextView) || (view instanceof ImageView)) {
                                     view.setScaleX(0.7f);
                                     view.setScaleY(0.7f);
-                                    view.setAlpha(f2);
+                                    view.setAlpha(f3);
                                     InnerAnimator innerAnimator = new InnerAnimator();
                                     view.getLocationInWindow(PasscodeView.this.pos);
                                     int measuredWidth = PasscodeView.this.pos[c2] + (view.getMeasuredWidth() / 2);
                                     int measuredHeight = PasscodeView.this.pos[1] + (view.getMeasuredHeight() / 2);
-                                    int i21 = i4;
-                                    int i22 = (i21 - measuredWidth) * (i21 - measuredWidth);
-                                    int i23 = i5;
-                                    float unused = innerAnimator.startRadius = ((float) Math.sqrt((double) (i22 + ((i23 - measuredHeight) * (i23 - measuredHeight))))) - ((float) AndroidUtilities.dp(40.0f));
-                                    if (i20 != i19) {
+                                    int i19 = i4;
+                                    int i20 = (i19 - measuredWidth) * (i19 - measuredWidth);
+                                    int i21 = i5;
+                                    float unused = innerAnimator.startRadius = ((float) Math.sqrt((double) (i20 + ((i21 - measuredHeight) * (i21 - measuredHeight))))) - ((float) AndroidUtilities.dp(40.0f));
+                                    if (i18 != i17) {
                                         animatorSet = new AnimatorSet();
                                         Animator[] animatorArr = new Animator[2];
                                         Property property = View.SCALE_X;
-                                        i4 = childCount;
+                                        i2 = childCount;
                                         float[] fArr = new float[1];
-                                        fArr[c2] = f;
+                                        fArr[c2] = f2;
                                         animatorArr[c2] = ObjectAnimator.ofFloat(view, property, fArr);
                                         Property property2 = View.SCALE_Y;
                                         float[] fArr2 = new float[1];
-                                        fArr2[c2] = f;
+                                        fArr2[c2] = f2;
                                         animatorArr[1] = ObjectAnimator.ofFloat(view, property2, fArr2);
                                         animatorSet.playTogether(animatorArr);
                                         animatorSet.setDuration(140);
                                         animatorSet.setInterpolator(new DecelerateInterpolator());
                                     } else {
-                                        i4 = childCount;
+                                        i2 = childCount;
                                         animatorSet = null;
                                     }
                                     AnimatorSet unused2 = innerAnimator.animatorSet = new AnimatorSet();
@@ -1282,24 +1285,24 @@ public class PasscodeView extends FrameLayout {
                                     Animator[] animatorArr2 = new Animator[3];
                                     Property property3 = View.SCALE_X;
                                     float[] fArr3 = new float[2];
-                                    float f3 = 0.6f;
-                                    fArr3[c2] = i20 == -1 ? 0.9f : 0.6f;
-                                    float f4 = 1.04f;
-                                    fArr3[1] = i20 == -1 ? 1.0f : 1.04f;
+                                    float f4 = 0.6f;
+                                    fArr3[c2] = i18 == -1 ? 0.9f : 0.6f;
+                                    float f5 = 1.04f;
+                                    fArr3[1] = i18 == -1 ? 1.0f : 1.04f;
                                     animatorArr2[c2] = ObjectAnimator.ofFloat(view, property3, fArr3);
                                     Property property4 = View.SCALE_Y;
                                     float[] fArr4 = new float[2];
-                                    if (i20 == -1) {
-                                        f3 = 0.9f;
+                                    if (i18 == -1) {
+                                        f4 = 0.9f;
                                     }
-                                    fArr4[0] = f3;
-                                    if (i20 == -1) {
+                                    fArr4[0] = f4;
+                                    if (i18 == -1) {
                                         c = 1;
-                                        f4 = 1.0f;
+                                        f5 = 1.0f;
                                     } else {
                                         c = 1;
                                     }
-                                    fArr4[c] = f4;
+                                    fArr4[c] = f5;
                                     animatorArr2[c] = ObjectAnimator.ofFloat(view, property4, fArr4);
                                     animatorArr2[2] = ObjectAnimator.ofFloat(view, View.ALPHA, new float[]{0.0f, 1.0f});
                                     access$2200.playTogether(animatorArr2);
@@ -1311,17 +1314,17 @@ public class PasscodeView extends FrameLayout {
                                             }
                                         }
                                     });
-                                    innerAnimator.animatorSet.setDuration(i20 == -1 ? 232 : 200);
+                                    innerAnimator.animatorSet.setDuration(i18 == -1 ? 232 : 200);
                                     innerAnimator.animatorSet.setInterpolator(new DecelerateInterpolator());
                                     PasscodeView.this.innerAnimators.add(innerAnimator);
                                 } else {
-                                    i4 = childCount;
+                                    i2 = childCount;
                                 }
-                                i20++;
-                                childCount = i4;
-                                f = 1.0f;
-                                f2 = 0.0f;
-                                i19 = -1;
+                                i18++;
+                                childCount = i2;
+                                f2 = 1.0f;
+                                f3 = 0.0f;
+                                i17 = -1;
                                 c2 = 0;
                             }
                             arrayList.add(ViewAnimationUtils.createCircularReveal(PasscodeView.this.backgroundFrameLayout, i4, i5, 0.0f, (float) max));
@@ -1350,36 +1353,14 @@ public class PasscodeView extends FrameLayout {
                         animatorSet2.start();
                         AnimatorSet animatorSet3 = new AnimatorSet();
                         animatorSet3.setDuration(332);
-                        if (!AndroidUtilities.isTablet()) {
-                            i2 = 2;
-                            if (PasscodeView.this.getContext().getResources().getConfiguration().orientation == 2) {
-                                if (SharedConfig.passcodeType == 0) {
-                                    i5 /= 2;
-                                }
-                                i = i5 / 2;
-                                i3 = AndroidUtilities.dp(30.0f);
-                                float f5 = (float) (i - i3);
-                                RLottieImageView access$1500 = PasscodeView.this.imageView;
-                                Property property5 = View.TRANSLATION_X;
-                                float[] fArr5 = new float[i2];
-                                fArr5[0] = (float) (i4 - AndroidUtilities.dp(29.0f));
-                                fArr5[1] = f5;
-                                animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(access$1500, property5, fArr5), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.TRANSLATION_Y, new float[]{(float) (i5 - AndroidUtilities.dp(29.0f)), (float) PasscodeView.this.imageY}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_X, new float[]{0.5f, 1.0f}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_Y, new float[]{0.5f, 1.0f})});
-                                animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-                                animatorSet3.start();
-                            }
+                        if (AndroidUtilities.isTablet() || PasscodeView.this.getContext().getResources().getConfiguration().orientation != 2) {
+                            f = ((float) i3) / 2.0f;
+                            i = AndroidUtilities.dp(29.0f);
                         } else {
-                            i2 = 2;
+                            f = (SharedConfig.passcodeType == 0 ? ((float) i3) / 2.0f : (float) i3) / 2.0f;
+                            i = AndroidUtilities.dp(30.0f);
                         }
-                        i = i5 / i2;
-                        i3 = AndroidUtilities.dp(29.0f);
-                        float var_ = (float) (i - i3);
-                        RLottieImageView access$15002 = PasscodeView.this.imageView;
-                        Property property52 = View.TRANSLATION_X;
-                        float[] fArr52 = new float[i2];
-                        fArr52[0] = (float) (i4 - AndroidUtilities.dp(29.0f));
-                        fArr52[1] = var_;
-                        animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(access$15002, property52, fArr52), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.TRANSLATION_Y, new float[]{(float) (i5 - AndroidUtilities.dp(29.0f)), (float) PasscodeView.this.imageY}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_X, new float[]{0.5f, 1.0f}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_Y, new float[]{0.5f, 1.0f})});
+                        animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.TRANSLATION_X, new float[]{(float) (i4 - AndroidUtilities.dp(29.0f)), f - ((float) i)}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.TRANSLATION_Y, new float[]{(float) (i5 - AndroidUtilities.dp(29.0f)), (float) PasscodeView.this.imageY}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_X, new float[]{0.5f, 1.0f}), ObjectAnimator.ofFloat(PasscodeView.this.imageView, View.SCALE_Y, new float[]{0.5f, 1.0f})});
                         animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_OUT);
                         animatorSet3.start();
                     }
@@ -1456,52 +1437,54 @@ public class PasscodeView extends FrameLayout {
             int r1 = r1 - r5
             boolean r5 = org.telegram.messenger.AndroidUtilities.isTablet()
             r6 = 1105723392(0x41e80000, float:29.0)
-            r7 = 1109393408(0x42200000, float:40.0)
-            r8 = 2
-            if (r5 != 0) goto L_0x0096
+            r7 = 1073741824(0x40000000, float:2.0)
+            r8 = 1109393408(0x42200000, float:40.0)
+            r9 = 2
+            if (r5 != 0) goto L_0x0098
             android.content.Context r5 = r13.getContext()
             android.content.res.Resources r5 = r5.getResources()
             android.content.res.Configuration r5 = r5.getConfiguration()
             int r5 = r5.orientation
-            if (r5 != r8) goto L_0x0096
+            if (r5 != r9) goto L_0x0098
             org.telegram.ui.Components.RLottieImageView r5 = r13.imageView
-            int r9 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r9 != 0) goto L_0x0038
-            int r9 = r0 / 2
-            goto L_0x0039
-        L_0x0038:
-            r9 = r0
-        L_0x0039:
-            int r9 = r9 / r8
+            int r10 = org.telegram.messenger.SharedConfig.passcodeType
+            if (r10 != 0) goto L_0x003a
+            float r10 = (float) r0
+            float r10 = r10 / r7
+            goto L_0x003b
+        L_0x003a:
+            float r10 = (float) r0
+        L_0x003b:
+            float r10 = r10 / r7
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r9 = r9 - r6
-            float r6 = (float) r9
-            r5.setTranslationX(r6)
+            float r6 = (float) r6
+            float r10 = r10 - r6
+            r5.setTranslationX(r10)
             android.widget.FrameLayout r5 = r13.passwordFrameLayout
             android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
             int r6 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r6 != 0) goto L_0x0052
+            if (r6 != 0) goto L_0x0054
             int r6 = r0 / 2
-            goto L_0x0053
-        L_0x0052:
+            goto L_0x0055
+        L_0x0054:
             r6 = r0
-        L_0x0053:
+        L_0x0055:
             r5.width = r6
             r6 = 1124859904(0x430CLASSNAME, float:140.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            r5.height = r9
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r5.height = r7
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r6 = r1 - r6
-            int r6 = r6 / r8
-            int r9 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r9 != 0) goto L_0x006d
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            goto L_0x006e
-        L_0x006d:
-            r9 = 0
-        L_0x006e:
-            int r6 = r6 + r9
+            int r6 = r6 / r9
+            int r7 = org.telegram.messenger.SharedConfig.passcodeType
+            if (r7 != 0) goto L_0x006f
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            goto L_0x0070
+        L_0x006f:
+            r7 = 0
+        L_0x0070:
+            int r6 = r6 + r7
             r5.topMargin = r6
             android.widget.FrameLayout r6 = r13.passwordFrameLayout
             r6.setLayoutParams(r5)
@@ -1509,85 +1492,86 @@ public class PasscodeView extends FrameLayout {
             android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
             r5.height = r1
-            int r0 = r0 / r8
+            int r0 = r0 / r9
             r5.leftMargin = r0
             int r1 = r1 - r1
-            if (r2 < r3) goto L_0x0089
+            if (r2 < r3) goto L_0x008b
             int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-            goto L_0x008a
-        L_0x0089:
+            goto L_0x008c
+        L_0x008b:
             r2 = 0
-        L_0x008a:
+        L_0x008c:
             int r1 = r1 + r2
             r5.topMargin = r1
             r5.width = r0
             android.widget.FrameLayout r0 = r13.numbersFrameLayout
             r0.setLayoutParams(r5)
-            goto L_0x0141
-        L_0x0096:
+            goto L_0x0143
+        L_0x0098:
             org.telegram.ui.Components.RLottieImageView r2 = r13.imageView
-            int r3 = r0 / 2
+            float r3 = (float) r0
+            float r3 = r3 / r7
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r3 = r3 - r5
-            float r3 = (float) r3
+            float r5 = (float) r5
+            float r3 = r3 - r5
             r2.setTranslationX(r3)
             boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r2 == 0) goto L_0x00da
+            if (r2 == 0) goto L_0x00dc
             r2 = 1140391936(0x43var_, float:498.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            if (r0 <= r3) goto L_0x00bf
+            if (r0 <= r3) goto L_0x00c1
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 - r3
-            int r0 = r0 / r8
+            int r0 = r0 / r9
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r12 = r2
             r2 = r0
             r0 = r12
-            goto L_0x00c0
-        L_0x00bf:
+            goto L_0x00c2
+        L_0x00c1:
             r2 = 0
-        L_0x00c0:
+        L_0x00c2:
             r3 = 1141112832(0x44040000, float:528.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            if (r1 <= r5) goto L_0x00d7
+            if (r1 <= r5) goto L_0x00d9
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r1 = r1 - r5
-            int r1 = r1 / r8
+            int r1 = r1 / r9
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r12 = r2
             r2 = r1
             r1 = r3
             r3 = r12
-            goto L_0x00dc
-        L_0x00d7:
+            goto L_0x00de
+        L_0x00d9:
             r3 = r2
             r2 = 0
-            goto L_0x00dc
-        L_0x00da:
+            goto L_0x00de
+        L_0x00dc:
             r2 = 0
             r3 = 0
-        L_0x00dc:
+        L_0x00de:
             android.widget.FrameLayout r5 = r13.passwordFrameLayout
             android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
             int r6 = r1 / 3
-            int r9 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r9 != 0) goto L_0x00ef
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            goto L_0x00f0
-        L_0x00ef:
-            r9 = 0
-        L_0x00f0:
-            int r9 = r9 + r6
-            r5.height = r9
+            int r7 = org.telegram.messenger.SharedConfig.passcodeType
+            if (r7 != 0) goto L_0x00f1
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            goto L_0x00f2
+        L_0x00f1:
+            r7 = 0
+        L_0x00f2:
+            int r7 = r7 + r6
+            r5.height = r7
             r5.width = r0
             r5.topMargin = r2
             r5.leftMargin = r3
-            android.widget.FrameLayout r9 = r13.passwordFrameLayout
+            android.widget.FrameLayout r7 = r13.passwordFrameLayout
             java.lang.Integer r10 = java.lang.Integer.valueOf(r2)
-            r9.setTag(r10)
-            android.widget.FrameLayout r9 = r13.passwordFrameLayout
-            r9.setLayoutParams(r5)
+            r7.setTag(r10)
+            android.widget.FrameLayout r7 = r13.passwordFrameLayout
+            r7.setLayoutParams(r5)
             android.widget.FrameLayout r5 = r13.numbersFrameLayout
             android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r5 = (android.widget.FrameLayout.LayoutParams) r5
@@ -1595,7 +1579,7 @@ public class PasscodeView extends FrameLayout {
             r5.height = r6
             r5.leftMargin = r3
             boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r3 == 0) goto L_0x0129
+            if (r3 == 0) goto L_0x012b
             int r3 = r5.height
             int r1 = r1 - r3
             int r1 = r1 + r2
@@ -1603,25 +1587,25 @@ public class PasscodeView extends FrameLayout {
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r1 = r1 + r2
             r5.topMargin = r1
-            goto L_0x013a
-        L_0x0129:
+            goto L_0x013c
+        L_0x012b:
             int r3 = r5.height
             int r1 = r1 - r3
             int r1 = r1 + r2
             int r2 = org.telegram.messenger.SharedConfig.passcodeType
-            if (r2 != 0) goto L_0x0136
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            goto L_0x0137
-        L_0x0136:
+            if (r2 != 0) goto L_0x0138
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            goto L_0x0139
+        L_0x0138:
             r2 = 0
-        L_0x0137:
+        L_0x0139:
             int r1 = r1 + r2
             r5.topMargin = r1
-        L_0x013a:
+        L_0x013c:
             r5.width = r0
             android.widget.FrameLayout r0 = r13.numbersFrameLayout
             r0.setLayoutParams(r5)
-        L_0x0141:
+        L_0x0143:
             int r0 = r5.width
             r1 = 1112014848(0x42480000, float:50.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -1633,36 +1617,36 @@ public class PasscodeView extends FrameLayout {
             int r3 = r3 * 4
             int r2 = r2 - r3
             int r2 = r2 / 5
-        L_0x0159:
+        L_0x015b:
             r3 = 12
-            if (r4 >= r3) goto L_0x0242
+            if (r4 >= r3) goto L_0x0244
             r3 = 11
             r5 = 10
-            if (r4 != 0) goto L_0x0166
+            if (r4 != 0) goto L_0x0168
             r3 = 10
-            goto L_0x0170
-        L_0x0166:
-            if (r4 != r5) goto L_0x0169
-            goto L_0x0170
-        L_0x0169:
-            if (r4 != r3) goto L_0x016e
+            goto L_0x0172
+        L_0x0168:
+            if (r4 != r5) goto L_0x016b
+            goto L_0x0172
+        L_0x016b:
+            if (r4 != r3) goto L_0x0170
             r3 = 9
-            goto L_0x0170
-        L_0x016e:
-            int r3 = r4 + -1
+            goto L_0x0172
         L_0x0170:
+            int r3 = r4 + -1
+        L_0x0172:
             int r6 = r3 / 3
             int r3 = r3 % 3
-            if (r4 >= r5) goto L_0x01ba
+            if (r4 >= r5) goto L_0x01bc
             java.util.ArrayList<android.widget.TextView> r5 = r13.numberTextViews
             java.lang.Object r5 = r5.get(r4)
             android.widget.TextView r5 = (android.widget.TextView) r5
-            java.util.ArrayList<android.widget.TextView> r8 = r13.lettersTextViews
-            java.lang.Object r8 = r8.get(r4)
-            android.widget.TextView r8 = (android.widget.TextView) r8
+            java.util.ArrayList<android.widget.TextView> r7 = r13.lettersTextViews
+            java.lang.Object r7 = r7.get(r4)
+            android.widget.TextView r7 = (android.widget.TextView) r7
             android.view.ViewGroup$LayoutParams r9 = r5.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r9 = (android.widget.FrameLayout.LayoutParams) r9
-            android.view.ViewGroup$LayoutParams r10 = r8.getLayoutParams()
+            android.view.ViewGroup$LayoutParams r10 = r7.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r10 = (android.widget.FrameLayout.LayoutParams) r10
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r11 = r11 + r2
@@ -1677,15 +1661,15 @@ public class PasscodeView extends FrameLayout {
             r9.leftMargin = r6
             r10.leftMargin = r6
             int r3 = r10.topMargin
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r8)
             int r3 = r3 + r6
             r10.topMargin = r3
             r5.setLayoutParams(r9)
-            r8.setLayoutParams(r10)
-            goto L_0x0219
-        L_0x01ba:
-            r8 = 1090519040(0x41000000, float:8.0)
-            if (r4 != r5) goto L_0x01ec
+            r7.setLayoutParams(r10)
+            goto L_0x021b
+        L_0x01bc:
+            r7 = 1090519040(0x41000000, float:8.0)
+            if (r4 != r5) goto L_0x01ee
             android.widget.ImageView r5 = r13.eraseView
             android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
             r9 = r5
@@ -1694,7 +1678,7 @@ public class PasscodeView extends FrameLayout {
             int r5 = r5 + r2
             int r5 = r5 * r6
             int r5 = r5 + r2
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r5 = r5 + r6
             r9.topMargin = r5
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -1702,12 +1686,12 @@ public class PasscodeView extends FrameLayout {
             int r6 = r6 * r3
             int r6 = r6 + r0
             r9.leftMargin = r6
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r11 = r5 - r3
             android.widget.ImageView r3 = r13.eraseView
             r3.setLayoutParams(r9)
-            goto L_0x0219
-        L_0x01ec:
+            goto L_0x021b
+        L_0x01ee:
             android.widget.ImageView r5 = r13.fingerprintView
             android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
             r9 = r5
@@ -1716,7 +1700,7 @@ public class PasscodeView extends FrameLayout {
             int r5 = r5 + r2
             int r5 = r5 * r6
             int r5 = r5 + r2
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r5 = r5 + r6
             r9.topMargin = r5
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -1724,11 +1708,11 @@ public class PasscodeView extends FrameLayout {
             int r6 = r6 * r3
             int r6 = r6 + r0
             r9.leftMargin = r6
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r11 = r5 - r3
             android.widget.ImageView r3 = r13.fingerprintView
             r3.setLayoutParams(r9)
-        L_0x0219:
+        L_0x021b:
             java.util.ArrayList<android.widget.FrameLayout> r3 = r13.numberFrameLayouts
             java.lang.Object r3 = r3.get(r4)
             android.widget.FrameLayout r3 = (android.widget.FrameLayout) r3
@@ -1739,14 +1723,14 @@ public class PasscodeView extends FrameLayout {
             int r11 = r11 - r6
             r5.topMargin = r11
             int r6 = r9.leftMargin
-            r8 = 1103626240(0x41CLASSNAME, float:25.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r6 = r6 - r8
+            r7 = 1103626240(0x41CLASSNAME, float:25.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r6 = r6 - r7
             r5.leftMargin = r6
             r3.setLayoutParams(r5)
             int r4 = r4 + 1
-            goto L_0x0159
-        L_0x0242:
+            goto L_0x015b
+        L_0x0244:
             super.onMeasure(r14, r15)
             return
         */

@@ -1,24 +1,21 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC$Message;
+import org.telegram.tgnet.TLRPC$Document;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda166 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ TLRPC$Message f$1;
-    public final /* synthetic */ boolean f$2;
-    public final /* synthetic */ ArrayList f$3;
-    public final /* synthetic */ ArrayList f$4;
+    public final /* synthetic */ TLRPC$Document f$1;
+    public final /* synthetic */ String f$2;
+    public final /* synthetic */ String f$3;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda166(MessagesStorage messagesStorage, TLRPC$Message tLRPC$Message, boolean z, ArrayList arrayList, ArrayList arrayList2) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda166(MessagesStorage messagesStorage, TLRPC$Document tLRPC$Document, String str, String str2) {
         this.f$0 = messagesStorage;
-        this.f$1 = tLRPC$Message;
-        this.f$2 = z;
-        this.f$3 = arrayList;
-        this.f$4 = arrayList2;
+        this.f$1 = tLRPC$Document;
+        this.f$2 = str;
+        this.f$3 = str2;
     }
 
     public final void run() {
-        this.f$0.lambda$replaceMessageIfExists$171(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$addRecentLocalFile$61(this.f$1, this.f$2, this.f$3);
     }
 }

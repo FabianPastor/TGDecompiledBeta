@@ -86,6 +86,21 @@ public class RadialProgressView extends View {
         this.progressTime = 0;
     }
 
+    public void sync(RadialProgressView radialProgressView) {
+        this.lastUpdateTime = radialProgressView.lastUpdateTime;
+        this.radOffset = radialProgressView.radOffset;
+        this.toCircle = radialProgressView.toCircle;
+        this.toCircleProgress = radialProgressView.toCircleProgress;
+        this.noProgress = radialProgressView.noProgress;
+        this.currentCircleLength = radialProgressView.currentCircleLength;
+        this.currentProgressTime = radialProgressView.currentProgressTime;
+        this.currentProgress = radialProgressView.currentProgress;
+        this.progressTime = radialProgressView.progressTime;
+        this.animatedProgress = radialProgressView.animatedProgress;
+        this.risingCircleLength = radialProgressView.risingCircleLength;
+        this.progressAnimationStart = radialProgressView.progressAnimationStart;
+    }
+
     /* JADX WARNING: Removed duplicated region for block: B:18:0x005d  */
     /* JADX WARNING: Removed duplicated region for block: B:41:0x0101  */
     /* Code decompiled incorrectly, please refer to instructions dump. */

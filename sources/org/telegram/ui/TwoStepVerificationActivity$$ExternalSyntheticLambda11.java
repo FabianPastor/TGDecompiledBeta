@@ -8,6 +8,6 @@ public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheti
     }
 
     public final void run() {
-        this.f$0.updateBottomButton();
+        this.f$0.lambda$onFieldError$36();
     }
 }

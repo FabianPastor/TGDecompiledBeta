@@ -51,20 +51,17 @@ public abstract class BaseFragment {
     public int classGuid;
     /* access modifiers changed from: protected */
     public int currentAccount;
-    private boolean finishing;
-    /* access modifiers changed from: protected */
-    public boolean fragmentBeginToShow;
+    protected boolean finishing;
+    protected boolean fragmentBeginToShow;
     /* access modifiers changed from: protected */
     public View fragmentView;
     protected boolean hasOwnBackground;
-    /* access modifiers changed from: protected */
-    public boolean inBubbleMode;
+    protected boolean inBubbleMode;
     protected boolean inMenuMode;
     /* access modifiers changed from: protected */
     public boolean inPreviewMode;
     private boolean isFinished;
-    /* access modifiers changed from: protected */
-    public boolean isPaused;
+    protected boolean isPaused;
     protected Dialog parentDialog;
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
@@ -103,6 +100,10 @@ public abstract class BaseFragment {
 
     public Theme.ResourcesProvider getResourceProvider() {
         return null;
+    }
+
+    public boolean hasForceLightStatusBar() {
+        return false;
     }
 
     /* access modifiers changed from: protected */
@@ -182,6 +183,11 @@ public abstract class BaseFragment {
     }
 
     public void setProgressToDrawerOpened(float f) {
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean shouldOverrideSlideTransition(boolean z, boolean z2) {
+        return false;
     }
 
     public BaseFragment() {
@@ -415,7 +421,15 @@ public abstract class BaseFragment {
     }
 
     public void onResume() {
+        boolean z = false;
         this.isPaused = false;
+        if (hasForceLightStatusBar() && !AndroidUtilities.isTablet() && getParentLayout().getLastFragment() == this && getParentActivity() != null && !this.finishing) {
+            Window window = getParentActivity().getWindow();
+            if (Theme.getColor("actionBarDefault") == -1 || !Theme.getActiveTheme().isDark()) {
+                z = true;
+            }
+            AndroidUtilities.setLightStatusBar(window, z, true);
+        }
     }
 
     public void onPause() {
@@ -423,6 +437,7 @@ public abstract class BaseFragment {
         if (actionBar2 != null) {
             actionBar2.onPause();
         }
+        boolean z = true;
         this.isPaused = true;
         try {
             Dialog dialog = this.visibleDialog;
@@ -432,6 +447,13 @@ public abstract class BaseFragment {
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
+        }
+        if (hasForceLightStatusBar() && !AndroidUtilities.isTablet() && getParentLayout().getLastFragment() == this && getParentActivity() != null && !this.finishing) {
+            Window window = getParentActivity().getWindow();
+            if (Theme.getColor("actionBarDefault") != -1) {
+                z = false;
+            }
+            AndroidUtilities.setLightStatusBar(window, z);
         }
     }
 

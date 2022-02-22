@@ -12,6 +12,6 @@ public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheti
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$processDone$29(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$clearPassword$26(tLObject, tLRPC$TL_error);
     }
 }

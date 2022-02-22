@@ -1,14 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.MediaController;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda44 implements Runnable {
-    public static final /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda44 INSTANCE = new ChatActivityEnterView$$ExternalSyntheticLambda44();
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda44 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
+    public final /* synthetic */ ChatActivityEnterView f$0;
 
-    private /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda44() {
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda44(ChatActivityEnterView chatActivityEnterView) {
+        this.f$0 = chatActivityEnterView;
     }
 
-    public final void run() {
-        MediaController.getInstance().stopRecording(0, false, 0);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$onSendLongClick$29(keyEvent);
     }
 }

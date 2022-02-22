@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import android.view.View;
-import android.view.ViewTreeObserver;
+import android.window.SplashScreen;
+import android.window.SplashScreenView;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda18 implements ViewTreeObserver.OnGlobalLayoutListener {
-    public final /* synthetic */ View f$0;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda18 implements SplashScreen.OnExitAnimationListener {
+    public final /* synthetic */ LaunchActivity f$0;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda18(View view) {
-        this.f$0 = view;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda18(LaunchActivity launchActivity) {
+        this.f$0 = launchActivity;
     }
 
-    public final void onGlobalLayout() {
-        LaunchActivity.lambda$onCreate$4(this.f$0);
+    public final void onSplashScreenExit(SplashScreenView splashScreenView) {
+        this.f$0.lambda$onCreate$0(splashScreenView);
     }
 }

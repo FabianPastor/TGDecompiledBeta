@@ -1,23 +1,17 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
+import org.telegram.ui.ActionIntroActivity;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda76 implements ChatAttachAlertContactsLayout.PhonebookShareAlertDelegate {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda76 implements ActionIntroActivity.ActionIntroQRLoginDelegate {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ ChatActivity f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ ActionIntroActivity f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda76(LaunchActivity launchActivity, ChatActivity chatActivity, ArrayList arrayList, int i) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda76(LaunchActivity launchActivity, ActionIntroActivity actionIntroActivity) {
         this.f$0 = launchActivity;
-        this.f$1 = chatActivity;
-        this.f$2 = arrayList;
-        this.f$3 = i;
+        this.f$1 = actionIntroActivity;
     }
 
-    public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
-        this.f$0.lambda$didSelectDialogs$61(this.f$1, this.f$2, this.f$3, tLRPC$User, z, i);
+    public final void didFindQRCode(String str) {
+        this.f$0.lambda$handleIntent$19(this.f$1, str);
     }
 }

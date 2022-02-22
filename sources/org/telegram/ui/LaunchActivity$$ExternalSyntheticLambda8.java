@@ -10,6 +10,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda8 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$showPermissionErrorAlert$63(dialogInterface, i);
+        this.f$0.lambda$didReceivedNotification$68(dialogInterface, i);
     }
 }

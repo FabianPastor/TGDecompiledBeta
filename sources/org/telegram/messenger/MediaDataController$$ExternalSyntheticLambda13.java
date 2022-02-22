@@ -10,6 +10,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
     }
 
     public final void run() {
-        this.f$0.lambda$processLoadedStickers$58(this.f$1);
+        this.f$0.lambda$loadStickers$54(this.f$1);
     }
 }

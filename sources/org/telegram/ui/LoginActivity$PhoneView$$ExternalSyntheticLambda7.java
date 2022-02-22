@@ -1,21 +1,18 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.tgnet.TLObject;
+import android.content.Context;
+import android.view.View;
+import android.widget.ViewSwitcher;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda7 implements Runnable {
-    public final /* synthetic */ LoginActivity.PhoneView f$0;
-    public final /* synthetic */ TLObject f$1;
-    public final /* synthetic */ HashMap f$2;
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda7 implements ViewSwitcher.ViewFactory {
+    public final /* synthetic */ Context f$0;
 
-    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda7(LoginActivity.PhoneView phoneView, TLObject tLObject, HashMap hashMap) {
-        this.f$0 = phoneView;
-        this.f$1 = tLObject;
-        this.f$2 = hashMap;
+    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda7(Context context) {
+        this.f$0 = context;
     }
 
-    public final void run() {
-        this.f$0.lambda$new$7(this.f$1, this.f$2);
+    public final View makeView() {
+        return LoginActivity.PhoneView.lambda$new$0(this.f$0);
     }
 }

@@ -2,8 +2,6 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.browser.Browser;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda10 implements DialogInterface.OnClickListener {
     public final /* synthetic */ Context f$0;
@@ -13,6 +11,6 @@ public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda10 impl
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        Browser.openUrl(this.f$0, BuildVars.PLAYSTORE_APP_URL);
+        AlertsCreator.lambda$createApkRestrictedDialog$2(this.f$0, dialogInterface, i);
     }
 }

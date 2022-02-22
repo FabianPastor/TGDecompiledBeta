@@ -145,7 +145,9 @@ public class AvatarDrawable extends Drawable {
     public void setAvatarType(int i) {
         this.avatarType = i;
         boolean z = true;
-        if (i == 2) {
+        if (i == 13) {
+            this.color = Theme.getColor("chats_actionBackground");
+        } else if (i == 2) {
             this.color = getThemedColor("avatar_backgroundArchivedHidden");
         } else if (i == 12) {
             this.color = getThemedColor("avatar_backgroundSaved");

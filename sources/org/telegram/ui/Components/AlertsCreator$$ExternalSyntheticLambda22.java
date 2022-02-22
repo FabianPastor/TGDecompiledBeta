@@ -1,17 +1,19 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.messenger.MessagesController;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.tgnet.TLRPC$TL_langPackLanguage;
+import org.telegram.ui.LaunchActivity;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda22 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ BaseFragment f$0;
+    public final /* synthetic */ TLRPC$TL_langPackLanguage f$0;
+    public final /* synthetic */ LaunchActivity f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda22(BaseFragment baseFragment) {
-        this.f$0 = baseFragment;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda22(TLRPC$TL_langPackLanguage tLRPC$TL_langPackLanguage, LaunchActivity launchActivity) {
+        this.f$0 = tLRPC$TL_langPackLanguage;
+        this.f$1 = launchActivity;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        MessagesController.getInstance(this.f$0.getCurrentAccount()).openByUserName("spambot", this.f$0, 1);
+        AlertsCreator.lambda$createLanguageAlert$5(this.f$0, this.f$1, dialogInterface, i);
     }
 }

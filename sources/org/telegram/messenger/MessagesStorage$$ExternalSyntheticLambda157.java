@@ -1,21 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$Document;
+import android.util.SparseIntArray;
+import org.telegram.messenger.support.LongSparseIntArray;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda157 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ TLRPC$Document f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ String f$3;
+    public final /* synthetic */ LongSparseIntArray f$1;
+    public final /* synthetic */ LongSparseIntArray f$2;
+    public final /* synthetic */ SparseIntArray f$3;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda157(MessagesStorage messagesStorage, TLRPC$Document tLRPC$Document, String str, String str2) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda157(MessagesStorage messagesStorage, LongSparseIntArray longSparseIntArray, LongSparseIntArray longSparseIntArray2, SparseIntArray sparseIntArray) {
         this.f$0 = messagesStorage;
-        this.f$1 = tLRPC$Document;
-        this.f$2 = str;
-        this.f$3 = str2;
+        this.f$1 = longSparseIntArray;
+        this.f$2 = longSparseIntArray2;
+        this.f$3 = sparseIntArray;
     }
 
     public final void run() {
-        this.f$0.lambda$addRecentLocalFile$55(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$markMessagesAsRead$167(this.f$1, this.f$2, this.f$3);
     }
 }

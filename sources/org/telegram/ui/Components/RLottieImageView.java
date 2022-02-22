@@ -48,20 +48,29 @@ public class RLottieImageView extends ImageView {
         setAnimation(new RLottieDrawable(i, "" + i, AndroidUtilities.dp((float) i2), AndroidUtilities.dp((float) i3), false, iArr));
     }
 
+    public void setOnAnimationEndListener(Runnable runnable) {
+        RLottieDrawable rLottieDrawable = this.drawable;
+        if (rLottieDrawable != null) {
+            rLottieDrawable.setOnAnimationEndListener(runnable);
+        }
+    }
+
     public void setAnimation(RLottieDrawable rLottieDrawable) {
-        this.drawable = rLottieDrawable;
-        if (this.autoRepeat) {
-            rLottieDrawable.setAutoRepeat(1);
-        }
-        if (this.layerColors != null) {
-            this.drawable.beginApplyLayerColors();
-            for (Map.Entry next : this.layerColors.entrySet()) {
-                this.drawable.setLayerColor((String) next.getKey(), ((Integer) next.getValue()).intValue());
+        if (this.drawable != rLottieDrawable) {
+            this.drawable = rLottieDrawable;
+            if (this.autoRepeat) {
+                rLottieDrawable.setAutoRepeat(1);
             }
-            this.drawable.commitApplyLayerColors();
+            if (this.layerColors != null) {
+                this.drawable.beginApplyLayerColors();
+                for (Map.Entry next : this.layerColors.entrySet()) {
+                    this.drawable.setLayerColor((String) next.getKey(), ((Integer) next.getValue()).intValue());
+                }
+                this.drawable.commitApplyLayerColors();
+            }
+            this.drawable.setAllowDecodeSingleFrame(true);
+            setImageDrawable(this.drawable);
         }
-        this.drawable.setAllowDecodeSingleFrame(true);
-        setImageDrawable(this.drawable);
     }
 
     public void clearAnimationDrawable() {

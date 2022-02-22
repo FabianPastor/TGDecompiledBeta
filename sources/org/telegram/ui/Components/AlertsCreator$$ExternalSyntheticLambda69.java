@@ -1,15 +1,20 @@
 package org.telegram.ui.Components;
 
+import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda69 implements View.OnTouchListener {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda69 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda69();
+    public final /* synthetic */ ActionBarPopupWindow f$0;
+    public final /* synthetic */ Rect f$1;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda69() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda69(ActionBarPopupWindow actionBarPopupWindow, Rect rect) {
+        this.f$0 = actionBarPopupWindow;
+        this.f$1 = rect;
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return AlertsCreator.lambda$createDatePickerDialog$50(view, motionEvent);
+        return AlertsCreator.lambda$showPopupMenu$111(this.f$0, this.f$1, view, motionEvent);
     }
 }

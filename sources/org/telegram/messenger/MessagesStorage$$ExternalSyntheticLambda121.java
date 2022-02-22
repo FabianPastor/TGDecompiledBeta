@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda121 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ Long f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda121(MessagesStorage messagesStorage, ArrayList arrayList) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda121(MessagesStorage messagesStorage, Long l, int i) {
         this.f$0 = messagesStorage;
-        this.f$1 = arrayList;
+        this.f$1 = l;
+        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$deleteFromDownloadQueue$141(this.f$1);
+        this.f$0.lambda$broadcastScheduledMessagesChange$170(this.f$1, this.f$2);
     }
 }

@@ -1,14 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.messenger.MediaController;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda45 implements Runnable {
-    public static final /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda45 INSTANCE = new ChatActivityEnterView$$ExternalSyntheticLambda45();
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda45 implements AlertsCreator.ScheduleDatePickerDelegate {
+    public final /* synthetic */ ChatActivityEnterView f$0;
 
-    private /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda45() {
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda45(ChatActivityEnterView chatActivityEnterView) {
+        this.f$0 = chatActivityEnterView;
     }
 
-    public final void run() {
-        MediaController.getInstance().stopRecording(0, false, 0);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.sendMessageInternal(z, i);
     }
 }

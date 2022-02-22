@@ -17,6 +17,6 @@ public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSynthe
     }
 
     public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$7(this.f$1, this.f$2, view, i);
+        this.f$0.lambda$new$15(this.f$1, this.f$2, view, i);
     }
 }

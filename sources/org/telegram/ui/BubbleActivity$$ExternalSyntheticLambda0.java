@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
+import org.telegram.ui.Components.PasscodeView;
 
-public final /* synthetic */ class BubbleActivity$$ExternalSyntheticLambda0 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class BubbleActivity$$ExternalSyntheticLambda0 implements PasscodeView.PasscodeViewDelegate {
     public final /* synthetic */ BubbleActivity f$0;
 
     public /* synthetic */ BubbleActivity$$ExternalSyntheticLambda0(BubbleActivity bubbleActivity) {
         this.f$0 = bubbleActivity;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$showPermissionErrorAlert$1(dialogInterface, i);
+    public final void didAcceptedPassword() {
+        this.f$0.lambda$showPasscodeActivity$0();
     }
 }

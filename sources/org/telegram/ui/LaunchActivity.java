@@ -1,6 +1,8 @@
 package org.telegram.ui;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,11 +33,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.window.SplashScreenView;
 import androidx.arch.core.util.Function;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -55,7 +57,6 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MediaController;
@@ -68,7 +69,6 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
@@ -84,7 +84,9 @@ import org.telegram.tgnet.TLRPC$TL_account_authorizationForm;
 import org.telegram.tgnet.TLRPC$TL_account_getAuthorizationForm;
 import org.telegram.tgnet.TLRPC$TL_account_getPassword;
 import org.telegram.tgnet.TLRPC$TL_account_password;
+import org.telegram.tgnet.TLRPC$TL_account_sendConfirmPhoneCode;
 import org.telegram.tgnet.TLRPC$TL_auth_acceptLoginToken;
+import org.telegram.tgnet.TLRPC$TL_auth_sentCode;
 import org.telegram.tgnet.TLRPC$TL_authorization;
 import org.telegram.tgnet.TLRPC$TL_channels_getChannels;
 import org.telegram.tgnet.TLRPC$TL_contacts_resolvedPeer;
@@ -122,7 +124,9 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BlockingUpdateView;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EmbedBottomSheet;
+import org.telegram.ui.Components.FireworksOverlay;
 import org.telegram.ui.Components.GroupCallPip;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PasscodeView;
@@ -141,7 +145,7 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.DialogsActivity;
 import org.webrtc.voiceengine.WebRtcAudioTrack;
 
-public class LaunchActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
+public class LaunchActivity extends BasePermissionsActivity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
     private static ArrayList<BaseFragment> layerFragmentsStack = new ArrayList<>();
     /* access modifiers changed from: private */
     public static ArrayList<BaseFragment> mainFragmentsStack = new ArrayList<>();
@@ -154,7 +158,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* access modifiers changed from: private */
     public ArrayList<TLRPC$User> contactsToSend;
     private Uri contactsToSendUri;
-    private int currentAccount;
     private int currentConnectionState;
     private String documentsMimeType;
     private ArrayList<String> documentsOriginalPathsArray;
@@ -167,10 +170,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* access modifiers changed from: private */
     public Uri exportingChatUri;
     private boolean finished;
+    private FireworksOverlay fireworksOverlay;
     private FrameLayout frameLayout;
     private ArrayList<Parcelable> importingStickers;
     private ArrayList<String> importingStickersEmoji;
     private String importingStickersSoftware;
+    private boolean isNavigationBarColorFrozen = false;
     /* access modifiers changed from: private */
     public SideMenultItemAnimator itemAnimator;
     /* access modifiers changed from: private */
@@ -228,720 +233,727 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     private boolean wasMutedByAdminRaisedHand;
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$onCreate$1(View view) {
+    public static /* synthetic */ void lambda$onCreate$2(View view) {
     }
 
     /* access modifiers changed from: protected */
+    /* JADX WARNING: Can't wrap try/catch for region: R(5:28|29|30|31|32) */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:48:0x0110 */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x009f  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x00a1  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x00a4  */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:31:0x00b5 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void onCreate(android.os.Bundle r14) {
+    public void onCreate(android.os.Bundle r13) {
         /*
-            r13 = this;
+            r12 = this;
             java.lang.String r0 = "flyme"
-            org.telegram.messenger.ApplicationLoader.postInitApplication()
-            android.content.res.Resources r1 = r13.getResources()
-            android.content.res.Configuration r1 = r1.getConfiguration()
-            org.telegram.messenger.AndroidUtilities.checkDisplaySize(r13, r1)
-            int r1 = org.telegram.messenger.UserConfig.selectedAccount
-            r13.currentAccount = r1
-            org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
-            boolean r1 = r1.isClientActivated()
-            r2 = 1
-            r3 = 0
-            if (r1 != 0) goto L_0x00ef
-            android.content.Intent r1 = r13.getIntent()
-            if (r1 == 0) goto L_0x0088
-            java.lang.String r4 = r1.getAction()
-            if (r4 == 0) goto L_0x0088
-            java.lang.String r4 = r1.getAction()
-            java.lang.String r5 = "android.intent.action.SEND"
-            boolean r4 = r5.equals(r4)
-            if (r4 != 0) goto L_0x0081
-            java.lang.String r4 = r1.getAction()
-            java.lang.String r5 = "android.intent.action.SEND_MULTIPLE"
-            boolean r4 = r5.equals(r4)
-            if (r4 == 0) goto L_0x0045
-            goto L_0x0081
-        L_0x0045:
-            java.lang.String r4 = r1.getAction()
-            java.lang.String r5 = "android.intent.action.VIEW"
-            boolean r4 = r5.equals(r4)
-            if (r4 == 0) goto L_0x0088
-            android.net.Uri r4 = r1.getData()
-            if (r4 == 0) goto L_0x0088
-            java.lang.String r4 = r4.toString()
-            java.lang.String r4 = r4.toLowerCase()
-            java.lang.String r5 = "tg:proxy"
-            boolean r5 = r4.startsWith(r5)
-            if (r5 != 0) goto L_0x007f
-            java.lang.String r5 = "tg://proxy"
-            boolean r5 = r4.startsWith(r5)
-            if (r5 != 0) goto L_0x007f
-            java.lang.String r5 = "tg:socks"
-            boolean r5 = r4.startsWith(r5)
-            if (r5 != 0) goto L_0x007f
-            java.lang.String r5 = "tg://socks"
-            boolean r4 = r4.startsWith(r5)
-            if (r4 == 0) goto L_0x0088
-        L_0x007f:
-            r4 = 1
-            goto L_0x0089
-        L_0x0081:
-            super.onCreate(r14)
-            r13.finish()
-            return
-        L_0x0088:
-            r4 = 0
-        L_0x0089:
-            android.content.SharedPreferences r5 = org.telegram.messenger.MessagesController.getGlobalMainSettings()
-            java.lang.String r6 = "intro_crashed_time"
-            r7 = 0
-            long r9 = r5.getLong(r6, r7)
-            if (r1 == 0) goto L_0x00a1
-            java.lang.String r11 = "fromIntro"
-            boolean r11 = r1.getBooleanExtra(r11, r3)
-            if (r11 == 0) goto L_0x00a1
-            r11 = 1
-            goto L_0x00a2
-        L_0x00a1:
-            r11 = 0
-        L_0x00a2:
-            if (r11 == 0) goto L_0x00af
-            android.content.SharedPreferences$Editor r5 = r5.edit()
-            android.content.SharedPreferences$Editor r5 = r5.putLong(r6, r7)
-            r5.commit()
-        L_0x00af:
-            if (r4 != 0) goto L_0x00ef
-            long r4 = java.lang.System.currentTimeMillis()
-            long r9 = r9 - r4
-            long r4 = java.lang.Math.abs(r9)
-            r6 = 120000(0x1d4c0, double:5.9288E-319)
-            int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r8 < 0) goto L_0x00ef
-            if (r1 == 0) goto L_0x00ef
-            if (r11 != 0) goto L_0x00ef
-            android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext
-            java.lang.String r5 = "logininfo2"
-            android.content.SharedPreferences r4 = r4.getSharedPreferences(r5, r3)
-            java.util.Map r4 = r4.getAll()
-            boolean r4 = r4.isEmpty()
-            if (r4 == 0) goto L_0x00ef
-            android.content.Intent r0 = new android.content.Intent
-            java.lang.Class<org.telegram.ui.IntroActivity> r2 = org.telegram.ui.IntroActivity.class
-            r0.<init>(r13, r2)
-            android.net.Uri r1 = r1.getData()
-            r0.setData(r1)
-            r13.startActivity(r0)
-            super.onCreate(r14)
-            r13.finish()
-            return
-        L_0x00ef:
-            r13.requestWindowFeature(r2)
-            r1 = 2131689489(0x7f0var_, float:1.9007995E38)
-            r13.setTheme(r1)
             int r1 = android.os.Build.VERSION.SDK_INT
-            r4 = 0
-            r5 = 21
-            if (r1 < r5) goto L_0x0119
+            r2 = 31
+            if (r1 < r2) goto L_0x0014
+            android.window.SplashScreen r2 = r12.getSplashScreen()
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda18 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda18
+            r3.<init>(r12)
+            r2.setOnExitAnimationListener(r3)
+        L_0x0014:
+            org.telegram.messenger.ApplicationLoader.postInitApplication()
+            android.content.res.Resources r2 = r12.getResources()
+            android.content.res.Configuration r2 = r2.getConfiguration()
+            org.telegram.messenger.AndroidUtilities.checkDisplaySize(r12, r2)
+            int r2 = org.telegram.messenger.UserConfig.selectedAccount
+            r12.currentAccount = r2
+            org.telegram.messenger.UserConfig r2 = org.telegram.messenger.UserConfig.getInstance(r2)
+            boolean r2 = r2.isClientActivated()
+            if (r2 != 0) goto L_0x0095
+            android.content.Intent r2 = r12.getIntent()
+            if (r2 == 0) goto L_0x0095
+            java.lang.String r3 = r2.getAction()
+            if (r3 == 0) goto L_0x0095
+            java.lang.String r3 = r2.getAction()
+            java.lang.String r4 = "android.intent.action.SEND"
+            boolean r3 = r4.equals(r3)
+            if (r3 != 0) goto L_0x008e
+            java.lang.String r3 = r2.getAction()
+            java.lang.String r4 = "android.intent.action.SEND_MULTIPLE"
+            boolean r3 = r4.equals(r3)
+            if (r3 == 0) goto L_0x0055
+            goto L_0x008e
+        L_0x0055:
+            java.lang.String r3 = r2.getAction()
+            java.lang.String r4 = "android.intent.action.VIEW"
+            boolean r3 = r4.equals(r3)
+            if (r3 == 0) goto L_0x0095
+            android.net.Uri r2 = r2.getData()
+            if (r2 == 0) goto L_0x0095
+            java.lang.String r2 = r2.toString()
+            java.lang.String r2 = r2.toLowerCase()
+            java.lang.String r3 = "tg:proxy"
+            boolean r3 = r2.startsWith(r3)
+            if (r3 != 0) goto L_0x0095
+            java.lang.String r3 = "tg://proxy"
+            boolean r3 = r2.startsWith(r3)
+            if (r3 != 0) goto L_0x0095
+            java.lang.String r3 = "tg:socks"
+            boolean r3 = r2.startsWith(r3)
+            if (r3 != 0) goto L_0x0095
+            java.lang.String r3 = "tg://socks"
+            boolean r2 = r2.startsWith(r3)
+            goto L_0x0095
+        L_0x008e:
+            super.onCreate(r13)
+            r12.finish()
+            return
+        L_0x0095:
+            r2 = 1
+            r12.requestWindowFeature(r2)
+            r3 = 2131689489(0x7f0var_, float:1.9007995E38)
+            r12.setTheme(r3)
+            r3 = 0
+            r4 = 21
+            if (r1 < r4) goto L_0x00be
             r1 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            android.app.ActivityManager$TaskDescription r6 = new android.app.ActivityManager$TaskDescription     // Catch:{ Exception -> 0x0110 }
-            java.lang.String r7 = "actionBarDefault"
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)     // Catch:{ Exception -> 0x0110 }
-            r7 = r7 | r1
-            r6.<init>(r4, r4, r7)     // Catch:{ Exception -> 0x0110 }
-            r13.setTaskDescription(r6)     // Catch:{ Exception -> 0x0110 }
-        L_0x0110:
-            android.view.Window r6 = r13.getWindow()     // Catch:{ Exception -> 0x0118 }
-            r6.setNavigationBarColor(r1)     // Catch:{ Exception -> 0x0118 }
-            goto L_0x0119
-        L_0x0118:
-        L_0x0119:
-            android.view.Window r1 = r13.getWindow()
-            r6 = 2131166164(0x7var_d4, float:1.7946566E38)
-            r1.setBackgroundDrawableResource(r6)
+            android.app.ActivityManager$TaskDescription r5 = new android.app.ActivityManager$TaskDescription     // Catch:{ Exception -> 0x00b5 }
+            java.lang.String r6 = "actionBarDefault"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)     // Catch:{ Exception -> 0x00b5 }
+            r6 = r6 | r1
+            r5.<init>(r3, r3, r6)     // Catch:{ Exception -> 0x00b5 }
+            r12.setTaskDescription(r5)     // Catch:{ Exception -> 0x00b5 }
+        L_0x00b5:
+            android.view.Window r5 = r12.getWindow()     // Catch:{ Exception -> 0x00bd }
+            r5.setNavigationBarColor(r1)     // Catch:{ Exception -> 0x00bd }
+            goto L_0x00be
+        L_0x00bd:
+        L_0x00be:
+            android.view.Window r1 = r12.getWindow()
+            r5 = 2131166166(0x7var_d6, float:1.794657E38)
+            r1.setBackgroundDrawableResource(r5)
             java.lang.String r1 = org.telegram.messenger.SharedConfig.passcodeHash
             int r1 = r1.length()
-            if (r1 <= 0) goto L_0x013d
+            if (r1 <= 0) goto L_0x00e2
             boolean r1 = org.telegram.messenger.SharedConfig.allowScreenCapture
-            if (r1 != 0) goto L_0x013d
-            android.view.Window r1 = r13.getWindow()     // Catch:{ Exception -> 0x0139 }
-            r6 = 8192(0x2000, float:1.14794E-41)
-            r1.setFlags(r6, r6)     // Catch:{ Exception -> 0x0139 }
-            goto L_0x013d
-        L_0x0139:
+            if (r1 != 0) goto L_0x00e2
+            android.view.Window r1 = r12.getWindow()     // Catch:{ Exception -> 0x00de }
+            r5 = 8192(0x2000, float:1.14794E-41)
+            r1.setFlags(r5, r5)     // Catch:{ Exception -> 0x00de }
+            goto L_0x00e2
+        L_0x00de:
             r1 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-        L_0x013d:
-            super.onCreate(r14)
+        L_0x00e2:
+            super.onCreate(r13)
             int r1 = android.os.Build.VERSION.SDK_INT
-            r6 = 24
-            if (r1 < r6) goto L_0x014c
-            boolean r7 = r13.isInMultiWindowMode()
-            org.telegram.messenger.AndroidUtilities.isInMultiwindow = r7
-        L_0x014c:
+            r5 = 24
+            if (r1 < r5) goto L_0x00f1
+            boolean r6 = r12.isInMultiWindowMode()
+            org.telegram.messenger.AndroidUtilities.isInMultiwindow = r6
+        L_0x00f1:
             org.telegram.ui.ActionBar.Theme.createCommonChatResources()
-            org.telegram.ui.ActionBar.Theme.createDialogsResources(r13)
-            java.lang.String r7 = org.telegram.messenger.SharedConfig.passcodeHash
-            int r7 = r7.length()
-            if (r7 == 0) goto L_0x0168
-            boolean r7 = org.telegram.messenger.SharedConfig.appLocked
-            if (r7 == 0) goto L_0x0168
-            long r7 = android.os.SystemClock.elapsedRealtime()
-            r9 = 1000(0x3e8, double:4.94E-321)
-            long r7 = r7 / r9
-            int r8 = (int) r7
-            org.telegram.messenger.SharedConfig.lastPauseTime = r8
-        L_0x0168:
-            org.telegram.messenger.AndroidUtilities.fillStatusBarHeight(r13)
-            org.telegram.ui.LaunchActivity$1 r7 = new org.telegram.ui.LaunchActivity$1
-            r7.<init>(r13)
-            r13.actionBarLayout = r7
-            android.widget.FrameLayout r7 = new android.widget.FrameLayout
-            r7.<init>(r13)
-            r13.frameLayout = r7
-            android.view.ViewGroup$LayoutParams r8 = new android.view.ViewGroup$LayoutParams
-            r9 = -1
-            r8.<init>(r9, r9)
-            r13.setContentView(r7, r8)
-            r7 = 8
-            if (r1 < r5) goto L_0x0190
-            android.widget.ImageView r8 = new android.widget.ImageView
-            r8.<init>(r13)
-            r13.themeSwitchImageView = r8
-            r8.setVisibility(r7)
-        L_0x0190:
-            org.telegram.ui.LaunchActivity$2 r8 = new org.telegram.ui.LaunchActivity$2
-            r8.<init>(r13, r13)
-            r13.drawerLayoutContainer = r8
-            java.lang.String r10 = "windowBackgroundWhite"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r8.setBehindKeyboardColor(r10)
-            android.widget.FrameLayout r8 = r13.frameLayout
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r10 = r13.drawerLayoutContainer
-            r11 = -1082130432(0xffffffffbvar_, float:-1.0)
-            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r11)
-            r8.addView(r10, r12)
-            if (r1 < r5) goto L_0x01c8
-            org.telegram.ui.LaunchActivity$3 r1 = new org.telegram.ui.LaunchActivity$3
-            r1.<init>(r13)
-            r13.themeSwitchSunView = r1
-            android.widget.FrameLayout r5 = r13.frameLayout
-            r8 = 48
-            r10 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r10)
-            r5.addView(r1, r8)
-            android.view.View r1 = r13.themeSwitchSunView
-            r1.setVisibility(r7)
-        L_0x01c8:
-            boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r1 == 0) goto L_0x02ab
-            android.view.Window r1 = r13.getWindow()
-            r5 = 16
-            r1.setSoftInputMode(r5)
-            org.telegram.ui.LaunchActivity$4 r1 = new org.telegram.ui.LaunchActivity$4
-            r1.<init>(r13)
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r5 = r13.drawerLayoutContainer
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r11)
-            r5.addView(r1, r8)
-            org.telegram.ui.LaunchActivity$5 r5 = new org.telegram.ui.LaunchActivity$5
-            r5.<init>(r13, r13)
-            r13.backgroundTablet = r5
-            r5.setOccupyStatusBar(r3)
-            org.telegram.ui.Components.SizeNotifierFrameLayout r5 = r13.backgroundTablet
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper()
-            boolean r10 = org.telegram.ui.ActionBar.Theme.isWallpaperMotion()
-            r5.setBackgroundImage(r8, r10)
-            org.telegram.ui.Components.SizeNotifierFrameLayout r5 = r13.backgroundTablet
-            android.widget.RelativeLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createRelative(r9, r9)
-            r1.addView(r5, r8)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.actionBarLayout
-            r1.addView(r5)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = new org.telegram.ui.ActionBar.ActionBarLayout
-            r5.<init>(r13)
-            r13.rightActionBarLayout = r5
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = rightFragmentsStack
-            r5.init(r8)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.rightActionBarLayout
-            r5.setDelegate(r13)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.rightActionBarLayout
-            r1.addView(r5)
-            android.widget.FrameLayout r5 = new android.widget.FrameLayout
-            r5.<init>(r13)
-            r13.shadowTabletSide = r5
-            r8 = 1076449908(0x40295274, float:2.6456575)
-            r5.setBackgroundColor(r8)
-            android.widget.FrameLayout r5 = r13.shadowTabletSide
-            r1.addView(r5)
-            android.widget.FrameLayout r5 = new android.widget.FrameLayout
-            r5.<init>(r13)
-            r13.shadowTablet = r5
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = layerFragmentsStack
-            boolean r8 = r8.isEmpty()
-            if (r8 == 0) goto L_0x0244
-            r8 = 8
-            goto L_0x0245
-        L_0x0244:
-            r8 = 0
-        L_0x0245:
-            r5.setVisibility(r8)
-            android.widget.FrameLayout r5 = r13.shadowTablet
-            r8 = 2130706432(0x7var_, float:1.7014118E38)
-            r5.setBackgroundColor(r8)
-            android.widget.FrameLayout r5 = r13.shadowTablet
-            r1.addView(r5)
-            android.widget.FrameLayout r5 = r13.shadowTablet
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda17 r8 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda17
-            r8.<init>(r13)
-            r5.setOnTouchListener(r8)
-            android.widget.FrameLayout r5 = r13.shadowTablet
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda16 r8 = org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda16.INSTANCE
-            r5.setOnClickListener(r8)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = new org.telegram.ui.ActionBar.ActionBarLayout
-            r5.<init>(r13)
-            r13.layersActionBarLayout = r5
-            r5.setRemoveActionBarExtraHeight(r2)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.layersActionBarLayout
-            android.widget.FrameLayout r8 = r13.shadowTablet
-            r5.setBackgroundView(r8)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.layersActionBarLayout
-            r5.setUseAlphaAnimations(r2)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.layersActionBarLayout
-            r8 = 2131165302(0x7var_, float:1.7944817E38)
-            r5.setBackgroundResource(r8)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.layersActionBarLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = layerFragmentsStack
-            r5.init(r8)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.layersActionBarLayout
-            r5.setDelegate(r13)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.layersActionBarLayout
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r8 = r13.drawerLayoutContainer
-            r5.setDrawerLayoutContainer(r8)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.layersActionBarLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = layerFragmentsStack
-            boolean r8 = r8.isEmpty()
-            if (r8 == 0) goto L_0x02a1
-            goto L_0x02a2
-        L_0x02a1:
-            r7 = 0
-        L_0x02a2:
-            r5.setVisibility(r7)
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.layersActionBarLayout
-            r1.addView(r5)
-            goto L_0x02b7
-        L_0x02ab:
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r13.drawerLayoutContainer
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.actionBarLayout
+            org.telegram.ui.ActionBar.Theme.createDialogsResources(r12)
+            java.lang.String r6 = org.telegram.messenger.SharedConfig.passcodeHash
+            int r6 = r6.length()
+            if (r6 == 0) goto L_0x010d
+            boolean r6 = org.telegram.messenger.SharedConfig.appLocked
+            if (r6 == 0) goto L_0x010d
+            long r6 = android.os.SystemClock.elapsedRealtime()
+            r8 = 1000(0x3e8, double:4.94E-321)
+            long r6 = r6 / r8
+            int r7 = (int) r6
+            org.telegram.messenger.SharedConfig.lastPauseTime = r7
+        L_0x010d:
+            org.telegram.messenger.AndroidUtilities.fillStatusBarHeight(r12)
+            org.telegram.ui.LaunchActivity$2 r6 = new org.telegram.ui.LaunchActivity$2
+            r6.<init>(r12)
+            r12.actionBarLayout = r6
+            android.widget.FrameLayout r6 = new android.widget.FrameLayout
+            r6.<init>(r12)
+            r12.frameLayout = r6
             android.view.ViewGroup$LayoutParams r7 = new android.view.ViewGroup$LayoutParams
-            r7.<init>(r9, r9)
-            r1.addView(r5, r7)
-        L_0x02b7:
+            r8 = -1
+            r7.<init>(r8, r8)
+            r12.setContentView(r6, r7)
+            r6 = 8
+            if (r1 < r4) goto L_0x0135
+            android.widget.ImageView r7 = new android.widget.ImageView
+            r7.<init>(r12)
+            r12.themeSwitchImageView = r7
+            r7.setVisibility(r6)
+        L_0x0135:
+            org.telegram.ui.LaunchActivity$3 r7 = new org.telegram.ui.LaunchActivity$3
+            r7.<init>(r12, r12)
+            r12.drawerLayoutContainer = r7
+            java.lang.String r9 = "windowBackgroundWhite"
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
+            r7.setBehindKeyboardColor(r9)
+            android.widget.FrameLayout r7 = r12.frameLayout
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r9 = r12.drawerLayoutContainer
+            r10 = -1082130432(0xffffffffbvar_, float:-1.0)
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r10)
+            r7.addView(r9, r11)
+            if (r1 < r4) goto L_0x016d
+            org.telegram.ui.LaunchActivity$4 r1 = new org.telegram.ui.LaunchActivity$4
+            r1.<init>(r12)
+            r12.themeSwitchSunView = r1
+            android.widget.FrameLayout r4 = r12.frameLayout
+            r7 = 48
+            r9 = 1111490560(0x42400000, float:48.0)
+            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r9)
+            r4.addView(r1, r7)
+            android.view.View r1 = r12.themeSwitchSunView
+            r1.setVisibility(r6)
+        L_0x016d:
+            android.widget.FrameLayout r1 = r12.frameLayout
+            org.telegram.ui.Components.FireworksOverlay r4 = new org.telegram.ui.Components.FireworksOverlay
+            r4.<init>(r12)
+            r12.fireworksOverlay = r4
+            r1.addView(r4)
+            boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
+            r4 = 0
+            if (r1 == 0) goto L_0x0262
+            android.view.Window r1 = r12.getWindow()
+            r7 = 16
+            r1.setSoftInputMode(r7)
+            org.telegram.ui.LaunchActivity$5 r1 = new org.telegram.ui.LaunchActivity$5
+            r1.<init>(r12)
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r7 = r12.drawerLayoutContainer
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r10)
+            r7.addView(r1, r9)
+            org.telegram.ui.LaunchActivity$6 r7 = new org.telegram.ui.LaunchActivity$6
+            r7.<init>(r12, r12)
+            r12.backgroundTablet = r7
+            r7.setOccupyStatusBar(r4)
+            org.telegram.ui.Components.SizeNotifierFrameLayout r7 = r12.backgroundTablet
+            android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper()
+            boolean r11 = org.telegram.ui.ActionBar.Theme.isWallpaperMotion()
+            r7.setBackgroundImage(r9, r11)
+            org.telegram.ui.Components.SizeNotifierFrameLayout r7 = r12.backgroundTablet
+            android.widget.RelativeLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createRelative(r8, r8)
+            r1.addView(r7, r9)
+            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.actionBarLayout
+            r1.addView(r7)
+            org.telegram.ui.ActionBar.ActionBarLayout r7 = new org.telegram.ui.ActionBar.ActionBarLayout
+            r7.<init>(r12)
+            r12.rightActionBarLayout = r7
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r9 = rightFragmentsStack
+            r7.init(r9)
+            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.rightActionBarLayout
+            r7.setDelegate(r12)
+            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.rightActionBarLayout
+            r1.addView(r7)
+            android.widget.FrameLayout r7 = new android.widget.FrameLayout
+            r7.<init>(r12)
+            r12.shadowTabletSide = r7
+            r9 = 1076449908(0x40295274, float:2.6456575)
+            r7.setBackgroundColor(r9)
+            android.widget.FrameLayout r7 = r12.shadowTabletSide
+            r1.addView(r7)
+            android.widget.FrameLayout r7 = new android.widget.FrameLayout
+            r7.<init>(r12)
+            r12.shadowTablet = r7
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r9 = layerFragmentsStack
+            boolean r9 = r9.isEmpty()
+            if (r9 == 0) goto L_0x01f6
+            r9 = 8
+            goto L_0x01f7
+        L_0x01f6:
+            r9 = 0
+        L_0x01f7:
+            r7.setVisibility(r9)
+            android.widget.FrameLayout r7 = r12.shadowTablet
+            r9 = 2130706432(0x7var_, float:1.7014118E38)
+            r7.setBackgroundColor(r9)
+            android.widget.FrameLayout r7 = r12.shadowTablet
+            r1.addView(r7)
+            android.widget.FrameLayout r7 = r12.shadowTablet
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda16 r9 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda16
+            r9.<init>(r12)
+            r7.setOnTouchListener(r9)
+            android.widget.FrameLayout r7 = r12.shadowTablet
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda15 r9 = org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda15.INSTANCE
+            r7.setOnClickListener(r9)
+            org.telegram.ui.ActionBar.ActionBarLayout r7 = new org.telegram.ui.ActionBar.ActionBarLayout
+            r7.<init>(r12)
+            r12.layersActionBarLayout = r7
+            r7.setRemoveActionBarExtraHeight(r2)
+            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
+            android.widget.FrameLayout r9 = r12.shadowTablet
+            r7.setBackgroundView(r9)
+            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
+            r7.setUseAlphaAnimations(r2)
+            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
+            r9 = 2131165302(0x7var_, float:1.7944817E38)
+            r7.setBackgroundResource(r9)
+            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r9 = layerFragmentsStack
+            r7.init(r9)
+            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
+            r7.setDelegate(r12)
+            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r9 = r12.drawerLayoutContainer
+            r7.setDrawerLayoutContainer(r9)
+            org.telegram.ui.ActionBar.ActionBarLayout r7 = r12.layersActionBarLayout
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r9 = layerFragmentsStack
+            boolean r9 = r9.isEmpty()
+            if (r9 == 0) goto L_0x0253
+            goto L_0x0254
+        L_0x0253:
+            r6 = 0
+        L_0x0254:
+            r7.setVisibility(r6)
+            org.telegram.ui.ActionBar.ActionBarLayout r6 = r12.layersActionBarLayout
+            org.telegram.ui.Components.VerticalPositionAutoAnimator.attach(r6)
+            org.telegram.ui.ActionBar.ActionBarLayout r6 = r12.layersActionBarLayout
+            r1.addView(r6)
+            goto L_0x026e
+        L_0x0262:
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r12.drawerLayoutContainer
+            org.telegram.ui.ActionBar.ActionBarLayout r6 = r12.actionBarLayout
+            android.view.ViewGroup$LayoutParams r7 = new android.view.ViewGroup$LayoutParams
+            r7.<init>(r8, r8)
+            r1.addView(r6, r7)
+        L_0x026e:
             android.widget.FrameLayout r1 = new android.widget.FrameLayout
-            r1.<init>(r13)
-            r13.sideMenuContainer = r1
-            org.telegram.ui.LaunchActivity$6 r1 = new org.telegram.ui.LaunchActivity$6
-            r1.<init>(r13)
-            r13.sideMenu = r1
-            org.telegram.ui.Components.SideMenultItemAnimator r5 = new org.telegram.ui.Components.SideMenultItemAnimator
-            r5.<init>(r1)
-            r13.itemAnimator = r5
-            org.telegram.ui.Components.RecyclerListView r1 = r13.sideMenu
-            r1.setItemAnimator(r5)
-            org.telegram.ui.Components.RecyclerListView r1 = r13.sideMenu
-            java.lang.String r5 = "chats_menuBackground"
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-            r1.setBackgroundColor(r5)
-            org.telegram.ui.Components.RecyclerListView r1 = r13.sideMenu
-            androidx.recyclerview.widget.LinearLayoutManager r5 = new androidx.recyclerview.widget.LinearLayoutManager
-            r5.<init>(r13, r2, r3)
-            r1.setLayoutManager(r5)
-            org.telegram.ui.Components.RecyclerListView r1 = r13.sideMenu
-            r1.setAllowItemsInteractionDuringAnimation(r3)
-            org.telegram.ui.Components.RecyclerListView r1 = r13.sideMenu
-            org.telegram.ui.Adapters.DrawerLayoutAdapter r5 = new org.telegram.ui.Adapters.DrawerLayoutAdapter
-            org.telegram.ui.Components.SideMenultItemAnimator r7 = r13.itemAnimator
-            r5.<init>(r13, r7)
-            r13.drawerLayoutAdapter = r5
-            r1.setAdapter(r5)
-            android.widget.FrameLayout r1 = r13.sideMenuContainer
-            org.telegram.ui.Components.RecyclerListView r5 = r13.sideMenu
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r11)
-            r1.addView(r5, r7)
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r13.drawerLayoutContainer
-            android.widget.FrameLayout r5 = r13.sideMenuContainer
-            r1.setDrawerLayout(r5)
-            android.widget.FrameLayout r1 = r13.sideMenuContainer
+            r1.<init>(r12)
+            r12.sideMenuContainer = r1
+            org.telegram.ui.LaunchActivity$7 r1 = new org.telegram.ui.LaunchActivity$7
+            r1.<init>(r12)
+            r12.sideMenu = r1
+            org.telegram.ui.Components.SideMenultItemAnimator r6 = new org.telegram.ui.Components.SideMenultItemAnimator
+            r6.<init>(r1)
+            r12.itemAnimator = r6
+            org.telegram.ui.Components.RecyclerListView r1 = r12.sideMenu
+            r1.setItemAnimator(r6)
+            org.telegram.ui.Components.RecyclerListView r1 = r12.sideMenu
+            java.lang.String r6 = "chats_menuBackground"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r1.setBackgroundColor(r6)
+            org.telegram.ui.Components.RecyclerListView r1 = r12.sideMenu
+            androidx.recyclerview.widget.LinearLayoutManager r6 = new androidx.recyclerview.widget.LinearLayoutManager
+            r6.<init>(r12, r2, r4)
+            r1.setLayoutManager(r6)
+            org.telegram.ui.Components.RecyclerListView r1 = r12.sideMenu
+            r1.setAllowItemsInteractionDuringAnimation(r4)
+            org.telegram.ui.Components.RecyclerListView r1 = r12.sideMenu
+            org.telegram.ui.Adapters.DrawerLayoutAdapter r6 = new org.telegram.ui.Adapters.DrawerLayoutAdapter
+            org.telegram.ui.Components.SideMenultItemAnimator r7 = r12.itemAnimator
+            r6.<init>(r12, r7)
+            r12.drawerLayoutAdapter = r6
+            r1.setAdapter(r6)
+            android.widget.FrameLayout r1 = r12.sideMenuContainer
+            org.telegram.ui.Components.RecyclerListView r6 = r12.sideMenu
+            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r10)
+            r1.addView(r6, r7)
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r12.drawerLayoutContainer
+            android.widget.FrameLayout r6 = r12.sideMenuContainer
+            r1.setDrawerLayout(r6)
+            android.widget.FrameLayout r1 = r12.sideMenuContainer
             android.view.ViewGroup$LayoutParams r1 = r1.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
-            android.graphics.Point r5 = org.telegram.messenger.AndroidUtilities.getRealScreenSize()
+            android.graphics.Point r6 = org.telegram.messenger.AndroidUtilities.getRealScreenSize()
             boolean r7 = org.telegram.messenger.AndroidUtilities.isTablet()
-            r8 = 1134559232(0x43a00000, float:320.0)
-            if (r7 == 0) goto L_0x0324
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            goto L_0x033b
-        L_0x0324:
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r8 = r5.x
-            int r5 = r5.y
-            int r5 = java.lang.Math.min(r8, r5)
-            r8 = 1113587712(0x42600000, float:56.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            int r5 = r5 - r8
-            int r5 = java.lang.Math.min(r7, r5)
-        L_0x033b:
-            r1.width = r5
-            r1.height = r9
-            android.widget.FrameLayout r5 = r13.sideMenuContainer
-            r5.setLayoutParams(r1)
-            org.telegram.ui.Components.RecyclerListView r1 = r13.sideMenu
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda78 r5 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda78
-            r5.<init>(r13)
-            r1.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListenerExtended) r5)
+            r9 = 1134559232(0x43a00000, float:320.0)
+            if (r7 == 0) goto L_0x02db
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            goto L_0x02f2
+        L_0x02db:
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r9 = r6.x
+            int r6 = r6.y
+            int r6 = java.lang.Math.min(r9, r6)
+            r9 = 1113587712(0x42600000, float:56.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r6 = r6 - r9
+            int r6 = java.lang.Math.min(r7, r6)
+        L_0x02f2:
+            r1.width = r6
+            r1.height = r8
+            android.widget.FrameLayout r6 = r12.sideMenuContainer
+            r6.setLayoutParams(r1)
+            org.telegram.ui.Components.RecyclerListView r1 = r12.sideMenu
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda80 r6 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda80
+            r6.<init>(r12)
+            r1.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListenerExtended) r6)
             androidx.recyclerview.widget.ItemTouchHelper r1 = new androidx.recyclerview.widget.ItemTouchHelper
-            org.telegram.ui.LaunchActivity$7 r5 = new org.telegram.ui.LaunchActivity$7
+            org.telegram.ui.LaunchActivity$8 r6 = new org.telegram.ui.LaunchActivity$8
             r7 = 3
-            r5.<init>(r7, r3)
-            r1.<init>(r5)
-            org.telegram.ui.Components.RecyclerListView r5 = r13.sideMenu
-            r1.attachToRecyclerView(r5)
-            org.telegram.ui.Components.RecyclerListView r5 = r13.sideMenu
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda79 r8 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda79
-            r8.<init>(r13, r1)
-            r5.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r8)
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r13.drawerLayoutContainer
-            org.telegram.ui.ActionBar.ActionBarLayout r5 = r13.actionBarLayout
-            r1.setParentActionBarLayout(r5)
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r13.actionBarLayout
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r5 = r13.drawerLayoutContainer
-            r1.setDrawerLayoutContainer(r5)
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r13.actionBarLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r5 = mainFragmentsStack
-            r1.init(r5)
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r13.actionBarLayout
-            r1.setDelegate(r13)
+            r6.<init>(r7, r4)
+            r1.<init>(r6)
+            org.telegram.ui.Components.RecyclerListView r6 = r12.sideMenu
+            r1.attachToRecyclerView(r6)
+            org.telegram.ui.Components.RecyclerListView r6 = r12.sideMenu
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda81 r9 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda81
+            r9.<init>(r12, r1)
+            r6.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r9)
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r12.drawerLayoutContainer
+            org.telegram.ui.ActionBar.ActionBarLayout r6 = r12.actionBarLayout
+            r1.setParentActionBarLayout(r6)
+            org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.actionBarLayout
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r6 = r12.drawerLayoutContainer
+            r1.setDrawerLayoutContainer(r6)
+            org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.actionBarLayout
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r6 = mainFragmentsStack
+            r1.init(r6)
+            org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.actionBarLayout
+            r1.setDelegate(r12)
             org.telegram.ui.ActionBar.Theme.loadWallpaper()
-            r13.checkCurrentAccount()
-            int r1 = r13.currentAccount
-            r13.updateCurrentConnectionState(r1)
+            r12.checkCurrentAccount()
+            int r1 = r12.currentAccount
+            r12.updateCurrentConnectionState(r1)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r5 = org.telegram.messenger.NotificationCenter.closeOtherAppActivities
-            java.lang.Object[] r8 = new java.lang.Object[r2]
-            r8[r3] = r13
-            r1.postNotificationName(r5, r8)
-            int r1 = r13.currentAccount
+            int r6 = org.telegram.messenger.NotificationCenter.closeOtherAppActivities
+            java.lang.Object[] r9 = new java.lang.Object[r2]
+            r9[r4] = r12
+            r1.postNotificationName(r6, r9)
+            int r1 = r12.currentAccount
             org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
             int r1 = r1.getConnectionState()
-            r13.currentConnectionState = r1
+            r12.currentConnectionState = r1
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r8 = org.telegram.messenger.NotificationCenter.needShowAlert
-            r1.addObserver(r13, r8)
+            int r9 = org.telegram.messenger.NotificationCenter.needShowAlert
+            r1.addObserver(r12, r9)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r8 = org.telegram.messenger.NotificationCenter.reloadInterface
-            r1.addObserver(r13, r8)
+            int r9 = org.telegram.messenger.NotificationCenter.reloadInterface
+            r1.addObserver(r12, r9)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r8 = org.telegram.messenger.NotificationCenter.suggestedLangpack
-            r1.addObserver(r13, r8)
+            int r9 = org.telegram.messenger.NotificationCenter.suggestedLangpack
+            r1.addObserver(r12, r9)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r8 = org.telegram.messenger.NotificationCenter.didSetNewTheme
-            r1.addObserver(r13, r8)
+            int r9 = org.telegram.messenger.NotificationCenter.didSetNewTheme
+            r1.addObserver(r12, r9)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r8 = org.telegram.messenger.NotificationCenter.needSetDayNightTheme
-            r1.addObserver(r13, r8)
+            int r9 = org.telegram.messenger.NotificationCenter.needSetDayNightTheme
+            r1.addObserver(r12, r9)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r8 = org.telegram.messenger.NotificationCenter.needCheckSystemBarColors
-            r1.addObserver(r13, r8)
+            int r9 = org.telegram.messenger.NotificationCenter.needCheckSystemBarColors
+            r1.addObserver(r12, r9)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            r1.addObserver(r13, r5)
+            r1.addObserver(r12, r6)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r5 = org.telegram.messenger.NotificationCenter.didSetPasscode
-            r1.addObserver(r13, r5)
+            int r6 = org.telegram.messenger.NotificationCenter.didSetPasscode
+            r1.addObserver(r12, r6)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r5 = org.telegram.messenger.NotificationCenter.didSetNewWallpapper
-            r1.addObserver(r13, r5)
+            int r6 = org.telegram.messenger.NotificationCenter.didSetNewWallpapper
+            r1.addObserver(r12, r6)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r5 = org.telegram.messenger.NotificationCenter.notificationsCountUpdated
-            r1.addObserver(r13, r5)
+            int r6 = org.telegram.messenger.NotificationCenter.notificationsCountUpdated
+            r1.addObserver(r12, r6)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r5 = org.telegram.messenger.NotificationCenter.screenStateChanged
-            r1.addObserver(r13, r5)
+            int r6 = org.telegram.messenger.NotificationCenter.screenStateChanged
+            r1.addObserver(r12, r6)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r5 = org.telegram.messenger.NotificationCenter.showBulletin
-            r1.addObserver(r13, r5)
+            int r6 = org.telegram.messenger.NotificationCenter.showBulletin
+            r1.addObserver(r12, r6)
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r5 = org.telegram.messenger.NotificationCenter.appUpdateAvailable
-            r1.addObserver(r13, r5)
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r13.actionBarLayout
+            int r6 = org.telegram.messenger.NotificationCenter.appUpdateAvailable
+            r1.addObserver(r12, r6)
+            org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r1.fragmentsStack
             boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x0536
-            int r1 = r13.currentAccount
+            if (r1 == 0) goto L_0x04ee
+            int r1 = r12.currentAccount
             org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
             boolean r1 = r1.isClientActivated()
-            if (r1 != 0) goto L_0x043f
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r13.actionBarLayout
-            org.telegram.ui.LoginActivity r4 = new org.telegram.ui.LoginActivity
-            r4.<init>()
-            r1.addFragmentToStack(r4)
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r13.drawerLayoutContainer
-            r1.setAllowOpenDrawer(r3, r3)
-            goto L_0x0453
-        L_0x043f:
+            if (r1 != 0) goto L_0x03f5
+            org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.actionBarLayout
+            org.telegram.ui.ActionBar.BaseFragment r3 = r12.getClientNotActivatedFragment()
+            r1.addFragmentToStack(r3)
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r12.drawerLayoutContainer
+            r1.setAllowOpenDrawer(r4, r4)
+            goto L_0x0409
+        L_0x03f5:
             org.telegram.ui.DialogsActivity r1 = new org.telegram.ui.DialogsActivity
-            r1.<init>(r4)
-            org.telegram.ui.Components.RecyclerListView r4 = r13.sideMenu
-            r1.setSideMenu(r4)
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r13.actionBarLayout
-            r4.addFragmentToStack(r1)
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r13.drawerLayoutContainer
-            r1.setAllowOpenDrawer(r2, r3)
-        L_0x0453:
-            if (r14 == 0) goto L_0x059d
+            r1.<init>(r3)
+            org.telegram.ui.Components.RecyclerListView r3 = r12.sideMenu
+            r1.setSideMenu(r3)
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout
+            r3.addFragmentToStack(r1)
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r1 = r12.drawerLayoutContainer
+            r1.setAllowOpenDrawer(r2, r4)
+        L_0x0409:
+            if (r13 == 0) goto L_0x056d
             java.lang.String r1 = "fragment"
-            java.lang.String r1 = r14.getString(r1)     // Catch:{ Exception -> 0x0531 }
-            if (r1 == 0) goto L_0x059d
-            java.lang.String r4 = "args"
-            android.os.Bundle r4 = r14.getBundle(r4)     // Catch:{ Exception -> 0x0531 }
-            int r5 = r1.hashCode()     // Catch:{ Exception -> 0x0531 }
-            r8 = 5
+            java.lang.String r1 = r13.getString(r1)     // Catch:{ Exception -> 0x04e8 }
+            if (r1 == 0) goto L_0x056d
+            java.lang.String r3 = "args"
+            android.os.Bundle r3 = r13.getBundle(r3)     // Catch:{ Exception -> 0x04e8 }
+            int r6 = r1.hashCode()     // Catch:{ Exception -> 0x04e8 }
+            r9 = 5
             r10 = 4
             r11 = 2
-            switch(r5) {
-                case -1529105743: goto L_0x04a0;
-                case -1349522494: goto L_0x0496;
-                case 3052376: goto L_0x048c;
-                case 98629247: goto L_0x0482;
-                case 738950403: goto L_0x0478;
-                case 1434631203: goto L_0x046e;
-                default: goto L_0x046d;
-            }     // Catch:{ Exception -> 0x0531 }
+            switch(r6) {
+                case -1529105743: goto L_0x0456;
+                case -1349522494: goto L_0x044c;
+                case 3052376: goto L_0x0442;
+                case 98629247: goto L_0x0438;
+                case 738950403: goto L_0x042e;
+                case 1434631203: goto L_0x0424;
+                default: goto L_0x0423;
+            }     // Catch:{ Exception -> 0x04e8 }
+        L_0x0423:
+            goto L_0x045f
+        L_0x0424:
+            java.lang.String r6 = "settings"
+            boolean r1 = r1.equals(r6)     // Catch:{ Exception -> 0x04e8 }
+            if (r1 == 0) goto L_0x045f
+            r8 = 1
+            goto L_0x045f
+        L_0x042e:
+            java.lang.String r6 = "channel"
+            boolean r1 = r1.equals(r6)     // Catch:{ Exception -> 0x04e8 }
+            if (r1 == 0) goto L_0x045f
+            r8 = 3
+            goto L_0x045f
+        L_0x0438:
+            java.lang.String r6 = "group"
+            boolean r1 = r1.equals(r6)     // Catch:{ Exception -> 0x04e8 }
+            if (r1 == 0) goto L_0x045f
+            r8 = 2
+            goto L_0x045f
+        L_0x0442:
+            java.lang.String r6 = "chat"
+            boolean r1 = r1.equals(r6)     // Catch:{ Exception -> 0x04e8 }
+            if (r1 == 0) goto L_0x045f
+            r8 = 0
+            goto L_0x045f
+        L_0x044c:
+            java.lang.String r6 = "chat_profile"
+            boolean r1 = r1.equals(r6)     // Catch:{ Exception -> 0x04e8 }
+            if (r1 == 0) goto L_0x045f
+            r8 = 4
+            goto L_0x045f
+        L_0x0456:
+            java.lang.String r6 = "wallpapers"
+            boolean r1 = r1.equals(r6)     // Catch:{ Exception -> 0x04e8 }
+            if (r1 == 0) goto L_0x045f
+            r8 = 5
+        L_0x045f:
+            if (r8 == 0) goto L_0x04d4
+            if (r8 == r2) goto L_0x04b8
+            if (r8 == r11) goto L_0x04a4
+            if (r8 == r7) goto L_0x0490
+            if (r8 == r10) goto L_0x047c
+            if (r8 == r9) goto L_0x046d
+            goto L_0x056d
         L_0x046d:
-            goto L_0x04a9
-        L_0x046e:
-            java.lang.String r5 = "settings"
-            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x0531 }
-            if (r1 == 0) goto L_0x04a9
-            r9 = 1
-            goto L_0x04a9
-        L_0x0478:
-            java.lang.String r5 = "channel"
-            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x0531 }
-            if (r1 == 0) goto L_0x04a9
-            r9 = 3
-            goto L_0x04a9
-        L_0x0482:
-            java.lang.String r5 = "group"
-            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x0531 }
-            if (r1 == 0) goto L_0x04a9
-            r9 = 2
-            goto L_0x04a9
-        L_0x048c:
-            java.lang.String r5 = "chat"
-            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x0531 }
-            if (r1 == 0) goto L_0x04a9
-            r9 = 0
-            goto L_0x04a9
-        L_0x0496:
-            java.lang.String r5 = "chat_profile"
-            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x0531 }
-            if (r1 == 0) goto L_0x04a9
-            r9 = 4
-            goto L_0x04a9
-        L_0x04a0:
-            java.lang.String r5 = "wallpapers"
-            boolean r1 = r1.equals(r5)     // Catch:{ Exception -> 0x0531 }
-            if (r1 == 0) goto L_0x04a9
-            r9 = 5
-        L_0x04a9:
-            if (r9 == 0) goto L_0x051e
-            if (r9 == r2) goto L_0x0502
-            if (r9 == r11) goto L_0x04ee
-            if (r9 == r7) goto L_0x04da
-            if (r9 == r10) goto L_0x04c6
-            if (r9 == r8) goto L_0x04b7
-            goto L_0x059d
-        L_0x04b7:
-            org.telegram.ui.WallpapersListActivity r1 = new org.telegram.ui.WallpapersListActivity     // Catch:{ Exception -> 0x0531 }
-            r1.<init>(r3)     // Catch:{ Exception -> 0x0531 }
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r13.actionBarLayout     // Catch:{ Exception -> 0x0531 }
-            r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x0531 }
-            r1.restoreSelfArgs(r14)     // Catch:{ Exception -> 0x0531 }
-            goto L_0x059d
-        L_0x04c6:
-            if (r4 == 0) goto L_0x059d
-            org.telegram.ui.ProfileActivity r1 = new org.telegram.ui.ProfileActivity     // Catch:{ Exception -> 0x0531 }
-            r1.<init>(r4)     // Catch:{ Exception -> 0x0531 }
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r13.actionBarLayout     // Catch:{ Exception -> 0x0531 }
-            boolean r4 = r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x0531 }
-            if (r4 == 0) goto L_0x059d
-            r1.restoreSelfArgs(r14)     // Catch:{ Exception -> 0x0531 }
-            goto L_0x059d
-        L_0x04da:
-            if (r4 == 0) goto L_0x059d
-            org.telegram.ui.ChannelCreateActivity r1 = new org.telegram.ui.ChannelCreateActivity     // Catch:{ Exception -> 0x0531 }
-            r1.<init>(r4)     // Catch:{ Exception -> 0x0531 }
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r13.actionBarLayout     // Catch:{ Exception -> 0x0531 }
-            boolean r4 = r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x0531 }
-            if (r4 == 0) goto L_0x059d
-            r1.restoreSelfArgs(r14)     // Catch:{ Exception -> 0x0531 }
-            goto L_0x059d
-        L_0x04ee:
-            if (r4 == 0) goto L_0x059d
-            org.telegram.ui.GroupCreateFinalActivity r1 = new org.telegram.ui.GroupCreateFinalActivity     // Catch:{ Exception -> 0x0531 }
-            r1.<init>(r4)     // Catch:{ Exception -> 0x0531 }
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r13.actionBarLayout     // Catch:{ Exception -> 0x0531 }
-            boolean r4 = r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x0531 }
-            if (r4 == 0) goto L_0x059d
-            r1.restoreSelfArgs(r14)     // Catch:{ Exception -> 0x0531 }
-            goto L_0x059d
-        L_0x0502:
+            org.telegram.ui.WallpapersListActivity r1 = new org.telegram.ui.WallpapersListActivity     // Catch:{ Exception -> 0x04e8 }
+            r1.<init>(r4)     // Catch:{ Exception -> 0x04e8 }
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e8 }
+            r3.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e8 }
+            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e8 }
+            goto L_0x056d
+        L_0x047c:
+            if (r3 == 0) goto L_0x056d
+            org.telegram.ui.ProfileActivity r1 = new org.telegram.ui.ProfileActivity     // Catch:{ Exception -> 0x04e8 }
+            r1.<init>(r3)     // Catch:{ Exception -> 0x04e8 }
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e8 }
+            boolean r3 = r3.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e8 }
+            if (r3 == 0) goto L_0x056d
+            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e8 }
+            goto L_0x056d
+        L_0x0490:
+            if (r3 == 0) goto L_0x056d
+            org.telegram.ui.ChannelCreateActivity r1 = new org.telegram.ui.ChannelCreateActivity     // Catch:{ Exception -> 0x04e8 }
+            r1.<init>(r3)     // Catch:{ Exception -> 0x04e8 }
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e8 }
+            boolean r3 = r3.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e8 }
+            if (r3 == 0) goto L_0x056d
+            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e8 }
+            goto L_0x056d
+        L_0x04a4:
+            if (r3 == 0) goto L_0x056d
+            org.telegram.ui.GroupCreateFinalActivity r1 = new org.telegram.ui.GroupCreateFinalActivity     // Catch:{ Exception -> 0x04e8 }
+            r1.<init>(r3)     // Catch:{ Exception -> 0x04e8 }
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e8 }
+            boolean r3 = r3.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e8 }
+            if (r3 == 0) goto L_0x056d
+            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e8 }
+            goto L_0x056d
+        L_0x04b8:
             java.lang.String r1 = "user_id"
-            int r5 = r13.currentAccount     // Catch:{ Exception -> 0x0531 }
-            org.telegram.messenger.UserConfig r5 = org.telegram.messenger.UserConfig.getInstance(r5)     // Catch:{ Exception -> 0x0531 }
-            long r7 = r5.clientUserId     // Catch:{ Exception -> 0x0531 }
-            r4.putLong(r1, r7)     // Catch:{ Exception -> 0x0531 }
-            org.telegram.ui.ProfileActivity r1 = new org.telegram.ui.ProfileActivity     // Catch:{ Exception -> 0x0531 }
-            r1.<init>(r4)     // Catch:{ Exception -> 0x0531 }
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r13.actionBarLayout     // Catch:{ Exception -> 0x0531 }
-            r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x0531 }
-            r1.restoreSelfArgs(r14)     // Catch:{ Exception -> 0x0531 }
-            goto L_0x059d
-        L_0x051e:
-            if (r4 == 0) goto L_0x059d
-            org.telegram.ui.ChatActivity r1 = new org.telegram.ui.ChatActivity     // Catch:{ Exception -> 0x0531 }
-            r1.<init>(r4)     // Catch:{ Exception -> 0x0531 }
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r13.actionBarLayout     // Catch:{ Exception -> 0x0531 }
-            boolean r4 = r4.addFragmentToStack(r1)     // Catch:{ Exception -> 0x0531 }
-            if (r4 == 0) goto L_0x059d
-            r1.restoreSelfArgs(r14)     // Catch:{ Exception -> 0x0531 }
-            goto L_0x059d
-        L_0x0531:
+            int r6 = r12.currentAccount     // Catch:{ Exception -> 0x04e8 }
+            org.telegram.messenger.UserConfig r6 = org.telegram.messenger.UserConfig.getInstance(r6)     // Catch:{ Exception -> 0x04e8 }
+            long r6 = r6.clientUserId     // Catch:{ Exception -> 0x04e8 }
+            r3.putLong(r1, r6)     // Catch:{ Exception -> 0x04e8 }
+            org.telegram.ui.ProfileActivity r1 = new org.telegram.ui.ProfileActivity     // Catch:{ Exception -> 0x04e8 }
+            r1.<init>(r3)     // Catch:{ Exception -> 0x04e8 }
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e8 }
+            r3.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e8 }
+            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e8 }
+            goto L_0x056d
+        L_0x04d4:
+            if (r3 == 0) goto L_0x056d
+            org.telegram.ui.ChatActivity r1 = new org.telegram.ui.ChatActivity     // Catch:{ Exception -> 0x04e8 }
+            r1.<init>(r3)     // Catch:{ Exception -> 0x04e8 }
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout     // Catch:{ Exception -> 0x04e8 }
+            boolean r3 = r3.addFragmentToStack(r1)     // Catch:{ Exception -> 0x04e8 }
+            if (r3 == 0) goto L_0x056d
+            r1.restoreSelfArgs(r13)     // Catch:{ Exception -> 0x04e8 }
+            goto L_0x056d
+        L_0x04e8:
             r1 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-            goto L_0x059d
-        L_0x0536:
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r13.actionBarLayout
+            goto L_0x056d
+        L_0x04ee:
+            org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r1.fragmentsStack
-            java.lang.Object r1 = r1.get(r3)
+            java.lang.Object r1 = r1.get(r4)
             org.telegram.ui.ActionBar.BaseFragment r1 = (org.telegram.ui.ActionBar.BaseFragment) r1
-            boolean r4 = r1 instanceof org.telegram.ui.DialogsActivity
-            if (r4 == 0) goto L_0x054b
+            boolean r3 = r1 instanceof org.telegram.ui.DialogsActivity
+            if (r3 == 0) goto L_0x0503
             org.telegram.ui.DialogsActivity r1 = (org.telegram.ui.DialogsActivity) r1
-            org.telegram.ui.Components.RecyclerListView r4 = r13.sideMenu
-            r1.setSideMenu(r4)
-        L_0x054b:
+            org.telegram.ui.Components.RecyclerListView r3 = r12.sideMenu
+            r1.setSideMenu(r3)
+        L_0x0503:
             boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r1 == 0) goto L_0x0580
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r13.actionBarLayout
+            if (r1 == 0) goto L_0x0544
+            org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r1.fragmentsStack
             int r1 = r1.size()
-            if (r1 > r2) goto L_0x0567
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r13.layersActionBarLayout
+            if (r1 > r2) goto L_0x051f
+            org.telegram.ui.ActionBar.ActionBarLayout r1 = r12.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r1.fragmentsStack
             boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x0567
+            if (r1 == 0) goto L_0x051f
             r1 = 1
-            goto L_0x0568
+            goto L_0x0520
+        L_0x051f:
+            r1 = 0
+        L_0x0520:
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.layersActionBarLayout
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
+            int r3 = r3.size()
+            if (r3 != r2) goto L_0x0545
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.layersActionBarLayout
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
+            java.lang.Object r3 = r3.get(r4)
+            boolean r3 = r3 instanceof org.telegram.ui.LoginActivity
+            if (r3 != 0) goto L_0x0542
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.layersActionBarLayout
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
+            java.lang.Object r3 = r3.get(r4)
+            boolean r3 = r3 instanceof org.telegram.ui.IntroActivity
+            if (r3 == 0) goto L_0x0545
+        L_0x0542:
+            r1 = 0
+            goto L_0x0545
+        L_0x0544:
+            r1 = 1
+        L_0x0545:
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
+            int r3 = r3.size()
+            if (r3 != r2) goto L_0x0568
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
+            java.lang.Object r3 = r3.get(r4)
+            boolean r3 = r3 instanceof org.telegram.ui.LoginActivity
+            if (r3 != 0) goto L_0x0567
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.actionBarLayout
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
+            java.lang.Object r3 = r3.get(r4)
+            boolean r3 = r3 instanceof org.telegram.ui.IntroActivity
+            if (r3 == 0) goto L_0x0568
         L_0x0567:
             r1 = 0
         L_0x0568:
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r13.layersActionBarLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = r4.fragmentsStack
-            int r4 = r4.size()
-            if (r4 != r2) goto L_0x0581
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r13.layersActionBarLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = r4.fragmentsStack
-            java.lang.Object r4 = r4.get(r3)
-            boolean r4 = r4 instanceof org.telegram.ui.LoginActivity
-            if (r4 == 0) goto L_0x0581
-            r1 = 0
-            goto L_0x0581
-        L_0x0580:
-            r1 = 1
-        L_0x0581:
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r13.actionBarLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = r4.fragmentsStack
-            int r4 = r4.size()
-            if (r4 != r2) goto L_0x0598
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r13.actionBarLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = r4.fragmentsStack
-            java.lang.Object r4 = r4.get(r3)
-            boolean r4 = r4 instanceof org.telegram.ui.LoginActivity
-            if (r4 == 0) goto L_0x0598
-            r1 = 0
-        L_0x0598:
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r4 = r13.drawerLayoutContainer
-            r4.setAllowOpenDrawer(r1, r3)
-        L_0x059d:
-            r13.checkLayout()
-            r13.checkSystemBarColors()
-            android.content.Intent r1 = r13.getIntent()
-            if (r14 == 0) goto L_0x05ab
-            r14 = 1
-            goto L_0x05ac
-        L_0x05ab:
-            r14 = 0
-        L_0x05ac:
-            r13.handleIntent(r1, r3, r14, r3)
-            java.lang.String r14 = android.os.Build.DISPLAY     // Catch:{ Exception -> 0x0610 }
-            java.lang.String r1 = android.os.Build.USER     // Catch:{ Exception -> 0x0610 }
-            java.lang.String r4 = ""
-            if (r14 == 0) goto L_0x05bc
-            java.lang.String r14 = r14.toLowerCase()     // Catch:{ Exception -> 0x0610 }
-            goto L_0x05bd
-        L_0x05bc:
-            r14 = r4
-        L_0x05bd:
-            if (r1 == 0) goto L_0x05c3
-            java.lang.String r4 = r14.toLowerCase()     // Catch:{ Exception -> 0x0610 }
-        L_0x05c3:
-            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0610 }
-            if (r1 == 0) goto L_0x05e3
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0610 }
-            r1.<init>()     // Catch:{ Exception -> 0x0610 }
-            java.lang.String r5 = "OS name "
-            r1.append(r5)     // Catch:{ Exception -> 0x0610 }
-            r1.append(r14)     // Catch:{ Exception -> 0x0610 }
-            java.lang.String r5 = " "
-            r1.append(r5)     // Catch:{ Exception -> 0x0610 }
-            r1.append(r4)     // Catch:{ Exception -> 0x0610 }
-            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x0610 }
-            org.telegram.messenger.FileLog.d(r1)     // Catch:{ Exception -> 0x0610 }
-        L_0x05e3:
-            boolean r14 = r14.contains(r0)     // Catch:{ Exception -> 0x0610 }
-            if (r14 != 0) goto L_0x05ef
-            boolean r14 = r4.contains(r0)     // Catch:{ Exception -> 0x0610 }
-            if (r14 == 0) goto L_0x0614
-        L_0x05ef:
-            int r14 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0610 }
-            if (r14 > r6) goto L_0x0614
-            org.telegram.messenger.AndroidUtilities.incorrectDisplaySizeFix = r2     // Catch:{ Exception -> 0x0610 }
-            android.view.Window r14 = r13.getWindow()     // Catch:{ Exception -> 0x0610 }
-            android.view.View r14 = r14.getDecorView()     // Catch:{ Exception -> 0x0610 }
-            android.view.View r14 = r14.getRootView()     // Catch:{ Exception -> 0x0610 }
-            android.view.ViewTreeObserver r0 = r14.getViewTreeObserver()     // Catch:{ Exception -> 0x0610 }
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda18 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda18     // Catch:{ Exception -> 0x0610 }
-            r1.<init>(r14)     // Catch:{ Exception -> 0x0610 }
-            r13.onGlobalLayoutListener = r1     // Catch:{ Exception -> 0x0610 }
-            r0.addOnGlobalLayoutListener(r1)     // Catch:{ Exception -> 0x0610 }
-            goto L_0x0614
-        L_0x0610:
-            r14 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r14)
-        L_0x0614:
-            org.telegram.messenger.MediaController r14 = org.telegram.messenger.MediaController.getInstance()
-            r14.setBaseActivity(r13, r2)
-            org.telegram.messenger.AndroidUtilities.startAppCenter(r13)
-            r13.updateAppUpdateViews(r3)
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r3 = r12.drawerLayoutContainer
+            r3.setAllowOpenDrawer(r1, r4)
+        L_0x056d:
+            r12.checkLayout()
+            r12.checkSystemBarColors()
+            android.content.Intent r1 = r12.getIntent()
+            if (r13 == 0) goto L_0x057b
+            r13 = 1
+            goto L_0x057c
+        L_0x057b:
+            r13 = 0
+        L_0x057c:
+            r12.handleIntent(r1, r4, r13, r4)
+            java.lang.String r13 = android.os.Build.DISPLAY     // Catch:{ Exception -> 0x05e0 }
+            java.lang.String r1 = android.os.Build.USER     // Catch:{ Exception -> 0x05e0 }
+            java.lang.String r3 = ""
+            if (r13 == 0) goto L_0x058c
+            java.lang.String r13 = r13.toLowerCase()     // Catch:{ Exception -> 0x05e0 }
+            goto L_0x058d
+        L_0x058c:
+            r13 = r3
+        L_0x058d:
+            if (r1 == 0) goto L_0x0593
+            java.lang.String r3 = r13.toLowerCase()     // Catch:{ Exception -> 0x05e0 }
+        L_0x0593:
+            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x05e0 }
+            if (r1 == 0) goto L_0x05b3
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x05e0 }
+            r1.<init>()     // Catch:{ Exception -> 0x05e0 }
+            java.lang.String r6 = "OS name "
+            r1.append(r6)     // Catch:{ Exception -> 0x05e0 }
+            r1.append(r13)     // Catch:{ Exception -> 0x05e0 }
+            java.lang.String r6 = " "
+            r1.append(r6)     // Catch:{ Exception -> 0x05e0 }
+            r1.append(r3)     // Catch:{ Exception -> 0x05e0 }
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x05e0 }
+            org.telegram.messenger.FileLog.d(r1)     // Catch:{ Exception -> 0x05e0 }
+        L_0x05b3:
+            boolean r13 = r13.contains(r0)     // Catch:{ Exception -> 0x05e0 }
+            if (r13 != 0) goto L_0x05bf
+            boolean r13 = r3.contains(r0)     // Catch:{ Exception -> 0x05e0 }
+            if (r13 == 0) goto L_0x05e4
+        L_0x05bf:
+            int r13 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x05e0 }
+            if (r13 > r5) goto L_0x05e4
+            org.telegram.messenger.AndroidUtilities.incorrectDisplaySizeFix = r2     // Catch:{ Exception -> 0x05e0 }
+            android.view.Window r13 = r12.getWindow()     // Catch:{ Exception -> 0x05e0 }
+            android.view.View r13 = r13.getDecorView()     // Catch:{ Exception -> 0x05e0 }
+            android.view.View r13 = r13.getRootView()     // Catch:{ Exception -> 0x05e0 }
+            android.view.ViewTreeObserver r0 = r13.getViewTreeObserver()     // Catch:{ Exception -> 0x05e0 }
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda17 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda17     // Catch:{ Exception -> 0x05e0 }
+            r1.<init>(r13)     // Catch:{ Exception -> 0x05e0 }
+            r12.onGlobalLayoutListener = r1     // Catch:{ Exception -> 0x05e0 }
+            r0.addOnGlobalLayoutListener(r1)     // Catch:{ Exception -> 0x05e0 }
+            goto L_0x05e4
+        L_0x05e0:
+            r13 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
+        L_0x05e4:
+            org.telegram.messenger.MediaController r13 = org.telegram.messenger.MediaController.getInstance()
+            r13.setBaseActivity(r12, r2)
+            org.telegram.messenger.AndroidUtilities.startAppCenter(r12)
+            r12.updateAppUpdateViews(r4)
+            int r13 = android.os.Build.VERSION.SDK_INT
+            r0 = 28
+            if (r13 < r0) goto L_0x0623
+            java.lang.String r13 = "activity"
+            java.lang.Object r13 = r12.getSystemService(r13)
+            android.app.ActivityManager r13 = (android.app.ActivityManager) r13
+            boolean r13 = r13.isBackgroundRestricted()
+            if (r13 == 0) goto L_0x0623
+            long r0 = java.lang.System.currentTimeMillis()
+            long r2 = org.telegram.messenger.SharedConfig.BackgroundActivityPrefs.getLastCheckedBackgroundActivity()
+            long r0 = r0 - r2
+            r2 = 86400000(0x5265CLASSNAME, double:4.2687272E-316)
+            int r13 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+            if (r13 < 0) goto L_0x0623
+            android.app.Dialog r13 = org.telegram.ui.Components.AlertsCreator.createBackgroundActivityDialog(r12)
+            r13.show()
+            long r0 = java.lang.System.currentTimeMillis()
+            org.telegram.messenger.SharedConfig.BackgroundActivityPrefs.setLastCheckedBackgroundActivity(r0)
+        L_0x0623:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.onCreate(android.os.Bundle):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$onCreate$0(View view, MotionEvent motionEvent) {
+    public /* synthetic */ void lambda$onCreate$0(final SplashScreenView splashScreenView) {
+        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(splashScreenView, View.ALPHA, new float[]{1.0f, 0.0f});
+        ofFloat.setInterpolator(CubicBezierInterpolator.DEFAULT);
+        ofFloat.setDuration(150);
+        ofFloat.addListener(new AnimatorListenerAdapter(this) {
+            public void onAnimationEnd(Animator animator) {
+                splashScreenView.remove();
+            }
+        });
+        ofFloat.start();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$onCreate$1(View view, MotionEvent motionEvent) {
         if (!this.actionBarLayout.fragmentsStack.isEmpty() && motionEvent.getAction() == 1) {
             float x = motionEvent.getX();
             float y = motionEvent.getY();
@@ -964,7 +976,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onCreate$2(View view, int i, float f, float f2) {
+    public /* synthetic */ void lambda$onCreate$3(View view, int i, float f, float f2) {
         boolean z = true;
         if (i == 0) {
             DrawerProfileCell drawerProfileCell = (DrawerProfileCell) view;
@@ -991,13 +1003,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 }
             }
             if (i2 >= 0) {
-                lambda$runLinkRequest$43(new LoginActivity(i2));
+                lambda$runLinkRequest$45(new LoginActivity(i2));
             }
             this.drawerLayoutContainer.closeDrawer(false);
         } else {
             int id = this.drawerLayoutAdapter.getId(i);
             if (id == 2) {
-                lambda$runLinkRequest$43(new GroupCreateActivity(new Bundle()));
+                lambda$runLinkRequest$45(new GroupCreateActivity(new Bundle()));
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (id == 3) {
                 Bundle bundle = new Bundle();
@@ -1006,24 +1018,24 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 bundle.putBoolean("createSecretChat", true);
                 bundle.putBoolean("allowBots", false);
                 bundle.putBoolean("allowSelf", false);
-                lambda$runLinkRequest$43(new ContactsActivity(bundle));
+                lambda$runLinkRequest$45(new ContactsActivity(bundle));
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (id == 4) {
                 SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
                 if (BuildVars.DEBUG_VERSION || !globalMainSettings.getBoolean("channel_intro", false)) {
-                    lambda$runLinkRequest$43(new ActionIntroActivity(0));
+                    lambda$runLinkRequest$45(new ActionIntroActivity(0));
                     globalMainSettings.edit().putBoolean("channel_intro", true).commit();
                 } else {
                     Bundle bundle2 = new Bundle();
                     bundle2.putInt("step", 0);
-                    lambda$runLinkRequest$43(new ChannelCreateActivity(bundle2));
+                    lambda$runLinkRequest$45(new ChannelCreateActivity(bundle2));
                 }
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (id == 6) {
-                lambda$runLinkRequest$43(new ContactsActivity((Bundle) null));
+                lambda$runLinkRequest$45(new ContactsActivity((Bundle) null));
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (id == 7) {
-                lambda$runLinkRequest$43(new InviteContactsActivity());
+                lambda$runLinkRequest$45(new InviteContactsActivity());
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (id == 8) {
                 openSettings(false);
@@ -1031,12 +1043,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 Browser.openUrl((Context) this, LocaleController.getString("TelegramFaqUrl", NUM));
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (id == 10) {
-                lambda$runLinkRequest$43(new CallLogActivity());
+                lambda$runLinkRequest$45(new CallLogActivity());
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (id == 11) {
                 Bundle bundle3 = new Bundle();
                 bundle3.putLong("user_id", UserConfig.getInstance(this.currentAccount).getClientUserId());
-                lambda$runLinkRequest$43(new ChatActivity(bundle3));
+                lambda$runLinkRequest$45(new ChatActivity(bundle3));
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (id == 12) {
                 int i4 = Build.VERSION.SDK_INT;
@@ -1053,14 +1065,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         }
                     }
                     if (z) {
-                        lambda$runLinkRequest$43(new PeopleNearbyActivity());
+                        lambda$runLinkRequest$45(new PeopleNearbyActivity());
                     } else {
-                        lambda$runLinkRequest$43(new ActionIntroActivity(4));
+                        lambda$runLinkRequest$45(new ActionIntroActivity(4));
                     }
                     this.drawerLayoutContainer.closeDrawer(false);
                     return;
                 }
-                lambda$runLinkRequest$43(new ActionIntroActivity(1));
+                lambda$runLinkRequest$45(new ActionIntroActivity(1));
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (id == 13) {
                 Browser.openUrl((Context) this, LocaleController.getString("TelegramFeaturesUrl", NUM));
@@ -1070,7 +1082,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$onCreate$3(ItemTouchHelper itemTouchHelper, View view, int i) {
+    public /* synthetic */ boolean lambda$onCreate$4(ItemTouchHelper itemTouchHelper, View view, int i) {
         if (!(view instanceof DrawerUserCell)) {
             return false;
         }
@@ -1079,7 +1091,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             itemTouchHelper.startDrag(this.sideMenu.getChildViewHolder(view));
             return false;
         }
-        AnonymousClass8 r2 = new DialogsActivity((Bundle) null) {
+        AnonymousClass9 r2 = new DialogsActivity((Bundle) null) {
             /* access modifiers changed from: protected */
             public void onTransitionAnimationEnd(boolean z, boolean z2) {
                 super.onTransitionAnimationEnd(z, z2);
@@ -1103,7 +1115,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$onCreate$4(View view) {
+    public static /* synthetic */ void lambda$onCreate$5(View view) {
         int measuredHeight = view.getMeasuredHeight();
         FileLog.d("height = " + measuredHeight + " displayHeight = " + AndroidUtilities.displaySize.y);
         if (Build.VERSION.SDK_INT >= 21) {
@@ -1121,44 +1133,109 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
     }
 
+    private BaseFragment getClientNotActivatedFragment() {
+        if (LoginActivity.loadCurrentState(false).getInt("currentViewNum", 0) != 0) {
+            return new LoginActivity();
+        }
+        return new IntroActivity();
+    }
+
+    public FireworksOverlay getFireworksOverlay() {
+        return this.fireworksOverlay;
+    }
+
     private void openSettings(boolean z) {
         Bundle bundle = new Bundle();
         bundle.putLong("user_id", UserConfig.getInstance(this.currentAccount).clientUserId);
         if (z) {
             bundle.putBoolean("expandPhoto", true);
         }
-        lambda$runLinkRequest$43(new ProfileActivity(bundle));
+        lambda$runLinkRequest$45(new ProfileActivity(bundle));
         this.drawerLayoutContainer.closeDrawer(false);
     }
 
     private void checkSystemBarColors() {
-        checkSystemBarColors(true, true);
+        checkSystemBarColors(true, !this.isNavigationBarColorFrozen);
     }
 
-    private void checkSystemBarColors(boolean z, boolean z2) {
-        int i = Build.VERSION.SDK_INT;
-        if (i >= 23) {
-            boolean z3 = true;
-            if (z) {
-                AndroidUtilities.setLightStatusBar(getWindow(), Theme.getColor("actionBarDefault", (boolean[]) null, true) == -1);
-            }
-            if (i >= 26 && z2) {
-                Window window = getWindow();
-                int color = Theme.getColor("windowBackgroundGray", (boolean[]) null, true);
-                if (window.getNavigationBarColor() != color) {
-                    window.setNavigationBarColor(color);
-                    float computePerceivedBrightness = AndroidUtilities.computePerceivedBrightness(color);
-                    Window window2 = getWindow();
-                    if (computePerceivedBrightness < 0.721f) {
-                        z3 = false;
-                    }
-                    AndroidUtilities.setLightNavigationBar(window2, z3);
-                }
-            }
-        }
-        if (SharedConfig.noStatusBar && i >= 21 && z) {
-            getWindow().setStatusBarColor(0);
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:8:0x0026  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private void checkSystemBarColors(boolean r9, boolean r10) {
+        /*
+            r8 = this;
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack
+            boolean r0 = r0.isEmpty()
+            r1 = 0
+            r2 = 1
+            if (r0 != 0) goto L_0x001f
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack
+            int r3 = r0.size()
+            int r3 = r3 - r2
+            java.lang.Object r0 = r0.get(r3)
+            org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0
+            boolean r0 = r0.hasForceLightStatusBar()
+            if (r0 == 0) goto L_0x001f
+            r0 = 1
+            goto L_0x0020
+        L_0x001f:
+            r0 = 0
+        L_0x0020:
+            int r3 = android.os.Build.VERSION.SDK_INT
+            r4 = 23
+            if (r3 < r4) goto L_0x0076
+            r4 = 0
+            if (r9 == 0) goto L_0x0049
+            java.lang.String r5 = "actionBarDefault"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5, r4, r2)
+            android.view.Window r6 = r8.getWindow()
+            r7 = -1
+            if (r5 == r7) goto L_0x0045
+            if (r0 == 0) goto L_0x0043
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r5 = org.telegram.ui.ActionBar.Theme.getCurrentTheme()
+            boolean r5 = r5.isDark()
+            if (r5 != 0) goto L_0x0043
+            goto L_0x0045
+        L_0x0043:
+            r5 = 0
+            goto L_0x0046
+        L_0x0045:
+            r5 = 1
+        L_0x0046:
+            org.telegram.messenger.AndroidUtilities.setLightStatusBar(r6, r5, r0)
+        L_0x0049:
+            r5 = 26
+            if (r3 < r5) goto L_0x0076
+            if (r10 == 0) goto L_0x0076
+            android.view.Window r10 = r8.getWindow()
+            java.lang.String r5 = "windowBackgroundGray"
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r5, r4, r2)
+            int r5 = r10.getNavigationBarColor()
+            if (r5 == r4) goto L_0x0076
+            r10.setNavigationBarColor(r4)
+            float r10 = org.telegram.messenger.AndroidUtilities.computePerceivedBrightness(r4)
+            android.view.Window r4 = r8.getWindow()
+            r5 = 1060672373(0x3var_, float:0.721)
+            int r10 = (r10 > r5 ? 1 : (r10 == r5 ? 0 : -1))
+            if (r10 < 0) goto L_0x0072
+            goto L_0x0073
+        L_0x0072:
+            r2 = 0
+        L_0x0073:
+            org.telegram.messenger.AndroidUtilities.setLightNavigationBar(r4, r2)
+        L_0x0076:
+            boolean r10 = org.telegram.messenger.SharedConfig.noStatusBar
+            if (r10 != 0) goto L_0x007c
+            if (r0 == 0) goto L_0x0089
+        L_0x007c:
+            r10 = 21
+            if (r3 < r10) goto L_0x0089
+            if (r9 == 0) goto L_0x0089
+            android.view.Window r9 = r8.getWindow()
+            r9.setStatusBarColor(r1)
+        L_0x0089:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.checkSystemBarColors(boolean, boolean):void");
     }
 
     public void switchToAccount(int i, boolean z) {
@@ -1228,9 +1305,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             drawerLayoutAdapter2.notifyDataSetChanged();
         }
         clearFragments();
-        startActivity(new Intent(this, IntroActivity.class));
-        onFinish();
-        finish();
+        this.actionBarLayout.rebuildLogout();
+        if (AndroidUtilities.isTablet()) {
+            this.layersActionBarLayout.rebuildLogout();
+            this.rightActionBarLayout.rebuildLogout();
+        }
+        lambda$runLinkRequest$45(new IntroActivity().setOnLogout());
     }
 
     public static void clearFragments() {
@@ -1354,7 +1434,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
     private void showUpdateActivity(int i, TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate, boolean z) {
         if (this.blockingUpdateView == null) {
-            AnonymousClass9 r0 = new BlockingUpdateView(this) {
+            AnonymousClass10 r0 = new BlockingUpdateView(this) {
                 public void setVisibility(int i) {
                     super.setVisibility(i);
                     if (i == 8) {
@@ -1383,7 +1463,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     if (LaunchActivity.mainFragmentsStack.size() > 0) {
                         ((BaseFragment) LaunchActivity.mainFragmentsStack.get(LaunchActivity.mainFragmentsStack.size() - 1)).onResume();
                     }
-                    LaunchActivity.this.termsOfServiceView.animate().alpha(0.0f).setDuration(150).setInterpolator(AndroidUtilities.accelerateInterpolator).withEndAction(new LaunchActivity$10$$ExternalSyntheticLambda0(this)).start();
+                    LaunchActivity.this.termsOfServiceView.animate().alpha(0.0f).setDuration(150).setInterpolator(AndroidUtilities.accelerateInterpolator).withEndAction(new LaunchActivity$11$$ExternalSyntheticLambda0(this)).start();
                 }
 
                 /* access modifiers changed from: private */
@@ -1424,12 +1504,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             this.passcodeView.onShow(z, z2, i, i2, new LaunchActivity$$ExternalSyntheticLambda32(this, runnable), runnable2);
             SharedConfig.isWaitingForPasscodeEnter = true;
             this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-            this.passcodeView.setDelegate(new LaunchActivity$$ExternalSyntheticLambda77(this));
+            this.passcodeView.setDelegate(new LaunchActivity$$ExternalSyntheticLambda79(this));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showPasscodeActivity$5(Runnable runnable) {
+    public /* synthetic */ void lambda$showPasscodeActivity$6(Runnable runnable) {
         this.actionBarLayout.setVisibility(4);
         if (AndroidUtilities.isTablet()) {
             if (this.layersActionBarLayout.getVisibility() == 0) {
@@ -1443,7 +1523,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showPasscodeActivity$6() {
+    public /* synthetic */ void lambda$showPasscodeActivity$7() {
         SharedConfig.isWaitingForPasscodeEnter = false;
         Intent intent = this.passcodeSaveIntent;
         if (intent != null) {
@@ -1463,168 +1543,169 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r73v1, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v0, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v0, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v1, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v0, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v1, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v1, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v4, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v5, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v15, resolved type: org.telegram.ui.EditWidgetActivity} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v16, resolved type: org.telegram.ui.EditWidgetActivity} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v17, resolved type: org.telegram.ui.ActionIntroActivity} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v21, resolved type: org.telegram.ui.ProfileActivity} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v4, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v5, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v5, resolved type: org.telegram.ui.ActionIntroActivity} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v6, resolved type: org.telegram.ui.ActionIntroActivity} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v7, resolved type: org.telegram.ui.EditWidgetActivity} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v8, resolved type: org.telegram.ui.ActionIntroActivity} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v10, resolved type: org.telegram.ui.ActionIntroActivity} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v12, resolved type: org.telegram.ui.ProfileActivity} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v2, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v1, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v1, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v22, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v2, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v19, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v16, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v40, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v3, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v2, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v2, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v10, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v17, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v58, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r73v3, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v3, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v11, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v23, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v3, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v18, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v14, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v59, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v77, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r73v4, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v20, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v17, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v41, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v4, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v3, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v3, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v24, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v21, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v18, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v42, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v5, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v4, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v4, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v12, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v19, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v15, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v60, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v78, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r73v5, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v25, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v22, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v19, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v43, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v6, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v5, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v5, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v13, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v20, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v16, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v61, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v79, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r73v6, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v26, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v23, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v20, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v44, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v7, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v6, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v6, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v14, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v21, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v17, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v62, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v80, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r73v7, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v27, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v24, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v21, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v45, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v8, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v7, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v7, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v15, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v22, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v18, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v63, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v81, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v64, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v16, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v28, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v25, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v46, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v8, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v47, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v29, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v8, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r73v8, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v19, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v23, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v13, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r73v9, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v26, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v9, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v18, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v10, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v55, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v30, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v9, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v17, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v25, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v20, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v66, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v67, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v18, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v10, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v24, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v31, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v9, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v56, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v31, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v10, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r73v10, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v93, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v21, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v27, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v68, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v19, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v11, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v25, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v32, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v57, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v32, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v11, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r73v11, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v94, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v22, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v28, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v69, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v20, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v12, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v26, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v33, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v33, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v60, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v35, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v12, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r73v12, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v95, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v23, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v29, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v74, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v13, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v75, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v177, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v31, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v13, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v28, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v62, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v34, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v65, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v35, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v67, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v36, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v37, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v68, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v38, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v69, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v39, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v70, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v40, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v71, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v72, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v41, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v73, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v42, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v13, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v22, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v180, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v76, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v16, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v78, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v17, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v79, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v82, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v19, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v83, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v188, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v84, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v85, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v86, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v27, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v14, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v34, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v36, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v74, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v43, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v14, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r73v14, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v99, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v30, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v32, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v15, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v33, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v37, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v11, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v0, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v0, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v0, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v0, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v28, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v88, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v34, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v30, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v16, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v44, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v75, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v39, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v45, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v15, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v1, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v29, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v1, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v46, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v1, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v1, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v1, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r57v0, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r55v0, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r54v0, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v2, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v0, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v0, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v0, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v0, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v0, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v0, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v0, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v0, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v0, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v0, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v0, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v2, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v2, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v2, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v2, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v0, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v17, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v30, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v32, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v27, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v24, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v16, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v15, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v89, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v196, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v31, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v0, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v0, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v16, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v47, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v25, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v19, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v18, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v41, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v36, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v21, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v191, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v48, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v1, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v34, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v51, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v2, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v3, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v4, resolved type: long} */
@@ -1635,192 +1716,189 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v3, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v8, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v1, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v1, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v1, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v1, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v1, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v1, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v1, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v3, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v3, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v3, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v3, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v1, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v19, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v37, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v30, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v1, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v1, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v18, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v52, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v36, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r55v2, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r54v2, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v4, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v9, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v2, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v2, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v2, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v2, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v2, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v2, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v2, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v2, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v2, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v2, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v4, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v4, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v4, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v4, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v2, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v20, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v36, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v38, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v31, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v34, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v26, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v20, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v97, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v224, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v2, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v2, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v19, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v53, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v37, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v27, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v23, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v50, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v48, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v27, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v219, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v2, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r57v2, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v5, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v10, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v3, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v3, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v3, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v3, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v3, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v3, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v3, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v3, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v3, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v3, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v3, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v5, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v5, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v5, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v3, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v21, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v37, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v39, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v32, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v35, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v27, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v21, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v98, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v225, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v3, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v3, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v20, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v54, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v38, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v28, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v24, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v51, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v49, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v28, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v220, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r54v3, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v6, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v11, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v22, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v38, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v40, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v33, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v36, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v28, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v22, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v99, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v226, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v4, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v6, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v4, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v21, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v55, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v39, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v29, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v25, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v52, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v50, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v29, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v221, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v4, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v6, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v6, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v6, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v4, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v4, resolved type: java.lang.Long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v4, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v4, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v4, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v4, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v4, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v4, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v4, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v4, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v4, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v23, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v22, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v12, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v227, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v100, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v23, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v29, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v37, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v34, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v41, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v39, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v222, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v30, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v51, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v53, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v26, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v30, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v40, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v56, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v5, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v5, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v5, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v5, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v5, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v5, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v5, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v5, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v7, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v7, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v7, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v24, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v41, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v23, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v58, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v43, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v32, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v28, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v57, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v52, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v31, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v223, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v3, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r57v3, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v5, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v44, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v36, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v39, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v33, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v24, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v101, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v228, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v5, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v45, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v25, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v37, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r57v4, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v4, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v24, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v9, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v14, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v6, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v6, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v6, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v6, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v8, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v8, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v8, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v6, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v48, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v43, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v111, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v235, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v6, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v7, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v61, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v49, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v230, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v6, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v6, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v6, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v6, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v6, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r55v5, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v28, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v44, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v39, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v35, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v32, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v35, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v57, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v60, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v7, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v7, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r57v5, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v7, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v7, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v7, resolved type: java.lang.Integer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v5, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v15, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v10, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v7, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v236, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v112, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v44, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v49, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v7, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v231, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v50, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v62, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v8, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v7, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v9, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v9, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v9, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v8, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r57v6, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v8, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v8, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v8, resolved type: java.lang.Integer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v6, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v16, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v11, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v8, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v237, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v113, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v45, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v50, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v8, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v232, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v51, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v63, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v9, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v8, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v10, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v10, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v10, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v8, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v115, resolved type: java.util.HashMap} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v150, resolved type: java.util.HashMap} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v7, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v239, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v116, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v29, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v43, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v51, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v41, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v45, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v234, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v36, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v63, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v65, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v35, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v36, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v64, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v11, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v11, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v9, resolved type: java.lang.Integer} */
@@ -1828,853 +1906,835 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v9, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v9, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v9, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v55, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v26, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v7, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v57, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v25, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v10, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v10, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v10, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v10, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v10, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v12, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v12, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v12, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v47, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v44, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v63, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v46, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v34, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v124, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v246, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v66, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v37, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v38, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v67, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v41, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v241, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v8, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v8, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v11, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v11, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v11, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v11, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v45, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v67, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v13, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v13, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v11, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v12, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v12, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v12, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v46, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v68, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v14, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v14, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v12, resolved type: java.lang.Integer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v26, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v27, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v28, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v29, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v58, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v60, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r54v6, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v47, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v15, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v30, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v9, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v69, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v14, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v13, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v13, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v13, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v13, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v13, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v9, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v9, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v7, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v7, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v7, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r55v6, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v7, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r57v7, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v29, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v9, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v17, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v12, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v61, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v62, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v63, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v64, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v18, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v8, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v8, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v8, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v8, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v10, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v14, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v10, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v14, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v14, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v14, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v14, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v16, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v16, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v16, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v16, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v10, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v31, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v55, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v63, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v62, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v102, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v100, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v89, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v131, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v257, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v10, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v15, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v30, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v73, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v65, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v43, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v62, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v110, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v120, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v96, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v252, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v13, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v9, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v9, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v9, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v9, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v11, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v15, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v11, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v15, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v15, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v15, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v15, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v17, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v17, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v17, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v17, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v11, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v32, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v56, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v64, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v63, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v103, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v101, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v90, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v132, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v258, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v11, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v16, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v31, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v74, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v66, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v44, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v63, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v111, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v121, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v97, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v253, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v19, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v10, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v10, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v12, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v16, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v12, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v16, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v16, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v16, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v16, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v18, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v18, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v18, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v18, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v12, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v33, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v57, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v65, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v64, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v104, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v102, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v91, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v133, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v259, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v12, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v17, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v32, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v75, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v67, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v45, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v64, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v112, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v122, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v98, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v254, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v10, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v10, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v13, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v17, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v13, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v17, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v17, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v17, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v17, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v19, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v19, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v19, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v19, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v13, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v34, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v58, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v66, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v65, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v105, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v103, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v92, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v134, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v260, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v18, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v13, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v18, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v33, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v76, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v68, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v46, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v65, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v113, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v123, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v99, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v255, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v11, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v14, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v18, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v18, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v18, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v18, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v20, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v20, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v20, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v20, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v14, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v35, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v59, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v67, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v66, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v106, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v104, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v93, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v135, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v261, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v14, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v19, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v34, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v77, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v69, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v47, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v66, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v114, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v124, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v100, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v256, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v14, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v21, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v21, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v21, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v21, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v15, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v36, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v60, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v68, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v67, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v107, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v105, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v94, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v136, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v262, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v15, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v20, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v35, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v78, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v70, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v48, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v67, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v115, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v125, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v101, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v257, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v19, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v19, resolved type: java.lang.Long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v19, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v19, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v19, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v15, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v22, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v16, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v37, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v61, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v69, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v68, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v108, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v106, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v95, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v137, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v263, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v22, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v17, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v38, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v62, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v70, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v69, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v109, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v107, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v96, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v138, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v264, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v23, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v18, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v39, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v63, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v16, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v21, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v36, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v79, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v71, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v70, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v110, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v108, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v97, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v139, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v265, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v40, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v64, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v72, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v71, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v111, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v109, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v98, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v140, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v266, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v41, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v65, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v73, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v72, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v112, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v110, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v99, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v141, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v267, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v74, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v73, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v113, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v111, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v100, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v142, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v268, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v66, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v42, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v75, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v274, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v145, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v101, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v112, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v114, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v74, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v279, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v148, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v49, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v68, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v116, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v126, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v102, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v113, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v119, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v75, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v76, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v258, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v22, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v17, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v22, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v37, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v80, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v72, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v50, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v69, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v117, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v127, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v103, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v259, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v23, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v38, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v81, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v73, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v51, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v70, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v118, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v128, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v104, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v287, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v288, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v76, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v289, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v149, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v260, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v24, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v39, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v82, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v74, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v52, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v71, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v119, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v129, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v105, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v261, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v40, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v83, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v75, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v53, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v72, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v120, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v130, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v106, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v262, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v25, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v76, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v54, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v73, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v121, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v131, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v107, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v263, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v84, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v41, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v132, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v108, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v264, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v122, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v126, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v74, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v55, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v77, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v67, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v43, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v290, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v136, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v133, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v270, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v109, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v275, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v110, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v134, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v85, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v285, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v114, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v129, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v78, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v135, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v125, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v83, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v56, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v78, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v68, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v44, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v21, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v24, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v42, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v129, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v79, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v296, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v124, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v138, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v91, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v57, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v304, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v305, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v125, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v142, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v130, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v92, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v58, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v80, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v86, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v43, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v20, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v23, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v23, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v23, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v20, resolved type: java.lang.Integer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v20, resolved type: java.lang.Long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v20, resolved type: java.lang.Integer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v16, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v15, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v12, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v11, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v11, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v12, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v93, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v128, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v20, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v14, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r55v7, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r57v8, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v154, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v300, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v308, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v309, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v162, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v115, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v314, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v129, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v144, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v131, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v137, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v79, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v79, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v69, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v94, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v59, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v81, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v87, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v44, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v27, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v17, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v323, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v140, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v149, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v133, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v97, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v60, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v82, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v88, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v45, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v22, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v25, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v21, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v24, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v24, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v24, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v21, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v21, resolved type: java.lang.Long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v21, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v21, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v21, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v16, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v13, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v138, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v170, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v21, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v318, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v171, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v118, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v133, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v139, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v80, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v80, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v70, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v329, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v141, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v158, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v136, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v98, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v61, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v83, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v89, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v46, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v327, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v184, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v124, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v138, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v143, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v81, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v81, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v71, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v47, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v23, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v26, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v22, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v25, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v25, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v25, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v22, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v22, resolved type: java.lang.Long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v22, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v22, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v22, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v17, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v333, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v193, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v125, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v147, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v146, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v82, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v82, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v72, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v48, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v24, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v27, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v26, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v18, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v335, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v142, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v159, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v137, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v99, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v62, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v84, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v90, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v47, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v23, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v26, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v26, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v23, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v23, resolved type: java.lang.Long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v23, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v23, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v23, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v339, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v200, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v126, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v148, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v147, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v83, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v83, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v73, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v19, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v17, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v13, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v12, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v12, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v21, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v15, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r54v7, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v344, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v143, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v160, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v138, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v100, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v63, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v85, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v91, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v48, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v31, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v346, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v144, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v161, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v139, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v101, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v64, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v86, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v92, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v49, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v25, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v28, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v32, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v348, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v145, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v162, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v140, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v102, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v65, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v87, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v93, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v50, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v33, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v349, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v146, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v163, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v141, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v103, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v66, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v88, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v94, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v51, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v34, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v350, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v147, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v164, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v142, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v104, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v67, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v89, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v95, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v52, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v35, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v36, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v356, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v149, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v165, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v143, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v105, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v68, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v90, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v96, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v53, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v357, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v151, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v166, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v144, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v106, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v69, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v91, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v97, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v54, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v29, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v92, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v107, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v167, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v27, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v22, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v27, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v27, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v359, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v153, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v168, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v146, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v108, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v70, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v93, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v99, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v55, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v30, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v24, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v24, resolved type: java.lang.Long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v24, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v24, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v24, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v20, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v18, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v14, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v14, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v13, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v13, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v22, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v16, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r54v8, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v348, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v205, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v127, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v149, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v148, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v84, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v84, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v74, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v50, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v350, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v206, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v128, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v154, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v171, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v95, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v156, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v157, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v96, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v172, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v173, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v97, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v373, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v162, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v174, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v150, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v149, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v85, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v85, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v75, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v51, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v352, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v207, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v129, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v151, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v150, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v86, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v86, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v76, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v52, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v353, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v208, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v130, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v152, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v151, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v87, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v87, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v77, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v53, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v354, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v209, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v131, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v153, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v152, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v88, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v88, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v78, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v54, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v29, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v360, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v216, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v133, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v154, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v153, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v89, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v89, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v79, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v55, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v31, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v361, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v221, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v135, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v155, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v154, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v90, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v90, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v80, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v115, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v73, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v98, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v103, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v56, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v32, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v81, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v91, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v23, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v28, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v28, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v31, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v28, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v363, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v233, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v137, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v157, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v156, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v91, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v92, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v82, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v383, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v163, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v175, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v151, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v116, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v74, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v99, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v104, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v57, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v33, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v30, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v32, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v15, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v390, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v164, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v176, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v152, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v117, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v75, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v100, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v105, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v58, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v33, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v29, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v29, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v29, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v25, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v25, resolved type: java.lang.Long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v25, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v25, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v25, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v21, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v19, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v15, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v14, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v14, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v138, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v96, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v83, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v140, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v141, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v84, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v97, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v98, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v85, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v377, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v246, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v145, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v163, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v164, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v93, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v99, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v86, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v58, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v34, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v29, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v387, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v250, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v146, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v164, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v165, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v94, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v100, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v87, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v59, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v35, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v31, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v393, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v394, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v254, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v147, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v165, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v166, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v95, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v32, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v34, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v32, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v34, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v49, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v108, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v101, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v88, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v60, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v36, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v32, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v30, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v30, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v30, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v118, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v156, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v166, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v392, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v102, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v26, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r56v8, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r57v8, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v20, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r55v8, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v14, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r54v8, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v26, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v26, resolved type: java.lang.Long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v26, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v26, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v26, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v20, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v395, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v35, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v59, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v31, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v30, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v30, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r45v22, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v14, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v23, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v16, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v393, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v157, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v35, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v34, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v36, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v34, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v36, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v51, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v109, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v103, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v119, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v158, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v167, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v394, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v35, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v35, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v37, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v35, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v37, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v37, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v39, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v2, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v60, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v91, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v102, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v167, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v149, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v255, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v170, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v96, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r44v27, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r57v9, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r46v21, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r55v9, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r48v15, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r54v9, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r40v27, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r41v27, resolved type: java.lang.Long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r42v27, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v27, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v61, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v38, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v34, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r37v32, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r38v32, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r39v31, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r47v17, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r49v15, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r50v24, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r52v17, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v103, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v397, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v168, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v256, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v37, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v37, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v37, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v52, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v110, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v104, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v120, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v159, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v168, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v395, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v36, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v38, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v36, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v38, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v53, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v111, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v105, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v121, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v160, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v169, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v396, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v39, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v37, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v39, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v39, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v41, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v3, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v62, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v92, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v104, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v169, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v150, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v257, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v38, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v38, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v38, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v54, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v112, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v106, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v122, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v161, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v170, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v397, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v37, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v38, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v40, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v40, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v42, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v4, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v63, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v93, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v105, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v170, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v151, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v258, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v39, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v39, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v39, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v39, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v41, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v41, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v43, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v5, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v64, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v94, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v106, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v171, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v152, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v259, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v40, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v40, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v40, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v42, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v42, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v44, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v6, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v65, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v95, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v55, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v113, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v107, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v172, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v153, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v260, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v40, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v41, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v41, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v43, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v43, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v45, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v7, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v66, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v96, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v123, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v162, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v171, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v398, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v40, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v41, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v56, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v114, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v108, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v173, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v154, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v261, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v41, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v42, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v44, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v44, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v46, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v8, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v97, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v124, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v163, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v172, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v399, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v39, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v115, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v109, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v174, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v155, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v262, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v42, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v98, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v110, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v175, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v156, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v263, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v45, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v45, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v43, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v176, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v157, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v264, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v99, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v69, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v265, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v158, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v177, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v266, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v159, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v160, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v409, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v410, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v70, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v267, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v162, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v180, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v111, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v412, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v413, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v415, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v165, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v167, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v168, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v169, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v125, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v164, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v173, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v400, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v57, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v42, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v165, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v174, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v119, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v401, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v126, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v116, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v49, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v41, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v42, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v43, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v44, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v46, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v46, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v11, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v187, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v287, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v50, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v72, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v47, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v47, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v288, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v188, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v12, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v45, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v44, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v43, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v42, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v48, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v48, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v289, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v189, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v13, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v46, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v45, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v44, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v43, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v402, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v175, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v197, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v403, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v176, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v177, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v297, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v405, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v406, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v128, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v407, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v179, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v170, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v127, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v408, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v409, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v411, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v182, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v191, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v122, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v117, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v73, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v14, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v184, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v185, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v186, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v193, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v117, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v38, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v41, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v40, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v43, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v59, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v415, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v132, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v176, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v134, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v52, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v46, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v416, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v60, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v44, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v41, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v42, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v39, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v53, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v49, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v49, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v47, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v46, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v45, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v44, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v46, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v304, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v188, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v192, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v123, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v120, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v74, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v15, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v54, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v50, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v50, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v48, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v47, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v48, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v305, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v189, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v193, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v124, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v121, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v16, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v55, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v51, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v51, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v49, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v50, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v307, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v190, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v194, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v125, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v122, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v52, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v52, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v195, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v308, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v191, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v309, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v45, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v310, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v192, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v196, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v126, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v123, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v77, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v18, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v57, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v53, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v53, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v51, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v49, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v47, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v313, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v47, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v417, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v61, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v45, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v42, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v43, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v40, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v194, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v193, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v195, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v199, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v127, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v124, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v78, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v19, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v58, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v54, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v54, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v52, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v50, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v48, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v46, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v196, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v419, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v201, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v179, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v134, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v118, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v135, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v62, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v46, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v43, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v44, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v41, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v45, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v426, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v207, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v180, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v135, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v119, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v138, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v63, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v47, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v44, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v45, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v429, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v208, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v181, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v136, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v120, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v139, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v64, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v48, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v49, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v65, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v431, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v210, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v182, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v137, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v121, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v140, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v434, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v211, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v436, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v438, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v42, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v444, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v212, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v184, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v138, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v122, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v141, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v66, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v50, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v46, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v46, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v447, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v215, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v185, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v139, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v123, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v142, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r23v67, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v51, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v47, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v47, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v43, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v19, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v61, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v102, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v149, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r61v20, resolved type: long} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r72v19, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v231, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v62, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v63, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v44, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v64, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v65, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v66, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v67, resolved type: long} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v68, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v69, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v70, resolved type: long} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v247, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v41, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v42, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v153, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v55, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v56, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v57, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v58, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v59, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v60, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v61, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v62, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v63, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r28v64, resolved type: boolean} */
-    /* JADX WARNING: type inference failed for: r10v2, types: [android.os.Bundle, java.lang.String] */
-    /* JADX WARNING: type inference failed for: r6v1, types: [boolean, int] */
-    /* JADX WARNING: type inference failed for: r10v6 */
-    /* JADX WARNING: type inference failed for: r10v8 */
-    /* JADX WARNING: type inference failed for: r10v9 */
-    /* JADX WARNING: type inference failed for: r10v10 */
-    /* JADX WARNING: type inference failed for: r10v11 */
-    /* JADX WARNING: type inference failed for: r6v6 */
-    /* JADX WARNING: type inference failed for: r6v8 */
-    /* JADX WARNING: type inference failed for: r6v11 */
-    /* JADX WARNING: type inference failed for: r6v12 */
-    /* JADX WARNING: type inference failed for: r45v5 */
-    /* JADX WARNING: type inference failed for: r45v10 */
-    /* JADX WARNING: type inference failed for: r45v11 */
-    /* JADX WARNING: type inference failed for: r45v12 */
-    /* JADX WARNING: type inference failed for: r45v13 */
-    /* JADX WARNING: type inference failed for: r45v14 */
-    /* JADX WARNING: type inference failed for: r45v16 */
-    /* JADX WARNING: type inference failed for: r45v17 */
-    /* JADX WARNING: type inference failed for: r45v18 */
-    /* JADX WARNING: type inference failed for: r45v19 */
-    /* JADX WARNING: type inference failed for: r45v20 */
-    /* JADX WARNING: type inference failed for: r45v21 */
-    /* JADX WARNING: type inference failed for: r45v22 */
-    /* JADX WARNING: type inference failed for: r45v23 */
-    /* JADX WARNING: type inference failed for: r10v99 */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v60, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r27v62, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v52, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v53, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v54, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v55, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v56, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v57, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v58, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v59, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v60, resolved type: boolean} */
+    /* JADX WARNING: type inference failed for: r11v2, types: [android.os.Bundle, java.lang.String] */
+    /* JADX WARNING: type inference failed for: r5v2, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r11v6 */
+    /* JADX WARNING: type inference failed for: r11v7 */
+    /* JADX WARNING: type inference failed for: r11v8 */
+    /* JADX WARNING: type inference failed for: r11v9 */
+    /* JADX WARNING: type inference failed for: r11v10 */
+    /* JADX WARNING: type inference failed for: r5v9 */
+    /* JADX WARNING: type inference failed for: r5v11 */
+    /* JADX WARNING: type inference failed for: r5v14 */
+    /* JADX WARNING: type inference failed for: r5v15 */
+    /* JADX WARNING: type inference failed for: r57v0 */
+    /* JADX WARNING: type inference failed for: r56v0 */
+    /* JADX WARNING: type inference failed for: r47v0 */
+    /* JADX WARNING: type inference failed for: r44v0 */
+    /* JADX WARNING: type inference failed for: r42v0 */
+    /* JADX WARNING: type inference failed for: r15v19, types: [java.util.HashMap] */
+    /* JADX WARNING: type inference failed for: r57v1 */
+    /* JADX WARNING: type inference failed for: r56v1 */
+    /* JADX WARNING: type inference failed for: r47v2 */
+    /* JADX WARNING: type inference failed for: r44v2 */
+    /* JADX WARNING: type inference failed for: r44v3 */
+    /* JADX WARNING: type inference failed for: r42v3 */
+    /* JADX WARNING: type inference failed for: r42v4 */
+    /* JADX WARNING: type inference failed for: r44v4 */
+    /* JADX WARNING: type inference failed for: r44v5 */
+    /* JADX WARNING: type inference failed for: r42v5 */
+    /* JADX WARNING: type inference failed for: r57v4 */
+    /* JADX WARNING: type inference failed for: r56v4 */
+    /* JADX WARNING: type inference failed for: r44v6 */
+    /* JADX WARNING: type inference failed for: r42v6 */
+    /* JADX WARNING: type inference failed for: r47v6 */
+    /* JADX WARNING: type inference failed for: r42v10 */
+    /* JADX WARNING: type inference failed for: r44v12 */
+    /* JADX WARNING: type inference failed for: r44v14 */
+    /* JADX WARNING: type inference failed for: r42v14 */
+    /* JADX WARNING: type inference failed for: r44v15 */
+    /* JADX WARNING: type inference failed for: r42v15 */
+    /* JADX WARNING: type inference failed for: r44v16 */
+    /* JADX WARNING: type inference failed for: r42v16 */
+    /* JADX WARNING: type inference failed for: r44v17 */
+    /* JADX WARNING: type inference failed for: r42v17 */
+    /* JADX WARNING: type inference failed for: r44v18 */
+    /* JADX WARNING: type inference failed for: r42v18 */
+    /* JADX WARNING: type inference failed for: r42v19 */
+    /* JADX WARNING: type inference failed for: r44v19 */
+    /* JADX WARNING: type inference failed for: r42v20 */
+    /* JADX WARNING: type inference failed for: r44v20 */
+    /* JADX WARNING: type inference failed for: r42v21 */
+    /* JADX WARNING: type inference failed for: r44v21 */
+    /* JADX WARNING: type inference failed for: r42v22 */
+    /* JADX WARNING: type inference failed for: r44v22 */
+    /* JADX WARNING: type inference failed for: r42v23 */
+    /* JADX WARNING: type inference failed for: r44v23 */
+    /* JADX WARNING: type inference failed for: r42v24 */
+    /* JADX WARNING: type inference failed for: r44v24 */
+    /* JADX WARNING: type inference failed for: r42v25 */
+    /* JADX WARNING: type inference failed for: r44v25 */
+    /* JADX WARNING: type inference failed for: r47v16 */
+    /* JADX WARNING: type inference failed for: r11v32 */
     /* JADX WARNING: Can't fix incorrect switch cases order */
+    /* JADX WARNING: Can't wrap try/catch for region: R(7:865|866|883|884|885|886|887) */
     /* JADX WARNING: Code restructure failed: missing block: B:168:0x0326, code lost:
         if (r15.sendingText == null) goto L_0x019a;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:448:0x0951, code lost:
-        if (r2.intValue() == 0) goto L_0x0953;
+    /* JADX WARNING: Code restructure failed: missing block: B:447:0x0951, code lost:
+        if (r1.intValue() == 0) goto L_0x0953;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:49:0x011e, code lost:
         r0 = r23.getIntent().getExtras();
@@ -2693,53 +2753,56 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         r19 = r12;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:64:0x0153, code lost:
-        if (r4.equals(r0) != false) goto L_0x0157;
+        if (r1.equals(r0) != false) goto L_0x0157;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:774:0x145b, code lost:
-        if (r2.longValue() == 0) goto L_0x1460;
+    /* JADX WARNING: Code restructure failed: missing block: B:774:0x1407, code lost:
+        if (r1.longValue() == 0) goto L_0x140c;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:978:0x1ad0, code lost:
-        if (r1.checkCanOpenChat(r0, r2.get(r2.size() - r6)) != false) goto L_0x1ad2;
+    /* JADX WARNING: Code restructure failed: missing block: B:888:0x175e, code lost:
+        r0 = e;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:995:0x1b46, code lost:
-        if (r1.checkCanOpenChat(r0, r2.get(r2.size() - r6)) != false) goto L_0x1b48;
+    /* JADX WARNING: Code restructure failed: missing block: B:981:0x1abd, code lost:
+        if (r1.checkCanOpenChat(r0, r2.get(r2.size() - r5)) != false) goto L_0x1abf;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:998:0x1b34, code lost:
+        if (r1.checkCanOpenChat(r0, r2.get(r2.size() - r5)) != false) goto L_0x1b36;
      */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:887:0x17b7 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:886:0x175d */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:1073:0x1ca4  */
-    /* JADX WARNING: Removed duplicated region for block: B:1074:0x1cb0  */
-    /* JADX WARNING: Removed duplicated region for block: B:1077:0x1cbe  */
-    /* JADX WARNING: Removed duplicated region for block: B:1078:0x1ccf  */
-    /* JADX WARNING: Removed duplicated region for block: B:1146:0x1var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:1157:0x1f5d  */
-    /* JADX WARNING: Removed duplicated region for block: B:1168:0x1fa9  */
-    /* JADX WARNING: Removed duplicated region for block: B:1170:0x1fb5  */
+    /* JADX WARNING: Removed duplicated region for block: B:1074:0x1CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:1075:0x1ca1  */
+    /* JADX WARNING: Removed duplicated region for block: B:1078:0x1caf  */
+    /* JADX WARNING: Removed duplicated region for block: B:1079:0x1cc0  */
+    /* JADX WARNING: Removed duplicated region for block: B:1147:0x1var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:1158:0x1f4c  */
+    /* JADX WARNING: Removed duplicated region for block: B:1169:0x1var_  */
+    /* JADX WARNING: Removed duplicated region for block: B:1171:0x1fa3  */
     /* JADX WARNING: Removed duplicated region for block: B:171:0x032d  */
-    /* JADX WARNING: Removed duplicated region for block: B:201:0x03c3 A[Catch:{ Exception -> 0x04e9 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:270:0x04f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:340:0x0677  */
-    /* JADX WARNING: Removed duplicated region for block: B:387:0x0769 A[Catch:{ Exception -> 0x0777 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x0776  */
-    /* JADX WARNING: Removed duplicated region for block: B:639:0x0ff8 A[SYNTHETIC, Splitter:B:639:0x0ff8] */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x03c7 A[Catch:{ Exception -> 0x04ed }] */
+    /* JADX WARNING: Removed duplicated region for block: B:270:0x04f4  */
+    /* JADX WARNING: Removed duplicated region for block: B:340:0x067e  */
+    /* JADX WARNING: Removed duplicated region for block: B:387:0x0770 A[Catch:{ Exception -> 0x077e }] */
+    /* JADX WARNING: Removed duplicated region for block: B:388:0x077d  */
+    /* JADX WARNING: Removed duplicated region for block: B:638:0x0fe7 A[SYNTHETIC, Splitter:B:638:0x0fe7] */
     /* JADX WARNING: Removed duplicated region for block: B:63:0x014f  */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x0165 A[SYNTHETIC, Splitter:B:70:0x0165] */
-    /* JADX WARNING: Removed duplicated region for block: B:725:0x12f1  */
-    /* JADX WARNING: Removed duplicated region for block: B:767:0x13d2 A[Catch:{ Exception -> 0x13e0 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:768:0x13df  */
+    /* JADX WARNING: Removed duplicated region for block: B:725:0x129d  */
+    /* JADX WARNING: Removed duplicated region for block: B:767:0x137e A[Catch:{ Exception -> 0x138c }] */
+    /* JADX WARNING: Removed duplicated region for block: B:768:0x138b  */
     /* JADX WARNING: Removed duplicated region for block: B:80:0x019d  */
-    /* JADX WARNING: Removed duplicated region for block: B:892:0x17c0 A[SYNTHETIC, Splitter:B:892:0x17c0] */
-    /* JADX WARNING: Removed duplicated region for block: B:956:0x1a69  */
-    /* JADX WARNING: Removed duplicated region for block: B:970:0x1a9c  */
-    /* JADX WARNING: Removed duplicated region for block: B:987:0x1b13  */
+    /* JADX WARNING: Removed duplicated region for block: B:891:0x1766 A[SYNTHETIC, Splitter:B:891:0x1766] */
+    /* JADX WARNING: Removed duplicated region for block: B:959:0x1a56  */
+    /* JADX WARNING: Removed duplicated region for block: B:973:0x1a89  */
+    /* JADX WARNING: Removed duplicated region for block: B:990:0x1b01  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private boolean handleIntent(android.content.Intent r71, boolean r72, boolean r73, boolean r74) {
+    private boolean handleIntent(android.content.Intent r70, boolean r71, boolean r72, boolean r73) {
         /*
-            r70 = this;
-            r15 = r70
-            r14 = r71
-            r0 = r73
-            boolean r1 = org.telegram.messenger.AndroidUtilities.handleProxyIntent(r70, r71)
+            r69 = this;
+            r15 = r69
+            r14 = r70
+            r0 = r72
+            boolean r1 = org.telegram.messenger.AndroidUtilities.handleProxyIntent(r69, r70)
             r13 = 1
             if (r1 == 0) goto L_0x0023
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r15.actionBarLayout
@@ -2760,7 +2823,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             boolean r1 = r1.isVisible()
             if (r1 == 0) goto L_0x0049
             if (r14 == 0) goto L_0x0042
-            java.lang.String r1 = r71.getAction()
+            java.lang.String r1 = r70.getAction()
             java.lang.String r2 = "android.intent.action.MAIN"
             boolean r1 = r2.equals(r1)
             if (r1 != 0) goto L_0x0049
@@ -2768,8 +2831,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.PhotoViewer r1 = org.telegram.ui.PhotoViewer.getInstance()
             r1.closePhoto(r12, r13)
         L_0x0049:
-            int r8 = r71.getFlags()
-            java.lang.String r9 = r71.getAction()
+            int r8 = r70.getFlags()
+            java.lang.String r9 = r70.getAction()
             int[] r11 = new int[r13]
             int r1 = org.telegram.messenger.UserConfig.selectedAccount
             java.lang.String r2 = "currentAccount"
@@ -2786,7 +2849,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x006f:
             r26 = 0
         L_0x0071:
-            if (r74 != 0) goto L_0x009c
+            if (r73 != 0) goto L_0x009c
             boolean r1 = org.telegram.messenger.AndroidUtilities.needShowPasscode(r13)
             if (r1 != 0) goto L_0x007d
             boolean r1 = org.telegram.messenger.SharedConfig.isWaitingForPasscodeEnter
@@ -2798,19 +2861,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5 = -1
             r6 = 0
             r7 = 0
-            r1 = r70
+            r1 = r69
             r1.showPasscodeActivity(r2, r3, r4, r5, r6, r7)
             int r1 = r15.currentAccount
             org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
             r1.saveConfig(r12)
             if (r26 != 0) goto L_0x009c
             r15.passcodeSaveIntent = r14
-            r10 = r72
+            r10 = r71
             r15.passcodeSaveIntentIsNew = r10
             r15.passcodeSaveIntentIsRestore = r0
             return r12
         L_0x009c:
-            r10 = r72
+            r10 = r71
             r7 = 0
             r15.photoPathsArray = r7
             r15.videoPath = r7
@@ -2829,28 +2892,28 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r1 = r1 & r8
             java.lang.String r8 = "message_id"
             r5 = 0
-            if (r1 != 0) goto L_0x1a2f
-            java.lang.String r1 = r71.getAction()
-            if (r1 == 0) goto L_0x1a2f
-            if (r0 != 0) goto L_0x1a2f
-            java.lang.String r0 = r71.getAction()
+            if (r1 != 0) goto L_0x1a19
+            java.lang.String r1 = r70.getAction()
+            if (r1 == 0) goto L_0x1a19
+            if (r0 != 0) goto L_0x1a19
+            java.lang.String r0 = r70.getAction()
             java.lang.String r1 = "android.intent.action.SEND"
             boolean r0 = r1.equals(r0)
-            java.lang.String r1 = "android.intent.extra.STREAM"
-            java.lang.String r2 = "\n"
-            java.lang.String r4 = "hash"
+            java.lang.String r1 = "hash"
+            java.lang.String r2 = "android.intent.extra.STREAM"
+            java.lang.String r4 = "\n"
             java.lang.String r3 = ""
-            if (r0 == 0) goto L_0x0346
+            if (r0 == 0) goto L_0x034a
             boolean r0 = org.telegram.messenger.SharedConfig.directShare
             if (r0 == 0) goto L_0x0155
-            android.os.Bundle r0 = r71.getExtras()
+            android.os.Bundle r0 = r70.getExtras()
             if (r0 == 0) goto L_0x0155
-            android.os.Bundle r0 = r71.getExtras()
+            android.os.Bundle r0 = r70.getExtras()
             java.lang.String r9 = "dialogId"
             long r19 = r0.getLong(r9, r5)
             int r0 = (r19 > r5 ? 1 : (r19 == r5 ? 0 : -1))
             if (r0 != 0) goto L_0x0142
-            android.os.Bundle r0 = r71.getExtras()     // Catch:{ all -> 0x013c }
+            android.os.Bundle r0 = r70.getExtras()     // Catch:{ all -> 0x013c }
             java.lang.String r9 = "android.intent.extra.shortcut.ID"
             java.lang.String r0 = r0.getString(r9)     // Catch:{ all -> 0x013c }
             if (r0 == 0) goto L_0x0140
@@ -2869,7 +2932,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r7 = "dialogId"
             long r12 = r0.getLong(r7, r5)     // Catch:{ all -> 0x013c }
             r7 = 0
-            java.lang.String r0 = r0.getString(r4, r7)     // Catch:{ all -> 0x0134 }
+            java.lang.String r0 = r0.getString(r1, r7)     // Catch:{ all -> 0x0134 }
             r19 = r12
             goto L_0x014b
         L_0x0134:
@@ -2888,40 +2951,40 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0 = 0
             goto L_0x014b
         L_0x0142:
-            android.os.Bundle r0 = r71.getExtras()
+            android.os.Bundle r0 = r70.getExtras()
             r7 = 0
-            java.lang.String r0 = r0.getString(r4, r7)
+            java.lang.String r0 = r0.getString(r1, r7)
         L_0x014b:
-            java.lang.String r4 = org.telegram.messenger.SharedConfig.directShareHash
-            if (r4 == 0) goto L_0x0155
-            boolean r0 = r4.equals(r0)
+            java.lang.String r1 = org.telegram.messenger.SharedConfig.directShareHash
+            if (r1 == 0) goto L_0x0155
+            boolean r0 = r1.equals(r0)
             if (r0 != 0) goto L_0x0157
         L_0x0155:
             r19 = r5
         L_0x0157:
-            java.lang.String r4 = r71.getType()
-            if (r4 == 0) goto L_0x019d
+            java.lang.String r1 = r70.getType()
+            if (r1 == 0) goto L_0x019d
             java.lang.String r0 = "text/x-vcard"
-            boolean r0 = r4.equals(r0)
+            boolean r0 = r1.equals(r0)
             if (r0 == 0) goto L_0x019d
-            android.os.Bundle r0 = r71.getExtras()     // Catch:{ Exception -> 0x0196 }
-            java.lang.Object r0 = r0.get(r1)     // Catch:{ Exception -> 0x0196 }
+            android.os.Bundle r0 = r70.getExtras()     // Catch:{ Exception -> 0x0196 }
+            java.lang.Object r0 = r0.get(r2)     // Catch:{ Exception -> 0x0196 }
             android.net.Uri r0 = (android.net.Uri) r0     // Catch:{ Exception -> 0x0196 }
             if (r0 == 0) goto L_0x019a
-            int r1 = r15.currentAccount     // Catch:{ Exception -> 0x0196 }
-            r2 = 0
+            int r2 = r15.currentAccount     // Catch:{ Exception -> 0x0196 }
             r3 = 0
-            java.util.ArrayList r1 = org.telegram.messenger.AndroidUtilities.loadVCardFromStream(r0, r1, r3, r2, r2)     // Catch:{ Exception -> 0x0196 }
-            r15.contactsToSend = r1     // Catch:{ Exception -> 0x0196 }
-            int r1 = r1.size()     // Catch:{ Exception -> 0x0196 }
-            r3 = 5
-            if (r1 <= r3) goto L_0x0192
+            r4 = 0
+            java.util.ArrayList r2 = org.telegram.messenger.AndroidUtilities.loadVCardFromStream(r0, r2, r4, r3, r3)     // Catch:{ Exception -> 0x0196 }
             r15.contactsToSend = r2     // Catch:{ Exception -> 0x0196 }
-            java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ Exception -> 0x0196 }
-            r1.<init>()     // Catch:{ Exception -> 0x0196 }
-            r15.documentsUrisArray = r1     // Catch:{ Exception -> 0x0196 }
-            r1.add(r0)     // Catch:{ Exception -> 0x0196 }
-            r15.documentsMimeType = r4     // Catch:{ Exception -> 0x0196 }
+            int r2 = r2.size()     // Catch:{ Exception -> 0x0196 }
+            r4 = 5
+            if (r2 <= r4) goto L_0x0192
+            r15.contactsToSend = r3     // Catch:{ Exception -> 0x0196 }
+            java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x0196 }
+            r2.<init>()     // Catch:{ Exception -> 0x0196 }
+            r15.documentsUrisArray = r2     // Catch:{ Exception -> 0x0196 }
+            r2.add(r0)     // Catch:{ Exception -> 0x0196 }
+            r15.documentsMimeType = r1     // Catch:{ Exception -> 0x0196 }
             goto L_0x032a
         L_0x0192:
             r15.contactsToSendUri = r0     // Catch:{ Exception -> 0x0196 }
@@ -2957,7 +3020,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.StringBuilder r9 = new java.lang.StringBuilder
             r9.<init>()
             r9.append(r7)
-            r9.append(r2)
+            r9.append(r4)
             r9.append(r0)
             java.lang.String r0 = r9.toString()
         L_0x01e5:
@@ -2968,31 +3031,31 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r0 != 0) goto L_0x01f0
             r15.sendingText = r7
         L_0x01f0:
-            android.os.Parcelable r0 = r14.getParcelableExtra(r1)
+            android.os.Parcelable r0 = r14.getParcelableExtra(r2)
             if (r0 == 0) goto L_0x0324
-            boolean r1 = r0 instanceof android.net.Uri
-            if (r1 != 0) goto L_0x0202
+            boolean r2 = r0 instanceof android.net.Uri
+            if (r2 != 0) goto L_0x0202
             java.lang.String r0 = r0.toString()
             android.net.Uri r0 = android.net.Uri.parse(r0)
         L_0x0202:
-            r1 = r0
-            android.net.Uri r1 = (android.net.Uri) r1
-            if (r1 == 0) goto L_0x020f
-            boolean r0 = org.telegram.messenger.AndroidUtilities.isInternalUri((android.net.Uri) r1)
+            r2 = r0
+            android.net.Uri r2 = (android.net.Uri) r2
+            if (r2 == 0) goto L_0x020f
+            boolean r0 = org.telegram.messenger.AndroidUtilities.isInternalUri((android.net.Uri) r2)
             if (r0 == 0) goto L_0x020f
-            r2 = 1
+            r4 = 1
             goto L_0x0210
         L_0x020f:
-            r2 = 0
+            r4 = 0
         L_0x0210:
-            if (r2 != 0) goto L_0x0322
-            if (r1 == 0) goto L_0x0322
-            if (r4 == 0) goto L_0x021e
+            if (r4 != 0) goto L_0x0322
+            if (r2 == 0) goto L_0x0322
+            if (r1 == 0) goto L_0x021e
             java.lang.String r0 = "image/"
-            boolean r0 = r4.startsWith(r0)
+            boolean r0 = r1.startsWith(r0)
             if (r0 != 0) goto L_0x022e
         L_0x021e:
-            java.lang.String r0 = r1.toString()
+            java.lang.String r0 = r2.toString()
             java.lang.String r0 = r0.toLowerCase()
             java.lang.String r7 = ".jpg"
             boolean r0 = r0.endsWith(r7)
@@ -3006,12 +3069,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0239:
             org.telegram.messenger.SendMessagesHelper$SendingMediaInfo r0 = new org.telegram.messenger.SendMessagesHelper$SendingMediaInfo
             r0.<init>()
-            r0.uri = r1
+            r0.uri = r2
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r1 = r15.photoPathsArray
             r1.add(r0)
             goto L_0x0322
         L_0x0247:
-            java.lang.String r7 = r1.toString()
+            java.lang.String r7 = r2.toString()
             int r0 = (r19 > r5 ? 1 : (r19 == r5 ? 0 : -1))
             if (r0 != 0) goto L_0x02c0
             if (r7 == 0) goto L_0x02c0
@@ -3029,7 +3092,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0 = r11[r9]
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             java.util.Set<java.lang.String> r0 = r0.exportUri
-            java.lang.String r9 = org.telegram.messenger.MediaController.getFileName(r1)
+            java.lang.String r9 = org.telegram.messenger.MediaController.getFileName(r2)
             java.lang.String r9 = org.telegram.messenger.FileLoader.fixFileName(r9)
             java.util.Iterator r12 = r0.iterator()
         L_0x027e:
@@ -3045,7 +3108,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             boolean r0 = r0.find()     // Catch:{ Exception -> 0x02a5 }
             if (r0 == 0) goto L_0x027e
         L_0x02a2:
-            r15.exportingChatUri = r1     // Catch:{ Exception -> 0x02a5 }
+            r15.exportingChatUri = r2     // Catch:{ Exception -> 0x02a5 }
             goto L_0x02aa
         L_0x02a5:
             r0 = move-exception
@@ -3060,15 +3123,15 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r0 = "KakaoTalkChats.txt"
             boolean r0 = r7.endsWith(r0)
             if (r0 == 0) goto L_0x02c0
-            r15.exportingChatUri = r1
+            r15.exportingChatUri = r2
         L_0x02c0:
             android.net.Uri r0 = r15.exportingChatUri
             if (r0 != 0) goto L_0x0322
-            java.lang.String r0 = org.telegram.messenger.AndroidUtilities.getPath(r1)
+            java.lang.String r0 = org.telegram.messenger.AndroidUtilities.getPath(r2)
             boolean r7 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
             if (r7 != 0) goto L_0x02d2
             java.lang.String r0 = "file"
-            java.lang.String r0 = org.telegram.messenger.MediaController.copyFileToCache(r1, r0)
+            java.lang.String r0 = org.telegram.messenger.MediaController.copyFileToCache(r2, r0)
         L_0x02d2:
             if (r0 == 0) goto L_0x0310
             java.lang.String r7 = "file:"
@@ -3077,26 +3140,26 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r7 = "file://"
             java.lang.String r0 = r0.replace(r7, r3)
         L_0x02e2:
-            if (r4 == 0) goto L_0x02ef
+            if (r1 == 0) goto L_0x02ef
             java.lang.String r3 = "video/"
-            boolean r3 = r4.startsWith(r3)
-            if (r3 == 0) goto L_0x02ef
+            boolean r1 = r1.startsWith(r3)
+            if (r1 == 0) goto L_0x02ef
             r15.videoPath = r0
             goto L_0x0322
         L_0x02ef:
-            java.util.ArrayList<java.lang.String> r3 = r15.documentsPathsArray
-            if (r3 != 0) goto L_0x0301
-            java.util.ArrayList r3 = new java.util.ArrayList
-            r3.<init>()
-            r15.documentsPathsArray = r3
-            java.util.ArrayList r3 = new java.util.ArrayList
-            r3.<init>()
-            r15.documentsOriginalPathsArray = r3
+            java.util.ArrayList<java.lang.String> r1 = r15.documentsPathsArray
+            if (r1 != 0) goto L_0x0301
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r15.documentsPathsArray = r1
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r15.documentsOriginalPathsArray = r1
         L_0x0301:
-            java.util.ArrayList<java.lang.String> r3 = r15.documentsPathsArray
-            r3.add(r0)
+            java.util.ArrayList<java.lang.String> r1 = r15.documentsPathsArray
+            r1.add(r0)
             java.util.ArrayList<java.lang.String> r0 = r15.documentsOriginalPathsArray
-            java.lang.String r1 = r1.toString()
+            java.lang.String r1 = r2.toString()
             r0.add(r1)
             goto L_0x0322
         L_0x0310:
@@ -3107,10 +3170,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r15.documentsUrisArray = r0
         L_0x031b:
             java.util.ArrayList<android.net.Uri> r0 = r15.documentsUrisArray
-            r0.add(r1)
-            r15.documentsMimeType = r4
+            r0.add(r2)
+            r15.documentsMimeType = r1
         L_0x0322:
-            r0 = r2
+            r0 = r4
             goto L_0x032b
         L_0x0324:
             java.lang.String r0 = r15.sendingText
@@ -3126,544 +3189,743 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0.show()
         L_0x0337:
             r2 = r5
-            r12 = r2
-            r61 = r12
-            r5 = r8
-            r7 = r15
-            r73 = 0
+            r13 = r2
+            r61 = r13
+            r6 = r8
+            r12 = r11
+            r8 = r15
+            r72 = 0
             r0 = -1
             r1 = 0
             r4 = -1
-            r6 = 0
-            r8 = 0
-            goto L_0x18d7
-        L_0x0346:
-            java.lang.String r0 = r71.getAction()
+            r5 = 0
+            r7 = 0
+            r9 = 0
+            r10 = 0
+            r11 = 0
+            goto L_0x1a32
+        L_0x034a:
+            java.lang.String r0 = r70.getAction()
             java.lang.String r7 = "org.telegram.messenger.CREATE_STICKER_PACK"
             boolean r0 = r7.equals(r0)
-            if (r0 == 0) goto L_0x0377
-            java.util.ArrayList r0 = r14.getParcelableArrayListExtra(r1)     // Catch:{ all -> 0x036a }
-            r15.importingStickers = r0     // Catch:{ all -> 0x036a }
+            if (r0 == 0) goto L_0x037b
+            java.util.ArrayList r0 = r14.getParcelableArrayListExtra(r2)     // Catch:{ all -> 0x036e }
+            r15.importingStickers = r0     // Catch:{ all -> 0x036e }
             java.lang.String r0 = "STICKER_EMOJIS"
-            java.util.ArrayList r0 = r14.getStringArrayListExtra(r0)     // Catch:{ all -> 0x036a }
-            r15.importingStickersEmoji = r0     // Catch:{ all -> 0x036a }
+            java.util.ArrayList r0 = r14.getStringArrayListExtra(r0)     // Catch:{ all -> 0x036e }
+            r15.importingStickersEmoji = r0     // Catch:{ all -> 0x036e }
             java.lang.String r0 = "IMPORTER"
-            java.lang.String r0 = r14.getStringExtra(r0)     // Catch:{ all -> 0x036a }
-            r15.importingStickersSoftware = r0     // Catch:{ all -> 0x036a }
-            goto L_0x1a2f
-        L_0x036a:
+            java.lang.String r0 = r14.getStringExtra(r0)     // Catch:{ all -> 0x036e }
+            r15.importingStickersSoftware = r0     // Catch:{ all -> 0x036e }
+            goto L_0x1a19
+        L_0x036e:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             r1 = 0
             r15.importingStickers = r1
             r15.importingStickersEmoji = r1
             r15.importingStickersSoftware = r1
-            goto L_0x1a2f
-        L_0x0377:
-            java.lang.String r0 = r71.getAction()
+            goto L_0x1a19
+        L_0x037b:
+            java.lang.String r0 = r70.getAction()
             java.lang.String r7 = "android.intent.action.SEND_MULTIPLE"
             boolean r0 = r7.equals(r0)
-            if (r0 == 0) goto L_0x0504
-            java.util.ArrayList r0 = r14.getParcelableArrayListExtra(r1)     // Catch:{ Exception -> 0x04e9 }
-            java.lang.String r1 = r71.getType()     // Catch:{ Exception -> 0x04e9 }
-            if (r0 == 0) goto L_0x03c0
+            if (r0 == 0) goto L_0x050b
+            java.util.ArrayList r0 = r14.getParcelableArrayListExtra(r2)     // Catch:{ Exception -> 0x04ed }
+            java.lang.String r1 = r70.getType()     // Catch:{ Exception -> 0x04ed }
+            if (r0 == 0) goto L_0x03c4
             r2 = 0
-        L_0x038e:
-            int r4 = r0.size()     // Catch:{ Exception -> 0x04e9 }
-            if (r2 >= r4) goto L_0x03b8
-            java.lang.Object r4 = r0.get(r2)     // Catch:{ Exception -> 0x04e9 }
-            android.os.Parcelable r4 = (android.os.Parcelable) r4     // Catch:{ Exception -> 0x04e9 }
-            boolean r7 = r4 instanceof android.net.Uri     // Catch:{ Exception -> 0x04e9 }
-            if (r7 != 0) goto L_0x03a6
-            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x04e9 }
-            android.net.Uri r4 = android.net.Uri.parse(r4)     // Catch:{ Exception -> 0x04e9 }
-        L_0x03a6:
-            android.net.Uri r4 = (android.net.Uri) r4     // Catch:{ Exception -> 0x04e9 }
-            if (r4 == 0) goto L_0x03b5
-            boolean r4 = org.telegram.messenger.AndroidUtilities.isInternalUri((android.net.Uri) r4)     // Catch:{ Exception -> 0x04e9 }
-            if (r4 == 0) goto L_0x03b5
-            r0.remove(r2)     // Catch:{ Exception -> 0x04e9 }
+        L_0x0392:
+            int r4 = r0.size()     // Catch:{ Exception -> 0x04ed }
+            if (r2 >= r4) goto L_0x03bc
+            java.lang.Object r4 = r0.get(r2)     // Catch:{ Exception -> 0x04ed }
+            android.os.Parcelable r4 = (android.os.Parcelable) r4     // Catch:{ Exception -> 0x04ed }
+            boolean r7 = r4 instanceof android.net.Uri     // Catch:{ Exception -> 0x04ed }
+            if (r7 != 0) goto L_0x03aa
+            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x04ed }
+            android.net.Uri r4 = android.net.Uri.parse(r4)     // Catch:{ Exception -> 0x04ed }
+        L_0x03aa:
+            android.net.Uri r4 = (android.net.Uri) r4     // Catch:{ Exception -> 0x04ed }
+            if (r4 == 0) goto L_0x03b9
+            boolean r4 = org.telegram.messenger.AndroidUtilities.isInternalUri((android.net.Uri) r4)     // Catch:{ Exception -> 0x04ed }
+            if (r4 == 0) goto L_0x03b9
+            r0.remove(r2)     // Catch:{ Exception -> 0x04ed }
             int r2 = r2 + -1
-        L_0x03b5:
+        L_0x03b9:
             r4 = 1
             int r2 = r2 + r4
-            goto L_0x038e
-        L_0x03b8:
-            boolean r2 = r0.isEmpty()     // Catch:{ Exception -> 0x04e9 }
-            if (r2 == 0) goto L_0x03c0
+            goto L_0x0392
+        L_0x03bc:
+            boolean r2 = r0.isEmpty()     // Catch:{ Exception -> 0x04ed }
+            if (r2 == 0) goto L_0x03c4
             r2 = 0
-            goto L_0x03c1
-        L_0x03c0:
+            goto L_0x03c5
+        L_0x03c4:
             r2 = r0
-        L_0x03c1:
-            if (r2 == 0) goto L_0x04ed
-            if (r1 == 0) goto L_0x0402
+        L_0x03c5:
+            if (r2 == 0) goto L_0x04f1
+            if (r1 == 0) goto L_0x0406
             java.lang.String r0 = "image/"
-            boolean r0 = r1.startsWith(r0)     // Catch:{ Exception -> 0x04e9 }
-            if (r0 == 0) goto L_0x0402
+            boolean r0 = r1.startsWith(r0)     // Catch:{ Exception -> 0x04ed }
+            if (r0 == 0) goto L_0x0406
             r0 = 0
-        L_0x03ce:
-            int r1 = r2.size()     // Catch:{ Exception -> 0x04e9 }
-            if (r0 >= r1) goto L_0x04e7
-            java.lang.Object r1 = r2.get(r0)     // Catch:{ Exception -> 0x04e9 }
-            android.os.Parcelable r1 = (android.os.Parcelable) r1     // Catch:{ Exception -> 0x04e9 }
-            boolean r3 = r1 instanceof android.net.Uri     // Catch:{ Exception -> 0x04e9 }
-            if (r3 != 0) goto L_0x03e6
-            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x04e9 }
-            android.net.Uri r1 = android.net.Uri.parse(r1)     // Catch:{ Exception -> 0x04e9 }
-        L_0x03e6:
-            android.net.Uri r1 = (android.net.Uri) r1     // Catch:{ Exception -> 0x04e9 }
-            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r3 = r15.photoPathsArray     // Catch:{ Exception -> 0x04e9 }
-            if (r3 != 0) goto L_0x03f3
-            java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ Exception -> 0x04e9 }
-            r3.<init>()     // Catch:{ Exception -> 0x04e9 }
-            r15.photoPathsArray = r3     // Catch:{ Exception -> 0x04e9 }
-        L_0x03f3:
-            org.telegram.messenger.SendMessagesHelper$SendingMediaInfo r3 = new org.telegram.messenger.SendMessagesHelper$SendingMediaInfo     // Catch:{ Exception -> 0x04e9 }
-            r3.<init>()     // Catch:{ Exception -> 0x04e9 }
-            r3.uri = r1     // Catch:{ Exception -> 0x04e9 }
-            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r1 = r15.photoPathsArray     // Catch:{ Exception -> 0x04e9 }
-            r1.add(r3)     // Catch:{ Exception -> 0x04e9 }
+        L_0x03d2:
+            int r1 = r2.size()     // Catch:{ Exception -> 0x04ed }
+            if (r0 >= r1) goto L_0x04eb
+            java.lang.Object r1 = r2.get(r0)     // Catch:{ Exception -> 0x04ed }
+            android.os.Parcelable r1 = (android.os.Parcelable) r1     // Catch:{ Exception -> 0x04ed }
+            boolean r3 = r1 instanceof android.net.Uri     // Catch:{ Exception -> 0x04ed }
+            if (r3 != 0) goto L_0x03ea
+            java.lang.String r1 = r1.toString()     // Catch:{ Exception -> 0x04ed }
+            android.net.Uri r1 = android.net.Uri.parse(r1)     // Catch:{ Exception -> 0x04ed }
+        L_0x03ea:
+            android.net.Uri r1 = (android.net.Uri) r1     // Catch:{ Exception -> 0x04ed }
+            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r3 = r15.photoPathsArray     // Catch:{ Exception -> 0x04ed }
+            if (r3 != 0) goto L_0x03f7
+            java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ Exception -> 0x04ed }
+            r3.<init>()     // Catch:{ Exception -> 0x04ed }
+            r15.photoPathsArray = r3     // Catch:{ Exception -> 0x04ed }
+        L_0x03f7:
+            org.telegram.messenger.SendMessagesHelper$SendingMediaInfo r3 = new org.telegram.messenger.SendMessagesHelper$SendingMediaInfo     // Catch:{ Exception -> 0x04ed }
+            r3.<init>()     // Catch:{ Exception -> 0x04ed }
+            r3.uri = r1     // Catch:{ Exception -> 0x04ed }
+            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r1 = r15.photoPathsArray     // Catch:{ Exception -> 0x04ed }
+            r1.add(r3)     // Catch:{ Exception -> 0x04ed }
             int r0 = r0 + 1
-            goto L_0x03ce
-        L_0x0402:
+            goto L_0x03d2
+        L_0x0406:
             r4 = 0
-            r0 = r11[r4]     // Catch:{ Exception -> 0x04e9 }
-            org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)     // Catch:{ Exception -> 0x04e9 }
-            java.util.Set<java.lang.String> r4 = r0.exportUri     // Catch:{ Exception -> 0x04e9 }
+            r0 = r11[r4]     // Catch:{ Exception -> 0x04ed }
+            org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)     // Catch:{ Exception -> 0x04ed }
+            java.util.Set<java.lang.String> r4 = r0.exportUri     // Catch:{ Exception -> 0x04ed }
             r7 = 0
-        L_0x040c:
-            int r0 = r2.size()     // Catch:{ Exception -> 0x04e9 }
-            if (r7 >= r0) goto L_0x04e7
-            java.lang.Object r0 = r2.get(r7)     // Catch:{ Exception -> 0x04e9 }
-            android.os.Parcelable r0 = (android.os.Parcelable) r0     // Catch:{ Exception -> 0x04e9 }
-            boolean r9 = r0 instanceof android.net.Uri     // Catch:{ Exception -> 0x04e9 }
-            if (r9 != 0) goto L_0x0424
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x04e9 }
-            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x04e9 }
-        L_0x0424:
+        L_0x0410:
+            int r0 = r2.size()     // Catch:{ Exception -> 0x04ed }
+            if (r7 >= r0) goto L_0x04eb
+            java.lang.Object r0 = r2.get(r7)     // Catch:{ Exception -> 0x04ed }
+            android.os.Parcelable r0 = (android.os.Parcelable) r0     // Catch:{ Exception -> 0x04ed }
+            boolean r9 = r0 instanceof android.net.Uri     // Catch:{ Exception -> 0x04ed }
+            if (r9 != 0) goto L_0x0428
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x04ed }
+            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x04ed }
+        L_0x0428:
             r9 = r0
-            android.net.Uri r9 = (android.net.Uri) r9     // Catch:{ Exception -> 0x04e9 }
-            java.lang.String r12 = org.telegram.messenger.AndroidUtilities.getPath(r9)     // Catch:{ Exception -> 0x04e9 }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x04e9 }
-            if (r0 != 0) goto L_0x0433
+            android.net.Uri r9 = (android.net.Uri) r9     // Catch:{ Exception -> 0x04ed }
+            java.lang.String r12 = org.telegram.messenger.AndroidUtilities.getPath(r9)     // Catch:{ Exception -> 0x04ed }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x04ed }
+            if (r0 != 0) goto L_0x0437
             r13 = r12
-            goto L_0x0434
-        L_0x0433:
+            goto L_0x0438
+        L_0x0437:
             r13 = r0
-        L_0x0434:
-            boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x04e9 }
-            if (r0 == 0) goto L_0x044c
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x04e9 }
-            r0.<init>()     // Catch:{ Exception -> 0x04e9 }
+        L_0x0438:
+            boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x04ed }
+            if (r0 == 0) goto L_0x0450
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x04ed }
+            r0.<init>()     // Catch:{ Exception -> 0x04ed }
             java.lang.String r5 = "export path = "
-            r0.append(r5)     // Catch:{ Exception -> 0x04e9 }
-            r0.append(r13)     // Catch:{ Exception -> 0x04e9 }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x04e9 }
-            org.telegram.messenger.FileLog.d(r0)     // Catch:{ Exception -> 0x04e9 }
-        L_0x044c:
-            if (r13 == 0) goto L_0x04a2
-            android.net.Uri r0 = r15.exportingChatUri     // Catch:{ Exception -> 0x04e9 }
-            if (r0 != 0) goto L_0x04a2
-            java.lang.String r0 = org.telegram.messenger.MediaController.getFileName(r9)     // Catch:{ Exception -> 0x04e9 }
-            java.lang.String r5 = org.telegram.messenger.FileLoader.fixFileName(r0)     // Catch:{ Exception -> 0x04e9 }
-            java.util.Iterator r6 = r4.iterator()     // Catch:{ Exception -> 0x04e9 }
-        L_0x045e:
-            boolean r0 = r6.hasNext()     // Catch:{ Exception -> 0x04e9 }
-            if (r0 == 0) goto L_0x048b
-            java.lang.Object r0 = r6.next()     // Catch:{ Exception -> 0x04e9 }
-            java.lang.String r0 = (java.lang.String) r0     // Catch:{ Exception -> 0x04e9 }
-            java.util.regex.Pattern r0 = java.util.regex.Pattern.compile(r0)     // Catch:{ Exception -> 0x0486 }
-            java.util.regex.Matcher r23 = r0.matcher(r13)     // Catch:{ Exception -> 0x0486 }
-            boolean r23 = r23.find()     // Catch:{ Exception -> 0x0486 }
-            if (r23 != 0) goto L_0x0482
-            java.util.regex.Matcher r0 = r0.matcher(r5)     // Catch:{ Exception -> 0x0486 }
-            boolean r0 = r0.find()     // Catch:{ Exception -> 0x0486 }
-            if (r0 == 0) goto L_0x045e
-        L_0x0482:
-            r15.exportingChatUri = r9     // Catch:{ Exception -> 0x0486 }
-            r0 = 1
-            goto L_0x048c
-        L_0x0486:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x04e9 }
-            goto L_0x045e
-        L_0x048b:
-            r0 = 0
-        L_0x048c:
+            r0.append(r5)     // Catch:{ Exception -> 0x04ed }
+            r0.append(r13)     // Catch:{ Exception -> 0x04ed }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x04ed }
+            org.telegram.messenger.FileLog.d(r0)     // Catch:{ Exception -> 0x04ed }
+        L_0x0450:
+            if (r13 == 0) goto L_0x04a6
+            android.net.Uri r0 = r15.exportingChatUri     // Catch:{ Exception -> 0x04ed }
+            if (r0 != 0) goto L_0x04a6
+            java.lang.String r0 = org.telegram.messenger.MediaController.getFileName(r9)     // Catch:{ Exception -> 0x04ed }
+            java.lang.String r5 = org.telegram.messenger.FileLoader.fixFileName(r0)     // Catch:{ Exception -> 0x04ed }
+            java.util.Iterator r6 = r4.iterator()     // Catch:{ Exception -> 0x04ed }
+        L_0x0462:
+            boolean r0 = r6.hasNext()     // Catch:{ Exception -> 0x04ed }
             if (r0 == 0) goto L_0x048f
-            goto L_0x04e1
+            java.lang.Object r0 = r6.next()     // Catch:{ Exception -> 0x04ed }
+            java.lang.String r0 = (java.lang.String) r0     // Catch:{ Exception -> 0x04ed }
+            java.util.regex.Pattern r0 = java.util.regex.Pattern.compile(r0)     // Catch:{ Exception -> 0x048a }
+            java.util.regex.Matcher r23 = r0.matcher(r13)     // Catch:{ Exception -> 0x048a }
+            boolean r23 = r23.find()     // Catch:{ Exception -> 0x048a }
+            if (r23 != 0) goto L_0x0486
+            java.util.regex.Matcher r0 = r0.matcher(r5)     // Catch:{ Exception -> 0x048a }
+            boolean r0 = r0.find()     // Catch:{ Exception -> 0x048a }
+            if (r0 == 0) goto L_0x0462
+        L_0x0486:
+            r15.exportingChatUri = r9     // Catch:{ Exception -> 0x048a }
+            r0 = 1
+            goto L_0x0490
+        L_0x048a:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x04ed }
+            goto L_0x0462
         L_0x048f:
+            r0 = 0
+        L_0x0490:
+            if (r0 == 0) goto L_0x0493
+            goto L_0x04e5
+        L_0x0493:
             java.lang.String r0 = "content://com.kakao.talk"
-            boolean r0 = r13.startsWith(r0)     // Catch:{ Exception -> 0x04e9 }
-            if (r0 == 0) goto L_0x04a2
+            boolean r0 = r13.startsWith(r0)     // Catch:{ Exception -> 0x04ed }
+            if (r0 == 0) goto L_0x04a6
             java.lang.String r0 = "KakaoTalkChats.txt"
-            boolean r0 = r13.endsWith(r0)     // Catch:{ Exception -> 0x04e9 }
-            if (r0 == 0) goto L_0x04a2
-            r15.exportingChatUri = r9     // Catch:{ Exception -> 0x04e9 }
-            goto L_0x04e1
-        L_0x04a2:
-            if (r12 == 0) goto L_0x04cf
+            boolean r0 = r13.endsWith(r0)     // Catch:{ Exception -> 0x04ed }
+            if (r0 == 0) goto L_0x04a6
+            r15.exportingChatUri = r9     // Catch:{ Exception -> 0x04ed }
+            goto L_0x04e5
+        L_0x04a6:
+            if (r12 == 0) goto L_0x04d3
             java.lang.String r0 = "file:"
-            boolean r0 = r12.startsWith(r0)     // Catch:{ Exception -> 0x04e9 }
-            if (r0 == 0) goto L_0x04b2
+            boolean r0 = r12.startsWith(r0)     // Catch:{ Exception -> 0x04ed }
+            if (r0 == 0) goto L_0x04b6
             java.lang.String r0 = "file://"
-            java.lang.String r12 = r12.replace(r0, r3)     // Catch:{ Exception -> 0x04e9 }
-        L_0x04b2:
-            java.util.ArrayList<java.lang.String> r0 = r15.documentsPathsArray     // Catch:{ Exception -> 0x04e9 }
-            if (r0 != 0) goto L_0x04c4
-            java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x04e9 }
-            r0.<init>()     // Catch:{ Exception -> 0x04e9 }
-            r15.documentsPathsArray = r0     // Catch:{ Exception -> 0x04e9 }
-            java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x04e9 }
-            r0.<init>()     // Catch:{ Exception -> 0x04e9 }
-            r15.documentsOriginalPathsArray = r0     // Catch:{ Exception -> 0x04e9 }
-        L_0x04c4:
-            java.util.ArrayList<java.lang.String> r0 = r15.documentsPathsArray     // Catch:{ Exception -> 0x04e9 }
-            r0.add(r12)     // Catch:{ Exception -> 0x04e9 }
-            java.util.ArrayList<java.lang.String> r0 = r15.documentsOriginalPathsArray     // Catch:{ Exception -> 0x04e9 }
-            r0.add(r13)     // Catch:{ Exception -> 0x04e9 }
-            goto L_0x04e1
-        L_0x04cf:
-            java.util.ArrayList<android.net.Uri> r0 = r15.documentsUrisArray     // Catch:{ Exception -> 0x04e9 }
-            if (r0 != 0) goto L_0x04da
-            java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x04e9 }
-            r0.<init>()     // Catch:{ Exception -> 0x04e9 }
-            r15.documentsUrisArray = r0     // Catch:{ Exception -> 0x04e9 }
-        L_0x04da:
-            java.util.ArrayList<android.net.Uri> r0 = r15.documentsUrisArray     // Catch:{ Exception -> 0x04e9 }
-            r0.add(r9)     // Catch:{ Exception -> 0x04e9 }
-            r15.documentsMimeType = r1     // Catch:{ Exception -> 0x04e9 }
-        L_0x04e1:
+            java.lang.String r12 = r12.replace(r0, r3)     // Catch:{ Exception -> 0x04ed }
+        L_0x04b6:
+            java.util.ArrayList<java.lang.String> r0 = r15.documentsPathsArray     // Catch:{ Exception -> 0x04ed }
+            if (r0 != 0) goto L_0x04c8
+            java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x04ed }
+            r0.<init>()     // Catch:{ Exception -> 0x04ed }
+            r15.documentsPathsArray = r0     // Catch:{ Exception -> 0x04ed }
+            java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x04ed }
+            r0.<init>()     // Catch:{ Exception -> 0x04ed }
+            r15.documentsOriginalPathsArray = r0     // Catch:{ Exception -> 0x04ed }
+        L_0x04c8:
+            java.util.ArrayList<java.lang.String> r0 = r15.documentsPathsArray     // Catch:{ Exception -> 0x04ed }
+            r0.add(r12)     // Catch:{ Exception -> 0x04ed }
+            java.util.ArrayList<java.lang.String> r0 = r15.documentsOriginalPathsArray     // Catch:{ Exception -> 0x04ed }
+            r0.add(r13)     // Catch:{ Exception -> 0x04ed }
+            goto L_0x04e5
+        L_0x04d3:
+            java.util.ArrayList<android.net.Uri> r0 = r15.documentsUrisArray     // Catch:{ Exception -> 0x04ed }
+            if (r0 != 0) goto L_0x04de
+            java.util.ArrayList r0 = new java.util.ArrayList     // Catch:{ Exception -> 0x04ed }
+            r0.<init>()     // Catch:{ Exception -> 0x04ed }
+            r15.documentsUrisArray = r0     // Catch:{ Exception -> 0x04ed }
+        L_0x04de:
+            java.util.ArrayList<android.net.Uri> r0 = r15.documentsUrisArray     // Catch:{ Exception -> 0x04ed }
+            r0.add(r9)     // Catch:{ Exception -> 0x04ed }
+            r15.documentsMimeType = r1     // Catch:{ Exception -> 0x04ed }
+        L_0x04e5:
             int r7 = r7 + 1
             r5 = 0
-            goto L_0x040c
-        L_0x04e7:
+            goto L_0x0410
+        L_0x04eb:
             r0 = 0
-            goto L_0x04ee
-        L_0x04e9:
+            goto L_0x04f2
+        L_0x04ed:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x04ed:
+        L_0x04f1:
             r0 = 1
-        L_0x04ee:
-            if (r0 == 0) goto L_0x04fa
+        L_0x04f2:
+            if (r0 == 0) goto L_0x04fe
             java.lang.String r0 = "Unsupported content"
             r1 = 0
             android.widget.Toast r0 = android.widget.Toast.makeText(r15, r0, r1)
             r0.show()
-        L_0x04fa:
-            r5 = r8
-            r8 = r14
-            r7 = r15
-            r10 = 0
+        L_0x04fe:
+            r6 = r8
+            r12 = r11
+            r7 = r14
+            r8 = r15
+            r1 = 2
+            r10 = 3
+            r11 = 0
             r60 = -1
             r61 = 0
-            goto L_0x1a37
-        L_0x0504:
-            java.lang.String r0 = r71.getAction()
-            java.lang.String r1 = "android.intent.action.VIEW"
-            boolean r0 = r1.equals(r0)
-            if (r0 == 0) goto L_0x18b2
-            android.net.Uri r0 = r71.getData()
-            if (r0 == 0) goto L_0x1868
-            java.lang.String r1 = r0.getScheme()
+            goto L_0x1a24
+        L_0x050b:
+            java.lang.String r0 = r70.getAction()
+            java.lang.String r2 = "android.intent.action.VIEW"
+            boolean r0 = r2.equals(r0)
+            if (r0 == 0) goto L_0x18b4
+            android.net.Uri r0 = r70.getData()
+            if (r0 == 0) goto L_0x186a
+            java.lang.String r2 = r0.getScheme()
             java.lang.String r5 = "actions.fulfillment.extra.ACTION_TOKEN"
             java.lang.String r6 = "phone"
-            if (r1 == 0) goto L_0x164a
-            int r7 = r1.hashCode()
+            if (r2 == 0) goto L_0x15f1
+            int r7 = r2.hashCode()
             switch(r7) {
-                case 3699: goto L_0x053f;
-                case 3213448: goto L_0x0534;
-                case 99617003: goto L_0x0529;
-                default: goto L_0x0527;
+                case 3699: goto L_0x0546;
+                case 3213448: goto L_0x053b;
+                case 99617003: goto L_0x0530;
+                default: goto L_0x052e;
             }
-        L_0x0527:
+        L_0x052e:
             r7 = -1
-            goto L_0x0549
-        L_0x0529:
+            goto L_0x0550
+        L_0x0530:
             java.lang.String r7 = "https"
-            boolean r7 = r1.equals(r7)
-            if (r7 != 0) goto L_0x0532
-            goto L_0x0527
-        L_0x0532:
+            boolean r7 = r2.equals(r7)
+            if (r7 != 0) goto L_0x0539
+            goto L_0x052e
+        L_0x0539:
             r7 = 2
-            goto L_0x0549
-        L_0x0534:
+            goto L_0x0550
+        L_0x053b:
             java.lang.String r7 = "http"
-            boolean r7 = r1.equals(r7)
-            if (r7 != 0) goto L_0x053d
-            goto L_0x0527
-        L_0x053d:
+            boolean r7 = r2.equals(r7)
+            if (r7 != 0) goto L_0x0544
+            goto L_0x052e
+        L_0x0544:
             r7 = 1
-            goto L_0x0549
-        L_0x053f:
+            goto L_0x0550
+        L_0x0546:
             java.lang.String r7 = "tg"
-            boolean r7 = r1.equals(r7)
-            if (r7 != 0) goto L_0x0548
-            goto L_0x0527
-        L_0x0548:
+            boolean r7 = r2.equals(r7)
+            if (r7 != 0) goto L_0x054f
+            goto L_0x052e
+        L_0x054f:
             r7 = 0
-        L_0x0549:
+        L_0x0550:
             java.lang.String r9 = "thread"
             r23 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             switch(r7) {
-                case 0: goto L_0x0abe;
-                case 1: goto L_0x0552;
-                case 2: goto L_0x0552;
-                default: goto L_0x0550;
+                case 0: goto L_0x0ab6;
+                case 1: goto L_0x0559;
+                case 2: goto L_0x0559;
+                default: goto L_0x0557;
             }
-        L_0x0550:
-            goto L_0x164a
-        L_0x0552:
+        L_0x0557:
+            goto L_0x15f1
+        L_0x0559:
             java.lang.String r7 = r0.getHost()
             java.lang.String r7 = r7.toLowerCase()
             java.lang.String r13 = "telegram.me"
             boolean r13 = r7.equals(r13)
-            if (r13 != 0) goto L_0x0572
+            if (r13 != 0) goto L_0x0579
             java.lang.String r13 = "t.me"
             boolean r13 = r7.equals(r13)
-            if (r13 != 0) goto L_0x0572
+            if (r13 != 0) goto L_0x0579
             java.lang.String r13 = "telegram.dog"
             boolean r7 = r7.equals(r13)
-            if (r7 == 0) goto L_0x164a
-        L_0x0572:
+            if (r7 == 0) goto L_0x15f1
+        L_0x0579:
             java.lang.String r7 = r0.getPath()
-            if (r7 == 0) goto L_0x0a50
+            if (r7 == 0) goto L_0x0a4b
             int r13 = r7.length()
             r12 = 1
-            if (r13 <= r12) goto L_0x0a50
+            if (r13 <= r12) goto L_0x0a4b
             java.lang.String r7 = r7.substring(r12)
             java.lang.String r12 = "bg/"
             boolean r12 = r7.startsWith(r12)
-            if (r12 == 0) goto L_0x0794
-            org.telegram.tgnet.TLRPC$TL_wallPaper r2 = new org.telegram.tgnet.TLRPC$TL_wallPaper
-            r2.<init>()
-            org.telegram.tgnet.TLRPC$TL_wallPaperSettings r9 = new org.telegram.tgnet.TLRPC$TL_wallPaperSettings
-            r9.<init>()
-            r2.settings = r9
-            java.lang.String r9 = "bg/"
-            java.lang.String r3 = r7.replace(r9, r3)
-            r2.slug = r3
-            if (r3 == 0) goto L_0x05bc
+            if (r12 == 0) goto L_0x079a
+            org.telegram.tgnet.TLRPC$TL_wallPaper r1 = new org.telegram.tgnet.TLRPC$TL_wallPaper
+            r1.<init>()
+            org.telegram.tgnet.TLRPC$TL_wallPaperSettings r4 = new org.telegram.tgnet.TLRPC$TL_wallPaperSettings
+            r4.<init>()
+            r1.settings = r4
+            java.lang.String r4 = "bg/"
+            java.lang.String r3 = r7.replace(r4, r3)
+            r1.slug = r3
+            if (r3 == 0) goto L_0x05c3
             int r3 = r3.length()
-            r7 = 6
-            if (r3 != r7) goto L_0x05bc
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x0674 }
-            java.lang.String r7 = r2.slug     // Catch:{ Exception -> 0x0674 }
-            r9 = 16
-            int r7 = java.lang.Integer.parseInt(r7, r9)     // Catch:{ Exception -> 0x0674 }
-            r7 = r7 | r23
-            r3.background_color = r7     // Catch:{ Exception -> 0x0674 }
-            r3 = 0
-            r2.slug = r3     // Catch:{ Exception -> 0x0674 }
-        L_0x05b9:
-            r3 = 1
-            goto L_0x0675
-        L_0x05bc:
-            java.lang.String r3 = r2.slug
-            if (r3 == 0) goto L_0x0674
-            int r3 = r3.length()
-            r7 = 13
-            if (r3 < r7) goto L_0x0674
-            java.lang.String r3 = r2.slug
-            r7 = 6
-            char r3 = r3.charAt(r7)
-            boolean r3 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r3)
-            if (r3 == 0) goto L_0x0674
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x0674 }
-            java.lang.String r9 = r2.slug     // Catch:{ Exception -> 0x0674 }
-            r12 = 0
-            java.lang.String r9 = r9.substring(r12, r7)     // Catch:{ Exception -> 0x0674 }
+            r4 = 6
+            if (r3 != r4) goto L_0x05c3
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x067b }
+            java.lang.String r4 = r1.slug     // Catch:{ Exception -> 0x067b }
             r7 = 16
-            int r9 = java.lang.Integer.parseInt(r9, r7)     // Catch:{ Exception -> 0x0674 }
-            r7 = r9 | r23
-            r3.background_color = r7     // Catch:{ Exception -> 0x0674 }
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x0674 }
-            java.lang.String r7 = r2.slug     // Catch:{ Exception -> 0x0674 }
-            r9 = 7
-            r12 = 13
-            java.lang.String r7 = r7.substring(r9, r12)     // Catch:{ Exception -> 0x0674 }
-            r9 = 16
-            int r7 = java.lang.Integer.parseInt(r7, r9)     // Catch:{ Exception -> 0x0674 }
-            r7 = r7 | r23
-            r3.second_background_color = r7     // Catch:{ Exception -> 0x0674 }
-            java.lang.String r3 = r2.slug     // Catch:{ Exception -> 0x0674 }
-            int r3 = r3.length()     // Catch:{ Exception -> 0x0674 }
-            r7 = 20
-            if (r3 < r7) goto L_0x062b
-            java.lang.String r3 = r2.slug     // Catch:{ Exception -> 0x0674 }
-            r7 = 13
-            char r3 = r3.charAt(r7)     // Catch:{ Exception -> 0x0674 }
-            boolean r3 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r3)     // Catch:{ Exception -> 0x0674 }
-            if (r3 == 0) goto L_0x062b
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x0674 }
-            java.lang.String r7 = r2.slug     // Catch:{ Exception -> 0x0674 }
-            r9 = 14
-            r12 = 20
-            java.lang.String r7 = r7.substring(r9, r12)     // Catch:{ Exception -> 0x0674 }
-            r9 = 16
-            int r7 = java.lang.Integer.parseInt(r7, r9)     // Catch:{ Exception -> 0x0674 }
-            r7 = r7 | r23
-            r3.third_background_color = r7     // Catch:{ Exception -> 0x0674 }
-        L_0x062b:
-            java.lang.String r3 = r2.slug     // Catch:{ Exception -> 0x0674 }
-            int r3 = r3.length()     // Catch:{ Exception -> 0x0674 }
-            r7 = 27
-            if (r3 != r7) goto L_0x0657
-            java.lang.String r3 = r2.slug     // Catch:{ Exception -> 0x0674 }
-            r7 = 20
-            char r3 = r3.charAt(r7)     // Catch:{ Exception -> 0x0674 }
-            boolean r3 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r3)     // Catch:{ Exception -> 0x0674 }
-            if (r3 == 0) goto L_0x0657
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x0674 }
-            java.lang.String r7 = r2.slug     // Catch:{ Exception -> 0x0674 }
-            r9 = 21
-            java.lang.String r7 = r7.substring(r9)     // Catch:{ Exception -> 0x0674 }
-            r9 = 16
-            int r7 = java.lang.Integer.parseInt(r7, r9)     // Catch:{ Exception -> 0x0674 }
-            r7 = r7 | r23
-            r3.fourth_background_color = r7     // Catch:{ Exception -> 0x0674 }
-        L_0x0657:
+            int r4 = java.lang.Integer.parseInt(r4, r7)     // Catch:{ Exception -> 0x067b }
+            r4 = r4 | r23
+            r3.background_color = r4     // Catch:{ Exception -> 0x067b }
+            r3 = 0
+            r1.slug = r3     // Catch:{ Exception -> 0x067b }
+        L_0x05c0:
+            r3 = 1
+            goto L_0x067c
+        L_0x05c3:
+            java.lang.String r3 = r1.slug
+            if (r3 == 0) goto L_0x067b
+            int r3 = r3.length()
+            r4 = 13
+            if (r3 < r4) goto L_0x067b
+            java.lang.String r3 = r1.slug
+            r4 = 6
+            char r3 = r3.charAt(r4)
+            boolean r3 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r3)
+            if (r3 == 0) goto L_0x067b
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x067b }
+            java.lang.String r7 = r1.slug     // Catch:{ Exception -> 0x067b }
+            r9 = 0
+            java.lang.String r7 = r7.substring(r9, r4)     // Catch:{ Exception -> 0x067b }
+            r4 = 16
+            int r7 = java.lang.Integer.parseInt(r7, r4)     // Catch:{ Exception -> 0x067b }
+            r4 = r7 | r23
+            r3.background_color = r4     // Catch:{ Exception -> 0x067b }
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x067b }
+            java.lang.String r4 = r1.slug     // Catch:{ Exception -> 0x067b }
+            r7 = 7
+            r9 = 13
+            java.lang.String r4 = r4.substring(r7, r9)     // Catch:{ Exception -> 0x067b }
+            r7 = 16
+            int r4 = java.lang.Integer.parseInt(r4, r7)     // Catch:{ Exception -> 0x067b }
+            r4 = r4 | r23
+            r3.second_background_color = r4     // Catch:{ Exception -> 0x067b }
+            java.lang.String r3 = r1.slug     // Catch:{ Exception -> 0x067b }
+            int r3 = r3.length()     // Catch:{ Exception -> 0x067b }
+            r4 = 20
+            if (r3 < r4) goto L_0x0632
+            java.lang.String r3 = r1.slug     // Catch:{ Exception -> 0x067b }
+            r4 = 13
+            char r3 = r3.charAt(r4)     // Catch:{ Exception -> 0x067b }
+            boolean r3 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r3)     // Catch:{ Exception -> 0x067b }
+            if (r3 == 0) goto L_0x0632
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x067b }
+            java.lang.String r4 = r1.slug     // Catch:{ Exception -> 0x067b }
+            r7 = 14
+            r9 = 20
+            java.lang.String r4 = r4.substring(r7, r9)     // Catch:{ Exception -> 0x067b }
+            r7 = 16
+            int r4 = java.lang.Integer.parseInt(r4, r7)     // Catch:{ Exception -> 0x067b }
+            r4 = r4 | r23
+            r3.third_background_color = r4     // Catch:{ Exception -> 0x067b }
+        L_0x0632:
+            java.lang.String r3 = r1.slug     // Catch:{ Exception -> 0x067b }
+            int r3 = r3.length()     // Catch:{ Exception -> 0x067b }
+            r4 = 27
+            if (r3 != r4) goto L_0x065e
+            java.lang.String r3 = r1.slug     // Catch:{ Exception -> 0x067b }
+            r4 = 20
+            char r3 = r3.charAt(r4)     // Catch:{ Exception -> 0x067b }
+            boolean r3 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r3)     // Catch:{ Exception -> 0x067b }
+            if (r3 == 0) goto L_0x065e
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x067b }
+            java.lang.String r4 = r1.slug     // Catch:{ Exception -> 0x067b }
+            r7 = 21
+            java.lang.String r4 = r4.substring(r7)     // Catch:{ Exception -> 0x067b }
+            r7 = 16
+            int r4 = java.lang.Integer.parseInt(r4, r7)     // Catch:{ Exception -> 0x067b }
+            r4 = r4 | r23
+            r3.fourth_background_color = r4     // Catch:{ Exception -> 0x067b }
+        L_0x065e:
             java.lang.String r3 = "rotation"
-            java.lang.String r3 = r0.getQueryParameter(r3)     // Catch:{ Exception -> 0x066f }
-            boolean r7 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x066f }
-            if (r7 != 0) goto L_0x066f
-            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r2.settings     // Catch:{ Exception -> 0x066f }
-            java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ Exception -> 0x066f }
-            int r3 = r3.intValue()     // Catch:{ Exception -> 0x066f }
-            r7.rotation = r3     // Catch:{ Exception -> 0x066f }
-        L_0x066f:
+            java.lang.String r3 = r0.getQueryParameter(r3)     // Catch:{ Exception -> 0x0676 }
+            boolean r4 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x0676 }
+            if (r4 != 0) goto L_0x0676
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x0676 }
+            java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ Exception -> 0x0676 }
+            int r3 = r3.intValue()     // Catch:{ Exception -> 0x0676 }
+            r4.rotation = r3     // Catch:{ Exception -> 0x0676 }
+        L_0x0676:
             r3 = 0
-            r2.slug = r3     // Catch:{ Exception -> 0x0674 }
-            goto L_0x05b9
-        L_0x0674:
+            r1.slug = r3     // Catch:{ Exception -> 0x067b }
+            goto L_0x05c0
+        L_0x067b:
             r3 = 0
-        L_0x0675:
-            if (r3 != 0) goto L_0x0776
+        L_0x067c:
+            if (r3 != 0) goto L_0x077d
             java.lang.String r3 = "mode"
             java.lang.String r3 = r0.getQueryParameter(r3)
-            if (r3 == 0) goto L_0x06b4
+            if (r3 == 0) goto L_0x06bb
             java.lang.String r3 = r3.toLowerCase()
-            java.lang.String r7 = " "
-            java.lang.String[] r3 = r3.split(r7)
-            if (r3 == 0) goto L_0x06b4
+            java.lang.String r4 = " "
+            java.lang.String[] r3 = r3.split(r4)
+            if (r3 == 0) goto L_0x06bb
+            int r4 = r3.length
+            if (r4 <= 0) goto L_0x06bb
+            r4 = 0
+        L_0x0696:
             int r7 = r3.length
-            if (r7 <= 0) goto L_0x06b4
-            r7 = 0
-        L_0x068f:
-            int r9 = r3.length
-            if (r7 >= r9) goto L_0x06b4
-            r9 = r3[r7]
-            java.lang.String r12 = "blur"
-            boolean r9 = r12.equals(r9)
-            if (r9 == 0) goto L_0x06a2
-            org.telegram.tgnet.TLRPC$WallPaperSettings r9 = r2.settings
-            r12 = 1
-            r9.blur = r12
-            goto L_0x06b1
-        L_0x06a2:
-            r12 = 1
-            r9 = r3[r7]
-            java.lang.String r13 = "motion"
-            boolean r9 = r13.equals(r9)
-            if (r9 == 0) goto L_0x06b1
-            org.telegram.tgnet.TLRPC$WallPaperSettings r9 = r2.settings
-            r9.motion = r12
-        L_0x06b1:
-            int r7 = r7 + 1
-            goto L_0x068f
-        L_0x06b4:
+            if (r4 >= r7) goto L_0x06bb
+            r7 = r3[r4]
+            java.lang.String r9 = "blur"
+            boolean r7 = r9.equals(r7)
+            if (r7 == 0) goto L_0x06a9
+            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r1.settings
+            r9 = 1
+            r7.blur = r9
+            goto L_0x06b8
+        L_0x06a9:
+            r9 = 1
+            r7 = r3[r4]
+            java.lang.String r12 = "motion"
+            boolean r7 = r12.equals(r7)
+            if (r7 == 0) goto L_0x06b8
+            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r1.settings
+            r7.motion = r9
+        L_0x06b8:
+            int r4 = r4 + 1
+            goto L_0x0696
+        L_0x06bb:
             java.lang.String r3 = "intensity"
             java.lang.String r3 = r0.getQueryParameter(r3)
-            boolean r7 = android.text.TextUtils.isEmpty(r3)
-            if (r7 != 0) goto L_0x06cd
-            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r2.settings
+            boolean r4 = android.text.TextUtils.isEmpty(r3)
+            if (r4 != 0) goto L_0x06d4
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings
             java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)
             int r3 = r3.intValue()
-            r7.intensity = r3
-            goto L_0x06d3
-        L_0x06cd:
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings
-            r7 = 50
-            r3.intensity = r7
-        L_0x06d3:
+            r4.intensity = r3
+            goto L_0x06da
+        L_0x06d4:
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings
+            r4 = 50
+            r3.intensity = r4
+        L_0x06da:
             java.lang.String r3 = "bg_color"
-            java.lang.String r3 = r0.getQueryParameter(r3)     // Catch:{ Exception -> 0x0756 }
-            boolean r7 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x0756 }
-            if (r7 != 0) goto L_0x0758
-            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r2.settings     // Catch:{ Exception -> 0x0756 }
-            r9 = 6
-            r12 = 0
-            java.lang.String r13 = r3.substring(r12, r9)     // Catch:{ Exception -> 0x0756 }
-            r9 = 16
-            int r12 = java.lang.Integer.parseInt(r13, r9)     // Catch:{ Exception -> 0x0756 }
-            r9 = r12 | r23
-            r7.background_color = r9     // Catch:{ Exception -> 0x0756 }
-            int r7 = r3.length()     // Catch:{ Exception -> 0x0756 }
-            r9 = 13
-            if (r7 < r9) goto L_0x0756
-            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r2.settings     // Catch:{ Exception -> 0x0756 }
-            r12 = 7
-            java.lang.String r12 = r3.substring(r12, r9)     // Catch:{ Exception -> 0x0756 }
-            r9 = 16
-            int r12 = java.lang.Integer.parseInt(r12, r9)     // Catch:{ Exception -> 0x0756 }
-            r9 = r12 | r23
-            r7.second_background_color = r9     // Catch:{ Exception -> 0x0756 }
-            int r7 = r3.length()     // Catch:{ Exception -> 0x0756 }
-            r9 = 20
-            if (r7 < r9) goto L_0x0730
+            java.lang.String r3 = r0.getQueryParameter(r3)     // Catch:{ Exception -> 0x075d }
+            boolean r4 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x075d }
+            if (r4 != 0) goto L_0x075f
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x075d }
+            r7 = 6
+            r9 = 0
+            java.lang.String r12 = r3.substring(r9, r7)     // Catch:{ Exception -> 0x075d }
+            r7 = 16
+            int r9 = java.lang.Integer.parseInt(r12, r7)     // Catch:{ Exception -> 0x075d }
+            r7 = r9 | r23
+            r4.background_color = r7     // Catch:{ Exception -> 0x075d }
+            int r4 = r3.length()     // Catch:{ Exception -> 0x075d }
             r7 = 13
-            char r7 = r3.charAt(r7)     // Catch:{ Exception -> 0x0756 }
-            boolean r7 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r7)     // Catch:{ Exception -> 0x0756 }
-            if (r7 == 0) goto L_0x0730
-            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r2.settings     // Catch:{ Exception -> 0x0756 }
-            r12 = 14
-            java.lang.String r12 = r3.substring(r12, r9)     // Catch:{ Exception -> 0x0756 }
-            r9 = 16
-            int r12 = java.lang.Integer.parseInt(r12, r9)     // Catch:{ Exception -> 0x0756 }
-            r9 = r12 | r23
-            r7.third_background_color = r9     // Catch:{ Exception -> 0x0756 }
-        L_0x0730:
-            int r7 = r3.length()     // Catch:{ Exception -> 0x0756 }
-            r9 = 27
-            if (r7 != r9) goto L_0x0756
+            if (r4 < r7) goto L_0x075d
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x075d }
+            r9 = 7
+            java.lang.String r9 = r3.substring(r9, r7)     // Catch:{ Exception -> 0x075d }
+            r7 = 16
+            int r9 = java.lang.Integer.parseInt(r9, r7)     // Catch:{ Exception -> 0x075d }
+            r7 = r9 | r23
+            r4.second_background_color = r7     // Catch:{ Exception -> 0x075d }
+            int r4 = r3.length()     // Catch:{ Exception -> 0x075d }
             r7 = 20
-            char r7 = r3.charAt(r7)     // Catch:{ Exception -> 0x0756 }
-            boolean r7 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r7)     // Catch:{ Exception -> 0x0756 }
-            if (r7 == 0) goto L_0x0756
-            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r2.settings     // Catch:{ Exception -> 0x0756 }
-            r9 = 21
-            java.lang.String r3 = r3.substring(r9)     // Catch:{ Exception -> 0x0756 }
-            r9 = 16
-            int r3 = java.lang.Integer.parseInt(r3, r9)     // Catch:{ Exception -> 0x0756 }
+            if (r4 < r7) goto L_0x0737
+            r4 = 13
+            char r4 = r3.charAt(r4)     // Catch:{ Exception -> 0x075d }
+            boolean r4 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r4)     // Catch:{ Exception -> 0x075d }
+            if (r4 == 0) goto L_0x0737
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x075d }
+            r9 = 14
+            java.lang.String r9 = r3.substring(r9, r7)     // Catch:{ Exception -> 0x075d }
+            r7 = 16
+            int r9 = java.lang.Integer.parseInt(r9, r7)     // Catch:{ Exception -> 0x075d }
+            r7 = r9 | r23
+            r4.third_background_color = r7     // Catch:{ Exception -> 0x075d }
+        L_0x0737:
+            int r4 = r3.length()     // Catch:{ Exception -> 0x075d }
+            r7 = 27
+            if (r4 != r7) goto L_0x075d
+            r4 = 20
+            char r4 = r3.charAt(r4)     // Catch:{ Exception -> 0x075d }
+            boolean r4 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r4)     // Catch:{ Exception -> 0x075d }
+            if (r4 == 0) goto L_0x075d
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x075d }
+            r7 = 21
+            java.lang.String r3 = r3.substring(r7)     // Catch:{ Exception -> 0x075d }
+            r7 = 16
+            int r3 = java.lang.Integer.parseInt(r3, r7)     // Catch:{ Exception -> 0x075d }
             r3 = r3 | r23
-            r7.fourth_background_color = r3     // Catch:{ Exception -> 0x0756 }
-        L_0x0756:
-            r12 = -1
-            goto L_0x075d
-        L_0x0758:
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x0756 }
-            r12 = -1
-            r3.background_color = r12     // Catch:{ Exception -> 0x075d }
+            r4.fourth_background_color = r3     // Catch:{ Exception -> 0x075d }
         L_0x075d:
-            java.lang.String r3 = "rotation"
-            java.lang.String r0 = r0.getQueryParameter(r3)     // Catch:{ Exception -> 0x0777 }
-            boolean r3 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x0777 }
-            if (r3 != 0) goto L_0x0777
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x0777 }
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x0777 }
-            int r0 = r0.intValue()     // Catch:{ Exception -> 0x0777 }
-            r3.rotation = r0     // Catch:{ Exception -> 0x0777 }
-            goto L_0x0777
-        L_0x0776:
             r12 = -1
-        L_0x0777:
-            r34 = r2
+            goto L_0x0764
+        L_0x075f:
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x075d }
+            r12 = -1
+            r3.background_color = r12     // Catch:{ Exception -> 0x0764 }
+        L_0x0764:
+            java.lang.String r3 = "rotation"
+            java.lang.String r0 = r0.getQueryParameter(r3)     // Catch:{ Exception -> 0x077e }
+            boolean r3 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x077e }
+            if (r3 != 0) goto L_0x077e
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x077e }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x077e }
+            int r0 = r0.intValue()     // Catch:{ Exception -> 0x077e }
+            r3.rotation = r0     // Catch:{ Exception -> 0x077e }
+            goto L_0x077e
+        L_0x077d:
+            r12 = -1
+        L_0x077e:
+            r33 = r1
             r0 = 0
-            r2 = 0
+            r1 = 0
             r3 = 0
-            r7 = -1
+            r4 = -1
+            r7 = 0
+            r9 = 0
+            r12 = 0
+            r13 = 0
+            r23 = 0
+            r24 = 0
+            r27 = 0
+            r28 = 0
+            r29 = 0
+            r30 = 0
+            r31 = 0
+            r32 = 0
+            goto L_0x0a65
+        L_0x079a:
+            r12 = -1
+            java.lang.String r13 = "login/"
+            boolean r13 = r7.startsWith(r13)
+            if (r13 == 0) goto L_0x07de
+            java.lang.String r0 = "login/"
+            java.lang.String r0 = r7.replace(r0, r3)
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)
+            int r0 = r0.intValue()
+            if (r0 == 0) goto L_0x07c3
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder
+            r1.<init>()
+            r1.append(r3)
+            r1.append(r0)
+            java.lang.String r0 = r1.toString()
+            goto L_0x07c4
+        L_0x07c3:
+            r0 = 0
+        L_0x07c4:
+            r32 = r0
+            r0 = 0
+            r1 = 0
+            r3 = 0
+            r4 = -1
+            r7 = 0
+            r9 = 0
+            r12 = 0
+            r13 = 0
+            r23 = 0
+            r24 = 0
+            r27 = 0
+            r28 = 0
+            r29 = 0
+            r30 = 0
+            r31 = 0
+            goto L_0x0a63
+        L_0x07de:
+            java.lang.String r13 = "joinchat/"
+            boolean r13 = r7.startsWith(r13)
+            if (r13 == 0) goto L_0x07ee
+            java.lang.String r0 = "joinchat/"
+            java.lang.String r0 = r7.replace(r0, r3)
+            goto L_0x0a4c
+        L_0x07ee:
+            java.lang.String r13 = "+"
+            boolean r13 = r7.startsWith(r13)
+            if (r13 == 0) goto L_0x07fe
+            java.lang.String r0 = "+"
+            java.lang.String r0 = r7.replace(r0, r3)
+            goto L_0x0a4c
+        L_0x07fe:
+            java.lang.String r13 = "addstickers/"
+            boolean r13 = r7.startsWith(r13)
+            if (r13 == 0) goto L_0x0813
+            java.lang.String r0 = "addstickers/"
+            java.lang.String r0 = r7.replace(r0, r3)
+            r7 = r0
+            r0 = 0
+            r1 = 0
+            r3 = 0
+            r4 = -1
+            goto L_0x0a50
+        L_0x0813:
+            java.lang.String r13 = "msg/"
+            boolean r13 = r7.startsWith(r13)
+            if (r13 != 0) goto L_0x09df
+            java.lang.String r13 = "share/"
+            boolean r13 = r7.startsWith(r13)
+            if (r13 == 0) goto L_0x0825
+            goto L_0x09df
+        L_0x0825:
+            java.lang.String r3 = "confirmphone"
+            boolean r3 = r7.startsWith(r3)
+            if (r3 == 0) goto L_0x0849
+            java.lang.String r3 = r0.getQueryParameter(r6)
+            java.lang.String r0 = r0.getQueryParameter(r1)
+            r29 = r0
+            r23 = r3
+            r0 = 0
+            r1 = 0
+            r3 = 0
+            r4 = -1
+            r7 = 0
+            r9 = 0
+            r12 = 0
+            r13 = 0
+            r24 = 0
+            r27 = 0
+            r28 = 0
+            goto L_0x0a5d
+        L_0x0849:
+            java.lang.String r1 = "setlanguage/"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 == 0) goto L_0x086d
+            r0 = 12
+            java.lang.String r0 = r7.substring(r0)
+            r30 = r0
+            r0 = 0
+            r1 = 0
+            r3 = 0
+            r4 = -1
+            r7 = 0
+            r9 = 0
+            r12 = 0
+            r13 = 0
+            r23 = 0
+            r24 = 0
+            r27 = 0
+            r28 = 0
+            r29 = 0
+            goto L_0x0a5f
+        L_0x086d:
+            java.lang.String r1 = "addtheme/"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 == 0) goto L_0x0893
+            r0 = 9
+            java.lang.String r0 = r7.substring(r0)
+            r31 = r0
+            r0 = 0
+            r1 = 0
+            r3 = 0
+            r4 = -1
+            r7 = 0
+            r9 = 0
+            r12 = 0
+            r13 = 0
+            r23 = 0
+            r24 = 0
+            r27 = 0
+            r28 = 0
+            r29 = 0
+            r30 = 0
+            goto L_0x0a61
+        L_0x0893:
+            java.lang.String r1 = "c/"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 == 0) goto L_0x0904
+            java.util.List r1 = r0.getPathSegments()
+            int r3 = r1.size()
+            r4 = 3
+            if (r3 != r4) goto L_0x08de
+            r3 = 1
+            java.lang.Object r4 = r1.get(r3)
+            java.lang.String r4 = (java.lang.String) r4
+            java.lang.Long r3 = org.telegram.messenger.Utilities.parseLong(r4)
+            r13 = 2
+            java.lang.Object r1 = r1.get(r13)
+            java.lang.CharSequence r1 = (java.lang.CharSequence) r1
+            java.lang.Integer r1 = org.telegram.messenger.Utilities.parseInt(r1)
+            int r4 = r1.intValue()
+            if (r4 == 0) goto L_0x08cc
+            long r16 = r3.longValue()
+            r19 = 0
+            int r4 = (r16 > r19 ? 1 : (r16 == r19 ? 0 : -1))
+            if (r4 != 0) goto L_0x08ce
+        L_0x08cc:
+            r1 = 0
+            r3 = 0
+        L_0x08ce:
+            java.lang.String r0 = r0.getQueryParameter(r9)
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)
+            int r4 = r0.intValue()
+            if (r4 != 0) goto L_0x08e2
+            r0 = 0
+            goto L_0x08e2
+        L_0x08de:
+            r13 = 2
+            r0 = 0
+            r1 = 0
+            r3 = 0
+        L_0x08e2:
+            r36 = r0
+            r34 = r1
+            r35 = r3
+            r0 = 0
+            r1 = 0
+            r3 = 0
+            r4 = -1
+            r7 = 0
             r9 = 0
             r12 = 0
             r13 = 0
@@ -3677,423 +3939,226 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r32 = 0
             r33 = 0
             goto L_0x0a6b
-        L_0x0794:
-            r12 = -1
-            java.lang.String r13 = "login/"
-            boolean r13 = r7.startsWith(r13)
-            if (r13 == 0) goto L_0x07d9
-            java.lang.String r0 = "login/"
-            java.lang.String r0 = r7.replace(r0, r3)
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)
-            int r0 = r0.intValue()
-            if (r0 == 0) goto L_0x07bd
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder
-            r2.<init>()
-            r2.append(r3)
-            r2.append(r0)
-            java.lang.String r0 = r2.toString()
-            goto L_0x07be
-        L_0x07bd:
-            r0 = 0
-        L_0x07be:
-            r33 = r0
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = -1
-            r9 = 0
-            r12 = 0
-            r13 = 0
-            r23 = 0
-            r24 = 0
-            r27 = 0
-            r28 = 0
-            r29 = 0
-            r30 = 0
-            r31 = 0
-            r32 = 0
-            goto L_0x0a69
-        L_0x07d9:
-            java.lang.String r13 = "joinchat/"
-            boolean r13 = r7.startsWith(r13)
-            if (r13 == 0) goto L_0x07eb
-            java.lang.String r0 = "joinchat/"
-            java.lang.String r0 = r7.replace(r0, r3)
-        L_0x07e7:
-            r2 = r0
-            r0 = 0
-            goto L_0x0a52
-        L_0x07eb:
-            java.lang.String r13 = "+"
-            boolean r13 = r7.startsWith(r13)
-            if (r13 == 0) goto L_0x07fa
-            java.lang.String r0 = "+"
-            java.lang.String r0 = r7.replace(r0, r3)
-            goto L_0x07e7
-        L_0x07fa:
-            java.lang.String r13 = "addstickers/"
-            boolean r13 = r7.startsWith(r13)
-            if (r13 == 0) goto L_0x080f
-            java.lang.String r0 = "addstickers/"
-            java.lang.String r0 = r7.replace(r0, r3)
-            r9 = r0
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = -1
-            goto L_0x0a55
-        L_0x080f:
-            java.lang.String r13 = "msg/"
-            boolean r13 = r7.startsWith(r13)
-            if (r13 != 0) goto L_0x09e2
-            java.lang.String r13 = "share/"
-            boolean r13 = r7.startsWith(r13)
-            if (r13 == 0) goto L_0x0821
-            goto L_0x09e2
-        L_0x0821:
-            java.lang.String r2 = "confirmphone"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0846
-            java.lang.String r2 = r0.getQueryParameter(r6)
-            java.lang.String r0 = r0.getQueryParameter(r4)
-            r30 = r0
-            r24 = r2
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = -1
-            r9 = 0
-            r12 = 0
-            r13 = 0
-            r23 = 0
-            r27 = 0
-            r28 = 0
-            r29 = 0
-            goto L_0x0a63
-        L_0x0846:
-            java.lang.String r2 = "setlanguage/"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x086b
-            r0 = 12
-            java.lang.String r0 = r7.substring(r0)
-            r31 = r0
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = -1
-            r9 = 0
-            r12 = 0
-            r13 = 0
-            r23 = 0
-            r24 = 0
-            r27 = 0
-            r28 = 0
-            r29 = 0
-            r30 = 0
-            goto L_0x0a65
-        L_0x086b:
-            java.lang.String r2 = "addtheme/"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0892
-            r0 = 9
-            java.lang.String r0 = r7.substring(r0)
-            r32 = r0
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = -1
-            r9 = 0
-            r12 = 0
-            r13 = 0
-            r23 = 0
-            r24 = 0
-            r27 = 0
-            r28 = 0
-            r29 = 0
-            r30 = 0
-            r31 = 0
-            goto L_0x0a67
-        L_0x0892:
-            java.lang.String r2 = "c/"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0904
-            java.util.List r2 = r0.getPathSegments()
-            int r3 = r2.size()
-            r7 = 3
-            if (r3 != r7) goto L_0x08dd
-            r3 = 1
-            java.lang.Object r7 = r2.get(r3)
-            java.lang.String r7 = (java.lang.String) r7
-            java.lang.Long r3 = org.telegram.messenger.Utilities.parseLong(r7)
-            r13 = 2
-            java.lang.Object r2 = r2.get(r13)
-            java.lang.CharSequence r2 = (java.lang.CharSequence) r2
-            java.lang.Integer r2 = org.telegram.messenger.Utilities.parseInt(r2)
-            int r7 = r2.intValue()
-            if (r7 == 0) goto L_0x08cb
-            long r16 = r3.longValue()
-            r19 = 0
-            int r7 = (r16 > r19 ? 1 : (r16 == r19 ? 0 : -1))
-            if (r7 != 0) goto L_0x08cd
-        L_0x08cb:
-            r2 = 0
-            r3 = 0
-        L_0x08cd:
-            java.lang.String r0 = r0.getQueryParameter(r9)
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)
-            int r7 = r0.intValue()
-            if (r7 != 0) goto L_0x08e1
-            r0 = 0
-            goto L_0x08e1
-        L_0x08dd:
-            r13 = 2
-            r0 = 0
-            r2 = 0
-            r3 = 0
-        L_0x08e1:
-            r37 = r0
-            r35 = r2
-            r36 = r3
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = -1
-            r9 = 0
-            r12 = 0
-            r13 = 0
-            r23 = 0
-            r24 = 0
-            r27 = 0
-            r28 = 0
-            r29 = 0
-            r30 = 0
-            r31 = 0
-            r32 = 0
-            r33 = 0
-            r34 = 0
-            goto L_0x0a71
         L_0x0904:
             r13 = 2
-            int r2 = r7.length()
+            int r1 = r7.length()
             r3 = 1
-            if (r2 < r3) goto L_0x0a50
-            java.util.ArrayList r2 = new java.util.ArrayList
+            if (r1 < r3) goto L_0x0a4b
+            java.util.ArrayList r1 = new java.util.ArrayList
             java.util.List r3 = r0.getPathSegments()
-            r2.<init>(r3)
-            int r3 = r2.size()
+            r1.<init>(r3)
+            int r3 = r1.size()
             if (r3 <= 0) goto L_0x092e
             r3 = 0
-            java.lang.Object r7 = r2.get(r3)
-            java.lang.String r7 = (java.lang.String) r7
-            java.lang.String r12 = "s"
-            boolean r7 = r7.equals(r12)
-            if (r7 == 0) goto L_0x092f
-            r2.remove(r3)
+            java.lang.Object r4 = r1.get(r3)
+            java.lang.String r4 = (java.lang.String) r4
+            java.lang.String r7 = "s"
+            boolean r4 = r4.equals(r7)
+            if (r4 == 0) goto L_0x092f
+            r1.remove(r3)
             goto L_0x092f
         L_0x092e:
             r3 = 0
         L_0x092f:
-            int r7 = r2.size()
-            if (r7 <= 0) goto L_0x0955
-            java.lang.Object r7 = r2.get(r3)
-            r3 = r7
+            int r4 = r1.size()
+            if (r4 <= 0) goto L_0x0955
+            java.lang.Object r4 = r1.get(r3)
+            r3 = r4
             java.lang.String r3 = (java.lang.String) r3
-            int r7 = r2.size()
-            r12 = 1
-            if (r7 <= r12) goto L_0x0953
-            java.lang.Object r2 = r2.get(r12)
-            java.lang.CharSequence r2 = (java.lang.CharSequence) r2
-            java.lang.Integer r2 = org.telegram.messenger.Utilities.parseInt(r2)
-            int r7 = r2.intValue()
-            if (r7 != 0) goto L_0x0957
+            int r4 = r1.size()
+            r7 = 1
+            if (r4 <= r7) goto L_0x0953
+            java.lang.Object r1 = r1.get(r7)
+            java.lang.CharSequence r1 = (java.lang.CharSequence) r1
+            java.lang.Integer r1 = org.telegram.messenger.Utilities.parseInt(r1)
+            int r4 = r1.intValue()
+            if (r4 != 0) goto L_0x0957
         L_0x0953:
-            r2 = 0
+            r1 = 0
             goto L_0x0957
         L_0x0955:
-            r2 = 0
+            r1 = 0
             r3 = 0
         L_0x0957:
-            if (r2 == 0) goto L_0x095e
-            int r7 = getTimestampFromLink(r0)
+            if (r1 == 0) goto L_0x095e
+            int r4 = getTimestampFromLink(r0)
             goto L_0x095f
         L_0x095e:
-            r7 = -1
+            r4 = -1
         L_0x095f:
-            java.lang.String r12 = "start"
+            java.lang.String r7 = "start"
+            java.lang.String r7 = r0.getQueryParameter(r7)
+            java.lang.String r12 = "startgroup"
             java.lang.String r12 = r0.getQueryParameter(r12)
-            java.lang.String r13 = "startgroup"
+            java.lang.String r13 = "game"
             java.lang.String r13 = r0.getQueryParameter(r13)
-            r73 = r2
-            java.lang.String r2 = "game"
-            java.lang.String r2 = r0.getQueryParameter(r2)
-            r23 = r2
-            java.lang.String r2 = "voicechat"
-            java.lang.String r2 = r0.getQueryParameter(r2)
-            r24 = r2
-            java.lang.String r2 = "livestream"
-            java.lang.String r2 = r0.getQueryParameter(r2)
+            r72 = r1
+            java.lang.String r1 = "voicechat"
+            java.lang.String r1 = r0.getQueryParameter(r1)
+            r23 = r1
+            java.lang.String r1 = "livestream"
+            java.lang.String r1 = r0.getQueryParameter(r1)
             java.lang.String r9 = r0.getQueryParameter(r9)
             java.lang.Integer r9 = org.telegram.messenger.Utilities.parseInt(r9)
-            int r27 = r9.intValue()
-            if (r27 != 0) goto L_0x0995
-            r27 = r2
+            int r24 = r9.intValue()
+            if (r24 != 0) goto L_0x0993
+            r24 = r1
             r9 = 0
-            goto L_0x0997
+            goto L_0x0995
+        L_0x0993:
+            r24 = r1
         L_0x0995:
-            r27 = r2
-        L_0x0997:
-            java.lang.String r2 = "comment"
-            java.lang.String r0 = r0.getQueryParameter(r2)
+            java.lang.String r1 = "comment"
+            java.lang.String r0 = r0.getQueryParameter(r1)
             java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)
-            int r2 = r0.intValue()
-            r35 = r73
-            if (r2 != 0) goto L_0x09c3
-            r37 = r9
-            r28 = r24
-            r29 = r27
-            r0 = 0
-            r2 = 0
-            r9 = 0
-            r24 = 0
-            r30 = 0
-            r31 = 0
-            r32 = 0
-            r33 = 0
-            r34 = 0
-            r36 = 0
-            r38 = 0
-            goto L_0x09dc
-        L_0x09c3:
-            r38 = r0
-            r37 = r9
-            r28 = r24
-            r29 = r27
-            r0 = 0
-            r2 = 0
-            r9 = 0
-            r24 = 0
-            r30 = 0
-            r31 = 0
-            r32 = 0
-            r33 = 0
-            r34 = 0
-            r36 = 0
-        L_0x09dc:
+            int r1 = r0.intValue()
+            r34 = r72
+            if (r1 != 0) goto L_0x09c0
+            r36 = r9
             r27 = r23
+            r28 = r24
+            r0 = 0
+            r1 = 0
             r23 = 0
-            goto L_0x0a73
-        L_0x09e2:
-            java.lang.String r7 = "url"
-            java.lang.String r7 = r0.getQueryParameter(r7)
-            if (r7 != 0) goto L_0x09eb
-            goto L_0x09ec
-        L_0x09eb:
-            r3 = r7
-        L_0x09ec:
-            java.lang.String r7 = "text"
-            java.lang.String r7 = r0.getQueryParameter(r7)
-            if (r7 == 0) goto L_0x0a22
-            int r7 = r3.length()
-            if (r7 <= 0) goto L_0x0a0b
+            r29 = 0
+            r30 = 0
+            r31 = 0
+            r32 = 0
+            r33 = 0
+            r35 = 0
+            r37 = 0
+            goto L_0x09d8
+        L_0x09c0:
+            r37 = r0
+            r36 = r9
+            r27 = r23
+            r28 = r24
+            r0 = 0
+            r1 = 0
+            r23 = 0
+            r29 = 0
+            r30 = 0
+            r31 = 0
+            r32 = 0
+            r33 = 0
+            r35 = 0
+        L_0x09d8:
+            r9 = r7
+            r24 = r13
+            r7 = 0
+            r13 = 0
+            goto L_0x0a6d
+        L_0x09df:
+            java.lang.String r1 = "url"
+            java.lang.String r1 = r0.getQueryParameter(r1)
+            if (r1 != 0) goto L_0x09e8
+            goto L_0x09e9
+        L_0x09e8:
+            r3 = r1
+        L_0x09e9:
+            java.lang.String r1 = "text"
+            java.lang.String r1 = r0.getQueryParameter(r1)
+            if (r1 == 0) goto L_0x0a1f
+            int r1 = r3.length()
+            if (r1 <= 0) goto L_0x0a08
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder
+            r1.<init>()
+            r1.append(r3)
+            r1.append(r4)
+            java.lang.String r3 = r1.toString()
+            r1 = 1
+            goto L_0x0a09
+        L_0x0a08:
+            r1 = 0
+        L_0x0a09:
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
             r7.<init>()
             r7.append(r3)
-            r7.append(r2)
-            java.lang.String r3 = r7.toString()
-            r7 = 1
-            goto L_0x0a0c
-        L_0x0a0b:
-            r7 = 0
-        L_0x0a0c:
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder
-            r9.<init>()
-            r9.append(r3)
             java.lang.String r3 = "text"
             java.lang.String r0 = r0.getQueryParameter(r3)
-            r9.append(r0)
-            java.lang.String r3 = r9.toString()
-            goto L_0x0a23
-        L_0x0a22:
-            r7 = 0
-        L_0x0a23:
+            r7.append(r0)
+            java.lang.String r3 = r7.toString()
+            goto L_0x0a20
+        L_0x0a1f:
+            r1 = 0
+        L_0x0a20:
             int r0 = r3.length()
-            r9 = 16384(0x4000, float:2.2959E-41)
-            if (r0 <= r9) goto L_0x0a33
+            r7 = 16384(0x4000, float:2.2959E-41)
+            if (r0 <= r7) goto L_0x0a30
             r0 = 16384(0x4000, float:2.2959E-41)
-            r9 = 0
-            java.lang.String r0 = r3.substring(r9, r0)
-            goto L_0x0a35
-        L_0x0a33:
-            r9 = 0
+            r7 = 0
+            java.lang.String r0 = r3.substring(r7, r0)
+            goto L_0x0a32
+        L_0x0a30:
+            r7 = 0
             r0 = r3
-        L_0x0a35:
-            boolean r3 = r0.endsWith(r2)
-            if (r3 == 0) goto L_0x0a46
+        L_0x0a32:
+            boolean r3 = r0.endsWith(r4)
+            if (r3 == 0) goto L_0x0a43
             int r3 = r0.length()
-            r12 = 1
-            int r3 = r3 - r12
-            java.lang.String r0 = r0.substring(r9, r3)
-            goto L_0x0a35
-        L_0x0a46:
-            r23 = r0
-            r0 = r7
-            r2 = 0
-            r3 = 0
-            r7 = -1
-            r9 = 0
-            r12 = 0
-            r13 = 0
-            goto L_0x0a59
-        L_0x0a50:
+            r9 = 1
+            int r3 = r3 - r9
+            java.lang.String r0 = r0.substring(r7, r3)
+            goto L_0x0a32
+        L_0x0a43:
+            r13 = r0
             r0 = 0
-            r2 = 0
-        L_0x0a52:
             r3 = 0
-            r7 = -1
+            r4 = -1
+            r7 = 0
             r9 = 0
-        L_0x0a55:
+            r12 = 0
+            goto L_0x0a53
+        L_0x0a4b:
+            r0 = 0
+        L_0x0a4c:
+            r1 = 0
+            r3 = 0
+            r4 = -1
+            r7 = 0
+        L_0x0a50:
+            r9 = 0
             r12 = 0
             r13 = 0
+        L_0x0a53:
             r23 = 0
-        L_0x0a59:
             r24 = 0
             r27 = 0
             r28 = 0
             r29 = 0
+        L_0x0a5d:
             r30 = 0
-        L_0x0a63:
+        L_0x0a5f:
             r31 = 0
-        L_0x0a65:
+        L_0x0a61:
             r32 = 0
-        L_0x0a67:
+        L_0x0a63:
             r33 = 0
-        L_0x0a69:
+        L_0x0a65:
             r34 = 0
-        L_0x0a6b:
             r35 = 0
             r36 = 0
+        L_0x0a6b:
             r37 = 0
-        L_0x0a71:
-            r38 = 0
-        L_0x0a73:
-            r58 = r7
-            r7 = r12
-            r10 = r23
-            r44 = r27
-            r56 = r28
-            r57 = r29
-            r46 = r31
-            r55 = r32
-            r48 = r33
-            r54 = r34
-            r40 = r35
-            r41 = r36
-            r42 = r37
-            r43 = r38
+        L_0x0a6d:
+            r58 = r4
+            r10 = r12
+            r12 = r23
+            r44 = r24
+            r56 = r27
+            r57 = r28
+            r46 = r30
+            r55 = r31
+            r48 = r32
+            r54 = r33
+            r40 = r34
+            r41 = r35
+            r42 = r36
+            r43 = r37
             r19 = 0
             r27 = 0
             r28 = 0
-            r29 = 0
+            r30 = 0
             r31 = 0
             r32 = 0
             r33 = 0
@@ -4108,184 +4173,183 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r49 = 0
             r50 = 0
             r52 = 0
-            r23 = r0
-            r12 = r2
-            r0 = r9
-            r9 = r24
-            r2 = r30
-            r30 = 0
-            goto L_0x1692
-        L_0x0abe:
+            r4 = r0
+            r23 = r1
+            r0 = r7
+            r7 = r29
+            r29 = 0
+            goto L_0x1639
+        L_0x0ab6:
             java.lang.String r7 = r0.toString()
             java.lang.String r12 = "tg:resolve"
             boolean r12 = r7.startsWith(r12)
             java.lang.String r13 = "scope"
             java.lang.String r10 = "tg://telegram.org"
-            if (r12 != 0) goto L_0x14ba
+            if (r12 != 0) goto L_0x1466
             java.lang.String r12 = "tg://resolve"
             boolean r12 = r7.startsWith(r12)
-            if (r12 == 0) goto L_0x0ad8
-            goto L_0x14ba
-        L_0x0ad8:
+            if (r12 == 0) goto L_0x0ad0
+            goto L_0x1466
+        L_0x0ad0:
             java.lang.String r12 = "tg:privatepost"
             boolean r12 = r7.startsWith(r12)
-            if (r12 != 0) goto L_0x1427
+            if (r12 != 0) goto L_0x13d3
             java.lang.String r12 = "tg://privatepost"
             boolean r12 = r7.startsWith(r12)
-            if (r12 == 0) goto L_0x0aea
-            goto L_0x1427
-        L_0x0aea:
+            if (r12 == 0) goto L_0x0ae2
+            goto L_0x13d3
+        L_0x0ae2:
             java.lang.String r9 = "tg:bg"
             boolean r9 = r7.startsWith(r9)
-            if (r9 != 0) goto L_0x11e7
+            if (r9 != 0) goto L_0x1193
             java.lang.String r9 = "tg://bg"
             boolean r9 = r7.startsWith(r9)
-            if (r9 == 0) goto L_0x0afc
-            goto L_0x11e7
-        L_0x0afc:
+            if (r9 == 0) goto L_0x0af4
+            goto L_0x1193
+        L_0x0af4:
             java.lang.String r9 = "tg:join"
             boolean r9 = r7.startsWith(r9)
-            if (r9 != 0) goto L_0x1191
+            if (r9 != 0) goto L_0x113d
             java.lang.String r9 = "tg://join"
             boolean r9 = r7.startsWith(r9)
-            if (r9 == 0) goto L_0x0b0e
-            goto L_0x1191
-        L_0x0b0e:
+            if (r9 == 0) goto L_0x0b06
+            goto L_0x113d
+        L_0x0b06:
             java.lang.String r9 = "tg:addstickers"
             boolean r9 = r7.startsWith(r9)
-            if (r9 != 0) goto L_0x1174
+            if (r9 != 0) goto L_0x1124
             java.lang.String r9 = "tg://addstickers"
             boolean r9 = r7.startsWith(r9)
-            if (r9 == 0) goto L_0x0b20
-            goto L_0x1174
-        L_0x0b20:
+            if (r9 == 0) goto L_0x0b18
+            goto L_0x1124
+        L_0x0b18:
             java.lang.String r9 = "tg:msg"
             boolean r9 = r7.startsWith(r9)
-            if (r9 != 0) goto L_0x10e7
+            if (r9 != 0) goto L_0x1097
             java.lang.String r9 = "tg://msg"
             boolean r9 = r7.startsWith(r9)
-            if (r9 != 0) goto L_0x10e7
+            if (r9 != 0) goto L_0x1097
             java.lang.String r9 = "tg://share"
             boolean r9 = r7.startsWith(r9)
-            if (r9 != 0) goto L_0x10e7
+            if (r9 != 0) goto L_0x1097
             java.lang.String r9 = "tg:share"
             boolean r9 = r7.startsWith(r9)
-            if (r9 == 0) goto L_0x0b42
-            goto L_0x10e7
-        L_0x0b42:
-            java.lang.String r2 = "tg:confirmphone"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 != 0) goto L_0x1085
-            java.lang.String r2 = "tg://confirmphone"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0b54
-            goto L_0x1085
-        L_0x0b54:
-            java.lang.String r2 = "tg:login"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 != 0) goto L_0x1012
-            java.lang.String r2 = "tg://login"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0b66
-            goto L_0x1012
-        L_0x0b66:
-            java.lang.String r2 = "tg:openmessage"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 != 0) goto L_0x0fc1
-            java.lang.String r2 = "tg://openmessage"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0b78
-            goto L_0x0fc1
-        L_0x0b78:
-            java.lang.String r2 = "tg:passport"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 != 0) goto L_0x0f1d
-            java.lang.String r2 = "tg://passport"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 != 0) goto L_0x0f1d
-            java.lang.String r2 = "tg:secureid"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0b92
-            goto L_0x0f1d
-        L_0x0b92:
-            java.lang.String r2 = "tg:setlanguage"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 != 0) goto L_0x0ed1
-            java.lang.String r2 = "tg://setlanguage"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0ba4
-            goto L_0x0ed1
-        L_0x0ba4:
-            java.lang.String r2 = "tg:addtheme"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 != 0) goto L_0x0e77
-            java.lang.String r2 = "tg://addtheme"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0bb6
-            goto L_0x0e77
-        L_0x0bb6:
-            java.lang.String r2 = "tg:settings"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 != 0) goto L_0x0dfb
-            java.lang.String r2 = "tg://settings"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0bc8
-            goto L_0x0dfb
-        L_0x0bc8:
-            java.lang.String r2 = "tg:search"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 != 0) goto L_0x0dbd
-            java.lang.String r2 = "tg://search"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0bda
-            goto L_0x0dbd
-        L_0x0bda:
-            java.lang.String r2 = "tg:calllog"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 != 0) goto L_0x0da9
-            java.lang.String r2 = "tg://calllog"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0bec
-            goto L_0x0da9
-        L_0x0bec:
-            java.lang.String r2 = "tg:call"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 != 0) goto L_0x0cd4
-            java.lang.String r2 = "tg://call"
-            boolean r2 = r7.startsWith(r2)
-            if (r2 == 0) goto L_0x0bfe
-            goto L_0x0cd4
-        L_0x0bfe:
+            if (r9 == 0) goto L_0x0b3a
+            goto L_0x1097
+        L_0x0b3a:
+            java.lang.String r4 = "tg:confirmphone"
+            boolean r4 = r7.startsWith(r4)
+            if (r4 != 0) goto L_0x1076
+            java.lang.String r4 = "tg://confirmphone"
+            boolean r4 = r7.startsWith(r4)
+            if (r4 == 0) goto L_0x0b4c
+            goto L_0x1076
+        L_0x0b4c:
+            java.lang.String r1 = "tg:login"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 != 0) goto L_0x1003
+            java.lang.String r1 = "tg://login"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 == 0) goto L_0x0b5e
+            goto L_0x1003
+        L_0x0b5e:
+            java.lang.String r1 = "tg:openmessage"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 != 0) goto L_0x0fb0
+            java.lang.String r1 = "tg://openmessage"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 == 0) goto L_0x0b70
+            goto L_0x0fb0
+        L_0x0b70:
+            java.lang.String r1 = "tg:passport"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 != 0) goto L_0x0f0c
+            java.lang.String r1 = "tg://passport"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 != 0) goto L_0x0f0c
+            java.lang.String r1 = "tg:secureid"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 == 0) goto L_0x0b8a
+            goto L_0x0f0c
+        L_0x0b8a:
+            java.lang.String r1 = "tg:setlanguage"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 != 0) goto L_0x0ec0
+            java.lang.String r1 = "tg://setlanguage"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 == 0) goto L_0x0b9c
+            goto L_0x0ec0
+        L_0x0b9c:
+            java.lang.String r1 = "tg:addtheme"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 != 0) goto L_0x0e66
+            java.lang.String r1 = "tg://addtheme"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 == 0) goto L_0x0bae
+            goto L_0x0e66
+        L_0x0bae:
+            java.lang.String r1 = "tg:settings"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 != 0) goto L_0x0de0
+            java.lang.String r1 = "tg://settings"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 == 0) goto L_0x0bc0
+            goto L_0x0de0
+        L_0x0bc0:
+            java.lang.String r1 = "tg:search"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 != 0) goto L_0x0db4
+            java.lang.String r1 = "tg://search"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 == 0) goto L_0x0bd2
+            goto L_0x0db4
+        L_0x0bd2:
+            java.lang.String r1 = "tg:calllog"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 != 0) goto L_0x0d9e
+            java.lang.String r1 = "tg://calllog"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 == 0) goto L_0x0be4
+            goto L_0x0d9e
+        L_0x0be4:
+            java.lang.String r1 = "tg:call"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 != 0) goto L_0x0cce
+            java.lang.String r1 = "tg://call"
+            boolean r1 = r7.startsWith(r1)
+            if (r1 == 0) goto L_0x0bf6
+            goto L_0x0cce
+        L_0x0bf6:
             java.lang.String r0 = "tg:scanqr"
             boolean r0 = r7.startsWith(r0)
-            if (r0 != 0) goto L_0x0cb4
+            if (r0 != 0) goto L_0x0cac
             java.lang.String r0 = "tg://scanqr"
             boolean r0 = r7.startsWith(r0)
             if (r0 == 0) goto L_0x0CLASSNAME
-            goto L_0x0cb4
+            goto L_0x0cac
         L_0x0CLASSNAME:
             java.lang.String r0 = "tg:addcontact"
             boolean r0 = r7.startsWith(r0)
-            if (r0 != 0) goto L_0x0CLASSNAME
+            if (r0 != 0) goto L_0x0c6a
             java.lang.String r0 = "tg://addcontact"
             boolean r0 = r7.startsWith(r0)
             if (r0 == 0) goto L_0x0CLASSNAME
-            goto L_0x0CLASSNAME
+            goto L_0x0c6a
         L_0x0CLASSNAME:
             java.lang.String r0 = "tg://"
             java.lang.String r0 = r7.replace(r0, r3)
-            java.lang.String r2 = "tg:"
-            java.lang.String r0 = r0.replace(r2, r3)
-            r2 = 63
-            int r2 = r0.indexOf(r2)
-            if (r2 < 0) goto L_0x0c3a
+            java.lang.String r1 = "tg:"
+            java.lang.String r0 = r0.replace(r1, r3)
+            r1 = 63
+            int r1 = r0.indexOf(r1)
+            if (r1 < 0) goto L_0x0CLASSNAME
             r3 = 0
-            java.lang.String r0 = r0.substring(r3, r2)
-        L_0x0c3a:
+            java.lang.String r0 = r0.substring(r3, r1)
+        L_0x0CLASSNAME:
             r47 = r0
             r0 = 0
-            r2 = 0
             r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
             r10 = 0
@@ -4313,21 +4377,21 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r44 = 0
             r45 = 0
             r46 = 0
-            goto L_0x11dd
-        L_0x0CLASSNAME:
+            goto L_0x1189
+        L_0x0c6a:
             java.lang.String r0 = "tg:addcontact"
             java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://addcontact"
-            java.lang.String r0 = r0.replace(r2, r10)
+            java.lang.String r1 = "tg://addcontact"
+            java.lang.String r0 = r0.replace(r1, r10)
             android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.lang.String r2 = "name"
-            java.lang.String r2 = r0.getQueryParameter(r2)
+            java.lang.String r1 = "name"
+            java.lang.String r1 = r0.getQueryParameter(r1)
             java.lang.String r0 = r0.getQueryParameter(r6)
             r39 = r0
-            r38 = r2
+            r38 = r1
             r0 = 0
-            r2 = 0
             r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
             r10 = 0
@@ -4341,16 +4405,16 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r30 = 0
             r31 = 0
             r32 = 0
-            r33 = 1
-            r34 = 0
+            r33 = 0
+            r34 = 1
             r35 = 0
             r36 = 0
             r37 = 0
-            goto L_0x11cd
-        L_0x0cb4:
+            goto L_0x1179
+        L_0x0cac:
             r0 = 0
-            r2 = 0
             r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
             r10 = 0
@@ -4366,103 +4430,102 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r32 = 0
             r33 = 0
             r34 = 0
-            r35 = 1
-            goto L_0x11c5
-        L_0x0cd4:
-            int r2 = r15.currentAccount
-            org.telegram.messenger.UserConfig r2 = org.telegram.messenger.UserConfig.getInstance(r2)
-            boolean r2 = r2.isClientActivated()
-            if (r2 == 0) goto L_0x164a
-            int r2 = r15.currentAccount
-            org.telegram.messenger.ContactsController r2 = org.telegram.messenger.ContactsController.getInstance(r2)
-            boolean r2 = r2.contactsLoaded
-            if (r2 != 0) goto L_0x0d16
-            java.lang.String r2 = "extra_force_call"
-            boolean r2 = r14.hasExtra(r2)
-            if (r2 == 0) goto L_0x0cf3
-            goto L_0x0d16
-        L_0x0cf3:
+            r35 = 0
+            r36 = 1
+            goto L_0x1173
+        L_0x0cce:
+            int r1 = r15.currentAccount
+            org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
+            boolean r1 = r1.isClientActivated()
+            if (r1 == 0) goto L_0x15f1
+            int r1 = r15.currentAccount
+            org.telegram.messenger.ContactsController r1 = org.telegram.messenger.ContactsController.getInstance(r1)
+            boolean r1 = r1.contactsLoaded
+            if (r1 != 0) goto L_0x0d0f
+            java.lang.String r1 = "extra_force_call"
+            boolean r1 = r14.hasExtra(r1)
+            if (r1 == 0) goto L_0x0ced
+            goto L_0x0d0f
+        L_0x0ced:
             android.content.Intent r0 = new android.content.Intent
             r0.<init>(r14)
             r0.removeExtra(r5)
-            java.lang.String r2 = "extra_force_call"
+            java.lang.String r1 = "extra_force_call"
             r3 = 1
-            r0.putExtra(r2, r3)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda54 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda54
-            r2.<init>(r15, r0)
-            r9 = 1000(0x3e8, double:4.94E-321)
-            org.telegram.messenger.ContactsLoadingObserver.observe(r2, r9)
+            r0.putExtra(r1, r3)
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda55 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda55
+            r1.<init>(r15, r0)
+            r3 = 1000(0x3e8, double:4.94E-321)
+            org.telegram.messenger.ContactsLoadingObserver.observe(r1, r3)
             r0 = 0
-            r2 = 0
+            r1 = 0
             r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
             r12 = 0
             r13 = 0
-            r23 = 0
-            goto L_0x0d6b
-        L_0x0d16:
-            java.lang.String r2 = "format"
-            java.lang.String r2 = r0.getQueryParameter(r2)
-            java.lang.String r7 = "name"
-            java.lang.String r7 = r0.getQueryParameter(r7)
+            goto L_0x0d60
+        L_0x0d0f:
+            java.lang.String r1 = "format"
+            java.lang.String r1 = r0.getQueryParameter(r1)
+            java.lang.String r4 = "name"
+            java.lang.String r4 = r0.getQueryParameter(r4)
             java.lang.String r0 = r0.getQueryParameter(r6)
-            r9 = 0
-            java.util.List r10 = r15.findContacts(r7, r0, r9)
-            boolean r12 = r10.isEmpty()
-            if (r12 == 0) goto L_0x0d3e
-            if (r0 == 0) goto L_0x0d3e
-            r23 = r0
-            r13 = r7
-            r0 = 0
-            r2 = 1
-            r3 = 0
             r7 = 0
+            java.util.List r9 = r15.findContacts(r4, r0, r7)
+            boolean r10 = r9.isEmpty()
+            if (r10 == 0) goto L_0x0d35
+            if (r0 == 0) goto L_0x0d35
+            r13 = r0
+            r12 = r4
+            r0 = 1
+            r1 = 0
+            r3 = 0
+            r4 = 0
             r9 = 0
-            r12 = 0
-            goto L_0x0d6b
-        L_0x0d3e:
-            int r0 = r10.size()
-            r12 = 1
-            if (r0 != r12) goto L_0x0d4e
-            java.lang.Object r0 = r10.get(r9)
+            goto L_0x0d60
+        L_0x0d35:
+            int r0 = r9.size()
+            r10 = 1
+            if (r0 != r10) goto L_0x0d45
+            java.lang.Object r0 = r9.get(r7)
             org.telegram.tgnet.TLRPC$TL_contact r0 = (org.telegram.tgnet.TLRPC$TL_contact) r0
             long r9 = r0.user_id
-            goto L_0x0d50
-        L_0x0d4e:
+            goto L_0x0d47
+        L_0x0d45:
             r9 = 0
-        L_0x0d50:
+        L_0x0d47:
             r12 = 0
             int r0 = (r9 > r12 ? 1 : (r9 == r12 ? 0 : -1))
-            if (r0 != 0) goto L_0x0d5a
-            if (r7 == 0) goto L_0x0d5b
-            r3 = r7
-            goto L_0x0d5b
-        L_0x0d5a:
+            if (r0 != 0) goto L_0x0d51
+            if (r4 == 0) goto L_0x0d52
+            r3 = r4
+            goto L_0x0d52
+        L_0x0d51:
             r3 = 0
-        L_0x0d5b:
+        L_0x0d52:
             java.lang.String r0 = "video"
-            boolean r0 = r0.equalsIgnoreCase(r2)
-            r2 = r0 ^ 1
-            r7 = r0
-            r12 = r3
-            r0 = 1
+            boolean r0 = r0.equalsIgnoreCase(r1)
+            r1 = r0 ^ 1
+            r4 = r3
+            r7 = 1
+            r12 = 0
             r13 = 0
-            r23 = 0
-            r3 = r2
-            r2 = 0
-        L_0x0d6b:
-            r32 = r0
-            r34 = r2
-            r30 = r3
-            r31 = r7
-            r50 = r9
-            r37 = r12
-            r38 = r13
-            r39 = r23
+            r3 = r0
             r0 = 0
-            r2 = 0
+        L_0x0d60:
+            r35 = r0
+            r31 = r1
+            r32 = r3
+            r37 = r4
+            r33 = r7
+            r50 = r9
+            r38 = r12
+            r39 = r13
+            r0 = 0
             r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
             r10 = 0
@@ -4473,8 +4536,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r27 = 0
             r28 = 0
             r29 = 0
-            r33 = 0
-            r35 = 0
+            r30 = 0
+            r34 = 0
             r36 = 0
             r40 = 0
             r41 = 0
@@ -4486,11 +4549,124 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r47 = 0
             r48 = 0
             r49 = 0
-            goto L_0x11e3
-        L_0x0da9:
+            goto L_0x118f
+        L_0x0d9e:
             r0 = 0
-            r2 = 0
             r3 = 0
+            r4 = 0
+            r7 = 0
+            r9 = 0
+            r10 = 0
+            r12 = 0
+            r13 = 0
+            r19 = 0
+            r23 = 0
+            r27 = 0
+            r28 = 0
+            r29 = 0
+            r30 = 1
+            goto L_0x1167
+        L_0x0db4:
+            java.lang.String r0 = "tg:search"
+            java.lang.String r0 = r7.replace(r0, r10)
+            java.lang.String r1 = "tg://search"
+            java.lang.String r0 = r0.replace(r1, r10)
+            android.net.Uri r0 = android.net.Uri.parse(r0)
+            java.lang.String r1 = "query"
+            java.lang.String r0 = r0.getQueryParameter(r1)
+            if (r0 == 0) goto L_0x0dd0
+            java.lang.String r3 = r0.trim()
+        L_0x0dd0:
+            r27 = r3
+            r0 = 0
+            r3 = 0
+            r4 = 0
+            r7 = 0
+            r9 = 0
+            r10 = 0
+            r12 = 0
+            r13 = 0
+            r19 = 0
+            r23 = 0
+            goto L_0x1161
+        L_0x0de0:
+            java.lang.String r0 = "themes"
+            boolean r0 = r7.contains(r0)
+            if (r0 == 0) goto L_0x0dfc
+            r0 = 0
+            r3 = 0
+            r4 = 0
+            r7 = 0
+            r9 = 0
+            r10 = 0
+            r12 = 0
+            r13 = 0
+            r19 = 0
+            r23 = 0
+            r27 = 0
+            r28 = 0
+            r29 = 2
+            goto L_0x1165
+        L_0x0dfc:
+            java.lang.String r0 = "devices"
+            boolean r0 = r7.contains(r0)
+            if (r0 == 0) goto L_0x0e18
+            r0 = 0
+            r3 = 0
+            r4 = 0
+            r7 = 0
+            r9 = 0
+            r10 = 0
+            r12 = 0
+            r13 = 0
+            r19 = 0
+            r23 = 0
+            r27 = 0
+            r28 = 0
+            r29 = 3
+            goto L_0x1165
+        L_0x0e18:
+            java.lang.String r0 = "folders"
+            boolean r0 = r7.contains(r0)
+            if (r0 == 0) goto L_0x0e35
+            r0 = 4
+            r0 = 0
+            r3 = 0
+            r4 = 0
+            r7 = 0
+            r9 = 0
+            r10 = 0
+            r12 = 0
+            r13 = 0
+            r19 = 0
+            r23 = 0
+            r27 = 0
+            r28 = 0
+            r29 = 4
+            goto L_0x1165
+        L_0x0e35:
+            java.lang.String r0 = "change_number"
+            boolean r0 = r7.contains(r0)
+            if (r0 == 0) goto L_0x0e52
+            r0 = 5
+            r0 = 0
+            r3 = 0
+            r4 = 0
+            r7 = 0
+            r9 = 0
+            r10 = 0
+            r12 = 0
+            r13 = 0
+            r19 = 0
+            r23 = 0
+            r27 = 0
+            r28 = 0
+            r29 = 5
+            goto L_0x1165
+        L_0x0e52:
+            r0 = 0
+            r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
             r10 = 0
@@ -4501,135 +4677,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r27 = 0
             r28 = 0
             r29 = 1
-            goto L_0x11b9
-        L_0x0dbd:
-            java.lang.String r0 = "tg:search"
-            java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://search"
-            java.lang.String r0 = r0.replace(r2, r10)
-            android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.lang.String r2 = "query"
-            java.lang.String r0 = r0.getQueryParameter(r2)
-            if (r0 == 0) goto L_0x0dd9
-            java.lang.String r3 = r0.trim()
-        L_0x0dd9:
-            r36 = r3
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = 0
-            r9 = 0
-            r10 = 0
-            r12 = 0
-            r13 = 0
-            r19 = 0
-            r23 = 0
-            r27 = 0
-            r28 = 0
-            r29 = 0
-            r30 = 0
-            r31 = 0
-            r32 = 0
-            r33 = 0
-            r34 = 0
-            r35 = 0
-            goto L_0x11c7
-        L_0x0dfb:
-            java.lang.String r0 = "themes"
-            boolean r0 = r7.contains(r0)
-            if (r0 == 0) goto L_0x0e15
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = 0
-            r9 = 0
-            r10 = 0
-            r12 = 0
-            r13 = 0
-            r19 = 0
-            r23 = 0
-            r27 = 0
-            r28 = 2
-            goto L_0x11b7
-        L_0x0e15:
-            java.lang.String r0 = "devices"
-            boolean r0 = r7.contains(r0)
-            if (r0 == 0) goto L_0x0e2f
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = 0
-            r9 = 0
-            r10 = 0
-            r12 = 0
-            r13 = 0
-            r19 = 0
-            r23 = 0
-            r27 = 0
-            r28 = 3
-            goto L_0x11b7
-        L_0x0e2f:
-            java.lang.String r0 = "folders"
-            boolean r0 = r7.contains(r0)
-            if (r0 == 0) goto L_0x0e4a
-            r0 = 4
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = 0
-            r9 = 0
-            r10 = 0
-            r12 = 0
-            r13 = 0
-            r19 = 0
-            r23 = 0
-            r27 = 0
-            r28 = 4
-            goto L_0x11b7
-        L_0x0e4a:
-            java.lang.String r0 = "change_number"
-            boolean r0 = r7.contains(r0)
-            if (r0 == 0) goto L_0x0e65
-            r0 = 5
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = 0
-            r9 = 0
-            r10 = 0
-            r12 = 0
-            r13 = 0
-            r19 = 0
-            r23 = 0
-            r27 = 0
-            r28 = 5
-            goto L_0x11b7
-        L_0x0e65:
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = 0
-            r9 = 0
-            r10 = 0
-            r12 = 0
-            r13 = 0
-            r19 = 0
-            r23 = 0
-            r27 = 0
-            r28 = 1
-            goto L_0x11b7
-        L_0x0e77:
+            goto L_0x1165
+        L_0x0e66:
             java.lang.String r0 = "tg:addtheme"
             java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://addtheme"
-            java.lang.String r0 = r0.replace(r2, r10)
+            java.lang.String r1 = "tg://addtheme"
+            java.lang.String r0 = r0.replace(r1, r10)
             android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.lang.String r2 = "slug"
-            java.lang.String r0 = r0.getQueryParameter(r2)
+            java.lang.String r1 = "slug"
+            java.lang.String r0 = r0.getQueryParameter(r1)
             r55 = r0
             r0 = 0
-            r2 = 0
             r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
             r10 = 0
@@ -4663,19 +4723,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r50 = 0
             r52 = 0
             r54 = 0
-            goto L_0x168c
-        L_0x0ed1:
+            goto L_0x1633
+        L_0x0ec0:
             java.lang.String r0 = "tg:setlanguage"
             java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://setlanguage"
-            java.lang.String r0 = r0.replace(r2, r10)
+            java.lang.String r1 = "tg://setlanguage"
+            java.lang.String r0 = r0.replace(r1, r10)
             android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.lang.String r2 = "lang"
-            java.lang.String r0 = r0.getQueryParameter(r2)
+            java.lang.String r1 = "lang"
+            java.lang.String r0 = r0.getQueryParameter(r1)
             r46 = r0
             r0 = 0
-            r2 = 0
             r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
             r10 = 0
@@ -4702,54 +4762,54 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r43 = 0
             r44 = 0
             r45 = 0
-            goto L_0x11db
-        L_0x0f1d:
+            goto L_0x1187
+        L_0x0f0c:
             java.lang.String r0 = "tg:passport"
             java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://passport"
-            java.lang.String r0 = r0.replace(r2, r10)
-            java.lang.String r2 = "tg:secureid"
-            java.lang.String r0 = r0.replace(r2, r10)
+            java.lang.String r1 = "tg://passport"
+            java.lang.String r0 = r0.replace(r1, r10)
+            java.lang.String r1 = "tg:secureid"
+            java.lang.String r0 = r0.replace(r1, r10)
             android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.util.HashMap r2 = new java.util.HashMap
-            r2.<init>()
+            java.util.HashMap r1 = new java.util.HashMap
+            r1.<init>()
             java.lang.String r3 = r0.getQueryParameter(r13)
-            boolean r7 = android.text.TextUtils.isEmpty(r3)
-            if (r7 != 0) goto L_0x0f5e
-            java.lang.String r7 = "{"
-            boolean r7 = r3.startsWith(r7)
-            if (r7 == 0) goto L_0x0f5e
-            java.lang.String r7 = "}"
-            boolean r7 = r3.endsWith(r7)
-            if (r7 == 0) goto L_0x0f5e
+            boolean r4 = android.text.TextUtils.isEmpty(r3)
+            if (r4 != 0) goto L_0x0f4d
+            java.lang.String r4 = "{"
+            boolean r4 = r3.startsWith(r4)
+            if (r4 == 0) goto L_0x0f4d
+            java.lang.String r4 = "}"
+            boolean r4 = r3.endsWith(r4)
+            if (r4 == 0) goto L_0x0f4d
+            java.lang.String r4 = "nonce"
+            java.lang.String r4 = r0.getQueryParameter(r4)
             java.lang.String r7 = "nonce"
-            java.lang.String r7 = r0.getQueryParameter(r7)
-            java.lang.String r9 = "nonce"
-            r2.put(r9, r7)
+            r1.put(r7, r4)
             goto L_0x0var_
-        L_0x0f5e:
+        L_0x0f4d:
+            java.lang.String r4 = "payload"
+            java.lang.String r4 = r0.getQueryParameter(r4)
             java.lang.String r7 = "payload"
-            java.lang.String r7 = r0.getQueryParameter(r7)
-            java.lang.String r9 = "payload"
-            r2.put(r9, r7)
+            r1.put(r7, r4)
         L_0x0var_:
+            java.lang.String r4 = "bot_id"
+            java.lang.String r4 = r0.getQueryParameter(r4)
             java.lang.String r7 = "bot_id"
-            java.lang.String r7 = r0.getQueryParameter(r7)
-            java.lang.String r9 = "bot_id"
-            r2.put(r9, r7)
-            r2.put(r13, r3)
+            r1.put(r7, r4)
+            r1.put(r13, r3)
             java.lang.String r3 = "public_key"
             java.lang.String r3 = r0.getQueryParameter(r3)
-            java.lang.String r7 = "public_key"
-            r2.put(r7, r3)
+            java.lang.String r4 = "public_key"
+            r1.put(r4, r3)
             java.lang.String r3 = "callback_url"
             java.lang.String r0 = r0.getQueryParameter(r3)
             java.lang.String r3 = "callback_url"
-            r2.put(r3, r0)
-            r45 = r2
+            r1.put(r3, r0)
+            r45 = r1
             r0 = 0
-            r2 = 0
             r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
             r10 = 0
@@ -4775,44 +4835,44 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r42 = 0
             r43 = 0
             r44 = 0
-            goto L_0x11d9
-        L_0x0fc1:
+            goto L_0x1185
+        L_0x0fb0:
             java.lang.String r0 = "tg:openmessage"
             java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://openmessage"
-            java.lang.String r0 = r0.replace(r2, r10)
+            java.lang.String r1 = "tg://openmessage"
+            java.lang.String r0 = r0.replace(r1, r10)
             android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.lang.String r2 = "user_id"
-            java.lang.String r2 = r0.getQueryParameter(r2)
+            java.lang.String r1 = "user_id"
+            java.lang.String r1 = r0.getQueryParameter(r1)
             java.lang.String r3 = "chat_id"
             java.lang.String r3 = r0.getQueryParameter(r3)
             java.lang.String r0 = r0.getQueryParameter(r8)
-            if (r2 == 0) goto L_0x0fe8
-            long r2 = java.lang.Long.parseLong(r2)     // Catch:{ NumberFormatException -> 0x0ff2 }
-            goto L_0x0ff4
-        L_0x0fe8:
-            if (r3 == 0) goto L_0x0ff2
-            long r2 = java.lang.Long.parseLong(r3)     // Catch:{ NumberFormatException -> 0x0ff2 }
-            r9 = r2
-            r2 = 0
-            goto L_0x0ff6
-        L_0x0ff2:
-            r2 = 0
-        L_0x0ff4:
+            if (r1 == 0) goto L_0x0fd7
+            long r3 = java.lang.Long.parseLong(r1)     // Catch:{ NumberFormatException -> 0x0fe1 }
+            goto L_0x0fe3
+        L_0x0fd7:
+            if (r3 == 0) goto L_0x0fe1
+            long r3 = java.lang.Long.parseLong(r3)     // Catch:{ NumberFormatException -> 0x0fe1 }
+            r9 = r3
+            r3 = 0
+            goto L_0x0fe5
+        L_0x0fe1:
+            r3 = 0
+        L_0x0fe3:
             r9 = 0
-        L_0x0ff6:
-            if (r0 == 0) goto L_0x0ffd
-            int r0 = java.lang.Integer.parseInt(r0)     // Catch:{ NumberFormatException -> 0x0ffd }
-            goto L_0x0ffe
-        L_0x0ffd:
+        L_0x0fe5:
+            if (r0 == 0) goto L_0x0fec
+            int r0 = java.lang.Integer.parseInt(r0)     // Catch:{ NumberFormatException -> 0x0fec }
+            goto L_0x0fed
+        L_0x0fec:
             r0 = 0
-        L_0x0ffe:
-            r27 = r0
-            r50 = r2
+        L_0x0fed:
+            r28 = r0
+            r50 = r3
             r52 = r9
             r0 = 0
-            r2 = 0
             r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
             r10 = 0
@@ -4820,34 +4880,35 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r13 = 0
             r19 = 0
             r23 = 0
-            goto L_0x165c
-        L_0x1012:
+            r27 = 0
+            goto L_0x1605
+        L_0x1003:
             java.lang.String r0 = "tg:login"
             java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://login"
-            java.lang.String r0 = r0.replace(r2, r10)
+            java.lang.String r1 = "tg://login"
+            java.lang.String r0 = r0.replace(r1, r10)
             android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.lang.String r2 = "token"
-            java.lang.String r2 = r0.getQueryParameter(r2)
-            java.lang.String r7 = "code"
-            java.lang.String r0 = r0.getQueryParameter(r7)
+            java.lang.String r1 = "token"
+            java.lang.String r1 = r0.getQueryParameter(r1)
+            java.lang.String r4 = "code"
+            java.lang.String r0 = r0.getQueryParameter(r4)
             java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)
             int r0 = r0.intValue()
-            if (r0 == 0) goto L_0x1048
-            java.lang.StringBuilder r7 = new java.lang.StringBuilder
-            r7.<init>()
-            r7.append(r3)
-            r7.append(r0)
-            java.lang.String r0 = r7.toString()
-            goto L_0x1049
-        L_0x1048:
+            if (r0 == 0) goto L_0x1039
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder
+            r4.<init>()
+            r4.append(r3)
+            r4.append(r0)
+            java.lang.String r0 = r4.toString()
+            goto L_0x103a
+        L_0x1039:
             r0 = 0
-        L_0x1049:
+        L_0x103a:
             r48 = r0
-            r49 = r2
+            r49 = r1
             r0 = 0
-            r2 = 0
             r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
             r10 = 0
@@ -4876,435 +4937,399 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r45 = 0
             r46 = 0
             r47 = 0
-            goto L_0x11e1
-        L_0x1085:
+            goto L_0x118d
+        L_0x1076:
             java.lang.String r0 = "tg:confirmphone"
             java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://confirmphone"
-            java.lang.String r0 = r0.replace(r2, r10)
+            java.lang.String r3 = "tg://confirmphone"
+            java.lang.String r0 = r0.replace(r3, r10)
             android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.lang.String r2 = r0.getQueryParameter(r6)
-            java.lang.String r0 = r0.getQueryParameter(r4)
-            r9 = r2
-            r3 = 0
-            r7 = 0
-            r10 = 0
-            r12 = 0
-            r13 = 0
-            r19 = 0
-            r23 = 0
-            r27 = 0
-            r28 = 0
-            r29 = 0
-            r30 = 0
-            r31 = 0
-            r32 = 0
-            r33 = 0
-            r34 = 0
-            r35 = 0
-            r36 = 0
-            r37 = 0
-            r38 = 0
-            r39 = 0
-            r40 = 0
-            r41 = 0
-            r42 = 0
-            r43 = 0
-            r44 = 0
-            r45 = 0
-            r46 = 0
-            r47 = 0
-            r48 = 0
-            r49 = 0
-            r50 = 0
-            r52 = 0
-            r54 = 0
-            r55 = 0
-            r56 = 0
-            r57 = 0
-            r58 = -1
-            r2 = r0
+            java.lang.String r3 = r0.getQueryParameter(r6)
+            java.lang.String r0 = r0.getQueryParameter(r1)
+            r7 = r0
+            r12 = r3
             r0 = 0
-            goto L_0x1692
-        L_0x10e7:
+            r3 = 0
+            r4 = 0
+            r9 = 0
+            r10 = 0
+            goto L_0x115a
+        L_0x1097:
             java.lang.String r0 = "tg:msg"
             java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r7 = "tg://msg"
-            java.lang.String r0 = r0.replace(r7, r10)
-            java.lang.String r7 = "tg://share"
-            java.lang.String r0 = r0.replace(r7, r10)
-            java.lang.String r7 = "tg:share"
-            java.lang.String r0 = r0.replace(r7, r10)
+            java.lang.String r1 = "tg://msg"
+            java.lang.String r0 = r0.replace(r1, r10)
+            java.lang.String r1 = "tg://share"
+            java.lang.String r0 = r0.replace(r1, r10)
+            java.lang.String r1 = "tg:share"
+            java.lang.String r0 = r0.replace(r1, r10)
             android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.lang.String r7 = "url"
-            java.lang.String r7 = r0.getQueryParameter(r7)
-            if (r7 != 0) goto L_0x110c
-            goto L_0x110d
-        L_0x110c:
-            r3 = r7
-        L_0x110d:
-            java.lang.String r7 = "text"
-            java.lang.String r7 = r0.getQueryParameter(r7)
-            if (r7 == 0) goto L_0x1143
-            int r7 = r3.length()
-            if (r7 <= 0) goto L_0x112c
+            java.lang.String r1 = "url"
+            java.lang.String r1 = r0.getQueryParameter(r1)
+            if (r1 != 0) goto L_0x10bc
+            goto L_0x10bd
+        L_0x10bc:
+            r3 = r1
+        L_0x10bd:
+            java.lang.String r1 = "text"
+            java.lang.String r1 = r0.getQueryParameter(r1)
+            if (r1 == 0) goto L_0x10f3
+            int r1 = r3.length()
+            if (r1 <= 0) goto L_0x10dc
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder
+            r1.<init>()
+            r1.append(r3)
+            r1.append(r4)
+            java.lang.String r3 = r1.toString()
+            r1 = 1
+            goto L_0x10dd
+        L_0x10dc:
+            r1 = 0
+        L_0x10dd:
             java.lang.StringBuilder r7 = new java.lang.StringBuilder
             r7.<init>()
             r7.append(r3)
-            r7.append(r2)
-            java.lang.String r3 = r7.toString()
-            r7 = 1
-            goto L_0x112d
-        L_0x112c:
-            r7 = 0
-        L_0x112d:
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder
-            r9.<init>()
-            r9.append(r3)
             java.lang.String r3 = "text"
             java.lang.String r0 = r0.getQueryParameter(r3)
-            r9.append(r0)
-            java.lang.String r3 = r9.toString()
-            goto L_0x1144
-        L_0x1143:
-            r7 = 0
-        L_0x1144:
+            r7.append(r0)
+            java.lang.String r3 = r7.toString()
+            goto L_0x10f4
+        L_0x10f3:
+            r1 = 0
+        L_0x10f4:
             int r0 = r3.length()
-            r9 = 16384(0x4000, float:2.2959E-41)
-            if (r0 <= r9) goto L_0x1154
+            r7 = 16384(0x4000, float:2.2959E-41)
+            if (r0 <= r7) goto L_0x1104
             r0 = 16384(0x4000, float:2.2959E-41)
-            r9 = 0
-            java.lang.String r0 = r3.substring(r9, r0)
-            goto L_0x1156
-        L_0x1154:
-            r9 = 0
+            r7 = 0
+            java.lang.String r0 = r3.substring(r7, r0)
+            goto L_0x1106
+        L_0x1104:
+            r7 = 0
             r0 = r3
-        L_0x1156:
-            boolean r3 = r0.endsWith(r2)
-            if (r3 == 0) goto L_0x1167
+        L_0x1106:
+            boolean r3 = r0.endsWith(r4)
+            if (r3 == 0) goto L_0x1117
             int r3 = r0.length()
-            r10 = 1
-            int r3 = r3 - r10
-            java.lang.String r0 = r0.substring(r9, r3)
-            goto L_0x1156
-        L_0x1167:
-            r10 = r0
-            r23 = r7
+            r9 = 1
+            int r3 = r3 - r9
+            java.lang.String r0 = r0.substring(r7, r3)
+            goto L_0x1106
+        L_0x1117:
+            r13 = r0
+            r23 = r1
             r0 = 0
-            r2 = 0
             r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
+            r10 = 0
             r12 = 0
-            r13 = 0
             r19 = 0
-            goto L_0x11b3
-        L_0x1174:
+            goto L_0x115f
+        L_0x1124:
             java.lang.String r0 = "tg:addstickers"
             java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://addstickers"
-            java.lang.String r0 = r0.replace(r2, r10)
+            java.lang.String r1 = "tg://addstickers"
+            java.lang.String r0 = r0.replace(r1, r10)
             android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.lang.String r2 = "set"
-            java.lang.String r0 = r0.getQueryParameter(r2)
-            r2 = 0
+            java.lang.String r1 = "set"
+            java.lang.String r0 = r0.getQueryParameter(r1)
             r3 = 0
+            r4 = 0
+            goto L_0x1156
+        L_0x113d:
+            java.lang.String r0 = "tg:join"
+            java.lang.String r0 = r7.replace(r0, r10)
+            java.lang.String r1 = "tg://join"
+            java.lang.String r0 = r0.replace(r1, r10)
+            android.net.Uri r0 = android.net.Uri.parse(r0)
+            java.lang.String r1 = "invite"
+            java.lang.String r0 = r0.getQueryParameter(r1)
+            r4 = r0
+            r0 = 0
+            r3 = 0
+        L_0x1156:
             r7 = 0
             r9 = 0
             r10 = 0
             r12 = 0
-            goto L_0x11ae
-        L_0x1191:
-            java.lang.String r0 = "tg:join"
-            java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://join"
-            java.lang.String r0 = r0.replace(r2, r10)
-            android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.lang.String r2 = "invite"
-            java.lang.String r0 = r0.getQueryParameter(r2)
-            r12 = r0
-            r0 = 0
-            r2 = 0
-            r3 = 0
-            r7 = 0
-            r9 = 0
-            r10 = 0
-        L_0x11ae:
+        L_0x115a:
             r13 = 0
             r19 = 0
             r23 = 0
-        L_0x11b3:
+        L_0x115f:
             r27 = 0
+        L_0x1161:
             r28 = 0
-        L_0x11b7:
             r29 = 0
-        L_0x11b9:
+        L_0x1165:
             r30 = 0
+        L_0x1167:
             r31 = 0
             r32 = 0
             r33 = 0
             r34 = 0
             r35 = 0
-        L_0x11c5:
             r36 = 0
-        L_0x11c7:
+        L_0x1173:
             r37 = 0
             r38 = 0
             r39 = 0
-        L_0x11cd:
+        L_0x1179:
             r40 = 0
             r41 = 0
             r42 = 0
             r43 = 0
             r44 = 0
             r45 = 0
-        L_0x11d9:
+        L_0x1185:
             r46 = 0
-        L_0x11db:
+        L_0x1187:
             r47 = 0
-        L_0x11dd:
+        L_0x1189:
             r48 = 0
             r49 = 0
-        L_0x11e1:
+        L_0x118d:
             r50 = 0
-        L_0x11e3:
+        L_0x118f:
             r52 = 0
-            goto L_0x1688
-        L_0x11e7:
+            goto L_0x162f
+        L_0x1193:
             java.lang.String r0 = "tg:bg"
             java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://bg"
-            java.lang.String r0 = r0.replace(r2, r10)
+            java.lang.String r1 = "tg://bg"
+            java.lang.String r0 = r0.replace(r1, r10)
             android.net.Uri r0 = android.net.Uri.parse(r0)
-            org.telegram.tgnet.TLRPC$TL_wallPaper r2 = new org.telegram.tgnet.TLRPC$TL_wallPaper
-            r2.<init>()
+            org.telegram.tgnet.TLRPC$TL_wallPaper r1 = new org.telegram.tgnet.TLRPC$TL_wallPaper
+            r1.<init>()
             org.telegram.tgnet.TLRPC$TL_wallPaperSettings r3 = new org.telegram.tgnet.TLRPC$TL_wallPaperSettings
             r3.<init>()
-            r2.settings = r3
+            r1.settings = r3
             java.lang.String r3 = "slug"
             java.lang.String r3 = r0.getQueryParameter(r3)
-            r2.slug = r3
-            if (r3 != 0) goto L_0x1215
+            r1.slug = r3
+            if (r3 != 0) goto L_0x11c1
             java.lang.String r3 = "color"
             java.lang.String r3 = r0.getQueryParameter(r3)
-            r2.slug = r3
-        L_0x1215:
-            java.lang.String r3 = r2.slug
-            if (r3 == 0) goto L_0x1235
+            r1.slug = r3
+        L_0x11c1:
+            java.lang.String r3 = r1.slug
+            if (r3 == 0) goto L_0x11e1
             int r3 = r3.length()
-            r7 = 6
-            if (r3 != r7) goto L_0x1235
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x12ed }
-            java.lang.String r7 = r2.slug     // Catch:{ Exception -> 0x12ed }
-            r9 = 16
-            int r7 = java.lang.Integer.parseInt(r7, r9)     // Catch:{ Exception -> 0x12ed }
-            r7 = r7 | r23
-            r3.background_color = r7     // Catch:{ Exception -> 0x12ed }
-            r3 = 0
-            r2.slug = r3     // Catch:{ Exception -> 0x12ed }
-            r3 = 1
-            r12 = 0
-            goto L_0x12ef
-        L_0x1235:
-            java.lang.String r3 = r2.slug
-            if (r3 == 0) goto L_0x12ed
-            int r3 = r3.length()
-            r7 = 13
-            if (r3 < r7) goto L_0x12ed
-            java.lang.String r3 = r2.slug
-            r7 = 6
-            char r3 = r3.charAt(r7)
-            boolean r3 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r3)
-            if (r3 == 0) goto L_0x12ed
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x12ed }
-            java.lang.String r9 = r2.slug     // Catch:{ Exception -> 0x12ed }
-            r10 = 0
-            java.lang.String r9 = r9.substring(r10, r7)     // Catch:{ Exception -> 0x12ed }
+            r4 = 6
+            if (r3 != r4) goto L_0x11e1
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x1299 }
+            java.lang.String r4 = r1.slug     // Catch:{ Exception -> 0x1299 }
             r7 = 16
-            int r9 = java.lang.Integer.parseInt(r9, r7)     // Catch:{ Exception -> 0x12ed }
-            r7 = r9 | r23
-            r3.background_color = r7     // Catch:{ Exception -> 0x12ed }
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x12ed }
-            java.lang.String r7 = r2.slug     // Catch:{ Exception -> 0x12ed }
-            r9 = 7
-            r10 = 13
-            java.lang.String r7 = r7.substring(r9, r10)     // Catch:{ Exception -> 0x12ed }
-            r9 = 16
-            int r7 = java.lang.Integer.parseInt(r7, r9)     // Catch:{ Exception -> 0x12ed }
-            r7 = r7 | r23
-            r3.second_background_color = r7     // Catch:{ Exception -> 0x12ed }
-            java.lang.String r3 = r2.slug     // Catch:{ Exception -> 0x12ed }
-            int r3 = r3.length()     // Catch:{ Exception -> 0x12ed }
-            r7 = 20
-            if (r3 < r7) goto L_0x12a4
-            java.lang.String r3 = r2.slug     // Catch:{ Exception -> 0x12ed }
-            r7 = 13
-            char r3 = r3.charAt(r7)     // Catch:{ Exception -> 0x12ed }
-            boolean r3 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r3)     // Catch:{ Exception -> 0x12ed }
-            if (r3 == 0) goto L_0x12a4
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x12ed }
-            java.lang.String r7 = r2.slug     // Catch:{ Exception -> 0x12ed }
-            r9 = 14
-            r10 = 20
-            java.lang.String r7 = r7.substring(r9, r10)     // Catch:{ Exception -> 0x12ed }
-            r9 = 16
-            int r7 = java.lang.Integer.parseInt(r7, r9)     // Catch:{ Exception -> 0x12ed }
-            r7 = r7 | r23
-            r3.third_background_color = r7     // Catch:{ Exception -> 0x12ed }
-        L_0x12a4:
-            java.lang.String r3 = r2.slug     // Catch:{ Exception -> 0x12ed }
-            int r3 = r3.length()     // Catch:{ Exception -> 0x12ed }
-            r7 = 27
-            if (r3 != r7) goto L_0x12d0
-            java.lang.String r3 = r2.slug     // Catch:{ Exception -> 0x12ed }
-            r7 = 20
-            char r3 = r3.charAt(r7)     // Catch:{ Exception -> 0x12ed }
-            boolean r3 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r3)     // Catch:{ Exception -> 0x12ed }
-            if (r3 == 0) goto L_0x12d0
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x12ed }
-            java.lang.String r7 = r2.slug     // Catch:{ Exception -> 0x12ed }
-            r9 = 21
-            java.lang.String r7 = r7.substring(r9)     // Catch:{ Exception -> 0x12ed }
-            r9 = 16
-            int r7 = java.lang.Integer.parseInt(r7, r9)     // Catch:{ Exception -> 0x12ed }
-            r7 = r7 | r23
-            r3.fourth_background_color = r7     // Catch:{ Exception -> 0x12ed }
-        L_0x12d0:
-            java.lang.String r3 = "rotation"
-            java.lang.String r3 = r0.getQueryParameter(r3)     // Catch:{ Exception -> 0x12e8 }
-            boolean r7 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x12e8 }
-            if (r7 != 0) goto L_0x12e8
-            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r2.settings     // Catch:{ Exception -> 0x12e8 }
-            java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ Exception -> 0x12e8 }
-            int r3 = r3.intValue()     // Catch:{ Exception -> 0x12e8 }
-            r7.rotation = r3     // Catch:{ Exception -> 0x12e8 }
-        L_0x12e8:
-            r12 = 0
-            r2.slug = r12     // Catch:{ Exception -> 0x12ee }
-            r3 = 1
-            goto L_0x12ef
-        L_0x12ed:
-            r12 = 0
-        L_0x12ee:
+            int r4 = java.lang.Integer.parseInt(r4, r7)     // Catch:{ Exception -> 0x1299 }
+            r4 = r4 | r23
+            r3.background_color = r4     // Catch:{ Exception -> 0x1299 }
             r3 = 0
-        L_0x12ef:
-            if (r3 != 0) goto L_0x13df
+            r1.slug = r3     // Catch:{ Exception -> 0x1299 }
+            r3 = 1
+            r12 = 0
+            goto L_0x129b
+        L_0x11e1:
+            java.lang.String r3 = r1.slug
+            if (r3 == 0) goto L_0x1299
+            int r3 = r3.length()
+            r4 = 13
+            if (r3 < r4) goto L_0x1299
+            java.lang.String r3 = r1.slug
+            r4 = 6
+            char r3 = r3.charAt(r4)
+            boolean r3 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r3)
+            if (r3 == 0) goto L_0x1299
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x1299 }
+            java.lang.String r7 = r1.slug     // Catch:{ Exception -> 0x1299 }
+            r9 = 0
+            java.lang.String r7 = r7.substring(r9, r4)     // Catch:{ Exception -> 0x1299 }
+            r4 = 16
+            int r7 = java.lang.Integer.parseInt(r7, r4)     // Catch:{ Exception -> 0x1299 }
+            r4 = r7 | r23
+            r3.background_color = r4     // Catch:{ Exception -> 0x1299 }
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x1299 }
+            java.lang.String r4 = r1.slug     // Catch:{ Exception -> 0x1299 }
+            r7 = 7
+            r9 = 13
+            java.lang.String r4 = r4.substring(r7, r9)     // Catch:{ Exception -> 0x1299 }
+            r7 = 16
+            int r4 = java.lang.Integer.parseInt(r4, r7)     // Catch:{ Exception -> 0x1299 }
+            r4 = r4 | r23
+            r3.second_background_color = r4     // Catch:{ Exception -> 0x1299 }
+            java.lang.String r3 = r1.slug     // Catch:{ Exception -> 0x1299 }
+            int r3 = r3.length()     // Catch:{ Exception -> 0x1299 }
+            r4 = 20
+            if (r3 < r4) goto L_0x1250
+            java.lang.String r3 = r1.slug     // Catch:{ Exception -> 0x1299 }
+            r4 = 13
+            char r3 = r3.charAt(r4)     // Catch:{ Exception -> 0x1299 }
+            boolean r3 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r3)     // Catch:{ Exception -> 0x1299 }
+            if (r3 == 0) goto L_0x1250
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x1299 }
+            java.lang.String r4 = r1.slug     // Catch:{ Exception -> 0x1299 }
+            r7 = 14
+            r9 = 20
+            java.lang.String r4 = r4.substring(r7, r9)     // Catch:{ Exception -> 0x1299 }
+            r7 = 16
+            int r4 = java.lang.Integer.parseInt(r4, r7)     // Catch:{ Exception -> 0x1299 }
+            r4 = r4 | r23
+            r3.third_background_color = r4     // Catch:{ Exception -> 0x1299 }
+        L_0x1250:
+            java.lang.String r3 = r1.slug     // Catch:{ Exception -> 0x1299 }
+            int r3 = r3.length()     // Catch:{ Exception -> 0x1299 }
+            r4 = 27
+            if (r3 != r4) goto L_0x127c
+            java.lang.String r3 = r1.slug     // Catch:{ Exception -> 0x1299 }
+            r4 = 20
+            char r3 = r3.charAt(r4)     // Catch:{ Exception -> 0x1299 }
+            boolean r3 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r3)     // Catch:{ Exception -> 0x1299 }
+            if (r3 == 0) goto L_0x127c
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x1299 }
+            java.lang.String r4 = r1.slug     // Catch:{ Exception -> 0x1299 }
+            r7 = 21
+            java.lang.String r4 = r4.substring(r7)     // Catch:{ Exception -> 0x1299 }
+            r7 = 16
+            int r4 = java.lang.Integer.parseInt(r4, r7)     // Catch:{ Exception -> 0x1299 }
+            r4 = r4 | r23
+            r3.fourth_background_color = r4     // Catch:{ Exception -> 0x1299 }
+        L_0x127c:
+            java.lang.String r3 = "rotation"
+            java.lang.String r3 = r0.getQueryParameter(r3)     // Catch:{ Exception -> 0x1294 }
+            boolean r4 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x1294 }
+            if (r4 != 0) goto L_0x1294
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x1294 }
+            java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)     // Catch:{ Exception -> 0x1294 }
+            int r3 = r3.intValue()     // Catch:{ Exception -> 0x1294 }
+            r4.rotation = r3     // Catch:{ Exception -> 0x1294 }
+        L_0x1294:
+            r12 = 0
+            r1.slug = r12     // Catch:{ Exception -> 0x129a }
+            r3 = 1
+            goto L_0x129b
+        L_0x1299:
+            r12 = 0
+        L_0x129a:
+            r3 = 0
+        L_0x129b:
+            if (r3 != 0) goto L_0x138b
             java.lang.String r3 = "mode"
             java.lang.String r3 = r0.getQueryParameter(r3)
-            if (r3 == 0) goto L_0x132e
+            if (r3 == 0) goto L_0x12da
             java.lang.String r3 = r3.toLowerCase()
-            java.lang.String r7 = " "
-            java.lang.String[] r3 = r3.split(r7)
-            if (r3 == 0) goto L_0x132e
+            java.lang.String r4 = " "
+            java.lang.String[] r3 = r3.split(r4)
+            if (r3 == 0) goto L_0x12da
+            int r4 = r3.length
+            if (r4 <= 0) goto L_0x12da
+            r4 = 0
+        L_0x12b5:
             int r7 = r3.length
-            if (r7 <= 0) goto L_0x132e
-            r7 = 0
-        L_0x1309:
-            int r9 = r3.length
-            if (r7 >= r9) goto L_0x132e
-            r9 = r3[r7]
-            java.lang.String r10 = "blur"
-            boolean r9 = r10.equals(r9)
-            if (r9 == 0) goto L_0x131c
-            org.telegram.tgnet.TLRPC$WallPaperSettings r9 = r2.settings
-            r10 = 1
-            r9.blur = r10
-            goto L_0x132b
-        L_0x131c:
-            r10 = 1
-            r9 = r3[r7]
-            java.lang.String r13 = "motion"
-            boolean r9 = r13.equals(r9)
-            if (r9 == 0) goto L_0x132b
-            org.telegram.tgnet.TLRPC$WallPaperSettings r9 = r2.settings
-            r9.motion = r10
-        L_0x132b:
-            int r7 = r7 + 1
-            goto L_0x1309
-        L_0x132e:
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings
-            java.lang.String r7 = "intensity"
-            java.lang.String r7 = r0.getQueryParameter(r7)
-            java.lang.Integer r7 = org.telegram.messenger.Utilities.parseInt(r7)
-            int r7 = r7.intValue()
-            r3.intensity = r7
+            if (r4 >= r7) goto L_0x12da
+            r7 = r3[r4]
+            java.lang.String r9 = "blur"
+            boolean r7 = r9.equals(r7)
+            if (r7 == 0) goto L_0x12c8
+            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r1.settings
+            r9 = 1
+            r7.blur = r9
+            goto L_0x12d7
+        L_0x12c8:
+            r9 = 1
+            r7 = r3[r4]
+            java.lang.String r10 = "motion"
+            boolean r7 = r10.equals(r7)
+            if (r7 == 0) goto L_0x12d7
+            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r1.settings
+            r7.motion = r9
+        L_0x12d7:
+            int r4 = r4 + 1
+            goto L_0x12b5
+        L_0x12da:
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings
+            java.lang.String r4 = "intensity"
+            java.lang.String r4 = r0.getQueryParameter(r4)
+            java.lang.Integer r4 = org.telegram.messenger.Utilities.parseInt(r4)
+            int r4 = r4.intValue()
+            r3.intensity = r4
             java.lang.String r3 = "bg_color"
-            java.lang.String r3 = r0.getQueryParameter(r3)     // Catch:{ Exception -> 0x13c5 }
-            boolean r7 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x13c5 }
-            if (r7 != 0) goto L_0x13c5
-            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r2.settings     // Catch:{ Exception -> 0x13c5 }
-            r9 = 0
+            java.lang.String r3 = r0.getQueryParameter(r3)     // Catch:{ Exception -> 0x1371 }
+            boolean r4 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x1371 }
+            if (r4 != 0) goto L_0x1371
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x1371 }
+            r7 = 0
             r13 = 6
-            java.lang.String r10 = r3.substring(r9, r13)     // Catch:{ Exception -> 0x13c6 }
-            r9 = 16
-            int r10 = java.lang.Integer.parseInt(r10, r9)     // Catch:{ Exception -> 0x13c6 }
-            r9 = r10 | r23
-            r7.background_color = r9     // Catch:{ Exception -> 0x13c6 }
-            int r7 = r3.length()     // Catch:{ Exception -> 0x13c6 }
-            r9 = 13
-            if (r7 < r9) goto L_0x13c6
-            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r2.settings     // Catch:{ Exception -> 0x13c6 }
-            r10 = 8
-            java.lang.String r10 = r3.substring(r10, r9)     // Catch:{ Exception -> 0x13c6 }
-            r9 = 16
-            int r10 = java.lang.Integer.parseInt(r10, r9)     // Catch:{ Exception -> 0x13c6 }
-            r9 = r10 | r23
-            r7.second_background_color = r9     // Catch:{ Exception -> 0x13c6 }
-            int r7 = r3.length()     // Catch:{ Exception -> 0x13c6 }
-            r9 = 20
-            if (r7 < r9) goto L_0x139e
+            java.lang.String r9 = r3.substring(r7, r13)     // Catch:{ Exception -> 0x1372 }
+            r7 = 16
+            int r9 = java.lang.Integer.parseInt(r9, r7)     // Catch:{ Exception -> 0x1372 }
+            r7 = r9 | r23
+            r4.background_color = r7     // Catch:{ Exception -> 0x1372 }
+            int r4 = r3.length()     // Catch:{ Exception -> 0x1372 }
             r7 = 13
-            char r7 = r3.charAt(r7)     // Catch:{ Exception -> 0x13c6 }
-            boolean r7 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r7)     // Catch:{ Exception -> 0x13c6 }
-            if (r7 == 0) goto L_0x139e
-            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r2.settings     // Catch:{ Exception -> 0x13c6 }
-            r10 = 14
-            java.lang.String r10 = r3.substring(r10, r9)     // Catch:{ Exception -> 0x13c6 }
-            r9 = 16
-            int r10 = java.lang.Integer.parseInt(r10, r9)     // Catch:{ Exception -> 0x13c6 }
-            r9 = r10 | r23
-            r7.third_background_color = r9     // Catch:{ Exception -> 0x13c6 }
-        L_0x139e:
-            int r7 = r3.length()     // Catch:{ Exception -> 0x13c6 }
-            r9 = 27
-            if (r7 != r9) goto L_0x13c6
+            if (r4 < r7) goto L_0x1372
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x1372 }
+            r9 = 8
+            java.lang.String r9 = r3.substring(r9, r7)     // Catch:{ Exception -> 0x1372 }
+            r7 = 16
+            int r9 = java.lang.Integer.parseInt(r9, r7)     // Catch:{ Exception -> 0x1372 }
+            r7 = r9 | r23
+            r4.second_background_color = r7     // Catch:{ Exception -> 0x1372 }
+            int r4 = r3.length()     // Catch:{ Exception -> 0x1372 }
             r7 = 20
-            char r7 = r3.charAt(r7)     // Catch:{ Exception -> 0x13c6 }
-            boolean r7 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r7)     // Catch:{ Exception -> 0x13c6 }
-            if (r7 == 0) goto L_0x13c6
-            org.telegram.tgnet.TLRPC$WallPaperSettings r7 = r2.settings     // Catch:{ Exception -> 0x13c6 }
-            r9 = 21
-            java.lang.String r3 = r3.substring(r9)     // Catch:{ Exception -> 0x13c6 }
-            r9 = 16
-            int r3 = java.lang.Integer.parseInt(r3, r9)     // Catch:{ Exception -> 0x13c6 }
+            if (r4 < r7) goto L_0x134a
+            r4 = 13
+            char r4 = r3.charAt(r4)     // Catch:{ Exception -> 0x1372 }
+            boolean r4 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r4)     // Catch:{ Exception -> 0x1372 }
+            if (r4 == 0) goto L_0x134a
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x1372 }
+            r9 = 14
+            java.lang.String r9 = r3.substring(r9, r7)     // Catch:{ Exception -> 0x1372 }
+            r7 = 16
+            int r9 = java.lang.Integer.parseInt(r9, r7)     // Catch:{ Exception -> 0x1372 }
+            r7 = r9 | r23
+            r4.third_background_color = r7     // Catch:{ Exception -> 0x1372 }
+        L_0x134a:
+            int r4 = r3.length()     // Catch:{ Exception -> 0x1372 }
+            r7 = 27
+            if (r4 != r7) goto L_0x1372
+            r4 = 20
+            char r4 = r3.charAt(r4)     // Catch:{ Exception -> 0x1372 }
+            boolean r4 = org.telegram.messenger.AndroidUtilities.isValidWallChar(r4)     // Catch:{ Exception -> 0x1372 }
+            if (r4 == 0) goto L_0x1372
+            org.telegram.tgnet.TLRPC$WallPaperSettings r4 = r1.settings     // Catch:{ Exception -> 0x1372 }
+            r7 = 21
+            java.lang.String r3 = r3.substring(r7)     // Catch:{ Exception -> 0x1372 }
+            r7 = 16
+            int r3 = java.lang.Integer.parseInt(r3, r7)     // Catch:{ Exception -> 0x1372 }
             r3 = r3 | r23
-            r7.fourth_background_color = r3     // Catch:{ Exception -> 0x13c6 }
-            goto L_0x13c6
-        L_0x13c5:
+            r4.fourth_background_color = r3     // Catch:{ Exception -> 0x1372 }
+            goto L_0x1372
+        L_0x1371:
             r13 = 6
-        L_0x13c6:
+        L_0x1372:
             java.lang.String r3 = "rotation"
-            java.lang.String r0 = r0.getQueryParameter(r3)     // Catch:{ Exception -> 0x13e0 }
-            boolean r3 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x13e0 }
-            if (r3 != 0) goto L_0x13e0
-            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r2.settings     // Catch:{ Exception -> 0x13e0 }
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x13e0 }
-            int r0 = r0.intValue()     // Catch:{ Exception -> 0x13e0 }
-            r3.rotation = r0     // Catch:{ Exception -> 0x13e0 }
-            goto L_0x13e0
-        L_0x13df:
+            java.lang.String r0 = r0.getQueryParameter(r3)     // Catch:{ Exception -> 0x138c }
+            boolean r3 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x138c }
+            if (r3 != 0) goto L_0x138c
+            org.telegram.tgnet.TLRPC$WallPaperSettings r3 = r1.settings     // Catch:{ Exception -> 0x138c }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x138c }
+            int r0 = r0.intValue()     // Catch:{ Exception -> 0x138c }
+            r3.rotation = r0     // Catch:{ Exception -> 0x138c }
+            goto L_0x138c
+        L_0x138b:
             r13 = 6
-        L_0x13e0:
-            r54 = r2
+        L_0x138c:
+            r54 = r1
             r0 = r12
-            r2 = r0
-            r3 = r2
-            r7 = r3
+            r3 = r0
+            r4 = r3
+            r7 = r4
             r9 = r7
             r10 = r9
             r13 = r10
-            r36 = r13
-            r37 = r36
+            r27 = r13
+            r37 = r27
             r38 = r37
             r39 = r38
             r40 = r39
@@ -5322,7 +5347,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r57 = r56
             r19 = 0
             r23 = 0
-            r27 = 0
             r28 = 0
             r29 = 0
             r30 = 0
@@ -5331,144 +5355,145 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r33 = 0
             r34 = 0
             r35 = 0
+            r36 = 0
             r50 = 0
             r52 = 0
-            goto L_0x1690
-        L_0x1427:
+            goto L_0x1637
+        L_0x13d3:
             r12 = 0
             r13 = 6
             java.lang.String r0 = "tg:privatepost"
             java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://privatepost"
-            java.lang.String r0 = r0.replace(r2, r10)
+            java.lang.String r1 = "tg://privatepost"
+            java.lang.String r0 = r0.replace(r1, r10)
             android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.lang.String r2 = "post"
-            java.lang.String r2 = r0.getQueryParameter(r2)
-            java.lang.Integer r7 = org.telegram.messenger.Utilities.parseInt(r2)
-            java.lang.String r2 = "channel"
-            java.lang.String r2 = r0.getQueryParameter(r2)
-            java.lang.Long r2 = org.telegram.messenger.Utilities.parseLong(r2)
+            java.lang.String r1 = "post"
+            java.lang.String r1 = r0.getQueryParameter(r1)
+            java.lang.Integer r7 = org.telegram.messenger.Utilities.parseInt(r1)
+            java.lang.String r1 = "channel"
+            java.lang.String r1 = r0.getQueryParameter(r1)
+            java.lang.Long r1 = org.telegram.messenger.Utilities.parseLong(r1)
             int r3 = r7.intValue()
-            if (r3 == 0) goto L_0x145e
-            long r23 = r2.longValue()
+            if (r3 == 0) goto L_0x140a
+            long r3 = r1.longValue()
             r19 = 0
-            int r3 = (r23 > r19 ? 1 : (r23 == r19 ? 0 : -1))
-            if (r3 != 0) goto L_0x1462
-            goto L_0x1460
-        L_0x145e:
+            int r10 = (r3 > r19 ? 1 : (r3 == r19 ? 0 : -1))
+            if (r10 != 0) goto L_0x140e
+            goto L_0x140c
+        L_0x140a:
             r19 = 0
-        L_0x1460:
-            r2 = r12
-            r7 = r2
-        L_0x1462:
+        L_0x140c:
+            r1 = r12
+            r7 = r1
+        L_0x140e:
             java.lang.String r3 = r0.getQueryParameter(r9)
             java.lang.Integer r3 = org.telegram.messenger.Utilities.parseInt(r3)
-            int r9 = r3.intValue()
-            if (r9 != 0) goto L_0x1471
+            int r4 = r3.intValue()
+            if (r4 != 0) goto L_0x141d
             r3 = r12
-        L_0x1471:
-            java.lang.String r9 = "comment"
-            java.lang.String r0 = r0.getQueryParameter(r9)
+        L_0x141d:
+            java.lang.String r4 = "comment"
+            java.lang.String r0 = r0.getQueryParameter(r4)
             java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)
-            int r9 = r0.intValue()
-            if (r9 != 0) goto L_0x149b
-            r41 = r2
+            int r4 = r0.intValue()
+            if (r4 != 0) goto L_0x1447
+            r41 = r1
             r42 = r3
             r40 = r7
             r0 = r12
-            r2 = r0
-            r3 = r2
-            r7 = r3
+            r3 = r0
+            r4 = r3
+            r7 = r4
             r9 = r7
             r10 = r9
             r13 = r10
-            r36 = r13
-            r37 = r36
+            r27 = r13
+            r37 = r27
             r38 = r37
             r39 = r38
             r43 = r39
             r44 = r43
-            goto L_0x14b4
-        L_0x149b:
+            goto L_0x1460
+        L_0x1447:
             r43 = r0
-            r41 = r2
+            r41 = r1
             r42 = r3
             r40 = r7
             r0 = r12
-            r2 = r0
-            r3 = r2
-            r7 = r3
+            r3 = r0
+            r4 = r3
+            r7 = r4
             r9 = r7
             r10 = r9
             r13 = r10
-            r36 = r13
-            r37 = r36
+            r27 = r13
+            r37 = r27
             r38 = r37
             r39 = r38
             r44 = r39
-        L_0x14b4:
+        L_0x1460:
             r45 = r44
             r46 = r45
-            goto L_0x1553
-        L_0x14ba:
+            goto L_0x14ff
+        L_0x1466:
             r3 = 6
             r12 = 0
             r19 = 0
             java.lang.String r0 = "tg:resolve"
             java.lang.String r0 = r7.replace(r0, r10)
-            java.lang.String r2 = "tg://resolve"
-            java.lang.String r0 = r0.replace(r2, r10)
+            java.lang.String r1 = "tg://resolve"
+            java.lang.String r0 = r0.replace(r1, r10)
             android.net.Uri r0 = android.net.Uri.parse(r0)
-            java.lang.String r2 = "domain"
-            java.lang.String r2 = r0.getQueryParameter(r2)
-            java.lang.String r7 = "telegrampassport"
-            boolean r7 = r7.equals(r2)
-            if (r7 == 0) goto L_0x157b
-            java.util.HashMap r2 = new java.util.HashMap
-            r2.<init>()
-            java.lang.String r7 = r0.getQueryParameter(r13)
-            boolean r9 = android.text.TextUtils.isEmpty(r7)
-            if (r9 != 0) goto L_0x1507
-            java.lang.String r9 = "{"
-            boolean r9 = r7.startsWith(r9)
-            if (r9 == 0) goto L_0x1507
-            java.lang.String r9 = "}"
-            boolean r9 = r7.endsWith(r9)
-            if (r9 == 0) goto L_0x1507
-            java.lang.String r9 = "nonce"
-            java.lang.String r9 = r0.getQueryParameter(r9)
-            java.lang.String r10 = "nonce"
-            r2.put(r10, r9)
-            goto L_0x1512
-        L_0x1507:
-            java.lang.String r9 = "payload"
-            java.lang.String r9 = r0.getQueryParameter(r9)
-            java.lang.String r10 = "payload"
-            r2.put(r10, r9)
-        L_0x1512:
-            java.lang.String r9 = "bot_id"
-            java.lang.String r9 = r0.getQueryParameter(r9)
-            java.lang.String r10 = "bot_id"
-            r2.put(r10, r9)
-            r2.put(r13, r7)
-            java.lang.String r7 = "public_key"
+            java.lang.String r1 = "domain"
+            java.lang.String r1 = r0.getQueryParameter(r1)
+            java.lang.String r4 = "telegrampassport"
+            boolean r4 = r4.equals(r1)
+            if (r4 == 0) goto L_0x1527
+            java.util.HashMap r1 = new java.util.HashMap
+            r1.<init>()
+            java.lang.String r4 = r0.getQueryParameter(r13)
+            boolean r7 = android.text.TextUtils.isEmpty(r4)
+            if (r7 != 0) goto L_0x14b3
+            java.lang.String r7 = "{"
+            boolean r7 = r4.startsWith(r7)
+            if (r7 == 0) goto L_0x14b3
+            java.lang.String r7 = "}"
+            boolean r7 = r4.endsWith(r7)
+            if (r7 == 0) goto L_0x14b3
+            java.lang.String r7 = "nonce"
             java.lang.String r7 = r0.getQueryParameter(r7)
-            java.lang.String r9 = "public_key"
-            r2.put(r9, r7)
-            java.lang.String r7 = "callback_url"
-            java.lang.String r0 = r0.getQueryParameter(r7)
-            java.lang.String r7 = "callback_url"
-            r2.put(r7, r0)
-            r45 = r2
+            java.lang.String r9 = "nonce"
+            r1.put(r9, r7)
+            goto L_0x14be
+        L_0x14b3:
+            java.lang.String r7 = "payload"
+            java.lang.String r7 = r0.getQueryParameter(r7)
+            java.lang.String r9 = "payload"
+            r1.put(r9, r7)
+        L_0x14be:
+            java.lang.String r7 = "bot_id"
+            java.lang.String r7 = r0.getQueryParameter(r7)
+            java.lang.String r9 = "bot_id"
+            r1.put(r9, r7)
+            r1.put(r13, r4)
+            java.lang.String r4 = "public_key"
+            java.lang.String r4 = r0.getQueryParameter(r4)
+            java.lang.String r7 = "public_key"
+            r1.put(r7, r4)
+            java.lang.String r4 = "callback_url"
+            java.lang.String r0 = r0.getQueryParameter(r4)
+            java.lang.String r4 = "callback_url"
+            r1.put(r4, r0)
+            r45 = r1
             r0 = r12
-            r2 = r0
-            r3 = r2
-            r7 = r3
+            r3 = r0
+            r4 = r3
+            r7 = r4
             r9 = r7
             r10 = r9
             r13 = r10
-            r36 = r13
-            r37 = r36
+            r27 = r13
+            r37 = r27
             r38 = r37
             r39 = r38
             r40 = r39
@@ -5477,7 +5502,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r43 = r42
             r44 = r43
             r46 = r44
-        L_0x1553:
+        L_0x14ff:
             r47 = r46
             r48 = r47
             r49 = r48
@@ -5488,7 +5513,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r50 = r19
             r52 = r50
             r23 = 0
-            r27 = 0
             r28 = 0
             r29 = 0
             r30 = 0
@@ -5497,52 +5521,48 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r33 = 0
             r34 = 0
             r35 = 0
-            goto L_0x1690
-        L_0x157b:
-            java.lang.String r7 = "start"
+            r36 = 0
+            goto L_0x1637
+        L_0x1527:
+            java.lang.String r4 = "start"
+            java.lang.String r4 = r0.getQueryParameter(r4)
+            java.lang.String r7 = "startgroup"
             java.lang.String r7 = r0.getQueryParameter(r7)
-            java.lang.String r10 = "startgroup"
+            java.lang.String r10 = "game"
             java.lang.String r10 = r0.getQueryParameter(r10)
-            java.lang.String r13 = "game"
+            java.lang.String r13 = "voicechat"
             java.lang.String r13 = r0.getQueryParameter(r13)
-            java.lang.String r3 = "voicechat"
+            java.lang.String r3 = "livestream"
             java.lang.String r3 = r0.getQueryParameter(r3)
-            java.lang.String r12 = "livestream"
+            java.lang.String r12 = "post"
             java.lang.String r12 = r0.getQueryParameter(r12)
-            r73 = r2
-            java.lang.String r2 = "post"
-            java.lang.String r2 = r0.getQueryParameter(r2)
-            java.lang.Integer r2 = org.telegram.messenger.Utilities.parseInt(r2)
-            int r23 = r2.intValue()
-            if (r23 != 0) goto L_0x15ac
-            r2 = 0
-        L_0x15ac:
+            java.lang.Integer r12 = org.telegram.messenger.Utilities.parseInt(r12)
+            int r23 = r12.intValue()
+            if (r23 != 0) goto L_0x1556
+            r12 = 0
+        L_0x1556:
             java.lang.String r9 = r0.getQueryParameter(r9)
             java.lang.Integer r9 = org.telegram.messenger.Utilities.parseInt(r9)
             int r23 = r9.intValue()
-            if (r23 != 0) goto L_0x15be
-            r23 = r2
+            r72 = r1
+            if (r23 != 0) goto L_0x1567
             r9 = 0
-            goto L_0x15c0
-        L_0x15be:
-            r23 = r2
-        L_0x15c0:
-            java.lang.String r2 = "comment"
-            java.lang.String r0 = r0.getQueryParameter(r2)
+        L_0x1567:
+            java.lang.String r1 = "comment"
+            java.lang.String r0 = r0.getQueryParameter(r1)
             java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)
-            int r2 = r0.intValue()
-            if (r2 != 0) goto L_0x1603
-            r56 = r3
+            int r1 = r0.intValue()
+            if (r1 != 0) goto L_0x15a9
+            r57 = r3
             r42 = r9
-            r57 = r12
-            r44 = r13
+            r44 = r10
+            r40 = r12
+            r56 = r13
             r50 = r19
             r52 = r50
-            r40 = r23
             r0 = 0
-            r2 = 0
-            r9 = 0
             r12 = 0
+            r13 = 0
             r23 = 0
             r27 = 0
             r28 = 0
@@ -5559,20 +5579,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r39 = 0
             r41 = 0
             r43 = 0
-            goto L_0x1635
-        L_0x1603:
+            goto L_0x15da
+        L_0x15a9:
             r43 = r0
-            r56 = r3
+            r57 = r3
             r42 = r9
-            r57 = r12
-            r44 = r13
+            r44 = r10
+            r40 = r12
+            r56 = r13
             r50 = r19
             r52 = r50
-            r40 = r23
             r0 = 0
-            r2 = 0
-            r9 = 0
             r12 = 0
+            r13 = 0
             r23 = 0
             r27 = 0
             r28 = 0
@@ -5588,7 +5607,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r38 = 0
             r39 = 0
             r41 = 0
-        L_0x1635:
+        L_0x15da:
             r45 = 0
             r46 = 0
             r47 = 0
@@ -5597,17 +5616,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r54 = 0
             r55 = 0
             r58 = -1
-            r3 = r73
-            r13 = r10
-            r10 = 0
-            goto L_0x1692
-        L_0x164a:
+            r3 = r72
+            r9 = r4
+            r10 = r7
+            r4 = 0
+            r7 = 0
+            goto L_0x1639
+        L_0x15f1:
             r19 = 0
             r50 = r19
             r52 = r50
             r0 = 0
-            r2 = 0
             r3 = 0
+            r4 = 0
             r7 = 0
             r9 = 0
             r10 = 0
@@ -5615,8 +5636,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r13 = 0
             r23 = 0
             r27 = 0
-        L_0x165c:
             r28 = 0
+        L_0x1605:
             r29 = 0
             r30 = 0
             r31 = 0
@@ -5638,240 +5659,244 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r47 = 0
             r48 = 0
             r49 = 0
-        L_0x1688:
+        L_0x162f:
             r54 = 0
             r55 = 0
-        L_0x168c:
+        L_0x1633:
             r56 = 0
             r57 = 0
-        L_0x1690:
+        L_0x1637:
             r58 = -1
-        L_0x1692:
-            boolean r24 = r14.hasExtra(r5)
-            if (r24 == 0) goto L_0x16dc
-            r59 = r8
-            int r8 = r15.currentAccount
-            org.telegram.messenger.UserConfig r8 = org.telegram.messenger.UserConfig.getInstance(r8)
-            boolean r8 = r8.isClientActivated()
-            if (r8 == 0) goto L_0x16b2
-            java.lang.String r8 = "tg"
-            boolean r1 = r8.equals(r1)
-            if (r1 == 0) goto L_0x16b2
-            if (r47 != 0) goto L_0x16b2
-            r1 = 1
-            goto L_0x16b3
-        L_0x16b2:
-            r1 = 0
-        L_0x16b3:
-            com.google.firebase.appindexing.builders.AssistActionBuilder r8 = new com.google.firebase.appindexing.builders.AssistActionBuilder
-            r8.<init>()
-            r73 = r4
-            java.lang.String r4 = r14.getStringExtra(r5)
-            com.google.firebase.appindexing.builders.AssistActionBuilder r4 = r8.setActionToken(r4)
-            if (r1 == 0) goto L_0x16c7
-            java.lang.String r1 = "http://schema.org/CompletedActionStatus"
-            goto L_0x16c9
-        L_0x16c7:
-            java.lang.String r1 = "http://schema.org/FailedActionStatus"
-        L_0x16c9:
-            com.google.firebase.appindexing.Action$Builder r1 = r4.setActionStatus(r1)
-            com.google.firebase.appindexing.Action r1 = r1.build()
-            com.google.firebase.appindexing.FirebaseUserActions r4 = com.google.firebase.appindexing.FirebaseUserActions.getInstance(r70)
-            r4.end(r1)
-            r14.removeExtra(r5)
-            goto L_0x16e0
-        L_0x16dc:
-            r73 = r4
-            r59 = r8
-        L_0x16e0:
-            if (r48 != 0) goto L_0x16fa
+        L_0x1639:
+            boolean r1 = r14.hasExtra(r5)
+            if (r1 == 0) goto L_0x1681
             int r1 = r15.currentAccount
             org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
             boolean r1 = r1.isClientActivated()
-            if (r1 == 0) goto L_0x16ef
-            goto L_0x16fa
-        L_0x16ef:
-            r66 = r11
-            r7 = r15
+            if (r1 == 0) goto L_0x1657
+            java.lang.String r1 = "tg"
+            boolean r1 = r1.equals(r2)
+            if (r1 == 0) goto L_0x1657
+            if (r47 != 0) goto L_0x1657
+            r1 = 1
+            goto L_0x1658
+        L_0x1657:
+            r1 = 0
+        L_0x1658:
+            com.google.firebase.appindexing.builders.AssistActionBuilder r2 = new com.google.firebase.appindexing.builders.AssistActionBuilder
+            r2.<init>()
+            r59 = r8
+            java.lang.String r8 = r14.getStringExtra(r5)
+            com.google.firebase.appindexing.builders.AssistActionBuilder r2 = r2.setActionToken(r8)
+            if (r1 == 0) goto L_0x166c
+            java.lang.String r1 = "http://schema.org/CompletedActionStatus"
+            goto L_0x166e
+        L_0x166c:
+            java.lang.String r1 = "http://schema.org/FailedActionStatus"
+        L_0x166e:
+            com.google.firebase.appindexing.Action$Builder r1 = r2.setActionStatus(r1)
+            com.google.firebase.appindexing.Action r1 = r1.build()
+            com.google.firebase.appindexing.FirebaseUserActions r2 = com.google.firebase.appindexing.FirebaseUserActions.getInstance(r69)
+            r2.end(r1)
+            r14.removeExtra(r5)
+            goto L_0x1683
+        L_0x1681:
+            r59 = r8
+        L_0x1683:
+            if (r48 != 0) goto L_0x16a0
+            int r1 = r15.currentAccount
+            org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
+            boolean r1 = r1.isClientActivated()
+            if (r1 == 0) goto L_0x1692
+            goto L_0x16a0
+        L_0x1692:
+            r67 = r11
+            r8 = r15
             r61 = r19
-            r68 = r59
+            r66 = r59
+            r1 = 2
+            r10 = 3
+            r11 = 0
             r60 = -1
             goto L_0x1861
-        L_0x16fa:
-            if (r9 != 0) goto L_0x1842
-            if (r2 == 0) goto L_0x1700
-            goto L_0x1842
-        L_0x1700:
-            if (r3 != 0) goto L_0x17e2
-            if (r12 != 0) goto L_0x17e2
-            if (r0 != 0) goto L_0x17e2
-            if (r10 != 0) goto L_0x17e2
-            if (r44 != 0) goto L_0x17e2
-            if (r56 != 0) goto L_0x17e2
-            if (r45 != 0) goto L_0x17e2
-            if (r47 != 0) goto L_0x17e2
-            if (r46 != 0) goto L_0x17e2
-            if (r48 != 0) goto L_0x17e2
-            if (r54 != 0) goto L_0x17e2
-            if (r41 != 0) goto L_0x17e2
-            if (r55 != 0) goto L_0x17e2
-            if (r49 == 0) goto L_0x171e
-            goto L_0x17e2
-        L_0x171e:
-            android.content.ContentResolver r60 = r70.getContentResolver()     // Catch:{ Exception -> 0x17cb }
-            android.net.Uri r61 = r71.getData()     // Catch:{ Exception -> 0x17cb }
+        L_0x16a0:
+            if (r12 != 0) goto L_0x17ef
+            if (r7 == 0) goto L_0x16a6
+            goto L_0x17ef
+        L_0x16a6:
+            if (r3 != 0) goto L_0x178d
+            if (r4 != 0) goto L_0x178d
+            if (r0 != 0) goto L_0x178d
+            if (r13 != 0) goto L_0x178d
+            if (r44 != 0) goto L_0x178d
+            if (r56 != 0) goto L_0x178d
+            if (r45 != 0) goto L_0x178d
+            if (r47 != 0) goto L_0x178d
+            if (r46 != 0) goto L_0x178d
+            if (r48 != 0) goto L_0x178d
+            if (r54 != 0) goto L_0x178d
+            if (r41 != 0) goto L_0x178d
+            if (r55 != 0) goto L_0x178d
+            if (r49 == 0) goto L_0x16c4
+            goto L_0x178d
+        L_0x16c4:
+            android.content.ContentResolver r60 = r69.getContentResolver()     // Catch:{ Exception -> 0x1771 }
+            android.net.Uri r61 = r70.getData()     // Catch:{ Exception -> 0x1771 }
             r62 = 0
             r63 = 0
             r64 = 0
             r65 = 0
-            android.database.Cursor r1 = r60.query(r61, r62, r63, r64, r65)     // Catch:{ Exception -> 0x17cb }
-            if (r1 == 0) goto L_0x17ba
-            boolean r0 = r1.moveToFirst()     // Catch:{ all -> 0x17b1 }
-            if (r0 == 0) goto L_0x17ba
+            android.database.Cursor r1 = r60.query(r61, r62, r63, r64, r65)     // Catch:{ Exception -> 0x1771 }
+            if (r1 == 0) goto L_0x1760
+            boolean r0 = r1.moveToFirst()     // Catch:{ all -> 0x1757 }
+            if (r0 == 0) goto L_0x1760
             java.lang.String r0 = "account_name"
-            int r0 = r1.getColumnIndex(r0)     // Catch:{ all -> 0x17b1 }
-            java.lang.String r0 = r1.getString(r0)     // Catch:{ all -> 0x17b1 }
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ all -> 0x17b1 }
-            int r0 = r0.intValue()     // Catch:{ all -> 0x17b1 }
+            int r0 = r1.getColumnIndex(r0)     // Catch:{ all -> 0x1757 }
+            java.lang.String r0 = r1.getString(r0)     // Catch:{ all -> 0x1757 }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ all -> 0x1757 }
+            int r0 = r0.intValue()     // Catch:{ all -> 0x1757 }
             r2 = 0
             r6 = 3
-        L_0x174e:
-            if (r2 >= r6) goto L_0x176d
-            org.telegram.messenger.UserConfig r3 = org.telegram.messenger.UserConfig.getInstance(r2)     // Catch:{ all -> 0x176b }
-            long r3 = r3.getClientUserId()     // Catch:{ all -> 0x176b }
-            long r7 = (long) r0     // Catch:{ all -> 0x176b }
+        L_0x16f4:
+            if (r2 >= r6) goto L_0x1713
+            org.telegram.messenger.UserConfig r3 = org.telegram.messenger.UserConfig.getInstance(r2)     // Catch:{ all -> 0x1711 }
+            long r3 = r3.getClientUserId()     // Catch:{ all -> 0x1711 }
+            long r7 = (long) r0     // Catch:{ all -> 0x1711 }
             int r5 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1))
-            if (r5 != 0) goto L_0x1767
+            if (r5 != 0) goto L_0x170d
             r3 = 0
-            r11[r3] = r2     // Catch:{ all -> 0x176b }
-            r0 = r11[r3]     // Catch:{ all -> 0x176b }
-            r9 = 1
-            r15.switchToAccount(r0, r9)     // Catch:{ all -> 0x17af }
-            goto L_0x176e
-        L_0x1767:
-            r9 = 1
+            r11[r3] = r2     // Catch:{ all -> 0x1711 }
+            r0 = r11[r3]     // Catch:{ all -> 0x1711 }
+            r12 = 1
+            r15.switchToAccount(r0, r12)     // Catch:{ all -> 0x1755 }
+            goto L_0x1714
+        L_0x170d:
+            r12 = 1
             int r2 = r2 + 1
-            goto L_0x174e
-        L_0x176b:
+            goto L_0x16f4
+        L_0x1711:
             r0 = move-exception
-            goto L_0x17b3
-        L_0x176d:
-            r9 = 1
-        L_0x176e:
+            goto L_0x1759
+        L_0x1713:
+            r12 = 1
+        L_0x1714:
             java.lang.String r0 = "data4"
-            int r0 = r1.getColumnIndex(r0)     // Catch:{ all -> 0x17af }
-            long r2 = r1.getLong(r0)     // Catch:{ all -> 0x17af }
+            int r0 = r1.getColumnIndex(r0)     // Catch:{ all -> 0x1755 }
+            long r2 = r1.getLong(r0)     // Catch:{ all -> 0x1755 }
             r4 = 0
-            r0 = r11[r4]     // Catch:{ all -> 0x17af }
-            org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)     // Catch:{ all -> 0x17af }
-            int r5 = org.telegram.messenger.NotificationCenter.closeChats     // Catch:{ all -> 0x17af }
-            java.lang.Object[] r7 = new java.lang.Object[r4]     // Catch:{ all -> 0x17af }
-            r0.postNotificationName(r5, r7)     // Catch:{ all -> 0x17af }
+            r0 = r11[r4]     // Catch:{ all -> 0x1755 }
+            org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)     // Catch:{ all -> 0x1755 }
+            int r5 = org.telegram.messenger.NotificationCenter.closeChats     // Catch:{ all -> 0x1755 }
+            java.lang.Object[] r7 = new java.lang.Object[r4]     // Catch:{ all -> 0x1755 }
+            r0.postNotificationName(r5, r7)     // Catch:{ all -> 0x1755 }
             java.lang.String r0 = "mimetype"
-            int r0 = r1.getColumnIndex(r0)     // Catch:{ all -> 0x17ab }
-            java.lang.String r0 = r1.getString(r0)     // Catch:{ all -> 0x17ab }
+            int r0 = r1.getColumnIndex(r0)     // Catch:{ all -> 0x1751 }
+            java.lang.String r0 = r1.getString(r0)     // Catch:{ all -> 0x1751 }
             java.lang.String r4 = "vnd.android.cursor.item/vnd.org.telegram.messenger.android.call"
-            boolean r4 = android.text.TextUtils.equals(r0, r4)     // Catch:{ all -> 0x17ab }
-            if (r4 == 0) goto L_0x179c
+            boolean r4 = android.text.TextUtils.equals(r0, r4)     // Catch:{ all -> 0x1751 }
+            if (r4 == 0) goto L_0x1742
             r50 = r2
             r4 = 1
-            goto L_0x17be
-        L_0x179c:
+            goto L_0x1764
+        L_0x1742:
             java.lang.String r4 = "vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video"
-            boolean r0 = android.text.TextUtils.equals(r0, r4)     // Catch:{ all -> 0x17ab }
+            boolean r0 = android.text.TextUtils.equals(r0, r4)     // Catch:{ all -> 0x1751 }
             r50 = r2
-            r4 = r30
-            if (r0 == 0) goto L_0x17be
-            r31 = 1
-            goto L_0x17be
-        L_0x17ab:
+            r4 = r31
+            if (r0 == 0) goto L_0x1764
+            r32 = 1
+            goto L_0x1764
+        L_0x1751:
             r0 = move-exception
             r50 = r2
-            goto L_0x17b4
-        L_0x17af:
+            goto L_0x175a
+        L_0x1755:
             r0 = move-exception
-            goto L_0x17b4
-        L_0x17b1:
-            r0 = move-exception
-            r6 = 3
-        L_0x17b3:
-            r9 = 1
-        L_0x17b4:
-            r1.close()     // Catch:{ all -> 0x17b7 }
-        L_0x17b7:
-            throw r0     // Catch:{ Exception -> 0x17b8 }
-        L_0x17b8:
-            r0 = move-exception
-            goto L_0x17ce
-        L_0x17ba:
-            r6 = 3
-            r9 = 1
-            r4 = r30
-        L_0x17be:
-            if (r1 == 0) goto L_0x17c8
-            r1.close()     // Catch:{ Exception -> 0x17c4 }
-            goto L_0x17c8
-        L_0x17c4:
-            r0 = move-exception
-            r30 = r4
-            goto L_0x17ce
-        L_0x17c8:
-            r30 = r4
-            goto L_0x17d1
-        L_0x17cb:
+            goto L_0x175a
+        L_0x1757:
             r0 = move-exception
             r6 = 3
-            r9 = 1
-        L_0x17ce:
+        L_0x1759:
+            r12 = 1
+        L_0x175a:
+            r1.close()     // Catch:{ all -> 0x175d }
+        L_0x175d:
+            throw r0     // Catch:{ Exception -> 0x175e }
+        L_0x175e:
+            r0 = move-exception
+            goto L_0x1774
+        L_0x1760:
+            r6 = 3
+            r12 = 1
+            r4 = r31
+        L_0x1764:
+            if (r1 == 0) goto L_0x176e
+            r1.close()     // Catch:{ Exception -> 0x176a }
+            goto L_0x176e
+        L_0x176a:
+            r0 = move-exception
+            r31 = r4
+            goto L_0x1774
+        L_0x176e:
+            r31 = r4
+            goto L_0x1777
+        L_0x1771:
+            r0 = move-exception
+            r6 = 3
+            r12 = 1
+        L_0x1774:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x17d1:
-            r66 = r11
-            r7 = r15
+        L_0x1777:
+            r67 = r11
+            r8 = r15
             r61 = r19
-            r12 = r27
-            r13 = r28
+            r7 = r27
+            r12 = r28
+            r13 = r29
             r5 = r50
-            r68 = r59
+            r66 = r59
+            r1 = 2
+            r10 = 3
+            r11 = 0
             r60 = -1
-            goto L_0x188d
-        L_0x17e2:
+            goto L_0x1891
+        L_0x178d:
             r6 = 3
-            r9 = 1
-            if (r10 == 0) goto L_0x1801
+            r12 = 1
+            if (r13 == 0) goto L_0x17ac
             java.lang.String r1 = "@"
-            boolean r1 = r10.startsWith(r1)
-            if (r1 == 0) goto L_0x1801
+            boolean r1 = r13.startsWith(r1)
+            if (r1 == 0) goto L_0x17ac
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             java.lang.String r2 = " "
             r1.append(r2)
-            r1.append(r10)
+            r1.append(r13)
             java.lang.String r1 = r1.toString()
             r8 = r1
-            goto L_0x1802
-        L_0x1801:
-            r8 = r10
-        L_0x1802:
-            r21 = 0
-            r2 = r11[r21]
+            goto L_0x17ad
+        L_0x17ac:
+            r8 = r13
+        L_0x17ad:
+            r13 = 0
+            r2 = r11[r13]
             r24 = 0
-            r1 = r70
-            r10 = 6
+            r1 = r69
+            r7 = 6
             r60 = -1
-            r4 = r12
             r61 = r19
-            r12 = 2
             r5 = r0
-            r6 = r7
-            r7 = r13
-            r13 = r59
-            r16 = 1
+            r6 = r9
+            r9 = 0
+            r7 = r10
+            r10 = r59
             r9 = r23
+            r66 = r10
             r10 = r40
-            r66 = r11
+            r67 = r11
             r11 = r41
+            r16 = 1
             r12 = r42
-            r68 = r13
             r13 = r43
             r14 = r44
             r15 = r45
@@ -5885,38 +5910,83 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r23 = r57
             r25 = r58
             r1.runLinkRequest(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20, r21, r22, r23, r24, r25)
-            r7 = r70
+            r1 = 2
+            r10 = 3
+            r11 = 0
+            r8 = r69
             goto L_0x1861
-        L_0x1842:
-            r66 = r11
+        L_0x17ef:
+            r67 = r11
             r61 = r19
-            r68 = r59
+            r66 = r59
             r60 = -1
-            android.os.Bundle r0 = new android.os.Bundle
+            org.telegram.ui.ActionBar.AlertDialog r3 = new org.telegram.ui.ActionBar.AlertDialog
+            r10 = 3
+            r8 = r69
+            r3.<init>(r8, r10)
+            r11 = 0
+            r3.setCanCancel(r11)
+            r3.show()
+            org.telegram.tgnet.TLRPC$TL_account_sendConfirmPhoneCode r0 = new org.telegram.tgnet.TLRPC$TL_account_sendConfirmPhoneCode
             r0.<init>()
-            r0.putString(r6, r9)
-            r1 = r73
-            r0.putString(r1, r2)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda30 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda30
-            r7 = r70
-            r1.<init>(r7, r0)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
+            r0.hash = r7
+            org.telegram.tgnet.TLRPC$TL_codeSettings r1 = new org.telegram.tgnet.TLRPC$TL_codeSettings
+            r1.<init>()
+            r0.settings = r1
+            r1.allow_flashcall = r11
+            boolean r2 = org.telegram.messenger.ApplicationLoader.hasPlayServices
+            r1.allow_app_hash = r2
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext
+            java.lang.String r2 = "mainconfig"
+            android.content.SharedPreferences r1 = r1.getSharedPreferences(r2, r11)
+            org.telegram.tgnet.TLRPC$TL_codeSettings r2 = r0.settings
+            boolean r2 = r2.allow_app_hash
+            if (r2 == 0) goto L_0x1838
+            android.content.SharedPreferences$Editor r1 = r1.edit()
+            java.lang.String r2 = org.telegram.messenger.BuildVars.SMS_HASH
+            java.lang.String r4 = "sms_hash"
+            android.content.SharedPreferences$Editor r1 = r1.putString(r4, r2)
+            r1.apply()
+            goto L_0x1845
+        L_0x1838:
+            android.content.SharedPreferences$Editor r1 = r1.edit()
+            java.lang.String r2 = "sms_hash"
+            android.content.SharedPreferences$Editor r1 = r1.remove(r2)
+            r1.apply()
+        L_0x1845:
+            android.os.Bundle r5 = new android.os.Bundle
+            r5.<init>()
+            r5.putString(r6, r12)
+            int r1 = r8.currentAccount
+            org.telegram.tgnet.ConnectionsManager r7 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda68 r9 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda68
+            r1 = r9
+            r2 = r69
+            r4 = r12
+            r6 = r0
+            r1.<init>(r2, r3, r4, r5, r6)
+            r1 = 2
+            r7.sendRequest(r0, r9, r1)
         L_0x1861:
-            r12 = r27
-            r13 = r28
+            r7 = r27
+            r12 = r28
+            r13 = r29
             r5 = r50
-            goto L_0x188d
-        L_0x1868:
-            r68 = r8
-            r66 = r11
-            r7 = r15
+            goto L_0x1891
+        L_0x186a:
+            r66 = r8
+            r67 = r11
+            r8 = r15
+            r1 = 2
+            r10 = 3
+            r11 = 0
             r60 = -1
             r61 = 0
             r5 = r61
             r52 = r5
+            r7 = 0
             r12 = 0
             r13 = 0
-            r29 = 0
             r30 = 0
             r31 = 0
             r32 = 0
@@ -5927,851 +5997,839 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r37 = 0
             r38 = 0
             r39 = 0
-        L_0x188d:
+        L_0x1891:
             r2 = r5
-            r10 = r12
-            r8 = r13
-            r67 = r30
-            r15 = r31
-            r9 = r36
-            r1 = r37
-            r6 = r38
-            r73 = r39
-            r12 = r52
+            r9 = r7
+            r11 = r12
+            r7 = r13
+            r10 = r32
+            r5 = r37
+            r72 = r38
+            r68 = r39
+            r13 = r52
             r19 = r61
-            r11 = r66
-            r5 = r68
+            r6 = r66
+            r12 = r67
             r0 = -1
+            r1 = 0
             r4 = -1
             r16 = 0
             r17 = 0
             r18 = 0
             r21 = 0
             r23 = 0
-            goto L_0x1a5b
-        L_0x18b2:
-            r68 = r8
-            r66 = r11
-            r7 = r15
+            goto L_0x1a4a
+        L_0x18b4:
+            r66 = r8
+            r67 = r11
+            r8 = r15
+            r1 = 2
+            r10 = 3
+            r11 = 0
             r60 = -1
             r61 = 0
-            java.lang.String r0 = r71.getAction()
-            java.lang.String r1 = "org.telegram.messenger.OPEN_ACCOUNT"
-            boolean r0 = r0.equals(r1)
-            if (r0 == 0) goto L_0x18db
+            java.lang.String r0 = r70.getAction()
+            java.lang.String r2 = "org.telegram.messenger.OPEN_ACCOUNT"
+            boolean r0 = r0.equals(r2)
+            if (r0 == 0) goto L_0x18de
             r2 = r61
-            r12 = r2
-            r19 = r12
-            r11 = r66
-            r5 = r68
-            r73 = 0
+            r13 = r2
+            r19 = r13
+            r6 = r66
+            r12 = r67
+            r72 = 0
             r0 = -1
             r1 = 0
             r4 = -1
-            r6 = 0
-            r8 = 1
-        L_0x18d7:
-            r9 = 0
-            r10 = 0
-            goto L_0x1a44
-        L_0x18db:
-            java.lang.String r0 = r71.getAction()
-            java.lang.String r1 = "new_dialog"
-            boolean r0 = r0.equals(r1)
-            if (r0 == 0) goto L_0x1904
+            r5 = 0
+            r7 = 1
+            goto L_0x1a30
+        L_0x18de:
+            java.lang.String r0 = r70.getAction()
+            java.lang.String r2 = "new_dialog"
+            boolean r0 = r0.equals(r2)
+            if (r0 == 0) goto L_0x1906
             r2 = r61
-            r12 = r2
-            r19 = r12
-            r11 = r66
-            r5 = r68
-            r73 = 0
+            r13 = r2
+            r19 = r13
+            r6 = r66
+            r12 = r67
+            r72 = 0
             r0 = -1
             r1 = 0
             r4 = -1
-            r6 = 0
-            r8 = 0
+            r5 = 0
+            r7 = 0
             r9 = 0
             r10 = 0
-            r15 = 0
             r16 = 0
             r17 = 0
             r18 = 0
             r21 = 1
-            goto L_0x1a4d
-        L_0x1904:
-            java.lang.String r0 = r71.getAction()
-            java.lang.String r1 = "com.tmessages.openchat"
-            boolean r0 = r0.startsWith(r1)
-            if (r0 == 0) goto L_0x19c7
+            goto L_0x1a3a
+        L_0x1906:
+            java.lang.String r0 = r70.getAction()
+            java.lang.String r2 = "com.tmessages.openchat"
+            boolean r0 = r0.startsWith(r2)
+            if (r0 == 0) goto L_0x19b2
             java.lang.String r0 = "chatId"
-            r8 = r71
-            r10 = 0
-            int r0 = r8.getIntExtra(r0, r10)
-            long r0 = (long) r0
-            java.lang.String r2 = "chatId"
-            long r0 = r8.getLongExtra(r2, r0)
-            java.lang.String r2 = "userId"
-            int r2 = r8.getIntExtra(r2, r10)
-            long r2 = (long) r2
-            java.lang.String r4 = "userId"
-            long r2 = r8.getLongExtra(r4, r2)
-            java.lang.String r4 = "encId"
-            int r4 = r8.getIntExtra(r4, r10)
-            java.lang.String r5 = "appWidgetId"
-            int r5 = r8.getIntExtra(r5, r10)
-            if (r5 == 0) goto L_0x194f
+            r7 = r70
+            int r0 = r7.getIntExtra(r0, r11)
+            long r2 = (long) r0
+            java.lang.String r0 = "chatId"
+            long r2 = r7.getLongExtra(r0, r2)
+            java.lang.String r0 = "userId"
+            int r0 = r7.getIntExtra(r0, r11)
+            long r4 = (long) r0
+            java.lang.String r0 = "userId"
+            long r4 = r7.getLongExtra(r0, r4)
+            java.lang.String r0 = "encId"
+            int r0 = r7.getIntExtra(r0, r11)
+            java.lang.String r6 = "appWidgetId"
+            int r6 = r7.getIntExtra(r6, r11)
+            if (r6 == 0) goto L_0x1950
             java.lang.String r0 = "appWidgetType"
-            int r4 = r8.getIntExtra(r0, r10)
-            r60 = r5
-            r0 = r61
-            r2 = r0
-            r11 = r66
-            r5 = r68
-            r6 = 0
-            r9 = 6
-        L_0x194c:
-            r12 = 0
-        L_0x194d:
-            r13 = 0
-            goto L_0x19a0
-        L_0x194f:
-            r5 = r68
-            int r6 = r8.getIntExtra(r5, r10)
-            int r9 = (r0 > r61 ? 1 : (r0 == r61 ? 0 : -1))
-            if (r9 == 0) goto L_0x196d
-            r11 = r66
-            r2 = r11[r10]
+            int r4 = r7.getIntExtra(r0, r11)
+            r60 = r6
+            r2 = r61
+            r13 = r2
+            r6 = r66
+            r12 = r67
+            r0 = 0
+            r5 = 0
+            r9 = 0
+            r15 = 6
+            goto L_0x19a2
+        L_0x1950:
+            r6 = r66
+            int r9 = r7.getIntExtra(r6, r11)
+            int r12 = (r2 > r61 ? 1 : (r2 == r61 ? 0 : -1))
+            if (r12 == 0) goto L_0x1971
+            r12 = r67
+            r0 = r12[r11]
+            org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
+            int r4 = org.telegram.messenger.NotificationCenter.closeChats
+            java.lang.Object[] r5 = new java.lang.Object[r11]
+            r0.postNotificationName(r4, r5)
+            r13 = r2
+            r2 = r61
+        L_0x196c:
+            r0 = 0
+        L_0x196d:
+            r4 = -1
+            r5 = 0
+        L_0x196f:
+            r15 = 0
+            goto L_0x19a2
+        L_0x1971:
+            r12 = r67
+            int r2 = (r4 > r61 ? 1 : (r4 == r61 ? 0 : -1))
+            if (r2 == 0) goto L_0x1988
+            r0 = r12[r11]
+            org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
+            int r2 = org.telegram.messenger.NotificationCenter.closeChats
+            java.lang.Object[] r3 = new java.lang.Object[r11]
+            r0.postNotificationName(r2, r3)
+            r2 = r4
+            r13 = r61
+            goto L_0x196c
+        L_0x1988:
+            if (r0 == 0) goto L_0x199b
+            r2 = r12[r11]
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
             int r3 = org.telegram.messenger.NotificationCenter.closeChats
-            java.lang.Object[] r4 = new java.lang.Object[r10]
+            java.lang.Object[] r4 = new java.lang.Object[r11]
             r2.postNotificationName(r3, r4)
             r2 = r61
-        L_0x196a:
-            r4 = -1
-            r9 = 0
-            goto L_0x194c
-        L_0x196d:
-            r11 = r66
-            int r0 = (r2 > r61 ? 1 : (r2 == r61 ? 0 : -1))
-            if (r0 == 0) goto L_0x1983
-            r0 = r11[r10]
-            org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
-            int r1 = org.telegram.messenger.NotificationCenter.closeChats
-            java.lang.Object[] r4 = new java.lang.Object[r10]
-            r0.postNotificationName(r1, r4)
-            r0 = r61
-            goto L_0x196a
-        L_0x1983:
-            if (r4 == 0) goto L_0x1999
-            r0 = r11[r10]
-            org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
-            int r1 = org.telegram.messenger.NotificationCenter.closeChats
-            java.lang.Object[] r2 = new java.lang.Object[r10]
-            r0.postNotificationName(r1, r2)
-            r12 = r4
-            r0 = r61
-            r2 = r0
-            r4 = -1
-            r9 = 0
-            goto L_0x194d
-        L_0x1999:
-            r0 = r61
-            r2 = r0
-            r4 = -1
-            r9 = 0
-            r12 = 0
-            r13 = 1
-        L_0x19a0:
-            r10 = r6
-            r8 = r9
-            r69 = r12
-            r16 = r13
-            r19 = r61
-            r73 = 0
-            r6 = 0
-            r9 = 0
-            r15 = 0
-            r17 = 0
-            r18 = 0
-            r21 = 0
-            r23 = 0
-            r29 = 0
-            r32 = 0
-            r33 = 0
-            r34 = 0
-            r35 = 0
-            r67 = 0
-            r12 = r0
-            r0 = r60
-            r1 = 0
-            goto L_0x1a5d
-        L_0x19c7:
-            r8 = r71
-            r11 = r66
-            r5 = r68
-            r10 = 0
-            java.lang.String r0 = r71.getAction()
-            java.lang.String r1 = "com.tmessages.openplayer"
-            boolean r0 = r0.equals(r1)
-            if (r0 == 0) goto L_0x19ed
+            r13 = r2
+            goto L_0x196d
+        L_0x199b:
             r2 = r61
-            r12 = r2
-            r19 = r12
-            r73 = 0
+            r13 = r2
+            r0 = 0
+            r4 = -1
+            r5 = 1
+            goto L_0x196f
+        L_0x19a2:
+            r1 = r0
+            r16 = r5
+            r11 = r9
+            r7 = r15
+            r0 = r60
+            r19 = r61
+            r72 = 0
+            r5 = 0
+            r9 = 0
+            r10 = 0
+            goto L_0x1a34
+        L_0x19b2:
+            r7 = r70
+            r6 = r66
+            r12 = r67
+            java.lang.String r0 = r70.getAction()
+            java.lang.String r2 = "com.tmessages.openplayer"
+            boolean r0 = r0.equals(r2)
+            if (r0 == 0) goto L_0x19d7
+            r2 = r61
+            r13 = r2
+            r19 = r13
+            r72 = 0
             r0 = -1
             r1 = 0
             r4 = -1
-            r6 = 0
-            r8 = 0
+            r5 = 0
+            r7 = 0
             r9 = 0
-            r15 = 0
+            r10 = 0
             r16 = 0
             r17 = 1
-            goto L_0x1a49
-        L_0x19ed:
-            java.lang.String r0 = r71.getAction()
-            java.lang.String r1 = "org.tmessages.openlocations"
-            boolean r0 = r0.equals(r1)
-            if (r0 == 0) goto L_0x1a0e
+            goto L_0x1a36
+        L_0x19d7:
+            java.lang.String r0 = r70.getAction()
+            java.lang.String r2 = "org.tmessages.openlocations"
+            boolean r0 = r0.equals(r2)
+            if (r0 == 0) goto L_0x19f8
             r2 = r61
-            r12 = r2
-            r19 = r12
-            r73 = 0
+            r13 = r2
+            r19 = r13
+            r72 = 0
             r0 = -1
             r1 = 0
             r4 = -1
-            r6 = 0
-            r8 = 0
+            r5 = 0
+            r7 = 0
             r9 = 0
-            r15 = 0
+            r10 = 0
             r16 = 0
             r17 = 0
             r18 = 1
-            goto L_0x1a4b
-        L_0x1a0e:
+            goto L_0x1a38
+        L_0x19f8:
             java.lang.String r0 = "voip_chat"
             boolean r0 = r9.equals(r0)
-            if (r0 == 0) goto L_0x1a37
+            if (r0 == 0) goto L_0x1a24
             r2 = r61
-            r12 = r2
-            r19 = r12
-            r73 = 0
+            r13 = r2
+            r19 = r13
+            r72 = 0
             r0 = -1
             r1 = 0
             r4 = -1
-            r6 = 0
-            r8 = 0
+            r5 = 0
+            r7 = 0
             r9 = 0
-            r15 = 0
+            r10 = 0
             r16 = 0
             r17 = 0
             r18 = 0
             r21 = 0
             r23 = 1
-            goto L_0x1a4f
-        L_0x1a2f:
+            goto L_0x1a3c
+        L_0x1a19:
             r61 = r5
-            r5 = r8
-            r8 = r14
-            r7 = r15
-            r10 = 0
+            r6 = r8
+            r12 = r11
+            r7 = r14
+            r8 = r15
+            r1 = 2
+            r10 = 3
+            r11 = 0
             r60 = -1
-        L_0x1a37:
+        L_0x1a24:
             r2 = r61
-            r12 = r2
-            r19 = r12
-            r73 = 0
+            r13 = r2
+            r19 = r13
+            r72 = 0
             r0 = -1
             r1 = 0
             r4 = -1
-            r6 = 0
-            r8 = 0
+            r5 = 0
+            r7 = 0
+        L_0x1a30:
             r9 = 0
-        L_0x1a44:
-            r15 = 0
+            r10 = 0
+        L_0x1a32:
             r16 = 0
+        L_0x1a34:
             r17 = 0
-        L_0x1a49:
+        L_0x1a36:
             r18 = 0
-        L_0x1a4b:
+        L_0x1a38:
             r21 = 0
-        L_0x1a4d:
+        L_0x1a3a:
             r23 = 0
-        L_0x1a4f:
-            r29 = 0
-            r32 = 0
+        L_0x1a3c:
+            r30 = 0
+            r31 = 0
             r33 = 0
             r34 = 0
             r35 = 0
-            r67 = 0
-        L_0x1a5b:
-            r69 = 0
-        L_0x1a5d:
-            int r14 = r7.currentAccount
-            org.telegram.messenger.UserConfig r14 = org.telegram.messenger.UserConfig.getInstance(r14)
-            boolean r14 = r14.isClientActivated()
-            if (r14 == 0) goto L_0x1var_
-            if (r9 == 0) goto L_0x1a95
-            org.telegram.ui.ActionBar.ActionBarLayout r14 = r7.actionBarLayout
-            org.telegram.ui.ActionBar.BaseFragment r14 = r14.getLastFragment()
-            r74 = r6
-            boolean r6 = r14 instanceof org.telegram.ui.DialogsActivity
-            if (r6 == 0) goto L_0x1a91
-            org.telegram.ui.DialogsActivity r14 = (org.telegram.ui.DialogsActivity) r14
-            boolean r6 = r14.isMainDialogList()
-            if (r6 == 0) goto L_0x1a8f
-            android.view.View r6 = r14.getFragmentView()
-            if (r6 == 0) goto L_0x1a8a
-            r6 = 1
-            r14.search(r9, r6)
-            goto L_0x1a98
-        L_0x1a8a:
-            r6 = 1
-            r14.setInitialSearchString(r9)
-            goto L_0x1a98
-        L_0x1a8f:
-            r6 = 1
-            goto L_0x1a98
-        L_0x1a91:
-            r6 = 1
+            r36 = 0
+            r68 = 0
+        L_0x1a4a:
+            int r15 = r8.currentAccount
+            org.telegram.messenger.UserConfig r15 = org.telegram.messenger.UserConfig.getInstance(r15)
+            boolean r15 = r15.isClientActivated()
+            if (r15 == 0) goto L_0x1ef2
+            if (r9 == 0) goto L_0x1a82
+            org.telegram.ui.ActionBar.ActionBarLayout r15 = r8.actionBarLayout
+            org.telegram.ui.ActionBar.BaseFragment r15 = r15.getLastFragment()
+            r73 = r5
+            boolean r5 = r15 instanceof org.telegram.ui.DialogsActivity
+            if (r5 == 0) goto L_0x1a7e
+            org.telegram.ui.DialogsActivity r15 = (org.telegram.ui.DialogsActivity) r15
+            boolean r5 = r15.isMainDialogList()
+            if (r5 == 0) goto L_0x1a7c
+            android.view.View r5 = r15.getFragmentView()
+            if (r5 == 0) goto L_0x1a77
+            r5 = 1
+            r15.search(r9, r5)
+            goto L_0x1a85
+        L_0x1a77:
+            r5 = 1
+            r15.setInitialSearchString(r9)
+            goto L_0x1a85
+        L_0x1a7c:
+            r5 = 1
+            goto L_0x1a85
+        L_0x1a7e:
+            r5 = 1
             r16 = 1
-            goto L_0x1a98
-        L_0x1a95:
-            r74 = r6
-            goto L_0x1a8f
-        L_0x1a98:
-            int r14 = (r2 > r61 ? 1 : (r2 == r61 ? 0 : -1))
-            if (r14 == 0) goto L_0x1b13
-            if (r67 != 0) goto L_0x1aec
-            if (r15 == 0) goto L_0x1aa1
-            goto L_0x1aec
-        L_0x1aa1:
+            goto L_0x1a85
+        L_0x1a82:
+            r73 = r5
+            goto L_0x1a7c
+        L_0x1a85:
+            int r15 = (r2 > r61 ? 1 : (r2 == r61 ? 0 : -1))
+            if (r15 == 0) goto L_0x1b01
+            if (r31 != 0) goto L_0x1ada
+            if (r10 == 0) goto L_0x1a8e
+            goto L_0x1ada
+        L_0x1a8e:
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             java.lang.String r1 = "user_id"
             r0.putLong(r1, r2)
-            if (r10 == 0) goto L_0x1ab0
-            r0.putInt(r5, r10)
-        L_0x1ab0:
+            if (r11 == 0) goto L_0x1a9d
+            r0.putInt(r6, r11)
+        L_0x1a9d:
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = mainFragmentsStack
             boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x1ad2
+            if (r1 != 0) goto L_0x1abf
             r1 = 0
-            r2 = r11[r1]
+            r2 = r12[r1]
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r2)
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = mainFragmentsStack
             int r3 = r2.size()
-            int r3 = r3 - r6
+            int r3 = r3 - r5
             java.lang.Object r2 = r2.get(r3)
             org.telegram.ui.ActionBar.BaseFragment r2 = (org.telegram.ui.ActionBar.BaseFragment) r2
             boolean r1 = r1.checkCanOpenChat(r0, r2)
-            if (r1 == 0) goto L_0x1b89
-        L_0x1ad2:
-            org.telegram.ui.ChatActivity r13 = new org.telegram.ui.ChatActivity
-            r13.<init>(r0)
-            org.telegram.ui.ActionBar.ActionBarLayout r12 = r7.actionBarLayout
-            r14 = 0
-            r15 = 1
+            if (r1 == 0) goto L_0x1b77
+        L_0x1abf:
+            org.telegram.ui.ChatActivity r14 = new org.telegram.ui.ChatActivity
+            r14.<init>(r0)
+            org.telegram.ui.ActionBar.ActionBarLayout r13 = r8.actionBarLayout
+            r15 = 0
             r16 = 1
-            r17 = 0
-            boolean r0 = r12.presentFragment(r13, r14, r15, r16, r17)
-            if (r0 == 0) goto L_0x1b89
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
+            r17 = 1
+            r18 = 0
+            boolean r0 = r13.presentFragment(r14, r15, r16, r17, r18)
+            if (r0 == 0) goto L_0x1b77
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r0.closeDrawer()
-            goto L_0x1b87
-        L_0x1aec:
-            if (r32 == 0) goto L_0x1b07
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            goto L_0x1b75
+        L_0x1ada:
+            if (r33 == 0) goto L_0x1af5
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             org.telegram.ui.ActionBar.BaseFragment r0 = r0.getLastFragment()
-            if (r0 == 0) goto L_0x1var_
+            if (r0 == 0) goto L_0x1ef2
             org.telegram.messenger.MessagesController r1 = r0.getMessagesController()
             java.lang.Long r2 = java.lang.Long.valueOf(r2)
             org.telegram.tgnet.TLRPC$User r1 = r1.getUser(r2)
-            org.telegram.ui.Components.AlertsCreator.createCallDialogAlert(r0, r1, r15)
-            goto L_0x1var_
-        L_0x1b07:
+            org.telegram.ui.Components.AlertsCreator.createCallDialogAlert(r0, r1, r10)
+            goto L_0x1ef2
+        L_0x1af5:
             r1 = 0
-            r0 = r11[r1]
+            r0 = r12[r1]
             org.telegram.messenger.AccountInstance r0 = org.telegram.messenger.AccountInstance.getInstance(r0)
-            org.telegram.messenger.voip.VoIPPendingCall.startOrSchedule(r7, r2, r15, r0)
-            goto L_0x1var_
-        L_0x1b13:
-            int r2 = (r12 > r61 ? 1 : (r12 == r61 ? 0 : -1))
-            if (r2 == 0) goto L_0x1b61
+            org.telegram.messenger.voip.VoIPPendingCall.startOrSchedule(r8, r2, r10, r0)
+            goto L_0x1ef2
+        L_0x1b01:
+            int r2 = (r13 > r61 ? 1 : (r13 == r61 ? 0 : -1))
+            if (r2 == 0) goto L_0x1b50
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             java.lang.String r1 = "chat_id"
-            r0.putLong(r1, r12)
-            if (r10 == 0) goto L_0x1b26
-            r0.putInt(r5, r10)
-        L_0x1b26:
+            r0.putLong(r1, r13)
+            if (r11 == 0) goto L_0x1b14
+            r0.putInt(r6, r11)
+        L_0x1b14:
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = mainFragmentsStack
             boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x1b48
+            if (r1 != 0) goto L_0x1b36
             r1 = 0
-            r2 = r11[r1]
+            r2 = r12[r1]
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r2)
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = mainFragmentsStack
             int r3 = r2.size()
-            int r3 = r3 - r6
+            int r3 = r3 - r5
             java.lang.Object r2 = r2.get(r3)
             org.telegram.ui.ActionBar.BaseFragment r2 = (org.telegram.ui.ActionBar.BaseFragment) r2
             boolean r1 = r1.checkCanOpenChat(r0, r2)
-            if (r1 == 0) goto L_0x1b89
-        L_0x1b48:
-            org.telegram.ui.ChatActivity r13 = new org.telegram.ui.ChatActivity
-            r13.<init>(r0)
-            org.telegram.ui.ActionBar.ActionBarLayout r12 = r7.actionBarLayout
-            r14 = 0
-            r15 = 1
+            if (r1 == 0) goto L_0x1b77
+        L_0x1b36:
+            org.telegram.ui.ChatActivity r14 = new org.telegram.ui.ChatActivity
+            r14.<init>(r0)
+            org.telegram.ui.ActionBar.ActionBarLayout r13 = r8.actionBarLayout
+            r15 = 0
             r16 = 1
-            r17 = 0
-            boolean r0 = r12.presentFragment(r13, r14, r15, r16, r17)
-            if (r0 == 0) goto L_0x1b89
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
+            r17 = 1
+            r18 = 0
+            boolean r0 = r13.presentFragment(r14, r15, r16, r17, r18)
+            if (r0 == 0) goto L_0x1b77
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r0.closeDrawer()
-            goto L_0x1b87
-        L_0x1b61:
-            r10 = r69
-            if (r10 == 0) goto L_0x1b90
+            goto L_0x1b75
+        L_0x1b50:
+            if (r1 == 0) goto L_0x1b7e
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
-            java.lang.String r1 = "enc_id"
-            r0.putInt(r1, r10)
-            org.telegram.ui.ChatActivity r13 = new org.telegram.ui.ChatActivity
-            r13.<init>(r0)
-            org.telegram.ui.ActionBar.ActionBarLayout r12 = r7.actionBarLayout
-            r14 = 0
-            r15 = 1
+            java.lang.String r2 = "enc_id"
+            r0.putInt(r2, r1)
+            org.telegram.ui.ChatActivity r14 = new org.telegram.ui.ChatActivity
+            r14.<init>(r0)
+            org.telegram.ui.ActionBar.ActionBarLayout r13 = r8.actionBarLayout
+            r15 = 0
             r16 = 1
-            r17 = 0
-            boolean r0 = r12.presentFragment(r13, r14, r15, r16, r17)
-            if (r0 == 0) goto L_0x1b89
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
+            r17 = 1
+            r18 = 0
+            boolean r0 = r13.presentFragment(r14, r15, r16, r17, r18)
+            if (r0 == 0) goto L_0x1b77
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r0.closeDrawer()
-        L_0x1b87:
+        L_0x1b75:
             r13 = 1
-            goto L_0x1b8a
-        L_0x1b89:
+            goto L_0x1b78
+        L_0x1b77:
             r13 = 0
-        L_0x1b8a:
-            r2 = r72
-            r8 = 1
-            r10 = 0
-            goto L_0x1var_
-        L_0x1b90:
-            if (r16 == 0) goto L_0x1bce
+        L_0x1b78:
+            r2 = r71
+            r7 = 1
+            r11 = 0
+            goto L_0x1ef7
+        L_0x1b7e:
+            if (r16 == 0) goto L_0x1bbc
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 != 0) goto L_0x1b9e
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            if (r0 != 0) goto L_0x1b8c
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             r0.removeAllFragments()
-            goto L_0x1bc9
-        L_0x1b9e:
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.layersActionBarLayout
+            goto L_0x1bb7
+        L_0x1b8c:
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x1bc9
-        L_0x1ba8:
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.layersActionBarLayout
+            if (r0 != 0) goto L_0x1bb7
+        L_0x1b96:
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             int r0 = r0.size()
-            int r0 = r0 - r6
-            if (r0 <= 0) goto L_0x1bc2
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.layersActionBarLayout
+            int r0 = r0 - r5
+            if (r0 <= 0) goto L_0x1bb0
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r0.fragmentsStack
             r2 = 0
             java.lang.Object r1 = r1.get(r2)
             org.telegram.ui.ActionBar.BaseFragment r1 = (org.telegram.ui.ActionBar.BaseFragment) r1
             r0.removeFragmentFromStack((org.telegram.ui.ActionBar.BaseFragment) r1)
-            goto L_0x1ba8
-        L_0x1bc2:
+            goto L_0x1b96
+        L_0x1bb0:
             r2 = 0
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.layersActionBarLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.layersActionBarLayout
             r0.closeLastFragment(r2)
-            goto L_0x1bca
-        L_0x1bc9:
+            goto L_0x1bb8
+        L_0x1bb7:
             r2 = 0
-        L_0x1bca:
-            r8 = 1
-            r10 = 0
-            goto L_0x1var_
-        L_0x1bce:
+        L_0x1bb8:
+            r7 = 1
+            r11 = 0
+            goto L_0x1ef6
+        L_0x1bbc:
             r2 = 0
-            if (r17 == 0) goto L_0x1bf5
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            if (r17 == 0) goto L_0x1be3
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x1bef
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            if (r0 != 0) goto L_0x1bdd
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             java.lang.Object r0 = r0.get(r2)
             org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0
             org.telegram.ui.Components.AudioPlayerAlert r1 = new org.telegram.ui.Components.AudioPlayerAlert
-            r10 = 0
-            r1.<init>(r7, r10)
+            r11 = 0
+            r1.<init>(r8, r11)
             r0.showDialog(r1)
-            goto L_0x1bf0
-        L_0x1bef:
-            r10 = 0
-        L_0x1bf0:
-            r2 = r72
-            r8 = 1
-            goto L_0x1var_
-        L_0x1bf5:
-            r10 = 0
-            if (r18 == 0) goto L_0x1c1b
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            goto L_0x1bde
+        L_0x1bdd:
+            r11 = 0
+        L_0x1bde:
+            r2 = r71
+            r7 = 1
+            goto L_0x1ef6
+        L_0x1be3:
+            r11 = 0
+            if (r18 == 0) goto L_0x1CLASSNAME
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x1bf0
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            if (r0 != 0) goto L_0x1bde
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             r1 = 0
             java.lang.Object r0 = r0.get(r1)
             org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0
             org.telegram.ui.Components.SharingLocationsAlert r1 = new org.telegram.ui.Components.SharingLocationsAlert
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda80 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda80
-            r2.<init>(r7, r11)
-            r1.<init>(r7, r2, r10)
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda82 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda82
+            r2.<init>(r8, r12)
+            r1.<init>(r8, r2, r11)
             r0.showDialog(r1)
-            goto L_0x1bf0
-        L_0x1c1b:
-            android.net.Uri r2 = r7.exportingChatUri
-            if (r2 == 0) goto L_0x1CLASSNAME
-            java.util.ArrayList<android.net.Uri> r0 = r7.documentsUrisArray
-            r7.runImportRequest(r2, r0)
-            r8 = 1
-            goto L_0x1var_
+            goto L_0x1bde
         L_0x1CLASSNAME:
-            java.util.ArrayList<android.os.Parcelable> r2 = r7.importingStickers
-            if (r2 == 0) goto L_0x1CLASSNAME
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda25 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda25
-            r0.<init>(r7)
+            android.net.Uri r1 = r8.exportingChatUri
+            if (r1 == 0) goto L_0x1CLASSNAME
+            java.util.ArrayList<android.net.Uri> r0 = r8.documentsUrisArray
+            r8.runImportRequest(r1, r0)
+            r7 = 1
+            goto L_0x1ef4
+        L_0x1CLASSNAME:
+            java.util.ArrayList<android.os.Parcelable> r1 = r8.importingStickers
+            if (r1 == 0) goto L_0x1CLASSNAME
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda30 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda30
+            r0.<init>(r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-            goto L_0x1bf0
+            goto L_0x1bde
         L_0x1CLASSNAME:
-            java.lang.String r2 = r7.videoPath
-            if (r2 != 0) goto L_0x1ed2
-            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r2 = r7.photoPathsArray
-            if (r2 != 0) goto L_0x1ed2
-            java.lang.String r2 = r7.sendingText
-            if (r2 != 0) goto L_0x1ed2
-            java.util.ArrayList<java.lang.String> r2 = r7.documentsPathsArray
-            if (r2 != 0) goto L_0x1ed2
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r2 = r7.contactsToSend
-            if (r2 != 0) goto L_0x1ed2
-            java.util.ArrayList<android.net.Uri> r2 = r7.documentsUrisArray
-            if (r2 == 0) goto L_0x1c4e
-            goto L_0x1ed2
-        L_0x1c4e:
-            if (r8 == 0) goto L_0x1cd6
-            if (r8 != r6) goto L_0x1c6d
+            java.lang.String r1 = r8.videoPath
+            if (r1 != 0) goto L_0x1ec2
+            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r1 = r8.photoPathsArray
+            if (r1 != 0) goto L_0x1ec2
+            java.lang.String r1 = r8.sendingText
+            if (r1 != 0) goto L_0x1ec2
+            java.util.ArrayList<java.lang.String> r1 = r8.documentsPathsArray
+            if (r1 != 0) goto L_0x1ec2
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r1 = r8.contactsToSend
+            if (r1 != 0) goto L_0x1ec2
+            java.util.ArrayList<android.net.Uri> r1 = r8.documentsUrisArray
+            if (r1 == 0) goto L_0x1c3c
+            goto L_0x1ec2
+        L_0x1c3c:
+            if (r7 == 0) goto L_0x1cc7
+            if (r7 != r5) goto L_0x1c5b
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
-            int r1 = r7.currentAccount
+            int r1 = r8.currentAccount
             org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
             long r1 = r1.clientUserId
             java.lang.String r3 = "user_id"
             r0.putLong(r3, r1)
             org.telegram.ui.ProfileActivity r1 = new org.telegram.ui.ProfileActivity
             r1.<init>(r0)
-            r13 = r1
-        L_0x1c6a:
-            r0 = 0
-        L_0x1c6b:
+            r14 = r1
+        L_0x1CLASSNAME:
             r1 = 6
-            goto L_0x1ca2
-        L_0x1c6d:
-            r2 = 2
-            if (r8 != r2) goto L_0x1CLASSNAME
+        L_0x1CLASSNAME:
+            r13 = 0
+            goto L_0x1CLASSNAME
+        L_0x1c5b:
+            r1 = 2
+            if (r7 != r1) goto L_0x1CLASSNAME
             org.telegram.ui.ThemeActivity r0 = new org.telegram.ui.ThemeActivity
             r1 = 0
             r0.<init>(r1)
         L_0x1CLASSNAME:
-            r13 = r0
-            goto L_0x1c6a
+            r14 = r0
+            goto L_0x1CLASSNAME
         L_0x1CLASSNAME:
             r1 = 0
             r2 = 3
-            if (r8 != r2) goto L_0x1CLASSNAME
+            if (r7 != r2) goto L_0x1CLASSNAME
             org.telegram.ui.SessionsActivity r0 = new org.telegram.ui.SessionsActivity
             r0.<init>(r1)
             goto L_0x1CLASSNAME
         L_0x1CLASSNAME:
             r1 = 4
-            if (r8 != r1) goto L_0x1c8b
+            if (r7 != r1) goto L_0x1CLASSNAME
             org.telegram.ui.FiltersSetupActivity r0 = new org.telegram.ui.FiltersSetupActivity
             r0.<init>()
             goto L_0x1CLASSNAME
-        L_0x1c8b:
+        L_0x1CLASSNAME:
             r1 = 5
-            if (r8 != r1) goto L_0x1CLASSNAME
+            if (r7 != r1) goto L_0x1CLASSNAME
             org.telegram.ui.ActionIntroActivity r0 = new org.telegram.ui.ActionIntroActivity
-            r0.<init>(r2)
-            r13 = r0
-            r0 = 1
-            goto L_0x1c6b
+            r1 = 3
+            r0.<init>(r1)
+            r14 = r0
+            r1 = 6
+            r13 = 1
+            goto L_0x1CLASSNAME
         L_0x1CLASSNAME:
             r1 = 6
-            if (r8 != r1) goto L_0x1ca0
+            if (r7 != r1) goto L_0x1CLASSNAME
             org.telegram.ui.EditWidgetActivity r2 = new org.telegram.ui.EditWidgetActivity
             r2.<init>(r4, r0)
-            r13 = r2
-            goto L_0x1ca1
-        L_0x1ca0:
-            r13 = r10
-        L_0x1ca1:
-            r0 = 0
-        L_0x1ca2:
-            if (r8 != r1) goto L_0x1cb0
-            org.telegram.ui.ActionBar.ActionBarLayout r12 = r7.actionBarLayout
-            r14 = 0
-            r15 = 1
+            r14 = r2
+            goto L_0x1CLASSNAME
+        L_0x1CLASSNAME:
+            r14 = r11
+            goto L_0x1CLASSNAME
+        L_0x1CLASSNAME:
+            if (r7 != r1) goto L_0x1ca1
+            org.telegram.ui.ActionBar.ActionBarLayout r13 = r8.actionBarLayout
+            r15 = 0
             r16 = 1
-            r17 = 0
-            r12.presentFragment(r13, r14, r15, r16, r17)
-            goto L_0x1cb8
-        L_0x1cb0:
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda50 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda50
-            r1.<init>(r7, r13, r0)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
-        L_0x1cb8:
+            r17 = 1
+            r18 = 0
+            r13.presentFragment(r14, r15, r16, r17, r18)
+            goto L_0x1ca9
+        L_0x1ca1:
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda51 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda51
+            r0.<init>(r8, r14, r13)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
+        L_0x1ca9:
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x1ccf
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            if (r0 == 0) goto L_0x1cc0
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             r0.showLastFragment()
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.rightActionBarLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.rightActionBarLayout
             r0.showLastFragment()
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r1 = 0
             r0.setAllowOpenDrawer(r1, r1)
-            goto L_0x1d10
-        L_0x1ccf:
+            goto L_0x1d01
+        L_0x1cc0:
             r1 = 0
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
-            r0.setAllowOpenDrawer(r6, r1)
-            goto L_0x1d10
-        L_0x1cd6:
-            r2 = 2
-            if (r21 == 0) goto L_0x1d15
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
+            r0.setAllowOpenDrawer(r5, r1)
+            goto L_0x1d01
+        L_0x1cc7:
+            if (r21 == 0) goto L_0x1d06
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             java.lang.String r1 = "destroyAfterSelect"
-            r0.putBoolean(r1, r6)
-            org.telegram.ui.ActionBar.ActionBarLayout r12 = r7.actionBarLayout
-            org.telegram.ui.ContactsActivity r13 = new org.telegram.ui.ContactsActivity
-            r13.<init>(r0)
-            r14 = 0
-            r15 = 1
+            r0.putBoolean(r1, r5)
+            org.telegram.ui.ActionBar.ActionBarLayout r13 = r8.actionBarLayout
+            org.telegram.ui.ContactsActivity r14 = new org.telegram.ui.ContactsActivity
+            r14.<init>(r0)
+            r15 = 0
             r16 = 1
-            r17 = 0
-            r12.presentFragment(r13, r14, r15, r16, r17)
+            r17 = 1
+            r18 = 0
+            r13.presentFragment(r14, r15, r16, r17, r18)
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x1d0a
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            if (r0 == 0) goto L_0x1cfb
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             r0.showLastFragment()
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.rightActionBarLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.rightActionBarLayout
             r0.showLastFragment()
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r1 = 0
             r0.setAllowOpenDrawer(r1, r1)
-            goto L_0x1d10
-        L_0x1d0a:
+            goto L_0x1d01
+        L_0x1cfb:
             r1 = 0
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
-            r0.setAllowOpenDrawer(r6, r1)
-        L_0x1d10:
-            r2 = r72
-            r8 = 1
-            goto L_0x1ef0
-        L_0x1d15:
-            if (r1 == 0) goto L_0x1d76
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
+            r0.setAllowOpenDrawer(r5, r1)
+        L_0x1d01:
+            r2 = r71
+            r7 = 1
+            goto L_0x1ee0
+        L_0x1d06:
+            if (r73 == 0) goto L_0x1d63
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
-            java.lang.String r2 = "destroyAfterSelect"
-            r0.putBoolean(r2, r6)
-            java.lang.String r2 = "returnAsResult"
-            r0.putBoolean(r2, r6)
-            java.lang.String r2 = "onlyUsers"
-            r0.putBoolean(r2, r6)
-            java.lang.String r2 = "allowSelf"
-            r3 = 0
-            r0.putBoolean(r2, r3)
-            org.telegram.ui.ContactsActivity r2 = new org.telegram.ui.ContactsActivity
-            r2.<init>(r0)
-            r2.setInitialSearchString(r1)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda81 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda81
-            r0.<init>(r7, r15, r11)
-            r2.setDelegate(r0)
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
-            org.telegram.ui.ActionBar.BaseFragment r1 = r0.getLastFragment()
-            boolean r1 = r1 instanceof org.telegram.ui.ContactsActivity
-            r19 = 1
-            r20 = 1
-            r21 = 0
-            r16 = r0
-            r17 = r2
-            r18 = r1
-            r16.presentFragment(r17, r18, r19, r20, r21)
-            boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x1d6f
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
-            r0.showLastFragment()
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.rightActionBarLayout
-            r0.showLastFragment()
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
-            r1 = 0
-            r0.setAllowOpenDrawer(r1, r1)
-            goto L_0x1d10
-        L_0x1d6f:
-            r1 = 0
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
-            r0.setAllowOpenDrawer(r6, r1)
-            goto L_0x1d10
-        L_0x1d76:
-            if (r35 == 0) goto L_0x1db1
-            org.telegram.ui.ActionIntroActivity r13 = new org.telegram.ui.ActionIntroActivity
-            r0 = 5
-            r13.<init>(r0)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda74 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda74
-            r0.<init>(r7, r13)
-            r13.setQrLoginDelegate(r0)
-            org.telegram.ui.ActionBar.ActionBarLayout r12 = r7.actionBarLayout
-            r14 = 0
-            r15 = 1
+            java.lang.String r1 = "destroyAfterSelect"
+            r0.putBoolean(r1, r5)
+            java.lang.String r1 = "returnAsResult"
+            r0.putBoolean(r1, r5)
+            java.lang.String r1 = "onlyUsers"
+            r0.putBoolean(r1, r5)
+            java.lang.String r1 = "allowSelf"
+            r2 = 0
+            r0.putBoolean(r1, r2)
+            org.telegram.ui.ContactsActivity r14 = new org.telegram.ui.ContactsActivity
+            r14.<init>(r0)
+            r0 = r73
+            r14.setInitialSearchString(r0)
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda83 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda83
+            r0.<init>(r8, r10, r12)
+            r14.setDelegate(r0)
+            org.telegram.ui.ActionBar.ActionBarLayout r13 = r8.actionBarLayout
+            org.telegram.ui.ActionBar.BaseFragment r0 = r13.getLastFragment()
+            boolean r15 = r0 instanceof org.telegram.ui.ContactsActivity
             r16 = 1
-            r17 = 0
-            r12.presentFragment(r13, r14, r15, r16, r17)
+            r17 = 1
+            r18 = 0
+            r13.presentFragment(r14, r15, r16, r17, r18)
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x1da9
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            if (r0 == 0) goto L_0x1d5c
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             r0.showLastFragment()
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.rightActionBarLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.rightActionBarLayout
             r0.showLastFragment()
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r1 = 0
             r0.setAllowOpenDrawer(r1, r1)
-            goto L_0x1d10
-        L_0x1da9:
+            goto L_0x1d01
+        L_0x1d5c:
             r1 = 0
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
-            r0.setAllowOpenDrawer(r6, r1)
-            goto L_0x1d10
-        L_0x1db1:
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
+            r0.setAllowOpenDrawer(r5, r1)
+            goto L_0x1d01
+        L_0x1d63:
+            if (r36 == 0) goto L_0x1d9f
+            org.telegram.ui.ActionIntroActivity r14 = new org.telegram.ui.ActionIntroActivity
+            r0 = 5
+            r14.<init>(r0)
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda76 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda76
+            r0.<init>(r8, r14)
+            r14.setQrLoginDelegate(r0)
+            org.telegram.ui.ActionBar.ActionBarLayout r13 = r8.actionBarLayout
+            r15 = 0
+            r16 = 1
+            r17 = 1
+            r18 = 0
+            r13.presentFragment(r14, r15, r16, r17, r18)
+            boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r0 == 0) goto L_0x1d97
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
+            r0.showLastFragment()
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.rightActionBarLayout
+            r0.showLastFragment()
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r1 = 0
-            if (r33 == 0) goto L_0x1e05
-            org.telegram.ui.NewContactActivity r13 = new org.telegram.ui.NewContactActivity
-            r13.<init>()
-            if (r74 == 0) goto L_0x1dcf
+            r0.setAllowOpenDrawer(r1, r1)
+            goto L_0x1d01
+        L_0x1d97:
+            r1 = 0
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
+            r0.setAllowOpenDrawer(r5, r1)
+            goto L_0x1d01
+        L_0x1d9f:
+            r1 = 0
+            if (r34 == 0) goto L_0x1df5
+            org.telegram.ui.NewContactActivity r14 = new org.telegram.ui.NewContactActivity
+            r14.<init>()
+            if (r72 == 0) goto L_0x1dbe
             java.lang.String r0 = " "
-            r3 = r74
-            java.lang.String[] r0 = r3.split(r0, r2)
+            r2 = r72
+            r3 = 2
+            java.lang.String[] r0 = r2.split(r0, r3)
             r2 = r0[r1]
             int r3 = r0.length
-            if (r3 <= r6) goto L_0x1dcb
-            r0 = r0[r6]
-            goto L_0x1dcc
-        L_0x1dcb:
-            r0 = r10
-        L_0x1dcc:
-            r13.setInitialName(r2, r0)
-        L_0x1dcf:
-            if (r73 == 0) goto L_0x1dda
-            r0 = r73
-            java.lang.String r0 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r0, r6)
-            r13.setInitialPhoneNumber(r0, r1)
-        L_0x1dda:
-            org.telegram.ui.ActionBar.ActionBarLayout r12 = r7.actionBarLayout
-            r14 = 0
-            r15 = 1
+            if (r3 <= r5) goto L_0x1dba
+            r7 = r0[r5]
+            goto L_0x1dbb
+        L_0x1dba:
+            r7 = r11
+        L_0x1dbb:
+            r14.setInitialName(r2, r7)
+        L_0x1dbe:
+            r0 = r68
+            if (r0 == 0) goto L_0x1dc9
+            java.lang.String r0 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r0, r5)
+            r14.setInitialPhoneNumber(r0, r1)
+        L_0x1dc9:
+            org.telegram.ui.ActionBar.ActionBarLayout r13 = r8.actionBarLayout
+            r15 = 0
             r16 = 1
-            r17 = 0
-            r12.presentFragment(r13, r14, r15, r16, r17)
+            r17 = 1
+            r18 = 0
+            r13.presentFragment(r14, r15, r16, r17, r18)
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x1dfd
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            if (r0 == 0) goto L_0x1ded
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             r0.showLastFragment()
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.rightActionBarLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.rightActionBarLayout
             r0.showLastFragment()
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r1 = 0
             r0.setAllowOpenDrawer(r1, r1)
-            goto L_0x1d10
-        L_0x1dfd:
+            goto L_0x1d01
+        L_0x1ded:
             r1 = 0
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
-            r0.setAllowOpenDrawer(r6, r1)
-            goto L_0x1d10
-        L_0x1e05:
-            r0 = r73
-            r3 = r74
-            if (r23 == 0) goto L_0x1e24
-            int r0 = r7.currentAccount
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
+            r0.setAllowOpenDrawer(r5, r1)
+            goto L_0x1d01
+        L_0x1df5:
+            r2 = r72
+            r0 = r68
+            if (r23 == 0) goto L_0x1e14
+            int r0 = r8.currentAccount
             org.telegram.messenger.AccountInstance r2 = org.telegram.messenger.AccountInstance.getInstance(r0)
             r3 = 0
             r4 = 0
-            r5 = 0
             r0 = 0
-            r1 = r70
-            r8 = 1
-            r6 = r0
+            r6 = 0
+            r1 = r69
+            r7 = 1
+            r5 = r0
             org.telegram.ui.GroupCallActivity.create(r1, r2, r3, r4, r5, r6)
             org.telegram.ui.GroupCallActivity r0 = org.telegram.ui.GroupCallActivity.groupCallInstance
-            if (r0 == 0) goto L_0x1var_
-            org.telegram.ui.GroupCallActivity.groupCallUiVisible = r8
-            goto L_0x1var_
-        L_0x1e24:
-            r8 = 1
-            if (r34 == 0) goto L_0x1ea4
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r7.actionBarLayout
+            if (r0 == 0) goto L_0x1ef4
+            org.telegram.ui.GroupCallActivity.groupCallUiVisible = r7
+            goto L_0x1ef4
+        L_0x1e14:
+            r7 = 1
+            if (r35 == 0) goto L_0x1e94
+            org.telegram.ui.ActionBar.ActionBarLayout r1 = r8.actionBarLayout
             org.telegram.ui.ActionBar.BaseFragment r1 = r1.getLastFragment()
-            if (r1 == 0) goto L_0x1ea0
-            android.app.Activity r2 = r1.getParentActivity()
-            if (r2 == 0) goto L_0x1ea0
-            int r2 = r7.currentAccount
-            org.telegram.messenger.UserConfig r2 = org.telegram.messenger.UserConfig.getInstance(r2)
-            org.telegram.tgnet.TLRPC$User r2 = r2.getCurrentUser()
+            if (r1 == 0) goto L_0x1e90
+            android.app.Activity r3 = r1.getParentActivity()
+            if (r3 == 0) goto L_0x1e90
+            int r3 = r8.currentAccount
+            org.telegram.messenger.UserConfig r3 = org.telegram.messenger.UserConfig.getInstance(r3)
+            org.telegram.tgnet.TLRPC$User r3 = r3.getCurrentUser()
             r4 = 0
-            java.lang.String r0 = org.telegram.ui.NewContactActivity.getPhoneNumber(r7, r2, r0, r4)
-            org.telegram.ui.ActionBar.AlertDialog$Builder r2 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            java.lang.String r0 = org.telegram.ui.NewContactActivity.getPhoneNumber(r8, r3, r0, r4)
+            org.telegram.ui.ActionBar.AlertDialog$Builder r3 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r4 = r1.getParentActivity()
-            r2.<init>((android.content.Context) r4)
-            r4 = 2131626490(0x7f0e09fa, float:1.8880218E38)
+            r3.<init>((android.content.Context) r4)
+            r4 = 2131626527(0x7f0e0a1f, float:1.8880293E38)
             java.lang.String r5 = "NewContactAlertTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            org.telegram.ui.ActionBar.AlertDialog$Builder r2 = r2.setTitle(r4)
-            r4 = 2131626489(0x7f0e09f9, float:1.8880216E38)
-            java.lang.Object[] r5 = new java.lang.Object[r8]
+            org.telegram.ui.ActionBar.AlertDialog$Builder r3 = r3.setTitle(r4)
+            r4 = 2131626526(0x7f0e0a1e, float:1.888029E38)
+            java.lang.Object[] r5 = new java.lang.Object[r7]
             org.telegram.PhoneFormat.PhoneFormat r6 = org.telegram.PhoneFormat.PhoneFormat.getInstance()
             java.lang.String r6 = r6.format(r0)
-            r12 = 0
-            r5[r12] = r6
+            r10 = 0
+            r5[r10] = r6
             java.lang.String r6 = "NewContactAlertMessage"
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r6, r4, r5)
             android.text.SpannableStringBuilder r4 = org.telegram.messenger.AndroidUtilities.replaceTags(r4)
-            org.telegram.ui.ActionBar.AlertDialog$Builder r2 = r2.setMessage(r4)
-            r4 = 2131626488(0x7f0e09f8, float:1.8880214E38)
+            org.telegram.ui.ActionBar.AlertDialog$Builder r3 = r3.setMessage(r4)
+            r4 = 2131626525(0x7f0e0a1d, float:1.8880289E38)
             java.lang.String r5 = "NewContactAlertButton"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda7 r5 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda7
-            r5.<init>(r0, r3, r1)
-            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r2.setPositiveButton(r4, r5)
-            r2 = 2131624697(0x7f0e02f9, float:1.8876581E38)
+            r5.<init>(r0, r2, r1)
+            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r3.setPositiveButton(r4, r5)
+            r2 = 2131624700(0x7f0e02fc, float:1.8876587E38)
             java.lang.String r3 = "Cancel"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r0.setNegativeButton(r2, r10)
+            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r0.setNegativeButton(r2, r11)
             org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
             r1.showDialog(r0)
             r13 = 1
-            goto L_0x1ea1
-        L_0x1ea0:
+            goto L_0x1e91
+        L_0x1e90:
             r13 = 0
-        L_0x1ea1:
-            r2 = r72
-            goto L_0x1var_
-        L_0x1ea4:
-            if (r29 == 0) goto L_0x1var_
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+        L_0x1e91:
+            r2 = r71
+            goto L_0x1ef7
+        L_0x1e94:
+            if (r30 == 0) goto L_0x1ef4
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             org.telegram.ui.CallLogActivity r1 = new org.telegram.ui.CallLogActivity
             r1.<init>()
             r2 = 0
@@ -6780,204 +6838,212 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5 = 0
             r0.presentFragment(r1, r2, r3, r4, r5)
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x1ecb
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            if (r0 == 0) goto L_0x1ebb
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             r0.showLastFragment()
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.rightActionBarLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.rightActionBarLayout
             r0.showLastFragment()
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r1 = 0
             r0.setAllowOpenDrawer(r1, r1)
-            goto L_0x1eee
-        L_0x1ecb:
+            goto L_0x1ede
+        L_0x1ebb:
             r1 = 0
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
-            r0.setAllowOpenDrawer(r8, r1)
-            goto L_0x1eee
-        L_0x1ed2:
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
+            r0.setAllowOpenDrawer(r7, r1)
+            goto L_0x1ede
+        L_0x1ec2:
             r1 = 0
-            r8 = 1
+            r7 = 1
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 != 0) goto L_0x1ee7
-            r0 = r11[r1]
+            if (r0 != 0) goto L_0x1ed7
+            r0 = r12[r1]
             org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
             int r2 = org.telegram.messenger.NotificationCenter.closeChats
             java.lang.Object[] r3 = new java.lang.Object[r1]
             r0.postNotificationName(r2, r3)
-        L_0x1ee7:
+        L_0x1ed7:
             int r0 = (r19 > r61 ? 1 : (r19 == r61 ? 0 : -1))
-            if (r0 != 0) goto L_0x1ef2
-            r7.openDialogsToSend(r1)
-        L_0x1eee:
-            r2 = r72
-        L_0x1ef0:
+            if (r0 != 0) goto L_0x1ee2
+            r8.openDialogsToSend(r1)
+        L_0x1ede:
+            r2 = r71
+        L_0x1ee0:
             r13 = 1
-            goto L_0x1var_
-        L_0x1ef2:
+            goto L_0x1ef7
+        L_0x1ee2:
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>()
             java.lang.Long r2 = java.lang.Long.valueOf(r19)
             r0.add(r2)
-            r7.didSelectDialogs(r10, r0, r10, r1)
-            goto L_0x1var_
-        L_0x1var_:
-            r8 = 1
-            r10 = 0
-        L_0x1var_:
-            r2 = r72
-        L_0x1var_:
+            r8.didSelectDialogs(r11, r0, r11, r1)
+            goto L_0x1ef4
+        L_0x1ef2:
+            r7 = 1
+            r11 = 0
+        L_0x1ef4:
+            r2 = r71
+        L_0x1ef6:
             r13 = 0
-        L_0x1var_:
-            if (r13 != 0) goto L_0x1fb3
-            if (r2 != 0) goto L_0x1fb3
+        L_0x1ef7:
+            if (r13 != 0) goto L_0x1fa1
+            if (r2 != 0) goto L_0x1fa1
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x1f5d
-            int r0 = r7.currentAccount
+            if (r0 == 0) goto L_0x1f4c
+            int r0 = r8.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             boolean r0 = r0.isClientActivated()
             if (r0 != 0) goto L_0x1var_
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.layersActionBarLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.layersActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x1f9e
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.layersActionBarLayout
-            org.telegram.ui.LoginActivity r1 = new org.telegram.ui.LoginActivity
-            r1.<init>()
+            if (r0 == 0) goto L_0x1f8c
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.layersActionBarLayout
+            org.telegram.ui.ActionBar.BaseFragment r1 = r69.getClientNotActivatedFragment()
             r0.addFragmentToStack(r1)
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r1 = 0
             r0.setAllowOpenDrawer(r1, r1)
-            goto L_0x1f9e
+            goto L_0x1f8c
         L_0x1var_:
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x1f9e
+            if (r0 == 0) goto L_0x1f8c
             org.telegram.ui.DialogsActivity r0 = new org.telegram.ui.DialogsActivity
-            r0.<init>(r10)
-            org.telegram.ui.Components.RecyclerListView r1 = r7.sideMenu
+            r0.<init>(r11)
+            org.telegram.ui.Components.RecyclerListView r1 = r8.sideMenu
             r0.setSideMenu(r1)
             if (r9 == 0) goto L_0x1var_
             r0.setInitialSearchString(r9)
         L_0x1var_:
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r7.actionBarLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r1 = r8.actionBarLayout
             r1.addFragmentToStack(r0)
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r1 = 0
-            r0.setAllowOpenDrawer(r8, r1)
-            goto L_0x1f9e
-        L_0x1f5d:
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            r0.setAllowOpenDrawer(r7, r1)
+            goto L_0x1f8c
+        L_0x1f4c:
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x1f9e
-            int r0 = r7.currentAccount
+            if (r0 == 0) goto L_0x1f8c
+            int r0 = r8.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             boolean r0 = r0.isClientActivated()
             if (r0 != 0) goto L_0x1var_
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
-            org.telegram.ui.LoginActivity r1 = new org.telegram.ui.LoginActivity
-            r1.<init>()
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
+            org.telegram.ui.ActionBar.BaseFragment r1 = r69.getClientNotActivatedFragment()
             r0.addFragmentToStack(r1)
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r1 = 0
             r0.setAllowOpenDrawer(r1, r1)
-            goto L_0x1f9e
+            goto L_0x1f8c
         L_0x1var_:
             org.telegram.ui.DialogsActivity r0 = new org.telegram.ui.DialogsActivity
-            r0.<init>(r10)
-            org.telegram.ui.Components.RecyclerListView r1 = r7.sideMenu
+            r0.<init>(r11)
+            org.telegram.ui.Components.RecyclerListView r1 = r8.sideMenu
             r0.setSideMenu(r1)
             if (r9 == 0) goto L_0x1var_
             r0.setInitialSearchString(r9)
         L_0x1var_:
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r7.actionBarLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r1 = r8.actionBarLayout
             r1.addFragmentToStack(r0)
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r7.drawerLayoutContainer
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             r1 = 0
-            r0.setAllowOpenDrawer(r8, r1)
-        L_0x1f9e:
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.actionBarLayout
+            r0.setAllowOpenDrawer(r7, r1)
+        L_0x1f8c:
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
             r0.showLastFragment()
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x1fb3
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.layersActionBarLayout
+            if (r0 == 0) goto L_0x1fa1
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.layersActionBarLayout
             r0.showLastFragment()
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r7.rightActionBarLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.rightActionBarLayout
             r0.showLastFragment()
-        L_0x1fb3:
-            if (r26 == 0) goto L_0x1fbb
+        L_0x1fa1:
+            if (r26 == 0) goto L_0x1fa9
             r1 = 0
-            r0 = r11[r1]
-            org.telegram.ui.VoIPFragment.show(r7, r0)
-        L_0x1fbb:
-            if (r23 != 0) goto L_0x1fd0
-            java.lang.String r0 = r71.getAction()
+            r0 = r12[r1]
+            org.telegram.ui.VoIPFragment.show(r8, r0)
+        L_0x1fa9:
+            if (r23 != 0) goto L_0x1fbe
+            java.lang.String r0 = r70.getAction()
             java.lang.String r1 = "android.intent.action.MAIN"
             boolean r0 = r1.equals(r0)
-            if (r0 != 0) goto L_0x1fd0
+            if (r0 != 0) goto L_0x1fbe
             org.telegram.ui.GroupCallActivity r0 = org.telegram.ui.GroupCallActivity.groupCallInstance
-            if (r0 == 0) goto L_0x1fd0
+            if (r0 == 0) goto L_0x1fbe
             r0.dismiss()
-        L_0x1fd0:
-            r1 = r71
-            r1.setAction(r10)
+        L_0x1fbe:
+            r1 = r70
+            r1.setAction(r11)
             return r13
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.handleIntent(android.content.Intent, boolean, boolean, boolean):boolean");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$handleIntent$7(Intent intent, boolean z) {
+    public /* synthetic */ void lambda$handleIntent$8(Intent intent, boolean z) {
         handleIntent(intent, true, false, false);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$handleIntent$8(Bundle bundle) {
-        lambda$runLinkRequest$43(new CancelAccountDeletionActivity(bundle));
+    public /* synthetic */ void lambda$handleIntent$10(AlertDialog alertDialog, String str, Bundle bundle, TLRPC$TL_account_sendConfirmPhoneCode tLRPC$TL_account_sendConfirmPhoneCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda49(this, alertDialog, tLRPC$TL_error, str, bundle, tLObject, tLRPC$TL_account_sendConfirmPhoneCode));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$handleIntent$10(int[] iArr, LocationController.SharingLocationInfo sharingLocationInfo) {
+    public /* synthetic */ void lambda$handleIntent$9(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, String str, Bundle bundle, TLObject tLObject, TLRPC$TL_account_sendConfirmPhoneCode tLRPC$TL_account_sendConfirmPhoneCode) {
+        alertDialog.dismiss();
+        if (tLRPC$TL_error == null) {
+            lambda$runLinkRequest$45(new LoginActivity().cancelAccountDeletion(str, bundle, (TLRPC$TL_auth_sentCode) tLObject));
+        } else {
+            AlertsCreator.processError(this.currentAccount, tLRPC$TL_error, getActionBarLayout().getLastFragment(), tLRPC$TL_account_sendConfirmPhoneCode, new Object[0]);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$handleIntent$12(int[] iArr, LocationController.SharingLocationInfo sharingLocationInfo) {
         iArr[0] = sharingLocationInfo.messageObject.currentAccount;
         switchToAccount(iArr[0], true);
         LocationActivity locationActivity = new LocationActivity(2);
         locationActivity.setMessageObject(sharingLocationInfo.messageObject);
-        locationActivity.setDelegate(new LaunchActivity$$ExternalSyntheticLambda86(iArr, sharingLocationInfo.messageObject.getDialogId()));
-        lambda$runLinkRequest$43(locationActivity);
+        locationActivity.setDelegate(new LaunchActivity$$ExternalSyntheticLambda88(iArr, sharingLocationInfo.messageObject.getDialogId()));
+        lambda$runLinkRequest$45(locationActivity);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$handleIntent$11() {
+    public /* synthetic */ void lambda$handleIntent$13() {
         if (!this.actionBarLayout.fragmentsStack.isEmpty()) {
             this.actionBarLayout.fragmentsStack.get(0).showDialog(new StickersAlert((Context) this, this.importingStickersSoftware, this.importingStickers, this.importingStickersEmoji, (Theme.ResourcesProvider) null));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$handleIntent$12(BaseFragment baseFragment, boolean z) {
+    public /* synthetic */ void lambda$handleIntent$14(BaseFragment baseFragment, boolean z) {
         presentFragment(baseFragment, z, false);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$handleIntent$13(boolean z, int[] iArr, TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
+    public /* synthetic */ void lambda$handleIntent$15(boolean z, int[] iArr, TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
         TLRPC$UserFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(tLRPC$User.id);
         VoIPHelper.startCall(tLRPC$User, z, userFull != null && userFull.video_calls_available, this, userFull, AccountInstance.getInstance(iArr[0]));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$handleIntent$17(ActionIntroActivity actionIntroActivity, String str) {
+    public /* synthetic */ void lambda$handleIntent$19(ActionIntroActivity actionIntroActivity, String str) {
         AlertDialog alertDialog = new AlertDialog(this, 3);
-        alertDialog.setCanCacnel(false);
+        alertDialog.setCanCancel(false);
         alertDialog.show();
         byte[] decode = Base64.decode(str.substring(17), 8);
         TLRPC$TL_auth_acceptLoginToken tLRPC$TL_auth_acceptLoginToken = new TLRPC$TL_auth_acceptLoginToken();
         tLRPC$TL_auth_acceptLoginToken.token = decode;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_auth_acceptLoginToken, new LaunchActivity$$ExternalSyntheticLambda56(alertDialog, actionIntroActivity));
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_auth_acceptLoginToken, new LaunchActivity$$ExternalSyntheticLambda57(alertDialog, actionIntroActivity));
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$handleIntent$15(AlertDialog alertDialog, TLObject tLObject, ActionIntroActivity actionIntroActivity, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$handleIntent$17(AlertDialog alertDialog, TLObject tLObject, ActionIntroActivity actionIntroActivity, TLRPC$TL_error tLRPC$TL_error) {
         try {
             alertDialog.dismiss();
         } catch (Exception unused) {
@@ -6988,13 +7054,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$handleIntent$14(ActionIntroActivity actionIntroActivity, TLRPC$TL_error tLRPC$TL_error) {
+    public static /* synthetic */ void lambda$handleIntent$16(ActionIntroActivity actionIntroActivity, TLRPC$TL_error tLRPC$TL_error) {
         String string = LocaleController.getString("AuthAnotherClient", NUM);
         AlertsCreator.showSimpleAlert(actionIntroActivity, string, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error.text);
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$handleIntent$18(String str, String str2, BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$handleIntent$20(String str, String str2, BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
         NewContactActivity newContactActivity = new NewContactActivity();
         newContactActivity.setInitialPhoneNumber(str, false);
         if (str2 != null) {
@@ -7058,7 +7124,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0.putBoolean(r1, r2)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r1 = r10.contactsToSend
             java.lang.String r3 = "selectAlertStringGroup"
-            r4 = 2131627802(0x7f0e0f1a, float:1.8882879E38)
+            r4 = 2131627869(0x7f0e0f5d, float:1.8883015E38)
             java.lang.String r5 = "selectAlertString"
             if (r1 == 0) goto L_0x003d
             int r1 = r1.size()
@@ -7066,7 +7132,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r1 = "SendContactToText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r4)
             r0.putString(r5, r1)
-            r1 = 2131627778(0x7f0e0var_, float:1.888283E38)
+            r1 = 2131627845(0x7f0e0var_, float:1.8882966E38)
             java.lang.String r4 = "SendContactToGroupText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.putString(r3, r1)
@@ -7075,12 +7141,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r1 = "SendMessagesToText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r4)
             r0.putString(r5, r1)
-            r1 = 2131627801(0x7f0e0var_, float:1.8882877E38)
+            r1 = 2131627868(0x7f0e0f5c, float:1.8883013E38)
             java.lang.String r4 = "SendMessagesToGroupText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.putString(r3, r1)
         L_0x0052:
-            org.telegram.ui.LaunchActivity$11 r5 = new org.telegram.ui.LaunchActivity$11
+            org.telegram.ui.LaunchActivity$12 r5 = new org.telegram.ui.LaunchActivity$12
             r5.<init>(r0)
             r5.setDelegate(r10)
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
@@ -7178,18 +7244,18 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage = new TLRPC$TL_messages_getDiscussionMessage();
         tLRPC$TL_messages_getDiscussionMessage.peer = MessagesController.getInputPeer(tLRPC$Chat);
         tLRPC$TL_messages_getDiscussionMessage.msg_id = (num2 != null ? num : num3).intValue();
-        return ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_getDiscussionMessage, new LaunchActivity$$ExternalSyntheticLambda58(this, i, num, tLRPC$Chat, tLRPC$TL_messages_getDiscussionMessage, num2, num3, alertDialog));
+        return ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_getDiscussionMessage, new LaunchActivity$$ExternalSyntheticLambda59(this, i, num, tLRPC$Chat, tLRPC$TL_messages_getDiscussionMessage, num2, num3, alertDialog));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runCommentRequest$20(int i, Integer num, TLRPC$Chat tLRPC$Chat, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, Integer num2, Integer num3, AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runCommentRequest$22(int i, Integer num, TLRPC$Chat tLRPC$Chat, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, Integer num2, Integer num3, AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda35(this, tLObject, i, num, tLRPC$Chat, tLRPC$TL_messages_getDiscussionMessage, num2, num3, alertDialog));
     }
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:15:0x0094 A[SYNTHETIC, Splitter:B:15:0x0094] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$runCommentRequest$19(org.telegram.tgnet.TLObject r12, int r13, java.lang.Integer r14, org.telegram.tgnet.TLRPC$Chat r15, org.telegram.tgnet.TLRPC$TL_messages_getDiscussionMessage r16, java.lang.Integer r17, java.lang.Integer r18, org.telegram.ui.ActionBar.AlertDialog r19) {
+    public /* synthetic */ void lambda$runCommentRequest$21(org.telegram.tgnet.TLObject r12, int r13, java.lang.Integer r14, org.telegram.tgnet.TLRPC$Chat r15, org.telegram.tgnet.TLRPC$TL_messages_getDiscussionMessage r16, java.lang.Integer r17, java.lang.Integer r18, org.telegram.ui.ActionBar.AlertDialog r19) {
         /*
             r11 = this;
             r0 = r12
@@ -7254,7 +7320,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2.setHighlightMessageId(r0)
         L_0x008b:
             r1 = r11
-            r11.lambda$runLinkRequest$43(r2)
+            r11.lambda$runLinkRequest$45(r2)
             r2 = 1
             goto L_0x0092
         L_0x0091:
@@ -7271,7 +7337,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0     // Catch:{ Exception -> 0x00be }
             org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r0)     // Catch:{ Exception -> 0x00be }
             java.lang.String r2 = "ChannelPostDeleted"
-            r3 = 2131624815(0x7f0e036f, float:1.887682E38)
+            r3 = 2131624820(0x7f0e0374, float:1.887683E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x00be }
             org.telegram.ui.Components.Bulletin r0 = r0.createErrorBulletin(r2)     // Catch:{ Exception -> 0x00be }
             r0.show()     // Catch:{ Exception -> 0x00be }
@@ -7289,7 +7355,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00cb:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runCommentRequest$19(org.telegram.tgnet.TLObject, int, java.lang.Integer, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$TL_messages_getDiscussionMessage, java.lang.Integer, java.lang.Integer, org.telegram.ui.ActionBar.AlertDialog):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runCommentRequest$21(org.telegram.tgnet.TLObject, int, java.lang.Integer, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$TL_messages_getDiscussionMessage, java.lang.Integer, java.lang.Integer, org.telegram.ui.ActionBar.AlertDialog):void");
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:29:0x007c A[SYNTHETIC, Splitter:B:29:0x007c] */
@@ -7340,11 +7406,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r4.<init>()
             r4.import_head = r5
             org.telegram.tgnet.ConnectionsManager r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r12)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda61 r6 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda61
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda62 r6 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda62
             r6.<init>(r10, r11, r12, r0)
             int r11 = r5.sendRequest(r4, r6)
             r1[r2] = r11
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda0 r11 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda0
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda1 r11 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda1
             r11.<init>(r12, r1, r3)
             r0.setOnCancelListener(r11)
             r11 = 300(0x12c, double:1.48E-321)
@@ -7392,7 +7458,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runImportRequest$22(Uri uri, int i, AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runImportRequest$24(Uri uri, int i, AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda36(this, tLObject, uri, i, alertDialog), 2);
     }
 
@@ -7404,7 +7470,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         if ((r10.get(r10.size() - 1) instanceof org.telegram.ui.DialogsActivity) != false) goto L_0x0139;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$runImportRequest$21(org.telegram.tgnet.TLObject r10, android.net.Uri r11, int r12, org.telegram.ui.ActionBar.AlertDialog r13) {
+    public /* synthetic */ void lambda$runImportRequest$23(org.telegram.tgnet.TLObject r10, android.net.Uri r11, int r12, org.telegram.ui.ActionBar.AlertDialog r13) {
         /*
             r9 = this;
             boolean r0 = r9.isFinishing()
@@ -7576,11 +7642,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0164:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runImportRequest$21(org.telegram.tgnet.TLObject, android.net.Uri, int, org.telegram.ui.ActionBar.AlertDialog):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runImportRequest$23(org.telegram.tgnet.TLObject, android.net.Uri, int, org.telegram.ui.ActionBar.AlertDialog):void");
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$runImportRequest$23(int i, int[] iArr, Runnable runnable, DialogInterface dialogInterface) {
+    public static /* synthetic */ void lambda$runImportRequest$25(int i, int[] iArr, Runnable runnable, DialogInterface dialogInterface) {
         ConnectionsManager.getInstance(i).cancelRequest(iArr[0], true);
         if (runnable != null) {
             runnable.run();
@@ -7612,7 +7678,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int r3 = org.telegram.messenger.UserConfig.getActivatedAccountsCount()
             if (r3 < r2) goto L_0x0068
             if (r13 == 0) goto L_0x0068
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda75 r4 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda75
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda77 r4 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda77
             r1 = r4
             r2 = r26
             r3 = r27
@@ -7648,7 +7714,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             return
         L_0x0068:
             r3 = r7
-            r4 = 2131626776(0x7f0e0b18, float:1.8880798E38)
+            r4 = 2131626813(0x7f0e0b3d, float:1.8880873E38)
             java.lang.String r7 = "OK"
             r13 = 0
             r8 = 1
@@ -7666,11 +7732,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x008b:
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r0.<init>((android.content.Context) r15)
-            r1 = 2131624302(0x7f0e016e, float:1.887578E38)
+            r1 = 2131624304(0x7f0e0170, float:1.8875784E38)
             java.lang.String r2 = "AppName"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131626821(0x7f0e0b45, float:1.888089E38)
+            r1 = 2131626858(0x7f0e0b6a, float:1.8880964E38)
             java.lang.Object[] r2 = new java.lang.Object[r8]
             r2[r11] = r43
             java.lang.String r3 = "OtherLoginCode"
@@ -7686,11 +7752,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r44 == 0) goto L_0x00e5
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r0.<init>((android.content.Context) r15)
-            r1 = 2131624445(0x7f0e01fd, float:1.887607E38)
+            r1 = 2131624447(0x7f0e01ff, float:1.8876074E38)
             java.lang.String r2 = "AuthAnotherClient"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131624456(0x7f0e0208, float:1.8876092E38)
+            r1 = 2131624458(0x7f0e020a, float:1.8876096E38)
             java.lang.String r2 = "AuthAnotherClientUrl"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
@@ -7709,7 +7775,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r12.<init>()
             r12.username = r0
             org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r27)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda62 r9 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda62
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda63 r9 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda63
             r1 = r9
             r2 = r26
             r3 = r39
@@ -7751,7 +7817,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0.<init>()
             r0.hash = r5
             org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r27)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda60 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda60
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda61 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda61
             r11 = r26
             r13 = r27
             r14 = r48
@@ -7768,7 +7834,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0.<init>()
             r0.hash = r5
             org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r27)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda59 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda59
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda60 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda60
             r3.<init>(r11, r13, r14)
             r1.sendRequest(r0, r3, r2)
             goto L_0x0136
@@ -7832,7 +7898,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0.putInt(r1, r4)
             org.telegram.ui.DialogsActivity r1 = new org.telegram.ui.DialogsActivity
             r1.<init>(r0)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda84 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda84
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda86 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda86
             r2 = r34
             r0.<init>(r11, r2, r13, r9)
             r1.setDelegate(r0)
@@ -7871,7 +7937,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r0 = (java.lang.String) r0
             r5.public_key = r0
             org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r27)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda71 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda71
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda73 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda73
             r28 = r1
             r29 = r26
             r30 = r7
@@ -7893,7 +7959,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r1.path = r0
             int r0 = r11.currentAccount
             org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda64 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda64
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda65 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda65
             r2.<init>(r11, r14)
             int r0 = r0.sendRequest(r1, r2)
             r7[r10] = r0
@@ -7908,7 +7974,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2.lang_pack = r0
             int r0 = r11.currentAccount
             org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda63 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda63
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda66 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda66
             r1.<init>(r11, r14)
             int r0 = r0.sendRequest(r2, r1)
             r7[r10] = r0
@@ -7947,7 +8013,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ThemePreviewActivity r0 = new org.telegram.ui.ThemePreviewActivity     // Catch:{ Exception -> 0x0300 }
             r2 = 0
             r0.<init>(r3, r2, r8, r10)     // Catch:{ Exception -> 0x02fe }
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda52 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda52     // Catch:{ Exception -> 0x02fe }
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda53 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda53     // Catch:{ Exception -> 0x02fe }
             r3.<init>(r11, r0)     // Catch:{ Exception -> 0x02fe }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r3)     // Catch:{ Exception -> 0x02fe }
             goto L_0x0308
@@ -7975,7 +8041,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0.wallpaper = r3
             int r3 = r11.currentAccount
             org.telegram.tgnet.ConnectionsManager r3 = org.telegram.tgnet.ConnectionsManager.getInstance(r3)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda67 r4 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda67
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda69 r4 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda69
             r4.<init>(r11, r14, r1)
             int r0 = r3.sendRequest(r0, r4)
             r7[r10] = r0
@@ -7983,7 +8049,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x032d:
             r2 = 0
             if (r3 == 0) goto L_0x0358
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda24 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda24
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda26 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda26
             r1.<init>(r11)
             org.telegram.tgnet.TLRPC$TL_account_getTheme r2 = new org.telegram.tgnet.TLRPC$TL_account_getTheme
             r2.<init>()
@@ -7994,7 +8060,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2.theme = r0
             int r0 = r11.currentAccount
             org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda65 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda65
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda64 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda64
             r3.<init>(r11, r14)
             int r0 = r0.sendRequest(r2, r3)
             r7[r10] = r0
@@ -8027,7 +8093,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r3.add(r1)
             int r1 = r11.currentAccount
             org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda70 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda70
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda72 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda72
             r39 = r3
             r40 = r26
             r41 = r7
@@ -8082,7 +8148,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0408:
             r0 = r7[r10]
             if (r0 == 0) goto L_0x0419
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda1 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda1
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda0 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda0
             r0.<init>(r13, r7, r1)
             r14.setOnCancelListener(r0)
             r0 = 300(0x12c, double:1.48E-321)
@@ -8094,7 +8160,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$24(int i, String str, String str2, String str3, String str4, String str5, String str6, boolean z, Integer num, Long l, Integer num2, Integer num3, String str7, HashMap hashMap, String str8, String str9, String str10, String str11, TLRPC$TL_wallPaper tLRPC$TL_wallPaper, String str12, String str13, String str14, int i2, int i3) {
+    public /* synthetic */ void lambda$runLinkRequest$26(int i, String str, String str2, String str3, String str4, String str5, String str6, boolean z, Integer num, Long l, Integer num2, Integer num3, String str7, HashMap hashMap, String str8, String str9, String str10, String str11, TLRPC$TL_wallPaper tLRPC$TL_wallPaper, String str12, String str13, String str14, int i2, int i3) {
         int i4 = i3;
         if (i4 != i) {
             switchToAccount(i4, true);
@@ -8103,7 +8169,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$28(String str, String str2, String str3, int i, Integer num, Integer num2, Integer num3, int[] iArr, AlertDialog alertDialog, String str4, String str5, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$30(String str, String str2, String str3, int i, Integer num, Integer num2, Integer num3, int[] iArr, AlertDialog alertDialog, String str4, String str5, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         LaunchActivity$$ExternalSyntheticLambda37 launchActivity$$ExternalSyntheticLambda37 = r0;
         LaunchActivity$$ExternalSyntheticLambda37 launchActivity$$ExternalSyntheticLambda372 = new LaunchActivity$$ExternalSyntheticLambda37(this, tLObject, tLRPC$TL_error, str, str2, str3, i, num, num2, num3, iArr, alertDialog, str4, str5, i2);
         AndroidUtilities.runOnUIThread(launchActivity$$ExternalSyntheticLambda37, 2);
@@ -8128,7 +8194,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX WARNING: Removed duplicated region for block: B:61:0x0180  */
     /* JADX WARNING: Removed duplicated region for block: B:62:0x018c  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$runLinkRequest$27(org.telegram.tgnet.TLObject r16, org.telegram.tgnet.TLRPC$TL_error r17, java.lang.String r18, java.lang.String r19, java.lang.String r20, int r21, java.lang.Integer r22, java.lang.Integer r23, java.lang.Integer r24, int[] r25, org.telegram.ui.ActionBar.AlertDialog r26, java.lang.String r27, java.lang.String r28, int r29) {
+    public /* synthetic */ void lambda$runLinkRequest$29(org.telegram.tgnet.TLObject r16, org.telegram.tgnet.TLRPC$TL_error r17, java.lang.String r18, java.lang.String r19, java.lang.String r20, int r21, java.lang.Integer r22, java.lang.Integer r23, java.lang.Integer r24, int[] r25, org.telegram.ui.ActionBar.AlertDialog r26, java.lang.String r27, java.lang.String r28, int r29) {
         /*
             r15 = this;
             r8 = r15
@@ -8212,19 +8278,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r3 = "cantSendToChannels"
             r2.putBoolean(r3, r10)
             r2.putInt(r0, r10)
-            r0 = 2131627784(0x7f0e0var_, float:1.8882842E38)
+            r0 = 2131627851(0x7f0e0f4b, float:1.8882978E38)
             java.lang.String r3 = "SendGameToText"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             java.lang.String r3 = "selectAlertString"
             r2.putString(r3, r0)
-            r0 = 2131627783(0x7f0e0var_, float:1.888284E38)
+            r0 = 2131627850(0x7f0e0f4a, float:1.8882976E38)
             java.lang.String r3 = "SendGameToGroupText"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             java.lang.String r3 = "selectAlertStringGroup"
             r2.putString(r3, r0)
             org.telegram.ui.DialogsActivity r0 = new org.telegram.ui.DialogsActivity
             r0.<init>(r2)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda83 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda83
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda85 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda85
             r2.<init>(r15, r1, r4, r9)
             r0.setDelegate(r2)
             boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
@@ -8348,10 +8414,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2.putString(r3, r0)
             org.telegram.ui.DialogsActivity r0 = new org.telegram.ui.DialogsActivity
             r0.<init>(r2)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda82 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda82
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda84 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda84
             r2.<init>(r15, r4, r1, r5)
             r0.setDelegate(r2)
-            r15.lambda$runLinkRequest$43(r0)
+            r15.lambda$runLinkRequest$45(r0)
             goto L_0x02cd
         L_0x01e9:
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack     // Catch:{ Exception -> 0x0213 }
@@ -8364,7 +8430,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0     // Catch:{ Exception -> 0x0213 }
             org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r0)     // Catch:{ Exception -> 0x0213 }
             java.lang.String r1 = "BotCantJoinGroups"
-            r2 = 2131624616(0x7f0e02a8, float:1.8876417E38)
+            r2 = 2131624618(0x7f0e02aa, float:1.887642E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x0213 }
             org.telegram.ui.Components.Bulletin r0 = r0.createErrorBulletin(r1)     // Catch:{ Exception -> 0x0213 }
             r0.show()     // Catch:{ Exception -> 0x0213 }
@@ -8471,7 +8537,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x02d8:
             int r2 = r22.intValue()
         L_0x02dc:
-            org.telegram.ui.LaunchActivity$12 r3 = new org.telegram.ui.LaunchActivity$12
+            org.telegram.ui.LaunchActivity$13 r3 = new org.telegram.ui.LaunchActivity$13
             r4 = r26
             r3.<init>(r4, r0)
             r1.ensureMessagesLoaded(r12, r2, r3)
@@ -8494,7 +8560,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r0 == 0) goto L_0x0322
             org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r1)     // Catch:{ Exception -> 0x0337 }
             java.lang.String r1 = "FloodWait"
-            r2 = 2131625696(0x7f0e06e0, float:1.8878607E38)
+            r2 = 2131625723(0x7f0e06fb, float:1.8878662E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x0337 }
             org.telegram.ui.Components.Bulletin r0 = r0.createErrorBulletin(r1)     // Catch:{ Exception -> 0x0337 }
             r0.show()     // Catch:{ Exception -> 0x0337 }
@@ -8502,7 +8568,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0322:
             org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r1)     // Catch:{ Exception -> 0x0337 }
             java.lang.String r1 = "NoUsernameFound"
-            r2 = 2131626586(0x7f0e0a5a, float:1.8880412E38)
+            r2 = 2131626623(0x7f0e0a7f, float:1.8880487E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x0337 }
             org.telegram.ui.Components.Bulletin r0 = r0.createErrorBulletin(r1)     // Catch:{ Exception -> 0x0337 }
             r0.show()     // Catch:{ Exception -> 0x0337 }
@@ -8521,11 +8587,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0346:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runLinkRequest$27(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error, java.lang.String, java.lang.String, java.lang.String, int, java.lang.Integer, java.lang.Integer, java.lang.Integer, int[], org.telegram.ui.ActionBar.AlertDialog, java.lang.String, java.lang.String, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runLinkRequest$29(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error, java.lang.String, java.lang.String, java.lang.String, int, java.lang.Integer, java.lang.Integer, java.lang.Integer, int[], org.telegram.ui.ActionBar.AlertDialog, java.lang.String, java.lang.String, int):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$25(String str, int i, TLRPC$TL_contacts_resolvedPeer tLRPC$TL_contacts_resolvedPeer, DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+    public /* synthetic */ void lambda$runLinkRequest$27(String str, int i, TLRPC$TL_contacts_resolvedPeer tLRPC$TL_contacts_resolvedPeer, DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
         ArrayList arrayList2 = arrayList;
         long longValue = ((Long) arrayList.get(0)).longValue();
         TLRPC$TL_inputMediaGame tLRPC$TL_inputMediaGame = new TLRPC$TL_inputMediaGame();
@@ -8552,7 +8618,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$26(int i, TLRPC$User tLRPC$User, String str, DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+    public /* synthetic */ void lambda$runLinkRequest$28(int i, TLRPC$User tLRPC$User, String str, DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
         long longValue = ((Long) arrayList.get(0)).longValue();
         Bundle bundle = new Bundle();
         bundle.putBoolean("scrollToTopOnResume", true);
@@ -8571,7 +8637,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$31(int i, AlertDialog alertDialog, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$33(int i, AlertDialog alertDialog, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda41(this, tLRPC$TL_error, tLObject, i, alertDialog, str));
     }
 
@@ -8583,7 +8649,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         if (r10.checkCanOpenChat(r7, r11.get(r11.size() - 1)) != false) goto L_0x007b;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$runLinkRequest$30(org.telegram.tgnet.TLRPC$TL_error r10, org.telegram.tgnet.TLObject r11, int r12, org.telegram.ui.ActionBar.AlertDialog r13, java.lang.String r14) {
+    public /* synthetic */ void lambda$runLinkRequest$32(org.telegram.tgnet.TLRPC$TL_error r10, org.telegram.tgnet.TLObject r11, int r12, org.telegram.ui.ActionBar.AlertDialog r13, java.lang.String r14) {
         /*
             r9 = this;
             boolean r0 = r9.isFinishing()
@@ -8647,7 +8713,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.tgnet.TLRPC$Chat r11 = r8.chat
             long r11 = r11.id
             long r11 = -r11
-            org.telegram.ui.LaunchActivity$13 r0 = new org.telegram.ui.LaunchActivity$13
+            org.telegram.ui.LaunchActivity$14 r0 = new org.telegram.ui.LaunchActivity$14
             r3 = r0
             r4 = r9
             r5 = r13
@@ -8668,7 +8734,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00b2:
             org.telegram.ui.ActionBar.AlertDialog$Builder r11 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r11.<init>((android.content.Context) r9)
-            r12 = 2131624302(0x7f0e016e, float:1.887578E38)
+            r12 = 2131624304(0x7f0e0170, float:1.8875784E38)
             java.lang.String r14 = "AppName"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r14, r12)
             r11.setTitle(r12)
@@ -8676,7 +8742,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r14 = "FLOOD_WAIT"
             boolean r12 = r12.startsWith(r14)
             if (r12 == 0) goto L_0x00da
-            r10 = 2131625696(0x7f0e06e0, float:1.8878607E38)
+            r10 = 2131625723(0x7f0e06fb, float:1.8878662E38)
             java.lang.String r12 = "FloodWait"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setMessage(r10)
@@ -8686,22 +8752,22 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r12 = "INVITE_HASH_EXPIRED"
             boolean r10 = r10.startsWith(r12)
             if (r10 == 0) goto L_0x00fd
-            r10 = 2131625581(0x7f0e066d, float:1.8878374E38)
+            r10 = 2131625607(0x7f0e0687, float:1.8878427E38)
             java.lang.String r12 = "ExpiredLink"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setTitle(r10)
-            r10 = 2131626029(0x7f0e082d, float:1.8879283E38)
+            r10 = 2131626064(0x7f0e0850, float:1.8879354E38)
             java.lang.String r12 = "InviteExpired"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setMessage(r10)
             goto L_0x0109
         L_0x00fd:
-            r10 = 2131626086(0x7f0e0866, float:1.8879398E38)
+            r10 = 2131626121(0x7f0e0889, float:1.887947E38)
             java.lang.String r12 = "JoinToGroupErrorNotExist"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setMessage(r10)
         L_0x0109:
-            r10 = 2131626776(0x7f0e0b18, float:1.8880798E38)
+            r10 = 2131626813(0x7f0e0b3d, float:1.8880873E38)
             java.lang.String r12 = "OK"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setPositiveButton(r10, r0)
@@ -8716,24 +8782,24 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0122:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runLinkRequest$30(org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLObject, int, org.telegram.ui.ActionBar.AlertDialog, java.lang.String):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runLinkRequest$32(org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLObject, int, org.telegram.ui.ActionBar.AlertDialog, java.lang.String):void");
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$runLinkRequest$29(boolean[] zArr, DialogInterface dialogInterface) {
+    public static /* synthetic */ void lambda$runLinkRequest$31(boolean[] zArr, DialogInterface dialogInterface) {
         zArr[0] = true;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$33(int i, AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$35(int i, AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             MessagesController.getInstance(i).processUpdates((TLRPC$Updates) tLObject, false);
         }
-        AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda49(this, alertDialog, tLRPC$TL_error, tLObject, i));
+        AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda50(this, alertDialog, tLRPC$TL_error, tLObject, i));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$32(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i) {
+    public /* synthetic */ void lambda$runLinkRequest$34(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i) {
         if (!isFinishing()) {
             try {
                 alertDialog.dismiss();
@@ -8778,7 +8844,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$34(boolean z, int i, String str, DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z2) {
+    public /* synthetic */ void lambda$runLinkRequest$36(boolean z, int i, String str, DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z2) {
         ArrayList arrayList2 = arrayList;
         long longValue = ((Long) arrayList.get(0)).longValue();
         Bundle bundle = new Bundle();
@@ -8802,22 +8868,22 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$38(int[] iArr, int i, AlertDialog alertDialog, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, String str3, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$40(int[] iArr, int i, AlertDialog alertDialog, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, String str3, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm = (TLRPC$TL_account_authorizationForm) tLObject;
         if (tLRPC$TL_account_authorizationForm != null) {
-            iArr[0] = ConnectionsManager.getInstance(i).sendRequest(new TLRPC$TL_account_getPassword(), new LaunchActivity$$ExternalSyntheticLambda66(this, alertDialog, i, tLRPC$TL_account_authorizationForm, tLRPC$TL_account_getAuthorizationForm, str, str2, str3));
+            iArr[0] = ConnectionsManager.getInstance(i).sendRequest(new TLRPC$TL_account_getPassword(), new LaunchActivity$$ExternalSyntheticLambda67(this, alertDialog, i, tLRPC$TL_account_authorizationForm, tLRPC$TL_account_getAuthorizationForm, str, str2, str3));
             return;
         }
         AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda48(this, alertDialog, tLRPC$TL_error));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$36(AlertDialog alertDialog, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, String str3, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$38(AlertDialog alertDialog, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, String str3, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda44(this, alertDialog, tLObject, i, tLRPC$TL_account_authorizationForm, tLRPC$TL_account_getAuthorizationForm, str, str2, str3));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$35(AlertDialog alertDialog, TLObject tLObject, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, String str3) {
+    public /* synthetic */ void lambda$runLinkRequest$37(AlertDialog alertDialog, TLObject tLObject, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, String str3) {
         TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm2 = tLRPC$TL_account_getAuthorizationForm;
         try {
             alertDialog.dismiss();
@@ -8826,13 +8892,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
         if (tLObject != null) {
             MessagesController.getInstance(i).putUsers(tLRPC$TL_account_authorizationForm.users, false);
-            lambda$runLinkRequest$43(new PassportActivity(5, tLRPC$TL_account_getAuthorizationForm2.bot_id, tLRPC$TL_account_getAuthorizationForm2.scope, tLRPC$TL_account_getAuthorizationForm2.public_key, str, str2, str3, tLRPC$TL_account_authorizationForm, (TLRPC$TL_account_password) tLObject));
+            lambda$runLinkRequest$45(new PassportActivity(5, tLRPC$TL_account_getAuthorizationForm2.bot_id, tLRPC$TL_account_getAuthorizationForm2.scope, tLRPC$TL_account_getAuthorizationForm2.public_key, str, str2, str3, tLRPC$TL_account_authorizationForm, (TLRPC$TL_account_password) tLObject));
             return;
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$37(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$39(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error) {
         try {
             alertDialog.dismiss();
             if ("APP_VERSION_OUTDATED".equals(tLRPC$TL_error.text)) {
@@ -8846,12 +8912,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$40(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$42(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda43(this, alertDialog, tLObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$39(AlertDialog alertDialog, TLObject tLObject) {
+    public /* synthetic */ void lambda$runLinkRequest$41(AlertDialog alertDialog, TLObject tLObject) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -8864,12 +8930,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$42(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$44(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda45(this, alertDialog, tLObject, tLRPC$TL_error));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$41(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$43(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -8888,7 +8954,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$45(AlertDialog alertDialog, TLRPC$TL_wallPaper tLRPC$TL_wallPaper, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$47(AlertDialog alertDialog, TLRPC$TL_wallPaper tLRPC$TL_wallPaper, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda46(this, alertDialog, tLObject, tLRPC$TL_wallPaper, tLRPC$TL_error));
     }
 
@@ -8899,7 +8965,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$runLinkRequest$44(org.telegram.ui.ActionBar.AlertDialog r11, org.telegram.tgnet.TLObject r12, org.telegram.tgnet.TLRPC$TL_wallPaper r13, org.telegram.tgnet.TLRPC$TL_error r14) {
+    public /* synthetic */ void lambda$runLinkRequest$46(org.telegram.ui.ActionBar.AlertDialog r11, org.telegram.tgnet.TLObject r12, org.telegram.tgnet.TLRPC$TL_wallPaper r13, org.telegram.tgnet.TLRPC$TL_error r14) {
         /*
             r10 = this;
             r11.dismiss()     // Catch:{ Exception -> 0x0004 }
@@ -8943,12 +9009,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             boolean r13 = r12.blur
             boolean r12 = r12.motion
             r11.setInitialModes(r13, r12)
-            r10.lambda$runLinkRequest$43(r11)
+            r10.lambda$runLinkRequest$45(r11)
             goto L_0x0073
         L_0x004d:
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
             r11.<init>()
-            r12 = 2131625452(0x7f0e05ec, float:1.8878112E38)
+            r12 = 2131625478(0x7f0e0606, float:1.8878165E38)
             java.lang.String r13 = "ErrorOccurred"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             r11.append(r12)
@@ -8962,11 +9028,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0073:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runLinkRequest$44(org.telegram.ui.ActionBar.AlertDialog, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_wallPaper, org.telegram.tgnet.TLRPC$TL_error):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runLinkRequest$46(org.telegram.ui.ActionBar.AlertDialog, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_wallPaper, org.telegram.tgnet.TLRPC$TL_error):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$46() {
+    public /* synthetic */ void lambda$runLinkRequest$48() {
         this.loadingThemeFileName = null;
         this.loadingThemeWallpaperName = null;
         this.loadingThemeWallpaper = null;
@@ -8976,7 +9042,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$48(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$50(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda38(this, tLObject, alertDialog, tLRPC$TL_error));
     }
 
@@ -8987,7 +9053,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX WARNING: Removed duplicated region for block: B:38:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$runLinkRequest$47(org.telegram.tgnet.TLObject r6, org.telegram.ui.ActionBar.AlertDialog r7, org.telegram.tgnet.TLRPC$TL_error r8) {
+    public /* synthetic */ void lambda$runLinkRequest$49(org.telegram.tgnet.TLObject r6, org.telegram.ui.ActionBar.AlertDialog r7, org.telegram.tgnet.TLRPC$TL_error r8) {
         /*
             r5 = this;
             boolean r0 = r6 instanceof org.telegram.tgnet.TLRPC$TL_theme
@@ -9074,11 +9140,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r6 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)
         L_0x009d:
-            r6 = 2131628167(0x7f0e1087, float:1.888362E38)
+            r6 = 2131628240(0x7f0e10d0, float:1.8883767E38)
             java.lang.String r7 = "Theme"
             if (r2 != r1) goto L_0x00b9
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r7 = 2131628189(0x7f0e109d, float:1.8883664E38)
+            r7 = 2131628262(0x7f0e10e6, float:1.8883812E38)
             java.lang.String r8 = "ThemeNotSupported"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.ui.ActionBar.AlertDialog$Builder r6 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r5, r6, r7)
@@ -9086,7 +9152,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             goto L_0x00cd
         L_0x00b9:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r7 = 2131628188(0x7f0e109c, float:1.8883662E38)
+            r7 = 2131628261(0x7f0e10e5, float:1.888381E38)
             java.lang.String r8 = "ThemeNotFound"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.ui.ActionBar.AlertDialog$Builder r6 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r5, r6, r7)
@@ -9094,11 +9160,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00cd:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runLinkRequest$47(org.telegram.tgnet.TLObject, org.telegram.ui.ActionBar.AlertDialog, org.telegram.tgnet.TLRPC$TL_error):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runLinkRequest$49(org.telegram.tgnet.TLObject, org.telegram.ui.ActionBar.AlertDialog, org.telegram.tgnet.TLRPC$TL_error):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$50(int[] iArr, int i, AlertDialog alertDialog, Integer num, Integer num2, Integer num3, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$52(int[] iArr, int i, AlertDialog alertDialog, Integer num, Integer num2, Integer num3, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda40(this, tLObject, iArr, i, alertDialog, num, num2, num3));
     }
 
@@ -9106,7 +9172,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX WARNING: Removed duplicated region for block: B:13:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:7:0x0037 A[SYNTHETIC, Splitter:B:7:0x0037] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$runLinkRequest$49(org.telegram.tgnet.TLObject r11, int[] r12, int r13, org.telegram.ui.ActionBar.AlertDialog r14, java.lang.Integer r15, java.lang.Integer r16, java.lang.Integer r17) {
+    public /* synthetic */ void lambda$runLinkRequest$51(org.telegram.tgnet.TLObject r11, int[] r12, int r13, org.telegram.ui.ActionBar.AlertDialog r14, java.lang.Integer r15, java.lang.Integer r16, java.lang.Integer r17) {
         /*
             r10 = this;
             r8 = r10
@@ -9146,7 +9212,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r1 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
         L_0x0040:
-            r0 = 2131626180(0x7f0e08c4, float:1.8879589E38)
+            r0 = 2131626216(0x7f0e08e8, float:1.8879662E38)
             java.lang.String r1 = "LinkNotFound"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r10, r0)
@@ -9154,27 +9220,27 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0050:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runLinkRequest$49(org.telegram.tgnet.TLObject, int[], int, org.telegram.ui.ActionBar.AlertDialog, java.lang.Integer, java.lang.Integer, java.lang.Integer):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$runLinkRequest$51(org.telegram.tgnet.TLObject, int[], int, org.telegram.ui.ActionBar.AlertDialog, java.lang.Integer, java.lang.Integer, java.lang.Integer):void");
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$53(Bundle bundle, Long l, int[] iArr, AlertDialog alertDialog, BaseFragment baseFragment, int i) {
+    public /* synthetic */ void lambda$runLinkRequest$55(Bundle bundle, Long l, int[] iArr, AlertDialog alertDialog, BaseFragment baseFragment, int i) {
         if (!this.actionBarLayout.presentFragment(new ChatActivity(bundle))) {
             TLRPC$TL_channels_getChannels tLRPC$TL_channels_getChannels = new TLRPC$TL_channels_getChannels();
             TLRPC$TL_inputChannel tLRPC$TL_inputChannel = new TLRPC$TL_inputChannel();
             tLRPC$TL_inputChannel.channel_id = l.longValue();
             tLRPC$TL_channels_getChannels.id.add(tLRPC$TL_inputChannel);
-            iArr[0] = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_channels_getChannels, new LaunchActivity$$ExternalSyntheticLambda68(this, alertDialog, baseFragment, i, bundle));
+            iArr[0] = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_channels_getChannels, new LaunchActivity$$ExternalSyntheticLambda70(this, alertDialog, baseFragment, i, bundle));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$52(AlertDialog alertDialog, BaseFragment baseFragment, int i, Bundle bundle, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$runLinkRequest$54(AlertDialog alertDialog, BaseFragment baseFragment, int i, Bundle bundle, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda47(this, alertDialog, tLObject, baseFragment, i, bundle));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$runLinkRequest$51(AlertDialog alertDialog, TLObject tLObject, BaseFragment baseFragment, int i, Bundle bundle) {
+    public /* synthetic */ void lambda$runLinkRequest$53(AlertDialog alertDialog, TLObject tLObject, BaseFragment baseFragment, int i, Bundle bundle) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -9198,7 +9264,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$runLinkRequest$54(int i, int[] iArr, Runnable runnable, DialogInterface dialogInterface) {
+    public static /* synthetic */ void lambda$runLinkRequest$56(int i, int[] iArr, Runnable runnable, DialogInterface dialogInterface) {
         ConnectionsManager.getInstance(i).cancelRequest(iArr[0], true);
         if (runnable != null) {
             runnable.run();
@@ -9310,7 +9376,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00de:
             boolean r13 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r12)
             if (r13 == 0) goto L_0x00f4
-            r13 = 2131627545(0x7f0e0e19, float:1.8882357E38)
+            r13 = 2131627605(0x7f0e0e55, float:1.888248E38)
             java.lang.String r15 = "RepliesTitle"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             java.lang.String r13 = r13.toLowerCase()
@@ -9319,7 +9385,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00f4:
             boolean r13 = r12.self
             if (r13 == 0) goto L_0x0107
-            r13 = 2131627678(0x7f0e0e9e, float:1.8882627E38)
+            r13 = 2131627743(0x7f0e0edf, float:1.888276E38)
             java.lang.String r15 = "SavedMessages"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             java.lang.String r13 = r13.toLowerCase()
@@ -9392,7 +9458,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
     private void createUpdateUI() {
         if (this.sideMenuContainer != null) {
-            AnonymousClass14 r0 = new FrameLayout(this) {
+            AnonymousClass15 r0 = new FrameLayout(this) {
                 private int lastGradientWidth;
                 private Matrix matrix = new Matrix();
                 private Paint paint = new Paint();
@@ -9428,7 +9494,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 this.updateLayout.setBackground(Theme.getSelectorDrawable(NUM, false));
             }
             this.sideMenuContainer.addView(this.updateLayout, LayoutHelper.createFrame(-1, 44, 83));
-            this.updateLayout.setOnClickListener(new LaunchActivity$$ExternalSyntheticLambda14(this));
+            this.updateLayout.setOnClickListener(new LaunchActivity$$ExternalSyntheticLambda12(this));
             RadialProgress2 radialProgress2 = new RadialProgress2(this.updateLayout);
             this.updateLayoutIcon = radialProgress2;
             radialProgress2.setColors(-1, -1, -1, -1);
@@ -9454,7 +9520,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createUpdateUI$55(View view) {
+    public /* synthetic */ void lambda$createUpdateUI$57(View view) {
         if (SharedConfig.isAppUpdateAvailable()) {
             if (this.updateLayoutIcon.getIcon() == 2) {
                 FileLoader.getInstance(this.currentAccount).loadFile(SharedConfig.pendingAppUpdate.document, "update", 1, 1);
@@ -9509,7 +9575,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r7 = 15
             r6.setIcon(r7, r8, r5)
             org.telegram.ui.ActionBar.SimpleTextView r6 = r13.updateTextView
-            r7 = 2131624308(0x7f0e0174, float:1.8875792E38)
+            r7 = 2131624310(0x7f0e0176, float:1.8875796E38)
             java.lang.String r10 = "AppUpdateNow"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
             r6.setText(r7)
@@ -9529,7 +9595,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.messenger.ImageLoader r7 = org.telegram.messenger.ImageLoader.getInstance()
             java.lang.Float r6 = r7.getFileProgress(r6)
             org.telegram.ui.ActionBar.SimpleTextView r7 = r13.updateTextView
-            r10 = 2131624307(0x7f0e0173, float:1.887579E38)
+            r10 = 2131624309(0x7f0e0175, float:1.8875794E38)
             java.lang.Object[] r11 = new java.lang.Object[r8]
             if (r6 == 0) goto L_0x0082
             float r6 = r6.floatValue()
@@ -9551,7 +9617,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r7 = 2
             r6.setIcon(r7, r8, r5)
             org.telegram.ui.ActionBar.SimpleTextView r6 = r13.updateTextView
-            r7 = 2131624304(0x7f0e0170, float:1.8875784E38)
+            r7 = 2131624306(0x7f0e0172, float:1.8875788E38)
             java.lang.String r10 = "AppUpdate"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
             r6.setText(r7)
@@ -9657,7 +9723,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             android.view.ViewPropertyAnimator r14 = r14.translationY(r0)
             org.telegram.ui.Components.CubicBezierInterpolator r0 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT
             android.view.ViewPropertyAnimator r14 = r14.setInterpolator(r0)
-            org.telegram.ui.LaunchActivity$15 r0 = new org.telegram.ui.LaunchActivity$15
+            org.telegram.ui.LaunchActivity$16 r0 = new org.telegram.ui.LaunchActivity$16
             r0.<init>()
             android.view.ViewPropertyAnimator r14 = r14.setListener(r0)
             android.view.ViewPropertyAnimator r14 = r14.setDuration(r3)
@@ -9681,7 +9747,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$updateAppUpdateViews$56(View view) {
+    public static /* synthetic */ void lambda$updateAppUpdateViews$58(View view) {
         if (view != null) {
             ((ViewGroup) view.getParent()).removeView(view);
         }
@@ -9704,12 +9770,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 tLRPC$TL_help_getAppUpdate.source = "";
             }
             int i = this.currentAccount;
-            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_help_getAppUpdate, new LaunchActivity$$ExternalSyntheticLambda57(this, i));
+            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_help_getAppUpdate, new LaunchActivity$$ExternalSyntheticLambda58(this, i));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkAppUpdate$58(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$checkAppUpdate$60(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         SharedConfig.lastUpdateCheckTime = System.currentTimeMillis();
         SharedConfig.saveConfig();
         if (tLObject instanceof TLRPC$TL_help_appUpdate) {
@@ -9718,7 +9784,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkAppUpdate$57(TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate, int i) {
+    public /* synthetic */ void lambda$checkAppUpdate$59(TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate, int i) {
         TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate2 = SharedConfig.pendingAppUpdate;
         if ((tLRPC$TL_help_appUpdate2 == null || !tLRPC$TL_help_appUpdate2.version.equals(tLRPC$TL_help_appUpdate.version)) && SharedConfig.setNewAppVersionAvailable(tLRPC$TL_help_appUpdate)) {
             if (tLRPC$TL_help_appUpdate.can_not_skip) {
@@ -9749,7 +9815,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             AlertDialog show = builder.show();
             this.visibleDialog = show;
             show.setCanceledOnTouchOutside(true);
-            this.visibleDialog.setOnDismissListener(new LaunchActivity$$ExternalSyntheticLambda12(this));
+            this.visibleDialog.setOnDismissListener(new LaunchActivity$$ExternalSyntheticLambda11(this));
             return this.visibleDialog;
         } catch (Exception e2) {
             FileLog.e((Throwable) e2);
@@ -9758,7 +9824,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showAlertDialog$59(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$showAlertDialog$61(DialogInterface dialogInterface) {
         AlertDialog alertDialog = this.visibleDialog;
         if (alertDialog != null) {
             if (alertDialog == this.localeDialog) {
@@ -9815,12 +9881,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         ArrayList<SendMessagesHelper.SendingMediaInfo> arrayList2;
         DialogsActivity dialogsActivity2 = dialogsActivity;
         ArrayList<Long> arrayList3 = arrayList;
-        int currentAccount2 = dialogsActivity2 != null ? dialogsActivity.getCurrentAccount() : this.currentAccount;
+        int currentAccount = dialogsActivity2 != null ? dialogsActivity.getCurrentAccount() : this.currentAccount;
         Uri uri = this.exportingChatUri;
         if (uri != null) {
             ArrayList arrayList4 = this.documentsUrisArray != null ? new ArrayList(this.documentsUrisArray) : null;
             AlertDialog alertDialog = new AlertDialog(this, 3);
-            SendMessagesHelper.getInstance(currentAccount2).prepareImportHistory(arrayList3.get(0).longValue(), this.exportingChatUri, this.documentsUrisArray, new LaunchActivity$$ExternalSyntheticLambda55(this, currentAccount2, dialogsActivity, z, arrayList4, uri, alertDialog));
+            SendMessagesHelper.getInstance(currentAccount).prepareImportHistory(arrayList3.get(0).longValue(), this.exportingChatUri, this.documentsUrisArray, new LaunchActivity$$ExternalSyntheticLambda56(this, currentAccount, dialogsActivity, z, arrayList4, uri, alertDialog));
             try {
                 alertDialog.showDelayed(300);
             } catch (Exception unused) {
@@ -9832,7 +9898,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("scrollToTopOnResume", true);
                 if (!AndroidUtilities.isTablet()) {
-                    NotificationCenter.getInstance(currentAccount2).postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                    NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                 }
                 if (DialogObject.isEncryptedDialog(longValue)) {
                     bundle.putInt("enc_id", DialogObject.getEncryptedChatId(longValue));
@@ -9841,7 +9907,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 } else {
                     bundle.putLong("chat_id", -longValue);
                 }
-                if (MessagesController.getInstance(currentAccount2).checkCanOpenChat(bundle, dialogsActivity2)) {
+                if (MessagesController.getInstance(currentAccount).checkCanOpenChat(bundle, dialogsActivity2)) {
                     chatActivity = new ChatActivity(bundle);
                 } else {
                     return;
@@ -9949,7 +10015,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     ArrayList<TLRPC$User> arrayList14 = this.contactsToSend;
                     if (arrayList14 != null && !arrayList14.isEmpty()) {
                         for (int i4 = 0; i4 < this.contactsToSend.size(); i4++) {
-                            SendMessagesHelper.getInstance(currentAccount2).sendMessage(this.contactsToSend.get(i4), longValue2, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z3, 0);
+                            SendMessagesHelper.getInstance(currentAccount).sendMessage(this.contactsToSend.get(i4), longValue2, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z3, 0);
                         }
                     }
                     if (!TextUtils.isEmpty(charSequence)) {
@@ -9961,7 +10027,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             } else {
                 ArrayList<BaseFragment> arrayList15 = mainFragmentsStack;
                 PhonebookShareAlert phonebookShareAlert = new PhonebookShareAlert(arrayList15.get(arrayList15.size() - 1), (ContactsController.Contact) null, (TLRPC$User) null, this.contactsToSendUri, (File) null, (String) null, (String) null);
-                phonebookShareAlert.setDelegate(new LaunchActivity$$ExternalSyntheticLambda76(this, chatActivity, arrayList3, currentAccount2));
+                phonebookShareAlert.setDelegate(new LaunchActivity$$ExternalSyntheticLambda78(this, chatActivity, arrayList3, currentAccount));
                 ArrayList<BaseFragment> arrayList16 = mainFragmentsStack;
                 arrayList16.get(arrayList16.size() - 1).showDialog(phonebookShareAlert);
             }
@@ -9980,7 +10046,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didSelectDialogs$60(int i, DialogsActivity dialogsActivity, boolean z, ArrayList arrayList, Uri uri, AlertDialog alertDialog, long j) {
+    public /* synthetic */ void lambda$didSelectDialogs$62(int i, DialogsActivity dialogsActivity, boolean z, ArrayList arrayList, Uri uri, AlertDialog alertDialog, long j) {
         ArrayList arrayList2 = arrayList;
         long j2 = j;
         if (j2 != 0) {
@@ -10013,7 +10079,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didSelectDialogs$61(ChatActivity chatActivity, ArrayList arrayList, int i, TLRPC$User tLRPC$User, boolean z, int i2) {
+    public /* synthetic */ void lambda$didSelectDialogs$63(ChatActivity chatActivity, ArrayList arrayList, int i, TLRPC$User tLRPC$User, boolean z, int i2) {
         if (chatActivity != null) {
             this.actionBarLayout.presentFragment(chatActivity, true, false, true, false);
         }
@@ -10065,7 +10131,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* renamed from: presentFragment */
-    public void lambda$runLinkRequest$43(BaseFragment baseFragment) {
+    public void lambda$runLinkRequest$45(BaseFragment baseFragment) {
         this.actionBarLayout.presentFragment(baseFragment);
     }
 
@@ -10143,107 +10209,29 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onActivityResult$62() {
+    public /* synthetic */ void lambda$onActivityResult$64() {
         GroupCallPip.clearForce();
         GroupCallPip.updateVisibility(this);
     }
 
     public void onRequestPermissionsResult(int i, String[] strArr, int[] iArr) {
         super.onRequestPermissionsResult(i, strArr, iArr);
-        if (iArr == null) {
-            iArr = new int[0];
-        }
-        if (strArr == null) {
-            strArr = new String[0];
-        }
-        boolean z = iArr.length > 0 && iArr[0] == 0;
-        if (i == 104) {
-            if (z) {
-                GroupCallActivity groupCallActivity = GroupCallActivity.groupCallInstance;
-                if (groupCallActivity != null) {
-                    groupCallActivity.enableCamera();
+        if (checkPermissionsResult(i, strArr, iArr)) {
+            if (this.actionBarLayout.fragmentsStack.size() != 0) {
+                ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;
+                arrayList.get(arrayList.size() - 1).onRequestPermissionsResultFragment(i, strArr, iArr);
+            }
+            if (AndroidUtilities.isTablet()) {
+                if (this.rightActionBarLayout.fragmentsStack.size() != 0) {
+                    ArrayList<BaseFragment> arrayList2 = this.rightActionBarLayout.fragmentsStack;
+                    arrayList2.get(arrayList2.size() - 1).onRequestPermissionsResultFragment(i, strArr, iArr);
                 }
-            } else {
-                showPermissionErrorAlert(LocaleController.getString("VoipNeedCameraPermission", NUM));
-            }
-        } else if (i == 4) {
-            if (!z) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionStorage", NUM));
-            } else {
-                ImageLoader.getInstance().checkMediaPaths();
-            }
-        } else if (i == 5) {
-            if (!z) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionContacts", NUM));
-                return;
-            }
-            ContactsController.getInstance(this.currentAccount).forceImportContacts();
-        } else if (i == 3) {
-            int min = Math.min(strArr.length, iArr.length);
-            boolean z2 = true;
-            boolean z3 = true;
-            for (int i2 = 0; i2 < min; i2++) {
-                if ("android.permission.RECORD_AUDIO".equals(strArr[i2])) {
-                    z2 = iArr[i2] == 0;
-                } else if ("android.permission.CAMERA".equals(strArr[i2])) {
-                    z3 = iArr[i2] == 0;
+                if (this.layersActionBarLayout.fragmentsStack.size() != 0) {
+                    ArrayList<BaseFragment> arrayList3 = this.layersActionBarLayout.fragmentsStack;
+                    arrayList3.get(arrayList3.size() - 1).onRequestPermissionsResultFragment(i, strArr, iArr);
                 }
             }
-            if (!z2) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionNoAudio", NUM));
-            } else if (!z3) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionNoCamera", NUM));
-            } else if (SharedConfig.inappCamera) {
-                CameraController.getInstance().initCamera((Runnable) null);
-                return;
-            } else {
-                return;
-            }
-        } else if (i == 18 || i == 19 || i == 20 || i == 22) {
-            if (!z) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionNoCamera", NUM));
-            }
-        } else if (i == 2) {
-            if (z) {
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.locationPermissionGranted, new Object[0]);
-            } else {
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.locationPermissionDenied, new Object[0]);
-            }
-        }
-        if (this.actionBarLayout.fragmentsStack.size() != 0) {
-            ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;
-            arrayList.get(arrayList.size() - 1).onRequestPermissionsResultFragment(i, strArr, iArr);
-        }
-        if (AndroidUtilities.isTablet()) {
-            if (this.rightActionBarLayout.fragmentsStack.size() != 0) {
-                ArrayList<BaseFragment> arrayList2 = this.rightActionBarLayout.fragmentsStack;
-                arrayList2.get(arrayList2.size() - 1).onRequestPermissionsResultFragment(i, strArr, iArr);
-            }
-            if (this.layersActionBarLayout.fragmentsStack.size() != 0) {
-                ArrayList<BaseFragment> arrayList3 = this.layersActionBarLayout.fragmentsStack;
-                arrayList3.get(arrayList3.size() - 1).onRequestPermissionsResultFragment(i, strArr, iArr);
-            }
-        }
-        VoIPFragment.onRequestPermissionsResult(i, strArr, iArr);
-    }
-
-    private void showPermissionErrorAlert(String str) {
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) this);
-        builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setMessage(str);
-        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new LaunchActivity$$ExternalSyntheticLambda8(this));
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-        builder.show();
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showPermissionErrorAlert$63(DialogInterface dialogInterface, int i) {
-        try {
-            Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
-            intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
-            startActivity(intent);
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            VoIPFragment.onRequestPermissionsResult(i, strArr, iArr);
         }
     }
 
@@ -10273,7 +10261,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$onPause$64(int i) {
+    public static /* synthetic */ void lambda$onPause$65(int i) {
         ApplicationLoader.mainInterfacePausedStageQueue = true;
         ApplicationLoader.mainInterfacePausedStageQueueTime = 0;
         if (VoIPService.getSharedInstance() == null) {
@@ -10373,7 +10361,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         MediaController.getInstance().setFeedbackView(this.actionBarLayout, true);
         ApplicationLoader.mainInterfacePaused = false;
         showLanguageAlert(false);
-        Utilities.stageQueue.postRunnable(LaunchActivity$$ExternalSyntheticLambda53.INSTANCE);
+        Utilities.stageQueue.postRunnable(LaunchActivity$$ExternalSyntheticLambda54.INSTANCE);
         checkFreeDiscSpace();
         MediaController.checkGallery();
         onPasscodeResume();
@@ -10419,7 +10407,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$onResume$65() {
+    public static /* synthetic */ void lambda$onResume$66() {
         ApplicationLoader.mainInterfacePausedStageQueue = false;
         ApplicationLoader.mainInterfacePausedStageQueueTime = System.currentTimeMillis();
     }
@@ -10481,32 +10469,34 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v86, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v78, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v47, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v91, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v98, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v111, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v113, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v52, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v95, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v12, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v103, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v116, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v118, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v53, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v28, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v93, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v31, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v12, resolved type: boolean} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v139, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v148, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v162, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v164, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v181, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v14, resolved type: boolean} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v144, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v153, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v167, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v169, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v186, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v191, resolved type: org.telegram.tgnet.TLRPC$TL_help_termsOfService} */
     /* JADX WARNING: type inference failed for: r4v0 */
     /* JADX WARNING: type inference failed for: r4v2 */
     /* JADX WARNING: type inference failed for: r4v6, types: [int] */
     /* JADX WARNING: type inference failed for: r4v13 */
-    /* JADX WARNING: type inference failed for: r4v25 */
+    /* JADX WARNING: type inference failed for: r4v15 */
+    /* JADX WARNING: type inference failed for: r4v27 */
     /* JADX WARNING: Code restructure failed: missing block: B:99:0x027c, code lost:
         if (((org.telegram.ui.ProfileActivity) r1.get(r1.size() - 1)).isSettings() == false) goto L_0x0280;
      */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:175:0x0542  */
-    /* JADX WARNING: Removed duplicated region for block: B:358:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:183:0x0558  */
+    /* JADX WARNING: Removed duplicated region for block: B:366:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:98:0x026b  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void didReceivedNotification(int r17, int r18, java.lang.Object... r19) {
@@ -10519,23 +10509,23 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int r3 = org.telegram.messenger.NotificationCenter.appDidLogout
             if (r0 != r3) goto L_0x0011
             r16.switchToAvailableAccountOrLogout()
-            goto L_0x087d
+            goto L_0x0893
         L_0x0011:
             int r3 = org.telegram.messenger.NotificationCenter.closeOtherAppActivities
             r4 = 0
             if (r0 != r3) goto L_0x0022
             r0 = r2[r4]
-            if (r0 == r8) goto L_0x087d
+            if (r0 == r8) goto L_0x0893
             r16.onFinish()
             r16.finish()
-            goto L_0x087d
+            goto L_0x0893
         L_0x0022:
             int r3 = org.telegram.messenger.NotificationCenter.didUpdateConnectionState
             if (r0 != r3) goto L_0x0051
             org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r18)
             int r0 = r0.getConnectionState()
             int r2 = r8.currentConnectionState
-            if (r2 == r0) goto L_0x087d
+            if (r2 == r0) goto L_0x0893
             boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
             if (r2 == 0) goto L_0x004a
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
@@ -10548,22 +10538,22 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x004a:
             r8.currentConnectionState = r0
             r8.updateCurrentConnectionState(r1)
-            goto L_0x087d
+            goto L_0x0893
         L_0x0051:
             int r3 = org.telegram.messenger.NotificationCenter.mainUserInfoChanged
             if (r0 != r3) goto L_0x005c
             org.telegram.ui.Adapters.DrawerLayoutAdapter r0 = r8.drawerLayoutAdapter
             r0.notifyDataSetChanged()
-            goto L_0x087d
+            goto L_0x0893
         L_0x005c:
             int r3 = org.telegram.messenger.NotificationCenter.needShowAlert
             java.lang.String r6 = "Cancel"
             r7 = 5
-            r9 = 2131624302(0x7f0e016e, float:1.887578E38)
+            r9 = 2131624304(0x7f0e0170, float:1.8875784E38)
             java.lang.String r10 = "AppName"
             r11 = 4
             r12 = 3
-            r13 = 2131626776(0x7f0e0b18, float:1.8880798E38)
+            r13 = 2131626813(0x7f0e0b3d, float:1.8880873E38)
             java.lang.String r14 = "OK"
             r15 = 2
             r5 = 1
@@ -10594,7 +10584,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r4 == r15) goto L_0x00bf
             int r4 = r0.intValue()
             if (r4 == r12) goto L_0x00bf
-            r4 = 2131626458(0x7f0e09da, float:1.8880153E38)
+            r4 = 2131626495(0x7f0e09ff, float:1.8880228E38)
             java.lang.String r9 = "MoreInfo"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
             org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda3 r9 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda3
@@ -10603,7 +10593,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00bf:
             int r1 = r0.intValue()
             if (r1 != r7) goto L_0x00db
-            r0 = 2131626591(0x7f0e0a5f, float:1.8880423E38)
+            r0 = 2131626628(0x7f0e0a84, float:1.8880498E38)
             java.lang.String r1 = "NobodyLikesSpam3"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r3.setMessage(r0)
@@ -10615,7 +10605,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r1 = 0
             int r4 = r0.intValue()
             if (r4 != 0) goto L_0x00f7
-            r0 = 2131626589(0x7f0e0a5d, float:1.8880418E38)
+            r0 = 2131626626(0x7f0e0a82, float:1.8880494E38)
             java.lang.String r2 = "NobodyLikesSpam1"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r3.setMessage(r0)
@@ -10625,7 +10615,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00f7:
             int r4 = r0.intValue()
             if (r4 != r5) goto L_0x0111
-            r0 = 2131626590(0x7f0e0a5e, float:1.888042E38)
+            r0 = 2131626627(0x7f0e0a83, float:1.8880496E38)
             java.lang.String r2 = "NobodyLikesSpam2"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r3.setMessage(r0)
@@ -10643,14 +10633,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r1 = "AUTH_KEY_DROP_"
             boolean r0 = r0.startsWith(r1)
             if (r0 == 0) goto L_0x0147
-            r0 = 2131624697(0x7f0e02f9, float:1.8876581E38)
+            r0 = 2131624700(0x7f0e02fc, float:1.8876587E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
             r1 = 0
             r3.setPositiveButton(r0, r1)
-            r0 = 2131626222(0x7f0e08ee, float:1.8879674E38)
+            r0 = 2131626258(0x7f0e0912, float:1.8879747E38)
             java.lang.String r1 = "LogOut"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda9 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda9
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda8 r1 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda8
             r1.<init>(r8)
             r3.setNegativeButton(r0, r1)
             goto L_0x017d
@@ -10662,11 +10652,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0150:
             int r0 = r0.intValue()
             if (r0 != r12) goto L_0x017d
-            r0 = 2131627395(0x7f0e0d83, float:1.8882053E38)
+            r0 = 2131627451(0x7f0e0dbb, float:1.8882167E38)
             java.lang.String r1 = "Proxy"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r3.setTitle(r0)
-            r0 = 2131628351(0x7f0e113f, float:1.8883992E38)
+            r0 = 2131628424(0x7f0e1188, float:1.888414E38)
             java.lang.String r1 = "UseProxyTelegramError"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r3.setMessage(r0)
@@ -10679,7 +10669,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x017d:
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x087d
+            if (r0 != 0) goto L_0x0893
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack
             int r1 = r0.size()
             int r1 = r1 - r5
@@ -10687,7 +10677,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0
             org.telegram.ui.ActionBar.AlertDialog r1 = r3.create()
             r0.showDialog(r1)
-            goto L_0x087d
+            goto L_0x0893
         L_0x019b:
             return
         L_0x019c:
@@ -10702,19 +10692,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r4 = 0
             r2.setPositiveButton(r3, r4)
-            r3 = 2131627886(0x7f0e0f6e, float:1.888305E38)
+            r3 = 2131627955(0x7f0e0fb3, float:1.888319E38)
             java.lang.String r4 = "ShareYouLocationUnableManually"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda10 r4 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda10
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda9 r4 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda9
             r4.<init>(r8, r0, r1)
             r2.setNegativeButton(r3, r4)
-            r0 = 2131627885(0x7f0e0f6d, float:1.8883047E38)
+            r0 = 2131627954(0x7f0e0fb2, float:1.8883187E38)
             java.lang.String r1 = "ShareYouLocationUnable"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r2.setMessage(r0)
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x087d
+            if (r0 != 0) goto L_0x0893
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack
             int r1 = r0.size()
             int r1 = r1 - r5
@@ -10722,7 +10712,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0
             org.telegram.ui.ActionBar.AlertDialog r1 = r2.create()
             r0.showDialog(r1)
-            goto L_0x087d
+            goto L_0x0893
         L_0x01f3:
             int r3 = org.telegram.messenger.NotificationCenter.didSetNewWallpapper
             if (r0 != r3) goto L_0x0215
@@ -10733,11 +10723,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0.invalidate()
         L_0x0204:
             org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r8.backgroundTablet
-            if (r0 == 0) goto L_0x087d
+            if (r0 == 0) goto L_0x0893
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper()
             boolean r2 = org.telegram.ui.ActionBar.Theme.isWallpaperMotion()
             r0.setBackgroundImage(r1, r2)
-            goto L_0x087d
+            goto L_0x0893
         L_0x0215:
             int r3 = org.telegram.messenger.NotificationCenter.didSetPasscode
             if (r0 != r3) goto L_0x024b
@@ -10749,21 +10739,21 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r0 != 0) goto L_0x0236
             android.view.Window r0 = r16.getWindow()     // Catch:{ Exception -> 0x0230 }
             r0.setFlags(r1, r1)     // Catch:{ Exception -> 0x0230 }
-            goto L_0x087d
+            goto L_0x0893
         L_0x0230:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x087d
+            goto L_0x0893
         L_0x0236:
             boolean r0 = org.telegram.messenger.AndroidUtilities.hasFlagSecureFragment()
-            if (r0 != 0) goto L_0x087d
+            if (r0 != 0) goto L_0x0893
             android.view.Window r0 = r16.getWindow()     // Catch:{ Exception -> 0x0245 }
             r0.clearFlags(r1)     // Catch:{ Exception -> 0x0245 }
-            goto L_0x087d
+            goto L_0x0893
         L_0x0245:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x087d
+            goto L_0x0893
         L_0x024b:
             int r3 = org.telegram.messenger.NotificationCenter.reloadInterface
             if (r0 != r3) goto L_0x0285
@@ -10794,12 +10784,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r4 = r0
         L_0x0280:
             r8.rebuildAllFragments(r4)
-            goto L_0x087d
+            goto L_0x0893
         L_0x0285:
             int r3 = org.telegram.messenger.NotificationCenter.suggestedLangpack
             if (r0 != r3) goto L_0x028e
             r8.showLanguageAlert(r4)
-            goto L_0x087d
+            goto L_0x0893
         L_0x028e:
             int r3 = org.telegram.messenger.NotificationCenter.openArticle
             if (r0 != r3) goto L_0x02c0
@@ -10821,17 +10811,17 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2 = r2[r5]
             java.lang.String r2 = (java.lang.String) r2
             r0.open(r1, r2)
-            goto L_0x087d
+            goto L_0x0893
         L_0x02c0:
             int r3 = org.telegram.messenger.NotificationCenter.hasNewContactsToImport
-            if (r0 != r3) goto L_0x0348
+            if (r0 != r3) goto L_0x0357
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.actionBarLayout
-            if (r0 == 0) goto L_0x0347
+            if (r0 == 0) goto L_0x0356
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x02d1
-            goto L_0x0347
-        L_0x02d1:
+            if (r0 == 0) goto L_0x02d2
+            goto L_0x0356
+        L_0x02d2:
             r0 = r2[r4]
             java.lang.Integer r0 = (java.lang.Integer) r0
             r0.intValue()
@@ -10851,11 +10841,16 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r5 = (org.telegram.ui.ActionBar.BaseFragment) r5
             org.telegram.ui.ActionBar.AlertDialog$Builder r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r7.<init>((android.content.Context) r8)
-            r9 = 2131628318(0x7f0e111e, float:1.8883925E38)
+            r9 = 2131558484(0x7f0d0054, float:1.8742285E38)
+            r10 = 72
+            java.lang.String r11 = "dialogTopBackground"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r7.setTopAnimation(r9, r10, r4, r11)
+            r9 = 2131628391(0x7f0e1167, float:1.8884073E38)
             java.lang.String r10 = "UpdateContactsTitle"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r7.setTitle(r9)
-            r9 = 2131628317(0x7f0e111d, float:1.8883923E38)
+            r9 = 2131628390(0x7f0e1166, float:1.8884071E38)
             java.lang.String r10 = "UpdateContactsMessage"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r7.setMessage(r9)
@@ -10863,30 +10858,30 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda5 r10 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda5
             r10.<init>(r1, r0, r3, r2)
             r7.setPositiveButton(r9, r10)
-            r9 = 2131624697(0x7f0e02f9, float:1.8876581E38)
+            r9 = 2131624700(0x7f0e02fc, float:1.8876587E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r9)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda6 r9 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda6
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda4 r9 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda4
             r9.<init>(r1, r0, r3, r2)
             r7.setNegativeButton(r6, r9)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda4 r6 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda4
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda6 r6 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda6
             r6.<init>(r1, r0, r3, r2)
             r7.setOnBackButtonListener(r6)
             org.telegram.ui.ActionBar.AlertDialog r0 = r7.create()
             r5.showDialog(r0)
             r0.setCanceledOnTouchOutside(r4)
-            goto L_0x087d
-        L_0x0347:
+            goto L_0x0893
+        L_0x0356:
             return
-        L_0x0348:
+        L_0x0357:
             int r3 = org.telegram.messenger.NotificationCenter.didSetNewTheme
             r6 = 21
-            if (r0 != r3) goto L_0x03b7
+            if (r0 != r3) goto L_0x03cd
             r0 = r2[r4]
             java.lang.Boolean r0 = (java.lang.Boolean) r0
             boolean r0 = r0.booleanValue()
-            if (r0 != 0) goto L_0x039a
+            if (r0 != 0) goto L_0x03a9
             org.telegram.ui.Components.RecyclerListView r0 = r8.sideMenu
-            if (r0 == 0) goto L_0x0382
+            if (r0 == 0) goto L_0x0391
             java.lang.String r1 = "chats_menuBackground"
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setBackgroundColor(r3)
@@ -10900,218 +10895,228 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.Components.RecyclerListView r0 = r8.sideMenu
             androidx.recyclerview.widget.RecyclerView$Adapter r0 = r0.getAdapter()
             r0.notifyDataSetChanged()
-        L_0x0382:
+        L_0x0391:
             int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r6) goto L_0x039a
-            android.app.ActivityManager$TaskDescription r0 = new android.app.ActivityManager$TaskDescription     // Catch:{ Exception -> 0x0399 }
+            if (r0 < r6) goto L_0x03a9
+            android.app.ActivityManager$TaskDescription r0 = new android.app.ActivityManager$TaskDescription     // Catch:{ Exception -> 0x03a8 }
             java.lang.String r1 = "actionBarDefault"
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)     // Catch:{ Exception -> 0x0399 }
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)     // Catch:{ Exception -> 0x03a8 }
             r3 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             r1 = r1 | r3
             r3 = 0
-            r0.<init>(r3, r3, r1)     // Catch:{ Exception -> 0x0399 }
-            r8.setTaskDescription(r0)     // Catch:{ Exception -> 0x0399 }
-            goto L_0x039a
-        L_0x0399:
-        L_0x039a:
+            r0.<init>(r3, r3, r1)     // Catch:{ Exception -> 0x03a8 }
+            r8.setTaskDescription(r0)     // Catch:{ Exception -> 0x03a8 }
+            goto L_0x03a9
+        L_0x03a8:
+        L_0x03a9:
             org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r8.drawerLayoutContainer
             java.lang.String r1 = "windowBackgroundWhite"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setBehindKeyboardColor(r1)
             int r0 = r2.length
-            if (r0 <= r5) goto L_0x03b1
+            if (r0 <= r5) goto L_0x03c0
             r0 = r2[r5]
             java.lang.Boolean r0 = (java.lang.Boolean) r0
             boolean r0 = r0.booleanValue()
-            goto L_0x03b2
-        L_0x03b1:
+            goto L_0x03c1
+        L_0x03c0:
             r0 = 1
-        L_0x03b2:
-            r8.checkSystemBarColors(r5, r0)
-            goto L_0x087d
-        L_0x03b7:
+        L_0x03c1:
+            if (r0 == 0) goto L_0x03c8
+            boolean r0 = r8.isNavigationBarColorFrozen
+            if (r0 != 0) goto L_0x03c8
+            r4 = 1
+        L_0x03c8:
+            r8.checkSystemBarColors(r5, r4)
+            goto L_0x0893
+        L_0x03cd:
             int r3 = org.telegram.messenger.NotificationCenter.needSetDayNightTheme
-            if (r0 != r3) goto L_0x054e
+            if (r0 != r3) goto L_0x0564
             int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r6) goto L_0x0520
+            if (r0 < r6) goto L_0x0536
             r0 = r2[r15]
-            if (r0 == 0) goto L_0x0520
+            if (r0 == 0) goto L_0x0536
             android.widget.ImageView r0 = r8.themeSwitchImageView
             int r0 = r0.getVisibility()
-            if (r0 != 0) goto L_0x03cc
+            if (r0 != 0) goto L_0x03e2
             return
-        L_0x03cc:
-            r0 = r2[r15]     // Catch:{ all -> 0x0507 }
-            int[] r0 = (int[]) r0     // Catch:{ all -> 0x0507 }
-            r1 = r2[r11]     // Catch:{ all -> 0x0507 }
-            java.lang.Boolean r1 = (java.lang.Boolean) r1     // Catch:{ all -> 0x0507 }
-            boolean r1 = r1.booleanValue()     // Catch:{ all -> 0x0507 }
-            r3 = r2[r7]     // Catch:{ all -> 0x0507 }
-            org.telegram.ui.Components.RLottieImageView r3 = (org.telegram.ui.Components.RLottieImageView) r3     // Catch:{ all -> 0x0507 }
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r6 = r8.drawerLayoutContainer     // Catch:{ all -> 0x0507 }
-            int r6 = r6.getMeasuredWidth()     // Catch:{ all -> 0x0507 }
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r7 = r8.drawerLayoutContainer     // Catch:{ all -> 0x0507 }
-            int r7 = r7.getMeasuredHeight()     // Catch:{ all -> 0x0507 }
-            if (r1 != 0) goto L_0x03ed
-            r3.setVisibility(r11)     // Catch:{ all -> 0x0507 }
-        L_0x03ed:
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r9 = r8.drawerLayoutContainer     // Catch:{ all -> 0x0507 }
-            int r9 = r9.getMeasuredWidth()     // Catch:{ all -> 0x0507 }
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r10 = r8.drawerLayoutContainer     // Catch:{ all -> 0x0507 }
-            int r10 = r10.getMeasuredHeight()     // Catch:{ all -> 0x0507 }
-            android.graphics.Bitmap$Config r11 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0507 }
-            android.graphics.Bitmap r9 = android.graphics.Bitmap.createBitmap(r9, r10, r11)     // Catch:{ all -> 0x0507 }
-            android.graphics.Canvas r10 = new android.graphics.Canvas     // Catch:{ all -> 0x0507 }
-            r10.<init>(r9)     // Catch:{ all -> 0x0507 }
-            java.util.HashMap r11 = new java.util.HashMap     // Catch:{ all -> 0x0507 }
-            r11.<init>()     // Catch:{ all -> 0x0507 }
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r11 = r8.drawerLayoutContainer     // Catch:{ all -> 0x0507 }
-            r8.invalidateCachedViews(r11)     // Catch:{ all -> 0x0507 }
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r11 = r8.drawerLayoutContainer     // Catch:{ all -> 0x0507 }
-            r11.draw(r10)     // Catch:{ all -> 0x0507 }
-            android.widget.FrameLayout r10 = r8.frameLayout     // Catch:{ all -> 0x0507 }
-            android.widget.ImageView r11 = r8.themeSwitchImageView     // Catch:{ all -> 0x0507 }
-            r10.removeView(r11)     // Catch:{ all -> 0x0507 }
+        L_0x03e2:
+            r0 = r2[r15]     // Catch:{ all -> 0x051d }
+            int[] r0 = (int[]) r0     // Catch:{ all -> 0x051d }
+            r1 = r2[r11]     // Catch:{ all -> 0x051d }
+            java.lang.Boolean r1 = (java.lang.Boolean) r1     // Catch:{ all -> 0x051d }
+            boolean r1 = r1.booleanValue()     // Catch:{ all -> 0x051d }
+            r3 = r2[r7]     // Catch:{ all -> 0x051d }
+            org.telegram.ui.Components.RLottieImageView r3 = (org.telegram.ui.Components.RLottieImageView) r3     // Catch:{ all -> 0x051d }
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r6 = r8.drawerLayoutContainer     // Catch:{ all -> 0x051d }
+            int r6 = r6.getMeasuredWidth()     // Catch:{ all -> 0x051d }
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r7 = r8.drawerLayoutContainer     // Catch:{ all -> 0x051d }
+            int r7 = r7.getMeasuredHeight()     // Catch:{ all -> 0x051d }
+            if (r1 != 0) goto L_0x0403
+            r3.setVisibility(r11)     // Catch:{ all -> 0x051d }
+        L_0x0403:
+            r8.isNavigationBarColorFrozen = r5     // Catch:{ all -> 0x051d }
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r9 = r8.drawerLayoutContainer     // Catch:{ all -> 0x051d }
+            r8.invalidateCachedViews(r9)     // Catch:{ all -> 0x051d }
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r9 = r8.drawerLayoutContainer     // Catch:{ all -> 0x051d }
+            android.graphics.Bitmap r9 = org.telegram.messenger.AndroidUtilities.snapshotView(r9)     // Catch:{ all -> 0x051d }
+            android.widget.FrameLayout r10 = r8.frameLayout     // Catch:{ all -> 0x051d }
+            android.widget.ImageView r11 = r8.themeSwitchImageView     // Catch:{ all -> 0x051d }
+            r10.removeView(r11)     // Catch:{ all -> 0x051d }
             r10 = -1082130432(0xffffffffbvar_, float:-1.0)
             r11 = -1
-            if (r1 == 0) goto L_0x0432
-            android.widget.FrameLayout r13 = r8.frameLayout     // Catch:{ all -> 0x0507 }
-            android.widget.ImageView r14 = r8.themeSwitchImageView     // Catch:{ all -> 0x0507 }
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r10)     // Catch:{ all -> 0x0507 }
-            r13.addView(r14, r4, r10)     // Catch:{ all -> 0x0507 }
-            android.view.View r10 = r8.themeSwitchSunView     // Catch:{ all -> 0x0507 }
+            if (r1 == 0) goto L_0x042f
+            android.widget.FrameLayout r13 = r8.frameLayout     // Catch:{ all -> 0x051d }
+            android.widget.ImageView r14 = r8.themeSwitchImageView     // Catch:{ all -> 0x051d }
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r10)     // Catch:{ all -> 0x051d }
+            r13.addView(r14, r4, r10)     // Catch:{ all -> 0x051d }
+            android.view.View r10 = r8.themeSwitchSunView     // Catch:{ all -> 0x051d }
             r11 = 8
-            r10.setVisibility(r11)     // Catch:{ all -> 0x0507 }
-            goto L_0x0463
-        L_0x0432:
-            android.widget.FrameLayout r13 = r8.frameLayout     // Catch:{ all -> 0x0507 }
-            android.widget.ImageView r14 = r8.themeSwitchImageView     // Catch:{ all -> 0x0507 }
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r10)     // Catch:{ all -> 0x0507 }
-            r13.addView(r14, r5, r10)     // Catch:{ all -> 0x0507 }
-            android.view.View r10 = r8.themeSwitchSunView     // Catch:{ all -> 0x0507 }
-            r11 = r0[r4]     // Catch:{ all -> 0x0507 }
+            r10.setVisibility(r11)     // Catch:{ all -> 0x051d }
+            goto L_0x0460
+        L_0x042f:
+            android.widget.FrameLayout r13 = r8.frameLayout     // Catch:{ all -> 0x051d }
+            android.widget.ImageView r14 = r8.themeSwitchImageView     // Catch:{ all -> 0x051d }
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r10)     // Catch:{ all -> 0x051d }
+            r13.addView(r14, r5, r10)     // Catch:{ all -> 0x051d }
+            android.view.View r10 = r8.themeSwitchSunView     // Catch:{ all -> 0x051d }
+            r11 = r0[r4]     // Catch:{ all -> 0x051d }
             r13 = 1096810496(0x41600000, float:14.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r13)     // Catch:{ all -> 0x0507 }
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r13)     // Catch:{ all -> 0x051d }
             int r11 = r11 - r14
-            float r11 = (float) r11     // Catch:{ all -> 0x0507 }
-            r10.setTranslationX(r11)     // Catch:{ all -> 0x0507 }
-            android.view.View r10 = r8.themeSwitchSunView     // Catch:{ all -> 0x0507 }
-            r11 = r0[r5]     // Catch:{ all -> 0x0507 }
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)     // Catch:{ all -> 0x0507 }
+            float r11 = (float) r11     // Catch:{ all -> 0x051d }
+            r10.setTranslationX(r11)     // Catch:{ all -> 0x051d }
+            android.view.View r10 = r8.themeSwitchSunView     // Catch:{ all -> 0x051d }
+            r11 = r0[r5]     // Catch:{ all -> 0x051d }
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)     // Catch:{ all -> 0x051d }
             int r11 = r11 - r13
-            float r11 = (float) r11     // Catch:{ all -> 0x0507 }
-            r10.setTranslationY(r11)     // Catch:{ all -> 0x0507 }
-            android.view.View r10 = r8.themeSwitchSunView     // Catch:{ all -> 0x0507 }
-            r10.setVisibility(r4)     // Catch:{ all -> 0x0507 }
-            android.view.View r10 = r8.themeSwitchSunView     // Catch:{ all -> 0x0507 }
-            r10.invalidate()     // Catch:{ all -> 0x0507 }
-        L_0x0463:
-            android.widget.ImageView r10 = r8.themeSwitchImageView     // Catch:{ all -> 0x0507 }
-            r10.setImageBitmap(r9)     // Catch:{ all -> 0x0507 }
-            android.widget.ImageView r9 = r8.themeSwitchImageView     // Catch:{ all -> 0x0507 }
-            r9.setVisibility(r4)     // Catch:{ all -> 0x0507 }
-            org.telegram.ui.Components.RLottieDrawable r9 = r3.getAnimatedDrawable()     // Catch:{ all -> 0x0507 }
-            r8.themeSwitchSunDrawable = r9     // Catch:{ all -> 0x0507 }
-            r9 = r0[r4]     // Catch:{ all -> 0x0507 }
+            float r11 = (float) r11     // Catch:{ all -> 0x051d }
+            r10.setTranslationY(r11)     // Catch:{ all -> 0x051d }
+            android.view.View r10 = r8.themeSwitchSunView     // Catch:{ all -> 0x051d }
+            r10.setVisibility(r4)     // Catch:{ all -> 0x051d }
+            android.view.View r10 = r8.themeSwitchSunView     // Catch:{ all -> 0x051d }
+            r10.invalidate()     // Catch:{ all -> 0x051d }
+        L_0x0460:
+            android.widget.ImageView r10 = r8.themeSwitchImageView     // Catch:{ all -> 0x051d }
+            r10.setImageBitmap(r9)     // Catch:{ all -> 0x051d }
+            android.widget.ImageView r9 = r8.themeSwitchImageView     // Catch:{ all -> 0x051d }
+            r9.setVisibility(r4)     // Catch:{ all -> 0x051d }
+            org.telegram.ui.Components.RLottieDrawable r9 = r3.getAnimatedDrawable()     // Catch:{ all -> 0x051d }
+            r8.themeSwitchSunDrawable = r9     // Catch:{ all -> 0x051d }
+            r9 = r0[r4]     // Catch:{ all -> 0x051d }
             int r9 = r6 - r9
-            r10 = r0[r4]     // Catch:{ all -> 0x0507 }
+            r10 = r0[r4]     // Catch:{ all -> 0x051d }
             int r10 = r6 - r10
             int r9 = r9 * r10
-            r10 = r0[r5]     // Catch:{ all -> 0x0507 }
+            r10 = r0[r5]     // Catch:{ all -> 0x051d }
             int r10 = r7 - r10
-            r11 = r0[r5]     // Catch:{ all -> 0x0507 }
+            r11 = r0[r5]     // Catch:{ all -> 0x051d }
             int r11 = r7 - r11
             int r10 = r10 * r11
             int r9 = r9 + r10
-            double r9 = (double) r9     // Catch:{ all -> 0x0507 }
-            double r9 = java.lang.Math.sqrt(r9)     // Catch:{ all -> 0x0507 }
-            r11 = r0[r4]     // Catch:{ all -> 0x0507 }
-            r13 = r0[r4]     // Catch:{ all -> 0x0507 }
+            double r9 = (double) r9     // Catch:{ all -> 0x051d }
+            double r9 = java.lang.Math.sqrt(r9)     // Catch:{ all -> 0x051d }
+            r11 = r0[r4]     // Catch:{ all -> 0x051d }
+            r13 = r0[r4]     // Catch:{ all -> 0x051d }
             int r11 = r11 * r13
-            r13 = r0[r5]     // Catch:{ all -> 0x0507 }
+            r13 = r0[r5]     // Catch:{ all -> 0x051d }
             int r13 = r7 - r13
-            r14 = r0[r5]     // Catch:{ all -> 0x0507 }
-            int r7 = r7 - r14
-            int r13 = r13 * r7
+            r14 = r0[r5]     // Catch:{ all -> 0x051d }
+            int r14 = r7 - r14
+            int r13 = r13 * r14
             int r11 = r11 + r13
-            double r13 = (double) r11     // Catch:{ all -> 0x0507 }
-            double r13 = java.lang.Math.sqrt(r13)     // Catch:{ all -> 0x0507 }
-            double r9 = java.lang.Math.max(r9, r13)     // Catch:{ all -> 0x0507 }
-            float r7 = (float) r9     // Catch:{ all -> 0x0507 }
-            r9 = r0[r4]     // Catch:{ all -> 0x0507 }
-            int r9 = r6 - r9
-            r10 = r0[r4]     // Catch:{ all -> 0x0507 }
-            int r6 = r6 - r10
-            int r9 = r9 * r6
-            r6 = r0[r5]     // Catch:{ all -> 0x0507 }
-            r10 = r0[r5]     // Catch:{ all -> 0x0507 }
-            int r6 = r6 * r10
-            int r9 = r9 + r6
-            double r9 = (double) r9     // Catch:{ all -> 0x0507 }
-            double r9 = java.lang.Math.sqrt(r9)     // Catch:{ all -> 0x0507 }
-            r6 = r0[r4]     // Catch:{ all -> 0x0507 }
-            r11 = r0[r4]     // Catch:{ all -> 0x0507 }
+            double r13 = (double) r11     // Catch:{ all -> 0x051d }
+            double r13 = java.lang.Math.sqrt(r13)     // Catch:{ all -> 0x051d }
+            double r9 = java.lang.Math.max(r9, r13)     // Catch:{ all -> 0x051d }
+            float r9 = (float) r9     // Catch:{ all -> 0x051d }
+            r10 = r0[r4]     // Catch:{ all -> 0x051d }
+            int r10 = r6 - r10
+            r11 = r0[r4]     // Catch:{ all -> 0x051d }
+            int r6 = r6 - r11
+            int r10 = r10 * r6
+            r6 = r0[r5]     // Catch:{ all -> 0x051d }
+            r11 = r0[r5]     // Catch:{ all -> 0x051d }
             int r6 = r6 * r11
-            r11 = r0[r5]     // Catch:{ all -> 0x0507 }
-            r13 = r0[r5]     // Catch:{ all -> 0x0507 }
-            int r11 = r11 * r13
-            int r6 = r6 + r11
-            double r13 = (double) r6     // Catch:{ all -> 0x0507 }
-            double r13 = java.lang.Math.sqrt(r13)     // Catch:{ all -> 0x0507 }
-            double r9 = java.lang.Math.max(r9, r13)     // Catch:{ all -> 0x0507 }
-            float r6 = (float) r9     // Catch:{ all -> 0x0507 }
-            float r6 = java.lang.Math.max(r7, r6)     // Catch:{ all -> 0x0507 }
-            if (r1 == 0) goto L_0x04dc
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r7 = r8.drawerLayoutContainer     // Catch:{ all -> 0x0507 }
-            goto L_0x04de
+            int r10 = r10 + r6
+            double r10 = (double) r10     // Catch:{ all -> 0x051d }
+            double r10 = java.lang.Math.sqrt(r10)     // Catch:{ all -> 0x051d }
+            r6 = r0[r4]     // Catch:{ all -> 0x051d }
+            r13 = r0[r4]     // Catch:{ all -> 0x051d }
+            int r6 = r6 * r13
+            r13 = r0[r5]     // Catch:{ all -> 0x051d }
+            r14 = r0[r5]     // Catch:{ all -> 0x051d }
+            int r13 = r13 * r14
+            int r6 = r6 + r13
+            double r13 = (double) r6     // Catch:{ all -> 0x051d }
+            double r13 = java.lang.Math.sqrt(r13)     // Catch:{ all -> 0x051d }
+            double r10 = java.lang.Math.max(r10, r13)     // Catch:{ all -> 0x051d }
+            float r6 = (float) r10     // Catch:{ all -> 0x051d }
+            float r6 = java.lang.Math.max(r9, r6)     // Catch:{ all -> 0x051d }
+            if (r1 == 0) goto L_0x04da
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r9 = r8.drawerLayoutContainer     // Catch:{ all -> 0x051d }
+            goto L_0x04dc
+        L_0x04da:
+            android.widget.ImageView r9 = r8.themeSwitchImageView     // Catch:{ all -> 0x051d }
         L_0x04dc:
-            android.widget.ImageView r7 = r8.themeSwitchImageView     // Catch:{ all -> 0x0507 }
-        L_0x04de:
-            r9 = r0[r4]     // Catch:{ all -> 0x0507 }
-            r0 = r0[r5]     // Catch:{ all -> 0x0507 }
-            r10 = 0
-            if (r1 == 0) goto L_0x04e7
-            r11 = 0
-            goto L_0x04e8
-        L_0x04e7:
-            r11 = r6
-        L_0x04e8:
-            if (r1 == 0) goto L_0x04eb
-            goto L_0x04ec
-        L_0x04eb:
+            r10 = r0[r4]     // Catch:{ all -> 0x051d }
+            r11 = r0[r5]     // Catch:{ all -> 0x051d }
+            r13 = 0
+            if (r1 == 0) goto L_0x04e5
+            r14 = 0
+            goto L_0x04e6
+        L_0x04e5:
+            r14 = r6
+        L_0x04e6:
+            if (r1 == 0) goto L_0x04e9
+            goto L_0x04ea
+        L_0x04e9:
             r6 = 0
-        L_0x04ec:
-            android.animation.Animator r0 = android.view.ViewAnimationUtils.createCircularReveal(r7, r9, r0, r11, r6)     // Catch:{ all -> 0x0507 }
-            r6 = 400(0x190, double:1.976E-321)
-            r0.setDuration(r6)     // Catch:{ all -> 0x0507 }
-            android.view.animation.Interpolator r6 = org.telegram.ui.Components.Easings.easeInOutQuad     // Catch:{ all -> 0x0507 }
-            r0.setInterpolator(r6)     // Catch:{ all -> 0x0507 }
-            org.telegram.ui.LaunchActivity$16 r6 = new org.telegram.ui.LaunchActivity$16     // Catch:{ all -> 0x0507 }
-            r6.<init>(r1, r3)     // Catch:{ all -> 0x0507 }
-            r0.addListener(r6)     // Catch:{ all -> 0x0507 }
-            r0.start()     // Catch:{ all -> 0x0507 }
+        L_0x04ea:
+            android.animation.Animator r6 = android.view.ViewAnimationUtils.createCircularReveal(r9, r10, r11, r14, r6)     // Catch:{ all -> 0x051d }
+            r9 = 400(0x190, double:1.976E-321)
+            r6.setDuration(r9)     // Catch:{ all -> 0x051d }
+            android.view.animation.Interpolator r9 = org.telegram.ui.Components.Easings.easeInOutQuad     // Catch:{ all -> 0x051d }
+            r6.setInterpolator(r9)     // Catch:{ all -> 0x051d }
+            org.telegram.ui.LaunchActivity$17 r9 = new org.telegram.ui.LaunchActivity$17     // Catch:{ all -> 0x051d }
+            r9.<init>(r1, r3)     // Catch:{ all -> 0x051d }
+            r6.addListener(r9)     // Catch:{ all -> 0x051d }
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda29 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda29     // Catch:{ all -> 0x051d }
+            r3.<init>(r8)     // Catch:{ all -> 0x051d }
+            if (r1 == 0) goto L_0x0513
+            r0 = r0[r5]     // Catch:{ all -> 0x051d }
+            int r7 = r7 - r0
+            r0 = 1074790400(0x40100000, float:2.25)
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)     // Catch:{ all -> 0x051d }
+            int r7 = r7 / r0
+            long r0 = (long) r7     // Catch:{ all -> 0x051d }
+            goto L_0x0515
+        L_0x0513:
+            r0 = 50
+        L_0x0515:
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r3, r0)     // Catch:{ all -> 0x051d }
+            r6.start()     // Catch:{ all -> 0x051d }
             r0 = 1
-            goto L_0x0523
-        L_0x0507:
+            goto L_0x0539
+        L_0x051d:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            android.widget.ImageView r0 = r8.themeSwitchImageView     // Catch:{ Exception -> 0x051b }
+            android.widget.ImageView r0 = r8.themeSwitchImageView     // Catch:{ Exception -> 0x0531 }
             r1 = 0
-            r0.setImageDrawable(r1)     // Catch:{ Exception -> 0x051b }
-            android.widget.FrameLayout r0 = r8.frameLayout     // Catch:{ Exception -> 0x051b }
-            android.widget.ImageView r1 = r8.themeSwitchImageView     // Catch:{ Exception -> 0x051b }
-            r0.removeView(r1)     // Catch:{ Exception -> 0x051b }
-            org.telegram.ui.Cells.DrawerProfileCell.switchingTheme = r4     // Catch:{ Exception -> 0x051b }
-            goto L_0x0522
-        L_0x051b:
+            r0.setImageDrawable(r1)     // Catch:{ Exception -> 0x0531 }
+            android.widget.FrameLayout r0 = r8.frameLayout     // Catch:{ Exception -> 0x0531 }
+            android.widget.ImageView r1 = r8.themeSwitchImageView     // Catch:{ Exception -> 0x0531 }
+            r0.removeView(r1)     // Catch:{ Exception -> 0x0531 }
+            org.telegram.ui.Cells.DrawerProfileCell.switchingTheme = r4     // Catch:{ Exception -> 0x0531 }
+            goto L_0x0538
+        L_0x0531:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x0522
-        L_0x0520:
+            goto L_0x0538
+        L_0x0536:
             org.telegram.ui.Cells.DrawerProfileCell.switchingTheme = r4
-        L_0x0522:
+        L_0x0538:
             r0 = 0
-        L_0x0523:
+        L_0x0539:
             r1 = r2[r4]
             org.telegram.ui.ActionBar.Theme$ThemeInfo r1 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r1
             r3 = r2[r5]
@@ -11123,62 +11128,62 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r8.actionBarLayout
             r4.animateThemedValues(r1, r2, r3, r0)
             boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r4 == 0) goto L_0x087d
+            if (r4 == 0) goto L_0x0893
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r8.layersActionBarLayout
             r4.animateThemedValues(r1, r2, r3, r0)
             org.telegram.ui.ActionBar.ActionBarLayout r4 = r8.rightActionBarLayout
             r4.animateThemedValues(r1, r2, r3, r0)
-            goto L_0x087d
-        L_0x054e:
+            goto L_0x0893
+        L_0x0564:
             int r3 = org.telegram.messenger.NotificationCenter.notificationsCountUpdated
-            if (r0 != r3) goto L_0x057f
+            if (r0 != r3) goto L_0x0595
             org.telegram.ui.Components.RecyclerListView r0 = r8.sideMenu
-            if (r0 == 0) goto L_0x087d
+            if (r0 == 0) goto L_0x0893
             r1 = r2[r4]
             java.lang.Integer r1 = (java.lang.Integer) r1
             int r0 = r0.getChildCount()
-        L_0x055e:
-            if (r4 >= r0) goto L_0x087d
+        L_0x0574:
+            if (r4 >= r0) goto L_0x0893
             org.telegram.ui.Components.RecyclerListView r2 = r8.sideMenu
             android.view.View r2 = r2.getChildAt(r4)
             boolean r3 = r2 instanceof org.telegram.ui.Cells.DrawerUserCell
-            if (r3 == 0) goto L_0x057c
+            if (r3 == 0) goto L_0x0592
             r3 = r2
             org.telegram.ui.Cells.DrawerUserCell r3 = (org.telegram.ui.Cells.DrawerUserCell) r3
             int r3 = r3.getAccountNumber()
             int r5 = r1.intValue()
-            if (r3 != r5) goto L_0x057c
+            if (r3 != r5) goto L_0x0592
             r2.invalidate()
-            goto L_0x087d
-        L_0x057c:
+            goto L_0x0893
+        L_0x0592:
             int r4 = r4 + 1
-            goto L_0x055e
-        L_0x057f:
+            goto L_0x0574
+        L_0x0595:
             int r3 = org.telegram.messenger.NotificationCenter.needShowPlayServicesAlert
-            if (r0 != r3) goto L_0x058e
-            r0 = r2[r4]     // Catch:{ all -> 0x087d }
-            com.google.android.gms.common.api.Status r0 = (com.google.android.gms.common.api.Status) r0     // Catch:{ all -> 0x087d }
+            if (r0 != r3) goto L_0x05a4
+            r0 = r2[r4]     // Catch:{ all -> 0x0893 }
+            com.google.android.gms.common.api.Status r0 = (com.google.android.gms.common.api.Status) r0     // Catch:{ all -> 0x0893 }
             r1 = 140(0x8c, float:1.96E-43)
-            r0.startResolutionForResult(r8, r1)     // Catch:{ all -> 0x087d }
-            goto L_0x087d
-        L_0x058e:
+            r0.startResolutionForResult(r8, r1)     // Catch:{ all -> 0x0893 }
+            goto L_0x0893
+        L_0x05a4:
             int r3 = org.telegram.messenger.NotificationCenter.fileLoaded
-            if (r0 != r3) goto L_0x0664
+            if (r0 != r3) goto L_0x067a
             r0 = r2[r4]
             java.lang.String r0 = (java.lang.String) r0
             boolean r1 = org.telegram.messenger.SharedConfig.isAppUpdateAvailable()
-            if (r1 == 0) goto L_0x05ad
+            if (r1 == 0) goto L_0x05c3
             org.telegram.tgnet.TLRPC$TL_help_appUpdate r1 = org.telegram.messenger.SharedConfig.pendingAppUpdate
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             java.lang.String r1 = org.telegram.messenger.FileLoader.getAttachFileName(r1)
             boolean r1 = r1.equals(r0)
-            if (r1 == 0) goto L_0x05ad
+            if (r1 == 0) goto L_0x05c3
             r8.updateAppUpdateViews(r5)
-        L_0x05ad:
+        L_0x05c3:
             java.lang.String r1 = r8.loadingThemeFileName
-            if (r1 == 0) goto L_0x0633
+            if (r1 == 0) goto L_0x0649
             boolean r0 = r1.equals(r0)
-            if (r0 == 0) goto L_0x087d
+            if (r0 == 0) goto L_0x0893
             r1 = 0
             r8.loadingThemeFileName = r1
             java.io.File r0 = new java.io.File
@@ -11197,14 +11202,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.tgnet.TLRPC$TL_theme r1 = r8.loadingTheme
             java.lang.String r2 = r1.title
             org.telegram.ui.ActionBar.Theme$ThemeInfo r1 = org.telegram.ui.ActionBar.Theme.fillThemeValues(r0, r2, r1)
-            if (r1 == 0) goto L_0x062e
+            if (r1 == 0) goto L_0x0644
             java.lang.String r2 = r1.pathToWallpaper
-            if (r2 == 0) goto L_0x0617
+            if (r2 == 0) goto L_0x062d
             java.io.File r2 = new java.io.File
             java.lang.String r3 = r1.pathToWallpaper
             r2.<init>(r3)
             boolean r2 = r2.exists()
-            if (r2 != 0) goto L_0x0617
+            if (r2 != 0) goto L_0x062d
             org.telegram.tgnet.TLRPC$TL_account_getWallPaper r0 = new org.telegram.tgnet.TLRPC$TL_account_getWallPaper
             r0.<init>()
             org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug r2 = new org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug
@@ -11214,15 +11219,15 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0.wallpaper = r2
             int r2 = r1.account
             org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2)
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda69 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda69
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda71 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda71
             r3.<init>(r8, r1)
             r2.sendRequest(r0, r3)
             return
-        L_0x0617:
+        L_0x062d:
             org.telegram.tgnet.TLRPC$TL_theme r1 = r8.loadingTheme
             java.lang.String r2 = r1.title
             org.telegram.ui.ActionBar.Theme$ThemeInfo r10 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r0, r2, r1, r5)
-            if (r10 == 0) goto L_0x062e
+            if (r10 == 0) goto L_0x0644
             org.telegram.ui.ThemePreviewActivity r0 = new org.telegram.ui.ThemePreviewActivity
             r11 = 1
             r12 = 0
@@ -11230,84 +11235,84 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r14 = 0
             r9 = r0
             r9.<init>(r10, r11, r12, r13, r14)
-            r8.lambda$runLinkRequest$43(r0)
-        L_0x062e:
+            r8.lambda$runLinkRequest$45(r0)
+        L_0x0644:
             r16.onThemeLoadFinish()
-            goto L_0x087d
-        L_0x0633:
+            goto L_0x0893
+        L_0x0649:
             java.lang.String r1 = r8.loadingThemeWallpaperName
-            if (r1 == 0) goto L_0x087d
+            if (r1 == 0) goto L_0x0893
             boolean r0 = r1.equals(r0)
-            if (r0 == 0) goto L_0x087d
+            if (r0 == 0) goto L_0x0893
             r1 = 0
             r8.loadingThemeWallpaperName = r1
             r0 = r2[r5]
             java.io.File r0 = (java.io.File) r0
             boolean r1 = r8.loadingThemeAccent
-            if (r1 == 0) goto L_0x0656
+            if (r1 == 0) goto L_0x066c
             org.telegram.tgnet.TLRPC$TL_theme r0 = r8.loadingTheme
             org.telegram.tgnet.TLRPC$TL_wallPaper r1 = r8.loadingThemeWallpaper
             org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r8.loadingThemeInfo
             r8.openThemeAccentPreview(r0, r1, r2)
             r16.onThemeLoadFinish()
-            goto L_0x087d
-        L_0x0656:
+            goto L_0x0893
+        L_0x066c:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r1 = r8.loadingThemeInfo
             org.telegram.messenger.DispatchQueue r2 = org.telegram.messenger.Utilities.globalQueue
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda51 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda51
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda52 r3 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda52
             r3.<init>(r8, r1, r0)
             r2.postRunnable(r3)
-            goto L_0x087d
-        L_0x0664:
+            goto L_0x0893
+        L_0x067a:
             int r3 = org.telegram.messenger.NotificationCenter.fileLoadFailed
-            if (r0 != r3) goto L_0x0698
+            if (r0 != r3) goto L_0x06ae
             r0 = r2[r4]
             java.lang.String r0 = (java.lang.String) r0
             java.lang.String r1 = r8.loadingThemeFileName
             boolean r1 = r0.equals(r1)
-            if (r1 != 0) goto L_0x067c
+            if (r1 != 0) goto L_0x0692
             java.lang.String r1 = r8.loadingThemeWallpaperName
             boolean r1 = r0.equals(r1)
-            if (r1 == 0) goto L_0x067f
-        L_0x067c:
+            if (r1 == 0) goto L_0x0695
+        L_0x0692:
             r16.onThemeLoadFinish()
-        L_0x067f:
+        L_0x0695:
             boolean r1 = org.telegram.messenger.SharedConfig.isAppUpdateAvailable()
-            if (r1 == 0) goto L_0x087d
+            if (r1 == 0) goto L_0x0893
             org.telegram.tgnet.TLRPC$TL_help_appUpdate r1 = org.telegram.messenger.SharedConfig.pendingAppUpdate
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             java.lang.String r1 = org.telegram.messenger.FileLoader.getAttachFileName(r1)
             boolean r0 = r1.equals(r0)
-            if (r0 == 0) goto L_0x087d
+            if (r0 == 0) goto L_0x0893
             r8.updateAppUpdateViews(r5)
-            goto L_0x087d
-        L_0x0698:
+            goto L_0x0893
+        L_0x06ae:
             int r3 = org.telegram.messenger.NotificationCenter.screenStateChanged
-            if (r0 != r3) goto L_0x06af
+            if (r0 != r3) goto L_0x06c5
             boolean r0 = org.telegram.messenger.ApplicationLoader.mainInterfacePaused
-            if (r0 == 0) goto L_0x06a1
+            if (r0 == 0) goto L_0x06b7
             return
-        L_0x06a1:
+        L_0x06b7:
             boolean r0 = org.telegram.messenger.ApplicationLoader.isScreenOn
-            if (r0 == 0) goto L_0x06aa
+            if (r0 == 0) goto L_0x06c0
             r16.onPasscodeResume()
-            goto L_0x087d
-        L_0x06aa:
+            goto L_0x0893
+        L_0x06c0:
             r16.onPasscodePause()
-            goto L_0x087d
-        L_0x06af:
+            goto L_0x0893
+        L_0x06c5:
             int r3 = org.telegram.messenger.NotificationCenter.needCheckSystemBarColors
-            if (r0 != r3) goto L_0x06b8
+            if (r0 != r3) goto L_0x06ce
             r16.checkSystemBarColors()
-            goto L_0x087d
-        L_0x06b8:
+            goto L_0x0893
+        L_0x06ce:
             int r3 = org.telegram.messenger.NotificationCenter.historyImportProgressChanged
-            if (r0 != r3) goto L_0x06e5
+            if (r0 != r3) goto L_0x06fb
             int r0 = r2.length
-            if (r0 <= r5) goto L_0x087d
+            if (r0 <= r5) goto L_0x0893
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x087d
+            if (r0 != 0) goto L_0x0893
             int r0 = r8.currentAccount
             r1 = r2[r15]
             org.telegram.tgnet.TLRPC$TL_error r1 = (org.telegram.tgnet.TLRPC$TL_error) r1
@@ -11320,10 +11325,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.tgnet.TLObject r2 = (org.telegram.tgnet.TLObject) r2
             java.lang.Object[] r4 = new java.lang.Object[r4]
             org.telegram.ui.Components.AlertsCreator.processError(r0, r1, r3, r2, r4)
-            goto L_0x087d
-        L_0x06e5:
+            goto L_0x0893
+        L_0x06fb:
             int r3 = org.telegram.messenger.NotificationCenter.stickersImportComplete
-            if (r0 != r3) goto L_0x0714
+            if (r0 != r3) goto L_0x072a
             org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r18)
             r0 = r2[r4]
             r3 = r0
@@ -11331,110 +11336,110 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r4 = 2
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x070a
+            if (r0 != 0) goto L_0x0720
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack
             int r2 = r0.size()
             int r2 = r2 - r5
             java.lang.Object r0 = r0.get(r2)
             org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0
             r5 = r0
-            goto L_0x070b
-        L_0x070a:
+            goto L_0x0721
+        L_0x0720:
             r5 = 0
-        L_0x070b:
+        L_0x0721:
             r6 = 0
             r7 = 1
             r2 = r16
             r1.toggleStickerSet(r2, r3, r4, r5, r6, r7)
-            goto L_0x087d
-        L_0x0714:
+            goto L_0x0893
+        L_0x072a:
             int r1 = org.telegram.messenger.NotificationCenter.newSuggestionsAvailable
-            if (r0 != r1) goto L_0x071f
+            if (r0 != r1) goto L_0x0735
             org.telegram.ui.Components.RecyclerListView r0 = r8.sideMenu
             r0.invalidateViews()
-            goto L_0x087d
-        L_0x071f:
+            goto L_0x0893
+        L_0x0735:
             int r1 = org.telegram.messenger.NotificationCenter.showBulletin
-            if (r0 != r1) goto L_0x080f
+            if (r0 != r1) goto L_0x0825
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x087d
+            if (r0 != 0) goto L_0x0893
             r0 = r2[r4]
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             boolean r1 = org.telegram.ui.GroupCallActivity.groupCallUiVisible
-            if (r1 == 0) goto L_0x0741
+            if (r1 == 0) goto L_0x0757
             org.telegram.ui.GroupCallActivity r1 = org.telegram.ui.GroupCallActivity.groupCallInstance
-            if (r1 == 0) goto L_0x0741
+            if (r1 == 0) goto L_0x0757
             android.widget.FrameLayout r1 = r1.getContainer()
             r7 = r1
-            goto L_0x0742
-        L_0x0741:
+            goto L_0x0758
+        L_0x0757:
             r7 = 0
-        L_0x0742:
-            if (r7 != 0) goto L_0x0753
+        L_0x0758:
+            if (r7 != 0) goto L_0x0769
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = mainFragmentsStack
             int r3 = r1.size()
             int r3 = r3 - r5
             java.lang.Object r1 = r1.get(r3)
             org.telegram.ui.ActionBar.BaseFragment r1 = (org.telegram.ui.ActionBar.BaseFragment) r1
             r9 = r1
-            goto L_0x0754
-        L_0x0753:
+            goto L_0x076a
+        L_0x0769:
             r9 = 0
-        L_0x0754:
-            r3 = 0
-            if (r0 != r12) goto L_0x0788
-            r0 = r2[r5]
-            java.lang.Long r0 = (java.lang.Long) r0
-            long r0 = r0.longValue()
-            int r2 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r2 <= 0) goto L_0x076a
-            r0 = 2131628826(0x7f0e131a, float:1.8884956E38)
-            java.lang.String r1 = "YourNameChanged"
-            goto L_0x076f
         L_0x076a:
-            r0 = 2131624834(0x7f0e0382, float:1.8876859E38)
-            java.lang.String r1 = "CannelTitleChanged"
-        L_0x076f:
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            if (r7 == 0) goto L_0x077b
-            r1 = 0
-            org.telegram.ui.Components.BulletinFactory r1 = org.telegram.ui.Components.BulletinFactory.of(r7, r1)
-            goto L_0x077f
-        L_0x077b:
-            org.telegram.ui.Components.BulletinFactory r1 = org.telegram.ui.Components.BulletinFactory.of(r9)
-        L_0x077f:
-            org.telegram.ui.Components.Bulletin r0 = r1.createErrorBulletin(r0)
-            r0.show()
-            goto L_0x087d
-        L_0x0788:
-            if (r0 != r15) goto L_0x07ba
+            r3 = 0
+            if (r0 != r12) goto L_0x079e
             r0 = r2[r5]
             java.lang.Long r0 = (java.lang.Long) r0
             long r0 = r0.longValue()
             int r2 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r2 <= 0) goto L_0x079c
-            r0 = 2131628809(0x7f0e1309, float:1.8884921E38)
-            java.lang.String r1 = "YourBioChanged"
-            goto L_0x07a1
-        L_0x079c:
-            r0 = 2131624773(0x7f0e0345, float:1.8876735E38)
-            java.lang.String r1 = "CannelDescriptionChanged"
-        L_0x07a1:
+            if (r2 <= 0) goto L_0x0780
+            r0 = 2131628904(0x7f0e1368, float:1.8885114E38)
+            java.lang.String r1 = "YourNameChanged"
+            goto L_0x0785
+        L_0x0780:
+            r0 = 2131624839(0x7f0e0387, float:1.887687E38)
+            java.lang.String r1 = "CannelTitleChanged"
+        L_0x0785:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            if (r7 == 0) goto L_0x07ad
+            if (r7 == 0) goto L_0x0791
             r1 = 0
             org.telegram.ui.Components.BulletinFactory r1 = org.telegram.ui.Components.BulletinFactory.of(r7, r1)
-            goto L_0x07b1
-        L_0x07ad:
+            goto L_0x0795
+        L_0x0791:
             org.telegram.ui.Components.BulletinFactory r1 = org.telegram.ui.Components.BulletinFactory.of(r9)
-        L_0x07b1:
+        L_0x0795:
             org.telegram.ui.Components.Bulletin r0 = r1.createErrorBulletin(r0)
             r0.show()
-            goto L_0x087d
-        L_0x07ba:
-            if (r0 != 0) goto L_0x07e9
+            goto L_0x0893
+        L_0x079e:
+            if (r0 != r15) goto L_0x07d0
+            r0 = r2[r5]
+            java.lang.Long r0 = (java.lang.Long) r0
+            long r0 = r0.longValue()
+            int r2 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
+            if (r2 <= 0) goto L_0x07b2
+            r0 = 2131628887(0x7f0e1357, float:1.888508E38)
+            java.lang.String r1 = "YourBioChanged"
+            goto L_0x07b7
+        L_0x07b2:
+            r0 = 2131624778(0x7f0e034a, float:1.8876745E38)
+            java.lang.String r1 = "CannelDescriptionChanged"
+        L_0x07b7:
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            if (r7 == 0) goto L_0x07c3
+            r1 = 0
+            org.telegram.ui.Components.BulletinFactory r1 = org.telegram.ui.Components.BulletinFactory.of(r7, r1)
+            goto L_0x07c7
+        L_0x07c3:
+            org.telegram.ui.Components.BulletinFactory r1 = org.telegram.ui.Components.BulletinFactory.of(r9)
+        L_0x07c7:
+            org.telegram.ui.Components.Bulletin r0 = r1.createErrorBulletin(r0)
+            r0.show()
+            goto L_0x0893
+        L_0x07d0:
+            if (r0 != 0) goto L_0x07ff
             r0 = r2[r5]
             r5 = r0
             org.telegram.tgnet.TLRPC$Document r5 = (org.telegram.tgnet.TLRPC$Document) r5
@@ -11448,51 +11453,51 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2 = r16
             r1.<init>(r2, r3, r4, r5, r6)
             r1 = 1500(0x5dc, float:2.102E-42)
-            if (r9 == 0) goto L_0x07e0
+            if (r9 == 0) goto L_0x07f6
             org.telegram.ui.Components.Bulletin r0 = org.telegram.ui.Components.Bulletin.make((org.telegram.ui.ActionBar.BaseFragment) r9, (org.telegram.ui.Components.Bulletin.Layout) r0, (int) r1)
             r0.show()
-            goto L_0x087d
-        L_0x07e0:
+            goto L_0x0893
+        L_0x07f6:
             org.telegram.ui.Components.Bulletin r0 = org.telegram.ui.Components.Bulletin.make((android.widget.FrameLayout) r7, (org.telegram.ui.Components.Bulletin.Layout) r0, (int) r1)
             r0.show()
-            goto L_0x087d
-        L_0x07e9:
-            if (r0 != r5) goto L_0x087d
-            if (r9 == 0) goto L_0x07fe
+            goto L_0x0893
+        L_0x07ff:
+            if (r0 != r5) goto L_0x0893
+            if (r9 == 0) goto L_0x0814
             org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r9)
             r1 = r2[r5]
             java.lang.String r1 = (java.lang.String) r1
             org.telegram.ui.Components.Bulletin r0 = r0.createErrorBulletin(r1)
             r0.show()
-            goto L_0x087d
-        L_0x07fe:
+            goto L_0x0893
+        L_0x0814:
             r1 = 0
             org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r7, r1)
             r1 = r2[r5]
             java.lang.String r1 = (java.lang.String) r1
             org.telegram.ui.Components.Bulletin r0 = r0.createErrorBulletin(r1)
             r0.show()
-            goto L_0x087d
-        L_0x080f:
+            goto L_0x0893
+        L_0x0825:
             int r1 = org.telegram.messenger.NotificationCenter.groupCallUpdated
-            if (r0 != r1) goto L_0x0817
+            if (r0 != r1) goto L_0x082d
             r8.checkWasMutedByAdmin(r4)
-            goto L_0x087d
-        L_0x0817:
+            goto L_0x0893
+        L_0x082d:
             int r1 = org.telegram.messenger.NotificationCenter.fileLoadProgressChanged
-            if (r0 != r1) goto L_0x086d
+            if (r0 != r1) goto L_0x0883
             org.telegram.ui.ActionBar.SimpleTextView r0 = r8.updateTextView
-            if (r0 == 0) goto L_0x087d
+            if (r0 == 0) goto L_0x0893
             boolean r0 = org.telegram.messenger.SharedConfig.isAppUpdateAvailable()
-            if (r0 == 0) goto L_0x087d
+            if (r0 == 0) goto L_0x0893
             r0 = r2[r4]
             java.lang.String r0 = (java.lang.String) r0
             org.telegram.tgnet.TLRPC$TL_help_appUpdate r1 = org.telegram.messenger.SharedConfig.pendingAppUpdate
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             java.lang.String r1 = org.telegram.messenger.FileLoader.getAttachFileName(r1)
-            if (r1 == 0) goto L_0x087d
+            if (r1 == 0) goto L_0x0893
             boolean r0 = r1.equals(r0)
-            if (r0 == 0) goto L_0x087d
+            if (r0 == 0) goto L_0x0893
             r0 = r2[r5]
             java.lang.Long r0 = (java.lang.Long) r0
             r1 = r2[r15]
@@ -11505,7 +11510,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.Components.RadialProgress2 r1 = r8.updateLayoutIcon
             r1.setProgress(r0, r5)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r8.updateTextView
-            r2 = 2131624307(0x7f0e0173, float:1.887579E38)
+            r2 = 2131624309(0x7f0e0175, float:1.8875794E38)
             java.lang.Object[] r3 = new java.lang.Object[r5]
             r5 = 1120403456(0x42CLASSNAME, float:100.0)
             float r0 = r0 * r5
@@ -11515,24 +11520,24 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r0 = "AppUpdateDownloading"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r2, r3)
             r1.setText(r0)
-            goto L_0x087d
-        L_0x086d:
+            goto L_0x0893
+        L_0x0883:
             int r1 = org.telegram.messenger.NotificationCenter.appUpdateAvailable
-            if (r0 != r1) goto L_0x087d
+            if (r0 != r1) goto L_0x0893
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = mainFragmentsStack
             int r0 = r0.size()
-            if (r0 != r5) goto L_0x087a
+            if (r0 != r5) goto L_0x0890
             r4 = 1
-        L_0x087a:
+        L_0x0890:
             r8.updateAppUpdateViews(r4)
-        L_0x087d:
+        L_0x0893:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$didReceivedNotification$66(int i, DialogInterface dialogInterface, int i2) {
+    public static /* synthetic */ void lambda$didReceivedNotification$67(int i, DialogInterface dialogInterface, int i2) {
         if (!mainFragmentsStack.isEmpty()) {
             MessagesController instance = MessagesController.getInstance(i);
             ArrayList<BaseFragment> arrayList = mainFragmentsStack;
@@ -11541,24 +11546,24 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didReceivedNotification$67(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$didReceivedNotification$68(DialogInterface dialogInterface, int i) {
         MessagesController.getInstance(this.currentAccount).performLogout(2);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didReceivedNotification$69(HashMap hashMap, int i, DialogInterface dialogInterface, int i2) {
+    public /* synthetic */ void lambda$didReceivedNotification$70(HashMap hashMap, int i, DialogInterface dialogInterface, int i2) {
         if (!mainFragmentsStack.isEmpty()) {
             ArrayList<BaseFragment> arrayList = mainFragmentsStack;
             if (AndroidUtilities.isGoogleMapsInstalled(arrayList.get(arrayList.size() - 1))) {
                 LocationActivity locationActivity = new LocationActivity(0);
-                locationActivity.setDelegate(new LaunchActivity$$ExternalSyntheticLambda85(hashMap, i));
-                lambda$runLinkRequest$43(locationActivity);
+                locationActivity.setDelegate(new LaunchActivity$$ExternalSyntheticLambda87(hashMap, i));
+                lambda$runLinkRequest$45(locationActivity);
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$didReceivedNotification$68(HashMap hashMap, int i, TLRPC$MessageMedia tLRPC$MessageMedia, int i2, boolean z, int i3) {
+    public static /* synthetic */ void lambda$didReceivedNotification$69(HashMap hashMap, int i, TLRPC$MessageMedia tLRPC$MessageMedia, int i2, boolean z, int i3) {
         for (Map.Entry value : hashMap.entrySet()) {
             MessageObject messageObject = (MessageObject) value.getValue();
             SendMessagesHelper.getInstance(i).sendMessage(tLRPC$MessageMedia, messageObject.getDialogId(), messageObject, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i3);
@@ -11566,12 +11571,20 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didReceivedNotification$74(Theme.ThemeInfo themeInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$didReceivedNotification$74() {
+        if (this.isNavigationBarColorFrozen) {
+            this.isNavigationBarColorFrozen = false;
+            checkSystemBarColors(false, true);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$didReceivedNotification$76(Theme.ThemeInfo themeInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda39(this, tLObject, themeInfo));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didReceivedNotification$73(TLObject tLObject, Theme.ThemeInfo themeInfo) {
+    public /* synthetic */ void lambda$didReceivedNotification$75(TLObject tLObject, Theme.ThemeInfo themeInfo) {
         if (tLObject instanceof TLRPC$TL_wallPaper) {
             TLRPC$TL_wallPaper tLRPC$TL_wallPaper = (TLRPC$TL_wallPaper) tLObject;
             this.loadingThemeInfo = themeInfo;
@@ -11584,20 +11597,20 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didReceivedNotification$76(Theme.ThemeInfo themeInfo, File file) {
+    public /* synthetic */ void lambda$didReceivedNotification$78(Theme.ThemeInfo themeInfo, File file) {
         themeInfo.createBackground(file, themeInfo.pathToWallpaper);
-        AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda26(this));
+        AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda25(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didReceivedNotification$75() {
+    public /* synthetic */ void lambda$didReceivedNotification$77() {
         if (this.loadingTheme != null) {
             File filesDirFixed = ApplicationLoader.getFilesDirFixed();
             File file = new File(filesDirFixed, "remote" + this.loadingTheme.id + ".attheme");
             TLRPC$TL_theme tLRPC$TL_theme = this.loadingTheme;
             Theme.ThemeInfo applyThemeFile = Theme.applyThemeFile(file, tLRPC$TL_theme.title, tLRPC$TL_theme, true);
             if (applyThemeFile != null) {
-                lambda$runLinkRequest$43(new ThemePreviewActivity(applyThemeFile, true, 0, false, false));
+                lambda$runLinkRequest$45(new ThemePreviewActivity(applyThemeFile, true, 0, false, false));
             }
             onThemeLoadFinish();
         }
@@ -11683,7 +11696,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         themeInfo.prevAccentId = themeInfo.currentAccentId;
         themeInfo.setCurrentAccentId(createNewAccent.id);
         createNewAccent.pattern = tLRPC$TL_wallPaper;
-        lambda$runLinkRequest$43(new ThemePreviewActivity(themeInfo, i != themeInfo.lastAccentId, 0, false, false));
+        lambda$runLinkRequest$45(new ThemePreviewActivity(themeInfo, i != themeInfo.lastAccentId, 0, false, false));
     }
 
     private void onThemeLoadFinish() {
@@ -11706,12 +11719,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         SharedConfig.checkKeepMedia();
         SharedConfig.checkLogsToDelete();
         if (Build.VERSION.SDK_INT < 26) {
-            Utilities.globalQueue.postRunnable(new LaunchActivity$$ExternalSyntheticLambda29(this), 2000);
+            Utilities.globalQueue.postRunnable(new LaunchActivity$$ExternalSyntheticLambda27(this), 2000);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkFreeDiscSpace$78() {
+    public /* synthetic */ void lambda$checkFreeDiscSpace$80() {
         File directory;
         long j;
         if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
@@ -11735,20 +11748,20 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkFreeDiscSpace$77() {
+    public /* synthetic */ void lambda$checkFreeDiscSpace$79() {
         try {
             AlertsCreator.createFreeSpaceDialog(this).show();
         } catch (Throwable unused) {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:11:0x0054 A[Catch:{ Exception -> 0x0115 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x0056 A[Catch:{ Exception -> 0x0115 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x005c A[Catch:{ Exception -> 0x0115 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x005f A[Catch:{ Exception -> 0x0115 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x0064 A[Catch:{ Exception -> 0x0115 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x0065 A[Catch:{ Exception -> 0x0115 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x006d A[Catch:{ Exception -> 0x0115 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:11:0x0054 A[Catch:{ Exception -> 0x0122 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x0056 A[Catch:{ Exception -> 0x0122 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x005c A[Catch:{ Exception -> 0x0122 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x005f A[Catch:{ Exception -> 0x0122 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x0064 A[Catch:{ Exception -> 0x0122 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0065 A[Catch:{ Exception -> 0x0122 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x006e A[SYNTHETIC, Splitter:B:25:0x006e] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void showLanguageAlertInternal(org.telegram.messenger.LocaleController.LocaleInfo r17, org.telegram.messenger.LocaleController.LocaleInfo r18, java.lang.String r19) {
         /*
@@ -11757,13 +11770,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r0 = "ChooseYourLanguageOther"
             java.lang.String r2 = "ChooseYourLanguage"
             r3 = 0
-            r1.loadingLocaleDialog = r3     // Catch:{ Exception -> 0x0115 }
+            r1.loadingLocaleDialog = r3     // Catch:{ Exception -> 0x0122 }
             r4 = r17
-            boolean r5 = r4.builtIn     // Catch:{ Exception -> 0x0115 }
+            boolean r5 = r4.builtIn     // Catch:{ Exception -> 0x0122 }
             r6 = 1
             if (r5 != 0) goto L_0x001d
-            org.telegram.messenger.LocaleController r5 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0115 }
-            boolean r5 = r5.isCurrentLocalLocale()     // Catch:{ Exception -> 0x0115 }
+            org.telegram.messenger.LocaleController r5 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0122 }
+            boolean r5 = r5.isCurrentLocalLocale()     // Catch:{ Exception -> 0x0122 }
             if (r5 == 0) goto L_0x001b
             goto L_0x001d
         L_0x001b:
@@ -11772,147 +11785,152 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x001d:
             r5 = 1
         L_0x001e:
-            org.telegram.ui.ActionBar.AlertDialog$Builder r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder     // Catch:{ Exception -> 0x0115 }
-            r7.<init>((android.content.Context) r1)     // Catch:{ Exception -> 0x0115 }
-            java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
-            r9 = 2131624983(0x7f0e0417, float:1.8877161E38)
-            java.lang.String r8 = r1.getStringForLanguageAlert(r8, r2, r9)     // Catch:{ Exception -> 0x0115 }
-            r7.setTitle(r8)     // Catch:{ Exception -> 0x0115 }
-            java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0115 }
-            java.lang.String r2 = r1.getStringForLanguageAlert(r8, r2, r9)     // Catch:{ Exception -> 0x0115 }
-            r7.setSubtitle(r2)     // Catch:{ Exception -> 0x0115 }
-            android.widget.LinearLayout r2 = new android.widget.LinearLayout     // Catch:{ Exception -> 0x0115 }
-            r2.<init>(r1)     // Catch:{ Exception -> 0x0115 }
-            r2.setOrientation(r6)     // Catch:{ Exception -> 0x0115 }
+            org.telegram.ui.ActionBar.AlertDialog$Builder r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder     // Catch:{ Exception -> 0x0122 }
+            r7.<init>((android.content.Context) r1)     // Catch:{ Exception -> 0x0122 }
+            java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0122 }
+            r9 = 2131624988(0x7f0e041c, float:1.8877171E38)
+            java.lang.String r8 = r1.getStringForLanguageAlert(r8, r2, r9)     // Catch:{ Exception -> 0x0122 }
+            r7.setTitle(r8)     // Catch:{ Exception -> 0x0122 }
+            java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0122 }
+            java.lang.String r2 = r1.getStringForLanguageAlert(r8, r2, r9)     // Catch:{ Exception -> 0x0122 }
+            r7.setSubtitle(r2)     // Catch:{ Exception -> 0x0122 }
+            android.widget.LinearLayout r2 = new android.widget.LinearLayout     // Catch:{ Exception -> 0x0122 }
+            r2.<init>(r1)     // Catch:{ Exception -> 0x0122 }
+            r2.setOrientation(r6)     // Catch:{ Exception -> 0x0122 }
             r8 = 2
-            org.telegram.ui.Cells.LanguageCell[] r9 = new org.telegram.ui.Cells.LanguageCell[r8]     // Catch:{ Exception -> 0x0115 }
-            org.telegram.messenger.LocaleController$LocaleInfo[] r10 = new org.telegram.messenger.LocaleController.LocaleInfo[r6]     // Catch:{ Exception -> 0x0115 }
-            org.telegram.messenger.LocaleController$LocaleInfo[] r11 = new org.telegram.messenger.LocaleController.LocaleInfo[r8]     // Catch:{ Exception -> 0x0115 }
-            java.util.HashMap<java.lang.String, java.lang.String> r12 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
+            org.telegram.ui.Cells.LanguageCell[] r9 = new org.telegram.ui.Cells.LanguageCell[r8]     // Catch:{ Exception -> 0x0122 }
+            org.telegram.messenger.LocaleController$LocaleInfo[] r10 = new org.telegram.messenger.LocaleController.LocaleInfo[r6]     // Catch:{ Exception -> 0x0122 }
+            org.telegram.messenger.LocaleController$LocaleInfo[] r11 = new org.telegram.messenger.LocaleController.LocaleInfo[r8]     // Catch:{ Exception -> 0x0122 }
+            java.util.HashMap<java.lang.String, java.lang.String> r12 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0122 }
             java.lang.String r13 = "English"
-            r14 = 2131625438(0x7f0e05de, float:1.8878084E38)
-            java.lang.String r12 = r1.getStringForLanguageAlert(r12, r13, r14)     // Catch:{ Exception -> 0x0115 }
+            r14 = 2131625462(0x7f0e05f6, float:1.8878133E38)
+            java.lang.String r12 = r1.getStringForLanguageAlert(r12, r13, r14)     // Catch:{ Exception -> 0x0122 }
             if (r5 == 0) goto L_0x0056
             r13 = r4
             goto L_0x0058
         L_0x0056:
             r13 = r18
         L_0x0058:
-            r11[r3] = r13     // Catch:{ Exception -> 0x0115 }
+            r11[r3] = r13     // Catch:{ Exception -> 0x0122 }
             if (r5 == 0) goto L_0x005f
             r13 = r18
             goto L_0x0060
         L_0x005f:
             r13 = r4
         L_0x0060:
-            r11[r6] = r13     // Catch:{ Exception -> 0x0115 }
+            r11[r6] = r13     // Catch:{ Exception -> 0x0122 }
             if (r5 == 0) goto L_0x0065
             goto L_0x0067
         L_0x0065:
             r4 = r18
         L_0x0067:
-            r10[r3] = r4     // Catch:{ Exception -> 0x0115 }
+            r10[r3] = r4     // Catch:{ Exception -> 0x0122 }
             r4 = 0
         L_0x006a:
-            r13 = -1
-            if (r4 >= r8) goto L_0x00bf
-            org.telegram.ui.Cells.LanguageCell r14 = new org.telegram.ui.Cells.LanguageCell     // Catch:{ Exception -> 0x0115 }
-            r14.<init>(r1, r6)     // Catch:{ Exception -> 0x0115 }
-            r9[r4] = r14     // Catch:{ Exception -> 0x0115 }
-            r14 = r9[r4]     // Catch:{ Exception -> 0x0115 }
-            r15 = r11[r4]     // Catch:{ Exception -> 0x0115 }
-            r3 = r11[r4]     // Catch:{ Exception -> 0x0115 }
-            r5 = r18
-            if (r3 != r5) goto L_0x0080
-            r3 = r12
-            goto L_0x0081
-        L_0x0080:
-            r3 = 0
-        L_0x0081:
-            r14.setLanguage(r15, r3, r6)     // Catch:{ Exception -> 0x0115 }
-            r3 = r9[r4]     // Catch:{ Exception -> 0x0115 }
-            java.lang.Integer r14 = java.lang.Integer.valueOf(r4)     // Catch:{ Exception -> 0x0115 }
-            r3.setTag(r14)     // Catch:{ Exception -> 0x0115 }
-            r3 = r9[r4]     // Catch:{ Exception -> 0x0115 }
             java.lang.String r14 = "dialogButtonSelector"
-            int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)     // Catch:{ Exception -> 0x0115 }
-            android.graphics.drawable.Drawable r14 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r14, r8)     // Catch:{ Exception -> 0x0115 }
-            r3.setBackgroundDrawable(r14)     // Catch:{ Exception -> 0x0115 }
-            r3 = r9[r4]     // Catch:{ Exception -> 0x0115 }
-            if (r4 != 0) goto L_0x00a2
-            r14 = 1
-            goto L_0x00a3
+            if (r4 >= r8) goto L_0x00c0
+            org.telegram.ui.Cells.LanguageCell r15 = new org.telegram.ui.Cells.LanguageCell     // Catch:{ Exception -> 0x0122 }
+            r15.<init>(r1)     // Catch:{ Exception -> 0x0122 }
+            r9[r4] = r15     // Catch:{ Exception -> 0x0122 }
+            r15 = r9[r4]     // Catch:{ Exception -> 0x0122 }
+            r5 = r11[r4]     // Catch:{ Exception -> 0x0122 }
+            r13 = r11[r4]     // Catch:{ Exception -> 0x0122 }
+            r3 = r18
+            if (r13 != r3) goto L_0x0081
+            r13 = r12
+            goto L_0x0082
+        L_0x0081:
+            r13 = 0
+        L_0x0082:
+            r15.setLanguage(r5, r13, r6)     // Catch:{ Exception -> 0x0122 }
+            r5 = r9[r4]     // Catch:{ Exception -> 0x0122 }
+            java.lang.Integer r13 = java.lang.Integer.valueOf(r4)     // Catch:{ Exception -> 0x0122 }
+            r5.setTag(r13)     // Catch:{ Exception -> 0x0122 }
+            r5 = r9[r4]     // Catch:{ Exception -> 0x0122 }
+            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r14)     // Catch:{ Exception -> 0x0122 }
+            android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r13, r8)     // Catch:{ Exception -> 0x0122 }
+            r5.setBackground(r13)     // Catch:{ Exception -> 0x0122 }
+            r5 = r9[r4]     // Catch:{ Exception -> 0x0122 }
+            if (r4 != 0) goto L_0x00a1
+            r13 = 1
+            goto L_0x00a2
+        L_0x00a1:
+            r13 = 0
         L_0x00a2:
             r14 = 0
-        L_0x00a3:
-            r3.setLanguageSelected(r14)     // Catch:{ Exception -> 0x0115 }
-            r3 = r9[r4]     // Catch:{ Exception -> 0x0115 }
-            r14 = 50
-            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r13, r14)     // Catch:{ Exception -> 0x0115 }
-            r2.addView(r3, r13)     // Catch:{ Exception -> 0x0115 }
-            r3 = r9[r4]     // Catch:{ Exception -> 0x0115 }
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda15 r13 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda15     // Catch:{ Exception -> 0x0115 }
-            r13.<init>(r10, r9)     // Catch:{ Exception -> 0x0115 }
-            r3.setOnClickListener(r13)     // Catch:{ Exception -> 0x0115 }
+            r5.setLanguageSelected(r13, r14)     // Catch:{ Exception -> 0x0122 }
+            r5 = r9[r4]     // Catch:{ Exception -> 0x0122 }
+            r13 = 50
+            r15 = -1
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r13)     // Catch:{ Exception -> 0x0122 }
+            r2.addView(r5, r13)     // Catch:{ Exception -> 0x0122 }
+            r5 = r9[r4]     // Catch:{ Exception -> 0x0122 }
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda14 r13 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda14     // Catch:{ Exception -> 0x0122 }
+            r13.<init>(r10, r9)     // Catch:{ Exception -> 0x0122 }
+            r5.setOnClickListener(r13)     // Catch:{ Exception -> 0x0122 }
             int r4 = r4 + 1
             r3 = 0
             goto L_0x006a
-        L_0x00bf:
-            org.telegram.ui.Cells.LanguageCell r3 = new org.telegram.ui.Cells.LanguageCell     // Catch:{ Exception -> 0x0115 }
-            r3.<init>(r1, r6)     // Catch:{ Exception -> 0x0115 }
-            java.util.HashMap<java.lang.String, java.lang.String> r4 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
-            r5 = 2131624984(0x7f0e0418, float:1.8877163E38)
-            java.lang.String r4 = r1.getStringForLanguageAlert(r4, r0, r5)     // Catch:{ Exception -> 0x0115 }
-            java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0115 }
-            java.lang.String r0 = r1.getStringForLanguageAlert(r6, r0, r5)     // Catch:{ Exception -> 0x0115 }
-            r3.setValue(r4, r0)     // Catch:{ Exception -> 0x0115 }
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda13 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda13     // Catch:{ Exception -> 0x0115 }
-            r0.<init>(r1)     // Catch:{ Exception -> 0x0115 }
-            r3.setOnClickListener(r0)     // Catch:{ Exception -> 0x0115 }
+        L_0x00c0:
+            org.telegram.ui.Cells.LanguageCell r3 = new org.telegram.ui.Cells.LanguageCell     // Catch:{ Exception -> 0x0122 }
+            r3.<init>(r1)     // Catch:{ Exception -> 0x0122 }
+            java.util.HashMap<java.lang.String, java.lang.String> r4 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0122 }
+            r5 = 2131624989(0x7f0e041d, float:1.8877173E38)
+            java.lang.String r4 = r1.getStringForLanguageAlert(r4, r0, r5)     // Catch:{ Exception -> 0x0122 }
+            java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0122 }
+            java.lang.String r0 = r1.getStringForLanguageAlert(r6, r0, r5)     // Catch:{ Exception -> 0x0122 }
+            r3.setValue(r4, r0)     // Catch:{ Exception -> 0x0122 }
+            int r0 = org.telegram.ui.ActionBar.Theme.getColor(r14)     // Catch:{ Exception -> 0x0122 }
+            android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r0, r8)     // Catch:{ Exception -> 0x0122 }
+            r3.setBackground(r0)     // Catch:{ Exception -> 0x0122 }
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda13 r0 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda13     // Catch:{ Exception -> 0x0122 }
+            r0.<init>(r1)     // Catch:{ Exception -> 0x0122 }
+            r3.setOnClickListener(r0)     // Catch:{ Exception -> 0x0122 }
             r0 = 50
-            android.widget.LinearLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createLinear(r13, r0)     // Catch:{ Exception -> 0x0115 }
-            r2.addView(r3, r0)     // Catch:{ Exception -> 0x0115 }
-            r7.setView(r2)     // Catch:{ Exception -> 0x0115 }
+            r4 = -1
+            android.widget.LinearLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r0)     // Catch:{ Exception -> 0x0122 }
+            r2.addView(r3, r0)     // Catch:{ Exception -> 0x0122 }
+            r7.setView(r2)     // Catch:{ Exception -> 0x0122 }
             java.lang.String r0 = "OK"
-            r2 = 2131626776(0x7f0e0b18, float:1.8880798E38)
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x0115 }
-            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda11 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda11     // Catch:{ Exception -> 0x0115 }
-            r2.<init>(r1, r10)     // Catch:{ Exception -> 0x0115 }
-            r7.setNegativeButton(r0, r2)     // Catch:{ Exception -> 0x0115 }
-            org.telegram.ui.ActionBar.AlertDialog r0 = r1.showAlertDialog(r7)     // Catch:{ Exception -> 0x0115 }
-            r1.localeDialog = r0     // Catch:{ Exception -> 0x0115 }
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x0115 }
-            android.content.SharedPreferences$Editor r0 = r0.edit()     // Catch:{ Exception -> 0x0115 }
+            r2 = 2131626813(0x7f0e0b3d, float:1.8880873E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x0122 }
+            org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda10 r2 = new org.telegram.ui.LaunchActivity$$ExternalSyntheticLambda10     // Catch:{ Exception -> 0x0122 }
+            r2.<init>(r1, r10)     // Catch:{ Exception -> 0x0122 }
+            r7.setNegativeButton(r0, r2)     // Catch:{ Exception -> 0x0122 }
+            org.telegram.ui.ActionBar.AlertDialog r0 = r1.showAlertDialog(r7)     // Catch:{ Exception -> 0x0122 }
+            r1.localeDialog = r0     // Catch:{ Exception -> 0x0122 }
+            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x0122 }
+            android.content.SharedPreferences$Editor r0 = r0.edit()     // Catch:{ Exception -> 0x0122 }
             java.lang.String r2 = "language_showed2"
             r3 = r19
-            android.content.SharedPreferences$Editor r0 = r0.putString(r2, r3)     // Catch:{ Exception -> 0x0115 }
-            r0.commit()     // Catch:{ Exception -> 0x0115 }
-            goto L_0x0119
-        L_0x0115:
+            android.content.SharedPreferences$Editor r0 = r0.putString(r2, r3)     // Catch:{ Exception -> 0x0122 }
+            r0.commit()     // Catch:{ Exception -> 0x0122 }
+            goto L_0x0126
+        L_0x0122:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0119:
+        L_0x0126:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.showLanguageAlertInternal(org.telegram.messenger.LocaleController$LocaleInfo, org.telegram.messenger.LocaleController$LocaleInfo, java.lang.String):void");
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showLanguageAlertInternal$79(LocaleController.LocaleInfo[] localeInfoArr, LanguageCell[] languageCellArr, View view) {
+    public static /* synthetic */ void lambda$showLanguageAlertInternal$81(LocaleController.LocaleInfo[] localeInfoArr, LanguageCell[] languageCellArr, View view) {
         Integer num = (Integer) view.getTag();
         localeInfoArr[0] = ((LanguageCell) view).getCurrentLocale();
         int i = 0;
         while (i < languageCellArr.length) {
-            languageCellArr[i].setLanguageSelected(i == num.intValue());
+            languageCellArr[i].setLanguageSelected(i == num.intValue(), true);
             i++;
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showLanguageAlertInternal$80(View view) {
+    public /* synthetic */ void lambda$showLanguageAlertInternal$82(View view) {
         this.localeDialog = null;
         this.drawerLayoutContainer.closeDrawer(true);
-        lambda$runLinkRequest$43(new LanguageSelectActivity());
+        lambda$runLinkRequest$45(new LanguageSelectActivity());
         AlertDialog alertDialog = this.visibleDialog;
         if (alertDialog != null) {
             alertDialog.dismiss();
@@ -11921,98 +11939,79 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showLanguageAlertInternal$81(LocaleController.LocaleInfo[] localeInfoArr, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showLanguageAlertInternal$83(LocaleController.LocaleInfo[] localeInfoArr, DialogInterface dialogInterface, int i) {
         LocaleController.getInstance().applyLanguage(localeInfoArr[0], true, false, this.currentAccount);
         rebuildAllFragments(true);
     }
 
     private void showLanguageAlert(boolean z) {
         String str;
-        try {
-            if (this.loadingLocaleDialog) {
-                return;
-            }
-            if (!ApplicationLoader.mainInterfacePaused) {
-                String string = MessagesController.getGlobalMainSettings().getString("language_showed2", "");
-                String str2 = MessagesController.getInstance(this.currentAccount).suggestedLangCode;
-                if (z || !string.equals(str2)) {
-                    LocaleController.LocaleInfo[] localeInfoArr = new LocaleController.LocaleInfo[2];
-                    String str3 = str2.contains("-") ? str2.split("-")[0] : str2;
-                    if ("in".equals(str3)) {
-                        str = "id";
-                    } else if ("iw".equals(str3)) {
-                        str = "he";
-                    } else {
-                        str = "jw".equals(str3) ? "jv" : null;
-                    }
-                    int i = 0;
-                    while (true) {
-                        if (i >= LocaleController.getInstance().languages.size()) {
-                            break;
+        if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
+            try {
+                if (this.loadingLocaleDialog) {
+                    return;
+                }
+                if (!ApplicationLoader.mainInterfacePaused) {
+                    String string = MessagesController.getGlobalMainSettings().getString("language_showed2", "");
+                    String str2 = MessagesController.getInstance(this.currentAccount).suggestedLangCode;
+                    if (z || !string.equals(str2)) {
+                        LocaleController.LocaleInfo[] localeInfoArr = new LocaleController.LocaleInfo[2];
+                        String str3 = str2.contains("-") ? str2.split("-")[0] : str2;
+                        if ("in".equals(str3)) {
+                            str = "id";
+                        } else if ("iw".equals(str3)) {
+                            str = "he";
+                        } else {
+                            str = "jw".equals(str3) ? "jv" : null;
                         }
-                        LocaleController.LocaleInfo localeInfo = LocaleController.getInstance().languages.get(i);
-                        if (localeInfo.shortName.equals("en")) {
-                            localeInfoArr[0] = localeInfo;
-                        }
-                        if (localeInfo.shortName.replace("_", "-").equals(str2) || localeInfo.shortName.equals(str3) || localeInfo.shortName.equals(str)) {
-                            localeInfoArr[1] = localeInfo;
+                        int i = 0;
+                        while (true) {
+                            if (i >= LocaleController.getInstance().languages.size()) {
+                                break;
+                            }
+                            LocaleController.LocaleInfo localeInfo = LocaleController.getInstance().languages.get(i);
+                            if (localeInfo.shortName.equals("en")) {
+                                localeInfoArr[0] = localeInfo;
+                            }
+                            if (localeInfo.shortName.replace("_", "-").equals(str2) || localeInfo.shortName.equals(str3) || localeInfo.shortName.equals(str)) {
+                                localeInfoArr[1] = localeInfo;
+                            }
+                            if (localeInfoArr[0] != null && localeInfoArr[1] != null) {
+                                break;
+                            }
+                            i++;
                         }
                         if (localeInfoArr[0] != null && localeInfoArr[1] != null) {
-                            break;
-                        }
-                        i++;
-                    }
-                    if (localeInfoArr[0] != null && localeInfoArr[1] != null) {
-                        if (localeInfoArr[0] != localeInfoArr[1]) {
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("show lang alert for " + localeInfoArr[0].getKey() + " and " + localeInfoArr[1].getKey());
+                            if (localeInfoArr[0] != localeInfoArr[1]) {
+                                if (BuildVars.LOGS_ENABLED) {
+                                    FileLog.d("show lang alert for " + localeInfoArr[0].getKey() + " and " + localeInfoArr[1].getKey());
+                                }
+                                this.systemLocaleStrings = null;
+                                this.englishLocaleStrings = null;
+                                this.loadingLocaleDialog = true;
+                                TLRPC$TL_langpack_getStrings tLRPC$TL_langpack_getStrings = new TLRPC$TL_langpack_getStrings();
+                                tLRPC$TL_langpack_getStrings.lang_code = localeInfoArr[1].getLangCode();
+                                tLRPC$TL_langpack_getStrings.keys.add("English");
+                                tLRPC$TL_langpack_getStrings.keys.add("ChooseYourLanguage");
+                                tLRPC$TL_langpack_getStrings.keys.add("ChooseYourLanguageOther");
+                                tLRPC$TL_langpack_getStrings.keys.add("ChangeLanguageLater");
+                                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_langpack_getStrings, new LaunchActivity$$ExternalSyntheticLambda75(this, localeInfoArr, str2), 8);
+                                TLRPC$TL_langpack_getStrings tLRPC$TL_langpack_getStrings2 = new TLRPC$TL_langpack_getStrings();
+                                tLRPC$TL_langpack_getStrings2.lang_code = localeInfoArr[0].getLangCode();
+                                tLRPC$TL_langpack_getStrings2.keys.add("English");
+                                tLRPC$TL_langpack_getStrings2.keys.add("ChooseYourLanguage");
+                                tLRPC$TL_langpack_getStrings2.keys.add("ChooseYourLanguageOther");
+                                tLRPC$TL_langpack_getStrings2.keys.add("ChangeLanguageLater");
+                                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_langpack_getStrings2, new LaunchActivity$$ExternalSyntheticLambda74(this, localeInfoArr, str2), 8);
                             }
-                            this.systemLocaleStrings = null;
-                            this.englishLocaleStrings = null;
-                            this.loadingLocaleDialog = true;
-                            TLRPC$TL_langpack_getStrings tLRPC$TL_langpack_getStrings = new TLRPC$TL_langpack_getStrings();
-                            tLRPC$TL_langpack_getStrings.lang_code = localeInfoArr[1].getLangCode();
-                            tLRPC$TL_langpack_getStrings.keys.add("English");
-                            tLRPC$TL_langpack_getStrings.keys.add("ChooseYourLanguage");
-                            tLRPC$TL_langpack_getStrings.keys.add("ChooseYourLanguageOther");
-                            tLRPC$TL_langpack_getStrings.keys.add("ChangeLanguageLater");
-                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_langpack_getStrings, new LaunchActivity$$ExternalSyntheticLambda72(this, localeInfoArr, str2), 8);
-                            TLRPC$TL_langpack_getStrings tLRPC$TL_langpack_getStrings2 = new TLRPC$TL_langpack_getStrings();
-                            tLRPC$TL_langpack_getStrings2.lang_code = localeInfoArr[0].getLangCode();
-                            tLRPC$TL_langpack_getStrings2.keys.add("English");
-                            tLRPC$TL_langpack_getStrings2.keys.add("ChooseYourLanguage");
-                            tLRPC$TL_langpack_getStrings2.keys.add("ChooseYourLanguageOther");
-                            tLRPC$TL_langpack_getStrings2.keys.add("ChangeLanguageLater");
-                            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_langpack_getStrings2, new LaunchActivity$$ExternalSyntheticLambda73(this, localeInfoArr, str2), 8);
                         }
+                    } else if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("alert already showed for " + string);
                     }
-                } else if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("alert already showed for " + string);
                 }
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
             }
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-        }
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showLanguageAlert$83(LocaleController.LocaleInfo[] localeInfoArr, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        HashMap hashMap = new HashMap();
-        if (tLObject != null) {
-            TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
-            for (int i = 0; i < tLRPC$Vector.objects.size(); i++) {
-                TLRPC$LangPackString tLRPC$LangPackString = (TLRPC$LangPackString) tLRPC$Vector.objects.get(i);
-                hashMap.put(tLRPC$LangPackString.key, tLRPC$LangPackString.value);
-            }
-        }
-        AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda33(this, hashMap, localeInfoArr, str));
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showLanguageAlert$82(HashMap hashMap, LocaleController.LocaleInfo[] localeInfoArr, String str) {
-        this.systemLocaleStrings = hashMap;
-        if (this.englishLocaleStrings != null && hashMap != null) {
-            showLanguageAlertInternal(localeInfoArr[1], localeInfoArr[0], str);
         }
     }
 
@@ -12031,6 +12030,27 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$showLanguageAlert$84(HashMap hashMap, LocaleController.LocaleInfo[] localeInfoArr, String str) {
+        this.systemLocaleStrings = hashMap;
+        if (this.englishLocaleStrings != null && hashMap != null) {
+            showLanguageAlertInternal(localeInfoArr[1], localeInfoArr[0], str);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$showLanguageAlert$87(LocaleController.LocaleInfo[] localeInfoArr, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        HashMap hashMap = new HashMap();
+        if (tLObject != null) {
+            TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
+            for (int i = 0; i < tLRPC$Vector.objects.size(); i++) {
+                TLRPC$LangPackString tLRPC$LangPackString = (TLRPC$LangPackString) tLRPC$Vector.objects.get(i);
+                hashMap.put(tLRPC$LangPackString.key, tLRPC$LangPackString.value);
+            }
+        }
+        AndroidUtilities.runOnUIThread(new LaunchActivity$$ExternalSyntheticLambda33(this, hashMap, localeInfoArr, str));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$showLanguageAlert$86(HashMap hashMap, LocaleController.LocaleInfo[] localeInfoArr, String str) {
         this.englishLocaleStrings = hashMap;
         if (hashMap != null && this.systemLocaleStrings != null) {
             showLanguageAlertInternal(localeInfoArr[1], localeInfoArr[0], str);
@@ -12047,7 +12067,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
         if (SharedConfig.passcodeHash.length() != 0) {
             SharedConfig.lastPauseTime = (int) (SystemClock.elapsedRealtime() / 1000);
-            AnonymousClass17 r0 = new Runnable() {
+            AnonymousClass18 r0 = new Runnable() {
                 public void run() {
                     if (LaunchActivity.this.lockRunnable == this) {
                         if (AndroidUtilities.needShowPasscode(true)) {
@@ -12106,7 +12126,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int i2 = 0;
             int connectionState = ConnectionsManager.getInstance(this.currentAccount).getConnectionState();
             this.currentConnectionState = connectionState;
-            LaunchActivity$$ExternalSyntheticLambda27 launchActivity$$ExternalSyntheticLambda27 = null;
+            LaunchActivity$$ExternalSyntheticLambda24 launchActivity$$ExternalSyntheticLambda24 = null;
             if (connectionState == 2) {
                 i2 = NUM;
                 str = "WaitingForNetwork";
@@ -12123,9 +12143,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 str = null;
             }
             if (connectionState == 1 || connectionState == 4) {
-                launchActivity$$ExternalSyntheticLambda27 = new LaunchActivity$$ExternalSyntheticLambda27(this);
+                launchActivity$$ExternalSyntheticLambda24 = new LaunchActivity$$ExternalSyntheticLambda24(this);
             }
-            this.actionBarLayout.setTitleOverlayText(str, i2, launchActivity$$ExternalSyntheticLambda27);
+            this.actionBarLayout.setTitleOverlayText(str, i2, launchActivity$$ExternalSyntheticLambda24);
         }
     }
 
@@ -12133,7 +12153,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX WARNING: Removed duplicated region for block: B:13:0x003e  */
     /* JADX WARNING: Removed duplicated region for block: B:16:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$updateCurrentConnectionState$86() {
+    public /* synthetic */ void lambda$updateCurrentConnectionState$88() {
         /*
             r2 = this;
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
@@ -12168,11 +12188,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x003e:
             org.telegram.ui.ProxyListActivity r0 = new org.telegram.ui.ProxyListActivity
             r0.<init>()
-            r2.lambda$runLinkRequest$43(r0)
+            r2.lambda$runLinkRequest$45(r0)
         L_0x0046:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$updateCurrentConnectionState$86():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$updateCurrentConnectionState$88():void");
     }
 
     public void hideVisibleActionMode() {
@@ -12387,7 +12407,6 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     public boolean needPresentFragment(BaseFragment baseFragment, boolean z, boolean z2, ActionBarLayout actionBarLayout2) {
-        boolean z3;
         ActionBarLayout actionBarLayout3;
         ActionBarLayout actionBarLayout4;
         ActionBarLayout actionBarLayout5;
@@ -12396,8 +12415,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             ArticleViewer.getInstance().close(false, true);
         }
         if (AndroidUtilities.isTablet()) {
-            boolean z4 = baseFragment instanceof LoginActivity;
-            this.drawerLayoutContainer.setAllowOpenDrawer(!z4 && !(baseFragment instanceof CountrySelectActivity) && this.layersActionBarLayout.getVisibility() != 0, true);
+            boolean z3 = baseFragment instanceof LoginActivity;
+            this.drawerLayoutContainer.setAllowOpenDrawer(!z3 && !(baseFragment instanceof IntroActivity) && !(baseFragment instanceof CountrySelectActivity) && this.layersActionBarLayout.getVisibility() != 0, true);
             if ((baseFragment instanceof DialogsActivity) && ((DialogsActivity) baseFragment).isMainDialogList() && actionBarLayout2 != (actionBarLayout6 = this.actionBarLayout)) {
                 actionBarLayout6.removeAllFragments();
                 this.actionBarLayout.presentFragment(baseFragment, z, z2, false, false);
@@ -12416,7 +12435,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 if (actionBarLayout2 != actionBarLayout7) {
                     actionBarLayout7.setVisibility(0);
                     this.drawerLayoutContainer.setAllowOpenDrawer(false, true);
-                    if (z4) {
+                    if (z3) {
                         this.backgroundTablet.setVisibility(0);
                         this.shadowTabletSide.setVisibility(8);
                         this.shadowTablet.setBackgroundColor(0);
@@ -12427,9 +12446,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     return false;
                 }
             } else {
-                boolean z5 = this.tabletFullSize;
-                if ((!z5 && actionBarLayout2 == this.rightActionBarLayout) || (z5 && actionBarLayout2 == this.actionBarLayout)) {
-                    boolean z6 = (z5 && actionBarLayout2 == (actionBarLayout3 = this.actionBarLayout) && actionBarLayout3.fragmentsStack.size() == 1) ? false : true;
+                boolean z4 = this.tabletFullSize;
+                if ((!z4 && actionBarLayout2 == this.rightActionBarLayout) || (z4 && actionBarLayout2 == this.actionBarLayout)) {
+                    boolean z5 = (z4 && actionBarLayout2 == (actionBarLayout3 = this.actionBarLayout) && actionBarLayout3.fragmentsStack.size() == 1) ? false : true;
                     if (!this.layersActionBarLayout.fragmentsStack.isEmpty()) {
                         while (this.layersActionBarLayout.fragmentsStack.size() - 1 > 0) {
                             ActionBarLayout actionBarLayout8 = this.layersActionBarLayout;
@@ -12437,11 +12456,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         }
                         this.layersActionBarLayout.closeLastFragment(!z2);
                     }
-                    if (!z6) {
+                    if (!z5) {
                         this.actionBarLayout.presentFragment(baseFragment, false, z2, false, false);
                     }
-                    return z6;
-                } else if (!z5 && actionBarLayout2 != (actionBarLayout5 = this.rightActionBarLayout)) {
+                    return z5;
+                } else if (!z4 && actionBarLayout2 != (actionBarLayout5 = this.rightActionBarLayout)) {
                     actionBarLayout5.setVisibility(0);
                     this.backgroundTablet.setVisibility(8);
                     this.rightActionBarLayout.removeAllFragments();
@@ -12454,7 +12473,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         this.layersActionBarLayout.closeLastFragment(!z2);
                     }
                     return false;
-                } else if (!z5 || actionBarLayout2 == (actionBarLayout4 = this.actionBarLayout)) {
+                } else if (!z4 || actionBarLayout2 == (actionBarLayout4 = this.actionBarLayout)) {
                     if (!this.layersActionBarLayout.fragmentsStack.isEmpty()) {
                         while (this.layersActionBarLayout.fragmentsStack.size() - 1 > 0) {
                             ActionBarLayout actionBarLayout10 = this.layersActionBarLayout;
@@ -12478,24 +12497,18 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 }
             }
         } else {
-            if (!(baseFragment instanceof LoginActivity) ? !(baseFragment instanceof CountrySelectActivity) || mainFragmentsStack.size() != 1 : mainFragmentsStack.size() != 0) {
-                z3 = true;
-            } else {
-                z3 = false;
-            }
-            this.drawerLayoutContainer.setAllowOpenDrawer(z3, false);
+            this.drawerLayoutContainer.setAllowOpenDrawer((baseFragment instanceof LoginActivity) || (baseFragment instanceof IntroActivity) ? !(mainFragmentsStack.size() == 0 || (mainFragmentsStack.get(0) instanceof IntroActivity)) : !((baseFragment instanceof CountrySelectActivity) && mainFragmentsStack.size() == 1), false);
         }
         return true;
     }
 
     public boolean needAddFragmentToStack(BaseFragment baseFragment, ActionBarLayout actionBarLayout2) {
-        boolean z;
         ActionBarLayout actionBarLayout3;
         ActionBarLayout actionBarLayout4;
         ActionBarLayout actionBarLayout5;
         if (AndroidUtilities.isTablet()) {
-            boolean z2 = baseFragment instanceof LoginActivity;
-            this.drawerLayoutContainer.setAllowOpenDrawer(!z2 && !(baseFragment instanceof CountrySelectActivity) && this.layersActionBarLayout.getVisibility() != 0, true);
+            boolean z = baseFragment instanceof LoginActivity;
+            this.drawerLayoutContainer.setAllowOpenDrawer(!z && !(baseFragment instanceof IntroActivity) && !(baseFragment instanceof CountrySelectActivity) && this.layersActionBarLayout.getVisibility() != 0, true);
             if (baseFragment instanceof DialogsActivity) {
                 if (((DialogsActivity) baseFragment).isMainDialogList() && actionBarLayout2 != (actionBarLayout5 = this.actionBarLayout)) {
                     actionBarLayout5.removeAllFragments();
@@ -12516,7 +12529,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 if (actionBarLayout2 != actionBarLayout6) {
                     actionBarLayout6.setVisibility(0);
                     this.drawerLayoutContainer.setAllowOpenDrawer(false, true);
-                    if (z2) {
+                    if (z) {
                         this.backgroundTablet.setVisibility(0);
                         this.shadowTabletSide.setVisibility(8);
                         this.shadowTablet.setBackgroundColor(0);
@@ -12527,8 +12540,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     return false;
                 }
             } else {
-                boolean z3 = this.tabletFullSize;
-                if (!z3 && actionBarLayout2 != (actionBarLayout4 = this.rightActionBarLayout)) {
+                boolean z2 = this.tabletFullSize;
+                if (!z2 && actionBarLayout2 != (actionBarLayout4 = this.rightActionBarLayout)) {
                     actionBarLayout4.setVisibility(0);
                     this.backgroundTablet.setVisibility(8);
                     this.rightActionBarLayout.removeAllFragments();
@@ -12541,7 +12554,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         this.layersActionBarLayout.closeLastFragment(true);
                     }
                     return false;
-                } else if (z3 && actionBarLayout2 != (actionBarLayout3 = this.actionBarLayout)) {
+                } else if (z2 && actionBarLayout2 != (actionBarLayout3 = this.actionBarLayout)) {
                     actionBarLayout3.addFragmentToStack(baseFragment);
                     if (!this.layersActionBarLayout.fragmentsStack.isEmpty()) {
                         while (this.layersActionBarLayout.fragmentsStack.size() - 1 > 0) {
@@ -12554,12 +12567,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 }
             }
         } else {
-            if (!(baseFragment instanceof LoginActivity) ? !(baseFragment instanceof CountrySelectActivity) || mainFragmentsStack.size() != 1 : mainFragmentsStack.size() != 0) {
-                z = true;
-            } else {
-                z = false;
-            }
-            this.drawerLayoutContainer.setAllowOpenDrawer(z, false);
+            this.drawerLayoutContainer.setAllowOpenDrawer((baseFragment instanceof LoginActivity) || (baseFragment instanceof IntroActivity) ? !(mainFragmentsStack.size() == 0 || (mainFragmentsStack.get(0) instanceof IntroActivity)) : !((baseFragment instanceof CountrySelectActivity) && mainFragmentsStack.size() == 1), false);
         }
         return true;
     }

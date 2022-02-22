@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <public type="anim" name="alpha_in" id="NUM" />
+    <public type="anim" name="alpha_out" id="NUM" />
     <public type="anim" name="ft_avd_toarrow_rectangle_1_pivot_0_animation" id="NUM" />
     <public type="anim" name="ft_avd_toarrow_rectangle_2_pivot_0_animation" id="NUM" />
     <public type="anim" name="ft_avd_toarrow_rectangle_3_pivot_0_animation" id="NUM" />
@@ -22,6 +24,9 @@
     <public type="anim" name="popup_context_in" id="NUM" />
     <public type="anim" name="popup_in" id="NUM" />
     <public type="anim" name="popup_out" id="NUM" />
+    <public type="anim" name="text_in" id="NUM" />
+    <public type="anim" name="text_out" id="NUM" />
+    <public type="anim" name="text_out_down" id="NUM" />
     <public type="array" name="android_wear_capabilities" id="NUM" />
     <public type="attr" name="allowShortcuts" id="NUM" />
     <public type="attr" name="alpha" id="NUM" />
@@ -610,7 +615,6 @@
     <public type="drawable" name="intro_private_door" id="NUM" />
     <public type="drawable" name="intro_private_screw" id="NUM" />
     <public type="drawable" name="intro_tg_plane" id="NUM" />
-    <public type="drawable" name="intro_tg_sphere" id="NUM" />
     <public type="drawable" name="knob_shadow" id="NUM" />
     <public type="drawable" name="layer_shadow" id="NUM" />
     <public type="drawable" name="list_bot" id="NUM" />
@@ -677,6 +681,7 @@
     <public type="drawable" name="menu_camera_av" id="NUM" />
     <public type="drawable" name="menu_channel_ny" id="NUM" />
     <public type="drawable" name="menu_chats" id="NUM" />
+    <public type="drawable" name="menu_clear" id="NUM" />
     <public type="drawable" name="menu_clear_recent" id="NUM" />
     <public type="drawable" name="menu_clearcache" id="NUM" />
     <public type="drawable" name="menu_contacts" id="NUM" />
@@ -800,6 +805,7 @@
     <public type="drawable" name="msg_handdown" id="NUM" />
     <public type="drawable" name="msg_home" id="NUM" />
     <public type="drawable" name="msg_hybrid" id="NUM" />
+    <public type="drawable" name="msg_inputarrow" id="NUM" />
     <public type="drawable" name="msg_instant" id="NUM" />
     <public type="drawable" name="msg_invited" id="NUM" />
     <public type="drawable" name="msg_language" id="NUM" />
@@ -841,6 +847,7 @@
     <public type="drawable" name="msg_photo_shadow" id="NUM" />
     <public type="drawable" name="msg_photoeditor" id="NUM" />
     <public type="drawable" name="msg_pin" id="NUM" />
+    <public type="drawable" name="msg_pin_code" id="NUM" />
     <public type="drawable" name="msg_pin_filled" id="NUM" />
     <public type="drawable" name="msg_pin_mini" id="NUM" />
     <public type="drawable" name="msg_played" id="NUM" />
@@ -1318,6 +1325,7 @@
     <public type="id" name="classic" id="NUM" />
     <public type="id" name="clip_horizontal" id="NUM" />
     <public type="id" name="clip_vertical" id="NUM" />
+    <public type="id" name="color_key_tag" id="NUM" />
     <public type="id" name="contact" id="NUM" />
     <public type="id" name="contacts_widget_item" id="NUM" />
     <public type="id" name="contacts_widget_item1" id="NUM" />
@@ -1469,6 +1477,7 @@
     <public type="id" name="text_wrap" id="NUM" />
     <public type="id" name="thing_proto" id="NUM" />
     <public type="id" name="time" id="NUM" />
+    <public type="id" name="timeout_callback" id="NUM" />
     <public type="id" name="title" id="NUM" />
     <public type="id" name="top" id="NUM" />
     <public type="id" name="url" id="NUM" />
@@ -1535,6 +1544,7 @@
     <public type="raw" name="camera" id="NUM" />
     <public type="raw" name="camera_flip" id="NUM" />
     <public type="raw" name="camera_outline" id="NUM" />
+    <public type="raw" name="camera_wait" id="NUM" />
     <public type="raw" name="channel_create" id="NUM" />
     <public type="raw" name="chat_audio_record_delete" id="NUM" />
     <public type="raw" name="chat_audio_record_delete_2" id="NUM" />
@@ -1547,6 +1557,7 @@
     <public type="raw" name="chats_unarchive" id="NUM" />
     <public type="raw" name="chats_unhide" id="NUM" />
     <public type="raw" name="chrome_30" id="NUM" />
+    <public type="raw" name="code_laptop" id="NUM" />
     <public type="raw" name="contact_check" id="NUM" />
     <public type="raw" name="contacts_sync_off" id="NUM" />
     <public type="raw" name="contacts_sync_on" id="NUM" />
@@ -1602,6 +1613,16 @@
     <public type="raw" name="permission_map_dark" id="NUM" />
     <public type="raw" name="permission_pin" id="NUM" />
     <public type="raw" name="permission_pin_dark" id="NUM" />
+    <public type="raw" name="permission_request_apk" id="NUM" />
+    <public type="raw" name="permission_request_camera" id="NUM" />
+    <public type="raw" name="permission_request_contacts" id="NUM" />
+    <public type="raw" name="permission_request_folder" id="NUM" />
+    <public type="raw" name="permission_request_location" id="NUM" />
+    <public type="raw" name="permission_request_microphone" id="NUM" />
+    <public type="raw" name="phone_dots" id="NUM" />
+    <public type="raw" name="phone_dots_to_stars" id="NUM" />
+    <public type="raw" name="phone_flash_call" id="NUM" />
+    <public type="raw" name="phone_stars_to_dots" id="NUM" />
     <public type="raw" name="pip_video_request" id="NUM" />
     <public type="raw" name="pip_voice_request" id="NUM" />
     <public type="raw" name="player_prev" id="NUM" />
@@ -1614,6 +1635,7 @@
     <public type="raw" name="record_video_p" id="NUM" />
     <public type="raw" name="report_police" id="NUM" />
     <public type="raw" name="safari_30" id="NUM" />
+    <public type="raw" name="sandclock" id="NUM" />
     <public type="raw" name="saved_messages" id="NUM" />
     <public type="raw" name="shared_link_enter" id="NUM" />
     <public type="raw" name="silent_mute" id="NUM" />
@@ -1650,6 +1672,8 @@
     <public type="raw" name="ubuntu_30" id="NUM" />
     <public type="raw" name="utyan_call" id="NUM" />
     <public type="raw" name="utyan_gigagroup" id="NUM" />
+    <public type="raw" name="utyan_newborn" id="NUM" />
+    <public type="raw" name="utyan_passcode" id="NUM" />
     <public type="raw" name="utyan_private" id="NUM" />
     <public type="raw" name="utyan_schedule" id="NUM" />
     <public type="raw" name="voice_mini" id="NUM" />
@@ -2005,6 +2029,8 @@
     <public type="string" name="AllPhotos" id="NUM" />
     <public type="string" name="AllVideos" id="NUM" />
     <public type="string" name="Allow" id="NUM" />
+    <public type="string" name="AllowBackgroundActivity" id="NUM" />
+    <public type="string" name="AllowBackgroundActivityInfo" id="NUM" />
     <public type="string" name="AllowCustomQuickReply" id="NUM" />
     <public type="string" name="AllowFillNumber" id="NUM" />
     <public type="string" name="AllowReadCall" id="NUM" />
@@ -2405,6 +2431,7 @@
     <public type="string" name="CallAgain" id="NUM" />
     <public type="string" name="CallAlert" id="NUM" />
     <public type="string" name="CallAlertTitle" id="NUM" />
+    <public type="string" name="CallAvailableIn" id="NUM" />
     <public type="string" name="CallBack" id="NUM" />
     <public type="string" name="CallEmojiKeyTooltip" id="NUM" />
     <public type="string" name="CallMessageIncoming" id="NUM" />
@@ -2450,6 +2477,7 @@
     <public type="string" name="CancelForwarding" id="NUM" />
     <public type="string" name="CancelLinkExpired" id="NUM" />
     <public type="string" name="CancelLinkSuccess" id="NUM" />
+    <public type="string" name="CancelLinkSuccessTitle" id="NUM" />
     <public type="string" name="CancelPasswordQuestion" id="NUM" />
     <public type="string" name="CancelPasswordReset" id="NUM" />
     <public type="string" name="CancelPasswordResetNo" id="NUM" />
@@ -2470,6 +2498,7 @@
     <public type="string" name="ChangeLanguageLater" id="NUM" />
     <public type="string" name="ChangePasscode" id="NUM" />
     <public type="string" name="ChangePasscodeInfo" id="NUM" />
+    <public type="string" name="ChangePasscodeInfoShort" id="NUM" />
     <public type="string" name="ChangePassword" id="NUM" />
     <public type="string" name="ChangePermissions" id="NUM" />
     <public type="string" name="ChangePhoneHelp" id="NUM" />
@@ -2729,6 +2758,7 @@
     <public type="string" name="ChoosingSticker" id="NUM" />
     <public type="string" name="ChromeCustomTabs" id="NUM" />
     <public type="string" name="ChromeCustomTabsInfo" id="NUM" />
+    <public type="string" name="Clear" id="NUM" />
     <public type="string" name="ClearButton" id="NUM" />
     <public type="string" name="ClearCache" id="NUM" />
     <public type="string" name="ClearCacheFewChatsTitle" id="NUM" />
@@ -2805,6 +2835,8 @@
     <public type="string" name="CommonGroups_two" id="NUM" />
     <public type="string" name="CommonGroups_zero" id="NUM" />
     <public type="string" name="CompatibilityChat" id="NUM" />
+    <public type="string" name="ConfirmCorrectNumber" id="NUM" />
+    <public type="string" name="ConfirmCreatePasscode" id="NUM" />
     <public type="string" name="ConfirmDeleteCallLog" id="NUM" />
     <public type="string" name="Connected" id="NUM" />
     <public type="string" name="Connecting" id="NUM" />
@@ -2848,6 +2880,7 @@
     <public type="string" name="CountOfResults_zero" id="NUM" />
     <public type="string" name="CountReceived" id="NUM" />
     <public type="string" name="CountSent" id="NUM" />
+    <public type="string" name="Country" id="NUM" />
     <public type="string" name="Create" id="NUM" />
     <public type="string" name="CreateEncryptedChatError" id="NUM" />
     <public type="string" name="CreateGroupError" id="NUM" />
@@ -2863,6 +2896,10 @@
     <public type="string" name="CreateNewThemeAlert" id="NUM" />
     <public type="string" name="CreateNewThemeHelp" id="NUM" />
     <public type="string" name="CreateNewThemeMenu" id="NUM" />
+    <public type="string" name="CreatePasscode" id="NUM" />
+    <public type="string" name="CreatePasscodeInfoPIN" id="NUM" />
+    <public type="string" name="CreatePasscodeInfoPassword" id="NUM" />
+    <public type="string" name="CreatePassword" id="NUM" />
     <public type="string" name="CreateTheme" id="NUM" />
     <public type="string" name="Crop" id="NUM" />
     <public type="string" name="CropImage" id="NUM" />
@@ -3025,12 +3062,18 @@
     <public type="string" name="DiceEmojiInfo" id="NUM" />
     <public type="string" name="DiceInfo2" id="NUM" />
     <public type="string" name="DidNotGetTheCode" id="NUM" />
+    <public type="string" name="DidNotGetTheCodeEditNumberButton" id="NUM" />
+    <public type="string" name="DidNotGetTheCodeHelpButton" id="NUM" />
+    <public type="string" name="DidNotGetTheCodeInfo" id="NUM" />
     <public type="string" name="DidNotGetTheCodePhone" id="NUM" />
     <public type="string" name="DidNotGetTheCodeSms" id="NUM" />
     <public type="string" name="DirectShare" id="NUM" />
     <public type="string" name="DirectShareInfo" id="NUM" />
     <public type="string" name="Directions" id="NUM" />
     <public type="string" name="Disable" id="NUM" />
+    <public type="string" name="DisablePasscode" id="NUM" />
+    <public type="string" name="DisablePasscodeConfirmMessage" id="NUM" />
+    <public type="string" name="DisablePasscodeTurnOff" id="NUM" />
     <public type="string" name="DisappearingGif" id="NUM" />
     <public type="string" name="DisappearingPhoto" id="NUM" />
     <public type="string" name="DisappearingVideo" id="NUM" />
@@ -3077,6 +3120,8 @@
     <public type="string" name="DoubleTapPreviewRational" id="NUM" />
     <public type="string" name="DoubleTapPreviewSenderName" id="NUM" />
     <public type="string" name="DoubleTapSetting" id="NUM" />
+    <public type="string" name="Downloading" id="NUM" />
+    <public type="string" name="DownloadsTabs" id="NUM" />
     <public type="string" name="Draft" id="NUM" />
     <public type="string" name="Edit" id="NUM" />
     <public type="string" name="EditAdmin" id="NUM" />
@@ -3129,6 +3174,8 @@
     <public type="string" name="EditMessageReplacePhoto" id="NUM" />
     <public type="string" name="EditMessageReplaceVideo" id="NUM" />
     <public type="string" name="EditName" id="NUM" />
+    <public type="string" name="EditNumber" id="NUM" />
+    <public type="string" name="EditNumberInfo" id="NUM" />
     <public type="string" name="EditPhoto" id="NUM" />
     <public type="string" name="EditThemeColors" id="NUM" />
     <public type="string" name="EditThemeTitle" id="NUM" />
@@ -3159,6 +3206,7 @@
     <public type="string" name="EnableAllStreamingInfo" id="NUM" />
     <public type="string" name="EnableAnimations" id="NUM" />
     <public type="string" name="EnableAutoDelete" id="NUM" />
+    <public type="string" name="EnablePasscode" id="NUM" />
     <public type="string" name="EnableReactions" id="NUM" />
     <public type="string" name="EnableReactionsChannelInfo" id="NUM" />
     <public type="string" name="EnableReactionsGroupInfo" id="NUM" />
@@ -3189,8 +3237,11 @@
     <public type="string" name="EnterListName" id="NUM" />
     <public type="string" name="EnterNewFirstPasscode" id="NUM" />
     <public type="string" name="EnterNewPasscode" id="NUM" />
+    <public type="string" name="EnterPassword" id="NUM" />
     <public type="string" name="EnterThemeName" id="NUM" />
     <public type="string" name="EnterThemeNameEdit" id="NUM" />
+    <public type="string" name="EnterYourPasscode" id="NUM" />
+    <public type="string" name="EnterYourPasscodeInfo" id="NUM" />
     <public type="string" name="EnterYourTelegramPasscode" id="NUM" />
     <public type="string" name="ErrorOccurred" id="NUM" />
     <public type="string" name="ErrorSendRestrictedMedia" id="NUM" />
@@ -3436,6 +3487,7 @@
     <public type="string" name="FingerprintInfo" id="NUM" />
     <public type="string" name="FingerprintNotRecognized" id="NUM" />
     <public type="string" name="FirstName" id="NUM" />
+    <public type="string" name="FirstNameSmall" id="NUM" />
     <public type="string" name="FloodWait" id="NUM" />
     <public type="string" name="FloodWaitTime" id="NUM" />
     <public type="string" name="Folder" id="NUM" />
@@ -3449,6 +3501,12 @@
     <public type="string" name="FootsAway" id="NUM" />
     <public type="string" name="FootsFromYou" id="NUM" />
     <public type="string" name="FootsShort" id="NUM" />
+    <public type="string" name="ForceSetPasswordAlertMessageShort_few" id="NUM" />
+    <public type="string" name="ForceSetPasswordAlertMessageShort_many" id="NUM" />
+    <public type="string" name="ForceSetPasswordAlertMessageShort_one" id="NUM" />
+    <public type="string" name="ForceSetPasswordAlertMessageShort_other" id="NUM" />
+    <public type="string" name="ForceSetPasswordAlertMessageShort_two" id="NUM" />
+    <public type="string" name="ForceSetPasswordAlertMessageShort_zero" id="NUM" />
     <public type="string" name="ForceSetPasswordAlertMessage_few" id="NUM" />
     <public type="string" name="ForceSetPasswordAlertMessage_many" id="NUM" />
     <public type="string" name="ForceSetPasswordAlertMessage_one" id="NUM" />
@@ -3457,6 +3515,8 @@
     <public type="string" name="ForceSetPasswordAlertMessage_zero" id="NUM" />
     <public type="string" name="ForceSetPasswordCancel" id="NUM" />
     <public type="string" name="ForceSetPasswordContinue" id="NUM" />
+    <public type="string" name="ForgotPasscode" id="NUM" />
+    <public type="string" name="ForgotPasscodeInfo" id="NUM" />
     <public type="string" name="ForgotPassword" id="NUM" />
     <public type="string" name="Forward" id="NUM" />
     <public type="string" name="ForwardAnotherChat" id="NUM" />
@@ -3868,6 +3928,7 @@
     <public type="string" name="Languages_zero" id="NUM" />
     <public type="string" name="LargeEmoji" id="NUM" />
     <public type="string" name="LastName" id="NUM" />
+    <public type="string" name="LastNameSmall" id="NUM" />
     <public type="string" name="LastSeen" id="NUM" />
     <public type="string" name="LastSeenContacts" id="NUM" />
     <public type="string" name="LastSeenContactsMinus" id="NUM" />
@@ -3969,6 +4030,7 @@
     <public type="string" name="LoginAttemptsInfo" id="NUM" />
     <public type="string" name="LoginPassword" id="NUM" />
     <public type="string" name="LoginPasswordText" id="NUM" />
+    <public type="string" name="LoginPasswordTextShort" id="NUM" />
     <public type="string" name="Long" id="NUM" />
     <public type="string" name="LoopAnimatedStickers" id="NUM" />
     <public type="string" name="LoopAnimatedStickersInfo" id="NUM" />
@@ -4605,8 +4667,14 @@
     <public type="string" name="Participants_zero" id="NUM" />
     <public type="string" name="Passcode" id="NUM" />
     <public type="string" name="PasscodeDoNotMatch" id="NUM" />
+    <public type="string" name="PasscodeFinish" id="NUM" />
     <public type="string" name="PasscodePIN" id="NUM" />
     <public type="string" name="PasscodePassword" id="NUM" />
+    <public type="string" name="PasscodeReinstallNotice" id="NUM" />
+    <public type="string" name="PasscodeScreenHint" id="NUM" />
+    <public type="string" name="PasscodeSwitchToPIN" id="NUM" />
+    <public type="string" name="PasscodeSwitchToPassword" id="NUM" />
+    <public type="string" name="PasscodesDoNotMatchTryAgain" id="NUM" />
     <public type="string" name="PassportAddAddressUploadInfo" id="NUM" />
     <public type="string" name="PassportAddAgreement" id="NUM" />
     <public type="string" name="PassportAddAgreementInfo" id="NUM" />
@@ -4792,6 +4860,7 @@
     <public type="string" name="PasswordDoNotMatch" id="NUM" />
     <public type="string" name="PasswordEmailInvalid" id="NUM" />
     <public type="string" name="PasswordHint" id="NUM" />
+    <public type="string" name="PasswordHintDescription" id="NUM" />
     <public type="string" name="PasswordHintPlaceholder" id="NUM" />
     <public type="string" name="PasswordHintText" id="NUM" />
     <public type="string" name="PasswordHintTextLogin" id="NUM" />
@@ -4800,6 +4869,7 @@
     <public type="string" name="PasswordRecovery" id="NUM" />
     <public type="string" name="PasswordReset" id="NUM" />
     <public type="string" name="PasteFromClipboard" id="NUM" />
+    <public type="string" name="PauseAll" id="NUM" />
     <public type="string" name="PaymentBillingAddress" id="NUM" />
     <public type="string" name="PaymentCardCvv" id="NUM" />
     <public type="string" name="PaymentCardExpireDate" id="NUM" />
@@ -4898,13 +4968,19 @@
     <public type="string" name="PermissionDrawAboveOtherAppsGroupCall" id="NUM" />
     <public type="string" name="PermissionDrawAboveOtherAppsGroupCallTitle" id="NUM" />
     <public type="string" name="PermissionDrawAboveOtherAppsTitle" id="NUM" />
-    <public type="string" name="PermissionNoAudio" id="NUM" />
-    <public type="string" name="PermissionNoAudioVideo" id="NUM" />
-    <public type="string" name="PermissionNoCamera" id="NUM" />
+    <public type="string" name="PermissionNoAudioVideoWithHint" id="NUM" />
+    <public type="string" name="PermissionNoAudioWithHint" id="NUM" />
+    <public type="string" name="PermissionNoCameraMicVideo" id="NUM" />
+    <public type="string" name="PermissionNoCameraWithHint" id="NUM" />
+    <public type="string" name="PermissionNoContactsSharing" id="NUM" />
     <public type="string" name="PermissionNoLocation" id="NUM" />
+    <public type="string" name="PermissionNoLocationFriends" id="NUM" />
+    <public type="string" name="PermissionNoLocationNavigation" id="NUM" />
+    <public type="string" name="PermissionNoLocationPeopleNearby" id="NUM" />
     <public type="string" name="PermissionNoLocationPosition" id="NUM" />
+    <public type="string" name="PermissionNoStorageAvatar" id="NUM" />
     <public type="string" name="PermissionOpenSettings" id="NUM" />
-    <public type="string" name="PermissionStorage" id="NUM" />
+    <public type="string" name="PermissionStorageWithHint" id="NUM" />
     <public type="string" name="PermissionXiaomiLockscreen" id="NUM" />
     <public type="string" name="Phone" id="NUM" />
     <public type="string" name="PhoneCopied" id="NUM" />
@@ -4912,6 +4988,7 @@
     <public type="string" name="PhoneHome" id="NUM" />
     <public type="string" name="PhoneMain" id="NUM" />
     <public type="string" name="PhoneMobile" id="NUM" />
+    <public type="string" name="PhoneNumber" id="NUM" />
     <public type="string" name="PhoneNumberAlert" id="NUM" />
     <public type="string" name="PhoneNumberChange2" id="NUM" />
     <public type="string" name="PhoneNumberChangeTitle" id="NUM" />
@@ -5196,7 +5273,7 @@
     <public type="string" name="PushReactVideo" id="NUM" />
     <public type="string" name="QRCodeLinkHelpChannel" id="NUM" />
     <public type="string" name="QRCodeLinkHelpGroup" id="NUM" />
-    <public type="string" name="QRCodePermissionNoCamera" id="NUM" />
+    <public type="string" name="QRCodePermissionNoCameraWithHint" id="NUM" />
     <public type="string" name="QrCode" id="NUM" />
     <public type="string" name="QuestionHint" id="NUM" />
     <public type="string" name="QuickReplyCustom" id="NUM" />
@@ -5221,6 +5298,7 @@
     <public type="string" name="RateCallSilentRemote" id="NUM" />
     <public type="string" name="RateCallVideoDistorted" id="NUM" />
     <public type="string" name="RateCallVideoPixelated" id="NUM" />
+    <public type="string" name="ReEnterPassword" id="NUM" />
     <public type="string" name="ReEnterYourPasscode" id="NUM" />
     <public type="string" name="Reacted_few" id="NUM" />
     <public type="string" name="Reacted_many" id="NUM" />
@@ -5245,6 +5323,7 @@
     <public type="string" name="RecentPosts" id="NUM" />
     <public type="string" name="RecentStickers" id="NUM" />
     <public type="string" name="RecentStickersShort" id="NUM" />
+    <public type="string" name="RecentlyDownloaded" id="NUM" />
     <public type="string" name="RecentlyViewed" id="NUM" />
     <public type="string" name="RecentlyViewedHide" id="NUM" />
     <public type="string" name="Recipient_few" id="NUM" />
@@ -5260,6 +5339,7 @@
     <public type="string" name="RecoveryEmailTitle" id="NUM" />
     <public type="string" name="Red" id="NUM" />
     <public type="string" name="RegisterText2" id="NUM" />
+    <public type="string" name="RegistrationProfileInfo" id="NUM" />
     <public type="string" name="Regular" id="NUM" />
     <public type="string" name="ReleaseToGoNextArchive" id="NUM" />
     <public type="string" name="ReleaseToGoNextChannel" id="NUM" />
@@ -5328,6 +5408,9 @@
     <public type="string" name="ReportUnrelatedGroupText" id="NUM" />
     <public type="string" name="ReportUnrelatedGroupTextNoAddress" id="NUM" />
     <public type="string" name="ReportUserLocation" id="NUM" />
+    <public type="string" name="RequestCallButton" id="NUM" />
+    <public type="string" name="RequestMissedCall" id="NUM" />
+    <public type="string" name="RequestSmsButton" id="NUM" />
     <public type="string" name="RequestToJoinChannel" id="NUM" />
     <public type="string" name="RequestToJoinChannelApproved" id="NUM" />
     <public type="string" name="RequestToJoinChannelDescription" id="NUM" />
@@ -5367,6 +5450,7 @@
     <public type="string" name="ResetStatistics" id="NUM" />
     <public type="string" name="ResetStatisticsAlert" id="NUM" />
     <public type="string" name="ResetStatisticsAlertTitle" id="NUM" />
+    <public type="string" name="RestoreEmailNoAccess" id="NUM" />
     <public type="string" name="RestoreEmailSent" id="NUM" />
     <public type="string" name="RestoreEmailSentInfo" id="NUM" />
     <public type="string" name="RestoreEmailSentTitle" id="NUM" />
@@ -5391,6 +5475,7 @@
     <public type="string" name="Restrictions_other" id="NUM" />
     <public type="string" name="Restrictions_two" id="NUM" />
     <public type="string" name="Restrictions_zero" id="NUM" />
+    <public type="string" name="ResumeAll" id="NUM" />
     <public type="string" name="Retry" id="NUM" />
     <public type="string" name="RetryCall" id="NUM" />
     <public type="string" name="ReturnToCall" id="NUM" />
@@ -5429,7 +5514,9 @@
     <public type="string" name="ScheduledOrNoSoundHint" id="NUM" />
     <public type="string" name="ScreenCapture" id="NUM" />
     <public type="string" name="ScreenCaptureAlert" id="NUM" />
+    <public type="string" name="ScreenCaptureHeader" id="NUM" />
     <public type="string" name="ScreenCaptureInfo" id="NUM" />
+    <public type="string" name="ScreenCaptureShowContent" id="NUM" />
     <public type="string" name="SdCard" id="NUM" />
     <public type="string" name="Search" id="NUM" />
     <public type="string" name="SearchAllChatsShort" id="NUM" />
@@ -5559,6 +5646,7 @@
     <public type="string" name="SendingVideoStatus" id="NUM" />
     <public type="string" name="SentAppCode" id="NUM" />
     <public type="string" name="SentAppCodeTitle" id="NUM" />
+    <public type="string" name="SentAppCodeWithPhone" id="NUM" />
     <public type="string" name="SentCallCode" id="NUM" />
     <public type="string" name="SentCallOnly" id="NUM" />
     <public type="string" name="SentSmsCode" id="NUM" />
@@ -5577,6 +5665,7 @@
     <public type="string" name="SetAsMain" id="NUM" />
     <public type="string" name="SetBackground" id="NUM" />
     <public type="string" name="SetColor" id="NUM" />
+    <public type="string" name="SetNewPassword" id="NUM" />
     <public type="string" name="SetPasscode" id="NUM" />
     <public type="string" name="SetPasscodeInfo" id="NUM" />
     <public type="string" name="SetProfilePhoto" id="NUM" />
@@ -5662,6 +5751,7 @@
     <public type="string" name="Sharpen" id="NUM" />
     <public type="string" name="Short" id="NUM" />
     <public type="string" name="ShortMessageLifetimeForever" id="NUM" />
+    <public type="string" name="ShortNumberInfo" id="NUM" />
     <public type="string" name="ShowAllFiles" id="NUM" />
     <public type="string" name="ShowAllGIFs" id="NUM" />
     <public type="string" name="ShowAllMedia" id="NUM" />
@@ -5706,6 +5796,7 @@
     <public type="string" name="SmartNotificationsDetail" id="NUM" />
     <public type="string" name="SmartNotificationsDisabled" id="NUM" />
     <public type="string" name="SmartNotificationsInfo" id="NUM" />
+    <public type="string" name="SmsAvailableIn" id="NUM" />
     <public type="string" name="SmsText" id="NUM" />
     <public type="string" name="SoftUserLimitAlert" id="NUM" />
     <public type="string" name="SoftenSkin" id="NUM" />
@@ -5814,6 +5905,8 @@
     <public type="string" name="Subscribers_other" id="NUM" />
     <public type="string" name="Subscribers_two" id="NUM" />
     <public type="string" name="Subscribers_zero" id="NUM" />
+    <public type="string" name="SuggestClearDatabaseMessage" id="NUM" />
+    <public type="string" name="SuggestClearDatabaseTitle" id="NUM" />
     <public type="string" name="SuggestContacts" id="NUM" />
     <public type="string" name="SuggestContactsAlert" id="NUM" />
     <public type="string" name="SuggestContactsInfo" id="NUM" />
@@ -6422,8 +6515,8 @@
     <public type="string" name="VoipMutedTapedForSpeak" id="NUM" />
     <public type="string" name="VoipMutedTapedForSpeakInfo" id="NUM" />
     <public type="string" name="VoipNeedCameraPermission" id="NUM" />
-    <public type="string" name="VoipNeedMicCameraPermission" id="NUM" />
-    <public type="string" name="VoipNeedMicPermission" id="NUM" />
+    <public type="string" name="VoipNeedMicCameraPermissionWithHint" id="NUM" />
+    <public type="string" name="VoipNeedMicPermissionWithHint" id="NUM" />
     <public type="string" name="VoipNoiseCancellation" id="NUM" />
     <public type="string" name="VoipNoiseCancellationDisabled" id="NUM" />
     <public type="string" name="VoipNoiseCancellationEnabled" id="NUM" />
@@ -6522,8 +6615,11 @@
     <public type="string" name="WillUnmuteIn" id="NUM" />
     <public type="string" name="WithinAMonth" id="NUM" />
     <public type="string" name="WithinAWeek" id="NUM" />
+    <public type="string" name="WrongCode" id="NUM" />
+    <public type="string" name="WrongCodeTitle" id="NUM" />
     <public type="string" name="WrongCountry" id="NUM" />
     <public type="string" name="WrongNumber" id="NUM" />
+    <public type="string" name="WrongNumberFormat" id="NUM" />
     <public type="string" name="Years_few" id="NUM" />
     <public type="string" name="Years_many" id="NUM" />
     <public type="string" name="Years_one" id="NUM" />
@@ -6559,12 +6655,14 @@
     <public type="string" name="YourLocatedChannelsTooMuch" id="NUM" />
     <public type="string" name="YourName" id="NUM" />
     <public type="string" name="YourNameChanged" id="NUM" />
+    <public type="string" name="YourNumber" id="NUM" />
     <public type="string" name="YourPassword" id="NUM" />
     <public type="string" name="YourPasswordChangedSuccessText" id="NUM" />
     <public type="string" name="YourPasswordHeader" id="NUM" />
     <public type="string" name="YourPasswordRemember" id="NUM" />
     <public type="string" name="YourPasswordRememberNo" id="NUM" />
     <public type="string" name="YourPasswordRememberYes" id="NUM" />
+    <public type="string" name="YourPasswordReset" id="NUM" />
     <public type="string" name="YourPasswordSuccess" id="NUM" />
     <public type="string" name="YourPasswordSuccessText" id="NUM" />
     <public type="string" name="YourPhone" id="NUM" />

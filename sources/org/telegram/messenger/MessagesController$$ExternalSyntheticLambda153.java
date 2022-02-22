@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda15
     }
 
     public final void run() {
-        this.f$0.lambda$loadFullChat$45(this.f$1, this.f$2);
+        this.f$0.lambda$loadFullChat$46(this.f$1, this.f$2);
     }
 }

@@ -52,14 +52,17 @@ import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.customview.widget.ExploreByTouchHelper;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 import androidx.recyclerview.widget.ChatListItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicReference;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -141,6 +144,7 @@ import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BotCommandsMenuView;
 import org.telegram.ui.Components.EmojiView;
+import org.telegram.ui.Components.SenderSelectPopup;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.TextStyleSpan;
@@ -421,7 +425,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     /* access modifiers changed from: private */
     public Rect sendRect;
     /* access modifiers changed from: private */
-    public ActionBarPopupWindow senderSelectPopupWindow;
+    public SenderSelectPopup senderSelectPopupWindow;
     /* access modifiers changed from: private */
     public SenderSelectView senderSelectView;
     private Runnable setTextFieldRunnable;
@@ -587,7 +591,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$new$17(View view, MotionEvent motionEvent) {
+    public static /* synthetic */ boolean lambda$new$15(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -2607,206 +2611,206 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     /* JADX WARNING: Illegal instructions before constructor call */
     @android.annotation.SuppressLint({"ClickableViewAccessibility"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public ChatActivityEnterView(android.app.Activity r39, org.telegram.ui.Components.SizeNotifierFrameLayout r40, org.telegram.ui.ChatActivity r41, boolean r42, org.telegram.ui.ActionBar.Theme.ResourcesProvider r43) {
+    public ChatActivityEnterView(android.app.Activity r38, org.telegram.ui.Components.SizeNotifierFrameLayout r39, org.telegram.ui.ChatActivity r40, boolean r41, org.telegram.ui.ActionBar.Theme.ResourcesProvider r42) {
         /*
-            r38 = this;
-            r7 = r38
-            r8 = r39
+            r37 = this;
+            r7 = r37
+            r8 = r38
+            r0 = r39
             r9 = r40
-            r10 = r41
-            r11 = r43
-            r7.<init>(r8, r10)
-            int r0 = org.telegram.messenger.UserConfig.selectedAccount
-            r7.currentAccount = r0
-            org.telegram.messenger.AccountInstance r0 = org.telegram.messenger.AccountInstance.getInstance(r0)
-            r7.accountInstance = r0
-            r12 = 1
-            r7.lineCount = r12
-            r13 = -1
-            r7.currentLimit = r13
-            java.util.HashMap r0 = new java.util.HashMap
-            r0.<init>()
-            r7.animationParamsX = r0
-            org.telegram.ui.Components.ChatActivityEnterView$1 r0 = new org.telegram.ui.Components.ChatActivityEnterView$1
-            r0.<init>(r7)
-            r7.mediaMessageButtonsDelegate = r0
-            r0 = 2
-            android.widget.ImageView[] r1 = new android.widget.ImageView[r0]
-            r7.emojiButton = r1
-            r7.currentPopupContentType = r13
-            r7.currentEmojiIcon = r13
-            r7.isPaused = r12
-            r14 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r7.startedDraggingX = r14
-            r1 = 1117782016(0x42a00000, float:80.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r1 = (float) r1
-            r7.distCanMove = r1
-            int[] r1 = new int[r0]
-            r7.location = r1
-            r7.messageWebPageSearch = r12
-            r7.animatingContentType = r13
-            r15 = 1065353216(0x3var_, float:1.0)
-            r7.doneButtonEnabledProgress = r15
-            r7.doneButtonEnabled = r12
-            org.telegram.ui.Components.ChatActivityEnterView$2 r1 = new org.telegram.ui.Components.ChatActivityEnterView$2
+            r10 = r42
+            r7.<init>(r8, r9)
+            int r1 = org.telegram.messenger.UserConfig.selectedAccount
+            r7.currentAccount = r1
+            org.telegram.messenger.AccountInstance r1 = org.telegram.messenger.AccountInstance.getInstance(r1)
+            r7.accountInstance = r1
+            r11 = 1
+            r7.lineCount = r11
+            r12 = -1
+            r7.currentLimit = r12
+            java.util.HashMap r1 = new java.util.HashMap
             r1.<init>()
-            r7.openKeyboardRunnable = r1
-            org.telegram.ui.Components.ChatActivityEnterView$3 r1 = new org.telegram.ui.Components.ChatActivityEnterView$3
-            r1.<init>()
-            r7.updateExpandabilityRunnable = r1
-            org.telegram.ui.Components.ChatActivityEnterView$4 r1 = new org.telegram.ui.Components.ChatActivityEnterView$4
-            java.lang.Class<java.lang.Integer> r2 = java.lang.Integer.class
-            java.lang.String r3 = "translationY"
-            r1.<init>(r7, r2, r3)
-            r7.roundedTranslationYProperty = r1
-            org.telegram.ui.Components.ChatActivityEnterView$5 r1 = new org.telegram.ui.Components.ChatActivityEnterView$5
-            java.lang.Class<java.lang.Float> r2 = java.lang.Float.class
-            java.lang.String r3 = "scale"
-            r1.<init>(r7, r2, r3)
-            r7.recordCircleScale = r1
-            android.graphics.Paint r1 = new android.graphics.Paint
-            r1.<init>(r12)
-            r7.redDotPaint = r1
-            org.telegram.ui.Components.ChatActivityEnterView$6 r1 = new org.telegram.ui.Components.ChatActivityEnterView$6
-            r1.<init>()
-            r7.onFinishInitCameraRunnable = r1
-            org.telegram.ui.Components.ChatActivityEnterView$7 r1 = new org.telegram.ui.Components.ChatActivityEnterView$7
-            r1.<init>()
-            r7.recordAudioVideoRunnable = r1
-            android.graphics.Paint r1 = new android.graphics.Paint
-            r1.<init>(r12)
-            r7.paint = r1
-            android.graphics.RectF r1 = new android.graphics.RectF
-            r1.<init>()
-            r7.pauseRect = r1
-            android.graphics.Rect r1 = new android.graphics.Rect
-            r1.<init>()
-            r7.sendRect = r1
-            android.graphics.Rect r1 = new android.graphics.Rect
-            r1.<init>()
-            r7.rect = r1
-            org.telegram.ui.Components.ChatActivityEnterView$8 r1 = new org.telegram.ui.Components.ChatActivityEnterView$8
-            r1.<init>()
-            r7.runEmojiPanelAnimation = r1
-            android.graphics.Paint r1 = new android.graphics.Paint
-            r1.<init>()
-            r7.backgroundPaint = r1
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda5 r1 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda5
+            r7.animationParamsX = r1
+            org.telegram.ui.Components.ChatActivityEnterView$1 r1 = new org.telegram.ui.Components.ChatActivityEnterView$1
             r1.<init>(r7)
-            r7.topViewUpdateListener = r1
-            r7.botCommandLastPosition = r13
-            r7.resourcesProvider = r11
-            java.lang.String r1 = "chat_messagePanelBackground"
-            int r1 = r7.getThemedColor(r1)
-            r7.backgroundColor = r1
-            r6 = 0
-            r7.drawBlur = r6
-            if (r42 == 0) goto L_0x00de
-            boolean r1 = org.telegram.messenger.SharedConfig.smoothKeyboard
-            if (r1 == 0) goto L_0x00de
-            boolean r1 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
-            if (r1 != 0) goto L_0x00de
-            if (r10 == 0) goto L_0x00dc
-            boolean r1 = r41.isInBubbleMode()
-            if (r1 != 0) goto L_0x00de
+            r7.mediaMessageButtonsDelegate = r1
+            r1 = 2
+            android.widget.ImageView[] r2 = new android.widget.ImageView[r1]
+            r7.emojiButton = r2
+            r7.currentPopupContentType = r12
+            r7.currentEmojiIcon = r12
+            r7.isPaused = r11
+            r13 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r7.startedDraggingX = r13
+            r2 = 1117782016(0x42a00000, float:80.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r2 = (float) r2
+            r7.distCanMove = r2
+            int[] r2 = new int[r1]
+            r7.location = r2
+            r7.messageWebPageSearch = r11
+            r7.animatingContentType = r12
+            r14 = 1065353216(0x3var_, float:1.0)
+            r7.doneButtonEnabledProgress = r14
+            r7.doneButtonEnabled = r11
+            org.telegram.ui.Components.ChatActivityEnterView$2 r2 = new org.telegram.ui.Components.ChatActivityEnterView$2
+            r2.<init>()
+            r7.openKeyboardRunnable = r2
+            org.telegram.ui.Components.ChatActivityEnterView$3 r2 = new org.telegram.ui.Components.ChatActivityEnterView$3
+            r2.<init>()
+            r7.updateExpandabilityRunnable = r2
+            org.telegram.ui.Components.ChatActivityEnterView$4 r2 = new org.telegram.ui.Components.ChatActivityEnterView$4
+            java.lang.Class<java.lang.Integer> r3 = java.lang.Integer.class
+            java.lang.String r4 = "translationY"
+            r2.<init>(r7, r3, r4)
+            r7.roundedTranslationYProperty = r2
+            org.telegram.ui.Components.ChatActivityEnterView$5 r2 = new org.telegram.ui.Components.ChatActivityEnterView$5
+            java.lang.Class<java.lang.Float> r3 = java.lang.Float.class
+            java.lang.String r4 = "scale"
+            r2.<init>(r7, r3, r4)
+            r7.recordCircleScale = r2
+            android.graphics.Paint r2 = new android.graphics.Paint
+            r2.<init>(r11)
+            r7.redDotPaint = r2
+            org.telegram.ui.Components.ChatActivityEnterView$6 r2 = new org.telegram.ui.Components.ChatActivityEnterView$6
+            r2.<init>()
+            r7.onFinishInitCameraRunnable = r2
+            org.telegram.ui.Components.ChatActivityEnterView$7 r2 = new org.telegram.ui.Components.ChatActivityEnterView$7
+            r2.<init>()
+            r7.recordAudioVideoRunnable = r2
+            android.graphics.Paint r2 = new android.graphics.Paint
+            r2.<init>(r11)
+            r7.paint = r2
+            android.graphics.RectF r2 = new android.graphics.RectF
+            r2.<init>()
+            r7.pauseRect = r2
+            android.graphics.Rect r2 = new android.graphics.Rect
+            r2.<init>()
+            r7.sendRect = r2
+            android.graphics.Rect r2 = new android.graphics.Rect
+            r2.<init>()
+            r7.rect = r2
+            org.telegram.ui.Components.ChatActivityEnterView$8 r2 = new org.telegram.ui.Components.ChatActivityEnterView$8
+            r2.<init>()
+            r7.runEmojiPanelAnimation = r2
+            android.graphics.Paint r2 = new android.graphics.Paint
+            r2.<init>()
+            r7.backgroundPaint = r2
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda1
+            r2.<init>(r7)
+            r7.topViewUpdateListener = r2
+            r7.botCommandLastPosition = r12
+            r7.resourcesProvider = r10
+            java.lang.String r2 = "chat_messagePanelBackground"
+            int r2 = r7.getThemedColor(r2)
+            r7.backgroundColor = r2
+            r15 = 0
+            r7.drawBlur = r15
+            if (r41 == 0) goto L_0x00de
+            boolean r2 = org.telegram.messenger.SharedConfig.smoothKeyboard
+            if (r2 == 0) goto L_0x00de
+            boolean r2 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
+            if (r2 != 0) goto L_0x00de
+            if (r9 == 0) goto L_0x00dc
+            boolean r2 = r40.isInBubbleMode()
+            if (r2 != 0) goto L_0x00de
         L_0x00dc:
-            r1 = 1
+            r2 = 1
             goto L_0x00df
         L_0x00de:
-            r1 = 0
+            r2 = 0
         L_0x00df:
-            r7.smoothKeyboard = r1
-            android.graphics.Paint r1 = new android.graphics.Paint
-            r1.<init>(r12)
-            r7.dotPaint = r1
-            java.lang.String r2 = "chat_emojiPanelNewTrending"
-            int r2 = r7.getThemedColor(r2)
-            r1.setColor(r2)
-            r7.setFocusable(r12)
-            r7.setFocusableInTouchMode(r12)
-            r7.setWillNotDraw(r6)
-            r7.setClipChildren(r6)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.recordStarted
-            r1.addObserver(r7, r2)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.recordStartError
-            r1.addObserver(r7, r2)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.recordStopped
-            r1.addObserver(r7, r2)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.recordProgressChanged
-            r1.addObserver(r7, r2)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.closeChats
-            r1.addObserver(r7, r2)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.audioDidSent
-            r1.addObserver(r7, r2)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.audioRouteChanged
-            r1.addObserver(r7, r2)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset
-            r1.addObserver(r7, r2)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged
-            r1.addObserver(r7, r2)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.featuredStickersDidLoad
-            r1.addObserver(r7, r2)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.messageReceivedByServer
-            r1.addObserver(r7, r2)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.sendingMessagesChanged
-            r1.addObserver(r7, r2)
-            int r1 = r7.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.audioRecordTooShort
-            r1.addObserver(r7, r2)
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r2 = org.telegram.messenger.NotificationCenter.emojiLoaded
-            r1.addObserver(r7, r2)
+            r7.smoothKeyboard = r2
+            android.graphics.Paint r2 = new android.graphics.Paint
+            r2.<init>(r11)
+            r7.dotPaint = r2
+            java.lang.String r3 = "chat_emojiPanelNewTrending"
+            int r3 = r7.getThemedColor(r3)
+            r2.setColor(r3)
+            r7.setFocusable(r11)
+            r7.setFocusableInTouchMode(r11)
+            r7.setWillNotDraw(r15)
+            r7.setClipChildren(r15)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.recordStarted
+            r2.addObserver(r7, r3)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.recordStartError
+            r2.addObserver(r7, r3)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.recordStopped
+            r2.addObserver(r7, r3)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.recordProgressChanged
+            r2.addObserver(r7, r3)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.closeChats
+            r2.addObserver(r7, r3)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.audioDidSent
+            r2.addObserver(r7, r3)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.audioRouteChanged
+            r2.addObserver(r7, r3)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset
+            r2.addObserver(r7, r3)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged
+            r2.addObserver(r7, r3)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.featuredStickersDidLoad
+            r2.addObserver(r7, r3)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.messageReceivedByServer
+            r2.addObserver(r7, r3)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.sendingMessagesChanged
+            r2.addObserver(r7, r3)
+            int r2 = r7.currentAccount
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
+            int r3 = org.telegram.messenger.NotificationCenter.audioRecordTooShort
+            r2.addObserver(r7, r3)
+            org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
+            int r3 = org.telegram.messenger.NotificationCenter.emojiLoaded
+            r2.addObserver(r7, r3)
             r7.parentActivity = r8
-            r7.parentFragment = r10
-            if (r10 == 0) goto L_0x01a1
-            int r1 = r41.getClassGuid()
-            r7.recordingGuid = r1
+            r7.parentFragment = r9
+            if (r9 == 0) goto L_0x01a1
+            int r2 = r40.getClassGuid()
+            r7.recordingGuid = r2
         L_0x01a1:
-            r7.sizeNotifierLayout = r9
-            r9.setDelegate(r7)
-            android.content.SharedPreferences r1 = org.telegram.messenger.MessagesController.getGlobalMainSettings()
+            r7.sizeNotifierLayout = r0
+            r0.setDelegate(r7)
+            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()
             java.lang.String r2 = "send_by_enter"
-            boolean r2 = r1.getBoolean(r2, r6)
+            boolean r2 = r0.getBoolean(r2, r15)
             r7.sendByEnter = r2
             java.lang.String r2 = "view_animations"
-            boolean r1 = r1.getBoolean(r2, r12)
-            r7.configAnimationsEnabled = r1
-            android.widget.FrameLayout r1 = new android.widget.FrameLayout
-            r1.<init>(r8)
-            r7.textFieldContainer = r1
-            r1.setClipChildren(r6)
-            android.widget.FrameLayout r1 = r7.textFieldContainer
-            r1.setClipToPadding(r6)
-            android.widget.FrameLayout r1 = r7.textFieldContainer
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            r1.setPadding(r6, r2, r6, r6)
-            android.widget.FrameLayout r1 = r7.textFieldContainer
+            boolean r0 = r0.getBoolean(r2, r11)
+            r7.configAnimationsEnabled = r0
+            android.widget.FrameLayout r0 = new android.widget.FrameLayout
+            r0.<init>(r8)
+            r7.textFieldContainer = r0
+            r0.setClipChildren(r15)
+            android.widget.FrameLayout r0 = r7.textFieldContainer
+            r0.setClipToPadding(r15)
+            android.widget.FrameLayout r0 = r7.textFieldContainer
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            r0.setPadding(r15, r2, r15, r15)
+            android.widget.FrameLayout r0 = r7.textFieldContainer
             r16 = -1
             r17 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             r18 = 83
@@ -2815,93 +2819,94 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r21 = 0
             r22 = 0
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
-            r7.addView(r1, r2)
-            org.telegram.ui.Components.ChatActivityEnterView$9 r5 = new org.telegram.ui.Components.ChatActivityEnterView$9
-            r5.<init>(r8)
-            r5.setClipChildren(r6)
-            android.widget.FrameLayout r1 = r7.textFieldContainer
+            r7.addView(r0, r2)
+            org.telegram.ui.Components.ChatActivityEnterView$9 r6 = new org.telegram.ui.Components.ChatActivityEnterView$9
+            r6.<init>(r8)
+            r6.setClipChildren(r15)
+            android.widget.FrameLayout r0 = r7.textFieldContainer
             r18 = 80
             r20 = 0
             r21 = 1111490560(0x42400000, float:48.0)
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
-            r1.addView(r5, r2)
-            r1 = 0
+            r0.addView(r6, r2)
+            r0 = 0
         L_0x0201:
-            r4 = 4
-            r3 = 0
-            java.lang.String r2 = "listSelectorSDK21"
+            r5 = 4
+            r4 = 0
+            java.lang.String r3 = "listSelectorSDK21"
+            r2 = 1036831949(0x3dcccccd, float:0.1)
             r13 = 21
-            java.lang.String r15 = "chat_messagePanelIcons"
-            if (r1 >= r0) goto L_0x02a3
-            android.widget.ImageView[] r0 = r7.emojiButton
-            org.telegram.ui.Components.ChatActivityEnterView$10 r6 = new org.telegram.ui.Components.ChatActivityEnterView$10
-            r6.<init>(r8)
-            r0[r1] = r6
-            android.widget.ImageView[] r0 = r7.emojiButton
-            r0 = r0[r1]
-            android.graphics.PorterDuffColorFilter r6 = new android.graphics.PorterDuffColorFilter
-            int r15 = r7.getThemedColor(r15)
-            android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r6.<init>(r15, r14)
-            r0.setColorFilter(r6)
-            android.widget.ImageView[] r0 = r7.emojiButton
-            r0 = r0[r1]
-            android.widget.ImageView$ScaleType r6 = android.widget.ImageView.ScaleType.CENTER_INSIDE
-            r0.setScaleType(r6)
-            int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r13) goto L_0x0242
-            android.widget.ImageView[] r0 = r7.emojiButton
-            r0 = r0[r1]
-            int r2 = r7.getThemedColor(r2)
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2)
-            r0.setBackgroundDrawable(r2)
-        L_0x0242:
-            android.widget.ImageView[] r0 = r7.emojiButton
-            r0 = r0[r1]
-            r22 = 48
-            r23 = 1111490560(0x42400000, float:48.0)
-            r24 = 83
-            r25 = 1077936128(0x40400000, float:3.0)
+            java.lang.String r12 = "chat_messagePanelIcons"
+            if (r0 >= r1) goto L_0x02a3
+            android.widget.ImageView[] r1 = r7.emojiButton
+            org.telegram.ui.Components.ChatActivityEnterView$10 r14 = new org.telegram.ui.Components.ChatActivityEnterView$10
+            r14.<init>(r8)
+            r1[r0] = r14
+            android.widget.ImageView[] r1 = r7.emojiButton
+            r1 = r1[r0]
+            android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
+            int r12 = r7.getThemedColor(r12)
+            android.graphics.PorterDuff$Mode r15 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r14.<init>(r12, r15)
+            r1.setColorFilter(r14)
+            android.widget.ImageView[] r1 = r7.emojiButton
+            r1 = r1[r0]
+            android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER_INSIDE
+            r1.setScaleType(r12)
+            int r1 = android.os.Build.VERSION.SDK_INT
+            if (r1 < r13) goto L_0x0245
+            android.widget.ImageView[] r1 = r7.emojiButton
+            r1 = r1[r0]
+            int r3 = r7.getThemedColor(r3)
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r3)
+            r1.setBackgroundDrawable(r3)
+        L_0x0245:
+            android.widget.ImageView[] r1 = r7.emojiButton
+            r1 = r1[r0]
+            r21 = 48
+            r22 = 1111490560(0x42400000, float:48.0)
+            r23 = 83
+            r24 = 1077936128(0x40400000, float:3.0)
+            r25 = 0
             r26 = 0
             r27 = 0
-            r28 = 0
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28)
-            r5.addView(r0, r2)
-            android.widget.ImageView[] r0 = r7.emojiButton
-            r0 = r0[r1]
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda22 r2 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda22
-            r2.<init>(r7)
-            r0.setOnClickListener(r2)
-            android.widget.ImageView[] r0 = r7.emojiButton
-            r0 = r0[r1]
-            r2 = 2131623972(0x7f0e0024, float:1.887511E38)
-            java.lang.String r6 = "AccDescrEmojiButton"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
-            r0.setContentDescription(r2)
-            if (r1 != r12) goto L_0x0298
-            android.widget.ImageView[] r0 = r7.emojiButton
-            r0 = r0[r1]
-            r0.setVisibility(r4)
-            android.widget.ImageView[] r0 = r7.emojiButton
-            r0 = r0[r1]
-            r0.setAlpha(r3)
-            android.widget.ImageView[] r0 = r7.emojiButton
-            r0 = r0[r1]
-            r2 = 1036831949(0x3dcccccd, float:0.1)
-            r0.setScaleX(r2)
-            android.widget.ImageView[] r0 = r7.emojiButton
-            r0 = r0[r1]
-            r0.setScaleY(r2)
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r21, r22, r23, r24, r25, r26, r27)
+            r6.addView(r1, r3)
+            android.widget.ImageView[] r1 = r7.emojiButton
+            r1 = r1[r0]
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda19 r3 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda19
+            r3.<init>(r7)
+            r1.setOnClickListener(r3)
+            android.widget.ImageView[] r1 = r7.emojiButton
+            r1 = r1[r0]
+            r3 = 2131623972(0x7f0e0024, float:1.887511E38)
+            java.lang.String r12 = "AccDescrEmojiButton"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r12, r3)
+            r1.setContentDescription(r3)
+            if (r0 != r11) goto L_0x0298
+            android.widget.ImageView[] r1 = r7.emojiButton
+            r1 = r1[r0]
+            r1.setVisibility(r5)
+            android.widget.ImageView[] r1 = r7.emojiButton
+            r1 = r1[r0]
+            r1.setAlpha(r4)
+            android.widget.ImageView[] r1 = r7.emojiButton
+            r1 = r1[r0]
+            r1.setScaleX(r2)
+            android.widget.ImageView[] r1 = r7.emojiButton
+            r1 = r1[r0]
+            r1.setScaleY(r2)
         L_0x0298:
-            int r1 = r1 + 1
-            r0 = 2
-            r6 = 0
-            r13 = -1
-            r14 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r15 = 1065353216(0x3var_, float:1.0)
+            int r0 = r0 + 1
+            r1 = 2
+            r12 = -1
+            r13 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r14 = 1065353216(0x3var_, float:1.0)
+            r15 = 0
             goto L_0x0201
         L_0x02a3:
-            r7.setEmojiButtonImage(r6, r6)
+            r0 = 0
+            r7.setEmojiButtonImage(r0, r0)
             org.telegram.ui.Components.NumberTextView r0 = new org.telegram.ui.Components.NumberTextView
             r0.<init>(r8)
             r7.captionLimitView = r0
@@ -2919,36 +2924,35 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r1)
             r0.setTypeface(r1)
             org.telegram.ui.Components.NumberTextView r0 = r7.captionLimitView
-            r0.setCenterAlign(r12)
+            r0.setCenterAlign(r11)
             org.telegram.ui.Components.NumberTextView r0 = r7.captionLimitView
-            r22 = 48
-            r23 = 1101004800(0x41a00000, float:20.0)
-            r24 = 85
-            r25 = 1077936128(0x40400000, float:3.0)
+            r21 = 48
+            r22 = 1101004800(0x41a00000, float:20.0)
+            r23 = 85
+            r24 = 1077936128(0x40400000, float:3.0)
+            r25 = 0
             r26 = 0
-            r27 = 0
-            r28 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28)
+            r27 = 1111490560(0x42400000, float:48.0)
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r21, r22, r23, r24, r25, r26, r27)
             r7.addView(r0, r1)
-            org.telegram.ui.Components.ChatActivityEnterView$11 r1 = new org.telegram.ui.Components.ChatActivityEnterView$11
-            r0 = r1
-            r13 = r1
-            r1 = r38
-            r29 = r2
-            r2 = r39
-            r3 = r43
-            r4 = r43
-            r14 = r5
-            r5 = r41
-            r12 = 0
-            r6 = r39
+            org.telegram.ui.Components.ChatActivityEnterView$11 r15 = new org.telegram.ui.Components.ChatActivityEnterView$11
+            r0 = r15
+            r1 = r37
+            r2 = r38
+            r28 = r3
+            r3 = r42
+            r4 = r42
+            r5 = r40
+            r13 = r6
+            r6 = r38
             r0.<init>(r2, r3, r4, r5, r6)
-            r7.messageEditText = r13
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda52 r0 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda52
+            r7.messageEditText = r15
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda50 r0 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda50
             r0.<init>(r7)
-            r13.setDelegate(r0)
+            r15.setDelegate(r0)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            r0.setIncludeFontPadding(r12)
+            r1 = 0
+            r0.setIncludeFontPadding(r1)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
             android.app.Activity r1 = r7.parentActivity
             android.view.Window r1 = r1.getWindow()
@@ -2963,13 +2967,14 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r0 = r1
         L_0x032b:
             org.telegram.ui.Components.EditTextCaption r2 = r7.messageEditText
-            boolean r3 = r38.supportsSendingNewEntities()
+            boolean r3 = r37.supportsSendingNewEntities()
             r2.setAllowTextEntitiesIntersection(r3)
-            r7.updateFieldHint(r12)
+            r2 = 0
+            r7.updateFieldHint(r2)
             r2 = 268435456(0x10000000, float:2.5243549E-29)
-            if (r0 == 0) goto L_0x033d
+            if (r0 == 0) goto L_0x033e
             r2 = 285212672(0x11000000, float:1.00974196E-28)
-        L_0x033d:
+        L_0x033e:
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
             r0.setImeOptions(r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
@@ -2979,14 +2984,14 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r2 = r2 | r3
             r0.setInputType(r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            r0.setSingleLine(r12)
+            r2 = 0
+            r0.setSingleLine(r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
             r2 = 6
             r0.setMaxLines(r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
             r2 = 1099956224(0x41900000, float:18.0)
-            r3 = 1
-            r0.setTextSize(r3, r2)
+            r0.setTextSize(r11, r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
             r2 = 80
             r0.setGravity(r2)
@@ -2995,7 +3000,8 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r4 = 1094713344(0x41400000, float:12.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r0.setPadding(r12, r3, r12, r4)
+            r5 = 0
+            r0.setPadding(r5, r3, r5, r4)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
             r0.setBackgroundDrawable(r1)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
@@ -3015,22 +3021,22 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             int r1 = r7.getThemedColor(r1)
             r0.setCursorColor(r1)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            r30 = -1
-            r31 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r32 = 80
-            r33 = 1112539136(0x42500000, float:52.0)
-            r34 = 0
-            if (r42 == 0) goto L_0x03bf
+            r21 = -1
+            r22 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r23 = 80
+            r24 = 1112539136(0x42500000, float:52.0)
+            r25 = 0
+            if (r41 == 0) goto L_0x03c1
             r1 = 1112014848(0x42480000, float:50.0)
-            r35 = 1112014848(0x42480000, float:50.0)
-            goto L_0x03c3
-        L_0x03bf:
+            r26 = 1112014848(0x42480000, float:50.0)
+            goto L_0x03c5
+        L_0x03c1:
             r1 = 1073741824(0x40000000, float:2.0)
-            r35 = 1073741824(0x40000000, float:2.0)
-        L_0x03c3:
-            r36 = 0
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
-            r14.addView(r0, r1)
+            r26 = 1073741824(0x40000000, float:2.0)
+        L_0x03c5:
+            r27 = 0
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r21, r22, r23, r24, r25, r26, r27)
+            r13.addView(r0, r1)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
             org.telegram.ui.Components.ChatActivityEnterView$12 r1 = new org.telegram.ui.Components.ChatActivityEnterView$12
             r1.<init>()
@@ -3043,145 +3049,146 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             org.telegram.ui.Components.ChatActivityEnterView$14 r1 = new org.telegram.ui.Components.ChatActivityEnterView$14
             r1.<init>()
             r0.addTextChangedListener(r1)
+            r0 = -2
             r1 = 85
             r3 = 1111490560(0x42400000, float:48.0)
             r4 = 48
-            if (r42 == 0) goto L_0x067e
+            if (r41 == 0) goto L_0x067f
             org.telegram.ui.ChatActivity r5 = r7.parentFragment
-            if (r5 == 0) goto L_0x0489
-            android.content.res.Resources r5 = r39.getResources()
+            if (r5 == 0) goto L_0x048a
+            android.content.res.Resources r5 = r38.getResources()
             r6 = 2131165556(0x7var_, float:1.7945332E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r6)
             android.graphics.drawable.Drawable r5 = r5.mutate()
-            android.content.res.Resources r6 = r39.getResources()
-            r13 = 2131165557(0x7var_, float:1.7945334E38)
-            android.graphics.drawable.Drawable r6 = r6.getDrawable(r13)
+            android.content.res.Resources r6 = r38.getResources()
+            r15 = 2131165557(0x7var_, float:1.7945334E38)
+            android.graphics.drawable.Drawable r6 = r6.getDrawable(r15)
             android.graphics.drawable.Drawable r6 = r6.mutate()
-            android.graphics.PorterDuffColorFilter r13 = new android.graphics.PorterDuffColorFilter
-            int r2 = r7.getThemedColor(r15)
-            android.graphics.PorterDuff$Mode r0 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r13.<init>(r2, r0)
-            r5.setColorFilter(r13)
-            android.graphics.PorterDuffColorFilter r0 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r2 = "chat_recordedVoiceDot"
-            int r2 = r7.getThemedColor(r2)
-            android.graphics.PorterDuff$Mode r13 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r0.<init>(r2, r13)
-            r6.setColorFilter(r0)
-            org.telegram.ui.Components.CombinedDrawable r0 = new org.telegram.ui.Components.CombinedDrawable
-            r0.<init>(r5, r6)
-            android.widget.ImageView r2 = new android.widget.ImageView
-            r2.<init>(r8)
-            r7.scheduledButton = r2
-            r2.setImageDrawable(r0)
-            android.widget.ImageView r0 = r7.scheduledButton
-            r2 = 8
-            r0.setVisibility(r2)
-            android.widget.ImageView r0 = r7.scheduledButton
-            r2 = 2131627685(0x7f0e0ea5, float:1.8882641E38)
-            java.lang.String r5 = "ScheduledMessages"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
-            r0.setContentDescription(r2)
-            android.widget.ImageView r0 = r7.scheduledButton
-            android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
-            r0.setScaleType(r2)
-            int r0 = android.os.Build.VERSION.SDK_INT
-            r2 = 21
-            if (r0 < r2) goto L_0x0473
-            android.widget.ImageView r0 = r7.scheduledButton
-            r2 = r29
-            int r5 = r7.getThemedColor(r2)
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r5)
-            r0.setBackgroundDrawable(r5)
-            goto L_0x0475
-        L_0x0473:
-            r2 = r29
-        L_0x0475:
-            android.widget.ImageView r0 = r7.scheduledButton
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r4, r1)
-            r14.addView(r0, r5)
-            android.widget.ImageView r0 = r7.scheduledButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda25 r5 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda25
-            r5.<init>(r7)
-            r0.setOnClickListener(r5)
-            goto L_0x048b
-        L_0x0489:
-            r2 = r29
-        L_0x048b:
-            android.widget.LinearLayout r0 = new android.widget.LinearLayout
-            r0.<init>(r8)
-            r7.attachLayout = r0
-            r0.setOrientation(r12)
-            android.widget.LinearLayout r0 = r7.attachLayout
-            r0.setEnabled(r12)
-            android.widget.LinearLayout r0 = r7.attachLayout
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r5 = (float) r5
-            r0.setPivotX(r5)
-            android.widget.LinearLayout r0 = r7.attachLayout
-            r0.setClipChildren(r12)
-            android.widget.LinearLayout r0 = r7.attachLayout
-            r5 = -2
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r4, r1)
-            r14.addView(r0, r6)
-            org.telegram.ui.Components.BotCommandsMenuView r0 = new org.telegram.ui.Components.BotCommandsMenuView
-            android.content.Context r5 = r38.getContext()
-            r0.<init>(r5)
-            r7.botCommandsMenuButton = r0
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda17 r5 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda17
-            r5.<init>(r7)
-            r0.setOnClickListener(r5)
-            org.telegram.ui.Components.BotCommandsMenuView r0 = r7.botCommandsMenuButton
-            r30 = -2
-            r31 = 1107296256(0x42000000, float:32.0)
-            r32 = 83
-            r33 = 1092616192(0x41200000, float:10.0)
-            r34 = 1090519040(0x41000000, float:8.0)
-            r35 = 1092616192(0x41200000, float:10.0)
-            r36 = 1090519040(0x41000000, float:8.0)
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
-            r14.addView(r0, r5)
-            org.telegram.ui.Components.BotCommandsMenuView r0 = r7.botCommandsMenuButton
-            r5 = 1065353216(0x3var_, float:1.0)
-            org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r0, r12, r5, r12)
-            org.telegram.ui.Components.BotCommandsMenuView r0 = r7.botCommandsMenuButton
-            r5 = 1
-            r0.setExpanded(r5, r12)
-            androidx.recyclerview.widget.LinearLayoutManager r0 = new androidx.recyclerview.widget.LinearLayoutManager
-            r0.<init>(r8)
-            org.telegram.ui.Components.ChatActivityEnterView$15 r5 = new org.telegram.ui.Components.ChatActivityEnterView$15
+            android.graphics.PorterDuffColorFilter r15 = new android.graphics.PorterDuffColorFilter
+            int r2 = r7.getThemedColor(r12)
+            android.graphics.PorterDuff$Mode r11 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r15.<init>(r2, r11)
+            r5.setColorFilter(r15)
+            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r11 = "chat_recordedVoiceDot"
+            int r11 = r7.getThemedColor(r11)
+            android.graphics.PorterDuff$Mode r15 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r2.<init>(r11, r15)
+            r6.setColorFilter(r2)
+            org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
+            r2.<init>(r5, r6)
+            android.widget.ImageView r5 = new android.widget.ImageView
             r5.<init>(r8)
-            r7.botCommandsMenuContainer = r5
-            org.telegram.ui.Components.RecyclerListView r5 = r5.listView
-            r5.setLayoutManager(r0)
-            org.telegram.ui.Components.BotCommandsMenuContainer r0 = r7.botCommandsMenuContainer
-            org.telegram.ui.Components.RecyclerListView r0 = r0.listView
-            org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter r5 = new org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter
-            r5.<init>()
-            r7.botCommandsAdapter = r5
-            r0.setAdapter(r5)
-            org.telegram.ui.Components.BotCommandsMenuContainer r0 = r7.botCommandsMenuContainer
-            org.telegram.ui.Components.RecyclerListView r0 = r0.listView
-            org.telegram.ui.Components.ChatActivityEnterView$16 r5 = new org.telegram.ui.Components.ChatActivityEnterView$16
-            r5.<init>(r11, r10)
-            r0.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r5)
-            org.telegram.ui.Components.BotCommandsMenuContainer r0 = r7.botCommandsMenuContainer
-            org.telegram.ui.Components.RecyclerListView r0 = r0.listView
-            org.telegram.ui.Components.ChatActivityEnterView$17 r5 = new org.telegram.ui.Components.ChatActivityEnterView$17
-            r5.<init>()
-            r0.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r5)
-            org.telegram.ui.Components.BotCommandsMenuContainer r0 = r7.botCommandsMenuContainer
-            r0.setClipToPadding(r12)
-            org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r7.sizeNotifierLayout
-            org.telegram.ui.Components.BotCommandsMenuContainer r5 = r7.botCommandsMenuContainer
-            r6 = 14
+            r7.scheduledButton = r5
+            r5.setImageDrawable(r2)
+            android.widget.ImageView r2 = r7.scheduledButton
+            r2.setVisibility(r14)
+            android.widget.ImageView r2 = r7.scheduledButton
+            r5 = 2131627750(0x7f0e0ee6, float:1.8882773E38)
+            java.lang.String r6 = "ScheduledMessages"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
+            r2.setContentDescription(r5)
+            android.widget.ImageView r2 = r7.scheduledButton
+            android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r5)
+            int r2 = android.os.Build.VERSION.SDK_INT
+            r5 = 21
+            if (r2 < r5) goto L_0x0474
+            android.widget.ImageView r2 = r7.scheduledButton
+            r5 = r28
+            int r6 = r7.getThemedColor(r5)
+            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r6)
+            r2.setBackgroundDrawable(r6)
+            goto L_0x0476
+        L_0x0474:
+            r5 = r28
+        L_0x0476:
+            android.widget.ImageView r2 = r7.scheduledButton
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r4, r1)
+            r13.addView(r2, r6)
+            android.widget.ImageView r2 = r7.scheduledButton
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda21 r6 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda21
+            r6.<init>(r7)
+            r2.setOnClickListener(r6)
+            goto L_0x048c
+        L_0x048a:
+            r5 = r28
+        L_0x048c:
+            android.widget.LinearLayout r2 = new android.widget.LinearLayout
+            r2.<init>(r8)
+            r7.attachLayout = r2
+            r6 = 0
+            r2.setOrientation(r6)
+            android.widget.LinearLayout r2 = r7.attachLayout
+            r2.setEnabled(r6)
+            android.widget.LinearLayout r2 = r7.attachLayout
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r11 = (float) r11
+            r2.setPivotX(r11)
+            android.widget.LinearLayout r2 = r7.attachLayout
+            r2.setClipChildren(r6)
+            android.widget.LinearLayout r2 = r7.attachLayout
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r0, r4, r1)
+            r13.addView(r2, r6)
+            org.telegram.ui.Components.BotCommandsMenuView r2 = new org.telegram.ui.Components.BotCommandsMenuView
+            android.content.Context r6 = r37.getContext()
+            r2.<init>(r6)
+            r7.botCommandsMenuButton = r2
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda12 r6 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda12
+            r6.<init>(r7)
+            r2.setOnClickListener(r6)
+            org.telegram.ui.Components.BotCommandsMenuView r2 = r7.botCommandsMenuButton
+            r29 = -2
+            r30 = 1107296256(0x42000000, float:32.0)
+            r31 = 83
+            r32 = 1092616192(0x41200000, float:10.0)
+            r33 = 1090519040(0x41000000, float:8.0)
+            r34 = 1092616192(0x41200000, float:10.0)
+            r35 = 1090519040(0x41000000, float:8.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r13.addView(r2, r6)
+            org.telegram.ui.Components.BotCommandsMenuView r2 = r7.botCommandsMenuButton
+            r6 = 1065353216(0x3var_, float:1.0)
+            r11 = 0
+            org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r2, r11, r6, r11)
+            org.telegram.ui.Components.BotCommandsMenuView r2 = r7.botCommandsMenuButton
+            r6 = 1
+            r2.setExpanded(r6, r11)
+            androidx.recyclerview.widget.LinearLayoutManager r2 = new androidx.recyclerview.widget.LinearLayoutManager
+            r2.<init>(r8)
+            org.telegram.ui.Components.ChatActivityEnterView$15 r6 = new org.telegram.ui.Components.ChatActivityEnterView$15
+            r6.<init>(r8)
+            r7.botCommandsMenuContainer = r6
+            org.telegram.ui.Components.RecyclerListView r6 = r6.listView
+            r6.setLayoutManager(r2)
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r7.botCommandsMenuContainer
+            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
+            org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter r6 = new org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter
+            r6.<init>()
+            r7.botCommandsAdapter = r6
+            r2.setAdapter(r6)
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r7.botCommandsMenuContainer
+            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
+            org.telegram.ui.Components.ChatActivityEnterView$16 r6 = new org.telegram.ui.Components.ChatActivityEnterView$16
+            r6.<init>(r10, r9)
+            r2.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r6)
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r7.botCommandsMenuContainer
+            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
+            org.telegram.ui.Components.ChatActivityEnterView$17 r6 = new org.telegram.ui.Components.ChatActivityEnterView$17
+            r6.<init>()
+            r2.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r6)
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r7.botCommandsMenuContainer
+            r6 = 0
+            r2.setClipToPadding(r6)
+            org.telegram.ui.Components.SizeNotifierFrameLayout r2 = r7.sizeNotifierLayout
+            org.telegram.ui.Components.BotCommandsMenuContainer r6 = r7.botCommandsMenuContainer
+            r11 = 14
             r1 = -1
-            r13 = 80
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r1, r1, r13)
-            r0.addView(r5, r6, r3)
+            r15 = 80
+            android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r1, r1, r15)
+            r2.addView(r6, r11, r0)
             org.telegram.ui.Components.BotCommandsMenuContainer r0 = r7.botCommandsMenuContainer
-            r1 = 8
-            r0.setVisibility(r1)
+            r0.setVisibility(r14)
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r8)
             r7.botButton = r0
@@ -3191,166 +3198,166 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r0.setImageDrawable(r1)
             org.telegram.ui.Components.ReplaceableIconDrawable r0 = r7.botButtonDrawable
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
-            int r3 = r7.getThemedColor(r15)
-            android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r1.<init>(r3, r5)
+            int r2 = r7.getThemedColor(r12)
+            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r1.<init>(r2, r6)
             r0.setColorFilter(r1)
             org.telegram.ui.Components.ReplaceableIconDrawable r0 = r7.botButtonDrawable
             r1 = 2131165555(0x7var_, float:1.794533E38)
-            r0.setIcon((int) r1, (boolean) r12)
+            r2 = 0
+            r0.setIcon((int) r1, (boolean) r2)
             android.widget.ImageView r0 = r7.botButton
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r0.setScaleType(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
             r1 = 21
-            if (r0 < r1) goto L_0x0580
+            if (r0 < r1) goto L_0x0582
             android.widget.ImageView r1 = r7.botButton
-            int r3 = r7.getThemedColor(r2)
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r3)
-            r1.setBackgroundDrawable(r3)
-        L_0x0580:
+            int r2 = r7.getThemedColor(r5)
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2)
+            r1.setBackgroundDrawable(r2)
+        L_0x0582:
             android.widget.ImageView r1 = r7.botButton
-            r3 = 8
-            r1.setVisibility(r3)
+            r1.setVisibility(r14)
             android.widget.LinearLayout r1 = r7.attachLayout
-            android.widget.ImageView r3 = r7.botButton
-            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r4)
-            r1.addView(r3, r5)
+            android.widget.ImageView r2 = r7.botButton
+            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r4)
+            r1.addView(r2, r6)
             android.widget.ImageView r1 = r7.botButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda15 r3 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda15
-            r3.<init>(r7)
-            r1.setOnClickListener(r3)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda11 r2 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda11
+            r2.<init>(r7)
+            r1.setOnClickListener(r2)
             android.widget.ImageView r1 = new android.widget.ImageView
             r1.<init>(r8)
             r7.notifyButton = r1
             org.telegram.ui.Components.CrossOutDrawable r1 = new org.telegram.ui.Components.CrossOutDrawable
-            r3 = 2131165566(0x7var_e, float:1.7945353E38)
-            r1.<init>(r8, r3, r15)
+            r2 = 2131165566(0x7var_e, float:1.7945353E38)
+            r1.<init>(r8, r2, r12)
             r7.notifySilentDrawable = r1
-            android.widget.ImageView r3 = r7.notifyButton
-            r3.setImageDrawable(r1)
+            android.widget.ImageView r2 = r7.notifyButton
+            r2.setImageDrawable(r1)
             org.telegram.ui.Components.CrossOutDrawable r1 = r7.notifySilentDrawable
-            boolean r3 = r7.silent
-            r1.setCrossOut(r3, r12)
-            android.widget.ImageView r1 = r7.notifyButton
-            boolean r3 = r7.silent
-            if (r3 == 0) goto L_0x05c5
-            r3 = 2131623963(0x7f0e001b, float:1.8875092E38)
-            java.lang.String r5 = "AccDescrChanSilentOn"
-            goto L_0x05ca
-        L_0x05c5:
-            r3 = 2131623962(0x7f0e001a, float:1.887509E38)
-            java.lang.String r5 = "AccDescrChanSilentOff"
-        L_0x05ca:
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
-            r1.setContentDescription(r3)
-            android.widget.ImageView r1 = r7.notifyButton
-            android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
-            int r5 = r7.getThemedColor(r15)
-            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r3.<init>(r5, r6)
-            r1.setColorFilter(r3)
-            android.widget.ImageView r1 = r7.notifyButton
-            android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
-            r1.setScaleType(r3)
-            r1 = 21
-            if (r0 < r1) goto L_0x05f9
-            android.widget.ImageView r1 = r7.notifyButton
-            int r3 = r7.getThemedColor(r2)
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r3)
-            r1.setBackgroundDrawable(r3)
-        L_0x05f9:
-            android.widget.ImageView r1 = r7.notifyButton
-            boolean r3 = r7.canWriteToChannel
-            if (r3 == 0) goto L_0x060b
-            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r3 = r7.delegate
-            if (r3 == 0) goto L_0x0609
-            boolean r3 = r3.hasScheduledMessages()
-            if (r3 != 0) goto L_0x060b
-        L_0x0609:
+            boolean r2 = r7.silent
             r6 = 0
-            goto L_0x060d
-        L_0x060b:
-            r6 = 8
-        L_0x060d:
-            r1.setVisibility(r6)
-            android.widget.LinearLayout r1 = r7.attachLayout
-            android.widget.ImageView r3 = r7.notifyButton
-            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r4)
-            r1.addView(r3, r5)
+            r1.setCrossOut(r2, r6)
             android.widget.ImageView r1 = r7.notifyButton
-            org.telegram.ui.Components.ChatActivityEnterView$18 r3 = new org.telegram.ui.Components.ChatActivityEnterView$18
-            r3.<init>(r8, r10)
-            r1.setOnClickListener(r3)
+            boolean r2 = r7.silent
+            if (r2 == 0) goto L_0x05c6
+            r2 = 2131623963(0x7f0e001b, float:1.8875092E38)
+            java.lang.String r6 = "AccDescrChanSilentOn"
+            goto L_0x05cb
+        L_0x05c6:
+            r2 = 2131623962(0x7f0e001a, float:1.887509E38)
+            java.lang.String r6 = "AccDescrChanSilentOff"
+        L_0x05cb:
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
+            r1.setContentDescription(r2)
+            android.widget.ImageView r1 = r7.notifyButton
+            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
+            int r6 = r7.getThemedColor(r12)
+            android.graphics.PorterDuff$Mode r11 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r2.<init>(r6, r11)
+            r1.setColorFilter(r2)
+            android.widget.ImageView r1 = r7.notifyButton
+            android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
+            r1.setScaleType(r2)
+            r1 = 21
+            if (r0 < r1) goto L_0x05fa
+            android.widget.ImageView r1 = r7.notifyButton
+            int r2 = r7.getThemedColor(r5)
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2)
+            r1.setBackgroundDrawable(r2)
+        L_0x05fa:
+            android.widget.ImageView r1 = r7.notifyButton
+            boolean r2 = r7.canWriteToChannel
+            if (r2 == 0) goto L_0x060c
+            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r2 = r7.delegate
+            if (r2 == 0) goto L_0x060a
+            boolean r2 = r2.hasScheduledMessages()
+            if (r2 != 0) goto L_0x060c
+        L_0x060a:
+            r2 = 0
+            goto L_0x060e
+        L_0x060c:
+            r2 = 8
+        L_0x060e:
+            r1.setVisibility(r2)
+            android.widget.LinearLayout r1 = r7.attachLayout
+            android.widget.ImageView r2 = r7.notifyButton
+            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r4)
+            r1.addView(r2, r6)
+            android.widget.ImageView r1 = r7.notifyButton
+            org.telegram.ui.Components.ChatActivityEnterView$18 r2 = new org.telegram.ui.Components.ChatActivityEnterView$18
+            r2.<init>(r8, r9)
+            r1.setOnClickListener(r2)
             android.widget.ImageView r1 = new android.widget.ImageView
             r1.<init>(r8)
             r7.attachButton = r1
-            android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
-            int r5 = r7.getThemedColor(r15)
-            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r3.<init>(r5, r6)
-            r1.setColorFilter(r3)
+            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
+            int r6 = r7.getThemedColor(r12)
+            android.graphics.PorterDuff$Mode r9 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r2.<init>(r6, r9)
+            r1.setColorFilter(r2)
             android.widget.ImageView r1 = r7.attachButton
-            r3 = 2131165553(0x7var_, float:1.7945326E38)
-            r1.setImageResource(r3)
+            r2 = 2131165553(0x7var_, float:1.7945326E38)
+            r1.setImageResource(r2)
             android.widget.ImageView r1 = r7.attachButton
-            android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
-            r1.setScaleType(r3)
+            android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
+            r1.setScaleType(r2)
             r1 = 21
-            if (r0 < r1) goto L_0x065a
+            if (r0 < r1) goto L_0x065b
             android.widget.ImageView r0 = r7.attachButton
-            int r1 = r7.getThemedColor(r2)
+            int r1 = r7.getThemedColor(r5)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1)
             r0.setBackgroundDrawable(r1)
-        L_0x065a:
+        L_0x065b:
             android.widget.LinearLayout r0 = r7.attachLayout
             android.widget.ImageView r1 = r7.attachButton
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r4)
-            r0.addView(r1, r3)
+            android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r4)
+            r0.addView(r1, r2)
             android.widget.ImageView r0 = r7.attachButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda19 r1 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda19
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda16 r1 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda16
             r1.<init>(r7)
             r0.setOnClickListener(r1)
             android.widget.ImageView r0 = r7.attachButton
             r1 = 2131623952(0x7f0e0010, float:1.887507E38)
-            java.lang.String r3 = "AccDescrAttachButton"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
+            java.lang.String r2 = "AccDescrAttachButton"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
-            goto L_0x0680
-        L_0x067e:
-            r2 = r29
-        L_0x0680:
+            goto L_0x0681
+        L_0x067f:
+            r5 = r28
+        L_0x0681:
             org.telegram.ui.Components.SenderSelectView r0 = new org.telegram.ui.Components.SenderSelectView
-            android.content.Context r1 = r38.getContext()
+            android.content.Context r1 = r37.getContext()
             r0.<init>(r1)
             r7.senderSelectView = r0
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda27 r1 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda27
-            r1.<init>(r7, r9)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda23 r1 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda23
+            r1.<init>(r7, r8)
             r0.setOnClickListener(r1)
             org.telegram.ui.Components.SenderSelectView r0 = r7.senderSelectView
-            r1 = 8
-            r0.setVisibility(r1)
+            r0.setVisibility(r14)
             org.telegram.ui.Components.SenderSelectView r0 = r7.senderSelectView
-            r30 = 32
-            r31 = 1107296256(0x42000000, float:32.0)
-            r32 = 83
-            r33 = 1092616192(0x41200000, float:10.0)
-            r34 = 1090519040(0x41000000, float:8.0)
-            r35 = 1092616192(0x41200000, float:10.0)
-            r36 = 1090519040(0x41000000, float:8.0)
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
-            r14.addView(r0, r1)
-            org.telegram.ui.Components.ChatActivityEnterView$25 r0 = new org.telegram.ui.Components.ChatActivityEnterView$25
+            r29 = 32
+            r30 = 1107296256(0x42000000, float:32.0)
+            r31 = 83
+            r32 = 1092616192(0x41200000, float:10.0)
+            r33 = 1090519040(0x41000000, float:8.0)
+            r34 = 1092616192(0x41200000, float:10.0)
+            r35 = 1090519040(0x41000000, float:8.0)
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r13.addView(r0, r1)
+            org.telegram.ui.Components.ChatActivityEnterView$23 r0 = new org.telegram.ui.Components.ChatActivityEnterView$23
             r0.<init>(r8)
             r7.recordedAudioPanel = r0
             org.telegram.tgnet.TLRPC$TL_document r1 = r7.audioToSend
-            if (r1 != 0) goto L_0x06bf
-            r6 = 8
-            goto L_0x06c0
+            if (r1 != 0) goto L_0x06be
+            r1 = 8
+            goto L_0x06bf
+        L_0x06be:
+            r1 = 0
         L_0x06bf:
-            r6 = 0
-        L_0x06c0:
-            r0.setVisibility(r6)
+            r0.setVisibility(r1)
             android.widget.FrameLayout r0 = r7.recordedAudioPanel
             r1 = 1
             r0.setFocusable(r1)
@@ -3360,557 +3367,554 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r0.setClickable(r1)
             android.widget.FrameLayout r0 = r7.recordedAudioPanel
             r1 = 80
-            r3 = -1
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r4, r1)
-            r14.addView(r0, r1)
+            r2 = -1
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r4, r1)
+            r13.addView(r0, r1)
             org.telegram.ui.Components.RLottieImageView r0 = new org.telegram.ui.Components.RLottieImageView
             r0.<init>(r8)
             r7.recordDeleteImageView = r0
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r0.setScaleType(r1)
             org.telegram.ui.Components.RLottieImageView r0 = r7.recordDeleteImageView
-            r1 = 2131558415(0x7f0d000f, float:1.8742145E38)
-            r3 = 28
-            r5 = 28
-            r0.setAnimation(r1, r3, r5)
+            r1 = 2131558416(0x7f0d0010, float:1.8742147E38)
+            r2 = 28
+            r6 = 28
+            r0.setAnimation(r1, r2, r6)
             org.telegram.ui.Components.RLottieImageView r0 = r7.recordDeleteImageView
             org.telegram.ui.Components.RLottieDrawable r0 = r0.getAnimatedDrawable()
             r1 = 1
             r0.setInvalidateOnProgressSet(r1)
-            r38.updateRecordedDeleteIconColors()
+            r37.updateRecordedDeleteIconColors()
             org.telegram.ui.Components.RLottieImageView r0 = r7.recordDeleteImageView
-            r1 = 2131625195(0x7f0e04eb, float:1.8877591E38)
-            java.lang.String r3 = "Delete"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
+            r1 = 2131625208(0x7f0e04f8, float:1.8877617E38)
+            java.lang.String r2 = "Delete"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
             r1 = 21
-            if (r0 < r1) goto L_0x0725
+            if (r0 < r1) goto L_0x0724
             org.telegram.ui.Components.RLottieImageView r1 = r7.recordDeleteImageView
-            int r3 = r7.getThemedColor(r2)
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r3)
-            r1.setBackgroundDrawable(r3)
-        L_0x0725:
+            int r2 = r7.getThemedColor(r5)
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2)
+            r1.setBackgroundDrawable(r2)
+        L_0x0724:
             android.widget.FrameLayout r1 = r7.recordedAudioPanel
-            org.telegram.ui.Components.RLottieImageView r3 = r7.recordDeleteImageView
-            r5 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r5)
-            r1.addView(r3, r6)
+            org.telegram.ui.Components.RLottieImageView r2 = r7.recordDeleteImageView
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
+            r1.addView(r2, r6)
             org.telegram.ui.Components.RLottieImageView r1 = r7.recordDeleteImageView
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda13 r3 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda13
-            r3.<init>(r7)
-            r1.setOnClickListener(r3)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda15 r2 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda15
+            r2.<init>(r7)
+            r1.setOnClickListener(r2)
             org.telegram.ui.Components.VideoTimelineView r1 = new org.telegram.ui.Components.VideoTimelineView
             r1.<init>(r8)
             r7.videoTimelineView = r1
-            java.lang.String r3 = "chat_messagePanelVideoFrame"
-            int r3 = r7.getThemedColor(r3)
-            r1.setColor(r3)
+            java.lang.String r2 = "chat_messagePanelVideoFrame"
+            int r2 = r7.getThemedColor(r2)
+            r1.setColor(r2)
             org.telegram.ui.Components.VideoTimelineView r1 = r7.videoTimelineView
-            r3 = 1
-            r1.setRoundFrames(r3)
+            r2 = 1
+            r1.setRoundFrames(r2)
             org.telegram.ui.Components.VideoTimelineView r1 = r7.videoTimelineView
-            org.telegram.ui.Components.ChatActivityEnterView$26 r3 = new org.telegram.ui.Components.ChatActivityEnterView$26
-            r3.<init>()
-            r1.setDelegate(r3)
+            org.telegram.ui.Components.ChatActivityEnterView$24 r2 = new org.telegram.ui.Components.ChatActivityEnterView$24
+            r2.<init>()
+            r1.setDelegate(r2)
             android.widget.FrameLayout r1 = r7.recordedAudioPanel
-            org.telegram.ui.Components.VideoTimelineView r3 = r7.videoTimelineView
-            r30 = -1
-            r31 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r32 = 19
-            r33 = 1113587712(0x42600000, float:56.0)
-            r34 = 0
-            r35 = 1090519040(0x41000000, float:8.0)
-            r36 = 0
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
-            r1.addView(r3, r5)
+            org.telegram.ui.Components.VideoTimelineView r2 = r7.videoTimelineView
+            r29 = -1
+            r30 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r31 = 19
+            r32 = 1113587712(0x42600000, float:56.0)
+            r33 = 0
+            r34 = 1090519040(0x41000000, float:8.0)
+            r35 = 0
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r1.addView(r2, r6)
             org.telegram.ui.Components.VideoTimelineView$TimeHintView r1 = new org.telegram.ui.Components.VideoTimelineView$TimeHintView
             r1.<init>(r8)
-            org.telegram.ui.Components.VideoTimelineView r3 = r7.videoTimelineView
-            r3.setTimeHintView(r1)
-            org.telegram.ui.Components.SizeNotifierFrameLayout r3 = r7.sizeNotifierLayout
-            r31 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r32 = 80
-            r33 = 0
-            r35 = 0
-            r36 = 1112539136(0x42500000, float:52.0)
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
-            r3.addView(r1, r5)
+            org.telegram.ui.Components.VideoTimelineView r2 = r7.videoTimelineView
+            r2.setTimeHintView(r1)
+            org.telegram.ui.Components.SizeNotifierFrameLayout r2 = r7.sizeNotifierLayout
+            r30 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r31 = 80
+            r32 = 0
+            r34 = 0
+            r35 = 1112539136(0x42500000, float:52.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r2.addView(r1, r6)
             android.view.View r1 = new android.view.View
             r1.<init>(r8)
             r7.recordedAudioBackground = r1
-            r3 = 1099956224(0x41900000, float:18.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            java.lang.String r5 = "chat_recordedVoiceBackground"
-            int r5 = r7.getThemedColor(r5)
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createRoundRectDrawable(r3, r5)
-            r1.setBackgroundDrawable(r3)
+            r2 = 1099956224(0x41900000, float:18.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            java.lang.String r6 = "chat_recordedVoiceBackground"
+            int r6 = r7.getThemedColor(r6)
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createRoundRectDrawable(r2, r6)
+            r1.setBackgroundDrawable(r2)
             android.widget.FrameLayout r1 = r7.recordedAudioPanel
-            android.view.View r3 = r7.recordedAudioBackground
-            r31 = 1108344832(0x42100000, float:36.0)
-            r32 = 19
-            r33 = 1111490560(0x42400000, float:48.0)
-            r36 = 0
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
-            r1.addView(r3, r5)
+            android.view.View r2 = r7.recordedAudioBackground
+            r30 = 1108344832(0x42100000, float:36.0)
+            r31 = 19
+            r32 = 1111490560(0x42400000, float:48.0)
+            r35 = 0
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r1.addView(r2, r6)
             org.telegram.ui.Components.ChatActivityEnterView$SeekBarWaveformView r1 = new org.telegram.ui.Components.ChatActivityEnterView$SeekBarWaveformView
             r1.<init>(r8)
             r7.recordedAudioSeekBar = r1
             android.widget.LinearLayout r1 = new android.widget.LinearLayout
             r1.<init>(r8)
-            r1.setOrientation(r12)
-            android.widget.FrameLayout r3 = r7.recordedAudioPanel
-            r31 = 1107296256(0x42000000, float:32.0)
-            r33 = 1119354880(0x42b80000, float:92.0)
-            r35 = 1095761920(0x41500000, float:13.0)
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
-            r3.addView(r1, r5)
-            org.telegram.ui.Components.MediaActionDrawable r3 = new org.telegram.ui.Components.MediaActionDrawable
-            r3.<init>()
-            r7.playPauseDrawable = r3
-            android.widget.ImageView r3 = new android.widget.ImageView
-            r3.<init>(r8)
-            r7.recordedAudioPlayButton = r3
-            android.graphics.Matrix r3 = new android.graphics.Matrix
-            r3.<init>()
-            r5 = 1061997773(0x3f4ccccd, float:0.8)
+            r2 = 0
+            r1.setOrientation(r2)
+            android.widget.FrameLayout r2 = r7.recordedAudioPanel
+            r30 = 1107296256(0x42000000, float:32.0)
+            r32 = 1119354880(0x42b80000, float:92.0)
+            r34 = 1095761920(0x41500000, float:13.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r2.addView(r1, r6)
+            org.telegram.ui.Components.MediaActionDrawable r2 = new org.telegram.ui.Components.MediaActionDrawable
+            r2.<init>()
+            r7.playPauseDrawable = r2
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r8)
+            r7.recordedAudioPlayButton = r2
+            android.graphics.Matrix r2 = new android.graphics.Matrix
+            r2.<init>()
             r6 = 1061997773(0x3f4ccccd, float:0.8)
-            r9 = 1103101952(0x41CLASSNAME, float:24.0)
-            float r9 = org.telegram.messenger.AndroidUtilities.dpf2(r9)
-            r10 = 1103101952(0x41CLASSNAME, float:24.0)
-            float r10 = org.telegram.messenger.AndroidUtilities.dpf2(r10)
-            r3.postScale(r5, r6, r9, r10)
-            android.widget.ImageView r5 = r7.recordedAudioPlayButton
-            r5.setImageMatrix(r3)
-            android.widget.ImageView r3 = r7.recordedAudioPlayButton
-            org.telegram.ui.Components.MediaActionDrawable r5 = r7.playPauseDrawable
-            r3.setImageDrawable(r5)
-            android.widget.ImageView r3 = r7.recordedAudioPlayButton
-            android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.MATRIX
-            r3.setScaleType(r5)
-            android.widget.ImageView r3 = r7.recordedAudioPlayButton
-            r5 = 2131623947(0x7f0e000b, float:1.887506E38)
-            java.lang.String r6 = "AccActionPlay"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r3.setContentDescription(r5)
-            android.widget.FrameLayout r3 = r7.recordedAudioPanel
-            android.widget.ImageView r5 = r7.recordedAudioPlayButton
-            r30 = 48
-            r31 = 1111490560(0x42400000, float:48.0)
-            r32 = 83
-            r33 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
-            r3.addView(r5, r6)
-            android.widget.ImageView r3 = r7.recordedAudioPlayButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda14 r5 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda14
-            r5.<init>(r7)
-            r3.setOnClickListener(r5)
-            android.widget.TextView r3 = new android.widget.TextView
-            r3.<init>(r8)
-            r7.recordedAudioTimeTextView = r3
-            java.lang.String r5 = "chat_messagePanelVoiceDuration"
-            int r5 = r7.getThemedColor(r5)
-            r3.setTextColor(r5)
-            android.widget.TextView r3 = r7.recordedAudioTimeTextView
-            r5 = 1095761920(0x41500000, float:13.0)
-            r6 = 1
-            r3.setTextSize(r6, r5)
-            org.telegram.ui.Components.ChatActivityEnterView$SeekBarWaveformView r3 = r7.recordedAudioSeekBar
-            r30 = 0
-            r31 = 32
-            r32 = 1065353216(0x3var_, float:1.0)
-            r33 = 16
-            r34 = 0
-            r35 = 0
-            r36 = 4
-            r37 = 0
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r30, r31, r32, r33, r34, r35, r36, r37)
-            r1.addView(r3, r6)
-            android.widget.TextView r3 = r7.recordedAudioTimeTextView
-            r6 = 16
-            r9 = -2
-            r10 = 0
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r9, r10, r6)
-            r1.addView(r3, r6)
-            android.widget.FrameLayout r1 = new android.widget.FrameLayout
-            r1.<init>(r8)
-            r7.recordPanel = r1
-            r1.setClipChildren(r12)
-            android.widget.FrameLayout r1 = r7.recordPanel
-            r3 = 8
-            r1.setVisibility(r3)
-            android.widget.FrameLayout r1 = r7.recordPanel
-            r3 = 1111490560(0x42400000, float:48.0)
-            r6 = -1
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r3)
-            r14.addView(r1, r9)
-            android.widget.FrameLayout r1 = r7.recordPanel
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda31 r3 = org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda31.INSTANCE
-            r1.setOnTouchListener(r3)
-            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r1 = new org.telegram.ui.Components.ChatActivityEnterView$SlideTextView
-            r1.<init>(r8)
-            r7.slideText = r1
-            android.widget.FrameLayout r3 = r7.recordPanel
-            r30 = -1
-            r31 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r32 = 0
-            r33 = 1110704128(0x42340000, float:45.0)
-            r34 = 0
-            r35 = 0
-            r36 = 0
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
-            r3.addView(r1, r6)
-            android.widget.LinearLayout r1 = new android.widget.LinearLayout
-            r1.<init>(r8)
-            r7.recordTimeContainer = r1
-            r1.setOrientation(r12)
-            android.widget.LinearLayout r1 = r7.recordTimeContainer
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r1.setPadding(r3, r12, r12, r12)
-            android.widget.FrameLayout r1 = r7.recordPanel
-            android.widget.LinearLayout r3 = r7.recordTimeContainer
-            r6 = 16
-            r9 = -1
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r6)
-            r1.addView(r3, r6)
-            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r1 = new org.telegram.ui.Components.ChatActivityEnterView$RecordDot
-            r1.<init>(r8)
-            r7.recordDot = r1
-            android.widget.LinearLayout r3 = r7.recordTimeContainer
-            r30 = 28
-            r31 = 28
+            r9 = 1061997773(0x3f4ccccd, float:0.8)
+            r11 = 1103101952(0x41CLASSNAME, float:24.0)
+            float r11 = org.telegram.messenger.AndroidUtilities.dpf2(r11)
+            r15 = 1103101952(0x41CLASSNAME, float:24.0)
+            float r15 = org.telegram.messenger.AndroidUtilities.dpf2(r15)
+            r2.postScale(r6, r9, r11, r15)
+            android.widget.ImageView r6 = r7.recordedAudioPlayButton
+            r6.setImageMatrix(r2)
+            android.widget.ImageView r2 = r7.recordedAudioPlayButton
+            org.telegram.ui.Components.MediaActionDrawable r6 = r7.playPauseDrawable
+            r2.setImageDrawable(r6)
+            android.widget.ImageView r2 = r7.recordedAudioPlayButton
+            android.widget.ImageView$ScaleType r6 = android.widget.ImageView.ScaleType.MATRIX
+            r2.setScaleType(r6)
+            android.widget.ImageView r2 = r7.recordedAudioPlayButton
+            r6 = 2131623947(0x7f0e000b, float:1.887506E38)
+            java.lang.String r9 = "AccActionPlay"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r2.setContentDescription(r6)
+            android.widget.FrameLayout r2 = r7.recordedAudioPanel
+            android.widget.ImageView r6 = r7.recordedAudioPlayButton
+            r29 = 48
+            r30 = 1111490560(0x42400000, float:48.0)
+            r31 = 83
+            r32 = 1111490560(0x42400000, float:48.0)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r2.addView(r6, r9)
+            android.widget.ImageView r2 = r7.recordedAudioPlayButton
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda13 r6 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda13
+            r6.<init>(r7)
+            r2.setOnClickListener(r6)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r8)
+            r7.recordedAudioTimeTextView = r2
+            java.lang.String r6 = "chat_messagePanelVoiceDuration"
+            int r6 = r7.getThemedColor(r6)
+            r2.setTextColor(r6)
+            android.widget.TextView r2 = r7.recordedAudioTimeTextView
+            r6 = 1095761920(0x41500000, float:13.0)
+            r9 = 1
+            r2.setTextSize(r9, r6)
+            org.telegram.ui.Components.ChatActivityEnterView$SeekBarWaveformView r2 = r7.recordedAudioSeekBar
+            r29 = 0
+            r30 = 32
+            r31 = 1065353216(0x3var_, float:1.0)
             r32 = 16
             r33 = 0
             r34 = 0
-            r35 = 0
+            r35 = 4
             r36 = 0
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r30, (int) r31, (int) r32, (int) r33, (int) r34, (int) r35, (int) r36)
-            r3.addView(r1, r6)
-            org.telegram.ui.Components.ChatActivityEnterView$TimerView r1 = new org.telegram.ui.Components.ChatActivityEnterView$TimerView
-            r1.<init>(r8)
-            r7.recordTimerView = r1
-            android.widget.LinearLayout r3 = r7.recordTimeContainer
-            r30 = -1
-            r31 = -1
-            r33 = 6
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r30, (int) r31, (int) r32, (int) r33, (int) r34, (int) r35, (int) r36)
-            r3.addView(r1, r6)
-            org.telegram.ui.Components.ChatActivityEnterView$27 r1 = new org.telegram.ui.Components.ChatActivityEnterView$27
-            r1.<init>(r8)
-            r7.sendButtonContainer = r1
-            r1.setClipChildren(r12)
-            android.widget.FrameLayout r1 = r7.sendButtonContainer
-            r1.setClipToPadding(r12)
-            android.widget.FrameLayout r1 = r7.textFieldContainer
-            android.widget.FrameLayout r3 = r7.sendButtonContainer
-            r6 = 85
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r4, r6)
-            r1.addView(r3, r9)
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r29, r30, r31, r32, r33, r34, r35, r36)
+            r1.addView(r2, r9)
+            android.widget.TextView r2 = r7.recordedAudioTimeTextView
+            r9 = 16
+            r11 = -2
+            r15 = 0
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r11, r15, r9)
+            r1.addView(r2, r9)
             android.widget.FrameLayout r1 = new android.widget.FrameLayout
             r1.<init>(r8)
-            r7.audioVideoButtonContainer = r1
-            r1.setSoundEffectsEnabled(r12)
-            android.widget.FrameLayout r1 = r7.sendButtonContainer
-            android.widget.FrameLayout r3 = r7.audioVideoButtonContainer
-            r6 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r6)
-            r1.addView(r3, r9)
-            android.widget.FrameLayout r1 = r7.audioVideoButtonContainer
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda30 r3 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda30
-            r3.<init>(r7, r11)
-            r1.setOnTouchListener(r3)
-            android.widget.ImageView r1 = new android.widget.ImageView
+            r7.recordPanel = r1
+            r2 = 0
+            r1.setClipChildren(r2)
+            android.widget.FrameLayout r1 = r7.recordPanel
+            r1.setVisibility(r14)
+            android.widget.FrameLayout r1 = r7.recordPanel
+            r2 = -1
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3)
+            r13.addView(r1, r9)
+            android.widget.FrameLayout r1 = r7.recordPanel
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda27 r2 = org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda27.INSTANCE
+            r1.setOnTouchListener(r2)
+            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r1 = new org.telegram.ui.Components.ChatActivityEnterView$SlideTextView
             r1.<init>(r8)
-            r7.audioSendButton = r1
-            android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER_INSIDE
-            r1.setScaleType(r3)
-            android.widget.ImageView r1 = r7.audioSendButton
-            android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
-            int r6 = r7.getThemedColor(r15)
-            android.graphics.PorterDuff$Mode r9 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r3.<init>(r6, r9)
-            r1.setColorFilter(r3)
-            android.widget.ImageView r1 = r7.audioSendButton
-            r3 = 2131165563(0x7var_b, float:1.7945347E38)
-            r1.setImageResource(r3)
-            android.widget.ImageView r1 = r7.audioSendButton
-            r3 = 1082130432(0x40800000, float:4.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r1.setPadding(r12, r12, r3, r12)
-            android.widget.ImageView r1 = r7.audioSendButton
-            r3 = 2131624067(0x7f0e0083, float:1.8875303E38)
-            java.lang.String r6 = "AccDescrVoiceMessage"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
-            r1.setContentDescription(r3)
-            android.widget.ImageView r1 = r7.audioSendButton
-            r3 = 1
-            r1.setFocusable(r3)
-            android.widget.ImageView r1 = r7.audioSendButton
-            android.view.View$AccessibilityDelegate r3 = r7.mediaMessageButtonsDelegate
-            r1.setAccessibilityDelegate(r3)
-            android.widget.FrameLayout r1 = r7.audioVideoButtonContainer
-            android.widget.ImageView r3 = r7.audioSendButton
-            r6 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r6)
-            r1.addView(r3, r9)
-            if (r42 == 0) goto L_0x0a05
-            android.widget.ImageView r1 = new android.widget.ImageView
-            r1.<init>(r8)
-            r7.videoSendButton = r1
-            android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER_INSIDE
-            r1.setScaleType(r3)
-            android.widget.ImageView r1 = r7.videoSendButton
-            android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
-            int r6 = r7.getThemedColor(r15)
-            android.graphics.PorterDuff$Mode r9 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r3.<init>(r6, r9)
-            r1.setColorFilter(r3)
-            android.widget.ImageView r1 = r7.videoSendButton
-            r3 = 2131165571(0x7var_, float:1.7945363E38)
-            r1.setImageResource(r3)
-            android.widget.ImageView r1 = r7.videoSendButton
-            r3 = 1082130432(0x40800000, float:4.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r1.setPadding(r12, r12, r3, r12)
-            android.widget.ImageView r1 = r7.videoSendButton
-            r3 = 2131624065(0x7f0e0081, float:1.88753E38)
-            java.lang.String r6 = "AccDescrVideoMessage"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
-            r1.setContentDescription(r3)
-            android.widget.ImageView r1 = r7.videoSendButton
-            r3 = 1
-            r1.setFocusable(r3)
-            android.widget.ImageView r1 = r7.videoSendButton
-            android.view.View$AccessibilityDelegate r3 = r7.mediaMessageButtonsDelegate
-            r1.setAccessibilityDelegate(r3)
-            android.widget.FrameLayout r1 = r7.audioVideoButtonContainer
-            android.widget.ImageView r3 = r7.videoSendButton
-            r6 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r6)
-            r1.addView(r3, r9)
-        L_0x0a05:
-            org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r1 = new org.telegram.ui.Components.ChatActivityEnterView$RecordCircle
-            r1.<init>(r8)
-            r7.recordCircle = r1
-            r3 = 8
-            r1.setVisibility(r3)
-            org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.sizeNotifierLayout
-            org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r3 = r7.recordCircle
-            r30 = -1
-            r31 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r32 = 80
+            r7.slideText = r1
+            android.widget.FrameLayout r2 = r7.recordPanel
+            r29 = -1
+            r30 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r31 = 0
+            r32 = 1110704128(0x42340000, float:45.0)
             r33 = 0
             r34 = 0
             r35 = 0
-            r36 = 0
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
-            r1.addView(r3, r6)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r2.addView(r1, r9)
+            android.widget.LinearLayout r1 = new android.widget.LinearLayout
+            r1.<init>(r8)
+            r7.recordTimeContainer = r1
+            r2 = 0
+            r1.setOrientation(r2)
+            android.widget.LinearLayout r1 = r7.recordTimeContainer
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r1.setPadding(r9, r2, r2, r2)
+            android.widget.FrameLayout r1 = r7.recordPanel
+            android.widget.LinearLayout r2 = r7.recordTimeContainer
+            r9 = 16
+            r11 = -1
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r11, r9)
+            r1.addView(r2, r9)
+            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r1 = new org.telegram.ui.Components.ChatActivityEnterView$RecordDot
+            r1.<init>(r8)
+            r7.recordDot = r1
+            android.widget.LinearLayout r2 = r7.recordTimeContainer
+            r29 = 28
+            r30 = 28
+            r31 = 16
+            r32 = 0
+            r33 = 0
+            r34 = 0
+            r35 = 0
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r29, (int) r30, (int) r31, (int) r32, (int) r33, (int) r34, (int) r35)
+            r2.addView(r1, r9)
+            org.telegram.ui.Components.ChatActivityEnterView$TimerView r1 = new org.telegram.ui.Components.ChatActivityEnterView$TimerView
+            r1.<init>(r8)
+            r7.recordTimerView = r1
+            android.widget.LinearLayout r2 = r7.recordTimeContainer
+            r29 = -1
+            r30 = -1
+            r32 = 6
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r29, (int) r30, (int) r31, (int) r32, (int) r33, (int) r34, (int) r35)
+            r2.addView(r1, r9)
+            org.telegram.ui.Components.ChatActivityEnterView$25 r1 = new org.telegram.ui.Components.ChatActivityEnterView$25
+            r1.<init>(r8)
+            r7.sendButtonContainer = r1
+            r2 = 0
+            r1.setClipChildren(r2)
+            android.widget.FrameLayout r1 = r7.sendButtonContainer
+            r1.setClipToPadding(r2)
+            android.widget.FrameLayout r1 = r7.textFieldContainer
+            android.widget.FrameLayout r9 = r7.sendButtonContainer
+            r11 = 85
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r4, r11)
+            r1.addView(r9, r13)
+            android.widget.FrameLayout r1 = new android.widget.FrameLayout
+            r1.<init>(r8)
+            r7.audioVideoButtonContainer = r1
+            r1.setSoundEffectsEnabled(r2)
+            android.widget.FrameLayout r1 = r7.sendButtonContainer
+            android.widget.FrameLayout r2 = r7.audioVideoButtonContainer
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
+            r1.addView(r2, r9)
+            android.widget.FrameLayout r1 = r7.audioVideoButtonContainer
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda26 r2 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda26
+            r2.<init>(r7, r10)
+            r1.setOnTouchListener(r2)
+            android.widget.ImageView r1 = new android.widget.ImageView
+            r1.<init>(r8)
+            r7.audioSendButton = r1
+            android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER_INSIDE
+            r1.setScaleType(r2)
+            android.widget.ImageView r1 = r7.audioSendButton
+            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
+            int r9 = r7.getThemedColor(r12)
+            android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r2.<init>(r9, r10)
+            r1.setColorFilter(r2)
+            android.widget.ImageView r1 = r7.audioSendButton
+            r2 = 2131165563(0x7var_b, float:1.7945347E38)
+            r1.setImageResource(r2)
+            android.widget.ImageView r1 = r7.audioSendButton
+            r2 = 1082130432(0x40800000, float:4.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r9 = 0
+            r1.setPadding(r9, r9, r2, r9)
+            android.widget.ImageView r1 = r7.audioSendButton
+            r2 = 2131624067(0x7f0e0083, float:1.8875303E38)
+            java.lang.String r9 = "AccDescrVoiceMessage"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r2)
+            r1.setContentDescription(r2)
+            android.widget.ImageView r1 = r7.audioSendButton
+            r2 = 1
+            r1.setFocusable(r2)
+            android.widget.ImageView r1 = r7.audioSendButton
+            android.view.View$AccessibilityDelegate r2 = r7.mediaMessageButtonsDelegate
+            r1.setAccessibilityDelegate(r2)
+            android.widget.FrameLayout r1 = r7.audioVideoButtonContainer
+            android.widget.ImageView r2 = r7.audioSendButton
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
+            r1.addView(r2, r9)
+            if (r41 == 0) goto L_0x09fe
+            android.widget.ImageView r1 = new android.widget.ImageView
+            r1.<init>(r8)
+            r7.videoSendButton = r1
+            android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER_INSIDE
+            r1.setScaleType(r2)
+            android.widget.ImageView r1 = r7.videoSendButton
+            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
+            int r9 = r7.getThemedColor(r12)
+            android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r2.<init>(r9, r10)
+            r1.setColorFilter(r2)
+            android.widget.ImageView r1 = r7.videoSendButton
+            r2 = 2131165571(0x7var_, float:1.7945363E38)
+            r1.setImageResource(r2)
+            android.widget.ImageView r1 = r7.videoSendButton
+            r2 = 1082130432(0x40800000, float:4.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r9 = 0
+            r1.setPadding(r9, r9, r2, r9)
+            android.widget.ImageView r1 = r7.videoSendButton
+            r2 = 2131624065(0x7f0e0081, float:1.88753E38)
+            java.lang.String r9 = "AccDescrVideoMessage"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r2)
+            r1.setContentDescription(r2)
+            android.widget.ImageView r1 = r7.videoSendButton
+            r2 = 1
+            r1.setFocusable(r2)
+            android.widget.ImageView r1 = r7.videoSendButton
+            android.view.View$AccessibilityDelegate r2 = r7.mediaMessageButtonsDelegate
+            r1.setAccessibilityDelegate(r2)
+            android.widget.FrameLayout r1 = r7.audioVideoButtonContainer
+            android.widget.ImageView r2 = r7.videoSendButton
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
+            r1.addView(r2, r9)
+        L_0x09fe:
+            org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r1 = new org.telegram.ui.Components.ChatActivityEnterView$RecordCircle
+            r1.<init>(r8)
+            r7.recordCircle = r1
+            r1.setVisibility(r14)
+            org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.sizeNotifierLayout
+            org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r2 = r7.recordCircle
+            r29 = -1
+            r30 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r31 = 80
+            r32 = 0
+            r33 = 0
+            r34 = 0
+            r35 = 0
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r1.addView(r2, r9)
             android.widget.ImageView r1 = new android.widget.ImageView
             r1.<init>(r8)
             r7.cancelBotButton = r1
-            r3 = 4
-            r1.setVisibility(r3)
+            r2 = 4
+            r1.setVisibility(r2)
             android.widget.ImageView r1 = r7.cancelBotButton
-            android.widget.ImageView$ScaleType r6 = android.widget.ImageView.ScaleType.CENTER_INSIDE
-            r1.setScaleType(r6)
+            android.widget.ImageView$ScaleType r9 = android.widget.ImageView.ScaleType.CENTER_INSIDE
+            r1.setScaleType(r9)
             android.widget.ImageView r1 = r7.cancelBotButton
-            org.telegram.ui.Components.CloseProgressDrawable2 r6 = new org.telegram.ui.Components.CloseProgressDrawable2
-            r6.<init>()
-            r7.progressDrawable = r6
-            r1.setImageDrawable(r6)
+            org.telegram.ui.Components.CloseProgressDrawable2 r9 = new org.telegram.ui.Components.CloseProgressDrawable2
+            r9.<init>()
+            r7.progressDrawable = r9
+            r1.setImageDrawable(r9)
             android.widget.ImageView r1 = r7.cancelBotButton
-            r6 = 2131624697(0x7f0e02f9, float:1.8876581E38)
-            java.lang.String r9 = "Cancel"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
-            r1.setContentDescription(r6)
+            r9 = 2131624700(0x7f0e02fc, float:1.8876587E38)
+            java.lang.String r10 = "Cancel"
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            r1.setContentDescription(r9)
             org.telegram.ui.Components.CloseProgressDrawable2 r1 = r7.progressDrawable
-            android.graphics.PorterDuffColorFilter r6 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r9 = "chat_messagePanelCancelInlineBot"
-            int r9 = r7.getThemedColor(r9)
+            android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r10 = "chat_messagePanelCancelInlineBot"
+            int r10 = r7.getThemedColor(r10)
             android.graphics.PorterDuff$Mode r11 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r6.<init>(r9, r11)
-            r1.setColorFilter(r6)
+            r9.<init>(r10, r11)
+            r1.setColorFilter(r9)
             android.widget.ImageView r1 = r7.cancelBotButton
-            r1.setSoundEffectsEnabled(r12)
+            r9 = 0
+            r1.setSoundEffectsEnabled(r9)
             android.widget.ImageView r1 = r7.cancelBotButton
-            r6 = 1036831949(0x3dcccccd, float:0.1)
-            r1.setScaleX(r6)
+            r9 = 1036831949(0x3dcccccd, float:0.1)
+            r1.setScaleX(r9)
             android.widget.ImageView r1 = r7.cancelBotButton
-            r1.setScaleY(r6)
+            r1.setScaleY(r9)
             android.widget.ImageView r1 = r7.cancelBotButton
-            r1.setAlpha(r10)
+            r1.setAlpha(r15)
             r1 = 21
-            if (r0 < r1) goto L_0x0a90
+            if (r0 < r1) goto L_0x0a88
             android.widget.ImageView r1 = r7.cancelBotButton
-            int r6 = r7.getThemedColor(r2)
-            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r6)
-            r1.setBackgroundDrawable(r6)
-        L_0x0a90:
+            int r10 = r7.getThemedColor(r5)
+            android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r10)
+            r1.setBackgroundDrawable(r10)
+        L_0x0a88:
             android.widget.FrameLayout r1 = r7.sendButtonContainer
-            android.widget.ImageView r6 = r7.cancelBotButton
-            r9 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r9)
-            r1.addView(r6, r11)
+            android.widget.ImageView r10 = r7.cancelBotButton
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
+            r1.addView(r10, r11)
             android.widget.ImageView r1 = r7.cancelBotButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda24 r6 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda24
-            r6.<init>(r7)
-            r1.setOnClickListener(r6)
-            boolean r1 = r38.isInScheduleMode()
-            if (r1 == 0) goto L_0x0adb
-            android.content.res.Resources r1 = r39.getResources()
-            r6 = 2131165568(0x7var_, float:1.7945357E38)
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r6)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda10 r10 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda10
+            r10.<init>(r7)
+            r1.setOnClickListener(r10)
+            boolean r1 = r37.isInScheduleMode()
+            if (r1 == 0) goto L_0x0ad1
+            android.content.res.Resources r1 = r38.getResources()
+            r10 = 2131165568(0x7var_, float:1.7945357E38)
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r10)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.sendButtonDrawable = r1
-            android.content.res.Resources r1 = r39.getResources()
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r6)
+            android.content.res.Resources r1 = r38.getResources()
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r10)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.sendButtonInverseDrawable = r1
-            android.content.res.Resources r1 = r39.getResources()
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r6)
+            android.content.res.Resources r1 = r38.getResources()
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r10)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.inactinveSendButtonDrawable = r1
-            goto L_0x0b08
-        L_0x0adb:
-            android.content.res.Resources r1 = r39.getResources()
-            r6 = 2131165544(0x7var_, float:1.7945308E38)
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r6)
+            goto L_0x0afe
+        L_0x0ad1:
+            android.content.res.Resources r1 = r38.getResources()
+            r10 = 2131165544(0x7var_, float:1.7945308E38)
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r10)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.sendButtonDrawable = r1
-            android.content.res.Resources r1 = r39.getResources()
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r6)
+            android.content.res.Resources r1 = r38.getResources()
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r10)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.sendButtonInverseDrawable = r1
-            android.content.res.Resources r1 = r39.getResources()
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r6)
+            android.content.res.Resources r1 = r38.getResources()
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r10)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.inactinveSendButtonDrawable = r1
-        L_0x0b08:
-            org.telegram.ui.Components.ChatActivityEnterView$28 r1 = new org.telegram.ui.Components.ChatActivityEnterView$28
+        L_0x0afe:
+            org.telegram.ui.Components.ChatActivityEnterView$26 r1 = new org.telegram.ui.Components.ChatActivityEnterView$26
             r1.<init>(r8)
             r7.sendButton = r1
-            r1.setVisibility(r3)
+            r1.setVisibility(r2)
             java.lang.String r1 = "chat_messagePanelSend"
             int r1 = r7.getThemedColor(r1)
-            android.view.View r6 = r7.sendButton
-            r9 = 2131627772(0x7f0e0efc, float:1.8882818E38)
-            java.lang.String r11 = "Send"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
-            r6.setContentDescription(r9)
-            android.view.View r6 = r7.sendButton
-            r6.setSoundEffectsEnabled(r12)
-            android.view.View r6 = r7.sendButton
-            r9 = 1036831949(0x3dcccccd, float:0.1)
-            r6.setScaleX(r9)
-            android.view.View r6 = r7.sendButton
-            r6.setScaleY(r9)
-            android.view.View r6 = r7.sendButton
-            r6.setAlpha(r10)
-            r6 = 21
-            if (r0 < r6) goto L_0x0b5d
-            android.view.View r6 = r7.sendButton
-            r9 = 24
-            int r11 = android.graphics.Color.red(r1)
-            int r13 = android.graphics.Color.green(r1)
+            android.view.View r10 = r7.sendButton
+            r11 = 2131627839(0x7f0e0f3f, float:1.8882954E38)
+            java.lang.String r13 = "Send"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
+            r10.setContentDescription(r11)
+            android.view.View r10 = r7.sendButton
+            r11 = 0
+            r10.setSoundEffectsEnabled(r11)
+            android.view.View r10 = r7.sendButton
+            r10.setScaleX(r9)
+            android.view.View r10 = r7.sendButton
+            r10.setScaleY(r9)
+            android.view.View r10 = r7.sendButton
+            r10.setAlpha(r15)
+            r10 = 21
+            if (r0 < r10) goto L_0x0b51
+            android.view.View r10 = r7.sendButton
+            r11 = 24
+            int r13 = android.graphics.Color.red(r1)
+            int r14 = android.graphics.Color.green(r1)
             int r1 = android.graphics.Color.blue(r1)
-            int r1 = android.graphics.Color.argb(r9, r11, r13, r1)
-            r9 = 1
-            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1, r9)
-            r6.setBackgroundDrawable(r1)
-        L_0x0b5d:
+            int r1 = android.graphics.Color.argb(r11, r13, r14, r1)
+            r11 = 1
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1, r11)
+            r10.setBackgroundDrawable(r1)
+        L_0x0b51:
             android.widget.FrameLayout r1 = r7.sendButtonContainer
-            android.view.View r6 = r7.sendButton
-            r9 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r9)
-            r1.addView(r6, r11)
+            android.view.View r10 = r7.sendButton
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
+            r1.addView(r10, r11)
             android.view.View r1 = r7.sendButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda23 r6 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda23
-            r6.<init>(r7)
-            r1.setOnClickListener(r6)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda17 r10 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda17
+            r10.<init>(r7)
+            r1.setOnClickListener(r10)
             android.view.View r1 = r7.sendButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda28 r6 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda28
-            r6.<init>(r7)
-            r1.setOnLongClickListener(r6)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda24 r10 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda24
+            r10.<init>(r7)
+            r1.setOnLongClickListener(r10)
             org.telegram.ui.ActionBar.SimpleTextView r1 = new org.telegram.ui.ActionBar.SimpleTextView
             r1.<init>(r8)
             r7.slowModeButton = r1
-            r6 = 18
-            r1.setTextSize(r6)
+            r10 = 18
+            r1.setTextSize(r10)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            r1.setVisibility(r3)
+            r1.setVisibility(r2)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            r1.setSoundEffectsEnabled(r12)
+            r10 = 0
+            r1.setSoundEffectsEnabled(r10)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            r6 = 1036831949(0x3dcccccd, float:0.1)
-            r1.setScaleX(r6)
+            r1.setScaleX(r9)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            r1.setScaleY(r6)
+            r1.setScaleY(r9)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            r1.setAlpha(r10)
+            r1.setAlpha(r15)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r1.setPadding(r12, r12, r5, r12)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r1.setPadding(r10, r10, r6, r10)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            r5 = 21
-            r1.setGravity(r5)
+            r6 = 21
+            r1.setGravity(r6)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            int r5 = r7.getThemedColor(r15)
-            r1.setTextColor(r5)
+            int r6 = r7.getThemedColor(r12)
+            r1.setTextColor(r6)
             android.widget.FrameLayout r1 = r7.sendButtonContainer
-            org.telegram.ui.ActionBar.SimpleTextView r5 = r7.slowModeButton
-            r6 = 64
-            r9 = 53
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r4, r9)
-            r1.addView(r5, r6)
+            org.telegram.ui.ActionBar.SimpleTextView r6 = r7.slowModeButton
+            r10 = 64
+            r11 = 53
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r4, r11)
+            r1.addView(r6, r10)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda21 r5 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda21
-            r5.<init>(r7)
-            r1.setOnClickListener(r5)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda20 r6 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda20
+            r6.<init>(r7)
+            r1.setOnClickListener(r6)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda29 r5 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda29
-            r5.<init>(r7)
-            r1.setOnLongClickListener(r5)
-            org.telegram.ui.Components.ChatActivityEnterView$29 r1 = new org.telegram.ui.Components.ChatActivityEnterView$29
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda25 r6 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda25
+            r6.<init>(r7)
+            r1.setOnLongClickListener(r6)
+            org.telegram.ui.Components.ChatActivityEnterView$27 r1 = new org.telegram.ui.Components.ChatActivityEnterView$27
             r1.<init>(r7, r8)
             r7.expandStickersButton = r1
-            android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
-            r1.setScaleType(r5)
+            android.widget.ImageView$ScaleType r6 = android.widget.ImageView.ScaleType.CENTER
+            r1.setScaleType(r6)
             android.widget.ImageView r1 = r7.expandStickersButton
-            org.telegram.ui.Components.AnimatedArrowDrawable r5 = new org.telegram.ui.Components.AnimatedArrowDrawable
-            int r6 = r7.getThemedColor(r15)
-            r5.<init>(r6, r12)
-            r7.stickersArrow = r5
-            r1.setImageDrawable(r5)
+            org.telegram.ui.Components.AnimatedArrowDrawable r6 = new org.telegram.ui.Components.AnimatedArrowDrawable
+            int r10 = r7.getThemedColor(r12)
+            r11 = 0
+            r6.<init>(r10, r11)
+            r7.stickersArrow = r6
+            r1.setImageDrawable(r6)
             android.widget.ImageView r1 = r7.expandStickersButton
-            r5 = 8
-            r1.setVisibility(r5)
+            r6 = 8
+            r1.setVisibility(r6)
             android.widget.ImageView r1 = r7.expandStickersButton
-            r5 = 1036831949(0x3dcccccd, float:0.1)
-            r1.setScaleX(r5)
+            r1.setScaleX(r9)
             android.widget.ImageView r1 = r7.expandStickersButton
-            r1.setScaleY(r5)
+            r1.setScaleY(r9)
             android.widget.ImageView r1 = r7.expandStickersButton
-            r1.setAlpha(r10)
+            r1.setAlpha(r15)
             r1 = 21
             if (r0 < r1) goto L_0x0CLASSNAME
             android.widget.ImageView r0 = r7.expandStickersButton
-            int r1 = r7.getThemedColor(r2)
+            int r1 = r7.getThemedColor(r5)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1)
             r0.setBackgroundDrawable(r1)
         L_0x0CLASSNAME:
             android.widget.FrameLayout r0 = r7.sendButtonContainer
             android.widget.ImageView r1 = r7.expandStickersButton
-            r2 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r2)
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
             r0.addView(r1, r5)
             android.widget.ImageView r0 = r7.expandStickersButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda20 r1 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda20
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda18 r1 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda18
             r1.<init>(r7)
             r0.setOnClickListener(r1)
             android.widget.ImageView r0 = r7.expandStickersButton
             r1 = 2131623973(0x7f0e0025, float:1.8875113E38)
-            java.lang.String r2 = "AccDescrExpandPanel"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            java.lang.String r5 = "AccDescrExpandPanel"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             r0.setContentDescription(r1)
             android.widget.FrameLayout r0 = new android.widget.FrameLayout
             r0.<init>(r8)
@@ -3919,11 +3923,11 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r0.setVisibility(r1)
             android.widget.FrameLayout r0 = r7.textFieldContainer
             android.widget.FrameLayout r1 = r7.doneButtonContainer
-            r2 = 85
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r4, r2)
-            r0.addView(r1, r2)
+            r5 = 85
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r4, r5)
+            r0.addView(r1, r5)
             android.widget.FrameLayout r0 = r7.doneButtonContainer
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda16 r1 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda16
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda14 r1 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda14
             r1.<init>(r7)
             r0.setOnClickListener(r1)
             r0 = 1098907648(0x41800000, float:16.0)
@@ -3931,47 +3935,48 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             java.lang.String r1 = "chat_messagePanelSend"
             int r1 = r7.getThemedColor(r1)
             android.graphics.drawable.ShapeDrawable r0 = org.telegram.ui.ActionBar.Theme.createCircleDrawable(r0, r1)
-            android.content.res.Resources r1 = r39.getResources()
-            r2 = 2131165559(0x7var_, float:1.7945339E38)
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r2)
+            android.content.res.Resources r1 = r38.getResources()
+            r5 = 2131165559(0x7var_, float:1.7945339E38)
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r5)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.doneCheckDrawable = r1
-            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r5 = "chat_messagePanelVoicePressed"
-            int r5 = r7.getThemedColor(r5)
-            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r2.<init>(r5, r6)
-            r1.setColorFilter(r2)
-            org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
-            r5 = 1065353216(0x3var_, float:1.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r2.<init>(r0, r1, r12, r5)
+            android.graphics.PorterDuffColorFilter r5 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r6 = "chat_messagePanelVoicePressed"
+            int r6 = r7.getThemedColor(r6)
+            android.graphics.PorterDuff$Mode r9 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r5.<init>(r6, r9)
+            r1.setColorFilter(r5)
+            org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
+            r6 = 1065353216(0x3var_, float:1.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r9 = 0
+            r5.<init>(r0, r1, r9, r6)
             r0 = 1107296256(0x42000000, float:32.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             r1 = 1107296256(0x42000000, float:32.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            r2.setCustomSize(r0, r1)
+            r5.setCustomSize(r0, r1)
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r8)
             r7.doneButtonImage = r0
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r0.setScaleType(r1)
             android.widget.ImageView r0 = r7.doneButtonImage
-            r0.setImageDrawable(r2)
+            r0.setImageDrawable(r5)
             android.widget.ImageView r0 = r7.doneButtonImage
-            r1 = 2131625330(0x7f0e0572, float:1.8877865E38)
-            java.lang.String r2 = "Done"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r1 = 2131625349(0x7f0e0585, float:1.8877903E38)
+            java.lang.String r5 = "Done"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             r0.setContentDescription(r1)
             android.widget.FrameLayout r0 = r7.doneButtonContainer
             android.widget.ImageView r1 = r7.doneButtonImage
-            r2 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r2)
-            r0.addView(r1, r2)
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
+            r0.addView(r1, r3)
             org.telegram.ui.Components.ContextProgressView r0 = new org.telegram.ui.Components.ContextProgressView
-            r0.<init>(r8, r12)
+            r1 = 0
+            r0.<init>(r8, r1)
             r7.doneButtonProgress = r0
-            r0.setVisibility(r3)
+            r0.setVisibility(r2)
             android.widget.FrameLayout r0 = r7.doneButtonContainer
             org.telegram.ui.Components.ContextProgressView r1 = r7.doneButtonProgress
             r2 = -1082130432(0xffffffffbvar_, float:-1.0)
@@ -3989,9 +3994,10 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             java.lang.String r2 = "kbd_height_land3"
             int r0 = r0.getInt(r2, r1)
             r7.keyboardHeightLand = r0
-            r7.setRecordVideoButtonVisible(r12, r12)
-            r7.checkSendButton(r12)
-            r38.checkChannelRights()
+            r0 = 0
+            r7.setRecordVideoButtonVisible(r0, r0)
+            r7.checkSendButton(r0)
+            r37.checkChannelRights()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.<init>(android.app.Activity, org.telegram.ui.Components.SizeNotifierFrameLayout, org.telegram.ui.ChatActivity, boolean, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
@@ -4022,7 +4028,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             if (this.stickersExpanded) {
                 setStickersExpanded(false, true, false);
                 this.waitingForKeyboardOpenAfterAnimation = true;
-                AndroidUtilities.runOnUIThread(new ChatActivityEnterView$$ExternalSyntheticLambda34(this), 200);
+                AndroidUtilities.runOnUIThread(new ChatActivityEnterView$$ExternalSyntheticLambda32(this), 200);
                 return;
             }
             openKeyboardInternal();
@@ -4105,485 +4111,117 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x02f2  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0300  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x031a  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x031f  */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x0333  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x0335  */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x033f  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x0364  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$new$14(org.telegram.ui.Components.SizeNotifierFrameLayout r28, android.view.View r29) {
-        /*
-            r27 = this;
-            r12 = r27
-            float r0 = r27.getTranslationY()
-            r13 = 0
-            r14 = 1
-            int r0 = (r0 > r13 ? 1 : (r0 == r13 ? 0 : -1))
-            if (r0 == 0) goto L_0x0017
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda32 r0 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda32
-            r0.<init>(r12)
-            r12.onEmojiSearchClosed = r0
-            r12.hidePopup(r14, r14)
-            return
-        L_0x0017:
-            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r0 = r12.delegate
-            int r0 = r0.measureKeyboardHeight()
-            r15 = 1101004800(0x41a00000, float:20.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            if (r0 <= r1) goto L_0x0054
-            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r0 = r12.delegate
-            int r0 = r0.getContentViewHeight()
-            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r1 = r12.delegate
-            int r1 = r1.measureKeyboardHeight()
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            if (r1 > r2) goto L_0x0038
-            int r0 = r0 + r1
-        L_0x0038:
-            boolean r1 = r12.emojiViewVisible
-            if (r1 == 0) goto L_0x0041
-            int r1 = r27.getEmojiPadding()
-            int r0 = r0 - r1
-        L_0x0041:
-            r1 = 1128792064(0x43480000, float:200.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            if (r0 >= r1) goto L_0x0054
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda38 r0 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda38
-            r0.<init>(r12)
-            r12.onKeyboardClosed = r0
-            r27.closeKeyboard()
-            return
-        L_0x0054:
-            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r0 = r12.delegate
-            org.telegram.tgnet.TLRPC$TL_channels_sendAsPeers r0 = r0.getSendAsPeers()
-            if (r0 == 0) goto L_0x03fa
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
-            r11 = 0
-            if (r0 == 0) goto L_0x006a
-            r0.setPauseNotifications(r11)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
-            r0.dismiss()
-            return
-        L_0x006a:
-            int r0 = r12.currentAccount
-            org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r0)
-            long r0 = r12.dialog_id
-            long r0 = -r0
-            org.telegram.tgnet.TLRPC$ChatFull r10 = r4.getChatFull(r0)
-            if (r10 != 0) goto L_0x007a
-            return
-        L_0x007a:
-            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r0 = r12.delegate
-            org.telegram.tgnet.TLRPC$TL_channels_sendAsPeers r0 = r0.getSendAsPeers()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Peer> r9 = r0.peers
-            org.telegram.ui.ChatActivity r0 = r12.parentFragment
-            org.telegram.ui.ActionBar.ActionBarLayout r8 = r0.getParentLayout()
-            org.telegram.ui.Components.ChatActivityEnterView$19 r7 = new org.telegram.ui.Components.ChatActivityEnterView$19
-            android.content.Context r0 = r27.getContext()
-            r7.<init>(r0)
-            r0 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r6 = -2
-            android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r0)
-            r7.setLayoutParams(r0)
-            android.content.Context r0 = r27.getContext()
-            r1 = 2131166016(0x7var_, float:1.7946265E38)
-            android.graphics.drawable.Drawable r0 = androidx.core.content.ContextCompat.getDrawable(r0, r1)
-            android.graphics.drawable.Drawable r0 = r0.mutate()
-            android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r2 = "actionBarDefaultSubmenuBackground"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            android.graphics.PorterDuff$Mode r3 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r1.<init>(r2, r3)
-            r0.setColorFilter(r1)
-            r7.setBackground(r0)
-            android.view.View r5 = new android.view.View
-            android.content.Context r0 = r27.getContext()
-            r5.<init>(r0)
-            r0 = 855638016(0x33000000, float:2.9802322E-8)
-            r5.setBackgroundColor(r0)
-            r0 = 1138819072(0x43e10000, float:450.0)
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            org.telegram.ui.Components.ChatActivityEnterView$20 r3 = new org.telegram.ui.Components.ChatActivityEnterView$20
-            android.content.Context r1 = r27.getContext()
-            r3.<init>(r12, r1, r0)
-            r3.setOrientation(r14)
-            android.widget.TextView r2 = new android.widget.TextView
-            android.content.Context r0 = r28.getContext()
-            r2.<init>(r0)
-            java.lang.String r0 = "dialogTextBlue"
-            int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-            r2.setTextColor(r0)
-            r0 = 1097859072(0x41700000, float:15.0)
-            r2.setTextSize(r14, r0)
-            r0 = 2131627795(0x7f0e0var_, float:1.8882865E38)
-            java.lang.String r1 = "SendMessageAsTitle"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r2.setText(r0)
-            java.lang.String r0 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r0 = org.telegram.messenger.AndroidUtilities.getTypeface(r0)
-            r2.setTypeface(r0, r14)
-            r0 = 1099956224(0x41900000, float:18.0)
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            r1 = 1095761920(0x41500000, float:13.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            r2.setPadding(r0, r6, r0, r1)
-            r3.addView(r2)
-            android.view.View r6 = new android.view.View
-            android.content.Context r0 = r27.getContext()
-            r6.<init>(r0)
-            r6.setAlpha(r13)
-            android.widget.FrameLayout r1 = new android.widget.FrameLayout
-            android.content.Context r0 = r27.getContext()
-            r1.<init>(r0)
-            org.telegram.ui.Components.RecyclerListView r0 = new org.telegram.ui.Components.RecyclerListView
-            android.content.Context r11 = r27.getContext()
-            r0.<init>(r11)
-            androidx.recyclerview.widget.LinearLayoutManager r11 = new androidx.recyclerview.widget.LinearLayoutManager
-            android.content.Context r13 = r27.getContext()
-            r11.<init>(r13)
-            java.util.concurrent.atomic.AtomicReference r13 = new java.util.concurrent.atomic.AtomicReference
-            r13.<init>()
-            java.util.concurrent.atomic.AtomicReference r17 = new java.util.concurrent.atomic.AtomicReference
-            r17.<init>()
-            java.util.concurrent.atomic.AtomicReference r18 = new java.util.concurrent.atomic.AtomicReference
-            r18.<init>()
-            r0.setLayoutManager(r11)
-            org.telegram.ui.Components.ChatActivityEnterView$21 r15 = new org.telegram.ui.Components.ChatActivityEnterView$21
-            r15.<init>(r12, r9, r4, r10)
-            r0.setAdapter(r15)
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda53 r15 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda53
-            r28 = r0
-            r0 = r15
-            r14 = r1
-            r1 = r27
-            r19 = r2
-            r2 = r9
-            r20 = r9
-            r9 = r3
-            r3 = r10
-            r21 = r5
-            r5 = r28
-            r16 = r9
-            r22 = r10
-            r9 = -2
-            r10 = r6
-            r6 = r17
-            r23 = r7
-            r7 = r13
-            r24 = r8
-            r8 = r18
-            r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8)
-            r8 = r28
-            r8.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r15)
-            r15 = 150(0x96, float:2.1E-43)
-            org.telegram.ui.Components.ChatActivityEnterView$23 r0 = new org.telegram.ui.Components.ChatActivityEnterView$23
-            r0.<init>(r12, r11, r10, r15)
-            r8.addOnScrollListener(r0)
-            r7 = 2
-            r8.setOverScrollMode(r7)
-            r14.addView(r8)
-            android.content.Context r0 = r27.getContext()
-            r1 = 2131165470(0x7var_e, float:1.7945158E38)
-            java.lang.String r2 = "windowBackgroundGrayShadow"
-            android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r2)
-            r10.setBackground(r0)
-            r6 = -1
-            r5 = 1082130432(0x40800000, float:4.0)
-            android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r5)
-            r14.addView(r10, r0)
-            android.widget.LinearLayout$LayoutParams r0 = new android.widget.LinearLayout$LayoutParams
-            r0.<init>(r6, r9)
-            r9 = r16
-            r9.addView(r14, r0)
-            r14 = r23
-            r14.addView(r9)
-            org.telegram.ui.Components.ChatActivityEnterView$24 r4 = new org.telegram.ui.Components.ChatActivityEnterView$24
-            r3 = -2
-            r16 = -2
-            r0 = r4
-            r1 = r27
-            r2 = r14
-            r15 = r4
-            r4 = r16
-            r16 = 1082130432(0x40800000, float:4.0)
-            r5 = r24
-            r6 = r21
-            r7 = r14
-            r23 = r8
-            r8 = r9
-            r25 = r20
-            r20 = r9
-            r9 = r13
-            r13 = r22
-            r22 = r10
-            r10 = r17
-            r26 = r11
-            r17 = r13
-            r13 = 0
-            r11 = r18
-            r0.<init>(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
-            r12.senderSelectPopupWindow = r15
-            r0 = 1
-            r15.setPauseNotifications(r0)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r1 = r12.senderSelectPopupWindow
-            r2 = 220(0xdc, float:3.08E-43)
-            r1.setDismissAnimationDuration(r2)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r1 = r12.senderSelectPopupWindow
-            r1.setOutsideTouchable(r0)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r1 = r12.senderSelectPopupWindow
-            r1.setClippingEnabled(r0)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r1 = r12.senderSelectPopupWindow
-            r1.setFocusable(r0)
-            r0 = 1148846080(0x447a0000, float:1000.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            r2 = -2147483648(0xfffffffvar_, float:-0.0)
-            int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r1, r2)
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r2)
-            r14.measure(r1, r0)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
-            r1 = 2
-            r0.setInputMethodMode(r1)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
-            r0.setSoftInputMode(r13)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
-            android.view.View r0 = r0.getContentView()
-            r2 = 1
-            r0.setFocusableInTouchMode(r2)
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
-            r0.setAnimationEnabled(r13)
-            r0 = r17
-            org.telegram.tgnet.TLRPC$Peer r0 = r0.default_send_as
-            if (r0 == 0) goto L_0x0243
-            goto L_0x0244
-        L_0x0243:
-            r0 = 0
-        L_0x0244:
-            r2 = 1065353216(0x3var_, float:1.0)
-            if (r0 == 0) goto L_0x02e4
-            r3 = 1114112000(0x42680000, float:58.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            int r4 = r25.size()
-            int r4 = r4 * r3
-            r11 = 0
-        L_0x0255:
-            int r5 = r25.size()
-            if (r11 >= r5) goto L_0x02e4
-            r5 = r25
-            java.lang.Object r6 = r5.get(r11)
-            org.telegram.tgnet.TLRPC$Peer r6 = (org.telegram.tgnet.TLRPC$Peer) r6
-            long r7 = r6.channel_id
-            r9 = 0
-            int r15 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r15 == 0) goto L_0x0273
-            r15 = r14
-            long r13 = r0.channel_id
-            int r17 = (r7 > r13 ? 1 : (r7 == r13 ? 0 : -1))
-            if (r17 == 0) goto L_0x028c
-            goto L_0x0274
-        L_0x0273:
-            r15 = r14
-        L_0x0274:
-            long r7 = r6.user_id
-            int r13 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r13 == 0) goto L_0x0280
-            long r13 = r0.user_id
-            int r17 = (r7 > r13 ? 1 : (r7 == r13 ? 0 : -1))
-            if (r17 == 0) goto L_0x028c
-        L_0x0280:
-            long r6 = r6.chat_id
-            int r8 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
-            if (r8 == 0) goto L_0x02d6
-            long r8 = r0.chat_id
-            int r10 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r10 != 0) goto L_0x02d6
-        L_0x028c:
-            int r0 = r5.size()
-            r6 = 1
-            int r0 = r0 - r6
-            if (r11 == r0) goto L_0x02a0
-            int r0 = r23.getMeasuredHeight()
-            if (r0 >= r4) goto L_0x02a0
-            int r0 = r23.getMeasuredHeight()
-            int r0 = r0 % r3
-            goto L_0x02a1
-        L_0x02a0:
-            r0 = 0
-        L_0x02a1:
-            r6 = 1088421888(0x40e00000, float:7.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r0 = r0 + r6
-            int r5 = r5.size()
-            int r5 = r5 - r1
-            int r5 = r5 * r3
-            int r4 = r4 - r5
-            int r0 = r0 + r4
-            r6 = r26
-            r6.scrollToPositionWithOffset(r11, r0)
-            int r0 = r23.computeVerticalScrollOffset()
-            if (r0 <= 0) goto L_0x02e5
-            android.view.ViewPropertyAnimator r0 = r22.animate()
-            r0.cancel()
-            android.view.ViewPropertyAnimator r0 = r22.animate()
-            android.view.ViewPropertyAnimator r0 = r0.alpha(r2)
-            r7 = 150(0x96, float:2.1E-43)
-            long r3 = (long) r7
-            android.view.ViewPropertyAnimator r0 = r0.setDuration(r3)
-            r0.start()
-            goto L_0x02e5
-        L_0x02d6:
-            r6 = r26
-            r7 = 150(0x96, float:2.1E-43)
-            int r11 = r11 + 1
-            r25 = r5
-            r26 = r6
-            r14 = r15
-            r13 = 0
-            goto L_0x0255
-        L_0x02e4:
-            r15 = r14
-        L_0x02e5:
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r16)
-            int r0 = -r0
-            int[] r3 = new int[r1]
-            boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r4 == 0) goto L_0x0300
-            org.telegram.ui.ChatActivity r4 = r12.parentFragment
-            android.view.View r4 = r4.getFragmentView()
-            r4.getLocationInWindow(r3)
-            r4 = 0
-            r5 = r3[r4]
-            int r5 = r5 + r0
-            goto L_0x0302
-        L_0x0300:
-            r4 = 0
-            r5 = r0
-        L_0x0302:
-            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r6 = r12.delegate
-            int r6 = r6.getContentViewHeight()
-            int r7 = r15.getMeasuredHeight()
-            org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r8 = r12.delegate
-            int r8 = r8.measureKeyboardHeight()
-            r9 = 1101004800(0x41a00000, float:20.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            if (r8 > r9) goto L_0x031b
-            int r6 = r6 + r8
-        L_0x031b:
-            boolean r8 = r12.emojiViewVisible
-            if (r8 == 0) goto L_0x0324
-            int r8 = r27.getEmojiPadding()
-            int r6 = r6 - r8
-        L_0x0324:
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r9 = r0 * 2
-            int r9 = r9 + r6
-            org.telegram.ui.ChatActivity r10 = r12.parentFragment
-            boolean r10 = r10.isInBubbleMode()
-            if (r10 == 0) goto L_0x0335
-            r11 = 0
-            goto L_0x0337
-        L_0x0335:
-            int r11 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-        L_0x0337:
-            int r9 = r9 - r11
-            int r10 = r19.getMeasuredHeight()
-            int r9 = r9 - r10
-            if (r7 >= r9) goto L_0x0364
-            r12.getLocationInWindow(r3)
-            r4 = 1
-            r3 = r3[r4]
-            int r3 = r3 - r7
-            int r3 = r3 - r0
-            r4 = 1073741824(0x40000000, float:2.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r3 = r3 - r6
-            android.widget.FrameLayout$LayoutParams r6 = new android.widget.FrameLayout$LayoutParams
-            int r0 = r0 + r3
-            int r0 = r0 + r7
-            int r0 = r0 + r8
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r0 = r0 + r4
-            r7 = -1
-            r6.<init>(r7, r0)
-            r0 = r21
-            r9 = r24
-            r9.addView(r0, r6)
-            goto L_0x039a
-        L_0x0364:
-            r0 = r21
-            r9 = r24
-            r7 = -1
-            org.telegram.ui.ChatActivity r3 = r12.parentFragment
-            boolean r3 = r3.isInBubbleMode()
-            if (r3 == 0) goto L_0x0373
-            r11 = 0
-            goto L_0x0375
-        L_0x0373:
-            int r11 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-        L_0x0375:
-            r3 = 1096810496(0x41600000, float:14.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            android.view.ViewGroup$LayoutParams r4 = r20.getLayoutParams()
-            int r6 = r6 - r11
-            int r6 = r6 - r3
-            int r10 = r27.getHeightWithTopView()
-            int r6 = r6 - r10
-            r4.height = r6
-            android.widget.FrameLayout$LayoutParams r4 = new android.widget.FrameLayout$LayoutParams
-            int r3 = r3 + r11
-            android.view.ViewGroup$LayoutParams r6 = r20.getLayoutParams()
-            int r6 = r6.height
-            int r3 = r3 + r6
-            int r3 = r3 + r8
-            r4.<init>(r7, r3)
-            r9.addView(r0, r4)
-            r3 = r11
-        L_0x039a:
-            r4 = 1048576000(0x3e800000, float:0.25)
-            r6 = 1090519040(0x41000000, float:8.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            float r7 = (float) r7
-            r8 = r15
-            r8.setPivotX(r7)
-            int r7 = r8.getMeasuredHeight()
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r7 = r7 - r6
-            float r6 = (float) r7
-            r8.setPivotY(r6)
-            r6 = r20
-            r7 = 0
-            r6.setPivotX(r7)
-            r6.setPivotY(r7)
-            r8.setScaleX(r4)
-            r8.setScaleY(r4)
-            r6.setAlpha(r4)
-            r0.setAlpha(r7)
-            float[] r1 = new float[r1]
-            r1 = {0, NUM} // fill-array
-            android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
-            r9 = 220(0xdc, double:1.087E-321)
-            android.animation.ValueAnimator r1 = r1.setDuration(r9)
-            org.telegram.ui.Components.CubicBezierInterpolator r7 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT
-            r1.setInterpolator(r7)
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda1 r7 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda1
-            r7.<init>(r4, r8, r6, r0)
-            r1.addUpdateListener(r7)
-            r1.start()
-            org.telegram.ui.ActionBar.ActionBarPopupWindow r0 = r12.senderSelectPopupWindow
-            r1 = 51
-            r12.popupX = r5
-            r12.popupY = r3
-            r4 = r29
-            r0.showAtLocation(r4, r1, r5, r3)
-            org.telegram.ui.Components.SenderSelectView r0 = r12.senderSelectView
-            r0.setProgress(r2)
-        L_0x03fa:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.lambda$new$14(org.telegram.ui.Components.SizeNotifierFrameLayout, android.view.View):void");
+    public /* synthetic */ void lambda$new$12(Activity activity, View view) {
+        int i;
+        int i2;
+        View view2 = view;
+        if (getTranslationY() != 0.0f) {
+            this.onEmojiSearchClosed = new ChatActivityEnterView$$ExternalSyntheticLambda29(this);
+            hidePopup(true, true);
+            return;
+        }
+        if (this.delegate.measureKeyboardHeight() > AndroidUtilities.dp(20.0f)) {
+            int contentViewHeight = this.delegate.getContentViewHeight();
+            int measureKeyboardHeight = this.delegate.measureKeyboardHeight();
+            if (measureKeyboardHeight <= AndroidUtilities.dp(20.0f)) {
+                contentViewHeight += measureKeyboardHeight;
+            }
+            if (this.emojiViewVisible) {
+                contentViewHeight -= getEmojiPadding();
+            }
+            if (contentViewHeight < AndroidUtilities.dp(200.0f)) {
+                this.onKeyboardClosed = new ChatActivityEnterView$$ExternalSyntheticLambda34(this);
+                closeKeyboard();
+                return;
+            }
+        }
+        if (this.delegate.getSendAsPeers() != null) {
+            try {
+                view2.performHapticFeedback(3, 2);
+            } catch (Exception unused) {
+            }
+            SenderSelectPopup senderSelectPopup = this.senderSelectPopupWindow;
+            int i3 = 0;
+            if (senderSelectPopup != null) {
+                senderSelectPopup.setPauseNotifications(false);
+                this.senderSelectPopupWindow.startDismissAnimation(new SpringAnimation[0]);
+                return;
+            }
+            MessagesController instance = MessagesController.getInstance(this.currentAccount);
+            TLRPC$ChatFull chatFull = instance.getChatFull(-this.dialog_id);
+            if (chatFull != null) {
+                ActionBarLayout parentLayout = this.parentFragment.getParentLayout();
+                final ActionBarLayout actionBarLayout = parentLayout;
+                AnonymousClass19 r0 = new SenderSelectPopup(activity, instance, chatFull, this.delegate.getSendAsPeers(), new ChatActivityEnterView$$ExternalSyntheticLambda51(this, chatFull, instance)) {
+                    public void dismiss() {
+                        if (ChatActivityEnterView.this.senderSelectPopupWindow != this) {
+                            actionBarLayout.removeView(this.dimView);
+                            super.dismiss();
+                            return;
+                        }
+                        SenderSelectPopup unused = ChatActivityEnterView.this.senderSelectPopupWindow = null;
+                        if (!this.runningCustomSprings) {
+                            startDismissAnimation(new SpringAnimation[0]);
+                            ChatActivityEnterView.this.senderSelectView.setProgress(0.0f, true, true);
+                            return;
+                        }
+                        for (SpringAnimation cancel : this.springAnimations) {
+                            cancel.cancel();
+                        }
+                        this.springAnimations.clear();
+                        super.dismiss();
+                    }
+                };
+                this.senderSelectPopupWindow = r0;
+                r0.setPauseNotifications(true);
+                this.senderSelectPopupWindow.setDismissAnimationDuration(220);
+                this.senderSelectPopupWindow.setOutsideTouchable(true);
+                this.senderSelectPopupWindow.setClippingEnabled(true);
+                this.senderSelectPopupWindow.setFocusable(true);
+                this.senderSelectPopupWindow.getContentView().measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
+                this.senderSelectPopupWindow.setInputMethodMode(2);
+                this.senderSelectPopupWindow.setSoftInputMode(0);
+                this.senderSelectPopupWindow.getContentView().setFocusableInTouchMode(true);
+                this.senderSelectPopupWindow.setAnimationEnabled(false);
+                int i4 = -AndroidUtilities.dp(4.0f);
+                int[] iArr = new int[2];
+                if (AndroidUtilities.isTablet()) {
+                    this.parentFragment.getFragmentView().getLocationInWindow(iArr);
+                    i = iArr[0] + i4;
+                } else {
+                    i = i4;
+                }
+                int contentViewHeight2 = this.delegate.getContentViewHeight();
+                int measuredHeight = this.senderSelectPopupWindow.getContentView().getMeasuredHeight();
+                int measureKeyboardHeight2 = this.delegate.measureKeyboardHeight();
+                if (measureKeyboardHeight2 <= AndroidUtilities.dp(20.0f)) {
+                    contentViewHeight2 += measureKeyboardHeight2;
+                }
+                if (this.emojiViewVisible) {
+                    contentViewHeight2 -= getEmojiPadding();
+                }
+                int dp = AndroidUtilities.dp(1.0f);
+                if (measuredHeight < (((i4 * 2) + contentViewHeight2) - (this.parentFragment.isInBubbleMode() ? 0 : AndroidUtilities.statusBarHeight)) - this.senderSelectPopupWindow.headerText.getMeasuredHeight()) {
+                    getLocationInWindow(iArr);
+                    i2 = ((iArr[1] - measuredHeight) - i4) - AndroidUtilities.dp(2.0f);
+                    parentLayout.addView(this.senderSelectPopupWindow.dimView, new FrameLayout.LayoutParams(-1, i4 + i2 + measuredHeight + dp + AndroidUtilities.dp(2.0f)));
+                } else {
+                    if (!this.parentFragment.isInBubbleMode()) {
+                        i3 = AndroidUtilities.statusBarHeight;
+                    }
+                    int dp2 = AndroidUtilities.dp(14.0f);
+                    this.senderSelectPopupWindow.recyclerContainer.getLayoutParams().height = ((contentViewHeight2 - i3) - dp2) - getHeightWithTopView();
+                    parentLayout.addView(this.senderSelectPopupWindow.dimView, new FrameLayout.LayoutParams(-1, dp2 + i3 + this.senderSelectPopupWindow.recyclerContainer.getLayoutParams().height + dp));
+                    i2 = i3;
+                }
+                this.senderSelectPopupWindow.startShowAnimation();
+                SenderSelectPopup senderSelectPopup2 = this.senderSelectPopupWindow;
+                this.popupX = i;
+                this.popupY = i2;
+                senderSelectPopup2.showAtLocation(view2, 51, i, i2);
+                this.senderSelectView.setProgress(1.0f);
+            }
+        }
     }
 
     /* access modifiers changed from: private */
@@ -4597,181 +4235,152 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$12(List list, TLRPC$ChatFull tLRPC$ChatFull, MessagesController messagesController, RecyclerListView recyclerListView, AtomicReference atomicReference, AtomicReference atomicReference2, AtomicReference atomicReference3, View view, int i) {
+    public /* synthetic */ void lambda$new$11(TLRPC$ChatFull tLRPC$ChatFull, MessagesController messagesController, RecyclerView recyclerView, SenderSelectPopup.SenderView senderView, TLRPC$Peer tLRPC$Peer) {
         TLRPC$User user;
-        TLRPC$ChatFull tLRPC$ChatFull2 = tLRPC$ChatFull;
-        MessagesController messagesController2 = messagesController;
-        int i2 = i;
         if (this.senderSelectPopupWindow != null) {
-            TLRPC$Peer tLRPC$Peer = (TLRPC$Peer) list.get(i2);
-            if (tLRPC$ChatFull2 != null) {
-                tLRPC$ChatFull2.default_send_as = tLRPC$Peer;
+            if (tLRPC$ChatFull != null) {
+                tLRPC$ChatFull.default_send_as = tLRPC$Peer;
                 updateSendAsButton();
             }
-            MessagesController messagesController3 = this.parentFragment.getMessagesController();
+            MessagesController messagesController2 = this.parentFragment.getMessagesController();
             long j = this.dialog_id;
             long j2 = tLRPC$Peer.user_id;
+            long j3 = 0;
             if (j2 == 0) {
                 j2 = -tLRPC$Peer.channel_id;
             }
-            messagesController3.setDefaultSendAs(j, j2);
+            messagesController2.setDefaultSendAs(j, j2);
             int[] iArr = new int[2];
-            final SimpleAvatarView simpleAvatarView = (SimpleAvatarView) ((ViewGroup) ((ViewGroup) view).getChildAt(0)).getChildAt(0);
-            boolean isSelected = simpleAvatarView.isSelected();
-            simpleAvatarView.getLocationInWindow(iArr);
-            simpleAvatarView.setSelected(true, true);
-            final SimpleAvatarView simpleAvatarView2 = new SimpleAvatarView(getContext());
-            long j3 = tLRPC$Peer.channel_id;
-            if (j3 != 0) {
-                TLRPC$Chat chat = messagesController2.getChat(Long.valueOf(j3));
+            boolean isSelected = senderView.avatar.isSelected();
+            senderView.avatar.getLocationInWindow(iArr);
+            senderView.avatar.setSelected(true, true);
+            SimpleAvatarView simpleAvatarView = new SimpleAvatarView(getContext());
+            long j4 = tLRPC$Peer.channel_id;
+            if (j4 != 0) {
+                TLRPC$Chat chat = messagesController.getChat(Long.valueOf(j4));
                 if (chat != null) {
-                    simpleAvatarView2.setAvatar(chat);
+                    simpleAvatarView.setAvatar(chat);
                 }
             } else {
-                long j4 = tLRPC$Peer.user_id;
-                if (!(j4 == 0 || (user = messagesController2.getUser(Long.valueOf(j4))) == null)) {
-                    simpleAvatarView2.setAvatar(user);
+                long j5 = tLRPC$Peer.user_id;
+                if (!(j5 == 0 || (user = messagesController.getUser(Long.valueOf(j5))) == null)) {
+                    simpleAvatarView.setAvatar(user);
                 }
             }
-            for (int i3 = 0; i3 < recyclerListView.getChildCount(); i3++) {
-                View childAt = recyclerListView.getChildAt(i3);
-                if (i3 != i2) {
-                    ((SimpleAvatarView) ((ViewGroup) ((ViewGroup) childAt).getChildAt(0)).getChildAt(0)).setSelected(false, true);
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                View childAt = recyclerView.getChildAt(i);
+                if ((childAt instanceof SenderSelectPopup.SenderView) && childAt != senderView) {
+                    ((SenderSelectPopup.SenderView) childAt).avatar.setSelected(false, true);
                 }
             }
-            RecyclerListView recyclerListView2 = recyclerListView;
-            final Dialog dialog = new Dialog(getContext(), NUM);
-            FrameLayout frameLayout = new FrameLayout(getContext());
-            frameLayout.addView(simpleAvatarView2, LayoutHelper.createFrame(44, 44, 3));
-            dialog.setContentView(frameLayout);
-            dialog.getWindow().setLayout(-1, -1);
-            int i4 = Build.VERSION.SDK_INT;
-            if (i4 >= 21) {
-                dialog.getWindow().clearFlags(1024);
-                dialog.getWindow().clearFlags(67108864);
-                dialog.getWindow().clearFlags(NUM);
-                dialog.getWindow().addFlags(Integer.MIN_VALUE);
-                dialog.getWindow().addFlags(512);
-                dialog.getWindow().addFlags(131072);
-                dialog.getWindow().getAttributes().windowAnimations = 0;
-                dialog.getWindow().getDecorView().setSystemUiVisibility(1792);
-                dialog.getWindow().setStatusBarColor(0);
-                dialog.getWindow().setNavigationBarColor(0);
-                AndroidUtilities.setLightStatusBar(dialog.getWindow(), Theme.getColor("actionBarDefault", (boolean[]) null, true) == -1);
-                if (i4 >= 26) {
-                    AndroidUtilities.setLightNavigationBar(dialog.getWindow(), AndroidUtilities.computePerceivedBrightness(Theme.getColor("windowBackgroundGray", (boolean[]) null, true)) >= 0.721f);
-                }
+            ChatActivityEnterView$$ExternalSyntheticLambda41 chatActivityEnterView$$ExternalSyntheticLambda41 = new ChatActivityEnterView$$ExternalSyntheticLambda41(this, simpleAvatarView, iArr, senderView);
+            if (!isSelected) {
+                j3 = 150;
             }
-            if (AndroidUtilities.isTablet()) {
-                this.parentFragment.getFragmentView().getLocationInWindow(this.location);
-                this.popupX += this.location[0];
-            }
-            if (i4 >= 23) {
-                this.popupX += getRootWindowInsets().getSystemWindowInsetLeft();
-            }
-            this.senderSelectView.getLocationInWindow(this.location);
-            int[] iArr2 = this.location;
-            float f = (float) iArr2[0];
-            float f2 = (float) iArr2[1];
-            float dp = isSelected ? (float) AndroidUtilities.dp(5.0f) : 0.0f;
-            float dp2 = ((float) (iArr[0] + this.popupX)) + dp + ((float) AndroidUtilities.dp(4.0f)) + 0.0f;
-            float f3 = ((float) (iArr[1] + this.popupY)) + dp + 0.0f;
-            simpleAvatarView2.setTranslationX(dp2);
-            simpleAvatarView2.setTranslationY(f3);
-            float f4 = isSelected ? 0.77272725f : 1.0f;
-            simpleAvatarView2.setPivotX(0.0f);
-            simpleAvatarView2.setPivotY(0.0f);
-            simpleAvatarView2.setScaleX(f4);
-            simpleAvatarView2.setScaleY(f4);
-            atomicReference.set(new AnimatorListenerAdapter() {
-                public void onAnimationStart(Animator animator) {
-                    simpleAvatarView2.getViewTreeObserver().addOnDrawListener(new ViewTreeObserver.OnDrawListener() {
-                        public void onDraw() {
-                            AnonymousClass22 r0 = AnonymousClass22.this;
-                            SimpleAvatarView simpleAvatarView = simpleAvatarView2;
-                            simpleAvatarView.post(new ChatActivityEnterView$22$1$$ExternalSyntheticLambda0(this, simpleAvatarView, simpleAvatarView));
-                        }
-
-                        /* access modifiers changed from: private */
-                        public /* synthetic */ void lambda$onDraw$0(SimpleAvatarView simpleAvatarView, SimpleAvatarView simpleAvatarView2) {
-                            simpleAvatarView.getViewTreeObserver().removeOnDrawListener(this);
-                            simpleAvatarView2.setHideAvatar(true);
-                        }
-                    });
-                    dialog.show();
-                }
-
-                public void onAnimationEnd(Animator animator) {
-                    ChatActivityEnterView.this.senderSelectView.setProgress(0.0f, false);
-                    ChatActivityEnterView.this.senderSelectView.setScaleX(1.0f);
-                    ChatActivityEnterView.this.senderSelectView.setScaleY(1.0f);
-                    ChatActivityEnterView.this.senderSelectView.setAlpha(1.0f);
-                    ChatActivityEnterView.this.senderSelectView.getViewTreeObserver().addOnDrawListener(new ViewTreeObserver.OnDrawListener() {
-                        public void onDraw() {
-                            ChatActivityEnterView.this.senderSelectView.post(new ChatActivityEnterView$22$2$$ExternalSyntheticLambda0(this, dialog));
-                        }
-
-                        /* access modifiers changed from: private */
-                        public /* synthetic */ void lambda$onDraw$0(Dialog dialog) {
-                            ChatActivityEnterView.this.senderSelectView.getViewTreeObserver().removeOnDrawListener(this);
-                            dialog.dismiss();
-                        }
-                    });
-                }
-
-                public void onAnimationCancel(Animator animator) {
-                    onAnimationEnd(animator);
-                }
-            });
-            atomicReference2.set(new ChatActivityEnterView$$ExternalSyntheticLambda6(this));
-            ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(350);
-            float y = ((recyclerListView.getY() + ((float) recyclerListView.getMeasuredHeight())) - ((float) iArr[1])) / ((float) AndroidUtilities.dp(58.0f));
-            duration.setInterpolator(new ChatActivityEnterView$$ExternalSyntheticLambda0(0.18f - (0.009f * y), 5.7f - (y * 0.325f)));
-            duration.addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda11(simpleAvatarView2, dp2, f, f3, f2, f4, ((float) this.senderSelectView.getLayoutParams().width) / ((float) AndroidUtilities.dp(44.0f))));
-            atomicReference3.set(duration);
-            this.senderSelectPopupWindow.dismiss();
+            AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda41, j3);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$9(ValueAnimator valueAnimator) {
-        float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-        float f = (floatValue * 0.5f) + 0.5f;
-        this.senderSelectView.setScaleX(f);
-        this.senderSelectView.setScaleY(f);
-        this.senderSelectView.setAlpha(floatValue);
+    public /* synthetic */ void lambda$new$10(SimpleAvatarView simpleAvatarView, int[] iArr, SenderSelectPopup.SenderView senderView) {
+        final SimpleAvatarView simpleAvatarView2 = simpleAvatarView;
+        Dialog dialog = new Dialog(getContext(), NUM);
+        FrameLayout frameLayout = new FrameLayout(getContext());
+        frameLayout.addView(simpleAvatarView2, LayoutHelper.createFrame(40, 40, 3));
+        dialog.setContentView(frameLayout);
+        dialog.getWindow().setLayout(-1, -1);
+        int i = Build.VERSION.SDK_INT;
+        if (i >= 21) {
+            dialog.getWindow().clearFlags(1024);
+            dialog.getWindow().clearFlags(67108864);
+            dialog.getWindow().clearFlags(NUM);
+            dialog.getWindow().addFlags(Integer.MIN_VALUE);
+            dialog.getWindow().addFlags(512);
+            dialog.getWindow().addFlags(131072);
+            dialog.getWindow().getAttributes().windowAnimations = 0;
+            dialog.getWindow().getDecorView().setSystemUiVisibility(1792);
+            dialog.getWindow().setStatusBarColor(0);
+            dialog.getWindow().setNavigationBarColor(0);
+            AndroidUtilities.setLightStatusBar(dialog.getWindow(), Theme.getColor("actionBarDefault", (boolean[]) null, true) == -1);
+            if (i >= 26) {
+                AndroidUtilities.setLightNavigationBar(dialog.getWindow(), AndroidUtilities.computePerceivedBrightness(Theme.getColor("windowBackgroundGray", (boolean[]) null, true)) >= 0.721f);
+            }
+        }
+        if (AndroidUtilities.isTablet()) {
+            this.parentFragment.getFragmentView().getLocationInWindow(this.location);
+            this.popupX += this.location[0];
+        }
+        if (i >= 23) {
+            this.popupX += getRootWindowInsets().getSystemWindowInsetLeft();
+        }
+        this.senderSelectView.getLocationInWindow(this.location);
+        int[] iArr2 = this.location;
+        final float f = (float) iArr2[1];
+        float dp = (float) AndroidUtilities.dp(5.0f);
+        simpleAvatarView2.setTranslationX(((float) (iArr[0] + this.popupX)) + dp + ((float) AndroidUtilities.dp(4.0f)) + 0.0f);
+        simpleAvatarView2.setTranslationY(((float) (iArr[1] + this.popupY)) + dp + 0.0f);
+        float dp2 = ((float) this.senderSelectView.getLayoutParams().width) / ((float) AndroidUtilities.dp(40.0f));
+        simpleAvatarView2.setPivotX(0.0f);
+        simpleAvatarView2.setPivotY(0.0f);
+        simpleAvatarView2.setScaleX(0.75f);
+        simpleAvatarView2.setScaleY(0.75f);
+        final SenderSelectPopup.SenderView senderView2 = senderView;
+        simpleAvatarView.getViewTreeObserver().addOnDrawListener(new ViewTreeObserver.OnDrawListener(this) {
+            public void onDraw() {
+                SimpleAvatarView simpleAvatarView = simpleAvatarView2;
+                simpleAvatarView.post(new ChatActivityEnterView$20$$ExternalSyntheticLambda0(this, simpleAvatarView, senderView2));
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$onDraw$0(SimpleAvatarView simpleAvatarView, SenderSelectPopup.SenderView senderView) {
+                simpleAvatarView.getViewTreeObserver().removeOnDrawListener(this);
+                senderView.avatar.setHideAvatar(true);
+            }
+        });
+        dialog.show();
+        this.senderSelectView.setScaleX(1.0f);
+        this.senderSelectView.setScaleY(1.0f);
+        this.senderSelectView.setAlpha(1.0f);
+        SenderSelectPopup senderSelectPopup = this.senderSelectPopupWindow;
+        SenderSelectView senderSelectView2 = this.senderSelectView;
+        DynamicAnimation.ViewProperty viewProperty = DynamicAnimation.SCALE_X;
+        SenderSelectView senderSelectView3 = this.senderSelectView;
+        DynamicAnimation.ViewProperty viewProperty2 = DynamicAnimation.SCALE_Y;
+        senderSelectPopup.startDismissAnimation(new SpringAnimation(senderSelectView2, viewProperty).setSpring(new SpringForce(0.5f).setStiffness(750.0f).setDampingRatio(1.0f)), new SpringAnimation(senderSelectView3, viewProperty2).setSpring(new SpringForce(0.5f).setStiffness(750.0f).setDampingRatio(1.0f)), (SpringAnimation) new SpringAnimation(this.senderSelectView, DynamicAnimation.ALPHA).setSpring(new SpringForce(0.0f).setStiffness(750.0f).setDampingRatio(1.0f)).addEndListener(new ChatActivityEnterView$$ExternalSyntheticLambda28(this, dialog)), new SpringAnimation(simpleAvatarView2, DynamicAnimation.TRANSLATION_X).setSpring(new SpringForce((float) iArr2[0]).setStiffness(700.0f).setDampingRatio(1.0f)), (SpringAnimation) ((SpringAnimation) new SpringAnimation(simpleAvatarView2, DynamicAnimation.TRANSLATION_Y).setSpring(new SpringForce(f).setStiffness(700.0f).setDampingRatio(0.75f)).setMaxValue(((float) AndroidUtilities.dp(6.0f)) + f)).addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener(this) {
+            boolean performedHapticFeedback = false;
+
+            public void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
+                if (!this.performedHapticFeedback && f >= f) {
+                    this.performedHapticFeedback = true;
+                    try {
+                        simpleAvatarView2.performHapticFeedback(3, 2);
+                    } catch (Exception unused) {
+                    }
+                }
+            }
+        }), new SpringAnimation(simpleAvatarView2, viewProperty).setSpring(new SpringForce(dp2).setStiffness(1000.0f).setDampingRatio(1.0f)), new SpringAnimation(simpleAvatarView2, viewProperty2).setSpring(new SpringForce(dp2).setStiffness(1000.0f).setDampingRatio(1.0f)));
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ float lambda$new$10(float f, float f2, float f3) {
-        return (float) ((Math.pow(2.718281828459045d, (double) ((-f3) / f)) * -1.0d * Math.cos((double) (f2 * f3))) + 1.0d);
+    public /* synthetic */ void lambda$new$9(final Dialog dialog, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        this.senderSelectView.setProgress(0.0f, false);
+        this.senderSelectView.setScaleX(1.0f);
+        this.senderSelectView.setScaleY(1.0f);
+        this.senderSelectView.setAlpha(1.0f);
+        this.senderSelectView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                ChatActivityEnterView.this.senderSelectView.getViewTreeObserver().removeOnPreDrawListener(this);
+                SenderSelectView access$12000 = ChatActivityEnterView.this.senderSelectView;
+                Dialog dialog = dialog;
+                dialog.getClass();
+                access$12000.postDelayed(new ChatActivityEnterView$21$$ExternalSyntheticLambda0(dialog), 100);
+                return true;
+            }
+        });
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$new$11(SimpleAvatarView simpleAvatarView, float f, float f2, float f3, float f4, float f5, float f6, ValueAnimator valueAnimator) {
-        float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-        simpleAvatarView.setTranslationX(f + ((f2 - f) * floatValue));
-        simpleAvatarView.setTranslationY(f3 + ((f4 - f3) * floatValue));
-        float f7 = f5 + ((f6 - f5) * floatValue);
-        simpleAvatarView.setScaleX(f7);
-        simpleAvatarView.setScaleY(f7);
-    }
-
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$new$13(float f, FrameLayout frameLayout, LinearLayout linearLayout, View view, ValueAnimator valueAnimator) {
-        float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-        float f2 = f + ((1.0f - f) * floatValue);
-        frameLayout.setScaleX(f2);
-        frameLayout.setScaleY(f2);
-        float f3 = 1.0f / f2;
-        linearLayout.setScaleX(f3);
-        linearLayout.setScaleY(f3);
-        linearLayout.setAlpha(f2);
-        view.setAlpha(floatValue);
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$15(View view) {
+    public /* synthetic */ void lambda$new$13(View view) {
         AnimatorSet animatorSet = this.runningAnimationAudio;
         if (animatorSet == null || !animatorSet.isRunning()) {
             if (this.videoToSendMessageObject != null) {
@@ -4792,7 +4401,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$16(View view) {
+    public /* synthetic */ void lambda$new$14(View view) {
         if (this.audioToSend != null) {
             if (!MediaController.getInstance().isPlayingMessage(this.audioToSendMessageObject) || MediaController.getInstance().isMessagePaused()) {
                 this.playPauseDrawable.setIcon(1, true);
@@ -4807,7 +4416,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$24(Theme.ResourcesProvider resourcesProvider2, View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$new$22(Theme.ResourcesProvider resourcesProvider2, View view, MotionEvent motionEvent) {
         TLRPC$Chat currentChat;
         int i = 3;
         boolean z = false;
@@ -4860,7 +4469,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                         this.startedDraggingX = -1.0f;
                         if (!z2 || this.videoSendButton.getTag() == null) {
                             if (this.recordingAudioVideo && isInScheduleMode()) {
-                                AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) ChatActivityEnterView$$ExternalSyntheticLambda50.INSTANCE, (Runnable) ChatActivityEnterView$$ExternalSyntheticLambda44.INSTANCE, resourcesProvider2);
+                                AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) ChatActivityEnterView$$ExternalSyntheticLambda47.INSTANCE, (Runnable) ChatActivityEnterView$$ExternalSyntheticLambda42.INSTANCE, resourcesProvider2);
                             }
                             this.delegate.needStartRecordAudio(0);
                             MediaController instance = MediaController.getInstance();
@@ -4874,9 +4483,9 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                         }
                         this.recordingAudioVideo = false;
                         this.messageTransitionIsRunning = false;
-                        ChatActivityEnterView$$ExternalSyntheticLambda39 chatActivityEnterView$$ExternalSyntheticLambda39 = new ChatActivityEnterView$$ExternalSyntheticLambda39(this);
-                        this.moveToSendStateRunnable = chatActivityEnterView$$ExternalSyntheticLambda39;
-                        AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda39, 500);
+                        ChatActivityEnterView$$ExternalSyntheticLambda30 chatActivityEnterView$$ExternalSyntheticLambda30 = new ChatActivityEnterView$$ExternalSyntheticLambda30(this);
+                        this.moveToSendStateRunnable = chatActivityEnterView$$ExternalSyntheticLambda30;
+                        AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda30, 500);
                     }
                 }
             } else if (motionEvent.getAction() == 2 && this.recordingAudioVideo) {
@@ -4929,7 +4538,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                 this.startedDraggingX = -1.0f;
                 if (!z3 || this.videoSendButton.getTag() == null) {
                     if (this.recordingAudioVideo && isInScheduleMode()) {
-                        AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) ChatActivityEnterView$$ExternalSyntheticLambda49.INSTANCE, (Runnable) ChatActivityEnterView$$ExternalSyntheticLambda45.INSTANCE, resourcesProvider2);
+                        AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) ChatActivityEnterView$$ExternalSyntheticLambda48.INSTANCE, (Runnable) ChatActivityEnterView$$ExternalSyntheticLambda43.INSTANCE, resourcesProvider2);
                     }
                     MediaController instance2 = MediaController.getInstance();
                     if (!isInScheduleMode()) {
@@ -4942,9 +4551,9 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                 }
                 this.recordingAudioVideo = false;
                 this.messageTransitionIsRunning = false;
-                ChatActivityEnterView$$ExternalSyntheticLambda33 chatActivityEnterView$$ExternalSyntheticLambda33 = new ChatActivityEnterView$$ExternalSyntheticLambda33(this);
-                this.moveToSendStateRunnable = chatActivityEnterView$$ExternalSyntheticLambda33;
-                AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda33, 200);
+                ChatActivityEnterView$$ExternalSyntheticLambda31 chatActivityEnterView$$ExternalSyntheticLambda31 = new ChatActivityEnterView$$ExternalSyntheticLambda31(this);
+                this.moveToSendStateRunnable = chatActivityEnterView$$ExternalSyntheticLambda31;
+                AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda31, 200);
             }
             return false;
         } else {
@@ -4965,19 +4574,19 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$20() {
+    public /* synthetic */ void lambda$new$18() {
         this.moveToSendStateRunnable = null;
         updateRecordIntefrace(1);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$23() {
+    public /* synthetic */ void lambda$new$21() {
         this.moveToSendStateRunnable = null;
         updateRecordIntefrace(1);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$25(View view) {
+    public /* synthetic */ void lambda$new$23(View view) {
         String obj = this.messageEditText.getText().toString();
         int indexOf = obj.indexOf(32);
         if (indexOf == -1 || indexOf == obj.length() - 1) {
@@ -4988,7 +4597,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$26(View view) {
+    public /* synthetic */ void lambda$new$24(View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow == null || !actionBarPopupWindow.isShowing()) {
             AnimatorSet animatorSet = this.runningAnimationAudio;
@@ -4999,7 +4608,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$27(View view) {
+    public /* synthetic */ void lambda$new$25(View view) {
         ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
         if (chatActivityEnterViewDelegate != null) {
             SimpleTextView simpleTextView = this.slowModeButton;
@@ -5008,7 +4617,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$28(View view) {
+    public /* synthetic */ boolean lambda$new$26(View view) {
         if (this.messageEditText.length() == 0) {
             return false;
         }
@@ -5016,7 +4625,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$29(View view) {
+    public /* synthetic */ void lambda$new$27(View view) {
         EmojiView emojiView2;
         if (this.expandStickersButton.getVisibility() != 0 || this.expandStickersButton.getAlpha() != 1.0f || this.waitingForKeyboardOpen) {
             return;
@@ -5043,7 +4652,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$30(View view) {
+    public /* synthetic */ void lambda$new$28(View view) {
         doneEditingMessage();
     }
 
@@ -5117,7 +4726,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
         }
         Rect rect2 = AndroidUtilities.rectTmp2;
         rect2.set(0, intrinsicHeight, getWidth(), getHeight());
-        this.chatActivity.contentView.drawBlur(canvas, getY(), rect2, this.backgroundPaint, false);
+        this.chatActivity.contentView.drawBlur(canvas, (float) getTop(), rect2, this.backgroundPaint, false);
     }
 
     /* access modifiers changed from: private */
@@ -5147,7 +4756,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                     return false;
                 }
             });
-            this.sendPopupLayout.setDispatchKeyEventListener(new ChatActivityEnterView$$ExternalSyntheticLambda46(this));
+            this.sendPopupLayout.setDispatchKeyEventListener(new ChatActivityEnterView$$ExternalSyntheticLambda44(this));
             this.sendPopupLayout.setShownFromBotton(false);
             ChatActivity chatActivity2 = this.parentFragment;
             boolean z2 = chatActivity2 != null && chatActivity2.canScheduleMessage();
@@ -5160,18 +4769,18 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                     actionBarMenuSubItem.setTextAndIcon(LocaleController.getString("ScheduleMessage", NUM), NUM);
                 }
                 actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
-                actionBarMenuSubItem.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda26(this));
+                actionBarMenuSubItem.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda22(this));
                 this.sendPopupLayout.addView(actionBarMenuSubItem, LayoutHelper.createLinear(-1, 48));
             }
             if (z3) {
                 ActionBarMenuSubItem actionBarMenuSubItem2 = new ActionBarMenuSubItem(getContext(), !z2, true, this.resourcesProvider);
                 actionBarMenuSubItem2.setTextAndIcon(LocaleController.getString("SendWithoutSound", NUM), NUM);
                 actionBarMenuSubItem2.setMinimumWidth(AndroidUtilities.dp(196.0f));
-                actionBarMenuSubItem2.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda18(this));
+                actionBarMenuSubItem2.setOnClickListener(new ChatActivityEnterView$$ExternalSyntheticLambda9(this));
                 this.sendPopupLayout.addView(actionBarMenuSubItem2, LayoutHelper.createLinear(-1, 48));
             }
             this.sendPopupLayout.setupRadialSelectors(getThemedColor("dialogButtonSelector"));
-            AnonymousClass31 r0 = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2) {
+            AnonymousClass29 r0 = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2) {
                 public void dismiss() {
                     super.dismiss();
                     ChatActivityEnterView.this.sendButton.invalidate();
@@ -5218,7 +4827,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onSendLongClick$31(KeyEvent keyEvent) {
+    public /* synthetic */ void lambda$onSendLongClick$29(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.sendPopupWindow) != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -5226,16 +4835,16 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onSendLongClick$32(View view) {
+    public /* synthetic */ void lambda$onSendLongClick$30(View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
         }
-        AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$$ExternalSyntheticLambda47(this), this.resourcesProvider);
+        AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$$ExternalSyntheticLambda45(this), this.resourcesProvider);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onSendLongClick$33(View view) {
+    public /* synthetic */ void lambda$onSendLongClick$31(View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -5395,7 +5004,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r4[r1] = r12
             r13.playTogether(r4)
             android.animation.AnimatorSet r12 = r11.audioVideoButtonAnimation
-            org.telegram.ui.Components.ChatActivityEnterView$32 r13 = new org.telegram.ui.Components.ChatActivityEnterView$32
+            org.telegram.ui.Components.ChatActivityEnterView$30 r13 = new org.telegram.ui.Components.ChatActivityEnterView$30
             r13.<init>()
             r12.addListener(r13)
             android.animation.AnimatorSet r12 = r11.audioVideoButtonAnimation
@@ -5613,7 +5222,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             java.lang.CharSequence r2 = r1.getText()
             r0.onUpdateSlowModeButton(r1, r4, r2)
         L_0x009c:
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda35 r0 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda35
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda33 r0 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda33
             r0.<init>(r8)
             r8.updateSlowModeRunnable = r0
             r1 = 100
@@ -5692,7 +5301,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$34(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$new$32(ValueAnimator valueAnimator) {
         if (this.topView != null) {
             float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             this.topViewEnterProgress = floatValue;
@@ -5758,9 +5367,9 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             if (runnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(runnable);
             }
-            ChatActivityEnterView$$ExternalSyntheticLambda37 chatActivityEnterView$$ExternalSyntheticLambda37 = new ChatActivityEnterView$$ExternalSyntheticLambda37(this);
-            this.showTopViewRunnable = chatActivityEnterView$$ExternalSyntheticLambda37;
-            AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda37, 200);
+            ChatActivityEnterView$$ExternalSyntheticLambda38 chatActivityEnterView$$ExternalSyntheticLambda38 = new ChatActivityEnterView$$ExternalSyntheticLambda38(this);
+            this.showTopViewRunnable = chatActivityEnterView$$ExternalSyntheticLambda38;
+            AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda38, 200);
         } else if (this.recordedAudioPanel.getVisibility() == 0) {
         } else {
             if (!this.forceShowSendButton || z2) {
@@ -5770,7 +5379,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showTopView$35() {
+    public /* synthetic */ void lambda$showTopView$33() {
         showTopView(true, false, true);
         this.showTopViewRunnable = null;
     }
@@ -6007,9 +5616,9 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
         if (sizeNotifierFrameLayout != null) {
             sizeNotifierFrameLayout.setDelegate((SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate) null);
         }
-        ActionBarPopupWindow actionBarPopupWindow = this.senderSelectPopupWindow;
-        if (actionBarPopupWindow != null) {
-            actionBarPopupWindow.setPauseNotifications(false);
+        SenderSelectPopup senderSelectPopup = this.senderSelectPopupWindow;
+        if (senderSelectPopup != null) {
+            senderSelectPopup.setPauseNotifications(false);
             this.senderSelectPopupWindow.dismiss();
         }
     }
@@ -6037,30 +5646,30 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     /* access modifiers changed from: protected */
     public void onConfigurationChanged(Configuration configuration) {
         super.onConfigurationChanged(configuration);
-        ActionBarPopupWindow actionBarPopupWindow = this.senderSelectPopupWindow;
-        if (actionBarPopupWindow != null) {
-            actionBarPopupWindow.setPauseNotifications(false);
+        SenderSelectPopup senderSelectPopup = this.senderSelectPopupWindow;
+        if (senderSelectPopup != null) {
+            senderSelectPopup.setPauseNotifications(false);
             this.senderSelectPopupWindow.dismiss();
         }
     }
 
     public void onPause() {
         this.isPaused = true;
-        ActionBarPopupWindow actionBarPopupWindow = this.senderSelectPopupWindow;
-        if (actionBarPopupWindow != null) {
-            actionBarPopupWindow.setPauseNotifications(false);
+        SenderSelectPopup senderSelectPopup = this.senderSelectPopupWindow;
+        if (senderSelectPopup != null) {
+            senderSelectPopup.setPauseNotifications(false);
             this.senderSelectPopupWindow.dismiss();
         }
         if (this.keyboardVisible) {
             this.showKeyboardOnResume = true;
         }
-        ChatActivityEnterView$$ExternalSyntheticLambda40 chatActivityEnterView$$ExternalSyntheticLambda40 = new ChatActivityEnterView$$ExternalSyntheticLambda40(this);
-        this.hideKeyboardRunnable = chatActivityEnterView$$ExternalSyntheticLambda40;
-        AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda40, 500);
+        ChatActivityEnterView$$ExternalSyntheticLambda36 chatActivityEnterView$$ExternalSyntheticLambda36 = new ChatActivityEnterView$$ExternalSyntheticLambda36(this);
+        this.hideKeyboardRunnable = chatActivityEnterView$$ExternalSyntheticLambda36;
+        AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda36, 500);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onPause$36() {
+    public /* synthetic */ void lambda$onPause$34() {
         ChatActivity chatActivity = this.parentFragment;
         if (chatActivity == null || chatActivity.isLastFragment()) {
             closeKeyboard();
@@ -6400,7 +6009,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     /* access modifiers changed from: private */
     public void sendMessage() {
         if (isInScheduleMode()) {
-            AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$$ExternalSyntheticLambda47(this), this.resourcesProvider);
+            AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$$ExternalSyntheticLambda45(this), this.resourcesProvider);
         } else {
             sendMessageInternal(true, 0);
         }
@@ -6468,9 +6077,9 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                         }
                     } else {
                         this.messageTransitionIsRunning = false;
-                        ChatActivityEnterView$$ExternalSyntheticLambda43 chatActivityEnterView$$ExternalSyntheticLambda43 = new ChatActivityEnterView$$ExternalSyntheticLambda43(this, text, z3, i3);
-                        this.moveToSendStateRunnable = chatActivityEnterView$$ExternalSyntheticLambda43;
-                        AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda43, 200);
+                        ChatActivityEnterView$$ExternalSyntheticLambda40 chatActivityEnterView$$ExternalSyntheticLambda40 = new ChatActivityEnterView$$ExternalSyntheticLambda40(this, text, z3, i3);
+                        this.moveToSendStateRunnable = chatActivityEnterView$$ExternalSyntheticLambda40;
+                        AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda40, 200);
                     }
                     this.lastTypingTimeSend = 0;
                 } else if (this.forceShowSendButton && (chatActivityEnterViewDelegate = this.delegate) != null) {
@@ -6486,7 +6095,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$sendMessageInternal$37(CharSequence charSequence, boolean z, int i) {
+    public /* synthetic */ void lambda$sendMessageInternal$35(CharSequence charSequence, boolean z, int i) {
         this.moveToSendStateRunnable = null;
         hideTopView(true);
         this.messageEditText.setText("");
@@ -6513,7 +6122,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                 if (this.stickersExpanded) {
                     setStickersExpanded(false, true, false);
                     this.waitingForKeyboardOpenAfterAnimation = true;
-                    AndroidUtilities.runOnUIThread(new ChatActivityEnterView$$ExternalSyntheticLambda36(this), 200);
+                    AndroidUtilities.runOnUIThread(new ChatActivityEnterView$$ExternalSyntheticLambda37(this), 200);
                 }
             }
             CharSequence[] charSequenceArr = {AndroidUtilities.getTrimmedString(this.messageEditText.getText())};
@@ -6530,7 +6139,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$doneEditingMessage$38() {
+    public /* synthetic */ void lambda$doneEditingMessage$36() {
         this.waitingForKeyboardOpenAfterAnimation = false;
         openKeyboardInternal();
     }
@@ -7694,7 +7303,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r5[r14] = r0
             r3.playTogether(r5)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            org.telegram.ui.Components.ChatActivityEnterView$46 r2 = new org.telegram.ui.Components.ChatActivityEnterView$46
+            org.telegram.ui.Components.ChatActivityEnterView$44 r2 = new org.telegram.ui.Components.ChatActivityEnterView$44
             r2.<init>()
             r0.addListener(r2)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
@@ -7848,7 +7457,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             float[] r0 = new float[r14]
             r0 = {0, NUM} // fill-array
             android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda4 r15 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda4
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda0 r15 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda0
             r15.<init>(r1)
             r0.addUpdateListener(r15)
             boolean r15 = r23.isInVideoMode()
@@ -8084,7 +7693,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r7[r14] = r3
             r5.playTogether(r7)
         L_0x05f6:
-            org.telegram.ui.Components.ChatActivityEnterView$47 r3 = new org.telegram.ui.Components.ChatActivityEnterView$47
+            org.telegram.ui.Components.ChatActivityEnterView$45 r3 = new org.telegram.ui.Components.ChatActivityEnterView$45
             r3.<init>()
             r5.addListener(r3)
             r10 = 150(0x96, double:7.4E-322)
@@ -8133,7 +7742,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r7[r14] = r3
             r6.playTogether(r7)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            org.telegram.ui.Components.ChatActivityEnterView$48 r3 = new org.telegram.ui.Components.ChatActivityEnterView$48
+            org.telegram.ui.Components.ChatActivityEnterView$46 r3 = new org.telegram.ui.Components.ChatActivityEnterView$46
             r3.<init>(r15, r9)
             r0.addListener(r3)
             goto L_0x0e7b
@@ -8773,7 +8382,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r5.setDuration(r9)
             r11 = 110(0x6e, double:5.43E-322)
             r5.setStartDelay(r11)
-            org.telegram.ui.Components.ChatActivityEnterView$49 r7 = new org.telegram.ui.Components.ChatActivityEnterView$49
+            org.telegram.ui.Components.ChatActivityEnterView$47 r7 = new org.telegram.ui.Components.ChatActivityEnterView$47
             r7.<init>()
             r5.addListener(r7)
             android.animation.AnimatorSet r7 = r1.runningAnimationAudio
@@ -9094,7 +8703,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r0.setDuration(r3)
         L_0x0e7b:
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            org.telegram.ui.Components.ChatActivityEnterView$50 r3 = new org.telegram.ui.Components.ChatActivityEnterView$50
+            org.telegram.ui.Components.ChatActivityEnterView$48 r3 = new org.telegram.ui.Components.ChatActivityEnterView$48
             r3.<init>(r2)
             r0.addListener(r3)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
@@ -9111,7 +8720,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateRecordIntefrace$39(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updateRecordIntefrace$37(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         if (!isInVideoMode()) {
             this.recordCircle.setTransformToSeekbar(floatValue);
@@ -9316,9 +8925,9 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                 }
                 this.messageWebPageSearch = this.editingMessageObject.messageOwner.media instanceof TLRPC$TL_messageMediaWebPage;
                 if (!this.keyboardVisible) {
-                    ChatActivityEnterView$$ExternalSyntheticLambda42 chatActivityEnterView$$ExternalSyntheticLambda42 = new ChatActivityEnterView$$ExternalSyntheticLambda42(this, charSequence2);
-                    this.setTextFieldRunnable = chatActivityEnterView$$ExternalSyntheticLambda42;
-                    AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda42, 200);
+                    ChatActivityEnterView$$ExternalSyntheticLambda39 chatActivityEnterView$$ExternalSyntheticLambda39 = new ChatActivityEnterView$$ExternalSyntheticLambda39(this, charSequence2);
+                    this.setTextFieldRunnable = chatActivityEnterView$$ExternalSyntheticLambda39;
+                    AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda39, 200);
                 } else {
                     Runnable runnable = this.setTextFieldRunnable;
                     if (runnable != null) {
@@ -9421,7 +9030,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setEditingMessageObject$40(CharSequence charSequence) {
+    public /* synthetic */ void lambda$setEditingMessageObject$38(CharSequence charSequence) {
         setFieldText(charSequence);
         this.setTextFieldRunnable = null;
     }
@@ -9596,15 +9205,15 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                     }
                 }
             } else if (this.searchingType == 0 && !this.messageEditText.isFocused()) {
-                ChatActivityEnterView$$ExternalSyntheticLambda41 chatActivityEnterView$$ExternalSyntheticLambda41 = new ChatActivityEnterView$$ExternalSyntheticLambda41(this);
-                this.focusRunnable = chatActivityEnterView$$ExternalSyntheticLambda41;
-                AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda41, 600);
+                ChatActivityEnterView$$ExternalSyntheticLambda35 chatActivityEnterView$$ExternalSyntheticLambda35 = new ChatActivityEnterView$$ExternalSyntheticLambda35(this);
+                this.focusRunnable = chatActivityEnterView$$ExternalSyntheticLambda35;
+                AndroidUtilities.runOnUIThread(chatActivityEnterView$$ExternalSyntheticLambda35, 600);
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setFieldFocused$41() {
+    public /* synthetic */ void lambda$setFieldFocused$39() {
         EditTextCaption editTextCaption;
         ActionBarLayout layersActionBarLayout;
         this.focusRunnable = null;
@@ -9879,7 +9488,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r0 = 180(0xb4, double:8.9E-322)
             r14.setDuration(r0)
             android.animation.AnimatorSet r14 = r13.scheduledButtonAnimation
-            org.telegram.ui.Components.ChatActivityEnterView$51 r0 = new org.telegram.ui.Components.ChatActivityEnterView$51
+            org.telegram.ui.Components.ChatActivityEnterView$49 r0 = new org.telegram.ui.Components.ChatActivityEnterView$49
             r0.<init>(r4)
             r14.addListener(r0)
             android.animation.AnimatorSet r14 = r13.scheduledButtonAnimation
@@ -10001,7 +9610,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                 this.senderSelectView.setTranslationX(f3);
                 this.messageEditText.setTranslationX(this.senderSelectView.getTranslationX());
                 final float f5 = f3;
-                duration.addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda8(this, f2, f4, f5, f));
+                duration.addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda5(this, f2, f4, f5, f));
                 final boolean z3 = z2;
                 final float f6 = f2;
                 final float f7 = f4;
@@ -10056,7 +9665,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateSendAsButton$42(float f, float f2, float f3, float f4, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updateSendAsButton$40(float f, float f2, float f3, float f4, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.senderSelectView.setAlpha(f + ((f2 - f) * floatValue));
         this.senderSelectView.setTranslationX(f3 + ((f4 - f3) * floatValue));
@@ -10164,7 +9773,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r1 = 0
             r2 = 1
             if (r0 != 0) goto L_0x004b
-            org.telegram.ui.Components.ChatActivityEnterView$53 r0 = new org.telegram.ui.Components.ChatActivityEnterView$53
+            org.telegram.ui.Components.ChatActivityEnterView$51 r0 = new org.telegram.ui.Components.ChatActivityEnterView$51
             android.app.Activity r3 = r6.parentActivity
             org.telegram.ui.ActionBar.Theme$ResourcesProvider r4 = r6.resourcesProvider
             r0.<init>(r3, r4)
@@ -10173,7 +9782,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r0.setVisibility(r3)
             r6.botKeyboardViewVisible = r1
             org.telegram.ui.Components.BotKeyboardView r0 = r6.botKeyboardView
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda51 r3 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda51
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda49 r3 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda49
             r3.<init>(r6)
             r0.setDelegate(r3)
             org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r6.sizeNotifierLayout
@@ -10277,7 +9886,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setButtons$43(TLRPC$KeyboardButton tLRPC$KeyboardButton) {
+    public /* synthetic */ void lambda$setButtons$41(TLRPC$KeyboardButton tLRPC$KeyboardButton) {
         MessageObject messageObject = this.replyingMessageObject;
         if (messageObject == null) {
             messageObject = DialogObject.isChatDialog(this.dialog_id) ? this.botButtonsMessageObject : null;
@@ -10333,7 +9942,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentActivity);
                 builder.setTitle(LocaleController.getString("ShareYouLocationTitle", NUM));
                 builder.setMessage(LocaleController.getString("ShareYouLocationInfo", NUM));
-                builder.setPositiveButton(LocaleController.getString("OK", NUM), new ChatActivityEnterView$$ExternalSyntheticLambda12(this, messageObject3, tLRPC$KeyboardButton2));
+                builder.setPositiveButton(LocaleController.getString("OK", NUM), new ChatActivityEnterView$$ExternalSyntheticLambda8(this, messageObject3, tLRPC$KeyboardButton2));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 this.parentFragment.showDialog(builder.create());
             } else if ((tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonCallback) || (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonGame) || (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonBuy) || (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonUrlAuth)) {
@@ -10359,7 +9968,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                     bundle.putBoolean("onlySelect", true);
                     bundle.putInt("dialogsType", 1);
                     DialogsActivity dialogsActivity = new DialogsActivity(bundle);
-                    dialogsActivity.setDelegate(new ChatActivityEnterView$$ExternalSyntheticLambda54(this, messageObject3, tLRPC$KeyboardButton2));
+                    dialogsActivity.setDelegate(new ChatActivityEnterView$$ExternalSyntheticLambda52(this, messageObject3, tLRPC$KeyboardButton2));
                     this.parentFragment.presentFragment(dialogsActivity);
                 }
             } else if ((tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonUserProfile) && MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(tLRPC$KeyboardButton2.user_id)) != null) {
@@ -10372,7 +9981,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didPressedBotButton$44(MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$didPressedBotButton$42(MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, DialogInterface dialogInterface, int i) {
         if (Build.VERSION.SDK_INT < 23 || this.parentActivity.checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") == 0) {
             SendMessagesHelper.getInstance(this.currentAccount).sendCurrentLocation(messageObject, tLRPC$KeyboardButton);
             return;
@@ -10383,7 +9992,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didPressedBotButton$45(MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+    public /* synthetic */ void lambda$didPressedBotButton$43(MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
         TLRPC$Message tLRPC$Message = messageObject.messageOwner;
         long j = tLRPC$Message.from_id.user_id;
         long j2 = tLRPC$Message.via_bot_id;
@@ -10429,7 +10038,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
 
     private void createEmojiView() {
         if (this.emojiView == null) {
-            AnonymousClass54 r1 = new EmojiView(this.allowStickers, this.allowGifs, getContext(), true, this.info, this.sizeNotifierLayout, this.resourcesProvider) {
+            AnonymousClass52 r1 = new EmojiView(this.allowStickers, this.allowGifs, getContext(), true, this.info, this.sizeNotifierLayout, this.resourcesProvider) {
                 public void setTranslationY(float f) {
                     super.setTranslationY(f);
                     if (ChatActivityEnterView.this.panelAnimation != null && ChatActivityEnterView.this.animatingContentType == 0) {
@@ -10484,7 +10093,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                             }
                             ChatActivityEnterView.this.setStickersExpanded(false, true, false);
                         }
-                        ChatActivityEnterView.this.lambda$onStickerSelected$46(tLRPC$Document, str, obj, sendAnimationData, false, z, i);
+                        ChatActivityEnterView.this.lambda$onStickerSelected$44(tLRPC$Document, str, obj, sendAnimationData, false, z, i);
                         if (DialogObject.isEncryptedDialog(ChatActivityEnterView.this.dialog_id) && MessageObject.isGifDocument(tLRPC$Document)) {
                             TLRPC$Document tLRPC$Document2 = tLRPC$Document;
                             ChatActivityEnterView.this.accountInstance.getMessagesController().saveGif(obj, tLRPC$Document);
@@ -10506,7 +10115,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                     Object obj4 = obj2;
                     int i2 = i;
                     if (isInScheduleMode() && i2 == 0) {
-                        AlertsCreator.createScheduleDatePickerDialog((Context) ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$55$$ExternalSyntheticLambda1(this, view, obj, str, obj2), ChatActivityEnterView.this.resourcesProvider);
+                        AlertsCreator.createScheduleDatePickerDialog((Context) ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$53$$ExternalSyntheticLambda1(this, view, obj, str, obj2), ChatActivityEnterView.this.resourcesProvider);
                     } else if (ChatActivityEnterView.this.slowModeTimer <= 0 || isInScheduleMode()) {
                         if (ChatActivityEnterView.this.stickersExpanded) {
                             if (ChatActivityEnterView.this.searchingType != 0) {
@@ -10560,7 +10169,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                         AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.resourcesProvider);
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setMessage(LocaleController.getString("ClearRecentEmoji", NUM));
-                        builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new ChatActivityEnterView$55$$ExternalSyntheticLambda0(this));
+                        builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new ChatActivityEnterView$53$$ExternalSyntheticLambda0(this));
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                         ChatActivityEnterView.this.parentFragment.showDialog(builder.create());
                     }
@@ -10749,10 +10358,10 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* renamed from: onStickerSelected */
-    public void lambda$onStickerSelected$46(TLRPC$Document tLRPC$Document, String str, Object obj, MessageObject.SendAnimationData sendAnimationData, boolean z, boolean z2, int i) {
+    public void lambda$onStickerSelected$44(TLRPC$Document tLRPC$Document, String str, Object obj, MessageObject.SendAnimationData sendAnimationData, boolean z, boolean z2, int i) {
         int i2 = i;
         if (isInScheduleMode() && i2 == 0) {
-            AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$$ExternalSyntheticLambda48(this, tLRPC$Document, str, obj, sendAnimationData, z), this.resourcesProvider);
+            AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new ChatActivityEnterView$$ExternalSyntheticLambda46(this, tLRPC$Document, str, obj, sendAnimationData, z), this.resourcesProvider);
         } else if (this.slowModeTimer <= 0 || isInScheduleMode()) {
             if (this.searchingType != 0) {
                 setSearchingTypeInternal(0, true);
@@ -11219,7 +10828,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r6[r0] = r1
             r12.playTogether(r6)
             android.animation.AnimatorSet r12 = r10.emojiButtonAnimation
-            org.telegram.ui.Components.ChatActivityEnterView$60 r0 = new org.telegram.ui.Components.ChatActivityEnterView$60
+            org.telegram.ui.Components.ChatActivityEnterView$58 r0 = new org.telegram.ui.Components.ChatActivityEnterView$58
             r0.<init>()
             r12.addListener(r0)
             android.animation.AnimatorSet r12 = r10.emojiButtonAnimation
@@ -11306,7 +10915,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                 fArr[1] = f;
                 ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
                 this.searchAnimator = ofFloat;
-                ofFloat.addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda7(this));
+                ofFloat.addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda2(this));
                 this.searchAnimator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         float unused = ChatActivityEnterView.this.searchToOpenProgress = z2 ? 1.0f : 0.0f;
@@ -11324,7 +10933,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setSearchingTypeInternal$47(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setSearchingTypeInternal$45(ValueAnimator valueAnimator) {
         this.searchToOpenProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         EmojiView emojiView2 = this.emojiView;
         if (emojiView2 != null) {
@@ -11865,7 +11474,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                 if (i2 > currentActionBarHeight) {
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)})});
-                    ((ObjectAnimator) animatorSet.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda2(this));
+                    ((ObjectAnimator) animatorSet.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda4(this));
                     animatorSet.setDuration(300);
                     animatorSet.setInterpolator(CubicBezierInterpolator.DEFAULT);
                     animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -11908,12 +11517,12 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkStickresExpandHeight$48(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$checkStickresExpandHeight$46(ValueAnimator valueAnimator) {
         this.sizeNotifierLayout.invalidate();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkStickresExpandHeight$49(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$checkStickresExpandHeight$47(ValueAnimator valueAnimator) {
         this.sizeNotifierLayout.invalidate();
     }
 
@@ -11958,7 +11567,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                     animatorSet.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofFloat(this.stickersArrow, "animationProgress", new float[]{1.0f})});
                     animatorSet.setDuration(300);
                     animatorSet.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                    ((ObjectAnimator) animatorSet.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda9(this, i));
+                    ((ObjectAnimator) animatorSet.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda7(this, i));
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             Animator unused = ChatActivityEnterView.this.stickersExpansionAnim = null;
@@ -11986,7 +11595,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
                     animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{0}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{0}), ObjectAnimator.ofFloat(this.stickersArrow, "animationProgress", new float[]{0.0f})});
                     animatorSet2.setDuration(300);
                     animatorSet2.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                    ((ObjectAnimator) animatorSet2.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda10(this, i));
+                    ((ObjectAnimator) animatorSet2.getChildAnimations().get(0)).addUpdateListener(new ChatActivityEnterView$$ExternalSyntheticLambda6(this, i));
                     animatorSet2.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             boolean unused = ChatActivityEnterView.this.closeAnimationInProgress = false;
@@ -12037,13 +11646,13 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setStickersExpanded$50(int i, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setStickersExpanded$48(int i, ValueAnimator valueAnimator) {
         this.stickersExpansionProgress = Math.abs(getTranslationY() / ((float) (-(this.stickersExpandedHeight - i))));
         this.sizeNotifierLayout.invalidate();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setStickersExpanded$51(int i, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setStickersExpanded$49(int i, ValueAnimator valueAnimator) {
         this.stickersExpansionProgress = getTranslationY() / ((float) (-(this.stickersExpandedHeight - i)));
         this.sizeNotifierLayout.invalidate();
     }
@@ -12566,23 +12175,23 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Code restructure failed: missing block: B:37:0x0128, code lost:
-        r2 = (androidx.recyclerview.widget.LinearLayoutManager) r5.botCommandsMenuContainer.listView.getLayoutManager();
+    /* JADX WARNING: Code restructure failed: missing block: B:37:0x0132, code lost:
+        r2 = (androidx.recyclerview.widget.LinearLayoutManager) r6.botCommandsMenuContainer.listView.getLayoutManager();
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void onMeasure(int r6, int r7) {
+    public void onMeasure(int r7, int r8) {
         /*
-            r5 = this;
-            org.telegram.ui.Components.BotCommandsMenuView r0 = r5.botCommandsMenuButton
+            r6 = this;
+            org.telegram.ui.Components.BotCommandsMenuView r0 = r6.botCommandsMenuButton
             r1 = 0
             if (r0 == 0) goto L_0x0049
             java.lang.Object r0 = r0.getTag()
             if (r0 == 0) goto L_0x0049
-            org.telegram.ui.Components.BotCommandsMenuView r0 = r5.botCommandsMenuButton
-            r0.measure(r6, r7)
+            org.telegram.ui.Components.BotCommandsMenuView r0 = r6.botCommandsMenuButton
+            r0.measure(r7, r8)
             r0 = 0
         L_0x0011:
-            android.widget.ImageView[] r2 = r5.emojiButton
+            android.widget.ImageView[] r2 = r6.emojiButton
             int r3 = r2.length
             if (r0 >= r3) goto L_0x0030
             r2 = r2[r0]
@@ -12590,65 +12199,68 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             android.view.ViewGroup$MarginLayoutParams r2 = (android.view.ViewGroup.MarginLayoutParams) r2
             r3 = 1092616192(0x41200000, float:10.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            org.telegram.ui.Components.BotCommandsMenuView r4 = r5.botCommandsMenuButton
+            org.telegram.ui.Components.BotCommandsMenuView r4 = r6.botCommandsMenuButton
             int r4 = r4.getMeasuredWidth()
             int r3 = r3 + r4
             r2.leftMargin = r3
             int r0 = r0 + 1
             goto L_0x0011
         L_0x0030:
-            org.telegram.ui.Components.EditTextCaption r0 = r5.messageEditText
+            org.telegram.ui.Components.EditTextCaption r0 = r6.messageEditText
             android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
             android.view.ViewGroup$MarginLayoutParams r0 = (android.view.ViewGroup.MarginLayoutParams) r0
             r2 = 1113849856(0x42640000, float:57.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            org.telegram.ui.Components.BotCommandsMenuView r3 = r5.botCommandsMenuButton
+            org.telegram.ui.Components.BotCommandsMenuView r3 = r6.botCommandsMenuButton
             int r3 = r3.getMeasuredWidth()
             int r2 = r2 + r3
             r0.leftMargin = r2
-            goto L_0x00bd
+            goto L_0x00c7
         L_0x0049:
-            org.telegram.ui.Components.SenderSelectView r0 = r5.senderSelectView
-            if (r0 == 0) goto L_0x0094
+            org.telegram.ui.Components.SenderSelectView r0 = r6.senderSelectView
+            if (r0 == 0) goto L_0x009e
             int r0 = r0.getVisibility()
-            if (r0 != 0) goto L_0x0094
-            org.telegram.ui.Components.SenderSelectView r0 = r5.senderSelectView
-            r0.measure(r6, r7)
-            r0 = 0
-        L_0x0059:
-            android.widget.ImageView[] r2 = r5.emojiButton
-            int r3 = r2.length
-            if (r0 >= r3) goto L_0x007a
-            r2 = r2[r0]
+            if (r0 != 0) goto L_0x009e
+            org.telegram.ui.Components.SenderSelectView r0 = r6.senderSelectView
+            android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
+            int r0 = r0.width
+            org.telegram.ui.Components.SenderSelectView r2 = r6.senderSelectView
+            android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
+            int r2 = r2.height
+            org.telegram.ui.Components.SenderSelectView r3 = r6.senderSelectView
+            r4 = 1073741824(0x40000000, float:2.0)
+            int r5 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r4)
+            int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r4)
+            r3.measure(r5, r2)
+            r2 = 0
+        L_0x0073:
+            android.widget.ImageView[] r3 = r6.emojiButton
+            int r4 = r3.length
+            if (r2 >= r4) goto L_0x008c
+            r3 = r3[r2]
+            android.view.ViewGroup$LayoutParams r3 = r3.getLayoutParams()
+            android.view.ViewGroup$MarginLayoutParams r3 = (android.view.ViewGroup.MarginLayoutParams) r3
+            r4 = 1098907648(0x41800000, float:16.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r4 = r4 + r0
+            r3.leftMargin = r4
+            int r2 = r2 + 1
+            goto L_0x0073
+        L_0x008c:
+            org.telegram.ui.Components.EditTextCaption r2 = r6.messageEditText
             android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
             android.view.ViewGroup$MarginLayoutParams r2 = (android.view.ViewGroup.MarginLayoutParams) r2
-            r3 = 1098907648(0x41800000, float:16.0)
+            r3 = 1115422720(0x427CLASSNAME, float:63.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            org.telegram.ui.Components.SenderSelectView r4 = r5.senderSelectView
-            android.view.ViewGroup$LayoutParams r4 = r4.getLayoutParams()
-            int r4 = r4.width
-            int r3 = r3 + r4
+            int r3 = r3 + r0
             r2.leftMargin = r3
-            int r0 = r0 + 1
-            goto L_0x0059
-        L_0x007a:
-            org.telegram.ui.Components.EditTextCaption r0 = r5.messageEditText
-            android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
-            android.view.ViewGroup$MarginLayoutParams r0 = (android.view.ViewGroup.MarginLayoutParams) r0
-            r2 = 1115422720(0x427CLASSNAME, float:63.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            org.telegram.ui.Components.SenderSelectView r3 = r5.senderSelectView
-            android.view.ViewGroup$LayoutParams r3 = r3.getLayoutParams()
-            int r3 = r3.width
-            int r2 = r2 + r3
-            r0.leftMargin = r2
-            goto L_0x00bd
-        L_0x0094:
+            goto L_0x00c7
+        L_0x009e:
             r0 = 0
-        L_0x0095:
-            android.widget.ImageView[] r2 = r5.emojiButton
+        L_0x009f:
+            android.widget.ImageView[] r2 = r6.emojiButton
             int r3 = r2.length
-            if (r0 >= r3) goto L_0x00ad
+            if (r0 >= r3) goto L_0x00b7
             r2 = r2[r0]
             android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
             android.view.ViewGroup$MarginLayoutParams r2 = (android.view.ViewGroup.MarginLayoutParams) r2
@@ -12656,32 +12268,32 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r2.leftMargin = r3
             int r0 = r0 + 1
-            goto L_0x0095
-        L_0x00ad:
-            org.telegram.ui.Components.EditTextCaption r0 = r5.messageEditText
+            goto L_0x009f
+        L_0x00b7:
+            org.telegram.ui.Components.EditTextCaption r0 = r6.messageEditText
             android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
             android.view.ViewGroup$MarginLayoutParams r0 = (android.view.ViewGroup.MarginLayoutParams) r0
             r2 = 1112014848(0x42480000, float:50.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r0.leftMargin = r2
-        L_0x00bd:
-            org.telegram.ui.Components.BotCommandsMenuContainer r0 = r5.botCommandsMenuContainer
-            if (r0 == 0) goto L_0x015c
-            org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter r0 = r5.botCommandsAdapter
+        L_0x00c7:
+            org.telegram.ui.Components.BotCommandsMenuContainer r0 = r6.botCommandsMenuContainer
+            if (r0 == 0) goto L_0x0166
+            org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter r0 = r6.botCommandsAdapter
             int r0 = r0.getItemCount()
             r2 = 4
-            if (r0 <= r2) goto L_0x00dd
-            org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r5.sizeNotifierLayout
+            if (r0 <= r2) goto L_0x00e7
+            org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r6.sizeNotifierLayout
             int r0 = r0.getMeasuredHeight()
             r2 = 1126354125(0x4322cccd, float:162.8)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 - r2
             int r0 = java.lang.Math.max(r1, r0)
-            goto L_0x0100
-        L_0x00dd:
-            org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r5.sizeNotifierLayout
+            goto L_0x010a
+        L_0x00e7:
+            org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r6.sizeNotifierLayout
             int r0 = r0.getMeasuredHeight()
-            org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter r3 = r5.botCommandsAdapter
+            org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter r3 = r6.botCommandsAdapter
             int r3 = r3.getItemCount()
             int r2 = java.lang.Math.min(r2, r3)
             r3 = 1
@@ -12692,47 +12304,47 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 - r2
             int r0 = java.lang.Math.max(r1, r0)
-        L_0x0100:
-            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
+        L_0x010a:
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r6.botCommandsMenuContainer
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             int r2 = r2.getPaddingTop()
-            if (r2 == r0) goto L_0x015c
-            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
+            if (r2 == r0) goto L_0x0166
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r6.botCommandsMenuContainer
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             r2.setTopGlowOffset(r0)
-            int r2 = r5.botCommandLastPosition
+            int r2 = r6.botCommandLastPosition
             r3 = -1
-            if (r2 != r3) goto L_0x014f
-            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
+            if (r2 != r3) goto L_0x0159
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r6.botCommandsMenuContainer
             int r2 = r2.getVisibility()
-            if (r2 != 0) goto L_0x014f
-            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
+            if (r2 != 0) goto L_0x0159
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r6.botCommandsMenuContainer
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             androidx.recyclerview.widget.RecyclerView$LayoutManager r2 = r2.getLayoutManager()
-            if (r2 == 0) goto L_0x014f
-            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
+            if (r2 == 0) goto L_0x0159
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r6.botCommandsMenuContainer
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             androidx.recyclerview.widget.RecyclerView$LayoutManager r2 = r2.getLayoutManager()
             androidx.recyclerview.widget.LinearLayoutManager r2 = (androidx.recyclerview.widget.LinearLayoutManager) r2
             int r3 = r2.findFirstVisibleItemPosition()
-            if (r3 < 0) goto L_0x014f
+            if (r3 < 0) goto L_0x0159
             android.view.View r2 = r2.findViewByPosition(r3)
-            if (r2 == 0) goto L_0x014f
-            r5.botCommandLastPosition = r3
+            if (r2 == 0) goto L_0x0159
+            r6.botCommandLastPosition = r3
             int r2 = r2.getTop()
-            org.telegram.ui.Components.BotCommandsMenuContainer r3 = r5.botCommandsMenuContainer
+            org.telegram.ui.Components.BotCommandsMenuContainer r3 = r6.botCommandsMenuContainer
             org.telegram.ui.Components.RecyclerListView r3 = r3.listView
             int r3 = r3.getPaddingTop()
             int r2 = r2 - r3
-            r5.botCommandLastTop = r2
-        L_0x014f:
-            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
+            r6.botCommandLastTop = r2
+        L_0x0159:
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r6.botCommandsMenuContainer
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             r3 = 1090519040(0x41000000, float:8.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r2.setPadding(r1, r0, r1, r3)
-        L_0x015c:
-            super.onMeasure(r6, r7)
+        L_0x0166:
+            super.onMeasure(r7, r8)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.onMeasure(int, int):void");

@@ -1,14 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.NumberPicker;
+import android.content.Context;
+import android.view.View;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda4 implements NumberPicker.Formatter {
-    public static final /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda4 INSTANCE = new PasscodeActivity$$ExternalSyntheticLambda4();
+public final /* synthetic */ class PasscodeActivity$$ExternalSyntheticLambda4 implements View.OnClickListener {
+    public final /* synthetic */ Context f$0;
 
-    private /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda4() {
+    public /* synthetic */ PasscodeActivity$$ExternalSyntheticLambda4(Context context) {
+        this.f$0 = context;
     }
 
-    public final String format(int i) {
-        return PasscodeActivity.lambda$createView$2(i);
+    public final void onClick(View view) {
+        AlertsCreator.createForgotPasscodeDialog(this.f$0).show();
     }
 }

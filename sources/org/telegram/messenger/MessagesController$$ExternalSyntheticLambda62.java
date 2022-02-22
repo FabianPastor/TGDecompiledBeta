@@ -3,15 +3,13 @@ package org.telegram.messenger;
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda62 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
     public final /* synthetic */ long f$1;
-    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda62(MessagesController messagesController, long j, int i) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda62(MessagesController messagesController, long j) {
         this.f$0 = messagesController;
         this.f$1 = j;
-        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$processUpdateArray$320(this.f$1, this.f$2);
+        this.f$0.lambda$setUserAdminRole$80(this.f$1);
     }
 }

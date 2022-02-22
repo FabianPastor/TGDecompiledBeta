@@ -334,11 +334,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         presentFragment(new TwoStepVerificationSetupActivity(i3, this.currentPassword));
                     }
                 } else if (i2 == this.passcodeRow) {
-                    if (SharedConfig.passcodeHash.length() > 0) {
-                        presentFragment(new PasscodeActivity(2));
-                    } else {
-                        presentFragment(new PasscodeActivity(0));
-                    }
+                    presentFragment(PasscodeActivity.determineOpenFragment());
                 } else if (i2 == this.secretWebpageRow) {
                     if (getMessagesController().secretWebpagePreview == 1) {
                         getMessagesController().secretWebpagePreview = 0;
@@ -454,7 +450,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             i = num.intValue() == 3 ? 365 : 0;
         }
         AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
-        alertDialog.setCanCacnel(false);
+        alertDialog.setCanCancel(false);
         alertDialog.show();
         TLRPC$TL_account_setAccountTTL tLRPC$TL_account_setAccountTTL = new TLRPC$TL_account_setAccountTTL();
         TLRPC$TL_accountDaysTTL tLRPC$TL_accountDaysTTL = new TLRPC$TL_accountDaysTTL();
@@ -485,7 +481,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     public /* synthetic */ void lambda$createView$6(DialogInterface dialogInterface, int i) {
         AlertDialog show = new AlertDialog.Builder(getParentActivity(), 3, (Theme.ResourcesProvider) null).show();
         this.progressDialog = show;
-        show.setCanCacnel(false);
+        show.setCanCancel(false);
         if (this.currentSync != this.newSync) {
             UserConfig userConfig = getUserConfig();
             boolean z = this.newSync;

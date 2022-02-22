@@ -12,6 +12,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda8
     }
 
     public final void run() {
-        this.f$0.lambda$addRecentGif$11(this.f$1);
+        this.f$0.lambda$addRecentGif$12(this.f$1);
     }
 }

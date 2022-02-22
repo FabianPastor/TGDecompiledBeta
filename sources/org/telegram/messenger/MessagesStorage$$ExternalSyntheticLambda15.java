@@ -8,6 +8,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda15 im
     }
 
     public final void run() {
-        this.f$0.lambda$updateDbToLastVersion$6();
+        this.f$0.lambda$loadDownloadingFiles$43();
     }
 }

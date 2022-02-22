@@ -839,7 +839,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             LocationActivity locationActivity = new LocationActivity(2);
             locationActivity.setMessageObject(sharingLocationInfo.messageObject);
             locationActivity.setDelegate(new FragmentContextView$$ExternalSyntheticLambda12(sharingLocationInfo, sharingLocationInfo.messageObject.getDialogId()));
-            launchActivity.lambda$runLinkRequest$43(locationActivity);
+            launchActivity.lambda$runLinkRequest$45(locationActivity);
         }
     }
 
@@ -2056,8 +2056,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (r1 != 0) goto L_0x0389
             org.telegram.ui.ActionBar.BaseFragment r1 = r0.fragment
             org.telegram.ui.Components.BulletinFactory r1 = org.telegram.ui.Components.BulletinFactory.of(r1)
-            r2 = 2131558470(0x7f0d0046, float:1.8742257E38)
-            r3 = 2131626029(0x7f0e082d, float:1.8879283E38)
+            r2 = 2131558472(0x7f0d0048, float:1.874226E38)
+            r3 = 2131626064(0x7f0e0850, float:1.8879354E38)
             java.lang.String r4 = "InviteExpired"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             org.telegram.ui.Components.Bulletin r1 = r1.createSimpleBulletin(r2, r3)
@@ -2176,14 +2176,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x0237
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628531(0x7f0e11f3, float:1.8884357E38)
+            r9 = 2131628604(0x7f0e123c, float:1.8884505E38)
             java.lang.String r11 = "VoipChannelScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0245
         L_0x0237:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628638(0x7f0e125e, float:1.8884574E38)
+            r9 = 2131628711(0x7f0e12a7, float:1.8884722E38)
             java.lang.String r11 = "VoipGroupScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2207,14 +2207,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x027b
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628544(0x7f0e1200, float:1.8884384E38)
+            r9 = 2131628617(0x7f0e1249, float:1.8884532E38)
             java.lang.String r11 = "VoipChannelVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0289
         L_0x027b:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628670(0x7f0e127e, float:1.888464E38)
+            r9 = 2131628743(0x7f0e12c7, float:1.8884787E38)
             java.lang.String r11 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2223,7 +2223,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r4 = r4.participants_count
             if (r4 != 0) goto L_0x029e
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r4 = r0.subtitleTextView
-            r6 = 2131626329(0x7f0e0959, float:1.8879891E38)
+            r6 = 2131626366(0x7f0e097e, float:1.8879966E38)
             java.lang.String r9 = "MembersTalkingNobody"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r4.setText(r6, r5)

@@ -12,6 +12,6 @@ public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$clearDatabase$8(this.f$1);
+        this.f$0.lambda$cleanupFolders$3(this.f$1);
     }
 }

@@ -5,15 +5,15 @@ import java.util.ArrayList;
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda137 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
     public final /* synthetic */ ArrayList f$1;
-    public final /* synthetic */ ArrayList f$2;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda137(MessagesStorage messagesStorage, ArrayList arrayList, ArrayList arrayList2) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda137(MessagesStorage messagesStorage, ArrayList arrayList, int i) {
         this.f$0 = messagesStorage;
         this.f$1 = arrayList;
-        this.f$2 = arrayList2;
+        this.f$2 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$setDialogsPinned$185(this.f$1, this.f$2);
+        this.f$0.lambda$unpinAllDialogsExceptNew$187(this.f$1, this.f$2);
     }
 }

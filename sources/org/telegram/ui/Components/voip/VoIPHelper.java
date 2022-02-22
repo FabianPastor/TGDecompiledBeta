@@ -445,18 +445,19 @@ public class VoIPHelper {
 
     @TargetApi(23)
     public static void permissionDenied(Activity activity, Runnable runnable, int i) {
-        int i2;
         String str;
-        if (!activity.shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO") || (i == 102 && !activity.shouldShowRequestPermissionRationale("android.permission.CAMERA"))) {
-            AlertDialog.Builder title = new AlertDialog.Builder((Context) activity).setTitle(LocaleController.getString("AppName", NUM));
-            if (i == 102) {
+        int i2;
+        boolean z = i == 102;
+        if (!activity.shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO") || (z && !activity.shouldShowRequestPermissionRationale("android.permission.CAMERA"))) {
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
+            if (z) {
                 i2 = NUM;
-                str = "VoipNeedMicCameraPermission";
+                str = "VoipNeedMicCameraPermissionWithHint";
             } else {
                 i2 = NUM;
-                str = "VoipNeedMicPermission";
+                str = "VoipNeedMicPermissionWithHint";
             }
-            title.setMessage(LocaleController.getString(str, i2)).setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null).setNegativeButton(LocaleController.getString("Settings", NUM), new VoIPHelper$$ExternalSyntheticLambda0(activity)).show().setOnDismissListener(new VoIPHelper$$ExternalSyntheticLambda7(runnable));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString(str, i2))).setPositiveButton(LocaleController.getString("Settings", NUM), new VoIPHelper$$ExternalSyntheticLambda0(activity)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), (DialogInterface.OnClickListener) null).setOnDismissListener(new VoIPHelper$$ExternalSyntheticLambda7(runnable)).setTopAnimation(z ? NUM : NUM, 72, false, Theme.getColor("dialogTopBackground")).show();
         }
     }
 

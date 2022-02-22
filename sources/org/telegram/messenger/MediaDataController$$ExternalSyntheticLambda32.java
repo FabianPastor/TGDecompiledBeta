@@ -14,6 +14,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda3
     }
 
     public final void run() {
-        this.f$0.lambda$getMediaCountDatabase$86(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$putMediaCountDatabase$86(this.f$1, this.f$2, this.f$3);
     }
 }

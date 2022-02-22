@@ -1,18 +1,24 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.LocationController;
-import org.telegram.ui.Components.SharingLocationsAlert;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda80 implements SharingLocationsAlert.SharingLocationsAlertDelegate {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda80 implements RecyclerListView.OnItemClickListenerExtended {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ int[] f$1;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda80(LaunchActivity launchActivity, int[] iArr) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda80(LaunchActivity launchActivity) {
         this.f$0 = launchActivity;
-        this.f$1 = iArr;
     }
 
-    public final void didSelectLocation(LocationController.SharingLocationInfo sharingLocationInfo) {
-        this.f$0.lambda$handleIntent$10(this.f$1, sharingLocationInfo);
+    public /* synthetic */ boolean hasDoubleTap(View view, int i) {
+        return RecyclerListView.OnItemClickListenerExtended.CC.$default$hasDoubleTap(this, view, i);
+    }
+
+    public /* synthetic */ void onDoubleTap(View view, int i, float f, float f2) {
+        RecyclerListView.OnItemClickListenerExtended.CC.$default$onDoubleTap(this, view, i, f, f2);
+    }
+
+    public final void onItemClick(View view, int i, float f, float f2) {
+        this.f$0.lambda$onCreate$3(view, i, f, f2);
     }
 }

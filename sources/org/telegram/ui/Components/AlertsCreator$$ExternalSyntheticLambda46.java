@@ -1,19 +1,18 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
 import android.view.View;
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.widget.LinearLayout;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda46 implements View.OnClickListener {
-    public final /* synthetic */ AlertDialog.Builder f$0;
-    public final /* synthetic */ DialogInterface.OnClickListener f$1;
+    public final /* synthetic */ LinearLayout f$0;
+    public final /* synthetic */ int[] f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda46(AlertDialog.Builder builder, DialogInterface.OnClickListener onClickListener) {
-        this.f$0 = builder;
-        this.f$1 = onClickListener;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda46(LinearLayout linearLayout, int[] iArr) {
+        this.f$0 = linearLayout;
+        this.f$1 = iArr;
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createSingleChoiceDialog$86(this.f$0, this.f$1, view);
+        AlertsCreator.lambda$createColorSelectDialog$71(this.f$0, this.f$1, view);
     }
 }

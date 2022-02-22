@@ -1556,11 +1556,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             L_0x004a:
                 r5 = 2
                 java.lang.CharSequence[] r5 = new java.lang.CharSequence[r5]
-                r6 = 2131626791(0x7f0e0b27, float:1.8880828E38)
+                r6 = 2131626828(0x7f0e0b4c, float:1.8880903E38)
                 java.lang.String r7 = "Open"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 r5[r3] = r6
-                r6 = 2131625096(0x7f0e0488, float:1.887739E38)
+                r6 = 2131625104(0x7f0e0490, float:1.8877407E38)
                 java.lang.String r7 = "Copy"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 r5[r2] = r6
@@ -1721,7 +1721,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             L_0x0136:
                 org.telegram.messenger.AndroidUtilities.addToClipboard(r7)
                 if (r9 == 0) goto L_0x0145
-                r7 = 2131627167(0x7f0e0c9f, float:1.888159E38)
+                r7 = 2131627222(0x7f0e0cd6, float:1.8881702E38)
                 java.lang.String r8 = "PhoneCopied"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
                 goto L_0x0172
@@ -1729,7 +1729,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r8 = "#"
                 boolean r8 = r7.startsWith(r8)
                 if (r8 == 0) goto L_0x0157
-                r7 = 2131625901(0x7f0e07ad, float:1.8879023E38)
+                r7 = 2131625936(0x7f0e07d0, float:1.8879094E38)
                 java.lang.String r8 = "HashtagCopied"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
                 goto L_0x0172
@@ -1737,12 +1737,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r8 = "@"
                 boolean r7 = r7.startsWith(r8)
                 if (r7 == 0) goto L_0x0169
-                r7 = 2131628399(0x7f0e116f, float:1.888409E38)
+                r7 = 2131628472(0x7f0e11b8, float:1.8884238E38)
                 java.lang.String r8 = "UsernameCopied"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
                 goto L_0x0172
             L_0x0169:
-                r7 = 2131626157(0x7f0e08ad, float:1.8879542E38)
+                r7 = 2131626193(0x7f0e08d1, float:1.8879615E38)
                 java.lang.String r8 = "LinkCopied"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             L_0x0172:
@@ -1754,7 +1754,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.ui.PhotoViewer r9 = org.telegram.ui.PhotoViewer.this
                 org.telegram.ui.ActionBar.Theme$ResourcesProvider r9 = r9.resourcesProvider
                 org.telegram.ui.Components.BulletinFactory r8 = org.telegram.ui.Components.BulletinFactory.of(r8, r9)
-                r9 = 2131558544(0x7f0d0090, float:1.8742407E38)
+                r9 = 2131558559(0x7f0d009f, float:1.8742437E38)
                 org.telegram.ui.Components.Bulletin r7 = r8.createSimpleBulletin(r9, r7)
                 r7.show()
             L_0x0192:
@@ -4350,7 +4350,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             boolean r1 = r1.isEmpty()
             if (r1 != 0) goto L_0x0867
             boolean r1 = r0.opennedFromMedia
-            r2 = 2131626778(0x7f0e0b1a, float:1.8880802E38)
+            r2 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
             java.lang.String r3 = "Of"
             if (r1 == 0) goto L_0x0431
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
@@ -5088,7 +5088,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x00ba:
             android.app.Activity r1 = r9.parentActivity     // Catch:{ Exception -> 0x00d3 }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131627868(0x7f0e0f5c, float:1.8883013E38)
+            r3 = 2131627937(0x7f0e0fa1, float:1.8883153E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x00d3 }
             android.content.Intent r0 = android.content.Intent.createChooser(r0, r2)     // Catch:{ Exception -> 0x00d3 }
             r2 = 500(0x1f4, float:7.0E-43)
@@ -5932,7 +5932,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.ui.PhotoViewer r5 = org.telegram.ui.PhotoViewer.this
                         org.telegram.ui.PhotoViewer$PhotoViewerProvider r5 = r5.placeProvider
                         java.lang.String r5 = r5.getDeleteMessageString()
-                        r6 = 2131624373(0x7f0e01b5, float:1.8875924E38)
+                        r6 = 2131624375(0x7f0e01b7, float:1.8875928E38)
                         java.lang.String r8 = "AreYouSureDeletePhotoTitle"
                         if (r5 == 0) goto L_0x0349
                         java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r8, r6)
@@ -5968,19 +5968,19 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         org.telegram.messenger.MessageObject r5 = r5.currentMessageObject
                         boolean r5 = r5.isGif()
                         if (r5 == 0) goto L_0x03bc
-                        r5 = 2131624370(0x7f0e01b2, float:1.8875918E38)
+                        r5 = 2131624372(0x7f0e01b4, float:1.8875922E38)
                         java.lang.String r6 = "AreYouSureDeleteGIFTitle"
                         java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                         r3.setTitle(r5)
                         if (r0 == 0) goto L_0x03ad
-                        r0 = 2131624369(0x7f0e01b1, float:1.8875916E38)
+                        r0 = 2131624371(0x7f0e01b3, float:1.887592E38)
                         java.lang.Object[] r5 = new java.lang.Object[r4]
                         java.lang.String r6 = "AreYouSureDeleteGIFEveryone"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r6, r0, r5)
                         r3.setMessage(r0)
                         goto L_0x040e
                     L_0x03ad:
-                        r0 = 2131624368(0x7f0e01b0, float:1.8875914E38)
+                        r0 = 2131624370(0x7f0e01b2, float:1.8875918E38)
                         java.lang.Object[] r5 = new java.lang.Object[r4]
                         java.lang.String r6 = "AreYouSureDeleteGIF"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r6, r0, r5)
@@ -5990,33 +5990,33 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r8, r6)
                         r3.setTitle(r5)
                         if (r0 == 0) goto L_0x03d4
-                        r0 = 2131624372(0x7f0e01b4, float:1.8875922E38)
+                        r0 = 2131624374(0x7f0e01b6, float:1.8875926E38)
                         java.lang.Object[] r5 = new java.lang.Object[r4]
                         java.lang.String r6 = "AreYouSureDeletePhotoEveryone"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r6, r0, r5)
                         r3.setMessage(r0)
                         goto L_0x040e
                     L_0x03d4:
-                        r0 = 2131624371(0x7f0e01b3, float:1.887592E38)
+                        r0 = 2131624373(0x7f0e01b5, float:1.8875924E38)
                         java.lang.Object[] r5 = new java.lang.Object[r4]
                         java.lang.String r6 = "AreYouSureDeletePhoto"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r6, r0, r5)
                         r3.setMessage(r0)
                         goto L_0x040e
                     L_0x03e3:
-                        r5 = 2131624384(0x7f0e01c0, float:1.8875946E38)
+                        r5 = 2131624386(0x7f0e01c2, float:1.887595E38)
                         java.lang.String r6 = "AreYouSureDeleteVideoTitle"
                         java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
                         r3.setTitle(r5)
                         if (r0 == 0) goto L_0x0400
-                        r0 = 2131624383(0x7f0e01bf, float:1.8875944E38)
+                        r0 = 2131624385(0x7f0e01c1, float:1.8875948E38)
                         java.lang.Object[] r5 = new java.lang.Object[r4]
                         java.lang.String r6 = "AreYouSureDeleteVideoEveryone"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r6, r0, r5)
                         r3.setMessage(r0)
                         goto L_0x040e
                     L_0x0400:
-                        r0 = 2131624382(0x7f0e01be, float:1.8875942E38)
+                        r0 = 2131624384(0x7f0e01c0, float:1.8875946E38)
                         java.lang.Object[] r5 = new java.lang.Object[r4]
                         java.lang.String r6 = "AreYouSureDeleteVideo"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r6, r0, r5)
@@ -6135,13 +6135,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         r10.setBackgroundDrawable(r11)
                         java.lang.String r11 = ""
                         if (r6 == 0) goto L_0x0528
-                        r2 = 2131625232(0x7f0e0510, float:1.8877666E38)
+                        r2 = 2131625245(0x7f0e051d, float:1.8877693E38)
                         java.lang.String r5 = "DeleteForAll"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
                         r10.setText(r2, r11, r4, r4)
                         goto L_0x053c
                     L_0x0528:
-                        r6 = 2131625233(0x7f0e0511, float:1.8877668E38)
+                        r6 = 2131625246(0x7f0e051e, float:1.8877695E38)
                         java.lang.Object[] r2 = new java.lang.Object[r2]
                         java.lang.String r5 = org.telegram.messenger.UserObject.getFirstName(r5)
                         r2[r4] = r5
@@ -6182,13 +6182,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         r2 = 9
                         r3.setCustomViewOffset(r2)
                     L_0x057f:
-                        r2 = 2131625195(0x7f0e04eb, float:1.8877591E38)
+                        r2 = 2131625208(0x7f0e04f8, float:1.8877617E38)
                         java.lang.String r4 = "Delete"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
                         org.telegram.ui.PhotoViewer$12$$ExternalSyntheticLambda0 r4 = new org.telegram.ui.PhotoViewer$12$$ExternalSyntheticLambda0
                         r4.<init>(r7, r0)
                         r3.setPositiveButton(r2, r4)
-                        r0 = 2131624697(0x7f0e02f9, float:1.8876581E38)
+                        r0 = 2131624700(0x7f0e02fc, float:1.8876587E38)
                         java.lang.String r2 = "Cancel"
                         java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
                         r3.setNegativeButton(r0, r9)
@@ -8209,22 +8209,22 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r13.<init>((android.content.Context) r14, (boolean) r15, (boolean) r3, (org.telegram.ui.ActionBar.Theme.ResourcesProvider) r6)
             if (r11 != 0) goto L_0x012a
             boolean r3 = org.telegram.messenger.UserObject.isUserSelf(r2)
-            r9 = 2131165858(0x7var_a2, float:1.7945945E38)
+            r9 = 2131165860(0x7var_a4, float:1.794595E38)
             if (r3 == 0) goto L_0x011d
-            r3 = 2131627842(0x7f0e0var_, float:1.888296E38)
+            r3 = 2131627911(0x7f0e0var_, float:1.88831E38)
             java.lang.String r10 = "SetReminder"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r3)
             r13.setTextAndIcon(r3, r9)
             goto L_0x0171
         L_0x011d:
-            r3 = 2131627683(0x7f0e0ea3, float:1.8882637E38)
+            r3 = 2131627748(0x7f0e0ee4, float:1.888277E38)
             java.lang.String r10 = "ScheduleMessage"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r3)
             r13.setTextAndIcon(r3, r9)
             goto L_0x0171
         L_0x012a:
             if (r11 != r5) goto L_0x013c
-            r3 = 2131627809(0x7f0e0var_, float:1.8882893E38)
+            r3 = 2131627876(0x7f0e0var_, float:1.8883029E38)
             java.lang.String r9 = "SendWithoutSound"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r9, r3)
             r9 = 2131165565(0x7var_d, float:1.794535E38)
@@ -8232,26 +8232,26 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             goto L_0x0171
         L_0x013c:
             if (r11 != r10) goto L_0x014e
-            r3 = 2131627543(0x7f0e0e17, float:1.8882353E38)
+            r3 = 2131627603(0x7f0e0e53, float:1.8882475E38)
             java.lang.String r9 = "ReplacePhoto"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r9, r3)
-            r9 = 2131165839(0x7var_f, float:1.7945906E38)
+            r9 = 2131165841(0x7var_, float:1.794591E38)
             r13.setTextAndIcon(r3, r9)
             goto L_0x0171
         L_0x014e:
             if (r11 != r9) goto L_0x0160
-            r3 = 2131627776(0x7f0e0var_, float:1.8882826E38)
+            r3 = 2131627843(0x7f0e0var_, float:1.8882962E38)
             java.lang.String r9 = "SendAsNewPhoto"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r9, r3)
-            r9 = 2131165865(0x7var_a9, float:1.794596E38)
+            r9 = 2131165867(0x7var_ab, float:1.7945963E38)
             r13.setTextAndIcon(r3, r9)
             goto L_0x0171
         L_0x0160:
             if (r11 != r12) goto L_0x0171
-            r3 = 2131627807(0x7f0e0f1f, float:1.8882889E38)
+            r3 = 2131627874(0x7f0e0var_, float:1.8883025E38)
             java.lang.String r9 = "SendWithoutCompression"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r9, r3)
-            r9 = 2131165864(0x7var_a8, float:1.7945957E38)
+            r9 = 2131165866(0x7var_aa, float:1.7945961E38)
             r13.setTextAndIcon(r3, r9)
         L_0x0171:
             r3 = 1128529920(0x43440000, float:196.0)
@@ -14198,7 +14198,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r7 = 0
             r0.sharedMediaType = r7
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r8 = r0.allMediaItem
-            r13 = 2131627925(0x7f0e0var_, float:1.8883128E38)
+            r13 = 2131627995(0x7f0e0fdb, float:1.888327E38)
             java.lang.String r10 = "ShowAllMedia"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r13)
             r8.setText(r10)
@@ -14354,7 +14354,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r9.setVisibility(r10)
             r0.muteVideo = r7
             android.widget.ImageView r7 = r0.muteItem
-            r9 = 2131166186(0x7var_ea, float:1.794661E38)
+            r9 = 2131166188(0x7var_ec, float:1.7946614E38)
             r7.setImageResource(r9)
             org.telegram.ui.Components.PickerBottomLayoutViewer r7 = r0.editorDoneLayout
             r7.setVisibility(r10)
@@ -14445,9 +14445,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x0301:
             r7 = 0
         L_0x0302:
-            r9 = 2131627924(0x7f0e0var_, float:1.8883126E38)
+            r9 = 2131627994(0x7f0e0fda, float:1.8883268E38)
             java.lang.String r11 = "ShowAllGIFs"
-            r12 = 2131627923(0x7f0e0var_, float:1.8883124E38)
+            r12 = 2131627993(0x7f0e0fd9, float:1.8883266E38)
             java.lang.String r13 = "ShowAllFiles"
             r8 = 5
             if (r1 == 0) goto L_0x0458
@@ -14750,7 +14750,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             int r4 = r2.getId()
             r3.put(r4, r2)
             int r1 = r1 + 1
-            r9 = 2131627924(0x7f0e0var_, float:1.8883126E38)
+            r9 = 2131627994(0x7f0e0fda, float:1.8883268E38)
             goto L_0x0521
         L_0x054f:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
@@ -14790,7 +14790,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (r1 == 0) goto L_0x05b0
             r0.sharedMediaType = r8
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r0.allMediaItem
-            r2 = 2131627924(0x7f0e0var_, float:1.8883126E38)
+            r2 = 2131627994(0x7f0e0fda, float:1.8883268E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r11, r2)
             r1.setText(r2)
             goto L_0x05b0
@@ -15640,7 +15640,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             long r8 = (long) r8
             r11 = 1000(0x3e8, double:4.94E-321)
             long r8 = r8 * r11
-            r11 = 2131628881(0x7f0e1351, float:1.8885067E38)
+            r11 = 2131628961(0x7f0e13a1, float:1.888523E38)
             r12 = 2
             java.lang.Object[] r13 = new java.lang.Object[r12]
             org.telegram.messenger.LocaleController r12 = org.telegram.messenger.LocaleController.getInstance()
@@ -15751,7 +15751,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x0384:
             r5.setVisibility(r4)
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            r5 = 2131624409(0x7f0e01d9, float:1.8875997E38)
+            r5 = 2131624411(0x7f0e01db, float:1.8876E38)
             java.lang.String r6 = "AttachGif"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r4.setTitle(r5)
@@ -15912,7 +15912,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             int r9 = r9 + r10
             java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             r8[r7] = r9
-            r7 = 2131626778(0x7f0e0b1a, float:1.8880802E38)
+            r7 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r15, r7, r8)
             r5.setTitle(r7)
             goto L_0x0618
@@ -16008,7 +16008,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             int r8 = r8 + r10
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r7[r9] = r8
-            r8 = 2131626778(0x7f0e0b1a, float:1.8880802E38)
+            r8 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r15, r8, r7)
             r5.setTitle(r7)
             goto L_0x0618
@@ -16029,7 +16029,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             boolean r5 = r1.canPreviewDocument()
             if (r5 == 0) goto L_0x05bf
             org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-            r7 = 2131624407(0x7f0e01d7, float:1.8875993E38)
+            r7 = 2131624409(0x7f0e01d9, float:1.8875997E38)
             java.lang.String r8 = "AttachDocument"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r5.setTitle(r7)
@@ -16039,13 +16039,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (r5 == 0) goto L_0x05d4
             org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
             r9 = r19
-            r7 = 2131624429(0x7f0e01ed, float:1.8876037E38)
+            r7 = 2131624431(0x7f0e01ef, float:1.8876042E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r5.setTitle(r7)
             goto L_0x0618
         L_0x05d4:
             org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-            r7 = 2131624423(0x7f0e01e7, float:1.8876025E38)
+            r7 = 2131624425(0x7f0e01e9, float:1.887603E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
             r5.setTitle(r7)
             goto L_0x0618
@@ -16062,7 +16062,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             boolean r5 = r1.isVideo()
             if (r5 == 0) goto L_0x0604
             org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-            r7 = 2131624429(0x7f0e01ed, float:1.8876037E38)
+            r7 = 2131624431(0x7f0e01ef, float:1.8876042E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r5.setTitle(r7)
             goto L_0x0618
@@ -16070,7 +16070,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             org.telegram.tgnet.TLRPC$Document r5 = r1.getDocument()
             if (r5 == 0) goto L_0x0618
             org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-            r7 = 2131624407(0x7f0e01d7, float:1.8875993E38)
+            r7 = 2131624409(0x7f0e01d9, float:1.8875997E38)
             java.lang.String r8 = "AttachDocument"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r5.setTitle(r7)
@@ -16191,7 +16191,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             int r4 = r4.size()
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             r5[r3] = r4
-            r3 = 2131626778(0x7f0e0b1a, float:1.8880802E38)
+            r3 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r15, r3, r5)
             r1.setTitle(r3)
         L_0x06f9:
@@ -16277,7 +16277,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             boolean r1 = r0.isEvent
             if (r1 == 0) goto L_0x07a4
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            r3 = 2131624423(0x7f0e01e7, float:1.8876025E38)
+            r3 = 2131624425(0x7f0e01e9, float:1.887603E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r3)
             r1.setTitle(r3)
             goto L_0x07c9
@@ -16294,7 +16294,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             int r5 = r5.size()
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             r3[r6] = r5
-            r5 = 2131626778(0x7f0e0b1a, float:1.8880802E38)
+            r5 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r15, r5, r3)
             r1.setTitle(r3)
         L_0x07c9:
@@ -16744,13 +16744,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (r13 == 0) goto L_0x0b01
             if (r6 == 0) goto L_0x0af4
             org.telegram.ui.ActionBar.ActionBar r6 = r0.actionBar
-            r10 = 2131624429(0x7f0e01ed, float:1.8876037E38)
+            r10 = 2131624431(0x7f0e01ef, float:1.8876042E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r6.setTitle(r9)
             goto L_0x0b26
         L_0x0af4:
             org.telegram.ui.ActionBar.ActionBar r6 = r0.actionBar
-            r9 = 2131624423(0x7f0e01e7, float:1.8876025E38)
+            r9 = 2131624425(0x7f0e01e9, float:1.887603E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r6.setTitle(r9)
             goto L_0x0b26
@@ -16767,7 +16767,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             int r9 = r9.size()
             java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             r10[r13] = r9
-            r9 = 2131626778(0x7f0e0b1a, float:1.8880802E38)
+            r9 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.formatString(r15, r9, r10)
             r6.setTitle(r9)
         L_0x0b26:
@@ -16786,7 +16786,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             boolean r9 = r6.self
             if (r9 == 0) goto L_0x0b53
             org.telegram.ui.ActionBar.ActionBar r6 = r0.actionBar
-            r9 = 2131627678(0x7f0e0e9e, float:1.8882627E38)
+            r9 = 2131627743(0x7f0e0edf, float:1.888276E38)
             java.lang.String r10 = "SavedMessages"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r6.setTitle(r9)
@@ -16997,7 +16997,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.menuItem
             r1.checkHideMenuItem()
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            r4 = 2131624409(0x7f0e01d9, float:1.8875997E38)
+            r4 = 2131624411(0x7f0e01db, float:1.8876E38)
             java.lang.String r6 = "AttachGif"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r1.setTitle(r4)
@@ -17007,13 +17007,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (r1 != r7) goto L_0x0cdd
             if (r6 == 0) goto L_0x0ccf
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            r4 = 2131624429(0x7f0e01ed, float:1.8876037E38)
+            r4 = 2131624431(0x7f0e01ef, float:1.8876042E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
             r1.setTitle(r4)
             goto L_0x0cdb
         L_0x0ccf:
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            r4 = 2131624423(0x7f0e01e7, float:1.8876025E38)
+            r4 = 2131624425(0x7f0e01e9, float:1.887603E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r10, r4)
             r1.setTitle(r4)
         L_0x0cdb:
@@ -17030,7 +17030,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r7[r4] = r9
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r7[r10] = r1
-            r1 = 2131626778(0x7f0e0b1a, float:1.8880802E38)
+            r1 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r15, r1, r7)
             r6.setTitle(r1)
         L_0x0cfc:
@@ -19022,7 +19022,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (android.graphics.drawable.Drawable) r4, (int) r5, (java.lang.String) r6, (java.lang.Object) r7, (int) r8)
             goto L_0x06b8
         L_0x0311:
-            r2 = 2131165922(0x7var_e2, float:1.7946075E38)
+            r2 = 2131165924(0x7var_e4, float:1.7946079E38)
             if (r1 == 0) goto L_0x0355
             if (r17 == 0) goto L_0x032a
             org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForWebFile(r1)
@@ -19094,7 +19094,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x0381:
             org.telegram.ui.PhotoViewer$PageBlocksAdapter r2 = r0.pageBlocksAdapter
             r3 = -1
-            r6 = 2131165988(0x7var_, float:1.7946209E38)
+            r6 = 2131165990(0x7var_, float:1.7946213E38)
             if (r2 == 0) goto L_0x0469
             r7 = 1
             int[] r4 = new int[r7]
@@ -20188,7 +20188,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x00db:
             r11.isEmbedVideo = r2
             org.telegram.ui.ActionBar.ActionBar r2 = r11.actionBar
-            r5 = 2131626778(0x7f0e0b1a, float:1.8880802E38)
+            r5 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
             r6 = 2
             java.lang.Object[] r6 = new java.lang.Object[r6]
             java.lang.Integer r7 = java.lang.Integer.valueOf(r15)

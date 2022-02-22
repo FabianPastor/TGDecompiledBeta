@@ -66,10 +66,6 @@ public class MenuDrawable extends Drawable {
         this.rotateToBack = z;
     }
 
-    public float getCurrentRotation() {
-        return this.currentRotation;
-    }
-
     public void setRotation(float f, boolean z) {
         this.lastFrameTime = 0;
         float f2 = this.currentRotation;

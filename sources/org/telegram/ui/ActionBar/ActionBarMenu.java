@@ -218,6 +218,20 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
+    public void setSearchCursorColor(int i) {
+        int childCount = getChildCount();
+        for (int i2 = 0; i2 < childCount; i2++) {
+            View childAt = getChildAt(i2);
+            if (childAt instanceof ActionBarMenuItem) {
+                ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
+                if (actionBarMenuItem.isSearchField()) {
+                    actionBarMenuItem.getSearchField().setCursorColor(i);
+                    return;
+                }
+            }
+        }
+    }
+
     public void setSearchTextColor(int i, boolean z) {
         int childCount = getChildCount();
         for (int i2 = 0; i2 < childCount; i2++) {

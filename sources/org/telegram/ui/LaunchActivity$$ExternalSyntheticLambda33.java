@@ -17,6 +17,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda33 imp
     }
 
     public final void run() {
-        this.f$0.lambda$showLanguageAlert$82(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$showLanguageAlert$86(this.f$1, this.f$2, this.f$3);
     }
 }

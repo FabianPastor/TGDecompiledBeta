@@ -64,7 +64,7 @@ public class ActionBar extends FrameLayout {
     private SimpleTextView additionalSubtitleTextView;
     private boolean allowOverlayTitle;
     private ImageView backButtonImageView;
-    Paint blurScrimPaint;
+    public Paint blurScrimPaint;
     boolean blurredBackground;
     private boolean castShadows;
     private boolean centerScale;
@@ -877,6 +877,13 @@ public class ActionBar extends FrameLayout {
         ActionBarMenu actionBarMenu = this.menu;
         if (actionBarMenu != null) {
             actionBarMenu.setSearchTextColor(i, z);
+        }
+    }
+
+    public void setSearchCursorColor(int i) {
+        ActionBarMenu actionBarMenu = this.menu;
+        if (actionBarMenu != null) {
+            actionBarMenu.setSearchCursorColor(i);
         }
     }
 
@@ -2032,7 +2039,7 @@ public class ActionBar extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void dispatchDraw(Canvas canvas) {
-        if (this.blurredBackground) {
+        if (this.blurredBackground && this.actionBarColor != 0) {
             this.rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
             this.blurScrimPaint.setColor(this.actionBarColor);
             this.contentView.drawBlur(canvas, 0.0f, this.rectTmp, this.blurScrimPaint, true);

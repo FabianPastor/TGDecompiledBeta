@@ -448,7 +448,7 @@ public class TranslateAlert extends Dialog {
             android.widget.TextView r0 = r6.titleView
             r0.setLines(r13)
             android.widget.TextView r0 = r6.titleView
-            r2 = 2131624540(0x7f0e025c, float:1.8876263E38)
+            r2 = 2131624542(0x7f0e025e, float:1.8876267E38)
             java.lang.String r3 = "AutomaticTranslation"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -538,7 +538,7 @@ public class TranslateAlert extends Dialog {
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.subtitleArrowView = r0
-            r1 = 2131166060(0x7var_c, float:1.7946355E38)
+            r1 = 2131166062(0x7var_e, float:1.7946359E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r6.subtitleArrowView
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -864,7 +864,7 @@ public class TranslateAlert extends Dialog {
             r1 = 1096810496(0x41600000, float:14.0)
             r0.setTextSize(r13, r1)
             android.widget.TextView r0 = r6.buttonTextView
-            r1 = 2131625014(0x7f0e0436, float:1.8877224E38)
+            r1 = 2131625020(0x7f0e043c, float:1.8877236E38)
             java.lang.String r3 = "CloseTranslation"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setText(r1)

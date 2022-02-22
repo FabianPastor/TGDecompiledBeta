@@ -76,7 +76,7 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
                     org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                     android.content.Context r4 = r4
                     r3.<init>(r4)
-                    r4 = 2131625333(0x7f0e0575, float:1.887787E38)
+                    r4 = 2131625352(0x7f0e0588, float:1.887791E38)
                     java.lang.String r0 = "DoubleTapPreviewRational"
                     java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                     r3.setText(r4)

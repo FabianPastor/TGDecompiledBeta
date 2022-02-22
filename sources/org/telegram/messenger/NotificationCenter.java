@@ -147,6 +147,8 @@ public class NotificationCenter {
     public static final int notificationsCountUpdated;
     public static final int notificationsSettingsUpdated;
     public static final int onDatabaseMigration;
+    public static final int onDatabaseOpened;
+    public static final int onDownloadingFilesChanged;
     public static final int onEmojiInteractionsReceived;
     public static final int openArticle;
     public static final int openedChatChanged;
@@ -817,8 +819,14 @@ public class NotificationCenter {
         int i195 = i194 + 1;
         totalEvents = i195;
         chatAvailableReactionsUpdated = i194;
-        totalEvents = i195 + 1;
+        int i196 = i195 + 1;
+        totalEvents = i196;
         dialogsUnreadReactionsCounterChanged = i195;
+        int i197 = i196 + 1;
+        totalEvents = i197;
+        onDatabaseOpened = i196;
+        totalEvents = i197 + 1;
+        onDownloadingFilesChanged = i197;
     }
 
     private static class DelayedPost {

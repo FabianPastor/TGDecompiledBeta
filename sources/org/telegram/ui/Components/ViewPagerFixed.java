@@ -86,8 +86,7 @@ public class ViewPagerFixed extends FrameLayout {
         }
     };
     private VelocityTracker velocityTracker;
-    /* access modifiers changed from: private */
-    public View[] viewPages;
+    protected View[] viewPages;
     /* access modifiers changed from: private */
     public int[] viewTypes;
     protected SparseArray<View> viewsByType = new SparseArray<>();
@@ -112,6 +111,10 @@ public class ViewPagerFixed extends FrameLayout {
     public static /* synthetic */ float lambda$static$0(float f) {
         float f2 = f - 1.0f;
         return (f2 * f2 * f2 * f2 * f2) + 1.0f;
+    }
+
+    /* access modifiers changed from: protected */
+    public void invalidateBlur() {
     }
 
     /* access modifiers changed from: protected */
@@ -149,36 +152,51 @@ public class ViewPagerFixed extends FrameLayout {
                 viewPagerFixed.nextPosition = i;
                 viewPagerFixed.updateViewForIndex(1);
                 if (z) {
-                    ViewPagerFixed.this.viewPages[1].setTranslationX((float) ViewPagerFixed.this.viewPages[0].getMeasuredWidth());
-                } else {
-                    ViewPagerFixed.this.viewPages[1].setTranslationX((float) (-ViewPagerFixed.this.viewPages[0].getMeasuredWidth()));
+                    View[] viewArr = ViewPagerFixed.this.viewPages;
+                    viewArr[1].setTranslationX((float) viewArr[0].getMeasuredWidth());
+                    return;
                 }
+                View[] viewArr2 = ViewPagerFixed.this.viewPages;
+                viewArr2[1].setTranslationX((float) (-viewArr2[0].getMeasuredWidth()));
             }
 
             public void onPageScrolled(float f) {
                 if (f == 1.0f) {
-                    if (ViewPagerFixed.this.viewPages[1] != null) {
-                        ViewPagerFixed.this.swapViews();
-                        ViewPagerFixed viewPagerFixed = ViewPagerFixed.this;
-                        viewPagerFixed.viewsByType.put(viewPagerFixed.viewTypes[1], ViewPagerFixed.this.viewPages[1]);
+                    ViewPagerFixed viewPagerFixed = ViewPagerFixed.this;
+                    if (viewPagerFixed.viewPages[1] != null) {
+                        viewPagerFixed.swapViews();
                         ViewPagerFixed viewPagerFixed2 = ViewPagerFixed.this;
-                        viewPagerFixed2.removeView(viewPagerFixed2.viewPages[1]);
+                        viewPagerFixed2.viewsByType.put(viewPagerFixed2.viewTypes[1], ViewPagerFixed.this.viewPages[1]);
+                        ViewPagerFixed viewPagerFixed3 = ViewPagerFixed.this;
+                        viewPagerFixed3.removeView(viewPagerFixed3.viewPages[1]);
                         ViewPagerFixed.this.viewPages[0].setTranslationX(0.0f);
                         ViewPagerFixed.this.viewPages[1] = null;
-                    }
-                } else if (ViewPagerFixed.this.viewPages[1] != null) {
-                    if (ViewPagerFixed.this.animatingForward) {
-                        ViewPagerFixed.this.viewPages[1].setTranslationX(((float) ViewPagerFixed.this.viewPages[0].getMeasuredWidth()) * (1.0f - f));
-                        ViewPagerFixed.this.viewPages[0].setTranslationX(((float) (-ViewPagerFixed.this.viewPages[0].getMeasuredWidth())) * f);
                         return;
                     }
-                    ViewPagerFixed.this.viewPages[1].setTranslationX(((float) (-ViewPagerFixed.this.viewPages[0].getMeasuredWidth())) * (1.0f - f));
-                    ViewPagerFixed.this.viewPages[0].setTranslationX(((float) ViewPagerFixed.this.viewPages[0].getMeasuredWidth()) * f);
+                    return;
+                }
+                ViewPagerFixed viewPagerFixed4 = ViewPagerFixed.this;
+                if (viewPagerFixed4.viewPages[1] != null) {
+                    if (viewPagerFixed4.animatingForward) {
+                        View[] viewArr = ViewPagerFixed.this.viewPages;
+                        viewArr[1].setTranslationX(((float) viewArr[0].getMeasuredWidth()) * (1.0f - f));
+                        View[] viewArr2 = ViewPagerFixed.this.viewPages;
+                        viewArr2[0].setTranslationX(((float) (-viewArr2[0].getMeasuredWidth())) * f);
+                        return;
+                    }
+                    View[] viewArr3 = ViewPagerFixed.this.viewPages;
+                    viewArr3[1].setTranslationX(((float) (-viewArr3[0].getMeasuredWidth())) * (1.0f - f));
+                    View[] viewArr4 = ViewPagerFixed.this.viewPages;
+                    viewArr4[0].setTranslationX(((float) viewArr4[0].getMeasuredWidth()) * f);
                 }
             }
 
             public boolean canPerformActions() {
                 return !ViewPagerFixed.this.tabsAnimationInProgress && !ViewPagerFixed.this.startedTracking;
+            }
+
+            public void invalidateBlur() {
+                ViewPagerFixed.this.invalidateBlur();
             }
         });
         fillTabs();
@@ -432,14 +450,15 @@ public class ViewPagerFixed extends FrameLayout {
                 this.tabsAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         AnimatorSet unused = ViewPagerFixed.this.tabsAnimation = null;
-                        if (ViewPagerFixed.this.viewPages[1] != null) {
-                            if (!ViewPagerFixed.this.backAnimation) {
+                        ViewPagerFixed viewPagerFixed = ViewPagerFixed.this;
+                        if (viewPagerFixed.viewPages[1] != null) {
+                            if (!viewPagerFixed.backAnimation) {
                                 ViewPagerFixed.this.swapViews();
                             }
-                            ViewPagerFixed viewPagerFixed = ViewPagerFixed.this;
-                            viewPagerFixed.viewsByType.put(viewPagerFixed.viewTypes[1], ViewPagerFixed.this.viewPages[1]);
                             ViewPagerFixed viewPagerFixed2 = ViewPagerFixed.this;
-                            viewPagerFixed2.removeView(viewPagerFixed2.viewPages[1]);
+                            viewPagerFixed2.viewsByType.put(viewPagerFixed2.viewTypes[1], ViewPagerFixed.this.viewPages[1]);
+                            ViewPagerFixed viewPagerFixed3 = ViewPagerFixed.this;
+                            viewPagerFixed3.removeView(viewPagerFixed3.viewPages[1]);
                             ViewPagerFixed.this.viewPages[1].setVisibility(8);
                             ViewPagerFixed.this.viewPages[1] = null;
                         }
@@ -635,7 +654,7 @@ public class ViewPagerFixed extends FrameLayout {
                     if (elapsedRealtime > 17) {
                         elapsedRealtime = 17;
                     }
-                    TabsView.access$2816(TabsView.this, ((float) elapsedRealtime) / 200.0f);
+                    TabsView.access$2716(TabsView.this, ((float) elapsedRealtime) / 200.0f);
                     TabsView tabsView = TabsView.this;
                     tabsView.setAnimationIdicatorProgress(tabsView.interpolator.getInterpolation(TabsView.this.animationTime));
                     if (TabsView.this.animationTime > 1.0f) {
@@ -715,6 +734,8 @@ public class ViewPagerFixed extends FrameLayout {
         public interface TabsViewDelegate {
             boolean canPerformActions();
 
+            void invalidateBlur();
+
             void onPageScrolled(float f);
 
             void onPageSelected(int i, boolean z);
@@ -726,7 +747,7 @@ public class ViewPagerFixed extends FrameLayout {
         public static /* synthetic */ void lambda$setIsEditing$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         }
 
-        static /* synthetic */ float access$2816(TabsView tabsView, float f) {
+        static /* synthetic */ float access$2716(TabsView tabsView, float f) {
             float f2 = tabsView.animationTime + f;
             tabsView.animationTime = f2;
             return f2;
@@ -799,9 +820,9 @@ public class ViewPagerFixed extends FrameLayout {
                 Canvas canvas2 = canvas;
                 if (!(this.currentTab.id == Integer.MAX_VALUE || TabsView.this.editingAnimationProgress == 0.0f)) {
                     canvas.save();
-                    float access$1300 = TabsView.this.editingAnimationProgress * (this.currentPosition % 2 == 0 ? 1.0f : -1.0f);
-                    canvas2.translate(((float) AndroidUtilities.dp(0.66f)) * access$1300, 0.0f);
-                    canvas2.rotate(access$1300, (float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2));
+                    float access$1200 = TabsView.this.editingAnimationProgress * (this.currentPosition % 2 == 0 ? 1.0f : -1.0f);
+                    canvas2.translate(((float) AndroidUtilities.dp(0.66f)) * access$1200, 0.0f);
+                    canvas2.rotate(access$1200, (float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2));
                 }
                 if (TabsView.this.manualScrollingToId != -1) {
                     i2 = TabsView.this.manualScrollingToId;
@@ -1407,6 +1428,10 @@ public class ViewPagerFixed extends FrameLayout {
                 this.currentPosition = i2;
                 this.selectedTabId = this.positionToId.get(i2);
             }
+            TabsViewDelegate tabsViewDelegate = this.delegate;
+            if (tabsViewDelegate != null) {
+                tabsViewDelegate.invalidateBlur();
+            }
         }
 
         public void selectTabWithId(int i, float f) {
@@ -1534,6 +1559,47 @@ public class ViewPagerFixed extends FrameLayout {
                         continue;
                     }
                 }
+            }
+        }
+        return null;
+    }
+
+    public void drawForBlur(Canvas canvas) {
+        RecyclerListView findRecyclerView;
+        int i = 0;
+        while (true) {
+            View[] viewArr = this.viewPages;
+            if (i < viewArr.length) {
+                if (!(viewArr[i] == null || viewArr[i].getVisibility() != 0 || (findRecyclerView = findRecyclerView(this.viewPages[i])) == null)) {
+                    for (int i2 = 0; i2 < findRecyclerView.getChildCount(); i2++) {
+                        View childAt = findRecyclerView.getChildAt(i2);
+                        if (childAt.getY() < ((float) (AndroidUtilities.dp(203.0f) + AndroidUtilities.dp(100.0f)))) {
+                            int save = canvas.save();
+                            canvas.translate(this.viewPages[i].getX(), getY() + this.viewPages[i].getY() + findRecyclerView.getY() + childAt.getY());
+                            childAt.draw(canvas);
+                            canvas.restoreToCount(save);
+                        }
+                    }
+                }
+                i++;
+            } else {
+                return;
+            }
+        }
+    }
+
+    private RecyclerListView findRecyclerView(View view) {
+        if (!(view instanceof ViewGroup)) {
+            return null;
+        }
+        ViewGroup viewGroup = (ViewGroup) view;
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View childAt = viewGroup.getChildAt(i);
+            if (childAt instanceof RecyclerListView) {
+                return (RecyclerListView) childAt;
+            }
+            if (childAt instanceof ViewGroup) {
+                findRecyclerView(childAt);
             }
         }
         return null;

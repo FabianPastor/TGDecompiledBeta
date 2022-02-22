@@ -72,8 +72,8 @@ public class SimpleAvatarView extends View {
             if (!z) {
                 f = 0.0f;
             }
-            ValueAnimator duration = ValueAnimator.ofFloat(new float[]{this.selectProgress, f}).setDuration((long) (Math.abs(f - this.selectProgress) * 350.0f));
-            duration.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
+            ValueAnimator duration = ValueAnimator.ofFloat(new float[]{this.selectProgress, f}).setDuration((long) (Math.abs(f - this.selectProgress) * 150.0f));
+            duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
             duration.addUpdateListener(new SimpleAvatarView$$ExternalSyntheticLambda0(this));
             duration.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {

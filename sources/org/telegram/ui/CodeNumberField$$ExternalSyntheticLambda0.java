@@ -10,6 +10,6 @@ public final /* synthetic */ class CodeNumberField$$ExternalSyntheticLambda0 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$startEnterAnimation$1(valueAnimator);
+        this.f$0.lambda$startExitAnimation$8(valueAnimator);
     }
 }

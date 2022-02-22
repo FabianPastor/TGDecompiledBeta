@@ -125,24 +125,24 @@ public class LogoutActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$1(View view, int i, float f, float f2) {
-        int i2 = 0;
-        int i3 = -1;
+        int i2 = -1;
         if (i == this.addAccountRow) {
+            int i3 = 0;
             while (true) {
-                if (i2 >= 3) {
+                if (i3 >= 3) {
                     break;
-                } else if (!UserConfig.getInstance(i2).isClientActivated()) {
-                    i3 = i2;
+                } else if (!UserConfig.getInstance(i3).isClientActivated()) {
+                    i2 = i3;
                     break;
                 } else {
-                    i2++;
+                    i3++;
                 }
             }
-            if (i3 >= 0) {
-                presentFragment(new LoginActivity(i3));
+            if (i2 >= 0) {
+                presentFragment(new LoginActivity(i2));
             }
         } else if (i == this.passcodeRow) {
-            presentFragment(new PasscodeActivity(0));
+            presentFragment(PasscodeActivity.determineOpenFragment());
         } else if (i == this.cacheRow) {
             presentFragment(new CacheControlActivity());
         } else if (i == this.phoneRow) {

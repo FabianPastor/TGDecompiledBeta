@@ -10,6 +10,6 @@ public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheti
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$createView$1(view);
+        this.f$0.lambda$createView$3(view);
     }
 }

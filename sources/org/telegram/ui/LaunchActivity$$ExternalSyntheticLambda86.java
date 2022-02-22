@@ -1,22 +1,22 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.tgnet.TLRPC$MessageMedia;
-import org.telegram.tgnet.TLRPC$ReplyMarkup;
-import org.telegram.ui.LocationActivity;
+import java.util.ArrayList;
+import org.telegram.ui.DialogsActivity;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda86 implements LocationActivity.LocationActivityDelegate {
-    public final /* synthetic */ int[] f$0;
-    public final /* synthetic */ long f$1;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda86 implements DialogsActivity.DialogsActivityDelegate {
+    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ String f$3;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda86(int[] iArr, long j) {
-        this.f$0 = iArr;
-        this.f$1 = j;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda86(LaunchActivity launchActivity, boolean z, int i, String str) {
+        this.f$0 = launchActivity;
+        this.f$1 = z;
+        this.f$2 = i;
+        this.f$3 = str;
     }
 
-    public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-        SendMessagesHelper.getInstance(this.f$0[0]).sendMessage(tLRPC$MessageMedia, this.f$1, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2);
+    public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+        this.f$0.lambda$runLinkRequest$36(this.f$1, this.f$2, this.f$3, dialogsActivity, arrayList, charSequence, z);
     }
 }

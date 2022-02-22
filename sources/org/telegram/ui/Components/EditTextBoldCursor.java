@@ -20,6 +20,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +32,8 @@ import androidx.annotation.Keep;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
@@ -88,6 +91,7 @@ public class EditTextBoldCursor extends EditTextEffects {
             }
         }
     };
+    private boolean isTextWatchersSuppressed = false;
     private int lastSize;
     private long lastUpdateTime;
     private int lineColor;
@@ -98,6 +102,7 @@ public class EditTextBoldCursor extends EditTextEffects {
     private Rect mTempRect;
     private boolean nextSetTextAnimated;
     private Rect rect = new Rect();
+    private List<TextWatcher> registeredTextWatchers = new ArrayList();
     private int scrollY;
     private boolean supportRtlHint;
     private boolean transformHintToHeader;
@@ -164,6 +169,48 @@ public class EditTextBoldCursor extends EditTextEffects {
             setImportantForAutofill(2);
         }
         init();
+    }
+
+    public void addTextChangedListener(TextWatcher textWatcher) {
+        this.registeredTextWatchers.add(textWatcher);
+        if (!this.isTextWatchersSuppressed) {
+            super.addTextChangedListener(textWatcher);
+        }
+    }
+
+    public void removeTextChangedListener(TextWatcher textWatcher) {
+        this.registeredTextWatchers.remove(textWatcher);
+        if (!this.isTextWatchersSuppressed) {
+            super.removeTextChangedListener(textWatcher);
+        }
+    }
+
+    public void dispatchTextWatchersTextChanged() {
+        for (TextWatcher next : this.registeredTextWatchers) {
+            next.beforeTextChanged("", 0, length(), length());
+            next.onTextChanged(getText(), 0, length(), length());
+            next.afterTextChanged(getText());
+        }
+    }
+
+    public void setTextWatchersSuppressed(boolean z, boolean z2) {
+        if (this.isTextWatchersSuppressed != z) {
+            this.isTextWatchersSuppressed = z;
+            if (z) {
+                for (TextWatcher removeTextChangedListener : this.registeredTextWatchers) {
+                    super.removeTextChangedListener(removeTextChangedListener);
+                }
+                return;
+            }
+            for (TextWatcher next : this.registeredTextWatchers) {
+                super.addTextChangedListener(next);
+                if (z2) {
+                    next.beforeTextChanged("", 0, length(), length());
+                    next.onTextChanged(getText(), 0, length(), length());
+                    next.afterTextChanged(getText());
+                }
+            }
+        }
     }
 
     public Drawable getTextCursorDrawable() {
