@@ -1,16 +1,18 @@
 package org.telegram.ui.Components;
 
 import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.ActionBar.BottomSheet;
 
-public final /* synthetic */ class SearchDownloadsContainer$$ExternalSyntheticLambda0 implements RecyclerListView.OnItemClickListener {
+public final /* synthetic */ class SearchDownloadsContainer$$ExternalSyntheticLambda0 implements View.OnClickListener {
     public final /* synthetic */ SearchDownloadsContainer f$0;
+    public final /* synthetic */ BottomSheet f$1;
 
-    public /* synthetic */ SearchDownloadsContainer$$ExternalSyntheticLambda0(SearchDownloadsContainer searchDownloadsContainer) {
+    public /* synthetic */ SearchDownloadsContainer$$ExternalSyntheticLambda0(SearchDownloadsContainer searchDownloadsContainer, BottomSheet bottomSheet) {
         this.f$0 = searchDownloadsContainer;
+        this.f$1 = bottomSheet;
     }
 
-    public final void onItemClick(View view, int i) {
-        this.f$0.lambda$new$0(view, i);
+    public final void onClick(View view) {
+        this.f$0.lambda$showSettingsDialog$5(this.f$1, view);
     }
 }

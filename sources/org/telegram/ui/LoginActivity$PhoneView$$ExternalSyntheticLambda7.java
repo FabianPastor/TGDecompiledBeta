@@ -1,18 +1,17 @@
 package org.telegram.ui;
 
-import android.content.Context;
-import android.view.View;
-import android.widget.ViewSwitcher;
+import android.view.KeyEvent;
+import android.widget.TextView;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda7 implements ViewSwitcher.ViewFactory {
-    public final /* synthetic */ Context f$0;
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda7 implements TextView.OnEditorActionListener {
+    public final /* synthetic */ LoginActivity.PhoneView f$0;
 
-    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda7(Context context) {
-        this.f$0 = context;
+    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda7(LoginActivity.PhoneView phoneView) {
+        this.f$0 = phoneView;
     }
 
-    public final View makeView() {
-        return LoginActivity.PhoneView.lambda$new$0(this.f$0);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.f$0.lambda$new$6(textView, i, keyEvent);
     }
 }

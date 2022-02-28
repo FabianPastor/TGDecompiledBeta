@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda44 im
     }
 
     public final void run() {
-        this.f$0.lambda$markMessageAsMention$83(this.f$1, this.f$2);
+        this.f$0.lambda$deleteDialog$69(this.f$1, this.f$2);
     }
 }

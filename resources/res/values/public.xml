@@ -2763,6 +2763,7 @@
     <public type="string" name="ClearCache" id="NUM" />
     <public type="string" name="ClearCacheFewChatsTitle" id="NUM" />
     <public type="string" name="ClearCacheInfo" id="NUM" />
+    <public type="string" name="ClearDownloadsList" id="NUM" />
     <public type="string" name="ClearFewChatsTitle" id="NUM" />
     <public type="string" name="ClearHistory" id="NUM" />
     <public type="string" name="ClearHistoryCache" id="NUM" />
@@ -3120,6 +3121,8 @@
     <public type="string" name="DoubleTapPreviewRational" id="NUM" />
     <public type="string" name="DoubleTapPreviewSenderName" id="NUM" />
     <public type="string" name="DoubleTapSetting" id="NUM" />
+    <public type="string" name="DownloadedFiles" id="NUM" />
+    <public type="string" name="DownloadedFilesMessage" id="NUM" />
     <public type="string" name="Downloading" id="NUM" />
     <public type="string" name="DownloadsTabs" id="NUM" />
     <public type="string" name="Draft" id="NUM" />
@@ -4026,6 +4029,7 @@
     <public type="string" name="LogOut" id="NUM" />
     <public type="string" name="LogOutInfo" id="NUM" />
     <public type="string" name="LogOutTitle" id="NUM" />
+    <public type="string" name="LoginAccessibilityCountryCode" id="NUM" />
     <public type="string" name="LoginAttempts" id="NUM" />
     <public type="string" name="LoginAttemptsInfo" id="NUM" />
     <public type="string" name="LoginPassword" id="NUM" />
@@ -4052,6 +4056,7 @@
     <public type="string" name="ManageAllFilesRational2" id="NUM" />
     <public type="string" name="ManageChannel" id="NUM" />
     <public type="string" name="ManageChannelMenu" id="NUM" />
+    <public type="string" name="ManageDeviceStorage" id="NUM" />
     <public type="string" name="ManageGroup" id="NUM" />
     <public type="string" name="ManageGroupMenu" id="NUM" />
     <public type="string" name="ManageInviteLinks" id="NUM" />
@@ -5348,6 +5353,13 @@
     <public type="string" name="RemindDayYearAt" id="NUM" />
     <public type="string" name="RemindTodayAt" id="NUM" />
     <public type="string" name="Reminders" id="NUM" />
+    <public type="string" name="RemoveDocumentsMessage" id="NUM" />
+    <public type="string" name="RemoveDocumentsTitle_few" id="NUM" />
+    <public type="string" name="RemoveDocumentsTitle_many" id="NUM" />
+    <public type="string" name="RemoveDocumentsTitle_one" id="NUM" />
+    <public type="string" name="RemoveDocumentsTitle_other" id="NUM" />
+    <public type="string" name="RemoveDocumentsTitle_two" id="NUM" />
+    <public type="string" name="RemoveDocumentsTitle_zero" id="NUM" />
     <public type="string" name="RemoveFromListText" id="NUM" />
     <public type="string" name="RemoveStickersCount" id="NUM" />
     <public type="string" name="RemovedFromFavorites" id="NUM" />
@@ -5523,6 +5535,7 @@
     <public type="string" name="SearchBackgrounds" id="NUM" />
     <public type="string" name="SearchByColor" id="NUM" />
     <public type="string" name="SearchEmojiHint" id="NUM" />
+    <public type="string" name="SearchEmptyViewDownloads" id="NUM" />
     <public type="string" name="SearchEmptyViewFilteredSubtitle2" id="NUM" />
     <public type="string" name="SearchEmptyViewFilteredSubtitleFiles" id="NUM" />
     <public type="string" name="SearchEmptyViewFilteredSubtitleLinks" id="NUM" />

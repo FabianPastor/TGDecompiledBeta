@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda23 im
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return DialogsActivity.lambda$createActionMode$12(view, motionEvent);
+        return DialogsActivity.lambda$createActionMode$13(view, motionEvent);
     }
 }

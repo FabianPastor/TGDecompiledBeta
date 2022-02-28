@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLam
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onNextPressed$13(dialogInterface, i);
+        this.f$0.lambda$onNextPressed$14(dialogInterface, i);
     }
 }

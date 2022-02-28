@@ -154,7 +154,7 @@ import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.ProfileActivity;
 import org.telegram.ui.StickersActivity;
 
-public class ChatActivityEnterView extends ChatBlurredFrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate {
+public class ChatActivityEnterView extends BlurredFrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate {
     /* access modifiers changed from: private */
     public AccountInstance accountInstance;
     private AdjustPanLayoutHelper adjustPanLayoutHelper;
@@ -2611,23 +2611,29 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
     /* JADX WARNING: Illegal instructions before constructor call */
     @android.annotation.SuppressLint({"ClickableViewAccessibility"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public ChatActivityEnterView(android.app.Activity r38, org.telegram.ui.Components.SizeNotifierFrameLayout r39, org.telegram.ui.ChatActivity r40, boolean r41, org.telegram.ui.ActionBar.Theme.ResourcesProvider r42) {
+    public ChatActivityEnterView(android.app.Activity r40, org.telegram.ui.Components.SizeNotifierFrameLayout r41, org.telegram.ui.ChatActivity r42, boolean r43, org.telegram.ui.ActionBar.Theme.ResourcesProvider r44) {
         /*
-            r37 = this;
-            r7 = r37
-            r8 = r38
-            r0 = r39
-            r9 = r40
-            r10 = r42
-            r7.<init>(r8, r9)
+            r39 = this;
+            r7 = r39
+            r8 = r40
+            r0 = r41
+            r9 = r42
+            r10 = r44
+            if (r9 != 0) goto L_0x000e
+            r1 = 0
+            goto L_0x0010
+        L_0x000e:
+            org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r9.contentView
+        L_0x0010:
+            r7.<init>(r8, r1)
             int r1 = org.telegram.messenger.UserConfig.selectedAccount
             r7.currentAccount = r1
             org.telegram.messenger.AccountInstance r1 = org.telegram.messenger.AccountInstance.getInstance(r1)
             r7.accountInstance = r1
-            r11 = 1
-            r7.lineCount = r11
-            r12 = -1
-            r7.currentLimit = r12
+            r12 = 1
+            r7.lineCount = r12
+            r13 = -1
+            r7.currentLimit = r13
             java.util.HashMap r1 = new java.util.HashMap
             r1.<init>()
             r7.animationParamsX = r1
@@ -2637,22 +2643,22 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r1 = 2
             android.widget.ImageView[] r2 = new android.widget.ImageView[r1]
             r7.emojiButton = r2
-            r7.currentPopupContentType = r12
-            r7.currentEmojiIcon = r12
-            r7.isPaused = r11
-            r13 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r7.startedDraggingX = r13
+            r7.currentPopupContentType = r13
+            r7.currentEmojiIcon = r13
+            r7.isPaused = r12
+            r14 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r7.startedDraggingX = r14
             r2 = 1117782016(0x42a00000, float:80.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             float r2 = (float) r2
             r7.distCanMove = r2
             int[] r2 = new int[r1]
             r7.location = r2
-            r7.messageWebPageSearch = r11
-            r7.animatingContentType = r12
-            r14 = 1065353216(0x3var_, float:1.0)
-            r7.doneButtonEnabledProgress = r14
-            r7.doneButtonEnabled = r11
+            r7.messageWebPageSearch = r12
+            r7.animatingContentType = r13
+            r15 = 1065353216(0x3var_, float:1.0)
+            r7.doneButtonEnabledProgress = r15
+            r7.doneButtonEnabled = r12
             org.telegram.ui.Components.ChatActivityEnterView$2 r2 = new org.telegram.ui.Components.ChatActivityEnterView$2
             r2.<init>()
             r7.openKeyboardRunnable = r2
@@ -2670,7 +2676,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r2.<init>(r7, r3, r4)
             r7.recordCircleScale = r2
             android.graphics.Paint r2 = new android.graphics.Paint
-            r2.<init>(r11)
+            r2.<init>(r12)
             r7.redDotPaint = r2
             org.telegram.ui.Components.ChatActivityEnterView$6 r2 = new org.telegram.ui.Components.ChatActivityEnterView$6
             r2.<init>()
@@ -2679,7 +2685,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r2.<init>()
             r7.recordAudioVideoRunnable = r2
             android.graphics.Paint r2 = new android.graphics.Paint
-            r2.<init>(r11)
+            r2.<init>(r12)
             r7.paint = r2
             android.graphics.RectF r2 = new android.graphics.RectF
             r2.<init>()
@@ -2699,38 +2705,38 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda1
             r2.<init>(r7)
             r7.topViewUpdateListener = r2
-            r7.botCommandLastPosition = r12
+            r7.botCommandLastPosition = r13
             r7.resourcesProvider = r10
             java.lang.String r2 = "chat_messagePanelBackground"
             int r2 = r7.getThemedColor(r2)
             r7.backgroundColor = r2
-            r15 = 0
-            r7.drawBlur = r15
-            if (r41 == 0) goto L_0x00de
+            r6 = 0
+            r7.drawBlur = r6
+            if (r43 == 0) goto L_0x00e4
             boolean r2 = org.telegram.messenger.SharedConfig.smoothKeyboard
-            if (r2 == 0) goto L_0x00de
+            if (r2 == 0) goto L_0x00e4
             boolean r2 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
-            if (r2 != 0) goto L_0x00de
-            if (r9 == 0) goto L_0x00dc
-            boolean r2 = r40.isInBubbleMode()
-            if (r2 != 0) goto L_0x00de
-        L_0x00dc:
+            if (r2 != 0) goto L_0x00e4
+            if (r9 == 0) goto L_0x00e2
+            boolean r2 = r42.isInBubbleMode()
+            if (r2 != 0) goto L_0x00e4
+        L_0x00e2:
             r2 = 1
-            goto L_0x00df
-        L_0x00de:
+            goto L_0x00e5
+        L_0x00e4:
             r2 = 0
-        L_0x00df:
+        L_0x00e5:
             r7.smoothKeyboard = r2
             android.graphics.Paint r2 = new android.graphics.Paint
-            r2.<init>(r11)
+            r2.<init>(r12)
             r7.dotPaint = r2
             java.lang.String r3 = "chat_emojiPanelNewTrending"
             int r3 = r7.getThemedColor(r3)
             r2.setColor(r3)
-            r7.setFocusable(r11)
-            r7.setFocusableInTouchMode(r11)
-            r7.setWillNotDraw(r15)
-            r7.setClipChildren(r15)
+            r7.setFocusable(r12)
+            r7.setFocusableInTouchMode(r12)
+            r7.setWillNotDraw(r6)
+            r7.setClipChildren(r6)
             int r2 = r7.currentAccount
             org.telegram.messenger.NotificationCenter r2 = org.telegram.messenger.NotificationCenter.getInstance(r2)
             int r3 = org.telegram.messenger.NotificationCenter.recordStarted
@@ -2788,28 +2794,28 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r2.addObserver(r7, r3)
             r7.parentActivity = r8
             r7.parentFragment = r9
-            if (r9 == 0) goto L_0x01a1
-            int r2 = r40.getClassGuid()
+            if (r9 == 0) goto L_0x01a7
+            int r2 = r42.getClassGuid()
             r7.recordingGuid = r2
-        L_0x01a1:
+        L_0x01a7:
             r7.sizeNotifierLayout = r0
             r0.setDelegate(r7)
             android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()
             java.lang.String r2 = "send_by_enter"
-            boolean r2 = r0.getBoolean(r2, r15)
+            boolean r2 = r0.getBoolean(r2, r6)
             r7.sendByEnter = r2
             java.lang.String r2 = "view_animations"
-            boolean r0 = r0.getBoolean(r2, r11)
+            boolean r0 = r0.getBoolean(r2, r12)
             r7.configAnimationsEnabled = r0
             android.widget.FrameLayout r0 = new android.widget.FrameLayout
             r0.<init>(r8)
             r7.textFieldContainer = r0
-            r0.setClipChildren(r15)
+            r0.setClipChildren(r6)
             android.widget.FrameLayout r0 = r7.textFieldContainer
-            r0.setClipToPadding(r15)
+            r0.setClipToPadding(r6)
             android.widget.FrameLayout r0 = r7.textFieldContainer
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            r0.setPadding(r15, r2, r15, r15)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            r0.setPadding(r6, r2, r6, r6)
             android.widget.FrameLayout r0 = r7.textFieldContainer
             r16 = -1
             r17 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
@@ -2820,98 +2826,97 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r22 = 0
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
             r7.addView(r0, r2)
-            org.telegram.ui.Components.ChatActivityEnterView$9 r6 = new org.telegram.ui.Components.ChatActivityEnterView$9
-            r6.<init>(r8)
-            r6.setClipChildren(r15)
+            org.telegram.ui.Components.ChatActivityEnterView$9 r5 = new org.telegram.ui.Components.ChatActivityEnterView$9
+            r5.<init>(r8)
+            r5.setClipChildren(r6)
             android.widget.FrameLayout r0 = r7.textFieldContainer
             r18 = 80
             r20 = 0
             r21 = 1111490560(0x42400000, float:48.0)
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
-            r0.addView(r6, r2)
+            r0.addView(r5, r2)
             r0 = 0
-        L_0x0201:
-            r5 = 4
-            r4 = 0
-            java.lang.String r3 = "listSelectorSDK21"
-            r2 = 1036831949(0x3dcccccd, float:0.1)
+        L_0x0207:
+            r4 = 4
+            r3 = 0
+            java.lang.String r2 = "listSelectorSDK21"
+            r14 = 1036831949(0x3dcccccd, float:0.1)
             r13 = 21
-            java.lang.String r12 = "chat_messagePanelIcons"
-            if (r0 >= r1) goto L_0x02a3
+            java.lang.String r15 = "chat_messagePanelIcons"
+            if (r0 >= r1) goto L_0x02a9
             android.widget.ImageView[] r1 = r7.emojiButton
-            org.telegram.ui.Components.ChatActivityEnterView$10 r14 = new org.telegram.ui.Components.ChatActivityEnterView$10
-            r14.<init>(r8)
-            r1[r0] = r14
-            android.widget.ImageView[] r1 = r7.emojiButton
-            r1 = r1[r0]
-            android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
-            int r12 = r7.getThemedColor(r12)
-            android.graphics.PorterDuff$Mode r15 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r14.<init>(r12, r15)
-            r1.setColorFilter(r14)
+            org.telegram.ui.Components.ChatActivityEnterView$10 r11 = new org.telegram.ui.Components.ChatActivityEnterView$10
+            r11.<init>(r8)
+            r1[r0] = r11
             android.widget.ImageView[] r1 = r7.emojiButton
             r1 = r1[r0]
-            android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER_INSIDE
-            r1.setScaleType(r12)
+            android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
+            int r15 = r7.getThemedColor(r15)
+            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r11.<init>(r15, r6)
+            r1.setColorFilter(r11)
+            android.widget.ImageView[] r1 = r7.emojiButton
+            r1 = r1[r0]
+            android.widget.ImageView$ScaleType r6 = android.widget.ImageView.ScaleType.CENTER_INSIDE
+            r1.setScaleType(r6)
             int r1 = android.os.Build.VERSION.SDK_INT
-            if (r1 < r13) goto L_0x0245
+            if (r1 < r13) goto L_0x024b
             android.widget.ImageView[] r1 = r7.emojiButton
             r1 = r1[r0]
-            int r3 = r7.getThemedColor(r3)
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r3)
-            r1.setBackgroundDrawable(r3)
-        L_0x0245:
+            int r2 = r7.getThemedColor(r2)
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2)
+            r1.setBackgroundDrawable(r2)
+        L_0x024b:
             android.widget.ImageView[] r1 = r7.emojiButton
             r1 = r1[r0]
-            r21 = 48
-            r22 = 1111490560(0x42400000, float:48.0)
-            r23 = 83
-            r24 = 1077936128(0x40400000, float:3.0)
-            r25 = 0
+            r22 = 48
+            r23 = 1111490560(0x42400000, float:48.0)
+            r24 = 83
+            r25 = 1077936128(0x40400000, float:3.0)
             r26 = 0
             r27 = 0
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r21, r22, r23, r24, r25, r26, r27)
-            r6.addView(r1, r3)
+            r28 = 0
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28)
+            r5.addView(r1, r2)
             android.widget.ImageView[] r1 = r7.emojiButton
             r1 = r1[r0]
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda19 r3 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda19
-            r3.<init>(r7)
-            r1.setOnClickListener(r3)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda19 r2 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda19
+            r2.<init>(r7)
+            r1.setOnClickListener(r2)
             android.widget.ImageView[] r1 = r7.emojiButton
             r1 = r1[r0]
-            r3 = 2131623972(0x7f0e0024, float:1.887511E38)
-            java.lang.String r12 = "AccDescrEmojiButton"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r12, r3)
-            r1.setContentDescription(r3)
-            if (r0 != r11) goto L_0x0298
+            r2 = 2131623972(0x7f0e0024, float:1.887511E38)
+            java.lang.String r6 = "AccDescrEmojiButton"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
+            r1.setContentDescription(r2)
+            if (r0 != r12) goto L_0x029e
             android.widget.ImageView[] r1 = r7.emojiButton
             r1 = r1[r0]
-            r1.setVisibility(r5)
+            r1.setVisibility(r4)
             android.widget.ImageView[] r1 = r7.emojiButton
             r1 = r1[r0]
-            r1.setAlpha(r4)
+            r1.setAlpha(r3)
             android.widget.ImageView[] r1 = r7.emojiButton
             r1 = r1[r0]
-            r1.setScaleX(r2)
+            r1.setScaleX(r14)
             android.widget.ImageView[] r1 = r7.emojiButton
             r1 = r1[r0]
-            r1.setScaleY(r2)
-        L_0x0298:
+            r1.setScaleY(r14)
+        L_0x029e:
             int r0 = r0 + 1
             r1 = 2
-            r12 = -1
-            r13 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r14 = 1065353216(0x3var_, float:1.0)
-            r15 = 0
-            goto L_0x0201
-        L_0x02a3:
-            r0 = 0
-            r7.setEmojiButtonImage(r0, r0)
+            r6 = 0
+            r13 = -1
+            r14 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r15 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0207
+        L_0x02a9:
+            r7.setEmojiButtonImage(r6, r6)
             org.telegram.ui.Components.NumberTextView r0 = new org.telegram.ui.Components.NumberTextView
             r0.<init>(r8)
             r7.captionLimitView = r0
-            r14 = 8
-            r0.setVisibility(r14)
+            r11 = 8
+            r0.setVisibility(r11)
             org.telegram.ui.Components.NumberTextView r0 = r7.captionLimitView
             r1 = 15
             r0.setTextSize(r1)
@@ -2924,7 +2929,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r1)
             r0.setTypeface(r1)
             org.telegram.ui.Components.NumberTextView r0 = r7.captionLimitView
-            r0.setCenterAlign(r11)
+            r0.setCenterAlign(r12)
             org.telegram.ui.Components.NumberTextView r0 = r7.captionLimitView
             r21 = 48
             r22 = 1101004800(0x41a00000, float:20.0)
@@ -2935,260 +2940,257 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r27 = 1111490560(0x42400000, float:48.0)
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r21, r22, r23, r24, r25, r26, r27)
             r7.addView(r0, r1)
-            org.telegram.ui.Components.ChatActivityEnterView$11 r15 = new org.telegram.ui.Components.ChatActivityEnterView$11
-            r0 = r15
-            r1 = r37
-            r2 = r38
-            r28 = r3
-            r3 = r42
-            r4 = r42
-            r5 = r40
-            r13 = r6
-            r6 = r38
+            org.telegram.ui.Components.ChatActivityEnterView$11 r1 = new org.telegram.ui.Components.ChatActivityEnterView$11
+            r0 = r1
+            r14 = r1
+            r1 = r39
+            r29 = r2
+            r2 = r40
+            r3 = r44
+            r4 = r44
+            r13 = r5
+            r5 = r42
+            r11 = 0
+            r6 = r40
             r0.<init>(r2, r3, r4, r5, r6)
-            r7.messageEditText = r15
+            r7.messageEditText = r14
             org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda50 r0 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda50
             r0.<init>(r7)
-            r15.setDelegate(r0)
+            r14.setDelegate(r0)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            r1 = 0
-            r0.setIncludeFontPadding(r1)
+            r0.setIncludeFontPadding(r11)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
             android.app.Activity r1 = r7.parentActivity
             android.view.Window r1 = r1.getWindow()
             android.view.View r1 = r1.getDecorView()
             r0.setWindowView(r1)
             org.telegram.ui.ChatActivity r0 = r7.parentFragment
-            r1 = 0
-            if (r0 == 0) goto L_0x032a
+            if (r0 == 0) goto L_0x032f
             org.telegram.tgnet.TLRPC$EncryptedChat r0 = r0.getCurrentEncryptedChat()
-            goto L_0x032b
-        L_0x032a:
-            r0 = r1
-        L_0x032b:
-            org.telegram.ui.Components.EditTextCaption r2 = r7.messageEditText
-            boolean r3 = r37.supportsSendingNewEntities()
-            r2.setAllowTextEntitiesIntersection(r3)
-            r2 = 0
-            r7.updateFieldHint(r2)
-            r2 = 268435456(0x10000000, float:2.5243549E-29)
-            if (r0 == 0) goto L_0x033e
-            r2 = 285212672(0x11000000, float:1.00974196E-28)
-        L_0x033e:
+            goto L_0x0330
+        L_0x032f:
+            r0 = 0
+        L_0x0330:
+            org.telegram.ui.Components.EditTextCaption r1 = r7.messageEditText
+            boolean r2 = r39.supportsSendingNewEntities()
+            r1.setAllowTextEntitiesIntersection(r2)
+            r7.updateFieldHint(r11)
+            r1 = 268435456(0x10000000, float:2.5243549E-29)
+            if (r0 == 0) goto L_0x0342
+            r1 = 285212672(0x11000000, float:1.00974196E-28)
+        L_0x0342:
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            r0.setImeOptions(r2)
+            r0.setImeOptions(r1)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            int r2 = r0.getInputType()
-            r2 = r2 | 16384(0x4000, float:2.2959E-41)
-            r3 = 131072(0x20000, float:1.83671E-40)
-            r2 = r2 | r3
-            r0.setInputType(r2)
+            int r1 = r0.getInputType()
+            r1 = r1 | 16384(0x4000, float:2.2959E-41)
+            r2 = 131072(0x20000, float:1.83671E-40)
+            r1 = r1 | r2
+            r0.setInputType(r1)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            r2 = 0
-            r0.setSingleLine(r2)
+            r0.setSingleLine(r11)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            r2 = 6
-            r0.setMaxLines(r2)
+            r1 = 6
+            r0.setMaxLines(r1)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            r2 = 1099956224(0x41900000, float:18.0)
-            r0.setTextSize(r11, r2)
+            r1 = 1099956224(0x41900000, float:18.0)
+            r0.setTextSize(r12, r1)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            r2 = 80
-            r0.setGravity(r2)
+            r1 = 80
+            r0.setGravity(r1)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            r3 = 1093664768(0x41300000, float:11.0)
+            r2 = 1093664768(0x41300000, float:11.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r3 = 1094713344(0x41400000, float:12.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r4 = 1094713344(0x41400000, float:12.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r5 = 0
-            r0.setPadding(r5, r3, r5, r4)
+            r0.setPadding(r11, r2, r11, r3)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            r0.setBackgroundDrawable(r1)
+            r2 = 0
+            r0.setBackgroundDrawable(r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            java.lang.String r1 = "chat_messagePanelText"
-            int r1 = r7.getThemedColor(r1)
-            r0.setTextColor(r1)
+            java.lang.String r2 = "chat_messagePanelText"
+            int r2 = r7.getThemedColor(r2)
+            r0.setTextColor(r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            java.lang.String r1 = "chat_messagePanelHint"
-            int r1 = r7.getThemedColor(r1)
-            r0.setHintColor(r1)
+            java.lang.String r2 = "chat_messagePanelHint"
+            int r2 = r7.getThemedColor(r2)
+            r0.setHintColor(r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            java.lang.String r1 = "chat_messagePanelHint"
-            int r1 = r7.getThemedColor(r1)
-            r0.setHintTextColor(r1)
+            java.lang.String r2 = "chat_messagePanelHint"
+            int r2 = r7.getThemedColor(r2)
+            r0.setHintTextColor(r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            java.lang.String r1 = "chat_messagePanelCursor"
-            int r1 = r7.getThemedColor(r1)
-            r0.setCursorColor(r1)
+            java.lang.String r2 = "chat_messagePanelCursor"
+            int r2 = r7.getThemedColor(r2)
+            r0.setCursorColor(r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            r21 = -1
-            r22 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r23 = 80
-            r24 = 1112539136(0x42500000, float:52.0)
-            r25 = 0
-            if (r41 == 0) goto L_0x03c1
-            r1 = 1112014848(0x42480000, float:50.0)
-            r26 = 1112014848(0x42480000, float:50.0)
-            goto L_0x03c5
-        L_0x03c1:
-            r1 = 1073741824(0x40000000, float:2.0)
-            r26 = 1073741824(0x40000000, float:2.0)
-        L_0x03c5:
-            r27 = 0
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r21, r22, r23, r24, r25, r26, r27)
-            r13.addView(r0, r1)
+            r22 = -1
+            r23 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r24 = 80
+            r25 = 1112539136(0x42500000, float:52.0)
+            r26 = 0
+            if (r43 == 0) goto L_0x03c4
+            r2 = 1112014848(0x42480000, float:50.0)
+            r27 = 1112014848(0x42480000, float:50.0)
+            goto L_0x03c8
+        L_0x03c4:
+            r2 = 1073741824(0x40000000, float:2.0)
+            r27 = 1073741824(0x40000000, float:2.0)
+        L_0x03c8:
+            r28 = 0
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28)
+            r13.addView(r0, r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            org.telegram.ui.Components.ChatActivityEnterView$12 r1 = new org.telegram.ui.Components.ChatActivityEnterView$12
-            r1.<init>()
-            r0.setOnKeyListener(r1)
+            org.telegram.ui.Components.ChatActivityEnterView$12 r2 = new org.telegram.ui.Components.ChatActivityEnterView$12
+            r2.<init>()
+            r0.setOnKeyListener(r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            org.telegram.ui.Components.ChatActivityEnterView$13 r1 = new org.telegram.ui.Components.ChatActivityEnterView$13
-            r1.<init>()
-            r0.setOnEditorActionListener(r1)
+            org.telegram.ui.Components.ChatActivityEnterView$13 r2 = new org.telegram.ui.Components.ChatActivityEnterView$13
+            r2.<init>()
+            r0.setOnEditorActionListener(r2)
             org.telegram.ui.Components.EditTextCaption r0 = r7.messageEditText
-            org.telegram.ui.Components.ChatActivityEnterView$14 r1 = new org.telegram.ui.Components.ChatActivityEnterView$14
-            r1.<init>()
-            r0.addTextChangedListener(r1)
+            org.telegram.ui.Components.ChatActivityEnterView$14 r2 = new org.telegram.ui.Components.ChatActivityEnterView$14
+            r2.<init>()
+            r0.addTextChangedListener(r2)
             r0 = -2
-            r1 = 85
+            r2 = 85
             r3 = 1111490560(0x42400000, float:48.0)
             r4 = 48
-            if (r41 == 0) goto L_0x067f
+            if (r43 == 0) goto L_0x0683
             org.telegram.ui.ChatActivity r5 = r7.parentFragment
-            if (r5 == 0) goto L_0x048a
-            android.content.res.Resources r5 = r38.getResources()
+            if (r5 == 0) goto L_0x048f
+            android.content.res.Resources r5 = r40.getResources()
             r6 = 2131165556(0x7var_, float:1.7945332E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r6)
             android.graphics.drawable.Drawable r5 = r5.mutate()
-            android.content.res.Resources r6 = r38.getResources()
-            r15 = 2131165557(0x7var_, float:1.7945334E38)
-            android.graphics.drawable.Drawable r6 = r6.getDrawable(r15)
+            android.content.res.Resources r6 = r40.getResources()
+            r14 = 2131165557(0x7var_, float:1.7945334E38)
+            android.graphics.drawable.Drawable r6 = r6.getDrawable(r14)
             android.graphics.drawable.Drawable r6 = r6.mutate()
-            android.graphics.PorterDuffColorFilter r15 = new android.graphics.PorterDuffColorFilter
-            int r2 = r7.getThemedColor(r12)
-            android.graphics.PorterDuff$Mode r11 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r15.<init>(r2, r11)
-            r5.setColorFilter(r15)
-            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r11 = "chat_recordedVoiceDot"
-            int r11 = r7.getThemedColor(r11)
-            android.graphics.PorterDuff$Mode r15 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r2.<init>(r11, r15)
-            r6.setColorFilter(r2)
-            org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
-            r2.<init>(r5, r6)
+            android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
+            int r1 = r7.getThemedColor(r15)
+            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r14.<init>(r1, r12)
+            r5.setColorFilter(r14)
+            android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r12 = "chat_recordedVoiceDot"
+            int r12 = r7.getThemedColor(r12)
+            android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r1.<init>(r12, r14)
+            r6.setColorFilter(r1)
+            org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
+            r1.<init>(r5, r6)
             android.widget.ImageView r5 = new android.widget.ImageView
             r5.<init>(r8)
             r7.scheduledButton = r5
-            r5.setImageDrawable(r2)
-            android.widget.ImageView r2 = r7.scheduledButton
-            r2.setVisibility(r14)
-            android.widget.ImageView r2 = r7.scheduledButton
-            r5 = 2131627750(0x7f0e0ee6, float:1.8882773E38)
+            r5.setImageDrawable(r1)
+            android.widget.ImageView r1 = r7.scheduledButton
+            r5 = 8
+            r1.setVisibility(r5)
+            android.widget.ImageView r1 = r7.scheduledButton
+            r5 = 2131627762(0x7f0e0ef2, float:1.8882798E38)
             java.lang.String r6 = "ScheduledMessages"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r2.setContentDescription(r5)
-            android.widget.ImageView r2 = r7.scheduledButton
+            r1.setContentDescription(r5)
+            android.widget.ImageView r1 = r7.scheduledButton
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
-            r2.setScaleType(r5)
-            int r2 = android.os.Build.VERSION.SDK_INT
+            r1.setScaleType(r5)
+            int r1 = android.os.Build.VERSION.SDK_INT
             r5 = 21
-            if (r2 < r5) goto L_0x0474
-            android.widget.ImageView r2 = r7.scheduledButton
-            r5 = r28
+            if (r1 < r5) goto L_0x0479
+            android.widget.ImageView r1 = r7.scheduledButton
+            r5 = r29
             int r6 = r7.getThemedColor(r5)
             android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r6)
-            r2.setBackgroundDrawable(r6)
-            goto L_0x0476
-        L_0x0474:
-            r5 = r28
-        L_0x0476:
-            android.widget.ImageView r2 = r7.scheduledButton
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r4, r1)
-            r13.addView(r2, r6)
-            android.widget.ImageView r2 = r7.scheduledButton
+            r1.setBackgroundDrawable(r6)
+            goto L_0x047b
+        L_0x0479:
+            r5 = r29
+        L_0x047b:
+            android.widget.ImageView r1 = r7.scheduledButton
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r4, r2)
+            r13.addView(r1, r6)
+            android.widget.ImageView r1 = r7.scheduledButton
             org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda21 r6 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda21
             r6.<init>(r7)
-            r2.setOnClickListener(r6)
-            goto L_0x048c
-        L_0x048a:
-            r5 = r28
-        L_0x048c:
-            android.widget.LinearLayout r2 = new android.widget.LinearLayout
-            r2.<init>(r8)
-            r7.attachLayout = r2
-            r6 = 0
-            r2.setOrientation(r6)
-            android.widget.LinearLayout r2 = r7.attachLayout
-            r2.setEnabled(r6)
-            android.widget.LinearLayout r2 = r7.attachLayout
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r11 = (float) r11
-            r2.setPivotX(r11)
-            android.widget.LinearLayout r2 = r7.attachLayout
-            r2.setClipChildren(r6)
-            android.widget.LinearLayout r2 = r7.attachLayout
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r0, r4, r1)
-            r13.addView(r2, r6)
-            org.telegram.ui.Components.BotCommandsMenuView r2 = new org.telegram.ui.Components.BotCommandsMenuView
-            android.content.Context r6 = r37.getContext()
-            r2.<init>(r6)
-            r7.botCommandsMenuButton = r2
+            r1.setOnClickListener(r6)
+            goto L_0x0491
+        L_0x048f:
+            r5 = r29
+        L_0x0491:
+            android.widget.LinearLayout r1 = new android.widget.LinearLayout
+            r1.<init>(r8)
+            r7.attachLayout = r1
+            r1.setOrientation(r11)
+            android.widget.LinearLayout r1 = r7.attachLayout
+            r1.setEnabled(r11)
+            android.widget.LinearLayout r1 = r7.attachLayout
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r6 = (float) r6
+            r1.setPivotX(r6)
+            android.widget.LinearLayout r1 = r7.attachLayout
+            r1.setClipChildren(r11)
+            android.widget.LinearLayout r1 = r7.attachLayout
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r0, r4, r2)
+            r13.addView(r1, r6)
+            org.telegram.ui.Components.BotCommandsMenuView r1 = new org.telegram.ui.Components.BotCommandsMenuView
+            android.content.Context r6 = r39.getContext()
+            r1.<init>(r6)
+            r7.botCommandsMenuButton = r1
             org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda12 r6 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda12
             r6.<init>(r7)
-            r2.setOnClickListener(r6)
-            org.telegram.ui.Components.BotCommandsMenuView r2 = r7.botCommandsMenuButton
-            r29 = -2
-            r30 = 1107296256(0x42000000, float:32.0)
-            r31 = 83
-            r32 = 1092616192(0x41200000, float:10.0)
-            r33 = 1090519040(0x41000000, float:8.0)
-            r34 = 1092616192(0x41200000, float:10.0)
-            r35 = 1090519040(0x41000000, float:8.0)
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
-            r13.addView(r2, r6)
-            org.telegram.ui.Components.BotCommandsMenuView r2 = r7.botCommandsMenuButton
+            r1.setOnClickListener(r6)
+            org.telegram.ui.Components.BotCommandsMenuView r1 = r7.botCommandsMenuButton
+            r23 = -2
+            r24 = 1107296256(0x42000000, float:32.0)
+            r25 = 83
+            r26 = 1092616192(0x41200000, float:10.0)
+            r27 = 1090519040(0x41000000, float:8.0)
+            r28 = 1092616192(0x41200000, float:10.0)
+            r29 = 1090519040(0x41000000, float:8.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r23, r24, r25, r26, r27, r28, r29)
+            r13.addView(r1, r6)
+            org.telegram.ui.Components.BotCommandsMenuView r1 = r7.botCommandsMenuButton
             r6 = 1065353216(0x3var_, float:1.0)
-            r11 = 0
-            org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r2, r11, r6, r11)
-            org.telegram.ui.Components.BotCommandsMenuView r2 = r7.botCommandsMenuButton
+            org.telegram.messenger.AndroidUtilities.updateViewVisibilityAnimated(r1, r11, r6, r11)
+            org.telegram.ui.Components.BotCommandsMenuView r1 = r7.botCommandsMenuButton
             r6 = 1
-            r2.setExpanded(r6, r11)
-            androidx.recyclerview.widget.LinearLayoutManager r2 = new androidx.recyclerview.widget.LinearLayoutManager
-            r2.<init>(r8)
+            r1.setExpanded(r6, r11)
+            androidx.recyclerview.widget.LinearLayoutManager r1 = new androidx.recyclerview.widget.LinearLayoutManager
+            r1.<init>(r8)
             org.telegram.ui.Components.ChatActivityEnterView$15 r6 = new org.telegram.ui.Components.ChatActivityEnterView$15
             r6.<init>(r8)
             r7.botCommandsMenuContainer = r6
             org.telegram.ui.Components.RecyclerListView r6 = r6.listView
-            r6.setLayoutManager(r2)
-            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r7.botCommandsMenuContainer
-            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
+            r6.setLayoutManager(r1)
+            org.telegram.ui.Components.BotCommandsMenuContainer r1 = r7.botCommandsMenuContainer
+            org.telegram.ui.Components.RecyclerListView r1 = r1.listView
             org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter r6 = new org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter
             r6.<init>()
             r7.botCommandsAdapter = r6
-            r2.setAdapter(r6)
-            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r7.botCommandsMenuContainer
-            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
+            r1.setAdapter(r6)
+            org.telegram.ui.Components.BotCommandsMenuContainer r1 = r7.botCommandsMenuContainer
+            org.telegram.ui.Components.RecyclerListView r1 = r1.listView
             org.telegram.ui.Components.ChatActivityEnterView$16 r6 = new org.telegram.ui.Components.ChatActivityEnterView$16
             r6.<init>(r10, r9)
-            r2.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r6)
-            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r7.botCommandsMenuContainer
-            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
+            r1.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r6)
+            org.telegram.ui.Components.BotCommandsMenuContainer r1 = r7.botCommandsMenuContainer
+            org.telegram.ui.Components.RecyclerListView r1 = r1.listView
             org.telegram.ui.Components.ChatActivityEnterView$17 r6 = new org.telegram.ui.Components.ChatActivityEnterView$17
             r6.<init>()
-            r2.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r6)
-            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r7.botCommandsMenuContainer
-            r6 = 0
-            r2.setClipToPadding(r6)
-            org.telegram.ui.Components.SizeNotifierFrameLayout r2 = r7.sizeNotifierLayout
+            r1.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r6)
+            org.telegram.ui.Components.BotCommandsMenuContainer r1 = r7.botCommandsMenuContainer
+            r1.setClipToPadding(r11)
+            org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.sizeNotifierLayout
             org.telegram.ui.Components.BotCommandsMenuContainer r6 = r7.botCommandsMenuContainer
-            r11 = 14
-            r1 = -1
-            r15 = 80
-            android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r1, r1, r15)
-            r2.addView(r6, r11, r0)
+            r12 = 14
+            r2 = -1
+            r14 = 80
+            android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r2, r14)
+            r1.addView(r6, r12, r0)
             org.telegram.ui.Components.BotCommandsMenuContainer r0 = r7.botCommandsMenuContainer
-            r0.setVisibility(r14)
+            r1 = 8
+            r0.setVisibility(r1)
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r8)
             r7.botButton = r0
@@ -3198,27 +3200,27 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r0.setImageDrawable(r1)
             org.telegram.ui.Components.ReplaceableIconDrawable r0 = r7.botButtonDrawable
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
-            int r2 = r7.getThemedColor(r12)
+            int r2 = r7.getThemedColor(r15)
             android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
             r1.<init>(r2, r6)
             r0.setColorFilter(r1)
             org.telegram.ui.Components.ReplaceableIconDrawable r0 = r7.botButtonDrawable
             r1 = 2131165555(0x7var_, float:1.794533E38)
-            r2 = 0
-            r0.setIcon((int) r1, (boolean) r2)
+            r0.setIcon((int) r1, (boolean) r11)
             android.widget.ImageView r0 = r7.botButton
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r0.setScaleType(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
             r1 = 21
-            if (r0 < r1) goto L_0x0582
+            if (r0 < r1) goto L_0x0585
             android.widget.ImageView r1 = r7.botButton
             int r2 = r7.getThemedColor(r5)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2)
             r1.setBackgroundDrawable(r2)
-        L_0x0582:
+        L_0x0585:
             android.widget.ImageView r1 = r7.botButton
-            r1.setVisibility(r14)
+            r2 = 8
+            r1.setVisibility(r2)
             android.widget.LinearLayout r1 = r7.attachLayout
             android.widget.ImageView r2 = r7.botButton
             android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r4)
@@ -3232,56 +3234,55 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r7.notifyButton = r1
             org.telegram.ui.Components.CrossOutDrawable r1 = new org.telegram.ui.Components.CrossOutDrawable
             r2 = 2131165566(0x7var_e, float:1.7945353E38)
-            r1.<init>(r8, r2, r12)
+            r1.<init>(r8, r2, r15)
             r7.notifySilentDrawable = r1
             android.widget.ImageView r2 = r7.notifyButton
             r2.setImageDrawable(r1)
             org.telegram.ui.Components.CrossOutDrawable r1 = r7.notifySilentDrawable
             boolean r2 = r7.silent
-            r6 = 0
-            r1.setCrossOut(r2, r6)
+            r1.setCrossOut(r2, r11)
             android.widget.ImageView r1 = r7.notifyButton
             boolean r2 = r7.silent
-            if (r2 == 0) goto L_0x05c6
+            if (r2 == 0) goto L_0x05ca
             r2 = 2131623963(0x7f0e001b, float:1.8875092E38)
             java.lang.String r6 = "AccDescrChanSilentOn"
-            goto L_0x05cb
-        L_0x05c6:
+            goto L_0x05cf
+        L_0x05ca:
             r2 = 2131623962(0x7f0e001a, float:1.887509E38)
             java.lang.String r6 = "AccDescrChanSilentOff"
-        L_0x05cb:
+        L_0x05cf:
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r1.setContentDescription(r2)
             android.widget.ImageView r1 = r7.notifyButton
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
-            int r6 = r7.getThemedColor(r12)
-            android.graphics.PorterDuff$Mode r11 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r2.<init>(r6, r11)
+            int r6 = r7.getThemedColor(r15)
+            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r2.<init>(r6, r12)
             r1.setColorFilter(r2)
             android.widget.ImageView r1 = r7.notifyButton
             android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
             r1.setScaleType(r2)
             r1 = 21
-            if (r0 < r1) goto L_0x05fa
+            if (r0 < r1) goto L_0x05fe
             android.widget.ImageView r1 = r7.notifyButton
             int r2 = r7.getThemedColor(r5)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2)
             r1.setBackgroundDrawable(r2)
-        L_0x05fa:
+        L_0x05fe:
             android.widget.ImageView r1 = r7.notifyButton
             boolean r2 = r7.canWriteToChannel
-            if (r2 == 0) goto L_0x060c
+            if (r2 == 0) goto L_0x0610
             org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r2 = r7.delegate
-            if (r2 == 0) goto L_0x060a
+            if (r2 == 0) goto L_0x060e
             boolean r2 = r2.hasScheduledMessages()
-            if (r2 != 0) goto L_0x060c
-        L_0x060a:
-            r2 = 0
-            goto L_0x060e
-        L_0x060c:
-            r2 = 8
+            if (r2 != 0) goto L_0x0610
         L_0x060e:
-            r1.setVisibility(r2)
+            r6 = 0
+            goto L_0x0612
+        L_0x0610:
+            r6 = 8
+        L_0x0612:
+            r1.setVisibility(r6)
             android.widget.LinearLayout r1 = r7.attachLayout
             android.widget.ImageView r2 = r7.notifyButton
             android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r4)
@@ -3294,7 +3295,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r1.<init>(r8)
             r7.attachButton = r1
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
-            int r6 = r7.getThemedColor(r12)
+            int r6 = r7.getThemedColor(r15)
             android.graphics.PorterDuff$Mode r9 = android.graphics.PorterDuff.Mode.MULTIPLY
             r2.<init>(r6, r9)
             r1.setColorFilter(r2)
@@ -3305,12 +3306,12 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
             r1.setScaleType(r2)
             r1 = 21
-            if (r0 < r1) goto L_0x065b
+            if (r0 < r1) goto L_0x065f
             android.widget.ImageView r0 = r7.attachButton
             int r1 = r7.getThemedColor(r5)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1)
             r0.setBackgroundDrawable(r1)
-        L_0x065b:
+        L_0x065f:
             android.widget.LinearLayout r0 = r7.attachLayout
             android.widget.ImageView r1 = r7.attachButton
             android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r4)
@@ -3324,40 +3325,41 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             java.lang.String r2 = "AccDescrAttachButton"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
-            goto L_0x0681
-        L_0x067f:
-            r5 = r28
-        L_0x0681:
+            goto L_0x0685
+        L_0x0683:
+            r5 = r29
+        L_0x0685:
             org.telegram.ui.Components.SenderSelectView r0 = new org.telegram.ui.Components.SenderSelectView
-            android.content.Context r1 = r37.getContext()
+            android.content.Context r1 = r39.getContext()
             r0.<init>(r1)
             r7.senderSelectView = r0
             org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda23 r1 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda23
             r1.<init>(r7, r8)
             r0.setOnClickListener(r1)
             org.telegram.ui.Components.SenderSelectView r0 = r7.senderSelectView
-            r0.setVisibility(r14)
+            r1 = 8
+            r0.setVisibility(r1)
             org.telegram.ui.Components.SenderSelectView r0 = r7.senderSelectView
-            r29 = 32
-            r30 = 1107296256(0x42000000, float:32.0)
-            r31 = 83
-            r32 = 1092616192(0x41200000, float:10.0)
-            r33 = 1090519040(0x41000000, float:8.0)
+            r31 = 32
+            r32 = 1107296256(0x42000000, float:32.0)
+            r33 = 83
             r34 = 1092616192(0x41200000, float:10.0)
             r35 = 1090519040(0x41000000, float:8.0)
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r36 = 1092616192(0x41200000, float:10.0)
+            r37 = 1090519040(0x41000000, float:8.0)
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
             r13.addView(r0, r1)
             org.telegram.ui.Components.ChatActivityEnterView$23 r0 = new org.telegram.ui.Components.ChatActivityEnterView$23
             r0.<init>(r8)
             r7.recordedAudioPanel = r0
             org.telegram.tgnet.TLRPC$TL_document r1 = r7.audioToSend
-            if (r1 != 0) goto L_0x06be
-            r1 = 8
-            goto L_0x06bf
-        L_0x06be:
-            r1 = 0
-        L_0x06bf:
-            r0.setVisibility(r1)
+            if (r1 != 0) goto L_0x06c4
+            r6 = 8
+            goto L_0x06c5
+        L_0x06c4:
+            r6 = 0
+        L_0x06c5:
+            r0.setVisibility(r6)
             android.widget.FrameLayout r0 = r7.recordedAudioPanel
             r1 = 1
             r0.setFocusable(r1)
@@ -3384,20 +3386,20 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             org.telegram.ui.Components.RLottieDrawable r0 = r0.getAnimatedDrawable()
             r1 = 1
             r0.setInvalidateOnProgressSet(r1)
-            r37.updateRecordedDeleteIconColors()
+            r39.updateRecordedDeleteIconColors()
             org.telegram.ui.Components.RLottieImageView r0 = r7.recordDeleteImageView
-            r1 = 2131625208(0x7f0e04f8, float:1.8877617E38)
+            r1 = 2131625209(0x7f0e04f9, float:1.887762E38)
             java.lang.String r2 = "Delete"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
             r1 = 21
-            if (r0 < r1) goto L_0x0724
+            if (r0 < r1) goto L_0x072a
             org.telegram.ui.Components.RLottieImageView r1 = r7.recordDeleteImageView
             int r2 = r7.getThemedColor(r5)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2)
             r1.setBackgroundDrawable(r2)
-        L_0x0724:
+        L_0x072a:
             android.widget.FrameLayout r1 = r7.recordedAudioPanel
             org.telegram.ui.Components.RLottieImageView r2 = r7.recordDeleteImageView
             android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
@@ -3421,26 +3423,26 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r1.setDelegate(r2)
             android.widget.FrameLayout r1 = r7.recordedAudioPanel
             org.telegram.ui.Components.VideoTimelineView r2 = r7.videoTimelineView
-            r29 = -1
-            r30 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r31 = 19
-            r32 = 1113587712(0x42600000, float:56.0)
-            r33 = 0
-            r34 = 1090519040(0x41000000, float:8.0)
+            r31 = -1
+            r32 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r33 = 19
+            r34 = 1113587712(0x42600000, float:56.0)
             r35 = 0
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r36 = 1090519040(0x41000000, float:8.0)
+            r37 = 0
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
             r1.addView(r2, r6)
             org.telegram.ui.Components.VideoTimelineView$TimeHintView r1 = new org.telegram.ui.Components.VideoTimelineView$TimeHintView
             r1.<init>(r8)
             org.telegram.ui.Components.VideoTimelineView r2 = r7.videoTimelineView
             r2.setTimeHintView(r1)
             org.telegram.ui.Components.SizeNotifierFrameLayout r2 = r7.sizeNotifierLayout
-            r30 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r31 = 80
-            r32 = 0
+            r32 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r33 = 80
             r34 = 0
-            r35 = 1112539136(0x42500000, float:52.0)
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r36 = 0
+            r37 = 1112539136(0x42500000, float:52.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
             r2.addView(r1, r6)
             android.view.View r1 = new android.view.View
             r1.<init>(r8)
@@ -3453,24 +3455,23 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r1.setBackgroundDrawable(r2)
             android.widget.FrameLayout r1 = r7.recordedAudioPanel
             android.view.View r2 = r7.recordedAudioBackground
-            r30 = 1108344832(0x42100000, float:36.0)
-            r31 = 19
-            r32 = 1111490560(0x42400000, float:48.0)
-            r35 = 0
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r32 = 1108344832(0x42100000, float:36.0)
+            r33 = 19
+            r34 = 1111490560(0x42400000, float:48.0)
+            r37 = 0
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
             r1.addView(r2, r6)
             org.telegram.ui.Components.ChatActivityEnterView$SeekBarWaveformView r1 = new org.telegram.ui.Components.ChatActivityEnterView$SeekBarWaveformView
             r1.<init>(r8)
             r7.recordedAudioSeekBar = r1
             android.widget.LinearLayout r1 = new android.widget.LinearLayout
             r1.<init>(r8)
-            r2 = 0
-            r1.setOrientation(r2)
+            r1.setOrientation(r11)
             android.widget.FrameLayout r2 = r7.recordedAudioPanel
-            r30 = 1107296256(0x42000000, float:32.0)
-            r32 = 1119354880(0x42b80000, float:92.0)
-            r34 = 1095761920(0x41500000, float:13.0)
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r32 = 1107296256(0x42000000, float:32.0)
+            r34 = 1119354880(0x42b80000, float:92.0)
+            r36 = 1095761920(0x41500000, float:13.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
             r2.addView(r1, r6)
             org.telegram.ui.Components.MediaActionDrawable r2 = new org.telegram.ui.Components.MediaActionDrawable
             r2.<init>()
@@ -3482,11 +3483,11 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r2.<init>()
             r6 = 1061997773(0x3f4ccccd, float:0.8)
             r9 = 1061997773(0x3f4ccccd, float:0.8)
-            r11 = 1103101952(0x41CLASSNAME, float:24.0)
-            float r11 = org.telegram.messenger.AndroidUtilities.dpf2(r11)
-            r15 = 1103101952(0x41CLASSNAME, float:24.0)
-            float r15 = org.telegram.messenger.AndroidUtilities.dpf2(r15)
-            r2.postScale(r6, r9, r11, r15)
+            r12 = 1103101952(0x41CLASSNAME, float:24.0)
+            float r12 = org.telegram.messenger.AndroidUtilities.dpf2(r12)
+            r14 = 1103101952(0x41CLASSNAME, float:24.0)
+            float r14 = org.telegram.messenger.AndroidUtilities.dpf2(r14)
+            r2.postScale(r6, r9, r12, r14)
             android.widget.ImageView r6 = r7.recordedAudioPlayButton
             r6.setImageMatrix(r2)
             android.widget.ImageView r2 = r7.recordedAudioPlayButton
@@ -3502,11 +3503,11 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r2.setContentDescription(r6)
             android.widget.FrameLayout r2 = r7.recordedAudioPanel
             android.widget.ImageView r6 = r7.recordedAudioPlayButton
-            r29 = 48
-            r30 = 1111490560(0x42400000, float:48.0)
-            r31 = 83
+            r31 = 48
             r32 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r33 = 83
+            r34 = 1111490560(0x42400000, float:48.0)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
             r2.addView(r6, r9)
             android.widget.ImageView r2 = r7.recordedAudioPlayButton
             org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda13 r6 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda13
@@ -3523,29 +3524,29 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r9 = 1
             r2.setTextSize(r9, r6)
             org.telegram.ui.Components.ChatActivityEnterView$SeekBarWaveformView r2 = r7.recordedAudioSeekBar
-            r29 = 0
-            r30 = 32
-            r31 = 1065353216(0x3var_, float:1.0)
-            r32 = 16
-            r33 = 0
-            r34 = 0
-            r35 = 4
+            r31 = 0
+            r32 = 32
+            r33 = 1065353216(0x3var_, float:1.0)
+            r34 = 16
+            r35 = 0
             r36 = 0
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r29, r30, r31, r32, r33, r34, r35, r36)
+            r37 = 4
+            r38 = 0
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r31, r32, r33, r34, r35, r36, r37, r38)
             r1.addView(r2, r9)
             android.widget.TextView r2 = r7.recordedAudioTimeTextView
             r9 = 16
-            r11 = -2
-            r15 = 0
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r11, r15, r9)
+            r12 = -2
+            r14 = 0
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r12, r12, r14, r9)
             r1.addView(r2, r9)
             android.widget.FrameLayout r1 = new android.widget.FrameLayout
             r1.<init>(r8)
             r7.recordPanel = r1
-            r2 = 0
-            r1.setClipChildren(r2)
+            r1.setClipChildren(r11)
             android.widget.FrameLayout r1 = r7.recordPanel
-            r1.setVisibility(r14)
+            r2 = 8
+            r1.setVisibility(r2)
             android.widget.FrameLayout r1 = r7.recordPanel
             r2 = -1
             android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3)
@@ -3557,67 +3558,65 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r1.<init>(r8)
             r7.slideText = r1
             android.widget.FrameLayout r2 = r7.recordPanel
-            r29 = -1
-            r30 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r31 = 0
-            r32 = 1110704128(0x42340000, float:45.0)
-            r33 = 0
-            r34 = 0
-            r35 = 0
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r24 = -1
+            r25 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r26 = 0
+            r27 = 1110704128(0x42340000, float:45.0)
+            r28 = 0
+            r29 = 0
+            r30 = 0
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
             r2.addView(r1, r9)
             android.widget.LinearLayout r1 = new android.widget.LinearLayout
             r1.<init>(r8)
             r7.recordTimeContainer = r1
-            r2 = 0
-            r1.setOrientation(r2)
+            r1.setOrientation(r11)
             android.widget.LinearLayout r1 = r7.recordTimeContainer
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            r1.setPadding(r9, r2, r2, r2)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r1.setPadding(r2, r11, r11, r11)
             android.widget.FrameLayout r1 = r7.recordPanel
             android.widget.LinearLayout r2 = r7.recordTimeContainer
             r9 = 16
-            r11 = -1
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r11, r9)
+            r12 = -1
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r12, r9)
             r1.addView(r2, r9)
             org.telegram.ui.Components.ChatActivityEnterView$RecordDot r1 = new org.telegram.ui.Components.ChatActivityEnterView$RecordDot
             r1.<init>(r8)
             r7.recordDot = r1
             android.widget.LinearLayout r2 = r7.recordTimeContainer
-            r29 = 28
-            r30 = 28
-            r31 = 16
-            r32 = 0
-            r33 = 0
-            r34 = 0
-            r35 = 0
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r29, (int) r30, (int) r31, (int) r32, (int) r33, (int) r34, (int) r35)
+            r24 = 28
+            r25 = 28
+            r26 = 16
+            r27 = 0
+            r28 = 0
+            r29 = 0
+            r30 = 0
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r24, (int) r25, (int) r26, (int) r27, (int) r28, (int) r29, (int) r30)
             r2.addView(r1, r9)
             org.telegram.ui.Components.ChatActivityEnterView$TimerView r1 = new org.telegram.ui.Components.ChatActivityEnterView$TimerView
             r1.<init>(r8)
             r7.recordTimerView = r1
             android.widget.LinearLayout r2 = r7.recordTimeContainer
-            r29 = -1
-            r30 = -1
-            r32 = 6
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r29, (int) r30, (int) r31, (int) r32, (int) r33, (int) r34, (int) r35)
+            r24 = -1
+            r25 = -1
+            r27 = 6
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r24, (int) r25, (int) r26, (int) r27, (int) r28, (int) r29, (int) r30)
             r2.addView(r1, r9)
             org.telegram.ui.Components.ChatActivityEnterView$25 r1 = new org.telegram.ui.Components.ChatActivityEnterView$25
             r1.<init>(r8)
             r7.sendButtonContainer = r1
-            r2 = 0
-            r1.setClipChildren(r2)
+            r1.setClipChildren(r11)
             android.widget.FrameLayout r1 = r7.sendButtonContainer
-            r1.setClipToPadding(r2)
+            r1.setClipToPadding(r11)
             android.widget.FrameLayout r1 = r7.textFieldContainer
-            android.widget.FrameLayout r9 = r7.sendButtonContainer
-            r11 = 85
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r4, r11)
-            r1.addView(r9, r13)
+            android.widget.FrameLayout r2 = r7.sendButtonContainer
+            r9 = 85
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r4, r9)
+            r1.addView(r2, r12)
             android.widget.FrameLayout r1 = new android.widget.FrameLayout
             r1.<init>(r8)
             r7.audioVideoButtonContainer = r1
-            r1.setSoundEffectsEnabled(r2)
+            r1.setSoundEffectsEnabled(r11)
             android.widget.FrameLayout r1 = r7.sendButtonContainer
             android.widget.FrameLayout r2 = r7.audioVideoButtonContainer
             android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
@@ -3633,7 +3632,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r1.setScaleType(r2)
             android.widget.ImageView r1 = r7.audioSendButton
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
-            int r9 = r7.getThemedColor(r12)
+            int r9 = r7.getThemedColor(r15)
             android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.MULTIPLY
             r2.<init>(r9, r10)
             r1.setColorFilter(r2)
@@ -3643,8 +3642,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             android.widget.ImageView r1 = r7.audioSendButton
             r2 = 1082130432(0x40800000, float:4.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r9 = 0
-            r1.setPadding(r9, r9, r2, r9)
+            r1.setPadding(r11, r11, r2, r11)
             android.widget.ImageView r1 = r7.audioSendButton
             r2 = 2131624067(0x7f0e0083, float:1.8875303E38)
             java.lang.String r9 = "AccDescrVoiceMessage"
@@ -3660,7 +3658,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             android.widget.ImageView r2 = r7.audioSendButton
             android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
             r1.addView(r2, r9)
-            if (r41 == 0) goto L_0x09fe
+            if (r43 == 0) goto L_0x0a00
             android.widget.ImageView r1 = new android.widget.ImageView
             r1.<init>(r8)
             r7.videoSendButton = r1
@@ -3668,7 +3666,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r1.setScaleType(r2)
             android.widget.ImageView r1 = r7.videoSendButton
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
-            int r9 = r7.getThemedColor(r12)
+            int r9 = r7.getThemedColor(r15)
             android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.MULTIPLY
             r2.<init>(r9, r10)
             r1.setColorFilter(r2)
@@ -3678,8 +3676,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             android.widget.ImageView r1 = r7.videoSendButton
             r2 = 1082130432(0x40800000, float:4.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r9 = 0
-            r1.setPadding(r9, r9, r2, r9)
+            r1.setPadding(r11, r11, r2, r11)
             android.widget.ImageView r1 = r7.videoSendButton
             r2 = 2131624065(0x7f0e0081, float:1.88753E38)
             java.lang.String r9 = "AccDescrVideoMessage"
@@ -3695,21 +3692,22 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             android.widget.ImageView r2 = r7.videoSendButton
             android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
             r1.addView(r2, r9)
-        L_0x09fe:
+        L_0x0a00:
             org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r1 = new org.telegram.ui.Components.ChatActivityEnterView$RecordCircle
             r1.<init>(r8)
             r7.recordCircle = r1
-            r1.setVisibility(r14)
+            r2 = 8
+            r1.setVisibility(r2)
             org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.sizeNotifierLayout
             org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r2 = r7.recordCircle
-            r29 = -1
-            r30 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r31 = 80
-            r32 = 0
-            r33 = 0
-            r34 = 0
-            r35 = 0
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r24 = -1
+            r25 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r26 = 80
+            r27 = 0
+            r28 = 0
+            r29 = 0
+            r30 = 0
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
             r1.addView(r2, r9)
             android.widget.ImageView r1 = new android.widget.ImageView
             r1.<init>(r8)
@@ -3733,140 +3731,139 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter
             java.lang.String r10 = "chat_messagePanelCancelInlineBot"
             int r10 = r7.getThemedColor(r10)
-            android.graphics.PorterDuff$Mode r11 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r9.<init>(r10, r11)
+            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r9.<init>(r10, r12)
             r1.setColorFilter(r9)
             android.widget.ImageView r1 = r7.cancelBotButton
-            r9 = 0
-            r1.setSoundEffectsEnabled(r9)
+            r1.setSoundEffectsEnabled(r11)
             android.widget.ImageView r1 = r7.cancelBotButton
             r9 = 1036831949(0x3dcccccd, float:0.1)
             r1.setScaleX(r9)
             android.widget.ImageView r1 = r7.cancelBotButton
             r1.setScaleY(r9)
             android.widget.ImageView r1 = r7.cancelBotButton
-            r1.setAlpha(r15)
+            r1.setAlpha(r14)
             r1 = 21
-            if (r0 < r1) goto L_0x0a88
+            if (r0 < r1) goto L_0x0a8b
             android.widget.ImageView r1 = r7.cancelBotButton
-            int r10 = r7.getThemedColor(r5)
-            android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r10)
-            r1.setBackgroundDrawable(r10)
-        L_0x0a88:
+            int r9 = r7.getThemedColor(r5)
+            android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9)
+            r1.setBackgroundDrawable(r9)
+        L_0x0a8b:
             android.widget.FrameLayout r1 = r7.sendButtonContainer
-            android.widget.ImageView r10 = r7.cancelBotButton
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
-            r1.addView(r10, r11)
+            android.widget.ImageView r9 = r7.cancelBotButton
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
+            r1.addView(r9, r10)
             android.widget.ImageView r1 = r7.cancelBotButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda10 r10 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda10
-            r10.<init>(r7)
-            r1.setOnClickListener(r10)
-            boolean r1 = r37.isInScheduleMode()
-            if (r1 == 0) goto L_0x0ad1
-            android.content.res.Resources r1 = r38.getResources()
-            r10 = 2131165568(0x7var_, float:1.7945357E38)
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r10)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda10 r9 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda10
+            r9.<init>(r7)
+            r1.setOnClickListener(r9)
+            boolean r1 = r39.isInScheduleMode()
+            if (r1 == 0) goto L_0x0ad4
+            android.content.res.Resources r1 = r40.getResources()
+            r9 = 2131165568(0x7var_, float:1.7945357E38)
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r9)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.sendButtonDrawable = r1
-            android.content.res.Resources r1 = r38.getResources()
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r10)
+            android.content.res.Resources r1 = r40.getResources()
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r9)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.sendButtonInverseDrawable = r1
-            android.content.res.Resources r1 = r38.getResources()
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r10)
+            android.content.res.Resources r1 = r40.getResources()
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r9)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.inactinveSendButtonDrawable = r1
-            goto L_0x0afe
-        L_0x0ad1:
-            android.content.res.Resources r1 = r38.getResources()
-            r10 = 2131165544(0x7var_, float:1.7945308E38)
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r10)
+            goto L_0x0b01
+        L_0x0ad4:
+            android.content.res.Resources r1 = r40.getResources()
+            r9 = 2131165544(0x7var_, float:1.7945308E38)
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r9)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.sendButtonDrawable = r1
-            android.content.res.Resources r1 = r38.getResources()
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r10)
+            android.content.res.Resources r1 = r40.getResources()
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r9)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.sendButtonInverseDrawable = r1
-            android.content.res.Resources r1 = r38.getResources()
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r10)
+            android.content.res.Resources r1 = r40.getResources()
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r9)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r7.inactinveSendButtonDrawable = r1
-        L_0x0afe:
+        L_0x0b01:
             org.telegram.ui.Components.ChatActivityEnterView$26 r1 = new org.telegram.ui.Components.ChatActivityEnterView$26
             r1.<init>(r8)
             r7.sendButton = r1
             r1.setVisibility(r2)
             java.lang.String r1 = "chat_messagePanelSend"
             int r1 = r7.getThemedColor(r1)
-            android.view.View r10 = r7.sendButton
-            r11 = 2131627839(0x7f0e0f3f, float:1.8882954E38)
-            java.lang.String r13 = "Send"
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
-            r10.setContentDescription(r11)
-            android.view.View r10 = r7.sendButton
-            r11 = 0
-            r10.setSoundEffectsEnabled(r11)
-            android.view.View r10 = r7.sendButton
-            r10.setScaleX(r9)
-            android.view.View r10 = r7.sendButton
-            r10.setScaleY(r9)
-            android.view.View r10 = r7.sendButton
-            r10.setAlpha(r15)
-            r10 = 21
-            if (r0 < r10) goto L_0x0b51
-            android.view.View r10 = r7.sendButton
-            r11 = 24
-            int r13 = android.graphics.Color.red(r1)
-            int r14 = android.graphics.Color.green(r1)
+            android.view.View r9 = r7.sendButton
+            r10 = 2131627852(0x7f0e0f4c, float:1.888298E38)
+            java.lang.String r12 = "Send"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
+            r9.setContentDescription(r10)
+            android.view.View r9 = r7.sendButton
+            r9.setSoundEffectsEnabled(r11)
+            android.view.View r9 = r7.sendButton
+            r10 = 1036831949(0x3dcccccd, float:0.1)
+            r9.setScaleX(r10)
+            android.view.View r9 = r7.sendButton
+            r9.setScaleY(r10)
+            android.view.View r9 = r7.sendButton
+            r9.setAlpha(r14)
+            r9 = 21
+            if (r0 < r9) goto L_0x0b56
+            android.view.View r9 = r7.sendButton
+            r10 = 24
+            int r12 = android.graphics.Color.red(r1)
+            int r13 = android.graphics.Color.green(r1)
             int r1 = android.graphics.Color.blue(r1)
-            int r1 = android.graphics.Color.argb(r11, r13, r14, r1)
-            r11 = 1
-            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1, r11)
-            r10.setBackgroundDrawable(r1)
-        L_0x0b51:
+            int r1 = android.graphics.Color.argb(r10, r12, r13, r1)
+            r10 = 1
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1, r10)
+            r9.setBackgroundDrawable(r1)
+        L_0x0b56:
             android.widget.FrameLayout r1 = r7.sendButtonContainer
-            android.view.View r10 = r7.sendButton
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
-            r1.addView(r10, r11)
+            android.view.View r9 = r7.sendButton
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
+            r1.addView(r9, r10)
             android.view.View r1 = r7.sendButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda17 r10 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda17
-            r10.<init>(r7)
-            r1.setOnClickListener(r10)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda17 r9 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda17
+            r9.<init>(r7)
+            r1.setOnClickListener(r9)
             android.view.View r1 = r7.sendButton
-            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda24 r10 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda24
-            r10.<init>(r7)
-            r1.setOnLongClickListener(r10)
+            org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda24 r9 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda24
+            r9.<init>(r7)
+            r1.setOnLongClickListener(r9)
             org.telegram.ui.ActionBar.SimpleTextView r1 = new org.telegram.ui.ActionBar.SimpleTextView
             r1.<init>(r8)
             r7.slowModeButton = r1
-            r10 = 18
-            r1.setTextSize(r10)
+            r9 = 18
+            r1.setTextSize(r9)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
             r1.setVisibility(r2)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            r10 = 0
-            r1.setSoundEffectsEnabled(r10)
+            r1.setSoundEffectsEnabled(r11)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
+            r9 = 1036831949(0x3dcccccd, float:0.1)
             r1.setScaleX(r9)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
             r1.setScaleY(r9)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            r1.setAlpha(r15)
+            r1.setAlpha(r14)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            r1.setPadding(r10, r10, r6, r10)
+            r1.setPadding(r11, r11, r6, r11)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
             r6 = 21
             r1.setGravity(r6)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
-            int r6 = r7.getThemedColor(r12)
+            int r6 = r7.getThemedColor(r15)
             r1.setTextColor(r6)
             android.widget.FrameLayout r1 = r7.sendButtonContainer
             org.telegram.ui.ActionBar.SimpleTextView r6 = r7.slowModeButton
-            r10 = 64
-            r11 = 53
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r4, r11)
-            r1.addView(r6, r10)
+            r9 = 64
+            r10 = 53
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r4, r10)
+            r1.addView(r6, r9)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r7.slowModeButton
             org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda20 r6 = new org.telegram.ui.Components.ChatActivityEnterView$$ExternalSyntheticLambda20
             r6.<init>(r7)
@@ -3882,27 +3879,27 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             r1.setScaleType(r6)
             android.widget.ImageView r1 = r7.expandStickersButton
             org.telegram.ui.Components.AnimatedArrowDrawable r6 = new org.telegram.ui.Components.AnimatedArrowDrawable
-            int r10 = r7.getThemedColor(r12)
-            r11 = 0
-            r6.<init>(r10, r11)
+            int r9 = r7.getThemedColor(r15)
+            r6.<init>(r9, r11)
             r7.stickersArrow = r6
             r1.setImageDrawable(r6)
             android.widget.ImageView r1 = r7.expandStickersButton
             r6 = 8
             r1.setVisibility(r6)
             android.widget.ImageView r1 = r7.expandStickersButton
-            r1.setScaleX(r9)
+            r6 = 1036831949(0x3dcccccd, float:0.1)
+            r1.setScaleX(r6)
             android.widget.ImageView r1 = r7.expandStickersButton
-            r1.setScaleY(r9)
+            r1.setScaleY(r6)
             android.widget.ImageView r1 = r7.expandStickersButton
-            r1.setAlpha(r15)
+            r1.setAlpha(r14)
             r1 = 21
-            if (r0 < r1) goto L_0x0CLASSNAME
+            if (r0 < r1) goto L_0x0c1f
             android.widget.ImageView r0 = r7.expandStickersButton
             int r1 = r7.getThemedColor(r5)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1)
             r0.setBackgroundDrawable(r1)
-        L_0x0CLASSNAME:
+        L_0x0c1f:
             android.widget.FrameLayout r0 = r7.sendButtonContainer
             android.widget.ImageView r1 = r7.expandStickersButton
             android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
@@ -3935,7 +3932,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             java.lang.String r1 = "chat_messagePanelSend"
             int r1 = r7.getThemedColor(r1)
             android.graphics.drawable.ShapeDrawable r0 = org.telegram.ui.ActionBar.Theme.createCircleDrawable(r0, r1)
-            android.content.res.Resources r1 = r38.getResources()
+            android.content.res.Resources r1 = r40.getResources()
             r5 = 2131165559(0x7var_, float:1.7945339E38)
             android.graphics.drawable.Drawable r1 = r1.getDrawable(r5)
             android.graphics.drawable.Drawable r1 = r1.mutate()
@@ -3949,8 +3946,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
             r6 = 1065353216(0x3var_, float:1.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            r9 = 0
-            r5.<init>(r0, r1, r9, r6)
+            r5.<init>(r0, r1, r11, r6)
             r0 = 1107296256(0x42000000, float:32.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             r1 = 1107296256(0x42000000, float:32.0)
@@ -3964,7 +3960,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             android.widget.ImageView r0 = r7.doneButtonImage
             r0.setImageDrawable(r5)
             android.widget.ImageView r0 = r7.doneButtonImage
-            r1 = 2131625349(0x7f0e0585, float:1.8877903E38)
+            r1 = 2131625350(0x7f0e0586, float:1.8877905E38)
             java.lang.String r5 = "Done"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             r0.setContentDescription(r1)
@@ -3973,8 +3969,7 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
             r0.addView(r1, r3)
             org.telegram.ui.Components.ContextProgressView r0 = new org.telegram.ui.Components.ContextProgressView
-            r1 = 0
-            r0.<init>(r8, r1)
+            r0.<init>(r8, r11)
             r7.doneButtonProgress = r0
             r0.setVisibility(r2)
             android.widget.FrameLayout r0 = r7.doneButtonContainer
@@ -3994,10 +3989,9 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
             java.lang.String r2 = "kbd_height_land3"
             int r0 = r0.getInt(r2, r1)
             r7.keyboardHeightLand = r0
-            r0 = 0
-            r7.setRecordVideoButtonVisible(r0, r0)
-            r7.checkSendButton(r0)
-            r37.checkChannelRights()
+            r7.setRecordVideoButtonVisible(r11, r11)
+            r7.checkSendButton(r11)
+            r39.checkChannelRights()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.<init>(android.app.Activity, org.telegram.ui.Components.SizeNotifierFrameLayout, org.telegram.ui.ChatActivity, boolean, org.telegram.ui.ActionBar.Theme$ResourcesProvider):void");
@@ -4720,13 +4714,13 @@ public class ChatActivityEnterView extends ChatBlurredFrameLayout implements Not
         Theme.chat_composeShadowDrawable.setBounds(0, i, getMeasuredWidth(), intrinsicHeight);
         Theme.chat_composeShadowDrawable.draw(canvas);
         this.backgroundPaint.setColor(getThemedColor("chat_messagePanelBackground"));
-        if (!SharedConfig.chatBlurEnabled() || this.chatActivity == null) {
+        if (!SharedConfig.chatBlurEnabled() || this.sizeNotifierLayout == null) {
             canvas.drawRect(0.0f, (float) intrinsicHeight, (float) getWidth(), (float) getHeight(), this.backgroundPaint);
             return;
         }
         Rect rect2 = AndroidUtilities.rectTmp2;
         rect2.set(0, intrinsicHeight, getWidth(), getHeight());
-        this.chatActivity.contentView.drawBlur(canvas, (float) getTop(), rect2, this.backgroundPaint, false);
+        this.sizeNotifierLayout.drawBlur(canvas, (float) getTop(), rect2, this.backgroundPaint, false);
     }
 
     /* access modifiers changed from: private */

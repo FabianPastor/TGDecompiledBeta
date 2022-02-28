@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
+import android.content.Context;
+import android.view.View;
+import android.widget.ViewSwitcher;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda8 implements Runnable {
-    public final /* synthetic */ LoginActivity.PhoneView f$0;
+public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLambda8 implements ViewSwitcher.ViewFactory {
+    public final /* synthetic */ Context f$0;
 
-    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda8(LoginActivity.PhoneView phoneView) {
-        this.f$0 = phoneView;
+    public /* synthetic */ LoginActivity$PhoneView$$ExternalSyntheticLambda8(Context context) {
+        this.f$0 = context;
     }
 
-    public final void run() {
-        this.f$0.lambda$new$1();
+    public final View makeView() {
+        return LoginActivity.PhoneView.lambda$new$0(this.f$0);
     }
 }

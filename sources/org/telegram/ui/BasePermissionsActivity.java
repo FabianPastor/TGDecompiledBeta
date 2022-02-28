@@ -89,12 +89,13 @@ public class BasePermissionsActivity extends Activity {
         return true;
     }
 
-    private void showPermissionErrorAlert(int i, String str) {
-        new AlertDialog.Builder((Context) this).setTopAnimation(i, 72, false, Theme.getColor("dialogTopBackground")).setMessage(AndroidUtilities.replaceTags(str)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new BasePermissionsActivity$$ExternalSyntheticLambda0(this)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), (DialogInterface.OnClickListener) null).show();
+    /* access modifiers changed from: protected */
+    public AlertDialog createPermissionErrorAlert(int i, String str) {
+        return new AlertDialog.Builder((Context) this).setTopAnimation(i, 72, false, Theme.getColor("dialogTopBackground")).setMessage(AndroidUtilities.replaceTags(str)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new BasePermissionsActivity$$ExternalSyntheticLambda0(this)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), (DialogInterface.OnClickListener) null).create();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showPermissionErrorAlert$0(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$createPermissionErrorAlert$0(DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -102,5 +103,9 @@ public class BasePermissionsActivity extends Activity {
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
+    }
+
+    private void showPermissionErrorAlert(int i, String str) {
+        createPermissionErrorAlert(i, str).show();
     }
 }

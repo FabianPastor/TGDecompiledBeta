@@ -13,6 +13,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda22 im
     }
 
     public final boolean onLongClick(View view) {
-        return this.f$0.lambda$createView$10(this.f$1, view);
+        return this.f$0.lambda$createView$11(this.f$1, view);
     }
 }

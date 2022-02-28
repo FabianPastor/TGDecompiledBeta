@@ -1,11 +1,14 @@
 package org.telegram.messenger;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.util.Locale;
 import javax.crypto.Cipher;
 
 public class FingerprintController {
@@ -45,18 +48,21 @@ public class FingerprintController {
         }
     }
 
-    private static boolean generateNewKey() {
+    /* access modifiers changed from: private */
+    public static void generateNewKey(boolean z) {
         KeyPairGenerator keyPairGenerator2 = getKeyPairGenerator();
         if (keyPairGenerator2 != null) {
             try {
+                Locale locale = Locale.getDefault();
+                setLocale(Locale.ENGLISH);
                 keyPairGenerator2.initialize(new KeyGenParameterSpec.Builder("tmessages_passcode", 3).setDigests(new String[]{"SHA-256", "SHA-512"}).setEncryptionPaddings(new String[]{"OAEPPadding"}).setUserAuthenticationRequired(true).build());
                 keyPairGenerator2.generateKeyPair();
-                return true;
+                setLocale(locale);
+                AndroidUtilities.runOnUIThread(new FingerprintController$$ExternalSyntheticLambda0(z));
             } catch (InvalidAlgorithmParameterException e) {
                 FileLog.e((Throwable) e);
             }
         }
-        return false;
     }
 
     public static void deleteInvalidKey() {
@@ -66,11 +72,22 @@ public class FingerprintController {
             FileLog.e((Throwable) e);
         }
         hasChangedFingerprints = null;
+        checkKeyReady(false);
+    }
+
+    public static void checkKeyReady() {
+        checkKeyReady(true);
+    }
+
+    public static void checkKeyReady(boolean z) {
+        if (!isKeyReady()) {
+            Utilities.globalQueue.postRunnable(new FingerprintController$$ExternalSyntheticLambda1(z));
+        }
     }
 
     public static boolean isKeyReady() {
         try {
-            return getKeyStore().containsAlias("tmessages_passcode") || generateNewKey();
+            return getKeyStore().containsAlias("tmessages_passcode");
         } catch (KeyStoreException e) {
             FileLog.e((Throwable) e);
             return false;
@@ -94,5 +111,13 @@ public class FingerprintController {
             hasChangedFingerprints = Boolean.FALSE;
             return false;
         }
+    }
+
+    private static void setLocale(Locale locale) {
+        Locale.setDefault(locale);
+        Resources resources = ApplicationLoader.applicationContext.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.setLocale(locale);
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
     }
 }

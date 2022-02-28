@@ -2902,6 +2902,7 @@ public final class R {
         public static final int ClearCache = NUM;
         public static final int ClearCacheFewChatsTitle = NUM;
         public static final int ClearCacheInfo = NUM;
+        public static final int ClearDownloadsList = NUM;
         public static final int ClearFewChatsTitle = NUM;
         public static final int ClearHistory = NUM;
         public static final int ClearHistoryCache = NUM;
@@ -3259,6 +3260,8 @@ public final class R {
         public static final int DoubleTapPreviewRational = NUM;
         public static final int DoubleTapPreviewSenderName = NUM;
         public static final int DoubleTapSetting = NUM;
+        public static final int DownloadedFiles = NUM;
+        public static final int DownloadedFilesMessage = NUM;
         public static final int Downloading = NUM;
         public static final int DownloadsTabs = NUM;
         public static final int Draft = NUM;
@@ -4165,6 +4168,7 @@ public final class R {
         public static final int LogOut = NUM;
         public static final int LogOutInfo = NUM;
         public static final int LogOutTitle = NUM;
+        public static final int LoginAccessibilityCountryCode = NUM;
         public static final int LoginAttempts = NUM;
         public static final int LoginAttemptsInfo = NUM;
         public static final int LoginPassword = NUM;
@@ -4191,6 +4195,7 @@ public final class R {
         public static final int ManageAllFilesRational2 = NUM;
         public static final int ManageChannel = NUM;
         public static final int ManageChannelMenu = NUM;
+        public static final int ManageDeviceStorage = NUM;
         public static final int ManageGroup = NUM;
         public static final int ManageGroupMenu = NUM;
         public static final int ManageInviteLinks = NUM;
@@ -5487,6 +5492,13 @@ public final class R {
         public static final int RemindDayYearAt = NUM;
         public static final int RemindTodayAt = NUM;
         public static final int Reminders = NUM;
+        public static final int RemoveDocumentsMessage = NUM;
+        public static final int RemoveDocumentsTitle_few = NUM;
+        public static final int RemoveDocumentsTitle_many = NUM;
+        public static final int RemoveDocumentsTitle_one = NUM;
+        public static final int RemoveDocumentsTitle_other = NUM;
+        public static final int RemoveDocumentsTitle_two = NUM;
+        public static final int RemoveDocumentsTitle_zero = NUM;
         public static final int RemoveFromListText = NUM;
         public static final int RemoveStickersCount = NUM;
         public static final int RemovedFromFavorites = NUM;
@@ -5662,6 +5674,7 @@ public final class R {
         public static final int SearchBackgrounds = NUM;
         public static final int SearchByColor = NUM;
         public static final int SearchEmojiHint = NUM;
+        public static final int SearchEmptyViewDownloads = NUM;
         public static final int SearchEmptyViewFilteredSubtitle2 = NUM;
         public static final int SearchEmptyViewFilteredSubtitleFiles = NUM;
         public static final int SearchEmptyViewFilteredSubtitleLinks = NUM;

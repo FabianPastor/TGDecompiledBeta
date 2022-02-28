@@ -87,7 +87,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private View applyingView;
     /* access modifiers changed from: private */
     public AvatarsImageView avatars;
-    private ChatActivity chatActivity;
     /* access modifiers changed from: private */
     public boolean checkCallAfterAnimation;
     /* access modifiers changed from: private */
@@ -268,17 +267,15 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.animationIndex = -1;
         this.resourcesProvider = resourcesProvider3;
         this.fragment = baseFragment2;
-        if (baseFragment2 instanceof ChatActivity) {
-            this.chatActivity = (ChatActivity) baseFragment2;
-        }
+        SizeNotifierFrameLayout sizeNotifierFrameLayout = baseFragment.getFragmentView() instanceof SizeNotifierFrameLayout ? (SizeNotifierFrameLayout) this.fragment.getFragmentView() : null;
         this.applyingView = view2;
         this.visible = true;
         this.isLocation = z2;
         if (view2 == null) {
-            ((ViewGroup) baseFragment.getFragmentView()).setClipToPadding(false);
+            ((ViewGroup) this.fragment.getFragmentView()).setClipToPadding(false);
         }
         setTag(1);
-        AnonymousClass3 r1 = new ChatBlurredFrameLayout(context2, this.chatActivity) {
+        AnonymousClass3 r1 = new BlurredFrameLayout(context2, sizeNotifierFrameLayout) {
             public void invalidate() {
                 super.invalidate();
                 if (FragmentContextView.this.avatars != null && FragmentContextView.this.avatars.getVisibility() == 0) {
@@ -658,9 +655,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (baseFragment instanceof DialogsActivity) {
                 builder.setMessage(LocaleController.getString("StopLiveLocationAlertAllText", NUM));
             } else {
-                ChatActivity chatActivity2 = (ChatActivity) baseFragment;
-                TLRPC$Chat currentChat = chatActivity2.getCurrentChat();
-                TLRPC$User currentUser = chatActivity2.getCurrentUser();
+                ChatActivity chatActivity = (ChatActivity) baseFragment;
+                TLRPC$Chat currentChat = chatActivity.getCurrentChat();
+                TLRPC$User currentUser = chatActivity.getCurrentUser();
                 if (currentChat != null) {
                     builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("StopLiveLocationAlertToGroupText", NUM, currentChat.title)));
                 } else if (currentUser != null) {
@@ -697,7 +694,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$10(Theme.ResourcesProvider resourcesProvider2, BaseFragment baseFragment, View view) {
-        ChatActivity chatActivity2;
+        ChatActivity chatActivity;
         ChatObject.Call groupCall;
         long j;
         int i;
@@ -768,8 +765,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 GroupCallActivity.create((LaunchActivity) getContext(), AccountInstance.getInstance(VoIPService.getSharedInstance().getAccount()), (TLRPC$Chat) null, (TLRPC$InputPeer) null, false, (String) null);
             }
         } else if (i2 == 4) {
-            if (this.fragment.getParentActivity() != null && (groupCall = chatActivity2.getGroupCall()) != null) {
-                TLRPC$Chat chat = (chatActivity2 = (ChatActivity) this.fragment).getMessagesController().getChat(Long.valueOf(groupCall.chatId));
+            if (this.fragment.getParentActivity() != null && (groupCall = chatActivity.getGroupCall()) != null) {
+                TLRPC$Chat chat = (chatActivity = (ChatActivity) this.fragment).getMessagesController().getChat(Long.valueOf(groupCall.chatId));
                 Activity parentActivity = this.fragment.getParentActivity();
                 BaseFragment baseFragment4 = this.fragment;
                 VoIPHelper.startCall(chat, (TLRPC$InputPeer) null, (String) null, false, parentActivity, baseFragment4, baseFragment4.getAccountInstance());
@@ -1471,9 +1468,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         String str;
         BaseFragment baseFragment = this.fragment;
         if ((baseFragment instanceof ChatActivity) && this.titleTextView != null) {
-            ChatActivity chatActivity2 = (ChatActivity) baseFragment;
-            long dialogId = chatActivity2.getDialogId();
-            int currentAccount = chatActivity2.getCurrentAccount();
+            ChatActivity chatActivity = (ChatActivity) baseFragment;
+            long dialogId = chatActivity.getDialogId();
+            int currentAccount = chatActivity.getCurrentAccount();
             ArrayList arrayList = LocationController.getInstance(currentAccount).locationsCache.get(dialogId);
             if (!this.firstLocationsLoaded) {
                 LocationController.getInstance(currentAccount).loadLiveLocations(dialogId);
@@ -1757,14 +1754,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             return;
         }
         if (!this.visible || !((i = this.currentStyle) == 1 || i == 3)) {
-            ChatActivity chatActivity2 = (ChatActivity) baseFragment;
-            SendMessagesHelper.ImportingHistory importingHistory = chatActivity2.getSendMessagesHelper().getImportingHistory(chatActivity2.getDialogId());
+            ChatActivity chatActivity = (ChatActivity) baseFragment;
+            SendMessagesHelper.ImportingHistory importingHistory = chatActivity.getSendMessagesHelper().getImportingHistory(chatActivity.getDialogId());
             View fragmentView = this.fragment.getFragmentView();
             if (!z && fragmentView != null && (fragmentView.getParent() == null || ((View) fragmentView.getParent()).getVisibility() != 0)) {
                 z = true;
             }
-            Dialog visibleDialog = chatActivity2.getVisibleDialog();
-            if ((isPlayingVoice() || chatActivity2.shouldShowImport() || ((visibleDialog instanceof ImportingAlert) && !((ImportingAlert) visibleDialog).isDismissed())) && importingHistory != null) {
+            Dialog visibleDialog = chatActivity.getVisibleDialog();
+            if ((isPlayingVoice() || chatActivity.shouldShowImport() || ((visibleDialog instanceof ImportingAlert) && !((ImportingAlert) visibleDialog).isDismissed())) && importingHistory != null) {
                 importingHistory = null;
             }
             if (importingHistory == null) {
@@ -2057,7 +2054,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             org.telegram.ui.ActionBar.BaseFragment r1 = r0.fragment
             org.telegram.ui.Components.BulletinFactory r1 = org.telegram.ui.Components.BulletinFactory.of(r1)
             r2 = 2131558472(0x7f0d0048, float:1.874226E38)
-            r3 = 2131626064(0x7f0e0850, float:1.8879354E38)
+            r3 = 2131626067(0x7f0e0853, float:1.887936E38)
             java.lang.String r4 = "InviteExpired"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             org.telegram.ui.Components.Bulletin r1 = r1.createSimpleBulletin(r2, r3)
@@ -2176,14 +2173,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x0237
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628604(0x7f0e123c, float:1.8884505E38)
+            r9 = 2131628617(0x7f0e1249, float:1.8884532E38)
             java.lang.String r11 = "VoipChannelScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0245
         L_0x0237:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628711(0x7f0e12a7, float:1.8884722E38)
+            r9 = 2131628724(0x7f0e12b4, float:1.8884749E38)
             java.lang.String r11 = "VoipGroupScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2207,14 +2204,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x027b
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628617(0x7f0e1249, float:1.8884532E38)
+            r9 = 2131628630(0x7f0e1256, float:1.8884558E38)
             java.lang.String r11 = "VoipChannelVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0289
         L_0x027b:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628743(0x7f0e12c7, float:1.8884787E38)
+            r9 = 2131628756(0x7f0e12d4, float:1.8884814E38)
             java.lang.String r11 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2223,7 +2220,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r4 = r4.participants_count
             if (r4 != 0) goto L_0x029e
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r4 = r0.subtitleTextView
-            r6 = 2131626366(0x7f0e097e, float:1.8879966E38)
+            r6 = 2131626371(0x7f0e0983, float:1.8879976E38)
             java.lang.String r9 = "MembersTalkingNobody"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r4.setText(r6, r5)
@@ -2370,9 +2367,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (this.currentStyle == 4) {
                 BaseFragment baseFragment = this.fragment;
                 if (baseFragment instanceof ChatActivity) {
-                    ChatActivity chatActivity2 = (ChatActivity) baseFragment;
-                    call = chatActivity2.getGroupCall();
-                    i2 = chatActivity2.getCurrentAccount();
+                    ChatActivity chatActivity = (ChatActivity) baseFragment;
+                    call = chatActivity.getGroupCall();
+                    i2 = chatActivity.getCurrentAccount();
                 } else {
                     i2 = this.account;
                     call = null;

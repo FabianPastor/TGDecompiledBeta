@@ -1058,6 +1058,7 @@
     <string name="ClearCache">Clear Cache</string>
     <string name="ClearCacheFewChatsTitle">Empty cache for %1$s</string>
     <string name="ClearCacheInfo">Free up disk space on your device; your media will stay in the cloud.</string>
+    <string name="ClearDownloadsList">Clear Downloads List</string>
     <string name="ClearFewChatsTitle">Clear %1$s</string>
     <string name="ClearHistory">Clear history</string>
     <string name="ClearHistoryCache">Delete from cache</string>
@@ -1415,6 +1416,8 @@
     <string name="DoubleTapPreviewRational">Double tap this message for a quck reaction.</string>
     <string name="DoubleTapPreviewSenderName">Dino</string>
     <string name="DoubleTapSetting">Quick Reactions</string>
+    <string name="DownloadedFiles">Downloaded files</string>
+    <string name="DownloadedFilesMessage">Telegram allows to store all recived and sent documents in cloud and save storege space on your device. </string>
     <string name="Downloading">Downloading</string>
     <string name="DownloadsTabs">Downloads</string>
     <string name="Draft">Draft</string>
@@ -2321,6 +2324,7 @@
     <string name="LogOut">Log out</string>
     <string name="LogOutInfo">Logging out deactivates all Secret Chats.</string>
     <string name="LogOutTitle">Log Out</string>
+    <string name="LoginAccessibilityCountryCode">Country code</string>
     <string name="LoginAttempts">Incomplete login attempts</string>
     <string name="LoginAttemptsInfo">The devices above have no access to your messages. The code was entered correctly, but no correct password was given.</string>
     <string name="LoginPassword">Password</string>
@@ -2347,6 +2351,7 @@
     <string name="ManageAllFilesRational2">Telegram needs permission to manage all files to migrate old cache files to Scoped Storage</string>
     <string name="ManageChannel">Manage Channel</string>
     <string name="ManageChannelMenu">Manage channel</string>
+    <string name="ManageDeviceStorage">Manage Device Storage</string>
     <string name="ManageGroup">Manage Group</string>
     <string name="ManageGroupMenu">Manage group</string>
     <string name="ManageInviteLinks">Manage Invite Links</string>
@@ -3643,6 +3648,13 @@
     <string name="RemindDayYearAt">\'Remind on\' MMM d yyyy \'at\' HH:mm</string>
     <string name="RemindTodayAt">\'Remind today at\' HH:mm</string>
     <string name="Reminders">Reminders</string>
+    <string name="RemoveDocumentsMessage">They will be deleted from your disk, but will remain accessible in the cloud.</string>
+    <string name="RemoveDocumentsTitle_few">Remove %d documents</string>
+    <string name="RemoveDocumentsTitle_many">Remove %d documents</string>
+    <string name="RemoveDocumentsTitle_one">Remove %d document</string>
+    <string name="RemoveDocumentsTitle_other">Remove %d documents</string>
+    <string name="RemoveDocumentsTitle_two">Remove %d documents</string>
+    <string name="RemoveDocumentsTitle_zero">Remove %d documents</string>
     <string name="RemoveFromListText">Tap and hold on user to delete.</string>
     <string name="RemoveStickersCount">REMOVE %1$s</string>
     <string name="RemovedFromFavorites">Sticker was removed from Favorites</string>
@@ -3818,6 +3830,7 @@
     <string name="SearchBackgrounds">Search Backgrounds</string>
     <string name="SearchByColor">Search by color</string>
     <string name="SearchEmojiHint">Search emoji</string>
+    <string name="SearchEmptyViewDownloads">No recently downloads</string>
     <string name="SearchEmptyViewFilteredSubtitle2">Try a new search.</string>
     <string name="SearchEmptyViewFilteredSubtitleFiles">Files from all your chats will be shown here.</string>
     <string name="SearchEmptyViewFilteredSubtitleLinks">Links from all your chats will be shown here.</string>

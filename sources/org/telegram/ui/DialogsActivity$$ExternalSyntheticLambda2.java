@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda2 imp
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$getCustomSlideTransition$48(valueAnimator);
+        this.f$0.lambda$hideFloatingButton$41(valueAnimator);
     }
 }

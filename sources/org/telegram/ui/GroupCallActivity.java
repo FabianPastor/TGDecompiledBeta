@@ -2205,11 +2205,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r2 = r15.noiseItem
             boolean r4 = org.telegram.messenger.SharedConfig.noiseSupression
             if (r4 == 0) goto L_0x00d4
-            r4 = 2131628769(0x7f0e12e1, float:1.888484E38)
+            r4 = 2131628782(0x7f0e12ee, float:1.8884866E38)
             java.lang.String r5 = "VoipNoiseCancellationEnabled"
             goto L_0x00d9
         L_0x00d4:
-            r4 = 2131628768(0x7f0e12e0, float:1.8884838E38)
+            r4 = 2131628781(0x7f0e12ed, float:1.8884864E38)
             java.lang.String r5 = "VoipNoiseCancellationDisabled"
         L_0x00d9:
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
@@ -2219,9 +2219,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r4 = 2131165862(0x7var_a6, float:1.7945953E38)
             r5 = 2131165861(0x7var_a5, float:1.7945951E38)
             r6 = 21
-            r7 = 2131628628(0x7f0e1254, float:1.8884554E38)
+            r7 = 2131628641(0x7f0e1261, float:1.888458E38)
             java.lang.String r8 = "VoipChatStopScreenCapture"
-            r9 = 2131628626(0x7f0e1252, float:1.888455E38)
+            r9 = 2131628639(0x7f0e125f, float:1.8884576E38)
             java.lang.String r10 = "VoipChatStartScreenCapture"
             r11 = 2
             r12 = 1
@@ -2277,7 +2277,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r13)
         L_0x0162:
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.recordItem
-            r2 = 2131628727(0x7f0e12b7, float:1.8884755E38)
+            r2 = 2131628740(0x7f0e12c4, float:1.8884781E38)
             java.lang.String r6 = "VoipGroupStopRecordCall"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r0.setText(r2)
@@ -2290,7 +2290,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r15.updateCallRecordRunnable = r0
         L_0x017b:
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r15.recordItem
-            r2 = 2131628703(0x7f0e129f, float:1.8884706E38)
+            r2 = 2131628716(0x7f0e12ac, float:1.8884733E38)
             java.lang.String r6 = "VoipGroupRecordCall"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r0.setText(r2)
@@ -2913,7 +2913,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r3 = 18
             r1.setTextSize(r3)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r8.scheduleStartInTextView
-            r3 = 2131628627(0x7f0e1253, float:1.8884552E38)
+            r3 = 2131628640(0x7f0e1260, float:1.8884578E38)
             java.lang.String r2 = "VoipChatStartsIn"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setText(r2)
@@ -3277,7 +3277,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             int r33 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r34 = 1050253722(0x3e99999a, float:0.3)
             r35 = 0
-            r2 = 2131628685(0x7f0e128d, float:1.888467E38)
+            r2 = 2131628698(0x7f0e129a, float:1.8884696E38)
             java.lang.String r12 = "VoipGroupLeave"
             java.lang.String r36 = org.telegram.messenger.LocaleController.getString(r12, r2)
             r37 = 0
@@ -3615,7 +3615,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             android.view.View r1 = r1.addGap(r2)
             r8.accountGap = r1
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r8.otherItem
-            r5 = 2131628647(0x7f0e1267, float:1.8884593E38)
+            r5 = 2131628660(0x7f0e1274, float:1.8884619E38)
             java.lang.String r6 = "VoipGroupAllCanSpeak"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = 1
@@ -3623,7 +3623,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r8.everyoneItem = r1
             r1.updateSelectorBackground(r6, r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r8.otherItem
-            r5 = 2131628696(0x7f0e1298, float:1.8884692E38)
+            r5 = 2131628709(0x7f0e12a5, float:1.8884718E38)
             java.lang.String r14 = "VoipGroupOnlyAdminsCanSpeak"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r14, r5)
             r14 = 2
@@ -3660,7 +3660,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r31 = 10
             r32 = 2131165905(0x7var_d1, float:1.794604E38)
             r33 = 0
-            r2 = 2131628649(0x7f0e1269, float:1.8884597E38)
+            r2 = 2131628662(0x7f0e1276, float:1.8884623E38)
             java.lang.String r5 = "VoipGroupAudio"
             java.lang.String r34 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r35 = 1
@@ -3673,7 +3673,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r8.otherItem
             r31 = 11
             r32 = 2131165818(0x7var_a, float:1.7945864E38)
-            r2 = 2131628767(0x7f0e12df, float:1.8884836E38)
+            r2 = 2131628780(0x7f0e12ec, float:1.8884862E38)
             java.lang.String r5 = "VoipNoiseCancellation"
             java.lang.String r34 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r30 = r1
@@ -3704,11 +3704,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.tgnet.TLRPC$Chat r5 = r8.currentChat
             boolean r5 = org.telegram.messenger.ChatObject.isChannelOrGiga(r5)
             if (r5 == 0) goto L_0x0ab6
-            r5 = 2131628585(0x7f0e1229, float:1.8884467E38)
+            r5 = 2131628598(0x7f0e1236, float:1.8884493E38)
             java.lang.String r6 = "VoipChannelEditTitle"
             goto L_0x0abb
         L_0x0ab6:
-            r5 = 2131628665(0x7f0e1279, float:1.888463E38)
+            r5 = 2131628678(0x7f0e1286, float:1.8884655E38)
             java.lang.String r6 = "VoipGroupEditTitle"
         L_0x0abb:
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
@@ -3723,7 +3723,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r31 = 7
             r32 = 2131165824(0x7var_, float:1.7945876E38)
             org.telegram.ui.GroupCallActivity$RecordCallDrawable r2 = r8.recordCallDrawable
-            r5 = 2131628664(0x7f0e1278, float:1.8884627E38)
+            r5 = 2131628677(0x7f0e1285, float:1.8884653E38)
             java.lang.String r6 = "VoipGroupEditPermissions"
             java.lang.String r34 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r35 = 0
@@ -3734,7 +3734,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r8.otherItem
             r2 = 3
             r5 = 2131165792(0x7var_, float:1.7945811E38)
-            r6 = 2131628714(0x7f0e12aa, float:1.8884728E38)
+            r6 = 2131628727(0x7f0e12b7, float:1.8884755E38)
             java.lang.String r14 = "VoipGroupShareInviteLink"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r14, r6)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r1.addSubItem(r2, r5, r6)
@@ -3745,7 +3745,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r8.otherItem
             r2 = 9
             r5 = 2131165861(0x7var_a5, float:1.7945951E38)
-            r6 = 2131628626(0x7f0e1252, float:1.888455E38)
+            r6 = 2131628639(0x7f0e125f, float:1.8884576E38)
             java.lang.String r14 = "VoipChatStartScreenCapture"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r14, r6)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r1.addSubItem(r2, r5, r6)
@@ -3754,7 +3754,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r31 = 5
             r32 = 0
             org.telegram.ui.GroupCallActivity$RecordCallDrawable r2 = r8.recordCallDrawable
-            r5 = 2131628703(0x7f0e129f, float:1.8884706E38)
+            r5 = 2131628716(0x7f0e12ac, float:1.8884733E38)
             java.lang.String r6 = "VoipGroupRecordCall"
             java.lang.String r34 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r35 = 1
@@ -3771,11 +3771,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.tgnet.TLRPC$Chat r6 = r8.currentChat
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x0b59
-            r6 = 2131628588(0x7f0e122c, float:1.8884473E38)
+            r6 = 2131628601(0x7f0e1239, float:1.88845E38)
             java.lang.String r14 = "VoipChannelEndChat"
             goto L_0x0b5e
         L_0x0b59:
-            r6 = 2131628669(0x7f0e127d, float:1.8884637E38)
+            r6 = 2131628682(0x7f0e128a, float:1.8884664E38)
             java.lang.String r14 = "VoipGroupEndChat"
         L_0x0b5e:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r14, r6)
@@ -5489,14 +5489,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.tgnet.TLRPC$Chat r0 = r12.currentChat
             boolean r0 = org.telegram.messenger.ChatObject.isChannelOrGiga(r0)
             if (r0 == 0) goto L_0x0075
-            r0 = 2131628589(0x7f0e122d, float:1.8884475E38)
+            r0 = 2131628602(0x7f0e123a, float:1.8884501E38)
             java.lang.Object[] r2 = new java.lang.Object[r2]
             r2[r1] = r8
             java.lang.String r1 = "VoipChannelInviteText"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r1, r0, r2)
             goto L_0x0082
         L_0x0075:
-            r0 = 2131628675(0x7f0e1283, float:1.888465E38)
+            r0 = 2131628688(0x7f0e1290, float:1.8884676E38)
             java.lang.Object[] r2 = new java.lang.Object[r2]
             r2[r1] = r8
             java.lang.String r1 = "VoipGroupInviteText"
@@ -6045,7 +6045,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r4 = 0
             r5 = 1065353216(0x3var_, float:1.0)
             r6 = 1
-            r7 = 2131628582(0x7f0e1226, float:1.888446E38)
+            r7 = 2131628595(0x7f0e1233, float:1.8884487E38)
             java.lang.String r8 = "VoipCamera"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r8 = r13 ^ 1
@@ -6067,7 +6067,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r21 = 0
             r22 = 1065353216(0x3var_, float:1.0)
             r23 = 1
-            r2 = 2131628642(0x7f0e1262, float:1.8884582E38)
+            r2 = 2131628655(0x7f0e126f, float:1.8884609E38)
             java.lang.String r3 = "VoipFlip"
             java.lang.String r24 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r25 = 0
@@ -6261,7 +6261,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r16 = 1050253722(0x3e99999a, float:0.3)
             r17 = 0
-            r1 = 2131625018(0x7f0e043a, float:1.8877232E38)
+            r1 = 2131625019(0x7f0e043b, float:1.8877234E38)
             java.lang.String r2 = "Close"
             java.lang.String r18 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r19 = 0
@@ -6357,7 +6357,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r3 = 6
             r13 = 7
             if (r1 != r13) goto L_0x0040
-            r5 = 2131628656(0x7f0e1270, float:1.888461E38)
+            r5 = 2131628669(0x7f0e127d, float:1.8884637E38)
             java.lang.String r12 = "VoipGroupCancelReminder"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r12, r5)
             org.telegram.ui.Components.RLottieDrawable r12 = r0.bigMicDrawable
@@ -6368,7 +6368,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             goto L_0x01b8
         L_0x0040:
             if (r1 != r3) goto L_0x0052
-            r5 = 2131628713(0x7f0e12a9, float:1.8884726E38)
+            r5 = 2131628726(0x7f0e12b6, float:1.8884753E38)
             java.lang.String r12 = "VoipGroupSetReminder"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r12, r5)
             org.telegram.ui.Components.RLottieDrawable r12 = r0.bigMicDrawable
@@ -6376,7 +6376,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             goto L_0x003b
         L_0x0052:
             if (r1 != r10) goto L_0x0066
-            r5 = 2131628722(0x7f0e12b2, float:1.8884745E38)
+            r5 = 2131628735(0x7f0e12bf, float:1.8884771E38)
             java.lang.String r12 = "VoipGroupStartNow"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r12, r5)
             org.telegram.ui.Components.RLottieDrawable r12 = r0.bigMicDrawable
@@ -6387,10 +6387,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r5 = 404(0x194, float:5.66E-43)
             r9 = 3
             if (r1 != 0) goto L_0x00d4
-            r12 = 2131628732(0x7f0e12bc, float:1.8884765E38)
+            r12 = 2131628745(0x7f0e12c9, float:1.8884791E38)
             java.lang.String r14 = "VoipGroupUnmute"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r14, r12)
-            r14 = 2131628748(0x7f0e12cc, float:1.8884797E38)
+            r14 = 2131628761(0x7f0e12d9, float:1.8884824E38)
             java.lang.String r8 = "VoipHoldAndTalk"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r8, r14)
             int r8 = r0.muteButtonState
@@ -6446,7 +6446,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         L_0x00d4:
             r8 = 1
             if (r1 != r8) goto L_0x00f3
-            r5 = 2131628812(0x7f0e130c, float:1.8884927E38)
+            r5 = 2131628825(0x7f0e1319, float:1.8884954E38)
             java.lang.String r8 = "VoipTapToMute"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r8, r5)
             org.telegram.ui.Components.RLottieDrawable r8 = r0.bigMicDrawable
@@ -6464,10 +6464,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         L_0x00f3:
             r12 = 4
             if (r1 != r12) goto L_0x0110
-            r5 = 2131628760(0x7f0e12d8, float:1.8884822E38)
+            r5 = 2131628773(0x7f0e12e5, float:1.8884848E38)
             java.lang.String r8 = "VoipMutedTapedForSpeak"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r8, r5)
-            r8 = 2131628761(0x7f0e12d9, float:1.8884824E38)
+            r8 = 2131628774(0x7f0e12e6, float:1.888485E38)
             java.lang.String r9 = "VoipMutedTapedForSpeakInfo"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r9, r8)
             org.telegram.ui.Components.RLottieDrawable r8 = r0.bigMicDrawable
@@ -6555,15 +6555,15 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r5 = 3
         L_0x019a:
             if (r1 != r5) goto L_0x01a6
-            r5 = 2131625074(0x7f0e0472, float:1.8877346E38)
+            r5 = 2131625075(0x7f0e0473, float:1.8877348E38)
             java.lang.String r10 = "Connecting"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r10, r5)
             goto L_0x01b8
         L_0x01a6:
-            r5 = 2131628756(0x7f0e12d4, float:1.8884814E38)
+            r5 = 2131628769(0x7f0e12e1, float:1.888484E38)
             java.lang.String r10 = "VoipMutedByAdmin"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r10, r5)
-            r10 = 2131628759(0x7f0e12d7, float:1.888482E38)
+            r10 = 2131628772(0x7f0e12e4, float:1.8884846E38)
             java.lang.String r14 = "VoipMutedTapForSpeak"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r14, r10)
         L_0x01b8:
@@ -7581,7 +7581,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             if (r8 == 0) goto L_0x03c1
             boolean r6 = r21.isHandRaised()
             if (r6 == 0) goto L_0x030f
-            r6 = 2131628655(0x7f0e126f, float:1.8884609E38)
+            r6 = 2131628668(0x7f0e127c, float:1.8884635E38)
             java.lang.String r8 = "VoipGroupCancelRaiseHand"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
             r5.add(r6)
@@ -7594,11 +7594,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         L_0x030f:
             boolean r6 = r21.hasAvatarSet()
             if (r6 == 0) goto L_0x031b
-            r6 = 2131628571(0x7f0e121b, float:1.8884438E38)
+            r6 = 2131628584(0x7f0e1228, float:1.8884465E38)
             java.lang.String r8 = "VoipAddPhoto"
             goto L_0x0320
         L_0x031b:
-            r6 = 2131628803(0x7f0e1303, float:1.888491E38)
+            r6 = 2131628816(0x7f0e1310, float:1.8884935E38)
             java.lang.String r8 = "VoipSetNewPhoto"
         L_0x0320:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
@@ -7615,11 +7615,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             java.lang.String r6 = r8.about
             boolean r6 = android.text.TextUtils.isEmpty(r6)
             if (r6 == 0) goto L_0x034e
-            r6 = 2131628569(0x7f0e1219, float:1.8884434E38)
+            r6 = 2131628582(0x7f0e1226, float:1.888446E38)
             java.lang.String r11 = "VoipAddBio"
             goto L_0x0353
         L_0x034e:
-            r6 = 2131628632(0x7f0e1258, float:1.8884562E38)
+            r6 = 2131628645(0x7f0e1265, float:1.8884589E38)
             java.lang.String r11 = "VoipEditBio"
         L_0x0353:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
@@ -7630,11 +7630,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             java.lang.String r6 = r8.about
             boolean r6 = android.text.TextUtils.isEmpty(r6)
             if (r6 == 0) goto L_0x036b
-            r6 = 2131628570(0x7f0e121a, float:1.8884436E38)
+            r6 = 2131628583(0x7f0e1227, float:1.8884463E38)
             java.lang.String r11 = "VoipAddDescription"
             goto L_0x0370
         L_0x036b:
-            r6 = 2131628633(0x7f0e1259, float:1.8884564E38)
+            r6 = 2131628646(0x7f0e1266, float:1.888459E38)
             java.lang.String r11 = "VoipEditDescription"
         L_0x0370:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
@@ -7655,11 +7655,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r1.add(r6)
             int r6 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
             if (r6 <= 0) goto L_0x03a0
-            r6 = 2131628634(0x7f0e125a, float:1.8884566E38)
+            r6 = 2131628647(0x7f0e1267, float:1.8884593E38)
             java.lang.String r11 = "VoipEditName"
             goto L_0x03a5
         L_0x03a0:
-            r6 = 2131628635(0x7f0e125b, float:1.8884568E38)
+            r6 = 2131628648(0x7f0e1268, float:1.8884595E38)
             java.lang.String r11 = "VoipEditTitle"
         L_0x03a5:
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
@@ -7675,7 +7675,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r8 = r26
             org.telegram.tgnet.TLRPC$Chat r11 = r7.currentChat
             boolean r11 = org.telegram.messenger.ChatObject.canManageCalls(r11)
-            r13 = 2131628697(0x7f0e1299, float:1.8884694E38)
+            r13 = 2131628710(0x7f0e12a6, float:1.888472E38)
             java.lang.String r14 = "VoipGroupOpenChannel"
             r24 = 6
             r26 = 2131165906(0x7var_d2, float:1.7946042E38)
@@ -7691,7 +7691,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             if (r11 == 0) goto L_0x03e7
             goto L_0x0414
         L_0x03e7:
-            r11 = 2131628648(0x7f0e1268, float:1.8884595E38)
+            r11 = 2131628661(0x7f0e1275, float:1.888462E38)
             java.lang.String r12 = "VoipGroupAllowToSpeak"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r5.add(r11)
@@ -7711,7 +7711,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r1.add(r12)
             goto L_0x042f
         L_0x0414:
-            r11 = 2131628689(0x7f0e1291, float:1.8884678E38)
+            r11 = 2131628702(0x7f0e129e, float:1.8884704E38)
             java.lang.String r12 = "VoipGroupMute"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r5.add(r11)
@@ -7738,7 +7738,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r1.add(r9)
             goto L_0x0477
         L_0x045a:
-            r9 = 2131628700(0x7f0e129c, float:1.88847E38)
+            r9 = 2131628713(0x7f0e12a9, float:1.8884726E38)
             java.lang.String r10 = "VoipGroupOpenProfile"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.add(r9)
@@ -7752,7 +7752,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.tgnet.TLRPC$Chat r6 = r7.currentChat
             boolean r6 = org.telegram.messenger.ChatObject.canBlockUsers(r6)
             if (r6 == 0) goto L_0x0523
-            r6 = 2131628739(0x7f0e12c3, float:1.888478E38)
+            r6 = 2131628752(0x7f0e12d0, float:1.8884806E38)
             java.lang.String r9 = "VoipGroupUserRemove"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r5.add(r6)
@@ -7766,7 +7766,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         L_0x04a1:
             boolean r6 = r8.muted_by_you
             if (r6 == 0) goto L_0x04c1
-            r6 = 2131628733(0x7f0e12bd, float:1.8884767E38)
+            r6 = 2131628746(0x7f0e12ca, float:1.8884793E38)
             java.lang.String r9 = "VoipGroupUnmuteForMe"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r5.add(r6)
@@ -7777,7 +7777,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r1.add(r6)
             goto L_0x04dc
         L_0x04c1:
-            r6 = 2131628690(0x7f0e1292, float:1.888468E38)
+            r6 = 2131628703(0x7f0e129f, float:1.8884706E38)
             java.lang.String r9 = "VoipGroupMuteForMe"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r5.add(r6)
@@ -7805,7 +7805,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r1.add(r6)
             goto L_0x0523
         L_0x0509:
-            r9 = 2131628698(0x7f0e129a, float:1.8884696E38)
+            r9 = 2131628711(0x7f0e12a7, float:1.8884722E38)
             java.lang.String r10 = "VoipGroupOpenChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r5.add(r9)
@@ -8981,14 +8981,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 java.lang.String r2 = r2.username
                 boolean r2 = android.text.TextUtils.isEmpty(r2)
                 if (r2 != 0) goto L_0x020f
-                r2 = 2131628715(0x7f0e12ab, float:1.888473E38)
+                r2 = 2131628728(0x7f0e12b8, float:1.8884757E38)
                 java.lang.String r3 = "VoipGroupShareLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r3 = 2131165792(0x7var_, float:1.7945811E38)
                 r1.setTextAndIcon(r2, r3, r5)
                 goto L_0x021e
             L_0x020f:
-                r2 = 2131628674(0x7f0e1282, float:1.8884647E38)
+                r2 = 2131628687(0x7f0e128f, float:1.8884674E38)
                 java.lang.String r3 = "VoipGroupInviteMember"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r3 = 2131165249(0x7var_, float:1.794471E38)

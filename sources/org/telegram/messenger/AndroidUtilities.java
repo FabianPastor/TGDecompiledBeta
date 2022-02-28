@@ -149,6 +149,7 @@ public class AndroidUtilities {
     public static final String STICKERS_PLACEHOLDER_PACK_NAME = "tg_placeholders_android";
     public static Pattern WEB_URL;
     public static AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
+    private static AccessibilityManager accessibilityManager;
     private static int adjustOwnerClassGuid = 0;
     private static int altFocusableClassGuid = 0;
     private static RectF bitmapRect;
@@ -1133,7 +1134,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131625078(0x7f0e0476, float:1.8877354E38)
+                r0 = 2131625079(0x7f0e0477, float:1.8877356E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1145,12 +1146,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131625079(0x7f0e0477, float:1.8877356E38)
+                r0 = 2131625080(0x7f0e0478, float:1.8877358E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131625080(0x7f0e0478, float:1.8877358E38)
+                r0 = 2131625081(0x7f0e0479, float:1.887736E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1268,27 +1269,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131627234(0x7f0e0ce2, float:1.8881727E38)
+                r0 = 2131627239(0x7f0e0ce7, float:1.8881737E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131627235(0x7f0e0ce3, float:1.8881729E38)
+                r0 = 2131627240(0x7f0e0ce8, float:1.8881739E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131627225(0x7f0e0cd9, float:1.8881708E38)
+                r0 = 2131627230(0x7f0e0cde, float:1.8881719E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131627224(0x7f0e0cd8, float:1.8881706E38)
+                r0 = 2131627229(0x7f0e0cdd, float:1.8881717E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131627226(0x7f0e0cda, float:1.888171E38)
+                r0 = 2131627231(0x7f0e0cdf, float:1.888172E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -3452,7 +3453,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0157
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0157
-            r7 = 2131626813(0x7f0e0b3d, float:1.8880873E38)
+            r7 = 2131626818(0x7f0e0b42, float:1.8880883E38)
             java.lang.String r8 = "OK"
             r9 = 2131624304(0x7f0e0170, float:1.8875784E38)
             java.lang.String r10 = "AppName"
@@ -3475,7 +3476,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131626038(0x7f0e0836, float:1.88793E38)
+            r1 = 2131626041(0x7f0e0839, float:1.8879307E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3559,7 +3560,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626578(0x7f0e0a52, float:1.8880396E38)
+            r1 = 2131626583(0x7f0e0a57, float:1.8880406E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3956,6 +3957,13 @@ public class AndroidUtilities {
         if (z) {
             matrix.preTranslate(f4, f5);
         }
+    }
+
+    public static boolean isAccessibilityTouchExplorationEnabled() {
+        if (accessibilityManager == null) {
+            accessibilityManager = (AccessibilityManager) ApplicationLoader.applicationContext.getSystemService("accessibility");
+        }
+        return accessibilityManager.isEnabled() && accessibilityManager.isTouchExplorationEnabled();
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:30:0x0063, code lost:
@@ -4441,12 +4449,12 @@ public class AndroidUtilities {
     }
 
     public static void makeAccessibilityAnnouncement(CharSequence charSequence) {
-        AccessibilityManager accessibilityManager = (AccessibilityManager) ApplicationLoader.applicationContext.getSystemService("accessibility");
-        if (accessibilityManager.isEnabled()) {
+        AccessibilityManager accessibilityManager2 = (AccessibilityManager) ApplicationLoader.applicationContext.getSystemService("accessibility");
+        if (accessibilityManager2.isEnabled()) {
             AccessibilityEvent obtain = AccessibilityEvent.obtain();
             obtain.setEventType(16384);
             obtain.getText().add(charSequence);
-            accessibilityManager.sendAccessibilityEvent(obtain);
+            accessibilityManager2.sendAccessibilityEvent(obtain);
         }
     }
 

@@ -1082,10 +1082,10 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.String r4 = android.os.Environment.getExternalStorageState()
             java.lang.String r5 = "mounted"
             boolean r5 = r4.equals(r5)
-            r6 = 2131625610(0x7f0e068a, float:1.8878433E38)
+            r6 = 2131625613(0x7f0e068d, float:1.8878439E38)
             java.lang.String r7 = "ExternalFolderInfo"
             r8 = 2131165423(0x7var_ef, float:1.7945063E38)
-            r9 = 2131627757(0x7f0e0eed, float:1.8882787E38)
+            r9 = 2131627769(0x7f0e0ef9, float:1.8882812E38)
             java.lang.String r10 = "SdCard"
             if (r5 != 0) goto L_0x0044
             java.lang.String r5 = "mounted_ro"
@@ -1103,13 +1103,13 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r4.subtitle = r5
             goto L_0x0079
         L_0x005e:
-            r5 = 2131626046(0x7f0e083e, float:1.8879317E38)
+            r5 = 2131626049(0x7f0e0841, float:1.8879323E38)
             java.lang.String r11 = "InternalStorage"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.title = r5
             r5 = 2131165425(0x7var_f1, float:1.7945067E38)
             r4.icon = r5
-            r5 = 2131626045(0x7f0e083d, float:1.8879315E38)
+            r5 = 2131626048(0x7f0e0840, float:1.8879321E38)
             java.lang.String r11 = "InternalFolderInfo"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.subtitle = r5
@@ -1200,7 +1200,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             goto L_0x0152
         L_0x0147:
             java.lang.String r11 = "ExternalStorage"
-            r12 = 2131625611(0x7f0e068b, float:1.8878435E38)
+            r12 = 2131625614(0x7f0e068e, float:1.887844E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r12)     // Catch:{ Exception -> 0x0168 }
             r4.title = r11     // Catch:{ Exception -> 0x0168 }
         L_0x0152:
@@ -1263,11 +1263,11 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         L_0x01ba:
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
             r0.<init>()
-            r2 = 2131625861(0x7f0e0785, float:1.8878942E38)
+            r2 = 2131625864(0x7f0e0788, float:1.8878948E38)
             java.lang.String r3 = "Gallery"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131625862(0x7f0e0786, float:1.8878944E38)
+            r2 = 2131625865(0x7f0e0789, float:1.887895E38)
             java.lang.String r3 = "GalleryInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2
@@ -1284,7 +1284,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.String r3 = "AttachMusic"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131626502(0x7f0e0a06, float:1.8880242E38)
+            r2 = 2131626507(0x7f0e0a0b, float:1.8880252E38)
             java.lang.String r3 = "MusicInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2

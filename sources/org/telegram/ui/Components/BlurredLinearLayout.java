@@ -1,32 +1,33 @@
 package org.telegram.ui.Components;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.ui.ChatActivity;
 
-public class ChatBlurredFrameLayout extends FrameLayout {
+@SuppressLint({"ViewConstructor"})
+public class BlurredLinearLayout extends LinearLayout {
     public int backgroundColor = 0;
     public int backgroundPaddingBottom;
     public int backgroundPaddingTop;
     protected Paint backgroundPaint;
-    ChatActivity chatActivity;
     public boolean drawBlur = true;
     public boolean isTopView = true;
+    private final SizeNotifierFrameLayout sizeNotifierFrameLayout;
 
-    public ChatBlurredFrameLayout(Context context, ChatActivity chatActivity2) {
+    public BlurredLinearLayout(Context context, SizeNotifierFrameLayout sizeNotifierFrameLayout2) {
         super(context);
-        this.chatActivity = chatActivity2;
+        this.sizeNotifierFrameLayout = sizeNotifierFrameLayout2;
     }
 
     /* access modifiers changed from: protected */
     public void dispatchDraw(Canvas canvas) {
-        SizeNotifierFrameLayout sizeNotifierFrameLayout;
-        if (SharedConfig.chatBlurEnabled() && this.chatActivity != null && this.drawBlur && this.backgroundColor != 0) {
+        SizeNotifierFrameLayout sizeNotifierFrameLayout2;
+        if (SharedConfig.chatBlurEnabled() && this.sizeNotifierFrameLayout != null && this.drawBlur && this.backgroundColor != 0) {
             if (this.backgroundPaint == null) {
                 this.backgroundPaint = new Paint();
             }
@@ -35,20 +36,20 @@ public class ChatBlurredFrameLayout extends FrameLayout {
             float f = 0.0f;
             View view = this;
             while (true) {
-                sizeNotifierFrameLayout = this.chatActivity.contentView;
-                if (view == sizeNotifierFrameLayout) {
+                sizeNotifierFrameLayout2 = this.sizeNotifierFrameLayout;
+                if (view == sizeNotifierFrameLayout2) {
                     break;
                 }
                 f += view.getY();
                 view = (View) view.getParent();
             }
-            sizeNotifierFrameLayout.drawBlur(canvas, f, AndroidUtilities.rectTmp2, this.backgroundPaint, this.isTopView);
+            sizeNotifierFrameLayout2.drawBlur(canvas, f, AndroidUtilities.rectTmp2, this.backgroundPaint, this.isTopView);
         }
         super.dispatchDraw(canvas);
     }
 
     public void setBackgroundColor(int i) {
-        if (!SharedConfig.chatBlurEnabled() || this.chatActivity == null) {
+        if (!SharedConfig.chatBlurEnabled() || this.sizeNotifierFrameLayout == null) {
             super.setBackgroundColor(i);
         } else {
             this.backgroundColor = i;
@@ -57,18 +58,18 @@ public class ChatBlurredFrameLayout extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
-        ChatActivity chatActivity2;
-        if (SharedConfig.chatBlurEnabled() && (chatActivity2 = this.chatActivity) != null) {
-            chatActivity2.contentView.blurBehindViews.add(this);
+        SizeNotifierFrameLayout sizeNotifierFrameLayout2;
+        if (SharedConfig.chatBlurEnabled() && (sizeNotifierFrameLayout2 = this.sizeNotifierFrameLayout) != null) {
+            sizeNotifierFrameLayout2.blurBehindViews.add(this);
         }
         super.onAttachedToWindow();
     }
 
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
-        ChatActivity chatActivity2 = this.chatActivity;
-        if (chatActivity2 != null) {
-            chatActivity2.contentView.blurBehindViews.remove(this);
+        SizeNotifierFrameLayout sizeNotifierFrameLayout2 = this.sizeNotifierFrameLayout;
+        if (sizeNotifierFrameLayout2 != null) {
+            sizeNotifierFrameLayout2.blurBehindViews.remove(this);
         }
         super.onDetachedFromWindow();
     }

@@ -14,6 +14,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda54 im
     }
 
     public final void run() {
-        this.f$0.lambda$putWallpapers$57(this.f$1, this.f$2);
+        this.f$0.lambda$putWidgetDialogs$133(this.f$1, this.f$2);
     }
 }

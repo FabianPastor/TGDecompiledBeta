@@ -821,7 +821,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
             r3.showTextView()
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r8 = 2131626561(0x7f0e0a41, float:1.8880362E38)
+            r8 = 2131626566(0x7f0e0a46, float:1.8880372E38)
             java.lang.String r13 = "NoChats"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r13, r8)
             r3.setText(r8)
@@ -984,7 +984,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3 = r3[r6]
             if (r3 == 0) goto L_0x0437
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r8 = 2131628662(0x7f0e1276, float:1.8884623E38)
+            r8 = 2131628675(0x7f0e1283, float:1.888465E38)
             java.lang.String r15 = "VoipGroupCopySpeakerLink"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r15, r8)
             java.lang.String r8 = r8.toUpperCase()
@@ -992,7 +992,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             goto L_0x0449
         L_0x0437:
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r8 = 2131625106(0x7f0e0492, float:1.887741E38)
+            r8 = 2131625107(0x7f0e0493, float:1.8877413E38)
             java.lang.String r15 = "CopyLink"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r15, r8)
             java.lang.String r8 = r8.toUpperCase()
@@ -1160,7 +1160,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r2.setTextColor(r3)
         L_0x05b4:
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
-            r3 = 2131627934(0x7f0e0f9e, float:1.8883146E38)
+            r3 = 2131627947(0x7f0e0fab, float:1.8883173E38)
             java.lang.String r4 = "ShareComment"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r2.setHint(r3)
@@ -2952,7 +2952,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 org.telegram.ui.Components.ShareAlert r0 = org.telegram.ui.Components.ShareAlert.this
                 org.telegram.ui.ActionBar.Theme$ResourcesProvider r0 = r0.resourcesProvider
                 r5.<init>(r4, r0)
-                r4 = 2131627557(0x7f0e0e25, float:1.8882382E38)
+                r4 = 2131627562(0x7f0e0e2a, float:1.8882392E38)
                 java.lang.String r0 = "Recent"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                 r5.setText(r4)

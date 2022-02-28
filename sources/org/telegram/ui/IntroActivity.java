@@ -166,6 +166,8 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
         this.darkThemeDrawable.commitApplyLayerColors();
         this.darkThemeDrawable.setCustomEndFrame(Theme.getCurrentTheme().isDark() ? this.darkThemeDrawable.getFramesCount() - 1 : 0);
         this.darkThemeDrawable.setCurrentFrame(Theme.getCurrentTheme().isDark() ? this.darkThemeDrawable.getFramesCount() - 1 : 0, false);
+        Theme.getCurrentTheme().isDark();
+        rLottieImageView.setContentDescription(LocaleController.getString(NUM));
         rLottieImageView.setAnimation(this.darkThemeDrawable);
         frameLayout.setOnClickListener(new IntroActivity$$ExternalSyntheticLambda2(this, rLottieImageView));
         FrameLayout frameLayout3 = new FrameLayout(context2);
@@ -369,6 +371,9 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             r10 = 5
             r7[r10] = r9
             r5.postNotificationName(r6, r7)
+            r10 = 2131624058(0x7f0e007a, float:1.8875285E38)
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString((int) r10)
+            r9.setContentDescription(r10)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.IntroActivity.lambda$createView$0(org.telegram.ui.Components.RLottieImageView, android.view.View):void");

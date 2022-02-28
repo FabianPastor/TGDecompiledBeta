@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda84 im
     }
 
     public final void run() {
-        this.f$0.lambda$clearUserPhoto$72(this.f$1, this.f$2);
+        this.f$0.lambda$setDialogFlags$34(this.f$1, this.f$2);
     }
 }

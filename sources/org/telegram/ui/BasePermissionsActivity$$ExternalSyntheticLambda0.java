@@ -10,6 +10,6 @@ public final /* synthetic */ class BasePermissionsActivity$$ExternalSyntheticLam
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$showPermissionErrorAlert$0(dialogInterface, i);
+        this.f$0.lambda$createPermissionErrorAlert$0(dialogInterface, i);
     }
 }

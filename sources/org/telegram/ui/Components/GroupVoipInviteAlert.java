@@ -950,7 +950,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             L_0x0021:
                 int r0 = r13.globalStartRow
                 if (r15 != r0) goto L_0x0133
-                r15 = 2131625889(0x7f0e07a1, float:1.8878999E38)
+                r15 = 2131625892(0x7f0e07a4, float:1.8879005E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)

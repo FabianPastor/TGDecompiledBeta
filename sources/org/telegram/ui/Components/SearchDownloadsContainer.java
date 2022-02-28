@@ -2,9 +2,14 @@ package org.telegram.ui.Components;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import androidx.core.graphics.ColorUtils;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,37 +17,53 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.CacheControlActivity;
 import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.SharedDocumentCell;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.FilteredSearchView;
 import org.telegram.ui.PhotoViewer;
 
 public class SearchDownloadsContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     DownloadsAdapter adapter = new DownloadsAdapter();
     private final int currentAccount;
     ArrayList<MessageObject> currentLoadingFiles = new ArrayList<>();
+    ArrayList<MessageObject> currentLoadingFilesTmp = new ArrayList<>();
     int downloadingFilesEndRow = -1;
     int downloadingFilesHeader = -1;
     int downloadingFilesStartRow = -1;
+    StickerEmptyView emptyView;
     /* access modifiers changed from: private */
     public boolean hasCurrentDownload;
+    RecyclerItemsEnterAnimator itemsEnterAnimator;
+    String lastQueryString;
+    Runnable lastSearchRunnable;
+    private final FlickerLoadingView loadingView;
+    /* access modifiers changed from: private */
+    public final FilteredSearchView.MessageHashId messageHashIdTmp = new FilteredSearchView.MessageHashId(0, 0);
     Activity parentActivity;
     BaseFragment parentFragment;
     int recentFilesEndRow = -1;
     int recentFilesHeader = -1;
     int recentFilesStartRow = -1;
     ArrayList<MessageObject> recentLoadingFiles = new ArrayList<>();
+    ArrayList<MessageObject> recentLoadingFilesTmp = new ArrayList<>();
     public RecyclerListView recyclerListView;
     int rowCount;
+    String searchQuery;
+    FilteredSearchView.UiCallback uiCallback;
 
     public SearchDownloadsContainer(BaseFragment baseFragment, int i) {
         super(baseFragment.getParentActivity());
@@ -58,11 +79,30 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             }
         });
         this.recyclerListView.setAdapter(this.adapter);
+        this.recyclerListView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            public void onScrollStateChanged(RecyclerView recyclerView, int i) {
+                if (i == 1) {
+                    AndroidUtilities.hideKeyboard(SearchDownloadsContainer.this.parentActivity.getCurrentFocus());
+                }
+            }
+        });
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         defaultItemAnimator.setDelayAnimations(false);
         defaultItemAnimator.setSupportsChangeAnimations(false);
         this.recyclerListView.setItemAnimator(defaultItemAnimator);
-        this.recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SearchDownloadsContainer$$ExternalSyntheticLambda0(this));
+        this.recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SearchDownloadsContainer$$ExternalSyntheticLambda4(this));
+        this.recyclerListView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new SearchDownloadsContainer$$ExternalSyntheticLambda5(this));
+        this.itemsEnterAnimator = new RecyclerItemsEnterAnimator(this.recyclerListView, true);
+        FlickerLoadingView flickerLoadingView = new FlickerLoadingView(getContext());
+        this.loadingView = flickerLoadingView;
+        addView(flickerLoadingView);
+        flickerLoadingView.setUseHeaderOffset(true);
+        flickerLoadingView.setViewType(3);
+        flickerLoadingView.setVisibility(8);
+        StickerEmptyView stickerEmptyView = new StickerEmptyView(getContext(), flickerLoadingView, 1);
+        this.emptyView = stickerEmptyView;
+        addView(stickerEmptyView);
+        this.recyclerListView.setEmptyView(this.emptyView);
         FileLoader.getInstance(i).getCurrentLoadingFiles(this.currentLoadingFiles);
         update(false);
     }
@@ -73,6 +113,12 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             SharedDocumentCell sharedDocumentCell = ((Cell) view).sharedDocumentCell;
             MessageObject message = sharedDocumentCell.getMessage();
             TLRPC$Document document = message.getDocument();
+            if (this.uiCallback.actionModeShowing()) {
+                this.uiCallback.toggleItemSelection(sharedDocumentCell.getMessage(), view, 0);
+                this.messageHashIdTmp.set(sharedDocumentCell.getMessage().getId(), sharedDocumentCell.getMessage().getDialogId());
+                sharedDocumentCell.setChecked(this.uiCallback.isSelected(this.messageHashIdTmp), true);
+                return;
+            }
             if (sharedDocumentCell.isLoaded()) {
                 if (message.canPreviewDocument()) {
                     PhotoViewer.getInstance().setParentActivity(this.parentActivity);
@@ -94,7 +140,106 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         }
     }
 
+    /* access modifiers changed from: private */
+    public /* synthetic */ boolean lambda$new$1(View view, int i) {
+        if (!(view instanceof Cell)) {
+            return false;
+        }
+        SharedDocumentCell sharedDocumentCell = ((Cell) view).sharedDocumentCell;
+        if (!this.uiCallback.actionModeShowing()) {
+            this.uiCallback.showActionMode();
+        }
+        if (this.uiCallback.actionModeShowing()) {
+            this.uiCallback.toggleItemSelection(sharedDocumentCell.getMessage(), view, 0);
+            this.messageHashIdTmp.set(sharedDocumentCell.getMessage().getId(), sharedDocumentCell.getMessage().getDialogId());
+            sharedDocumentCell.setChecked(this.uiCallback.isSelected(this.messageHashIdTmp), true);
+        }
+        return true;
+    }
+
     public void update(boolean z) {
+        if (TextUtils.isEmpty(this.searchQuery)) {
+            if (this.rowCount == 0) {
+                this.itemsEnterAnimator.showItemsAnimated(0);
+            }
+            FileLoader.getInstance(this.currentAccount).getCurrentLoadingFiles(this.currentLoadingFilesTmp);
+            FileLoader.getInstance(this.currentAccount).getRecentLoadingFiles(this.recentLoadingFilesTmp);
+            for (int i = 0; i < this.currentLoadingFiles.size(); i++) {
+                this.currentLoadingFiles.get(i).setQuery((String) null);
+            }
+            for (int i2 = 0; i2 < this.recentLoadingFiles.size(); i2++) {
+                this.recentLoadingFiles.get(i2).setQuery((String) null);
+            }
+            this.lastQueryString = null;
+            updateListInternal(z, this.currentLoadingFilesTmp, this.recentLoadingFilesTmp);
+            if (this.rowCount == 0) {
+                this.emptyView.showProgress(false, false);
+                this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewDownloads", NUM));
+                this.emptyView.subtitle.setVisibility(8);
+                return;
+            }
+            return;
+        }
+        ArrayList arrayList = new ArrayList();
+        ArrayList arrayList2 = new ArrayList();
+        FileLoader.getInstance(this.currentAccount).getCurrentLoadingFiles(arrayList);
+        FileLoader.getInstance(this.currentAccount).getRecentLoadingFiles(arrayList2);
+        String lowerCase = this.searchQuery.toLowerCase();
+        boolean equals = lowerCase.equals(this.lastQueryString);
+        this.lastQueryString = lowerCase;
+        Utilities.searchQueue.cancelRunnable(this.lastSearchRunnable);
+        DispatchQueue dispatchQueue = Utilities.searchQueue;
+        SearchDownloadsContainer$$ExternalSyntheticLambda3 searchDownloadsContainer$$ExternalSyntheticLambda3 = new SearchDownloadsContainer$$ExternalSyntheticLambda3(this, arrayList, lowerCase, arrayList2);
+        this.lastSearchRunnable = searchDownloadsContainer$$ExternalSyntheticLambda3;
+        dispatchQueue.postRunnable(searchDownloadsContainer$$ExternalSyntheticLambda3, equals ? 0 : 300);
+        this.recentLoadingFilesTmp.clear();
+        this.currentLoadingFilesTmp.clear();
+        if (!equals) {
+            this.emptyView.showProgress(true, true);
+            updateListInternal(z, this.currentLoadingFilesTmp, this.recentLoadingFilesTmp);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$update$3(ArrayList arrayList, String str, ArrayList arrayList2) {
+        ArrayList arrayList3 = new ArrayList();
+        ArrayList arrayList4 = new ArrayList();
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (FileLoader.getDocumentFileName(((MessageObject) arrayList.get(i)).getDocument()).toLowerCase().contains(str)) {
+                MessageObject messageObject = new MessageObject(this.currentAccount, ((MessageObject) arrayList.get(i)).messageOwner, false, false);
+                messageObject.mediaExists = ((MessageObject) arrayList.get(i)).mediaExists;
+                messageObject.setQuery(this.searchQuery);
+                arrayList3.add(messageObject);
+            }
+        }
+        for (int i2 = 0; i2 < arrayList2.size(); i2++) {
+            if (FileLoader.getDocumentFileName(((MessageObject) arrayList2.get(i2)).getDocument()).toLowerCase().contains(str)) {
+                MessageObject messageObject2 = new MessageObject(this.currentAccount, ((MessageObject) arrayList2.get(i2)).messageOwner, false, false);
+                messageObject2.mediaExists = ((MessageObject) arrayList2.get(i2)).mediaExists;
+                messageObject2.setQuery(this.searchQuery);
+                arrayList4.add(messageObject2);
+            }
+        }
+        AndroidUtilities.runOnUIThread(new SearchDownloadsContainer$$ExternalSyntheticLambda2(this, str, arrayList3, arrayList4));
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$update$2(String str, ArrayList arrayList, ArrayList arrayList2) {
+        if (str.equals(this.lastQueryString)) {
+            if (this.rowCount == 0) {
+                this.itemsEnterAnimator.showItemsAnimated(0);
+            }
+            updateListInternal(true, arrayList, arrayList2);
+            if (this.rowCount == 0) {
+                this.emptyView.showProgress(false, true);
+                this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", NUM));
+                this.emptyView.subtitle.setVisibility(0);
+                this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", NUM));
+            }
+        }
+    }
+
+    private void updateListInternal(boolean z, ArrayList<MessageObject> arrayList, ArrayList<MessageObject> arrayList2) {
         RecyclerView.ViewHolder childViewHolder;
         if (z) {
             final int i = this.downloadingFilesHeader;
@@ -104,9 +249,9 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             final int i5 = this.recentFilesStartRow;
             final int i6 = this.recentFilesEndRow;
             final int i7 = this.rowCount;
-            final ArrayList arrayList = new ArrayList(this.currentLoadingFiles);
-            final ArrayList arrayList2 = new ArrayList(this.recentLoadingFiles);
-            updateRows();
+            final ArrayList arrayList3 = new ArrayList(this.currentLoadingFiles);
+            final ArrayList arrayList4 = new ArrayList(this.recentLoadingFiles);
+            updateRows(arrayList, arrayList2);
             DiffUtil.calculateDiff(new DiffUtil.Callback() {
                 public int getOldListSize() {
                     return i7;
@@ -130,9 +275,9 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                     MessageObject messageObject2 = null;
                     if (i < i3 || i >= i3) {
                         int i4 = i5;
-                        messageObject = (i < i4 || i >= i6) ? null : (MessageObject) arrayList2.get(i - i4);
+                        messageObject = (i < i4 || i >= i6) ? null : (MessageObject) arrayList4.get(i - i4);
                     } else {
-                        messageObject = (MessageObject) arrayList.get(i - i3);
+                        messageObject = (MessageObject) arrayList3.get(i - i3);
                     }
                     SearchDownloadsContainer searchDownloadsContainer = SearchDownloadsContainer.this;
                     int i5 = searchDownloadsContainer.downloadingFilesStartRow;
@@ -161,19 +306,24 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                     if (childAt instanceof GraySectionCell) {
                         this.adapter.onBindViewHolder(childViewHolder, childAdapterPosition);
                     } else if (childAt instanceof Cell) {
-                        ((Cell) childAt).sharedDocumentCell.updateFileExistIcon(true);
+                        Cell cell = (Cell) childAt;
+                        cell.sharedDocumentCell.updateFileExistIcon(true);
+                        this.messageHashIdTmp.set(cell.sharedDocumentCell.getMessage().getId(), cell.sharedDocumentCell.getMessage().getDialogId());
+                        cell.sharedDocumentCell.setChecked(this.uiCallback.isSelected(this.messageHashIdTmp), true);
                     }
                 }
             }
             return;
         }
-        updateRows();
+        updateRows(arrayList, arrayList2);
         this.adapter.notifyDataSetChanged();
     }
 
-    private void updateRows() {
-        FileLoader.getInstance(this.currentAccount).getCurrentLoadingFiles(this.currentLoadingFiles);
-        FileLoader.getInstance(this.currentAccount).getRecentLoadingFiles(this.recentLoadingFiles);
+    private void updateRows(ArrayList<MessageObject> arrayList, ArrayList<MessageObject> arrayList2) {
+        this.currentLoadingFiles.clear();
+        this.currentLoadingFiles.addAll(arrayList);
+        this.recentLoadingFiles.clear();
+        this.recentLoadingFiles.addAll(arrayList2);
         int i = 0;
         this.rowCount = 0;
         this.downloadingFilesHeader = -1;
@@ -213,6 +363,11 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             this.rowCount = size2;
             this.recentFilesEndRow = size2;
         }
+    }
+
+    public void search(String str) {
+        this.searchQuery = str;
+        update(false);
     }
 
     private class DownloadsAdapter extends RecyclerListView.SelectionAdapter {
@@ -261,10 +416,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                 } else if (i == searchDownloadsContainer.recentFilesHeader) {
                     graySectionCell.setText(LocaleController.getString("RecentlyDownloaded", NUM), LocaleController.getString("Settings", NUM), new View.OnClickListener() {
                         public void onClick(View view) {
-                            BaseFragment baseFragment = SearchDownloadsContainer.this.parentFragment;
-                            if (baseFragment != null) {
-                                baseFragment.presentFragment(new CacheControlActivity());
-                            }
+                            SearchDownloadsContainer.this.showSettingsDialog();
                         }
                     });
                 }
@@ -276,18 +428,15 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                 if (i < i3 || i >= searchDownloadsContainer2.downloadingFilesEndRow) {
                     int i4 = searchDownloadsContainer2.recentFilesStartRow;
                     if (i >= i4 && i < searchDownloadsContainer2.recentFilesEndRow) {
-                        searchDownloadsContainer2.recentLoadingFiles.get(i - i4).checkMediaExistance();
-                        SharedDocumentCell sharedDocumentCell = cell.sharedDocumentCell;
-                        SearchDownloadsContainer searchDownloadsContainer3 = SearchDownloadsContainer.this;
-                        sharedDocumentCell.setDocument(searchDownloadsContainer3.recentLoadingFiles.get(i - searchDownloadsContainer3.recentFilesStartRow), true);
-                        return;
+                        cell.sharedDocumentCell.setDocument(searchDownloadsContainer2.recentLoadingFiles.get(i - i4), true);
                     }
-                    return;
+                } else {
+                    cell.sharedDocumentCell.setDocument(searchDownloadsContainer2.currentLoadingFiles.get(i - i3), true);
                 }
-                searchDownloadsContainer2.currentLoadingFiles.get(i - i3).checkMediaExistance();
-                SharedDocumentCell sharedDocumentCell2 = cell.sharedDocumentCell;
-                SearchDownloadsContainer searchDownloadsContainer4 = SearchDownloadsContainer.this;
-                sharedDocumentCell2.setDocument(searchDownloadsContainer4.currentLoadingFiles.get(i - searchDownloadsContainer4.downloadingFilesStartRow), true);
+                SearchDownloadsContainer.this.messageHashIdTmp.set(cell.sharedDocumentCell.getMessage().getId(), cell.sharedDocumentCell.getMessage().getDialogId());
+                SharedDocumentCell sharedDocumentCell = cell.sharedDocumentCell;
+                SearchDownloadsContainer searchDownloadsContainer3 = SearchDownloadsContainer.this;
+                sharedDocumentCell.setChecked(searchDownloadsContainer3.uiCallback.isSelected(searchDownloadsContainer3.messageHashIdTmp), false);
             }
         }
 
@@ -303,6 +452,71 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             return viewHolder.getItemViewType() == 1;
         }
+    }
+
+    /* access modifiers changed from: private */
+    public void showSettingsDialog() {
+        if (this.parentFragment != null && this.parentActivity != null) {
+            BottomSheet bottomSheet = new BottomSheet(this.parentActivity, false);
+            Activity parentActivity2 = this.parentFragment.getParentActivity();
+            LinearLayout linearLayout = new LinearLayout(parentActivity2);
+            linearLayout.setOrientation(1);
+            StickerImageView stickerImageView = new StickerImageView(parentActivity2, this.currentAccount);
+            stickerImageView.setStickerNum(8);
+            stickerImageView.getImageReceiver().setAutoRepeat(1);
+            linearLayout.addView(stickerImageView, LayoutHelper.createLinear(144, 144, 1, 0, 16, 0, 0));
+            TextView textView = new TextView(parentActivity2);
+            textView.setGravity(1);
+            textView.setTextColor(Theme.getColor("dialogTextBlack"));
+            textView.setTextSize(1, 24.0f);
+            textView.setText(LocaleController.getString("DownloadedFiles", NUM));
+            linearLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 30.0f, 21.0f, 0.0f));
+            TextView textView2 = new TextView(parentActivity2);
+            textView2.setGravity(1);
+            textView2.setTextSize(1, 15.0f);
+            textView2.setTextColor(Theme.getColor("dialogTextGray"));
+            textView2.setText(LocaleController.formatString("DownloadedFilesMessage", NUM, new Object[0]));
+            linearLayout.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 15.0f, 21.0f, 16.0f));
+            TextView textView3 = new TextView(parentActivity2);
+            textView3.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+            textView3.setGravity(17);
+            textView3.setTextSize(1, 14.0f);
+            textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            textView3.setText(LocaleController.getString("ManageDeviceStorage", NUM));
+            textView3.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+            textView3.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhite"), 120)));
+            linearLayout.addView(textView3, LayoutHelper.createFrame(-1, 48.0f, 0, 16.0f, 15.0f, 16.0f, 16.0f));
+            TextView textView4 = new TextView(parentActivity2);
+            textView4.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+            textView4.setGravity(17);
+            textView4.setTextSize(1, 14.0f);
+            textView4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            textView4.setText(LocaleController.getString("ClearDownloadsList", NUM));
+            textView4.setTextColor(Theme.getColor("featuredStickers_addButton"));
+            textView4.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), 0, ColorUtils.setAlphaComponent(Theme.getColor("featuredStickers_addButton"), 120)));
+            linearLayout.addView(textView4, LayoutHelper.createFrame(-1, 48.0f, 0, 16.0f, 0.0f, 16.0f, 16.0f));
+            NestedScrollView nestedScrollView = new NestedScrollView(parentActivity2);
+            nestedScrollView.addView(linearLayout);
+            bottomSheet.setCustomView(nestedScrollView);
+            bottomSheet.show();
+            textView3.setOnClickListener(new SearchDownloadsContainer$$ExternalSyntheticLambda1(this, bottomSheet));
+            textView4.setOnClickListener(new SearchDownloadsContainer$$ExternalSyntheticLambda0(this, bottomSheet));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$showSettingsDialog$4(BottomSheet bottomSheet, View view) {
+        bottomSheet.dismiss();
+        BaseFragment baseFragment = this.parentFragment;
+        if (baseFragment != null) {
+            baseFragment.presentFragment(new CacheControlActivity());
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$showSettingsDialog$5(BottomSheet bottomSheet, View view) {
+        bottomSheet.dismiss();
+        MessagesStorage.getInstance(this.currentAccount).clearRecentDownloadedFiles();
     }
 
     /* access modifiers changed from: protected */
@@ -332,5 +546,13 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             this.sharedDocumentCell = sharedDocumentCell2;
             addView(sharedDocumentCell2);
         }
+    }
+
+    public void setUiCallback(FilteredSearchView.UiCallback uiCallback2) {
+        this.uiCallback = uiCallback2;
+    }
+
+    public void setKeyboardHeight(int i, boolean z) {
+        this.emptyView.setKeyboardHeight(i, z);
     }
 }

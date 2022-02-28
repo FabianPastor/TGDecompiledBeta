@@ -328,7 +328,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r5, r7, r10, r7)
             android.widget.TextView r2 = r0.doneTextView
             java.lang.String r5 = "Done"
-            r10 = 2131625349(0x7f0e0585, float:1.8877903E38)
+            r10 = 2131625350(0x7f0e0586, float:1.8877905E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r10)
             java.lang.String r5 = r5.toUpperCase()
             r2.setText(r5)

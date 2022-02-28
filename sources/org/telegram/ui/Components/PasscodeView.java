@@ -53,7 +53,7 @@ import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 
-public class PasscodeView extends FrameLayout {
+public class PasscodeView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     private static final int[] ids = {NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
     /* access modifiers changed from: private */
     public Drawable backgroundDrawable;
@@ -111,6 +111,15 @@ public class PasscodeView extends FrameLayout {
     /* access modifiers changed from: private */
     public static /* synthetic */ boolean lambda$onShow$8(View view, MotionEvent motionEvent) {
         return true;
+    }
+
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.didGenerateFingerprintKeyPair) {
+            checkFingerprintButton();
+            if (objArr[0].booleanValue() && SharedConfig.appLocked) {
+                checkFingerprint();
+            }
+        }
     }
 
     private static class AnimatingTextView extends FrameLayout {
@@ -812,7 +821,7 @@ public class PasscodeView extends FrameLayout {
         SharedConfig.badPasscodeTries = 0;
         this.passwordEditText.clearFocus();
         AndroidUtilities.hideKeyboard(this.passwordEditText);
-        if (Build.VERSION.SDK_INT >= 23 && FingerprintController.isKeyReady()) {
+        if (Build.VERSION.SDK_INT >= 23 && FingerprintController.isKeyReady() && FingerprintController.checkDeviceFingerprintsChanged()) {
             FingerprintController.deleteInvalidKey();
         }
         SharedConfig.appLocked = false;
@@ -958,6 +967,18 @@ public class PasscodeView extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didGenerateFingerprintKeyPair);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didGenerateFingerprintKeyPair);
+    }
+
     private void checkFingerprint() {
         if (Build.VERSION.SDK_INT >= 23 && ((Activity) getContext()) != null && this.fingerprintView.getVisibility() == 0 && !ApplicationLoader.mainInterfacePaused) {
             try {
@@ -970,7 +991,7 @@ public class PasscodeView extends FrameLayout {
             }
             try {
                 FingerprintManagerCompat from = FingerprintManagerCompat.from(ApplicationLoader.applicationContext);
-                if (FingerprintController.isKeyReady() && !FingerprintController.checkDeviceFingerprintsChanged() && from.isHardwareDetected() && from.hasEnrolledFingerprints()) {
+                if (from.isHardwareDetected() && from.hasEnrolledFingerprints() && FingerprintController.isKeyReady() && !FingerprintController.checkDeviceFingerprintsChanged()) {
                     RelativeLayout relativeLayout = new RelativeLayout(getContext());
                     relativeLayout.setPadding(AndroidUtilities.dp(24.0f), 0, AndroidUtilities.dp(24.0f), 0);
                     TextView textView = new TextView(getContext());
@@ -1093,7 +1114,7 @@ public class PasscodeView extends FrameLayout {
             }
             try {
                 FingerprintManagerCompat from = FingerprintManagerCompat.from(ApplicationLoader.applicationContext);
-                if (!FingerprintController.isKeyReady() || FingerprintController.checkDeviceFingerprintsChanged() || !from.isHardwareDetected() || !from.hasEnrolledFingerprints()) {
+                if (!from.isHardwareDetected() || !from.hasEnrolledFingerprints() || !FingerprintController.isKeyReady() || FingerprintController.checkDeviceFingerprintsChanged()) {
                     this.fingerprintView.setVisibility(8);
                 } else {
                     this.fingerprintView.setVisibility(0);

@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda34 im
     }
 
     public final void run() {
-        this.f$0.lambda$getDownloadQueue$150(this.f$1);
+        this.f$0.lambda$checkIfFolderEmptyInternal$187(this.f$1);
     }
 }

@@ -1792,11 +1792,17 @@ public class FileLoader extends BaseController {
     public void getCurrentLoadingFiles(ArrayList<MessageObject> arrayList) {
         arrayList.clear();
         arrayList.addAll(getMessagesStorage().downloadingFiles);
+        for (int i = 0; i < arrayList.size(); i++) {
+            arrayList.get(i).isDownloadingFile = true;
+        }
     }
 
     public void getRecentLoadingFiles(ArrayList<MessageObject> arrayList) {
         arrayList.clear();
         arrayList.addAll(getMessagesStorage().recentDownloadingFiles);
+        for (int i = 0; i < arrayList.size(); i++) {
+            arrayList.get(i).isDownloadingFile = true;
+        }
     }
 
     public void clearRecentDownloadedFiles() {
