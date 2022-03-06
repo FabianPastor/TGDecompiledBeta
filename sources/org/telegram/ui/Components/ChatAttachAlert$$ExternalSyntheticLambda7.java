@@ -1,15 +1,18 @@
 package org.telegram.ui.Components;
 
-import android.view.MotionEvent;
 import android.view.View;
+import org.telegram.ui.ActionBar.Theme;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda7 implements View.OnTouchListener {
-    public static final /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda7 INSTANCE = new ChatAttachAlert$$ExternalSyntheticLambda7();
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda7 implements View.OnLongClickListener {
+    public final /* synthetic */ ChatAttachAlert f$0;
+    public final /* synthetic */ Theme.ResourcesProvider f$1;
 
-    private /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda7() {
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda7(ChatAttachAlert chatAttachAlert, Theme.ResourcesProvider resourcesProvider) {
+        this.f$0 = chatAttachAlert;
+        this.f$1 = resourcesProvider;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ChatAttachAlert.lambda$new$9(view, motionEvent);
+    public final boolean onLongClick(View view) {
+        return this.f$0.lambda$new$16(this.f$1, view);
     }
 }

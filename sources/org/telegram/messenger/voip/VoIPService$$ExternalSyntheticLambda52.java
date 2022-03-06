@@ -15,6 +15,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda52 implem
     }
 
     public final void run() {
-        this.f$0.lambda$acceptIncomingCall$66(this.f$1, this.f$2);
+        this.f$0.lambda$acceptIncomingCall$68(this.f$1, this.f$2);
     }
 }

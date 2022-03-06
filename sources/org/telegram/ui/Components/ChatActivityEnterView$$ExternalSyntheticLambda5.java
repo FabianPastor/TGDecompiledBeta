@@ -18,6 +18,6 @@ public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateSendAsButton$40(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
+        this.f$0.lambda$updateSendAsButton$41(this.f$1, this.f$2, this.f$3, this.f$4, valueAnimator);
     }
 }

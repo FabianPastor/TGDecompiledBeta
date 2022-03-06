@@ -23,6 +23,6 @@ public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda32
     }
 
     public final void run() {
-        this.f$0.lambda$performSyncPhoneBook$15(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        this.f$0.lambda$performSyncPhoneBook$22(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
     }
 }

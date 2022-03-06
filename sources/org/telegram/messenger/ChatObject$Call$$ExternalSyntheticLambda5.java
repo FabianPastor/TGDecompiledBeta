@@ -2,22 +2,17 @@ package org.telegram.messenger;
 
 import org.telegram.messenger.ChatObject;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_phone_getGroupParticipants;
 
 public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda5 implements Runnable {
     public final /* synthetic */ ChatObject.Call f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ TLObject f$2;
-    public final /* synthetic */ TLRPC$TL_phone_getGroupParticipants f$3;
+    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ ChatObject$Call$$ExternalSyntheticLambda5(ChatObject.Call call, boolean z, TLObject tLObject, TLRPC$TL_phone_getGroupParticipants tLRPC$TL_phone_getGroupParticipants) {
+    public /* synthetic */ ChatObject$Call$$ExternalSyntheticLambda5(ChatObject.Call call, TLObject tLObject) {
         this.f$0 = call;
-        this.f$1 = z;
-        this.f$2 = tLObject;
-        this.f$3 = tLRPC$TL_phone_getGroupParticipants;
+        this.f$1 = tLObject;
     }
 
     public final void run() {
-        this.f$0.lambda$loadMembers$1(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$reloadGroupCall$9(this.f$1);
     }
 }

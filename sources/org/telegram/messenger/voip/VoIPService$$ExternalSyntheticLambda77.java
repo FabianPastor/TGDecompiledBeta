@@ -12,6 +12,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda77 implem
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$stopScreenCapture$14(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$declineIncomingCall$72(tLObject, tLRPC$TL_error);
     }
 }

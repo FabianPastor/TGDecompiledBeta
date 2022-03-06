@@ -483,8 +483,13 @@
     <string name="AttachLiveLocationIsSharingChat">%1$s sharing with %2$s</string>
     <string name="AttachLiveLocationIsSharingChats">%1$s sharing with %2$s</string>
     <string name="AttachLocation">Location</string>
+    <string name="AttachMediaDragHint">Drag media to reorder</string>
+    <string name="AttachMediaPhotoDeselected">Photo deselected.</string>
+    <string name="AttachMediaPreview">Message preview</string>
+    <string name="AttachMediaPreviewButton">Preview message</string>
     <string name="AttachMediaRestricted">The admins of this group have restricted you from sending media here until %1$s</string>
     <string name="AttachMediaRestrictedForever">The admins of this group have restricted you from sending media here.</string>
+    <string name="AttachMediaVideoDeselected">Video deselected.</string>
     <string name="AttachMenu">Attach...</string>
     <string name="AttachMusic">Music</string>
     <string name="AttachPhoto">Photo</string>
@@ -1139,6 +1144,7 @@
     <string name="ConnectingConnectProxy">Connect Proxy</string>
     <string name="ConnectingToProxy">Connecting to proxy</string>
     <string name="ConnectingToProxyEnable">Enable</string>
+    <string name="ConnectingYourContacts">Connecting your contacts...</string>
     <string name="ContactBirthday">Birthday</string>
     <string name="ContactJob">Job</string>
     <string name="ContactJobTitle">Title</string>
@@ -1249,10 +1255,12 @@
     <string name="DebugMenuCheckAppUpdate">Check app update</string>
     <string name="DebugMenuClearMediaCache">Clear sent media cache</string>
     <string name="DebugMenuDisableCamera">Disable in-app camera</string>
+    <string name="DebugMenuDisableForceRtmpStreamFlag">Disable forced RTMP Stream Flag</string>
     <string name="DebugMenuDisableLogs">Disable Logs</string>
     <string name="DebugMenuDisablePauseMusic">Disable pause music on record</string>
     <string name="DebugMenuDisableSmoothKeyboard">Disable smooth keyboard</string>
     <string name="DebugMenuEnableCamera">Enable in-app camera</string>
+    <string name="DebugMenuEnableForceRtmpStreamFlag">Enable forced RTMP Stream Flag</string>
     <string name="DebugMenuEnableLogs">Enable Logs</string>
     <string name="DebugMenuEnablePauseMusic">Enable pause music on record</string>
     <string name="DebugMenuEnableSmoothKeyboard">Enable smooth keyboard</string>
@@ -4618,6 +4626,13 @@
     <string name="ViewReplies_zero">View %1$d Replies</string>
     <string name="ViewStats">View Stats</string>
     <string name="ViewThread">View Thread</string>
+    <string name="ViewersWatchingNobody">Nobody watching</string>
+    <string name="ViewersWatching_few">%1$d watching</string>
+    <string name="ViewersWatching_many">%1$d watching</string>
+    <string name="ViewersWatching_one">%1$d watching</string>
+    <string name="ViewersWatching_other">%1$d watching</string>
+    <string name="ViewersWatching_two">%1$d watching</string>
+    <string name="ViewersWatching_zero">%1$d watching</string>
     <string name="ViewingMembers">Viewing Members</string>
     <string name="ViewsBySourceChartTitle">Views by source</string>
     <string name="ViewsPerPost">Views Per Post</string>
@@ -4735,6 +4750,7 @@
     <string name="VoipGroupEndAlertText">Do you want to end this voice chat?</string>
     <string name="VoipGroupEndAlertTitle">End voice chat</string>
     <string name="VoipGroupEndChat">End voice chat</string>
+    <string name="VoipGroupExpandStream">Expand</string>
     <string name="VoipGroupInviteAlreadyParticipant">The selected user is already in this voice chat.</string>
     <string name="VoipGroupInviteCanSpeak">Can speak</string>
     <string name="VoipGroupInviteListenOnly">Listen only</string>
@@ -4751,6 +4767,7 @@
     <string name="VoipGroupLeaveAlertEndChat">End voice chat</string>
     <string name="VoipGroupLeaveAlertText">Do you want to leave this voice chat?</string>
     <string name="VoipGroupLeaveAlertTitle">Leave voice chat</string>
+    <string name="VoipGroupMinimizeStream">Minimize</string>
     <string name="VoipGroupMute">Mute</string>
     <string name="VoipGroupMuteForMe">Mute for me</string>
     <string name="VoipGroupMuteMemberAlertTitle">Mute microphone</string>

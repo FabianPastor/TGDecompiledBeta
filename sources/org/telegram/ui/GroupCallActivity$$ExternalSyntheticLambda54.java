@@ -1,14 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.NumberPicker;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda54 implements NumberPicker.Formatter {
-    public static final /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda54 INSTANCE = new GroupCallActivity$$ExternalSyntheticLambda54();
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda54 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
+    public final /* synthetic */ GroupCallActivity f$0;
 
-    private /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda54() {
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda54(GroupCallActivity groupCallActivity) {
+        this.f$0 = groupCallActivity;
     }
 
-    public final String format(int i) {
-        return String.format("%02d", new Object[]{Integer.valueOf(i)});
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$showMenuForCell$59(keyEvent);
     }
 }

@@ -364,7 +364,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     /* access modifiers changed from: package-private */
-    public void onShow() {
+    public void onShow(ChatAttachAlert.AttachAlertLayout attachAlertLayout) {
         this.layoutManager.scrollToPositionWithOffset(0, 0);
         this.listAdapter.notifyDataSetChanged();
     }

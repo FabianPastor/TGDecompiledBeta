@@ -34,7 +34,8 @@ public class DialogsEmptyCell extends LinearLayout {
     private int prevIcon;
     private TextViewSwitcher subtitleView;
     private TextView titleView;
-    private boolean utyanAnimationTriggered;
+    /* access modifiers changed from: private */
+    public boolean utyanAnimationTriggered;
     private float utyanCollapseProgress;
 
     /* access modifiers changed from: private */
@@ -46,12 +47,12 @@ public class DialogsEmptyCell extends LinearLayout {
         super(context);
         setGravity(17);
         setOrientation(1);
-        setOnTouchListener(DialogsEmptyCell$$ExternalSyntheticLambda2.INSTANCE);
+        setOnTouchListener(DialogsEmptyCell$$ExternalSyntheticLambda3.INSTANCE);
         RLottieImageView rLottieImageView = new RLottieImageView(context);
         this.imageView = rLottieImageView;
         rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
         addView(this.imageView, LayoutHelper.createFrame(100, 100.0f, 17, 52.0f, 4.0f, 52.0f, 0.0f));
-        this.imageView.setOnClickListener(new DialogsEmptyCell$$ExternalSyntheticLambda1(this));
+        this.imageView.setOnClickListener(new DialogsEmptyCell$$ExternalSyntheticLambda2(this));
         TextView textView = new TextView(context);
         this.titleView = textView;
         textView.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
@@ -61,7 +62,7 @@ public class DialogsEmptyCell extends LinearLayout {
         addView(this.titleView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 10.0f, 52.0f, 0.0f));
         TextViewSwitcher textViewSwitcher = new TextViewSwitcher(context);
         this.subtitleView = textViewSwitcher;
-        textViewSwitcher.setFactory(new DialogsEmptyCell$$ExternalSyntheticLambda3(context));
+        textViewSwitcher.setFactory(new DialogsEmptyCell$$ExternalSyntheticLambda4(context));
         this.subtitleView.setInAnimation(context, NUM);
         this.subtitleView.setOutAnimation(context, NUM);
         addView(this.subtitleView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 7.0f, 52.0f, 0.0f));
@@ -118,9 +119,14 @@ public class DialogsEmptyCell extends LinearLayout {
                 if (this.currentType == 1) {
                     if (isUtyanAnimationTriggered()) {
                         this.utyanCollapseProgress = 1.0f;
+                        String string = LocaleController.getString("NoChatsContactsHelp", NUM);
+                        if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
+                            string = string.replace(10, ' ');
+                        }
+                        this.subtitleView.setText(string, true);
                         requestLayout();
                     } else {
-                        startUtyanCollapseAnimation();
+                        startUtyanCollapseAnimation(true);
                     }
                 }
                 if (this.prevIcon != i2) {
@@ -142,16 +148,43 @@ public class DialogsEmptyCell extends LinearLayout {
         return this.utyanAnimationTriggered;
     }
 
-    private void startUtyanCollapseAnimation() {
-        this.utyanAnimationTriggered = true;
-        String string = LocaleController.getString("NoChatsContactsHelp", NUM);
-        if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
-            string = string.replace(10, ' ');
-        }
-        this.subtitleView.setText(string, true);
-        ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(250);
+    public void startUtyanExpandAnimation() {
+        ValueAnimator duration = ValueAnimator.ofFloat(new float[]{this.utyanCollapseProgress, 0.0f}).setDuration(250);
         duration.setInterpolator(Easings.easeOutQuad);
         duration.addUpdateListener(new DialogsEmptyCell$$ExternalSyntheticLambda0(this));
+        duration.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animator) {
+                if (DialogsEmptyCell.this.onUtyanAnimationEndListener != null) {
+                    DialogsEmptyCell.this.onUtyanAnimationEndListener.run();
+                }
+                boolean unused = DialogsEmptyCell.this.utyanAnimationTriggered = false;
+            }
+        });
+        duration.start();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startUtyanExpandAnimation$3(ValueAnimator valueAnimator) {
+        this.utyanCollapseProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        requestLayout();
+        Consumer<Float> consumer = this.onUtyanAnimationUpdateListener;
+        if (consumer != null) {
+            consumer.accept(Float.valueOf(this.utyanCollapseProgress));
+        }
+    }
+
+    public void startUtyanCollapseAnimation(boolean z) {
+        this.utyanAnimationTriggered = true;
+        if (z) {
+            String string = LocaleController.getString("NoChatsContactsHelp", NUM);
+            if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
+                string = string.replace(10, ' ');
+            }
+            this.subtitleView.setText(string, true);
+        }
+        ValueAnimator duration = ValueAnimator.ofFloat(new float[]{this.utyanCollapseProgress, 1.0f}).setDuration(250);
+        duration.setInterpolator(Easings.easeOutQuad);
+        duration.addUpdateListener(new DialogsEmptyCell$$ExternalSyntheticLambda1(this));
         duration.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (DialogsEmptyCell.this.onUtyanAnimationEndListener != null) {
@@ -163,7 +196,7 @@ public class DialogsEmptyCell extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$startUtyanCollapseAnimation$3(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$startUtyanCollapseAnimation$4(ValueAnimator valueAnimator) {
         this.utyanCollapseProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         requestLayout();
         Consumer<Float> consumer = this.onUtyanAnimationUpdateListener;
@@ -219,9 +252,9 @@ public class DialogsEmptyCell extends LinearLayout {
     public void onMeasure(int i, int i2) {
         int i3;
         int i4 = this.currentType;
-        if (i4 == 1) {
+        if (i4 == 0 || i4 == 1) {
             super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(measureUtyanHeight(i2), NUM));
-        } else if (i4 == 0 || i4 == 2 || i4 == 3) {
+        } else if (i4 == 2 || i4 == 3) {
             if (getParent() instanceof View) {
                 View view = (View) getParent();
                 i3 = view.getMeasuredHeight();

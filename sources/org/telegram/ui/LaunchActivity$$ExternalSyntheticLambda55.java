@@ -13,6 +13,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda55 imp
     }
 
     public final void onResult(boolean z) {
-        this.f$0.lambda$handleIntent$8(this.f$1, z);
+        this.f$0.lambda$handleIntent$9(this.f$1, z);
     }
 }

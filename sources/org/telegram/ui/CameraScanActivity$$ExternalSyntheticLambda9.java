@@ -1,12 +1,15 @@
 package org.telegram.ui;
 
 public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda9 implements Runnable {
-    public static final /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda9 INSTANCE = new CameraScanActivity$$ExternalSyntheticLambda9();
+    public final /* synthetic */ CameraScanActivity f$0;
+    public final /* synthetic */ String f$1;
 
-    private /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda9() {
+    public /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda9(CameraScanActivity cameraScanActivity, String str) {
+        this.f$0 = cameraScanActivity;
+        this.f$1 = str;
     }
 
     public final void run() {
-        CameraScanActivity.lambda$new$0();
+        this.f$0.lambda$onPreviewFrame$9(this.f$1);
     }
 }

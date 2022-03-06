@@ -9,6 +9,6 @@ public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda48
     }
 
     public final int compare(Object obj, Object obj2) {
-        return ContactsController.lambda$buildContactsSectionsArrays$44((String) obj, (String) obj2);
+        return ContactsController.lambda$buildContactsSectionsArrays$45((String) obj, (String) obj2);
     }
 }

@@ -227,6 +227,12 @@ public class MessageSeenView extends FrameLayout {
         } else {
             this.avatarsImageView.setTranslationX(0.0f);
         }
+        int i2 = this.users.size() == 0 ? 32 : 62;
+        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.titleView.getLayoutParams();
+        if (marginLayoutParams.rightMargin != i2) {
+            marginLayoutParams.rightMargin = i2;
+            this.titleView.setLayoutParams(marginLayoutParams);
+        }
         this.avatarsImageView.commitTransition(false);
         if (this.peerIds.size() == 1 && this.users.get(0) != null) {
             this.titleView.setText(ContactsController.formatName(this.users.get(0).first_name, this.users.get(0).last_name));

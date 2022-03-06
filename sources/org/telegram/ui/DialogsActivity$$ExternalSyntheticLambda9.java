@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda9 imp
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onItemLongClick$21(dialogInterface, i);
+        this.f$0.lambda$performSelectedDialogsAction$30(dialogInterface, i);
     }
 }

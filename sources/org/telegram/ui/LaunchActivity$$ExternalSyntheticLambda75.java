@@ -17,6 +17,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda75 imp
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$showLanguageAlert$85(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$showLanguageAlert$86(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

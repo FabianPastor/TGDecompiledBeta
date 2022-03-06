@@ -37,9 +37,11 @@ import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarsImageView;
 import org.telegram.ui.Components.CrossOutDrawable;
 import org.telegram.ui.Components.CubicBezierInterpolator;
+import org.telegram.ui.Components.GroupCallPip;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.UndoView;
@@ -102,12 +104,15 @@ public class GroupCallRenderersContainer extends FrameLayout {
     public float pinchTranslationX;
     /* access modifiers changed from: private */
     public float pinchTranslationY;
+    ImageView pipView;
     private int pointerId1;
     private int pointerId2;
     public float progressToFullscreenMode;
     float progressToHideUi;
     public float progressToScrimView;
     ValueAnimator replaceFullscreenViewAnimator;
+    Drawable rightShadowDrawable;
+    private final View rightShadowView;
     private boolean showSpeakingMembersToast;
     private float showSpeakingMembersToastProgress;
     /* access modifiers changed from: private */
@@ -158,33 +163,42 @@ public class GroupCallRenderersContainer extends FrameLayout {
     public GroupCallRenderersContainer(Context context, RecyclerView recyclerView, RecyclerView recyclerView2, ArrayList<GroupCallMiniTextureView> arrayList, ChatObject.Call call2, GroupCallActivity groupCallActivity2) {
         super(context);
         Context context2 = context;
+        ChatObject.Call call3 = call2;
+        GroupCallActivity groupCallActivity3 = groupCallActivity2;
         this.listView = recyclerView;
         this.fullscreenListView = recyclerView2;
         this.attachedRenderers = arrayList;
-        this.call = call2;
-        this.groupCallActivity = groupCallActivity2;
-        AnonymousClass2 r5 = new ImageView(this, context2) {
+        this.call = call3;
+        this.groupCallActivity = groupCallActivity3;
+        AnonymousClass2 r7 = new ImageView(this, context2) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(ActionBar.getCurrentActionBarHeight(), NUM));
             }
         };
-        this.backButton = r5;
+        this.backButton = r7;
         BackDrawable backDrawable = new BackDrawable(false);
         backDrawable.setColor(-1);
-        r5.setImageDrawable(backDrawable);
-        r5.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        r5.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
-        r5.setBackground(Theme.createSelectorDrawable(ColorUtils.setAlphaComponent(-1, 55)));
+        r7.setImageDrawable(backDrawable);
+        r7.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        r7.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
+        r7.setBackground(Theme.createSelectorDrawable(ColorUtils.setAlphaComponent(-1, 55)));
         View view = new View(context2);
         this.topShadowView = view;
         GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[]{0, ColorUtils.setAlphaComponent(-16777216, 114)});
         this.topShadowDrawable = gradientDrawable;
-        view.setBackgroundDrawable(gradientDrawable);
+        view.setBackground(gradientDrawable);
         addView(view, LayoutHelper.createFrame(-1, 120.0f));
-        addView(r5, LayoutHelper.createFrame(56, -1, 51));
-        r5.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda5(this));
-        AnonymousClass3 r52 = new ImageView(context2) {
+        View view2 = new View(context2);
+        this.rightShadowView = view2;
+        GradientDrawable gradientDrawable2 = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{0, ColorUtils.setAlphaComponent(-16777216, 114)});
+        this.rightShadowDrawable = gradientDrawable2;
+        view2.setBackground(gradientDrawable2);
+        view2.setVisibility(call3.call.rtmp_stream ? 0 : 8);
+        addView(view2, LayoutHelper.createFrame(160, -1, 5));
+        addView(r7, LayoutHelper.createFrame(56, -1, 51));
+        r7.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda5(this));
+        AnonymousClass3 r72 = new ImageView(context2) {
             public void invalidate() {
                 super.invalidate();
                 GroupCallRenderersContainer.this.pinContainer.invalidate();
@@ -196,9 +210,9 @@ public class GroupCallRenderersContainer extends FrameLayout {
                 super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(ActionBar.getCurrentActionBarHeight(), NUM));
             }
         };
-        this.pinButton = r52;
+        this.pinButton = r72;
         final Drawable createSimpleSelectorRoundRectDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(20.0f), 0, ColorUtils.setAlphaComponent(-1, 100));
-        AnonymousClass4 r12 = new View(context2) {
+        AnonymousClass4 r14 = new View(context2) {
             /* access modifiers changed from: protected */
             public void drawableStateChanged() {
                 super.drawableStateChanged();
@@ -223,16 +237,16 @@ public class GroupCallRenderersContainer extends FrameLayout {
                 super.dispatchDraw(canvas);
             }
         };
-        this.pinContainer = r12;
-        r12.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda4(this));
+        this.pinContainer = r14;
+        r14.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda4(this));
         createSimpleSelectorRoundRectDrawable.setCallback(this.pinContainer);
         addView(this.pinContainer);
         CrossOutDrawable crossOutDrawable = new CrossOutDrawable(context2, NUM, (String) null);
         this.pinDrawable = crossOutDrawable;
         crossOutDrawable.setOffsets((float) (-AndroidUtilities.dp(1.0f)), (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(1.0f));
-        r52.setImageDrawable(this.pinDrawable);
-        r52.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
-        addView(r52, LayoutHelper.createFrame(56, -1, 51));
+        r72.setImageDrawable(this.pinDrawable);
+        r72.setPadding(AndroidUtilities.dp(16.0f), 0, AndroidUtilities.dp(16.0f), 0);
+        addView(r72, LayoutHelper.createFrame(56, -1, 51));
         TextView textView = new TextView(context2);
         this.pinTextView = textView;
         textView.setTextColor(-1);
@@ -247,8 +261,19 @@ public class GroupCallRenderersContainer extends FrameLayout {
         this.unpinTextView.setText(LocaleController.getString("CallVideoUnpin", NUM));
         addView(this.pinTextView, LayoutHelper.createFrame(-2, -2, 51));
         addView(this.unpinTextView, LayoutHelper.createFrame(-2, -2, 51));
+        ImageView imageView = new ImageView(context2);
+        this.pipView = imageView;
+        imageView.setVisibility(4);
+        this.pipView.setAlpha(0.0f);
+        this.pipView.setImageResource(NUM);
+        this.pipView.setContentDescription(LocaleController.getString(NUM));
+        int dp = AndroidUtilities.dp(4.0f);
+        this.pipView.setPadding(dp, dp, dp, dp);
+        this.pipView.setBackground(Theme.createSelectorDrawable(ColorUtils.setAlphaComponent(-1, 55)));
+        this.pipView.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda6(this, call3, groupCallActivity3));
+        addView(this.pipView, LayoutHelper.createFrame(32, 32.0f, 53, 12.0f, 12.0f, 12.0f, 12.0f));
         final Drawable createRoundRectDrawable = Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_listViewBackground"), 204));
-        AnonymousClass5 r6 = new FrameLayout(context2) {
+        AnonymousClass5 r3 = new FrameLayout(context2) {
             /* access modifiers changed from: protected */
             public void dispatchDraw(Canvas canvas) {
                 if (GroupCallRenderersContainer.this.speakingMembersToastChangeProgress == 1.0f) {
@@ -267,21 +292,21 @@ public class GroupCallRenderersContainer extends FrameLayout {
                 super.dispatchDraw(canvas);
             }
         };
-        this.speakingMembersToast = r6;
+        this.speakingMembersToast = r3;
         AvatarsImageView avatarsImageView = new AvatarsImageView(context2, true);
         this.speakingMembersAvatars = avatarsImageView;
         avatarsImageView.setStyle(10);
-        r6.setClipChildren(false);
-        r6.setClipToPadding(false);
-        r6.addView(avatarsImageView, LayoutHelper.createFrame(100, 32.0f, 16, 0.0f, 0.0f, 0.0f, 0.0f));
+        r3.setClipChildren(false);
+        r3.setClipToPadding(false);
+        r3.addView(avatarsImageView, LayoutHelper.createFrame(100, 32.0f, 16, 0.0f, 0.0f, 0.0f, 0.0f));
         TextView textView3 = new TextView(context2);
         this.speakingMembersText = textView3;
         textView3.setTextSize(1, 14.0f);
         textView3.setTextColor(-1);
         textView3.setLines(1);
         textView3.setEllipsize(TextUtils.TruncateAt.END);
-        r6.addView(textView3, LayoutHelper.createFrame(-2, -2, 16));
-        addView(r6, LayoutHelper.createFrame(-2, 36.0f, 1, 0.0f, 0.0f, 0.0f, 0.0f));
+        r3.addView(textView3, LayoutHelper.createFrame(-2, -2, 16));
+        addView(r3, LayoutHelper.createFrame(-2, 36.0f, 1, 0.0f, 0.0f, 0.0f, 0.0f));
         this.touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
         for (int i = 0; i < 2; i++) {
             this.undoView[i] = new UndoView(context2) {
@@ -310,6 +335,23 @@ public class GroupCallRenderersContainer extends FrameLayout {
             this.hasPinnedVideo = z;
             this.pinDrawable.setCrossOut(z, true);
             requestLayout();
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$2(ChatObject.Call call2, GroupCallActivity groupCallActivity2, View view) {
+        if (call2.call.rtmp_stream) {
+            if (AndroidUtilities.checkInlinePermissions(groupCallActivity2.getParentActivity())) {
+                RTMPStreamPipOverlay.show();
+                groupCallActivity2.dismiss();
+                return;
+            }
+            AlertsCreator.createDrawOverlayGroupCallPermissionDialog(getContext()).show();
+        } else if (AndroidUtilities.checkInlinePermissions(groupCallActivity2.getParentActivity())) {
+            GroupCallPip.clearForce();
+            groupCallActivity2.dismiss();
+        } else {
+            AlertsCreator.createDrawOverlayGroupCallPermissionDialog(getContext()).show();
         }
     }
 
@@ -383,13 +425,13 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x03dd  */
-    /* JADX WARNING: Removed duplicated region for block: B:133:0x03ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x042e  */
-    /* JADX WARNING: Removed duplicated region for block: B:137:0x0436  */
-    /* JADX WARNING: Removed duplicated region for block: B:140:0x0441 A[LOOP:1: B:140:0x0441->B:147:0x049a, LOOP_START, PHI: r10 
-      PHI: (r10v1 int) = (r10v0 int), (r10v2 int) binds: [B:139:0x043f, B:147:0x049a] A[DONT_GENERATE, DONT_INLINE]] */
-    /* JADX WARNING: Removed duplicated region for block: B:155:? A[ORIG_RETURN, RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:143:0x0453  */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x0460  */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x04a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:148:0x04ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:151:0x04b7 A[LOOP:1: B:151:0x04b7->B:158:0x0510, LOOP_START, PHI: r10 
+      PHI: (r10v1 int) = (r10v0 int), (r10v2 int) binds: [B:150:0x04b5, B:158:0x0510] A[DONT_GENERATE, DONT_INLINE]] */
+    /* JADX WARNING: Removed duplicated region for block: B:166:? A[ORIG_RETURN, RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void dispatchDraw(android.graphics.Canvas r23) {
         /*
@@ -711,11 +753,11 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r3 = r14 - r3
             float r1 = r1 * r3
             android.animation.ValueAnimator r3 = r0.replaceFullscreenViewAnimator
-            if (r3 == 0) goto L_0x02a5
+            if (r3 == 0) goto L_0x02aa
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r3 = r0.outFullscreenTextureView
-            if (r3 == 0) goto L_0x02a5
+            if (r3 == 0) goto L_0x02aa
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r4 = r0.fullscreenTextureView
-            if (r4 == 0) goto L_0x02a5
+            if (r4 == 0) goto L_0x02aa
             boolean r3 = r3.hasVideo
             boolean r5 = r4.hasVideo
             if (r3 == r5) goto L_0x0297
@@ -739,28 +781,74 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r3 = r3 * r12
             int r3 = (int) r3
             r4.setAlpha(r3)
-            goto L_0x02c0
-        L_0x02a5:
+            android.graphics.drawable.Drawable r4 = r0.rightShadowDrawable
+            r4.setAlpha(r3)
+            goto L_0x02d8
+        L_0x02aa:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r3 = r0.fullscreenTextureView
-            if (r3 == 0) goto L_0x02b8
+            if (r3 == 0) goto L_0x02cb
             android.graphics.drawable.Drawable r4 = r0.topShadowDrawable
             float r12 = r12 * r1
             float r3 = r3.progressToNoVideoStub
             float r3 = r14 - r3
-            float r12 = r12 * r3
-            int r3 = (int) r12
+            float r3 = r3 * r12
+            int r3 = (int) r3
             r4.setAlpha(r3)
-            goto L_0x02c0
-        L_0x02b8:
+            android.graphics.drawable.Drawable r3 = r0.rightShadowDrawable
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r4 = r0.fullscreenTextureView
+            float r4 = r4.progressToNoVideoStub
+            float r4 = r14 - r4
+            float r12 = r12 * r4
+            int r4 = (int) r12
+            r3.setAlpha(r4)
+            goto L_0x02d8
+        L_0x02cb:
             android.graphics.drawable.Drawable r3 = r0.topShadowDrawable
             float r12 = r12 * r1
             int r4 = (int) r12
             r3.setAlpha(r4)
-        L_0x02c0:
+            android.graphics.drawable.Drawable r3 = r0.rightShadowDrawable
+            r3.setAlpha(r4)
+        L_0x02d8:
             android.widget.ImageView r3 = r0.backButton
             r3.setAlpha(r1)
+            org.telegram.messenger.ChatObject$Call r3 = r0.call
+            org.telegram.tgnet.TLRPC$GroupCall r3 = r3.call
+            boolean r3 = r3.rtmp_stream
+            r4 = 4
+            if (r3 == 0) goto L_0x0314
+            android.widget.ImageView r3 = r0.pinButton
+            r3.setAlpha(r13)
+            android.widget.ImageView r3 = r0.pinButton
+            r3.setVisibility(r4)
+            android.widget.ImageView r3 = r0.pipView
+            r3.setAlpha(r1)
+            android.widget.ImageView r3 = r0.pipView
+            r3.setVisibility(r10)
+            boolean r3 = org.telegram.ui.GroupCallActivity.isLandscapeMode
+            if (r3 == 0) goto L_0x030e
+            android.widget.ImageView r3 = r0.pipView
+            r4 = 1116733440(0x42900000, float:72.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r4 = -r4
+            float r4 = (float) r4
+            float r4 = r4 * r1
+            r3.setTranslationX(r4)
+            goto L_0x0328
+        L_0x030e:
+            android.widget.ImageView r3 = r0.pipView
+            r3.setTranslationX(r13)
+            goto L_0x0328
+        L_0x0314:
             android.widget.ImageView r3 = r0.pinButton
             r3.setAlpha(r1)
+            android.widget.ImageView r3 = r0.pinButton
+            r3.setVisibility(r10)
+            android.widget.ImageView r3 = r0.pipView
+            r3.setAlpha(r13)
+            android.widget.ImageView r3 = r0.pipView
+            r3.setVisibility(r4)
+        L_0x0328:
             int r3 = r22.getMeasuredWidth()
             android.widget.TextView r4 = r0.pinTextView
             int r4 = r4.getMeasuredWidth()
@@ -793,23 +881,23 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r3 = (float) r3
             float r4 = r4 - r3
             boolean r3 = org.telegram.ui.GroupCallActivity.isTabletMode
-            if (r3 == 0) goto L_0x031e
+            if (r3 == 0) goto L_0x037c
             r3 = 1134821376(0x43a40000, float:328.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-        L_0x031b:
+        L_0x0379:
             float r3 = (float) r3
             float r4 = r4 - r3
-            goto L_0x032b
-        L_0x031e:
+            goto L_0x0389
+        L_0x037c:
             boolean r3 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r3 == 0) goto L_0x0329
+            if (r3 == 0) goto L_0x0387
             r3 = 1127481344(0x43340000, float:180.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            goto L_0x031b
-        L_0x0329:
+            goto L_0x0379
+        L_0x0387:
             r3 = 0
-            goto L_0x031b
-        L_0x032b:
+            goto L_0x0379
+        L_0x0389:
             android.widget.TextView r3 = r0.pinTextView
             r3.setTranslationX(r4)
             android.widget.TextView r3 = r0.unpinTextView
@@ -838,6 +926,18 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r5 = (float) r5
             float r4 = r4 - r5
             r3.setTranslationX(r4)
+            org.telegram.messenger.ChatObject$Call r3 = r0.call
+            org.telegram.tgnet.TLRPC$GroupCall r3 = r3.call
+            boolean r3 = r3.rtmp_stream
+            if (r3 == 0) goto L_0x03e3
+            android.widget.TextView r1 = r0.pinTextView
+            r1.setAlpha(r13)
+            android.widget.TextView r1 = r0.unpinTextView
+            r1.setAlpha(r13)
+            android.view.View r1 = r0.pinContainer
+            r1.setAlpha(r13)
+            goto L_0x0404
+        L_0x03e3:
             android.widget.TextView r3 = r0.pinTextView
             org.telegram.ui.Components.CrossOutDrawable r4 = r0.pinDrawable
             float r4 = r4.getProgress()
@@ -851,60 +951,61 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r3.setAlpha(r4)
             android.view.View r3 = r0.pinContainer
             r3.setAlpha(r1)
+        L_0x0404:
             float r1 = r0.speakingMembersToastChangeProgress
             int r3 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
-            if (r3 == 0) goto L_0x03a9
+            if (r3 == 0) goto L_0x041f
             r3 = 1033171465(0x3d94var_, float:0.07272727)
             float r1 = r1 + r3
             r0.speakingMembersToastChangeProgress = r1
             int r1 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
-            if (r1 <= 0) goto L_0x03a1
+            if (r1 <= 0) goto L_0x0417
             r0.speakingMembersToastChangeProgress = r14
-            goto L_0x03a4
-        L_0x03a1:
+            goto L_0x041a
+        L_0x0417:
             r22.invalidate()
-        L_0x03a4:
+        L_0x041a:
             android.widget.FrameLayout r1 = r0.speakingMembersToast
             r1.invalidate()
-        L_0x03a9:
+        L_0x041f:
             boolean r1 = r0.showSpeakingMembersToast
             r3 = 1037726734(0x3dda740e, float:0.10666667)
-            if (r1 == 0) goto L_0x03c4
+            if (r1 == 0) goto L_0x043a
             float r4 = r0.showSpeakingMembersToastProgress
             int r5 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
-            if (r5 == 0) goto L_0x03c4
+            if (r5 == 0) goto L_0x043a
             float r4 = r4 + r3
             r0.showSpeakingMembersToastProgress = r4
             int r1 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
-            if (r1 <= 0) goto L_0x03c0
+            if (r1 <= 0) goto L_0x0436
             r0.showSpeakingMembersToastProgress = r14
-            goto L_0x03d9
-        L_0x03c0:
+            goto L_0x044f
+        L_0x0436:
             r22.invalidate()
-            goto L_0x03d9
-        L_0x03c4:
-            if (r1 != 0) goto L_0x03d9
+            goto L_0x044f
+        L_0x043a:
+            if (r1 != 0) goto L_0x044f
             float r1 = r0.showSpeakingMembersToastProgress
             int r4 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1))
-            if (r4 == 0) goto L_0x03d9
+            if (r4 == 0) goto L_0x044f
             float r1 = r1 - r3
             r0.showSpeakingMembersToastProgress = r1
             int r1 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1))
-            if (r1 >= 0) goto L_0x03d6
+            if (r1 >= 0) goto L_0x044c
             r0.showSpeakingMembersToastProgress = r13
-            goto L_0x03d9
-        L_0x03d6:
+            goto L_0x044f
+        L_0x044c:
             r22.invalidate()
-        L_0x03d9:
+        L_0x044f:
             boolean r1 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r1 == 0) goto L_0x03ea
+            if (r1 == 0) goto L_0x0460
             android.widget.FrameLayout r1 = r0.speakingMembersToast
             r2 = 1098907648(0x41800000, float:16.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             float r2 = (float) r2
             r1.setTranslationY(r2)
-            goto L_0x0409
-        L_0x03ea:
+            goto L_0x047f
+        L_0x0460:
             android.widget.FrameLayout r1 = r0.speakingMembersToast
             int r3 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
             float r3 = (float) r3
@@ -920,7 +1021,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r2 = r2 * r4
             float r3 = r3 + r2
             r1.setTranslationY(r3)
-        L_0x0409:
+        L_0x047f:
             android.widget.FrameLayout r1 = r0.speakingMembersToast
             float r2 = r0.showSpeakingMembersToastProgress
             float r3 = r0.progressToFullscreenMode
@@ -938,29 +1039,29 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r2 = r2 + r3
             r1.setScaleY(r2)
             boolean r1 = org.telegram.ui.GroupCallActivity.isTabletMode
-            if (r1 == 0) goto L_0x0436
+            if (r1 == 0) goto L_0x04ac
             r0.notDrawRenderes = r9
             super.dispatchDraw(r23)
             r0.notDrawRenderes = r10
-            goto L_0x0439
-        L_0x0436:
+            goto L_0x04af
+        L_0x04ac:
             super.dispatchDraw(r23)
-        L_0x0439:
+        L_0x04af:
             androidx.recyclerview.widget.RecyclerView r1 = r0.fullscreenListView
             int r1 = r1.getVisibility()
-            if (r1 != 0) goto L_0x049d
-        L_0x0441:
+            if (r1 != 0) goto L_0x0513
+        L_0x04b7:
             androidx.recyclerview.widget.RecyclerView r1 = r0.fullscreenListView
             int r1 = r1.getChildCount()
-            if (r10 >= r1) goto L_0x049d
+            if (r10 >= r1) goto L_0x0513
             androidx.recyclerview.widget.RecyclerView r1 = r0.fullscreenListView
             android.view.View r1 = r1.getChildAt(r10)
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r1 = (org.telegram.ui.Components.GroupCallFullscreenAdapter.GroupCallUserCell) r1
             int r2 = r1.getVisibility()
-            if (r2 != 0) goto L_0x049a
+            if (r2 != 0) goto L_0x0510
             float r2 = r1.getAlpha()
             int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
-            if (r2 == 0) goto L_0x049a
+            if (r2 == 0) goto L_0x0510
             r23.save()
             float r2 = r1.getX()
             androidx.recyclerview.widget.RecyclerView r3 = r0.fullscreenListView
@@ -982,10 +1083,10 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r8.scale(r2, r3, r4, r5)
             r1.drawOverlays(r8)
             r23.restore()
-        L_0x049a:
+        L_0x0510:
             int r10 = r10 + 1
-            goto L_0x0441
-        L_0x049d:
+            goto L_0x04b7
+        L_0x0513:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.GroupCallRenderersContainer.dispatchDraw(android.graphics.Canvas):void");
@@ -1248,7 +1349,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r1.setScaleY(r12)
             r1.animateEnter = r6
         L_0x01ea:
-            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda8 r3 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda8
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda9 r3 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda9
             r3.<init>(r0, r11, r1)
             r13.runOnFrameRendered(r3)
             r16.clearCurrentFullscreenTextureView()
@@ -1316,7 +1417,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r3.setScaleX(r12)
             r3.setScaleY(r12)
             r3.animateEnter = r6
-            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda7 r4 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda7
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda8 r4 = new org.telegram.ui.Components.voip.GroupCallRenderersContainer$$ExternalSyntheticLambda8
             r4.<init>(r0, r3)
             r3.runOnFrameRendered(r4)
         L_0x026e:
@@ -1460,7 +1561,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$requestFullscreen$2(final GroupCallMiniTextureView groupCallMiniTextureView, final GroupCallMiniTextureView groupCallMiniTextureView2) {
+    public /* synthetic */ void lambda$requestFullscreen$3(final GroupCallMiniTextureView groupCallMiniTextureView, final GroupCallMiniTextureView groupCallMiniTextureView2) {
         ValueAnimator valueAnimator = this.replaceFullscreenViewAnimator;
         if (valueAnimator != null) {
             valueAnimator.start();
@@ -1483,7 +1584,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$requestFullscreen$3(final GroupCallMiniTextureView groupCallMiniTextureView) {
+    public /* synthetic */ void lambda$requestFullscreen$4(final GroupCallMiniTextureView groupCallMiniTextureView) {
         groupCallMiniTextureView.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setListener(new AnimatorListenerAdapter(this) {
             public void onAnimationEnd(Animator animator) {
                 groupCallMiniTextureView.animateEnter = false;
@@ -1492,13 +1593,13 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$requestFullscreen$4(GroupCallMiniTextureView groupCallMiniTextureView, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$requestFullscreen$5(GroupCallMiniTextureView groupCallMiniTextureView, ValueAnimator valueAnimator) {
         groupCallMiniTextureView.setAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
         invalidate();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$requestFullscreen$5(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$requestFullscreen$6(ValueAnimator valueAnimator) {
         this.progressToFullscreenMode = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         update();
     }
@@ -2176,7 +2277,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$animateSwipeToBack$6(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$animateSwipeToBack$7(ValueAnimator valueAnimator) {
         this.swipeToBackDy = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
@@ -2207,7 +2308,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$finishZoom$7(float f, float f2, float f3, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$finishZoom$8(float f, float f2, float f3, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.pinchScale = (f * floatValue) + ((1.0f - floatValue) * 1.0f);
         this.pinchTranslationX = f2 * floatValue;
@@ -2231,8 +2332,9 @@ public class GroupCallRenderersContainer extends FrameLayout {
     public void delayHideUi() {
         if (this.hideUiRunnableIsScheduled) {
             AndroidUtilities.cancelRunOnUIThread(this.hideUiRunnable);
-            AndroidUtilities.runOnUIThread(this.hideUiRunnable, 3000);
         }
+        AndroidUtilities.runOnUIThread(this.hideUiRunnable, 3000);
+        this.hideUiRunnableIsScheduled = true;
     }
 
     public boolean isUiVisible() {
@@ -2267,10 +2369,11 @@ public class GroupCallRenderersContainer extends FrameLayout {
         if (GroupCallActivity.isTabletMode) {
             ((ViewGroup.MarginLayoutParams) this.topShadowView.getLayoutParams()).rightMargin = AndroidUtilities.dp(328.0f);
         } else if (GroupCallActivity.isLandscapeMode) {
-            ((ViewGroup.MarginLayoutParams) this.topShadowView.getLayoutParams()).rightMargin = AndroidUtilities.dp(90.0f);
+            ((ViewGroup.MarginLayoutParams) this.topShadowView.getLayoutParams()).rightMargin = this.call.call.rtmp_stream ? 0 : AndroidUtilities.dp(90.0f);
         } else {
             ((ViewGroup.MarginLayoutParams) this.topShadowView.getLayoutParams()).rightMargin = 0;
         }
+        this.rightShadowView.setVisibility((!GroupCallActivity.isLandscapeMode || GroupCallActivity.isTabletMode) ? 8 : 0);
         this.pinContainer.getLayoutParams().height = AndroidUtilities.dp(40.0f);
         this.pinTextView.measure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), 0), i2);
         this.unpinTextView.measure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), 0), i2);
@@ -2395,9 +2498,9 @@ public class GroupCallRenderersContainer extends FrameLayout {
                 }
                 this.speakingMembersAvatars.commitTransition(z2);
             } else if (this.updateTooltipRunnbale == null) {
-                GroupCallRenderersContainer$$ExternalSyntheticLambda6 groupCallRenderersContainer$$ExternalSyntheticLambda6 = new GroupCallRenderersContainer$$ExternalSyntheticLambda6(this);
-                this.updateTooltipRunnbale = groupCallRenderersContainer$$ExternalSyntheticLambda6;
-                AndroidUtilities.runOnUIThread(groupCallRenderersContainer$$ExternalSyntheticLambda6, (System.currentTimeMillis() - this.lastUpdateTooltipTime) + 50);
+                GroupCallRenderersContainer$$ExternalSyntheticLambda7 groupCallRenderersContainer$$ExternalSyntheticLambda7 = new GroupCallRenderersContainer$$ExternalSyntheticLambda7(this);
+                this.updateTooltipRunnbale = groupCallRenderersContainer$$ExternalSyntheticLambda7;
+                AndroidUtilities.runOnUIThread(groupCallRenderersContainer$$ExternalSyntheticLambda7, (System.currentTimeMillis() - this.lastUpdateTooltipTime) + 50);
             }
         } else if (this.showSpeakingMembersToast) {
             this.showSpeakingMembersToast = false;
@@ -2406,7 +2509,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setVisibleParticipant$8() {
+    public /* synthetic */ void lambda$setVisibleParticipant$9() {
         this.updateTooltipRunnbale = null;
         setVisibleParticipant(true);
     }

@@ -278,7 +278,7 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    public void openSearchField(boolean z, String str, boolean z2) {
+    public void openSearchField(boolean z, boolean z2, String str, boolean z3) {
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             View childAt = getChildAt(i);
@@ -286,9 +286,9 @@ public class ActionBarMenu extends LinearLayout {
                 ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
                 if (actionBarMenuItem.isSearchField()) {
                     if (z) {
-                        this.parentActionBar.onSearchFieldVisibilityChanged(actionBarMenuItem.toggleSearch(true));
+                        this.parentActionBar.onSearchFieldVisibilityChanged(actionBarMenuItem.toggleSearch(z2));
                     }
-                    actionBarMenuItem.setSearchFieldText(str, z2);
+                    actionBarMenuItem.setSearchFieldText(str, z3);
                     actionBarMenuItem.getSearchField().setSelection(str.length());
                     return;
                 }

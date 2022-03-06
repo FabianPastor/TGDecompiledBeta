@@ -8,6 +8,6 @@ public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda34 
     }
 
     public final void run() {
-        this.f$0.lambda$new$1();
+        this.f$0.lambda$didReceivedNotification$2();
     }
 }

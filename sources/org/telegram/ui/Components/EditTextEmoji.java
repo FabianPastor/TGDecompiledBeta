@@ -167,7 +167,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         float f = 11.0f;
         if (i == 0) {
             this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-            this.editText.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+            this.editText.setBackground((Drawable) null);
+            this.editText.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
             this.editText.setHintTextColor(getThemedColor("windowBackgroundWhiteHintText"));
             this.editText.setTextColor(getThemedColor("windowBackgroundWhiteBlackText"));
             this.editText.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(40.0f) : 0, 0, LocaleController.isRTL ? 0 : AndroidUtilities.dp(40.0f), AndroidUtilities.dp(8.0f));
@@ -178,7 +179,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             this.editText.setGravity(19);
             this.editText.setHintTextColor(getThemedColor("dialogTextHint"));
             this.editText.setTextColor(getThemedColor("dialogTextBlack"));
-            this.editText.setBackgroundDrawable((Drawable) null);
+            this.editText.setBackground((Drawable) null);
             this.editText.setPadding(0, AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(12.0f));
             addView(this.editText, LayoutHelper.createFrame(-1, -1.0f, 19, 48.0f, 0.0f, 0.0f, 0.0f));
         }
@@ -198,7 +199,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             addView(this.emojiButton, LayoutHelper.createFrame(48, 48.0f, 83, 0.0f, 0.0f, 0.0f, 0.0f));
         }
         if (Build.VERSION.SDK_INT >= 21) {
-            this.emojiButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor("listSelectorSDK21")));
+            this.emojiButton.setBackground(Theme.createSelectorDrawable(getThemedColor("listSelectorSDK21")));
         }
         this.emojiButton.setOnClickListener(new EditTextEmoji$$ExternalSyntheticLambda2(this));
         this.emojiButton.setContentDescription(LocaleController.getString("Emoji", NUM));

@@ -115,7 +115,7 @@ import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
 public class MessagesStorage extends BaseController {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
-    private static final int LAST_DB_VERSION = 91;
+    private static final int LAST_DB_VERSION = 92;
     private int archiveUnreadCount;
     private int[][] bots = {new int[2], new int[2]};
     private File cacheFile;
@@ -127,7 +127,7 @@ public class MessagesStorage extends BaseController {
     private SparseArray<MessagesController.DialogFilter> dialogFiltersMap = new SparseArray<>();
     private LongSparseArray<Integer> dialogsWithMentions = new LongSparseArray<>();
     private LongSparseArray<Integer> dialogsWithUnread = new LongSparseArray<>();
-    ArrayList<MessageObject> downloadingFiles = new ArrayList<>();
+    public ArrayList<MessageObject> downloadingFiles = new ArrayList<>();
     private int[][] groups = {new int[2], new int[2]};
     private int lastDateValue = 0;
     private int lastPtsValue = 0;
@@ -146,7 +146,7 @@ public class MessagesStorage extends BaseController {
     private CountDownLatch openSync = new CountDownLatch(1);
     private volatile int pendingArchiveUnreadCount;
     private volatile int pendingMainUnreadCount;
-    ArrayList<MessageObject> recentDownloadingFiles = new ArrayList<>();
+    public ArrayList<MessageObject> recentDownloadingFiles = new ArrayList<>();
     private int secretG = 0;
     private byte[] secretPBytes = null;
     private File shmCacheFile;
@@ -448,8 +448,8 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE TABLE reactions(data BLOB, hash INTEGER, date INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE reaction_mentions(message_id INTEGER, state INTEGER, dialog_id INTEGER, PRIMARY KEY(message_id, dialog_id))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS reaction_mentions_did ON reaction_mentions(dialog_id);").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE downloading_documents(data BLOB, hash INTEGER, id INTEGER, state INTEGER, PRIMARY KEY(hash, id));").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 91").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE downloading_documents(data BLOB, hash INTEGER, id INTEGER, state INTEGER, date INTEGER, PRIMARY KEY(hash, id));").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 92").stepThis().dispose();
                 AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda21(this));
                 loadDialogFilters();
                 loadUnreadMessages();
@@ -485,7 +485,7 @@ public class MessagesStorage extends BaseController {
                     }
                 }
                 queryFinalized.dispose();
-                if (intValue < 91) {
+                if (intValue < 92) {
                     updateDbToLastVersion(intValue);
                 }
                 AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda21(this));
@@ -575,7 +575,7 @@ public class MessagesStorage extends BaseController {
         MessagesStorage messagesStorage = this;
         int i4 = i;
         AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda23(messagesStorage));
-        FileLog.d("MessagesStorage start db migration from " + i4 + " to " + 91);
+        FileLog.d("MessagesStorage start db migration from " + i4 + " to " + 92);
         int i5 = 4;
         if (i4 < 4) {
             messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
@@ -1561,7 +1561,6 @@ public class MessagesStorage extends BaseController {
             i4 = 88;
         }
         if (i4 == 88 || i4 == 89) {
-            System.currentTimeMillis();
             messagesStorage.database.executeFast("DROP TABLE IF EXISTS reaction_mentions;").stepThis().dispose();
             messagesStorage.database.executeFast("CREATE TABLE IF NOT EXISTS reaction_mentions(message_id INTEGER, state INTEGER, dialog_id INTEGER, PRIMARY KEY(dialog_id, message_id));").stepThis().dispose();
             messagesStorage.database.executeFast("CREATE INDEX IF NOT EXISTS reaction_mentions_did ON reaction_mentions(dialog_id);").stepThis().dispose();
@@ -1570,9 +1569,10 @@ public class MessagesStorage extends BaseController {
             messagesStorage.database.executeFast("PRAGMA user_version = 90").stepThis().dispose();
             i4 = 90;
         }
-        if (i4 == 90) {
-            messagesStorage.database.executeFast("CREATE TABLE downloading_documents(data BLOB, hash INTEGER, id INTEGER, state INTEGER, PRIMARY KEY(hash, id));").stepThis().dispose();
-            messagesStorage.database.executeFast("PRAGMA user_version = 91").stepThis().dispose();
+        if (i4 == 90 || i4 == 91) {
+            messagesStorage.database.executeFast("DROP TABLE IF EXISTS downloading_documents;").stepThis().dispose();
+            messagesStorage.database.executeFast("CREATE TABLE downloading_documents(data BLOB, hash INTEGER, id INTEGER, state INTEGER, date INTEGER, PRIMARY KEY(hash, id));").stepThis().dispose();
+            messagesStorage.database.executeFast("PRAGMA user_version = 92").stepThis().dispose();
         }
         FileLog.d("MessagesStorage db migration finished");
         AndroidUtilities.runOnUIThread(new MessagesStorage$$ExternalSyntheticLambda9(messagesStorage));
@@ -2478,8 +2478,8 @@ public class MessagesStorage extends BaseController {
         }
         if (!z) {
             this.downloadingFiles.add(messageObject);
-            getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
         }
+        getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
     }
 
     /* access modifiers changed from: private */
@@ -2487,10 +2487,11 @@ public class MessagesStorage extends BaseController {
         try {
             NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(messageObject.messageOwner.getObjectSize());
             messageObject.messageOwner.serializeToStream(nativeByteBuffer);
-            SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO downloading_documents VALUES(?, ?, ?, ?)");
+            SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO downloading_documents VALUES(?, ?, ?, ?, ?)");
             executeFast.bindByteBuffer(1, nativeByteBuffer);
             executeFast.bindInteger(2, messageObject.getDocument().dc_id);
             executeFast.bindLong(3, messageObject.getDocument().id);
+            executeFast.bindLong(4, System.currentTimeMillis());
             executeFast.bindInteger(4, 0);
             executeFast.step();
             executeFast.dispose();
@@ -2547,14 +2548,45 @@ public class MessagesStorage extends BaseController {
         try {
             NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(messageObject.messageOwner.getObjectSize());
             messageObject.messageOwner.serializeToStream(nativeByteBuffer);
-            SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE downloading_documents SET state = 1 WHERE hash = ? AND id = ?");
-            executeFast.bindInteger(1, messageObject.getDocument().dc_id);
-            executeFast.bindLong(2, messageObject.getDocument().id);
+            SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE downloading_documents SET state = 1, date = ? WHERE hash = ? AND id = ?");
+            executeFast.bindLong(1, System.currentTimeMillis());
+            executeFast.bindInteger(2, messageObject.getDocument().dc_id);
+            executeFast.bindLong(3, messageObject.getDocument().id);
             executeFast.step();
             executeFast.dispose();
             nativeByteBuffer.reuse();
+            SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT COUNT(*) FROM downloading_documents WHERE state = 1", new Object[0]);
+            int intValue = queryFinalized.next() ? queryFinalized.intValue(0) : 0;
+            queryFinalized.dispose();
+            if (intValue > 100) {
+                SQLiteDatabase sQLiteDatabase = this.database;
+                SQLiteCursor queryFinalized2 = sQLiteDatabase.queryFinalized("SELECT hash, id FROM downloading_documents WHERE state = 1 ORDER BY date ASC LIMIT " + (100 - intValue), new Object[0]);
+                ArrayList arrayList = new ArrayList();
+                while (queryFinalized2.next()) {
+                    DownloadingDocumentEntry downloadingDocumentEntry = new DownloadingDocumentEntry();
+                    downloadingDocumentEntry.hash = queryFinalized2.intValue(0);
+                    downloadingDocumentEntry.id = queryFinalized2.longValue(1);
+                    arrayList.add(downloadingDocumentEntry);
+                }
+                queryFinalized2.dispose();
+                SQLitePreparedStatement executeFast2 = this.database.executeFast("DELETE FROM downloading_documents WHERE hash = ? AND id = ?");
+                for (int i = 0; i < arrayList.size(); i++) {
+                    executeFast2.bindInteger(1, ((DownloadingDocumentEntry) arrayList.get(i)).hash);
+                    executeFast2.bindLong(2, ((DownloadingDocumentEntry) arrayList.get(i)).id);
+                    executeFast2.step();
+                }
+                executeFast2.dispose();
+            }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
+        }
+    }
+
+    private class DownloadingDocumentEntry {
+        int hash;
+        long id;
+
+        private DownloadingDocumentEntry() {
         }
     }
 
@@ -2567,7 +2599,7 @@ public class MessagesStorage extends BaseController {
         ArrayList arrayList = new ArrayList();
         ArrayList arrayList2 = new ArrayList();
         try {
-            SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT data, state FROM downloading_documents", new Object[0]);
+            SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT data, state FROM downloading_documents ORDER BY date DESC", new Object[0]);
             while (queryFinalized.next()) {
                 NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(0);
                 int intValue = queryFinalized.intValue(1);
@@ -2628,6 +2660,7 @@ public class MessagesStorage extends BaseController {
                     i2++;
                 }
             }
+            FileLoader.getInstance(this.currentAccount).cancelLoadFile(arrayList.get(i).getFileName());
         }
         getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
         this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda136(this, arrayList));
@@ -21004,12 +21037,12 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX WARNING: type inference failed for: r6v0 */
-    /* JADX WARNING: type inference failed for: r6v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r6v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r15v5 */
     /* JADX WARNING: type inference failed for: r15v10 */
     /* JADX WARNING: type inference failed for: r6v24 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r15v2, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r15v2, types: [int, boolean] */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x0109 A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:53:0x01d8 A[Catch:{ Exception -> 0x0286 }] */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x01dd A[Catch:{ Exception -> 0x0286 }] */
@@ -21331,12 +21364,12 @@ public class MessagesStorage extends BaseController {
             TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
             if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported_old) {
                 if (tLRPC$MessageMedia.bytes.length == 0) {
-                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(138);
+                    tLRPC$MessageMedia.bytes = Utilities.intToBytes(139);
                 }
             } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported) {
                 TLRPC$TL_messageMediaUnsupported_old tLRPC$TL_messageMediaUnsupported_old = new TLRPC$TL_messageMediaUnsupported_old();
                 tLRPC$Message.media = tLRPC$TL_messageMediaUnsupported_old;
-                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(138);
+                tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(139);
                 tLRPC$Message.flags |= 512;
             }
         }
@@ -24753,7 +24786,7 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0021:
             java.lang.String r7 = "SavedMessages"
-            r8 = 2131627755(0x7f0e0eeb, float:1.8882783E38)
+            r8 = 2131627763(0x7f0e0ef3, float:1.88828E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)     // Catch:{ Exception -> 0x0654 }
             java.lang.String r7 = r7.toLowerCase()     // Catch:{ Exception -> 0x0654 }
             java.lang.String r8 = "saved messages"

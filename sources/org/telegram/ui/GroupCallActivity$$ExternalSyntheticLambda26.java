@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.Components.EditTextBoldCursor;
+import android.view.View;
+import org.telegram.ui.Cells.CheckBoxCell;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda26 implements Runnable {
-    public final /* synthetic */ EditTextBoldCursor f$0;
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda26 implements View.OnClickListener {
+    public final /* synthetic */ CheckBoxCell[] f$0;
 
-    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda26(EditTextBoldCursor editTextBoldCursor) {
-        this.f$0 = editTextBoldCursor;
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda26(CheckBoxCell[] checkBoxCellArr) {
+        this.f$0 = checkBoxCellArr;
     }
 
-    public final void run() {
-        AndroidUtilities.showKeyboard(this.f$0);
+    public final void onClick(View view) {
+        GroupCallActivity.lambda$onLeaveClick$52(this.f$0, view);
     }
 }

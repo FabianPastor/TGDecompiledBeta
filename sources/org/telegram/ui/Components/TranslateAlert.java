@@ -156,14 +156,14 @@ public class TranslateAlert extends Dialog {
             this.titleView.setScaleX(AndroidUtilities.lerp(1.0f, 0.9473f, min));
             this.titleView.setScaleY(AndroidUtilities.lerp(1.0f, 0.9473f, min));
             FrameLayout.LayoutParams layoutParams = this.titleLayout;
-            int dp = AndroidUtilities.dp(AndroidUtilities.lerp(22.0f, 72.0f, min));
-            int dp2 = AndroidUtilities.dp(AndroidUtilities.lerp(22.0f, 8.0f, min));
+            int dp = AndroidUtilities.dp((float) AndroidUtilities.lerp(22, 72, min));
+            int dp2 = AndroidUtilities.dp((float) AndroidUtilities.lerp(22, 8, min));
             FrameLayout.LayoutParams layoutParams2 = this.titleLayout;
             layoutParams.setMargins(dp, dp2, layoutParams2.rightMargin, layoutParams2.bottomMargin);
             this.titleView.setLayoutParams(this.titleLayout);
             FrameLayout.LayoutParams layoutParams3 = this.subtitleLayout;
-            int dp3 = AndroidUtilities.dp(AndroidUtilities.lerp(22.0f, 72.0f, min)) - LoadingTextView2.paddingHorizontal;
-            int dp4 = AndroidUtilities.dp(AndroidUtilities.lerp(47.0f, 30.0f, min)) - LoadingTextView2.paddingVertical;
+            int dp3 = AndroidUtilities.dp((float) AndroidUtilities.lerp(22, 72, min)) - LoadingTextView2.paddingHorizontal;
+            int dp4 = AndroidUtilities.dp((float) AndroidUtilities.lerp(47, 30, min)) - LoadingTextView2.paddingVertical;
             FrameLayout.LayoutParams layoutParams4 = this.subtitleLayout;
             layoutParams3.setMargins(dp3, dp4, layoutParams4.rightMargin, layoutParams4.bottomMargin);
             this.subtitleView.setLayoutParams(this.subtitleLayout);
@@ -177,11 +177,13 @@ public class TranslateAlert extends Dialog {
                 f2 = min;
             }
             frameLayout.setAlpha(f2);
-            this.headerLayout.height = (int) AndroidUtilities.lerp((float) AndroidUtilities.dp(70.0f), (float) AndroidUtilities.dp(56.0f), min);
+            this.headerLayout.height = AndroidUtilities.lerp(AndroidUtilities.dp(70.0f), AndroidUtilities.dp(56.0f), min);
             this.header.setLayoutParams(this.headerLayout);
             FrameLayout.LayoutParams layoutParams5 = this.scrollViewLayout;
+            int i = layoutParams5.leftMargin;
+            int lerp = AndroidUtilities.lerp(AndroidUtilities.dp(70.0f), AndroidUtilities.dp(56.0f), min);
             FrameLayout.LayoutParams layoutParams6 = this.scrollViewLayout;
-            layoutParams5.setMargins(layoutParams5.leftMargin, (int) AndroidUtilities.lerp((float) AndroidUtilities.dp(70.0f), (float) AndroidUtilities.dp(56.0f), min), layoutParams6.rightMargin, layoutParams6.bottomMargin);
+            layoutParams5.setMargins(i, lerp, layoutParams6.rightMargin, layoutParams6.bottomMargin);
             this.scrollView.setLayoutParams(this.scrollViewLayout);
         }
     }
@@ -448,7 +450,7 @@ public class TranslateAlert extends Dialog {
             android.widget.TextView r0 = r6.titleView
             r0.setLines(r13)
             android.widget.TextView r0 = r6.titleView
-            r2 = 2131624542(0x7f0e025e, float:1.8876267E38)
+            r2 = 2131624547(0x7f0e0263, float:1.8876277E38)
             java.lang.String r3 = "AutomaticTranslation"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -538,7 +540,7 @@ public class TranslateAlert extends Dialog {
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.subtitleArrowView = r0
-            r1 = 2131166062(0x7var_e, float:1.7946359E38)
+            r1 = 2131166067(0x7var_, float:1.7946369E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r6.subtitleArrowView
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -659,7 +661,7 @@ public class TranslateAlert extends Dialog {
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.backButton = r0
-            r1 = 2131165489(0x7var_, float:1.7945197E38)
+            r1 = 2131165491(0x7var_, float:1.79452E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r6.backButton
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -864,7 +866,7 @@ public class TranslateAlert extends Dialog {
             r1 = 1096810496(0x41600000, float:14.0)
             r0.setTextSize(r13, r1)
             android.widget.TextView r0 = r6.buttonTextView
-            r1 = 2131625021(0x7f0e043d, float:1.8877238E38)
+            r1 = 2131625026(0x7f0e0442, float:1.8877248E38)
             java.lang.String r3 = "CloseTranslation"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setText(r1)
@@ -1897,7 +1899,7 @@ public class TranslateAlert extends Dialog {
         public void onMeasure(int i, int i2) {
             this.fromTextView.measure(0, 0);
             this.toTextView.measure(0, 0);
-            super.onMeasure(View.MeasureSpec.makeMeasureSpec(((int) AndroidUtilities.lerp((float) this.fromTextView.getMeasuredWidth(), (float) this.toTextView.getMeasuredWidth(), this.loadingT)) + getPaddingLeft() + getPaddingRight(), NUM), View.MeasureSpec.makeMeasureSpec(Math.max(this.fromTextView.getMeasuredHeight(), this.toTextView.getMeasuredHeight()), NUM));
+            super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.lerp(this.fromTextView.getMeasuredWidth(), this.toTextView.getMeasuredWidth(), this.loadingT) + getPaddingLeft() + getPaddingRight(), NUM), View.MeasureSpec.makeMeasureSpec(Math.max(this.fromTextView.getMeasuredHeight(), this.toTextView.getMeasuredHeight()), NUM));
         }
 
         /* access modifiers changed from: protected */
@@ -1908,7 +1910,7 @@ public class TranslateAlert extends Dialog {
         }
 
         private void updateWidth() {
-            int lerp = ((int) AndroidUtilities.lerp((float) this.fromTextView.getMeasuredWidth(), (float) this.toTextView.getMeasuredWidth(), this.loadingT)) + getPaddingLeft() + getPaddingRight();
+            int lerp = AndroidUtilities.lerp(this.fromTextView.getMeasuredWidth(), this.toTextView.getMeasuredWidth(), this.loadingT) + getPaddingLeft() + getPaddingRight();
             int max = Math.max(this.fromTextView.getMeasuredHeight(), this.toTextView.getMeasuredHeight());
             ViewGroup.LayoutParams layoutParams = getLayoutParams();
             boolean z = true;
@@ -2157,7 +2159,7 @@ public class TranslateAlert extends Dialog {
         }
 
         public int innerHeight() {
-            return (int) (AndroidUtilities.lerp((float) this.fromTextView.getMeasuredHeight(), (float) this.toTextView.getMeasuredHeight(), this.loadingT) * this.scaleT);
+            return (int) (((float) AndroidUtilities.lerp(this.fromTextView.getMeasuredHeight(), this.toTextView.getMeasuredHeight(), this.loadingT)) * this.scaleT);
         }
 
         public int height() {

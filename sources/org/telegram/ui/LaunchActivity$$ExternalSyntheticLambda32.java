@@ -10,6 +10,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda32 imp
     }
 
     public final void run() {
-        this.f$0.lambda$showPasscodeActivity$6(this.f$1);
+        this.f$0.lambda$showPasscodeActivity$7(this.f$1);
     }
 }

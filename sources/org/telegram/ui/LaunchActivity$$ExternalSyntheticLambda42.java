@@ -14,6 +14,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda42 imp
     }
 
     public final void run() {
-        this.f$0.lambda$checkAppUpdate$59(this.f$1, this.f$2);
+        this.f$0.lambda$checkAppUpdate$60(this.f$1, this.f$2);
     }
 }

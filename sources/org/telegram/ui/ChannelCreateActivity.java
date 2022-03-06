@@ -617,7 +617,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             editTextBoldCursor.setTextSize(1, 18.0f);
             this.descriptionTextView.setHintTextColor(Theme.getColor(str));
             this.descriptionTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            this.descriptionTextView.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+            this.descriptionTextView.setBackgroundDrawable((Drawable) null);
+            this.descriptionTextView.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
             this.descriptionTextView.setPadding(0, 0, 0, AndroidUtilities.dp(6.0f));
             this.descriptionTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             this.descriptionTextView.setInputType(180225);

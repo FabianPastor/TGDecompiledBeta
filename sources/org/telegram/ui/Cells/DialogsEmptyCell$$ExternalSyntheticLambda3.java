@@ -1,17 +1,15 @@
 package org.telegram.ui.Cells;
 
-import android.content.Context;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ViewSwitcher;
 
-public final /* synthetic */ class DialogsEmptyCell$$ExternalSyntheticLambda3 implements ViewSwitcher.ViewFactory {
-    public final /* synthetic */ Context f$0;
+public final /* synthetic */ class DialogsEmptyCell$$ExternalSyntheticLambda3 implements View.OnTouchListener {
+    public static final /* synthetic */ DialogsEmptyCell$$ExternalSyntheticLambda3 INSTANCE = new DialogsEmptyCell$$ExternalSyntheticLambda3();
 
-    public /* synthetic */ DialogsEmptyCell$$ExternalSyntheticLambda3(Context context) {
-        this.f$0 = context;
+    private /* synthetic */ DialogsEmptyCell$$ExternalSyntheticLambda3() {
     }
 
-    public final View makeView() {
-        return DialogsEmptyCell.lambda$new$2(this.f$0);
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return DialogsEmptyCell.lambda$new$0(view, motionEvent);
     }
 }

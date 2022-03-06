@@ -130,7 +130,9 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                 }
                 AndroidUtilities.openDocument(message, this.parentActivity, this.parentFragment);
             } else if (!sharedDocumentCell.isLoading()) {
-                AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().loadFile(document, sharedDocumentCell.getMessage(), 0, 0);
+                MessageObject message2 = sharedDocumentCell.getMessage();
+                message2.putInDownloadsStore = true;
+                AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().loadFile(document, message2, 0, 0);
                 sharedDocumentCell.updateFileExistIcon(true);
             } else {
                 AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().cancelLoadFile(document);

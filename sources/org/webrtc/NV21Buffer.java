@@ -11,6 +11,10 @@ public class NV21Buffer implements VideoFrame.Buffer {
 
     private static native void nativeCropAndScale(int i, int i2, int i3, int i4, int i5, int i6, byte[] bArr, int i7, int i8, ByteBuffer byteBuffer, int i9, ByteBuffer byteBuffer2, int i10, ByteBuffer byteBuffer3, int i11);
 
+    public /* synthetic */ int getBufferType() {
+        return VideoFrame.Buffer.CC.$default$getBufferType(this);
+    }
+
     public NV21Buffer(byte[] bArr, int i, int i2, Runnable runnable) {
         this.data = bArr;
         this.width = i;

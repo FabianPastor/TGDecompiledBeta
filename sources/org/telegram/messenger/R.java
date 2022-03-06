@@ -269,6 +269,8 @@ public final class R {
         public static final int app_update = NUM;
         public static final int arrow_more = NUM;
         public static final int arrow_newchat = NUM;
+        public static final int attach_arrow_left = NUM;
+        public static final int attach_arrow_right = NUM;
         public static final int attach_close = NUM;
         public static final int attach_send = NUM;
         public static final int attach_shadow = NUM;
@@ -908,6 +910,7 @@ public final class R {
         public static final int msg_voice_unmuted = NUM;
         public static final int msg_voicechat = NUM;
         public static final int msg_voicechat2 = NUM;
+        public static final int msg_voiceclose = NUM;
         public static final int msg_voiceshare = NUM;
         public static final int msg_warning = NUM;
         public static final int msg_zoomin = NUM;
@@ -993,6 +996,8 @@ public final class R {
         public static final int pin = NUM;
         public static final int pip_close = NUM;
         public static final int pip_enlarge = NUM;
+        public static final int pip_video_close = NUM;
+        public static final int pip_video_expand = NUM;
         public static final int place_x = NUM;
         public static final int places_btn = NUM;
         public static final int play_big = NUM;
@@ -1189,9 +1194,11 @@ public final class R {
         public static final int video_send_mute = NUM;
         public static final int video_send_unmute = NUM;
         public static final int videopreview = NUM;
+        public static final int voice_expand = NUM;
         public static final int voice_mini_0_5 = NUM;
         public static final int voice_mini_1_5 = NUM;
         public static final int voice_mini_2_0 = NUM;
+        public static final int voice_minimize = NUM;
         public static final int voice_muted_large = NUM;
         public static final int voice_unmuted_large = NUM;
         public static final int voice_volume_mini = NUM;
@@ -1700,6 +1707,8 @@ public final class R {
         public static final int default_pattern = NUM;
         public static final int diceloop = NUM;
         public static final int download_arrow = NUM;
+        public static final int download_finish = NUM;
+        public static final int download_progress = NUM;
         public static final int edge_30 = NUM;
         public static final int error = NUM;
         public static final int filter_new = NUM;
@@ -1740,6 +1749,7 @@ public final class R {
         public static final int linux_30 = NUM;
         public static final int mac_30 = NUM;
         public static final int mapstyle_night = NUM;
+        public static final int media_forbidden = NUM;
         public static final int passcode_lock_close = NUM;
         public static final int payment_success = NUM;
         public static final int permission_map = NUM;
@@ -2327,8 +2337,13 @@ public final class R {
         public static final int AttachLiveLocationIsSharingChat = NUM;
         public static final int AttachLiveLocationIsSharingChats = NUM;
         public static final int AttachLocation = NUM;
+        public static final int AttachMediaDragHint = NUM;
+        public static final int AttachMediaPhotoDeselected = NUM;
+        public static final int AttachMediaPreview = NUM;
+        public static final int AttachMediaPreviewButton = NUM;
         public static final int AttachMediaRestricted = NUM;
         public static final int AttachMediaRestrictedForever = NUM;
+        public static final int AttachMediaVideoDeselected = NUM;
         public static final int AttachMenu = NUM;
         public static final int AttachMusic = NUM;
         public static final int AttachPhoto = NUM;
@@ -2983,6 +2998,7 @@ public final class R {
         public static final int ConnectingConnectProxy = NUM;
         public static final int ConnectingToProxy = NUM;
         public static final int ConnectingToProxyEnable = NUM;
+        public static final int ConnectingYourContacts = NUM;
         public static final int ContactBirthday = NUM;
         public static final int ContactJob = NUM;
         public static final int ContactJobTitle = NUM;
@@ -3093,10 +3109,12 @@ public final class R {
         public static final int DebugMenuCheckAppUpdate = NUM;
         public static final int DebugMenuClearMediaCache = NUM;
         public static final int DebugMenuDisableCamera = NUM;
+        public static final int DebugMenuDisableForceRtmpStreamFlag = NUM;
         public static final int DebugMenuDisableLogs = NUM;
         public static final int DebugMenuDisablePauseMusic = NUM;
         public static final int DebugMenuDisableSmoothKeyboard = NUM;
         public static final int DebugMenuEnableCamera = NUM;
+        public static final int DebugMenuEnableForceRtmpStreamFlag = NUM;
         public static final int DebugMenuEnableLogs = NUM;
         public static final int DebugMenuEnablePauseMusic = NUM;
         public static final int DebugMenuEnableSmoothKeyboard = NUM;
@@ -6462,6 +6480,13 @@ public final class R {
         public static final int ViewReplies_zero = NUM;
         public static final int ViewStats = NUM;
         public static final int ViewThread = NUM;
+        public static final int ViewersWatchingNobody = NUM;
+        public static final int ViewersWatching_few = NUM;
+        public static final int ViewersWatching_many = NUM;
+        public static final int ViewersWatching_one = NUM;
+        public static final int ViewersWatching_other = NUM;
+        public static final int ViewersWatching_two = NUM;
+        public static final int ViewersWatching_zero = NUM;
         public static final int ViewingMembers = NUM;
         public static final int ViewsBySourceChartTitle = NUM;
         public static final int ViewsPerPost = NUM;
@@ -6579,6 +6604,7 @@ public final class R {
         public static final int VoipGroupEndAlertText = NUM;
         public static final int VoipGroupEndAlertTitle = NUM;
         public static final int VoipGroupEndChat = NUM;
+        public static final int VoipGroupExpandStream = NUM;
         public static final int VoipGroupInviteAlreadyParticipant = NUM;
         public static final int VoipGroupInviteCanSpeak = NUM;
         public static final int VoipGroupInviteListenOnly = NUM;
@@ -6595,6 +6621,7 @@ public final class R {
         public static final int VoipGroupLeaveAlertEndChat = NUM;
         public static final int VoipGroupLeaveAlertText = NUM;
         public static final int VoipGroupLeaveAlertTitle = NUM;
+        public static final int VoipGroupMinimizeStream = NUM;
         public static final int VoipGroupMute = NUM;
         public static final int VoipGroupMuteForMe = NUM;
         public static final int VoipGroupMuteMemberAlertTitle = NUM;

@@ -217,7 +217,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             r0 = r32
             r1 = r33
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r3 = 2131165489(0x7var_, float:1.7945197E38)
+            r3 = 2131165491(0x7var_, float:1.79452E38)
             r2.setBackButtonImage(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
             r3 = 0
@@ -278,7 +278,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.Components.RLottieImageView r10 = new org.telegram.ui.Components.RLottieImageView
             r10.<init>(r1)
             r0.lockImageView = r10
-            r11 = 2131558530(0x7f0d0082, float:1.8742378E38)
+            r11 = 2131558533(0x7f0d0085, float:1.8742384E38)
             r12 = 120(0x78, float:1.68E-43)
             r10.setAnimation(r11, r12, r12)
             org.telegram.ui.Components.RLottieImageView r10 = r0.lockImageView
@@ -351,7 +351,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.Components.OutlineTextContainerView r10 = new org.telegram.ui.Components.OutlineTextContainerView
             r10.<init>(r1)
             r0.passwordOutlineView = r10
-            r15 = 2131625475(0x7f0e0603, float:1.887816E38)
+            r15 = 2131625483(0x7f0e060b, float:1.8878175E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r15)
             r10.setText(r9)
             org.telegram.ui.Components.OutlineTextContainerView r9 = r0.passwordOutlineView
@@ -445,7 +445,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             r13 = r13 | 48
             r4.setGravity(r13)
             android.widget.TextView r4 = r0.bottomTextView
-            r13 = 2131628909(0x7f0e136d, float:1.8885124E38)
+            r13 = 2131628926(0x7f0e137e, float:1.8885158E38)
             java.lang.String r15 = "YourEmailInfo"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             r4.setText(r13)
@@ -548,7 +548,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r4.setPadding(r12, r3, r6, r3)
             android.widget.TextView r4 = r0.cancelResetButton
-            r6 = 2131624720(0x7f0e0310, float:1.8876628E38)
+            r6 = 2131624725(0x7f0e0315, float:1.8876638E38)
             java.lang.String r12 = "CancelReset"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r12, r6)
             r4.setText(r6)
@@ -649,7 +649,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.Components.TransformableLoginButtonView r4 = r0.floatingButtonIcon
             r4.setDrawBackground(r3)
             android.widget.FrameLayout r4 = r0.floatingButtonContainer
-            r6 = 2131626556(0x7f0e0a3c, float:1.8880352E38)
+            r6 = 2131626564(0x7f0e0a44, float:1.8880368E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString((int) r6)
             r4.setContentDescription(r6)
             android.widget.FrameLayout r4 = r0.floatingButtonContainer
@@ -677,7 +677,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r6, r4, r9)
             if (r10 >= r15) goto L_0x0469
             android.content.res.Resources r6 = r33.getResources()
-            r9 = 2131165437(0x7var_fd, float:1.7945091E38)
+            r9 = 2131165439(0x7var_ff, float:1.7945095E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r9)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter
@@ -784,7 +784,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             boolean r1 = r0.passwordEntered
             if (r1 == 0) goto L_0x053e
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            r2 = 2131628358(0x7f0e1146, float:1.8884006E38)
+            r2 = 2131628366(0x7f0e114e, float:1.8884023E38)
             java.lang.String r4 = "TwoStepVerificationTitle"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r1.setTitle(r2)
@@ -797,20 +797,20 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.TwoStepVerificationActivity$TwoStepVerificationActivityDelegate r1 = r0.delegate
             if (r1 == 0) goto L_0x0557
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131627297(0x7f0e0d21, float:1.8881854E38)
+            r2 = 2131627305(0x7f0e0d29, float:1.888187E38)
             java.lang.String r3 = "PleaseEnterCurrentPasswordTransfer"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             goto L_0x0574
         L_0x0557:
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131628919(0x7f0e1377, float:1.8885144E38)
+            r2 = 2131628936(0x7f0e1388, float:1.8885179E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString((int) r2)
             r1.setText(r2)
             android.widget.TextView r1 = r0.subtitleTextView
             r1.setVisibility(r3)
             android.widget.TextView r1 = r0.subtitleTextView
-            r2 = 2131626269(0x7f0e091d, float:1.887977E38)
+            r2 = 2131626277(0x7f0e0925, float:1.8879786E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString((int) r2)
             r1.setText(r2)
         L_0x0574:

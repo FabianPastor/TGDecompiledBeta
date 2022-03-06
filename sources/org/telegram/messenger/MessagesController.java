@@ -485,7 +485,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private LongSparseArray<Boolean> gettingUnknownDialogs;
     public String gifSearchBot;
     public ArrayList<String> gifSearchEmojies;
-    public int groipCallVideoMaxParticipants;
+    public int groupCallVideoMaxParticipants;
     private LongSparseArray<ChatObject.Call> groupCalls;
     private LongSparseArray<ChatObject.Call> groupCallsByChatId;
     public ArrayList<TLRPC$RecentMeUrl> hintDialogs = new ArrayList<>();
@@ -1313,7 +1313,7 @@ public class MessagesController extends BaseController implements NotificationCe
         this.filtersEnabled = this.mainPreferences.getBoolean("filtersEnabled", false);
         this.showFiltersTooltip = this.mainPreferences.getBoolean("showFiltersTooltip", false);
         this.autoarchiveAvailable = this.mainPreferences.getBoolean("autoarchiveAvailable", false);
-        this.groipCallVideoMaxParticipants = this.mainPreferences.getInt("groipCallVideoMaxParticipants", 30);
+        this.groupCallVideoMaxParticipants = this.mainPreferences.getInt("groipCallVideoMaxParticipants", 30);
         this.chatReadMarkSizeThreshold = this.mainPreferences.getInt("chatReadMarkSizeThreshold", 50);
         this.chatReadMarkExpirePeriod = this.mainPreferences.getInt("chatReadMarkExpirePeriod", 604800);
         this.suggestStickersApiOnly = this.mainPreferences.getBoolean("suggestStickersApiOnly", false);
@@ -2893,12 +2893,12 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r3 == 0) goto L_0x089c
             org.telegram.tgnet.TLRPC$TL_jsonNumber r0 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r0
             double r3 = r0.value
-            int r0 = r1.groipCallVideoMaxParticipants
+            int r0 = r1.groupCallVideoMaxParticipants
             double r9 = (double) r0
             int r0 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
             if (r0 == 0) goto L_0x089c
             int r0 = (int) r3
-            r1.groipCallVideoMaxParticipants = r0
+            r1.groupCallVideoMaxParticipants = r0
             java.lang.String r3 = "groipCallVideoMaxParticipants"
             r2.putInt(r3, r0)
             goto L_0x07a8
@@ -9567,10 +9567,10 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:139:0x03b6, code lost:
-        if (r1[0] >= 138) goto L_0x03bb;
+        if (r1[0] >= 139) goto L_0x03bb;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:144:0x03c5, code lost:
-        if (org.telegram.messenger.Utilities.bytesToInt(r1) < 138) goto L_0x03ca;
+        if (org.telegram.messenger.Utilities.bytesToInt(r1) < 139) goto L_0x03ca;
      */
     /* JADX WARNING: Removed duplicated region for block: B:110:0x0307  */
     /* JADX WARNING: Removed duplicated region for block: B:115:0x0312  */
@@ -10053,7 +10053,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r40 == 0) goto L_0x041c
             r6 = r36
             boolean r7 = r6.legacy
-            r1 = 138(0x8a, float:1.93E-43)
+            r1 = 139(0x8b, float:1.95E-43)
             if (r7 == 0) goto L_0x039e
             int r7 = r6.layer
             if (r7 >= r1) goto L_0x039e
@@ -10075,17 +10075,17 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r7 != r0) goto L_0x03b9
             r7 = 0
             byte r0 = r1[r7]
-            r7 = 138(0x8a, float:1.93E-43)
+            r7 = 139(0x8b, float:1.95E-43)
             if (r0 < r7) goto L_0x03ca
             goto L_0x03bb
         L_0x03b9:
-            r7 = 138(0x8a, float:1.93E-43)
+            r7 = 139(0x8b, float:1.95E-43)
         L_0x03bb:
             int r0 = r1.length
             r7 = 4
             if (r0 != r7) goto L_0x03d6
             int r0 = org.telegram.messenger.Utilities.bytesToInt(r1)
-            r1 = 138(0x8a, float:1.93E-43)
+            r1 = 139(0x8b, float:1.95E-43)
             if (r0 >= r1) goto L_0x03d6
             goto L_0x03ca
         L_0x03c8:
@@ -12464,7 +12464,7 @@ public class MessagesController extends BaseController implements NotificationCe
     /* JADX WARNING: type inference failed for: r1v18 */
     /* JADX WARNING: type inference failed for: r1v19 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r1v12, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r1v12, types: [int, boolean] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$processLoadedDialogs$174(org.telegram.tgnet.TLRPC$Message r27, int r28, org.telegram.tgnet.TLRPC$messages_Dialogs r29, java.util.ArrayList r30, boolean r31, int r32, androidx.collection.LongSparseArray r33, androidx.collection.LongSparseArray r34, androidx.collection.LongSparseArray r35, int r36, boolean r37, int r38, java.util.ArrayList r39) {
         /*

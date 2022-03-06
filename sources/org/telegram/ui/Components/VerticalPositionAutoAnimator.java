@@ -22,6 +22,10 @@ public final class VerticalPositionAutoAnimator {
         return new VerticalPositionAutoAnimator(view, f);
     }
 
+    public void addUpdateListener(DynamicAnimation.OnAnimationUpdateListener onAnimationUpdateListener) {
+        this.floatingButtonAnimator.addUpdateListener(onAnimationUpdateListener);
+    }
+
     public void setOffsetY(float f) {
         this.offsetY = f;
         if (this.floatingButtonAnimator.isRunning()) {

@@ -34,6 +34,7 @@ import org.telegram.tgnet.TLRPC$TL_channels_sendAsPeers;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class SenderSelectPopup extends ActionBarPopupWindow {
@@ -58,7 +59,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         void onPeerSelected(RecyclerView recyclerView, SenderView senderView, TLRPC$Peer tLRPC$Peer);
     }
 
-    public SenderSelectPopup(Context context, final MessagesController messagesController, final TLRPC$ChatFull tLRPC$ChatFull, TLRPC$TL_channels_sendAsPeers tLRPC$TL_channels_sendAsPeers, OnSelectCallback onSelectCallback) {
+    public SenderSelectPopup(Context context, ChatActivity chatActivity, final MessagesController messagesController, final TLRPC$ChatFull tLRPC$ChatFull, TLRPC$TL_channels_sendAsPeers tLRPC$TL_channels_sendAsPeers, OnSelectCallback onSelectCallback) {
         super(context);
         this.chatFull = tLRPC$ChatFull;
         this.sendAsPeers = tLRPC$TL_channels_sendAsPeers;
@@ -77,15 +78,16 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         this.dimView = view;
         view.setBackgroundColor(NUM);
         final int dp = AndroidUtilities.dp(450.0f);
+        final int width = (int) (((float) chatActivity.contentView.getWidth()) * 0.75f);
         AnonymousClass1 r1 = new LinearLayout(this, context) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
-                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(i2), dp), View.MeasureSpec.getMode(i2)));
+                super.onMeasure(View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(i), width), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(i2), dp), View.MeasureSpec.getMode(i2)));
             }
 
             /* access modifiers changed from: protected */
             public int getSuggestedMinimumWidth() {
-                return AndroidUtilities.dp(200.0f);
+                return AndroidUtilities.dp(260.0f);
             }
         };
         this.recyclerContainer = r1;

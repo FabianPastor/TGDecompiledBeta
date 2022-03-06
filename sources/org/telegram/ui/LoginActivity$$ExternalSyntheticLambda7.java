@@ -16,6 +16,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda7 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$tryResetAccount$20(this.f$1, this.f$2, this.f$3, dialogInterface, i);
+        this.f$0.lambda$tryResetAccount$22(this.f$1, this.f$2, this.f$3, dialogInterface, i);
     }
 }

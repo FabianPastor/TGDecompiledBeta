@@ -1,21 +1,28 @@
 package org.telegram.tgnet;
 
+import org.telegram.messenger.SharedConfig;
+
 public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
     public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.join_muted = (readInt32 & 2) != 0;
         this.can_change_join_muted = (readInt32 & 4) != 0;
         this.join_date_asc = (readInt32 & 64) != 0;
         this.schedule_start_subscribed = (readInt32 & 256) != 0;
         this.can_start_video = (readInt32 & 512) != 0;
-        if ((readInt32 & 2048) == 0) {
-            z2 = false;
+        this.record_video_active = (readInt32 & 2048) != 0;
+        this.rtmp_stream = (readInt32 & 4096) != 0;
+        if ((readInt32 & 8192) != 0) {
+            z2 = true;
         }
-        this.record_video_active = z2;
+        this.listeners_hidden = z2;
+        if (SharedConfig.forceRtmpStream) {
+            this.rtmp_stream = true;
+        }
         this.id = abstractSerializedData.readInt64(z);
         this.access_hash = abstractSerializedData.readInt64(z);
         this.participants_count = abstractSerializedData.readInt32(z);
@@ -52,7 +59,11 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         this.flags = i5;
         int i6 = this.record_video_active ? i5 | 2048 : i5 & -2049;
         this.flags = i6;
-        abstractSerializedData.writeInt32(i6);
+        int i7 = this.rtmp_stream ? i6 | 4096 : i6 & -4097;
+        this.flags = i7;
+        int i8 = this.listeners_hidden ? i7 | 8192 : i7 & -8193;
+        this.flags = i8;
+        abstractSerializedData.writeInt32(i8);
         abstractSerializedData.writeInt64(this.id);
         abstractSerializedData.writeInt64(this.access_hash);
         abstractSerializedData.writeInt32(this.participants_count);

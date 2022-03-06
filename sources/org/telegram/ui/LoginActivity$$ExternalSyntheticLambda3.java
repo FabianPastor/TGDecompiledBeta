@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda3 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$showDoneButton$10(valueAnimator);
+        this.f$0.lambda$showDoneButton$12(valueAnimator);
     }
 }

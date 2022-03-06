@@ -1070,7 +1070,15 @@ public class ActionBar extends FrameLayout {
     public void openSearchField(String str, boolean z) {
         ActionBarMenu actionBarMenu = this.menu;
         if (actionBarMenu != null && str != null) {
-            actionBarMenu.openSearchField(!this.isSearchFieldVisible, str, z);
+            boolean z2 = this.isSearchFieldVisible;
+            actionBarMenu.openSearchField(!z2, !z2, str, z);
+        }
+    }
+
+    public void openSearchField(boolean z) {
+        ActionBarMenu actionBarMenu = this.menu;
+        if (actionBarMenu != null) {
+            actionBarMenu.openSearchField(!this.isSearchFieldVisible, false, "", z);
         }
     }
 

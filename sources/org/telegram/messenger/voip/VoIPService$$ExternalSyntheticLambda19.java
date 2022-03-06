@@ -8,6 +8,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda19 implem
     }
 
     public final void run() {
-        this.f$0.lambda$updateConnectionState$50();
+        this.f$0.lambda$initiateActualEncryptedCall$54();
     }
 }

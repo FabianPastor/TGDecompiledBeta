@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentUris;
@@ -236,6 +237,10 @@ public class AndroidUtilities {
 
     public static float lerp(float f, float f2, float f3) {
         return f + (f3 * (f2 - f));
+    }
+
+    public static int lerp(int i, int i2, float f) {
+        return (int) (((float) i) + (f * ((float) (i2 - i))));
     }
 
     public static int setMyLayerVersion(int i, int i2) {
@@ -729,13 +734,27 @@ public class AndroidUtilities {
         return new int[]{(int) (d6 * 255.0d), (int) (d9 * 255.0d), (int) (d8 * 255.0d)};
     }
 
-    public static void lightColorMatrix(ColorMatrix colorMatrix, float f) {
+    public static void adjustSaturationColorMatrix(ColorMatrix colorMatrix, float f) {
         if (colorMatrix != null) {
-            float[] array = colorMatrix.getArray();
-            array[4] = array[4] + f;
-            array[9] = array[9] + f;
-            array[14] = array[14] + f;
-            colorMatrix.set(array);
+            float f2 = f + 1.0f;
+            float f3 = 1.0f - f2;
+            float f4 = 0.3086f * f3;
+            float f5 = 0.6094f * f3;
+            float f6 = f3 * 0.082f;
+            colorMatrix.postConcat(new ColorMatrix(new float[]{f4 + f2, f5, f6, 0.0f, 0.0f, f4, f5 + f2, f6, 0.0f, 0.0f, f4, f5, f6 + f2, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f}));
+        }
+    }
+
+    public static void adjustBrightnessColorMatrix(ColorMatrix colorMatrix, float f) {
+        if (colorMatrix != null) {
+            float f2 = f * 255.0f;
+            colorMatrix.postConcat(new ColorMatrix(new float[]{1.0f, 0.0f, 0.0f, 0.0f, f2, 0.0f, 1.0f, 0.0f, 0.0f, f2, 0.0f, 0.0f, 1.0f, 0.0f, f2, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f}));
+        }
+    }
+
+    public static void multiplyBrightnessColorMatrix(ColorMatrix colorMatrix, float f) {
+        if (colorMatrix != null) {
+            colorMatrix.postConcat(new ColorMatrix(new float[]{f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f}));
         }
     }
 
@@ -1134,7 +1153,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131625079(0x7f0e0477, float:1.8877356E38)
+                r0 = 2131625085(0x7f0e047d, float:1.8877368E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1146,12 +1165,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131625080(0x7f0e0478, float:1.8877358E38)
+                r0 = 2131625086(0x7f0e047e, float:1.887737E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131625081(0x7f0e0479, float:1.887736E38)
+                r0 = 2131625087(0x7f0e047f, float:1.8877372E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1269,27 +1288,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131627239(0x7f0e0ce7, float:1.8881737E38)
+                r0 = 2131627247(0x7f0e0cef, float:1.8881753E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131627240(0x7f0e0ce8, float:1.8881739E38)
+                r0 = 2131627248(0x7f0e0cf0, float:1.8881755E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131627230(0x7f0e0cde, float:1.8881719E38)
+                r0 = 2131627238(0x7f0e0ce6, float:1.8881735E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131627229(0x7f0e0cdd, float:1.8881717E38)
+                r0 = 2131627237(0x7f0e0ce5, float:1.8881733E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131627231(0x7f0e0cdf, float:1.888172E38)
+                r0 = 2131627239(0x7f0e0ce7, float:1.8881737E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -3090,6 +3109,19 @@ public class AndroidUtilities {
         return spannableStringBuilder;
     }
 
+    public static boolean isKeyguardSecure() {
+        return ((KeyguardManager) ApplicationLoader.applicationContext.getSystemService("keyguard")).isKeyguardSecure();
+    }
+
+    public static boolean isSimAvailable() {
+        TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
+        int simState = telephonyManager.getSimState();
+        if (simState == 1 || simState == 0 || telephonyManager.getPhoneType() == 0 || isAirplaneModeOn()) {
+            return false;
+        }
+        return true;
+    }
+
     public static boolean isAirplaneModeOn() {
         if (Build.VERSION.SDK_INT < 17) {
             if (Settings.System.getInt(ApplicationLoader.applicationContext.getContentResolver(), "airplane_mode_on", 0) != 0) {
@@ -3453,7 +3485,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0157
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0157
-            r7 = 2131626818(0x7f0e0b42, float:1.8880883E38)
+            r7 = 2131626826(0x7f0e0b4a, float:1.88809E38)
             java.lang.String r8 = "OK"
             r9 = 2131624304(0x7f0e0170, float:1.8875784E38)
             java.lang.String r10 = "AppName"
@@ -3476,7 +3508,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131626041(0x7f0e0839, float:1.8879307E38)
+            r1 = 2131626049(0x7f0e0841, float:1.8879323E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3560,7 +3592,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626583(0x7f0e0a57, float:1.8880406E38)
+            r1 = 2131626591(0x7f0e0a5f, float:1.8880423E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -4492,6 +4524,22 @@ public class AndroidUtilities {
 
     public static float lerp(float[] fArr, float f) {
         return lerp(fArr[0], fArr[1], f);
+    }
+
+    public static int lerpColor(int i, int i2, float f) {
+        return Color.argb(lerp(Color.alpha(i), Color.alpha(i2), f), lerp(Color.red(i), Color.red(i2), f), lerp(Color.green(i), Color.green(i2), f), lerp(Color.blue(i), Color.blue(i2), f));
+    }
+
+    public static void lerp(RectF rectF, RectF rectF2, float f, RectF rectF3) {
+        if (rectF3 != null) {
+            rectF3.set(lerp(rectF.left, rectF2.left, f), lerp(rectF.top, rectF2.top, f), lerp(rectF.right, rectF2.right, f), lerp(rectF.bottom, rectF2.bottom, f));
+        }
+    }
+
+    public static void lerp(Rect rect, Rect rect2, float f, Rect rect3) {
+        if (rect3 != null) {
+            rect3.set(lerp(rect.left, rect2.left, f), lerp(rect.top, rect2.top, f), lerp(rect.right, rect2.right, f), lerp(rect.bottom, rect2.bottom, f));
+        }
     }
 
     public static boolean hasFlagSecureFragment() {

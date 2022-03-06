@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.lambda$hideCamera$11();
+        this.f$0.lambda$onPreMeasure$18();
     }
 }

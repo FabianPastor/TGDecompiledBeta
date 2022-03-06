@@ -4,29 +4,14 @@ import org.webrtc.EncodedImage;
 
 public interface VideoEncoder {
 
-    /* renamed from: org.webrtc.VideoEncoder$-CC  reason: invalid class name */
-    public final /* synthetic */ class CC {
-        @CalledByNative
-        public static long $default$createNativeVideoEncoder(VideoEncoder videoEncoder) {
-            return 0;
-        }
-
-        @CalledByNative
-        public static ResolutionBitrateLimits[] $default$getResolutionBitrateLimits(VideoEncoder videoEncoder) {
-            return new ResolutionBitrateLimits[0];
-        }
-
-        @CalledByNative
-        public static boolean $default$isHardwareEncoder(VideoEncoder videoEncoder) {
-            return true;
-        }
-    }
-
     public interface Callback {
         void onEncodedFrame(EncodedImage encodedImage, CodecSpecificInfo codecSpecificInfo);
     }
 
     public static class CodecSpecificInfo {
+    }
+
+    public static class CodecSpecificInfoAV1 extends CodecSpecificInfo {
     }
 
     public static class CodecSpecificInfoH264 extends CodecSpecificInfo {
@@ -43,6 +28,9 @@ public interface VideoEncoder {
 
     @CalledByNative
     VideoCodecStatus encode(VideoFrame videoFrame, EncodeInfo encodeInfo);
+
+    @CalledByNative
+    EncoderInfo getEncoderInfo();
 
     @CalledByNative
     String getImplementationName();
@@ -62,8 +50,10 @@ public interface VideoEncoder {
     @CalledByNative
     VideoCodecStatus release();
 
-    @CalledByNative
     VideoCodecStatus setRateAllocation(BitrateAllocation bitrateAllocation, int i);
+
+    @CalledByNative
+    VideoCodecStatus setRates(RateControlParameters rateControlParameters);
 
     public static class Settings {
         public final boolean automaticResizeOn;
@@ -201,6 +191,65 @@ public interface VideoEncoder {
         @CalledByNative("ResolutionBitrateLimits")
         public int getMaxBitrateBps() {
             return this.maxBitrateBps;
+        }
+    }
+
+    public static class RateControlParameters {
+        public final BitrateAllocation bitrate;
+        public final double framerateFps;
+
+        @CalledByNative("RateControlParameters")
+        public RateControlParameters(BitrateAllocation bitrateAllocation, double d) {
+            this.bitrate = bitrateAllocation;
+            this.framerateFps = d;
+        }
+    }
+
+    public static class EncoderInfo {
+        public final boolean applyAlignmentToAllSimulcastLayers;
+        public final int requestedResolutionAlignment;
+
+        public EncoderInfo(int i, boolean z) {
+            this.requestedResolutionAlignment = i;
+            this.applyAlignmentToAllSimulcastLayers = z;
+        }
+
+        @CalledByNative("EncoderInfo")
+        public int getRequestedResolutionAlignment() {
+            return this.requestedResolutionAlignment;
+        }
+
+        @CalledByNative("EncoderInfo")
+        public boolean getApplyAlignmentToAllSimulcastLayers() {
+            return this.applyAlignmentToAllSimulcastLayers;
+        }
+    }
+
+    /* renamed from: org.webrtc.VideoEncoder$-CC  reason: invalid class name */
+    public final /* synthetic */ class CC {
+        @CalledByNative
+        public static long $default$createNativeVideoEncoder(VideoEncoder videoEncoder) {
+            return 0;
+        }
+
+        @CalledByNative
+        public static ResolutionBitrateLimits[] $default$getResolutionBitrateLimits(VideoEncoder videoEncoder) {
+            return new ResolutionBitrateLimits[0];
+        }
+
+        @CalledByNative
+        public static boolean $default$isHardwareEncoder(VideoEncoder videoEncoder) {
+            return true;
+        }
+
+        @CalledByNative
+        public static VideoCodecStatus $default$setRates(VideoEncoder _this, RateControlParameters rateControlParameters) {
+            return _this.setRateAllocation(rateControlParameters.bitrate, (int) Math.ceil(rateControlParameters.framerateFps));
+        }
+
+        @CalledByNative
+        public static EncoderInfo $default$getEncoderInfo(VideoEncoder _this) {
+            return new EncoderInfo(1, false);
         }
     }
 }

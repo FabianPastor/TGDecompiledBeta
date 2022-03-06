@@ -14,6 +14,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda51 imp
     }
 
     public final void run() {
-        this.f$0.lambda$handleIntent$14(this.f$1, this.f$2);
+        this.f$0.lambda$handleIntent$15(this.f$1, this.f$2);
     }
 }

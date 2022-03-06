@@ -1358,7 +1358,7 @@ public class ActionBarLayout extends FrameLayout {
                         startLayoutAnimation(true, true, z7);
                     }
                 } else {
-                    if ((!z7 && this.containerView.isKeyboardVisible) || (this.containerViewBack.isKeyboardVisible && baseFragment2 != null)) {
+                    if (!z7 && ((this.containerView.isKeyboardVisible || this.containerViewBack.isKeyboardVisible) && baseFragment2 != null)) {
                         baseFragment2.saveKeyboardPositionBeforeTransition();
                     }
                     this.currentAnimation = onCustomTransitionAnimation;

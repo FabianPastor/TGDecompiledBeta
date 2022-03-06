@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda1 i
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$updateMuteButton$49(valueAnimator);
+        this.f$0.lambda$new$25(valueAnimator);
     }
 }

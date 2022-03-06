@@ -4899,13 +4899,13 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02c9 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02c9 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02c9 }
-            r10 = 2131626533(0x7f0e0a25, float:1.8880305E38)
+            r10 = 2131626541(0x7f0e0a2d, float:1.8880321E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02c9 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02c9 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02c9 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r9.setLongLabel(r0)     // Catch:{ all -> 0x02c9 }
             android.content.Context r9 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02c9 }
-            r10 = 2131166090(0x7var_a, float:1.7946416E38)
+            r10 = 2131166095(0x7var_f, float:1.7946426E38)
             androidx.core.graphics.drawable.IconCompat r9 = androidx.core.graphics.drawable.IconCompat.createWithResource(r9, r10)     // Catch:{ all -> 0x02c9 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r0.setIcon(r9)     // Catch:{ all -> 0x02c9 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r0.setIntent(r2)     // Catch:{ all -> 0x02c9 }
@@ -5122,7 +5122,7 @@ public class MediaDataController extends BaseController {
             goto L_0x02a7
         L_0x029b:
             android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02c9 }
-            r8 = 2131166091(0x7var_b, float:1.7946418E38)
+            r8 = 2131166096(0x7var_, float:1.7946428E38)
             androidx.core.graphics.drawable.IconCompat r6 = androidx.core.graphics.drawable.IconCompat.createWithResource(r6, r8)     // Catch:{ all -> 0x02c9 }
             r1.setIcon(r6)     // Catch:{ all -> 0x02c9 }
         L_0x02a7:
@@ -5600,7 +5600,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0074
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627617(0x7f0e0e61, float:1.8882503E38)
+            r9 = 2131627625(0x7f0e0e69, float:1.888252E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
         L_0x0071:
             r9 = r4
@@ -5610,7 +5610,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0084
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627755(0x7f0e0eeb, float:1.8882783E38)
+            r9 = 2131627763(0x7f0e0ef3, float:1.88828E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
             goto L_0x0071
         L_0x0084:
@@ -5714,7 +5714,7 @@ public class MediaDataController extends BaseController {
         L_0x013e:
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x016d }
             android.content.res.Resources r0 = r0.getResources()     // Catch:{ all -> 0x016d }
-            r10 = 2131165293(0x7var_d, float:1.79448E38)
+            r10 = 2131165295(0x7var_f, float:1.7944803E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r10)     // Catch:{ all -> 0x016d }
             r10 = 1097859072(0x41700000, float:15.0)
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)     // Catch:{ all -> 0x016d }
@@ -5739,10 +5739,10 @@ public class MediaDataController extends BaseController {
         L_0x0171:
             int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x024f }
             r10 = 26
-            r11 = 2131165291(0x7var_b, float:1.7944795E38)
-            r12 = 2131165290(0x7var_a, float:1.7944793E38)
-            r13 = 2131165294(0x7var_e, float:1.7944801E38)
-            r14 = 2131165292(0x7var_c, float:1.7944797E38)
+            r11 = 2131165293(0x7var_d, float:1.79448E38)
+            r12 = 2131165292(0x7var_c, float:1.7944797E38)
+            r13 = 2131165296(0x7var_, float:1.7944805E38)
+            r14 = 2131165294(0x7var_e, float:1.7944801E38)
             if (r0 < r10) goto L_0x01ee
             androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ Exception -> 0x024f }
             android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x024f }

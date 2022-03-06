@@ -16,6 +16,10 @@ public class JavaI420Buffer implements VideoFrame.I420Buffer {
 
     private static native void nativeCropAndScaleI420(ByteBuffer byteBuffer, int i, ByteBuffer byteBuffer2, int i2, ByteBuffer byteBuffer3, int i3, int i4, int i5, int i6, int i7, ByteBuffer byteBuffer4, int i8, ByteBuffer byteBuffer5, int i9, ByteBuffer byteBuffer6, int i10, int i11, int i12);
 
+    public /* synthetic */ int getBufferType() {
+        return VideoFrame.I420Buffer.CC.$default$getBufferType(this);
+    }
+
     private JavaI420Buffer(int i, int i2, ByteBuffer byteBuffer, int i3, ByteBuffer byteBuffer2, int i4, ByteBuffer byteBuffer3, int i5, Runnable runnable) {
         this.width = i;
         this.height = i2;

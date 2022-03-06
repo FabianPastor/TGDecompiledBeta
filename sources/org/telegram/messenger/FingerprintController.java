@@ -80,7 +80,7 @@ public class FingerprintController {
     }
 
     public static void checkKeyReady(boolean z) {
-        if (!isKeyReady()) {
+        if (!isKeyReady() && AndroidUtilities.isKeyguardSecure()) {
             Utilities.globalQueue.postRunnable(new FingerprintController$$ExternalSyntheticLambda1(z));
         }
     }

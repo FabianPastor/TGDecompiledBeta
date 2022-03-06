@@ -288,6 +288,8 @@
     <public type="drawable" name="app_update" id="NUM" />
     <public type="drawable" name="arrow_more" id="NUM" />
     <public type="drawable" name="arrow_newchat" id="NUM" />
+    <public type="drawable" name="attach_arrow_left" id="NUM" />
+    <public type="drawable" name="attach_arrow_right" id="NUM" />
     <public type="drawable" name="attach_close" id="NUM" />
     <public type="drawable" name="attach_send" id="NUM" />
     <public type="drawable" name="attach_shadow" id="NUM" />
@@ -927,6 +929,7 @@
     <public type="drawable" name="msg_voice_unmuted" id="NUM" />
     <public type="drawable" name="msg_voicechat" id="NUM" />
     <public type="drawable" name="msg_voicechat2" id="NUM" />
+    <public type="drawable" name="msg_voiceclose" id="NUM" />
     <public type="drawable" name="msg_voiceshare" id="NUM" />
     <public type="drawable" name="msg_warning" id="NUM" />
     <public type="drawable" name="msg_zoomin" id="NUM" />
@@ -1012,6 +1015,8 @@
     <public type="drawable" name="pin" id="NUM" />
     <public type="drawable" name="pip_close" id="NUM" />
     <public type="drawable" name="pip_enlarge" id="NUM" />
+    <public type="drawable" name="pip_video_close" id="NUM" />
+    <public type="drawable" name="pip_video_expand" id="NUM" />
     <public type="drawable" name="place_x" id="NUM" />
     <public type="drawable" name="places_btn" id="NUM" />
     <public type="drawable" name="play_big" id="NUM" />
@@ -1208,9 +1213,11 @@
     <public type="drawable" name="video_send_mute" id="NUM" />
     <public type="drawable" name="video_send_unmute" id="NUM" />
     <public type="drawable" name="videopreview" id="NUM" />
+    <public type="drawable" name="voice_expand" id="NUM" />
     <public type="drawable" name="voice_mini_0_5" id="NUM" />
     <public type="drawable" name="voice_mini_1_5" id="NUM" />
     <public type="drawable" name="voice_mini_2_0" id="NUM" />
+    <public type="drawable" name="voice_minimize" id="NUM" />
     <public type="drawable" name="voice_muted_large" id="NUM" />
     <public type="drawable" name="voice_unmuted_large" id="NUM" />
     <public type="drawable" name="voice_volume_mini" id="NUM" />
@@ -1567,6 +1574,8 @@
     <public type="raw" name="default_pattern" id="NUM" />
     <public type="raw" name="diceloop" id="NUM" />
     <public type="raw" name="download_arrow" id="NUM" />
+    <public type="raw" name="download_finish" id="NUM" />
+    <public type="raw" name="download_progress" id="NUM" />
     <public type="raw" name="edge_30" id="NUM" />
     <public type="raw" name="error" id="NUM" />
     <public type="raw" name="filter_new" id="NUM" />
@@ -1607,6 +1616,7 @@
     <public type="raw" name="linux_30" id="NUM" />
     <public type="raw" name="mac_30" id="NUM" />
     <public type="raw" name="mapstyle_night" id="NUM" />
+    <public type="raw" name="media_forbidden" id="NUM" />
     <public type="raw" name="passcode_lock_close" id="NUM" />
     <public type="raw" name="payment_success" id="NUM" />
     <public type="raw" name="permission_map" id="NUM" />
@@ -2188,8 +2198,13 @@
     <public type="string" name="AttachLiveLocationIsSharingChat" id="NUM" />
     <public type="string" name="AttachLiveLocationIsSharingChats" id="NUM" />
     <public type="string" name="AttachLocation" id="NUM" />
+    <public type="string" name="AttachMediaDragHint" id="NUM" />
+    <public type="string" name="AttachMediaPhotoDeselected" id="NUM" />
+    <public type="string" name="AttachMediaPreview" id="NUM" />
+    <public type="string" name="AttachMediaPreviewButton" id="NUM" />
     <public type="string" name="AttachMediaRestricted" id="NUM" />
     <public type="string" name="AttachMediaRestrictedForever" id="NUM" />
+    <public type="string" name="AttachMediaVideoDeselected" id="NUM" />
     <public type="string" name="AttachMenu" id="NUM" />
     <public type="string" name="AttachMusic" id="NUM" />
     <public type="string" name="AttachPhoto" id="NUM" />
@@ -2844,6 +2859,7 @@
     <public type="string" name="ConnectingConnectProxy" id="NUM" />
     <public type="string" name="ConnectingToProxy" id="NUM" />
     <public type="string" name="ConnectingToProxyEnable" id="NUM" />
+    <public type="string" name="ConnectingYourContacts" id="NUM" />
     <public type="string" name="ContactBirthday" id="NUM" />
     <public type="string" name="ContactJob" id="NUM" />
     <public type="string" name="ContactJobTitle" id="NUM" />
@@ -2954,10 +2970,12 @@
     <public type="string" name="DebugMenuCheckAppUpdate" id="NUM" />
     <public type="string" name="DebugMenuClearMediaCache" id="NUM" />
     <public type="string" name="DebugMenuDisableCamera" id="NUM" />
+    <public type="string" name="DebugMenuDisableForceRtmpStreamFlag" id="NUM" />
     <public type="string" name="DebugMenuDisableLogs" id="NUM" />
     <public type="string" name="DebugMenuDisablePauseMusic" id="NUM" />
     <public type="string" name="DebugMenuDisableSmoothKeyboard" id="NUM" />
     <public type="string" name="DebugMenuEnableCamera" id="NUM" />
+    <public type="string" name="DebugMenuEnableForceRtmpStreamFlag" id="NUM" />
     <public type="string" name="DebugMenuEnableLogs" id="NUM" />
     <public type="string" name="DebugMenuEnablePauseMusic" id="NUM" />
     <public type="string" name="DebugMenuEnableSmoothKeyboard" id="NUM" />
@@ -6323,6 +6341,13 @@
     <public type="string" name="ViewReplies_zero" id="NUM" />
     <public type="string" name="ViewStats" id="NUM" />
     <public type="string" name="ViewThread" id="NUM" />
+    <public type="string" name="ViewersWatchingNobody" id="NUM" />
+    <public type="string" name="ViewersWatching_few" id="NUM" />
+    <public type="string" name="ViewersWatching_many" id="NUM" />
+    <public type="string" name="ViewersWatching_one" id="NUM" />
+    <public type="string" name="ViewersWatching_other" id="NUM" />
+    <public type="string" name="ViewersWatching_two" id="NUM" />
+    <public type="string" name="ViewersWatching_zero" id="NUM" />
     <public type="string" name="ViewingMembers" id="NUM" />
     <public type="string" name="ViewsBySourceChartTitle" id="NUM" />
     <public type="string" name="ViewsPerPost" id="NUM" />
@@ -6440,6 +6465,7 @@
     <public type="string" name="VoipGroupEndAlertText" id="NUM" />
     <public type="string" name="VoipGroupEndAlertTitle" id="NUM" />
     <public type="string" name="VoipGroupEndChat" id="NUM" />
+    <public type="string" name="VoipGroupExpandStream" id="NUM" />
     <public type="string" name="VoipGroupInviteAlreadyParticipant" id="NUM" />
     <public type="string" name="VoipGroupInviteCanSpeak" id="NUM" />
     <public type="string" name="VoipGroupInviteListenOnly" id="NUM" />
@@ -6456,6 +6482,7 @@
     <public type="string" name="VoipGroupLeaveAlertEndChat" id="NUM" />
     <public type="string" name="VoipGroupLeaveAlertText" id="NUM" />
     <public type="string" name="VoipGroupLeaveAlertTitle" id="NUM" />
+    <public type="string" name="VoipGroupMinimizeStream" id="NUM" />
     <public type="string" name="VoipGroupMute" id="NUM" />
     <public type="string" name="VoipGroupMuteForMe" id="NUM" />
     <public type="string" name="VoipGroupMuteMemberAlertTitle" id="NUM" />

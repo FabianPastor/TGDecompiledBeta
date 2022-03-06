@@ -1,5 +1,6 @@
 package org.telegram.ui;
 
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.EditTextBoldCursor;
 
 public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda28 implements Runnable {
@@ -10,6 +11,6 @@ public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda28 
     }
 
     public final void run() {
-        GroupCallActivity.lambda$makeFocusable$8(this.f$0);
+        AndroidUtilities.showKeyboard(this.f$0);
     }
 }

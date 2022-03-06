@@ -29,6 +29,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda44 imp
     }
 
     public final void run() {
-        this.f$0.lambda$runLinkRequest$37(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+        this.f$0.lambda$runLinkRequest$38(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
     }
 }

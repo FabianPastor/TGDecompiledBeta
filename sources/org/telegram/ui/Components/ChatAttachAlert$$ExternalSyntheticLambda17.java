@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLRPC$MessageMedia;
-import org.telegram.ui.Components.ChatAttachAlertLocationLayout;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda17 implements ChatAttachAlertLocationLayout.LocationActivityDelegate {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda17 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ ChatAttachAlert f$0;
 
     public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda17(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
     }
 
-    public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-        this.f$0.lambda$new$4(tLRPC$MessageMedia, i, z, i2);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.lambda$new$11(z, i);
     }
 }

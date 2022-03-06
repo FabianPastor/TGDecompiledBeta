@@ -19,6 +19,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda36 im
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$36(this.f$1, this.f$2, this.f$3, this.f$4);
+        this.f$0.lambda$didReceivedNotification$37(this.f$1, this.f$2, this.f$3, this.f$4);
     }
 }

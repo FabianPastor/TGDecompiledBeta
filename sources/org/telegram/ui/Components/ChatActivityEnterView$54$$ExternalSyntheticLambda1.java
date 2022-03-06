@@ -4,14 +4,14 @@ import android.view.View;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.ChatActivityEnterView;
 
-public final /* synthetic */ class ChatActivityEnterView$53$$ExternalSyntheticLambda1 implements AlertsCreator.ScheduleDatePickerDelegate {
-    public final /* synthetic */ ChatActivityEnterView.AnonymousClass53 f$0;
+public final /* synthetic */ class ChatActivityEnterView$54$$ExternalSyntheticLambda1 implements AlertsCreator.ScheduleDatePickerDelegate {
+    public final /* synthetic */ ChatActivityEnterView.AnonymousClass54 f$0;
     public final /* synthetic */ View f$1;
     public final /* synthetic */ Object f$2;
     public final /* synthetic */ String f$3;
     public final /* synthetic */ Object f$4;
 
-    public /* synthetic */ ChatActivityEnterView$53$$ExternalSyntheticLambda1(ChatActivityEnterView.AnonymousClass53 r1, View view, Object obj, String str, Object obj2) {
+    public /* synthetic */ ChatActivityEnterView$54$$ExternalSyntheticLambda1(ChatActivityEnterView.AnonymousClass54 r1, View view, Object obj, String str, Object obj2) {
         this.f$0 = r1;
         this.f$1 = view;
         this.f$2 = obj;

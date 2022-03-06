@@ -3,10 +3,10 @@ package org.telegram.ui.Components;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import org.telegram.ui.Components.ChatAttachAlert;
 
-public final /* synthetic */ class ChatAttachAlert$15$$ExternalSyntheticLambda1 implements DynamicAnimation.OnAnimationUpdateListener {
-    public final /* synthetic */ ChatAttachAlert.AnonymousClass15 f$0;
+public final /* synthetic */ class ChatAttachAlert$17$$ExternalSyntheticLambda1 implements DynamicAnimation.OnAnimationUpdateListener {
+    public final /* synthetic */ ChatAttachAlert.AnonymousClass17 f$0;
 
-    public /* synthetic */ ChatAttachAlert$15$$ExternalSyntheticLambda1(ChatAttachAlert.AnonymousClass15 r1) {
+    public /* synthetic */ ChatAttachAlert$17$$ExternalSyntheticLambda1(ChatAttachAlert.AnonymousClass17 r1) {
         this.f$0 = r1;
     }
 

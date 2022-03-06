@@ -210,7 +210,7 @@ public class RecyclerAnimationScrollHelper {
                             }
                             RecyclerAnimationScrollHelper.this.recyclerView.setScrollEnabled(true);
                             RecyclerAnimationScrollHelper.this.recyclerView.setVerticalScrollBarEnabled(true);
-                            if (BuildVars.DEBUG_VERSION) {
+                            if (BuildVars.DEBUG_PRIVATE_VERSION) {
                                 if (RecyclerAnimationScrollHelper.this.recyclerView.mChildHelper.getChildCount() != RecyclerAnimationScrollHelper.this.recyclerView.getChildCount()) {
                                     throw new RuntimeException("views count in child helper must be quals views count in recycler view");
                                 } else if (RecyclerAnimationScrollHelper.this.recyclerView.mChildHelper.getHiddenChildCount() != 0) {

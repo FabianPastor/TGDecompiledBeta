@@ -23,6 +23,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.voip.VoIPService;
+import org.telegram.tgnet.TLRPC$GroupCall;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.voip.VoIPButtonsLayout;
 import org.telegram.ui.Components.voip.VoIPToggleButton;
@@ -604,10 +605,12 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPService.S
         if (sharedInstance != null && sharedInstance.groupCall != null) {
             int callState = sharedInstance.getCallState();
             if (sharedInstance.isSwitchingStream() || !(callState == 1 || callState == 2 || callState == 6 || callState == 5)) {
-                this.subtitleView.setText(LocaleController.formatPluralString("Participants", sharedInstance.groupCall.call.participants_count));
-            } else {
-                this.subtitleView.setText(LocaleController.getString("VoipGroupConnecting", NUM));
+                TextView textView = this.subtitleView;
+                TLRPC$GroupCall tLRPC$GroupCall = sharedInstance.groupCall.call;
+                textView.setText(LocaleController.formatPluralString(tLRPC$GroupCall.rtmp_stream ? "ViewersWatching" : "Participants", tLRPC$GroupCall.participants_count));
+                return;
             }
+            this.subtitleView.setText(LocaleController.getString("VoipGroupConnecting", NUM));
         }
     }
 

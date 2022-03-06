@@ -139,7 +139,8 @@ public class ChangeUsernameActivity extends BaseFragment {
         editTextBoldCursor.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.firstNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        this.firstNameField.setBackgroundDrawable((Drawable) null);
+        this.firstNameField.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
         this.firstNameField.setMaxLines(1);
         this.firstNameField.setLines(1);
         this.firstNameField.setPadding(0, 0, 0, 0);

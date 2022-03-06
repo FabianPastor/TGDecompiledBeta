@@ -274,7 +274,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         this.onFinishCameraInitRunnables.clear();
         this.loadingCameras = false;
         this.cameraInitied = false;
-        if (!z && "APP_PAUSED".equals(exc.getMessage())) {
+        if (!z && "APP_PAUSED".equals(exc.getMessage()) && runnable != null) {
             AndroidUtilities.runOnUIThread(new CameraController$$ExternalSyntheticLambda8(this, runnable), 1000);
         }
     }

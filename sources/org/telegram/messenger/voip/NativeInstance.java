@@ -25,6 +25,7 @@ public class NativeInstance {
     private PayloadCallback payloadCallback;
     private String persistentStateFilePath;
     private RequestBroadcastPartCallback requestBroadcastPartCallback;
+    private RequestCurrentTimeCallback requestCurrentTimeCallback;
     private CountDownLatch stopBarrier;
     private float[] temp = new float[1];
     private VideoSourcesCallback unknownParticipantsCallback;
@@ -39,6 +40,10 @@ public class NativeInstance {
 
     public interface RequestBroadcastPartCallback {
         void run(long j, long j2, int i, int i2);
+    }
+
+    public interface RequestCurrentTimeCallback {
+        void run(long j);
     }
 
     public static class SsrcGroup {
@@ -91,6 +96,8 @@ public class NativeInstance {
     public native boolean hasVideoCapturer();
 
     public native void onMediaDescriptionAvailable(long j, int[] iArr);
+
+    public native void onRequestTimeComplete(long j, long j2);
 
     public native void onSignalingDataReceive(byte[] bArr);
 
@@ -150,7 +157,7 @@ public class NativeInstance {
         return nativeInstance;
     }
 
-    public static NativeInstance makeGroup(String str, long j, boolean z, boolean z2, PayloadCallback payloadCallback2, AudioLevelsCallback audioLevelsCallback2, VideoSourcesCallback videoSourcesCallback, RequestBroadcastPartCallback requestBroadcastPartCallback2, RequestBroadcastPartCallback requestBroadcastPartCallback3) {
+    public static NativeInstance makeGroup(String str, long j, boolean z, boolean z2, PayloadCallback payloadCallback2, AudioLevelsCallback audioLevelsCallback2, VideoSourcesCallback videoSourcesCallback, RequestBroadcastPartCallback requestBroadcastPartCallback2, RequestBroadcastPartCallback requestBroadcastPartCallback3, RequestCurrentTimeCallback requestCurrentTimeCallback2) {
         ContextUtils.initialize(ApplicationLoader.applicationContext);
         NativeInstance nativeInstance = new NativeInstance();
         nativeInstance.payloadCallback = payloadCallback2;
@@ -158,6 +165,7 @@ public class NativeInstance {
         nativeInstance.unknownParticipantsCallback = videoSourcesCallback;
         nativeInstance.requestBroadcastPartCallback = requestBroadcastPartCallback2;
         nativeInstance.cancelRequestBroadcastPartCallback = requestBroadcastPartCallback3;
+        nativeInstance.requestCurrentTimeCallback = requestCurrentTimeCallback2;
         nativeInstance.isGroup = true;
         nativeInstance.nativePtr = makeGroupNativeInstance(nativeInstance, str, SharedConfig.disableVoiceAudioEffects, j, z, z2);
         return nativeInstance;
@@ -263,6 +271,10 @@ public class NativeInstance {
 
     private void onCancelRequestBroadcastPart(long j, int i, int i2) {
         this.cancelRequestBroadcastPartCallback.run(j, 0, 0, 0);
+    }
+
+    private void requestCurrentTime(long j) {
+        this.requestCurrentTimeCallback.run(j);
     }
 
     private void onStop(Instance.FinalState finalState2) {

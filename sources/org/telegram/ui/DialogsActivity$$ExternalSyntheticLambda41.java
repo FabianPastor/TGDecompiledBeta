@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda41 im
     }
 
     public final void run(int i) {
-        this.f$0.lambda$askForPermissons$35(i);
+        this.f$0.lambda$askForPermissons$36(i);
     }
 }

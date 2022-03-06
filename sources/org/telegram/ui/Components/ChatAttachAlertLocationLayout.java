@@ -1714,7 +1714,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: package-private */
-    public void onShow() {
+    public void onShow(ChatAttachAlert.AttachAlertLayout attachAlertLayout) {
         this.parentAlert.actionBar.setTitle(LocaleController.getString("ShareLocation", NUM));
         if (this.mapView.getParent() == null) {
             this.mapViewClip.addView(this.mapView, 0, LayoutHelper.createFrame(-1, this.overScrollHeight + AndroidUtilities.dp(10.0f), 51));

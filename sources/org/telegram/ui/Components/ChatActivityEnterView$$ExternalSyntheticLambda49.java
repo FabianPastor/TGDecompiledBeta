@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLRPC$KeyboardButton;
-import org.telegram.ui.Components.BotKeyboardView;
+import org.telegram.messenger.MediaController;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda49 implements BotKeyboardView.BotKeyboardViewDelegate {
-    public final /* synthetic */ ChatActivityEnterView f$0;
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda49 implements AlertsCreator.ScheduleDatePickerDelegate {
+    public static final /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda49 INSTANCE = new ChatActivityEnterView$$ExternalSyntheticLambda49();
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda49(ChatActivityEnterView chatActivityEnterView) {
-        this.f$0 = chatActivityEnterView;
+    private /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda49() {
     }
 
-    public final void didPressedButton(TLRPC$KeyboardButton tLRPC$KeyboardButton) {
-        this.f$0.lambda$setButtons$41(tLRPC$KeyboardButton);
+    public final void didSelectDate(boolean z, int i) {
+        MediaController.getInstance().stopRecording(1, z, i);
     }
 }

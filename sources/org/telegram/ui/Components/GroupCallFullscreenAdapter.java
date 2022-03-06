@@ -628,9 +628,15 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
                 final ArrayList arrayList = new ArrayList(this.participants);
                 final ArrayList arrayList2 = new ArrayList(this.videoParticipants);
                 this.participants.clear();
-                this.participants.addAll(this.groupCall.visibleParticipants);
+                ChatObject.Call call = this.groupCall;
+                if (!call.call.rtmp_stream) {
+                    this.participants.addAll(call.visibleParticipants);
+                }
                 this.videoParticipants.clear();
-                this.videoParticipants.addAll(this.groupCall.visibleVideoParticipants);
+                ChatObject.Call call2 = this.groupCall;
+                if (!call2.call.rtmp_stream) {
+                    this.videoParticipants.addAll(call2.visibleVideoParticipants);
+                }
                 DiffUtil.calculateDiff(new DiffUtil.Callback() {
                     public boolean areContentsTheSame(int i, int i2) {
                         return true;
@@ -675,9 +681,15 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
                 return;
             }
             this.participants.clear();
-            this.participants.addAll(this.groupCall.visibleParticipants);
+            ChatObject.Call call3 = this.groupCall;
+            if (!call3.call.rtmp_stream) {
+                this.participants.addAll(call3.visibleParticipants);
+            }
             this.videoParticipants.clear();
-            this.videoParticipants.addAll(this.groupCall.visibleVideoParticipants);
+            ChatObject.Call call4 = this.groupCall;
+            if (!call4.call.rtmp_stream) {
+                this.videoParticipants.addAll(call4.visibleVideoParticipants);
+            }
             notifyDataSetChanged();
         }
     }

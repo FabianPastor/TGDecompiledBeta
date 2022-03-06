@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda64 implem
     }
 
     public final void onMediaStateUpdated(int i, int i2) {
-        this.f$0.lambda$initiateActualEncryptedCall$55(i, i2);
+        this.f$0.lambda$initiateActualEncryptedCall$57(i, i2);
     }
 }

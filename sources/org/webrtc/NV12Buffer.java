@@ -13,6 +13,10 @@ public class NV12Buffer implements VideoFrame.Buffer {
 
     private static native void nativeCropAndScale(int i, int i2, int i3, int i4, int i5, int i6, ByteBuffer byteBuffer, int i7, int i8, int i9, int i10, ByteBuffer byteBuffer2, int i11, ByteBuffer byteBuffer3, int i12, ByteBuffer byteBuffer4, int i13);
 
+    public /* synthetic */ int getBufferType() {
+        return VideoFrame.Buffer.CC.$default$getBufferType(this);
+    }
+
     public NV12Buffer(int i, int i2, int i3, int i4, ByteBuffer byteBuffer, Runnable runnable) {
         this.width = i;
         this.height = i2;

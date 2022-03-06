@@ -10,6 +10,6 @@ public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda3 
     }
 
     public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return CameraScanActivity.lambda$createView$1(view, motionEvent);
+        return CameraScanActivity.lambda$createView$0(view, motionEvent);
     }
 }

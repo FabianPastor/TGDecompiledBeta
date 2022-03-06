@@ -12,6 +12,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda12 im
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$didSelectResult$45(this.f$1, dialogInterface, i);
+        this.f$0.lambda$onItemLongClick$21(this.f$1, dialogInterface, i);
     }
 }

@@ -592,8 +592,8 @@ public class AvatarPreviewer {
                 int r1 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
                 if (r1 >= 0) goto L_0x0078
                 r1 = 1064514355(0x3var_, float:0.95)
-                float r2 = org.telegram.messenger.AndroidUtilities.lerp(r1, r5, r0)
-                float r1 = org.telegram.messenger.AndroidUtilities.lerp(r1, r5, r0)
+                float r2 = org.telegram.messenger.AndroidUtilities.lerp((float) r1, (float) r5, (float) r0)
+                float r1 = org.telegram.messenger.AndroidUtilities.lerp((float) r1, (float) r5, (float) r0)
                 org.telegram.messenger.ImageReceiver r3 = r9.imageReceiver
                 float r3 = r3.getCenterX()
                 org.telegram.messenger.ImageReceiver r6 = r9.imageReceiver

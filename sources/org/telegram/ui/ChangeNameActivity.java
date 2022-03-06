@@ -72,11 +72,11 @@ public class ChangeNameActivity extends BaseFragment {
         editTextBoldCursor.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.firstNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        this.firstNameField.setBackgroundDrawable((Drawable) null);
+        this.firstNameField.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
         this.firstNameField.setMaxLines(1);
         this.firstNameField.setLines(1);
         this.firstNameField.setSingleLine(true);
-        int i = 3;
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
         this.firstNameField.setInputType(49152);
         this.firstNameField.setImeOptions(5);
@@ -91,15 +91,12 @@ public class ChangeNameActivity extends BaseFragment {
         editTextBoldCursor2.setTextSize(1, 18.0f);
         this.lastNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.lastNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.lastNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        this.lastNameField.setBackgroundDrawable((Drawable) null);
+        this.lastNameField.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
         this.lastNameField.setMaxLines(1);
         this.lastNameField.setLines(1);
         this.lastNameField.setSingleLine(true);
-        EditTextBoldCursor editTextBoldCursor3 = this.lastNameField;
-        if (LocaleController.isRTL) {
-            i = 5;
-        }
-        editTextBoldCursor3.setGravity(i);
+        this.lastNameField.setGravity(LocaleController.isRTL ? 5 : 3);
         this.lastNameField.setInputType(49152);
         this.lastNameField.setImeOptions(6);
         this.lastNameField.setHint(LocaleController.getString("LastName", NUM));
@@ -110,8 +107,8 @@ public class ChangeNameActivity extends BaseFragment {
         this.lastNameField.setOnEditorActionListener(new ChangeNameActivity$$ExternalSyntheticLambda2(this));
         if (user != null) {
             this.firstNameField.setText(user.first_name);
-            EditTextBoldCursor editTextBoldCursor4 = this.firstNameField;
-            editTextBoldCursor4.setSelection(editTextBoldCursor4.length());
+            EditTextBoldCursor editTextBoldCursor3 = this.firstNameField;
+            editTextBoldCursor3.setSelection(editTextBoldCursor3.length());
             this.lastNameField.setText(user.last_name);
         }
         return this.fragmentView;
