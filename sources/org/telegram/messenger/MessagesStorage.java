@@ -129,6 +129,7 @@ public class MessagesStorage extends BaseController {
     private LongSparseArray<Integer> dialogsWithUnread = new LongSparseArray<>();
     public ArrayList<MessageObject> downloadingFiles = new ArrayList<>();
     private int[][] groups = {new int[2], new int[2]};
+    public boolean hasUnviewedDownloads;
     private int lastDateValue = 0;
     private int lastPtsValue = 0;
     private int lastQtsValue = 0;
@@ -552,7 +553,7 @@ public class MessagesStorage extends BaseController {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$openDatabase$2() {
-        this.showClearDatabaseAlert = getDatabaseSize() > 1048576;
+        this.showClearDatabaseAlert = false;
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.onDatabaseOpened, new Object[0]);
     }
 
@@ -2478,6 +2479,7 @@ public class MessagesStorage extends BaseController {
         }
         if (!z) {
             this.downloadingFiles.add(messageObject);
+            this.hasUnviewedDownloads = true;
         }
         getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
     }
@@ -2660,7 +2662,7 @@ public class MessagesStorage extends BaseController {
                     i2++;
                 }
             }
-            FileLoader.getInstance(this.currentAccount).cancelLoadFile(arrayList.get(i).getFileName());
+            FileLoader.getInstance(this.currentAccount).cancelLoadFile(arrayList.get(i).getDocument(), true);
         }
         getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
         this.storageQueue.postRunnable(new MessagesStorage$$ExternalSyntheticLambda136(this, arrayList));
@@ -2673,7 +2675,7 @@ public class MessagesStorage extends BaseController {
             for (int i = 0; i < arrayList.size(); i++) {
                 executeFast.bindInteger(1, ((MessageObject) arrayList.get(i)).getDocument().dc_id);
                 executeFast.bindLong(2, ((MessageObject) arrayList.get(i)).getDocument().id);
-                executeFast.stepThis();
+                executeFast.step();
                 try {
                     FileLoader.getPathToMessage(((MessageObject) arrayList.get(i)).messageOwner).delete();
                 } catch (Exception e) {
@@ -24786,7 +24788,7 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0021:
             java.lang.String r7 = "SavedMessages"
-            r8 = 2131627763(0x7f0e0ef3, float:1.88828E38)
+            r8 = 2131627765(0x7f0e0ef5, float:1.8882804E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)     // Catch:{ Exception -> 0x0654 }
             java.lang.String r7 = r7.toLowerCase()     // Catch:{ Exception -> 0x0654 }
             java.lang.String r8 = "saved messages"

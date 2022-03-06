@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import org.telegram.messenger.voip.VoIPService;
+import org.telegram.tgnet.QuickAckDelegate;
+import org.telegram.tgnet.RequestDelegateTimestamp;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -60,6 +62,7 @@ import org.telegram.tgnet.TLRPC$TL_updateGroupCallParticipants;
 import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
+import org.telegram.tgnet.WriteToSocketDelegate;
 import org.telegram.ui.GroupCallActivity;
 
 public class ChatObject {
@@ -121,6 +124,7 @@ public class ChatObject {
         public HashSet<Long> invitedUsersMap = new HashSet<>();
         private long lastGroupCallReloadTime;
         private int lastLoadGuid;
+        private boolean loadedRtmpStreamParticipant;
         private boolean loadingGroupCall;
         private HashSet<Integer> loadingGuids = new HashSet<>();
         public boolean loadingMembers;
@@ -225,24 +229,31 @@ public class ChatObject {
             this.nextLoadOffset = tLRPC$TL_phone_groupCall.participants_next_offset;
             loadMembers(true);
             createNoVideoParticipant();
+            if (this.call.rtmp_stream) {
+                createRtmpStreamParticipant(Collections.emptyList());
+            }
         }
 
         public void loadRtmpStreamChannels() {
-            TLRPC$TL_phone_getGroupCallStreamChannels tLRPC$TL_phone_getGroupCallStreamChannels = new TLRPC$TL_phone_getGroupCallStreamChannels();
-            tLRPC$TL_phone_getGroupCallStreamChannels.call = getInputGroupCall();
-            this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupCallStreamChannels, new ChatObject$Call$$ExternalSyntheticLambda12(this));
+            if (this.call != null) {
+                TLRPC$TL_phone_getGroupCallStreamChannels tLRPC$TL_phone_getGroupCallStreamChannels = new TLRPC$TL_phone_getGroupCallStreamChannels();
+                tLRPC$TL_phone_getGroupCallStreamChannels.call = getInputGroupCall();
+                this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupCallStreamChannels, new ChatObject$Call$$ExternalSyntheticLambda12(this), (RequestDelegateTimestamp) null, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.call.stream_dc_id, 1, true);
+            }
         }
 
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$loadRtmpStreamChannels$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             if (tLObject instanceof TLRPC$TL_phone_groupCallStreamChannels) {
                 createRtmpStreamParticipant(((TLRPC$TL_phone_groupCallStreamChannels) tLObject).channels);
+                this.loadedRtmpStreamParticipant = true;
             }
         }
 
         public void createRtmpStreamParticipant(List<TLRPC$TL_groupCallStreamChannel> list) {
-            if (!list.isEmpty() && this.rtmpStreamParticipant == null) {
-                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = new TLRPC$TL_groupCallParticipant();
+            if (!this.loadedRtmpStreamParticipant || this.rtmpStreamParticipant == null) {
+                VideoParticipant videoParticipant = this.rtmpStreamParticipant;
+                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = videoParticipant != null ? videoParticipant.participant : new TLRPC$TL_groupCallParticipant();
                 TLRPC$TL_peerChat tLRPC$TL_peerChat = new TLRPC$TL_peerChat();
                 tLRPC$TL_groupCallParticipant.peer = tLRPC$TL_peerChat;
                 tLRPC$TL_peerChat.channel_id = this.chatId;
@@ -256,6 +267,7 @@ public class ChatObject {
                 tLRPC$TL_groupCallParticipant.video.endpoint = "unified";
                 tLRPC$TL_groupCallParticipant.videoEndpoint = "unified";
                 this.rtmpStreamParticipant = new VideoParticipant(tLRPC$TL_groupCallParticipant, false, false);
+                sortParticipants();
                 AndroidUtilities.runOnUIThread(new ChatObject$Call$$ExternalSyntheticLambda2(this));
             }
         }
@@ -323,7 +335,8 @@ public class ChatObject {
         }
 
         public boolean shouldShowPanel() {
-            return this.call.participants_count > 0 || isScheduled();
+            TLRPC$GroupCall tLRPC$GroupCall = this.call;
+            return tLRPC$GroupCall.participants_count > 0 || tLRPC$GroupCall.rtmp_stream || isScheduled();
         }
 
         public boolean isScheduled() {

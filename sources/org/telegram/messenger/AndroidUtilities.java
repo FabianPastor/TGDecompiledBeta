@@ -1288,27 +1288,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131627247(0x7f0e0cef, float:1.8881753E38)
+                r0 = 2131627249(0x7f0e0cf1, float:1.8881757E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131627248(0x7f0e0cf0, float:1.8881755E38)
+                r0 = 2131627250(0x7f0e0cf2, float:1.888176E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131627238(0x7f0e0ce6, float:1.8881735E38)
+                r0 = 2131627240(0x7f0e0ce8, float:1.8881739E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131627237(0x7f0e0ce5, float:1.8881733E38)
+                r0 = 2131627239(0x7f0e0ce7, float:1.8881737E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131627239(0x7f0e0ce7, float:1.8881737E38)
+                r0 = 2131627241(0x7f0e0ce9, float:1.888174E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -2865,6 +2865,10 @@ public class AndroidUtilities {
         }
     }
 
+    public static boolean shouldShowClipboardToast() {
+        return Build.VERSION.SDK_INT < 31 || !OneUIUtilities.isOneUI();
+    }
+
     public static void addToClipboard(CharSequence charSequence) {
         try {
             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", charSequence));
@@ -3485,7 +3489,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0157
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0157
-            r7 = 2131626826(0x7f0e0b4a, float:1.88809E38)
+            r7 = 2131626828(0x7f0e0b4c, float:1.8880903E38)
             java.lang.String r8 = "OK"
             r9 = 2131624304(0x7f0e0170, float:1.8875784E38)
             java.lang.String r10 = "AppName"

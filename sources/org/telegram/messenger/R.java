@@ -4535,6 +4535,8 @@ public final class R {
         public static final int NoRecentSearches = NUM;
         public static final int NoReplies = NUM;
         public static final int NoResult = NUM;
+        public static final int NoRtmpStreamFromAppOwner = NUM;
+        public static final int NoRtmpStreamFromAppViewer = NUM;
         public static final int NoScheduledMessages = NUM;
         public static final int NoSharedAudio = NUM;
         public static final int NoSharedAudioSecret = NUM;

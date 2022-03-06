@@ -464,7 +464,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             LinearLayout linearLayout = new LinearLayout(parentActivity2);
             linearLayout.setOrientation(1);
             StickerImageView stickerImageView = new StickerImageView(parentActivity2, this.currentAccount);
-            stickerImageView.setStickerNum(8);
+            stickerImageView.setStickerNum(9);
             stickerImageView.getImageReceiver().setAutoRepeat(1);
             linearLayout.addView(stickerImageView, LayoutHelper.createLinear(144, 144, 1, 0, 16, 0, 0));
             TextView textView = new TextView(parentActivity2);
@@ -525,6 +525,9 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.onDownloadingFilesChanged);
+        if (getVisibility() == 0) {
+            MessagesStorage.getInstance(this.currentAccount).hasUnviewedDownloads = false;
+        }
     }
 
     /* access modifiers changed from: protected */
@@ -535,6 +538,9 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.onDownloadingFilesChanged) {
+            if (getVisibility() == 0) {
+                MessagesStorage.getInstance(this.currentAccount).hasUnviewedDownloads = false;
+            }
             update(true);
         }
     }

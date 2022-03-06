@@ -1074,8 +1074,13 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.titleTextView.setPadding(0, 0, 0, 0);
                 this.importingImageView.setVisibility(8);
                 this.importingImageView.stopAnimation();
-                this.avatars.setVisibility(0);
-                updateAvatars(false);
+                this.avatars.setVisibility((VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().groupCall == null || VoIPService.getSharedInstance().groupCall.call.rtmp_stream) ? 8 : 0);
+                if (this.avatars.getVisibility() != 8) {
+                    updateAvatars(false);
+                } else {
+                    this.titleTextView.setTranslationX((float) (-AndroidUtilities.dp(36.0f)));
+                    this.subtitleTextView.setTranslationX((float) (-AndroidUtilities.dp(36.0f)));
+                }
                 this.closeButton.setVisibility(8);
                 this.playButton.setVisibility(8);
                 ActionBarMenuItem actionBarMenuItem3 = this.playbackSpeedButton;
@@ -1085,11 +1090,16 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             } else if (i2 == 1 || i2 == 3) {
                 this.selector.setBackground((Drawable) null);
                 updateCallTitle();
-                this.avatars.setVisibility(0);
+                this.avatars.setVisibility((VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().groupCall == null || VoIPService.getSharedInstance().groupCall.call.rtmp_stream) ? 8 : 0);
                 if (i2 == 3 && VoIPService.getSharedInstance() != null) {
                     VoIPService.getSharedInstance().registerStateListener(this);
                 }
-                updateAvatars(false);
+                if (this.avatars.getVisibility() != 8) {
+                    updateAvatars(false);
+                } else {
+                    this.titleTextView.setTranslationX(0.0f);
+                    this.subtitleTextView.setTranslationX(0.0f);
+                }
                 this.muteButton.setVisibility((VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().groupCall == null || VoIPService.getSharedInstance().groupCall.call.rtmp_stream) ? 8 : 0);
                 boolean z = VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().isMicMute();
                 this.isMuted = z;
@@ -2175,14 +2185,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x0237
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628632(0x7f0e1258, float:1.8884562E38)
+            r9 = 2131628634(0x7f0e125a, float:1.8884566E38)
             java.lang.String r11 = "VoipChannelScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0245
         L_0x0237:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628741(0x7f0e12c5, float:1.8884783E38)
+            r9 = 2131628743(0x7f0e12c7, float:1.8884787E38)
             java.lang.String r11 = "VoipGroupScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2206,14 +2216,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x027b
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628645(0x7f0e1265, float:1.8884589E38)
+            r9 = 2131628647(0x7f0e1267, float:1.8884593E38)
             java.lang.String r11 = "VoipChannelVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0289
         L_0x027b:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628773(0x7f0e12e5, float:1.8884848E38)
+            r9 = 2131628775(0x7f0e12e7, float:1.8884852E38)
             java.lang.String r11 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2224,7 +2234,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.subtitleTextView
             boolean r4 = r4.rtmp_stream
             if (r4 == 0) goto L_0x0299
-            r4 = 2131628574(0x7f0e121e, float:1.8884445E38)
+            r4 = 2131628576(0x7f0e1220, float:1.8884449E38)
             goto L_0x029c
         L_0x0299:
             r4 = 2131626379(0x7f0e098b, float:1.8879993E38)
@@ -2401,37 +2411,37 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int i3 = 0;
             if (call != null) {
                 int size = call.sortedParticipants.size();
-                while (i3 < 3) {
-                    if (i3 < size) {
-                        this.avatars.setObject(i3, i, call.sortedParticipants.get(i3));
+                for (int i4 = 0; i4 < 3; i4++) {
+                    if (i4 < size) {
+                        this.avatars.setObject(i4, i, call.sortedParticipants.get(i4));
                     } else {
-                        this.avatars.setObject(i3, i, (TLObject) null);
+                        this.avatars.setObject(i4, i, (TLObject) null);
                     }
-                    i3++;
                 }
             } else if (tLRPC$User != null) {
                 this.avatars.setObject(0, i, tLRPC$User);
-                for (int i4 = 1; i4 < 3; i4++) {
-                    this.avatars.setObject(i4, i, (TLObject) null);
+                for (int i5 = 1; i5 < 3; i5++) {
+                    this.avatars.setObject(i5, i, (TLObject) null);
                 }
             } else {
-                while (i3 < 3) {
-                    this.avatars.setObject(i3, i, (TLObject) null);
-                    i3++;
+                for (int i6 = 0; i6 < 3; i6++) {
+                    this.avatars.setObject(i6, i, (TLObject) null);
                 }
             }
             this.avatars.commitTransition(z);
             if (this.currentStyle == 4 && call != null) {
-                int min = Math.min(3, call.sortedParticipants.size());
-                int i5 = 10;
-                if (min != 0) {
-                    i5 = 10 + ((min - 1) * 24) + 10 + 32;
+                if (!call.call.rtmp_stream) {
+                    i3 = Math.min(3, call.sortedParticipants.size());
+                }
+                int i7 = 10;
+                if (i3 != 0) {
+                    i7 = 10 + ((i3 - 1) * 24) + 10 + 32;
                 }
                 if (z) {
-                    int i6 = ((FrameLayout.LayoutParams) this.titleTextView.getLayoutParams()).leftMargin;
-                    float f = (float) i5;
-                    if (AndroidUtilities.dp(f) != i6) {
-                        float translationX = (this.titleTextView.getTranslationX() + ((float) i6)) - ((float) AndroidUtilities.dp(f));
+                    int i8 = ((FrameLayout.LayoutParams) this.titleTextView.getLayoutParams()).leftMargin;
+                    float f = (float) i7;
+                    if (AndroidUtilities.dp(f) != i8) {
+                        float translationX = (this.titleTextView.getTranslationX() + ((float) i8)) - ((float) AndroidUtilities.dp(f));
                         this.titleTextView.setTranslationX(translationX);
                         this.subtitleTextView.setTranslationX(translationX);
                         ViewPropertyAnimator duration = this.titleTextView.animate().translationX(0.0f).setDuration(220);
@@ -2445,7 +2455,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     this.titleTextView.setTranslationX(0.0f);
                     this.subtitleTextView.setTranslationX(0.0f);
                 }
-                float f2 = (float) i5;
+                float f2 = (float) i7;
                 this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, 51, f2, 5.0f, call.isScheduled() ? 90.0f : 36.0f, 0.0f));
                 this.subtitleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, 51, f2, 25.0f, call.isScheduled() ? 90.0f : 36.0f, 0.0f));
                 return;

@@ -3090,7 +3090,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r5 = 8
             r1.setVisibility(r5)
             android.widget.ImageView r1 = r7.scheduledButton
-            r5 = 2131627770(0x7f0e0efa, float:1.8882814E38)
+            r5 = 2131627772(0x7f0e0efc, float:1.8882818E38)
             java.lang.String r6 = "ScheduledMessages"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r1.setContentDescription(r5)
@@ -3798,7 +3798,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             java.lang.String r1 = "chat_messagePanelSend"
             int r1 = r7.getThemedColor(r1)
             android.view.View r9 = r7.sendButton
-            r10 = 2131627860(0x7f0e0var_, float:1.8882996E38)
+            r10 = 2131627862(0x7f0e0var_, float:1.8883E38)
             java.lang.String r12 = "Send"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r9.setContentDescription(r10)
@@ -11722,7 +11722,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         return this.adjustPanLayoutHelper;
     }
 
-    public boolean pannelAniamationInProgress() {
+    public boolean panelAnimationInProgress() {
         return this.panelAnimation != null;
     }
 

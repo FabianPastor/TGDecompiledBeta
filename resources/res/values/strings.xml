@@ -1063,7 +1063,7 @@
     <string name="ClearCache">Clear Cache</string>
     <string name="ClearCacheFewChatsTitle">Empty cache for %1$s</string>
     <string name="ClearCacheInfo">Free up disk space on your device; your media will stay in the cloud.</string>
-    <string name="ClearDownloadsList">Clear Downloads List</string>
+    <string name="ClearDownloadsList">Clear Download List</string>
     <string name="ClearFewChatsTitle">Clear %1$s</string>
     <string name="ClearHistory">Clear history</string>
     <string name="ClearHistoryCache">Delete from cache</string>
@@ -1198,10 +1198,10 @@
     <string name="CreateNewThemeAlert">You can create your own theme by changing colors within the app.\10\10You can always switch back to the default Telegram theme here.</string>
     <string name="CreateNewThemeHelp">Tap on the palette icon to view the list of elements on each screen - and edit them.</string>
     <string name="CreateNewThemeMenu">Create new theme</string>
-    <string name="CreatePasscode">Create your passcode</string>
-    <string name="CreatePasscodeInfoPIN">Please enter any 4 digits that you want to use to unlock Telegram.</string>
-    <string name="CreatePasscodeInfoPassword">Please enter any password that you want to use to unlock Telegram.</string>
-    <string name="CreatePassword">Create Password</string>
+    <string name="CreatePasscode">Create a passcode</string>
+    <string name="CreatePasscodeInfoPIN">Please enter any 4 digits that you will use to unlock Telegram.</string>
+    <string name="CreatePasscodeInfoPassword">Please enter the password you will use to unlock Telegram.</string>
+    <string name="CreatePassword">Create a Password</string>
     <string name="CreateTheme">CREATE THEME</string>
     <string name="Crop">CROP</string>
     <string name="CropImage">Crop image</string>
@@ -1425,7 +1425,7 @@
     <string name="DoubleTapPreviewSenderName">Dino</string>
     <string name="DoubleTapSetting">Quick Reactions</string>
     <string name="DownloadedFiles">Downloaded files</string>
-    <string name="DownloadedFilesMessage">Telegram allows to store all recived and sent documents in cloud and save storege space on your device. </string>
+    <string name="DownloadedFilesMessage">Telegram lets you store all documents you send and receive in the cloud and save storage space on your device.</string>
     <string name="Downloading">Downloading</string>
     <string name="DownloadsTabs">Downloads</string>
     <string name="Draft">Draft</string>
@@ -1481,7 +1481,7 @@
     <string name="EditMessageReplaceVideo">Replace video</string>
     <string name="EditName">Edit name</string>
     <string name="EditNumber">Edit number</string>
-    <string name="EditNumberInfo">Do you want to edit your number?\10\10**%1$s**\10\10If the number above is correct please wait for the verification code.</string>
+    <string name="EditNumberInfo">Do you want to edit your number?\10\10**%1$s**\10\10If the number above is correct, please wait for the verification code.</string>
     <string name="EditPhoto">Open in editor</string>
     <string name="EditThemeColors">Edit colors</string>
     <string name="EditThemeTitle">Edit Theme</string>
@@ -1807,12 +1807,12 @@
     <string name="FootsAway">%1$s ft away</string>
     <string name="FootsFromYou">%1$s ft from you</string>
     <string name="FootsShort">%1$s ft</string>
-    <string name="ForceSetPasswordAlertMessageShort_few">If you do not set a password, you will only be able to log into your account via SMS once every %1$s days. Are you sure you want to processed without as password?</string>
-    <string name="ForceSetPasswordAlertMessageShort_many">If you do not set a password, you will only be able to log into your account via SMS once every %1$s days. Are you sure you want to processed without as password?</string>
-    <string name="ForceSetPasswordAlertMessageShort_one">If you do not set a password, you will only be able to log into your account via SMS once every %1$s day. Are you sure you want to processed without as password?</string>
-    <string name="ForceSetPasswordAlertMessageShort_other">If you do not set a password, you will only be able to log into your account via SMS once every %1$s days. Are you sure you want to processed without as password?</string>
-    <string name="ForceSetPasswordAlertMessageShort_two">If you do not set a password, you will only be able to log into your account via SMS once every %1$s days. Are you sure you want to processed without as password?</string>
-    <string name="ForceSetPasswordAlertMessageShort_zero">If you do not set a password, you will only be able to log into your account via SMS once every %1$s days. Are you sure you want to processed without as password?</string>
+    <string name="ForceSetPasswordAlertMessageShort_few">If you do not set a password, you will only be able to log into your account via SMS once every %1$s days. Do you want to proceed without a password?</string>
+    <string name="ForceSetPasswordAlertMessageShort_many">If you do not set a password, you will only be able to log into your account via SMS once every %1$s days. Do you want to proceed without a password?</string>
+    <string name="ForceSetPasswordAlertMessageShort_one">If you do not set a password, you will only be able to log into your account via SMS once every %1$s day. Do you want to proceed without a password?</string>
+    <string name="ForceSetPasswordAlertMessageShort_other">If you do not set a password, you will only be able to log into your account via SMS once every %1$s days. Do you want to proceed without a password?</string>
+    <string name="ForceSetPasswordAlertMessageShort_two">If you do not set a password, you will only be able to log into your account via SMS once every %1$s days. Do you want to proceed without a password?</string>
+    <string name="ForceSetPasswordAlertMessageShort_zero">If you do not set a password, you will only be able to log into your account via SMS once every %1$s days. Do you want to proceed without a password?</string>
     <string name="ForceSetPasswordAlertMessage_few">Proceed without a password? If you do not set a password, you will only be able to log into your account via SMS once every %1$s days.</string>
     <string name="ForceSetPasswordAlertMessage_many">Proceed without a password? If you do not set a password, you will only be able to log into your account via SMS once every %1$s days.</string>
     <string name="ForceSetPasswordAlertMessage_one">Proceed without a password? If you do not set a password, you will only be able to log into your account via SMS once every %1$s day.</string>
@@ -2681,6 +2681,8 @@
     <string name="NoRecentSearches">No recent searches</string>
     <string name="NoReplies">No replies here yet...</string>
     <string name="NoResult">No results</string>
+    <string name="NoRtmpStreamFromAppOwner">**Oops!** Telegram doesn\'t see any stream coming from your streaming app.\10\10Please make sure you entered the right Server URL and Stream Key in your app.</string>
+    <string name="NoRtmpStreamFromAppViewer">%1$s is currently not broadcasting live stream data to Telegram.</string>
     <string name="NoScheduledMessages">No scheduled messages here yet...</string>
     <string name="NoSharedAudio">Share music in this chat and access it on any of your devices.</string>
     <string name="NoSharedAudioSecret">Music from this chat will be shown here.</string>
@@ -2978,7 +2980,7 @@
     <string name="PasscodeFinish">Set Passcode</string>
     <string name="PasscodePIN">PIN</string>
     <string name="PasscodePassword">Password</string>
-    <string name="PasscodeReinstallNotice">If you forget the passcode, you\'ll need to **reinstall** the app. All secret chats will be lost.</string>
+    <string name="PasscodeReinstallNotice">If you forget your passcode, you\'ll need to **reinstall** the app. All secret chats will be lost.</string>
     <string name="PasscodeScreenHint">Tap a lock icon on the chats page to lock and unlock the app.</string>
     <string name="PasscodeSwitchToPIN">Switch to PIN</string>
     <string name="PasscodeSwitchToPassword">Switch to password</string>
@@ -3838,7 +3840,7 @@
     <string name="SearchBackgrounds">Search Backgrounds</string>
     <string name="SearchByColor">Search by color</string>
     <string name="SearchEmojiHint">Search emoji</string>
-    <string name="SearchEmptyViewDownloads">No recently downloads</string>
+    <string name="SearchEmptyViewDownloads">No recent downloads</string>
     <string name="SearchEmptyViewFilteredSubtitle2">Try a new search.</string>
     <string name="SearchEmptyViewFilteredSubtitleFiles">Files from all your chats will be shown here.</string>
     <string name="SearchEmptyViewFilteredSubtitleLinks">Links from all your chats will be shown here.</string>
@@ -4987,7 +4989,7 @@
     <string name="YourPasswordRemember">Your account is protected by 2-Step Verification.\10Do you still remember your password?</string>
     <string name="YourPasswordRememberNo">Not sure</string>
     <string name="YourPasswordRememberYes">Yes, definitely</string>
-    <string name="YourPasswordReset">Your password successfully deactivated</string>
+    <string name="YourPasswordReset">Your password was successfully deactivated</string>
     <string name="YourPasswordSuccess">Success!</string>
     <string name="YourPasswordSuccessText">Your password for Two-Step Verification is now active.</string>
     <string name="YourPhone">Your Phone</string>

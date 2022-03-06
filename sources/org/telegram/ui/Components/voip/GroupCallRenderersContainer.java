@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -194,7 +195,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
         GradientDrawable gradientDrawable2 = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{0, ColorUtils.setAlphaComponent(-16777216, 114)});
         this.rightShadowDrawable = gradientDrawable2;
         view2.setBackground(gradientDrawable2);
-        view2.setVisibility(call3.call.rtmp_stream ? 0 : 8);
+        view2.setVisibility((call3 == null || !isRtmpStream()) ? 8 : 0);
         addView(view2, LayoutHelper.createFrame(160, -1, 5));
         addView(r7, LayoutHelper.createFrame(56, -1, 51));
         r7.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda5(this));
@@ -212,7 +213,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
         };
         this.pinButton = r72;
         final Drawable createSimpleSelectorRoundRectDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(20.0f), 0, ColorUtils.setAlphaComponent(-1, 100));
-        AnonymousClass4 r14 = new View(context2) {
+        AnonymousClass4 r13 = new View(context2) {
             /* access modifiers changed from: protected */
             public void drawableStateChanged() {
                 super.drawableStateChanged();
@@ -237,8 +238,8 @@ public class GroupCallRenderersContainer extends FrameLayout {
                 super.dispatchDraw(canvas);
             }
         };
-        this.pinContainer = r14;
-        r14.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda4(this));
+        this.pinContainer = r13;
+        r13.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda4(this));
         createSimpleSelectorRoundRectDrawable.setCallback(this.pinContainer);
         addView(this.pinContainer);
         CrossOutDrawable crossOutDrawable = new CrossOutDrawable(context2, NUM, (String) null);
@@ -270,7 +271,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
         int dp = AndroidUtilities.dp(4.0f);
         this.pipView.setPadding(dp, dp, dp, dp);
         this.pipView.setBackground(Theme.createSelectorDrawable(ColorUtils.setAlphaComponent(-1, 55)));
-        this.pipView.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda6(this, call3, groupCallActivity3));
+        this.pipView.setOnClickListener(new GroupCallRenderersContainer$$ExternalSyntheticLambda6(this, groupCallActivity3));
         addView(this.pipView, LayoutHelper.createFrame(32, 32.0f, 53, 12.0f, 12.0f, 12.0f, 12.0f));
         final Drawable createRoundRectDrawable = Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_listViewBackground"), 204));
         AnonymousClass5 r3 = new FrameLayout(context2) {
@@ -339,20 +340,25 @@ public class GroupCallRenderersContainer extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$2(ChatObject.Call call2, GroupCallActivity groupCallActivity2, View view) {
-        if (call2.call.rtmp_stream) {
+    public /* synthetic */ void lambda$new$2(GroupCallActivity groupCallActivity2, View view) {
+        if (isRtmpStream()) {
             if (AndroidUtilities.checkInlinePermissions(groupCallActivity2.getParentActivity())) {
                 RTMPStreamPipOverlay.show();
                 groupCallActivity2.dismiss();
                 return;
             }
-            AlertsCreator.createDrawOverlayGroupCallPermissionDialog(getContext()).show();
+            AlertsCreator.createDrawOverlayPermissionDialog(groupCallActivity2.getParentActivity(), (DialogInterface.OnClickListener) null).show();
         } else if (AndroidUtilities.checkInlinePermissions(groupCallActivity2.getParentActivity())) {
             GroupCallPip.clearForce();
             groupCallActivity2.dismiss();
         } else {
             AlertsCreator.createDrawOverlayGroupCallPermissionDialog(getContext()).show();
         }
+    }
+
+    private boolean isRtmpStream() {
+        ChatObject.Call call2 = this.call;
+        return call2 != null && call2.call.rtmp_stream;
     }
 
     public void setIsTablet(boolean z) {
@@ -812,11 +818,9 @@ public class GroupCallRenderersContainer extends FrameLayout {
         L_0x02d8:
             android.widget.ImageView r3 = r0.backButton
             r3.setAlpha(r1)
-            org.telegram.messenger.ChatObject$Call r3 = r0.call
-            org.telegram.tgnet.TLRPC$GroupCall r3 = r3.call
-            boolean r3 = r3.rtmp_stream
+            boolean r3 = r22.isRtmpStream()
             r4 = 4
-            if (r3 == 0) goto L_0x0314
+            if (r3 == 0) goto L_0x0316
             android.widget.ImageView r3 = r0.pinButton
             r3.setAlpha(r13)
             android.widget.ImageView r3 = r0.pinButton
@@ -826,20 +830,22 @@ public class GroupCallRenderersContainer extends FrameLayout {
             android.widget.ImageView r3 = r0.pipView
             r3.setVisibility(r10)
             boolean r3 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r3 == 0) goto L_0x030e
+            if (r3 == 0) goto L_0x0310
             android.widget.ImageView r3 = r0.pipView
             r4 = 1116733440(0x42900000, float:72.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r4 = -r4
             float r4 = (float) r4
-            float r4 = r4 * r1
+            float r5 = r0.progressToHideUi
+            float r5 = r14 - r5
+            float r4 = r4 * r5
             r3.setTranslationX(r4)
-            goto L_0x0328
-        L_0x030e:
+            goto L_0x032a
+        L_0x0310:
             android.widget.ImageView r3 = r0.pipView
             r3.setTranslationX(r13)
-            goto L_0x0328
-        L_0x0314:
+            goto L_0x032a
+        L_0x0316:
             android.widget.ImageView r3 = r0.pinButton
             r3.setAlpha(r1)
             android.widget.ImageView r3 = r0.pinButton
@@ -848,7 +854,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r3.setAlpha(r13)
             android.widget.ImageView r3 = r0.pipView
             r3.setVisibility(r4)
-        L_0x0328:
+        L_0x032a:
             int r3 = r22.getMeasuredWidth()
             android.widget.TextView r4 = r0.pinTextView
             int r4 = r4.getMeasuredWidth()
@@ -881,23 +887,23 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r3 = (float) r3
             float r4 = r4 - r3
             boolean r3 = org.telegram.ui.GroupCallActivity.isTabletMode
-            if (r3 == 0) goto L_0x037c
+            if (r3 == 0) goto L_0x037e
             r3 = 1134821376(0x43a40000, float:328.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-        L_0x0379:
+        L_0x037b:
             float r3 = (float) r3
             float r4 = r4 - r3
-            goto L_0x0389
-        L_0x037c:
+            goto L_0x038b
+        L_0x037e:
             boolean r3 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r3 == 0) goto L_0x0387
+            if (r3 == 0) goto L_0x0389
             r3 = 1127481344(0x43340000, float:180.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            goto L_0x0379
-        L_0x0387:
-            r3 = 0
-            goto L_0x0379
+            goto L_0x037b
         L_0x0389:
+            r3 = 0
+            goto L_0x037b
+        L_0x038b:
             android.widget.TextView r3 = r0.pinTextView
             r3.setTranslationX(r4)
             android.widget.TextView r3 = r0.unpinTextView
@@ -926,9 +932,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r5 = (float) r5
             float r4 = r4 - r5
             r3.setTranslationX(r4)
-            org.telegram.messenger.ChatObject$Call r3 = r0.call
-            org.telegram.tgnet.TLRPC$GroupCall r3 = r3.call
-            boolean r3 = r3.rtmp_stream
+            boolean r3 = r22.isRtmpStream()
             if (r3 == 0) goto L_0x03e3
             android.widget.TextView r1 = r0.pinTextView
             r1.setAlpha(r13)
@@ -1601,6 +1605,9 @@ public class GroupCallRenderersContainer extends FrameLayout {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$requestFullscreen$6(ValueAnimator valueAnimator) {
         this.progressToFullscreenMode = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        this.groupCallActivity.getMenuItemsContainer().setAlpha(1.0f - this.progressToFullscreenMode);
+        this.groupCallActivity.invalidateActionBarAlpha();
+        this.groupCallActivity.invalidateScrollOffsetY();
         update();
     }
 
@@ -2369,7 +2376,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
         if (GroupCallActivity.isTabletMode) {
             ((ViewGroup.MarginLayoutParams) this.topShadowView.getLayoutParams()).rightMargin = AndroidUtilities.dp(328.0f);
         } else if (GroupCallActivity.isLandscapeMode) {
-            ((ViewGroup.MarginLayoutParams) this.topShadowView.getLayoutParams()).rightMargin = this.call.call.rtmp_stream ? 0 : AndroidUtilities.dp(90.0f);
+            ((ViewGroup.MarginLayoutParams) this.topShadowView.getLayoutParams()).rightMargin = isRtmpStream() ? 0 : AndroidUtilities.dp(90.0f);
         } else {
             ((ViewGroup.MarginLayoutParams) this.topShadowView.getLayoutParams()).rightMargin = 0;
         }

@@ -44,6 +44,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     private boolean mirrorRecorderVideo;
     private ArrayList<Runnable> onFinishCameraInitRunnables = new ArrayList<>();
     private VideoTakeCallback onVideoTakeCallback;
+    private boolean previewStarted = false;
     private String recordedFile;
     private MediaRecorder recorder;
     CameraView recordingCurrentCameraView;
@@ -666,6 +667,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             }
         }
         camera.startPreview();
+        cameraSession.previewStarted = true;
     }
 
     public void stopPreview(CameraSession cameraSession) {
@@ -693,6 +695,11 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             }
         }
         camera.stopPreview();
+        cameraSession.previewStarted = false;
+    }
+
+    public boolean isPreviewRunning(CameraSession cameraSession) {
+        return cameraSession != null && cameraSession.previewStarted;
     }
 
     public void openRound(CameraSession cameraSession, SurfaceTexture surfaceTexture, Runnable runnable, Runnable runnable2) {

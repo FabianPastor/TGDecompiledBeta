@@ -36,7 +36,7 @@ public class SharedConfig {
     public static boolean autoplayGifs = true;
     public static boolean autoplayVideo = true;
     public static int badPasscodeTries = 0;
-    public static int bubbleRadius = 10;
+    public static int bubbleRadius = 17;
     public static boolean chatBlur = true;
     public static boolean chatBubbles = (Build.VERSION.SDK_INT >= 30);
     private static int chatSwipeAction = 0;
@@ -475,7 +475,7 @@ public class SharedConfig {
             int r2 = r1.getInt(r2, r7)     // Catch:{ all -> 0x0376 }
             fontSize = r2     // Catch:{ all -> 0x0376 }
             java.lang.String r2 = "bubbleRadius"
-            r7 = 10
+            r7 = 17
             int r2 = r1.getInt(r2, r7)     // Catch:{ all -> 0x0376 }
             bubbleRadius = r2     // Catch:{ all -> 0x0376 }
             java.lang.String r2 = "iv_font_size"

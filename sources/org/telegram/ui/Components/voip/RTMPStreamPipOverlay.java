@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.Path;
@@ -59,8 +60,8 @@ import org.webrtc.RendererCommon;
 import org.webrtc.VideoSink;
 
 public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCenterDelegate {
-    private static final FloatPropertyCompat<RTMPStreamPipOverlay> PIP_X_PROPERTY = new SimpleFloatPropertyCompat("pipX", RTMPStreamPipOverlay$$ExternalSyntheticLambda5.INSTANCE, RTMPStreamPipOverlay$$ExternalSyntheticLambda7.INSTANCE);
-    private static final FloatPropertyCompat<RTMPStreamPipOverlay> PIP_Y_PROPERTY = new SimpleFloatPropertyCompat("pipY", RTMPStreamPipOverlay$$ExternalSyntheticLambda4.INSTANCE, RTMPStreamPipOverlay$$ExternalSyntheticLambda6.INSTANCE);
+    private static final FloatPropertyCompat<RTMPStreamPipOverlay> PIP_X_PROPERTY = new SimpleFloatPropertyCompat("pipX", RTMPStreamPipOverlay$$ExternalSyntheticLambda6.INSTANCE, RTMPStreamPipOverlay$$ExternalSyntheticLambda8.INSTANCE);
+    private static final FloatPropertyCompat<RTMPStreamPipOverlay> PIP_Y_PROPERTY = new SimpleFloatPropertyCompat("pipY", RTMPStreamPipOverlay$$ExternalSyntheticLambda5.INSTANCE, RTMPStreamPipOverlay$$ExternalSyntheticLambda7.INSTANCE);
     @SuppressLint({"StaticFieldLeak"})
     private static RTMPStreamPipOverlay instance = new RTMPStreamPipOverlay();
     private AccountInstance accountInstance;
@@ -218,9 +219,6 @@ public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCent
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$toggleControls$5(ValueAnimator valueAnimator) {
         this.controlsView.setAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
-        this.windowLayoutParams.width = (int) (this.scaleFactor * ((float) getSuggestedWidth()));
-        this.windowLayoutParams.height = (int) (this.scaleFactor * ((float) getSuggestedHeight()));
-        this.windowManager.updateViewLayout(this.contentView, this.windowLayoutParams);
     }
 
     public static void dismiss() {
@@ -230,6 +228,7 @@ public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCent
     private void dismissInternal() {
         if (this.isVisible) {
             this.isVisible = false;
+            AndroidUtilities.runOnUIThread(RTMPStreamPipOverlay$$ExternalSyntheticLambda4.INSTANCE, 100);
             this.accountInstance.getNotificationCenter().removeObserver(this, NotificationCenter.groupCallUpdated);
             this.accountInstance.getNotificationCenter().removeObserver(this, NotificationCenter.applyGroupCallVisibleParticipants);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didEndCall);
@@ -307,9 +306,11 @@ public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCent
                 /* access modifiers changed from: private */
                 public /* synthetic */ void lambda$onScale$0() {
                     RTMPStreamPipOverlay.this.contentFrameLayout.invalidate();
-                    RTMPStreamPipOverlay.this.contentFrameLayout.requestLayout();
-                    RTMPStreamPipOverlay.this.contentView.requestLayout();
-                    RTMPStreamPipOverlay.this.textureView.requestLayout();
+                    if (Build.VERSION.SDK_INT < 18 || !RTMPStreamPipOverlay.this.contentFrameLayout.isInLayout()) {
+                        RTMPStreamPipOverlay.this.contentFrameLayout.requestLayout();
+                        RTMPStreamPipOverlay.this.contentView.requestLayout();
+                        RTMPStreamPipOverlay.this.textureView.requestLayout();
+                    }
                 }
 
                 public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
@@ -337,16 +338,17 @@ public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCent
                         };
                         if (!RTMPStreamPipOverlay.this.pipXSpring.isRunning()) {
                             arrayList.add(RTMPStreamPipOverlay.this.pipXSpring);
+                        } else {
                             RTMPStreamPipOverlay.this.pipXSpring.addEndListener(r0);
                         }
                         if (!RTMPStreamPipOverlay.this.pipYSpring.isRunning()) {
                             arrayList.add(RTMPStreamPipOverlay.this.pipYSpring);
+                        } else {
                             RTMPStreamPipOverlay.this.pipYSpring.addEndListener(r0);
-                            return;
                         }
-                        return;
+                    } else {
+                        updateLayout();
                     }
-                    updateLayout();
                 }
 
                 /* access modifiers changed from: private */
@@ -481,6 +483,12 @@ public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCent
                     return false;
                 }
 
+                /* access modifiers changed from: protected */
+                public void onConfigurationChanged(Configuration configuration) {
+                    AndroidUtilities.checkDisplaySize(getContext(), configuration);
+                    RTMPStreamPipOverlay.this.bindTextureView();
+                }
+
                 public void draw(Canvas canvas) {
                     if (Build.VERSION.SDK_INT >= 21) {
                         super.draw(canvas);
@@ -490,21 +498,6 @@ public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCent
                     canvas.clipPath(this.path);
                     super.draw(canvas);
                     canvas.restore();
-                }
-
-                /* access modifiers changed from: protected */
-                public boolean drawChild(Canvas canvas, View view, long j) {
-                    canvas.save();
-                    if (!(view != RTMPStreamPipOverlay.this.textureView || RTMPStreamPipOverlay.this.textureWidth == 0 || RTMPStreamPipOverlay.this.textureHeight == 0)) {
-                        float width = ((float) view.getWidth()) / ((float) RTMPStreamPipOverlay.this.textureWidth);
-                        float height = ((float) view.getHeight()) / ((float) RTMPStreamPipOverlay.this.textureHeight);
-                        if (!(width == 1.0f && height == 1.0f)) {
-                            canvas.scale(width, height);
-                        }
-                    }
-                    boolean drawChild = super.drawChild(canvas, view, j);
-                    canvas.restore();
-                    return drawChild;
                 }
 
                 /* access modifiers changed from: protected */
@@ -652,11 +645,12 @@ public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCent
             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.contentView, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.contentView, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.contentView, View.SCALE_Y, new float[]{1.0f})});
             animatorSet.start();
             bindTextureView();
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.groupCallVisibilityChanged, new Object[0]);
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$showInternal$7(Context context, View view) {
+    public static /* synthetic */ void lambda$showInternal$8(Context context, View view) {
         if (VoIPService.getSharedInstance() != null) {
             Intent action = new Intent(context, LaunchActivity.class).setAction("voip_chat");
             action.putExtra("currentAccount", VoIPService.getSharedInstance().getAccount());

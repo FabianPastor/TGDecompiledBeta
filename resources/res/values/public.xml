@@ -4396,6 +4396,8 @@
     <public type="string" name="NoRecentSearches" id="NUM" />
     <public type="string" name="NoReplies" id="NUM" />
     <public type="string" name="NoResult" id="NUM" />
+    <public type="string" name="NoRtmpStreamFromAppOwner" id="NUM" />
+    <public type="string" name="NoRtmpStreamFromAppViewer" id="NUM" />
     <public type="string" name="NoScheduledMessages" id="NUM" />
     <public type="string" name="NoSharedAudio" id="NUM" />
     <public type="string" name="NoSharedAudioSecret" id="NUM" />

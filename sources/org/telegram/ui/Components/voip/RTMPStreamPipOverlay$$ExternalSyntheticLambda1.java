@@ -11,6 +11,6 @@ public final /* synthetic */ class RTMPStreamPipOverlay$$ExternalSyntheticLambda
     }
 
     public final void onClick(View view) {
-        RTMPStreamPipOverlay.lambda$showInternal$7(this.f$0, view);
+        RTMPStreamPipOverlay.lambda$showInternal$8(this.f$0, view);
     }
 }

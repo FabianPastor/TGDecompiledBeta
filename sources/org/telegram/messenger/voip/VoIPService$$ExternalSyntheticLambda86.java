@@ -7,15 +7,15 @@ import org.telegram.tgnet.TLRPC$TL_error;
 public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda86 implements RequestDelegate {
     public final /* synthetic */ VoIPService f$0;
     public final /* synthetic */ int f$1;
-    public final /* synthetic */ long f$2;
+    public final /* synthetic */ Runnable f$2;
 
-    public /* synthetic */ VoIPService$$ExternalSyntheticLambda86(VoIPService voIPService, int i, long j) {
+    public /* synthetic */ VoIPService$$ExternalSyntheticLambda86(VoIPService voIPService, int i, Runnable runnable) {
         this.f$0 = voIPService;
         this.f$1 = i;
-        this.f$2 = j;
+        this.f$2 = runnable;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$createGroupInstance$48(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$editCallMember$61(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

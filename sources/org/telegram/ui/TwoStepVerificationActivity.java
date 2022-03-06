@@ -445,7 +445,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             r13 = r13 | 48
             r4.setGravity(r13)
             android.widget.TextView r4 = r0.bottomTextView
-            r13 = 2131628926(0x7f0e137e, float:1.8885158E38)
+            r13 = 2131628928(0x7f0e1380, float:1.8885163E38)
             java.lang.String r15 = "YourEmailInfo"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             r4.setText(r13)
@@ -784,7 +784,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             boolean r1 = r0.passwordEntered
             if (r1 == 0) goto L_0x053e
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            r2 = 2131628366(0x7f0e114e, float:1.8884023E38)
+            r2 = 2131628368(0x7f0e1150, float:1.8884027E38)
             java.lang.String r4 = "TwoStepVerificationTitle"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r1.setTitle(r2)
@@ -797,14 +797,14 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             org.telegram.ui.TwoStepVerificationActivity$TwoStepVerificationActivityDelegate r1 = r0.delegate
             if (r1 == 0) goto L_0x0557
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131627305(0x7f0e0d29, float:1.888187E38)
+            r2 = 2131627307(0x7f0e0d2b, float:1.8881875E38)
             java.lang.String r3 = "PleaseEnterCurrentPasswordTransfer"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             goto L_0x0574
         L_0x0557:
             android.widget.TextView r1 = r0.titleTextView
-            r2 = 2131628936(0x7f0e1388, float:1.8885179E38)
+            r2 = 2131628938(0x7f0e138a, float:1.8885183E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString((int) r2)
             r1.setText(r2)
             android.widget.TextView r1 = r0.subtitleTextView
