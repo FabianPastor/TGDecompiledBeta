@@ -7,8 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -21,7 +20,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.View;
 import android.widget.FrameLayout;
-import com.google.android.exoplayer2.util.Log;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
@@ -82,7 +80,6 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     private boolean paused;
     BlurBitmap prevBitmap;
     private Rect rect;
-    float saturation;
     /* access modifiers changed from: private */
     public boolean skipBackgroundDrawing;
     SnowflakesEffect snowflakesEffect;
@@ -218,7 +215,6 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                                     } else if (SizeNotifierFrameLayout.this.emojiHeight != 0) {
                                         measuredHeight2 -= SizeNotifierFrameLayout.this.emojiHeight;
                                     }
-                                    Log.d("kek", "backgroundView " + SizeNotifierFrameLayout.this.backgroundTranslationY + " : " + getRootView().getMeasuredHeight());
                                     access$200.setBounds(0, 0, getMeasuredWidth(), measuredHeight2);
                                     access$200.draw(canvas);
                                     if (SizeNotifierFrameLayout.this.bottomClip != 0) {
@@ -495,27 +491,16 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     public void startBlur() {
         BlurBitmap blurBitmap;
         if (this.blurIsRunning && !this.blurGeneratingTuskIsRunning && this.invalidateBlur && SharedConfig.chatBlurEnabled()) {
-            float f = BlurSettingsBottomSheet.blurAlpha;
+            Color.alpha(Theme.getColor("chat_BlurAlpha"));
             int measuredWidth = getMeasuredWidth();
             int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + AndroidUtilities.statusBarHeight + AndroidUtilities.dp(100.0f);
             if (measuredWidth != 0 && currentActionBarHeight != 0) {
-                float f2 = this.saturation;
-                float f3 = BlurSettingsBottomSheet.saturation;
-                if (f2 != f3) {
-                    this.saturation = f3;
-                    ColorMatrix colorMatrix = new ColorMatrix();
-                    colorMatrix.setSaturation(this.saturation * 5.0f);
-                    this.blurPaintTop.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
-                    this.blurPaintTop2.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
-                    this.blurPaintBottom.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
-                    this.blurPaintBottom2.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
-                }
                 this.invalidateBlur = false;
                 this.blurGeneratingTuskIsRunning = true;
-                float f4 = (float) currentActionBarHeight;
-                int i = ((int) (f4 / 12.0f)) + 34;
-                float f5 = (float) measuredWidth;
-                int i2 = (int) (f5 / 12.0f);
+                float f = (float) currentActionBarHeight;
+                int i = ((int) (f / 12.0f)) + 34;
+                float f2 = (float) measuredWidth;
+                int i2 = (int) (f2 / 12.0f);
                 long currentTimeMillis = System.currentTimeMillis();
                 if (this.unusedBitmaps.size() > 0) {
                     ArrayList<BlurBitmap> arrayList = this.unusedBitmaps;
@@ -538,29 +523,29 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                         bitmap.eraseColor(0);
                     }
                 }
-                float width = ((float) blurBitmap.topBitmap.getWidth()) / f5;
-                float height = ((float) (blurBitmap.topBitmap.getHeight() - 34)) / f4;
+                float width = ((float) blurBitmap.topBitmap.getWidth()) / f2;
+                float height = ((float) (blurBitmap.topBitmap.getHeight() - 34)) / f;
                 blurBitmap.topCanvas.save();
                 blurBitmap.pixelFixOffset = getScrollOffset() % 24;
-                float f6 = height * 10.0f;
-                blurBitmap.topCanvas.clipRect(1.0f, f6, (float) blurBitmap.topBitmap.getWidth(), (float) (blurBitmap.topBitmap.getHeight() - 1));
+                float f3 = height * 10.0f;
+                blurBitmap.topCanvas.clipRect(1.0f, f3, (float) blurBitmap.topBitmap.getWidth(), (float) (blurBitmap.topBitmap.getHeight() - 1));
                 blurBitmap.topCanvas.scale(width, height);
-                blurBitmap.topCanvas.translate(0.0f, f6 + ((float) blurBitmap.pixelFixOffset));
+                blurBitmap.topCanvas.translate(0.0f, f3 + ((float) blurBitmap.pixelFixOffset));
                 blurBitmap.topScaleX = 1.0f / width;
                 blurBitmap.topScaleY = 1.0f / height;
                 drawList(blurBitmap.topCanvas, true);
                 blurBitmap.topCanvas.restore();
                 if (this.needBlurBottom) {
-                    float width2 = ((float) blurBitmap.bottomBitmap.getWidth()) / f5;
-                    float height2 = ((float) (blurBitmap.bottomBitmap.getHeight() - 34)) / f4;
+                    float width2 = ((float) blurBitmap.bottomBitmap.getWidth()) / f2;
+                    float height2 = ((float) (blurBitmap.bottomBitmap.getHeight() - 34)) / f;
                     blurBitmap.needBlurBottom = true;
-                    blurBitmap.bottomOffset = getBottomOffset() - f4;
+                    blurBitmap.bottomOffset = getBottomOffset() - f;
                     blurBitmap.drawnLisetTranslationY = getBottomOffset();
                     blurBitmap.bottomCanvas.save();
-                    float f7 = 10.0f * height2;
-                    blurBitmap.bottomCanvas.clipRect(1.0f, f7, (float) blurBitmap.bottomBitmap.getWidth(), (float) (blurBitmap.bottomBitmap.getHeight() - 1));
+                    float f4 = 10.0f * height2;
+                    blurBitmap.bottomCanvas.clipRect(1.0f, f4, (float) blurBitmap.bottomBitmap.getWidth(), (float) (blurBitmap.bottomBitmap.getHeight() - 1));
                     blurBitmap.bottomCanvas.scale(width2, height2);
-                    blurBitmap.bottomCanvas.translate(0.0f, (f7 - blurBitmap.bottomOffset) + ((float) blurBitmap.pixelFixOffset));
+                    blurBitmap.bottomCanvas.translate(0.0f, (f4 - blurBitmap.bottomOffset) + ((float) blurBitmap.pixelFixOffset));
                     blurBitmap.bottomScaleX = 1.0f / width2;
                     blurBitmap.bottomScaleY = 1.0f / height2;
                     drawList(blurBitmap.bottomCanvas, false);
@@ -730,67 +715,63 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     }
 
     public void drawBlur(Canvas canvas, float f, Rect rect2, Paint paint, boolean z) {
-        Canvas canvas2 = canvas;
-        float f2 = f;
-        Rect rect3 = rect2;
-        Paint paint2 = paint;
-        int i = (int) ((1.0f - BlurSettingsBottomSheet.blurAlpha) * 255.0f);
+        int alpha = Color.alpha(Theme.getColor("chat_BlurAlpha"));
         if (this.currentBitmap == null || !SharedConfig.chatBlurEnabled()) {
-            canvas2.drawRect(rect3, paint2);
+            canvas.drawRect(rect2, paint);
             return;
         }
-        Paint paint3 = z ? this.blurPaintTop : this.blurPaintBottom;
-        Paint paint4 = z ? this.blurPaintTop2 : this.blurPaintBottom2;
-        if (paint3.getShader() != null) {
+        Paint paint2 = z ? this.blurPaintTop : this.blurPaintBottom;
+        Paint paint3 = z ? this.blurPaintTop2 : this.blurPaintBottom2;
+        if (paint2.getShader() != null) {
             this.matrix.reset();
             this.matrix2.reset();
             if (!z) {
-                float f3 = -f2;
+                float f2 = -f;
                 BlurBitmap blurBitmap = this.currentBitmap;
-                this.matrix.setTranslate(0.0f, (((blurBitmap.bottomOffset + f3) - ((float) blurBitmap.pixelFixOffset)) - 34.0f) - (blurBitmap.drawnLisetTranslationY - (getBottomOffset() + getListTranslationY())));
+                this.matrix.setTranslate(0.0f, (((blurBitmap.bottomOffset + f2) - ((float) blurBitmap.pixelFixOffset)) - 34.0f) - (blurBitmap.drawnLisetTranslationY - (getBottomOffset() + getListTranslationY())));
                 Matrix matrix3 = this.matrix;
                 BlurBitmap blurBitmap2 = this.currentBitmap;
                 matrix3.preScale(blurBitmap2.bottomScaleX, blurBitmap2.bottomScaleY);
                 BlurBitmap blurBitmap3 = this.prevBitmap;
                 if (blurBitmap3 != null) {
-                    this.matrix2.setTranslate(0.0f, (((f3 + blurBitmap3.bottomOffset) - ((float) blurBitmap3.pixelFixOffset)) - 34.0f) - (blurBitmap3.drawnLisetTranslationY - (getBottomOffset() + getListTranslationY())));
+                    this.matrix2.setTranslate(0.0f, (((f2 + blurBitmap3.bottomOffset) - ((float) blurBitmap3.pixelFixOffset)) - 34.0f) - (blurBitmap3.drawnLisetTranslationY - (getBottomOffset() + getListTranslationY())));
                     Matrix matrix4 = this.matrix2;
                     BlurBitmap blurBitmap4 = this.prevBitmap;
                     matrix4.preScale(blurBitmap4.bottomScaleX, blurBitmap4.bottomScaleY);
                 }
             } else {
-                float f4 = -f2;
-                this.matrix.setTranslate(0.0f, (f4 - ((float) this.currentBitmap.pixelFixOffset)) - 34.0f);
+                float f3 = -f;
+                this.matrix.setTranslate(0.0f, (f3 - ((float) this.currentBitmap.pixelFixOffset)) - 34.0f);
                 Matrix matrix5 = this.matrix;
                 BlurBitmap blurBitmap5 = this.currentBitmap;
                 matrix5.preScale(blurBitmap5.topScaleX, blurBitmap5.topScaleY);
                 BlurBitmap blurBitmap6 = this.prevBitmap;
                 if (blurBitmap6 != null) {
-                    this.matrix2.setTranslate(0.0f, (f4 - ((float) blurBitmap6.pixelFixOffset)) - 34.0f);
+                    this.matrix2.setTranslate(0.0f, (f3 - ((float) blurBitmap6.pixelFixOffset)) - 34.0f);
                     Matrix matrix6 = this.matrix2;
                     BlurBitmap blurBitmap7 = this.prevBitmap;
                     matrix6.preScale(blurBitmap7.topScaleX, blurBitmap7.topScaleY);
                 }
             }
-            paint3.getShader().setLocalMatrix(this.matrix);
-            if (paint4.getShader() != null) {
-                paint4.getShader().setLocalMatrix(this.matrix);
+            paint2.getShader().setLocalMatrix(this.matrix);
+            if (paint3.getShader() != null) {
+                paint3.getShader().setLocalMatrix(this.matrix);
             }
         }
-        paint2.setAlpha(255);
-        if (this.blurCrossfadeProgress == 1.0f || paint4.getShader() == null) {
-            canvas2.drawRect(rect3, paint2);
-            canvas2.drawRect(rect3, paint3);
+        paint.setAlpha(255);
+        if (this.blurCrossfadeProgress == 1.0f || paint3.getShader() == null) {
+            canvas.drawRect(rect2, paint);
+            canvas.drawRect(rect2, paint2);
         } else {
-            canvas2.drawRect(rect3, paint2);
-            canvas2.drawRect(rect3, paint4);
-            canvas.saveLayerAlpha((float) rect3.left, (float) rect3.top, (float) rect3.right, (float) rect3.bottom, (int) (this.blurCrossfadeProgress * 255.0f), 31);
-            canvas2.drawRect(rect3, paint2);
-            canvas2.drawRect(rect3, paint3);
+            canvas.drawRect(rect2, paint);
+            canvas.drawRect(rect2, paint3);
+            canvas.saveLayerAlpha((float) rect2.left, (float) rect2.top, (float) rect2.right, (float) rect2.bottom, (int) (this.blurCrossfadeProgress * 255.0f), 31);
+            canvas.drawRect(rect2, paint);
+            canvas.drawRect(rect2, paint2);
             canvas.restore();
         }
-        paint2.setAlpha(i);
-        canvas2.drawRect(rect3, paint2);
+        paint.setAlpha(alpha);
+        canvas.drawRect(rect2, paint);
     }
 
     private static class BlurBitmap {

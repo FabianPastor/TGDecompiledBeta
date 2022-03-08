@@ -240,8 +240,9 @@ public class DialogsEmptyCell extends LinearLayout {
         if ((getParent() instanceof View) && (((i = this.currentType) == 2 || i == 3) && ((View) getParent()).getPaddingTop() != 0)) {
             i2 = 0 - (getTop() / 2);
         }
-        if (this.currentType == 0) {
-            i2 -= ActionBar.getCurrentActionBarHeight() / 2;
+        int i3 = this.currentType;
+        if (i3 == 0 || i3 == 1) {
+            i2 = (int) (((float) i2) - (((float) ((int) (((float) ActionBar.getCurrentActionBarHeight()) / 2.0f))) * (1.0f - this.utyanCollapseProgress)));
         }
         float f = (float) i2;
         this.imageView.setTranslationY(f);

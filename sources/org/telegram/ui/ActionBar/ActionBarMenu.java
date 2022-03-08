@@ -12,6 +12,7 @@ import org.telegram.ui.Adapters.FiltersView;
 import org.telegram.ui.Components.RLottieDrawable;
 
 public class ActionBarMenu extends LinearLayout {
+    public boolean drawBlur = true;
     protected boolean isActionMode;
     protected ActionBar parentActionBar;
 

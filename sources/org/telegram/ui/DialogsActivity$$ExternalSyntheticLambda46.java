@@ -1,18 +1,16 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.ui.Components.AlertsCreator;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda46 implements AlertsCreator.BlockDialogCallback {
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda46 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ DialogsActivity f$0;
-    public final /* synthetic */ ArrayList f$1;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda46(DialogsActivity dialogsActivity, ArrayList arrayList) {
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda46(DialogsActivity dialogsActivity) {
         this.f$0 = dialogsActivity;
-        this.f$1 = arrayList;
     }
 
-    public final void run(boolean z, boolean z2) {
-        this.f$0.lambda$performSelectedDialogsAction$29(this.f$1, z, z2);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$onSendLongClick$49(keyEvent);
     }
 }

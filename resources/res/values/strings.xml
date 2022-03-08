@@ -3659,6 +3659,12 @@
     <string name="RemindTodayAt">\'Remind today at\' HH:mm</string>
     <string name="Reminders">Reminders</string>
     <string name="RemoveDocumentsMessage">They will be deleted from your disk, but will remain accessible in the cloud.</string>
+    <string name="RemoveDocumentsMessage_few">Do you want remove these **%d documents** from Downloads?</string>
+    <string name="RemoveDocumentsMessage_many">Do you want remove these **%d documents** from Downloads?</string>
+    <string name="RemoveDocumentsMessage_one">Do you want remove this document from Downloads?</string>
+    <string name="RemoveDocumentsMessage_other">Do you want remove these **%d documents** from Downloads?</string>
+    <string name="RemoveDocumentsMessage_two">Do you want remove these **%d documents** from Downloads?</string>
+    <string name="RemoveDocumentsMessage_zero">Do you want remove these **%d documents** from Downloads?</string>
     <string name="RemoveDocumentsTitle_few">Remove %d documents</string>
     <string name="RemoveDocumentsTitle_many">Remove %d documents</string>
     <string name="RemoveDocumentsTitle_one">Remove %d document</string>

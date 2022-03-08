@@ -120,6 +120,12 @@ public class MessagesStorage extends BaseController {
     private int[][] bots = {new int[2], new int[2]};
     private File cacheFile;
     private int[][] channels = {new int[2], new int[2]};
+    Runnable clearUnviewedDownloadsRunnbale = new Runnable() {
+        public void run() {
+            MessagesStorage.this.clearUnviewedDownloads();
+            MessagesStorage.this.getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
+        }
+    };
     private int[][] contacts = {new int[2], new int[2]};
     private SQLiteDatabase database;
     private boolean databaseMigrationInProgress;
@@ -129,7 +135,6 @@ public class MessagesStorage extends BaseController {
     private LongSparseArray<Integer> dialogsWithUnread = new LongSparseArray<>();
     public ArrayList<MessageObject> downloadingFiles = new ArrayList<>();
     private int[][] groups = {new int[2], new int[2]};
-    public boolean hasUnviewedDownloads;
     private int lastDateValue = 0;
     private int lastPtsValue = 0;
     private int lastQtsValue = 0;
@@ -155,6 +160,7 @@ public class MessagesStorage extends BaseController {
     private DispatchQueue storageQueue = new DispatchQueue("storageQueue");
     private SparseArray<ArrayList<Runnable>> tasks = new SparseArray<>();
     private LongSparseArray<Boolean> unknownDialogsIds = new LongSparseArray<>();
+    public SparseArray<MessageObject> unviewedDownloads = new SparseArray<>();
     private File walCacheFile;
 
     public interface BooleanCallback {
@@ -2479,7 +2485,6 @@ public class MessagesStorage extends BaseController {
         }
         if (!z) {
             this.downloadingFiles.add(messageObject);
-            this.hasUnviewedDownloads = true;
         }
         getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
     }
@@ -2540,6 +2545,7 @@ public class MessagesStorage extends BaseController {
             }
             if (!z) {
                 this.recentDownloadingFiles.add(0, messageObject);
+                putToUnviewedDownloads(messageObject);
             }
             getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
         }
@@ -2582,6 +2588,30 @@ public class MessagesStorage extends BaseController {
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
+    }
+
+    private void putToUnviewedDownloads(MessageObject messageObject) {
+        this.unviewedDownloads.put(messageObject.getId(), messageObject);
+        AndroidUtilities.cancelRunOnUIThread(this.clearUnviewedDownloadsRunnbale);
+        AndroidUtilities.runOnUIThread(this.clearUnviewedDownloadsRunnbale, 60000);
+    }
+
+    public void clearUnviewedDownloads() {
+        this.unviewedDownloads.clear();
+    }
+
+    public void checkUnviewedDownloads(int i, long j) {
+        MessageObject messageObject = this.unviewedDownloads.get(i);
+        if (messageObject != null && messageObject.getDialogId() == j) {
+            this.unviewedDownloads.remove(i);
+            if (this.unviewedDownloads.size() == 0) {
+                getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
+            }
+        }
+    }
+
+    public boolean hasUnviewedDownloads() {
+        return this.unviewedDownloads.size() > 0;
     }
 
     private class DownloadingDocumentEntry {
@@ -24806,7 +24836,7 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0021:
             java.lang.String r7 = "SavedMessages"
-            r8 = 2131627765(0x7f0e0ef5, float:1.8882804E38)
+            r8 = 2131627771(0x7f0e0efb, float:1.8882816E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)     // Catch:{ Exception -> 0x0654 }
             java.lang.String r7 = r7.toLowerCase()     // Catch:{ Exception -> 0x0654 }
             java.lang.String r8 = "saved messages"

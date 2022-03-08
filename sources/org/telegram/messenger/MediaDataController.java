@@ -586,7 +586,9 @@ public class MediaDataController extends BaseController {
             for (int i3 = 0; i3 < this.reactionsList.size(); i3++) {
                 this.reactionsList.get(i3).positionInList = i3;
                 this.reactionsMap.put(this.reactionsList.get(i3).reaction, this.reactionsList.get(i3));
-                this.enabledReactionsList.add(this.reactionsList.get(i3));
+                if (!this.reactionsList.get(i3).inactive) {
+                    this.enabledReactionsList.add(this.reactionsList.get(i3));
+                }
             }
             this.reactionsUpdateHash = i;
         }
@@ -5600,7 +5602,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0074
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627627(0x7f0e0e6b, float:1.8882524E38)
+            r9 = 2131627633(0x7f0e0e71, float:1.8882536E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
         L_0x0071:
             r9 = r4
@@ -5610,7 +5612,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0084
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627765(0x7f0e0ef5, float:1.8882804E38)
+            r9 = 2131627771(0x7f0e0efb, float:1.8882816E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
             goto L_0x0071
         L_0x0084:

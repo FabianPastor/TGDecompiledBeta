@@ -6,14 +6,14 @@ import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda56 implements RequestDelegate {
     public final /* synthetic */ ContactsController f$0;
-    public final /* synthetic */ int f$1;
+    public final /* synthetic */ long f$1;
 
-    public /* synthetic */ ContactsController$$ExternalSyntheticLambda56(ContactsController contactsController, int i) {
+    public /* synthetic */ ContactsController$$ExternalSyntheticLambda56(ContactsController contactsController, long j) {
         this.f$0 = contactsController;
-        this.f$1 = i;
+        this.f$1 = j;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadPrivacySettings$64(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$loadContacts$27(this.f$1, tLObject, tLRPC$TL_error);
     }
 }

@@ -668,7 +668,7 @@ public class RTMPStreamPipOverlay implements NotificationCenter.NotificationCent
         TLRPC$TL_groupCallParticipantVideo tLRPC$TL_groupCallParticipantVideo;
         TLRPC$TL_groupCallParticipantVideo tLRPC$TL_groupCallParticipantVideo2;
         boolean z = true;
-        if (!VoIPService.getSharedInstance().groupCall.visibleVideoParticipants.isEmpty()) {
+        if (VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().groupCall != null && !VoIPService.getSharedInstance().groupCall.visibleVideoParticipants.isEmpty()) {
             TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = VoIPService.getSharedInstance().groupCall.visibleVideoParticipants.get(0).participant;
             TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant3 = this.boundParticipant;
             if (tLRPC$TL_groupCallParticipant3 == null || MessageObject.getPeerId(tLRPC$TL_groupCallParticipant3.peer) != MessageObject.getPeerId(tLRPC$TL_groupCallParticipant2.peer)) {

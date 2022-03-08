@@ -1,14 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda52 implements Comparator {
-    public static final /* synthetic */ ContactsController$$ExternalSyntheticLambda52 INSTANCE = new ContactsController$$ExternalSyntheticLambda52();
+public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda52 implements RequestDelegate {
+    public final /* synthetic */ ContactsController f$0;
 
-    private /* synthetic */ ContactsController$$ExternalSyntheticLambda52() {
+    public /* synthetic */ ContactsController$$ExternalSyntheticLambda52(ContactsController contactsController) {
+        this.f$0 = contactsController;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return ContactsController.lambda$mergePhonebookAndTelegramContacts$39(obj, obj2);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$loadPrivacySettings$61(tLObject, tLRPC$TL_error);
     }
 }

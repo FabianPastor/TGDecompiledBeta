@@ -9,6 +9,6 @@ public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda46
     }
 
     public final int compare(Object obj, Object obj2) {
-        return ContactsController.lambda$mergePhonebookAndTelegramContacts$40((String) obj, (String) obj2);
+        return ContactsController.lambda$processLoadedContacts$32((String) obj, (String) obj2);
     }
 }

@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
 import android.content.DialogInterface;
+import org.telegram.messenger.MessagesController;
 
-public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda15 implements DialogInterface.OnDismissListener {
-    public final /* synthetic */ DialogsActivity f$0;
+public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda15 implements DialogInterface.OnClickListener {
+    public static final /* synthetic */ DialogsActivity$$ExternalSyntheticLambda15 INSTANCE = new DialogsActivity$$ExternalSyntheticLambda15();
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda15(DialogsActivity dialogsActivity) {
-        this.f$0 = dialogsActivity;
+    private /* synthetic */ DialogsActivity$$ExternalSyntheticLambda15() {
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$showSuggestion$39(dialogInterface);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askedAboutMiuiLockscreen", true).commit();
     }
 }

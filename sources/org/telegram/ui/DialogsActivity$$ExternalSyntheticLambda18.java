@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda18 im
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$onSendLongClick$48(view);
+        this.f$0.lambda$onSendLongClick$50(view);
     }
 }

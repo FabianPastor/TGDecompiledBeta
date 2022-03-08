@@ -72,7 +72,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     public ImageView placeholderImageView;
     private LineProgressView progressView;
     private final Theme.ResourcesProvider resourcesProvider;
-    private TextView rightDateTextView;
+    public TextView rightDateTextView;
     private RLottieDrawable statusDrawable;
     private RLottieImageView statusImageView;
     /* access modifiers changed from: private */

@@ -50,7 +50,7 @@ public class StickerImageView extends BackupImageView implements NotificationCen
         r2 = r7.stickerNum;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private void setSticker() {
+    public void setSticker() {
         /*
             r7 = this;
             int r0 = r7.currentAccount

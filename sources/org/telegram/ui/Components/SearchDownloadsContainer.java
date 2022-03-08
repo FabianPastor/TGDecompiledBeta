@@ -184,10 +184,10 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                 this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewDownloads", NUM));
                 this.emptyView.subtitle.setVisibility(8);
             }
-            this.emptyView.stickerView.setStickerNum(9);
+            this.emptyView.setStickerType(9);
             return;
         }
-        this.emptyView.stickerView.setStickerNum(1);
+        this.emptyView.setStickerType(1);
         ArrayList arrayList = new ArrayList();
         ArrayList arrayList2 = new ArrayList();
         FileLoader.getInstance(this.currentAccount).getCurrentLoadingFiles(arrayList);
@@ -536,7 +536,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         super.onAttachedToWindow();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.onDownloadingFilesChanged);
         if (getVisibility() == 0) {
-            MessagesStorage.getInstance(this.currentAccount).hasUnviewedDownloads = false;
+            MessagesStorage.getInstance(this.currentAccount).clearUnviewedDownloads();
         }
     }
 
@@ -549,7 +549,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.onDownloadingFilesChanged) {
             if (getVisibility() == 0) {
-                MessagesStorage.getInstance(this.currentAccount).hasUnviewedDownloads = false;
+                MessagesStorage.getInstance(this.currentAccount).clearUnviewedDownloads();
             }
             update(true);
         }
@@ -562,7 +562,8 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             super(context);
             SharedDocumentCell sharedDocumentCell2 = new SharedDocumentCell(context, 2);
             this.sharedDocumentCell = sharedDocumentCell2;
-            addView(sharedDocumentCell2);
+            sharedDocumentCell2.rightDateTextView.setVisibility(8);
+            addView(this.sharedDocumentCell);
         }
     }
 

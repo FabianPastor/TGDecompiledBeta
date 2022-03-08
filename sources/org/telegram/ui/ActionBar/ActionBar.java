@@ -543,7 +543,7 @@ public class ActionBar extends FrameLayout {
             /* access modifiers changed from: protected */
             public void dispatchDraw(Canvas canvas) {
                 ActionBar actionBar = ActionBar.this;
-                if (actionBar.blurredBackground) {
+                if (actionBar.blurredBackground && this.drawBlur) {
                     actionBar.rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
                     ActionBar actionBar2 = ActionBar.this;
                     actionBar2.blurScrimPaint.setColor(actionBar2.actionModeColor);

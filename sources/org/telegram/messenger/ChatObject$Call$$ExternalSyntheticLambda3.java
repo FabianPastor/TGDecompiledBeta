@@ -23,6 +23,6 @@ public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda3 imp
     }
 
     public final void run() {
-        this.f$0.lambda$loadUnknownParticipants$6(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+        this.f$0.lambda$loadUnknownParticipants$5(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
     }
 }

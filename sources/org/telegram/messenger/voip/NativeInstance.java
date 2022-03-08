@@ -103,7 +103,7 @@ public class NativeInstance {
 
     public native void onStreamPartAvailable(long j, ByteBuffer byteBuffer, int i, long j2, int i2, int i3);
 
-    public native void prepareForStream();
+    public native void prepareForStream(boolean z);
 
     public native void removeIncomingVideoOutput(long j);
 

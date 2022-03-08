@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda2 imp
     }
 
     public final void run() {
-        this.f$0.lambda$createRtmpStreamParticipant$2();
+        this.f$0.lambda$createRtmpStreamParticipant$1();
     }
 }

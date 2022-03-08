@@ -1,15 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AccountInstance;
+import android.content.Context;
+import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda26 implements Runnable {
-    public final /* synthetic */ AccountInstance f$0;
+    public final /* synthetic */ Context f$0;
 
-    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda26(AccountInstance accountInstance) {
-        this.f$0 = accountInstance;
+    public /* synthetic */ DialogsActivity$$ExternalSyntheticLambda26(Context context) {
+        this.f$0 = context;
     }
 
     public final void run() {
-        this.f$0.getMessagesStorage().loadDownloadingFiles();
+        Theme.createChatResources(this.f$0, false);
     }
 }

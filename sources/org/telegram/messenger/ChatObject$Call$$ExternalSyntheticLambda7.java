@@ -16,6 +16,6 @@ public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda7 imp
     }
 
     public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$sortParticipants$13(this.f$1, this.f$2, (TLRPC$TL_groupCallParticipant) obj, (TLRPC$TL_groupCallParticipant) obj2);
+        return this.f$0.lambda$sortParticipants$12(this.f$1, this.f$2, (TLRPC$TL_groupCallParticipant) obj, (TLRPC$TL_groupCallParticipant) obj2);
     }
 }

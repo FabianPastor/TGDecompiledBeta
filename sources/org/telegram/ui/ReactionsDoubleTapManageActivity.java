@@ -161,7 +161,7 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
 
     /* access modifiers changed from: private */
     public List<TLRPC$TL_availableReaction> getAvailableReactions() {
-        return getMediaDataController().getEnabledReactionsList();
+        return getMediaDataController().getReactionsList();
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {

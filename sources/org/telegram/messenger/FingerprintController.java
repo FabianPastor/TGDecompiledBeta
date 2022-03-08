@@ -61,6 +61,10 @@ public class FingerprintController {
                 AndroidUtilities.runOnUIThread(new FingerprintController$$ExternalSyntheticLambda0(z));
             } catch (InvalidAlgorithmParameterException e) {
                 FileLog.e((Throwable) e);
+            } catch (Exception e2) {
+                if (!e2.getClass().getName().equals("android.security.KeyStoreException")) {
+                    FileLog.e((Throwable) e2);
+                }
             }
         }
     }

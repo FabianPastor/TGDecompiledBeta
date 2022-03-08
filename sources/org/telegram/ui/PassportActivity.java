@@ -2804,7 +2804,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r11 = r0
             android.widget.FrameLayout r11 = (android.widget.FrameLayout) r11
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131628238(0x7f0e10ce, float:1.8883763E38)
+            r1 = 2131628244(0x7f0e10d4, float:1.8883775E38)
             java.lang.String r2 = "TelegramPassport"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -3632,7 +3632,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.FrameLayout r0 = (android.widget.FrameLayout) r0
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r1 = "TelegramPassport"
-            r2 = 2131628238(0x7f0e10ce, float:1.8883763E38)
+            r2 = 2131628244(0x7f0e10d4, float:1.8883775E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setTitle(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
@@ -3697,7 +3697,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r9)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.deletePassportCell
             java.lang.String r9 = "TelegramPassportDelete"
-            r10 = 2131628241(0x7f0e10d1, float:1.888377E38)
+            r10 = 2131628247(0x7f0e10d7, float:1.8883781E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r10 = 0
             r0.setText(r9, r10)
@@ -10480,7 +10480,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627909(0x7f0e0var_, float:1.8883096E38)
+                r8 = 2131627915(0x7f0e0f8b, float:1.8883108E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -10508,7 +10508,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627914(0x7f0e0f8a, float:1.8883106E38)
+                r8 = 2131627920(0x7f0e0var_, float:1.8883118E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)

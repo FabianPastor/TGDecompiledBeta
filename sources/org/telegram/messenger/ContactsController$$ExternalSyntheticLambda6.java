@@ -8,6 +8,6 @@ public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda6 
     }
 
     public final void run() {
-        this.f$0.lambda$forceImportContacts$6();
+        this.f$0.lambda$forceImportContacts$5();
     }
 }

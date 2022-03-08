@@ -504,15 +504,13 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             public void onFirstFrameRendered() {
                 invalidate();
                 ChatObject.Call call = call4;
-                if (call != null && call.call.rtmp_stream) {
-                    if (this.this$0.postedNoRtmpStreamCallback) {
-                        AndroidUtilities.cancelRunOnUIThread(this.this$0.noRtmpStreamCallback);
-                        boolean unused = this.this$0.postedNoRtmpStreamCallback = false;
-                    }
-                    if (this.this$0.noRtmpStreamTextView.getAlpha() == 1.0f) {
-                        this.this$0.noRtmpStreamTextView.animate().cancel();
-                        this.this$0.noRtmpStreamTextView.animate().alpha(0.0f).setDuration(150).start();
-                    }
+                if (call != null && call.call.rtmp_stream && this.this$0.postedNoRtmpStreamCallback) {
+                    AndroidUtilities.cancelRunOnUIThread(this.this$0.noRtmpStreamCallback);
+                    boolean unused = this.this$0.postedNoRtmpStreamCallback = false;
+                    this.this$0.noRtmpStreamTextView.animate().cancel();
+                    this.this$0.noRtmpStreamTextView.animate().alpha(0.0f).setDuration(150).start();
+                    this.this$0.textureView.animate().cancel();
+                    this.this$0.textureView.animate().alpha(1.0f).setDuration(150).start();
                 }
                 if (!this.this$0.videoIsPaused && this.renderer.getAlpha() != 1.0f) {
                     this.renderer.animate().setDuration(300).alpha(1.0f);
@@ -1989,7 +1987,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             boolean r1 = r0.postedNoRtmpStreamCallback
             if (r1 != 0) goto L_0x06bc
             java.lang.Runnable r1 = r0.noRtmpStreamCallback
-            r2 = 10000(0x2710, double:4.9407E-320)
+            r2 = 15000(0x3a98, double:7.411E-320)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r2)
             r0.postedNoRtmpStreamCallback = r9
             goto L_0x06bc

@@ -7,9 +7,11 @@ import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -356,10 +358,15 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 ArrayList arrayList = new ArrayList(this.selectedFiles.values());
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parent.getParentActivity());
                 builder.setTitle(LocaleController.formatPluralString("RemoveDocumentsTitle", this.selectedFiles.size()));
-                builder.setMessage(LocaleController.getString("RemoveDocumentsMessage", NUM));
+                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+                spannableStringBuilder.append(AndroidUtilities.replaceTags(LocaleController.formatPluralString("RemoveDocumentsMessage", this.selectedFiles.size()))).append("\n\n").append(LocaleController.getString("RemoveDocumentsMessage", NUM));
+                builder.setMessage(spannableStringBuilder);
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), SearchViewPager$$ExternalSyntheticLambda1.INSTANCE);
                 builder.setPositiveButton(LocaleController.getString("Delete", NUM), new SearchViewPager$$ExternalSyntheticLambda0(this, arrayList));
-                builder.show();
+                TextView textView = (TextView) builder.show().getButton(-1);
+                if (textView != null) {
+                    textView.setTextColor(Theme.getColor("dialogTextRed2"));
+                }
             }
         } else if (i == 200) {
             if (this.selectedFiles.size() == 1) {

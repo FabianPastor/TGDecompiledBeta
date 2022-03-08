@@ -1074,7 +1074,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.titleTextView.setPadding(0, 0, 0, 0);
                 this.importingImageView.setVisibility(8);
                 this.importingImageView.stopAnimation();
-                this.avatars.setVisibility((VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().groupCall == null || VoIPService.getSharedInstance().groupCall.call.rtmp_stream) ? 8 : 0);
+                this.avatars.setVisibility(!VoIPService.hasRtmpStream() ? 0 : 8);
                 if (this.avatars.getVisibility() != 8) {
                     updateAvatars(false);
                 } else {
@@ -1090,7 +1090,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             } else if (i2 == 1 || i2 == 3) {
                 this.selector.setBackground((Drawable) null);
                 updateCallTitle();
-                this.avatars.setVisibility((VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().groupCall == null || VoIPService.getSharedInstance().groupCall.call.rtmp_stream) ? 8 : 0);
+                this.avatars.setVisibility(!VoIPService.hasRtmpStream() ? 0 : 8);
                 if (i2 == 3 && VoIPService.getSharedInstance() != null) {
                     VoIPService.getSharedInstance().registerStateListener(this);
                 }
@@ -1100,7 +1100,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     this.titleTextView.setTranslationX(0.0f);
                     this.subtitleTextView.setTranslationX(0.0f);
                 }
-                this.muteButton.setVisibility((VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().groupCall == null || VoIPService.getSharedInstance().groupCall.call.rtmp_stream) ? 8 : 0);
+                this.muteButton.setVisibility(!VoIPService.hasRtmpStream() ? 0 : 8);
                 boolean z = VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().isMicMute();
                 this.isMuted = z;
                 this.muteDrawable.setCustomEndFrame(z ? 15 : 29);
@@ -2185,14 +2185,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x0237
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628634(0x7f0e125a, float:1.8884566E38)
+            r9 = 2131628640(0x7f0e1260, float:1.8884578E38)
             java.lang.String r11 = "VoipChannelScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0245
         L_0x0237:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628743(0x7f0e12c7, float:1.8884787E38)
+            r9 = 2131628749(0x7f0e12cd, float:1.88848E38)
             java.lang.String r11 = "VoipGroupScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2216,14 +2216,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r6 = org.telegram.messenger.ChatObject.isChannelOrGiga(r6)
             if (r6 == 0) goto L_0x027b
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628647(0x7f0e1267, float:1.8884593E38)
+            r9 = 2131628653(0x7f0e126d, float:1.8884605E38)
             java.lang.String r11 = "VoipChannelVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
             goto L_0x0289
         L_0x027b:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628775(0x7f0e12e7, float:1.8884852E38)
+            r9 = 2131628781(0x7f0e12ed, float:1.8884864E38)
             java.lang.String r11 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2234,7 +2234,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.subtitleTextView
             boolean r4 = r4.rtmp_stream
             if (r4 == 0) goto L_0x0299
-            r4 = 2131628576(0x7f0e1220, float:1.8884449E38)
+            r4 = 2131628582(0x7f0e1226, float:1.888446E38)
             goto L_0x029c
         L_0x0299:
             r4 = 2131626379(0x7f0e098b, float:1.8879993E38)

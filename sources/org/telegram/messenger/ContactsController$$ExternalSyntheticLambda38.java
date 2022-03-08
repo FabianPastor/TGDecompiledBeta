@@ -15,6 +15,6 @@ public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda38
     }
 
     public final void run() {
-        this.f$0.lambda$loadPrivacySettings$59(this.f$1, this.f$2);
+        this.f$0.lambda$loadPrivacySettings$58(this.f$1, this.f$2);
     }
 }

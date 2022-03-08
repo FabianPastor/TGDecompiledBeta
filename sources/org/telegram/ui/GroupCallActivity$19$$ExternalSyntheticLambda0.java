@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallActivity$19$$ExternalSyntheticLambda
     }
 
     public final void run() {
-        this.f$0.lambda$onClick$1();
+        this.f$0.lambda$onClick$0();
     }
 }

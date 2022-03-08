@@ -8,6 +8,6 @@ public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda5 
     }
 
     public final void run() {
-        this.f$0.lambda$readContacts$11();
+        this.f$0.lambda$cleanup$1();
     }
 }

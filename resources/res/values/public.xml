@@ -5374,6 +5374,12 @@
     <public type="string" name="RemindTodayAt" id="NUM" />
     <public type="string" name="Reminders" id="NUM" />
     <public type="string" name="RemoveDocumentsMessage" id="NUM" />
+    <public type="string" name="RemoveDocumentsMessage_few" id="NUM" />
+    <public type="string" name="RemoveDocumentsMessage_many" id="NUM" />
+    <public type="string" name="RemoveDocumentsMessage_one" id="NUM" />
+    <public type="string" name="RemoveDocumentsMessage_other" id="NUM" />
+    <public type="string" name="RemoveDocumentsMessage_two" id="NUM" />
+    <public type="string" name="RemoveDocumentsMessage_zero" id="NUM" />
     <public type="string" name="RemoveDocumentsTitle_few" id="NUM" />
     <public type="string" name="RemoveDocumentsTitle_many" id="NUM" />
     <public type="string" name="RemoveDocumentsTitle_one" id="NUM" />

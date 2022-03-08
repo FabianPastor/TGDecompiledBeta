@@ -1,6 +1,5 @@
 package org.telegram.ui.Adapters;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
@@ -40,7 +39,6 @@ import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.BlurredRecyclerView;
-import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.DialogsActivity;
@@ -193,20 +191,15 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                             this.onlineContacts = null;
                         }
                         sortOnlineContacts(false);
-                        registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                            public void onChanged() {
-                                ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(250);
-                                duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                                duration.addUpdateListener(new DialogsAdapter$1$$ExternalSyntheticLambda0(this));
-                                duration.start();
-                                DialogsAdapter.this.unregisterAdapterDataObserver(this);
-                            }
-
-                            /* access modifiers changed from: private */
-                            public /* synthetic */ void lambda$onChanged$0(ValueAnimator valueAnimator) {
-                                DialogsAdapter.this.parentFragment.setContactsAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
-                            }
-                        });
+                        if (this.parentFragment.getContactsAlpha() == 0.0f) {
+                            registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                                public void onChanged() {
+                                    DialogsAdapter.this.parentFragment.setContactsAlpha(0.0f);
+                                    DialogsAdapter.this.parentFragment.animateContactsAlpha(1.0f);
+                                    DialogsAdapter.this.unregisterAdapterDataObserver(this);
+                                }
+                            });
+                        }
                     }
                     ArrayList<TLRPC$TL_contact> arrayList2 = this.onlineContacts;
                     if (arrayList2 != null) {
@@ -719,14 +712,13 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                     this.parentFragment.setContactsAlpha(0.0f);
                     this.parentFragment.setScrollDisabled(true);
                 }
-                ArrayList<TLRPC$TL_contact> arrayList = this.onlineContacts;
-                if (arrayList == null || i2 != 0) {
-                    if (arrayList != null || !this.forceUpdatingContacts) {
-                        if (dialogsEmptyCell.isUtyanAnimationTriggered() && this.lastDialogsEmptyType == 0) {
-                            dialogsEmptyCell.startUtyanExpandAnimation();
+                if (this.onlineContacts == null || i2 != 0) {
+                    if (this.forceUpdatingContacts) {
+                        if (this.dialogsCount == 0) {
+                            dialogsEmptyCell.startUtyanCollapseAnimation(false);
                         }
-                    } else if (ContactsController.getInstance(this.currentAccount).isLoadingContacts() && this.dialogsCount == 0) {
-                        dialogsEmptyCell.startUtyanCollapseAnimation(false);
+                    } else if (dialogsEmptyCell.isUtyanAnimationTriggered() && this.lastDialogsEmptyType == 0) {
+                        dialogsEmptyCell.startUtyanExpandAnimation();
                     }
                 } else if (!dialogsEmptyCell.isUtyanAnimationTriggered()) {
                     dialogsEmptyCell.startUtyanCollapseAnimation(true);
@@ -740,7 +732,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
             int i5 = this.dialogsType;
             if (i5 != 11 && i5 != 12 && i5 != 13) {
-                headerCell.setText(LocaleController.getString(ContactsController.getInstance(this.currentAccount).isLoadingContacts() ? NUM : NUM));
+                headerCell.setText(LocaleController.getString(this.forceUpdatingContacts ? NUM : NUM));
             } else if (i == 0) {
                 headerCell.setText(LocaleController.getString("ImportHeader", NUM));
             } else {
@@ -790,9 +782,9 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
     public int getItemViewType(int i) {
         int i2;
-        if (!ContactsController.getInstance(this.currentAccount).isLoadingContacts() || this.dialogsCount != 0 || !this.forceUpdatingContacts) {
+        int i3 = this.dialogsCount;
+        if (i3 != 0 || !this.forceUpdatingContacts) {
             if (this.onlineContacts != null) {
-                int i3 = this.dialogsCount;
                 if (i3 == 0) {
                     if (i == 0) {
                         return 5;

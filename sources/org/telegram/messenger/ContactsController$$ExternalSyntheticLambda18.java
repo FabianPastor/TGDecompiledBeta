@@ -12,6 +12,6 @@ public final /* synthetic */ class ContactsController$$ExternalSyntheticLambda18
     }
 
     public final void run() {
-        this.f$0.lambda$deleteContact$54(this.f$1);
+        this.f$0.lambda$performWriteContactsToPhoneBook$45(this.f$1);
     }
 }

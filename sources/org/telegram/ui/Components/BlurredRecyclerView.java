@@ -8,6 +8,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.SharedConfig;
 
 public class BlurredRecyclerView extends RecyclerListView {
+    public int additionalClipBottom;
     public int blurTopPadding;
     boolean globalIgnoreLayout;
     int topPadding;
@@ -53,7 +54,7 @@ public class BlurredRecyclerView extends RecyclerListView {
     public void dispatchDraw(Canvas canvas) {
         int i = this.blurTopPadding;
         if (i != 0) {
-            canvas.clipRect(0, i, getMeasuredWidth(), getMeasuredHeight());
+            canvas.clipRect(0, i, getMeasuredWidth(), getMeasuredHeight() + this.additionalClipBottom);
             super.dispatchDraw(canvas);
             return;
         }

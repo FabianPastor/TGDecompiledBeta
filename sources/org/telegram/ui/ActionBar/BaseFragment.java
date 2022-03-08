@@ -52,16 +52,19 @@ public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public int currentAccount;
     protected boolean finishing;
-    protected boolean fragmentBeginToShow;
+    /* access modifiers changed from: protected */
+    public boolean fragmentBeginToShow;
     /* access modifiers changed from: protected */
     public View fragmentView;
     protected boolean hasOwnBackground;
-    protected boolean inBubbleMode;
+    /* access modifiers changed from: protected */
+    public boolean inBubbleMode;
     protected boolean inMenuMode;
     /* access modifiers changed from: protected */
     public boolean inPreviewMode;
     private boolean isFinished;
-    protected boolean isPaused;
+    /* access modifiers changed from: protected */
+    public boolean isPaused;
     protected Dialog parentDialog;
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
@@ -405,10 +408,18 @@ public abstract class BaseFragment {
     public void onFragmentDestroy() {
         getConnectionsManager().cancelRequestsForGuid(this.classGuid);
         getMessagesStorage().cancelTasksForGuid(this.classGuid);
+        boolean z = true;
         this.isFinished = true;
         ActionBar actionBar2 = this.actionBar;
         if (actionBar2 != null) {
             actionBar2.setEnabled(false);
+        }
+        if (hasForceLightStatusBar() && !AndroidUtilities.isTablet() && getParentLayout().getLastFragment() == this && getParentActivity() != null && !this.finishing) {
+            Window window = getParentActivity().getWindow();
+            if (Theme.getColor("actionBarDefault") != -1) {
+                z = false;
+            }
+            AndroidUtilities.setLightStatusBar(window, z);
         }
     }
 
@@ -437,7 +448,6 @@ public abstract class BaseFragment {
         if (actionBar2 != null) {
             actionBar2.onPause();
         }
-        boolean z = true;
         this.isPaused = true;
         try {
             Dialog dialog = this.visibleDialog;
@@ -447,13 +457,6 @@ public abstract class BaseFragment {
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
-        }
-        if (hasForceLightStatusBar() && !AndroidUtilities.isTablet() && getParentLayout().getLastFragment() == this && getParentActivity() != null && !this.finishing) {
-            Window window = getParentActivity().getWindow();
-            if (Theme.getColor("actionBarDefault") != -1) {
-                z = false;
-            }
-            AndroidUtilities.setLightStatusBar(window, z);
         }
     }
 

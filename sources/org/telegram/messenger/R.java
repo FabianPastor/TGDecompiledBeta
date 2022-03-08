@@ -5513,6 +5513,12 @@ public final class R {
         public static final int RemindTodayAt = NUM;
         public static final int Reminders = NUM;
         public static final int RemoveDocumentsMessage = NUM;
+        public static final int RemoveDocumentsMessage_few = NUM;
+        public static final int RemoveDocumentsMessage_many = NUM;
+        public static final int RemoveDocumentsMessage_one = NUM;
+        public static final int RemoveDocumentsMessage_other = NUM;
+        public static final int RemoveDocumentsMessage_two = NUM;
+        public static final int RemoveDocumentsMessage_zero = NUM;
         public static final int RemoveDocumentsTitle_few = NUM;
         public static final int RemoveDocumentsTitle_many = NUM;
         public static final int RemoveDocumentsTitle_one = NUM;
