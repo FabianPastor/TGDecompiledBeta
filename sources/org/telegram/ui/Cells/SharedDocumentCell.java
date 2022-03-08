@@ -428,6 +428,17 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                 }
             }
             String documentFileName = FileLoader.getDocumentFileName(document);
+            if (TextUtils.isEmpty(documentFileName)) {
+                if (document.mime_type.startsWith("video")) {
+                    documentFileName = LocaleController.getString("AttachVideo", NUM);
+                } else if (document.mime_type.startsWith("image")) {
+                    documentFileName = LocaleController.getString("AttachPhoto", NUM);
+                } else if (document.mime_type.startsWith("audio")) {
+                    documentFileName = LocaleController.getString("AttachAudio", NUM);
+                } else {
+                    documentFileName = LocaleController.getString("AttachDocument", NUM);
+                }
+            }
             if (str4 == null) {
                 str4 = documentFileName;
             }

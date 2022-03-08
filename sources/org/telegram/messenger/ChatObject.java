@@ -235,7 +235,7 @@ public class ChatObject {
         }
 
         public void loadRtmpStreamChannels() {
-            if (this.call != null) {
+            if (this.call != null && !this.loadedRtmpStreamParticipant) {
                 TLRPC$TL_phone_getGroupCallStreamChannels tLRPC$TL_phone_getGroupCallStreamChannels = new TLRPC$TL_phone_getGroupCallStreamChannels();
                 tLRPC$TL_phone_getGroupCallStreamChannels.call = getInputGroupCall();
                 this.currentAccount.getConnectionsManager().sendRequest(tLRPC$TL_phone_getGroupCallStreamChannels, new ChatObject$Call$$ExternalSyntheticLambda12(this), (RequestDelegateTimestamp) null, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.call.stream_dc_id, 1, true);

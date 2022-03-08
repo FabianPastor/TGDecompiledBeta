@@ -7751,7 +7751,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                         }
                         AndroidUtilities.openDocument(messageObject2, this.profileActivity.getParentActivity(), this.profileActivity);
                     } else if (!sharedDocumentCell2.isLoading()) {
-                        this.profileActivity.getFileLoader().loadFile(document, sharedDocumentCell2.getMessage(), 0, 0);
+                        MessageObject message = sharedDocumentCell2.getMessage();
+                        message.putInDownloadsStore = true;
+                        this.profileActivity.getFileLoader().loadFile(document, message, 0, 0);
                         sharedDocumentCell2.updateFileExistIcon(true);
                     } else {
                         this.profileActivity.getFileLoader().cancelLoadFile(document);

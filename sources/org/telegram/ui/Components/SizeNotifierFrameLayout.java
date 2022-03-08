@@ -21,6 +21,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.View;
 import android.widget.FrameLayout;
+import com.google.android.exoplayer2.util.Log;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
@@ -211,12 +212,13 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                                         canvas.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - SizeNotifierFrameLayout.this.bottomClip);
                                     }
                                     motionBackgroundDrawable.setTranslationY(SizeNotifierFrameLayout.this.backgroundTranslationY);
-                                    int measuredHeight2 = getMeasuredHeight() - SizeNotifierFrameLayout.this.backgroundTranslationY;
+                                    int measuredHeight2 = (int) (((float) (getRootView().getMeasuredHeight() - SizeNotifierFrameLayout.this.backgroundTranslationY)) + SizeNotifierFrameLayout.this.translationY);
                                     if (SizeNotifierFrameLayout.this.animationInProgress) {
                                         measuredHeight2 = (int) (((float) measuredHeight2) - SizeNotifierFrameLayout.this.emojiOffset);
                                     } else if (SizeNotifierFrameLayout.this.emojiHeight != 0) {
                                         measuredHeight2 -= SizeNotifierFrameLayout.this.emojiHeight;
                                     }
+                                    Log.d("kek", "backgroundView " + SizeNotifierFrameLayout.this.backgroundTranslationY + " : " + getRootView().getMeasuredHeight());
                                     access$200.setBounds(0, 0, getMeasuredWidth(), measuredHeight2);
                                     access$200.draw(canvas);
                                     if (SizeNotifierFrameLayout.this.bottomClip != 0) {
@@ -449,12 +451,18 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     }
 
     public void setEmojiKeyboardHeight(int i) {
-        this.emojiHeight = i;
+        if (this.emojiHeight != i) {
+            this.emojiHeight = i;
+            this.backgroundView.invalidate();
+        }
     }
 
     public void setEmojiOffset(boolean z, float f) {
-        this.emojiOffset = f;
-        this.animationInProgress = z;
+        if (this.emojiOffset != f || this.animationInProgress != z) {
+            this.emojiOffset = f;
+            this.animationInProgress = z;
+            this.backgroundView.invalidate();
+        }
     }
 
     /* access modifiers changed from: private */

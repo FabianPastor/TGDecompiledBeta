@@ -475,6 +475,9 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             r6.totalDeviceSize = r0
             long r9 = r9 * r7
             r6.totalDeviceFreeSize = r9
+            int r0 = r6.currentAccount
+            org.telegram.messenger.FileLoader r0 = org.telegram.messenger.FileLoader.getInstance(r0)
+            r0.checkCurrentDownloadsFiles()
             org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda6 r7 = new org.telegram.ui.CacheControlActivity$$ExternalSyntheticLambda6
             r0 = r7
             r1 = r16

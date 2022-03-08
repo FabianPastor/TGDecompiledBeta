@@ -58,8 +58,8 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (getAlpha() != 0.0f) {
-            this.paint.setColor(Theme.getColor("actionBarActionModeDefaultIcon"));
-            this.paint2.setColor(Theme.getColor("actionBarActionModeDefaultIcon"));
+            this.paint.setColor(Theme.getColor("actionBarDefaultIcon"));
+            this.paint2.setColor(Theme.getColor("actionBarDefaultIcon"));
             this.paint2.setAlpha(100);
             float f = this.currentProgress;
             float f2 = this.progress;
@@ -142,6 +142,13 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
                 this.currentListeners.add(progressObserver);
             }
         }
+        if (this.currentListeners.size() != 0) {
+            return;
+        }
+        if (getVisibility() != 0 || getAlpha() != 1.0f) {
+            this.progress = 0.0f;
+            this.currentProgress = 0.0f;
+        }
     }
 
     public void updateProgress() {
@@ -152,12 +159,10 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
             j += this.currentListeners.get(i).total;
             j2 += this.currentListeners.get(i).downloaded;
         }
-        if (j != 0) {
-            this.progress = ((float) j2) / ((float) j);
-        } else if (this.currentListeners.size() != 0 || MessagesStorage.getInstance(this.currentAccount).hasUnviewedDownloads) {
+        if (j == 0) {
             this.progress = 1.0f;
         } else {
-            this.progress = 0.0f;
+            this.progress = ((float) j2) / ((float) j);
         }
         float f = this.progress;
         if (f > 1.0f) {

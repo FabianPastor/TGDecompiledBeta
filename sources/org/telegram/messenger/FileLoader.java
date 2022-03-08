@@ -197,7 +197,7 @@ public class FileLoader extends BaseController {
     public void setLoadingVideo(TLRPC$Document tLRPC$Document, boolean z, boolean z2) {
         if (tLRPC$Document != null) {
             if (z2) {
-                AndroidUtilities.runOnUIThread(new FileLoader$$ExternalSyntheticLambda5(this, tLRPC$Document, z));
+                AndroidUtilities.runOnUIThread(new FileLoader$$ExternalSyntheticLambda6(this, tLRPC$Document, z));
             } else {
                 lambda$setLoadingVideo$0(tLRPC$Document, z);
             }
@@ -240,7 +240,7 @@ public class FileLoader extends BaseController {
     public void removeLoadingVideo(TLRPC$Document tLRPC$Document, boolean z, boolean z2) {
         if (tLRPC$Document != null) {
             if (z2) {
-                AndroidUtilities.runOnUIThread(new FileLoader$$ExternalSyntheticLambda6(this, tLRPC$Document, z));
+                AndroidUtilities.runOnUIThread(new FileLoader$$ExternalSyntheticLambda7(this, tLRPC$Document, z));
             } else {
                 lambda$removeLoadingVideo$1(tLRPC$Document, z);
             }
@@ -265,7 +265,7 @@ public class FileLoader extends BaseController {
     }
 
     public void cancelFileUpload(String str, boolean z) {
-        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda9(this, z, str));
+        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda10(this, z, str));
     }
 
     /* access modifiers changed from: private */
@@ -286,7 +286,7 @@ public class FileLoader extends BaseController {
     }
 
     public void checkUploadNewDataAvailable(String str, boolean z, long j, long j2) {
-        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda11(this, z, str, j, j2));
+        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda12(this, z, str, j, j2));
     }
 
     /* access modifiers changed from: private */
@@ -305,7 +305,7 @@ public class FileLoader extends BaseController {
     }
 
     public void onNetworkChanged(boolean z) {
-        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda8(this, z));
+        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda9(this, z));
     }
 
     /* access modifiers changed from: private */
@@ -324,7 +324,7 @@ public class FileLoader extends BaseController {
 
     public void uploadFile(String str, boolean z, boolean z2, int i, int i2, boolean z3) {
         if (str != null) {
-            fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda10(this, z, str, i, i2, z3, z2));
+            fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda11(this, z, str, i, i2, z3, z2));
         }
     }
 
@@ -481,7 +481,7 @@ public class FileLoader extends BaseController {
 
     public void setForceStreamLoadingFile(TLRPC$FileLocation tLRPC$FileLocation, String str) {
         if (tLRPC$FileLocation != null) {
-            fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda7(this, tLRPC$FileLocation, str));
+            fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda8(this, tLRPC$FileLocation, str));
         }
     }
 
@@ -1046,7 +1046,7 @@ public class FileLoader extends BaseController {
         if (i3 != 10 && !TextUtils.isEmpty(str2) && !str2.contains("-NUM")) {
             this.loadOperationPathsUI.put(str2, Boolean.TRUE);
         }
-        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda4(this, tLRPC$Document, secureDocument, webFile, tLRPC$TL_fileLocationToBeDeprecated, imageLocation, obj, str, i, i2, i3));
+        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda5(this, tLRPC$Document, secureDocument, webFile, tLRPC$TL_fileLocationToBeDeprecated, imageLocation, obj, str, i, i2, i3));
     }
 
     /* access modifiers changed from: private */
@@ -1058,7 +1058,7 @@ public class FileLoader extends BaseController {
     public FileLoadOperation loadStreamFile(FileLoadOperationStream fileLoadOperationStream, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, int i, boolean z) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         FileLoadOperation[] fileLoadOperationArr = new FileLoadOperation[1];
-        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda12(this, fileLoadOperationArr, tLRPC$Document, imageLocation, obj, fileLoadOperationStream, i, z, countDownLatch));
+        fileLoaderQueue.postRunnable(new FileLoader$$ExternalSyntheticLambda13(this, fileLoadOperationArr, tLRPC$Document, imageLocation, obj, fileLoadOperationStream, i, z, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -1811,6 +1811,26 @@ public class FileLoader extends BaseController {
         for (int i = 0; i < arrayList.size(); i++) {
             arrayList.get(i).isDownloadingFile = true;
         }
+    }
+
+    public void checkCurrentDownloadsFiles() {
+        ArrayList arrayList = new ArrayList();
+        ArrayList arrayList2 = new ArrayList(getMessagesStorage().recentDownloadingFiles);
+        for (int i = 0; i < arrayList2.size(); i++) {
+            ((MessageObject) arrayList2.get(i)).checkMediaExistance();
+            if (((MessageObject) arrayList2.get(i)).mediaExists) {
+                arrayList.add((MessageObject) arrayList2.get(i));
+            }
+        }
+        if (!arrayList.isEmpty()) {
+            AndroidUtilities.runOnUIThread(new FileLoader$$ExternalSyntheticLambda4(this, arrayList));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$checkCurrentDownloadsFiles$13(ArrayList arrayList) {
+        getMessagesStorage().recentDownloadingFiles.removeAll(arrayList);
+        getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
     }
 
     public void clearRecentDownloadedFiles() {

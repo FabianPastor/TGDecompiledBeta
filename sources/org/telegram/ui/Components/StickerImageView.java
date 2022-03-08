@@ -14,7 +14,10 @@ public class StickerImageView extends BackupImageView implements NotificationCen
     }
 
     public void setStickerNum(int i) {
-        this.stickerNum = i;
+        if (this.stickerNum != i) {
+            this.stickerNum = i;
+            setSticker();
+        }
     }
 
     public void setStickerPackName(String str) {
@@ -91,20 +94,22 @@ public class StickerImageView extends BackupImageView implements NotificationCen
             java.lang.String r4 = "tgs"
             r1 = r7
             r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (java.lang.String) r4, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r6)
-            goto L_0x0067
+            goto L_0x006c
         L_0x0056:
+            org.telegram.messenger.ImageReceiver r0 = r7.imageReceiver
+            r0.clearImage()
             int r0 = r7.currentAccount
             org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
             java.lang.String r1 = r7.stickerPackName
             r2 = 0
-            if (r6 != 0) goto L_0x0063
+            if (r6 != 0) goto L_0x0068
             r3 = 1
-            goto L_0x0064
-        L_0x0063:
+            goto L_0x0069
+        L_0x0068:
             r3 = 0
-        L_0x0064:
+        L_0x0069:
             r0.loadStickersByEmojiOrName(r1, r2, r3)
-        L_0x0067:
+        L_0x006c:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickerImageView.setSticker():void");

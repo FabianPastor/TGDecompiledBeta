@@ -3,22 +3,16 @@ package org.telegram.ui.Components;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ImageLocation;
-import org.telegram.messenger.MediaDataController;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC$Document;
-import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.Theme;
 
-public class StickerEmptyView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
+public class StickerEmptyView extends FrameLayout {
     private boolean animateLayoutChange;
     int currentAccount;
     int keyboardSize;
@@ -32,7 +26,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
     private final Theme.ResourcesProvider resourcesProvider;
     Runnable showProgressRunnable;
     private int stickerType;
-    public BackupImageView stickerView;
+    public StickerImageView stickerView;
     private LoadingStickerDrawable stubDrawable;
     public final TextView subtitle;
     public final TextView title;
@@ -66,7 +60,6 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         AnonymousClass2 r0 = new LinearLayout(context) {
             public void setVisibility(int i) {
                 if (getVisibility() == 8 && i == 0) {
-                    StickerEmptyView.this.setSticker();
                     StickerEmptyView.this.stickerView.getImageReceiver().startAnimation();
                 } else if (i == 8) {
                     StickerEmptyView.this.stickerView.getImageReceiver().clearImage();
@@ -76,12 +69,13 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         };
         this.linearLayout = r0;
         r0.setOrientation(1);
-        BackupImageView backupImageView = new BackupImageView(context);
-        this.stickerView = backupImageView;
-        backupImageView.setOnClickListener(new StickerEmptyView$$ExternalSyntheticLambda0(this));
+        StickerImageView stickerImageView = new StickerImageView(context, this.currentAccount);
+        this.stickerView = stickerImageView;
+        stickerImageView.setOnClickListener(new StickerEmptyView$$ExternalSyntheticLambda0(this));
         LoadingStickerDrawable loadingStickerDrawable = new LoadingStickerDrawable(this.stickerView, i == 1 ? "M503.1,302.3c-2-20-21.4-29.8-42.4-30.7CLASSNAME.8-56.8-8.2-121-52.8-164.1CLASSNAME.6,24,190,51.3,131.7,146.2\n\tc-21.2-30.5-65-34.3-91.1-7.6c-30,30.6-18.4,82.7,22.5,97.3c-4.7,2.4-6.4,7.6-5.7,12.4c-14.2,10.5-19,28.5-5.1,42.4\n\tc-5.4,15,13.2,28.8,26.9,18.8CLASSNAME.5,6.9,21,15,27.8,28.8c-17.1,55.3-8.5,79.4,8.5,98.7v0CLASSNAME.5,53.8,235.6,45.3,292.2,11.5\n\tCLASSNAME.6-13.5,39.5-34.6,30.4-96.8CLASSNAME.1,322.1,505.7,328.5,503.1,302.3z M107.4,234c0.1,2.8,0.2,5.8,0.4,8.8c-7-2.5-14-3.6-20.5-3.6\n\tCLASSNAME.4,238.6,101.2,236.9,107.4,234z" : "m418 282.6CLASSNAME.4-21.1 20.2-44.9 20.2-70.8 0-88.3-79.8-175.3-178.9-175.3-100.1 0-178.9 88-178.9 175.3 0 46.6 16.9 73.1 29.1 86.1-19.3 23.4-30.9 52.3-34.6 86.1-2.5 22.7 3.2 41.4 17.4 57.3 14.3 16 51.7 35 148.1 35 41.2 0 119.9-5.3 156.7-18.3 49.5-17.4 59.2-41.1 59.2-76.2 0-41.5-12.9-74.8-38.3-99.2z", AndroidUtilities.dp(130.0f), AndroidUtilities.dp(130.0f));
         this.stubDrawable = loadingStickerDrawable;
         this.stickerView.setImageDrawable(loadingStickerDrawable);
+        this.stickerView.setStickerNum(this.stickerType);
         TextView textView = new TextView(context);
         this.title = textView;
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -167,80 +161,26 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             }
         }
         super.setVisibility(i);
-        if (getVisibility() == 0) {
-            setSticker();
-            return;
-        }
-        this.lastH = 0;
-        this.linearLayout.setAlpha(0.0f);
-        this.linearLayout.setScaleX(0.8f);
-        this.linearLayout.setScaleY(0.8f);
-        View view2 = this.progressView;
-        if (view2 != null) {
-            view2.animate().setListener((Animator.AnimatorListener) null).cancel();
-            this.progressView.animate().setListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    StickerEmptyView.this.progressView.setVisibility(8);
-                }
-            }).alpha(0.0f).setDuration(150).start();
-        } else {
-            this.progressBar.setAlpha(0.0f);
-            this.progressBar.setScaleX(0.5f);
-            this.progressBar.setScaleY(0.5f);
-        }
-        this.stickerView.getImageReceiver().stopAnimation();
-        this.stickerView.getImageReceiver().clearImage();
-    }
-
-    /* access modifiers changed from: protected */
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        if (getVisibility() == 0) {
-            setSticker();
-        }
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.diceStickersDidLoad);
-    }
-
-    /* access modifiers changed from: protected */
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.diceStickersDidLoad);
-    }
-
-    /* access modifiers changed from: private */
-    public void setSticker() {
-        TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet;
-        String str;
-        TLRPC$Document tLRPC$Document;
-        TLRPC$Document tLRPC$Document2 = null;
-        if (this.stickerType == 2) {
-            tLRPC$Document = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker("👍");
-            str = null;
-            tLRPC$TL_messages_stickerSet = null;
-        } else {
-            TLRPC$TL_messages_stickerSet stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByName("tg_placeholders_android");
-            if (stickerSetByName == null) {
-                stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByEmojiOrName("tg_placeholders_android");
+        if (getVisibility() != 0) {
+            this.lastH = 0;
+            this.linearLayout.setAlpha(0.0f);
+            this.linearLayout.setScaleX(0.8f);
+            this.linearLayout.setScaleY(0.8f);
+            View view2 = this.progressView;
+            if (view2 != null) {
+                view2.animate().setListener((Animator.AnimatorListener) null).cancel();
+                this.progressView.animate().setListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        StickerEmptyView.this.progressView.setVisibility(8);
+                    }
+                }).alpha(0.0f).setDuration(150).start();
+            } else {
+                this.progressBar.setAlpha(0.0f);
+                this.progressBar.setScaleX(0.5f);
+                this.progressBar.setScaleY(0.5f);
             }
-            if (stickerSetByName != null && stickerSetByName.documents.size() >= 2) {
-                tLRPC$Document2 = stickerSetByName.documents.get(this.stickerType);
-            }
-            tLRPC$TL_messages_stickerSet = stickerSetByName;
-            tLRPC$Document = tLRPC$Document2;
-            str = "130_130";
-        }
-        if (tLRPC$Document != null) {
-            this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$Document), str, "tgs", (Drawable) this.stubDrawable, (Object) tLRPC$TL_messages_stickerSet);
-            this.stickerView.getImageReceiver().setAutoRepeat(2);
-            return;
-        }
-        MediaDataController.getInstance(this.currentAccount).loadStickersByEmojiOrName("tg_placeholders_android", false, tLRPC$TL_messages_stickerSet == null);
-        this.stickerView.setImageDrawable(this.stubDrawable);
-    }
-
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.diceStickersDidLoad && "tg_placeholders_android".equals(objArr[0]) && getVisibility() == 0) {
-            setSticker();
+            this.stickerView.getImageReceiver().stopAnimation();
+            this.stickerView.getImageReceiver().clearImage();
         }
     }
 

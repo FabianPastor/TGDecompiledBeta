@@ -4060,7 +4060,13 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         if (bitmap != null) {
             contentIntent.setLargeIcon(bitmap);
         }
-        startForeground(201, contentIntent.getNotification());
+        try {
+            startForeground(201, contentIntent.getNotification());
+        } catch (Exception e) {
+            if (bitmap != null && (e instanceof IllegalArgumentException)) {
+                showNotification(str, (Bitmap) null);
+            }
+        }
     }
 
     private void startRingtoneAndVibration(long j) {

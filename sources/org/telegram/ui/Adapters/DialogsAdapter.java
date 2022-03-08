@@ -715,7 +715,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             if (!(i3 == 7 || i3 == 8)) {
                 dialogsEmptyCell.setOnUtyanAnimationEndListener(new DialogsAdapter$$ExternalSyntheticLambda2(this));
                 dialogsEmptyCell.setOnUtyanAnimationUpdateListener(new DialogsAdapter$$ExternalSyntheticLambda1(this));
-                if (!dialogsEmptyCell.isUtyanAnimationTriggered()) {
+                if (!dialogsEmptyCell.isUtyanAnimationTriggered() && this.dialogsCount == 0) {
                     this.parentFragment.setContactsAlpha(0.0f);
                     this.parentFragment.setScrollDisabled(true);
                 }

@@ -14,6 +14,6 @@ public final /* synthetic */ class FileLoader$$ExternalSyntheticLambda6 implemen
     }
 
     public final void run() {
-        this.f$0.lambda$removeLoadingVideo$1(this.f$1, this.f$2);
+        this.f$0.lambda$setLoadingVideo$0(this.f$1, this.f$2);
     }
 }

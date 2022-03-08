@@ -1496,14 +1496,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             if (max > 1) {
                 z2 = true;
             }
-            chatAttachAlert.canOpenPreview = z2;
-            if (z2) {
-                Drawable mutate = getResources().getDrawable(NUM).mutate();
-                mutate.setColorFilter(new PorterDuffColorFilter(getThemedColor("dialogTextBlack"), PorterDuff.Mode.MULTIPLY));
-                this.parentAlert.selectedTextView.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, mutate, (Drawable) null);
-            } else {
-                chatAttachAlert.selectedTextView.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, (Drawable) null, (Drawable) null);
-            }
+            chatAttachAlert.setCanOpenPreview(z2);
             this.currentSelectedCount = max;
         }
     }

@@ -2650,18 +2650,36 @@ public class MessagesStorage extends BaseController {
     }
 
     public void deleteRecentFiles(ArrayList<MessageObject> arrayList) {
+        boolean z;
         for (int i = 0; i < arrayList.size(); i++) {
             int i2 = 0;
             while (true) {
                 if (i2 >= this.recentDownloadingFiles.size()) {
+                    z = false;
                     break;
                 } else if (arrayList.get(i).getId() == this.recentDownloadingFiles.get(i2).getId()) {
                     this.recentDownloadingFiles.remove(i2);
+                    z = true;
                     break;
                 } else {
                     i2++;
                 }
             }
+            if (!z) {
+                int i3 = 0;
+                while (true) {
+                    if (i3 >= this.downloadingFiles.size()) {
+                        break;
+                    } else if (arrayList.get(i).getId() == this.downloadingFiles.get(i3).getId()) {
+                        this.downloadingFiles.remove(i3);
+                        break;
+                    } else {
+                        i3++;
+                    }
+                }
+            }
+            arrayList.get(i).putInDownloadsStore = false;
+            FileLoader.getInstance(this.currentAccount).loadFile(arrayList.get(i).getDocument(), arrayList.get(i), 0, 0);
             FileLoader.getInstance(this.currentAccount).cancelLoadFile(arrayList.get(i).getDocument(), true);
         }
         getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);

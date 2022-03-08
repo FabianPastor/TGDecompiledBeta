@@ -20,6 +20,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
@@ -120,15 +121,19 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                 return;
             }
             if (sharedDocumentCell.isLoaded()) {
-                if (message.canPreviewDocument()) {
+                if (message.isRoundVideo() || message.isVoice()) {
+                    MediaController.getInstance().playMessage(message);
+                    return;
+                } else if (message.canPreviewDocument()) {
                     PhotoViewer.getInstance().setParentActivity(this.parentActivity);
                     ArrayList arrayList = new ArrayList();
                     arrayList.add(message);
                     PhotoViewer.getInstance().setParentActivity(this.parentActivity);
                     PhotoViewer.getInstance().openPhoto((ArrayList<MessageObject>) arrayList, 0, 0, 0, (PhotoViewer.PhotoViewerProvider) new PhotoViewer.EmptyPhotoViewerProvider());
                     return;
+                } else {
+                    AndroidUtilities.openDocument(message, this.parentActivity, this.parentFragment);
                 }
-                AndroidUtilities.openDocument(message, this.parentActivity, this.parentFragment);
             } else if (!sharedDocumentCell.isLoading()) {
                 MessageObject message2 = sharedDocumentCell.getMessage();
                 message2.putInDownloadsStore = true;
@@ -160,7 +165,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
     }
 
     public void update(boolean z) {
-        if (TextUtils.isEmpty(this.searchQuery)) {
+        if (TextUtils.isEmpty(this.searchQuery) || isEmptyDownloads()) {
             if (this.rowCount == 0) {
                 this.itemsEnterAnimator.showItemsAnimated(0);
             }
@@ -178,10 +183,11 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                 this.emptyView.showProgress(false, false);
                 this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewDownloads", NUM));
                 this.emptyView.subtitle.setVisibility(8);
-                return;
             }
+            this.emptyView.stickerView.setStickerNum(9);
             return;
         }
+        this.emptyView.stickerView.setStickerNum(1);
         ArrayList arrayList = new ArrayList();
         ArrayList arrayList2 = new ArrayList();
         FileLoader.getInstance(this.currentAccount).getCurrentLoadingFiles(arrayList);
@@ -239,6 +245,10 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
                 this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", NUM));
             }
         }
+    }
+
+    private boolean isEmptyDownloads() {
+        return MessagesStorage.getInstance(this.currentAccount).downloadingFiles.isEmpty() && MessagesStorage.getInstance(this.currentAccount).recentDownloadingFiles.isEmpty();
     }
 
     private void updateListInternal(boolean z, ArrayList<MessageObject> arrayList, ArrayList<MessageObject> arrayList2) {
@@ -476,7 +486,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
             TextView textView2 = new TextView(parentActivity2);
             textView2.setGravity(1);
             textView2.setTextSize(1, 15.0f);
-            textView2.setTextColor(Theme.getColor("dialogTextGray"));
+            textView2.setTextColor(Theme.getColor("dialogTextHint"));
             textView2.setText(LocaleController.formatString("DownloadedFilesMessage", NUM, new Object[0]));
             linearLayout.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 0, 21.0f, 15.0f, 21.0f, 16.0f));
             TextView textView3 = new TextView(parentActivity2);

@@ -175,10 +175,12 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$0() {
-        this.textureView.animate().cancel();
-        this.textureView.animate().alpha(0.0f).setDuration(150).start();
-        this.noRtmpStreamTextView.animate().cancel();
-        this.noRtmpStreamTextView.animate().alpha(1.0f).setDuration(150).start();
+        if (!this.textureView.renderer.isFirstFrameRendered()) {
+            this.textureView.animate().cancel();
+            this.textureView.animate().alpha(0.0f).setDuration(150).start();
+            this.noRtmpStreamTextView.animate().cancel();
+            this.noRtmpStreamTextView.animate().alpha(1.0f).setDuration(150).start();
+        }
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
@@ -362,10 +364,8 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                     }
                     invalidate();
                 }
-                if (this.this$0.noRtmpStreamTextView.getAlpha() != 0.0f) {
-                    this.this$0.noRtmpStreamTextView.setTranslationY(((((float) (getMeasuredHeight() - this.this$0.noRtmpStreamTextView.getMeasuredHeight())) / 2.0f) + this.this$0.swipeToBackDy) - this.currentClipVertical);
-                    this.this$0.noRtmpStreamTextView.setTranslationX((((float) (getMeasuredWidth() - this.this$0.noRtmpStreamTextView.getMeasuredWidth())) / 2.0f) - this.currentClipHorizontal);
-                }
+                this.this$0.noRtmpStreamTextView.setTranslationY(((((float) (getMeasuredHeight() - this.this$0.noRtmpStreamTextView.getMeasuredHeight())) / 2.0f) + this.this$0.swipeToBackDy) - this.currentClipVertical);
+                this.this$0.noRtmpStreamTextView.setTranslationX((((float) (getMeasuredWidth() - this.this$0.noRtmpStreamTextView.getMeasuredWidth())) / 2.0f) - this.currentClipHorizontal);
                 ImageView imageView = this.this$0.blurredFlippingStub;
                 if (!(imageView == null || imageView.getParent() == null)) {
                     GroupCallMiniTextureView groupCallMiniTextureView9 = this.this$0;
