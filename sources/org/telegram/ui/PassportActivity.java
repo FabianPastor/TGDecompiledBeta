@@ -6337,6 +6337,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     CameraScanActivity.CameraScanActivityDelegate.CC.$default$didFindQr(this, str);
                 }
 
+                public /* synthetic */ boolean processQr(String str, Runnable runnable) {
+                    return CameraScanActivity.CameraScanActivityDelegate.CC.$default$processQr(this, str, runnable);
+                }
+
                 public void didFindMrzInfo(MrzRecognizer.Result result) {
                     if (!TextUtils.isEmpty(result.firstName)) {
                         PassportActivity.this.inputFields[0].setText(result.firstName);

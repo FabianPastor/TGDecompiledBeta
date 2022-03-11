@@ -4691,6 +4691,13 @@ public class AndroidUtilities {
         }
     }
 
+    public static boolean getLightNavigationBar(Window window) {
+        if (Build.VERSION.SDK_INT < 26 || (window.getDecorView().getSystemUiVisibility() & 16) <= 0) {
+            return false;
+        }
+        return true;
+    }
+
     public static void setLightNavigationBar(Window window, boolean z) {
         if (Build.VERSION.SDK_INT >= 26) {
             View decorView = window.getDecorView();

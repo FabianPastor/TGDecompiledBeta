@@ -144,7 +144,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     public int ttlHeaderRow;
     /* access modifiers changed from: private */
     public int ttlRow;
-    private UndoView undoView;
+    /* access modifiers changed from: private */
+    public UndoView undoView;
 
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$createView$0(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
@@ -242,7 +243,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         this.listView.setAnimateEmptyView(true, 0);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SessionsActivity$$ExternalSyntheticLambda22(this));
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new SessionsActivity$$ExternalSyntheticLambda18(this));
         if (this.currentType == 0) {
             AnonymousClass2 r4 = new UndoView(context2) {
                 public void hide(boolean z, int i) {
@@ -423,21 +424,21 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         if (listAdapter2 != null) {
             listAdapter2.notifyDataSetChanged();
         }
-        getConnectionsManager().sendRequest(tLRPC$TL_account_setAuthorizationTTL, SessionsActivity$$ExternalSyntheticLambda21.INSTANCE);
+        getConnectionsManager().sendRequest(tLRPC$TL_account_setAuthorizationTTL, SessionsActivity$$ExternalSyntheticLambda17.INSTANCE);
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$6(DialogInterface dialogInterface, int i) {
         if (this.currentType == 0) {
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_auth_resetAuthorizations(), new SessionsActivity$$ExternalSyntheticLambda14(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_auth_resetAuthorizations(), new SessionsActivity$$ExternalSyntheticLambda11(this));
             return;
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_resetWebAuthorizations(), new SessionsActivity$$ExternalSyntheticLambda17(this));
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_resetWebAuthorizations(), new SessionsActivity$$ExternalSyntheticLambda14(this));
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda6(this, tLRPC$TL_error, tLObject));
+        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda5(this, tLRPC$TL_error, tLObject));
         for (int i = 0; i < 3; i++) {
             UserConfig instance = UserConfig.getInstance(i);
             if (instance.isClientActivated()) {
@@ -459,7 +460,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda9(this, tLRPC$TL_error, tLObject));
+        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda8(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
@@ -498,13 +499,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 }
                 TLRPC$TL_account_resetAuthorization tLRPC$TL_account_resetAuthorization = new TLRPC$TL_account_resetAuthorization();
                 tLRPC$TL_account_resetAuthorization.hash = tLRPC$TL_authorization.hash;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_resetAuthorization, new SessionsActivity$$ExternalSyntheticLambda19(this, alertDialog, tLRPC$TL_authorization));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_resetAuthorization, new SessionsActivity$$ExternalSyntheticLambda15(this, alertDialog, tLRPC$TL_authorization));
                 return;
             }
             TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization = (TLRPC$TL_webAuthorization) this.sessions.get(i - this.otherSessionsStartRow);
             TLRPC$TL_account_resetWebAuthorization tLRPC$TL_account_resetWebAuthorization = new TLRPC$TL_account_resetWebAuthorization();
             tLRPC$TL_account_resetWebAuthorization.hash = tLRPC$TL_webAuthorization.hash;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_resetWebAuthorization, new SessionsActivity$$ExternalSyntheticLambda20(this, alertDialog, tLRPC$TL_webAuthorization));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_resetWebAuthorization, new SessionsActivity$$ExternalSyntheticLambda16(this, alertDialog, tLRPC$TL_webAuthorization));
             if (zArr[0]) {
                 MessagesController.getInstance(this.currentAccount).blockPeer(tLRPC$TL_webAuthorization.bot_id);
             }
@@ -513,7 +514,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$9(AlertDialog alertDialog, TLRPC$TL_authorization tLRPC$TL_authorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda12(this, alertDialog, tLRPC$TL_error, tLRPC$TL_authorization));
+        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda9(this, alertDialog, tLRPC$TL_error, tLRPC$TL_authorization));
     }
 
     /* access modifiers changed from: private */
@@ -536,7 +537,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$11(AlertDialog alertDialog, TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda13(this, alertDialog, tLRPC$TL_error, tLRPC$TL_webAuthorization));
+        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda10(this, alertDialog, tLRPC$TL_error, tLRPC$TL_webAuthorization));
     }
 
     /* access modifiers changed from: private */
@@ -615,16 +616,16 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 this.loading = true;
             }
             if (this.currentType == 0) {
-                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getAuthorizations(), new SessionsActivity$$ExternalSyntheticLambda15(this)), this.classGuid);
+                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getAuthorizations(), new SessionsActivity$$ExternalSyntheticLambda12(this)), this.classGuid);
                 return;
             }
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getWebAuthorizations(), new SessionsActivity$$ExternalSyntheticLambda16(this)), this.classGuid);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getWebAuthorizations(), new SessionsActivity$$ExternalSyntheticLambda13(this)), this.classGuid);
         }
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$loadSessions$15(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda8(this, tLRPC$TL_error, tLObject));
+        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda7(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
@@ -658,7 +659,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$loadSessions$17(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda7(this, tLRPC$TL_error, tLObject));
+        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda6(this, tLRPC$TL_error, tLObject));
     }
 
     /* access modifiers changed from: private */
@@ -1050,15 +1051,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         public /* synthetic */ void lambda$new$0(View view) {
             if (SessionsActivity.this.getParentActivity() != null) {
                 if (Build.VERSION.SDK_INT < 23 || SessionsActivity.this.getParentActivity().checkSelfPermission("android.permission.CAMERA") == 0) {
-                    CameraScanActivity.showAsSheet(SessionsActivity.this, false, 2, new CameraScanActivity.CameraScanActivityDelegate() {
-                        public /* synthetic */ void didFindMrzInfo(MrzRecognizer.Result result) {
-                            CameraScanActivity.CameraScanActivityDelegate.CC.$default$didFindMrzInfo(this, result);
-                        }
-
-                        public void didFindQr(String str) {
-                            SessionsActivity.this.proccessQrCode(str);
-                        }
-                    });
+                    SessionsActivity.this.openCameraScanActivity();
                     return;
                 }
                 SessionsActivity.this.getParentActivity().requestPermissions(new String[]{"android.permission.CAMERA"}, 34);
@@ -1114,60 +1107,77 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    public void proccessQrCode(String str) {
-        AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
-        alertDialog.setCanCancel(false);
-        alertDialog.show();
-        try {
-            byte[] decode = Base64.decode(str.substring(17).replaceAll("\\/", "_").replaceAll("\\+", "-"), 8);
-            TLRPC$TL_auth_acceptLoginToken tLRPC$TL_auth_acceptLoginToken = new TLRPC$TL_auth_acceptLoginToken();
-            tLRPC$TL_auth_acceptLoginToken.token = decode;
-            getConnectionsManager().sendRequest(tLRPC$TL_auth_acceptLoginToken, new SessionsActivity$$ExternalSyntheticLambda18(this, alertDialog));
-        } catch (Exception e) {
-            FileLog.e("Failed to pass qr code auth", (Throwable) e);
-            AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda10(this, alertDialog));
-        }
-    }
+    public void openCameraScanActivity() {
+        CameraScanActivity.showAsSheet(this, false, 2, new CameraScanActivity.CameraScanActivityDelegate() {
+            private TLRPC$TL_error error = null;
+            private TLObject response = null;
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$proccessQrCode$20(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda11(this, alertDialog, tLObject, tLRPC$TL_error));
-    }
+            public /* synthetic */ void didFindMrzInfo(MrzRecognizer.Result result) {
+                CameraScanActivity.CameraScanActivityDelegate.CC.$default$didFindMrzInfo(this, result);
+            }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$proccessQrCode$19(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        try {
-            alertDialog.dismiss();
-        } catch (Exception unused) {
-        }
-        if (tLObject instanceof TLRPC$TL_authorization) {
-            this.sessions.add(0, (TLRPC$TL_authorization) tLObject);
-            updateRows();
-            this.listAdapter.notifyDataSetChanged();
-            this.undoView.showWithAction(0, 11, (Object) tLObject);
-            return;
-        }
-        AndroidUtilities.runOnUIThread(new SessionsActivity$$ExternalSyntheticLambda5(this, tLRPC$TL_error));
-    }
+            public void didFindQr(String str) {
+                TLObject tLObject = this.response;
+                if (tLObject instanceof TLRPC$TL_authorization) {
+                    SessionsActivity.this.sessions.add(0, (TLRPC$TL_authorization) tLObject);
+                    SessionsActivity.this.updateRows();
+                    SessionsActivity.this.listAdapter.notifyDataSetChanged();
+                    SessionsActivity.this.undoView.showWithAction(0, 11, (Object) this.response);
+                } else if (this.error != null) {
+                    AndroidUtilities.runOnUIThread(new SessionsActivity$5$$ExternalSyntheticLambda1(this));
+                }
+            }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$proccessQrCode$18(TLRPC$TL_error tLRPC$TL_error) {
-        String str;
-        if (tLRPC$TL_error.text.equals("AUTH_TOKEN_EXCEPTION")) {
-            str = LocaleController.getString("AccountAlreadyLoggedIn", NUM);
-        } else {
-            str = LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error.text;
-        }
-        AlertsCreator.showSimpleAlert(this, LocaleController.getString("AuthAnotherClient", NUM), str);
-    }
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$didFindQr$0() {
+                String str;
+                String str2 = this.error.text;
+                if (str2 == null || !str2.equals("AUTH_TOKEN_EXCEPTION")) {
+                    str = LocaleController.getString("ErrorOccurred", NUM) + "\n" + this.error.text;
+                } else {
+                    str = LocaleController.getString("AccountAlreadyLoggedIn", NUM);
+                }
+                AlertsCreator.showSimpleAlert(SessionsActivity.this, LocaleController.getString("AuthAnotherClient", NUM), str);
+            }
 
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$proccessQrCode$21(AlertDialog alertDialog) {
-        try {
-            alertDialog.dismiss();
-        } catch (Exception unused) {
-        }
-        AlertsCreator.showSimpleAlert(this, LocaleController.getString("AuthAnotherClient", NUM), LocaleController.getString("ErrorOccurred", NUM));
+            public boolean processQr(String str, Runnable runnable) {
+                this.response = null;
+                this.error = null;
+                AndroidUtilities.runOnUIThread(new SessionsActivity$5$$ExternalSyntheticLambda2(this, str, runnable), 750);
+                return true;
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$processQr$4(String str, Runnable runnable) {
+                try {
+                    byte[] decode = Base64.decode(str.substring(17).replaceAll("\\/", "_").replaceAll("\\+", "-"), 8);
+                    TLRPC$TL_auth_acceptLoginToken tLRPC$TL_auth_acceptLoginToken = new TLRPC$TL_auth_acceptLoginToken();
+                    tLRPC$TL_auth_acceptLoginToken.token = decode;
+                    SessionsActivity.this.getConnectionsManager().sendRequest(tLRPC$TL_auth_acceptLoginToken, new SessionsActivity$5$$ExternalSyntheticLambda4(this, runnable));
+                } catch (Exception e) {
+                    FileLog.e("Failed to pass qr code auth", (Throwable) e);
+                    AndroidUtilities.runOnUIThread(new SessionsActivity$5$$ExternalSyntheticLambda0(this));
+                    runnable.run();
+                }
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$processQr$2(Runnable runnable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                AndroidUtilities.runOnUIThread(new SessionsActivity$5$$ExternalSyntheticLambda3(this, tLObject, tLRPC$TL_error, runnable));
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$processQr$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, Runnable runnable) {
+                this.response = tLObject;
+                this.error = tLRPC$TL_error;
+                runnable.run();
+            }
+
+            /* access modifiers changed from: private */
+            public /* synthetic */ void lambda$processQr$3() {
+                AlertsCreator.showSimpleAlert(SessionsActivity.this, LocaleController.getString("AuthAnotherClient", NUM), LocaleController.getString("ErrorOccurred", NUM));
+            }
+        });
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
@@ -1212,20 +1222,12 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         if (iArr.length <= 0 || iArr[0] != 0) {
             new AlertDialog.Builder((Context) getParentActivity()).setMessage(AndroidUtilities.replaceTags(LocaleController.getString("QRCodePermissionNoCameraWithHint", NUM))).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new SessionsActivity$$ExternalSyntheticLambda0(this)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), (DialogInterface.OnClickListener) null).setTopAnimation(NUM, 72, false, Theme.getColor("dialogTopBackground")).show();
         } else {
-            CameraScanActivity.showAsSheet(this, false, 2, new CameraScanActivity.CameraScanActivityDelegate() {
-                public /* synthetic */ void didFindMrzInfo(MrzRecognizer.Result result) {
-                    CameraScanActivity.CameraScanActivityDelegate.CC.$default$didFindMrzInfo(this, result);
-                }
-
-                public void didFindQr(String str) {
-                    SessionsActivity.this.proccessQrCode(str);
-                }
-            });
+            openCameraScanActivity();
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$22(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$18(DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));

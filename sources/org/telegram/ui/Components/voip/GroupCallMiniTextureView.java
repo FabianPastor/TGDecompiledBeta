@@ -747,10 +747,10 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x017d  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x018e  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x01b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x01bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x0185  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0196  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x01ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x01c4  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onMeasure(int r14, int r15) {
         /*
@@ -818,7 +818,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             boolean r1 = r13.showingInFullscreen
             r5 = 1082130432(0x40800000, float:4.0)
             r6 = 1073741824(0x40000000, float:2.0)
-            if (r1 == 0) goto L_0x00fb
+            if (r1 == 0) goto L_0x0103
             r13.updateSize(r0)
             r13.overlayIconAlpha = r3
             boolean r0 = org.telegram.ui.GroupCallActivity.isTabletMode
@@ -833,38 +833,43 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r6)
             int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r1, r6)
             super.onMeasure(r0, r1)
-            goto L_0x01dd
+            goto L_0x01e5
         L_0x00b9:
             boolean r0 = org.telegram.ui.GroupCallActivity.isLandscapeMode
             r1 = 1119354880(0x42b80000, float:92.0)
-            if (r0 != 0) goto L_0x00d9
+            if (r0 != 0) goto L_0x00e1
             int r0 = android.view.View.MeasureSpec.getSize(r15)
+            org.telegram.messenger.ChatObject$Call r3 = r13.call
+            org.telegram.tgnet.TLRPC$GroupCall r3 = r3.call
+            boolean r3 = r3.rtmp_stream
+            if (r3 != 0) goto L_0x00d0
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r0 = r0 - r1
+        L_0x00d0:
             int r1 = android.view.View.MeasureSpec.getSize(r14)
             int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r1, r6)
             int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r6)
             super.onMeasure(r1, r0)
-            goto L_0x01dd
-        L_0x00d9:
+            goto L_0x01e5
+        L_0x00e1:
             int r0 = android.view.View.MeasureSpec.getSize(r14)
             org.telegram.messenger.ChatObject$Call r3 = r13.call
             org.telegram.tgnet.TLRPC$GroupCall r3 = r3.call
             boolean r3 = r3.rtmp_stream
-            if (r3 != 0) goto L_0x00ea
+            if (r3 != 0) goto L_0x00f2
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r0 = r0 - r1
-        L_0x00ea:
+        L_0x00f2:
             int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r6)
             int r1 = android.view.View.MeasureSpec.getSize(r15)
             int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r1, r6)
             super.onMeasure(r0, r1)
-            goto L_0x01dd
-        L_0x00fb:
+            goto L_0x01e5
+        L_0x0103:
             boolean r1 = r13.showingAsScrimView
             r7 = 1096810496(0x41600000, float:14.0)
             r8 = 2
-            if (r1 == 0) goto L_0x0129
+            if (r1 == 0) goto L_0x0131
             r13.overlayIconAlpha = r3
             int r0 = android.view.View.MeasureSpec.getSize(r14)
             int r1 = android.view.View.MeasureSpec.getSize(r15)
@@ -877,101 +882,101 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             int r0 = r0 + r3
             int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r6)
             super.onMeasure(r1, r0)
-            goto L_0x01dd
-        L_0x0129:
+            goto L_0x01e5
+        L_0x0131:
             boolean r1 = r13.useSpanSize
-            if (r1 == 0) goto L_0x01d8
+            if (r1 == 0) goto L_0x01e0
             r13.overlayIconAlpha = r3
             boolean r1 = org.telegram.ui.GroupCallActivity.isTabletMode
             r3 = 6
-            if (r1 == 0) goto L_0x0139
+            if (r1 == 0) goto L_0x0141
             org.telegram.ui.Components.voip.GroupCallGridCell r1 = r13.tabletGridView
-            if (r1 == 0) goto L_0x0139
-            goto L_0x013f
-        L_0x0139:
+            if (r1 == 0) goto L_0x0141
+            goto L_0x0147
+        L_0x0141:
             boolean r1 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r1 == 0) goto L_0x013e
-            goto L_0x013f
-        L_0x013e:
+            if (r1 == 0) goto L_0x0146
+            goto L_0x0147
+        L_0x0146:
             r3 = 2
-        L_0x013f:
+        L_0x0147:
             org.telegram.ui.Components.voip.GroupCallGridCell r1 = r13.tabletGridView
-            if (r1 == 0) goto L_0x0150
+            if (r1 == 0) goto L_0x0158
             int r0 = android.view.View.MeasureSpec.getSize(r14)
             r1 = 1135345664(0x43aCLASSNAME, float:344.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r0 = r0 - r1
-        L_0x014e:
+        L_0x0156:
             float r0 = (float) r0
-            goto L_0x0173
-        L_0x0150:
+            goto L_0x017b
+        L_0x0158:
             boolean r1 = org.telegram.ui.GroupCallActivity.isTabletMode
-            if (r1 == 0) goto L_0x015b
+            if (r1 == 0) goto L_0x0163
             r0 = 1134559232(0x43a00000, float:320.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            goto L_0x014e
-        L_0x015b:
+            goto L_0x0156
+        L_0x0163:
             int r1 = android.view.View.MeasureSpec.getSize(r14)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r7 = r7 * 2
             int r1 = r1 - r7
             boolean r7 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r7 == 0) goto L_0x0171
+            if (r7 == 0) goto L_0x0179
             r0 = 1119092736(0x42b40000, float:90.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r0 = -r0
-        L_0x0171:
+        L_0x0179:
             int r1 = r1 + r0
             float r0 = (float) r1
-        L_0x0173:
+        L_0x017b:
             float r1 = r13.spanCount
             float r3 = (float) r3
             float r1 = r1 / r3
             float r1 = r1 * r0
             org.telegram.ui.Components.voip.GroupCallGridCell r3 = r13.tabletGridView
-            if (r3 == 0) goto L_0x018e
+            if (r3 == 0) goto L_0x0196
             float r0 = r3.getItemHeight()
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
             float r3 = (float) r3
             float r0 = r0 - r3
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
-        L_0x018b:
+        L_0x0193:
             float r3 = (float) r3
             float r1 = r1 - r3
-            goto L_0x01a2
-        L_0x018e:
+            goto L_0x01aa
+        L_0x0196:
             boolean r3 = org.telegram.ui.GroupCallActivity.isTabletMode
-            if (r3 == 0) goto L_0x0194
+            if (r3 == 0) goto L_0x019c
             float r0 = r0 / r4
-            goto L_0x019d
-        L_0x0194:
+            goto L_0x01a5
+        L_0x019c:
             boolean r3 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r3 == 0) goto L_0x019a
+            if (r3 == 0) goto L_0x01a2
             r3 = 3
-            goto L_0x019b
-        L_0x019a:
+            goto L_0x01a3
+        L_0x01a2:
             r3 = 2
-        L_0x019b:
+        L_0x01a3:
             float r3 = (float) r3
             float r0 = r0 / r3
-        L_0x019d:
+        L_0x01a5:
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            goto L_0x018b
-        L_0x01a2:
+            goto L_0x0193
+        L_0x01aa:
             android.widget.FrameLayout r3 = r13.infoContainer
             android.view.ViewGroup$LayoutParams r3 = r3.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r3 = (android.widget.FrameLayout.LayoutParams) r3
             android.widget.ImageView r5 = r13.screencastIcon
             int r5 = r5.getVisibility()
-            if (r5 != 0) goto L_0x01bc
+            if (r5 != 0) goto L_0x01c4
             r5 = 1105199104(0x41e00000, float:28.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             float r5 = (float) r5
             float r5 = r1 - r5
-            goto L_0x01bd
-        L_0x01bc:
+            goto L_0x01c5
+        L_0x01c4:
             r5 = r1
-        L_0x01bd:
+        L_0x01c5:
             int r7 = (int) r5
             r13.updateSize(r7)
             int r7 = r3.leftMargin
@@ -985,17 +990,17 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             int r0 = (int) r0
             int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r6)
             super.onMeasure(r1, r0)
-            goto L_0x01dd
-        L_0x01d8:
+            goto L_0x01e5
+        L_0x01e0:
             r13.overlayIconAlpha = r2
             super.onMeasure(r14, r15)
-        L_0x01dd:
+        L_0x01e5:
             int r15 = android.view.View.MeasureSpec.getSize(r15)
             int r14 = android.view.View.MeasureSpec.getSize(r14)
             int r14 = r14 << 16
             int r15 = r15 + r14
             int r14 = r13.lastSize
-            if (r14 == r15) goto L_0x0210
+            if (r14 == r15) goto L_0x0218
             r13.lastSize = r15
             android.graphics.LinearGradient r14 = new android.graphics.LinearGradient
             r6 = 0
@@ -1014,7 +1019,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             r13.gradientShader = r14
             android.graphics.Paint r15 = r13.gradientPaint
             r15.setShader(r14)
-        L_0x0210:
+        L_0x0218:
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.nameView
             r14.setPivotX(r2)
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.nameView

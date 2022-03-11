@@ -85,8 +85,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
     private boolean shown = false;
     /* access modifiers changed from: private */
     public ChatActivity.ThemeDelegate themeDelegate;
-    /* access modifiers changed from: private */
-    public UndoView undoView;
+    private UndoView undoView;
     /* access modifiers changed from: private */
     public Drawable videoPlayImage;
 
@@ -1035,7 +1034,6 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
         PreviewGroupCell tapGroupCell = null;
         PreviewGroupCell.MediaCell tapMediaCell = null;
         long tapTime = 0;
-        private int undoViewId = 0;
         float viewBottom;
         float viewTop;
 
@@ -1058,17 +1056,6 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
         public void onLayout(boolean z, int i, int i2, int i3, int i4) {
             ChatActionCell chatActionCell = this.hintView;
             chatActionCell.layout(0, 0, chatActionCell.getMeasuredWidth(), this.hintView.getMeasuredHeight());
-        }
-
-        public void saveDeletedImageId(MediaController.PhotoEntry photoEntry) {
-            if (ChatAttachAlertPhotoLayoutPreview.this.photoLayout != null) {
-                for (Map.Entry next : ChatAttachAlertPhotoLayoutPreview.this.photoLayout.getSelectedPhotos().entrySet()) {
-                    if (next.getValue() == photoEntry) {
-                        this.deletedPhotos.put(photoEntry, next.getKey());
-                        return;
-                    }
-                }
-            }
         }
 
         public void fromPhotoLayout(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout) {
@@ -1360,168 +1347,220 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
             invalidate();
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:122:0x0365  */
+        /* JADX WARNING: Removed duplicated region for block: B:122:0x0373  */
+        /* JADX WARNING: Removed duplicated region for block: B:20:0x005d  */
+        /* JADX WARNING: Removed duplicated region for block: B:45:0x0194  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public boolean onTouchEvent(android.view.MotionEvent r24) {
+        public boolean onTouchEvent(android.view.MotionEvent r17) {
             /*
-                r23 = this;
-                r0 = r23
-                float r1 = r24.getX()
-                float r2 = r24.getY()
+                r16 = this;
+                r0 = r16
+                float r1 = r17.getX()
+                float r2 = r17.getY()
                 java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell> r3 = r0.groupCells
                 java.util.Iterator r3 = r3.iterator()
                 r5 = 0
             L_0x0011:
                 boolean r6 = r3.hasNext()
-                r7 = 0
-                if (r6 == 0) goto L_0x002f
+                if (r6 == 0) goto L_0x002e
                 java.lang.Object r6 = r3.next()
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r6 = (org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell) r6
                 float r8 = r6.measure()
                 int r9 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
-                if (r9 < 0) goto L_0x002d
+                if (r9 < 0) goto L_0x002c
                 float r9 = r5 + r8
                 int r9 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1))
-                if (r9 > 0) goto L_0x002d
-                goto L_0x0030
-            L_0x002d:
+                if (r9 > 0) goto L_0x002c
+                goto L_0x002f
+            L_0x002c:
                 float r5 = r5 + r8
                 goto L_0x0011
+            L_0x002e:
+                r6 = 0
             L_0x002f:
-                r6 = r7
-            L_0x0030:
-                if (r6 == 0) goto L_0x0053
+                if (r6 == 0) goto L_0x0052
                 java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell> r3 = r6.media
                 java.util.Iterator r3 = r3.iterator()
-            L_0x0038:
+            L_0x0037:
                 boolean r8 = r3.hasNext()
-                if (r8 == 0) goto L_0x0053
+                if (r8 == 0) goto L_0x0052
                 java.lang.Object r8 = r3.next()
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r8 = (org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell.MediaCell) r8
-                if (r8 == 0) goto L_0x0038
+                if (r8 == 0) goto L_0x0037
                 android.graphics.RectF r9 = r8.drawingRect()
                 float r10 = r2 - r5
                 boolean r9 = r9.contains(r1, r10)
-                if (r9 == 0) goto L_0x0038
-                goto L_0x0054
+                if (r9 == 0) goto L_0x0037
+                goto L_0x0053
+            L_0x0052:
+                r8 = 0
             L_0x0053:
-                r8 = r7
-            L_0x0054:
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r3 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r3 = r3.draggingCell
                 r5 = 1065353216(0x3var_, float:1.0)
-                if (r3 == 0) goto L_0x0122
+                if (r3 == 0) goto L_0x0194
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r3 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r3 = r3.draggingCell
                 android.graphics.RectF r3 = r3.rect()
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r9 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r9 = r9.draggingCell
                 android.graphics.RectF r9 = r9.rect(r5)
-                float r10 = r9.left
-                float r11 = r3.width()
-                r12 = 1073741824(0x40000000, float:2.0)
-                float r11 = r11 / r12
-                float r10 = r10 + r11
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r11 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                float r11 = r11.draggingCellTouchX
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r13 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                float r13 = r13.draggingCellLeft
-                r14 = 1056964608(0x3var_, float:0.5)
-                float r13 = r13 - r14
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r15 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                float r15 = r15.draggingCellFromWidth
-                float r13 = r13 * r15
-                float r11 = r11 - r13
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r13 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                float r13 = r13.draggingT
-                float r10 = org.telegram.messenger.AndroidUtilities.lerp((float) r10, (float) r11, (float) r13)
+                android.graphics.RectF r10 = new android.graphics.RectF
+                r10.<init>()
+                float r11 = r9.left
+                float r12 = r3.width()
+                r13 = 1073741824(0x40000000, float:2.0)
+                float r12 = r12 / r13
+                float r11 = r11 + r12
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r12 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                float r12 = r12.draggingCellTouchX
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r14 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                float r14 = r14.draggingCellLeft
+                r15 = 1056964608(0x3var_, float:0.5)
+                float r14 = r14 - r15
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r4 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                float r4 = r4.draggingCellFromWidth
+                float r14 = r14 * r4
+                float r12 = r12 - r14
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r4 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                float r4 = r4.draggingT
+                float r4 = org.telegram.messenger.AndroidUtilities.lerp((float) r11, (float) r12, (float) r4)
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r11 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r11 = r11.draggingCell
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r11 = r11.groupCell
                 float r11 = r11.y
                 float r9 = r9.top
                 float r11 = r11 + r9
-                float r3 = r3.height()
-                float r3 = r3 / r12
-                float r11 = r11 + r3
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r3 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                float r3 = r3.draggingCellGroupY
+                float r9 = r3.height()
+                float r9 = r9 / r13
+                float r11 = r11 + r9
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r9 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                float r9 = r9.draggingCellTouchY
-                float r3 = r3 + r9
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r9 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                float r9 = r9.draggingCellTop
-                float r9 = r9 - r14
+                float r9 = r9.draggingCellGroupY
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r12 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                float r12 = r12.draggingCellFromHeight
-                float r9 = r9 * r12
-                float r3 = r3 - r9
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r9 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                float r9 = r9.draggingT
-                float r3 = org.telegram.messenger.AndroidUtilities.lerp((float) r11, (float) r3, (float) r9)
-                java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell> r9 = r0.groupCells
-                java.util.Iterator r9 = r9.iterator()
-                r11 = 0
-            L_0x00df:
-                boolean r12 = r9.hasNext()
-                if (r12 == 0) goto L_0x00fc
-                java.lang.Object r12 = r9.next()
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r12 = (org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell) r12
-                float r13 = r12.measure()
-                int r14 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
-                if (r14 < 0) goto L_0x00fa
-                float r14 = r11 + r13
-                int r14 = (r3 > r14 ? 1 : (r3 == r14 ? 0 : -1))
-                if (r14 > 0) goto L_0x00fa
-                goto L_0x00fd
-            L_0x00fa:
-                float r11 = r11 + r13
-                goto L_0x00df
-            L_0x00fc:
-                r12 = r7
-            L_0x00fd:
-                if (r12 == 0) goto L_0x0120
-                java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell> r9 = r12.media
-                java.util.Iterator r9 = r9.iterator()
-            L_0x0105:
-                boolean r13 = r9.hasNext()
-                if (r13 == 0) goto L_0x0120
-                java.lang.Object r13 = r9.next()
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r13 = (org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell.MediaCell) r13
-                if (r13 == 0) goto L_0x0105
-                android.graphics.RectF r14 = r13.drawingRect()
-                float r15 = r3 - r11
-                boolean r14 = r14.contains(r10, r15)
-                if (r14 == 0) goto L_0x0105
-                goto L_0x0124
-            L_0x0120:
-                r13 = r7
-                goto L_0x0124
-            L_0x0122:
-                r12 = r7
-                r13 = r12
-            L_0x0124:
-                int r3 = r24.getAction()
+                float r12 = r12.draggingCellTouchY
+                float r9 = r9 + r12
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r12 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                float r12 = r12.draggingCellTop
+                float r12 = r12 - r15
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r14 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                float r14 = r14.draggingCellFromHeight
+                float r12 = r12 * r14
+                float r9 = r9 - r12
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r12 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                float r12 = r12.draggingT
+                float r9 = org.telegram.messenger.AndroidUtilities.lerp((float) r11, (float) r9, (float) r12)
+                float r11 = r3.width()
+                float r11 = r11 / r13
+                float r11 = r4 - r11
+                float r12 = r3.height()
+                float r12 = r12 / r13
+                float r12 = r9 - r12
+                float r14 = r3.width()
+                float r14 = r14 / r13
+                float r4 = r4 + r14
+                float r3 = r3.height()
+                float r3 = r3 / r13
+                float r9 = r9 + r3
+                r10.set(r11, r12, r4, r9)
+                java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell> r3 = r0.groupCells
+                java.util.Iterator r3 = r3.iterator()
+                r4 = 0
                 r9 = 0
                 r11 = 0
-                r14 = 1
-                if (r3 != 0) goto L_0x0185
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r15 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r15 = r15.draggingCell
-                if (r15 != 0) goto L_0x0185
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r15 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.RecyclerListView r4 = r15.listView
-                boolean r4 = r4.scrollingByUser
-                if (r4 != 0) goto L_0x0185
-                android.animation.ValueAnimator r4 = r15.draggingAnimator
-                if (r4 == 0) goto L_0x0150
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r4 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                android.animation.ValueAnimator r4 = r4.draggingAnimator
-                boolean r4 = r4.isRunning()
-                if (r4 != 0) goto L_0x0185
-            L_0x0150:
-                if (r6 == 0) goto L_0x0185
-                if (r8 == 0) goto L_0x0185
+            L_0x0102:
+                boolean r12 = r3.hasNext()
+                if (r12 == 0) goto L_0x0132
+                java.lang.Object r12 = r3.next()
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r12 = (org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell) r12
+                float r13 = r12.measure()
+                float r13 = r13 + r9
+                float r14 = r10.top
+                int r14 = (r13 > r14 ? 1 : (r13 == r14 ? 0 : -1))
+                if (r14 < 0) goto L_0x0130
+                float r14 = r10.bottom
+                int r15 = (r14 > r9 ? 1 : (r14 == r9 ? 0 : -1))
+                if (r15 < 0) goto L_0x0130
+                float r14 = java.lang.Math.min(r13, r14)
+                float r15 = r10.top
+                float r9 = java.lang.Math.max(r9, r15)
+                float r14 = r14 - r9
+                int r9 = (r14 > r11 ? 1 : (r14 == r11 ? 0 : -1))
+                if (r9 <= 0) goto L_0x0130
+                r4 = r12
+                r11 = r14
+            L_0x0130:
+                r9 = r13
+                goto L_0x0102
+            L_0x0132:
+                if (r4 == 0) goto L_0x0195
+                java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell> r3 = r4.media
+                java.util.Iterator r3 = r3.iterator()
+                r9 = 0
+                r11 = 0
+            L_0x013c:
+                boolean r12 = r3.hasNext()
+                if (r12 == 0) goto L_0x0196
+                java.lang.Object r12 = r3.next()
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r12 = (org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell.MediaCell) r12
+                if (r12 == 0) goto L_0x0191
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r13 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r13 = r13.draggingCell
+                if (r12 == r13) goto L_0x0191
+                android.graphics.RectF r13 = r12.drawingRect()
+                boolean r14 = android.graphics.RectF.intersects(r10, r13)
+                if (r14 == 0) goto L_0x0191
+                float r14 = r13.right
+                float r15 = r10.right
+                float r14 = java.lang.Math.min(r14, r15)
+                float r15 = r13.left
+                float r5 = r10.left
+                float r5 = java.lang.Math.max(r15, r5)
+                float r14 = r14 - r5
+                float r5 = r13.bottom
+                float r15 = r10.bottom
+                float r5 = java.lang.Math.min(r5, r15)
+                float r15 = r13.top
+                float r7 = r10.top
+                float r7 = java.lang.Math.max(r15, r7)
+                float r5 = r5 - r7
+                float r14 = r14 * r5
+                float r5 = r13.width()
+                float r7 = r13.height()
+                float r5 = r5 * r7
+                float r14 = r14 / r5
+                int r5 = (r14 > r11 ? 1 : (r14 == r11 ? 0 : -1))
+                if (r5 <= 0) goto L_0x0191
+                r9 = r12
+                r11 = r14
+            L_0x0191:
+                r5 = 1065353216(0x3var_, float:1.0)
+                goto L_0x013c
+            L_0x0194:
+                r4 = 0
+            L_0x0195:
+                r9 = 0
+            L_0x0196:
+                int r3 = r17.getAction()
+                r10 = 0
+                r5 = 0
+                r7 = 1
+                if (r3 != 0) goto L_0x01f8
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r12 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r12 = r12.draggingCell
+                if (r12 != 0) goto L_0x01f8
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r12 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                org.telegram.ui.Components.RecyclerListView r13 = r12.listView
+                boolean r13 = r13.scrollingByUser
+                if (r13 != 0) goto L_0x01f8
+                android.animation.ValueAnimator r12 = r12.draggingAnimator
+                if (r12 == 0) goto L_0x01c2
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r12 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                android.animation.ValueAnimator r12 = r12.draggingAnimator
+                boolean r12 = r12.isRunning()
+                if (r12 != 0) goto L_0x01f8
+            L_0x01c2:
+                if (r6 == 0) goto L_0x01f8
+                if (r8 == 0) goto L_0x01f8
                 r0.tapGroupCell = r6
                 r0.tapMediaCell = r8
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r4 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
@@ -1529,69 +1568,61 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 float unused = r1.draggingCellTouchY = r2
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell.MediaCell unused = r1.draggingCell = r7
+                r2 = 0
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell.MediaCell unused = r1.draggingCell = r2
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell unused = r1.draggingFromGroupCell = r7
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell unused = r1.draggingFromGroupCell = r2
                 long r1 = android.os.SystemClock.elapsedRealtime()
                 r0.tapTime = r1
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r4 = r0.tapMediaCell
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$$ExternalSyntheticLambda3 r5 = new org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$$ExternalSyntheticLambda3
-                r5.<init>(r0, r1, r4)
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$$ExternalSyntheticLambda2 r6 = new org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$$ExternalSyntheticLambda2
+                r6.<init>(r0, r1, r4)
                 int r1 = android.view.ViewConfiguration.getLongPressTimeout()
                 long r1 = (long) r1
-                org.telegram.messenger.AndroidUtilities.runOnUIThread(r5, r1)
-                r23.invalidate()
-                goto L_0x01b2
-            L_0x0185:
-                r4 = 2
-                if (r3 != r4) goto L_0x01b5
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r15 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r15 = r15.draggingCell
-                if (r15 == 0) goto L_0x01b5
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r15 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                boolean r15 = r15.draggingCellHiding
-                if (r15 != 0) goto L_0x01b5
+                org.telegram.messenger.AndroidUtilities.runOnUIThread(r6, r1)
+                r16.invalidate()
+                goto L_0x0225
+            L_0x01f8:
+                r6 = 2
+                if (r3 != r6) goto L_0x0228
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r8 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r8 = r8.draggingCell
+                if (r8 == 0) goto L_0x0228
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r8 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                boolean r8 = r8.draggingCellHiding
+                if (r8 != 0) goto L_0x0228
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r4 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 float unused = r4.draggingCellTouchX = r1
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 float unused = r1.draggingCellTouchY = r2
                 boolean r1 = r0.scrollerStarted
-                if (r1 != 0) goto L_0x01af
-                r0.scrollerStarted = r14
+                if (r1 != 0) goto L_0x0222
+                r0.scrollerStarted = r7
                 java.lang.Runnable r1 = r0.scroller
-                r4 = 16
-                r0.postDelayed(r1, r4)
-            L_0x01af:
-                r23.invalidate()
-            L_0x01b2:
+                r8 = 16
+                r0.postDelayed(r1, r8)
+            L_0x0222:
+                r16.invalidate()
+            L_0x0225:
                 r1 = 1
-                goto L_0x0355
-            L_0x01b5:
-                if (r3 != r14) goto L_0x02be
+                goto L_0x0363
+            L_0x0228:
+                if (r3 != r7) goto L_0x0325
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r1 = r1.draggingCell
-                if (r1 == 0) goto L_0x02be
-                if (r6 == 0) goto L_0x01cc
-                if (r8 == 0) goto L_0x01cc
+                if (r1 == 0) goto L_0x0325
+                if (r4 == 0) goto L_0x023f
+                if (r9 == 0) goto L_0x023f
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r1 = r1.draggingCell
-                if (r8 == r1) goto L_0x01cc
-                goto L_0x01dd
-            L_0x01cc:
-                if (r12 == 0) goto L_0x01db
-                if (r13 == 0) goto L_0x01db
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r1 = r1.draggingCell
-                if (r13 == r1) goto L_0x01db
-                r6 = r12
-                r8 = r13
-                goto L_0x01dd
-            L_0x01db:
-                r6 = r7
-                r8 = r6
-            L_0x01dd:
-                if (r6 == 0) goto L_0x02b9
-                if (r8 == 0) goto L_0x02b9
+                if (r9 == r1) goto L_0x023f
+                goto L_0x0241
+            L_0x023f:
+                r4 = 0
+                r9 = 0
+            L_0x0241:
+                if (r4 == 0) goto L_0x0320
+                if (r9 == 0) goto L_0x0320
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r1 = r1.draggingCell
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r1 = r1.groupCell
@@ -1601,11 +1632,11 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r2 = r2.draggingCell
                 org.telegram.messenger.MediaController$PhotoEntry r2 = r2.photoEntry
                 int r1 = r1.indexOf(r2)
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$GroupCalculator r2 = r6.group
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$GroupCalculator r2 = r4.group
                 java.util.ArrayList<org.telegram.messenger.MediaController$PhotoEntry> r2 = r2.photos
-                org.telegram.messenger.MediaController$PhotoEntry r8 = r8.photoEntry
+                org.telegram.messenger.MediaController$PhotoEntry r8 = r9.photoEntry
                 int r2 = r2.indexOf(r8)
-                if (r1 < 0) goto L_0x0231
+                if (r1 < 0) goto L_0x0295
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r8 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r8 = r8.draggingCell
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r8 = r8.groupCell
@@ -1619,149 +1650,117 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r8 = r8.draggingCell
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r8 = r8.groupCell
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$GroupCalculator r8 = r8.group
-                r1.setGroup(r8, r14)
-            L_0x0231:
-                if (r2 < 0) goto L_0x02a7
+                r1.setGroup(r8, r7)
+            L_0x0295:
+                if (r2 < 0) goto L_0x030e
                 java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell> r1 = r0.groupCells
-                int r1 = r1.indexOf(r6)
+                int r1 = r1.indexOf(r4)
                 java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell> r8 = r0.groupCells
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r12 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r12 = r12.draggingCell
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r12 = r12.groupCell
-                int r8 = r8.indexOf(r12)
-                if (r1 <= r8) goto L_0x024b
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r9 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r9 = r9.draggingCell
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r9 = r9.groupCell
+                int r8 = r8.indexOf(r9)
+                if (r1 <= r8) goto L_0x02af
                 int r2 = r2 + 1
-            L_0x024b:
+            L_0x02af:
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r1 = r1.draggingCell
                 org.telegram.messenger.MediaController$PhotoEntry r1 = r1.photoEntry
-                r0.pushToGroup(r6, r1, r2)
+                r0.pushToGroup(r4, r1, r2)
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r1 = r1.draggingCell
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r1 = r1.groupCell
-                if (r1 == r6) goto L_0x02a7
-                java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell> r1 = r6.media
+                if (r1 == r4) goto L_0x030e
+                java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell> r1 = r4.media
                 java.util.Iterator r1 = r1.iterator()
-            L_0x0266:
+            L_0x02ca:
                 boolean r2 = r1.hasNext()
-                if (r2 == 0) goto L_0x027f
+                if (r2 == 0) goto L_0x02e3
                 java.lang.Object r2 = r1.next()
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r2 = (org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell.MediaCell) r2
                 org.telegram.messenger.MediaController$PhotoEntry r8 = r2.photoEntry
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r12 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r12 = r12.draggingCell
-                org.telegram.messenger.MediaController$PhotoEntry r12 = r12.photoEntry
-                if (r8 != r12) goto L_0x0266
-                r7 = r2
-            L_0x027f:
-                if (r7 == 0) goto L_0x02a7
-                r23.remeasure()
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r9 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r9 = r9.draggingCell
+                org.telegram.messenger.MediaController$PhotoEntry r9 = r9.photoEntry
+                if (r8 != r9) goto L_0x02ca
+                goto L_0x02e4
+            L_0x02e3:
+                r2 = 0
+            L_0x02e4:
+                if (r2 == 0) goto L_0x030e
+                r16.remeasure()
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r1 = r1.draggingCell
-                r7.layoutFrom(r1)
+                r2.layoutFrom(r1)
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell.MediaCell unused = r1.draggingCell = r7
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell.MediaCell unused = r1.draggingCell = r2
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r1 = r1.draggingFromGroupCell = r6
-                r7.groupCell = r1
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r1 = r1.draggingFromGroupCell = r4
+                r2.groupCell = r1
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r1 = r1.draggingCell
-                r1.fromScale = r5
-                r7.scale = r5
-                r23.remeasure()
-            L_0x02a7:
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this     // Catch:{ Exception -> 0x02ad }
+                r4 = 1065353216(0x3var_, float:1.0)
+                r1.fromScale = r4
+                r2.scale = r4
+                r16.remeasure()
+            L_0x030e:
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this     // Catch:{ Exception -> 0x0314 }
                 r2 = 7
-                r1.performHapticFeedback(r2, r4)     // Catch:{ Exception -> 0x02ad }
-            L_0x02ad:
-                r23.updateGroups()
+                r1.performHapticFeedback(r2, r6)     // Catch:{ Exception -> 0x0314 }
+            L_0x0314:
+                r16.updateGroups()
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayout r1 = r1.photoLayout
-                r0.toPhotoLayout(r1, r11)
-            L_0x02b9:
-                r23.stopDragging()
-                goto L_0x01b2
-            L_0x02be:
-                if (r3 != r14) goto L_0x0354
+                r0.toPhotoLayout(r1, r5)
+            L_0x0320:
+                r16.stopDragging()
+                goto L_0x0225
+            L_0x0325:
+                if (r3 != r7) goto L_0x0362
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r1 = r1.draggingCell
-                if (r1 != 0) goto L_0x0354
+                if (r1 != 0) goto L_0x0362
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r1 = r0.tapMediaCell
-                if (r1 == 0) goto L_0x0354
+                if (r1 == 0) goto L_0x0362
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r1 = r0.tapGroupCell
-                if (r1 == 0) goto L_0x0354
+                if (r1 == 0) goto L_0x0362
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 int r1 = r1.getSelectedItemsCount()
-                if (r1 <= r14) goto L_0x0343
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell$MediaCell r1 = r0.tapMediaCell
-                org.telegram.messenger.MediaController$PhotoEntry r1 = r1.photoEntry
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r2 = r0.tapGroupCell
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$GroupCalculator r2 = r2.group
-                java.util.ArrayList<org.telegram.messenger.MediaController$PhotoEntry> r2 = r2.photos
-                int r2 = r2.indexOf(r1)
-                if (r2 < 0) goto L_0x0332
-                r0.saveDeletedImageId(r1)
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$PreviewGroupCell r4 = r0.tapGroupCell
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$GroupCalculator r5 = r4.group
-                java.util.ArrayList<org.telegram.messenger.MediaController$PhotoEntry> r5 = r5.photos
-                r5.remove(r2)
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$GroupCalculator r5 = r4.group
-                r4.setGroup(r5, r14)
-                r23.updateGroups()
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r5 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayout r5 = r5.photoLayout
-                r0.toPhotoLayout(r5, r11)
-                int r5 = r0.undoViewId
-                int r5 = r5 + r14
-                r0.undoViewId = r5
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r6 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.UndoView r16 = r6.undoView
-                r17 = 0
-                r19 = 82
-                r21 = 0
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$$ExternalSyntheticLambda4 r6 = new org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$$ExternalSyntheticLambda4
-                r6.<init>(r0, r4, r1, r2)
-                r20 = r1
-                r22 = r6
-                r16.showWithAction(r17, r19, r20, r21, r22)
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$$ExternalSyntheticLambda2 r1 = new org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$$ExternalSyntheticLambda2
-                r1.<init>(r0, r5)
-                r4 = 4000(0xfa0, double:1.9763E-320)
-                r0.postDelayed(r1, r4)
-            L_0x0332:
+                if (r1 <= r7) goto L_0x0350
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 android.animation.ValueAnimator r1 = r1.draggingAnimator
-                if (r1 == 0) goto L_0x0343
+                if (r1 == 0) goto L_0x0350
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 android.animation.ValueAnimator r1 = r1.draggingAnimator
                 r1.cancel()
-            L_0x0343:
-                r0.tapMediaCell = r7
-                r0.tapTime = r9
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
-                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell.MediaCell unused = r1.draggingCell = r7
+            L_0x0350:
+                r1 = 0
+                r0.tapMediaCell = r1
+                r0.tapTime = r10
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r2 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
+                org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell.MediaCell unused = r2.draggingCell = r1
                 org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview r1 = org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.this
                 r2 = 0
                 float unused = r1.draggingT = r2
-                goto L_0x01b2
-            L_0x0354:
+                goto L_0x0225
+            L_0x0362:
                 r1 = 0
-            L_0x0355:
-                if (r3 == r14) goto L_0x035a
+            L_0x0363:
+                if (r3 == r7) goto L_0x0368
                 r2 = 3
-                if (r3 != r2) goto L_0x0369
-            L_0x035a:
-                r0.tapTime = r9
+                if (r3 != r2) goto L_0x0377
+            L_0x0368:
+                r0.tapTime = r10
                 java.lang.Runnable r2 = r0.scroller
                 r0.removeCallbacks(r2)
-                r0.scrollerStarted = r11
-                if (r1 != 0) goto L_0x0369
-                r23.stopDragging()
-                goto L_0x036a
-            L_0x0369:
-                r14 = r1
-            L_0x036a:
-                return r14
+                r0.scrollerStarted = r5
+                if (r1 != 0) goto L_0x0377
+                r16.stopDragging()
+                goto L_0x0378
+            L_0x0377:
+                r7 = r1
+            L_0x0378:
+                return r7
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.onTouchEvent(android.view.MotionEvent):boolean");
         }
@@ -1783,25 +1782,6 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                     ChatAttachAlertPhotoLayoutPreview.this.performHapticFeedback(0, 2);
                 } catch (Exception unused5) {
                 }
-            }
-        }
-
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$onTouchEvent$3(PreviewGroupCell previewGroupCell, MediaController.PhotoEntry photoEntry, int i) {
-            if (ChatAttachAlertPhotoLayoutPreview.this.draggingAnimator != null) {
-                ChatAttachAlertPhotoLayoutPreview.this.draggingAnimator.cancel();
-            }
-            PreviewGroupCell.MediaCell unused = ChatAttachAlertPhotoLayoutPreview.this.draggingCell = null;
-            float unused2 = ChatAttachAlertPhotoLayoutPreview.this.draggingT = 0.0f;
-            pushToGroup(previewGroupCell, photoEntry, i);
-            updateGroups();
-            toPhotoLayout(ChatAttachAlertPhotoLayoutPreview.this.photoLayout, false);
-        }
-
-        /* access modifiers changed from: private */
-        public /* synthetic */ void lambda$onTouchEvent$4(int i) {
-            if (i == this.undoViewId && ChatAttachAlertPhotoLayoutPreview.this.undoView.isShown()) {
-                ChatAttachAlertPhotoLayoutPreview.this.undoView.hide(true, 1);
             }
         }
 
@@ -2087,20 +2067,20 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                         this.tempRect.set(0.0f, 0.0f, 0.0f, 0.0f);
                         return this.tempRect;
                     }
-                    float access$2700 = PreviewGroupCell.this.left + (this.rect.left * PreviewGroupCell.this.width);
-                    float access$2800 = PreviewGroupCell.this.top + (this.rect.top * PreviewGroupCell.this.height);
+                    float access$2600 = PreviewGroupCell.this.left + (this.rect.left * PreviewGroupCell.this.width);
+                    float access$2700 = PreviewGroupCell.this.top + (this.rect.top * PreviewGroupCell.this.height);
                     float width = this.rect.width() * PreviewGroupCell.this.width;
                     float height = this.rect.height() * PreviewGroupCell.this.height;
                     if (f < 1.0f && this.fromRect != null) {
-                        access$2700 = AndroidUtilities.lerp(PreviewGroupCell.this.left + (this.fromRect.left * PreviewGroupCell.this.width), access$2700, f);
-                        access$2800 = AndroidUtilities.lerp(PreviewGroupCell.this.top + (this.fromRect.top * PreviewGroupCell.this.height), access$2800, f);
+                        access$2600 = AndroidUtilities.lerp(PreviewGroupCell.this.left + (this.fromRect.left * PreviewGroupCell.this.width), access$2600, f);
+                        access$2700 = AndroidUtilities.lerp(PreviewGroupCell.this.top + (this.fromRect.top * PreviewGroupCell.this.height), access$2700, f);
                         width = AndroidUtilities.lerp(this.fromRect.width() * PreviewGroupCell.this.width, width, f);
                         height = AndroidUtilities.lerp(this.fromRect.height() * PreviewGroupCell.this.height, height, f);
                     }
                     int i = this.positionFlags;
                     if ((i & 4) == 0) {
                         int i2 = PreviewGroupCell.this.halfGap;
-                        access$2800 += (float) i2;
+                        access$2700 += (float) i2;
                         height -= (float) i2;
                     }
                     if ((i & 8) == 0) {
@@ -2108,13 +2088,13 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                     }
                     if ((i & 1) == 0) {
                         int i3 = PreviewGroupCell.this.halfGap;
-                        access$2700 += (float) i3;
+                        access$2600 += (float) i3;
                         width -= (float) i3;
                     }
                     if ((i & 2) == 0) {
                         width -= (float) PreviewGroupCell.this.halfGap;
                     }
-                    this.tempRect.set(access$2700, access$2800, width + access$2700, height + access$2800);
+                    this.tempRect.set(access$2600, access$2700, width + access$2600, height + access$2700);
                     return this.tempRect;
                 }
 

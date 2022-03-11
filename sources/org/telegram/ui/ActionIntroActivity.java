@@ -893,6 +893,10 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 CameraScanActivity.CameraScanActivityDelegate.CC.$default$didFindMrzInfo(this, result);
             }
 
+            public /* synthetic */ boolean processQr(String str, Runnable runnable) {
+                return CameraScanActivity.CameraScanActivityDelegate.CC.$default$processQr(this, str, runnable);
+            }
+
             public void didFindQr(String str) {
                 ActionIntroActivity.this.finishFragment(false);
                 ActionIntroActivity.this.qrLoginDelegate.didFindQRCode(str);

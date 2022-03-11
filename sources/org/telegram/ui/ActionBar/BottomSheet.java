@@ -1461,6 +1461,11 @@ public class BottomSheet extends Dialog {
         dismissWithButtonClick(((Integer) view.getTag()).intValue());
     }
 
+    /* access modifiers changed from: protected */
+    public void onStart() {
+        super.onStart();
+    }
+
     public void setUseLightStatusBar(boolean z) {
         this.useLightStatusBar = z;
         if (Build.VERSION.SDK_INT >= 23) {
@@ -1762,7 +1767,7 @@ public class BottomSheet extends Dialog {
                         BottomSheet.this.onHideListener.onDismiss(BottomSheet.this);
                     }
                     try {
-                        BottomSheet.super.dismiss();
+                        BottomSheet.this.dismissInternal();
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);
                     }

@@ -660,21 +660,20 @@ public class FileLoader extends BaseController {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:65:0x0112, code lost:
-        if (org.telegram.messenger.MessageObject.isVideoDocument(r25) != false) goto L_0x0114;
+    /* JADX WARNING: Code restructure failed: missing block: B:71:0x0126, code lost:
+        if (org.telegram.messenger.MessageObject.isVideoDocument(r25) != false) goto L_0x0128;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:75:0x0136, code lost:
-        if (org.telegram.messenger.MessageObject.isImageWebDocument(r27) != false) goto L_0x00fd;
+    /* JADX WARNING: Code restructure failed: missing block: B:81:0x014a, code lost:
+        if (org.telegram.messenger.MessageObject.isImageWebDocument(r27) != false) goto L_0x0111;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x0183  */
-    /* JADX WARNING: Removed duplicated region for block: B:106:0x0193  */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x017d  */
+    /* JADX WARNING: Removed duplicated region for block: B:106:0x0197  */
     /* JADX WARNING: Removed duplicated region for block: B:109:0x01c2  */
     /* JADX WARNING: Removed duplicated region for block: B:120:0x01e2  */
     /* JADX WARNING: Removed duplicated region for block: B:147:0x0233  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x013f  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x0141  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x015d  */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x0169  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x0153  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0155  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x0171  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private org.telegram.messenger.FileLoadOperation loadFileInternal(org.telegram.tgnet.TLRPC$Document r25, org.telegram.messenger.SecureDocument r26, org.telegram.messenger.WebFile r27, org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r28, org.telegram.messenger.ImageLocation r29, java.lang.Object r30, java.lang.String r31, int r32, int r33, org.telegram.messenger.FileLoadOperationStream r34, int r35, boolean r36, int r37) {
         /*
@@ -727,20 +726,30 @@ public class FileLoader extends BaseController {
             java.lang.Boolean r13 = java.lang.Boolean.TRUE
             r15.put(r14, r13)
         L_0x005b:
+            if (r2 == 0) goto L_0x006f
+            boolean r13 = r5 instanceof org.telegram.messenger.MessageObject
+            if (r13 == 0) goto L_0x006f
+            r13 = r5
+            org.telegram.messenger.MessageObject r13 = (org.telegram.messenger.MessageObject) r13
+            boolean r15 = r13.putInDownloadsStore
+            if (r15 == 0) goto L_0x006f
+            org.telegram.messenger.MessagesStorage r15 = r24.getMessagesStorage()
+            r15.startDownloadFile(r2, r13)
+        L_0x006f:
             j$.util.concurrent.ConcurrentHashMap<java.lang.String, org.telegram.messenger.FileLoadOperation> r13 = r7.loadOperationPaths
             java.lang.Object r13 = r13.get(r14)
             org.telegram.messenger.FileLoadOperation r13 = (org.telegram.messenger.FileLoadOperation) r13
-            if (r13 == 0) goto L_0x00dd
+            if (r13 == 0) goto L_0x00f1
             r15 = 10
-            if (r12 == r15) goto L_0x0073
+            if (r12 == r15) goto L_0x0087
             boolean r0 = r13.isPreloadVideoOperation()
-            if (r0 == 0) goto L_0x0073
+            if (r0 == 0) goto L_0x0087
             r0 = 0
             r13.setIsPreloadVideoOperation(r0)
-        L_0x0073:
-            if (r9 != 0) goto L_0x0077
-            if (r8 <= 0) goto L_0x00d9
-        L_0x0077:
+        L_0x0087:
+            if (r9 != 0) goto L_0x008b
+            if (r8 <= 0) goto L_0x00ed
+        L_0x008b:
             int r0 = r13.getDatacenterId()
             r1 = 1
             r13.setForceRequest(r1)
@@ -748,148 +757,148 @@ public class FileLoader extends BaseController {
             java.util.LinkedList r3 = r7.getLoadOperationQueue(r0, r2)
             android.util.SparseIntArray r4 = r7.getLoadOperationCount(r2)
             int r5 = r3.indexOf(r13)
-            if (r5 < 0) goto L_0x00c2
+            if (r5 < 0) goto L_0x00d6
             r3.remove(r5)
-            if (r9 == 0) goto L_0x00bd
+            if (r9 == 0) goto L_0x00d1
             boolean r3 = r13.start(r9, r10, r11)
-            if (r3 == 0) goto L_0x00a4
+            if (r3 == 0) goto L_0x00b8
             int r3 = r4.get(r0)
             int r3 = r3 + r1
             r4.put(r0, r3)
-        L_0x00a4:
-            if (r2 != 0) goto L_0x00d9
+        L_0x00b8:
+            if (r2 != 0) goto L_0x00ed
             boolean r0 = r13.wasStarted()
-            if (r0 == 0) goto L_0x00d9
+            if (r0 == 0) goto L_0x00ed
             java.util.ArrayList<org.telegram.messenger.FileLoadOperation> r0 = r7.activeFileLoadOperation
             boolean r0 = r0.contains(r13)
-            if (r0 != 0) goto L_0x00d9
+            if (r0 != 0) goto L_0x00ed
             r7.pauseCurrentFileLoadOperations(r13)
             java.util.ArrayList<org.telegram.messenger.FileLoadOperation> r0 = r7.activeFileLoadOperation
             r0.add(r13)
-            goto L_0x00d9
-        L_0x00bd:
+            goto L_0x00ed
+        L_0x00d1:
             r15 = 0
             r3.add(r15, r13)
-            goto L_0x00d9
-        L_0x00c2:
-            if (r9 == 0) goto L_0x00c7
+            goto L_0x00ed
+        L_0x00d6:
+            if (r9 == 0) goto L_0x00db
             r7.pauseCurrentFileLoadOperations(r13)
-        L_0x00c7:
+        L_0x00db:
             r13.start(r9, r10, r11)
-            if (r2 != 0) goto L_0x00d9
+            if (r2 != 0) goto L_0x00ed
             java.util.ArrayList<org.telegram.messenger.FileLoadOperation> r0 = r7.activeFileLoadOperation
             boolean r0 = r0.contains(r13)
-            if (r0 != 0) goto L_0x00d9
+            if (r0 != 0) goto L_0x00ed
             java.util.ArrayList<org.telegram.messenger.FileLoadOperation> r0 = r7.activeFileLoadOperation
             r0.add(r13)
-        L_0x00d9:
+        L_0x00ed:
             r13.updateProgress()
             return r13
-        L_0x00dd:
+        L_0x00f1:
             r15 = 0
             r21 = 4
             java.io.File r20 = getDirectory(r21)
             r22 = 3
             r16 = r13
-            if (r0 == 0) goto L_0x00f3
+            if (r0 == 0) goto L_0x0107
             org.telegram.messenger.FileLoadOperation r6 = new org.telegram.messenger.FileLoadOperation
             r6.<init>(r0)
             r13 = r6
-        L_0x00f0:
+        L_0x0104:
             r6 = 3
-        L_0x00f1:
+        L_0x0105:
             r15 = 1
-            goto L_0x013d
-        L_0x00f3:
-            if (r3 == 0) goto L_0x00ff
+            goto L_0x0151
+        L_0x0107:
+            if (r3 == 0) goto L_0x0113
             org.telegram.messenger.FileLoadOperation r15 = new org.telegram.messenger.FileLoadOperation
             r13 = r32
             r15.<init>(r4, r5, r6, r13)
             r13 = r15
-        L_0x00fd:
+        L_0x0111:
             r6 = 0
-            goto L_0x00f1
-        L_0x00ff:
-            if (r2 == 0) goto L_0x0116
+            goto L_0x0105
+        L_0x0113:
+            if (r2 == 0) goto L_0x012a
             org.telegram.messenger.FileLoadOperation r13 = new org.telegram.messenger.FileLoadOperation
             r13.<init>((org.telegram.tgnet.TLRPC$Document) r2, (java.lang.Object) r5)
             boolean r6 = org.telegram.messenger.MessageObject.isVoiceDocument(r25)
-            if (r6 == 0) goto L_0x010e
-        L_0x010c:
+            if (r6 == 0) goto L_0x0122
+        L_0x0120:
             r6 = 1
-            goto L_0x00f1
-        L_0x010e:
+            goto L_0x0105
+        L_0x0122:
             boolean r6 = org.telegram.messenger.MessageObject.isVideoDocument(r25)
-            if (r6 == 0) goto L_0x00f0
-        L_0x0114:
+            if (r6 == 0) goto L_0x0104
+        L_0x0128:
             r6 = 2
-            goto L_0x00f1
-        L_0x0116:
-            if (r1 == 0) goto L_0x0139
+            goto L_0x0105
+        L_0x012a:
+            if (r1 == 0) goto L_0x014d
             org.telegram.messenger.FileLoadOperation r13 = new org.telegram.messenger.FileLoadOperation
             int r6 = r7.currentAccount
             r13.<init>((int) r6, (org.telegram.messenger.WebFile) r1)
             org.telegram.tgnet.TLRPC$InputWebFileLocation r6 = r1.location
-            if (r6 == 0) goto L_0x0124
-            goto L_0x013b
-        L_0x0124:
+            if (r6 == 0) goto L_0x0138
+            goto L_0x014f
+        L_0x0138:
             boolean r6 = org.telegram.messenger.MessageObject.isVoiceWebDocument(r27)
-            if (r6 == 0) goto L_0x012b
-            goto L_0x010c
-        L_0x012b:
+            if (r6 == 0) goto L_0x013f
+            goto L_0x0120
+        L_0x013f:
             boolean r6 = org.telegram.messenger.MessageObject.isVideoWebDocument(r27)
-            if (r6 == 0) goto L_0x0132
-            goto L_0x0114
-        L_0x0132:
+            if (r6 == 0) goto L_0x0146
+            goto L_0x0128
+        L_0x0146:
             boolean r6 = org.telegram.messenger.MessageObject.isImageWebDocument(r27)
-            if (r6 == 0) goto L_0x00f0
-            goto L_0x00fd
-        L_0x0139:
+            if (r6 == 0) goto L_0x0104
+            goto L_0x0111
+        L_0x014d:
             r13 = r16
-        L_0x013b:
+        L_0x014f:
             r6 = 4
-            goto L_0x00f1
-        L_0x013d:
-            if (r6 != r15) goto L_0x0141
+            goto L_0x0105
+        L_0x0151:
+            if (r6 != r15) goto L_0x0155
             r4 = 2
-            goto L_0x0156
-        L_0x0141:
-            if (r0 != 0) goto L_0x0155
-            if (r3 == 0) goto L_0x014c
-            if (r4 == 0) goto L_0x0155
+            goto L_0x016a
+        L_0x0155:
+            if (r0 != 0) goto L_0x0169
+            if (r3 == 0) goto L_0x0160
+            if (r4 == 0) goto L_0x0169
             int r0 = r4.imageType
             r3 = 2
-            if (r0 != r3) goto L_0x0155
-        L_0x014c:
+            if (r0 != r3) goto L_0x0169
+        L_0x0160:
             boolean r0 = org.telegram.messenger.MessageObject.isImageWebDocument(r27)
-            if (r0 == 0) goto L_0x0153
-            goto L_0x0155
-        L_0x0153:
-            r4 = 0
-            goto L_0x0156
-        L_0x0155:
-            r4 = 1
-        L_0x0156:
-            if (r12 == 0) goto L_0x0169
-            r0 = 10
-            if (r12 != r0) goto L_0x015d
+            if (r0 == 0) goto L_0x0167
             goto L_0x0169
-        L_0x015d:
+        L_0x0167:
+            r4 = 0
+            goto L_0x016a
+        L_0x0169:
+            r4 = 1
+        L_0x016a:
+            if (r12 == 0) goto L_0x017d
+            r0 = 10
+            if (r12 != r0) goto L_0x0171
+            goto L_0x017d
+        L_0x0171:
             r0 = 2
-            if (r12 != r0) goto L_0x0165
+            if (r12 != r0) goto L_0x0179
             r0 = 1
             r13.setEncryptFile(r0)
-            goto L_0x0166
-        L_0x0165:
+            goto L_0x017a
+        L_0x0179:
             r0 = 1
-        L_0x0166:
+        L_0x017a:
             r19 = r20
-            goto L_0x0170
-        L_0x0169:
+            goto L_0x0184
+        L_0x017d:
             r0 = 1
             java.io.File r1 = getDirectory(r6)
             r19 = r1
-        L_0x0170:
+        L_0x0184:
             int r1 = r7.currentAccount
             r3 = 1
             r23 = 0
@@ -899,18 +908,8 @@ public class FileLoader extends BaseController {
             r18 = r4
             r15.setPaths(r16, r17, r18, r19, r20)
             r0 = 10
-            if (r12 != r0) goto L_0x0186
+            if (r12 != r0) goto L_0x019a
             r13.setIsPreloadVideoOperation(r3)
-        L_0x0186:
-            if (r2 == 0) goto L_0x019a
-            boolean r0 = r5 instanceof org.telegram.messenger.MessageObject
-            if (r0 == 0) goto L_0x019a
-            r0 = r5
-            org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
-            boolean r1 = r0.putInDownloadsStore
-            if (r1 == 0) goto L_0x019a
-            org.telegram.messenger.MessagesStorage r1 = r24.getMessagesStorage()
-            r1.startDownloadFile(r2, r0)
         L_0x019a:
             org.telegram.messenger.FileLoader$2 r12 = new org.telegram.messenger.FileLoader$2
             r0 = r12

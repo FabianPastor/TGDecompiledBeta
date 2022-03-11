@@ -1592,36 +1592,41 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public void setCurrentFrame(int i, boolean z, boolean z2) {
-        if (i >= 0 && i <= this.metaData[0] && this.currentFrame != i) {
-            this.currentFrame = i;
-            this.nextFrameIsLast = false;
-            this.singleFrameDecoded = false;
-            if (this.invalidateOnProgressSet) {
-                this.isInvalid = true;
-                if (this.loadFrameTask != null) {
-                    this.doNotRemoveInvalidOnFrameReady = true;
+        if (i >= 0 && i <= this.metaData[0]) {
+            if (this.currentFrame != i || z2) {
+                this.currentFrame = i;
+                this.nextFrameIsLast = false;
+                this.singleFrameDecoded = false;
+                if (this.invalidateOnProgressSet) {
+                    this.isInvalid = true;
+                    if (this.loadFrameTask != null) {
+                        this.doNotRemoveInvalidOnFrameReady = true;
+                    }
                 }
-            }
-            if ((!z || z2) && this.waitingForNextTask && this.nextRenderingBitmap != null) {
-                this.backgroundBitmap = this.nextRenderingBitmap;
-                this.nextRenderingBitmap = null;
-                this.loadFrameTask = null;
-                this.waitingForNextTask = false;
-            }
-            if (!z && this.loadFrameTask == null) {
-                this.frameWaitSync = new CountDownLatch(1);
-            }
-            if (!scheduleNextGetFrame()) {
-                this.forceFrameRedraw = true;
-            } else if (!z) {
-                try {
-                    this.frameWaitSync.await();
-                } catch (Exception e) {
-                    FileLog.e((Throwable) e);
+                if ((!z || z2) && this.waitingForNextTask && this.nextRenderingBitmap != null) {
+                    this.backgroundBitmap = this.nextRenderingBitmap;
+                    this.nextRenderingBitmap = null;
+                    this.loadFrameTask = null;
+                    this.waitingForNextTask = false;
                 }
-                this.frameWaitSync = null;
+                if (!z && this.loadFrameTask == null) {
+                    this.frameWaitSync = new CountDownLatch(1);
+                }
+                if (z2 && !this.isRunning) {
+                    this.isRunning = true;
+                }
+                if (!scheduleNextGetFrame()) {
+                    this.forceFrameRedraw = true;
+                } else if (!z) {
+                    try {
+                        this.frameWaitSync.await();
+                    } catch (Exception e) {
+                        FileLog.e((Throwable) e);
+                    }
+                    this.frameWaitSync = null;
+                }
+                invalidateSelf();
             }
-            invalidateSelf();
         }
     }
 
@@ -1795,6 +1800,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     public int getMinimumWidth() {
         return this.width;
+    }
+
+    public Bitmap getBackgroundBitmap() {
+        return this.backgroundBitmap;
     }
 
     public Bitmap getAnimatedBitmap() {

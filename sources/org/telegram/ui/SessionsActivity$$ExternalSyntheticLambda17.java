@@ -5,13 +5,12 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class SessionsActivity$$ExternalSyntheticLambda17 implements RequestDelegate {
-    public final /* synthetic */ SessionsActivity f$0;
+    public static final /* synthetic */ SessionsActivity$$ExternalSyntheticLambda17 INSTANCE = new SessionsActivity$$ExternalSyntheticLambda17();
 
-    public /* synthetic */ SessionsActivity$$ExternalSyntheticLambda17(SessionsActivity sessionsActivity) {
-        this.f$0 = sessionsActivity;
+    private /* synthetic */ SessionsActivity$$ExternalSyntheticLambda17() {
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$createView$5(tLObject, tLRPC$TL_error);
+        SessionsActivity.lambda$createView$0(tLObject, tLRPC$TL_error);
     }
 }

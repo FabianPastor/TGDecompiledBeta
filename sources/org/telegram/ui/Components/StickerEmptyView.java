@@ -229,17 +229,26 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             tLRPC$Document = tLRPC$Document2;
             str = "130_130";
         }
+        boolean z = true;
         if (tLRPC$Document != null) {
             SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document.thumbs, this.colorKey1, 0.2f);
             if (svgThumb != null) {
                 svgThumb.overrideWidthAndHeight(512, 512);
             }
             this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$Document), str, "tgs", (Drawable) svgThumb, (Object) tLRPC$TL_messages_stickerSet);
-            this.stickerView.getImageReceiver().setAutoRepeat(2);
-            return;
+            if (this.stickerType == 9) {
+                this.stickerView.getImageReceiver().setAutoRepeat(1);
+            } else {
+                this.stickerView.getImageReceiver().setAutoRepeat(2);
+            }
+        } else {
+            MediaDataController instance = MediaDataController.getInstance(this.currentAccount);
+            if (tLRPC$TL_messages_stickerSet != null) {
+                z = false;
+            }
+            instance.loadStickersByEmojiOrName("tg_placeholders_android", false, z);
+            this.stickerView.getImageReceiver().clearImage();
         }
-        MediaDataController.getInstance(this.currentAccount).loadStickersByEmojiOrName("tg_placeholders_android", false, tLRPC$TL_messages_stickerSet == null);
-        this.stickerView.getImageReceiver().clearImage();
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
