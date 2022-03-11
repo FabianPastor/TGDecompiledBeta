@@ -1449,7 +1449,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             r0.<init>(r11, r12)
             r1.setDelegate(r0)
             org.telegram.ui.LaunchActivity r12 = r11.parentActivity
-            r12.lambda$runLinkRequest$46(r1)
+            r12.lambda$runLinkRequest$47(r1)
             r11.dismiss()
             goto L_0x01f3
         L_0x004b:

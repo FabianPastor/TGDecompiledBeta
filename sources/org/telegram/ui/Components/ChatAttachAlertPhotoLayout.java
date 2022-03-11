@@ -2558,8 +2558,35 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if (z) {
             updatePhotosCounter(false);
             updateCheckedPhotoIndices();
-            this.adapter.notifyDataSetChanged();
-            this.cameraAttachAdapter.notifyDataSetChanged();
+            int childCount = this.gridView.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = this.gridView.getChildAt(i);
+                if (childAt instanceof PhotoAttachPhotoCell) {
+                    int childAdapterPosition = this.gridView.getChildAdapterPosition(childAt);
+                    if (this.adapter.needCamera && this.selectedAlbumEntry == this.galleryAlbumEntry) {
+                        childAdapterPosition--;
+                    }
+                    PhotoAttachPhotoCell photoAttachPhotoCell = (PhotoAttachPhotoCell) childAt;
+                    if (this.parentAlert.avatarPicker != 0) {
+                        photoAttachPhotoCell.getCheckBox().setVisibility(8);
+                    }
+                    MediaController.PhotoEntry photoEntryAtPosition = getPhotoEntryAtPosition(childAdapterPosition);
+                    if (photoEntryAtPosition != null) {
+                        boolean z2 = true;
+                        boolean z3 = this.adapter.needCamera && this.selectedAlbumEntry == this.galleryAlbumEntry;
+                        if (childAdapterPosition != this.adapter.getItemCount() - 1) {
+                            z2 = false;
+                        }
+                        photoAttachPhotoCell.setPhotoEntry(photoEntryAtPosition, z3, z2);
+                        ChatAttachAlert chatAttachAlert = this.parentAlert;
+                        if (!(chatAttachAlert.baseFragment instanceof ChatActivity) || !chatAttachAlert.allowOrder) {
+                            photoAttachPhotoCell.setChecked(-1, hashMap.containsKey(Integer.valueOf(photoEntryAtPosition.imageId)), false);
+                        } else {
+                            photoAttachPhotoCell.setChecked(selectedPhotosOrder.indexOf(Integer.valueOf(photoEntryAtPosition.imageId)), hashMap.containsKey(Integer.valueOf(photoEntryAtPosition.imageId)), false);
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -61,10 +61,8 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
     public boolean applyTopPadding;
     protected ColorDrawable backDrawable;
-    /* access modifiers changed from: protected */
-    public int backgroundPaddingLeft;
-    /* access modifiers changed from: protected */
-    public int backgroundPaddingTop;
+    protected int backgroundPaddingLeft;
+    protected int backgroundPaddingTop;
     protected int behindKeyboardColor;
     protected String behindKeyboardColorKey;
     /* access modifiers changed from: private */
@@ -74,10 +72,8 @@ public class BottomSheet extends Dialog {
     protected boolean calcMandatoryInsets;
     private boolean canDismissWithSwipe;
     protected ContainerView container;
-    /* access modifiers changed from: protected */
-    public ViewGroup containerView;
-    /* access modifiers changed from: protected */
-    public int currentAccount;
+    protected ViewGroup containerView;
+    protected int currentAccount;
     /* access modifiers changed from: private */
     public float currentPanTranslationY;
     protected AnimatorSet currentSheetAnimation;
@@ -99,8 +95,7 @@ public class BottomSheet extends Dialog {
     protected boolean fullWidth;
     /* access modifiers changed from: private */
     public float hideSystemVerticalInsetsProgress;
-    /* access modifiers changed from: protected */
-    public boolean isFullscreen;
+    protected boolean isFullscreen;
     /* access modifiers changed from: private */
     public int[] itemIcons;
     private ArrayList<BottomSheetCell> itemViews;
@@ -108,16 +103,14 @@ public class BottomSheet extends Dialog {
     public CharSequence[] items;
     /* access modifiers changed from: private */
     public ValueAnimator keyboardContentAnimator;
-    /* access modifiers changed from: protected */
-    public boolean keyboardVisible;
+    protected boolean keyboardVisible;
     /* access modifiers changed from: private */
     public WindowInsets lastInsets;
     /* access modifiers changed from: private */
     public int layoutCount;
     /* access modifiers changed from: private */
     public int leftInset;
-    /* access modifiers changed from: protected */
-    public int navBarColor;
+    protected int navBarColor;
     protected String navBarColorKey;
     protected View nestedScrollChild;
     /* access modifiers changed from: private */

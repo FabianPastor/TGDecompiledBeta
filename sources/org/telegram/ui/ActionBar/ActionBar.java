@@ -28,9 +28,11 @@ import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import androidx.core.graphics.ColorUtils;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.FiltersView;
@@ -628,7 +630,7 @@ public class ActionBar extends FrameLayout {
                     arrayList.add(ObjectAnimator.ofFloat(view6, View.ALPHA, new float[]{0.0f, 1.0f}));
                 }
                 if (SharedConfig.noStatusBar) {
-                    if (AndroidUtilities.computePerceivedBrightness(this.actionModeColor) < 0.721f) {
+                    if (ColorUtils.calculateLuminance(this.actionModeColor) < 0.699999988079071d) {
                         AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), false);
                     } else {
                         AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), true);
@@ -713,7 +715,7 @@ public class ActionBar extends FrameLayout {
                 view5.setAlpha(1.0f);
             }
             if (SharedConfig.noStatusBar) {
-                if (AndroidUtilities.computePerceivedBrightness(this.actionModeColor) < 0.721f) {
+                if (ColorUtils.calculateLuminance(this.actionModeColor) < 0.699999988079071d) {
                     AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), false);
                 } else {
                     AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), true);
@@ -793,7 +795,10 @@ public class ActionBar extends FrameLayout {
                 arrayList.add(ObjectAnimator.ofFloat(view, View.ALPHA, new float[]{0.0f}));
             }
             if (SharedConfig.noStatusBar) {
-                if (AndroidUtilities.computePerceivedBrightness(this.actionBarColor) < 0.721f) {
+                int i2 = this.actionBarColor;
+                if (i2 == 0) {
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needCheckSystemBarColors, new Object[0]);
+                } else if (ColorUtils.calculateLuminance(i2) < 0.699999988079071d) {
                     AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), false);
                 } else {
                     AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), true);
@@ -1936,7 +1941,7 @@ public class ActionBar extends FrameLayout {
         super.onAttachedToWindow();
         this.ellipsizeSpanAnimator.onAttachedToWindow();
         if (SharedConfig.noStatusBar && this.actionModeVisible) {
-            if (AndroidUtilities.computePerceivedBrightness(this.actionModeColor) < 0.721f) {
+            if (ColorUtils.calculateLuminance(this.actionModeColor) < 0.699999988079071d) {
                 AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), false);
             } else {
                 AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), true);
@@ -1949,7 +1954,10 @@ public class ActionBar extends FrameLayout {
         super.onDetachedFromWindow();
         this.ellipsizeSpanAnimator.onDetachedFromWindow();
         if (SharedConfig.noStatusBar && this.actionModeVisible) {
-            if (AndroidUtilities.computePerceivedBrightness(this.actionBarColor) < 0.721f) {
+            int i = this.actionBarColor;
+            if (i == 0) {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needCheckSystemBarColors, new Object[0]);
+            } else if (ColorUtils.calculateLuminance(i) < 0.699999988079071d) {
                 AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), false);
             } else {
                 AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), true);

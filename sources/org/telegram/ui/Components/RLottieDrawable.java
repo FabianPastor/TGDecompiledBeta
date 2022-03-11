@@ -1802,10 +1802,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         return this.width;
     }
 
-    public Bitmap getBackgroundBitmap() {
-        return this.backgroundBitmap;
-    }
-
     public Bitmap getAnimatedBitmap() {
         if (this.renderingBitmap != null) {
             return this.renderingBitmap;

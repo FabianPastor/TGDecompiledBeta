@@ -96,6 +96,7 @@ public class ActionBarLayout extends FrameLayout {
     /* access modifiers changed from: private */
     public BaseFragment oldFragment;
     private Runnable onCloseAnimationEndRunnable;
+    private Runnable onFragmentStackChangedListener;
     private Runnable onOpenAnimationEndRunnable;
     private Runnable overlayAction;
     private int overrideWidthOffset = -1;
@@ -483,7 +484,7 @@ public class ActionBarLayout extends FrameLayout {
             if (baseFragment2.isBeginToShow() && (navigationBarColor = baseFragment2.getNavigationBarColor()) != (navigationBarColor2 = baseFragment.getNavigationBarColor())) {
                 baseFragment2.setNavigationBarColor(ColorUtils.blendARGB(navigationBarColor, navigationBarColor2, clamp));
             }
-            if (!baseFragment2.inPreviewMode && Build.VERSION.SDK_INT >= 23) {
+            if (!baseFragment2.inPreviewMode && Build.VERSION.SDK_INT >= 23 && !SharedConfig.noStatusBar) {
                 int i2 = Theme.getColor("actionBarDefault") == -1 ? NUM : NUM;
                 int i3 = baseFragment.hasForceLightStatusBar() ? 0 : i2;
                 if (!baseFragment2.hasForceLightStatusBar()) {
@@ -698,6 +699,7 @@ public class ActionBarLayout extends FrameLayout {
                 baseFragment.setParentLayout((ActionBarLayout) null);
                 ArrayList<BaseFragment> arrayList2 = this.fragmentsStack;
                 arrayList2.remove(arrayList2.size() - 1);
+                onFragmentStackChanged();
                 LayoutContainer layoutContainer = this.containerView;
                 LayoutContainer layoutContainer2 = this.containerViewBack;
                 this.containerView = layoutContainer2;
@@ -1004,6 +1006,7 @@ public class ActionBarLayout extends FrameLayout {
                 baseFragment.onFragmentDestroy();
                 baseFragment.setParentLayout((ActionBarLayout) null);
                 this.fragmentsStack.remove(baseFragment);
+                onFragmentStackChanged();
             } else {
                 View view = baseFragment.fragmentView;
                 if (!(view == null || (viewGroup2 = (ViewGroup) view.getParent()) == null)) {
@@ -1229,6 +1232,7 @@ public class ActionBarLayout extends FrameLayout {
             baseFragment3.actionBar.setTitleOverlayText(this.titleOverlayText, this.titleOverlayTextId, this.overlayAction);
         }
         this.fragmentsStack.add(baseFragment3);
+        onFragmentStackChanged();
         baseFragment.onResume();
         this.currentActionBar = baseFragment3.actionBar;
         if (!baseFragment3.hasOwnBackground && view3.getBackground() == null) {
@@ -1441,6 +1445,17 @@ public class ActionBarLayout extends FrameLayout {
         onAnimationEndCheck(false);
     }
 
+    public void setFragmentStackChangedListener(Runnable runnable) {
+        this.onFragmentStackChangedListener = runnable;
+    }
+
+    private void onFragmentStackChanged() {
+        Runnable runnable = this.onFragmentStackChangedListener;
+        if (runnable != null) {
+            runnable.run();
+        }
+    }
+
     public boolean addFragmentToStack(BaseFragment baseFragment) {
         return addFragmentToStack(baseFragment, -1);
     }
@@ -1469,8 +1484,10 @@ public class ActionBarLayout extends FrameLayout {
                 }
             }
             this.fragmentsStack.add(baseFragment);
+            onFragmentStackChanged();
         } else {
             this.fragmentsStack.add(i, baseFragment);
+            onFragmentStackChanged();
         }
         return true;
     }
@@ -1484,6 +1501,7 @@ public class ActionBarLayout extends FrameLayout {
         this.containerViewBack.setVisibility(4);
         this.containerViewBack.setTranslationY(0.0f);
         bringChildToFront(this.containerView);
+        onFragmentStackChanged();
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:17:0x00d6  */
@@ -1690,6 +1708,7 @@ public class ActionBarLayout extends FrameLayout {
                 if (z2) {
                     this.transitionAnimationStartTime = System.currentTimeMillis();
                     this.transitionAnimationInProgress = true;
+                    baseFragment2.setRemovingFromStack(true);
                     this.onCloseAnimationEndRunnable = new ActionBarLayout$$ExternalSyntheticLambda3(this, baseFragment2, baseFragment);
                     if (!this.inPreviewMode && !this.transitionAnimationPreviewMode) {
                         animatorSet = baseFragment2.onCustomTransitionAnimation(false, new ActionBarLayout$$ExternalSyntheticLambda0(this));
@@ -1713,11 +1732,12 @@ public class ActionBarLayout extends FrameLayout {
                         this.waitingForKeyboardCloseRunnable = r13;
                         AndroidUtilities.runOnUIThread(r13, 200);
                     }
-                } else {
-                    baseFragment2.onTransitionAnimationEnd(false, true);
-                    baseFragment.onTransitionAnimationEnd(true, true);
-                    baseFragment.onBecomeFullyVisible();
+                    onFragmentStackChanged();
+                    return;
                 }
+                baseFragment2.onTransitionAnimationEnd(false, true);
+                baseFragment.onTransitionAnimationEnd(true, true);
+                baseFragment.onBecomeFullyVisible();
             } else if (this.useAlphaAnimations) {
                 this.transitionAnimationStartTime = System.currentTimeMillis();
                 this.transitionAnimationInProgress = true;
@@ -1771,6 +1791,7 @@ public class ActionBarLayout extends FrameLayout {
             this.containerViewBack.setTranslationX(0.0f);
         }
         closeLastFragmentInternalRemoveOld(baseFragment);
+        baseFragment.setRemovingFromStack(false);
         baseFragment.onTransitionAnimationEnd(false, true);
         baseFragment2.onTransitionAnimationEnd(true, true);
         baseFragment2.onBecomeFullyVisible();
@@ -1856,6 +1877,7 @@ public class ActionBarLayout extends FrameLayout {
         baseFragment.onFragmentDestroy();
         baseFragment.setParentLayout((ActionBarLayout) null);
         this.fragmentsStack.remove(baseFragment);
+        onFragmentStackChanged();
     }
 
     public void removeFragmentFromStack(int i) {

@@ -4,6 +4,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import androidx.core.graphics.ColorUtils;
 import java.util.ArrayList;
 import org.telegram.messenger.LocaleController;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -377,5 +378,13 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, mediaActivity$$ExternalSyntheticLambda02, "windowBackgroundWhiteBlackText"));
         arrayList.addAll(this.sharedMediaLayout.getThemeDescriptions());
         return arrayList;
+    }
+
+    public boolean isLightStatusBar() {
+        int color = Theme.getColor("windowBackgroundWhite");
+        if (this.actionBar.isActionModeShowed()) {
+            color = Theme.getColor("actionBarActionModeDefault");
+        }
+        return ColorUtils.calculateLuminance(color) > 0.699999988079071d;
     }
 }

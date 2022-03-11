@@ -4,11 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
-import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
@@ -51,7 +51,8 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
         linearLayout.setOrientation(1);
         RecyclerListView recyclerListView = new RecyclerListView(context);
         this.listView = recyclerListView;
-        recyclerListView.setLayoutManager(new LinearLayoutManager(context));
+        ((DefaultItemAnimator) recyclerListView.getItemAnimator()).setSupportsChangeAnimations(false);
+        this.listView.setLayoutManager(new LinearLayoutManager(context));
         RecyclerListView recyclerListView2 = this.listView;
         AnonymousClass2 r2 = new RecyclerView.Adapter() {
             /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v2, resolved type: org.telegram.ui.Cells.ThemePreviewMessagesCell} */
@@ -138,7 +139,7 @@ public class ReactionsDoubleTapManageActivity extends BaseFragment implements No
     public /* synthetic */ void lambda$createView$0(View view, int i) {
         if (view instanceof AvailableReactionCell) {
             MediaDataController.getInstance(this.currentAccount).setDoubleTapReaction(((AvailableReactionCell) view).react.reaction);
-            AndroidUtilities.updateVisibleRows(this.listView);
+            this.listView.getAdapter().notifyItemRangeChanged(0, this.listView.getAdapter().getItemCount());
         }
     }
 

@@ -21,6 +21,7 @@ import android.view.ViewParent;
 import android.view.Window;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.FrameLayout;
+import androidx.core.graphics.ColorUtils;
 import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -52,22 +53,20 @@ public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public int currentAccount;
     protected boolean finishing;
-    /* access modifiers changed from: protected */
-    public boolean fragmentBeginToShow;
+    protected boolean fragmentBeginToShow;
     /* access modifiers changed from: protected */
     public View fragmentView;
     protected boolean hasOwnBackground;
-    /* access modifiers changed from: protected */
-    public boolean inBubbleMode;
+    protected boolean inBubbleMode;
     protected boolean inMenuMode;
     /* access modifiers changed from: protected */
     public boolean inPreviewMode;
     private boolean isFinished;
-    /* access modifiers changed from: protected */
-    public boolean isPaused;
+    protected boolean isPaused;
     protected Dialog parentDialog;
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
+    private boolean removingFromStack;
     protected Dialog visibleDialog;
 
     /* access modifiers changed from: protected */
@@ -242,6 +241,10 @@ public abstract class BaseFragment {
 
     public boolean isInBubbleMode() {
         return this.inBubbleMode;
+    }
+
+    public boolean isInPreviewMode() {
+        return this.inPreviewMode;
     }
 
     /* access modifiers changed from: protected */
@@ -432,15 +435,7 @@ public abstract class BaseFragment {
     }
 
     public void onResume() {
-        boolean z = false;
         this.isPaused = false;
-        if (hasForceLightStatusBar() && !AndroidUtilities.isTablet() && getParentLayout().getLastFragment() == this && getParentActivity() != null && !this.finishing) {
-            Window window = getParentActivity().getWindow();
-            if (Theme.getColor("actionBarDefault") == -1 || !Theme.getActiveTheme().isDark()) {
-                z = true;
-            }
-            AndroidUtilities.setLightStatusBar(window, z, true);
-        }
     }
 
     public void onPause() {
@@ -895,5 +890,27 @@ public abstract class BaseFragment {
 
     private void setParentDialog(Dialog dialog) {
         this.parentDialog = dialog;
+    }
+
+    public boolean isRemovingFromStack() {
+        return this.removingFromStack;
+    }
+
+    public void setRemovingFromStack(boolean z) {
+        this.removingFromStack = z;
+    }
+
+    public boolean isLightStatusBar() {
+        int i;
+        Theme.ResourcesProvider resourceProvider = getResourceProvider();
+        if (resourceProvider != null) {
+            i = resourceProvider.getColorOrDefault("actionBarDefault");
+        } else {
+            i = Theme.getColor("actionBarDefault", (boolean[]) null, true);
+        }
+        if (ColorUtils.calculateLuminance(i) > 0.699999988079071d) {
+            return true;
+        }
+        return false;
     }
 }

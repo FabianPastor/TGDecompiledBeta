@@ -95,10 +95,6 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         void onSizeChanged(int i, boolean z);
     }
 
-    /* access modifiers changed from: private */
-    public void checkLayerType() {
-    }
-
     /* access modifiers changed from: protected */
     public AdjustPanLayoutHelper createAdjustPanLayoutHelper() {
         return null;
@@ -175,7 +171,6 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                         }
                         Drawable unused2 = SizeNotifierFrameLayout.this.backgroundDrawable = newDrawable;
                     }
-                    SizeNotifierFrameLayout.this.checkLayerType();
                     float themeAnimationValue = SizeNotifierFrameLayout.this.parentLayout != null ? SizeNotifierFrameLayout.this.parentLayout.getThemeAnimationValue() : 1.0f;
                     int i = 0;
                     while (i < 2) {
@@ -196,10 +191,10 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                                     int ceil = (int) Math.ceil((double) (((float) access$200.getIntrinsicWidth()) * max * SizeNotifierFrameLayout.this.parallaxScale));
                                     int ceil2 = (int) Math.ceil((double) (((float) access$200.getIntrinsicHeight()) * max * SizeNotifierFrameLayout.this.parallaxScale));
                                     int measuredWidth = ((getMeasuredWidth() - ceil) / 2) + ((int) SizeNotifierFrameLayout.this.translationX);
-                                    int access$800 = SizeNotifierFrameLayout.this.backgroundTranslationY + ((measuredHeight - ceil2) / 2) + currentActionBarHeight + ((int) SizeNotifierFrameLayout.this.translationY);
+                                    int access$700 = SizeNotifierFrameLayout.this.backgroundTranslationY + ((measuredHeight - ceil2) / 2) + currentActionBarHeight + ((int) SizeNotifierFrameLayout.this.translationY);
                                     canvas.save();
                                     canvas.clipRect(0, currentActionBarHeight, ceil, getMeasuredHeight() - SizeNotifierFrameLayout.this.bottomClip);
-                                    access$200.setBounds(measuredWidth, access$800, ceil + measuredWidth, ceil2 + access$800);
+                                    access$200.setBounds(measuredWidth, access$700, ceil + measuredWidth, ceil2 + access$700);
                                     access$200.draw(canvas);
                                     SizeNotifierFrameLayout.this.checkSnowflake(canvas);
                                     canvas.restore();
@@ -259,10 +254,10 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                                     int ceil3 = (int) Math.ceil((double) (((float) access$200.getIntrinsicWidth()) * max2 * SizeNotifierFrameLayout.this.parallaxScale));
                                     int ceil4 = (int) Math.ceil((double) (((float) access$200.getIntrinsicHeight()) * max2 * SizeNotifierFrameLayout.this.parallaxScale));
                                     int measuredWidth2 = ((getMeasuredWidth() - ceil3) / 2) + ((int) SizeNotifierFrameLayout.this.translationX);
-                                    int access$8002 = SizeNotifierFrameLayout.this.backgroundTranslationY + ((measuredHeight3 - ceil4) / 2) + currentActionBarHeight2 + ((int) SizeNotifierFrameLayout.this.translationY);
+                                    int access$7002 = SizeNotifierFrameLayout.this.backgroundTranslationY + ((measuredHeight3 - ceil4) / 2) + currentActionBarHeight2 + ((int) SizeNotifierFrameLayout.this.translationY);
                                     canvas.save();
                                     canvas.clipRect(0, currentActionBarHeight2, ceil3, getMeasuredHeight() - SizeNotifierFrameLayout.this.bottomClip);
-                                    access$200.setBounds(measuredWidth2, access$8002, ceil3 + measuredWidth2, ceil4 + access$8002);
+                                    access$200.setBounds(measuredWidth2, access$7002, ceil3 + measuredWidth2, ceil4 + access$7002);
                                     access$200.draw(canvas);
                                     SizeNotifierFrameLayout.this.checkSnowflake(canvas);
                                     canvas.restore();
@@ -288,7 +283,6 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 ((MotionBackgroundDrawable) drawable).setParentView(this.backgroundView);
             }
             this.backgroundDrawable = drawable;
-            checkLayerType();
             if (z) {
                 if (this.parallaxEffect == null) {
                     WallpaperParallaxEffect wallpaperParallaxEffect = new WallpaperParallaxEffect(getContext());
@@ -490,8 +484,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
 
     public void startBlur() {
         BlurBitmap blurBitmap;
-        if (this.blurIsRunning && !this.blurGeneratingTuskIsRunning && this.invalidateBlur && SharedConfig.chatBlurEnabled()) {
-            Color.alpha(Theme.getColor("chat_BlurAlpha"));
+        if (this.blurIsRunning && !this.blurGeneratingTuskIsRunning && this.invalidateBlur && SharedConfig.chatBlurEnabled() && Color.alpha(Theme.getColor("chat_BlurAlpha")) != 255) {
             int measuredWidth = getMeasuredWidth();
             int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + AndroidUtilities.statusBarHeight + AndroidUtilities.dp(100.0f);
             if (measuredWidth != 0 && currentActionBarHeight != 0) {

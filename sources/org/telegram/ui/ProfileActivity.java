@@ -4431,6 +4431,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             });
             this.headerAnimatorSet.setDuration(150);
             this.headerAnimatorSet.start();
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needCheckSystemBarColors, new Object[0]);
         }
     }
 
@@ -4771,6 +4772,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (!this.allowPullingDown || (!this.openingAvatar && this.expandProgress < 0.33f)) {
                     if (this.isPulledDown) {
                         this.isPulledDown = false;
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needCheckSystemBarColors, new Object[0]);
                         ActionBarMenuItem actionBarMenuItem = this.otherItem;
                         if (actionBarMenuItem != null) {
                             actionBarMenuItem.hideSubItem(21);
@@ -4843,6 +4845,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             actionBarMenuItem3.setEnabled(false);
                         }
                         this.isPulledDown = true;
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needCheckSystemBarColors, new Object[0]);
                         this.overlaysView.setOverlaysVisible(true, min2);
                         this.avatarsViewPagerIndicatorView.refreshVisibility(min2);
                         this.avatarsViewPager.setCreateThumbFromParent(true);
@@ -12351,5 +12354,23 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 sparseIntArray.put(i2, i);
             }
         }
+    }
+
+    public boolean isLightStatusBar() {
+        int i;
+        if (this.isPulledDown) {
+            return false;
+        }
+        if (this.actionBar.isActionModeShowed()) {
+            i = Theme.getColor("actionBarActionModeDefault");
+        } else if (this.mediaHeaderVisible) {
+            i = Theme.getColor("windowBackgroundWhite");
+        } else {
+            i = Theme.getColor("actionBarDefault");
+        }
+        if (ColorUtils.calculateLuminance(i) > 0.699999988079071d) {
+            return true;
+        }
+        return false;
     }
 }

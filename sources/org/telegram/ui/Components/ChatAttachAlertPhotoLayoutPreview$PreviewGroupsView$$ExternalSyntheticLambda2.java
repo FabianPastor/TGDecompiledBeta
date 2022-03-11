@@ -4,16 +4,14 @@ import org.telegram.ui.Components.ChatAttachAlertPhotoLayoutPreview;
 
 public final /* synthetic */ class ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$$ExternalSyntheticLambda2 implements Runnable {
     public final /* synthetic */ ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell.MediaCell f$2;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$$ExternalSyntheticLambda2(ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView previewGroupsView, long j, ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView.PreviewGroupCell.MediaCell mediaCell) {
+    public /* synthetic */ ChatAttachAlertPhotoLayoutPreview$PreviewGroupsView$$ExternalSyntheticLambda2(ChatAttachAlertPhotoLayoutPreview.PreviewGroupsView previewGroupsView, int i) {
         this.f$0 = previewGroupsView;
-        this.f$1 = j;
-        this.f$2 = mediaCell;
+        this.f$1 = i;
     }
 
     public final void run() {
-        this.f$0.lambda$onTouchEvent$2(this.f$1, this.f$2);
+        this.f$0.lambda$onTouchEvent$4(this.f$1);
     }
 }

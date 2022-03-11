@@ -8110,6 +8110,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             super.notifyItemChanged(i);
         }
 
+        public void notifyItemRangeChanged(int i, int i2) {
+            updateRows();
+            super.notifyItemRangeChanged(i, i2);
+        }
+
         public void notifyItemRangeChanged(int i, int i2, Object obj) {
             updateRows();
             super.notifyItemRangeChanged(i, i2, obj);

@@ -4434,7 +4434,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 if (groupCallInvitedCell.hasAvatarSet()) {
                     bundle.putBoolean("expandPhoto", true);
                 }
-                this.parentActivity.lambda$runLinkRequest$46(new ProfileActivity(bundle));
+                this.parentActivity.lambda$runLinkRequest$47(new ProfileActivity(bundle));
                 dismiss();
             }
         } else if (i == this.listAdapter.addMemberRow) {
@@ -7547,7 +7547,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 } else {
                     bundle.putLong("chat_id", -j2);
                 }
-                this.parentActivity.lambda$runLinkRequest$46(new ChatActivity(bundle));
+                this.parentActivity.lambda$runLinkRequest$47(new ChatActivity(bundle));
                 dismiss();
             } else if (i2 == 8) {
                 this.parentActivity.switchToAccount(this.currentAccount, true);
@@ -7559,7 +7559,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     } else {
                         bundle2.putLong("chat_id", -j2);
                     }
-                    this.parentActivity.lambda$runLinkRequest$46(new ChatActivity(bundle2));
+                    this.parentActivity.lambda$runLinkRequest$47(new ChatActivity(bundle2));
                     dismiss();
                     return;
                 }
@@ -9132,6 +9132,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         public void notifyItemChanged(int i) {
             updateRows();
             super.notifyItemChanged(i);
+        }
+
+        public void notifyItemRangeChanged(int i, int i2) {
+            updateRows();
+            super.notifyItemRangeChanged(i, i2);
         }
 
         public void notifyItemRangeChanged(int i, int i2, Object obj) {

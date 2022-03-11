@@ -8,6 +8,6 @@ public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda27 imp
     }
 
     public final void run() {
-        this.f$0.lambda$didReceivedNotification$75();
+        this.f$0.lambda$didReceivedNotification$79();
     }
 }

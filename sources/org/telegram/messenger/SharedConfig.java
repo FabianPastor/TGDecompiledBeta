@@ -75,7 +75,7 @@ public class SharedConfig {
     public static int mediaColumnsCount = 3;
     public static int messageSeenHintCount = 0;
     public static boolean noSoundHintShowed = false;
-    public static boolean noStatusBar = false;
+    public static boolean noStatusBar = true;
     public static boolean noiseSupression = false;
     public static String passcodeHash = "";
     public static long passcodeRetryInMs = 0;
@@ -545,7 +545,7 @@ public class SharedConfig {
             int r2 = r1.getInt(r2, r6)     // Catch:{ all -> 0x0376 }
             keepMedia = r2     // Catch:{ all -> 0x0376 }
             java.lang.String r2 = "noStatusBar"
-            boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x0376 }
+            boolean r2 = r1.getBoolean(r2, r4)     // Catch:{ all -> 0x0376 }
             noStatusBar = r2     // Catch:{ all -> 0x0376 }
             java.lang.String r2 = "forceRtmpStream"
             boolean r2 = r1.getBoolean(r2, r3)     // Catch:{ all -> 0x0376 }

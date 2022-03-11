@@ -10229,4 +10229,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             this.searchViewPager.getTabsView().scrollToTab(i, i);
         }
     }
+
+    public boolean isLightStatusBar() {
+        int color = Theme.getColor(this.searching ? "windowBackgroundWhite" : this.folderId == 0 ? "actionBarDefault" : "actionBarDefaultArchived");
+        if (this.actionBar.isActionModeShowed()) {
+            color = Theme.getColor("actionBarActionModeDefault");
+        }
+        return ColorUtils.calculateLuminance(color) > 0.699999988079071d;
+    }
 }
