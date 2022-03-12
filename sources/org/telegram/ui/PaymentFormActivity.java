@@ -492,11 +492,11 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v0, resolved type: org.telegram.ui.PaymentFormActivity} */
     /* JADX WARNING: type inference failed for: r5v0 */
-    /* JADX WARNING: type inference failed for: r9v2, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r9v2, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r9v3 */
     /* JADX WARNING: type inference failed for: r9v4 */
     /* JADX WARNING: type inference failed for: r9v6 */
-    /* JADX WARNING: type inference failed for: r5v195, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r5v195, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r5v196 */
     /* JADX WARNING: Can't wrap try/catch for region: R(5:315|316|317|318|319) */
     /* JADX WARNING: Code restructure failed: missing block: B:465:0x0fc8, code lost:
@@ -2794,7 +2794,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0.setTextColor(r1)
             org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
             r0 = r0[r14]
-            r1 = 2131627689(0x7f0e0ea9, float:1.888265E38)
+            r1 = 2131627692(0x7f0e0eac, float:1.8882656E38)
             java.lang.String r3 = "ResendCode"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setText(r1, r14)
@@ -3587,7 +3587,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3 = 2131627132(0x7f0e0c7c, float:1.888152E38)
             java.lang.String r4 = "PaymentCheckoutMethod"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r4 = 2131165960(0x7var_, float:1.7946152E38)
+            r4 = 2131165962(0x7var_a, float:1.7946156E38)
             r0.setTextAndValueAndIcon(r1, r3, r4, r14)
             android.widget.LinearLayout r0 = r7.linearLayout2
             org.telegram.ui.Cells.TextDetailSettingsCell[] r1 = r7.detailSettingsCell
@@ -3640,7 +3640,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0 = 2131627137(0x7f0e0CLASSNAME, float:1.888153E38)
             java.lang.String r4 = "PaymentCheckoutProvider"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
-            r4 = 2131165965(0x7var_d, float:1.7946162E38)
+            r4 = 2131165967(0x7var_f, float:1.7946166E38)
             org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r5 = r7.validateRequest
             if (r5 == 0) goto L_0x19b2
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r5 = r5.info
@@ -3809,7 +3809,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r5 = 2131627138(0x7f0e0CLASSNAME, float:1.8881532E38)
             java.lang.String r6 = "PaymentCheckoutShippingMethod"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r6 = 2131165961(0x7var_, float:1.7946154E38)
+            r6 = 2131165963(0x7var_b, float:1.7946158E38)
             r0.setTextAndValueAndIcon(r1, r5, r6, r9)
             android.widget.LinearLayout r0 = r7.linearLayout2
             org.telegram.ui.Cells.TextDetailSettingsCell[] r1 = r7.detailSettingsCell

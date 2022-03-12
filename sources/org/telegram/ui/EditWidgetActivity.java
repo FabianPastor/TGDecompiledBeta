@@ -217,7 +217,7 @@ public class EditWidgetActivity extends BaseFragment {
                 org.telegram.ui.Cells.ChatActionCell r9 = new org.telegram.ui.Cells.ChatActionCell
                 r9.<init>(r2)
                 java.lang.String r10 = "WidgetPreview"
-                r11 = 2131628898(0x7f0e1362, float:1.8885102E38)
+                r11 = 2131628901(0x7f0e1365, float:1.8885108E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
                 r9.setCustomText(r10)
                 r11 = -2
@@ -232,7 +232,7 @@ public class EditWidgetActivity extends BaseFragment {
                 android.widget.LinearLayout r9 = new android.widget.LinearLayout
                 r9.<init>(r2)
                 r9.setOrientation(r4)
-                r10 = 2131166226(0x7var_, float:1.7946691E38)
+                r10 = 2131166228(0x7var_, float:1.7946695E38)
                 r9.setBackgroundResource(r10)
                 r14 = 10
                 r16 = 10
@@ -332,7 +332,7 @@ public class EditWidgetActivity extends BaseFragment {
                 org.telegram.ui.EditWidgetActivity r0 = r1.this$0
                 int r0 = r0.widgetType
                 r2 = 1111490560(0x42400000, float:48.0)
-                r3 = 2131627771(0x7f0e0efb, float:1.8882816E38)
+                r3 = 2131627774(0x7f0e0efe, float:1.8882822E38)
                 java.lang.String r4 = "SavedMessages"
                 r5 = 0
                 r6 = 0
@@ -418,7 +418,7 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x00c7:
                 boolean r10 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
                 if (r10 == 0) goto L_0x00d7
-                r10 = 2131627633(0x7f0e0e71, float:1.8882536E38)
+                r10 = 2131627634(0x7f0e0e72, float:1.8882538E38)
                 java.lang.String r11 = "RepliesTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
                 goto L_0x00ef
@@ -1072,14 +1072,14 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
                 android.view.View r0 = r0.findViewById(r2)
-                r2 = 2131166230(0x7var_, float:1.79467E38)
+                r2 = 2131166232(0x7var_, float:1.7946704E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x0630
             L_0x0614:
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
                 android.view.View r0 = r0.findViewById(r2)
-                r2 = 2131166229(0x7var_, float:1.7946697E38)
+                r2 = 2131166231(0x7var_, float:1.7946702E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x0630
             L_0x0623:
@@ -1092,7 +1092,7 @@ public class EditWidgetActivity extends BaseFragment {
                 int r13 = r13 + 1
                 r4 = r17
                 r2 = 1111490560(0x42400000, float:48.0)
-                r3 = 2131627771(0x7f0e0efb, float:1.8882816E38)
+                r3 = 2131627774(0x7f0e0efe, float:1.8882822E38)
                 r5 = 0
                 r8 = 8
                 r9 = 2
@@ -1245,15 +1245,15 @@ public class EditWidgetActivity extends BaseFragment {
                 boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r0)
                 if (r8 == 0) goto L_0x0780
                 r10 = r17
-                r8 = 2131627771(0x7f0e0efb, float:1.8882816E38)
+                r8 = 2131627774(0x7f0e0efe, float:1.8882822E38)
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 goto L_0x07a9
             L_0x0780:
                 r10 = r17
-                r8 = 2131627771(0x7f0e0efb, float:1.8882816E38)
+                r8 = 2131627774(0x7f0e0efe, float:1.8882822E38)
                 boolean r11 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
                 if (r11 == 0) goto L_0x0795
-                r11 = 2131627633(0x7f0e0e71, float:1.8882536E38)
+                r11 = 2131627634(0x7f0e0e72, float:1.8882538E38)
                 java.lang.String r13 = "RepliesTitle"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
                 goto L_0x07a9

@@ -3499,6 +3499,7 @@
     <string name="PrivacyPhoneInfo">Users who have your number saved in their contacts will also see it on Telegram.</string>
     <string name="PrivacyPhoneInfo2">You can add users or entire groups as exceptions that will override the settings above.</string>
     <string name="PrivacyPhoneInfo3">Users who add your number to their contacts will see it on Telegram only if they are your contacts.</string>
+    <string name="PrivacyPhoneInfo4">This public link opens a chat with you:</string>
     <string name="PrivacyPhoneTitle">Who can see my phone number?</string>
     <string name="PrivacyPhoneTitle2">Who can find me by my number?</string>
     <string name="PrivacyPolicy">Privacy Policy</string>
@@ -3702,7 +3703,9 @@
     <string name="ReportChatChild">Child Abuse</string>
     <string name="ReportChatDescription">Description</string>
     <string name="ReportChatFakeAccount">Fake Account</string>
+    <string name="ReportChatIllegalDrugs">Illegal Drugs</string>
     <string name="ReportChatOther">Other</string>
+    <string name="ReportChatPersonalDetails">Personal Details</string>
     <string name="ReportChatPornography">Pornography</string>
     <string name="ReportChatSent">Report sent</string>
     <string name="ReportChatSpam">Spam</string>

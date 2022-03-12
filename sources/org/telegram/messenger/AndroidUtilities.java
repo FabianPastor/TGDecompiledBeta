@@ -5027,4 +5027,13 @@ public class AndroidUtilities {
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.getBitmapShareUri(android.graphics.Bitmap, java.lang.String, android.graphics.Bitmap$CompressFormat):android.net.Uri");
     }
+
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException unused) {
+            return false;
+        }
+    }
 }

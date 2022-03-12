@@ -2627,7 +2627,7 @@ public class MessageObject {
         L_0x04eb:
             r24 = r14
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
-            r5 = 2131628495(0x7f0e11cf, float:1.8884284E38)
+            r5 = 2131628498(0x7f0e11d2, float:1.888429E38)
             java.lang.String r7 = "UserRestrictionsUntilForever"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r4.<init>(r5)
@@ -6571,7 +6571,7 @@ public class MessageObject {
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
             if (r2 == 0) goto L_0x07ae
-            r2 = 2131628999(0x7f0e13c7, float:1.8885307E38)
+            r2 = 2131629002(0x7f0e13ca, float:1.8885313E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -6737,7 +6737,7 @@ public class MessageObject {
         L_0x08eb:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
             if (r11 == 0) goto L_0x08ff
-            r0 = 2131628919(0x7f0e1377, float:1.8885144E38)
+            r0 = 2131628922(0x7f0e137a, float:1.888515E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"
@@ -7191,19 +7191,19 @@ public class MessageObject {
             int r2 = r6.currentAccount
             boolean r0 = org.telegram.messenger.ChatObject.isChannelAndNotMegaGroup(r0, r2)
             if (r0 == 0) goto L_0x0cb9
-            r0 = 2131627680(0x7f0e0ea0, float:1.8882631E38)
+            r0 = 2131627683(0x7f0e0ea3, float:1.8882637E38)
             java.lang.String r1 = "RequestToJoinChannelApproved"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0cc2
         L_0x0cb9:
-            r0 = 2131627684(0x7f0e0ea4, float:1.888264E38)
+            r0 = 2131627687(0x7f0e0ea7, float:1.8882645E38)
             java.lang.String r1 = "RequestToJoinGroupApproved"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x0cc2:
             r6.messageText = r0
             goto L_0x0f0f
         L_0x0cc6:
-            r0 = 2131628457(0x7f0e11a9, float:1.8884207E38)
+            r0 = 2131628460(0x7f0e11ac, float:1.8884213E38)
             java.lang.String r1 = "UserAcceptedToGroupAction"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.CharSequence r0 = replaceWithLink(r0, r7, r8)
@@ -7246,7 +7246,7 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$Poll r0 = r1.poll
             boolean r0 = r0.quiz
             if (r0 == 0) goto L_0x0d31
-            r0 = 2131627538(0x7f0e0e12, float:1.8882343E38)
+            r0 = 2131627539(0x7f0e0e13, float:1.8882345E38)
             java.lang.String r1 = "QuizPoll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -7355,7 +7355,7 @@ public class MessageObject {
         L_0x0e06:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaUnsupported
             if (r0 == 0) goto L_0x0e17
-            r0 = 2131628414(0x7f0e117e, float:1.888412E38)
+            r0 = 2131628417(0x7f0e1181, float:1.8884126E38)
             java.lang.String r1 = "UnsupportedMedia"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0

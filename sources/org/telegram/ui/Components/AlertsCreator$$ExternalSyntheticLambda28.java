@@ -1,21 +1,18 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.Components.AlertsCreator;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda28 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ BaseFragment f$0;
-    public final /* synthetic */ TLRPC$User f$1;
-    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ AlertsCreator.BlockDialogCallback f$0;
+    public final /* synthetic */ boolean[] f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda28(BaseFragment baseFragment, TLRPC$User tLRPC$User, boolean z) {
-        this.f$0 = baseFragment;
-        this.f$1 = tLRPC$User;
-        this.f$2 = z;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda28(AlertsCreator.BlockDialogCallback blockDialogCallback, boolean[] zArr) {
+        this.f$0 = blockDialogCallback;
+        this.f$1 = zArr;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createCallDialogAlert$25(this.f$0, this.f$1, this.f$2, dialogInterface, i);
+        this.f$0.run(this.f$1[0], this.f$1[1]);
     }
 }

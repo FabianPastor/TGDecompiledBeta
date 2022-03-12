@@ -1,20 +1,19 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import android.widget.EditText;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda2 implements DialogInterface.OnClickListener {
     public final /* synthetic */ long f$0;
     public final /* synthetic */ int f$1;
-    public final /* synthetic */ EditText f$2;
+    public final /* synthetic */ Runnable f$2;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda2(long j, int i, EditText editText) {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda2(long j, int i, Runnable runnable) {
         this.f$0 = j;
         this.f$1 = i;
-        this.f$2 = editText;
+        this.f$2 = runnable;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createChangeBioAlert$27(this.f$0, this.f$1, this.f$2, dialogInterface, i);
+        AlertsCreator.lambda$createColorSelectDialog$73(this.f$0, this.f$1, this.f$2, dialogInterface, i);
     }
 }

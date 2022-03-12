@@ -1,21 +1,16 @@
 package org.telegram.ui.Components;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda6 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ long f$0;
-    public final /* synthetic */ int[] f$1;
-    public final /* synthetic */ int f$2;
-    public final /* synthetic */ Runnable f$3;
+    public final /* synthetic */ Activity f$0;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda6(long j, int[] iArr, int i, Runnable runnable) {
-        this.f$0 = j;
-        this.f$1 = iArr;
-        this.f$2 = i;
-        this.f$3 = runnable;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda6(Activity activity) {
+        this.f$0 = activity;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createColorSelectDialog$72(this.f$0, this.f$1, this.f$2, this.f$3, dialogInterface, i);
+        AlertsCreator.lambda$createDrawOverlayPermissionDialog$80(this.f$0, dialogInterface, i);
     }
 }

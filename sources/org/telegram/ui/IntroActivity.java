@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import androidx.core.graphics.ColorUtils;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import java.util.ArrayList;
@@ -911,5 +912,12 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
         eGLThread.loadTexture(eGLThread.telegramMaskProvider, 23, true);
         this.eglThread.updateTelegramTextures();
         Intro.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+    }
+
+    public boolean isLightStatusBar() {
+        if (ColorUtils.calculateLuminance(Theme.getColor("windowBackgroundWhite", (boolean[]) null, true)) > 0.699999988079071d) {
+            return true;
+        }
+        return false;
     }
 }

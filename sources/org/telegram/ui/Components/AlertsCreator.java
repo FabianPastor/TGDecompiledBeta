@@ -109,7 +109,9 @@ import org.telegram.tgnet.TLRPC$TL_help_support;
 import org.telegram.tgnet.TLRPC$TL_inputPeerUser;
 import org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse;
 import org.telegram.tgnet.TLRPC$TL_inputReportReasonFake;
+import org.telegram.tgnet.TLRPC$TL_inputReportReasonIllegalDrugs;
 import org.telegram.tgnet.TLRPC$TL_inputReportReasonOther;
+import org.telegram.tgnet.TLRPC$TL_inputReportReasonPersonalDetails;
 import org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography;
 import org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam;
 import org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence;
@@ -231,7 +233,7 @@ public class AlertsCreator {
         } else {
             str = LocaleController.getString("PermissionNoLocationPeopleNearby", NUM);
         }
-        return builder.setMessage(AndroidUtilities.replaceTags(str)).setTopAnimation(NUM, 72, false, Theme.getColor("dialogTopBackground")).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new AlertsCreator$$ExternalSyntheticLambda9(context)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), (DialogInterface.OnClickListener) null).create();
+        return builder.setMessage(AndroidUtilities.replaceTags(str)).setTopAnimation(NUM, 72, false, Theme.getColor("dialogTopBackground")).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new AlertsCreator$$ExternalSyntheticLambda8(context)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), (DialogInterface.OnClickListener) null).create();
     }
 
     /* access modifiers changed from: private */
@@ -246,7 +248,7 @@ public class AlertsCreator {
     }
 
     public static Dialog createBackgroundActivityDialog(Context context) {
-        return new AlertDialog.Builder(context).setTitle(LocaleController.getString("AllowBackgroundActivity", NUM)).setMessage(LocaleController.getString("AllowBackgroundActivityInfo", NUM)).setTopAnimation(NUM, 72, false, Theme.getColor("dialogTopBackground")).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new AlertsCreator$$ExternalSyntheticLambda12(context)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), (DialogInterface.OnClickListener) null).create();
+        return new AlertDialog.Builder(context).setTitle(LocaleController.getString("AllowBackgroundActivity", NUM)).setMessage(LocaleController.getString("AllowBackgroundActivityInfo", NUM)).setTopAnimation(NUM, 72, false, Theme.getColor("dialogTopBackground")).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new AlertsCreator$$ExternalSyntheticLambda11(context)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), (DialogInterface.OnClickListener) null).create();
     }
 
     /* access modifiers changed from: private */
@@ -261,7 +263,7 @@ public class AlertsCreator {
     }
 
     public static Dialog createApkRestrictedDialog(Context context, Theme.ResourcesProvider resourcesProvider) {
-        return new AlertDialog.Builder(context, resourcesProvider).setMessage(LocaleController.getString("ApkRestricted", NUM)).setTopAnimation(NUM, 72, false, Theme.getColor("dialogTopBackground")).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new AlertsCreator$$ExternalSyntheticLambda10(context)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), (DialogInterface.OnClickListener) null).create();
+        return new AlertDialog.Builder(context, resourcesProvider).setMessage(LocaleController.getString("ApkRestricted", NUM)).setTopAnimation(NUM, 72, false, Theme.getColor("dialogTopBackground")).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new AlertsCreator$$ExternalSyntheticLambda9(context)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), (DialogInterface.OnClickListener) null).create();
     }
 
     /* access modifiers changed from: private */
@@ -555,7 +557,7 @@ public class AlertsCreator {
         builder.setMessage(str);
         builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
         if (z) {
-            builder.setNegativeButton(LocaleController.getString("UpdateApp", NUM), new AlertsCreator$$ExternalSyntheticLambda11(context));
+            builder.setNegativeButton(LocaleController.getString("UpdateApp", NUM), new AlertsCreator$$ExternalSyntheticLambda10(context));
         }
         return builder.show();
     }
@@ -577,7 +579,7 @@ public class AlertsCreator {
             builder.setTitle(LocaleController.getString("Language", NUM));
             str = LocaleController.formatString("LanguageSame", NUM, tLRPC$TL_langPackLanguage.name);
             builder.setNegativeButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-            builder.setNeutralButton(LocaleController.getString("SETTINGS", NUM), new AlertsCreator$$ExternalSyntheticLambda30(launchActivity));
+            builder.setNeutralButton(LocaleController.getString("SETTINGS", NUM), new AlertsCreator$$ExternalSyntheticLambda29(launchActivity));
         } else if (tLRPC$TL_langPackLanguage.strings_count == 0) {
             builder.setTitle(LocaleController.getString("LanguageUnknownTitle", NUM));
             str = LocaleController.formatString("LanguageUnknownCustomAlert", NUM, tLRPC$TL_langPackLanguage.name);
@@ -589,7 +591,7 @@ public class AlertsCreator {
             } else {
                 str = LocaleController.formatString("LanguageCustomAlert", NUM, tLRPC$TL_langPackLanguage.name, Integer.valueOf((int) Math.ceil((double) ((((float) tLRPC$TL_langPackLanguage.translated_count) / ((float) tLRPC$TL_langPackLanguage.strings_count)) * 100.0f))));
             }
-            builder.setPositiveButton(LocaleController.getString("Change", NUM), new AlertsCreator$$ExternalSyntheticLambda22(tLRPC$TL_langPackLanguage, launchActivity));
+            builder.setPositiveButton(LocaleController.getString("Change", NUM), new AlertsCreator$$ExternalSyntheticLambda21(tLRPC$TL_langPackLanguage, launchActivity));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         }
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(str));
@@ -740,7 +742,7 @@ public class AlertsCreator {
                 checkBoxCellArr[0].setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda59(checkBoxCellArr));
                 builder.setCustomViewOffset(12);
                 builder.setView(linearLayout);
-                builder.setPositiveButton(LocaleController.getString("BlockAndDeleteReplies", NUM), new AlertsCreator$$ExternalSyntheticLambda23(user, accountInstance, chatActivity, chat, messageObject, checkBoxCellArr, resourcesProvider));
+                builder.setPositiveButton(LocaleController.getString("BlockAndDeleteReplies", NUM), new AlertsCreator$$ExternalSyntheticLambda22(user, accountInstance, chatActivity, chat, messageObject, checkBoxCellArr, resourcesProvider));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 AlertDialog create = builder.create();
                 chatActivity.showDialog(create);
@@ -943,7 +945,7 @@ public class AlertsCreator {
         L_0x0132:
             if (r7 == 0) goto L_0x0171
             if (r23 == 0) goto L_0x0171
-            r2 = 2131627672(0x7f0e0e98, float:1.8882615E38)
+            r2 = 2131627675(0x7f0e0e9b, float:1.8882621E38)
             java.lang.String r4 = "ReportUnrelatedGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r11.setTitle(r2)
@@ -952,7 +954,7 @@ public class AlertsCreator {
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelLocation
             if (r2 == 0) goto L_0x0164
             org.telegram.tgnet.TLRPC$TL_channelLocation r1 = (org.telegram.tgnet.TLRPC$TL_channelLocation) r1
-            r2 = 2131627673(0x7f0e0e99, float:1.8882617E38)
+            r2 = 2131627676(0x7f0e0e9c, float:1.8882623E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             java.lang.String r1 = r1.address
@@ -963,13 +965,13 @@ public class AlertsCreator {
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0164:
-            r1 = 2131627674(0x7f0e0e9a, float:1.888262E38)
+            r1 = 2131627677(0x7f0e0e9d, float:1.8882625E38)
             java.lang.String r2 = "ReportUnrelatedGroupTextNoAddress"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0171:
-            r1 = 2131627665(0x7f0e0e91, float:1.88826E38)
+            r1 = 2131627668(0x7f0e0e94, float:1.8882607E38)
             java.lang.String r2 = "ReportSpamTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setTitle(r1)
@@ -977,24 +979,24 @@ public class AlertsCreator {
             if (r1 == 0) goto L_0x0194
             boolean r1 = r7.megagroup
             if (r1 != 0) goto L_0x0194
-            r1 = 2131627661(0x7f0e0e8d, float:1.8882593E38)
+            r1 = 2131627664(0x7f0e0e90, float:1.8882599E38)
             java.lang.String r2 = "ReportSpamAlertChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0194:
-            r1 = 2131627662(0x7f0e0e8e, float:1.8882595E38)
+            r1 = 2131627665(0x7f0e0e91, float:1.88826E38)
             java.lang.String r2 = "ReportSpamAlertGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
         L_0x01a0:
-            r1 = 2131627643(0x7f0e0e7b, float:1.8882556E38)
+            r1 = 2131627644(0x7f0e0e7c, float:1.8882558E38)
             java.lang.String r2 = "ReportChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r12 = r1
             r4 = 0
         L_0x01ab:
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda24 r13 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda24
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda23 r13 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda23
             r1 = r13
             r2 = r20
             r5 = r18
@@ -1531,7 +1533,7 @@ public class AlertsCreator {
             r0 = 2131626843(0x7f0e0b5b, float:1.8880934E38)
             java.lang.String r1 = "Open"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda27 r9 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda27
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda26 r9 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda26
             r1 = r9
             r2 = r12
             r3 = r13
@@ -1594,7 +1596,7 @@ public class AlertsCreator {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
         builder.setView(textView);
         builder.setTitle(LocaleController.getString("AskAQuestion", NUM));
-        builder.setPositiveButton(LocaleController.getString("AskButton", NUM), new AlertsCreator$$ExternalSyntheticLambda25(baseFragment));
+        builder.setPositiveButton(LocaleController.getString("AskButton", NUM), new AlertsCreator$$ExternalSyntheticLambda24(baseFragment));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         return builder.create();
     }
@@ -1737,7 +1739,7 @@ public class AlertsCreator {
                     backupImageView.setForUserOrChat(tLRPC$User2, avatarDrawable);
                 }
                 textView.setText(AndroidUtilities.replaceTags(str2));
-                builder.setPositiveButton(LocaleController.getString("Import", NUM), new AlertsCreator$$ExternalSyntheticLambda15(runnable));
+                builder.setPositiveButton(LocaleController.getString("Import", NUM), new AlertsCreator$$ExternalSyntheticLambda14(runnable));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 baseFragment2.showDialog(builder.create());
             }
@@ -2448,7 +2450,7 @@ public class AlertsCreator {
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x04fb
         L_0x0562:
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda33 r12 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda33
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda32 r12 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda32
             r0 = r12
             r1 = r26
             r2 = r38
@@ -2572,7 +2574,7 @@ public class AlertsCreator {
                 checkBoxCellArr[0].setChecked(false, false);
                 checkBoxCellArr[0].setOnClickListener(new AlertsCreator$$ExternalSyntheticLambda62(zArr));
             }
-            builder.setPositiveButton(LocaleController.getString("Delete", NUM), new AlertsCreator$$ExternalSyntheticLambda18(booleanCallback, zArr));
+            builder.setPositiveButton(LocaleController.getString("Delete", NUM), new AlertsCreator$$ExternalSyntheticLambda17(booleanCallback, zArr));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             AlertDialog create = builder.create();
             baseFragment2.showDialog(create);
@@ -2642,7 +2644,7 @@ public class AlertsCreator {
                 i = 3;
             }
             frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, i | 48, 24.0f, 57.0f, 24.0f, 9.0f));
-            baseFragment2.showDialog(new AlertDialog.Builder((Context) parentActivity).setView(frameLayout).setPositiveButton(LocaleController.getString("Call", NUM), new AlertsCreator$$ExternalSyntheticLambda28(baseFragment2, tLRPC$User2, z2)).setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null).create());
+            baseFragment2.showDialog(new AlertDialog.Builder((Context) parentActivity).setView(frameLayout).setPositiveButton(LocaleController.getString("Call", NUM), new AlertsCreator$$ExternalSyntheticLambda27(baseFragment2, tLRPC$User2, z2)).setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null).create());
         }
     }
 
@@ -2732,15 +2734,15 @@ public class AlertsCreator {
         editText.setText(str);
         editText.setSelection(editText.getText().toString().length());
         builder.setView(frameLayout);
-        AlertsCreator$$ExternalSyntheticLambda2 alertsCreator$$ExternalSyntheticLambda2 = new AlertsCreator$$ExternalSyntheticLambda2(j2, i, editText);
-        builder.setPositiveButton(LocaleController.getString("Save", NUM), alertsCreator$$ExternalSyntheticLambda2);
+        AlertsCreator$$ExternalSyntheticLambda1 alertsCreator$$ExternalSyntheticLambda1 = new AlertsCreator$$ExternalSyntheticLambda1(j2, i, editText);
+        builder.setPositiveButton(LocaleController.getString("Save", NUM), alertsCreator$$ExternalSyntheticLambda1);
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setOnPreDismissListener(new AlertsCreator$$ExternalSyntheticLambda37(editText));
         frameLayout.addView(editText, LayoutHelper.createFrame(-1, -2.0f, 0, 23.0f, 12.0f, 23.0f, 21.0f));
         editText.requestFocus();
         AndroidUtilities.showKeyboard(editText);
         AlertDialog create = builder.create();
-        editText.setOnEditorActionListener(new AlertsCreator$$ExternalSyntheticLambda73(j2, create, alertsCreator$$ExternalSyntheticLambda2));
+        editText.setOnEditorActionListener(new AlertsCreator$$ExternalSyntheticLambda73(j2, create, alertsCreator$$ExternalSyntheticLambda1));
         create.setBackgroundColor(Theme.getColor("voipgroup_dialogBackground"));
         create.show();
         create.setTextColor(Theme.getColor("voipgroup_actionBarItems"));
@@ -2883,15 +2885,15 @@ public class AlertsCreator {
             editText.setSelection(editText.getText().toString().length());
         }
         builder.setView(linearLayout);
-        AlertsCreator$$ExternalSyntheticLambda14 alertsCreator$$ExternalSyntheticLambda14 = new AlertsCreator$$ExternalSyntheticLambda14(editText2, j, i, editText);
-        builder.setPositiveButton(LocaleController.getString("Save", NUM), alertsCreator$$ExternalSyntheticLambda14);
+        AlertsCreator$$ExternalSyntheticLambda13 alertsCreator$$ExternalSyntheticLambda13 = new AlertsCreator$$ExternalSyntheticLambda13(editText2, j, i, editText);
+        builder.setPositiveButton(LocaleController.getString("Save", NUM), alertsCreator$$ExternalSyntheticLambda13);
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setOnPreDismissListener(new AlertsCreator$$ExternalSyntheticLambda38(editText2, editText));
         AlertDialog create = builder.create();
         create.setBackgroundColor(Theme.getColor("voipgroup_dialogBackground"));
         create.show();
         create.setTextColor(Theme.getColor("voipgroup_actionBarItems"));
-        AlertsCreator$$ExternalSyntheticLambda74 alertsCreator$$ExternalSyntheticLambda74 = new AlertsCreator$$ExternalSyntheticLambda74(create, alertsCreator$$ExternalSyntheticLambda14);
+        AlertsCreator$$ExternalSyntheticLambda74 alertsCreator$$ExternalSyntheticLambda74 = new AlertsCreator$$ExternalSyntheticLambda74(create, alertsCreator$$ExternalSyntheticLambda13);
         if (editText != null) {
             editText.setOnEditorActionListener(alertsCreator$$ExternalSyntheticLambda74);
         } else {
@@ -3053,7 +3055,7 @@ public class AlertsCreator {
                     }
                     i4++;
                 }
-                builder.setPositiveButton(str, new AlertsCreator$$ExternalSyntheticLambda29(blockDialogCallback, zArr));
+                builder.setPositiveButton(str, new AlertsCreator$$ExternalSyntheticLambda28(blockDialogCallback, zArr));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 AlertDialog create = builder.create();
                 baseFragment2.showDialog(create);
@@ -3112,7 +3114,7 @@ public class AlertsCreator {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(str);
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("Set", NUM), new AlertsCreator$$ExternalSyntheticLambda32(z, numberPicker2, numberPicker, numberPicker3, datePickerDelegate));
+        builder.setPositiveButton(LocaleController.getString("Set", NUM), new AlertsCreator$$ExternalSyntheticLambda31(z, numberPicker2, numberPicker, numberPicker3, datePickerDelegate));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         return builder;
     }
@@ -4065,7 +4067,7 @@ public class AlertsCreator {
         }
         BottomSheet.Builder builder = new BottomSheet.Builder(baseFragment.getParentActivity(), false, resourcesProvider);
         builder.setTitle(LocaleController.getString("Notifications", NUM), true);
-        builder.setItems(new CharSequence[]{LocaleController.formatString("MuteFor", NUM, LocaleController.formatPluralString("Hours", 1)), LocaleController.formatString("MuteFor", NUM, LocaleController.formatPluralString("Hours", 8)), LocaleController.formatString("MuteFor", NUM, LocaleController.formatPluralString("Days", 2)), LocaleController.getString("MuteDisable", NUM)}, new AlertsCreator$$ExternalSyntheticLambda5(j, baseFragment, resourcesProvider));
+        builder.setItems(new CharSequence[]{LocaleController.formatString("MuteFor", NUM, LocaleController.formatPluralString("Hours", 1)), LocaleController.formatString("MuteFor", NUM, LocaleController.formatPluralString("Hours", 8)), LocaleController.formatString("MuteFor", NUM, LocaleController.formatPluralString("Days", 2)), LocaleController.getString("MuteDisable", NUM)}, new AlertsCreator$$ExternalSyntheticLambda4(j, baseFragment, resourcesProvider));
         return builder.create();
     }
 
@@ -4092,15 +4094,19 @@ public class AlertsCreator {
         tLRPC$TL_messages_report.message = str;
         if (i == 0) {
             tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonSpam();
-        } else if (i == 1) {
+        } else if (i == 6) {
             tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonFake();
-        } else if (i == 2) {
+        } else if (i == 1) {
             tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonViolence();
-        } else if (i == 3) {
+        } else if (i == 2) {
             tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonChildAbuse();
-        } else if (i == 4) {
-            tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonPornography();
         } else if (i == 5) {
+            tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonPornography();
+        } else if (i == 3) {
+            tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonIllegalDrugs();
+        } else if (i == 4) {
+            tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonPersonalDetails();
+        } else if (i == 100) {
             tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonOther();
         }
         ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_report, AlertsCreator$$ExternalSyntheticLambda89.INSTANCE);
@@ -4113,6 +4119,7 @@ public class AlertsCreator {
     public static void createReportAlert(Context context, long j, int i, BaseFragment baseFragment, Theme.ResourcesProvider resourcesProvider, Runnable runnable) {
         CharSequence[] charSequenceArr;
         int[] iArr;
+        int[] iArr2;
         Context context2 = context;
         BaseFragment baseFragment2 = baseFragment;
         Runnable runnable2 = runnable;
@@ -4122,13 +4129,15 @@ public class AlertsCreator {
             builder.setOnPreDismissListener(new AlertsCreator$$ExternalSyntheticLambda39(runnable2));
             builder.setTitle(LocaleController.getString("ReportChat", NUM), true);
             if (i != 0) {
-                iArr = new int[]{NUM, NUM, NUM, NUM, NUM};
-                charSequenceArr = new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)};
+                iArr = new int[]{NUM, NUM, NUM, NUM, NUM, NUM, NUM};
+                charSequenceArr = new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatIllegalDrugs", NUM), LocaleController.getString("ReportChatPersonalDetails", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)};
+                iArr2 = new int[]{0, 1, 2, 3, 4, 5, 100};
             } else {
-                charSequenceArr = new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatFakeAccount", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)};
-                iArr = new int[]{NUM, NUM, NUM, NUM, NUM, NUM};
+                iArr2 = new int[]{0, 6, 1, 2, 3, 4, 5, 100};
+                iArr = new int[]{NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
+                charSequenceArr = new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatFakeAccount", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatIllegalDrugs", NUM), LocaleController.getString("ReportChatPersonalDetails", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)};
             }
-            builder.setItems(charSequenceArr, iArr, new AlertsCreator$$ExternalSyntheticLambda1(i, baseFragment, context, j, resourcesProvider));
+            builder.setItems(charSequenceArr, iArr, new AlertsCreator$$ExternalSyntheticLambda34(iArr2, i, baseFragment, context, j, resourcesProvider));
             baseFragment2.showDialog(builder.create());
         }
     }
@@ -4140,170 +4149,201 @@ public class AlertsCreator {
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v2, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v4, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v5, resolved type: org.telegram.tgnet.TLRPC$TL_messages_report} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v6, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v7, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v8, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v9, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v10, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v0, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v2, resolved type: org.telegram.tgnet.TLRPC$TL_messages_report} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v3, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v4, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v5, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v6, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v7, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v8, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v9, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v10, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v11, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v12, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v13, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v14, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v15, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v16, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v17, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:34:0x0088, code lost:
-        if (r0 != 3) goto L_0x00cd;
+    /* JADX WARNING: Code restructure failed: missing block: B:36:0x009e, code lost:
+        if (r2 != 4) goto L_0x00f6;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:35:0x008a, code lost:
-        r3.reason = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography();
-        r3 = r3;
+    /* JADX WARNING: Code restructure failed: missing block: B:37:0x00a0, code lost:
+        r12.reason = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPersonalDetails();
+        r12 = r12;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:51:0x00ed, code lost:
+        if (r2 != 4) goto L_0x00f6;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:52:0x00ef, code lost:
+        r12.reason = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPersonalDetails();
+        r12 = r12;
      */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static /* synthetic */ void lambda$createReportAlert$69(int r10, org.telegram.ui.ActionBar.BaseFragment r11, android.content.Context r12, long r13, org.telegram.ui.ActionBar.Theme.ResourcesProvider r15, android.content.DialogInterface r16, int r17) {
+    public static /* synthetic */ void lambda$createReportAlert$69(int[] r7, int r8, org.telegram.ui.ActionBar.BaseFragment r9, android.content.Context r10, long r11, org.telegram.ui.ActionBar.Theme.ResourcesProvider r13, android.content.DialogInterface r14, int r15) {
         /*
-            r7 = r11
-            r0 = r17
-            r1 = 3
-            r2 = 2
-            r3 = 4
-            if (r10 != 0) goto L_0x001b
-            if (r0 == 0) goto L_0x0010
-            if (r0 == r2) goto L_0x0010
-            if (r0 == r1) goto L_0x0010
-            if (r0 != r3) goto L_0x001b
-        L_0x0010:
-            boolean r4 = r7 instanceof org.telegram.ui.ChatActivity
-            if (r4 == 0) goto L_0x001b
-            r1 = r7
-            org.telegram.ui.ChatActivity r1 = (org.telegram.ui.ChatActivity) r1
-            r1.openReportChat(r0)
+            r2 = r7[r15]
+            r7 = 4
+            r14 = 3
+            r15 = 5
+            r0 = 2
+            r1 = 1
+            if (r8 != 0) goto L_0x001f
+            if (r2 == 0) goto L_0x0015
+            if (r2 == r1) goto L_0x0015
+            if (r2 == r0) goto L_0x0015
+            if (r2 == r15) goto L_0x0015
+            if (r2 == r14) goto L_0x0015
+            if (r2 != r7) goto L_0x001f
+        L_0x0015:
+            boolean r3 = r9 instanceof org.telegram.ui.ChatActivity
+            if (r3 == 0) goto L_0x001f
+            org.telegram.ui.ChatActivity r9 = (org.telegram.ui.ChatActivity) r9
+            r9.openReportChat(r2)
             return
-        L_0x001b:
-            r4 = 5
-            r5 = 1
-            if (r10 != 0) goto L_0x0023
-            if (r0 == r4) goto L_0x0027
-            if (r0 == r5) goto L_0x0027
-        L_0x0023:
-            if (r10 == 0) goto L_0x0049
-            if (r0 != r3) goto L_0x0049
-        L_0x0027:
-            boolean r1 = r7 instanceof org.telegram.ui.ChatActivity
-            if (r1 == 0) goto L_0x0036
-            android.app.Activity r1 = r11.getParentActivity()
-            int r2 = r11.getClassGuid()
-            org.telegram.messenger.AndroidUtilities.requestAdjustNothing(r1, r2)
-        L_0x0036:
-            org.telegram.ui.Components.AlertsCreator$17 r8 = new org.telegram.ui.Components.AlertsCreator$17
-            if (r0 != r3) goto L_0x003c
-            r2 = 5
-            goto L_0x003d
-        L_0x003c:
-            r2 = r0
-        L_0x003d:
-            r0 = r8
-            r1 = r12
-            r3 = r11
-            r4 = r10
-            r5 = r13
+        L_0x001f:
+            r3 = 6
+            r4 = 100
+            if (r8 != 0) goto L_0x0028
+            if (r2 == r4) goto L_0x002c
+            if (r2 == r3) goto L_0x002c
+        L_0x0028:
+            if (r8 == 0) goto L_0x0049
+            if (r2 != r4) goto L_0x0049
+        L_0x002c:
+            boolean r7 = r9 instanceof org.telegram.ui.ChatActivity
+            if (r7 == 0) goto L_0x003b
+            android.app.Activity r7 = r9.getParentActivity()
+            int r13 = r9.getClassGuid()
+            org.telegram.messenger.AndroidUtilities.requestAdjustNothing(r7, r13)
+        L_0x003b:
+            org.telegram.ui.Components.AlertsCreator$17 r7 = new org.telegram.ui.Components.AlertsCreator$17
+            r0 = r7
+            r1 = r10
+            r3 = r9
+            r4 = r8
+            r5 = r11
             r0.<init>(r1, r2, r3, r4, r5)
-            r11.showDialog(r8)
+            r9.showDialog(r7)
             return
         L_0x0049:
-            int r4 = org.telegram.messenger.UserConfig.selectedAccount
-            org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
-            r8 = r13
-            org.telegram.tgnet.TLRPC$InputPeer r4 = r4.getInputPeer((long) r13)
-            java.lang.String r6 = ""
-            if (r10 == 0) goto L_0x0092
-            org.telegram.tgnet.TLRPC$TL_messages_report r3 = new org.telegram.tgnet.TLRPC$TL_messages_report
-            r3.<init>()
-            r3.peer = r4
-            java.util.ArrayList<java.lang.Integer> r4 = r3.id
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r10)
-            r4.add(r8)
-            r3.message = r6
-            if (r0 != 0) goto L_0x0074
-            org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam
-            r0.<init>()
-            r3.reason = r0
-            goto L_0x00cd
+            int r10 = org.telegram.messenger.UserConfig.selectedAccount
+            org.telegram.messenger.MessagesController r10 = org.telegram.messenger.MessagesController.getInstance(r10)
+            org.telegram.tgnet.TLRPC$InputPeer r10 = r10.getInputPeer((long) r11)
+            java.lang.String r11 = ""
+            if (r8 == 0) goto L_0x00a8
+            org.telegram.tgnet.TLRPC$TL_messages_report r12 = new org.telegram.tgnet.TLRPC$TL_messages_report
+            r12.<init>()
+            r12.peer = r10
+            java.util.ArrayList<java.lang.Integer> r10 = r12.id
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+            r10.add(r8)
+            r12.message = r11
+            if (r2 != 0) goto L_0x0074
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam
+            r7.<init>()
+            r12.reason = r7
+            goto L_0x00f6
         L_0x0074:
-            if (r0 != r5) goto L_0x007e
-            org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence
-            r0.<init>()
-            r3.reason = r0
-            goto L_0x00cd
-        L_0x007e:
-            if (r0 != r2) goto L_0x0088
-            org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse
-            r0.<init>()
-            r3.reason = r0
-            goto L_0x00cd
-        L_0x0088:
-            if (r0 != r1) goto L_0x00cd
-            org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography
-            r0.<init>()
-            r3.reason = r0
-            goto L_0x00cd
-        L_0x0092:
-            org.telegram.tgnet.TLRPC$TL_account_reportPeer r8 = new org.telegram.tgnet.TLRPC$TL_account_reportPeer
-            r8.<init>()
-            r8.peer = r4
-            r8.message = r6
-            if (r0 != 0) goto L_0x00a5
-            org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam
-            r0.<init>()
-            r8.reason = r0
-            goto L_0x00cc
-        L_0x00a5:
-            if (r0 != r5) goto L_0x00af
-            org.telegram.tgnet.TLRPC$TL_inputReportReasonFake r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonFake
-            r0.<init>()
-            r8.reason = r0
-            goto L_0x00cc
-        L_0x00af:
-            if (r0 != r2) goto L_0x00b9
-            org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence
-            r0.<init>()
-            r8.reason = r0
-            goto L_0x00cc
-        L_0x00b9:
-            if (r0 != r1) goto L_0x00c3
-            org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse
-            r0.<init>()
-            r8.reason = r0
-            goto L_0x00cc
-        L_0x00c3:
-            if (r0 != r3) goto L_0x00cc
-            org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography
-            r0.<init>()
-            r8.reason = r0
-        L_0x00cc:
-            r3 = r8
-        L_0x00cd:
-            int r0 = org.telegram.messenger.UserConfig.selectedAccount
-            org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda91 r1 = org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda91.INSTANCE
-            r0.sendRequest(r3, r1)
-            boolean r0 = r7 instanceof org.telegram.ui.ChatActivity
-            if (r0 == 0) goto L_0x00ec
-            r0 = r7
-            org.telegram.ui.ChatActivity r0 = (org.telegram.ui.ChatActivity) r0
-            org.telegram.ui.Components.UndoView r0 = r0.getUndoView()
-            r1 = 0
-            r3 = 74
-            r4 = 0
-            r0.showWithAction((long) r1, (int) r3, (java.lang.Runnable) r4)
-            goto L_0x00f8
-        L_0x00ec:
-            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of(r11)
-            r1 = r15
-            org.telegram.ui.Components.Bulletin r0 = r0.createReportSent(r15)
-            r0.show()
-        L_0x00f8:
+            if (r2 != r1) goto L_0x007f
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence
+            r7.<init>()
+            r12.reason = r7
+            goto L_0x00f6
+        L_0x007f:
+            if (r2 != r0) goto L_0x008a
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse
+            r7.<init>()
+            r12.reason = r7
+            goto L_0x00f6
+        L_0x008a:
+            if (r2 != r15) goto L_0x0094
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography
+            r7.<init>()
+            r12.reason = r7
+            goto L_0x00f6
+        L_0x0094:
+            if (r2 != r14) goto L_0x009e
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonIllegalDrugs r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonIllegalDrugs
+            r7.<init>()
+            r12.reason = r7
+            goto L_0x00f6
+        L_0x009e:
+            if (r2 != r7) goto L_0x00f6
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonPersonalDetails r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPersonalDetails
+            r7.<init>()
+            r12.reason = r7
+            goto L_0x00f6
+        L_0x00a8:
+            org.telegram.tgnet.TLRPC$TL_account_reportPeer r12 = new org.telegram.tgnet.TLRPC$TL_account_reportPeer
+            r12.<init>()
+            r12.peer = r10
+            r12.message = r11
+            if (r2 != 0) goto L_0x00bb
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam
+            r7.<init>()
+            r12.reason = r7
+            goto L_0x00f6
+        L_0x00bb:
+            if (r2 != r3) goto L_0x00c5
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonFake r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonFake
+            r7.<init>()
+            r12.reason = r7
+            goto L_0x00f6
+        L_0x00c5:
+            if (r2 != r1) goto L_0x00cf
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence
+            r7.<init>()
+            r12.reason = r7
+            goto L_0x00f6
+        L_0x00cf:
+            if (r2 != r0) goto L_0x00d9
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse
+            r7.<init>()
+            r12.reason = r7
+            goto L_0x00f6
+        L_0x00d9:
+            if (r2 != r15) goto L_0x00e3
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography
+            r7.<init>()
+            r12.reason = r7
+            goto L_0x00f6
+        L_0x00e3:
+            if (r2 != r14) goto L_0x00ed
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonIllegalDrugs r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonIllegalDrugs
+            r7.<init>()
+            r12.reason = r7
+            goto L_0x00f6
+        L_0x00ed:
+            if (r2 != r7) goto L_0x00f6
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonPersonalDetails r7 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPersonalDetails
+            r7.<init>()
+            r12.reason = r7
+        L_0x00f6:
+            int r7 = org.telegram.messenger.UserConfig.selectedAccount
+            org.telegram.tgnet.ConnectionsManager r7 = org.telegram.tgnet.ConnectionsManager.getInstance(r7)
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda91 r8 = org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda91.INSTANCE
+            r7.sendRequest(r12, r8)
+            boolean r7 = r9 instanceof org.telegram.ui.ChatActivity
+            if (r7 == 0) goto L_0x0114
+            org.telegram.ui.ChatActivity r9 = (org.telegram.ui.ChatActivity) r9
+            org.telegram.ui.Components.UndoView r7 = r9.getUndoView()
+            r8 = 0
+            r10 = 74
+            r11 = 0
+            r7.showWithAction((long) r8, (int) r10, (java.lang.Runnable) r11)
+            goto L_0x011f
+        L_0x0114:
+            org.telegram.ui.Components.BulletinFactory r7 = org.telegram.ui.Components.BulletinFactory.of(r9)
+            org.telegram.ui.Components.Bulletin r7 = r7.createReportSent(r13)
+            r7.show()
+        L_0x011f:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$createReportAlert$69(int, org.telegram.ui.ActionBar.BaseFragment, android.content.Context, long, org.telegram.ui.ActionBar.Theme$ResourcesProvider, android.content.DialogInterface, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$createReportAlert$69(int[], int, org.telegram.ui.ActionBar.BaseFragment, android.content.Context, long, org.telegram.ui.ActionBar.Theme$ResourcesProvider, android.content.DialogInterface, int):void");
     }
 
     private static String getFloodWaitString(String str) {
@@ -4514,7 +4554,7 @@ public class AlertsCreator {
                     break;
                 case 5:
                     builder.setMessage(LocaleController.getString("NobodyLikesSpam2", NUM));
-                    builder.setNegativeButton(LocaleController.getString("MoreInfo", NUM), new AlertsCreator$$ExternalSyntheticLambda26(baseFragment));
+                    builder.setNegativeButton(LocaleController.getString("MoreInfo", NUM), new AlertsCreator$$ExternalSyntheticLambda25(baseFragment));
                     break;
                 case 6:
                     if (!z) {
@@ -4641,10 +4681,10 @@ public class AlertsCreator {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity2);
         builder.setTitle(LocaleController.getString("LedColor", NUM));
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("Set", NUM), new AlertsCreator$$ExternalSyntheticLambda6(j, iArr, i, runnable));
-        builder.setNeutralButton(LocaleController.getString("LedDisabled", NUM), new AlertsCreator$$ExternalSyntheticLambda3(j2, i3, runnable2));
+        builder.setPositiveButton(LocaleController.getString("Set", NUM), new AlertsCreator$$ExternalSyntheticLambda5(j, iArr, i, runnable));
+        builder.setNeutralButton(LocaleController.getString("LedDisabled", NUM), new AlertsCreator$$ExternalSyntheticLambda2(j2, i3, runnable2));
         if (j2 != 0) {
-            builder.setNegativeButton(LocaleController.getString("Default", NUM), new AlertsCreator$$ExternalSyntheticLambda4(j2, runnable2));
+            builder.setNegativeButton(LocaleController.getString("Default", NUM), new AlertsCreator$$ExternalSyntheticLambda3(j2, runnable2));
         }
         return builder.create();
     }
@@ -4901,8 +4941,8 @@ public class AlertsCreator {
         builder.setTopView(frameLayout);
         builder.setTopViewAspectRatio(0.37820512f);
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString(NUM)));
-        builder.setPositiveButton(LocaleController.getString(NUM), new AlertsCreator$$ExternalSyntheticLambda8(activity));
-        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new AlertsCreator$$ExternalSyntheticLambda16(runnable));
+        builder.setPositiveButton(LocaleController.getString(NUM), new AlertsCreator$$ExternalSyntheticLambda7(activity));
+        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new AlertsCreator$$ExternalSyntheticLambda15(runnable));
         return builder;
     }
 
@@ -4954,7 +4994,7 @@ public class AlertsCreator {
         builder.setTopView(frameLayout);
         builder.setTitle(LocaleController.getString("PermissionDrawAboveOtherAppsTitle", NUM));
         builder.setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", NUM));
-        builder.setPositiveButton(LocaleController.getString("Enable", NUM), new AlertsCreator$$ExternalSyntheticLambda7(activity));
+        builder.setPositiveButton(LocaleController.getString("Enable", NUM), new AlertsCreator$$ExternalSyntheticLambda6(activity));
         builder.notDrawBackgroundOnTopView(true);
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), onClickListener);
         builder.setTopViewAspectRatio(0.50427353f);
@@ -5000,7 +5040,7 @@ public class AlertsCreator {
         builder.setTopView(r8);
         builder.setTitle(LocaleController.getString("PermissionDrawAboveOtherAppsGroupCallTitle", NUM));
         builder.setMessage(LocaleController.getString("PermissionDrawAboveOtherAppsGroupCall", NUM));
-        builder.setPositiveButton(LocaleController.getString("Enable", NUM), new AlertsCreator$$ExternalSyntheticLambda13(context2));
+        builder.setPositiveButton(LocaleController.getString("Enable", NUM), new AlertsCreator$$ExternalSyntheticLambda12(context2));
         builder.notDrawBackgroundOnTopView(true);
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setTopViewAspectRatio(0.5769231f);
@@ -5030,8 +5070,8 @@ public class AlertsCreator {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
         builder.setTopAnimation(NUM, 72, false, Theme.getColor("dialogTopBackground"));
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("ContactsPermissionAlert", NUM)));
-        builder.setPositiveButton(LocaleController.getString("ContactsPermissionAlertContinue", NUM), new AlertsCreator$$ExternalSyntheticLambda20(intCallback));
-        builder.setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), new AlertsCreator$$ExternalSyntheticLambda19(intCallback));
+        builder.setPositiveButton(LocaleController.getString("ContactsPermissionAlertContinue", NUM), new AlertsCreator$$ExternalSyntheticLambda19(intCallback));
+        builder.setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), new AlertsCreator$$ExternalSyntheticLambda18(intCallback));
         return builder;
     }
 
@@ -5077,8 +5117,8 @@ public class AlertsCreator {
         builder.setTitle(LocaleController.getString("LowDiskSpaceTitle", NUM));
         builder.setMessage(LocaleController.getString("LowDiskSpaceMessage", NUM));
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), new AlertsCreator$$ExternalSyntheticLambda34(iArr));
-        builder.setNeutralButton(LocaleController.getString("ClearMediaCache", NUM), new AlertsCreator$$ExternalSyntheticLambda31(launchActivity2));
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), new AlertsCreator$$ExternalSyntheticLambda33(iArr));
+        builder.setNeutralButton(LocaleController.getString("ClearMediaCache", NUM), new AlertsCreator$$ExternalSyntheticLambda30(launchActivity2));
         return builder.create();
     }
 
@@ -5352,7 +5392,7 @@ public class AlertsCreator {
         }
         numberPicker.setFormatter(AlertsCreator$$ExternalSyntheticLambda95.INSTANCE);
         builder.setView(numberPicker);
-        builder.setNegativeButton(LocaleController.getString("Done", NUM), new AlertsCreator$$ExternalSyntheticLambda21(tLRPC$EncryptedChat, numberPicker));
+        builder.setNegativeButton(LocaleController.getString("Done", NUM), new AlertsCreator$$ExternalSyntheticLambda20(tLRPC$EncryptedChat, numberPicker));
         return builder;
     }
 
@@ -6324,7 +6364,7 @@ public class AlertsCreator {
             r4 = 2131625217(0x7f0e0501, float:1.8877636E38)
             java.lang.String r5 = "Delete"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda17 r12 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda17
+            org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda16 r12 = new org.telegram.ui.Components.AlertsCreator$$ExternalSyntheticLambda16
             r4 = r12
             r11 = r6
             r5 = r50

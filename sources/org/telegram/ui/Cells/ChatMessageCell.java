@@ -6797,7 +6797,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x0566:
             boolean r2 = r1.isRepliesChat
             if (r2 == 0) goto L_0x0577
-            r2 = 2131628570(0x7f0e121a, float:1.8884436E38)
+            r2 = 2131628573(0x7f0e121d, float:1.8884442E38)
             java.lang.String r3 = "ViewInChat"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x0573:
@@ -8078,7 +8078,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r50 = r6
             r6 = 11
             if (r15 != r6) goto L_0x0edd
-            r0 = 2131628653(0x7f0e126d, float:1.8884605E38)
+            r0 = 2131628656(0x7f0e1270, float:1.888461E38)
             java.lang.String r6 = "VoipChannelVoiceChat"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
         L_0x0edb:
@@ -8087,7 +8087,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x0edd:
             r6 = 9
             if (r15 != r6) goto L_0x0eeb
-            r0 = 2131628781(0x7f0e12ed, float:1.8884864E38)
+            r0 = 2131628784(0x7f0e12f0, float:1.888487E38)
             java.lang.String r6 = "VoipGroupVoiceChat"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
             goto L_0x0edb
@@ -11570,7 +11570,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r5 == 0) goto L_0x283d
             boolean r4 = r4.public_voters
             if (r4 == 0) goto L_0x2833
-            r4 = 2131627538(0x7f0e0e12, float:1.8882343E38)
+            r4 = 2131627539(0x7f0e0e13, float:1.8882345E38)
             java.lang.String r5 = "QuizPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2854
@@ -11582,7 +11582,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x283d:
             boolean r4 = r4.public_voters
             if (r4 == 0) goto L_0x284b
-            r4 = 2131627483(0x7f0e0ddb, float:1.8882232E38)
+            r4 = 2131627484(0x7f0e0ddc, float:1.8882234E38)
             java.lang.String r5 = "PublicPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x2854
@@ -15672,7 +15672,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r2 == 0) goto L_0x45dd
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             android.content.res.Resources r3 = r70.getResources()
-            r4 = 2131166152(0x7var_c8, float:1.7946541E38)
+            r4 = 2131166154(0x7var_ca, float:1.7946545E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             r2.setImageBitmap((android.graphics.drawable.Drawable) r3)
             goto L_0x4989
@@ -25384,7 +25384,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             boolean r2 = r2.isSponsored()
             r10 = 2147483646(0x7ffffffe, float:NaN)
             if (r2 == 0) goto L_0x0183
-            r2 = 2131628087(0x7f0e1037, float:1.8883457E38)
+            r2 = 2131628090(0x7f0e103a, float:1.8883463E38)
             java.lang.String r13 = "SponsoredMessage"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r13, r2)
             goto L_0x01d5
@@ -25752,7 +25752,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v4, resolved type: android.text.StaticLayout[]} */
-    /* JADX WARNING: type inference failed for: r4v1, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r4v1, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r3v4, types: [org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$User, java.lang.String] */
     /* JADX WARNING: type inference failed for: r9v7, types: [java.lang.CharSequence] */
     /* JADX WARNING: type inference failed for: r3v87 */
@@ -25921,7 +25921,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             long r6 = r0.via_bot_id
             java.lang.String r8 = "@"
             r9 = 0
-            r11 = 2131628532(0x7f0e11f4, float:1.888436E38)
+            r11 = 2131628535(0x7f0e11f7, float:1.8884365E38)
             java.lang.String r12 = "ViaBot"
             r13 = 2
             int r14 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
@@ -26160,7 +26160,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x02dd:
             r8 = r4
             r11 = r21
-            r4 = 2131628532(0x7f0e11f4, float:1.888436E38)
+            r4 = 2131628535(0x7f0e11f7, float:1.8884365E38)
             goto L_0x02f6
         L_0x02e4:
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
@@ -26518,7 +26518,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.Object[] r8 = new java.lang.Object[r8]
             r14 = 0
             r8[r14] = r13
-            r14 = 2131628532(0x7f0e11f4, float:1.888436E38)
+            r14 = 2131628535(0x7f0e11f7, float:1.8884365E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r14)
             r14 = 1
             r8[r14] = r11

@@ -4958,12 +4958,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     public void sendReaction(MessageObject messageObject, CharSequence charSequence, boolean z, ChatActivity chatActivity, Runnable runnable) {
         if (messageObject != null && chatActivity != null) {
             TLRPC$TL_messages_sendReaction tLRPC$TL_messages_sendReaction = new TLRPC$TL_messages_sendReaction();
-            if (messageObject.messageOwner.isThreadMessage) {
-                tLRPC$TL_messages_sendReaction.peer = getMessagesController().getInputPeer(messageObject.getFromChatId());
-                tLRPC$TL_messages_sendReaction.msg_id = messageObject.messageOwner.fwd_from.saved_from_msg_id;
-            } else {
+            TLRPC$Message tLRPC$Message = messageObject.messageOwner;
+            if (!tLRPC$Message.isThreadMessage || tLRPC$Message.fwd_from == null) {
                 tLRPC$TL_messages_sendReaction.peer = getMessagesController().getInputPeer(messageObject.getDialogId());
                 tLRPC$TL_messages_sendReaction.msg_id = messageObject.getId();
+            } else {
+                tLRPC$TL_messages_sendReaction.peer = getMessagesController().getInputPeer(messageObject.getFromChatId());
+                tLRPC$TL_messages_sendReaction.msg_id = messageObject.messageOwner.fwd_from.saved_from_msg_id;
             }
             if (charSequence != null) {
                 tLRPC$TL_messages_sendReaction.reaction = charSequence.toString();

@@ -866,8 +866,10 @@
     <public type="drawable" name="msg_reply_small" id="NUM" />
     <public type="drawable" name="msg_report" id="NUM" />
     <public type="drawable" name="msg_report_abuse" id="NUM" />
+    <public type="drawable" name="msg_report_drugs" id="NUM" />
     <public type="drawable" name="msg_report_fake" id="NUM" />
     <public type="drawable" name="msg_report_other" id="NUM" />
+    <public type="drawable" name="msg_report_personal" id="NUM" />
     <public type="drawable" name="msg_report_spam" id="NUM" />
     <public type="drawable" name="msg_report_violence" id="NUM" />
     <public type="drawable" name="msg_report_xxx" id="NUM" />
@@ -5214,6 +5216,7 @@
     <public type="string" name="PrivacyPhoneInfo" id="NUM" />
     <public type="string" name="PrivacyPhoneInfo2" id="NUM" />
     <public type="string" name="PrivacyPhoneInfo3" id="NUM" />
+    <public type="string" name="PrivacyPhoneInfo4" id="NUM" />
     <public type="string" name="PrivacyPhoneTitle" id="NUM" />
     <public type="string" name="PrivacyPhoneTitle2" id="NUM" />
     <public type="string" name="PrivacyPolicy" id="NUM" />
@@ -5417,7 +5420,9 @@
     <public type="string" name="ReportChatChild" id="NUM" />
     <public type="string" name="ReportChatDescription" id="NUM" />
     <public type="string" name="ReportChatFakeAccount" id="NUM" />
+    <public type="string" name="ReportChatIllegalDrugs" id="NUM" />
     <public type="string" name="ReportChatOther" id="NUM" />
+    <public type="string" name="ReportChatPersonalDetails" id="NUM" />
     <public type="string" name="ReportChatPornography" id="NUM" />
     <public type="string" name="ReportChatSent" id="NUM" />
     <public type="string" name="ReportChatSpam" id="NUM" />

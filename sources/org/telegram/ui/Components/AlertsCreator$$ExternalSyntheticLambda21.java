@@ -1,18 +1,19 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import org.telegram.tgnet.TLRPC$EncryptedChat;
+import org.telegram.tgnet.TLRPC$TL_langPackLanguage;
+import org.telegram.ui.LaunchActivity;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda21 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ TLRPC$EncryptedChat f$0;
-    public final /* synthetic */ NumberPicker f$1;
+    public final /* synthetic */ TLRPC$TL_langPackLanguage f$0;
+    public final /* synthetic */ LaunchActivity f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda21(TLRPC$EncryptedChat tLRPC$EncryptedChat, NumberPicker numberPicker) {
-        this.f$0 = tLRPC$EncryptedChat;
-        this.f$1 = numberPicker;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda21(TLRPC$TL_langPackLanguage tLRPC$TL_langPackLanguage, LaunchActivity launchActivity) {
+        this.f$0 = tLRPC$TL_langPackLanguage;
+        this.f$1 = launchActivity;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createTTLAlert$91(this.f$0, this.f$1, dialogInterface, i);
+        AlertsCreator.lambda$createLanguageAlert$5(this.f$0, this.f$1, dialogInterface, i);
     }
 }

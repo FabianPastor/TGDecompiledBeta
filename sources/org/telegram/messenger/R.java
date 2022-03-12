@@ -847,8 +847,10 @@ public final class R {
         public static final int msg_reply_small = NUM;
         public static final int msg_report = NUM;
         public static final int msg_report_abuse = NUM;
+        public static final int msg_report_drugs = NUM;
         public static final int msg_report_fake = NUM;
         public static final int msg_report_other = NUM;
+        public static final int msg_report_personal = NUM;
         public static final int msg_report_spam = NUM;
         public static final int msg_report_violence = NUM;
         public static final int msg_report_xxx = NUM;
@@ -5353,6 +5355,7 @@ public final class R {
         public static final int PrivacyPhoneInfo = NUM;
         public static final int PrivacyPhoneInfo2 = NUM;
         public static final int PrivacyPhoneInfo3 = NUM;
+        public static final int PrivacyPhoneInfo4 = NUM;
         public static final int PrivacyPhoneTitle = NUM;
         public static final int PrivacyPhoneTitle2 = NUM;
         public static final int PrivacyPolicy = NUM;
@@ -5556,7 +5559,9 @@ public final class R {
         public static final int ReportChatChild = NUM;
         public static final int ReportChatDescription = NUM;
         public static final int ReportChatFakeAccount = NUM;
+        public static final int ReportChatIllegalDrugs = NUM;
         public static final int ReportChatOther = NUM;
+        public static final int ReportChatPersonalDetails = NUM;
         public static final int ReportChatPornography = NUM;
         public static final int ReportChatSent = NUM;
         public static final int ReportChatSpam = NUM;

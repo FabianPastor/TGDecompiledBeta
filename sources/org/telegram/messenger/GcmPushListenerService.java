@@ -4704,10 +4704,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             goto L_0x1bb3
         L_0x0ae0:
             java.lang.String r1 = "YouHaveNewMessage"
-            r3 = 2131628920(0x7f0e1378, float:1.8885146E38)
+            r3 = 2131628923(0x7f0e137b, float:1.8885152E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x04a1 }
             java.lang.String r3 = "SecretChatName"
-            r4 = 2131627840(0x7f0e0var_, float:1.8882956E38)
+            r4 = 2131627843(0x7f0e0var_, float:1.8882962E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ all -> 0x04a1 }
             r26 = r1
             r42 = r3
@@ -5607,7 +5607,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         L_0x117d:
             r10 = r7
             java.lang.String r1 = "UserAcceptedToGroupPushWithGroup"
-            r3 = 2131628459(0x7f0e11ab, float:1.8884211E38)
+            r3 = 2131628462(0x7f0e11ae, float:1.8884217E38)
             r6 = 2
             java.lang.Object[] r6 = new java.lang.Object[r6]     // Catch:{ all -> 0x04a1 }
             r7 = 0
@@ -6344,7 +6344,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             r8[r9] = r4     // Catch:{ all -> 0x04a1 }
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r8)     // Catch:{ all -> 0x04a1 }
             java.lang.String r3 = "QuizPoll"
-            r4 = 2131627538(0x7f0e0e12, float:1.8882343E38)
+            r4 = 2131627539(0x7f0e0e13, float:1.8882345E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ all -> 0x04a1 }
             goto L_0x1839
         L_0x171a:
@@ -6714,7 +6714,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             r6[r7] = r4     // Catch:{ all -> 0x04a1 }
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r6)     // Catch:{ all -> 0x04a1 }
             java.lang.String r3 = "QuizPoll"
-            r4 = 2131627538(0x7f0e0e12, float:1.8882343E38)
+            r4 = 2131627539(0x7f0e0e13, float:1.8882345E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ all -> 0x04a1 }
             goto L_0x1b7e
         L_0x1a0a:
