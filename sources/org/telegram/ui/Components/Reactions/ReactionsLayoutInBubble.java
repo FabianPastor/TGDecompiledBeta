@@ -23,7 +23,6 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
@@ -465,10 +464,7 @@ public class ReactionsLayoutInBubble {
                 this.serviceBackgroundColor = 0;
             }
             if (!(this.reaction == null || (tLRPC$TL_availableReaction = MediaDataController.getInstance(ReactionsLayoutInBubble.this.currentAccount).getReactionsMap().get(this.reaction)) == null)) {
-                SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon, "windowBackgroundGray", 1.0f);
-                TLRPC$TL_availableReaction tLRPC$TL_availableReaction2 = tLRPC$TL_availableReaction;
-                this.imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.center_icon), "40_40_firstframe", svgThumb, "webp", tLRPC$TL_availableReaction2, 1);
-                this.imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.center_icon), "40_40_firstframe", svgThumb, "webp", tLRPC$TL_availableReaction2, 1);
+                this.imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.static_icon), "40_40", DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon, "windowBackgroundGray", 1.0f), "webp", tLRPC$TL_availableReaction, 1);
             }
             this.counterDrawable.setSize(AndroidUtilities.dp(26.0f), AndroidUtilities.dp(100.0f));
             this.counterDrawable.textPaint = ReactionsLayoutInBubble.textPaint;
