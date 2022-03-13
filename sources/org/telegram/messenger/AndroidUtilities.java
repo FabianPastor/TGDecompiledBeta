@@ -2346,7 +2346,7 @@ public class AndroidUtilities {
     public static boolean isSmallScreen() {
         if (isSmallScreen == null) {
             Point point = displaySize;
-            isSmallScreen = Boolean.valueOf(((float) ((Math.max(point.x, point.y) - statusBarHeight) - navigationBarHeight)) / density <= 610.0f);
+            isSmallScreen = Boolean.valueOf(((float) ((Math.max(point.x, point.y) - statusBarHeight) - navigationBarHeight)) / density <= 650.0f);
         }
         return isSmallScreen.booleanValue();
     }

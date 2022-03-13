@@ -1,19 +1,14 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda22 implements ThemeDescription.ThemeDescriptionDelegate {
-    public final /* synthetic */ LoginActivity f$0;
+public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda22 implements LoginActivity.PhoneNumberExclusionRule {
+    public static final /* synthetic */ LoginActivity$$ExternalSyntheticLambda22 INSTANCE = new LoginActivity$$ExternalSyntheticLambda22();
 
-    public /* synthetic */ LoginActivity$$ExternalSyntheticLambda22(LoginActivity loginActivity) {
-        this.f$0 = loginActivity;
+    private /* synthetic */ LoginActivity$$ExternalSyntheticLambda22() {
     }
 
-    public final void didSetColor() {
-        this.f$0.updateColors();
-    }
-
-    public /* synthetic */ void onAnimationProgress(float f) {
-        ThemeDescription.ThemeDescriptionDelegate.CC.$default$onAnimationProgress(this, f);
+    public final int modifyHintLengthRequirement(int i) {
+        return LoginActivity.lambda$static$0(i);
     }
 }

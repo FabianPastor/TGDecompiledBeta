@@ -89,6 +89,10 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         return true;
     }
 
+    public boolean hasForceLightStatusBar() {
+        return true;
+    }
+
     public ActionIntroActivity(int i) {
         this.currentType = i;
     }

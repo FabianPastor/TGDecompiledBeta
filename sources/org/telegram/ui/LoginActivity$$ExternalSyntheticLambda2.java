@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda2 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$setCustomKeyboardVisible$5(valueAnimator);
+        this.f$0.lambda$setCustomKeyboardVisible$7(valueAnimator);
     }
 }

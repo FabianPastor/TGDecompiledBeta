@@ -1095,9 +1095,13 @@ public class LocaleController {
     }
 
     public void applyLanguage(LocaleInfo localeInfo, boolean z, boolean z2, boolean z3, boolean z4, int i) {
+        boolean z5;
         String[] strArr;
         Locale locale;
-        if (localeInfo != null) {
+        LocaleInfo localeInfo2 = localeInfo;
+        boolean z6 = z4;
+        int i2 = i;
+        if (localeInfo2 != null) {
             boolean hasBaseLang = localeInfo.hasBaseLang();
             File pathToFile = localeInfo.getPathToFile();
             File pathToBaseFile = localeInfo.getPathToBaseFile();
@@ -1106,34 +1110,37 @@ public class LocaleController {
             }
             if (getLanguageFromDict(localeInfo.getKey()) == null) {
                 if (localeInfo.isRemote()) {
-                    this.remoteLanguages.add(localeInfo);
-                    this.remoteLanguagesDict.put(localeInfo.getKey(), localeInfo);
-                    this.languages.add(localeInfo);
-                    this.languagesDict.put(localeInfo.getKey(), localeInfo);
+                    this.remoteLanguages.add(localeInfo2);
+                    this.remoteLanguagesDict.put(localeInfo.getKey(), localeInfo2);
+                    this.languages.add(localeInfo2);
+                    this.languagesDict.put(localeInfo.getKey(), localeInfo2);
                     saveOtherLanguages();
                 } else if (localeInfo.isUnofficial()) {
-                    this.unofficialLanguages.add(localeInfo);
-                    this.languagesDict.put(localeInfo.getKey(), localeInfo);
+                    this.unofficialLanguages.add(localeInfo2);
+                    this.languagesDict.put(localeInfo.getKey(), localeInfo2);
                     saveOtherLanguages();
                 }
             }
-            if ((localeInfo.isRemote() || localeInfo.isUnofficial()) && (z4 || !pathToFile.exists() || (hasBaseLang && !pathToBaseFile.exists()))) {
+            if ((localeInfo.isRemote() || localeInfo.isUnofficial()) && (z6 || !pathToFile.exists() || (hasBaseLang && !pathToBaseFile.exists()))) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("reload locale because one of file doesn't exist" + pathToFile + " " + pathToBaseFile);
                 }
                 if (z2) {
-                    AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda4(this, localeInfo, i));
+                    AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda4(this, localeInfo2, i2));
                 } else {
-                    applyRemoteLanguage(localeInfo, (String) null, true, i);
+                    applyRemoteLanguage(localeInfo2, (String) null, true, i2);
                 }
+                z5 = true;
+            } else {
+                z5 = false;
             }
             try {
-                if (!TextUtils.isEmpty(localeInfo.pluralLangCode)) {
-                    strArr = localeInfo.pluralLangCode.split("_");
-                } else if (!TextUtils.isEmpty(localeInfo.baseLangCode)) {
-                    strArr = localeInfo.baseLangCode.split("_");
+                if (!TextUtils.isEmpty(localeInfo2.pluralLangCode)) {
+                    strArr = localeInfo2.pluralLangCode.split("_");
+                } else if (!TextUtils.isEmpty(localeInfo2.baseLangCode)) {
+                    strArr = localeInfo2.baseLangCode.split("_");
                 } else {
-                    strArr = localeInfo.shortName.split("_");
+                    strArr = localeInfo2.shortName.split("_");
                 }
                 if (strArr.length == 1) {
                     locale = new Locale(strArr[0]);
@@ -1141,7 +1148,7 @@ public class LocaleController {
                     locale = new Locale(strArr[0], strArr[1]);
                 }
                 if (z) {
-                    this.languageOverride = localeInfo.shortName;
+                    this.languageOverride = localeInfo2.shortName;
                     SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
                     edit.putString("language", localeInfo.getKey());
                     edit.commit();
@@ -1156,8 +1163,8 @@ public class LocaleController {
                     }
                 }
                 this.currentLocale = locale;
-                this.currentLocaleInfo = localeInfo;
-                if (!TextUtils.isEmpty(localeInfo.pluralLangCode)) {
+                this.currentLocaleInfo = localeInfo2;
+                if (!TextUtils.isEmpty(localeInfo2.pluralLangCode)) {
                     this.currentPluralRules = this.allRules.get(this.currentLocaleInfo.pluralLangCode);
                 }
                 if (this.currentPluralRules == null) {
@@ -1179,11 +1186,14 @@ public class LocaleController {
                 this.changingConfiguration = false;
                 if (this.reloadLastFile) {
                     if (z2) {
-                        AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda3(this, i, z4));
+                        AndroidUtilities.runOnUIThread(new LocaleController$$ExternalSyntheticLambda3(this, i2, z6));
                     } else {
-                        reloadCurrentRemoteLocale(i, (String) null, z4);
+                        reloadCurrentRemoteLocale(i2, (String) null, z6);
                     }
                     this.reloadLastFile = false;
+                }
+                if (!z5) {
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.reloadInterface, new Object[0]);
                 }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);

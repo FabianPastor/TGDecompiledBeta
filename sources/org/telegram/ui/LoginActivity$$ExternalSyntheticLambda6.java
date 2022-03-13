@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda6 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onDoneButtonPressed$13(dialogInterface, i);
+        this.f$0.lambda$onDoneButtonPressed$15(dialogInterface, i);
     }
 }

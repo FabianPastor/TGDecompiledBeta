@@ -1,15 +1,14 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.SizeNotifierFrameLayout;
+import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda23 implements SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate {
-    public final /* synthetic */ LoginActivity f$0;
+public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda23 implements LoginActivity.PhoneNumberExclusionRule {
+    public static final /* synthetic */ LoginActivity$$ExternalSyntheticLambda23 INSTANCE = new LoginActivity$$ExternalSyntheticLambda23();
 
-    public /* synthetic */ LoginActivity$$ExternalSyntheticLambda23(LoginActivity loginActivity) {
-        this.f$0 = loginActivity;
+    private /* synthetic */ LoginActivity$$ExternalSyntheticLambda23() {
     }
 
-    public final void onSizeChanged(int i, boolean z) {
-        this.f$0.lambda$createView$0(i, z);
+    public final int modifyHintLengthRequirement(int i) {
+        return LoginActivity.lambda$static$1(i);
     }
 }

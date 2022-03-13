@@ -14,6 +14,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda16 impl
     }
 
     public final void run() {
-        this.f$0.lambda$showEditDoneProgress$14(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$showEditDoneProgress$16(this.f$1, this.f$2, this.f$3);
     }
 }

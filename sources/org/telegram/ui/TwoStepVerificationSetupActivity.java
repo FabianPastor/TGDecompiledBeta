@@ -166,6 +166,10 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     public static /* synthetic */ void lambda$createView$19(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
+    public boolean hasForceLightStatusBar() {
+        return true;
+    }
+
     /* access modifiers changed from: protected */
     public void onReset() {
     }
@@ -603,7 +607,13 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     /* access modifiers changed from: protected */
                     public void onMeasure(int i, int i2) {
                         super.onMeasure(i, i2);
-                        ((ViewGroup.MarginLayoutParams) TwoStepVerificationSetupActivity.this.titleTextView.getLayoutParams()).topMargin = ((TwoStepVerificationSetupActivity.this.imageView.getVisibility() != 8 || Build.VERSION.SDK_INT < 21) ? 0 : AndroidUtilities.statusBarHeight) + AndroidUtilities.dp(8.0f);
+                        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) TwoStepVerificationSetupActivity.this.titleTextView.getLayoutParams();
+                        int i3 = 0;
+                        int dp = ((TwoStepVerificationSetupActivity.this.imageView.getVisibility() != 8 || Build.VERSION.SDK_INT < 21) ? 0 : AndroidUtilities.statusBarHeight) + AndroidUtilities.dp(8.0f);
+                        if (TwoStepVerificationSetupActivity.this.currentType == 2 && AndroidUtilities.isSmallScreen() && !TwoStepVerificationSetupActivity.this.isLandscape()) {
+                            i3 = AndroidUtilities.dp(32.0f);
+                        }
+                        marginLayoutParams.topMargin = dp + i3;
                     }
                 };
                 r92.setOrientation(1);
@@ -675,7 +685,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     }
                 });
                 this.outlineTextFirstRow.addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f));
-                r92.addView(this.outlineTextFirstRow, LayoutHelper.createFrame(-1, -2.0f, 49, 24.0f, 32.0f, 24.0f, 0.0f));
+                r92.addView(this.outlineTextFirstRow, LayoutHelper.createFrame(-1, -2.0f, 49, 24.0f, 32.0f, 24.0f, 32.0f));
                 this.outlineTextSecondRow = new OutlineTextContainerView(context2);
                 EditTextBoldCursor editTextBoldCursor2 = new EditTextBoldCursor(context2);
                 this.editTextSecondRow = editTextBoldCursor2;
@@ -1272,7 +1282,8 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         return i == 6 || i == 9 || i == 7;
     }
 
-    private boolean isLandscape() {
+    /* access modifiers changed from: private */
+    public boolean isLandscape() {
         Point point = AndroidUtilities.displaySize;
         return point.x > point.y;
     }

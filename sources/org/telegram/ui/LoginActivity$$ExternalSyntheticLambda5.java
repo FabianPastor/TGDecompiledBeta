@@ -12,6 +12,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda5 imple
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$showEditDoneProgress$15(this.f$1, valueAnimator);
+        this.f$0.lambda$showEditDoneProgress$17(this.f$1, valueAnimator);
     }
 }

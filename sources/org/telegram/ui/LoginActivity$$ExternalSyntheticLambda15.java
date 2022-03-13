@@ -8,6 +8,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda15 impl
     }
 
     public final void run() {
-        this.f$0.lambda$onDialogDismiss$7();
+        this.f$0.lambda$onDialogDismiss$9();
     }
 }

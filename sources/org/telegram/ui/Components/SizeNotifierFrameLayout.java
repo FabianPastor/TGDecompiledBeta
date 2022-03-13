@@ -600,16 +600,24 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         /* access modifiers changed from: private */
         public /* synthetic */ void lambda$run$2() {
             SizeNotifierFrameLayout sizeNotifierFrameLayout = SizeNotifierFrameLayout.this;
-            final BlurBitmap blurBitmap = sizeNotifierFrameLayout.currentBitmap;
-            sizeNotifierFrameLayout.prevBitmap = blurBitmap;
+            if (!sizeNotifierFrameLayout.blurIsRunning) {
+                BlurBitmap blurBitmap = this.finalBitmap;
+                if (blurBitmap != null) {
+                    blurBitmap.recycle();
+                }
+                SizeNotifierFrameLayout.this.blurGeneratingTuskIsRunning = false;
+                return;
+            }
+            final BlurBitmap blurBitmap2 = sizeNotifierFrameLayout.currentBitmap;
+            sizeNotifierFrameLayout.prevBitmap = blurBitmap2;
             sizeNotifierFrameLayout.blurPaintTop2.setShader(sizeNotifierFrameLayout.blurPaintTop.getShader());
             SizeNotifierFrameLayout sizeNotifierFrameLayout2 = SizeNotifierFrameLayout.this;
             sizeNotifierFrameLayout2.blurPaintBottom2.setShader(sizeNotifierFrameLayout2.blurPaintBottom.getShader());
             Bitmap bitmap = this.finalBitmap.topBitmap;
             Shader.TileMode tileMode = Shader.TileMode.CLAMP;
             SizeNotifierFrameLayout.this.blurPaintTop.setShader(new BitmapShader(bitmap, tileMode, tileMode));
-            BlurBitmap blurBitmap2 = this.finalBitmap;
-            if (blurBitmap2.needBlurBottom && blurBitmap2.bottomBitmap != null) {
+            BlurBitmap blurBitmap3 = this.finalBitmap;
+            if (blurBitmap3.needBlurBottom && blurBitmap3.bottomBitmap != null) {
                 Bitmap bitmap2 = this.finalBitmap.bottomBitmap;
                 Shader.TileMode tileMode2 = Shader.TileMode.CLAMP;
                 SizeNotifierFrameLayout.this.blurPaintBottom.setShader(new BitmapShader(bitmap2, tileMode2, tileMode2));
@@ -626,7 +634,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 public void onAnimationEnd(Animator animator) {
                     SizeNotifierFrameLayout sizeNotifierFrameLayout = SizeNotifierFrameLayout.this;
                     sizeNotifierFrameLayout.blurCrossfadeProgress = 1.0f;
-                    sizeNotifierFrameLayout.unusedBitmaps.add(blurBitmap);
+                    sizeNotifierFrameLayout.unusedBitmaps.add(blurBitmap2);
                     SizeNotifierFrameLayout.this.blurPaintTop2.setShader((Shader) null);
                     SizeNotifierFrameLayout.this.blurPaintBottom2.setShader((Shader) null);
                     SizeNotifierFrameLayout.this.invalidateBlurredViews();

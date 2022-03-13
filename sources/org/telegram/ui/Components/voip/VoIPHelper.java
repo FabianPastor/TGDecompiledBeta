@@ -86,9 +86,12 @@ public class VoIPHelper {
         int i;
         String str2;
         int i2;
+        TLRPC$User tLRPC$User2 = tLRPC$User;
+        Activity activity2 = activity;
+        TLRPC$UserFull tLRPC$UserFull2 = tLRPC$UserFull;
         boolean z3 = true;
-        if (tLRPC$UserFull != null && tLRPC$UserFull.phone_calls_private) {
-            new AlertDialog.Builder((Context) activity).setTitle(LocaleController.getString("VoipFailed", NUM)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("CallNotAvailable", NUM, ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name)))).setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null).show();
+        if (tLRPC$UserFull2 != null && tLRPC$UserFull2.phone_calls_private) {
+            new AlertDialog.Builder((Context) activity).setTitle(LocaleController.getString("VoipFailed", NUM)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("CallNotAvailable", NUM, ContactsController.formatName(tLRPC$User2.first_name, tLRPC$User2.last_name)))).setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null).show();
         } else if (ConnectionsManager.getInstance(UserConfig.selectedAccount).getConnectionState() != 3) {
             if (Settings.System.getInt(activity.getContentResolver(), "airplane_mode_on", 0) == 0) {
                 z3 = false;
@@ -130,27 +133,32 @@ public class VoIPHelper {
                 arrayList.add("android.permission.CAMERA");
             }
             if (arrayList.isEmpty()) {
-                initiateCall(tLRPC$User, (TLRPC$Chat) null, (String) null, z, z2, false, activity, (BaseFragment) null, accountInstance);
+                initiateCall(tLRPC$User, (TLRPC$Chat) null, (String) null, z, z2, false, (Boolean) null, activity, (BaseFragment) null, accountInstance);
             } else {
                 activity.requestPermissions((String[]) arrayList.toArray(new String[0]), z ? 102 : 101);
             }
         } else {
-            initiateCall(tLRPC$User, (TLRPC$Chat) null, (String) null, z, z2, false, activity, (BaseFragment) null, accountInstance);
+            initiateCall(tLRPC$User, (TLRPC$Chat) null, (String) null, z, z2, false, (Boolean) null, activity, (BaseFragment) null, accountInstance);
         }
     }
 
     public static void startCall(TLRPC$Chat tLRPC$Chat, TLRPC$InputPeer tLRPC$InputPeer, String str, boolean z, Activity activity, BaseFragment baseFragment, AccountInstance accountInstance) {
+        startCall(tLRPC$Chat, tLRPC$InputPeer, str, z, (Boolean) null, activity, baseFragment, accountInstance);
+    }
+
+    public static void startCall(TLRPC$Chat tLRPC$Chat, TLRPC$InputPeer tLRPC$InputPeer, String str, boolean z, Boolean bool, Activity activity, BaseFragment baseFragment, AccountInstance accountInstance) {
         String str2;
         int i;
         String str3;
         int i2;
-        if (activity != null) {
+        Activity activity2 = activity;
+        if (activity2 != null) {
             boolean z2 = false;
             if (ConnectionsManager.getInstance(UserConfig.selectedAccount).getConnectionState() != 3) {
                 if (Settings.System.getInt(activity.getContentResolver(), "airplane_mode_on", 0) != 0) {
                     z2 = true;
                 }
-                AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
+                AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity2);
                 if (z2) {
                     i = NUM;
                     str2 = "VoipOfflineAirplaneTitle";
@@ -170,7 +178,7 @@ public class VoIPHelper {
                 if (z2) {
                     Intent intent = new Intent("android.settings.AIRPLANE_MODE_SETTINGS");
                     if (intent.resolveActivity(activity.getPackageManager()) != null) {
-                        positiveButton.setNeutralButton(LocaleController.getString("VoipOfflineOpenSettings", NUM), new VoIPHelper$$ExternalSyntheticLambda2(activity, intent));
+                        positiveButton.setNeutralButton(LocaleController.getString("VoipOfflineOpenSettings", NUM), new VoIPHelper$$ExternalSyntheticLambda2(activity2, intent));
                     }
                 }
                 try {
@@ -180,21 +188,21 @@ public class VoIPHelper {
                 }
             } else if (Build.VERSION.SDK_INT >= 23) {
                 ArrayList arrayList = new ArrayList();
-                if (activity.checkSelfPermission("android.permission.RECORD_AUDIO") != 0) {
+                if (activity2.checkSelfPermission("android.permission.RECORD_AUDIO") != 0) {
                     arrayList.add("android.permission.RECORD_AUDIO");
                 }
                 if (arrayList.isEmpty()) {
-                    initiateCall((TLRPC$User) null, tLRPC$Chat, str, false, false, z, activity, baseFragment, accountInstance);
+                    initiateCall((TLRPC$User) null, tLRPC$Chat, str, false, false, z, bool, activity, baseFragment, accountInstance);
                 } else {
-                    activity.requestPermissions((String[]) arrayList.toArray(new String[0]), 103);
+                    activity2.requestPermissions((String[]) arrayList.toArray(new String[0]), 103);
                 }
             } else {
-                initiateCall((TLRPC$User) null, tLRPC$Chat, str, false, false, z, activity, baseFragment, accountInstance);
+                initiateCall((TLRPC$User) null, tLRPC$Chat, str, false, false, z, bool, activity, baseFragment, accountInstance);
             }
         }
     }
 
-    private static void initiateCall(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, String str, boolean z, boolean z2, boolean z3, Activity activity, BaseFragment baseFragment, AccountInstance accountInstance) {
+    private static void initiateCall(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, String str, boolean z, boolean z2, boolean z3, Boolean bool, Activity activity, BaseFragment baseFragment, AccountInstance accountInstance) {
         String str2;
         int i;
         String str3;
@@ -259,7 +267,7 @@ public class VoIPHelper {
             } else {
                 String str7 = str;
                 if (VoIPService.callIShouldHavePutIntoIntent == null) {
-                    doInitiateCall(tLRPC$User, tLRPC$Chat, str, (TLRPC$InputPeer) null, false, z, z2, z3, activity, baseFragment, accountInstance, true, true);
+                    doInitiateCall(tLRPC$User, tLRPC$Chat, str, (TLRPC$InputPeer) null, false, z, z2, z3, activity, baseFragment, accountInstance, bool != null ? bool.booleanValue() : true, true);
                 }
             }
         }

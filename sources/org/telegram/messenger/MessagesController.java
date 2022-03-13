@@ -571,6 +571,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private LongSparseArray<ArrayList<MessageObject>> reloadingScheduledWebpagesPending;
     private HashMap<String, ArrayList<MessageObject>> reloadingWebpages;
     private LongSparseArray<ArrayList<MessageObject>> reloadingWebpagesPending;
+    public boolean remoteConfigLoaded;
     private ArrayList<ReadTask> repliesReadTasks;
     private TLRPC$messages_Dialogs resetDialogsAll;
     private TLRPC$TL_messages_peerDialogs resetDialogsPinned;
@@ -1264,6 +1265,7 @@ public class MessagesController extends BaseController implements NotificationCe
             this.emojiPreferences = context3.getSharedPreferences("emoji" + this.currentAccount, 0);
         }
         this.enableJoined = this.notificationsPreferences.getBoolean("EnableContactJoined", true);
+        this.remoteConfigLoaded = this.mainPreferences.getBoolean("remoteConfigLoaded", false);
         this.secretWebpagePreview = this.mainPreferences.getInt("secretWebpage2", 2);
         this.maxGroupCount = this.mainPreferences.getInt("maxGroupCount", 200);
         this.maxMegagroupCount = this.mainPreferences.getInt("maxMegagroupCount", 10000);
@@ -3496,9 +3498,9 @@ public class MessagesController extends BaseController implements NotificationCe
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$updateConfig$22(TLRPC$TL_config tLRPC$TL_config) {
-        String str;
         getDownloadController().loadAutoDownloadConfig(false);
         loadAppConfig();
+        this.remoteConfigLoaded = true;
         this.maxMegagroupCount = tLRPC$TL_config.megagroup_size_max;
         this.maxGroupCount = tLRPC$TL_config.chat_size_max;
         this.maxEditTime = tLRPC$TL_config.edit_time_limit;
@@ -3509,11 +3511,11 @@ public class MessagesController extends BaseController implements NotificationCe
         this.revokeTimeLimit = tLRPC$TL_config.revoke_time_limit;
         this.revokeTimePmLimit = tLRPC$TL_config.revoke_pm_time_limit;
         this.canRevokePmInbox = tLRPC$TL_config.revoke_pm_inbox;
-        String str2 = tLRPC$TL_config.me_url_prefix;
-        this.linkPrefix = str2;
-        if (str2.endsWith("/")) {
-            String str3 = this.linkPrefix;
-            this.linkPrefix = str3.substring(0, str3.length() - 1);
+        String str = tLRPC$TL_config.me_url_prefix;
+        this.linkPrefix = str;
+        if (str.endsWith("/")) {
+            String str2 = this.linkPrefix;
+            this.linkPrefix = str2.substring(0, str2.length() - 1);
         }
         if (this.linkPrefix.startsWith("https://")) {
             this.linkPrefix = this.linkPrefix.substring(8);
@@ -3529,13 +3531,13 @@ public class MessagesController extends BaseController implements NotificationCe
         this.maxMessageLength = tLRPC$TL_config.message_length_max;
         this.maxCaptionLength = tLRPC$TL_config.caption_length_max;
         this.preloadFeaturedStickers = tLRPC$TL_config.preload_featured_stickers;
-        String str4 = tLRPC$TL_config.venue_search_username;
-        if (str4 != null) {
-            this.venueSearchBot = str4;
+        String str3 = tLRPC$TL_config.venue_search_username;
+        if (str3 != null) {
+            this.venueSearchBot = str3;
         }
-        String str5 = tLRPC$TL_config.gif_search_username;
-        if (str5 != null) {
-            this.gifSearchBot = str5;
+        String str4 = tLRPC$TL_config.gif_search_username;
+        if (str4 != null) {
+            this.gifSearchBot = str4;
         }
         if (this.imageSearchBot != null) {
             this.imageSearchBot = tLRPC$TL_config.img_search_username;
@@ -3543,10 +3545,14 @@ public class MessagesController extends BaseController implements NotificationCe
         this.blockedCountry = tLRPC$TL_config.blocked_mode;
         this.dcDomainName = tLRPC$TL_config.dc_txt_domain_name;
         this.webFileDatacenterId = tLRPC$TL_config.webfile_dc_id;
-        String str6 = tLRPC$TL_config.suggested_lang_code;
-        if (str6 != null && ((str = this.suggestedLangCode) == null || !str.equals(str6))) {
+        String str5 = tLRPC$TL_config.suggested_lang_code;
+        if (str5 != null) {
+            String str6 = this.suggestedLangCode;
+            boolean z = str6 == null || !str6.equals(str5);
             this.suggestedLangCode = tLRPC$TL_config.suggested_lang_code;
-            LocaleController.getInstance().loadRemoteLanguages(this.currentAccount);
+            if (z) {
+                LocaleController.getInstance().loadRemoteLanguages(this.currentAccount);
+            }
         }
         Theme.loadRemoteThemes(this.currentAccount, false);
         Theme.checkCurrentRemoteTheme(false);
@@ -3590,6 +3596,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
         }
         SharedPreferences.Editor edit = this.mainPreferences.edit();
+        edit.putBoolean("remoteConfigLoaded", this.remoteConfigLoaded);
         edit.putInt("maxGroupCount", this.maxGroupCount);
         edit.putInt("maxMegagroupCount", this.maxMegagroupCount);
         edit.putInt("maxEditTime", this.maxEditTime);
@@ -7040,6 +7047,18 @@ public class MessagesController extends BaseController implements NotificationCe
     public ArrayList<TLRPC$Dialog> getDialogs(int i) {
         ArrayList<TLRPC$Dialog> arrayList = this.dialogsByFolder.get(i);
         return arrayList == null ? new ArrayList<>() : arrayList;
+    }
+
+    public int getAllFoldersDialogsCount() {
+        int i = 0;
+        for (int i2 = 0; i2 < this.dialogsByFolder.size(); i2++) {
+            SparseArray<ArrayList<TLRPC$Dialog>> sparseArray = this.dialogsByFolder;
+            List list = sparseArray.get(sparseArray.keyAt(i2));
+            if (list != null) {
+                i += list.size();
+            }
+        }
+        return i;
     }
 
     public int getTotalDialogsCount() {

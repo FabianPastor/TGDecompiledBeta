@@ -1005,6 +1005,10 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    public boolean hasForceLightStatusBar() {
+        return this.type != 0;
+    }
+
     private void setCustomKeyboardVisible(final boolean z, boolean z2) {
         if (z) {
             AndroidUtilities.hideKeyboard(this.fragmentView);

@@ -164,6 +164,8 @@ public class LoginActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public static final int SHOW_DELAY = (SharedConfig.getDevicePerformanceClass() <= 1 ? 150 : 100);
     /* access modifiers changed from: private */
+    public static Map<String, PhoneNumberExclusionRule> phoneNumberExclusionRules;
+    /* access modifiers changed from: private */
     public Runnable animationFinishCallback;
     /* access modifiers changed from: private */
     public ImageView backButtonView;
@@ -241,11 +243,32 @@ public class LoginActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public SlideView[] views = new SlideView[12];
 
+    private interface PhoneNumberExclusionRule {
+        int modifyHintLengthRequirement(int i);
+    }
+
     private static class ProgressView extends View {
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$static$0(int i) {
+        return i - 1;
+    }
+
+    /* access modifiers changed from: private */
+    public static /* synthetic */ int lambda$static$1(int i) {
+        return i - 1;
     }
 
     public boolean hasForceLightStatusBar() {
         return true;
+    }
+
+    static {
+        HashMap hashMap = new HashMap();
+        phoneNumberExclusionRules = hashMap;
+        hashMap.put("60", LoginActivity$$ExternalSyntheticLambda22.INSTANCE);
+        phoneNumberExclusionRules.put("372", LoginActivity$$ExternalSyntheticLambda23.INSTANCE);
     }
 
     public LoginActivity() {
@@ -314,7 +337,7 @@ public class LoginActivity extends BaseFragment {
             org.telegram.ui.LoginActivity$2 r2 = new org.telegram.ui.LoginActivity$2
             r2.<init>(r1)
             r0.sizeNotifierFrameLayout = r2
-            org.telegram.ui.LoginActivity$$ExternalSyntheticLambda23 r5 = new org.telegram.ui.LoginActivity$$ExternalSyntheticLambda23
+            org.telegram.ui.LoginActivity$$ExternalSyntheticLambda21 r5 = new org.telegram.ui.LoginActivity$$ExternalSyntheticLambda21
             r5.<init>(r0)
             r2.setDelegate(r5)
             org.telegram.ui.Components.SizeNotifierFrameLayout r2 = r0.sizeNotifierFrameLayout
@@ -603,7 +626,7 @@ public class LoginActivity extends BaseFragment {
             android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
             r7.addView(r10, r11)
             android.widget.FrameLayout r7 = r0.floatingButtonContainer
-            org.telegram.ui.LoginActivity$$ExternalSyntheticLambda9 r10 = new org.telegram.ui.LoginActivity$$ExternalSyntheticLambda9
+            org.telegram.ui.LoginActivity$$ExternalSyntheticLambda10 r10 = new org.telegram.ui.LoginActivity$$ExternalSyntheticLambda10
             r10.<init>(r0)
             r7.setOnClickListener(r10)
             org.telegram.ui.Components.VerticalPositionAutoAnimator r7 = r0.floatingAutoAnimator
@@ -616,7 +639,7 @@ public class LoginActivity extends BaseFragment {
             r10 = 2131165491(0x7var_, float:1.79452E38)
             r7.setImageResource(r10)
             android.widget.ImageView r7 = r0.backButtonView
-            org.telegram.ui.LoginActivity$$ExternalSyntheticLambda10 r10 = new org.telegram.ui.LoginActivity$$ExternalSyntheticLambda10
+            org.telegram.ui.LoginActivity$$ExternalSyntheticLambda9 r10 = new org.telegram.ui.LoginActivity$$ExternalSyntheticLambda9
             r10.<init>(r0)
             r7.setOnClickListener(r10)
             android.widget.ImageView r7 = r0.backButtonView
@@ -817,7 +840,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$0(int i, boolean z) {
+    public /* synthetic */ void lambda$createView$2(int i, boolean z) {
         Runnable runnable;
         if (i > AndroidUtilities.dp(20.0f) && isCustomKeyboardVisible()) {
             AndroidUtilities.hideKeyboard(this.fragmentView);
@@ -829,12 +852,12 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$1(View view) {
+    public /* synthetic */ void lambda$createView$3(View view) {
         onDoneButtonPressed();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$2(DynamicAnimation dynamicAnimation, float f, float f2) {
+    public /* synthetic */ void lambda$createView$4(DynamicAnimation dynamicAnimation, float f, float f2) {
         PhoneNumberConfirmView phoneNumberConfirmView2 = this.phoneNumberConfirmView;
         if (phoneNumberConfirmView2 != null) {
             phoneNumberConfirmView2.updateFabPosition();
@@ -842,7 +865,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$3(View view) {
+    public /* synthetic */ void lambda$createView$5(View view) {
         if (onBackPressed()) {
             finishFragment();
         }
@@ -871,7 +894,7 @@ public class LoginActivity extends BaseFragment {
                 if (z2) {
                     ValueAnimator duration = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f}).setDuration(300);
                     duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                    duration.addUpdateListener(new LoginActivity$$ExternalSyntheticLambda1(this));
+                    duration.addUpdateListener(new LoginActivity$$ExternalSyntheticLambda0(this));
                     duration.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationStart(Animator animator) {
                             LoginActivity.this.keyboardView.setVisibility(0);
@@ -901,14 +924,14 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setCustomKeyboardVisible$4(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setCustomKeyboardVisible$6(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.keyboardView.setAlpha(floatValue);
         this.keyboardView.setTranslationY((1.0f - floatValue) * ((float) AndroidUtilities.dp(230.0f)));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setCustomKeyboardVisible$5(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$setCustomKeyboardVisible$7(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.keyboardView.setAlpha(floatValue);
         this.keyboardView.setTranslationY((1.0f - floatValue) * ((float) AndroidUtilities.dp(230.0f)));
@@ -1068,7 +1091,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDialogDismiss$7() {
+    public /* synthetic */ void lambda$onDialogDismiss$9() {
         this.needRequestPermissions = false;
     }
 
@@ -1173,7 +1196,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$onFieldError$9(OutlineTextContainerView outlineTextContainerView, View view, EditText editText, TextWatcher textWatcher) {
+    public static /* synthetic */ void lambda$onFieldError$11(OutlineTextContainerView outlineTextContainerView, View view, EditText editText, TextWatcher textWatcher) {
         outlineTextContainerView.animateError(0.0f);
         view.setTag(NUM, (Object) null);
         if (editText != null) {
@@ -1197,7 +1220,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$needShowInvalidAlert$10(boolean z, String str, BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
+    public static /* synthetic */ void lambda$needShowInvalidAlert$12(boolean z, String str, BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
         try {
             PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
             String format = String.format(Locale.US, "%s (%d)", new Object[]{packageInfo.versionName, Integer.valueOf(packageInfo.versionCode)});
@@ -1248,12 +1271,12 @@ public class LoginActivity extends BaseFragment {
                             this.floatingButtonContainer.setVisibility(0);
                         }
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.floatingAutoAnimator.getOffsetY(), 0.0f});
-                        ofFloat.addUpdateListener(new LoginActivity$$ExternalSyntheticLambda0(this));
+                        ofFloat.addUpdateListener(new LoginActivity$$ExternalSyntheticLambda3(this));
                         this.showDoneAnimation[this.currentDoneType].play(ofFloat);
                     }
                 } else if (z3) {
                     ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{this.floatingAutoAnimator.getOffsetY(), AndroidUtilities.dpf2(70.0f)});
-                    ofFloat2.addUpdateListener(new LoginActivity$$ExternalSyntheticLambda3(this));
+                    ofFloat2.addUpdateListener(new LoginActivity$$ExternalSyntheticLambda1(this));
                     this.showDoneAnimation[this.currentDoneType].play(ofFloat2);
                 }
                 this.showDoneAnimation[this.currentDoneType].addListener(new AnimatorListenerAdapter() {
@@ -1307,14 +1330,14 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showDoneButton$11(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showDoneButton$13(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.floatingAutoAnimator.setOffsetY(floatValue);
         this.floatingButtonContainer.setAlpha(1.0f - (floatValue / AndroidUtilities.dpf2(70.0f)));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showDoneButton$12(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showDoneButton$14(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.floatingAutoAnimator.setOffsetY(floatValue);
         this.floatingButtonContainer.setAlpha(1.0f - (floatValue / AndroidUtilities.dpf2(70.0f)));
@@ -1337,7 +1360,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onDoneButtonPressed$13(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$onDoneButtonPressed$15(DialogInterface dialogInterface, int i) {
         this.views[this.currentViewNum].onCancelPressed();
         needHideProgress(true);
     }
@@ -1458,7 +1481,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showEditDoneProgress$14(int i, boolean z, boolean z2) {
+    public /* synthetic */ void lambda$showEditDoneProgress$16(int i, boolean z, boolean z2) {
         int i2 = this.currentDoneType;
         this.currentDoneType = i;
         showEditDoneProgress(z, z2, true);
@@ -1466,7 +1489,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showEditDoneProgress$15(boolean z, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$showEditDoneProgress$17(boolean z, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         if (z) {
             float f = 1.0f - floatValue;
@@ -1629,7 +1652,7 @@ public class LoginActivity extends BaseFragment {
         if (getParentActivity() instanceof LaunchActivity) {
             if (this.newAccount) {
                 this.newAccount = false;
-                ((LaunchActivity) getParentActivity()).switchToAccount(this.currentAccount, false, new LoginActivity$$ExternalSyntheticLambda20(z));
+                ((LaunchActivity) getParentActivity()).switchToAccount(this.currentAccount, false, new LoginActivity$$ExternalSyntheticLambda18(z));
                 finishFragment();
                 return;
             }
@@ -1651,7 +1674,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ DialogsActivity lambda$needFinishActivity$16(boolean z, Void voidR) {
+    public static /* synthetic */ DialogsActivity lambda$needFinishActivity$18(boolean z, Void voidR) {
         Bundle bundle = new Bundle();
         bundle.putBoolean("afterSignup", z);
         return new DialogsActivity(bundle);
@@ -1664,11 +1687,7 @@ public class LoginActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public void onAuthSuccess(TLRPC$TL_auth_authorization tLRPC$TL_auth_authorization, boolean z) {
-        Utilities.cacheClearQueue.postRunnable(new LoginActivity$$ExternalSyntheticLambda17(this, tLRPC$TL_auth_authorization, z));
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onAuthSuccess$18(TLRPC$TL_auth_authorization tLRPC$TL_auth_authorization, boolean z) {
+        MessagesController.getInstance(this.currentAccount).cleanup();
         ConnectionsManager.getInstance(this.currentAccount).setUserId(tLRPC$TL_auth_authorization.user.id);
         UserConfig.getInstance(this.currentAccount).clearConfig();
         MessagesController.getInstance(this.currentAccount).cleanup();
@@ -1687,11 +1706,6 @@ public class LoginActivity extends BaseFragment {
             MessagesController.getInstance(this.currentAccount).putDialogsEndReachedAfterRegistration();
         }
         MediaDataController.getInstance(this.currentAccount).loadStickersByEmojiOrName("tg_placeholders_android", false, true);
-        AndroidUtilities.runOnUIThread(new LoginActivity$$ExternalSyntheticLambda19(this, z, tLRPC$TL_auth_authorization));
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onAuthSuccess$17(boolean z, TLRPC$TL_auth_authorization tLRPC$TL_auth_authorization) {
         needFinishActivity(z, tLRPC$TL_auth_authorization.setup_password_required, tLRPC$TL_auth_authorization.otherwise_relogin_days);
     }
 
@@ -2599,8 +2613,9 @@ public class LoginActivity extends BaseFragment {
                 String str5 = "+" + this.codeField.getText() + " " + this.phoneField.getText();
                 String hintText = this.phoneField.getHintText();
                 int length = hintText != null ? hintText.length() : 0;
-                if (this.codeField.getText().toString().equals("60")) {
-                    length--;
+                PhoneNumberExclusionRule phoneNumberExclusionRule = (PhoneNumberExclusionRule) LoginActivity.phoneNumberExclusionRules.get(this.codeField.getText().toString());
+                if (phoneNumberExclusionRule != null) {
+                    length = phoneNumberExclusionRule.modifyHintLengthRequirement(length);
                 }
                 if (hintText != null && this.phoneField.length() < length) {
                     new AlertDialog.Builder((Context) this.this$0.getParentActivity()).setTitle(LocaleController.getString(NUM)).setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("ShortNumberInfo", NUM, this.currentCountry.name, str5))).setPositiveButton(LocaleController.getString(NUM), (DialogInterface.OnClickListener) null).setNegativeButton(LocaleController.getString(NUM), new LoginActivity$PhoneView$$ExternalSyntheticLambda0(this)).show();
@@ -3288,7 +3303,7 @@ public class LoginActivity extends BaseFragment {
             return true;
         }
 
-        static /* synthetic */ int access$7426(LoginActivitySmsView loginActivitySmsView, double d) {
+        static /* synthetic */ int access$7526(LoginActivitySmsView loginActivitySmsView, double d) {
             double d2 = (double) loginActivitySmsView.codeTime;
             Double.isNaN(d2);
             int i = (int) (d2 - d);
@@ -3296,7 +3311,7 @@ public class LoginActivity extends BaseFragment {
             return i;
         }
 
-        static /* synthetic */ int access$8026(LoginActivitySmsView loginActivitySmsView, double d) {
+        static /* synthetic */ int access$8126(LoginActivitySmsView loginActivitySmsView, double d) {
             double d2 = (double) loginActivitySmsView.time;
             Double.isNaN(d2);
             int i = (int) (d2 - d);
@@ -4659,10 +4674,10 @@ public class LoginActivity extends BaseFragment {
                     /* access modifiers changed from: private */
                     public /* synthetic */ void lambda$run$0() {
                         double currentTimeMillis = (double) System.currentTimeMillis();
-                        double access$7300 = LoginActivitySmsView.this.lastCodeTime;
+                        double access$7400 = LoginActivitySmsView.this.lastCodeTime;
                         Double.isNaN(currentTimeMillis);
                         double unused = LoginActivitySmsView.this.lastCodeTime = currentTimeMillis;
-                        LoginActivitySmsView.access$7426(LoginActivitySmsView.this, currentTimeMillis - access$7300);
+                        LoginActivitySmsView.access$7526(LoginActivitySmsView.this, currentTimeMillis - access$7400);
                         if (LoginActivitySmsView.this.codeTime <= 1000) {
                             LoginActivitySmsView.this.setProblemTextVisible(true);
                             LoginActivitySmsView.this.timeText.setVisibility(8);
@@ -4704,17 +4719,17 @@ public class LoginActivity extends BaseFragment {
                     /* access modifiers changed from: private */
                     public /* synthetic */ void lambda$run$0() {
                         double currentTimeMillis = (double) System.currentTimeMillis();
-                        double access$7900 = LoginActivitySmsView.this.lastCurrentTime;
+                        double access$8000 = LoginActivitySmsView.this.lastCurrentTime;
                         Double.isNaN(currentTimeMillis);
                         double unused = LoginActivitySmsView.this.lastCurrentTime = currentTimeMillis;
-                        LoginActivitySmsView.access$8026(LoginActivitySmsView.this, currentTimeMillis - access$7900);
+                        LoginActivitySmsView.access$8126(LoginActivitySmsView.this, currentTimeMillis - access$8000);
                         if (LoginActivitySmsView.this.time >= 1000) {
-                            int access$8000 = (LoginActivitySmsView.this.time / 1000) / 60;
-                            int access$80002 = (LoginActivitySmsView.this.time / 1000) - (access$8000 * 60);
+                            int access$8100 = (LoginActivitySmsView.this.time / 1000) / 60;
+                            int access$81002 = (LoginActivitySmsView.this.time / 1000) - (access$8100 * 60);
                             if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3 || LoginActivitySmsView.this.nextType == 11) {
-                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallAvailableIn", NUM, Integer.valueOf(access$8000), Integer.valueOf(access$80002)));
+                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallAvailableIn", NUM, Integer.valueOf(access$8100), Integer.valueOf(access$81002)));
                             } else if (LoginActivitySmsView.this.nextType == 2) {
-                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsAvailableIn", NUM, Integer.valueOf(access$8000), Integer.valueOf(access$80002)));
+                                LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsAvailableIn", NUM, Integer.valueOf(access$8100), Integer.valueOf(access$81002)));
                             }
                             ProgressView unused2 = LoginActivitySmsView.this.progressView;
                             return;
@@ -8331,7 +8346,7 @@ public class LoginActivity extends BaseFragment {
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        return SimpleThemeDescription.createThemeDescriptions(new LoginActivity$$ExternalSyntheticLambda22(this), "windowBackgroundWhiteBlackText", "windowBackgroundWhiteGrayText6", "windowBackgroundWhiteHintText", "listSelectorSDK21", "chats_actionBackground", "chats_actionIcon", "windowBackgroundWhiteInputField", "windowBackgroundWhiteInputFieldActivated", "windowBackgroundWhiteValueText", "dialogTextRed", "windowBackgroundWhiteGrayText", "checkbox", "windowBackgroundWhiteBlueText4", "changephoneinfo_image2", "chats_actionPressedBackground", "windowBackgroundWhiteRedText2", "windowBackgroundWhiteLinkText", "checkboxSquareUnchecked", "checkboxSquareBackground", "checkboxSquareCheck", "dialogBackground", "dialogTextGray2", "dialogTextBlack");
+        return SimpleThemeDescription.createThemeDescriptions(new LoginActivity$$ExternalSyntheticLambda20(this), "windowBackgroundWhiteBlackText", "windowBackgroundWhiteGrayText6", "windowBackgroundWhiteHintText", "listSelectorSDK21", "chats_actionBackground", "chats_actionIcon", "windowBackgroundWhiteInputField", "windowBackgroundWhiteInputFieldActivated", "windowBackgroundWhiteValueText", "dialogTextRed", "windowBackgroundWhiteGrayText", "checkbox", "windowBackgroundWhiteBlueText4", "changephoneinfo_image2", "chats_actionPressedBackground", "windowBackgroundWhiteRedText2", "windowBackgroundWhiteLinkText", "checkboxSquareUnchecked", "checkboxSquareBackground", "checkboxSquareCheck", "dialogBackground", "dialogTextGray2", "dialogTextBlack");
     }
 
     /* access modifiers changed from: private */
@@ -8351,12 +8366,12 @@ public class LoginActivity extends BaseFragment {
         needShowProgress(0);
         TLRPC$TL_account_deleteAccount tLRPC$TL_account_deleteAccount = new TLRPC$TL_account_deleteAccount();
         tLRPC$TL_account_deleteAccount.reason = "Forgot password";
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_deleteAccount, new LoginActivity$$ExternalSyntheticLambda21(this, str, str2, str3), 10);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_deleteAccount, new LoginActivity$$ExternalSyntheticLambda19(this, str, str2, str3), 10);
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$tryResetAccount$21(String str, String str2, String str3, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new LoginActivity$$ExternalSyntheticLambda18(this, tLRPC$TL_error, str, str2, str3));
+        AndroidUtilities.runOnUIThread(new LoginActivity$$ExternalSyntheticLambda17(this, tLRPC$TL_error, str, str2, str3));
     }
 
     /* access modifiers changed from: private */

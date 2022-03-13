@@ -151,7 +151,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             }
             if (this.hasHints) {
                 i5 += instance.hintDialogs.size() + 2;
-            } else if (this.dialogsType == 0 && this.dialogsCount <= 10 && (i2 = this.folderId) == 0 && instance.isDialogsEndReached(i2)) {
+            } else if (this.dialogsType == 0 && (i2 = this.folderId) == 0 && instance.isDialogsEndReached(i2)) {
                 if (ContactsController.getInstance(this.currentAccount).contacts.isEmpty() && !ContactsController.getInstance(this.currentAccount).doneLoadingContacts && !this.forceUpdatingContacts) {
                     this.onlineContacts = null;
                     if (BuildVars.LOGS_ENABLED) {
@@ -169,7 +169,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                     }
                     this.currentCount = 0;
                     return 0;
-                } else if (ContactsController.getInstance(this.currentAccount).doneLoadingContacts && !ContactsController.getInstance(this.currentAccount).contacts.isEmpty()) {
+                } else if (instance.getAllFoldersDialogsCount() <= 10 && ContactsController.getInstance(this.currentAccount).doneLoadingContacts && !ContactsController.getInstance(this.currentAccount).contacts.isEmpty()) {
                     if (!(this.onlineContacts != null && this.prevDialogsCount == this.dialogsCount && this.prevContactsCount == ContactsController.getInstance(this.currentAccount).contacts.size())) {
                         ArrayList<TLRPC$TL_contact> arrayList = new ArrayList<>(ContactsController.getInstance(this.currentAccount).contacts);
                         this.onlineContacts = arrayList;
@@ -209,7 +209,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 }
             }
             int i8 = this.folderId;
-            if (i8 == 0 && !z && this.forceUpdatingContacts) {
+            if (i8 == 0 && !z && this.dialogsCount == 0 && this.forceUpdatingContacts) {
                 i5 += 3;
             }
             if (i8 == 0 && this.onlineContacts != null && !z) {
@@ -732,7 +732,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
             int i5 = this.dialogsType;
             if (i5 != 11 && i5 != 12 && i5 != 13) {
-                headerCell.setText(LocaleController.getString(this.forceUpdatingContacts ? NUM : NUM));
+                headerCell.setText(LocaleController.getString((this.dialogsCount != 0 || !this.forceUpdatingContacts) ? NUM : NUM));
             } else if (i == 0) {
                 headerCell.setText(LocaleController.getString("ImportHeader", NUM));
             } else {

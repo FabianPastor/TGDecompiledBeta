@@ -502,6 +502,8 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
 
             /* access modifiers changed from: protected */
             public void onFirstFrameRendered() {
+                int i;
+                ChatObject.VideoParticipant videoParticipant;
                 invalidate();
                 ChatObject.Call call = call4;
                 if (call != null && call.call.rtmp_stream && this.this$0.postedNoRtmpStreamCallback) {
@@ -520,7 +522,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                     this.blurRenderer.animate().setDuration(300).alpha(1.0f);
                 }
                 ImageView imageView = this.this$0.blurredFlippingStub;
-                if (imageView != null && imageView.getParent() != null) {
+                if (!(imageView == null || imageView.getParent() == null)) {
                     if (this.this$0.blurredFlippingStub.getAlpha() == 1.0f) {
                         this.this$0.blurredFlippingStub.animate().alpha(0.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
@@ -534,6 +536,11 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                         GroupCallMiniTextureView groupCallMiniTextureView = this.this$0;
                         groupCallMiniTextureView.textureView.removeView(groupCallMiniTextureView.blurredFlippingStub);
                     }
+                }
+                TextureViewRenderer textureViewRenderer = this.renderer;
+                int i2 = textureViewRenderer.rotatedFrameHeight;
+                if (i2 != 0 && (i = textureViewRenderer.rotatedFrameWidth) != 0 && (videoParticipant = this.this$0.participant) != null) {
+                    videoParticipant.setAspectRatio(i, i2, call4);
                 }
             }
         };

@@ -56,6 +56,7 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_langPackString;
 import org.telegram.tgnet.TLRPC$TL_langpack_getStrings;
 import org.telegram.tgnet.TLRPC$Vector;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -75,12 +76,14 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
     /* access modifiers changed from: private */
     public int currentViewPagerPage;
     private RLottieDrawable darkThemeDrawable;
-    private boolean destroyed;
+    /* access modifiers changed from: private */
+    public boolean destroyed;
     /* access modifiers changed from: private */
     public boolean dragging;
     /* access modifiers changed from: private */
     public EGLThread eglThread;
-    private FrameLayout frameContainerView;
+    /* access modifiers changed from: private */
+    public FrameLayout frameContainerView;
     /* access modifiers changed from: private */
     public FrameLayout frameLayout2;
     private boolean isOnLogout;
@@ -296,10 +299,12 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
         float f = (float) 4;
         this.frameContainerView.addView(frameLayout, LayoutHelper.createFrame(64, 64.0f, 53, 0.0f, f, f, 0.0f));
         this.fragmentView = scrollView;
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.configLoaded);
+        ConnectionsManager.getInstance(this.currentAccount).updateDcSettings();
         LocaleController.getInstance().loadRemoteLanguages(this.currentAccount);
         checkContinueText();
         this.justCreated = true;
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
         updateColors(false);
         return this.fragmentView;
     }
@@ -392,10 +397,26 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$2(View view) {
         if (!this.startPressed && this.localeInfo != null) {
-            LocaleController.getInstance().applyLanguage(this.localeInfo, true, false, this.currentAccount);
             this.startPressed = true;
-            presentFragment(new LoginActivity().setIntroView(this.frameContainerView, this.startMessagingButton), true);
-            this.destroyed = true;
+            final AlertDialog alertDialog = new AlertDialog(view.getContext(), 3);
+            alertDialog.setCanCancel(false);
+            alertDialog.showDelayed(1000);
+            NotificationCenter.getGlobalInstance().addObserver(new NotificationCenter.NotificationCenterDelegate() {
+                public void didReceivedNotification(int i, int i2, Object... objArr) {
+                    if (i == NotificationCenter.reloadInterface) {
+                        alertDialog.dismiss();
+                        NotificationCenter.getGlobalInstance().removeObserver(this, i);
+                        AndroidUtilities.runOnUIThread(new IntroActivity$5$$ExternalSyntheticLambda0(this), 100);
+                    }
+                }
+
+                /* access modifiers changed from: private */
+                public /* synthetic */ void lambda$didReceivedNotification$0() {
+                    IntroActivity.this.presentFragment(new LoginActivity().setIntroView(IntroActivity.this.frameContainerView, IntroActivity.this.startMessagingButton), true);
+                    boolean unused = IntroActivity.this.destroyed = true;
+                }
+            }, NotificationCenter.reloadInterface);
+            LocaleController.getInstance().applyLanguage(this.localeInfo, true, false, this.currentAccount);
         }
     }
 
@@ -430,12 +451,16 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
         super.onFragmentDestroy();
         this.destroyed = true;
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.configLoaded);
         MessagesController.getGlobalMainSettings().edit().putLong("intro_crashed_time", 0).apply();
     }
 
     private void checkContinueText() {
         LocaleController.LocaleInfo currentLocaleInfo = LocaleController.getInstance().getCurrentLocaleInfo();
         String str = MessagesController.getInstance(this.currentAccount).suggestedLangCode;
+        if ((str == null || (str.equals("en") && LocaleController.getInstance().getSystemDefaultLocale().getLanguage() != null && !LocaleController.getInstance().getSystemDefaultLocale().getLanguage().equals("en"))) && (str = LocaleController.getInstance().getSystemDefaultLocale().getLanguage()) == null) {
+            str = "en";
+        }
         String str2 = str.contains("-") ? str.split("-")[0] : str;
         String localeAlias = LocaleController.getLocaleAlias(str2);
         LocaleController.LocaleInfo localeInfo2 = null;
@@ -488,7 +513,7 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.suggestedLangpack) {
+        if (i == NotificationCenter.suggestedLangpack || i == NotificationCenter.configLoaded) {
             checkContinueText();
         }
     }

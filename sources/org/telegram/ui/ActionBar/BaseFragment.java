@@ -902,6 +902,9 @@ public abstract class BaseFragment {
 
     public boolean isLightStatusBar() {
         int i;
+        if (hasForceLightStatusBar() && !Theme.getCurrentTheme().isDark()) {
+            return true;
+        }
         Theme.ResourcesProvider resourceProvider = getResourceProvider();
         if (resourceProvider != null) {
             i = resourceProvider.getColorOrDefault("actionBarDefault");
