@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivity$ThemeDelegate$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.lambda$setCurrentTheme$1();
+        this.f$0.lambda$setCurrentTheme$3();
     }
 }

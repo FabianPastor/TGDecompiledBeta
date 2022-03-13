@@ -1,20 +1,15 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.animation.ValueAnimator;
 
-public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ boolean f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ BaseFragment f$2;
+public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda1 implements ValueAnimator.AnimatorUpdateListener {
+    public final /* synthetic */ LoginActivity f$0;
 
-    public /* synthetic */ LoginActivity$$ExternalSyntheticLambda1(boolean z, String str, BaseFragment baseFragment) {
-        this.f$0 = z;
-        this.f$1 = str;
-        this.f$2 = baseFragment;
+    public /* synthetic */ LoginActivity$$ExternalSyntheticLambda1(LoginActivity loginActivity) {
+        this.f$0 = loginActivity;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        LoginActivity.lambda$needShowInvalidAlert$2(this.f$0, this.f$1, this.f$2, dialogInterface, i);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.lambda$showDoneButton$14(valueAnimator);
     }
 }

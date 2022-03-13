@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda99
     }
 
     public final void run() {
-        this.f$0.lambda$checkChatInviter$287(this.f$1);
+        this.f$0.lambda$checkChatInviter$288(this.f$1);
     }
 }

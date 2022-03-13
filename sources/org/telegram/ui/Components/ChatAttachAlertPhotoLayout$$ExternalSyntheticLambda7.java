@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSynthetic
     }
 
     public final void run() {
-        this.f$0.lambda$showZoomControls$9();
+        this.f$0.lambda$onHide$17();
     }
 }

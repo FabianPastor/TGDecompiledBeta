@@ -720,6 +720,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             if (drawable6 instanceof SvgHelper.SvgDrawable) {
                 ((SvgHelper.SvgDrawable) drawable6).setParent(this);
             }
+            updateDrawableRadius(this.staticThumbDrawable);
             ImageReceiverDelegate imageReceiverDelegate3 = this.delegate;
             if (imageReceiverDelegate3 != null) {
                 Drawable drawable7 = this.currentImageDrawable;

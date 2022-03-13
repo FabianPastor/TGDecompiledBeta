@@ -38,6 +38,7 @@ import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.UserCell;
+import org.telegram.ui.Components.BlurredRecyclerView;
 import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.DialogsActivity;
@@ -57,6 +58,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     /* access modifiers changed from: private */
     public int folderId;
     private boolean forceShowEmptyCell;
+    private boolean forceUpdatingContacts;
     private boolean hasHints;
     private boolean isOnlySelect;
     private boolean isReordering;
@@ -127,6 +129,10 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         return this.dialogsType;
     }
 
+    public int getDialogsCount() {
+        return this.dialogsCount;
+    }
+
     public int getItemCount() {
         int i;
         int i2;
@@ -137,7 +143,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         this.dialogsCount = size;
         boolean z = false;
         boolean z2 = true;
-        if (this.forceShowEmptyCell || (i3 = this.dialogsType) == 7 || i3 == 8 || i3 == 11 || size != 0 || ((i4 = this.folderId) == 0 && !instance.isLoadingDialogs(i4) && MessagesController.getInstance(this.currentAccount).isDialogsEndReached(this.folderId))) {
+        if (this.forceUpdatingContacts || this.forceShowEmptyCell || (i3 = this.dialogsType) == 7 || i3 == 8 || i3 == 11 || size != 0 || ((i4 = this.folderId) == 0 && !instance.isLoadingDialogs(i4) && MessagesController.getInstance(this.currentAccount).isDialogsEndReached(this.folderId))) {
             int i5 = this.dialogsCount;
             int i6 = this.dialogsType;
             if (i6 == 7 || i6 == 8 ? i5 == 0 : !(instance.isDialogsEndReached(this.folderId) && this.dialogsCount != 0)) {
@@ -145,8 +151,8 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             }
             if (this.hasHints) {
                 i5 += instance.hintDialogs.size() + 2;
-            } else if (this.dialogsType == 0 && instance.dialogs_dict.size() <= 10 && (i2 = this.folderId) == 0 && instance.isDialogsEndReached(i2)) {
-                if (ContactsController.getInstance(this.currentAccount).contacts.isEmpty() && !ContactsController.getInstance(this.currentAccount).doneLoadingContacts) {
+            } else if (this.dialogsType == 0 && (i2 = this.folderId) == 0 && instance.isDialogsEndReached(i2)) {
+                if (ContactsController.getInstance(this.currentAccount).contacts.isEmpty() && !ContactsController.getInstance(this.currentAccount).doneLoadingContacts && !this.forceUpdatingContacts) {
                     this.onlineContacts = null;
                     if (BuildVars.LOGS_ENABLED) {
                         StringBuilder sb = new StringBuilder();
@@ -163,8 +169,8 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                     }
                     this.currentCount = 0;
                     return 0;
-                } else if (!ContactsController.getInstance(this.currentAccount).contacts.isEmpty()) {
-                    if (!(this.onlineContacts != null && this.prevDialogsCount == instance.dialogs_dict.size() && this.prevContactsCount == ContactsController.getInstance(this.currentAccount).contacts.size())) {
+                } else if (instance.getAllFoldersDialogsCount() <= 10 && ContactsController.getInstance(this.currentAccount).doneLoadingContacts && !ContactsController.getInstance(this.currentAccount).contacts.isEmpty()) {
+                    if (!(this.onlineContacts != null && this.prevDialogsCount == this.dialogsCount && this.prevContactsCount == ContactsController.getInstance(this.currentAccount).contacts.size())) {
                         ArrayList<TLRPC$TL_contact> arrayList = new ArrayList<>(ContactsController.getInstance(this.currentAccount).contacts);
                         this.onlineContacts = arrayList;
                         this.prevContactsCount = arrayList.size();
@@ -185,6 +191,15 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                             this.onlineContacts = null;
                         }
                         sortOnlineContacts(false);
+                        if (this.parentFragment.getContactsAlpha() == 0.0f) {
+                            registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                                public void onChanged() {
+                                    DialogsAdapter.this.parentFragment.setContactsAlpha(0.0f);
+                                    DialogsAdapter.this.parentFragment.animateContactsAlpha(1.0f);
+                                    DialogsAdapter.this.unregisterAdapterDataObserver(this);
+                                }
+                            });
+                        }
                     }
                     ArrayList<TLRPC$TL_contact> arrayList2 = this.onlineContacts;
                     if (arrayList2 != null) {
@@ -194,6 +209,9 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 }
             }
             int i8 = this.folderId;
+            if (i8 == 0 && !z && this.dialogsCount == 0 && this.forceUpdatingContacts) {
+                i5 += 3;
+            }
             if (i8 == 0 && this.onlineContacts != null && !z) {
                 this.onlineContacts = null;
             }
@@ -265,7 +283,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             this.lastSortTime = SystemClock.elapsedRealtime();
             try {
                 int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-                Collections.sort(this.onlineContacts, new DialogsAdapter$$ExternalSyntheticLambda1(MessagesController.getInstance(this.currentAccount), currentTime));
+                Collections.sort(this.onlineContacts, new DialogsAdapter$$ExternalSyntheticLambda3(MessagesController.getInstance(this.currentAccount), currentTime));
                 if (z) {
                     notifyDataSetChanged();
                 }
@@ -393,7 +411,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
     public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
         int itemViewType = viewHolder.getItemViewType();
-        return (itemViewType == 1 || itemViewType == 5 || itemViewType == 3 || itemViewType == 8 || itemViewType == 7 || itemViewType == 9 || itemViewType == 10 || itemViewType == 11) ? false : true;
+        return (itemViewType == 1 || itemViewType == 5 || itemViewType == 3 || itemViewType == 8 || itemViewType == 7 || itemViewType == 9 || itemViewType == 10 || itemViewType == 11 || itemViewType == 13) ? false : true;
     }
 
     /* access modifiers changed from: private */
@@ -403,9 +421,10 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         notifyDataSetChanged();
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v0, resolved type: org.telegram.ui.Cells.DialogCell} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v2, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v3, resolved type: org.telegram.ui.Cells.HeaderCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v1, resolved type: org.telegram.ui.Cells.DialogCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v3, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v4, resolved type: org.telegram.ui.Cells.HeaderCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v8, resolved type: org.telegram.ui.Cells.DialogCell} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v10, resolved type: org.telegram.ui.Cells.ArchiveHintCell} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v8, resolved type: org.telegram.ui.Cells.DialogCell} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v14, resolved type: org.telegram.ui.Cells.DialogCell} */
@@ -419,18 +438,18 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v22, resolved type: org.telegram.ui.Cells.DialogCell} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v23, resolved type: org.telegram.ui.Cells.DialogCell} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v24, resolved type: org.telegram.ui.Cells.DialogCell} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v25, resolved type: org.telegram.ui.Cells.DialogCell} */
-    /* JADX WARNING: type inference failed for: r5v4, types: [android.widget.FrameLayout, org.telegram.ui.Adapters.DialogsAdapter$1] */
-    /* JADX WARNING: type inference failed for: r5v5, types: [org.telegram.ui.Cells.DialogMeUrlCell] */
-    /* JADX WARNING: type inference failed for: r5v6, types: [org.telegram.ui.Cells.DialogsEmptyCell] */
-    /* JADX WARNING: type inference failed for: r5v7, types: [org.telegram.ui.Cells.UserCell] */
-    /* JADX WARNING: type inference failed for: r5v8, types: [org.telegram.ui.Cells.HeaderCell] */
+    /* JADX WARNING: type inference failed for: r5v5, types: [android.widget.FrameLayout, org.telegram.ui.Adapters.DialogsAdapter$2] */
+    /* JADX WARNING: type inference failed for: r5v6, types: [org.telegram.ui.Cells.DialogMeUrlCell] */
+    /* JADX WARNING: type inference failed for: r5v7, types: [org.telegram.ui.Cells.DialogsEmptyCell] */
+    /* JADX WARNING: type inference failed for: r1v21 */
+    /* JADX WARNING: type inference failed for: r1v22, types: [org.telegram.ui.Cells.UserCell] */
+    /* JADX WARNING: type inference failed for: r1v23, types: [android.view.View, org.telegram.ui.Cells.HeaderCell] */
     /* JADX WARNING: type inference failed for: r5v9, types: [org.telegram.ui.Cells.ShadowSectionCell, android.view.View] */
     /* JADX WARNING: type inference failed for: r5v11, types: [org.telegram.ui.Adapters.DialogsAdapter$LastEmptyView] */
-    /* JADX WARNING: type inference failed for: r5v12, types: [android.view.View, org.telegram.ui.Adapters.DialogsAdapter$2] */
+    /* JADX WARNING: type inference failed for: r5v12, types: [android.view.View, org.telegram.ui.Adapters.DialogsAdapter$3] */
     /* JADX WARNING: type inference failed for: r5v13, types: [org.telegram.ui.Cells.TextCell] */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Unknown variable types count: 3 */
+    /* JADX WARNING: Unknown variable types count: 4 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r14, int r15) {
         /*
@@ -438,31 +457,34 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r14 = 5
             r0 = -1
             java.lang.String r1 = "windowBackgroundGrayShadow"
-            r2 = 2131165469(0x7var_d, float:1.7945156E38)
+            r2 = 2131165471(0x7var_f, float:1.794516E38)
             java.lang.String r3 = "windowBackgroundGray"
             r4 = 1
+            r5 = 0
             switch(r15) {
-                case 0: goto L_0x013b;
-                case 1: goto L_0x012c;
-                case 2: goto L_0x00c0;
-                case 3: goto L_0x0097;
-                case 4: goto L_0x008e;
-                case 5: goto L_0x0085;
-                case 6: goto L_0x0079;
-                case 7: goto L_0x0070;
-                case 8: goto L_0x004d;
-                case 9: goto L_0x0042;
-                case 10: goto L_0x0039;
-                case 11: goto L_0x0016;
-                default: goto L_0x000d;
+                case 0: goto L_0x0162;
+                case 1: goto L_0x0135;
+                case 2: goto L_0x00c9;
+                case 3: goto L_0x00a0;
+                case 4: goto L_0x0097;
+                case 5: goto L_0x008e;
+                case 6: goto L_0x0082;
+                case 7: goto L_0x0071;
+                case 8: goto L_0x004e;
+                case 9: goto L_0x0043;
+                case 10: goto L_0x003a;
+                case 11: goto L_0x0017;
+                case 12: goto L_0x000e;
+                case 13: goto L_0x0135;
+                default: goto L_0x000e;
             }
-        L_0x000d:
+        L_0x000e:
             org.telegram.ui.Cells.TextCell r5 = new org.telegram.ui.Cells.TextCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0154
-        L_0x0016:
-            org.telegram.ui.Adapters.DialogsAdapter$2 r5 = new org.telegram.ui.Adapters.DialogsAdapter$2
+            goto L_0x017b
+        L_0x0017:
+            org.telegram.ui.Adapters.DialogsAdapter$3 r5 = new org.telegram.ui.Adapters.DialogsAdapter$3
             android.content.Context r6 = r13.mContext
             r5.<init>(r6)
             android.content.Context r6 = r13.mContext
@@ -474,19 +496,19 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r2.<init>(r6, r1)
             r2.setFullsize(r4)
             r5.setBackgroundDrawable(r2)
-            goto L_0x0154
-        L_0x0039:
+            goto L_0x017b
+        L_0x003a:
             org.telegram.ui.Adapters.DialogsAdapter$LastEmptyView r5 = new org.telegram.ui.Adapters.DialogsAdapter$LastEmptyView
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0154
-        L_0x0042:
+            goto L_0x017b
+        L_0x0043:
             org.telegram.ui.Cells.ArchiveHintCell r5 = new org.telegram.ui.Cells.ArchiveHintCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
             r13.archiveHintCell = r5
-            goto L_0x0154
-        L_0x004d:
+            goto L_0x017b
+        L_0x004e:
             org.telegram.ui.Cells.ShadowSectionCell r5 = new org.telegram.ui.Cells.ShadowSectionCell
             android.content.Context r6 = r13.mContext
             r5.<init>(r6)
@@ -499,31 +521,35 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r2.<init>(r6, r1)
             r2.setFullsize(r4)
             r5.setBackgroundDrawable(r2)
-            goto L_0x0154
-        L_0x0070:
-            org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell
-            android.content.Context r1 = r13.mContext
-            r5.<init>(r1)
-            goto L_0x0154
-        L_0x0079:
-            org.telegram.ui.Cells.UserCell r5 = new org.telegram.ui.Cells.UserCell
-            android.content.Context r1 = r13.mContext
-            r2 = 8
-            r3 = 0
-            r5.<init>(r1, r2, r3, r3)
-            goto L_0x0154
-        L_0x0085:
+            goto L_0x017b
+        L_0x0071:
+            org.telegram.ui.Cells.HeaderCell r1 = new org.telegram.ui.Cells.HeaderCell
+            android.content.Context r2 = r13.mContext
+            r1.<init>(r2)
+            r2 = 1094713344(0x41400000, float:12.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r1.setPadding(r5, r5, r5, r2)
+            goto L_0x008b
+        L_0x0082:
+            org.telegram.ui.Cells.UserCell r1 = new org.telegram.ui.Cells.UserCell
+            android.content.Context r2 = r13.mContext
+            r3 = 8
+            r1.<init>(r2, r3, r5, r5)
+        L_0x008b:
+            r5 = r1
+            goto L_0x017b
+        L_0x008e:
             org.telegram.ui.Cells.DialogsEmptyCell r5 = new org.telegram.ui.Cells.DialogsEmptyCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0154
-        L_0x008e:
+            goto L_0x017b
+        L_0x0097:
             org.telegram.ui.Cells.DialogMeUrlCell r5 = new org.telegram.ui.Cells.DialogMeUrlCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0154
-        L_0x0097:
-            org.telegram.ui.Adapters.DialogsAdapter$1 r5 = new org.telegram.ui.Adapters.DialogsAdapter$1
+            goto L_0x017b
+        L_0x00a0:
+            org.telegram.ui.Adapters.DialogsAdapter$2 r5 = new org.telegram.ui.Adapters.DialogsAdapter$2
             android.content.Context r4 = r13.mContext
             r5.<init>(r13, r4)
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
@@ -537,12 +563,12 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r1 = -1082130432(0xffffffffbvar_, float:-1.0)
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r0, r1)
             r5.addView(r3, r1)
-            goto L_0x0154
-        L_0x00c0:
+            goto L_0x017b
+        L_0x00c9:
             org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            r1 = 2131627505(0x7f0e0df1, float:1.8882276E38)
+            r1 = 2131627580(0x7f0e0e3c, float:1.8882428E38)
             java.lang.String r2 = "RecentlyViewed"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r5.setText(r1)
@@ -557,28 +583,28 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             java.lang.String r2 = "windowBackgroundWhiteBlueHeader"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r1.setTextColor(r2)
-            r2 = 2131627506(0x7f0e0df2, float:1.8882278E38)
+            r2 = 2131627581(0x7f0e0e3d, float:1.888243E38)
             java.lang.String r3 = "RecentlyViewedHide"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
             r3 = 3
-            if (r2 == 0) goto L_0x0104
+            if (r2 == 0) goto L_0x010d
             r2 = 3
-            goto L_0x0105
-        L_0x0104:
+            goto L_0x010e
+        L_0x010d:
             r2 = 5
-        L_0x0105:
+        L_0x010e:
             r2 = r2 | 16
             r1.setGravity(r2)
             r6 = -1
             r7 = -1082130432(0xffffffffbvar_, float:-1.0)
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            if (r2 == 0) goto L_0x0112
-            goto L_0x0113
-        L_0x0112:
+            if (r2 == 0) goto L_0x011b
+            goto L_0x011c
+        L_0x011b:
             r3 = 5
-        L_0x0113:
+        L_0x011c:
             r8 = r3 | 48
             r9 = 1099431936(0x41880000, float:17.0)
             r10 = 1097859072(0x41700000, float:15.0)
@@ -589,16 +615,34 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Adapters.DialogsAdapter$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.Adapters.DialogsAdapter$$ExternalSyntheticLambda0
             r2.<init>(r13)
             r1.setOnClickListener(r2)
-            goto L_0x0154
-        L_0x012c:
+            goto L_0x017b
+        L_0x0135:
             org.telegram.ui.Components.FlickerLoadingView r5 = new org.telegram.ui.Components.FlickerLoadingView
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
             r5.setIsSingleCell(r4)
-            r1 = 7
-            r5.setViewType(r1)
-            goto L_0x0154
-        L_0x013b:
+            r1 = 13
+            if (r15 != r1) goto L_0x0146
+            r2 = 18
+            goto L_0x0147
+        L_0x0146:
+            r2 = 7
+        L_0x0147:
+            r5.setViewType(r2)
+            if (r15 != r1) goto L_0x017b
+            android.graphics.Point r1 = org.telegram.messenger.AndroidUtilities.displaySize
+            int r1 = r1.y
+            float r1 = (float) r1
+            r2 = 1056964608(0x3var_, float:0.5)
+            float r1 = r1 * r2
+            r2 = 1115684864(0x42800000, float:64.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r2 = (float) r2
+            float r1 = r1 / r2
+            int r1 = (int) r1
+            r5.setItemsCount(r1)
+            goto L_0x017b
+        L_0x0162:
             org.telegram.ui.Cells.DialogCell r5 = new org.telegram.ui.Cells.DialogCell
             org.telegram.ui.DialogsActivity r7 = r13.parentFragment
             android.content.Context r8 = r13.mContext
@@ -612,14 +656,14 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r5.setArchivedPullAnimation(r1)
             org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader r1 = r13.preloader
             r5.setPreloader(r1)
-        L_0x0154:
+        L_0x017b:
             androidx.recyclerview.widget.RecyclerView$LayoutParams r1 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-            if (r15 != r14) goto L_0x015a
+            if (r15 != r14) goto L_0x0181
             r14 = -1
-            goto L_0x015b
-        L_0x015a:
+            goto L_0x0182
+        L_0x0181:
             r14 = -2
-        L_0x015b:
+        L_0x0182:
             r1.<init>((int) r0, (int) r14)
             r5.setLayoutParams(r1)
             org.telegram.ui.Components.RecyclerListView$Holder r14 = new org.telegram.ui.Components.RecyclerListView$Holder
@@ -636,7 +680,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         int itemViewType = viewHolder.getItemViewType();
-        boolean z = true;
+        boolean z = false;
         if (itemViewType == 0) {
             DialogCell dialogCell = (DialogCell) viewHolder.itemView;
             TLRPC$Dialog tLRPC$Dialog = (TLRPC$Dialog) getItem(i);
@@ -644,10 +688,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             dialogCell.useSeparator = tLRPC$Dialog2 != null;
             dialogCell.fullSeparator = tLRPC$Dialog.pinned && tLRPC$Dialog2 != null && !tLRPC$Dialog2.pinned;
             if (this.dialogsType == 0 && AndroidUtilities.isTablet()) {
-                if (tLRPC$Dialog.id != this.openedDialogId) {
-                    z = false;
-                }
-                dialogCell.setDialogSelected(z);
+                dialogCell.setDialogSelected(tLRPC$Dialog.id == this.openedDialogId);
             }
             dialogCell.setChecked(this.selectedDialogs.contains(Long.valueOf(tLRPC$Dialog.id)), false);
             dialogCell.setDialog(tLRPC$Dialog, this.dialogsType, this.folderId);
@@ -658,18 +699,40 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         } else if (itemViewType == 4) {
             ((DialogMeUrlCell) viewHolder.itemView).setRecentMeUrl((TLRPC$RecentMeUrl) getItem(i));
         } else if (itemViewType == 5) {
+            DialogsEmptyCell dialogsEmptyCell = (DialogsEmptyCell) viewHolder.itemView;
+            int i2 = this.lastDialogsEmptyType;
             int dialogsEmptyType = dialogsEmptyType();
             this.lastDialogsEmptyType = dialogsEmptyType;
-            ((DialogsEmptyCell) viewHolder.itemView).setType(dialogsEmptyType);
+            dialogsEmptyCell.setType(dialogsEmptyType);
+            int i3 = this.dialogsType;
+            if (!(i3 == 7 || i3 == 8)) {
+                dialogsEmptyCell.setOnUtyanAnimationEndListener(new DialogsAdapter$$ExternalSyntheticLambda2(this));
+                dialogsEmptyCell.setOnUtyanAnimationUpdateListener(new DialogsAdapter$$ExternalSyntheticLambda1(this));
+                if (!dialogsEmptyCell.isUtyanAnimationTriggered() && this.dialogsCount == 0) {
+                    this.parentFragment.setContactsAlpha(0.0f);
+                    this.parentFragment.setScrollDisabled(true);
+                }
+                if (this.onlineContacts == null || i2 != 0) {
+                    if (this.forceUpdatingContacts) {
+                        if (this.dialogsCount == 0) {
+                            dialogsEmptyCell.startUtyanCollapseAnimation(false);
+                        }
+                    } else if (dialogsEmptyCell.isUtyanAnimationTriggered() && this.lastDialogsEmptyType == 0) {
+                        dialogsEmptyCell.startUtyanExpandAnimation();
+                    }
+                } else if (!dialogsEmptyCell.isUtyanAnimationTriggered()) {
+                    dialogsEmptyCell.startUtyanCollapseAnimation(true);
+                }
+            }
         } else if (itemViewType == 6) {
             UserCell userCell = (UserCell) viewHolder.itemView;
-            int i2 = this.dialogsCount;
-            userCell.setData(MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.onlineContacts.get(i2 == 0 ? i - 3 : (i - i2) - 2).user_id)), (CharSequence) null, (CharSequence) null, 0);
+            int i4 = this.dialogsCount;
+            userCell.setData(MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.onlineContacts.get(i4 == 0 ? i - 3 : (i - i4) - 2).user_id)), (CharSequence) null, (CharSequence) null, 0);
         } else if (itemViewType == 7) {
             HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
-            int i3 = this.dialogsType;
-            if (i3 != 11 && i3 != 12 && i3 != 13) {
-                headerCell.setText(LocaleController.getString("YourContacts", NUM));
+            int i5 = this.dialogsType;
+            if (i5 != 11 && i5 != 12 && i5 != 13) {
+                headerCell.setText(LocaleController.getString((this.dialogsCount != 0 || !this.forceUpdatingContacts) ? NUM : NUM));
             } else if (i == 0) {
                 headerCell.setText(LocaleController.getString("ImportHeader", NUM));
             } else {
@@ -691,46 +754,63 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             TextCell textCell = (TextCell) viewHolder.itemView;
             textCell.setColors("windowBackgroundWhiteBlueText4", "windowBackgroundWhiteBlueText4");
             String string = LocaleController.getString("CreateGroupForImport", NUM);
-            if (this.dialogsCount == 0) {
-                z = false;
+            if (this.dialogsCount != 0) {
+                z = true;
             }
             textCell.setTextAndIcon(string, NUM, z);
             textCell.setIsInDialogs();
             textCell.setOffsetFromImage(75);
         }
+        if (i >= this.dialogsCount + 1) {
+            viewHolder.itemView.setAlpha(1.0f);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onBindViewHolder$2() {
+        this.parentFragment.setScrollDisabled(false);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onBindViewHolder$3(Float f) {
+        this.parentFragment.setContactsAlpha(f.floatValue());
+    }
+
+    public void setForceUpdatingContacts(boolean z) {
+        this.forceUpdatingContacts = z;
     }
 
     public int getItemViewType(int i) {
         int i2;
-        if (this.onlineContacts != null) {
-            int i3 = this.dialogsCount;
-            if (i3 == 0) {
-                if (i == 0) {
-                    return 5;
+        int i3 = this.dialogsCount;
+        if (i3 != 0 || !this.forceUpdatingContacts) {
+            if (this.onlineContacts != null) {
+                if (i3 == 0) {
+                    if (i == 0) {
+                        return 5;
+                    }
+                    if (i == 1) {
+                        return 8;
+                    }
+                    if (i == 2) {
+                        return 7;
+                    }
+                    return 6;
+                } else if (i < i3) {
+                    return 0;
+                } else {
+                    if (i == i3) {
+                        return 8;
+                    }
+                    if (i == i3 + 1) {
+                        return 7;
+                    }
+                    if (i == this.currentCount - 1) {
+                        return 10;
+                    }
+                    return 6;
                 }
-                if (i == 1) {
-                    return 8;
-                }
-                if (i == 2) {
-                    return 7;
-                }
-                return 6;
-            } else if (i < i3) {
-                return 0;
-            } else {
-                if (i == i3) {
-                    return 8;
-                }
-                if (i == i3 + 1) {
-                    return 7;
-                }
-                if (i == this.currentCount - 1) {
-                    return 10;
-                }
-                return 6;
-            }
-        } else {
-            if (this.hasHints) {
+            } else if (this.hasHints) {
                 int size = MessagesController.getInstance(this.currentAccount).hintDialogs.size();
                 int i4 = size + 2;
                 if (i >= i4) {
@@ -738,7 +818,10 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 } else if (i == 0) {
                     return 2;
                 } else {
-                    return i == size + 1 ? 3 : 4;
+                    if (i == size + 1) {
+                        return 3;
+                    }
+                    return 4;
                 }
             } else {
                 if (!this.showArchiveHint) {
@@ -765,19 +848,31 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 }
                 i -= 2;
             }
-            int i6 = this.folderId;
-            if (i6 == 0 && this.dialogsCount > 10 && i == this.currentCount - 2 && this.dialogsType == 0) {
-                return 11;
+        } else if (i == 0) {
+            return 5;
+        } else {
+            if (i == 1) {
+                return 8;
             }
-            int size2 = this.parentFragment.getDialogsArray(this.currentAccount, this.dialogsType, i6, this.dialogsListFrozen).size();
-            if (i != size2) {
-                return i > size2 ? 10 : 0;
+            if (i == 2) {
+                return 7;
             }
-            if (this.forceShowEmptyCell || (i2 = this.dialogsType) == 7 || i2 == 8 || MessagesController.getInstance(this.currentAccount).isDialogsEndReached(this.folderId)) {
-                return size2 == 0 ? 5 : 10;
+            if (i == 3) {
+                return 13;
             }
-            return 1;
         }
+        int i6 = this.folderId;
+        if (i6 == 0 && this.dialogsCount > 10 && i == this.currentCount - 2 && this.dialogsType == 0) {
+            return 11;
+        }
+        int size2 = this.parentFragment.getDialogsArray(this.currentAccount, this.dialogsType, i6, this.dialogsListFrozen).size();
+        if (i != size2) {
+            return i > size2 ? 10 : 0;
+        }
+        if (this.forceShowEmptyCell || (i2 = this.dialogsType) == 7 || i2 == 8 || MessagesController.getInstance(this.currentAccount).isDialogsEndReached(this.folderId)) {
+            return size2 == 0 ? 5 : 10;
+        }
+        return 1;
     }
 
     public void notifyItemMoved(int i, int i2) {
@@ -959,6 +1054,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             int i3 = 0;
             boolean z = DialogsAdapter.this.dialogsType == 0 && MessagesController.getInstance(DialogsAdapter.this.currentAccount).dialogs_dict.get(DialogObject.makeFolderDialogId(1)) != null;
             View view = (View) getParent();
+            int i4 = view instanceof BlurredRecyclerView ? ((BlurredRecyclerView) view).blurTopPadding : 0;
             int paddingTop = view.getPaddingTop();
             if (size != 0 && (paddingTop != 0 || z)) {
                 int size2 = View.MeasureSpec.getSize(i2);
@@ -968,26 +1064,27 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 if (size2 == 0) {
                     size2 = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
                 }
+                int i5 = size2 - i4;
                 int dp = AndroidUtilities.dp(SharedConfig.useThreeLinesLayout ? 78.0f : 72.0f);
-                int i4 = (size * dp) + (size - 1);
+                int i6 = (size * dp) + (size - 1);
                 if (DialogsAdapter.this.onlineContacts != null) {
-                    i4 += (DialogsAdapter.this.onlineContacts.size() * AndroidUtilities.dp(58.0f)) + (DialogsAdapter.this.onlineContacts.size() - 1) + AndroidUtilities.dp(52.0f);
+                    i6 += (DialogsAdapter.this.onlineContacts.size() * AndroidUtilities.dp(58.0f)) + (DialogsAdapter.this.onlineContacts.size() - 1) + AndroidUtilities.dp(52.0f);
                 }
-                int i5 = z ? dp + 1 : 0;
-                if (i4 < size2) {
-                    int i6 = (size2 - i4) + i5;
-                    if (paddingTop == 0 || (i6 = i6 - AndroidUtilities.statusBarHeight) >= 0) {
-                        i3 = i6;
+                int i7 = z ? dp + 1 : 0;
+                if (i6 < i5) {
+                    int i8 = (i5 - i6) + i7;
+                    if (paddingTop == 0 || (i8 = i8 - AndroidUtilities.statusBarHeight) >= 0) {
+                        i3 = i8;
                     }
                 } else {
-                    int i7 = i4 - size2;
-                    if (i7 < i5) {
-                        int i8 = i5 - i7;
+                    int i9 = i6 - i5;
+                    if (i9 < i7) {
+                        int i10 = i7 - i9;
                         if (paddingTop != 0) {
-                            i8 -= AndroidUtilities.statusBarHeight;
+                            i10 -= AndroidUtilities.statusBarHeight;
                         }
-                        if (i8 >= 0) {
-                            i3 = i8;
+                        if (i10 >= 0) {
+                            i3 = i10;
                         }
                     }
                 }

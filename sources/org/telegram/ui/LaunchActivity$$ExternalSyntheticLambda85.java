@@ -1,19 +1,20 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.tgnet.TLRPC$MessageMedia;
-import org.telegram.ui.LocationActivity;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.ContactsActivity;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda85 implements LocationActivity.LocationActivityDelegate {
-    public final /* synthetic */ HashMap f$0;
-    public final /* synthetic */ int f$1;
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda85 implements ContactsActivity.ContactsActivityDelegate {
+    public final /* synthetic */ LaunchActivity f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ int[] f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda85(HashMap hashMap, int i) {
-        this.f$0 = hashMap;
-        this.f$1 = i;
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda85(LaunchActivity launchActivity, boolean z, int[] iArr) {
+        this.f$0 = launchActivity;
+        this.f$1 = z;
+        this.f$2 = iArr;
     }
 
-    public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-        LaunchActivity.lambda$didReceivedNotification$68(this.f$0, this.f$1, tLRPC$MessageMedia, i, z, i2);
+    public final void didSelectContact(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
+        this.f$0.lambda$handleIntent$17(this.f$1, this.f$2, tLRPC$User, str, contactsActivity);
     }
 }

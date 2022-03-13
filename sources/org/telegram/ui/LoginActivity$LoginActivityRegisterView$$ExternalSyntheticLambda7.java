@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityRegisterView$$Exte
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$9(view);
+        this.f$0.lambda$new$12(view);
     }
 }

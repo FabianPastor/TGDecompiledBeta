@@ -66,9 +66,13 @@ public class MessageSeenView extends FrameLayout {
         this.flickerLoadingView.setViewType(13);
         this.flickerLoadingView.setIsSingleCell(false);
         addView(this.flickerLoadingView, LayoutHelper.createFrame(-2, -1.0f));
-        TextView textView = new TextView(context);
-        this.titleView = textView;
-        textView.setTextSize(1, 16.0f);
+        AnonymousClass1 r0 = new TextView(this, context) {
+            public void setText(CharSequence charSequence, TextView.BufferType bufferType) {
+                super.setText(charSequence, bufferType);
+            }
+        };
+        this.titleView = r0;
+        r0.setTextSize(1, 16.0f);
         this.titleView.setLines(1);
         this.titleView.setEllipsize(TextUtils.TruncateAt.END);
         addView(this.titleView, LayoutHelper.createFrame(-2, -2.0f, 19, 40.0f, 0.0f, 62.0f, 0.0f));
@@ -226,6 +230,12 @@ public class MessageSeenView extends FrameLayout {
             this.avatarsImageView.setTranslationX((float) AndroidUtilities.dp(12.0f));
         } else {
             this.avatarsImageView.setTranslationX(0.0f);
+        }
+        int dp = AndroidUtilities.dp(this.users.size() == 0 ? 8.0f : 62.0f);
+        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.titleView.getLayoutParams();
+        if (marginLayoutParams.rightMargin != dp) {
+            marginLayoutParams.rightMargin = dp;
+            this.titleView.setLayoutParams(marginLayoutParams);
         }
         this.avatarsImageView.commitTransition(false);
         if (this.peerIds.size() == 1 && this.users.get(0) != null) {

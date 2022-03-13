@@ -12,6 +12,7 @@ import org.telegram.ui.Adapters.FiltersView;
 import org.telegram.ui.Components.RLottieDrawable;
 
 public class ActionBarMenu extends LinearLayout {
+    public boolean drawBlur = true;
     protected boolean isActionMode;
     protected ActionBar parentActionBar;
 
@@ -218,6 +219,20 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
+    public void setSearchCursorColor(int i) {
+        int childCount = getChildCount();
+        for (int i2 = 0; i2 < childCount; i2++) {
+            View childAt = getChildAt(i2);
+            if (childAt instanceof ActionBarMenuItem) {
+                ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
+                if (actionBarMenuItem.isSearchField()) {
+                    actionBarMenuItem.getSearchField().setCursorColor(i);
+                    return;
+                }
+            }
+        }
+    }
+
     public void setSearchTextColor(int i, boolean z) {
         int childCount = getChildCount();
         for (int i2 = 0; i2 < childCount; i2++) {
@@ -264,7 +279,7 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    public void openSearchField(boolean z, String str, boolean z2) {
+    public void openSearchField(boolean z, boolean z2, String str, boolean z3) {
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             View childAt = getChildAt(i);
@@ -272,9 +287,9 @@ public class ActionBarMenu extends LinearLayout {
                 ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
                 if (actionBarMenuItem.isSearchField()) {
                     if (z) {
-                        this.parentActionBar.onSearchFieldVisibilityChanged(actionBarMenuItem.toggleSearch(true));
+                        this.parentActionBar.onSearchFieldVisibilityChanged(actionBarMenuItem.toggleSearch(z2));
                     }
-                    actionBarMenuItem.setSearchFieldText(str, z2);
+                    actionBarMenuItem.setSearchFieldText(str, z3);
                     actionBarMenuItem.getSearchField().setSelection(str.length());
                     return;
                 }

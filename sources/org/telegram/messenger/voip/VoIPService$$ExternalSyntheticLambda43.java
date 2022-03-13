@@ -12,6 +12,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda43 implem
     }
 
     public final void run() {
-        this.f$0.lambda$configureDeviceForCall$76(this.f$1);
+        this.f$0.lambda$configureDeviceForCall$78(this.f$1);
     }
 }

@@ -252,7 +252,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         if (this.pressedReaction != null) {
             float f5 = this.pressedProgress;
             if (f5 != 1.0f) {
-                float f6 = f5 + 0.008f;
+                float f6 = f5 + 0.010666667f;
                 this.pressedProgress = f6;
                 if (f6 >= 1.0f) {
                     this.pressedProgress = 1.0f;

@@ -1,11 +1,7 @@
 package org.telegram.ui;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.ViewGroup;
@@ -15,16 +11,11 @@ import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLoader;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.camera.CameraController;
 import org.telegram.ui.ActionBar.ActionBarLayout;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
@@ -32,9 +23,8 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PasscodeView;
 import org.telegram.ui.Components.ThemeEditorView;
 
-public class BubbleActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate {
+public class BubbleActivity extends BasePermissionsActivity implements ActionBarLayout.ActionBarLayoutDelegate {
     private ActionBarLayout actionBarLayout;
-    private int currentAccount = -1;
     private long dialogId;
     protected DrawerLayoutContainer drawerLayoutContainer;
     private boolean finished;
@@ -120,7 +110,7 @@ public class BubbleActivity extends Activity implements ActionBarLayout.ActionBa
             this.passcodeView.onShow(true, false);
             SharedConfig.isWaitingForPasscodeEnter = true;
             this.drawerLayoutContainer.setAllowOpenDrawer(false, false);
-            this.passcodeView.setDelegate(new BubbleActivity$$ExternalSyntheticLambda1(this));
+            this.passcodeView.setDelegate(new BubbleActivity$$ExternalSyntheticLambda0(this));
         }
     }
 
@@ -237,90 +227,12 @@ public class BubbleActivity extends Activity implements ActionBarLayout.ActionBa
 
     public void onRequestPermissionsResult(int i, String[] strArr, int[] iArr) {
         super.onRequestPermissionsResult(i, strArr, iArr);
-        if (iArr == null) {
-            iArr = new int[0];
-        }
-        if (strArr == null) {
-            strArr = new String[0];
-        }
-        boolean z = iArr.length > 0 && iArr[0] == 0;
-        if (i == 104) {
-            if (z) {
-                GroupCallActivity groupCallActivity = GroupCallActivity.groupCallInstance;
-                if (groupCallActivity != null) {
-                    groupCallActivity.enableCamera();
-                }
-            } else {
-                showPermissionErrorAlert(LocaleController.getString("VoipNeedCameraPermission", NUM));
+        if (checkPermissionsResult(i, strArr, iArr)) {
+            if (this.actionBarLayout.fragmentsStack.size() != 0) {
+                ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;
+                arrayList.get(arrayList.size() - 1).onRequestPermissionsResultFragment(i, strArr, iArr);
             }
-        } else if (i == 4) {
-            if (!z) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionStorage", NUM));
-            } else {
-                ImageLoader.getInstance().checkMediaPaths();
-            }
-        } else if (i == 5) {
-            if (!z) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionContacts", NUM));
-                return;
-            }
-            ContactsController.getInstance(this.currentAccount).forceImportContacts();
-        } else if (i == 3) {
-            int min = Math.min(strArr.length, iArr.length);
-            boolean z2 = true;
-            boolean z3 = true;
-            for (int i2 = 0; i2 < min; i2++) {
-                if ("android.permission.RECORD_AUDIO".equals(strArr[i2])) {
-                    z2 = iArr[i2] == 0;
-                } else if ("android.permission.CAMERA".equals(strArr[i2])) {
-                    z3 = iArr[i2] == 0;
-                }
-            }
-            if (!z2) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionNoAudio", NUM));
-            } else if (!z3) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionNoCamera", NUM));
-            } else if (SharedConfig.inappCamera) {
-                CameraController.getInstance().initCamera((Runnable) null);
-                return;
-            } else {
-                return;
-            }
-        } else if (i == 18 || i == 19 || i == 20 || i == 22) {
-            if (!z) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionNoCamera", NUM));
-            }
-        } else if (i == 2) {
-            if (z) {
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.locationPermissionGranted, new Object[0]);
-            } else {
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.locationPermissionDenied, new Object[0]);
-            }
-        }
-        if (this.actionBarLayout.fragmentsStack.size() != 0) {
-            ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;
-            arrayList.get(arrayList.size() - 1).onRequestPermissionsResultFragment(i, strArr, iArr);
-        }
-        VoIPFragment.onRequestPermissionsResult(i, strArr, iArr);
-    }
-
-    private void showPermissionErrorAlert(String str) {
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) this);
-        builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setMessage(str);
-        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new BubbleActivity$$ExternalSyntheticLambda0(this));
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-        builder.show();
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$showPermissionErrorAlert$1(DialogInterface dialogInterface, int i) {
-        try {
-            Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
-            intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
-            startActivity(intent);
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
+            VoIPFragment.onRequestPermissionsResult(i, strArr, iArr);
         }
     }
 

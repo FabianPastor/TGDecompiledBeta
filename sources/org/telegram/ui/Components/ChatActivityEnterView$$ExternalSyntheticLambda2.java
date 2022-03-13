@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambd
     }
 
     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-        this.f$0.lambda$checkStickresExpandHeight$48(valueAnimator);
+        this.f$0.lambda$new$33(valueAnimator);
     }
 }

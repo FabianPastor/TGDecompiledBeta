@@ -21,6 +21,7 @@ import android.view.ViewParent;
 import android.view.Window;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.FrameLayout;
+import androidx.core.graphics.ColorUtils;
 import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -51,7 +52,7 @@ public abstract class BaseFragment {
     public int classGuid;
     /* access modifiers changed from: protected */
     public int currentAccount;
-    private boolean finishing;
+    protected boolean finishing;
     /* access modifiers changed from: protected */
     public boolean fragmentBeginToShow;
     /* access modifiers changed from: protected */
@@ -68,6 +69,7 @@ public abstract class BaseFragment {
     protected Dialog parentDialog;
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
+    private boolean removingFromStack;
     protected Dialog visibleDialog;
 
     /* access modifiers changed from: protected */
@@ -103,6 +105,10 @@ public abstract class BaseFragment {
 
     public Theme.ResourcesProvider getResourceProvider() {
         return null;
+    }
+
+    public boolean hasForceLightStatusBar() {
+        return false;
     }
 
     /* access modifiers changed from: protected */
@@ -184,6 +190,11 @@ public abstract class BaseFragment {
     public void setProgressToDrawerOpened(float f) {
     }
 
+    /* access modifiers changed from: protected */
+    public boolean shouldOverrideSlideTransition(boolean z, boolean z2) {
+        return false;
+    }
+
     public BaseFragment() {
         this.currentAccount = UserConfig.selectedAccount;
         this.hasOwnBackground = false;
@@ -233,6 +244,10 @@ public abstract class BaseFragment {
 
     public boolean isInBubbleMode() {
         return this.inBubbleMode;
+    }
+
+    public boolean isInPreviewMode() {
+        return this.inPreviewMode;
     }
 
     /* access modifiers changed from: protected */
@@ -399,10 +414,18 @@ public abstract class BaseFragment {
     public void onFragmentDestroy() {
         getConnectionsManager().cancelRequestsForGuid(this.classGuid);
         getMessagesStorage().cancelTasksForGuid(this.classGuid);
+        boolean z = true;
         this.isFinished = true;
         ActionBar actionBar2 = this.actionBar;
         if (actionBar2 != null) {
             actionBar2.setEnabled(false);
+        }
+        if (hasForceLightStatusBar() && !AndroidUtilities.isTablet() && getParentLayout().getLastFragment() == this && getParentActivity() != null && !this.finishing) {
+            Window window = getParentActivity().getWindow();
+            if (Theme.getColor("actionBarDefault") != -1) {
+                z = false;
+            }
+            AndroidUtilities.setLightStatusBar(window, z);
         }
     }
 
@@ -870,5 +893,30 @@ public abstract class BaseFragment {
 
     private void setParentDialog(Dialog dialog) {
         this.parentDialog = dialog;
+    }
+
+    public boolean isRemovingFromStack() {
+        return this.removingFromStack;
+    }
+
+    public void setRemovingFromStack(boolean z) {
+        this.removingFromStack = z;
+    }
+
+    public boolean isLightStatusBar() {
+        int i;
+        if (hasForceLightStatusBar() && !Theme.getCurrentTheme().isDark()) {
+            return true;
+        }
+        Theme.ResourcesProvider resourceProvider = getResourceProvider();
+        if (resourceProvider != null) {
+            i = resourceProvider.getColorOrDefault("actionBarDefault");
+        } else {
+            i = Theme.getColor("actionBarDefault", (boolean[]) null, true);
+        }
+        if (ColorUtils.calculateLuminance(i) > 0.699999988079071d) {
+            return true;
+        }
+        return false;
     }
 }

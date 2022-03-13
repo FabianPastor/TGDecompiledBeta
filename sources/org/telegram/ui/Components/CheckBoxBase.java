@@ -184,6 +184,7 @@ public class CheckBoxBase {
         this.backgroundColorKey = str;
         this.background2ColorKey = str2;
         this.checkColorKey = str3;
+        invalidate();
     }
 
     public void setBackgroundDrawable(Theme.MessageDrawable messageDrawable2) {

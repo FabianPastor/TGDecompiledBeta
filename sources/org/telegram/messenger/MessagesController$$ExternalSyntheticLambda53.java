@@ -10,6 +10,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda53
     }
 
     public final void run() {
-        this.f$0.lambda$addUserToChat$232(this.f$1);
+        this.f$0.lambda$addUserToChat$233(this.f$1);
     }
 }

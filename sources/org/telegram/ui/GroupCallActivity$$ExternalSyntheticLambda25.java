@@ -1,23 +1,31 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.Components.EditTextBoldCursor;
+import android.view.View;
+import org.telegram.messenger.AccountInstance;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$InputPeer;
+import org.telegram.ui.Components.NumberPicker;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda25 implements Runnable {
-    public final /* synthetic */ BottomSheet f$0;
-    public final /* synthetic */ EditTextBoldCursor f$1;
-    public final /* synthetic */ boolean f$2;
-    public final /* synthetic */ AlertDialog f$3;
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda25 implements View.OnClickListener {
+    public final /* synthetic */ GroupCallActivity f$0;
+    public final /* synthetic */ NumberPicker f$1;
+    public final /* synthetic */ NumberPicker f$2;
+    public final /* synthetic */ NumberPicker f$3;
+    public final /* synthetic */ TLRPC$Chat f$4;
+    public final /* synthetic */ AccountInstance f$5;
+    public final /* synthetic */ TLRPC$InputPeer f$6;
 
-    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda25(BottomSheet bottomSheet, EditTextBoldCursor editTextBoldCursor, boolean z, AlertDialog alertDialog) {
-        this.f$0 = bottomSheet;
-        this.f$1 = editTextBoldCursor;
-        this.f$2 = z;
-        this.f$3 = alertDialog;
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda25(GroupCallActivity groupCallActivity, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, TLRPC$Chat tLRPC$Chat, AccountInstance accountInstance, TLRPC$InputPeer tLRPC$InputPeer) {
+        this.f$0 = groupCallActivity;
+        this.f$1 = numberPicker;
+        this.f$2 = numberPicker2;
+        this.f$3 = numberPicker3;
+        this.f$4 = tLRPC$Chat;
+        this.f$5 = accountInstance;
+        this.f$6 = tLRPC$InputPeer;
     }
 
-    public final void run() {
-        GroupCallActivity.lambda$makeFocusable$7(this.f$0, this.f$1, this.f$2, this.f$3);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$29(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, view);
     }
 }

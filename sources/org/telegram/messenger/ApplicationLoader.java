@@ -49,6 +49,7 @@ public class ApplicationLoader extends Application {
     public static volatile boolean mainInterfacePausedStageQueue = true;
     public static volatile long mainInterfacePausedStageQueueTime = 0;
     public static volatile boolean mainInterfaceStopped = true;
+    private static volatile ConnectivityManager.NetworkCallback networkCallback;
     public static long startTime;
 
     /* access modifiers changed from: protected */
@@ -279,17 +280,17 @@ public class ApplicationLoader extends Application {
                     connectivityManager = (ConnectivityManager) applicationContext.getSystemService("connectivity");
                 }
                 currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
-                if (Build.VERSION.SDK_INT >= 24) {
-                    connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
+                if (Build.VERSION.SDK_INT >= 24 && networkCallback == null) {
+                    networkCallback = new ConnectivityManager.NetworkCallback() {
                         public void onAvailable(Network network) {
                             int unused = ApplicationLoader.lastKnownNetworkType = -1;
                         }
 
                         public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
-                            super.onCapabilitiesChanged(network, networkCapabilities);
                             int unused = ApplicationLoader.lastKnownNetworkType = -1;
                         }
-                    });
+                    };
+                    connectivityManager.registerDefaultNetworkCallback(networkCallback);
                 }
             } catch (Throwable unused) {
             }

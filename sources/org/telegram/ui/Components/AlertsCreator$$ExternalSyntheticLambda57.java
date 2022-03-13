@@ -1,16 +1,18 @@
 package org.telegram.ui.Components;
 
 import android.view.View;
-import org.telegram.ui.Cells.CheckBoxCell;
+import android.widget.LinearLayout;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda57 implements View.OnClickListener {
-    public final /* synthetic */ CheckBoxCell[] f$0;
+    public final /* synthetic */ int[] f$0;
+    public final /* synthetic */ LinearLayout f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda57(CheckBoxCell[] checkBoxCellArr) {
-        this.f$0 = checkBoxCellArr;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda57(int[] iArr, LinearLayout linearLayout) {
+        this.f$0 = iArr;
+        this.f$1 = linearLayout;
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$showBlockReportSpamReplyAlert$4(this.f$0, view);
+        AlertsCreator.lambda$createLocationUpdateDialog$76(this.f$0, this.f$1, view);
     }
 }

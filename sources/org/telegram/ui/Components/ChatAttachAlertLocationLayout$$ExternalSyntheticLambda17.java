@@ -12,6 +12,6 @@ public final /* synthetic */ class ChatAttachAlertLocationLayout$$ExternalSynthe
     }
 
     public final void run() {
-        this.f$0.lambda$new$11(this.f$1);
+        this.f$0.lambda$new$12(this.f$1);
     }
 }

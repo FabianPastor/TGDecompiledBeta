@@ -1,20 +1,17 @@
 package org.telegram.ui.Components;
 
-import android.graphics.Rect;
-import android.view.MotionEvent;
 import android.view.View;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda66 implements View.OnTouchListener {
-    public final /* synthetic */ ActionBarPopupWindow f$0;
-    public final /* synthetic */ Rect f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda66 implements View.OnClickListener {
+    public final /* synthetic */ boolean[] f$0;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda66(ActionBarPopupWindow actionBarPopupWindow, Rect rect) {
-        this.f$0 = actionBarPopupWindow;
-        this.f$1 = rect;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda66(boolean[] zArr, int i) {
+        this.f$0 = zArr;
+        this.f$1 = i;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return AlertsCreator.lambda$showPopupMenu$108(this.f$0, this.f$1, view, motionEvent);
+    public final void onClick(View view) {
+        AlertsCreator.lambda$createBlockDialogAlert$35(this.f$0, this.f$1, view);
     }
 }

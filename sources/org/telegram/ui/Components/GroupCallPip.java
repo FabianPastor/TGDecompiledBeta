@@ -29,6 +29,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
+import org.telegram.ui.Components.voip.RTMPStreamPipOverlay;
 import org.telegram.ui.GroupCallActivity;
 
 public class GroupCallPip implements NotificationCenter.NotificationCenterDelegate {
@@ -699,7 +700,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     }
 
     public static boolean isShowing() {
-        if (instance != null) {
+        if (RTMPStreamPipOverlay.isVisible() || instance != null) {
             return true;
         }
         if (!checkInlinePermissions()) {

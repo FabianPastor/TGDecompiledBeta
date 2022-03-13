@@ -11,6 +11,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda34
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$installTheme$91(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$unregistedPush$243(tLObject, tLRPC$TL_error);
     }
 }

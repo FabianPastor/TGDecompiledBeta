@@ -1,13 +1,15 @@
 package org.telegram.ui.ActionBar;
 
-public final /* synthetic */ class BottomSheet$$ExternalSyntheticLambda3 implements Runnable {
-    public final /* synthetic */ BottomSheet f$0;
+import android.view.MotionEvent;
+import android.view.View;
 
-    public /* synthetic */ BottomSheet$$ExternalSyntheticLambda3(BottomSheet bottomSheet) {
-        this.f$0 = bottomSheet;
+public final /* synthetic */ class BottomSheet$$ExternalSyntheticLambda3 implements View.OnTouchListener {
+    public static final /* synthetic */ BottomSheet$$ExternalSyntheticLambda3 INSTANCE = new BottomSheet$$ExternalSyntheticLambda3();
+
+    private /* synthetic */ BottomSheet$$ExternalSyntheticLambda3() {
     }
 
-    public final void run() {
-        this.f$0.dismiss();
+    public final boolean onTouch(View view, MotionEvent motionEvent) {
+        return BottomSheet.lambda$onCreate$2(view, motionEvent);
     }
 }

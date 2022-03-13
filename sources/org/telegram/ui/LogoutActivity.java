@@ -125,24 +125,24 @@ public class LogoutActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$createView$1(View view, int i, float f, float f2) {
-        int i2 = 0;
-        int i3 = -1;
+        int i2 = -1;
         if (i == this.addAccountRow) {
+            int i3 = 0;
             while (true) {
-                if (i2 >= 3) {
+                if (i3 >= 3) {
                     break;
-                } else if (!UserConfig.getInstance(i2).isClientActivated()) {
-                    i3 = i2;
+                } else if (!UserConfig.getInstance(i3).isClientActivated()) {
+                    i2 = i3;
                     break;
                 } else {
-                    i2++;
+                    i3++;
                 }
             }
-            if (i3 >= 0) {
-                presentFragment(new LoginActivity(i3));
+            if (i2 >= 0) {
+                presentFragment(new LoginActivity(i2));
             }
         } else if (i == this.passcodeRow) {
-            presentFragment(new PasscodeActivity(0));
+            presentFragment(PasscodeActivity.determineOpenFragment());
         } else if (i == this.cacheRow) {
             presentFragment(new CacheControlActivity());
         } else if (i == this.phoneRow) {
@@ -254,7 +254,7 @@ public class LogoutActivity extends BaseFragment {
                 android.content.Context r4 = r2.mContext
                 r3.<init>(r4)
                 android.content.Context r4 = r2.mContext
-                r0 = 2131165469(0x7var_d, float:1.7945156E38)
+                r0 = 2131165471(0x7var_f, float:1.794516E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r4, (int) r0, (java.lang.String) r1)
                 r3.setBackgroundDrawable(r4)

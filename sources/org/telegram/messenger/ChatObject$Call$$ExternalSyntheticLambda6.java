@@ -1,21 +1,23 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
 import org.telegram.messenger.ChatObject;
-import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_phone_getGroupParticipants;
 
-public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda6 implements Comparator {
+public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda6 implements Runnable {
     public final /* synthetic */ ChatObject.Call f$0;
-    public final /* synthetic */ long f$1;
-    public final /* synthetic */ boolean f$2;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ TLObject f$2;
+    public final /* synthetic */ TLRPC$TL_phone_getGroupParticipants f$3;
 
-    public /* synthetic */ ChatObject$Call$$ExternalSyntheticLambda6(ChatObject.Call call, long j, boolean z) {
+    public /* synthetic */ ChatObject$Call$$ExternalSyntheticLambda6(ChatObject.Call call, boolean z, TLObject tLObject, TLRPC$TL_phone_getGroupParticipants tLRPC$TL_phone_getGroupParticipants) {
         this.f$0 = call;
-        this.f$1 = j;
-        this.f$2 = z;
+        this.f$1 = z;
+        this.f$2 = tLObject;
+        this.f$3 = tLRPC$TL_phone_getGroupParticipants;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return this.f$0.lambda$sortParticipants$11(this.f$1, this.f$2, (TLRPC$TL_groupCallParticipant) obj, (TLRPC$TL_groupCallParticipant) obj2);
+    public final void run() {
+        this.f$0.lambda$loadMembers$2(this.f$1, this.f$2, this.f$3);
     }
 }

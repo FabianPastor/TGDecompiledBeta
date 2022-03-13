@@ -11,6 +11,6 @@ public final /* synthetic */ class LoginActivity$LoginActivitySmsView$$ExternalS
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$onBackPressed$7(dialogInterface, i);
+        this.f$0.lambda$onBackPressed$33(dialogInterface, i);
     }
 }

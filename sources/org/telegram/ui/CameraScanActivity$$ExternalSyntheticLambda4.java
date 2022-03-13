@@ -1,13 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda4 implements Runnable {
+import android.view.View;
+
+public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda4 implements View.OnClickListener {
     public final /* synthetic */ CameraScanActivity f$0;
 
     public /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda4(CameraScanActivity cameraScanActivity) {
         this.f$0 = cameraScanActivity;
     }
 
-    public final void run() {
-        this.f$0.finishFragment();
+    public final void onClick(View view) {
+        this.f$0.lambda$createView$7(view);
     }
 }

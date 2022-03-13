@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.ZoomControlView;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda16 implements ZoomControlView.ZoomControlViewDelegate {
-    public final /* synthetic */ ChatAttachAlertPhotoLayout f$0;
+public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda16 implements RecyclerListView.OnItemClickListener {
+    public static final /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda16 INSTANCE = new ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda16();
 
-    public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda16(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout) {
-        this.f$0 = chatAttachAlertPhotoLayout;
+    private /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda16() {
     }
 
-    public final void didSetZoom(float f) {
-        this.f$0.lambda$new$4(f);
+    public final void onItemClick(View view, int i) {
+        ChatAttachAlertPhotoLayout.lambda$new$7(view, i);
     }
 }

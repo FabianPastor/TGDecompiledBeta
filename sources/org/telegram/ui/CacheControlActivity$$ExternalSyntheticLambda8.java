@@ -1,21 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.content.Context;
+import android.view.View;
+import org.telegram.ui.Components.RecyclerListView;
 
-public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda8 implements Runnable {
+public final /* synthetic */ class CacheControlActivity$$ExternalSyntheticLambda8 implements RecyclerListView.OnItemClickListener {
     public final /* synthetic */ CacheControlActivity f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ AlertDialog f$2;
-    public final /* synthetic */ long f$3;
+    public final /* synthetic */ Context f$1;
 
-    public /* synthetic */ CacheControlActivity$$ExternalSyntheticLambda8(CacheControlActivity cacheControlActivity, boolean z, AlertDialog alertDialog, long j) {
+    public /* synthetic */ CacheControlActivity$$ExternalSyntheticLambda8(CacheControlActivity cacheControlActivity, Context context) {
         this.f$0 = cacheControlActivity;
-        this.f$1 = z;
-        this.f$2 = alertDialog;
-        this.f$3 = j;
+        this.f$1 = context;
     }
 
-    public final void run() {
-        this.f$0.lambda$cleanupFolders$2(this.f$1, this.f$2, this.f$3);
+    public final void onItemClick(View view, int i) {
+        this.f$0.lambda$createView$6(this.f$1, view, i);
     }
 }

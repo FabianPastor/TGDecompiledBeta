@@ -13,6 +13,6 @@ public final /* synthetic */ class ChatObject$Call$$ExternalSyntheticLambda9 imp
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$toggleRecord$12(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$reloadGroupCall$9(tLObject, tLRPC$TL_error);
     }
 }

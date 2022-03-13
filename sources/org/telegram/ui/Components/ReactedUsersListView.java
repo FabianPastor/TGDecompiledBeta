@@ -62,6 +62,7 @@ public class ReactedUsersListView extends FrameLayout {
     private OnHeightChangedListener onHeightChangedListener;
     private OnProfileSelectedListener onProfileSelectedListener;
     private boolean onlySeenNow;
+    private int predictiveCount;
     /* access modifiers changed from: private */
     public List<TLRPC$TL_messagePeerReaction> userReactions = new ArrayList();
     /* access modifiers changed from: private */
@@ -78,6 +79,7 @@ public class ReactedUsersListView extends FrameLayout {
     public ReactedUsersListView(final Context context, Theme.ResourcesProvider resourcesProvider, int i, MessageObject messageObject, TLRPC$TL_reactionCount tLRPC$TL_reactionCount, boolean z) {
         super(context);
         String str;
+        int i2;
         this.currentAccount = i;
         this.message = messageObject;
         if (tLRPC$TL_reactionCount == null) {
@@ -86,6 +88,13 @@ public class ReactedUsersListView extends FrameLayout {
             str = tLRPC$TL_reactionCount.reaction;
         }
         this.filter = str;
+        int i3 = 6;
+        if (tLRPC$TL_reactionCount == null) {
+            i2 = 6;
+        } else {
+            i2 = tLRPC$TL_reactionCount.count;
+        }
+        this.predictiveCount = i2;
         this.listView = new RecyclerListView(context, resourcesProvider) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
@@ -103,7 +112,7 @@ public class ReactedUsersListView extends FrameLayout {
             this.listView.setVerticalScrollbarThumbDrawable(new ColorDrawable(Theme.getColor("listSelectorSDK21")));
         }
         RecyclerListView recyclerListView = this.listView;
-        AnonymousClass2 r8 = new RecyclerView.Adapter() {
+        AnonymousClass2 r1 = new RecyclerView.Adapter() {
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
                 return new RecyclerListView.Holder(new ReactedUserHolderView(context));
             }
@@ -116,8 +125,8 @@ public class ReactedUsersListView extends FrameLayout {
                 return ReactedUsersListView.this.userReactions.size();
             }
         };
-        this.adapter = r8;
-        recyclerListView.setAdapter(r8);
+        this.adapter = r1;
+        recyclerListView.setAdapter(r1);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new ReactedUsersListView$$ExternalSyntheticLambda5(this));
         this.listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
@@ -133,7 +142,7 @@ public class ReactedUsersListView extends FrameLayout {
         this.loadingView = flickerLoadingView;
         flickerLoadingView.setViewType(16);
         this.loadingView.setIsSingleCell(true);
-        this.loadingView.setItemsCount(tLRPC$TL_reactionCount == null ? 6 : tLRPC$TL_reactionCount.count);
+        this.loadingView.setItemsCount(tLRPC$TL_reactionCount != null ? tLRPC$TL_reactionCount.count : i3);
         addView(this.loadingView, LayoutHelper.createFrame(-1, -1.0f));
     }
 
@@ -277,10 +286,14 @@ public class ReactedUsersListView extends FrameLayout {
     public void updateHeight() {
         int i;
         if (this.onHeightChangedListener != null) {
+            int size = this.userReactions.size();
+            if (size == 0) {
+                size = this.predictiveCount;
+            }
             if (this.listView.getMeasuredHeight() != 0) {
-                i = Math.min(this.listView.getMeasuredHeight(), AndroidUtilities.dp((float) (Math.min(this.userReactions.size(), 6) * 48)));
+                i = Math.min(this.listView.getMeasuredHeight(), AndroidUtilities.dp((float) (size * 48)));
             } else {
-                i = AndroidUtilities.dp((float) (Math.min(this.userReactions.size(), 6) * 48));
+                i = AndroidUtilities.dp((float) (size * 48));
             }
             this.onHeightChangedListener.onHeightChanged(this, i);
         }

@@ -1,15 +1,27 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.messenger.MessagesController;
+import org.telegram.tgnet.TLRPC$messages_Messages;
 
-public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda192 implements Comparator {
-    public static final /* synthetic */ MessagesStorage$$ExternalSyntheticLambda192 INSTANCE = new MessagesStorage$$ExternalSyntheticLambda192();
+public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda192 implements Runnable {
+    public final /* synthetic */ MessagesStorage f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ TLRPC$messages_Messages f$3;
+    public final /* synthetic */ int f$4;
+    public final /* synthetic */ int f$5;
+    public final /* synthetic */ boolean f$6;
 
-    private /* synthetic */ MessagesStorage$$ExternalSyntheticLambda192() {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda192(MessagesStorage messagesStorage, boolean z, long j, TLRPC$messages_Messages tLRPC$messages_Messages, int i, int i2, boolean z2) {
+        this.f$0 = messagesStorage;
+        this.f$1 = z;
+        this.f$2 = j;
+        this.f$3 = tLRPC$messages_Messages;
+        this.f$4 = i;
+        this.f$5 = i2;
+        this.f$6 = z2;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MessagesStorage.lambda$processLoadedFilterPeersInternal$44((MessagesController.DialogFilter) obj, (MessagesController.DialogFilter) obj2);
+    public final void run() {
+        this.f$0.lambda$putMessages$181(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
     }
 }

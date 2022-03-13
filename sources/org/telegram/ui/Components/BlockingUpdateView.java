@@ -6,7 +6,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.RectF;
@@ -39,7 +38,6 @@ import org.telegram.tgnet.TLRPC$TL_document;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_help_appUpdate;
 import org.telegram.tgnet.TLRPC$TL_help_getAppUpdate;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
@@ -78,7 +76,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
         rLottieImageView.setPadding(0, 0, 0, AndroidUtilities.dp(14.0f));
         frameLayout.addView(rLottieImageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, (float) i2, 0.0f, 0.0f));
-        rLottieImageView.setOnClickListener(new BlockingUpdateView$$ExternalSyntheticLambda1(this));
+        rLottieImageView.setOnClickListener(new BlockingUpdateView$$ExternalSyntheticLambda0(this));
         FrameLayout frameLayout2 = new FrameLayout(context2);
         ScrollView scrollView2 = new ScrollView(context2);
         this.scrollView = scrollView2;
@@ -136,7 +134,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.acceptButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
         this.acceptButton.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
         addView(this.acceptButton, LayoutHelper.createFrame(-2, 46.0f, 81, 0.0f, 0.0f, 0.0f, 45.0f));
-        this.acceptButton.setOnClickListener(new BlockingUpdateView$$ExternalSyntheticLambda2(this));
+        this.acceptButton.setOnClickListener(new BlockingUpdateView$$ExternalSyntheticLambda1(this));
         TextView textView4 = new TextView(context2);
         this.acceptTextView = textView4;
         textView4.setGravity(17);
@@ -234,22 +232,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         if (Build.VERSION.SDK_INT < 26 || ApplicationLoader.applicationContext.getPackageManager().canRequestPackageInstalls()) {
             return true;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setMessage(LocaleController.getString("ApkRestricted", NUM));
-        builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new BlockingUpdateView$$ExternalSyntheticLambda0(context));
-        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-        builder.show();
+        AlertsCreator.createApkRestrictedDialog(context, (Theme.ResourcesProvider) null).show();
         return false;
-    }
-
-    /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$checkApkInstallPermissions$2(Context context, DialogInterface dialogInterface, int i) {
-        try {
-            context.startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName())));
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-        }
     }
 
     public static boolean openApkInstall(Activity activity, TLRPC$Document tLRPC$Document) {
@@ -346,17 +330,17 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
             if (tLRPC$TL_help_getAppUpdate.source == null) {
                 tLRPC$TL_help_getAppUpdate.source = "";
             }
-            ConnectionsManager.getInstance(this.accountNum).sendRequest(tLRPC$TL_help_getAppUpdate, new BlockingUpdateView$$ExternalSyntheticLambda4(this));
+            ConnectionsManager.getInstance(this.accountNum).sendRequest(tLRPC$TL_help_getAppUpdate, new BlockingUpdateView$$ExternalSyntheticLambda3(this));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$show$4(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new BlockingUpdateView$$ExternalSyntheticLambda3(this, tLObject));
+    public /* synthetic */ void lambda$show$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new BlockingUpdateView$$ExternalSyntheticLambda2(this, tLObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$show$3(TLObject tLObject) {
+    public /* synthetic */ void lambda$show$2(TLObject tLObject) {
         if ((tLObject instanceof TLRPC$TL_help_appUpdate) && !((TLRPC$TL_help_appUpdate) tLObject).can_not_skip) {
             setVisibility(8);
             SharedConfig.pendingAppUpdate = null;

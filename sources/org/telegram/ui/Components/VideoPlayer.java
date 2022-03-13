@@ -1036,10 +1036,6 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         }
     }
 
-    public int getRepeatCount() {
-        return this.repeatCount;
-    }
-
     private class AudioVisualizerRenderersFactory extends DefaultRenderersFactory {
         public AudioVisualizerRenderersFactory(Context context) {
             super(context);

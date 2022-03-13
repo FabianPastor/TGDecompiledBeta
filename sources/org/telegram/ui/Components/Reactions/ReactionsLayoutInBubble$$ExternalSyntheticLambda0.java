@@ -12,6 +12,6 @@ public final /* synthetic */ class ReactionsLayoutInBubble$$ExternalSyntheticLam
     }
 
     public final void run() {
-        this.f$0.lambda$chekTouchEvent$0(this.f$1);
+        this.f$0.lambda$chekTouchEvent$1(this.f$1);
     }
 }

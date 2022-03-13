@@ -1,17 +1,17 @@
 package org.telegram.ui.Components.voip;
 
-import android.view.View;
+import android.graphics.Bitmap;
 
 public final /* synthetic */ class GroupCallMiniTextureView$$ExternalSyntheticLambda6 implements Runnable {
     public final /* synthetic */ GroupCallMiniTextureView f$0;
-    public final /* synthetic */ View f$1;
+    public final /* synthetic */ Bitmap f$1;
 
-    public /* synthetic */ GroupCallMiniTextureView$$ExternalSyntheticLambda6(GroupCallMiniTextureView groupCallMiniTextureView, View view) {
+    public /* synthetic */ GroupCallMiniTextureView$$ExternalSyntheticLambda6(GroupCallMiniTextureView groupCallMiniTextureView, Bitmap bitmap) {
         this.f$0 = groupCallMiniTextureView;
-        this.f$1 = view;
+        this.f$1 = bitmap;
     }
 
     public final void run() {
-        this.f$0.lambda$updateAttachState$1(this.f$1);
+        this.f$0.lambda$saveThumb$4(this.f$1);
     }
 }

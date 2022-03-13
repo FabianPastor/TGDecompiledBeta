@@ -62,6 +62,7 @@ import org.telegram.ui.Cells.SharedMediaSectionCell;
 import org.telegram.ui.Cells.SharedPhotoVideoCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.BlurredRecyclerView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.FlickerLoadingView;
@@ -273,7 +274,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         Activity parentActivity2 = baseFragment.getParentActivity();
         this.parentActivity = parentActivity2;
         setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        AnonymousClass3 r0 = new RecyclerListView(parentActivity2) {
+        AnonymousClass3 r0 = new BlurredRecyclerView(parentActivity2) {
             /* access modifiers changed from: protected */
             public void dispatchDraw(Canvas canvas) {
                 if (getAdapter() == FilteredSearchView.this.sharedPhotoVideoAdapter) {
@@ -433,7 +434,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131166060(0x7var_c, float:1.7946355E38)
+            r3 = 2131166069(0x7var_, float:1.7946373E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>(r2)
@@ -1290,7 +1291,9 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                             }
                             AndroidUtilities.openDocument(messageObject, this.parentActivity, this.parentFragment);
                         } else if (!sharedDocumentCell.isLoading()) {
-                            AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().loadFile(document, sharedDocumentCell.getMessage(), 0, 0);
+                            MessageObject message = sharedDocumentCell.getMessage();
+                            message.putInDownloadsStore = true;
+                            AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().loadFile(document, message, 0, 0);
                             sharedDocumentCell.updateFileExistIcon(true);
                         } else {
                             AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().cancelLoadFile(document);
@@ -1826,7 +1829,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
                 android.content.Context r4 = r4.getContext()
                 r5.<init>(r4)
-                r4 = 2131627717(0x7f0e0ec5, float:1.8882706E38)
+                r4 = 2131627816(0x7f0e0var_, float:1.8882907E38)
                 java.lang.String r0 = "SearchMessages"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                 r5.setText(r4)

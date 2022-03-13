@@ -8,7 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Region;
-import android.text.Spannable;
+import android.text.Spanned;
 import android.view.MotionEvent;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -132,7 +132,7 @@ public class SpoilersTextView extends TextView {
                 invalidate();
                 return;
             }
-            if (getLayout() != null && (getText() instanceof Spannable)) {
+            if (getLayout() != null && (getText() instanceof Spanned)) {
                 SpoilerEffect.addSpoilers(this, this.spoilersPool, this.spoilers);
             }
             invalidate();

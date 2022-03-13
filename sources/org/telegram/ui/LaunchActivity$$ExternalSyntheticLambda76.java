@@ -1,23 +1,22 @@
 package org.telegram.ui;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
+import org.telegram.messenger.LocaleController;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda76 implements ChatAttachAlertContactsLayout.PhonebookShareAlertDelegate {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda76 implements RequestDelegate {
     public final /* synthetic */ LaunchActivity f$0;
-    public final /* synthetic */ ChatActivity f$1;
-    public final /* synthetic */ ArrayList f$2;
-    public final /* synthetic */ int f$3;
+    public final /* synthetic */ LocaleController.LocaleInfo[] f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda76(LaunchActivity launchActivity, ChatActivity chatActivity, ArrayList arrayList, int i) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda76(LaunchActivity launchActivity, LocaleController.LocaleInfo[] localeInfoArr, String str) {
         this.f$0 = launchActivity;
-        this.f$1 = chatActivity;
-        this.f$2 = arrayList;
-        this.f$3 = i;
+        this.f$1 = localeInfoArr;
+        this.f$2 = str;
     }
 
-    public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
-        this.f$0.lambda$didSelectDialogs$61(this.f$1, this.f$2, this.f$3, tLRPC$User, z, i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        this.f$0.lambda$showLanguageAlert$87(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
     }
 }

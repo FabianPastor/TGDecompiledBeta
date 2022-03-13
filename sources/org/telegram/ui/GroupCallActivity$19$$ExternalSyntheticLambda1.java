@@ -13,6 +13,6 @@ public final /* synthetic */ class GroupCallActivity$19$$ExternalSyntheticLambda
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$onClick$0(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$onClick$1(tLObject, tLRPC$TL_error);
     }
 }

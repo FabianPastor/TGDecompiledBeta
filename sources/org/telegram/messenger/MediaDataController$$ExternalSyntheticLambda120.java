@@ -7,6 +7,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
     }
 
     public final Object provide(Object obj) {
-        return MediaDataController.lambda$getEntities$127((Void) obj);
+        return MediaDataController.lambda$getEntities$126((Void) obj);
     }
 }

@@ -1,16 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.messenger.support.LongSparseIntArray;
+public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda189 implements Runnable {
+    public final /* synthetic */ MessagesStorage f$0;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ int f$2;
+    public final /* synthetic */ long f$3;
 
-public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda189 implements Comparator {
-    public final /* synthetic */ LongSparseIntArray f$0;
-
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda189(LongSparseIntArray longSparseIntArray) {
-        this.f$0 = longSparseIntArray;
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda189(MessagesStorage messagesStorage, boolean z, int i, long j) {
+        this.f$0 = messagesStorage;
+        this.f$1 = z;
+        this.f$2 = i;
+        this.f$3 = j;
     }
 
-    public final int compare(Object obj, Object obj2) {
-        return MessagesStorage.lambda$resetDialogs$67(this.f$0, (Long) obj, (Long) obj2);
+    public final void run() {
+        this.f$0.lambda$removeFromDownloadQueue$148(this.f$1, this.f$2, this.f$3);
     }
 }

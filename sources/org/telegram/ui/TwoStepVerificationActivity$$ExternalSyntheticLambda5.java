@@ -2,13 +2,14 @@ package org.telegram.ui;
 
 import android.content.DialogInterface;
 
-public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheticLambda5 implements DialogInterface.OnClickListener {
-    public static final /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda5 INSTANCE = new TwoStepVerificationActivity$$ExternalSyntheticLambda5();
+public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheticLambda5 implements DialogInterface.OnDismissListener {
+    public final /* synthetic */ TwoStepVerificationActivity f$0;
 
-    private /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda5() {
+    public /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda5(TwoStepVerificationActivity twoStepVerificationActivity) {
+        this.f$0 = twoStepVerificationActivity;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        TwoStepVerificationActivity.lambda$showSetForcePasswordAlert$33(dialogInterface, i);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.lambda$resetPassword$11(dialogInterface);
     }
 }

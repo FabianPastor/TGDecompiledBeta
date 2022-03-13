@@ -2,22 +2,33 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
-import org.telegram.messenger.AndroidUtilities;
+import android.text.TextPaint;
+import android.util.TypedValue;
 import org.telegram.ui.ActionBar.Theme;
 
 public class HintEditText extends EditTextBoldCursor {
+    protected TextPaint hintPaint = new TextPaint(1);
     private String hintText;
-    private float numberSize;
-    private Paint paint = new Paint();
     private Rect rect = new Rect();
-    private float spaceSize;
-    private float textOffset;
+
+    /* access modifiers changed from: protected */
+    public void onPreDrawHintCharacter(int i, Canvas canvas, float f, float f2) {
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean shouldDrawBehindText(int i) {
+        return false;
+    }
 
     public HintEditText(Context context) {
         super(context);
-        this.paint.setColor(Theme.getColor("windowBackgroundWhiteHintText"));
+        this.hintPaint.setColor(Theme.getColor("windowBackgroundWhiteHintText"));
+    }
+
+    public void setTextSize(int i, float f) {
+        super.setTextSize(i, f);
+        this.hintPaint.setTextSize(TypedValue.applyDimension(i, f, getResources().getDisplayMetrics()));
     }
 
     public String getHintText() {
@@ -37,29 +48,38 @@ public class HintEditText extends EditTextBoldCursor {
     }
 
     public void onTextChange() {
-        this.textOffset = length() > 0 ? getPaint().measureText(getText(), 0, length()) : 0.0f;
-        this.spaceSize = getPaint().measureText(" ");
-        this.numberSize = getPaint().measureText("1");
         invalidate();
     }
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         float f;
-        super.onDraw(canvas);
         if (this.hintText != null && length() < this.hintText.length()) {
-            int measuredHeight = getMeasuredHeight() / 2;
-            float f2 = this.textOffset;
-            for (int length = length(); length < this.hintText.length(); length++) {
-                if (this.hintText.charAt(length) == ' ') {
-                    f = this.spaceSize;
+            float f2 = 0.0f;
+            for (int i = 0; i < this.hintText.length(); i++) {
+                if (i < length()) {
+                    f = getPaint().measureText(getText(), i, i + 1);
                 } else {
-                    this.rect.set(((int) f2) + AndroidUtilities.dp(1.0f), measuredHeight, ((int) (this.numberSize + f2)) - AndroidUtilities.dp(1.0f), AndroidUtilities.dp(2.0f) + measuredHeight);
-                    canvas.drawRect(this.rect, this.paint);
-                    f = this.numberSize;
+                    f = this.hintPaint.measureText(this.hintText, i, i + 1);
                 }
-                f2 += f;
+                float f3 = f;
+                if (shouldDrawBehindText(i) || i >= length()) {
+                    int color = this.hintPaint.getColor();
+                    canvas.save();
+                    TextPaint textPaint = this.hintPaint;
+                    String str = this.hintText;
+                    textPaint.getTextBounds(str, 0, str.length(), this.rect);
+                    float height = ((float) (getHeight() + this.rect.height())) / 2.0f;
+                    onPreDrawHintCharacter(i, canvas, f2, height);
+                    canvas.drawText(this.hintText, i, i + 1, f2, height, this.hintPaint);
+                    f2 += f3;
+                    canvas.restore();
+                    this.hintPaint.setColor(color);
+                } else {
+                    f2 += f3;
+                }
             }
         }
+        super.onDraw(canvas);
     }
 }

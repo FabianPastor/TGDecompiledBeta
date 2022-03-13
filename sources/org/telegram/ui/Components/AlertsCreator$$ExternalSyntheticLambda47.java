@@ -1,26 +1,21 @@
 package org.telegram.ui.Components;
 
 import android.view.View;
+import java.util.ArrayList;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.Theme;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda47 implements View.OnClickListener {
-    public final /* synthetic */ BaseFragment f$0;
-    public final /* synthetic */ EditTextBoldCursor f$1;
-    public final /* synthetic */ Theme.ThemeAccent f$2;
-    public final /* synthetic */ Theme.ThemeInfo f$3;
-    public final /* synthetic */ AlertDialog f$4;
+    public final /* synthetic */ ArrayList f$0;
+    public final /* synthetic */ Runnable f$1;
+    public final /* synthetic */ AlertDialog.Builder f$2;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda47(BaseFragment baseFragment, EditTextBoldCursor editTextBoldCursor, Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, AlertDialog alertDialog) {
-        this.f$0 = baseFragment;
-        this.f$1 = editTextBoldCursor;
-        this.f$2 = themeAccent;
-        this.f$3 = themeInfo;
-        this.f$4 = alertDialog;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda47(ArrayList arrayList, Runnable runnable, AlertDialog.Builder builder) {
+        this.f$0 = arrayList;
+        this.f$1 = runnable;
+        this.f$2 = builder;
     }
 
     public final void onClick(View view) {
-        AlertsCreator.lambda$createThemeCreateDialog$106(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, view);
+        AlertsCreator.lambda$showSecretLocationAlert$13(this.f$0, this.f$1, this.f$2, view);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda69 implem
     }
 
     public final void run(int[] iArr, float[] fArr, boolean[] zArr) {
-        this.f$0.lambda$initiateActualEncryptedCall$53(iArr, fArr, zArr);
+        this.f$0.lambda$initiateActualEncryptedCall$55(iArr, fArr, zArr);
     }
 }

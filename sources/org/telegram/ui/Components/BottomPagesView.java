@@ -52,7 +52,7 @@ public class BottomPagesView extends View {
         if (str != null) {
             this.paint.setColor((Theme.getColor(str) & 16777215) | -NUM);
         } else {
-            this.paint.setColor(-4473925);
+            this.paint.setColor(Theme.getCurrentTheme().isDark() ? -11184811 : -4473925);
         }
         this.currentPage = this.viewPager.getCurrentItem();
         for (int i = 0; i < this.pagesCount; i++) {

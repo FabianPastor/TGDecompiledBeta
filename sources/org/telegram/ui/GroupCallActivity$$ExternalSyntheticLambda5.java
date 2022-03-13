@@ -1,18 +1,17 @@
 package org.telegram.ui;
 
 import android.content.DialogInterface;
-import org.telegram.tgnet.TLObject;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda5 implements DialogInterface.OnClickListener {
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda5 implements DialogInterface.OnCancelListener {
     public final /* synthetic */ GroupCallActivity f$0;
-    public final /* synthetic */ TLObject f$1;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda5(GroupCallActivity groupCallActivity, TLObject tLObject) {
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda5(GroupCallActivity groupCallActivity, int i) {
         this.f$0 = groupCallActivity;
-        this.f$1 = tLObject;
+        this.f$1 = i;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$processSelectedOption$52(this.f$1, dialogInterface, i);
+    public final void onCancel(DialogInterface dialogInterface) {
+        this.f$0.lambda$inviteUserToCall$47(this.f$1, dialogInterface);
     }
 }

@@ -1,11 +1,15 @@
 package org.telegram.messenger;
 
+import android.graphics.Color;
+
 public class Intro {
-    public static native void onDrawFrame();
+    public static native void onDrawFrame(int i);
 
     public static native void onSurfaceChanged(int i, int i2, float f, int i3);
 
     public static native void onSurfaceCreated();
+
+    private static native void setBackgroundColor(float f, float f2, float f3, float f4);
 
     public static native void setDate(float f);
 
@@ -23,5 +27,9 @@ public class Intro {
 
     public static native void setScrollOffset(float f);
 
-    public static native void setTelegramTextures(int i, int i2);
+    public static native void setTelegramTextures(int i, int i2, int i3);
+
+    public static void setBackgroundColor(int i) {
+        setBackgroundColor(((float) Color.red(i)) / 255.0f, ((float) Color.green(i)) / 255.0f, ((float) Color.blue(i)) / 255.0f, ((float) Color.alpha(i)) / 255.0f);
+    }
 }

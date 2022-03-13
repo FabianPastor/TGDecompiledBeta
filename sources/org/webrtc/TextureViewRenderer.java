@@ -46,6 +46,11 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
 
     public void setBackgroundRenderer(TextureView textureView) {
         this.backgroundRenderer = textureView;
+        if (textureView == null) {
+            ThreadUtils.checkIsOnMainThread();
+            this.eglRenderer.releaseEglSurface((Runnable) null, true);
+            return;
+        }
         textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
             public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
             }

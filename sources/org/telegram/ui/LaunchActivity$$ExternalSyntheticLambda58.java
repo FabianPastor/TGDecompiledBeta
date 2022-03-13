@@ -1,34 +1,30 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_getDiscussionMessage;
+import android.net.Uri;
+import java.util.ArrayList;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.ui.ActionBar.AlertDialog;
 
-public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda58 implements RequestDelegate {
+public final /* synthetic */ class LaunchActivity$$ExternalSyntheticLambda58 implements MessagesStorage.LongCallback {
     public final /* synthetic */ LaunchActivity f$0;
     public final /* synthetic */ int f$1;
-    public final /* synthetic */ Integer f$2;
-    public final /* synthetic */ TLRPC$Chat f$3;
-    public final /* synthetic */ TLRPC$TL_messages_getDiscussionMessage f$4;
-    public final /* synthetic */ Integer f$5;
-    public final /* synthetic */ Integer f$6;
-    public final /* synthetic */ AlertDialog f$7;
+    public final /* synthetic */ DialogsActivity f$2;
+    public final /* synthetic */ boolean f$3;
+    public final /* synthetic */ ArrayList f$4;
+    public final /* synthetic */ Uri f$5;
+    public final /* synthetic */ AlertDialog f$6;
 
-    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda58(LaunchActivity launchActivity, int i, Integer num, TLRPC$Chat tLRPC$Chat, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, Integer num2, Integer num3, AlertDialog alertDialog) {
+    public /* synthetic */ LaunchActivity$$ExternalSyntheticLambda58(LaunchActivity launchActivity, int i, DialogsActivity dialogsActivity, boolean z, ArrayList arrayList, Uri uri, AlertDialog alertDialog) {
         this.f$0 = launchActivity;
         this.f$1 = i;
-        this.f$2 = num;
-        this.f$3 = tLRPC$Chat;
-        this.f$4 = tLRPC$TL_messages_getDiscussionMessage;
-        this.f$5 = num2;
-        this.f$6 = num3;
-        this.f$7 = alertDialog;
+        this.f$2 = dialogsActivity;
+        this.f$3 = z;
+        this.f$4 = arrayList;
+        this.f$5 = uri;
+        this.f$6 = alertDialog;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$runCommentRequest$20(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, tLObject, tLRPC$TL_error);
+    public final void run(long j) {
+        this.f$0.lambda$didSelectDialogs$64(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, j);
     }
 }

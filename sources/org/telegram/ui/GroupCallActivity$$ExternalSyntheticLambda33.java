@@ -8,6 +8,6 @@ public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda33 
     }
 
     public final void run() {
-        this.f$0.lambda$processSelectedOption$55();
+        this.f$0.lambda$openShareAlert$43();
     }
 }

@@ -1,22 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$Dialog;
-import org.telegram.tgnet.TLRPC$InputPeer;
+import java.util.ArrayList;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda156 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ TLRPC$Dialog f$1;
-    public final /* synthetic */ TLRPC$InputPeer f$2;
-    public final /* synthetic */ long f$3;
+    public final /* synthetic */ MessageObject f$1;
+    public final /* synthetic */ ArrayList f$2;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda156(MessagesStorage messagesStorage, TLRPC$Dialog tLRPC$Dialog, TLRPC$InputPeer tLRPC$InputPeer, long j) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda156(MessagesStorage messagesStorage, MessageObject messageObject, ArrayList arrayList) {
         this.f$0 = messagesStorage;
-        this.f$1 = tLRPC$Dialog;
-        this.f$2 = tLRPC$InputPeer;
-        this.f$3 = j;
+        this.f$1 = messageObject;
+        this.f$2 = arrayList;
     }
 
     public final void run() {
-        this.f$0.lambda$loadPendingTasks$15(this.f$1, this.f$2, this.f$3);
+        this.f$0.lambda$replaceMessageIfExists$178(this.f$1, this.f$2);
     }
 }

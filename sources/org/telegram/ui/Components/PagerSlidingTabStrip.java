@@ -32,6 +32,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     /* access modifiers changed from: private */
     public ViewPager pager;
     private Paint rectPaint;
+    private Theme.ResourcesProvider resourcesProvider;
     private int scrollOffset = AndroidUtilities.dp(52.0f);
     private boolean shouldExpand = false;
     private int tabCount;
@@ -49,8 +50,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         Drawable getPageIconDrawable(int i);
     }
 
-    public PagerSlidingTabStrip(Context context) {
+    public PagerSlidingTabStrip(Context context, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        this.resourcesProvider = resourcesProvider2;
         setFillViewport(true);
         setWillNotDraw(false);
         LinearLayout linearLayout = new LinearLayout(context);
@@ -120,15 +122,15 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 super.setSelected(z);
                 Drawable background = getBackground();
                 if (Build.VERSION.SDK_INT >= 21 && background != null) {
-                    int color = Theme.getColor(z ? "chat_emojiPanelIconSelected" : "chat_emojiBottomPanelIcon");
-                    Theme.setSelectorDrawableColor(background, Color.argb(30, Color.red(color), Color.green(color), Color.blue(color)), true);
+                    int access$400 = PagerSlidingTabStrip.this.getThemedColor(z ? "chat_emojiPanelIconSelected" : "chat_emojiBottomPanelIcon");
+                    Theme.setSelectorDrawableColor(background, Color.argb(30, Color.red(access$400), Color.green(access$400), Color.blue(access$400)), true);
                 }
             }
         };
         boolean z = true;
         r0.setFocusable(true);
         if (Build.VERSION.SDK_INT >= 21) {
-            RippleDrawable rippleDrawable = (RippleDrawable) Theme.createSelectorDrawable(Theme.getColor("chat_emojiBottomPanelIcon"));
+            RippleDrawable rippleDrawable = (RippleDrawable) Theme.createSelectorDrawable(getThemedColor("chat_emojiBottomPanelIcon"));
             Theme.setRippleDrawableForceSoftware(rippleDrawable);
             r0.setBackground(rippleDrawable);
         }
@@ -252,6 +254,13 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 i2++;
             }
         }
+    }
+
+    /* access modifiers changed from: private */
+    public int getThemedColor(String str) {
+        Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
+        Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
+        return color != null ? color.intValue() : Theme.getColor(str);
     }
 
     public void onSizeChanged(int i, int i2, int i3, int i4) {

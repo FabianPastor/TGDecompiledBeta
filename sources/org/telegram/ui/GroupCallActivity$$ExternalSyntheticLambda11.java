@@ -3,12 +3,13 @@ package org.telegram.ui;
 import android.content.DialogInterface;
 
 public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda11 implements DialogInterface.OnDismissListener {
-    public static final /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda11 INSTANCE = new GroupCallActivity$$ExternalSyntheticLambda11();
+    public final /* synthetic */ GroupCallActivity f$0;
 
-    private /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda11() {
+    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda11(GroupCallActivity groupCallActivity) {
+        this.f$0 = groupCallActivity;
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        GroupCallActivity.lambda$processSelectedOption$56(dialogInterface);
+        this.f$0.lambda$openShareAlert$42(dialogInterface);
     }
 }

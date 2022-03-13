@@ -8,36 +8,57 @@ import org.telegram.messenger.AndroidUtilities;
 
 public final class VerticalPositionAutoAnimator {
     private final AnimatorLayoutChangeListener animatorLayoutChangeListener;
+    /* access modifiers changed from: private */
+    public SpringAnimation floatingButtonAnimator;
+    private View floatingButtonView;
+    /* access modifiers changed from: private */
+    public float offsetY;
 
     public static VerticalPositionAutoAnimator attach(View view) {
         return attach(view, 350.0f);
     }
 
     public static VerticalPositionAutoAnimator attach(View view, float f) {
-        AnimatorLayoutChangeListener animatorLayoutChangeListener2 = new AnimatorLayoutChangeListener(view, f);
-        view.addOnLayoutChangeListener(animatorLayoutChangeListener2);
-        return new VerticalPositionAutoAnimator(animatorLayoutChangeListener2);
+        return new VerticalPositionAutoAnimator(view, f);
     }
 
-    private VerticalPositionAutoAnimator(AnimatorLayoutChangeListener animatorLayoutChangeListener2) {
+    public void addUpdateListener(DynamicAnimation.OnAnimationUpdateListener onAnimationUpdateListener) {
+        this.floatingButtonAnimator.addUpdateListener(onAnimationUpdateListener);
+    }
+
+    public void setOffsetY(float f) {
+        this.offsetY = f;
+        if (this.floatingButtonAnimator.isRunning()) {
+            this.floatingButtonAnimator.getSpring().setFinalPosition(f);
+        } else {
+            this.floatingButtonView.setTranslationY(f);
+        }
+    }
+
+    public float getOffsetY() {
+        return this.offsetY;
+    }
+
+    private VerticalPositionAutoAnimator(View view, float f) {
+        this.floatingButtonView = view;
+        AnimatorLayoutChangeListener animatorLayoutChangeListener2 = new AnimatorLayoutChangeListener(view, f);
         this.animatorLayoutChangeListener = animatorLayoutChangeListener2;
+        view.addOnLayoutChangeListener(animatorLayoutChangeListener2);
     }
 
     public void ignoreNextLayout() {
         boolean unused = this.animatorLayoutChangeListener.ignoreNextLayout = true;
     }
 
-    private static class AnimatorLayoutChangeListener implements View.OnLayoutChangeListener {
-        private final SpringAnimation floatingButtonAnimator;
+    private class AnimatorLayoutChangeListener implements View.OnLayoutChangeListener {
         /* access modifiers changed from: private */
         public boolean ignoreNextLayout;
         private Boolean orientation;
 
         public AnimatorLayoutChangeListener(View view, float f) {
-            SpringAnimation springAnimation = new SpringAnimation(view, DynamicAnimation.TRANSLATION_Y, 0.0f);
-            this.floatingButtonAnimator = springAnimation;
-            springAnimation.getSpring().setDampingRatio(1.0f);
-            springAnimation.getSpring().setStiffness(f);
+            SpringAnimation unused = VerticalPositionAutoAnimator.this.floatingButtonAnimator = new SpringAnimation(view, DynamicAnimation.TRANSLATION_Y, VerticalPositionAutoAnimator.this.offsetY);
+            VerticalPositionAutoAnimator.this.floatingButtonAnimator.getSpring().setDampingRatio(1.0f);
+            VerticalPositionAutoAnimator.this.floatingButtonAnimator.getSpring().setStiffness(f);
         }
 
         public void onLayoutChange(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
@@ -46,9 +67,14 @@ public final class VerticalPositionAutoAnimator {
                 this.ignoreNextLayout = false;
                 return;
             }
-            this.floatingButtonAnimator.cancel();
-            view.setTranslationY((float) (i6 - i2));
-            this.floatingButtonAnimator.start();
+            VerticalPositionAutoAnimator.this.floatingButtonAnimator.cancel();
+            if (view.getVisibility() != 0) {
+                view.setTranslationY(VerticalPositionAutoAnimator.this.offsetY);
+                return;
+            }
+            VerticalPositionAutoAnimator.this.floatingButtonAnimator.getSpring().setFinalPosition(VerticalPositionAutoAnimator.this.offsetY);
+            view.setTranslationY(((float) (i6 - i2)) + VerticalPositionAutoAnimator.this.offsetY);
+            VerticalPositionAutoAnimator.this.floatingButtonAnimator.start();
         }
 
         private void checkOrientation() {

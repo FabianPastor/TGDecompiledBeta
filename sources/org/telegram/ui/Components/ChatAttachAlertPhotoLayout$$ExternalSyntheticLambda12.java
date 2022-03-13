@@ -1,15 +1,17 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.AlertsCreator;
+import java.util.ArrayList;
+import java.util.Comparator;
+import org.telegram.messenger.MediaController;
 
-public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda12 implements AlertsCreator.ScheduleDatePickerDelegate {
-    public final /* synthetic */ ChatAttachAlertPhotoLayout f$0;
+public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda12 implements Comparator {
+    public final /* synthetic */ ArrayList f$0;
 
-    public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda12(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout) {
-        this.f$0 = chatAttachAlertPhotoLayout;
+    public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda12(ArrayList arrayList) {
+        this.f$0 = arrayList;
     }
 
-    public final void didSelectDate(boolean z, int i) {
-        this.f$0.lambda$onMenuItemClick$15(z, i);
+    public final int compare(Object obj, Object obj2) {
+        return ChatAttachAlertPhotoLayout.lambda$updateAlbumsDropDown$8(this.f$0, (MediaController.AlbumEntry) obj, (MediaController.AlbumEntry) obj2);
     }
 }

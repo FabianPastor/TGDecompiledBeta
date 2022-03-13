@@ -1,29 +1,20 @@
 package org.telegram.messenger;
 
-import androidx.collection.LongSparseArray;
-import java.util.HashMap;
-import org.telegram.tgnet.TLObject;
+import java.util.ArrayList;
+import org.telegram.tgnet.TLRPC$updates_Difference;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda118 implements Runnable {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ HashMap f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ TLObject f$3;
-    public final /* synthetic */ LongSparseArray f$4;
-    public final /* synthetic */ long f$5;
-    public final /* synthetic */ boolean f$6;
+    public final /* synthetic */ ArrayList f$1;
+    public final /* synthetic */ TLRPC$updates_Difference f$2;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda118(MessagesController messagesController, HashMap hashMap, String str, TLObject tLObject, LongSparseArray longSparseArray, long j, boolean z) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda118(MessagesController messagesController, ArrayList arrayList, TLRPC$updates_Difference tLRPC$updates_Difference) {
         this.f$0 = messagesController;
-        this.f$1 = hashMap;
-        this.f$2 = str;
-        this.f$3 = tLObject;
-        this.f$4 = longSparseArray;
-        this.f$5 = j;
-        this.f$6 = z;
+        this.f$1 = arrayList;
+        this.f$2 = tLRPC$updates_Difference;
     }
 
     public final void run() {
-        this.f$0.lambda$reloadWebPages$147(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+        this.f$0.lambda$getDifference$270(this.f$1, this.f$2);
     }
 }

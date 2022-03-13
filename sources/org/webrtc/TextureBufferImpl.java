@@ -28,6 +28,10 @@ public class TextureBufferImpl implements VideoFrame.TextureBuffer {
         void onRetain(TextureBufferImpl textureBufferImpl);
     }
 
+    public /* synthetic */ int getBufferType() {
+        return VideoFrame.Buffer.CC.$default$getBufferType(this);
+    }
+
     /* JADX WARNING: Illegal instructions before constructor call */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public TextureBufferImpl(int r12, int r13, org.webrtc.VideoFrame.TextureBuffer.Type r14, int r15, android.graphics.Matrix r16, android.os.Handler r17, org.webrtc.YuvConverter r18, java.lang.Runnable r19) {

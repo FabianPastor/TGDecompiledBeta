@@ -612,9 +612,9 @@ public class RadialProgress2 {
             r3 = -2147483648(0xfffffffvar_, float:-0.0)
         L_0x026f:
             r6 = 0
-            if (r11 == 0) goto L_0x02b6
+            if (r11 == 0) goto L_0x02b4
             boolean r8 = r0.drawBackground
-            if (r8 == 0) goto L_0x02b6
+            if (r8 == 0) goto L_0x02b4
             boolean r8 = r0.drawMiniIcon
             if (r8 != 0) goto L_0x027e
             java.lang.String r8 = r0.circleCrossfadeColorKey
@@ -628,12 +628,12 @@ public class RadialProgress2 {
             float r11 = (float) r11
             android.graphics.Paint r13 = r0.circlePaint
             r8.drawCircle(r2, r10, r11, r13)
-            goto L_0x02b6
+            goto L_0x02b4
         L_0x028d:
             r8 = 4
             if (r2 != r8) goto L_0x0294
             int r2 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r2 == 0) goto L_0x02b6
+            if (r2 == 0) goto L_0x02b4
         L_0x0294:
             int r2 = r0.backgroundStroke
             if (r2 == 0) goto L_0x02aa
@@ -646,30 +646,29 @@ public class RadialProgress2 {
             float r10 = (float) r10
             android.graphics.Paint r11 = r0.circlePaint
             r1.drawCircle(r2, r8, r10, r11)
-            goto L_0x02b6
+            goto L_0x02b4
         L_0x02aa:
             float r2 = (float) r7
             float r8 = (float) r9
             int r10 = r0.circleRadius
             float r10 = (float) r10
-            float r10 = r10 * r5
             android.graphics.Paint r11 = r0.circlePaint
             r1.drawCircle(r2, r8, r10, r11)
-        L_0x02b6:
+        L_0x02b4:
             org.telegram.messenger.ImageReceiver r2 = r0.overlayImageView
             boolean r2 = r2.hasBitmapImage()
-            if (r2 == 0) goto L_0x02f4
+            if (r2 == 0) goto L_0x02f2
             org.telegram.messenger.ImageReceiver r2 = r0.overlayImageView
             float r8 = r0.overrideAlpha
             float r5 = r5 * r8
             r2.setAlpha(r5)
             boolean r2 = r0.drawMiniIcon
-            if (r2 != 0) goto L_0x02cf
+            if (r2 != 0) goto L_0x02cd
             java.lang.String r2 = r0.circleCrossfadeColorKey
-            if (r2 == 0) goto L_0x02e5
-        L_0x02cf:
+            if (r2 == 0) goto L_0x02e3
+        L_0x02cd:
             android.graphics.Canvas r2 = r0.miniDrawCanvas
-            if (r2 == 0) goto L_0x02e5
+            if (r2 == 0) goto L_0x02e3
             org.telegram.messenger.ImageReceiver r5 = r0.overlayImageView
             r5.draw(r2)
             android.graphics.Canvas r2 = r0.miniDrawCanvas
@@ -679,8 +678,8 @@ public class RadialProgress2 {
             float r10 = (float) r10
             android.graphics.Paint r11 = r0.overlayPaint
             r2.drawCircle(r5, r8, r10, r11)
-            goto L_0x02f4
-        L_0x02e5:
+            goto L_0x02f2
+        L_0x02e3:
             org.telegram.messenger.ImageReceiver r2 = r0.overlayImageView
             r2.draw(r1)
             float r2 = (float) r7
@@ -689,7 +688,7 @@ public class RadialProgress2 {
             float r8 = (float) r8
             android.graphics.Paint r10 = r0.overlayPaint
             r1.drawCircle(r2, r5, r8, r10)
-        L_0x02f4:
+        L_0x02f2:
             org.telegram.ui.Components.MediaActionDrawable r2 = r0.mediaActionDrawable
             int r5 = r0.circleRadius
             int r8 = r7 - r5
@@ -702,37 +701,37 @@ public class RadialProgress2 {
             boolean r5 = r5.hasBitmapImage()
             r2.setHasOverlayImage(r5)
             boolean r2 = r0.drawMiniIcon
-            if (r2 != 0) goto L_0x0322
+            if (r2 != 0) goto L_0x0320
             java.lang.String r2 = r0.circleCrossfadeColorKey
-            if (r2 == 0) goto L_0x0315
-            goto L_0x0322
-        L_0x0315:
+            if (r2 == 0) goto L_0x0313
+            goto L_0x0320
+        L_0x0313:
             org.telegram.ui.Components.MediaActionDrawable r2 = r0.mediaActionDrawable
             float r5 = r0.overrideAlpha
             r2.setOverrideAlpha(r5)
             org.telegram.ui.Components.MediaActionDrawable r2 = r0.mediaActionDrawable
             r2.draw(r1)
-            goto L_0x0331
-        L_0x0322:
+            goto L_0x032f
+        L_0x0320:
             android.graphics.Canvas r2 = r0.miniDrawCanvas
-            if (r2 == 0) goto L_0x032c
+            if (r2 == 0) goto L_0x032a
             org.telegram.ui.Components.MediaActionDrawable r5 = r0.mediaActionDrawable
             r5.draw(r2)
-            goto L_0x0331
-        L_0x032c:
+            goto L_0x032f
+        L_0x032a:
             org.telegram.ui.Components.MediaActionDrawable r2 = r0.mediaActionDrawable
             r2.draw(r1)
-        L_0x0331:
-            if (r3 == r4) goto L_0x033a
+        L_0x032f:
+            if (r3 == r4) goto L_0x0338
             android.graphics.Canvas r2 = r0.miniDrawCanvas
-            if (r2 == 0) goto L_0x033a
+            if (r2 == 0) goto L_0x0338
             r2.restoreToCount(r3)
-        L_0x033a:
+        L_0x0338:
             boolean r2 = r0.drawMiniIcon
-            if (r2 != 0) goto L_0x0342
+            if (r2 != 0) goto L_0x0340
             java.lang.String r2 = r0.circleCrossfadeColorKey
-            if (r2 == 0) goto L_0x046d
-        L_0x0342:
+            if (r2 == 0) goto L_0x046b
+        L_0x0340:
             android.graphics.RectF r2 = r0.progressRect
             float r2 = r2.width()
             r3 = 1110441984(0x42300000, float:44.0)
@@ -742,7 +741,7 @@ public class RadialProgress2 {
             float r2 = java.lang.Math.abs(r2)
             float r3 = org.telegram.messenger.AndroidUtilities.density
             int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r2 >= 0) goto L_0x0379
+            if (r2 >= 0) goto L_0x0377
             r2 = 20
             android.graphics.RectF r3 = r0.progressRect
             float r3 = r3.centerX()
@@ -757,8 +756,8 @@ public class RadialProgress2 {
             float r5 = (float) r5
             float r7 = r7 + r5
             r12 = 0
-            goto L_0x0395
-        L_0x0379:
+            goto L_0x0393
+        L_0x0377:
             r2 = 22
             android.graphics.RectF r3 = r0.progressRect
             float r3 = r3.centerX()
@@ -771,32 +770,32 @@ public class RadialProgress2 {
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             float r5 = (float) r5
             float r7 = r7 + r5
-        L_0x0395:
+        L_0x0393:
             int r5 = r2 / 2
             boolean r8 = r0.drawMiniIcon
-            if (r8 == 0) goto L_0x03b9
+            if (r8 == 0) goto L_0x03b7
             org.telegram.ui.Components.MediaActionDrawable r8 = r0.miniMediaActionDrawable
             int r8 = r8.getCurrentIcon()
             r9 = 4
-            if (r8 == r9) goto L_0x03a7
+            if (r8 == r9) goto L_0x03a5
             r8 = 1065353216(0x3var_, float:1.0)
-            goto L_0x03b1
-        L_0x03a7:
+            goto L_0x03af
+        L_0x03a5:
             org.telegram.ui.Components.MediaActionDrawable r8 = r0.miniMediaActionDrawable
             float r8 = r8.getTransitionProgress()
             r9 = 1065353216(0x3var_, float:1.0)
             float r8 = r9 - r8
-        L_0x03b1:
+        L_0x03af:
             int r6 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1))
-            if (r6 != 0) goto L_0x03bb
+            if (r6 != 0) goto L_0x03b9
             r6 = 0
             r0.drawMiniIcon = r6
-            goto L_0x03bb
-        L_0x03b9:
+            goto L_0x03b9
+        L_0x03b7:
             r8 = 1065353216(0x3var_, float:1.0)
-        L_0x03bb:
+        L_0x03b9:
             android.graphics.Canvas r6 = r0.miniDrawCanvas
-            if (r6 == 0) goto L_0x03e1
+            if (r6 == 0) goto L_0x03df
             int r2 = r2 + 18
             int r2 = r2 + r12
             float r2 = (float) r2
@@ -813,8 +812,8 @@ public class RadialProgress2 {
             float r10 = r10 * r11
             android.graphics.Paint r11 = org.telegram.ui.ActionBar.Theme.checkboxSquare_eraserPaint
             r6.drawCircle(r9, r2, r10, r11)
-            goto L_0x03f4
-        L_0x03e1:
+            goto L_0x03f2
+        L_0x03df:
             android.graphics.Paint r2 = r0.miniProgressBackgroundPaint
             int r6 = r0.progressColor
             r2.setColor(r6)
@@ -823,9 +822,9 @@ public class RadialProgress2 {
             float r2 = (float) r2
             android.graphics.Paint r6 = r0.miniProgressBackgroundPaint
             r1.drawCircle(r3, r7, r2, r6)
-        L_0x03f4:
+        L_0x03f2:
             android.graphics.Canvas r2 = r0.miniDrawCanvas
-            if (r2 == 0) goto L_0x0408
+            if (r2 == 0) goto L_0x0406
             android.graphics.Bitmap r2 = r0.miniDrawBitmap
             android.graphics.RectF r6 = r0.progressRect
             float r9 = r6.left
@@ -836,18 +835,18 @@ public class RadialProgress2 {
             float r6 = (float) r6
             r10 = 0
             r1.drawBitmap(r2, r9, r6, r10)
-        L_0x0408:
+        L_0x0406:
             float r2 = r0.miniIconScale
             r6 = 1065353216(0x3var_, float:1.0)
             int r2 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-            if (r2 >= 0) goto L_0x041a
+            if (r2 >= 0) goto L_0x0418
             int r2 = r17.save()
             float r9 = r0.miniIconScale
             r1.scale(r9, r9, r3, r7)
-            goto L_0x041c
-        L_0x041a:
+            goto L_0x041a
+        L_0x0418:
             r2 = -2147483648(0xfffffffvar_, float:-0.0)
-        L_0x041c:
+        L_0x041a:
             float r5 = (float) r5
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r5)
             float r9 = (float) r9
@@ -861,7 +860,7 @@ public class RadialProgress2 {
             android.graphics.Paint r6 = r0.circleMiniPaint
             r1.drawCircle(r3, r7, r9, r6)
             boolean r6 = r0.drawMiniIcon
-            if (r6 == 0) goto L_0x0468
+            if (r6 == 0) goto L_0x0466
             org.telegram.ui.Components.MediaActionDrawable r6 = r0.miniMediaActionDrawable
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r5)
             float r9 = (float) r9
@@ -886,10 +885,10 @@ public class RadialProgress2 {
             r6.setBounds(r9, r10, r3, r5)
             org.telegram.ui.Components.MediaActionDrawable r3 = r0.miniMediaActionDrawable
             r3.draw(r1)
-        L_0x0468:
-            if (r2 == r4) goto L_0x046d
+        L_0x0466:
+            if (r2 == r4) goto L_0x046b
             r1.restoreToCount(r2)
-        L_0x046d:
+        L_0x046b:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.RadialProgress2.draw(android.graphics.Canvas):void");

@@ -1,14 +1,16 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
+import org.telegram.messenger.SharedConfig;
 
 public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda33 implements DialogInterface.OnClickListener {
-    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda33 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda33();
+    public final /* synthetic */ int[] f$0;
 
-    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda33() {
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda33(int[] iArr) {
+        this.f$0 = iArr;
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createThemeCreateDialog$100(dialogInterface, i);
+        SharedConfig.setKeepMedia(this.f$0[0]);
     }
 }

@@ -498,6 +498,11 @@ public class ActionBarPopupWindow extends PopupWindow {
         init();
     }
 
+    public ActionBarPopupWindow(Context context) {
+        super(context);
+        init();
+    }
+
     public ActionBarPopupWindow(View view, int i, int i2) {
         super(view, i, i2);
         init();

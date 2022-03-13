@@ -6,14 +6,12 @@ import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda248 implements RequestDelegate {
     public final /* synthetic */ MessagesController f$0;
-    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ MessagesController$$ExternalSyntheticLambda248(MessagesController messagesController, int i) {
+    public /* synthetic */ MessagesController$$ExternalSyntheticLambda248(MessagesController messagesController) {
         this.f$0 = messagesController;
-        this.f$1 = i;
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadPinnedDialogs$280(this.f$1, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$setDialogHistoryTTL$106(tLObject, tLRPC$TL_error);
     }
 }

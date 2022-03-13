@@ -1,16 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
+import android.view.KeyEvent;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda16 implements ChatAttachAlertContactsLayout.PhonebookShareAlertDelegate {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda16 implements ActionBarPopupWindow.OnDispatchKeyEventListener {
     public final /* synthetic */ ChatAttachAlert f$0;
 
     public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda16(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
     }
 
-    public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
-        this.f$0.lambda$openContactsLayout$16(tLRPC$User, z, i);
+    public final void onDispatchKeyEvent(KeyEvent keyEvent) {
+        this.f$0.lambda$new$13(keyEvent);
     }
 }

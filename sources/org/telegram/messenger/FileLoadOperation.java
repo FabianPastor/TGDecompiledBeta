@@ -103,7 +103,7 @@ public class FileLoadOperation {
     private ArrayList<Range> notLoadedBytesRanges;
     private volatile ArrayList<Range> notLoadedBytesRangesCopy;
     private ArrayList<Range> notRequestedBytesRanges;
-    private Object parentObject;
+    public Object parentObject;
     private volatile boolean paused;
     private boolean preloadFinished;
     private int preloadNotRequestedBytesCount;

@@ -615,6 +615,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         int i = this.buttonState;
         if (i == 0) {
             if (this.miniButtonState == 0) {
+                this.currentMessageObject.putInDownloadsStore = true;
                 FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             }
             if (needPlayMessage(this.currentMessageObject)) {
@@ -635,6 +636,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
             }
         } else if (i == 2) {
             this.radialProgress.setProgress(0.0f, false);
+            this.currentMessageObject.putInDownloadsStore = true;
             FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             this.buttonState = 4;
             this.radialProgress.setIcon(getIconForCurrentState(), false, true);

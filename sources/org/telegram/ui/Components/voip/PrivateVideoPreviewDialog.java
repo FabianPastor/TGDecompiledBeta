@@ -640,7 +640,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 r0.<init>(r2)
                 android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
                 r0.setScaleType(r2)
-                r2 = 2131166056(0x7var_, float:1.7946347E38)
+                r2 = 2131166065(0x7var_, float:1.7946365E38)
                 r0.setImageResource(r2)
                 r3 = 82
                 r4 = 1118044160(0x42a40000, float:82.0)
@@ -655,7 +655,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 org.telegram.ui.Components.voip.PrivateVideoPreviewDialog r2 = org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.this
                 android.content.Context r2 = r2.getContext()
                 r0.<init>(r2)
-                r2 = 2131628745(0x7f0e12c9, float:1.8884791E38)
+                r2 = 2131628861(0x7f0e133d, float:1.8885027E38)
                 java.lang.String r3 = "VoipVideoPrivateScreenSharing"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -719,7 +719,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
                 r0.setImageBitmap(r2)
                 goto L_0x00f7
             L_0x00f1:
-                r12 = 2131165550(0x7var_e, float:1.794532E38)
+                r12 = 2131165552(0x7var_, float:1.7945324E38)
                 r0.setImageResource(r12)
             L_0x00f7:
                 android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.FIT_XY

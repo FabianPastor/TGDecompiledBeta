@@ -12,6 +12,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda68 implem
     }
 
     public final void onStateUpdated(int i, boolean z) {
-        this.f$0.lambda$createGroupInstance$48(this.f$1, i, z);
+        this.f$0.lambda$createGroupInstance$50(this.f$1, i, z);
     }
 }

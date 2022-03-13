@@ -1,22 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC$TL_auth_recoverPassword;
+import android.view.KeyEvent;
+import android.widget.TextView;
 import org.telegram.ui.LoginActivity;
 
-public final /* synthetic */ class LoginActivity$LoginActivityNewPasswordView$$ExternalSyntheticLambda4 implements Runnable {
+public final /* synthetic */ class LoginActivity$LoginActivityNewPasswordView$$ExternalSyntheticLambda4 implements TextView.OnEditorActionListener {
     public final /* synthetic */ LoginActivity.LoginActivityNewPasswordView f$0;
-    public final /* synthetic */ String f$1;
-    public final /* synthetic */ String f$2;
-    public final /* synthetic */ TLRPC$TL_auth_recoverPassword f$3;
+    public final /* synthetic */ int f$1;
 
-    public /* synthetic */ LoginActivity$LoginActivityNewPasswordView$$ExternalSyntheticLambda4(LoginActivity.LoginActivityNewPasswordView loginActivityNewPasswordView, String str, String str2, TLRPC$TL_auth_recoverPassword tLRPC$TL_auth_recoverPassword) {
+    public /* synthetic */ LoginActivity$LoginActivityNewPasswordView$$ExternalSyntheticLambda4(LoginActivity.LoginActivityNewPasswordView loginActivityNewPasswordView, int i) {
         this.f$0 = loginActivityNewPasswordView;
-        this.f$1 = str;
-        this.f$2 = str2;
-        this.f$3 = tLRPC$TL_auth_recoverPassword;
+        this.f$1 = i;
     }
 
-    public final void run() {
-        this.f$0.lambda$recoverPassword$7(this.f$1, this.f$2, this.f$3);
+    public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        return this.f$0.lambda$new$2(this.f$1, textView, i, keyEvent);
     }
 }

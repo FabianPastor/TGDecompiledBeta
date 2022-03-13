@@ -9,8 +9,18 @@ public class VideoFrame implements RefCounted {
     private final long timestampNs;
 
     public interface Buffer extends RefCounted {
+
+        /* renamed from: org.webrtc.VideoFrame$Buffer$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static int $default$getBufferType(Buffer buffer) {
+                return 0;
+            }
+        }
+
         @CalledByNative("Buffer")
         Buffer cropAndScale(int i, int i2, int i3, int i4, int i5, int i6);
+
+        int getBufferType();
 
         @CalledByNative("Buffer")
         int getHeight();
@@ -29,6 +39,16 @@ public class VideoFrame implements RefCounted {
     }
 
     public interface I420Buffer extends Buffer {
+
+        /* renamed from: org.webrtc.VideoFrame$I420Buffer$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static int $default$getBufferType(I420Buffer i420Buffer) {
+                return 1;
+            }
+        }
+
+        int getBufferType();
+
         @CalledByNative("I420Buffer")
         ByteBuffer getDataU();
 

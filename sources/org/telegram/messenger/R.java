@@ -3,6 +3,8 @@ package org.telegram.messenger;
 public final class R {
 
     public static final class anim {
+        public static final int alpha_in = NUM;
+        public static final int alpha_out = NUM;
         public static final int ft_avd_toarrow_rectangle_1_pivot_0_animation = NUM;
         public static final int ft_avd_toarrow_rectangle_2_pivot_0_animation = NUM;
         public static final int ft_avd_toarrow_rectangle_3_pivot_0_animation = NUM;
@@ -25,6 +27,9 @@ public final class R {
         public static final int popup_context_in = NUM;
         public static final int popup_in = NUM;
         public static final int popup_out = NUM;
+        public static final int text_in = NUM;
+        public static final int text_out = NUM;
+        public static final int text_out_down = NUM;
 
         private anim() {
         }
@@ -264,6 +269,8 @@ public final class R {
         public static final int app_update = NUM;
         public static final int arrow_more = NUM;
         public static final int arrow_newchat = NUM;
+        public static final int attach_arrow_left = NUM;
+        public static final int attach_arrow_right = NUM;
         public static final int attach_close = NUM;
         public static final int attach_send = NUM;
         public static final int attach_shadow = NUM;
@@ -591,7 +598,6 @@ public final class R {
         public static final int intro_private_door = NUM;
         public static final int intro_private_screw = NUM;
         public static final int intro_tg_plane = NUM;
-        public static final int intro_tg_sphere = NUM;
         public static final int knob_shadow = NUM;
         public static final int layer_shadow = NUM;
         public static final int list_bot = NUM;
@@ -658,6 +664,7 @@ public final class R {
         public static final int menu_camera_av = NUM;
         public static final int menu_channel_ny = NUM;
         public static final int menu_chats = NUM;
+        public static final int menu_clear = NUM;
         public static final int menu_clear_recent = NUM;
         public static final int menu_clearcache = NUM;
         public static final int menu_contacts = NUM;
@@ -781,6 +788,7 @@ public final class R {
         public static final int msg_handdown = NUM;
         public static final int msg_home = NUM;
         public static final int msg_hybrid = NUM;
+        public static final int msg_inputarrow = NUM;
         public static final int msg_instant = NUM;
         public static final int msg_invited = NUM;
         public static final int msg_language = NUM;
@@ -822,6 +830,7 @@ public final class R {
         public static final int msg_photo_shadow = NUM;
         public static final int msg_photoeditor = NUM;
         public static final int msg_pin = NUM;
+        public static final int msg_pin_code = NUM;
         public static final int msg_pin_filled = NUM;
         public static final int msg_pin_mini = NUM;
         public static final int msg_played = NUM;
@@ -838,8 +847,10 @@ public final class R {
         public static final int msg_reply_small = NUM;
         public static final int msg_report = NUM;
         public static final int msg_report_abuse = NUM;
+        public static final int msg_report_drugs = NUM;
         public static final int msg_report_fake = NUM;
         public static final int msg_report_other = NUM;
+        public static final int msg_report_personal = NUM;
         public static final int msg_report_spam = NUM;
         public static final int msg_report_violence = NUM;
         public static final int msg_report_xxx = NUM;
@@ -901,6 +912,7 @@ public final class R {
         public static final int msg_voice_unmuted = NUM;
         public static final int msg_voicechat = NUM;
         public static final int msg_voicechat2 = NUM;
+        public static final int msg_voiceclose = NUM;
         public static final int msg_voiceshare = NUM;
         public static final int msg_warning = NUM;
         public static final int msg_zoomin = NUM;
@@ -986,6 +998,8 @@ public final class R {
         public static final int pin = NUM;
         public static final int pip_close = NUM;
         public static final int pip_enlarge = NUM;
+        public static final int pip_video_close = NUM;
+        public static final int pip_video_expand = NUM;
         public static final int place_x = NUM;
         public static final int places_btn = NUM;
         public static final int play_big = NUM;
@@ -1182,9 +1196,11 @@ public final class R {
         public static final int video_send_mute = NUM;
         public static final int video_send_unmute = NUM;
         public static final int videopreview = NUM;
+        public static final int voice_expand = NUM;
         public static final int voice_mini_0_5 = NUM;
         public static final int voice_mini_1_5 = NUM;
         public static final int voice_mini_2_0 = NUM;
+        public static final int voice_minimize = NUM;
         public static final int voice_muted_large = NUM;
         public static final int voice_unmuted_large = NUM;
         public static final int voice_volume_mini = NUM;
@@ -1421,6 +1437,7 @@ public final class R {
         public static final int classic = NUM;
         public static final int clip_horizontal = NUM;
         public static final int clip_vertical = NUM;
+        public static final int color_key_tag = NUM;
         public static final int contact = NUM;
         public static final int contacts_widget_item = NUM;
         public static final int contacts_widget_item1 = NUM;
@@ -1572,6 +1589,7 @@ public final class R {
         public static final int text_wrap = NUM;
         public static final int thing_proto = NUM;
         public static final int time = NUM;
+        public static final int timeout_callback = NUM;
         public static final int title = NUM;
         public static final int top = NUM;
         public static final int url = NUM;
@@ -1668,6 +1686,7 @@ public final class R {
         public static final int camera = NUM;
         public static final int camera_flip = NUM;
         public static final int camera_outline = NUM;
+        public static final int camera_wait = NUM;
         public static final int channel_create = NUM;
         public static final int chat_audio_record_delete = NUM;
         public static final int chat_audio_record_delete_2 = NUM;
@@ -1680,6 +1699,7 @@ public final class R {
         public static final int chats_unarchive = NUM;
         public static final int chats_unhide = NUM;
         public static final int chrome_30 = NUM;
+        public static final int code_laptop = NUM;
         public static final int contact_check = NUM;
         public static final int contacts_sync_off = NUM;
         public static final int contacts_sync_on = NUM;
@@ -1689,6 +1709,8 @@ public final class R {
         public static final int default_pattern = NUM;
         public static final int diceloop = NUM;
         public static final int download_arrow = NUM;
+        public static final int download_finish = NUM;
+        public static final int download_progress = NUM;
         public static final int edge_30 = NUM;
         public static final int error = NUM;
         public static final int filter_new = NUM;
@@ -1729,12 +1751,23 @@ public final class R {
         public static final int linux_30 = NUM;
         public static final int mac_30 = NUM;
         public static final int mapstyle_night = NUM;
+        public static final int media_forbidden = NUM;
         public static final int passcode_lock_close = NUM;
         public static final int payment_success = NUM;
         public static final int permission_map = NUM;
         public static final int permission_map_dark = NUM;
         public static final int permission_pin = NUM;
         public static final int permission_pin_dark = NUM;
+        public static final int permission_request_apk = NUM;
+        public static final int permission_request_camera = NUM;
+        public static final int permission_request_contacts = NUM;
+        public static final int permission_request_folder = NUM;
+        public static final int permission_request_location = NUM;
+        public static final int permission_request_microphone = NUM;
+        public static final int phone_dots = NUM;
+        public static final int phone_dots_to_stars = NUM;
+        public static final int phone_flash_call = NUM;
+        public static final int phone_stars_to_dots = NUM;
         public static final int pip_video_request = NUM;
         public static final int pip_voice_request = NUM;
         public static final int player_prev = NUM;
@@ -1747,6 +1780,7 @@ public final class R {
         public static final int record_video_p = NUM;
         public static final int report_police = NUM;
         public static final int safari_30 = NUM;
+        public static final int sandclock = NUM;
         public static final int saved_messages = NUM;
         public static final int shared_link_enter = NUM;
         public static final int silent_mute = NUM;
@@ -1783,6 +1817,8 @@ public final class R {
         public static final int ubuntu_30 = NUM;
         public static final int utyan_call = NUM;
         public static final int utyan_gigagroup = NUM;
+        public static final int utyan_newborn = NUM;
+        public static final int utyan_passcode = NUM;
         public static final int utyan_private = NUM;
         public static final int utyan_schedule = NUM;
         public static final int voice_mini = NUM;
@@ -2144,6 +2180,8 @@ public final class R {
         public static final int AllPhotos = NUM;
         public static final int AllVideos = NUM;
         public static final int Allow = NUM;
+        public static final int AllowBackgroundActivity = NUM;
+        public static final int AllowBackgroundActivityInfo = NUM;
         public static final int AllowCustomQuickReply = NUM;
         public static final int AllowFillNumber = NUM;
         public static final int AllowReadCall = NUM;
@@ -2301,8 +2339,13 @@ public final class R {
         public static final int AttachLiveLocationIsSharingChat = NUM;
         public static final int AttachLiveLocationIsSharingChats = NUM;
         public static final int AttachLocation = NUM;
+        public static final int AttachMediaDragHint = NUM;
+        public static final int AttachMediaPhotoDeselected = NUM;
+        public static final int AttachMediaPreview = NUM;
+        public static final int AttachMediaPreviewButton = NUM;
         public static final int AttachMediaRestricted = NUM;
         public static final int AttachMediaRestrictedForever = NUM;
+        public static final int AttachMediaVideoDeselected = NUM;
         public static final int AttachMenu = NUM;
         public static final int AttachMusic = NUM;
         public static final int AttachPhoto = NUM;
@@ -2544,6 +2587,7 @@ public final class R {
         public static final int CallAgain = NUM;
         public static final int CallAlert = NUM;
         public static final int CallAlertTitle = NUM;
+        public static final int CallAvailableIn = NUM;
         public static final int CallBack = NUM;
         public static final int CallEmojiKeyTooltip = NUM;
         public static final int CallMessageIncoming = NUM;
@@ -2589,6 +2633,7 @@ public final class R {
         public static final int CancelForwarding = NUM;
         public static final int CancelLinkExpired = NUM;
         public static final int CancelLinkSuccess = NUM;
+        public static final int CancelLinkSuccessTitle = NUM;
         public static final int CancelPasswordQuestion = NUM;
         public static final int CancelPasswordReset = NUM;
         public static final int CancelPasswordResetNo = NUM;
@@ -2609,6 +2654,7 @@ public final class R {
         public static final int ChangeLanguageLater = NUM;
         public static final int ChangePasscode = NUM;
         public static final int ChangePasscodeInfo = NUM;
+        public static final int ChangePasscodeInfoShort = NUM;
         public static final int ChangePassword = NUM;
         public static final int ChangePermissions = NUM;
         public static final int ChangePhoneHelp = NUM;
@@ -2868,10 +2914,12 @@ public final class R {
         public static final int ChoosingSticker = NUM;
         public static final int ChromeCustomTabs = NUM;
         public static final int ChromeCustomTabsInfo = NUM;
+        public static final int Clear = NUM;
         public static final int ClearButton = NUM;
         public static final int ClearCache = NUM;
         public static final int ClearCacheFewChatsTitle = NUM;
         public static final int ClearCacheInfo = NUM;
+        public static final int ClearDownloadsList = NUM;
         public static final int ClearFewChatsTitle = NUM;
         public static final int ClearHistory = NUM;
         public static final int ClearHistoryCache = NUM;
@@ -2944,12 +2992,15 @@ public final class R {
         public static final int CommonGroups_two = NUM;
         public static final int CommonGroups_zero = NUM;
         public static final int CompatibilityChat = NUM;
+        public static final int ConfirmCorrectNumber = NUM;
+        public static final int ConfirmCreatePasscode = NUM;
         public static final int ConfirmDeleteCallLog = NUM;
         public static final int Connected = NUM;
         public static final int Connecting = NUM;
         public static final int ConnectingConnectProxy = NUM;
         public static final int ConnectingToProxy = NUM;
         public static final int ConnectingToProxyEnable = NUM;
+        public static final int ConnectingYourContacts = NUM;
         public static final int ContactBirthday = NUM;
         public static final int ContactJob = NUM;
         public static final int ContactJobTitle = NUM;
@@ -2987,6 +3038,7 @@ public final class R {
         public static final int CountOfResults_zero = NUM;
         public static final int CountReceived = NUM;
         public static final int CountSent = NUM;
+        public static final int Country = NUM;
         public static final int Create = NUM;
         public static final int CreateEncryptedChatError = NUM;
         public static final int CreateGroupError = NUM;
@@ -3002,6 +3054,10 @@ public final class R {
         public static final int CreateNewThemeAlert = NUM;
         public static final int CreateNewThemeHelp = NUM;
         public static final int CreateNewThemeMenu = NUM;
+        public static final int CreatePasscode = NUM;
+        public static final int CreatePasscodeInfoPIN = NUM;
+        public static final int CreatePasscodeInfoPassword = NUM;
+        public static final int CreatePassword = NUM;
         public static final int CreateTheme = NUM;
         public static final int Crop = NUM;
         public static final int CropImage = NUM;
@@ -3055,10 +3111,12 @@ public final class R {
         public static final int DebugMenuCheckAppUpdate = NUM;
         public static final int DebugMenuClearMediaCache = NUM;
         public static final int DebugMenuDisableCamera = NUM;
+        public static final int DebugMenuDisableForceRtmpStreamFlag = NUM;
         public static final int DebugMenuDisableLogs = NUM;
         public static final int DebugMenuDisablePauseMusic = NUM;
         public static final int DebugMenuDisableSmoothKeyboard = NUM;
         public static final int DebugMenuEnableCamera = NUM;
+        public static final int DebugMenuEnableForceRtmpStreamFlag = NUM;
         public static final int DebugMenuEnableLogs = NUM;
         public static final int DebugMenuEnablePauseMusic = NUM;
         public static final int DebugMenuEnableSmoothKeyboard = NUM;
@@ -3164,12 +3222,18 @@ public final class R {
         public static final int DiceEmojiInfo = NUM;
         public static final int DiceInfo2 = NUM;
         public static final int DidNotGetTheCode = NUM;
+        public static final int DidNotGetTheCodeEditNumberButton = NUM;
+        public static final int DidNotGetTheCodeHelpButton = NUM;
+        public static final int DidNotGetTheCodeInfo = NUM;
         public static final int DidNotGetTheCodePhone = NUM;
         public static final int DidNotGetTheCodeSms = NUM;
         public static final int DirectShare = NUM;
         public static final int DirectShareInfo = NUM;
         public static final int Directions = NUM;
         public static final int Disable = NUM;
+        public static final int DisablePasscode = NUM;
+        public static final int DisablePasscodeConfirmMessage = NUM;
+        public static final int DisablePasscodeTurnOff = NUM;
         public static final int DisappearingGif = NUM;
         public static final int DisappearingPhoto = NUM;
         public static final int DisappearingVideo = NUM;
@@ -3216,6 +3280,10 @@ public final class R {
         public static final int DoubleTapPreviewRational = NUM;
         public static final int DoubleTapPreviewSenderName = NUM;
         public static final int DoubleTapSetting = NUM;
+        public static final int DownloadedFiles = NUM;
+        public static final int DownloadedFilesMessage = NUM;
+        public static final int Downloading = NUM;
+        public static final int DownloadsTabs = NUM;
         public static final int Draft = NUM;
         public static final int Edit = NUM;
         public static final int EditAdmin = NUM;
@@ -3268,6 +3336,8 @@ public final class R {
         public static final int EditMessageReplacePhoto = NUM;
         public static final int EditMessageReplaceVideo = NUM;
         public static final int EditName = NUM;
+        public static final int EditNumber = NUM;
+        public static final int EditNumberInfo = NUM;
         public static final int EditPhoto = NUM;
         public static final int EditThemeColors = NUM;
         public static final int EditThemeTitle = NUM;
@@ -3298,6 +3368,7 @@ public final class R {
         public static final int EnableAllStreamingInfo = NUM;
         public static final int EnableAnimations = NUM;
         public static final int EnableAutoDelete = NUM;
+        public static final int EnablePasscode = NUM;
         public static final int EnableReactions = NUM;
         public static final int EnableReactionsChannelInfo = NUM;
         public static final int EnableReactionsGroupInfo = NUM;
@@ -3328,8 +3399,11 @@ public final class R {
         public static final int EnterListName = NUM;
         public static final int EnterNewFirstPasscode = NUM;
         public static final int EnterNewPasscode = NUM;
+        public static final int EnterPassword = NUM;
         public static final int EnterThemeName = NUM;
         public static final int EnterThemeNameEdit = NUM;
+        public static final int EnterYourPasscode = NUM;
+        public static final int EnterYourPasscodeInfo = NUM;
         public static final int EnterYourTelegramPasscode = NUM;
         public static final int ErrorOccurred = NUM;
         public static final int ErrorSendRestrictedMedia = NUM;
@@ -3575,6 +3649,7 @@ public final class R {
         public static final int FingerprintInfo = NUM;
         public static final int FingerprintNotRecognized = NUM;
         public static final int FirstName = NUM;
+        public static final int FirstNameSmall = NUM;
         public static final int FloodWait = NUM;
         public static final int FloodWaitTime = NUM;
         public static final int Folder = NUM;
@@ -3588,6 +3663,12 @@ public final class R {
         public static final int FootsAway = NUM;
         public static final int FootsFromYou = NUM;
         public static final int FootsShort = NUM;
+        public static final int ForceSetPasswordAlertMessageShort_few = NUM;
+        public static final int ForceSetPasswordAlertMessageShort_many = NUM;
+        public static final int ForceSetPasswordAlertMessageShort_one = NUM;
+        public static final int ForceSetPasswordAlertMessageShort_other = NUM;
+        public static final int ForceSetPasswordAlertMessageShort_two = NUM;
+        public static final int ForceSetPasswordAlertMessageShort_zero = NUM;
         public static final int ForceSetPasswordAlertMessage_few = NUM;
         public static final int ForceSetPasswordAlertMessage_many = NUM;
         public static final int ForceSetPasswordAlertMessage_one = NUM;
@@ -3596,6 +3677,8 @@ public final class R {
         public static final int ForceSetPasswordAlertMessage_zero = NUM;
         public static final int ForceSetPasswordCancel = NUM;
         public static final int ForceSetPasswordContinue = NUM;
+        public static final int ForgotPasscode = NUM;
+        public static final int ForgotPasscodeInfo = NUM;
         public static final int ForgotPassword = NUM;
         public static final int Forward = NUM;
         public static final int ForwardAnotherChat = NUM;
@@ -4007,6 +4090,7 @@ public final class R {
         public static final int Languages_zero = NUM;
         public static final int LargeEmoji = NUM;
         public static final int LastName = NUM;
+        public static final int LastNameSmall = NUM;
         public static final int LastSeen = NUM;
         public static final int LastSeenContacts = NUM;
         public static final int LastSeenContactsMinus = NUM;
@@ -4104,10 +4188,12 @@ public final class R {
         public static final int LogOut = NUM;
         public static final int LogOutInfo = NUM;
         public static final int LogOutTitle = NUM;
+        public static final int LoginAccessibilityCountryCode = NUM;
         public static final int LoginAttempts = NUM;
         public static final int LoginAttemptsInfo = NUM;
         public static final int LoginPassword = NUM;
         public static final int LoginPasswordText = NUM;
+        public static final int LoginPasswordTextShort = NUM;
         public static final int Long = NUM;
         public static final int LoopAnimatedStickers = NUM;
         public static final int LoopAnimatedStickersInfo = NUM;
@@ -4129,6 +4215,7 @@ public final class R {
         public static final int ManageAllFilesRational2 = NUM;
         public static final int ManageChannel = NUM;
         public static final int ManageChannelMenu = NUM;
+        public static final int ManageDeviceStorage = NUM;
         public static final int ManageGroup = NUM;
         public static final int ManageGroupMenu = NUM;
         public static final int ManageInviteLinks = NUM;
@@ -4450,6 +4537,8 @@ public final class R {
         public static final int NoRecentSearches = NUM;
         public static final int NoReplies = NUM;
         public static final int NoResult = NUM;
+        public static final int NoRtmpStreamFromAppOwner = NUM;
+        public static final int NoRtmpStreamFromAppViewer = NUM;
         public static final int NoScheduledMessages = NUM;
         public static final int NoSharedAudio = NUM;
         public static final int NoSharedAudioSecret = NUM;
@@ -4744,8 +4833,14 @@ public final class R {
         public static final int Participants_zero = NUM;
         public static final int Passcode = NUM;
         public static final int PasscodeDoNotMatch = NUM;
+        public static final int PasscodeFinish = NUM;
         public static final int PasscodePIN = NUM;
         public static final int PasscodePassword = NUM;
+        public static final int PasscodeReinstallNotice = NUM;
+        public static final int PasscodeScreenHint = NUM;
+        public static final int PasscodeSwitchToPIN = NUM;
+        public static final int PasscodeSwitchToPassword = NUM;
+        public static final int PasscodesDoNotMatchTryAgain = NUM;
         public static final int PassportAddAddressUploadInfo = NUM;
         public static final int PassportAddAgreement = NUM;
         public static final int PassportAddAgreementInfo = NUM;
@@ -4931,6 +5026,7 @@ public final class R {
         public static final int PasswordDoNotMatch = NUM;
         public static final int PasswordEmailInvalid = NUM;
         public static final int PasswordHint = NUM;
+        public static final int PasswordHintDescription = NUM;
         public static final int PasswordHintPlaceholder = NUM;
         public static final int PasswordHintText = NUM;
         public static final int PasswordHintTextLogin = NUM;
@@ -4939,6 +5035,7 @@ public final class R {
         public static final int PasswordRecovery = NUM;
         public static final int PasswordReset = NUM;
         public static final int PasteFromClipboard = NUM;
+        public static final int PauseAll = NUM;
         public static final int PaymentBillingAddress = NUM;
         public static final int PaymentCardCvv = NUM;
         public static final int PaymentCardExpireDate = NUM;
@@ -5037,13 +5134,19 @@ public final class R {
         public static final int PermissionDrawAboveOtherAppsGroupCall = NUM;
         public static final int PermissionDrawAboveOtherAppsGroupCallTitle = NUM;
         public static final int PermissionDrawAboveOtherAppsTitle = NUM;
-        public static final int PermissionNoAudio = NUM;
-        public static final int PermissionNoAudioVideo = NUM;
-        public static final int PermissionNoCamera = NUM;
+        public static final int PermissionNoAudioVideoWithHint = NUM;
+        public static final int PermissionNoAudioWithHint = NUM;
+        public static final int PermissionNoCameraMicVideo = NUM;
+        public static final int PermissionNoCameraWithHint = NUM;
+        public static final int PermissionNoContactsSharing = NUM;
         public static final int PermissionNoLocation = NUM;
+        public static final int PermissionNoLocationFriends = NUM;
+        public static final int PermissionNoLocationNavigation = NUM;
+        public static final int PermissionNoLocationPeopleNearby = NUM;
         public static final int PermissionNoLocationPosition = NUM;
+        public static final int PermissionNoStorageAvatar = NUM;
         public static final int PermissionOpenSettings = NUM;
-        public static final int PermissionStorage = NUM;
+        public static final int PermissionStorageWithHint = NUM;
         public static final int PermissionXiaomiLockscreen = NUM;
         public static final int Phone = NUM;
         public static final int PhoneCopied = NUM;
@@ -5051,6 +5154,7 @@ public final class R {
         public static final int PhoneHome = NUM;
         public static final int PhoneMain = NUM;
         public static final int PhoneMobile = NUM;
+        public static final int PhoneNumber = NUM;
         public static final int PhoneNumberAlert = NUM;
         public static final int PhoneNumberChange2 = NUM;
         public static final int PhoneNumberChangeTitle = NUM;
@@ -5251,6 +5355,7 @@ public final class R {
         public static final int PrivacyPhoneInfo = NUM;
         public static final int PrivacyPhoneInfo2 = NUM;
         public static final int PrivacyPhoneInfo3 = NUM;
+        public static final int PrivacyPhoneInfo4 = NUM;
         public static final int PrivacyPhoneTitle = NUM;
         public static final int PrivacyPhoneTitle2 = NUM;
         public static final int PrivacyPolicy = NUM;
@@ -5335,7 +5440,7 @@ public final class R {
         public static final int PushReactVideo = NUM;
         public static final int QRCodeLinkHelpChannel = NUM;
         public static final int QRCodeLinkHelpGroup = NUM;
-        public static final int QRCodePermissionNoCamera = NUM;
+        public static final int QRCodePermissionNoCameraWithHint = NUM;
         public static final int QrCode = NUM;
         public static final int QuestionHint = NUM;
         public static final int QuickReplyCustom = NUM;
@@ -5360,6 +5465,7 @@ public final class R {
         public static final int RateCallSilentRemote = NUM;
         public static final int RateCallVideoDistorted = NUM;
         public static final int RateCallVideoPixelated = NUM;
+        public static final int ReEnterPassword = NUM;
         public static final int ReEnterYourPasscode = NUM;
         public static final int Reacted_few = NUM;
         public static final int Reacted_many = NUM;
@@ -5384,6 +5490,7 @@ public final class R {
         public static final int RecentPosts = NUM;
         public static final int RecentStickers = NUM;
         public static final int RecentStickersShort = NUM;
+        public static final int RecentlyDownloaded = NUM;
         public static final int RecentlyViewed = NUM;
         public static final int RecentlyViewedHide = NUM;
         public static final int Recipient_few = NUM;
@@ -5399,6 +5506,7 @@ public final class R {
         public static final int RecoveryEmailTitle = NUM;
         public static final int Red = NUM;
         public static final int RegisterText2 = NUM;
+        public static final int RegistrationProfileInfo = NUM;
         public static final int Regular = NUM;
         public static final int ReleaseToGoNextArchive = NUM;
         public static final int ReleaseToGoNextChannel = NUM;
@@ -5407,6 +5515,19 @@ public final class R {
         public static final int RemindDayYearAt = NUM;
         public static final int RemindTodayAt = NUM;
         public static final int Reminders = NUM;
+        public static final int RemoveDocumentsMessage = NUM;
+        public static final int RemoveDocumentsMessage_few = NUM;
+        public static final int RemoveDocumentsMessage_many = NUM;
+        public static final int RemoveDocumentsMessage_one = NUM;
+        public static final int RemoveDocumentsMessage_other = NUM;
+        public static final int RemoveDocumentsMessage_two = NUM;
+        public static final int RemoveDocumentsMessage_zero = NUM;
+        public static final int RemoveDocumentsTitle_few = NUM;
+        public static final int RemoveDocumentsTitle_many = NUM;
+        public static final int RemoveDocumentsTitle_one = NUM;
+        public static final int RemoveDocumentsTitle_other = NUM;
+        public static final int RemoveDocumentsTitle_two = NUM;
+        public static final int RemoveDocumentsTitle_zero = NUM;
         public static final int RemoveFromListText = NUM;
         public static final int RemoveStickersCount = NUM;
         public static final int RemovedFromFavorites = NUM;
@@ -5438,7 +5559,9 @@ public final class R {
         public static final int ReportChatChild = NUM;
         public static final int ReportChatDescription = NUM;
         public static final int ReportChatFakeAccount = NUM;
+        public static final int ReportChatIllegalDrugs = NUM;
         public static final int ReportChatOther = NUM;
+        public static final int ReportChatPersonalDetails = NUM;
         public static final int ReportChatPornography = NUM;
         public static final int ReportChatSent = NUM;
         public static final int ReportChatSpam = NUM;
@@ -5467,6 +5590,9 @@ public final class R {
         public static final int ReportUnrelatedGroupText = NUM;
         public static final int ReportUnrelatedGroupTextNoAddress = NUM;
         public static final int ReportUserLocation = NUM;
+        public static final int RequestCallButton = NUM;
+        public static final int RequestMissedCall = NUM;
+        public static final int RequestSmsButton = NUM;
         public static final int RequestToJoinChannel = NUM;
         public static final int RequestToJoinChannelApproved = NUM;
         public static final int RequestToJoinChannelDescription = NUM;
@@ -5506,6 +5632,7 @@ public final class R {
         public static final int ResetStatistics = NUM;
         public static final int ResetStatisticsAlert = NUM;
         public static final int ResetStatisticsAlertTitle = NUM;
+        public static final int RestoreEmailNoAccess = NUM;
         public static final int RestoreEmailSent = NUM;
         public static final int RestoreEmailSentInfo = NUM;
         public static final int RestoreEmailSentTitle = NUM;
@@ -5530,6 +5657,7 @@ public final class R {
         public static final int Restrictions_other = NUM;
         public static final int Restrictions_two = NUM;
         public static final int Restrictions_zero = NUM;
+        public static final int ResumeAll = NUM;
         public static final int Retry = NUM;
         public static final int RetryCall = NUM;
         public static final int ReturnToCall = NUM;
@@ -5568,13 +5696,16 @@ public final class R {
         public static final int ScheduledOrNoSoundHint = NUM;
         public static final int ScreenCapture = NUM;
         public static final int ScreenCaptureAlert = NUM;
+        public static final int ScreenCaptureHeader = NUM;
         public static final int ScreenCaptureInfo = NUM;
+        public static final int ScreenCaptureShowContent = NUM;
         public static final int SdCard = NUM;
         public static final int Search = NUM;
         public static final int SearchAllChatsShort = NUM;
         public static final int SearchBackgrounds = NUM;
         public static final int SearchByColor = NUM;
         public static final int SearchEmojiHint = NUM;
+        public static final int SearchEmptyViewDownloads = NUM;
         public static final int SearchEmptyViewFilteredSubtitle2 = NUM;
         public static final int SearchEmptyViewFilteredSubtitleFiles = NUM;
         public static final int SearchEmptyViewFilteredSubtitleLinks = NUM;
@@ -5698,6 +5829,7 @@ public final class R {
         public static final int SendingVideoStatus = NUM;
         public static final int SentAppCode = NUM;
         public static final int SentAppCodeTitle = NUM;
+        public static final int SentAppCodeWithPhone = NUM;
         public static final int SentCallCode = NUM;
         public static final int SentCallOnly = NUM;
         public static final int SentSmsCode = NUM;
@@ -5716,6 +5848,7 @@ public final class R {
         public static final int SetAsMain = NUM;
         public static final int SetBackground = NUM;
         public static final int SetColor = NUM;
+        public static final int SetNewPassword = NUM;
         public static final int SetPasscode = NUM;
         public static final int SetPasscodeInfo = NUM;
         public static final int SetProfilePhoto = NUM;
@@ -5801,6 +5934,7 @@ public final class R {
         public static final int Sharpen = NUM;
         public static final int Short = NUM;
         public static final int ShortMessageLifetimeForever = NUM;
+        public static final int ShortNumberInfo = NUM;
         public static final int ShowAllFiles = NUM;
         public static final int ShowAllGIFs = NUM;
         public static final int ShowAllMedia = NUM;
@@ -5845,6 +5979,7 @@ public final class R {
         public static final int SmartNotificationsDetail = NUM;
         public static final int SmartNotificationsDisabled = NUM;
         public static final int SmartNotificationsInfo = NUM;
+        public static final int SmsAvailableIn = NUM;
         public static final int SmsText = NUM;
         public static final int SoftUserLimitAlert = NUM;
         public static final int SoftenSkin = NUM;
@@ -5953,6 +6088,8 @@ public final class R {
         public static final int Subscribers_other = NUM;
         public static final int Subscribers_two = NUM;
         public static final int Subscribers_zero = NUM;
+        public static final int SuggestClearDatabaseMessage = NUM;
+        public static final int SuggestClearDatabaseTitle = NUM;
         public static final int SuggestContacts = NUM;
         public static final int SuggestContactsAlert = NUM;
         public static final int SuggestContactsInfo = NUM;
@@ -6356,6 +6493,13 @@ public final class R {
         public static final int ViewReplies_zero = NUM;
         public static final int ViewStats = NUM;
         public static final int ViewThread = NUM;
+        public static final int ViewersWatchingNobody = NUM;
+        public static final int ViewersWatching_few = NUM;
+        public static final int ViewersWatching_many = NUM;
+        public static final int ViewersWatching_one = NUM;
+        public static final int ViewersWatching_other = NUM;
+        public static final int ViewersWatching_two = NUM;
+        public static final int ViewersWatching_zero = NUM;
         public static final int ViewingMembers = NUM;
         public static final int ViewsBySourceChartTitle = NUM;
         public static final int ViewsPerPost = NUM;
@@ -6473,6 +6617,7 @@ public final class R {
         public static final int VoipGroupEndAlertText = NUM;
         public static final int VoipGroupEndAlertTitle = NUM;
         public static final int VoipGroupEndChat = NUM;
+        public static final int VoipGroupExpandStream = NUM;
         public static final int VoipGroupInviteAlreadyParticipant = NUM;
         public static final int VoipGroupInviteCanSpeak = NUM;
         public static final int VoipGroupInviteListenOnly = NUM;
@@ -6489,6 +6634,7 @@ public final class R {
         public static final int VoipGroupLeaveAlertEndChat = NUM;
         public static final int VoipGroupLeaveAlertText = NUM;
         public static final int VoipGroupLeaveAlertTitle = NUM;
+        public static final int VoipGroupMinimizeStream = NUM;
         public static final int VoipGroupMute = NUM;
         public static final int VoipGroupMuteForMe = NUM;
         public static final int VoipGroupMuteMemberAlertTitle = NUM;
@@ -6561,8 +6707,8 @@ public final class R {
         public static final int VoipMutedTapedForSpeak = NUM;
         public static final int VoipMutedTapedForSpeakInfo = NUM;
         public static final int VoipNeedCameraPermission = NUM;
-        public static final int VoipNeedMicCameraPermission = NUM;
-        public static final int VoipNeedMicPermission = NUM;
+        public static final int VoipNeedMicCameraPermissionWithHint = NUM;
+        public static final int VoipNeedMicPermissionWithHint = NUM;
         public static final int VoipNoiseCancellation = NUM;
         public static final int VoipNoiseCancellationDisabled = NUM;
         public static final int VoipNoiseCancellationEnabled = NUM;
@@ -6661,8 +6807,11 @@ public final class R {
         public static final int WillUnmuteIn = NUM;
         public static final int WithinAMonth = NUM;
         public static final int WithinAWeek = NUM;
+        public static final int WrongCode = NUM;
+        public static final int WrongCodeTitle = NUM;
         public static final int WrongCountry = NUM;
         public static final int WrongNumber = NUM;
+        public static final int WrongNumberFormat = NUM;
         public static final int Years_few = NUM;
         public static final int Years_many = NUM;
         public static final int Years_one = NUM;
@@ -6698,12 +6847,14 @@ public final class R {
         public static final int YourLocatedChannelsTooMuch = NUM;
         public static final int YourName = NUM;
         public static final int YourNameChanged = NUM;
+        public static final int YourNumber = NUM;
         public static final int YourPassword = NUM;
         public static final int YourPasswordChangedSuccessText = NUM;
         public static final int YourPasswordHeader = NUM;
         public static final int YourPasswordRemember = NUM;
         public static final int YourPasswordRememberNo = NUM;
         public static final int YourPasswordRememberYes = NUM;
+        public static final int YourPasswordReset = NUM;
         public static final int YourPasswordSuccess = NUM;
         public static final int YourPasswordSuccessText = NUM;
         public static final int YourPhone = NUM;

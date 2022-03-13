@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda10 
     }
 
     public final void onDismiss(DialogInterface dialogInterface) {
-        this.f$0.lambda$new$9(dialogInterface);
+        this.f$0.lambda$new$11(dialogInterface);
     }
 }

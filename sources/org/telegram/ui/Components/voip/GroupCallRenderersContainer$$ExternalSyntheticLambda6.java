@@ -1,13 +1,18 @@
 package org.telegram.ui.Components.voip;
 
-public final /* synthetic */ class GroupCallRenderersContainer$$ExternalSyntheticLambda6 implements Runnable {
-    public final /* synthetic */ GroupCallRenderersContainer f$0;
+import android.view.View;
+import org.telegram.ui.GroupCallActivity;
 
-    public /* synthetic */ GroupCallRenderersContainer$$ExternalSyntheticLambda6(GroupCallRenderersContainer groupCallRenderersContainer) {
+public final /* synthetic */ class GroupCallRenderersContainer$$ExternalSyntheticLambda6 implements View.OnClickListener {
+    public final /* synthetic */ GroupCallRenderersContainer f$0;
+    public final /* synthetic */ GroupCallActivity f$1;
+
+    public /* synthetic */ GroupCallRenderersContainer$$ExternalSyntheticLambda6(GroupCallRenderersContainer groupCallRenderersContainer, GroupCallActivity groupCallActivity) {
         this.f$0 = groupCallRenderersContainer;
+        this.f$1 = groupCallActivity;
     }
 
-    public final void run() {
-        this.f$0.lambda$setVisibleParticipant$8();
+    public final void onClick(View view) {
+        this.f$0.lambda$new$2(this.f$1, view);
     }
 }

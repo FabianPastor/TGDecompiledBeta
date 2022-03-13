@@ -12,6 +12,6 @@ public final /* synthetic */ class TwoStepVerificationSetupActivity$$ExternalSyn
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.lambda$setNewPassword$32(this.f$1, dialogInterface, i);
+        this.f$0.lambda$setNewPassword$47(this.f$1, dialogInterface, i);
     }
 }

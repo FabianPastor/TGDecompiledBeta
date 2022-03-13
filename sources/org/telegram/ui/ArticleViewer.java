@@ -377,6 +377,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* access modifiers changed from: private */
     public ActionBarMenuItem menuButton;
     private FrameLayout menuContainer;
+    /* access modifiers changed from: private */
+    public Paint navigationBarPaint = new Paint();
     private int openUrlReqId;
     /* access modifiers changed from: private */
     public AnimatorSet pageSwitchAnimation;
@@ -454,7 +456,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public void updateWindowLayoutParamsForSearch() {
     }
 
-    static /* synthetic */ int access$13008(ArticleViewer articleViewer) {
+    static /* synthetic */ int access$13108(ArticleViewer articleViewer) {
         int i = articleViewer.lastBlockNum;
         articleViewer.lastBlockNum = i + 1;
         return i;
@@ -1197,7 +1199,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void dispatchDraw(Canvas canvas) {
             int i;
             super.dispatchDraw(canvas);
-            if (this.bWidth != 0 && this.bHeight != 0) {
+            if ((Build.VERSION.SDK_INT < 21 || ArticleViewer.this.lastInsets == null) && this.bWidth != 0 && this.bHeight != 0) {
                 this.blackPaint.setAlpha((int) (ArticleViewer.this.windowView.getAlpha() * 255.0f));
                 int i2 = this.bX;
                 if (i2 == 0 && (i = this.bY) == 0) {
@@ -1225,9 +1227,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
                     int systemWindowInsetRight = windowInsets.getSystemWindowInsetRight();
                     if (systemWindowInsetRight != 0) {
-                        canvas.drawRect((float) (getMeasuredWidth() - systemWindowInsetRight), 0.0f, (float) getMeasuredWidth(), f2, ArticleViewer.this.statusBarPaint);
+                        canvas.drawRect((float) (measuredWidth - systemWindowInsetRight), 0.0f, f, f2, ArticleViewer.this.statusBarPaint);
                     }
                 }
+                canvas.drawRect(0.0f, (float) (measuredHeight - windowInsets.getStableInsetBottom()), f, f2, ArticleViewer.this.navigationBarPaint);
             }
         }
 
@@ -2146,9 +2149,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (tLRPC$TL_textAnchor != null) {
                 TLRPC$TL_pageBlockParagraph tLRPC$TL_pageBlockParagraph = new TLRPC$TL_pageBlockParagraph();
                 tLRPC$TL_pageBlockParagraph.text = tLRPC$TL_textAnchor.text;
-                int access$7500 = this.adapter[0].getTypeForBlock(tLRPC$TL_pageBlockParagraph);
-                RecyclerView.ViewHolder onCreateViewHolder = this.adapter[0].onCreateViewHolder((ViewGroup) null, access$7500);
-                this.adapter[0].bindBlockToHolder(access$7500, onCreateViewHolder, tLRPC$TL_pageBlockParagraph, 0, 0);
+                int access$7600 = this.adapter[0].getTypeForBlock(tLRPC$TL_pageBlockParagraph);
+                RecyclerView.ViewHolder onCreateViewHolder = this.adapter[0].onCreateViewHolder((ViewGroup) null, access$7600);
+                this.adapter[0].bindBlockToHolder(access$7600, onCreateViewHolder, tLRPC$TL_pageBlockParagraph, 0, 0);
                 BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
                 builder.setApplyTopPadding(false);
                 builder.setApplyBottomPadding(false);
@@ -2240,9 +2243,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 Integer num3 = (Integer) this.adapter[0].anchorsOffset.get(lowerCase);
                 if (num3 != null) {
                     if (num3.intValue() == -1) {
-                        int access$75002 = this.adapter[0].getTypeForBlock(tLRPC$PageBlock);
-                        RecyclerView.ViewHolder onCreateViewHolder2 = this.adapter[0].onCreateViewHolder((ViewGroup) null, access$75002);
-                        this.adapter[0].bindBlockToHolder(access$75002, onCreateViewHolder2, tLRPC$PageBlock, 0, 0);
+                        int access$76002 = this.adapter[0].getTypeForBlock(tLRPC$PageBlock);
+                        RecyclerView.ViewHolder onCreateViewHolder2 = this.adapter[0].onCreateViewHolder((ViewGroup) null, access$76002);
+                        this.adapter[0].bindBlockToHolder(access$76002, onCreateViewHolder2, tLRPC$PageBlock, 0, 0);
                         onCreateViewHolder2.itemView.measure(View.MeasureSpec.makeMeasureSpec(this.listView[0].getMeasuredWidth(), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
                         Integer num4 = (Integer) this.adapter[0].anchorsOffset.get(lowerCase);
                         if (num4.intValue() != -1) {
@@ -4675,6 +4678,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.headerPaint.setColor(-16777216);
         this.statusBarPaint.setColor(-16777216);
         this.headerProgressPaint.setColor(-14408666);
+        this.navigationBarPaint.setColor(-16777216);
         AnonymousClass10 r02 = new FrameLayout(activity2) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
@@ -4958,10 +4962,21 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         layoutParams.type = 98;
         layoutParams.softInputMode = 48;
         layoutParams.flags = 131072;
+        int i4 = 1792;
+        int color = Theme.getColor("windowBackgroundGray", (boolean[]) null, true);
+        boolean z = AndroidUtilities.computePerceivedBrightness(color) >= 0.721f;
+        if (z && i3 >= 26) {
+            i4 = 1808;
+            this.navigationBarPaint.setColor(color);
+        } else if (!z) {
+            this.navigationBarPaint.setColor(color);
+        }
+        WindowManager.LayoutParams layoutParams2 = this.windowLayoutParams;
+        layoutParams2.systemUiVisibility = i4;
         if (i3 >= 21) {
-            layoutParams.flags = 131072 | -NUM;
+            layoutParams2.flags |= -NUM;
             if (i3 >= 28) {
-                layoutParams.layoutInDisplayCutoutMode = 1;
+                layoutParams2.layoutInDisplayCutoutMode = 1;
             }
         }
         TextSelectionHelper.ArticleTextSelectionHelper articleTextSelectionHelper = new TextSelectionHelper.ArticleTextSelectionHelper();
@@ -5569,7 +5584,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         if (openAllParentBlocks(r4) == false) goto L_0x006d;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:13:0x005b, code lost:
-        org.telegram.ui.ArticleViewer.WebpageAdapter.access$8000(r11.adapter[0]);
+        org.telegram.ui.ArticleViewer.WebpageAdapter.access$8100(r11.adapter[0]);
         r11.adapter[0].notifyDataSetChanged();
      */
     /* JADX WARNING: Multi-variable type inference failed */
@@ -5827,13 +5842,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* JADX WARNING: Can't wrap try/catch for region: R(6:56|(2:58|59)|60|61|(2:63|(1:65))|66) */
-    /* JADX WARNING: Code restructure failed: missing block: B:67:0x0158, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:67:0x0157, code lost:
         r12 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:68:0x0159, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:68:0x0158, code lost:
         org.telegram.messenger.FileLog.e((java.lang.Throwable) r12);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:69:0x015c, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:69:0x015b, code lost:
         return false;
      */
     /* JADX WARNING: Failed to process nested try/catch */
@@ -5842,24 +5857,24 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* JADX WARNING: Removed duplicated region for block: B:40:0x00de  */
     /* JADX WARNING: Removed duplicated region for block: B:43:0x00e7  */
     /* JADX WARNING: Removed duplicated region for block: B:56:0x0122  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x0139 A[Catch:{ Exception -> 0x0158 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x015d  */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x01ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x0139 A[Catch:{ Exception -> 0x0157 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x015c  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x01ed  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean open(org.telegram.messenger.MessageObject r12, org.telegram.tgnet.TLRPC$WebPage r13, java.lang.String r14, boolean r15) {
         /*
             r11 = this;
             android.app.Activity r0 = r11.parentActivity
             r1 = 0
-            if (r0 == 0) goto L_0x01f4
+            if (r0 == 0) goto L_0x01f3
             boolean r0 = r11.isVisible
             if (r0 == 0) goto L_0x000d
             boolean r0 = r11.collapsed
-            if (r0 == 0) goto L_0x01f4
+            if (r0 == 0) goto L_0x01f3
         L_0x000d:
             if (r12 != 0) goto L_0x0013
             if (r13 != 0) goto L_0x0013
-            goto L_0x01f4
+            goto L_0x01f3
         L_0x0013:
             r0 = -1
             r2 = 35
@@ -6004,7 +6019,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r11.lastInsets = r3
             boolean r12 = r11.isVisible
             java.lang.String r14 = "window"
-            if (r12 != 0) goto L_0x015d
+            if (r12 != 0) goto L_0x015c
             android.app.Activity r12 = r11.parentActivity
             java.lang.Object r12 = r12.getSystemService(r14)
             android.view.WindowManager r12 = (android.view.WindowManager) r12
@@ -6013,29 +6028,29 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x0133 }
             r12.removeView(r14)     // Catch:{ Exception -> 0x0133 }
         L_0x0133:
-            int r14 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0158 }
+            int r14 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0157 }
             r15 = 21
-            if (r14 < r15) goto L_0x0146
-            android.view.WindowManager$LayoutParams r15 = r11.windowLayoutParams     // Catch:{ Exception -> 0x0158 }
-            r2 = -2147417856(0xfffffffvar_, float:-9.2194E-41)
-            r15.flags = r2     // Catch:{ Exception -> 0x0158 }
+            if (r14 < r15) goto L_0x0145
+            android.view.WindowManager$LayoutParams r15 = r11.windowLayoutParams     // Catch:{ Exception -> 0x0157 }
+            r2 = -2013200384(0xfffffffvar_, float:-3.8819525E-34)
+            r15.flags = r2     // Catch:{ Exception -> 0x0157 }
             r2 = 28
-            if (r14 < r2) goto L_0x0146
-            r15.layoutInDisplayCutoutMode = r4     // Catch:{ Exception -> 0x0158 }
-        L_0x0146:
-            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x0158 }
-            r14.setFocusable(r1)     // Catch:{ Exception -> 0x0158 }
-            android.widget.FrameLayout r14 = r11.containerView     // Catch:{ Exception -> 0x0158 }
-            r14.setFocusable(r1)     // Catch:{ Exception -> 0x0158 }
-            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x0158 }
-            android.view.WindowManager$LayoutParams r15 = r11.windowLayoutParams     // Catch:{ Exception -> 0x0158 }
-            r12.addView(r14, r15)     // Catch:{ Exception -> 0x0158 }
-            goto L_0x0174
-        L_0x0158:
+            if (r14 < r2) goto L_0x0145
+            r15.layoutInDisplayCutoutMode = r4     // Catch:{ Exception -> 0x0157 }
+        L_0x0145:
+            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x0157 }
+            r14.setFocusable(r1)     // Catch:{ Exception -> 0x0157 }
+            android.widget.FrameLayout r14 = r11.containerView     // Catch:{ Exception -> 0x0157 }
+            r14.setFocusable(r1)     // Catch:{ Exception -> 0x0157 }
+            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x0157 }
+            android.view.WindowManager$LayoutParams r15 = r11.windowLayoutParams     // Catch:{ Exception -> 0x0157 }
+            r12.addView(r14, r15)     // Catch:{ Exception -> 0x0157 }
+            goto L_0x0173
+        L_0x0157:
             r12 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)
             return r1
-        L_0x015d:
+        L_0x015c:
             android.view.WindowManager$LayoutParams r12 = r11.windowLayoutParams
             int r15 = r12.flags
             r15 = r15 & -17
@@ -6046,7 +6061,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView
             android.view.WindowManager$LayoutParams r15 = r11.windowLayoutParams
             r12.updateViewLayout(r14, r15)
-        L_0x0174:
+        L_0x0173:
             r11.isVisible = r4
             r11.animationInProgress = r4
             org.telegram.ui.ArticleViewer$WindowView r12 = r11.windowView
@@ -6097,12 +6112,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)
             int r12 = android.os.Build.VERSION.SDK_INT
             r13 = 18
-            if (r12 < r13) goto L_0x01f3
+            if (r12 < r13) goto L_0x01f2
             android.widget.FrameLayout r12 = r11.containerView
             r12.setLayerType(r5, r3)
-        L_0x01f3:
+        L_0x01f2:
             return r4
-        L_0x01f4:
+        L_0x01f3:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.open(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$WebPage, java.lang.String, boolean):boolean");
@@ -7646,7 +7661,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         addAllMediaFromBlock(webpageAdapter, tLRPC$PageBlock2);
                         i++;
                     }
-                    ArticleViewer.access$13008(ArticleViewer.this);
+                    ArticleViewer.access$13108(ArticleViewer.this);
                 } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockCollage) {
                     TLRPC$TL_pageBlockCollage tLRPC$TL_pageBlockCollage = (TLRPC$TL_pageBlockCollage) tLRPC$PageBlock;
                     int size2 = tLRPC$TL_pageBlockCollage.items.size();
@@ -7656,7 +7671,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         addAllMediaFromBlock(webpageAdapter, tLRPC$PageBlock3);
                         i++;
                     }
-                    ArticleViewer.access$13008(ArticleViewer.this);
+                    ArticleViewer.access$13108(ArticleViewer.this);
                 } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockCover) {
                     addAllMediaFromBlock(webpageAdapter, ((TLRPC$TL_pageBlockCover) tLRPC$PageBlock).cover);
                 }
@@ -8041,16 +8056,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         private boolean isBlockOpened(TL_pageBlockDetailsChild tL_pageBlockDetailsChild) {
-            TLRPC$PageBlock access$11000 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild.parent);
-            if (access$11000 instanceof TLRPC$TL_pageBlockDetails) {
-                return ((TLRPC$TL_pageBlockDetails) access$11000).open;
+            TLRPC$PageBlock access$11100 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild.parent);
+            if (access$11100 instanceof TLRPC$TL_pageBlockDetails) {
+                return ((TLRPC$TL_pageBlockDetails) access$11100).open;
             }
-            if (!(access$11000 instanceof TL_pageBlockDetailsChild)) {
+            if (!(access$11100 instanceof TL_pageBlockDetailsChild)) {
                 return false;
             }
-            TL_pageBlockDetailsChild tL_pageBlockDetailsChild2 = (TL_pageBlockDetailsChild) access$11000;
-            TLRPC$PageBlock access$110002 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild2.block);
-            if (!(access$110002 instanceof TLRPC$TL_pageBlockDetails) || ((TLRPC$TL_pageBlockDetails) access$110002).open) {
+            TL_pageBlockDetailsChild tL_pageBlockDetailsChild2 = (TL_pageBlockDetailsChild) access$11100;
+            TLRPC$PageBlock access$111002 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild2.block);
+            if (!(access$111002 instanceof TLRPC$TL_pageBlockDetails) || ((TLRPC$TL_pageBlockDetails) access$111002).open) {
                 return isBlockOpened(tL_pageBlockDetailsChild2);
             }
             return false;
@@ -8062,8 +8077,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int size = this.blocks.size();
             for (int i = 0; i < size; i++) {
                 TLRPC$PageBlock tLRPC$PageBlock = this.blocks.get(i);
-                TLRPC$PageBlock access$11000 = ArticleViewer.this.getLastNonListPageBlock(tLRPC$PageBlock);
-                if (!(access$11000 instanceof TL_pageBlockDetailsChild) || isBlockOpened((TL_pageBlockDetailsChild) access$11000)) {
+                TLRPC$PageBlock access$11100 = ArticleViewer.this.getLastNonListPageBlock(tLRPC$PageBlock);
+                if (!(access$11100 instanceof TL_pageBlockDetailsChild) || isBlockOpened((TL_pageBlockDetailsChild) access$11100)) {
                     this.localBlocks.add(tLRPC$PageBlock);
                 }
             }
@@ -8093,6 +8108,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void notifyItemChanged(int i) {
             updateRows();
             super.notifyItemChanged(i);
+        }
+
+        public void notifyItemRangeChanged(int i, int i2) {
+            updateRows();
+            super.notifyItemRangeChanged(i, i2);
         }
 
         public void notifyItemRangeChanged(int i, int i2, Object obj) {
@@ -8175,9 +8195,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void setBlock(TLRPC$TL_pageBlockVideo tLRPC$TL_pageBlockVideo, boolean z, boolean z2) {
             this.currentBlock = tLRPC$TL_pageBlockVideo;
             this.parentBlock = null;
-            TLRPC$Document access$13100 = this.parentAdapter.getDocumentWithId(tLRPC$TL_pageBlockVideo.video_id);
-            this.currentDocument = access$13100;
-            this.isGif = MessageObject.isVideoDocument(access$13100) || MessageObject.isGifDocument(this.currentDocument);
+            TLRPC$Document access$13200 = this.parentAdapter.getDocumentWithId(tLRPC$TL_pageBlockVideo.video_id);
+            this.currentDocument = access$13200;
+            this.isGif = MessageObject.isVideoDocument(access$13200) || MessageObject.isGifDocument(this.currentDocument);
             this.isFirst = z;
             this.channelCell.setVisibility(4);
             updateButtonState(false);
@@ -9202,9 +9222,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 radialProgress2.setProgressRect(i5, dp4, i5 + dp3, dp4 + dp3);
                 ArticleViewer articleViewer = ArticleViewer.this;
                 TLRPC$TL_pageBlockAudio tLRPC$TL_pageBlockAudio2 = this.currentBlock;
-                DrawingText access$13300 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockAudio2.caption.text, dp2, this.textY, tLRPC$TL_pageBlockAudio2, this.parentAdapter);
-                this.captionLayout = access$13300;
-                if (access$13300 != null) {
+                DrawingText access$13400 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockAudio2.caption.text, dp2, this.textY, tLRPC$TL_pageBlockAudio2, this.parentAdapter);
+                this.captionLayout = access$13400;
+                if (access$13400 != null) {
                     int dp5 = AndroidUtilities.dp(8.0f) + this.captionLayout.getHeight();
                     this.creditOffset = dp5;
                     dp += dp5 + AndroidUtilities.dp(8.0f);
@@ -9212,9 +9232,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int i6 = dp;
                 ArticleViewer articleViewer2 = ArticleViewer.this;
                 TLRPC$TL_pageBlockAudio tLRPC$TL_pageBlockAudio3 = this.currentBlock;
-                DrawingText access$13400 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockAudio3.caption.credit, dp2, this.textY + this.creditOffset, tLRPC$TL_pageBlockAudio3, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.creditLayout = access$13400;
-                if (access$13400 != null) {
+                DrawingText access$13500 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockAudio3.caption.credit, dp2, this.textY + this.creditOffset, tLRPC$TL_pageBlockAudio3, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.creditLayout = access$13500;
+                if (access$13500 != null) {
                     i6 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
                 }
                 if (!this.isFirst && this.currentBlock.level <= 0) {
@@ -9528,18 +9548,18 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     int dp = size - AndroidUtilities.dp(50.0f);
                     ArticleViewer articleViewer = ArticleViewer.this;
                     TLRPC$TL_pageBlockEmbedPost tLRPC$TL_pageBlockEmbedPost2 = this.currentBlock;
-                    DrawingText access$13300 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost2.caption.text, dp, this.textY, tLRPC$TL_pageBlockEmbedPost2, this.parentAdapter);
-                    this.captionLayout = access$13300;
-                    if (access$13300 != null) {
+                    DrawingText access$13400 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost2.caption.text, dp, this.textY, tLRPC$TL_pageBlockEmbedPost2, this.parentAdapter);
+                    this.captionLayout = access$13400;
+                    if (access$13400 != null) {
                         int dp2 = AndroidUtilities.dp(4.0f) + this.captionLayout.getHeight();
                         this.creditOffset = dp2;
                         i4 = 0 + dp2 + AndroidUtilities.dp(4.0f);
                     }
                     ArticleViewer articleViewer2 = ArticleViewer.this;
                     TLRPC$TL_pageBlockEmbedPost tLRPC$TL_pageBlockEmbedPost3 = this.currentBlock;
-                    DrawingText access$13400 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost3.caption.credit, dp, this.textY + this.creditOffset, tLRPC$TL_pageBlockEmbedPost3, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                    this.creditLayout = access$13400;
-                    if (access$13400 != null) {
+                    DrawingText access$13500 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost3.caption.credit, dp, this.textY + this.creditOffset, tLRPC$TL_pageBlockEmbedPost3, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                    this.creditLayout = access$13500;
+                    if (access$13500 != null) {
                         i4 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
                     }
                     i3 = i4;
@@ -9548,18 +9568,18 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     boolean z = j != 0;
                     this.avatarVisible = z;
                     if (z) {
-                        TLRPC$Photo access$14200 = this.parentAdapter.getPhotoWithId(j);
-                        boolean z2 = access$14200 instanceof TLRPC$TL_photo;
+                        TLRPC$Photo access$14300 = this.parentAdapter.getPhotoWithId(j);
+                        boolean z2 = access$14300 instanceof TLRPC$TL_photo;
                         this.avatarVisible = z2;
                         if (z2) {
                             this.avatarDrawable.setInfo(0, this.currentBlock.author, (String) null);
-                            this.avatarImageView.setImage(ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(access$14200.sizes, AndroidUtilities.dp(40.0f), true), access$14200), "40_40", (Drawable) this.avatarDrawable, 0, (String) null, (Object) this.parentAdapter.currentPage, 1);
+                            this.avatarImageView.setImage(ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(access$14300.sizes, AndroidUtilities.dp(40.0f), true), access$14300), "40_40", (Drawable) this.avatarDrawable, 0, (String) null, (Object) this.parentAdapter.currentPage, 1);
                         }
                     }
-                    DrawingText access$14300 = ArticleViewer.this.createLayoutForText(this, this.currentBlock.author, (TLRPC$RichText) null, size - AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 50)), 0, this.currentBlock, Layout.Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
-                    this.nameLayout = access$14300;
-                    if (access$14300 != null) {
-                        access$14300.x = AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 32));
+                    DrawingText access$14400 = ArticleViewer.this.createLayoutForText(this, this.currentBlock.author, (TLRPC$RichText) null, size - AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 50)), 0, this.currentBlock, Layout.Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
+                    this.nameLayout = access$14400;
+                    if (access$14400 != null) {
+                        access$14400.x = AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 32));
                         this.nameLayout.y = AndroidUtilities.dp(this.dateLayout != null ? 10.0f : 19.0f);
                     }
                     if (this.currentBlock.date != 0) {
@@ -9574,9 +9594,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         int dp4 = size - AndroidUtilities.dp(50.0f);
                         ArticleViewer articleViewer3 = ArticleViewer.this;
                         TLRPC$TL_pageBlockEmbedPost tLRPC$TL_pageBlockEmbedPost4 = this.currentBlock;
-                        DrawingText access$133002 = articleViewer3.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost4.caption.text, dp4, this.textY, tLRPC$TL_pageBlockEmbedPost4, this.parentAdapter);
-                        this.captionLayout = access$133002;
-                        if (access$133002 != null) {
+                        DrawingText access$134002 = articleViewer3.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost4.caption.text, dp4, this.textY, tLRPC$TL_pageBlockEmbedPost4, this.parentAdapter);
+                        this.captionLayout = access$134002;
+                        if (access$134002 != null) {
                             int dp5 = AndroidUtilities.dp(4.0f) + this.captionLayout.getHeight();
                             this.creditOffset = dp5;
                             dp3 += dp5 + AndroidUtilities.dp(4.0f);
@@ -9584,9 +9604,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         int i5 = dp3;
                         ArticleViewer articleViewer4 = ArticleViewer.this;
                         TLRPC$TL_pageBlockEmbedPost tLRPC$TL_pageBlockEmbedPost5 = this.currentBlock;
-                        DrawingText access$134002 = articleViewer4.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost5.caption.credit, dp4, this.textY + this.creditOffset, tLRPC$TL_pageBlockEmbedPost5, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                        this.creditLayout = access$134002;
-                        if (access$134002 != null) {
+                        DrawingText access$135002 = articleViewer4.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost5.caption.credit, dp4, this.textY + this.creditOffset, tLRPC$TL_pageBlockEmbedPost5, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                        this.creditLayout = access$135002;
+                        if (access$135002 != null) {
                             i5 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
                         }
                         dp3 = i5;
@@ -9736,10 +9756,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.textY = 0;
                     this.textX = AndroidUtilities.dp((float) ((i5 * 14) + 18));
                 }
-                DrawingText access$14300 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, (size - AndroidUtilities.dp(18.0f)) - this.textX, this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, 0, this.parentAdapter);
-                this.textLayout = access$14300;
-                if (access$14300 != null) {
-                    int height = access$14300.getHeight();
+                DrawingText access$14400 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, (size - AndroidUtilities.dp(18.0f)) - this.textX, this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, 0, this.parentAdapter);
+                this.textLayout = access$14400;
+                if (access$14400 != null) {
+                    int height = access$14400.getHeight();
                     if (this.currentBlock.level > 0) {
                         i3 = AndroidUtilities.dp(8.0f);
                     } else {
@@ -10548,11 +10568,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 ArticleViewer articleViewer = ArticleViewer.this;
                 TLRPC$TL_pageBlockTable tLRPC$TL_pageBlockTable2 = this.currentBlock;
-                DrawingText access$14300 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockTable2.title, size - i4, 0, tLRPC$TL_pageBlockTable2, Layout.Alignment.ALIGN_CENTER, 0, this.parentAdapter);
-                this.titleLayout = access$14300;
-                if (access$14300 != null) {
+                DrawingText access$14400 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockTable2.title, size - i4, 0, tLRPC$TL_pageBlockTable2, Layout.Alignment.ALIGN_CENTER, 0, this.parentAdapter);
+                this.titleLayout = access$14400;
+                if (access$14400 != null) {
                     this.textY = 0;
-                    i5 = access$14300.getHeight() + AndroidUtilities.dp(8.0f) + 0;
+                    i5 = access$14400.getHeight() + AndroidUtilities.dp(8.0f) + 0;
                     this.listY = i5;
                     DrawingText drawingText = this.titleLayout;
                     drawingText.x = this.textX;
@@ -10714,7 +10734,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int i10;
                 TLRPC$PhotoSize tLRPC$PhotoSize;
                 float f2;
-                TLRPC$Document access$13100;
+                TLRPC$Document access$13200;
                 this.posArray.clear();
                 this.positions.clear();
                 int size = BlockCollageCell.this.currentBlock.items.size();
@@ -10726,15 +10746,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     while (i11 < size) {
                         TLObject tLObject = BlockCollageCell.this.currentBlock.items.get(i11);
                         if (tLObject instanceof TLRPC$TL_pageBlockPhoto) {
-                            TLRPC$Photo access$14200 = BlockCollageCell.this.parentAdapter.getPhotoWithId(((TLRPC$TL_pageBlockPhoto) tLObject).photo_id);
-                            if (access$14200 == null) {
+                            TLRPC$Photo access$14300 = BlockCollageCell.this.parentAdapter.getPhotoWithId(((TLRPC$TL_pageBlockPhoto) tLObject).photo_id);
+                            if (access$14300 == null) {
                                 i11++;
                             } else {
-                                tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(access$14200.sizes, AndroidUtilities.getPhotoSize());
+                                tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(access$14300.sizes, AndroidUtilities.getPhotoSize());
                             }
                         } else {
-                            if ((tLObject instanceof TLRPC$TL_pageBlockVideo) && (access$13100 = BlockCollageCell.this.parentAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLObject).video_id)) != null) {
-                                tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(access$13100.thumbs, 90);
+                            if ((tLObject instanceof TLRPC$TL_pageBlockVideo) && (access$13200 = BlockCollageCell.this.parentAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLObject).video_id)) != null) {
+                                tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(access$13200.thumbs, 90);
                             }
                             i11++;
                         }
@@ -11265,9 +11285,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 this.textY = dp2;
                 ArticleViewer articleViewer = ArticleViewer.this;
                 TLRPC$TL_pageBlockCollage tLRPC$TL_pageBlockCollage2 = this.currentBlock;
-                DrawingText access$13300 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockCollage2.caption.text, i4, dp2, tLRPC$TL_pageBlockCollage2, this.parentAdapter);
-                this.captionLayout = access$13300;
-                if (access$13300 != null) {
+                DrawingText access$13400 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockCollage2.caption.text, i4, dp2, tLRPC$TL_pageBlockCollage2, this.parentAdapter);
+                this.captionLayout = access$13400;
+                if (access$13400 != null) {
                     int dp3 = AndroidUtilities.dp(4.0f) + this.captionLayout.getHeight();
                     this.creditOffset = dp3;
                     measuredHeight += dp3 + AndroidUtilities.dp(4.0f);
@@ -11279,9 +11299,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 ArticleViewer articleViewer2 = ArticleViewer.this;
                 TLRPC$TL_pageBlockCollage tLRPC$TL_pageBlockCollage3 = this.currentBlock;
-                DrawingText access$13400 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockCollage3.caption.credit, i4, this.textY + this.creditOffset, tLRPC$TL_pageBlockCollage3, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.creditLayout = access$13400;
-                if (access$13400 != null) {
+                DrawingText access$13500 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockCollage3.caption.credit, i4, this.textY + this.creditOffset, tLRPC$TL_pageBlockCollage3, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.creditLayout = access$13500;
+                if (access$13500 != null) {
                     measuredHeight += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
                     DrawingText drawingText2 = this.creditLayout;
                     drawingText2.x = this.textX;
@@ -11497,7 +11517,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 /* access modifiers changed from: protected */
                 public void onDraw(Canvas canvas) {
                     int i;
-                    int access$17500;
+                    int access$17600;
                     if (BlockSlideshowCell.this.currentBlock != null) {
                         int count = BlockSlideshowCell.this.innerAdapter.getCount();
                         int dp = (AndroidUtilities.dp(7.0f) * count) + ((count - 1) * AndroidUtilities.dp(6.0f)) + AndroidUtilities.dp(4.0f);
@@ -11510,15 +11530,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                             int i2 = (count - measuredWidth) - 1;
                             if (BlockSlideshowCell.this.currentPage != i2 || BlockSlideshowCell.this.pageOffset >= 0.0f) {
                                 if (BlockSlideshowCell.this.currentPage >= i2) {
-                                    access$17500 = ((count - (measuredWidth * 2)) - 1) * dp3;
+                                    access$17600 = ((count - (measuredWidth * 2)) - 1) * dp3;
                                 } else if (BlockSlideshowCell.this.currentPage > measuredWidth) {
-                                    access$17500 = ((int) (BlockSlideshowCell.this.pageOffset * ((float) dp3))) + ((BlockSlideshowCell.this.currentPage - measuredWidth) * dp3);
+                                    access$17600 = ((int) (BlockSlideshowCell.this.pageOffset * ((float) dp3))) + ((BlockSlideshowCell.this.currentPage - measuredWidth) * dp3);
                                 } else if (BlockSlideshowCell.this.currentPage != measuredWidth || BlockSlideshowCell.this.pageOffset <= 0.0f) {
                                     i = dp2;
                                 } else {
-                                    access$17500 = (int) (BlockSlideshowCell.this.pageOffset * ((float) dp3));
+                                    access$17600 = (int) (BlockSlideshowCell.this.pageOffset * ((float) dp3));
                                 }
-                                i = dp2 - access$17500;
+                                i = dp2 - access$17600;
                             } else {
                                 i = dp2 - (((int) (BlockSlideshowCell.this.pageOffset * ((float) dp3))) + (((count - (measuredWidth * 2)) - 1) * dp3));
                             }
@@ -11526,9 +11546,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         int i3 = 0;
                         while (i3 < BlockSlideshowCell.this.currentBlock.items.size()) {
                             int dp4 = AndroidUtilities.dp(4.0f) + i + (AndroidUtilities.dp(13.0f) * i3);
-                            Drawable access$18300 = BlockSlideshowCell.this.currentPage == i3 ? ArticleViewer.this.slideDotBigDrawable : ArticleViewer.this.slideDotDrawable;
-                            access$18300.setBounds(dp4 - AndroidUtilities.dp(5.0f), 0, dp4 + AndroidUtilities.dp(5.0f), AndroidUtilities.dp(10.0f));
-                            access$18300.draw(canvas);
+                            Drawable access$18400 = BlockSlideshowCell.this.currentPage == i3 ? ArticleViewer.this.slideDotBigDrawable : ArticleViewer.this.slideDotDrawable;
+                            access$18400.setBounds(dp4 - AndroidUtilities.dp(5.0f), 0, dp4 + AndroidUtilities.dp(5.0f), AndroidUtilities.dp(10.0f));
+                            access$18400.draw(canvas);
                             i3++;
                         }
                     }
@@ -11568,9 +11588,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 this.textY = dp3;
                 ArticleViewer articleViewer = ArticleViewer.this;
                 TLRPC$TL_pageBlockSlideshow tLRPC$TL_pageBlockSlideshow = this.currentBlock;
-                DrawingText access$13300 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSlideshow.caption.text, dp2, dp3, tLRPC$TL_pageBlockSlideshow, this.parentAdapter);
-                this.captionLayout = access$13300;
-                if (access$13300 != null) {
+                DrawingText access$13400 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSlideshow.caption.text, dp2, dp3, tLRPC$TL_pageBlockSlideshow, this.parentAdapter);
+                this.captionLayout = access$13400;
+                if (access$13400 != null) {
                     int dp4 = AndroidUtilities.dp(4.0f) + this.captionLayout.getHeight();
                     this.creditOffset = dp4;
                     dp += dp4 + AndroidUtilities.dp(4.0f);
@@ -11582,9 +11602,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 ArticleViewer articleViewer2 = ArticleViewer.this;
                 TLRPC$TL_pageBlockSlideshow tLRPC$TL_pageBlockSlideshow2 = this.currentBlock;
-                DrawingText access$13400 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSlideshow2.caption.credit, dp2, this.textY + this.creditOffset, tLRPC$TL_pageBlockSlideshow2, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.creditLayout = access$13400;
-                if (access$13400 != null) {
+                DrawingText access$13500 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSlideshow2.caption.credit, dp2, this.textY + this.creditOffset, tLRPC$TL_pageBlockSlideshow2, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.creditLayout = access$13500;
+                if (access$13500 != null) {
                     dp += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
                     DrawingText drawingText2 = this.creditLayout;
                     drawingText2.x = this.textX;
@@ -11670,9 +11690,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.blockLayout = null;
                 }
                 if (this.currentBlock.blockItem != null) {
-                    int access$7500 = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
-                    this.currentBlockType = access$7500;
-                    RecyclerView.ViewHolder onCreateViewHolder = this.parentAdapter.onCreateViewHolder(this, access$7500);
+                    int access$7600 = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
+                    this.currentBlockType = access$7600;
+                    RecyclerView.ViewHolder onCreateViewHolder = this.parentAdapter.onCreateViewHolder(this, access$7600);
                     this.blockLayout = onCreateViewHolder;
                     addView(onCreateViewHolder.itemView);
                 }
@@ -12272,9 +12292,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.blockLayout = null;
                 }
                 if (this.currentBlock.blockItem != null) {
-                    int access$7500 = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
-                    this.currentBlockType = access$7500;
-                    RecyclerView.ViewHolder onCreateViewHolder = this.parentAdapter.onCreateViewHolder(this, access$7500);
+                    int access$7600 = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
+                    this.currentBlockType = access$7600;
+                    RecyclerView.ViewHolder onCreateViewHolder = this.parentAdapter.onCreateViewHolder(this, access$7600);
                     this.blockLayout = onCreateViewHolder;
                     addView(onCreateViewHolder.itemView);
                 }
@@ -12848,9 +12868,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int dp = AndroidUtilities.dp(39.0f);
             TLRPC$TL_pageBlockDetails tLRPC$TL_pageBlockDetails = this.currentBlock;
             if (tLRPC$TL_pageBlockDetails != null) {
-                DrawingText access$13400 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockDetails.title, size - AndroidUtilities.dp(52.0f), 0, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$13400;
-                if (access$13400 != null) {
+                DrawingText access$13500 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockDetails.title, size - AndroidUtilities.dp(52.0f), 0, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13500;
+                if (access$13500 != null) {
                     dp = Math.max(dp, AndroidUtilities.dp(21.0f) + this.textLayout.getHeight());
                     int height = ((this.textLayout.getHeight() + AndroidUtilities.dp(21.0f)) - this.textLayout.getHeight()) / 2;
                     this.textY = height;
@@ -12950,9 +12970,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int size = View.MeasureSpec.getSize(i);
             TLRPC$TL_pageBlockRelatedArticles tLRPC$TL_pageBlockRelatedArticles = this.currentBlock;
             if (tLRPC$TL_pageBlockRelatedArticles != null) {
-                DrawingText access$14300 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockRelatedArticles.title, size - AndroidUtilities.dp(52.0f), 0, this.currentBlock, Layout.Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
-                this.textLayout = access$14300;
-                if (access$14300 != null) {
+                DrawingText access$14400 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockRelatedArticles.title, size - AndroidUtilities.dp(52.0f), 0, this.currentBlock, Layout.Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
+                this.textLayout = access$14400;
+                if (access$14400 != null) {
                     this.textY = AndroidUtilities.dp(6.0f) + ((AndroidUtilities.dp(32.0f) - this.textLayout.getHeight()) / 2);
                 }
             }
@@ -13025,15 +13045,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int dp = AndroidUtilities.dp((float) (SharedConfig.ivFontSize - 16));
             long j = tLRPC$TL_pageRelatedArticle.photo_id;
             TLRPC$PhotoSize tLRPC$PhotoSize = null;
-            TLRPC$Photo access$14200 = j != 0 ? this.parentAdapter.getPhotoWithId(j) : null;
-            if (access$14200 != null) {
+            TLRPC$Photo access$14300 = j != 0 ? this.parentAdapter.getPhotoWithId(j) : null;
+            if (access$14300 != null) {
                 this.drawImage = true;
-                TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$14200.sizes, AndroidUtilities.getPhotoSize());
-                TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(access$14200.sizes, 80, true);
+                TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$14300.sizes, AndroidUtilities.getPhotoSize());
+                TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(access$14300.sizes, 80, true);
                 if (closestPhotoSizeWithSize != closestPhotoSizeWithSize2) {
                     tLRPC$PhotoSize = closestPhotoSizeWithSize2;
                 }
-                this.imageView.setImage(ImageLocation.getForPhoto(closestPhotoSizeWithSize, access$14200), "64_64", ImageLocation.getForPhoto(tLRPC$PhotoSize, access$14200), "64_64_b", closestPhotoSizeWithSize.size, (String) null, this.parentAdapter.currentPage, 1);
+                this.imageView.setImage(ImageLocation.getForPhoto(closestPhotoSizeWithSize, access$14300), "64_64", ImageLocation.getForPhoto(tLRPC$PhotoSize, access$14300), "64_64_b", closestPhotoSizeWithSize.size, (String) null, this.parentAdapter.currentPage, 1);
             } else {
                 this.drawImage = false;
             }
@@ -13092,10 +13112,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             } else {
                 str = tLRPC$TL_pageRelatedArticle.url;
             }
-            DrawingText access$14300 = ArticleViewer.this.createLayoutForText(this, str, (TLRPC$RichText) null, i6, this.textOffset + this.textY, this.currentBlock, (this.parentAdapter.isRtl || z) ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, i5, this.parentAdapter);
-            this.textLayout2 = access$14300;
-            if (access$14300 != null) {
-                i4 += access$14300.getHeight();
+            DrawingText access$14400 = ArticleViewer.this.createLayoutForText(this, str, (TLRPC$RichText) null, i6, this.textOffset + this.textY, this.currentBlock, (this.parentAdapter.isRtl || z) ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, i5, this.parentAdapter);
+            this.textLayout2 = access$14400;
+            if (access$14400 != null) {
+                i4 += access$14400.getHeight();
                 if (this.textLayout != null) {
                     i4 += AndroidUtilities.dp(6.0f) + dp;
                 }
@@ -13181,9 +13201,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             TLRPC$TL_pageBlockHeader tLRPC$TL_pageBlockHeader = this.currentBlock;
             int i3 = 0;
             if (tLRPC$TL_pageBlockHeader != null) {
-                DrawingText access$13400 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockHeader.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$13400;
-                if (access$13400 != null) {
+                DrawingText access$13500 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockHeader.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13500;
+                if (access$13500 != null) {
                     i3 = 0 + AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
                     DrawingText drawingText = this.textLayout;
                     drawingText.x = this.textX;
@@ -13270,9 +13290,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             TLRPC$TL_pageBlockSubtitle tLRPC$TL_pageBlockSubtitle = this.currentBlock;
             int i3 = 0;
             if (tLRPC$TL_pageBlockSubtitle != null) {
-                DrawingText access$13400 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSubtitle.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$13400;
-                if (access$13400 != null) {
+                DrawingText access$13500 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSubtitle.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13500;
+                if (access$13500 != null) {
                     i3 = 0 + AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
                     DrawingText drawingText = this.textLayout;
                     drawingText.x = this.textX;
@@ -13342,19 +13362,19 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int size = View.MeasureSpec.getSize(i);
             TLRPC$TL_pageBlockPullquote tLRPC$TL_pageBlockPullquote = this.currentBlock;
             if (tLRPC$TL_pageBlockPullquote != null) {
-                DrawingText access$13300 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockPullquote.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter);
-                this.textLayout = access$13300;
+                DrawingText access$13400 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockPullquote.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter);
+                this.textLayout = access$13400;
                 i3 = 0;
-                if (access$13300 != null) {
+                if (access$13400 != null) {
                     i3 = 0 + AndroidUtilities.dp(8.0f) + this.textLayout.getHeight();
                     DrawingText drawingText = this.textLayout;
                     drawingText.x = this.textX;
                     drawingText.y = this.textY;
                 }
                 this.textY2 = AndroidUtilities.dp(2.0f) + i3;
-                DrawingText access$133002 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.caption, size - AndroidUtilities.dp(36.0f), this.textY2, this.currentBlock, this.parentAdapter);
-                this.textLayout2 = access$133002;
-                if (access$133002 != null) {
+                DrawingText access$134002 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.caption, size - AndroidUtilities.dp(36.0f), this.textY2, this.currentBlock, this.parentAdapter);
+                this.textLayout2 = access$134002;
+                if (access$134002 != null) {
                     i3 += AndroidUtilities.dp(8.0f) + this.textLayout2.getHeight();
                     DrawingText drawingText2 = this.textLayout2;
                     drawingText2.x = this.textX;
@@ -13440,9 +13460,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 ArticleViewer articleViewer = ArticleViewer.this;
                 TLRPC$TL_pageBlockBlockquote tLRPC$TL_pageBlockBlockquote = this.currentBlock;
-                DrawingText access$13300 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockBlockquote.text, dp, this.textY, tLRPC$TL_pageBlockBlockquote, this.parentAdapter);
-                this.textLayout = access$13300;
-                i3 = access$13300 != null ? 0 + AndroidUtilities.dp(8.0f) + this.textLayout.getHeight() : 0;
+                DrawingText access$13400 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockBlockquote.text, dp, this.textY, tLRPC$TL_pageBlockBlockquote, this.parentAdapter);
+                this.textLayout = access$13400;
+                i3 = access$13400 != null ? 0 + AndroidUtilities.dp(8.0f) + this.textLayout.getHeight() : 0;
                 if (this.currentBlock.level > 0) {
                     if (this.parentAdapter.isRtl) {
                         this.textX = AndroidUtilities.dp((float) ((this.currentBlock.level * 14) + 14));
@@ -13458,9 +13478,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 this.textY2 = dp2;
                 ArticleViewer articleViewer2 = ArticleViewer.this;
                 TLRPC$TL_pageBlockBlockquote tLRPC$TL_pageBlockBlockquote2 = this.currentBlock;
-                DrawingText access$133002 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockBlockquote2.caption, dp, dp2, tLRPC$TL_pageBlockBlockquote2, this.parentAdapter);
-                this.textLayout2 = access$133002;
-                if (access$133002 != null) {
+                DrawingText access$134002 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockBlockquote2.caption, dp, dp2, tLRPC$TL_pageBlockBlockquote2, this.parentAdapter);
+                this.textLayout2 = access$134002;
+                if (access$134002 != null) {
                     i3 += AndroidUtilities.dp(8.0f) + this.textLayout2.getHeight();
                 }
                 if (i3 != 0) {
@@ -13593,9 +13613,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             TLRPC$TL_pageBlockPhoto tLRPC$TL_pageBlockPhoto2 = this.currentBlock;
             if (tLRPC$TL_pageBlockPhoto2 != null) {
-                TLRPC$Photo access$14200 = this.parentAdapter.getPhotoWithId(tLRPC$TL_pageBlockPhoto2.photo_id);
-                if (access$14200 != null) {
-                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(access$14200.sizes, AndroidUtilities.getPhotoSize());
+                TLRPC$Photo access$14300 = this.parentAdapter.getPhotoWithId(tLRPC$TL_pageBlockPhoto2.photo_id);
+                if (access$14300 != null) {
+                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(access$14300.sizes, AndroidUtilities.getPhotoSize());
                 } else {
                     this.currentPhotoObject = null;
                 }
@@ -15108,7 +15128,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (r4 == 0) goto L_0x0060
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
                 if (r4 != 0) goto L_0x0060
-                r4 = 2131624398(0x7f0e01ce, float:1.8875975E38)
+                r4 = 2131624400(0x7f0e01d0, float:1.8875979E38)
                 r7 = 2
                 java.lang.Object[] r7 = new java.lang.Object[r7]
                 org.telegram.messenger.LocaleController r8 = org.telegram.messenger.LocaleController.getInstance()
@@ -15126,7 +15146,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             L_0x0060:
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
                 if (r4 != 0) goto L_0x0074
-                r4 = 2131624397(0x7f0e01cd, float:1.8875973E38)
+                r4 = 2131624399(0x7f0e01cf, float:1.8875977E38)
                 java.lang.Object[] r15 = new java.lang.Object[r15]
                 r15[r3] = r0
                 java.lang.String r5 = "ArticleByAuthor"
@@ -15286,9 +15306,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 } else {
                     this.textY = AndroidUtilities.dp(8.0f);
                 }
-                DrawingText access$13400 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$13400;
-                if (access$13400 != null) {
+                DrawingText access$13500 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13500;
+                if (access$13500 != null) {
                     i3 += AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
                     DrawingText drawingText = this.textLayout;
                     drawingText.x = this.textX;
@@ -15362,9 +15382,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 } else {
                     this.textY = AndroidUtilities.dp(8.0f);
                 }
-                DrawingText access$13400 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$13400;
-                if (access$13400 != null) {
+                DrawingText access$13500 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13500;
+                if (access$13500 != null) {
                     i3 += AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
                     DrawingText drawingText = this.textLayout;
                     drawingText.x = this.textX;
@@ -15432,10 +15452,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.textY = 0;
                     this.textX = AndroidUtilities.dp((float) ((i5 * 14) + 18));
                 }
-                DrawingText access$13400 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, (size - AndroidUtilities.dp(18.0f)) - this.textX, this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$13400;
-                if (access$13400 != null) {
-                    int height = access$13400.getHeight();
+                DrawingText access$13500 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, (size - AndroidUtilities.dp(18.0f)) - this.textX, this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13500;
+                if (access$13500 != null) {
+                    int height = access$13500.getHeight();
                     if (this.currentBlock.level > 0) {
                         i3 = AndroidUtilities.dp(8.0f);
                     } else {
@@ -15536,9 +15556,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 public boolean onTouchEvent(MotionEvent motionEvent) {
                     BlockPreformattedCell blockPreformattedCell = BlockPreformattedCell.this;
                     ArticleViewer articleViewer = ArticleViewer.this;
-                    WebpageAdapter access$20600 = blockPreformattedCell.parentAdapter;
+                    WebpageAdapter access$20700 = blockPreformattedCell.parentAdapter;
                     BlockPreformattedCell blockPreformattedCell2 = BlockPreformattedCell.this;
-                    return articleViewer.checkLayoutForLinks(access$20600, motionEvent, blockPreformattedCell2, blockPreformattedCell2.textLayout, 0, 0) || super.onTouchEvent(motionEvent);
+                    return articleViewer.checkLayoutForLinks(access$20700, motionEvent, blockPreformattedCell2, blockPreformattedCell2.textLayout, 0, 0) || super.onTouchEvent(motionEvent);
                 }
 
                 /* access modifiers changed from: protected */
@@ -15637,9 +15657,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             TLRPC$TL_pageBlockSubheader tLRPC$TL_pageBlockSubheader = this.currentBlock;
             int i3 = 0;
             if (tLRPC$TL_pageBlockSubheader != null) {
-                DrawingText access$13400 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSubheader.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$13400;
-                if (access$13400 != null) {
+                DrawingText access$13500 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSubheader.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13500;
+                if (access$13500 != null) {
                     i3 = 0 + AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
                     DrawingText drawingText = this.textLayout;
                     drawingText.x = this.textX;

@@ -8,6 +8,6 @@ public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda32 
     }
 
     public final void run() {
-        this.f$0.lambda$updateItems$4();
+        this.f$0.lambda$processSelectedOption$57();
     }
 }

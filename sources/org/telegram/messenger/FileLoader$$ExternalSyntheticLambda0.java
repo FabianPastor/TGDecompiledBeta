@@ -12,6 +12,6 @@ public final /* synthetic */ class FileLoader$$ExternalSyntheticLambda0 implemen
     }
 
     public final void run() {
-        FileLoader.lambda$deleteFiles$11(this.f$0, this.f$1);
+        FileLoader.lambda$deleteFiles$12(this.f$0, this.f$1);
     }
 }

@@ -1398,6 +1398,7 @@
     <string name="EnterNewPasscode">قم بإدخال رمز قفلك الجديد</string>
     <string name="EnterThemeName">أدخل اسم النمط</string>
     <string name="EnterThemeNameEdit">اضغط على **إنشاء** إذا كنت ترغب في مشاركة نمطك مع الآخرين أو تخصيص كل لون يدويًّا.\10\10يرجى إدخال اسم النمط:</string>
+    <string name="EnterYourPasscode">أدخل رمز قفلك</string>
     <string name="ErrorOccurred">حدث خطأ ما.</string>
     <string name="ErrorSendRestrictedMedia">المعذرة، قام مشرفو هذه المجموعة بتقييدك من إرسال الوسائط.</string>
     <string name="ErrorSendRestrictedMediaAll">المعذرة، لا يُسمح بإرسال الوسائط في هذه المجموعة.</string>
@@ -2983,13 +2984,9 @@
     <string name="PermissionDrawAboveOtherAppsGroupCall">يتيح لك الوضع العائم استخدام المايكروفون ومعرفة من الذي يتحدث عندما تكون خارج تيليجرام. </string>
     <string name="PermissionDrawAboveOtherAppsGroupCallTitle">المحادثة الصوتية العائمة</string>
     <string name="PermissionDrawAboveOtherAppsTitle">صورة داخل صورة</string>
-    <string name="PermissionNoAudio">يحتاج تيليجرام الوصول للمايكروفون لتتمكن من إرسال الرسائل الصوتية.</string>
-    <string name="PermissionNoAudioVideo">يحتاج تيليجرام إلى استخدام الميكروفون من أجل تسجيل المقاطع المرئية.</string>
-    <string name="PermissionNoCamera">يحتاج تيليجرام للوصول للكاميرا لتتمكن من أخذ الصور والمقاطع المرئية. يرجى تفعيلها في الإعدادات.</string>
     <string name="PermissionNoLocation">يحتاج تيليجرام إلى السماح له بتحديد موقعك لتتمكن من مشاركته مع أصدقائك.</string>
     <string name="PermissionNoLocationPosition">يحتاج تيليجرام إلى صلاحية تحديد موقعك.</string>
     <string name="PermissionOpenSettings">الإعدادات</string>
-    <string name="PermissionStorage">يحتاج تيليجرام للوصول لذاكرة التخزين لتتمكن من إرسال وحفظ الصور، المقاطع المرئية، الصوتيات وغيرها من الوسائط.</string>
     <string name="PermissionXiaomiLockscreen">يرجى السماح لتيليجرام بالظهور على شاشة القفل للتمكن من إجراء المكالمات دون مشاكل.</string>
     <string name="Phone">هاتف</string>
     <string name="PhoneCopied">تم نسخ رقم الهاتف للحافظة</string>
@@ -3180,7 +3177,6 @@
     <string name="Purple">القرمزي</string>
     <string name="QRCodeLinkHelpChannel">يمكن لأي شخص لديه تيليجرام مسح هذا الرمز للانضمام إلى قناتك. </string>
     <string name="QRCodeLinkHelpGroup">يمكن لأي شخص لديه تيليجرام مسح هذا الرمز للانضمام إلى مجموعتك.</string>
-    <string name="QRCodePermissionNoCamera">يحتاج تيليجرام الوصول إلى الكاميرا لتتمكن من مسح رمز QR.</string>
     <string name="QuestionHint">اطرح سؤالًا</string>
     <string name="QuickReplyCustom">رسالة مخصصة...</string>
     <string name="QuickReplyDefault1">لا يمكنني التحدثُ الآن، ما الأمر؟</string>
@@ -4258,8 +4254,6 @@
     <string name="VoipMutedTapedForSpeak">لقد طلبت التحدّث</string>
     <string name="VoipMutedTapedForSpeakInfo">سيتم إعلام المتحدّثين</string>
     <string name="VoipNeedCameraPermission">يحتاج تيليجرام الوصول إلى الكاميرا لتتمكن من إجراء مكالمات مرئية.</string>
-    <string name="VoipNeedMicCameraPermission">يحتاج تيليجرام الوصول إلى المايكروفون والكاميرا لتتمكن من إجراء المكالمات المرئية. </string>
-    <string name="VoipNeedMicPermission">يحتاج تيليجرام إلى استخدام الميكروفون من أجل إجراء المكالمات.</string>
     <string name="VoipNoiseCancellation">تقليل الضوضاء</string>
     <string name="VoipNoiseCancellationDisabled">معطّل</string>
     <string name="VoipNoiseCancellationEnabled">مفعّل</string>

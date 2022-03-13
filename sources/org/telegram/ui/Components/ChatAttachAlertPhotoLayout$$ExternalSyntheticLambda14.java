@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda14 implements RecyclerListView.OnItemClickListener {
-    public static final /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda14 INSTANCE = new ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda14();
+public final /* synthetic */ class ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda14 implements AlertsCreator.ScheduleDatePickerDelegate {
+    public final /* synthetic */ ChatAttachAlertPhotoLayout f$0;
 
-    private /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda14() {
+    public /* synthetic */ ChatAttachAlertPhotoLayout$$ExternalSyntheticLambda14(ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout) {
+        this.f$0 = chatAttachAlertPhotoLayout;
     }
 
-    public final void onItemClick(View view, int i) {
-        ChatAttachAlertPhotoLayout.lambda$new$7(view, i);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.lambda$onMenuItemClick$15(z, i);
     }
 }

@@ -131,7 +131,7 @@ public class TermsOfServiceView extends FrameLayout {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$2(DialogInterface dialogInterface, int i) {
         AlertDialog alertDialog = new AlertDialog(getContext(), 3);
-        alertDialog.setCanCacnel(false);
+        alertDialog.setCanCancel(false);
         TLRPC$TL_account_deleteAccount tLRPC$TL_account_deleteAccount = new TLRPC$TL_account_deleteAccount();
         tLRPC$TL_account_deleteAccount.reason = "Decline ToS update";
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_deleteAccount, new TermsOfServiceView$$ExternalSyntheticLambda6(this, alertDialog));

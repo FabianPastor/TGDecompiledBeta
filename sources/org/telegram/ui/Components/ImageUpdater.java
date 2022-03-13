@@ -555,6 +555,9 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         ChatAttachAlert chatAttachAlert2;
         if (i == 17 && (chatAttachAlert2 = this.chatAttachAlert) != null) {
             chatAttachAlert2.getPhotoLayout().checkCamera(false);
+            this.chatAttachAlert.getPhotoLayout().checkStorage();
+        } else if (i == 4) {
+            this.chatAttachAlert.getPhotoLayout().checkStorage();
         }
     }
 
@@ -582,7 +585,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 this.parentFragment.presentFragment(photoAlbumPickerActivity);
                 return;
             }
-            this.parentFragment.getParentActivity().requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 4);
+            this.parentFragment.getParentActivity().requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 151);
         }
     }
 
@@ -603,7 +606,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
                 PhotoCropActivity photoCropActivity = new PhotoCropActivity(bundle);
                 photoCropActivity.setDelegate(this);
-                launchActivity.lambda$runLinkRequest$43(photoCropActivity);
+                launchActivity.lambda$runLinkRequest$47(photoCropActivity);
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -668,6 +671,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             }
             this.currentPicturePath = null;
         } else if (i == 13) {
+            this.parentFragment.getParentActivity().overridePendingTransition(NUM, NUM);
             PhotoViewer.getInstance().setParentActivity(this.parentFragment.getParentActivity());
             try {
                 int attributeInt = new ExifInterface(this.currentPicturePath).getAttributeInt("Orientation", 1);

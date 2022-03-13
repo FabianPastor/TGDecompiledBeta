@@ -1,19 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.ActionBar.ActionBarMenuItem;
-import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda89 implements ActionBarMenuItem.ActionBarMenuItemDelegate {
-    public final /* synthetic */ AlertsCreator.ScheduleDatePickerDelegate f$0;
-    public final /* synthetic */ BottomSheet.Builder f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda89 implements RequestDelegate {
+    public static final /* synthetic */ AlertsCreator$$ExternalSyntheticLambda89 INSTANCE = new AlertsCreator$$ExternalSyntheticLambda89();
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda89(AlertsCreator.ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder) {
-        this.f$0 = scheduleDatePickerDelegate;
-        this.f$1 = builder;
+    private /* synthetic */ AlertsCreator$$ExternalSyntheticLambda89() {
     }
 
-    public final void onItemClick(int i) {
-        AlertsCreator.lambda$createScheduleDatePickerDialog$43(this.f$0, this.f$1, i);
+    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AlertsCreator.lambda$sendReport$66(tLObject, tLRPC$TL_error);
     }
 }

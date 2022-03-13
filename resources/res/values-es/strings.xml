@@ -1398,6 +1398,7 @@
     <string name="EnterNewPasscode">Pon tu nuevo código</string>
     <string name="EnterThemeName">Pon el nombre del tema</string>
     <string name="EnterThemeNameEdit">Pulsa **Crear** si quieres compartir tu tema con otras personas o personalizar cada color manualmente.\10\10Pon el nombre del tema:</string>
+    <string name="EnterYourPasscode">Pon tu código</string>
     <string name="ErrorOccurred">Ocurrió un error.</string>
     <string name="ErrorSendRestrictedMedia">Lo sentimos, los administradores del grupo han restringido que envíes multimedia.</string>
     <string name="ErrorSendRestrictedMediaAll">No está permitido enviar multimedia en este grupo.</string>
@@ -2983,13 +2984,9 @@
     <string name="PermissionDrawAboveOtherAppsGroupCall">El modo de superposición te permite usar la opción de pulsar para hablar y ver quién está hablando aunque estés fuera de Telegram.</string>
     <string name="PermissionDrawAboveOtherAppsGroupCallTitle">Superposición del chat de voz</string>
     <string name="PermissionDrawAboveOtherAppsTitle">Modo imagen en imagen</string>
-    <string name="PermissionNoAudio">Telegram necesita acceso a tu micrófono para que puedas enviar mensajes de voz.</string>
-    <string name="PermissionNoAudioVideo">Telegram necesita acceso a tu micrófono para que puedas grabar videos.</string>
-    <string name="PermissionNoCamera">Telegram necesita acceso a la cámara para que puedas tomar fotos y videos. Por favor, actívalo en Ajustes.</string>
     <string name="PermissionNoLocation">Telegram necesita acceso a tu ubicación para que puedas compartirla con tus amigos.</string>
     <string name="PermissionNoLocationPosition">Telegram necesita acceso a tu ubicación.</string>
     <string name="PermissionOpenSettings">AJUSTES</string>
-    <string name="PermissionStorage">Telegram necesita acceso al almacenamiento para que puedas enviar y guardar fotos, videos, música y otros archivos.</string>
     <string name="PermissionXiaomiLockscreen">Por favor, permite a Telegram aparecer en la pantalla bloqueada para que las llamadas funcionen correctamente.</string>
     <string name="Phone">Teléfono</string>
     <string name="PhoneCopied">Teléfono copiado al portapapeles</string>
@@ -3180,7 +3177,6 @@
     <string name="Purple">Púrpura</string>
     <string name="QRCodeLinkHelpChannel">Cualquiera en Telegram puede escanear este código para unirse a tu canal.</string>
     <string name="QRCodeLinkHelpGroup">Cualquiera en Telegram puede escanear este código para unirse a tu grupo.</string>
-    <string name="QRCodePermissionNoCamera">Telegram necesita acceso a tu cámara para que puedas escanear códigos QR.</string>
     <string name="QuestionHint">Haz una pregunta</string>
     <string name="QuickReplyCustom">Mensaje personalizado...</string>
     <string name="QuickReplyDefault1">No puedo hablar ahora. ¿Qué pasa?</string>
@@ -4258,8 +4254,6 @@
     <string name="VoipMutedTapedForSpeak">Pediste hablar</string>
     <string name="VoipMutedTapedForSpeakInfo">Avisaremos a los oradores</string>
     <string name="VoipNeedCameraPermission">Telegram necesita acceso a tu cámara para que puedas hacer videollamadas.</string>
-    <string name="VoipNeedMicCameraPermission">Telegram necesita acceso a tu micrófono y cámara para que puedas hacer videollamadas.</string>
-    <string name="VoipNeedMicPermission">Telegram necesita acceso a tu micrófono para que puedas realizar llamadas.</string>
     <string name="VoipNoiseCancellation">Supresión de ruido</string>
     <string name="VoipNoiseCancellationDisabled">Desactivada</string>
     <string name="VoipNoiseCancellationEnabled">Activada</string>

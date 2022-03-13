@@ -1,18 +1,18 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import android.widget.EditText;
+import org.telegram.messenger.MessagesStorage;
 
-public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda35 implements DialogInterface.OnDismissListener {
-    public final /* synthetic */ EditText f$0;
-    public final /* synthetic */ EditText f$1;
+public final /* synthetic */ class AlertsCreator$$ExternalSyntheticLambda35 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ int[] f$0;
+    public final /* synthetic */ MessagesStorage.IntCallback f$1;
 
-    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda35(EditText editText, EditText editText2) {
-        this.f$0 = editText;
-        this.f$1 = editText2;
+    public /* synthetic */ AlertsCreator$$ExternalSyntheticLambda35(int[] iArr, MessagesStorage.IntCallback intCallback) {
+        this.f$0 = iArr;
+        this.f$1 = intCallback;
     }
 
-    public final void onDismiss(DialogInterface dialogInterface) {
-        AlertsCreator.lambda$createChangeNameAlert$29(this.f$0, this.f$1, dialogInterface);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        AlertsCreator.lambda$createLocationUpdateDialog$77(this.f$0, this.f$1, dialogInterface, i);
     }
 }

@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda39 implem
     }
 
     public final void run() {
-        this.f$0.lambda$startScreenCapture$29(this.f$1);
+        this.f$0.lambda$createGroupInstance$42(this.f$1);
     }
 }

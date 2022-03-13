@@ -7,6 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -14,10 +16,12 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class EmptyTextProgressView extends FrameLayout {
     private boolean inLayout;
+    private RLottieImageView lottieImageView;
     private View progressView;
     private final Theme.ResourcesProvider resourcesProvider;
     private int showAtPos;
     private TextView textView;
+    private LinearLayout textViewLayout;
 
     /* access modifiers changed from: private */
     public static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
@@ -32,26 +36,42 @@ public class EmptyTextProgressView extends FrameLayout {
         this(context, (View) null, (Theme.ResourcesProvider) null);
     }
 
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public EmptyTextProgressView(Context context, View view, Theme.ResourcesProvider resourcesProvider2) {
         super(context);
+        Context context2 = context;
+        View view2 = view;
         this.resourcesProvider = resourcesProvider2;
-        if (view == null) {
-            view = new RadialProgressView(context);
-            addView(view, LayoutHelper.createFrame(-2, -2.0f));
+        if (view2 == null) {
+            view2 = new RadialProgressView(context2);
+            addView(view2, LayoutHelper.createFrame(-2, -2.0f));
         } else {
-            addView(view, LayoutHelper.createFrame(-1, -1.0f));
+            addView(view2, LayoutHelper.createFrame(-1, -1.0f));
         }
-        this.progressView = view;
-        TextView textView2 = new TextView(context);
+        this.progressView = view2;
+        LinearLayout linearLayout = new LinearLayout(context2);
+        this.textViewLayout = linearLayout;
+        linearLayout.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
+        this.textViewLayout.setGravity(1);
+        this.textViewLayout.setClipChildren(false);
+        this.textViewLayout.setClipToPadding(false);
+        this.textViewLayout.setOrientation(1);
+        RLottieImageView rLottieImageView = new RLottieImageView(context2);
+        this.lottieImageView = rLottieImageView;
+        rLottieImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        this.lottieImageView.setImportantForAccessibility(2);
+        this.lottieImageView.setVisibility(8);
+        this.textViewLayout.addView(this.lottieImageView, LayoutHelper.createLinear(150, 150, 17, 0, 0, 0, 20));
+        TextView textView2 = new TextView(context2);
         this.textView = textView2;
         textView2.setTextSize(1, 20.0f);
         this.textView.setTextColor(getThemedColor("emptyListPlaceholder"));
-        this.textView.setGravity(17);
-        this.textView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
+        this.textView.setGravity(1);
         this.textView.setText(LocaleController.getString("NoResult", NUM));
-        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f));
+        this.textViewLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2, 17));
+        addView(this.textViewLayout, LayoutHelper.createFrame(-2, -2.0f));
         AndroidUtilities.updateViewVisibilityAnimated(this.textView, false, 2.0f, false);
-        AndroidUtilities.updateViewVisibilityAnimated(view, false, 1.0f, false);
+        AndroidUtilities.updateViewVisibilityAnimated(view2, false, 1.0f, false);
         setOnTouchListener(EmptyTextProgressView$$ExternalSyntheticLambda0.INSTANCE);
     }
 
@@ -75,6 +95,14 @@ public class EmptyTextProgressView extends FrameLayout {
 
     public void setTextColor(int i) {
         this.textView.setTextColor(i);
+    }
+
+    public void setLottie(int i, int i2, int i3) {
+        this.lottieImageView.setVisibility(i != 0 ? 0 : 8);
+        if (i != 0) {
+            this.lottieImageView.setAnimation(i, i2, i3);
+            this.lottieImageView.playAnimation();
+        }
     }
 
     public void setProgressBarColor(int i) {

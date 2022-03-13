@@ -228,7 +228,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r11.searching = r13
             r11.searchWas = r13
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131165489(0x7var_, float:1.7945197E38)
+            r1 = 2131165491(0x7var_, float:1.79452E38)
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
             r14 = 1
@@ -238,7 +238,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r11.returnAsResult
             if (r0 == 0) goto L_0x002e
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131627760(0x7f0e0ef0, float:1.8882794E38)
+            r1 = 2131627859(0x7f0e0var_, float:1.8882994E38)
             java.lang.String r2 = "SelectContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -247,21 +247,21 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r11.createSecretChat
             if (r0 == 0) goto L_0x0041
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131626506(0x7f0e0a0a, float:1.888025E38)
+            r1 = 2131626556(0x7f0e0a3c, float:1.8880352E38)
             java.lang.String r2 = "NewSecretChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0041:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131626496(0x7f0e0a00, float:1.888023E38)
+            r1 = 2131626546(0x7f0e0a32, float:1.8880331E38)
             java.lang.String r2 = "NewMessageTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0050:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131625082(0x7f0e047a, float:1.8877362E38)
+            r1 = 2131625097(0x7f0e0489, float:1.8877392E38)
             java.lang.String r2 = "Contacts"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -272,14 +272,14 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r0.setActionBarMenuOnItemClick(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
-            r1 = 2131165499(0x7var_b, float:1.7945217E38)
+            r1 = 2131165501(0x7var_d, float:1.794522E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r13, (int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setIsSearchField(r14)
             org.telegram.ui.ContactsActivity$2 r2 = new org.telegram.ui.ContactsActivity$2
             r2.<init>()
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setActionBarMenuItemSearchListener(r2)
             java.lang.String r2 = "Search"
-            r3 = 2131627691(0x7f0e0eab, float:1.8882654E38)
+            r3 = 2131627789(0x7f0e0f0d, float:1.8882852E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setSearchFieldHint(r4)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
@@ -290,10 +290,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             if (r1 != 0) goto L_0x00ba
             boolean r1 = r11.sortByName
             if (r1 == 0) goto L_0x00a5
-            r1 = 2131165388(0x7var_cc, float:1.7944992E38)
+            r1 = 2131165390(0x7var_ce, float:1.7944996E38)
             goto L_0x00a8
         L_0x00a5:
-            r1 = 2131165387(0x7var_cb, float:1.794499E38)
+            r1 = 2131165389(0x7var_cd, float:1.7944994E38)
         L_0x00a8:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r14, (int) r1)
             r11.sortItem = r0
@@ -406,13 +406,13 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r1.showProgress(r14, r13)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.title
-            r2 = 2131626570(0x7f0e0a4a, float:1.888038E38)
+            r2 = 2131626620(0x7f0e0a7c, float:1.8880481E38)
             java.lang.String r3 = "NoResult"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.subtitle
-            r2 = 2131627696(0x7f0e0eb0, float:1.8882664E38)
+            r2 = 2131627795(0x7f0e0var_, float:1.8882865E38)
             java.lang.String r3 = "SearchEmptyViewFilteredSubtitle2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -521,7 +521,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r1, r6, r7)
             if (r2 >= r5) goto L_0x029f
             android.content.res.Resources r6 = r24.getResources()
-            r7 = 2131165437(0x7var_fd, float:1.7945091E38)
+            r7 = 2131165439(0x7var_ff, float:1.7945095E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
@@ -550,15 +550,15 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.getBoolean(r1, r14)
             org.telegram.ui.Components.RLottieImageView r1 = r11.floatingButton
             if (r0 == 0) goto L_0x02c8
-            r0 = 2131558557(0x7f0d009d, float:1.8742433E38)
+            r0 = 2131558575(0x7f0d00af, float:1.874247E38)
             goto L_0x02cb
         L_0x02c8:
-            r0 = 2131558558(0x7f0d009e, float:1.8742435E38)
+            r0 = 2131558576(0x7f0d00b0, float:1.8742472E38)
         L_0x02cb:
             r6 = 52
             r1.setAnimation(r0, r6, r6)
             android.widget.FrameLayout r0 = r11.floatingButtonContainer
-            r1 = 2131625113(0x7f0e0499, float:1.8877425E38)
+            r1 = 2131625129(0x7f0e04a9, float:1.8877457E38)
             java.lang.String r6 = "CreateNewContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             r0.setContentDescription(r1)
@@ -1140,7 +1140,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: protected */
-    public AnimatorSet onCustomTransitionAnimation(final boolean z, final Runnable runnable) {
+    public AnimatorSet onCustomTransitionAnimation(boolean z, Runnable runnable) {
         ValueAnimator valueAnimator;
         BaseFragment baseFragment;
         float[] fArr = {0.0f, 1.0f};
@@ -1168,7 +1168,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (this.floatingButtonContainer == null || view == null || floatingButton2.getVisibility() != 0 || Math.abs(view.getTranslationY()) > ((float) AndroidUtilities.dp(4.0f)) || Math.abs(this.floatingButtonContainer.getTranslationY()) > ((float) AndroidUtilities.dp(4.0f))) {
             return null;
         }
-        floatingButton2.setVisibility(8);
+        view.setVisibility(8);
         if (z) {
             viewGroup.setAlpha(0.0f);
         }
@@ -1181,6 +1181,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         valueAnimator.setDuration(150);
         valueAnimator.setInterpolator(new DecelerateInterpolator(1.5f));
         AnimatorSet animatorSet = new AnimatorSet();
+        final View view2 = view;
+        final boolean z2 = z;
+        final Runnable runnable2 = runnable;
         animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (ContactsActivity.this.floatingButtonContainer != null) {
@@ -1188,18 +1191,18 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         ((ViewGroup) ContactsActivity.this.floatingButtonContainer.getParent()).removeView(ContactsActivity.this.floatingButtonContainer);
                     }
                     ((ViewGroup) ContactsActivity.this.fragmentView).addView(ContactsActivity.this.floatingButtonContainer);
-                    floatingButton2.setVisibility(0);
-                    if (!z) {
+                    view2.setVisibility(0);
+                    if (!z2) {
                         floatingButton2.setAnimation(NUM, 52, 52);
                         floatingButton2.getAnimatedDrawable().setCurrentFrame(ContactsActivity.this.floatingButton.getAnimatedDrawable().getCurrentFrame());
                         floatingButton2.playAnimation();
                     }
                 }
-                runnable.run();
+                runnable2.run();
             }
         });
         animatorSet.playTogether(new Animator[]{valueAnimator});
-        AndroidUtilities.runOnUIThread(new ContactsActivity$$ExternalSyntheticLambda5(this, animatorSet, z, floatingButton2), 50);
+        AndroidUtilities.runOnUIThread(new ContactsActivity$$ExternalSyntheticLambda5(this, animatorSet, z, view), 50);
         return animatorSet;
     }
 
@@ -1211,9 +1214,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onCustomTransitionAnimation$8(AnimatorSet animatorSet, boolean z, RLottieImageView rLottieImageView) {
-        final RLottieImageView rLottieImageView2 = rLottieImageView;
-        this.animationIndex = getNotificationCenter().setAnimationInProgress(this.animationIndex, (int[]) null);
+    public /* synthetic */ void lambda$onCustomTransitionAnimation$8(AnimatorSet animatorSet, boolean z, View view) {
+        final View view2 = view;
+        this.animationIndex = getNotificationCenter().setAnimationInProgress(this.animationIndex, new int[]{NotificationCenter.diceStickersDidLoad}, false);
         animatorSet.start();
         if (z) {
             this.floatingButton.setAnimation(NUM, 52, 52);
@@ -1234,27 +1237,27 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             for (int i2 = 0; i2 < 6; i2++) {
                 AnimatorSet animatorSet3 = new AnimatorSet();
                 if (i2 == 0) {
-                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.0f, 0.9f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.0f, 0.9f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{1.0f, 0.9f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{1.0f, 0.9f})});
+                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.0f, 0.9f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.0f, 0.9f}), ObjectAnimator.ofFloat(view2, View.SCALE_X, new float[]{1.0f, 0.9f}), ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{1.0f, 0.9f})});
                     animatorSet3.setDuration((long) (0.12765957f * duration));
                     animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_OUT);
                 } else if (i2 == 1) {
-                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{0.9f, 1.06f})});
+                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(view2, View.SCALE_X, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{0.9f, 1.06f})});
                     animatorSet3.setDuration((long) (0.3617021f * duration));
                     animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
                 } else if (i2 == 2) {
-                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.06f, 0.9f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.06f, 0.9f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{1.06f, 0.9f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{1.06f, 0.9f})});
+                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.06f, 0.9f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.06f, 0.9f}), ObjectAnimator.ofFloat(view2, View.SCALE_X, new float[]{1.06f, 0.9f}), ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{1.06f, 0.9f})});
                     animatorSet3.setDuration((long) (0.21276596f * duration));
                     animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
                 } else if (i2 == 3) {
-                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.9f, 1.03f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.9f, 1.03f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{0.9f, 1.03f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{0.9f, 1.03f})});
+                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.9f, 1.03f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.9f, 1.03f}), ObjectAnimator.ofFloat(view2, View.SCALE_X, new float[]{0.9f, 1.03f}), ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{0.9f, 1.03f})});
                     animatorSet3.setDuration((long) (duration * 0.10638298f));
                     animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
                 } else if (i2 == 4) {
-                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.03f, 0.98f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.03f, 0.98f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{1.03f, 0.98f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{1.03f, 0.98f})});
+                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.03f, 0.98f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.03f, 0.98f}), ObjectAnimator.ofFloat(view2, View.SCALE_X, new float[]{1.03f, 0.98f}), ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{1.03f, 0.98f})});
                     animatorSet3.setDuration((long) (duration * 0.10638298f));
                     animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
                 } else {
-                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.98f, 1.0f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.98f, 1.0f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{0.98f, 1.0f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{0.98f, 1.0f})});
+                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.98f, 1.0f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.98f, 1.0f}), ObjectAnimator.ofFloat(view2, View.SCALE_X, new float[]{0.98f, 1.0f}), ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{0.98f, 1.0f})});
                     animatorSet3.setDuration((long) (0.08510638f * duration));
                     animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_IN);
                 }
@@ -1269,26 +1272,26 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     Animator[] animatorArr = new Animator[i];
                     animatorArr[0] = ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.0f, 0.9f});
                     animatorArr[1] = ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.0f, 0.9f});
-                    animatorArr[2] = ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{1.0f, 0.9f});
-                    animatorArr[3] = ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{1.0f, 0.9f});
+                    animatorArr[2] = ObjectAnimator.ofFloat(view2, View.SCALE_X, new float[]{1.0f, 0.9f});
+                    animatorArr[3] = ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{1.0f, 0.9f});
                     animatorSet4.playTogether(animatorArr);
                     animatorSet4.setDuration((long) (0.19444445f * duration));
                     animatorSet4.setInterpolator(CubicBezierInterpolator.EASE_OUT);
                 } else if (i3 == 1) {
-                    animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{0.9f, 1.06f})});
+                    animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(view2, View.SCALE_X, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{0.9f, 1.06f})});
                     animatorSet4.setDuration((long) (0.22222222f * duration));
                     animatorSet4.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
                 } else if (i3 == 2) {
-                    animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.06f, 0.92f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.06f, 0.92f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{1.06f, 0.92f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{1.06f, 0.92f})});
+                    animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.06f, 0.92f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.06f, 0.92f}), ObjectAnimator.ofFloat(view2, View.SCALE_X, new float[]{1.06f, 0.92f}), ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{1.06f, 0.92f})});
                     animatorSet4.setDuration((long) (0.19444445f * duration));
                     animatorSet4.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
                 } else if (i3 == 3) {
-                    animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.92f, 1.02f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.92f, 1.02f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{0.92f, 1.02f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{0.92f, 1.02f})});
+                    animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.92f, 1.02f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.92f, 1.02f}), ObjectAnimator.ofFloat(view2, View.SCALE_X, new float[]{0.92f, 1.02f}), ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{0.92f, 1.02f})});
                     animatorSet4.setDuration((long) (0.25f * duration));
                     animatorSet4.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
                 } else {
                     i = 4;
-                    animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.02f, 1.0f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.02f, 1.0f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{1.02f, 1.0f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{1.02f, 1.0f})});
+                    animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.02f, 1.0f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.02f, 1.0f}), ObjectAnimator.ofFloat(view2, View.SCALE_X, new float[]{1.02f, 1.0f}), ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{1.02f, 1.0f})});
                     animatorSet4.setDuration((long) (duration * 0.10638298f));
                     animatorSet4.setInterpolator(CubicBezierInterpolator.EASE_IN);
                     animatorSet4.setStartDelay(j);
@@ -1305,8 +1308,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             public void onAnimationEnd(Animator animator) {
                 ContactsActivity.this.floatingButton.setScaleX(1.0f);
                 ContactsActivity.this.floatingButton.setScaleY(1.0f);
-                rLottieImageView2.setScaleX(1.0f);
-                rLottieImageView2.setScaleY(1.0f);
+                view2.setScaleX(1.0f);
+                view2.setScaleY(1.0f);
                 AnimatorSet unused = ContactsActivity.this.bounceIconAnimator = null;
                 ContactsActivity.this.getNotificationCenter().onAnimationFinish(ContactsActivity.this.animationIndex);
             }

@@ -601,9 +601,9 @@ public class TextMessageEnterTransition implements MessageEnterTransitionContain
             r25 = 1132396544(0x437var_, float:255.0)
             if (r1 == 0) goto L_0x0257
             org.telegram.ui.Cells.ChatMessageCell r2 = r0.messageView
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
+            org.telegram.ui.MessageEnterTransitionContainer r3 = r0.container
             int r3 = r3.getTop()
-            org.telegram.ui.MessageEnterTransitionContainer r10 = r0.container
+            org.telegram.ui.Components.RecyclerListView r10 = r0.listView
             int r10 = r10.getTop()
             int r3 = r3 - r10
             r2.setBackgroundTopY((int) r3)

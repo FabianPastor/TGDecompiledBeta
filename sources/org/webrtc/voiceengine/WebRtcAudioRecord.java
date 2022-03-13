@@ -158,8 +158,13 @@ public class WebRtcAudioRecord {
                         }
                     }
                     if (this.keepAlive) {
-                        WebRtcAudioRecord webRtcAudioRecord = WebRtcAudioRecord.this;
-                        webRtcAudioRecord.nativeDataIsRecorded(read, webRtcAudioRecord.nativeAudioRecord);
+                        try {
+                            WebRtcAudioRecord webRtcAudioRecord = WebRtcAudioRecord.this;
+                            webRtcAudioRecord.nativeDataIsRecorded(read, webRtcAudioRecord.nativeAudioRecord);
+                        } catch (UnsatisfiedLinkError e) {
+                            FileLog.e((Throwable) e);
+                            this.keepAlive = false;
+                        }
                     }
                     if (WebRtcAudioRecord.audioSamplesReadyCallback != null) {
                         WebRtcAudioRecord.audioSamplesReadyCallback.onWebRtcAudioRecordSamplesReady(new AudioSamples(WebRtcAudioRecord.this.audioRecord, Arrays.copyOf(WebRtcAudioRecord.this.byteBuffer.array(), WebRtcAudioRecord.this.byteBuffer.capacity())));
@@ -177,8 +182,8 @@ public class WebRtcAudioRecord {
                 if (WebRtcAudioRecord.this.audioRecord != null) {
                     WebRtcAudioRecord.this.audioRecord.stop();
                 }
-            } catch (IllegalStateException e) {
-                Logging.e("WebRtcAudioRecord", "AudioRecord.stop failed: " + e.getMessage());
+            } catch (IllegalStateException e2) {
+                Logging.e("WebRtcAudioRecord", "AudioRecord.stop failed: " + e2.getMessage());
             }
         }
 

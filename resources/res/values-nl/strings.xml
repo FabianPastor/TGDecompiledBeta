@@ -1398,6 +1398,7 @@
     <string name="EnterNewPasscode">Nieuwe toegangscode invoeren</string>
     <string name="EnterThemeName">Geef een naam aan je thema</string>
     <string name="EnterThemeNameEdit">Tik **Maken** als je je thema met anderen wilt delen of handmatig kleuren aan wilt passen.\10\10Geef een naam voor je thema:</string>
+    <string name="EnterYourPasscode">Toegangscode invoeren</string>
     <string name="ErrorOccurred">Er is een fout opgetreden.</string>
     <string name="ErrorSendRestrictedMedia">De beheerders van deze groep hebben je beperkt in het sturen van media.</string>
     <string name="ErrorSendRestrictedMediaAll">Media sturen naar deze groep is niet toegestaan.</string>
@@ -2983,13 +2984,9 @@
     <string name="PermissionDrawAboveOtherAppsGroupCall">Met overlay-modus kun je Push-To-Talk gebruiken en zien wie er aan het praten is zelfs als je Telegram niet in de voorgrond hebt.</string>
     <string name="PermissionDrawAboveOtherAppsGroupCallTitle">Spraakchat-overlay</string>
     <string name="PermissionDrawAboveOtherAppsTitle">Beeld-in-beeld</string>
-    <string name="PermissionNoAudio">Telegram heeft toegang tot je microfoon nodig om spraakberichten te kunnen verzenden.</string>
-    <string name="PermissionNoAudioVideo">Telegram heeft toegang tot je microfoon nodig om video op te nemen.</string>
-    <string name="PermissionNoCamera">Telegram heeft toegang tot je camera nodig zodat je foto\'s en video\'s kunt maken. Schakel dit in via instellingen.</string>
     <string name="PermissionNoLocation">Telegram heeft toegang tot je locatie nodig om deze te kunnen delen met je vrienden.</string>
     <string name="PermissionNoLocationPosition">Telegram heeft toegang tot je locatie nodig.</string>
     <string name="PermissionOpenSettings">INSTELLINGEN</string>
-    <string name="PermissionStorage">Telegram heeft toegang tot je opslaggeheugen nodig zodat je foto\'s, video\'s, muziek en andere media kunt opslaan en versturen.</string>
     <string name="PermissionXiaomiLockscreen">Sta Telegram toe om weer te kunnen geven op het vergrendelscherm om ervoor te zorgen dat oproepen goed werken.</string>
     <string name="Phone">Telefoon</string>
     <string name="PhoneCopied">Nummer gekopieerd naar klembord</string>
@@ -3180,7 +3177,6 @@
     <string name="Purple">Paars</string>
     <string name="QRCodeLinkHelpChannel">Iedereen op Telegram kan deze code scannen om lid te worden van je kanaal</string>
     <string name="QRCodeLinkHelpGroup">Everyone on Telegram can scan this code to join your group.</string>
-    <string name="QRCodePermissionNoCamera">Telegram heeft toegang tot je camera nodig om QR-codes te scannen.</string>
     <string name="QuestionHint">Stel een vraag</string>
     <string name="QuickReplyCustom">Aangepast bericht.</string>
     <string name="QuickReplyDefault1">Kan nu niet praten, wat is er?</string>
@@ -4258,8 +4254,6 @@
     <string name="VoipMutedTapedForSpeak">You asked to speak</string>
     <string name="VoipMutedTapedForSpeakInfo">We let the speakers know</string>
     <string name="VoipNeedCameraPermission">Telegram needs access to your camera so that you can make video calls.</string>
-    <string name="VoipNeedMicCameraPermission">Telegram heeft toegang nodig tot je microfoon en camera, zodat je video-oproepen kunt doen.</string>
-    <string name="VoipNeedMicPermission">Telegram heeft toegang tot je microfoon nodig zodat je kunt bellen.</string>
     <string name="VoipNoiseCancellation">Noise suppression</string>
     <string name="VoipNoiseCancellationDisabled">Disabled</string>
     <string name="VoipNoiseCancellationEnabled">Enabled</string>

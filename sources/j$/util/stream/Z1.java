@@ -37,7 +37,7 @@ final class Z1 extends CLASSNAMEb2 implements CLASSNAMEz1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public y m537spliterator() {
+    public y m556spliterator() {
         return N.d();
     }
 }

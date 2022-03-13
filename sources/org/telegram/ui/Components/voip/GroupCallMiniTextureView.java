@@ -104,6 +104,10 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
     int lastSpeakingFrameColor;
     private final RLottieImageView micIconView;
     private final SimpleTextView nameView;
+    /* access modifiers changed from: private */
+    public Runnable noRtmpStreamCallback = new GroupCallMiniTextureView$$ExternalSyntheticLambda5(this);
+    /* access modifiers changed from: private */
+    public TextView noRtmpStreamTextView;
     ValueAnimator noVideoStubAnimator;
     /* access modifiers changed from: private */
     public NoVideoStubLayout noVideoStubLayout;
@@ -118,6 +122,8 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
     float pinchScale;
     float pinchTranslationX;
     float pinchTranslationY;
+    /* access modifiers changed from: private */
+    public boolean postedNoRtmpStreamCallback;
     public GroupCallGridCell primaryView;
     /* access modifiers changed from: private */
     public float progressToBackground;
@@ -139,7 +145,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
     /* access modifiers changed from: private */
     public float swipeToBackDy;
     public GroupCallGridCell tabletGridView;
-    public final VoIPTextureView textureView;
+    public VoIPTextureView textureView;
     Bitmap thumb;
     Paint thumbPaint;
     private boolean updateNextLayoutAnimated;
@@ -155,16 +161,26 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         return f2;
     }
 
-    static /* synthetic */ float access$616(GroupCallMiniTextureView groupCallMiniTextureView, float f) {
+    static /* synthetic */ float access$716(GroupCallMiniTextureView groupCallMiniTextureView, float f) {
         float f2 = groupCallMiniTextureView.videoIsPausedProgress + f;
         groupCallMiniTextureView.videoIsPausedProgress = f2;
         return f2;
     }
 
-    static /* synthetic */ float access$624(GroupCallMiniTextureView groupCallMiniTextureView, float f) {
+    static /* synthetic */ float access$724(GroupCallMiniTextureView groupCallMiniTextureView, float f) {
         float f2 = groupCallMiniTextureView.videoIsPausedProgress - f;
         groupCallMiniTextureView.videoIsPausedProgress = f2;
         return f2;
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0() {
+        if (!this.textureView.renderer.isFirstFrameRendered()) {
+            this.textureView.animate().cancel();
+            this.textureView.animate().alpha(0.0f).setDuration(150).start();
+            this.noRtmpStreamTextView.animate().cancel();
+            this.noRtmpStreamTextView.animate().alpha(1.0f).setDuration(150).start();
+        }
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
@@ -197,14 +213,16 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         final StaticLayout staticLayout = r19;
         TextPaint textPaint5 = textPaint2;
         StaticLayout staticLayout2 = new StaticLayout(LocaleController.getString("VoipVideoScreenSharingTwoLines", NUM), textPaint5, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-        MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(call3.chatId));
         String str2 = string;
         final StaticLayout staticLayout3 = r19;
-        StaticLayout staticLayout4 = new StaticLayout(LocaleController.formatString("VoipVideoNotAvailable", NUM, LocaleController.formatPluralString("Participants", MessagesController.getInstance(this.currentAccount).groipCallVideoMaxParticipants)), textPaint5, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+        TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Long.valueOf(call3.chatId));
+        StaticLayout staticLayout4 = new StaticLayout(LocaleController.formatString("VoipVideoNotAvailable", NUM, LocaleController.formatPluralString("Participants", MessagesController.getInstance(this.currentAccount).groupCallVideoMaxParticipants)), textPaint5, AndroidUtilities.dp(400.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
         String string2 = LocaleController.getString("VoipVideoScreenSharing", NUM);
-        final String str3 = string2;
-        final float measureText = textPaint2.measureText(str2);
+        String str3 = str2;
+        final String str4 = string2;
+        final float measureText = textPaint2.measureText(str3);
         final float measureText2 = textPaint4.measureText(string2);
+        TLRPC$Chat tLRPC$Chat = chat;
         AnonymousClass1 r29 = r0;
         AnonymousClass1 r0 = new VoIPTextureView(this, groupCallRenderersContainer.getContext(), false, false, true, true) {
             float overlayIconAlphaFrom;
@@ -326,12 +344,12 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                             } else {
                                 groupCallMiniTextureView8.stopSharingTextView.setAlpha(0.0f);
                             }
-                            canvas2.drawText(str3, (((float) measuredWidth) - (measureText2 / 2.0f)) + (((float) i) / 2.0f), (float) (AndroidUtilities.dp(32.0f) + i2), textPaint3);
+                            canvas2.drawText(str4, (((float) measuredWidth) - (measureText2 / 2.0f)) + (((float) i) / 2.0f), (float) (AndroidUtilities.dp(32.0f) + i2), textPaint3);
                         } else {
                             this.this$0.stopSharingTextView.setAlpha(0.0f);
                         }
                         this.this$0.stopSharingTextView.setTranslationY((((float) (AndroidUtilities.dp(72.0f) + i2)) + this.this$0.swipeToBackDy) - this.currentClipVertical);
-                        this.this$0.stopSharingTextView.setTranslationX(((float) ((getMeasuredWidth() - this.this$0.stopSharingTextView.getMeasuredWidth()) / 2)) - this.currentClipHorizontal);
+                        this.this$0.stopSharingTextView.setTranslationX((((float) (getMeasuredWidth() - this.this$0.stopSharingTextView.getMeasuredWidth())) / 2.0f) - this.currentClipHorizontal);
                         float f9 = groupCallRenderersContainer2.progressToFullscreenMode;
                         if (f9 < 1.0f && f7 < 1.0f) {
                             TextPaint textPaint = textPaint;
@@ -346,6 +364,8 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                     }
                     invalidate();
                 }
+                this.this$0.noRtmpStreamTextView.setTranslationY(((((float) (getMeasuredHeight() - this.this$0.noRtmpStreamTextView.getMeasuredHeight())) / 2.0f) + this.this$0.swipeToBackDy) - this.currentClipVertical);
+                this.this$0.noRtmpStreamTextView.setTranslationX((((float) (getMeasuredWidth() - this.this$0.noRtmpStreamTextView.getMeasuredWidth())) / 2.0f) - this.currentClipHorizontal);
                 ImageView imageView = this.this$0.blurredFlippingStub;
                 if (!(imageView == null || imageView.getParent() == null)) {
                     GroupCallMiniTextureView groupCallMiniTextureView9 = this.this$0;
@@ -368,21 +388,21 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                 }
                 if (this.this$0.videoIsPaused || this.this$0.videoIsPausedProgress != 0.0f) {
                     if (this.this$0.videoIsPaused && this.this$0.videoIsPausedProgress != 1.0f) {
-                        GroupCallMiniTextureView.access$616(this.this$0, 0.064f);
+                        GroupCallMiniTextureView.access$716(this.this$0, 0.064f);
                         if (this.this$0.videoIsPausedProgress > 1.0f) {
                             float unused2 = this.this$0.videoIsPausedProgress = 1.0f;
                         } else {
                             invalidate();
                         }
                     } else if (!this.this$0.videoIsPaused && this.this$0.videoIsPausedProgress != 0.0f) {
-                        GroupCallMiniTextureView.access$624(this.this$0, 0.064f);
+                        GroupCallMiniTextureView.access$724(this.this$0, 0.064f);
                         if (this.this$0.videoIsPausedProgress < 0.0f) {
                             float unused3 = this.this$0.videoIsPausedProgress = 0.0f;
                         } else {
                             invalidate();
                         }
                     }
-                    float access$600 = this.this$0.videoIsPausedProgress;
+                    float access$700 = this.this$0.videoIsPausedProgress;
                     if (isInAnimation()) {
                         float var_ = this.overlayIconAlphaFrom;
                         float var_ = this.animationProgress;
@@ -390,7 +410,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                     } else {
                         f = this.this$0.overlayIconAlpha;
                     }
-                    float var_ = access$600 * f;
+                    float var_ = access$700 * f;
                     if (var_ > 0.0f) {
                         float dp6 = (float) AndroidUtilities.dp(48.0f);
                         float measuredWidth2 = (((float) getMeasuredWidth()) - dp6) / 2.0f;
@@ -471,7 +491,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                 TextureViewRenderer textureViewRenderer2 = this.renderer;
                 int i6 = textureViewRenderer2.rotatedFrameHeight;
                 if (i6 != 0 && (i5 = textureViewRenderer2.rotatedFrameWidth) != 0 && (videoParticipant = this.this$0.participant) != null) {
-                    videoParticipant.setAspectRatio(((float) i5) / ((float) i6), call4);
+                    videoParticipant.setAspectRatio(i5, i6, call4);
                 }
             }
 
@@ -482,7 +502,18 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
 
             /* access modifiers changed from: protected */
             public void onFirstFrameRendered() {
+                int i;
+                ChatObject.VideoParticipant videoParticipant;
                 invalidate();
+                ChatObject.Call call = call4;
+                if (call != null && call.call.rtmp_stream && this.this$0.postedNoRtmpStreamCallback) {
+                    AndroidUtilities.cancelRunOnUIThread(this.this$0.noRtmpStreamCallback);
+                    boolean unused = this.this$0.postedNoRtmpStreamCallback = false;
+                    this.this$0.noRtmpStreamTextView.animate().cancel();
+                    this.this$0.noRtmpStreamTextView.animate().alpha(0.0f).setDuration(150).start();
+                    this.this$0.textureView.animate().cancel();
+                    this.this$0.textureView.animate().alpha(1.0f).setDuration(150).start();
+                }
                 if (!this.this$0.videoIsPaused && this.renderer.getAlpha() != 1.0f) {
                     this.renderer.animate().setDuration(300).alpha(1.0f);
                 }
@@ -491,7 +522,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                     this.blurRenderer.animate().setDuration(300).alpha(1.0f);
                 }
                 ImageView imageView = this.this$0.blurredFlippingStub;
-                if (imageView != null && imageView.getParent() != null) {
+                if (!(imageView == null || imageView.getParent() == null)) {
                     if (this.this$0.blurredFlippingStub.getAlpha() == 1.0f) {
                         this.this$0.blurredFlippingStub.animate().alpha(0.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
@@ -506,6 +537,11 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                         groupCallMiniTextureView.textureView.removeView(groupCallMiniTextureView.blurredFlippingStub);
                     }
                 }
+                TextureViewRenderer textureViewRenderer = this.renderer;
+                int i2 = textureViewRenderer.rotatedFrameHeight;
+                if (i2 != 0 && (i = textureViewRenderer.rotatedFrameWidth) != 0 && (videoParticipant = this.this$0.participant) != null) {
+                    videoParticipant.setAspectRatio(i, i2, call4);
+                }
             }
         };
         AnonymousClass1 r1 = r29;
@@ -514,7 +550,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         this.parentContainer = groupCallRenderersContainer;
         this.attachedRenderers = arrayList;
         this.activity = groupCallActivity;
-        r1.renderer.init(VideoCapturerDevice.getEglBase().getEglBaseContext(), new RendererCommon.RendererEvents() {
+        this.textureView.renderer.init(VideoCapturerDevice.getEglBase().getEglBaseContext(), new RendererCommon.RendererEvents() {
             public void onFrameResolutionChanged(int i, int i2, int i3) {
             }
 
@@ -526,10 +562,10 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                 GroupCallMiniTextureView.this.onFirstFrameRunnables.clear();
             }
         });
-        r1.attachBackgroundRenderer();
+        this.textureView.attachBackgroundRenderer();
         setClipChildren(false);
-        r1.renderer.setAlpha(0.0f);
-        addView(r1);
+        this.textureView.renderer.setAlpha(0.0f);
+        addView(this.textureView);
         NoVideoStubLayout noVideoStubLayout2 = new NoVideoStubLayout(getContext());
         this.noVideoStubLayout = noVideoStubLayout2;
         addView(noVideoStubLayout2);
@@ -558,7 +594,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         imageView.setImageDrawable(ContextCompat.getDrawable(groupCallRenderersContainer.getContext(), NUM));
         imageView.setColorFilter(new PorterDuffColorFilter(-1, PorterDuff.Mode.MULTIPLY));
         Drawable createSimpleSelectorRoundRectDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(19.0f), 0, ColorUtils.setAlphaComponent(-1, 100));
-        AnonymousClass3 r6 = new TextView(groupCallRenderersContainer.getContext()) {
+        AnonymousClass3 r7 = new TextView(groupCallRenderersContainer.getContext()) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (Math.abs(GroupCallMiniTextureView.this.stopSharingTextView.getAlpha() - 1.0f) > 0.001f) {
                     return false;
@@ -566,8 +602,8 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                 return super.onTouchEvent(motionEvent);
             }
         };
-        this.stopSharingTextView = r6;
-        r6.setText(LocaleController.getString("VoipVideoScreenStopSharing", NUM));
+        this.stopSharingTextView = r7;
+        r7.setText(LocaleController.getString("VoipVideoScreenStopSharing", NUM));
         this.stopSharingTextView.setTextSize(1, 15.0f);
         this.stopSharingTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.stopSharingTextView.setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), 0);
@@ -576,10 +612,24 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         this.stopSharingTextView.setGravity(17);
         this.stopSharingTextView.setOnClickListener(new GroupCallMiniTextureView$$ExternalSyntheticLambda3(this));
         addView(this.stopSharingTextView, LayoutHelper.createFrame(-2, 38, 51));
+        TextView textView = new TextView(groupCallRenderersContainer.getContext());
+        this.noRtmpStreamTextView = textView;
+        textView.setTextSize(1, 15.0f);
+        this.noRtmpStreamTextView.setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), 0);
+        this.noRtmpStreamTextView.setTextColor(Theme.getColor("voipgroup_lastSeenText"));
+        this.noRtmpStreamTextView.setBackground(createSimpleSelectorRoundRectDrawable);
+        this.noRtmpStreamTextView.setGravity(17);
+        this.noRtmpStreamTextView.setAlpha(0.0f);
+        if (ChatObject.canManageCalls(tLRPC$Chat)) {
+            this.noRtmpStreamTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString(NUM)));
+        } else {
+            this.noRtmpStreamTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoRtmpStreamFromAppViewer", NUM, tLRPC$Chat.title)));
+        }
+        addView(this.noRtmpStreamTextView, LayoutHelper.createFrame(-2, -2, 51));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(View view) {
+    public /* synthetic */ void lambda$new$1(View view) {
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().stopScreenCapture();
         }
@@ -704,10 +754,10 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x0169  */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x017a  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x019e  */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x01a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x0185  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0196  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x01ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x01c4  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onMeasure(int r14, int r15) {
         /*
@@ -716,205 +766,224 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r0 = (android.widget.FrameLayout.LayoutParams) r0
             int r1 = r0.leftMargin
-            boolean r1 = r13.lastLandscapeMode
-            boolean r2 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r1 == r2) goto L_0x0015
-            r1 = 1
-            r13.checkScale = r1
-            r13.lastLandscapeMode = r2
-        L_0x0015:
-            r1 = 1073741824(0x40000000, float:2.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            r0.rightMargin = r2
-            r0.leftMargin = r2
+            org.telegram.messenger.ChatObject$Call r1 = r13.call
+            org.telegram.tgnet.TLRPC$GroupCall r1 = r1.call
+            boolean r1 = r1.rtmp_stream
+            r2 = 0
+            r3 = 1065353216(0x3var_, float:1.0)
+            if (r1 == 0) goto L_0x0017
+            r1 = 0
+            goto L_0x0019
+        L_0x0017:
+            r1 = 1065353216(0x3var_, float:1.0)
+        L_0x0019:
+            boolean r4 = r13.lastLandscapeMode
+            boolean r5 = org.telegram.ui.GroupCallActivity.isLandscapeMode
+            if (r4 == r5) goto L_0x0024
+            r4 = 1
+            r13.checkScale = r4
+            r13.lastLandscapeMode = r5
+        L_0x0024:
+            r4 = 1073741824(0x40000000, float:2.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r0.rightMargin = r5
+            r0.leftMargin = r5
             boolean r0 = r13.updateNextLayoutAnimated
-            r2 = 1065353216(0x3var_, float:1.0)
-            if (r0 == 0) goto L_0x0048
+            if (r0 == 0) goto L_0x0055
             org.telegram.ui.ActionBar.SimpleTextView r0 = r13.nameView
             android.view.ViewPropertyAnimator r0 = r0.animate()
-            android.view.ViewPropertyAnimator r0 = r0.scaleX(r2)
-            android.view.ViewPropertyAnimator r0 = r0.scaleY(r2)
+            android.view.ViewPropertyAnimator r0 = r0.scaleX(r1)
+            android.view.ViewPropertyAnimator r0 = r0.scaleY(r1)
             r0.start()
             org.telegram.ui.Components.RLottieImageView r0 = r13.micIconView
             android.view.ViewPropertyAnimator r0 = r0.animate()
-            android.view.ViewPropertyAnimator r0 = r0.scaleX(r2)
-            android.view.ViewPropertyAnimator r0 = r0.scaleY(r2)
+            android.view.ViewPropertyAnimator r0 = r0.scaleX(r1)
+            android.view.ViewPropertyAnimator r0 = r0.scaleY(r1)
             r0.start()
-            goto L_0x0077
-        L_0x0048:
+            goto L_0x0084
+        L_0x0055:
             org.telegram.ui.ActionBar.SimpleTextView r0 = r13.nameView
             android.view.ViewPropertyAnimator r0 = r0.animate()
             r0.cancel()
             org.telegram.ui.ActionBar.SimpleTextView r0 = r13.nameView
-            r0.setScaleX(r2)
+            r0.setScaleX(r1)
             org.telegram.ui.ActionBar.SimpleTextView r0 = r13.nameView
-            r0.setScaleY(r2)
+            r0.setScaleY(r1)
             org.telegram.ui.Components.RLottieImageView r0 = r13.micIconView
             android.view.ViewPropertyAnimator r0 = r0.animate()
             r0.cancel()
             org.telegram.ui.Components.RLottieImageView r0 = r13.micIconView
-            r0.setScaleX(r2)
+            r0.setScaleX(r1)
             org.telegram.ui.Components.RLottieImageView r0 = r13.micIconView
-            r0.setScaleY(r2)
+            r0.setScaleY(r1)
             android.widget.FrameLayout r0 = r13.infoContainer
             android.view.ViewPropertyAnimator r0 = r0.animate()
             r0.cancel()
-        L_0x0077:
+        L_0x0084:
             r0 = 0
             r13.updateNextLayoutAnimated = r0
-            boolean r3 = r13.showingInFullscreen
-            r4 = 0
+            boolean r1 = r13.showingInFullscreen
             r5 = 1082130432(0x40800000, float:4.0)
             r6 = 1073741824(0x40000000, float:2.0)
-            if (r3 == 0) goto L_0x00e7
+            if (r1 == 0) goto L_0x0103
             r13.updateSize(r0)
-            r13.overlayIconAlpha = r2
+            r13.overlayIconAlpha = r3
             boolean r0 = org.telegram.ui.GroupCallActivity.isTabletMode
-            if (r0 == 0) goto L_0x00ad
+            if (r0 == 0) goto L_0x00b9
             int r0 = android.view.View.MeasureSpec.getSize(r14)
-            r2 = 1134821376(0x43a40000, float:328.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r0 = r0 - r2
-            int r2 = android.view.View.MeasureSpec.getSize(r15)
+            r1 = 1134821376(0x43a40000, float:328.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r0 = r0 - r1
+            int r1 = android.view.View.MeasureSpec.getSize(r15)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r2 = r2 - r3
+            int r1 = r1 - r3
             int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r6)
-            int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r6)
-            super.onMeasure(r0, r2)
-            goto L_0x01c9
-        L_0x00ad:
+            int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r1, r6)
+            super.onMeasure(r0, r1)
+            goto L_0x01e5
+        L_0x00b9:
             boolean r0 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            r2 = 1119354880(0x42b80000, float:92.0)
-            if (r0 != 0) goto L_0x00cd
+            r1 = 1119354880(0x42b80000, float:92.0)
+            if (r0 != 0) goto L_0x00e1
             int r0 = android.view.View.MeasureSpec.getSize(r15)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r0 = r0 - r2
-            int r2 = android.view.View.MeasureSpec.getSize(r14)
-            int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r6)
+            org.telegram.messenger.ChatObject$Call r3 = r13.call
+            org.telegram.tgnet.TLRPC$GroupCall r3 = r3.call
+            boolean r3 = r3.rtmp_stream
+            if (r3 != 0) goto L_0x00d0
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r0 = r0 - r1
+        L_0x00d0:
+            int r1 = android.view.View.MeasureSpec.getSize(r14)
+            int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r1, r6)
             int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r6)
-            super.onMeasure(r2, r0)
-            goto L_0x01c9
-        L_0x00cd:
+            super.onMeasure(r1, r0)
+            goto L_0x01e5
+        L_0x00e1:
             int r0 = android.view.View.MeasureSpec.getSize(r14)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r0 = r0 - r2
+            org.telegram.messenger.ChatObject$Call r3 = r13.call
+            org.telegram.tgnet.TLRPC$GroupCall r3 = r3.call
+            boolean r3 = r3.rtmp_stream
+            if (r3 != 0) goto L_0x00f2
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r0 = r0 - r1
+        L_0x00f2:
             int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r6)
-            int r2 = android.view.View.MeasureSpec.getSize(r15)
-            int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r6)
-            super.onMeasure(r0, r2)
-            goto L_0x01c9
-        L_0x00e7:
-            boolean r3 = r13.showingAsScrimView
+            int r1 = android.view.View.MeasureSpec.getSize(r15)
+            int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r1, r6)
+            super.onMeasure(r0, r1)
+            goto L_0x01e5
+        L_0x0103:
+            boolean r1 = r13.showingAsScrimView
             r7 = 1096810496(0x41600000, float:14.0)
             r8 = 2
-            if (r3 == 0) goto L_0x0115
-            r13.overlayIconAlpha = r2
+            if (r1 == 0) goto L_0x0131
+            r13.overlayIconAlpha = r3
             int r0 = android.view.View.MeasureSpec.getSize(r14)
-            int r2 = android.view.View.MeasureSpec.getSize(r15)
-            int r0 = java.lang.Math.min(r0, r2)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r2 = r2 * 2
-            int r0 = r0 - r2
-            int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r6)
+            int r1 = android.view.View.MeasureSpec.getSize(r15)
+            int r0 = java.lang.Math.min(r0, r1)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r1 = r1 * 2
+            int r0 = r0 - r1
+            int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r6)
             int r3 = r13.getPaddingBottom()
             int r0 = r0 + r3
             int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r6)
-            super.onMeasure(r2, r0)
-            goto L_0x01c9
-        L_0x0115:
-            boolean r3 = r13.useSpanSize
-            if (r3 == 0) goto L_0x01c4
-            r13.overlayIconAlpha = r2
-            boolean r2 = org.telegram.ui.GroupCallActivity.isTabletMode
+            super.onMeasure(r1, r0)
+            goto L_0x01e5
+        L_0x0131:
+            boolean r1 = r13.useSpanSize
+            if (r1 == 0) goto L_0x01e0
+            r13.overlayIconAlpha = r3
+            boolean r1 = org.telegram.ui.GroupCallActivity.isTabletMode
             r3 = 6
-            if (r2 == 0) goto L_0x0125
-            org.telegram.ui.Components.voip.GroupCallGridCell r2 = r13.tabletGridView
-            if (r2 == 0) goto L_0x0125
-            goto L_0x012b
-        L_0x0125:
-            boolean r2 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r2 == 0) goto L_0x012a
-            goto L_0x012b
-        L_0x012a:
+            if (r1 == 0) goto L_0x0141
+            org.telegram.ui.Components.voip.GroupCallGridCell r1 = r13.tabletGridView
+            if (r1 == 0) goto L_0x0141
+            goto L_0x0147
+        L_0x0141:
+            boolean r1 = org.telegram.ui.GroupCallActivity.isLandscapeMode
+            if (r1 == 0) goto L_0x0146
+            goto L_0x0147
+        L_0x0146:
             r3 = 2
-        L_0x012b:
-            org.telegram.ui.Components.voip.GroupCallGridCell r2 = r13.tabletGridView
-            if (r2 == 0) goto L_0x013c
+        L_0x0147:
+            org.telegram.ui.Components.voip.GroupCallGridCell r1 = r13.tabletGridView
+            if (r1 == 0) goto L_0x0158
             int r0 = android.view.View.MeasureSpec.getSize(r14)
-            r2 = 1135345664(0x43aCLASSNAME, float:344.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r0 = r0 - r2
-        L_0x013a:
+            r1 = 1135345664(0x43aCLASSNAME, float:344.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r0 = r0 - r1
+        L_0x0156:
             float r0 = (float) r0
-            goto L_0x015f
-        L_0x013c:
-            boolean r2 = org.telegram.ui.GroupCallActivity.isTabletMode
-            if (r2 == 0) goto L_0x0147
+            goto L_0x017b
+        L_0x0158:
+            boolean r1 = org.telegram.ui.GroupCallActivity.isTabletMode
+            if (r1 == 0) goto L_0x0163
             r0 = 1134559232(0x43a00000, float:320.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            goto L_0x013a
-        L_0x0147:
-            int r2 = android.view.View.MeasureSpec.getSize(r14)
+            goto L_0x0156
+        L_0x0163:
+            int r1 = android.view.View.MeasureSpec.getSize(r14)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r7 = r7 * 2
-            int r2 = r2 - r7
+            int r1 = r1 - r7
             boolean r7 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r7 == 0) goto L_0x015d
+            if (r7 == 0) goto L_0x0179
             r0 = 1119092736(0x42b40000, float:90.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r0 = -r0
-        L_0x015d:
-            int r2 = r2 + r0
-            float r0 = (float) r2
-        L_0x015f:
-            float r2 = r13.spanCount
+        L_0x0179:
+            int r1 = r1 + r0
+            float r0 = (float) r1
+        L_0x017b:
+            float r1 = r13.spanCount
             float r3 = (float) r3
-            float r2 = r2 / r3
-            float r2 = r2 * r0
+            float r1 = r1 / r3
+            float r1 = r1 * r0
             org.telegram.ui.Components.voip.GroupCallGridCell r3 = r13.tabletGridView
-            if (r3 == 0) goto L_0x017a
+            if (r3 == 0) goto L_0x0196
             float r0 = r3.getItemHeight()
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
             float r3 = (float) r3
             float r0 = r0 - r3
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
-        L_0x0177:
+        L_0x0193:
             float r3 = (float) r3
-            float r2 = r2 - r3
-            goto L_0x018e
-        L_0x017a:
+            float r1 = r1 - r3
+            goto L_0x01aa
+        L_0x0196:
             boolean r3 = org.telegram.ui.GroupCallActivity.isTabletMode
-            if (r3 == 0) goto L_0x0180
-            float r0 = r0 / r1
-            goto L_0x0189
-        L_0x0180:
+            if (r3 == 0) goto L_0x019c
+            float r0 = r0 / r4
+            goto L_0x01a5
+        L_0x019c:
             boolean r3 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r3 == 0) goto L_0x0186
+            if (r3 == 0) goto L_0x01a2
             r3 = 3
-            goto L_0x0187
-        L_0x0186:
+            goto L_0x01a3
+        L_0x01a2:
             r3 = 2
-        L_0x0187:
+        L_0x01a3:
             float r3 = (float) r3
             float r0 = r0 / r3
-        L_0x0189:
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            goto L_0x0177
-        L_0x018e:
+        L_0x01a5:
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            goto L_0x0193
+        L_0x01aa:
             android.widget.FrameLayout r3 = r13.infoContainer
             android.view.ViewGroup$LayoutParams r3 = r3.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r3 = (android.widget.FrameLayout.LayoutParams) r3
             android.widget.ImageView r5 = r13.screencastIcon
             int r5 = r5.getVisibility()
-            if (r5 != 0) goto L_0x01a8
+            if (r5 != 0) goto L_0x01c4
             r5 = 1105199104(0x41e00000, float:28.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             float r5 = (float) r5
-            float r5 = r2 - r5
-            goto L_0x01a9
-        L_0x01a8:
-            r5 = r2
-        L_0x01a9:
+            float r5 = r1 - r5
+            goto L_0x01c5
+        L_0x01c4:
+            r5 = r1
+        L_0x01c5:
             int r7 = (int) r5
             r13.updateSize(r7)
             int r7 = r3.leftMargin
@@ -923,22 +992,22 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             float r5 = r5 - r7
             int r5 = (int) r5
             r3.width = r5
-            int r2 = (int) r2
-            int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r6)
+            int r1 = (int) r1
+            int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r1, r6)
             int r0 = (int) r0
             int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r0, r6)
-            super.onMeasure(r2, r0)
-            goto L_0x01c9
-        L_0x01c4:
-            r13.overlayIconAlpha = r4
+            super.onMeasure(r1, r0)
+            goto L_0x01e5
+        L_0x01e0:
+            r13.overlayIconAlpha = r2
             super.onMeasure(r14, r15)
-        L_0x01c9:
+        L_0x01e5:
             int r15 = android.view.View.MeasureSpec.getSize(r15)
             int r14 = android.view.View.MeasureSpec.getSize(r14)
             int r14 = r14 << 16
             int r15 = r15 + r14
             int r14 = r13.lastSize
-            if (r14 == r15) goto L_0x01fc
+            if (r14 == r15) goto L_0x0218
             r13.lastSize = r15
             android.graphics.LinearGradient r14 = new android.graphics.LinearGradient
             r6 = 0
@@ -957,13 +1026,13 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             r13.gradientShader = r14
             android.graphics.Paint r15 = r13.gradientPaint
             r15.setShader(r14)
-        L_0x01fc:
+        L_0x0218:
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.nameView
-            r14.setPivotX(r4)
+            r14.setPivotX(r2)
             org.telegram.ui.ActionBar.SimpleTextView r14 = r13.nameView
             int r15 = r14.getMeasuredHeight()
             float r15 = (float) r15
-            float r15 = r15 / r1
+            float r15 = r15 / r4
             r14.setPivotY(r15)
             return
         */
@@ -1042,63 +1111,63 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v55, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v64, resolved type: org.telegram.tgnet.TLRPC$User} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v98, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v99, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX WARNING: Code restructure failed: missing block: B:100:0x0174, code lost:
-        if (r1 != r11.videoNotAvailableParticipant) goto L_0x016a;
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v47, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v56, resolved type: org.telegram.tgnet.TLRPC$User} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v90, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v91, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX WARNING: Code restructure failed: missing block: B:101:0x0180, code lost:
+        if (org.telegram.messenger.voip.VoIPService.getSharedInstance().getVideoState(r0.participant.presentation) == 2) goto L_0x0182;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:102:0x017c, code lost:
-        if (org.telegram.messenger.ChatObject.Call.videoIsActive(r10, r1.presentation, r11) == false) goto L_0x016a;
+    /* JADX WARNING: Code restructure failed: missing block: B:107:0x018e, code lost:
+        if (r1 != r11.videoNotAvailableParticipant) goto L_0x0184;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:109:0x01a3, code lost:
-        if (r1 != false) goto L_0x01a5;
+    /* JADX WARNING: Code restructure failed: missing block: B:109:0x0196, code lost:
+        if (org.telegram.messenger.ChatObject.Call.videoIsActive(r10, r1.presentation, r11) == false) goto L_0x0184;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:36:0x006f, code lost:
-        if (r0.participant != r10.videoNotAvailableParticipant) goto L_0x0071;
+    /* JADX WARNING: Code restructure failed: missing block: B:116:0x01bd, code lost:
+        if (r1 != false) goto L_0x01bf;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:94:0x0166, code lost:
-        if (org.telegram.messenger.voip.VoIPService.getSharedInstance().getVideoState(r0.participant.presentation) == 2) goto L_0x0168;
+    /* JADX WARNING: Code restructure failed: missing block: B:43:0x0089, code lost:
+        if (r0.participant != r10.videoNotAvailableParticipant) goto L_0x008b;
      */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:105:0x0183  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x01a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x01db  */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x01ed  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x0209  */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x023e  */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x0272  */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x0286  */
-    /* JADX WARNING: Removed duplicated region for block: B:140:0x0288  */
-    /* JADX WARNING: Removed duplicated region for block: B:145:0x029b  */
-    /* JADX WARNING: Removed duplicated region for block: B:148:0x02af  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x02c5  */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x0368  */
-    /* JADX WARNING: Removed duplicated region for block: B:214:0x0373  */
-    /* JADX WARNING: Removed duplicated region for block: B:215:0x037b  */
-    /* JADX WARNING: Removed duplicated region for block: B:223:0x03a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:224:0x03c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:227:0x03e2  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x03ec  */
-    /* JADX WARNING: Removed duplicated region for block: B:231:0x0401  */
-    /* JADX WARNING: Removed duplicated region for block: B:238:0x042a  */
-    /* JADX WARNING: Removed duplicated region for block: B:239:0x044c  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x0482  */
-    /* JADX WARNING: Removed duplicated region for block: B:245:0x0485  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x04ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:262:0x04d8  */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x051c  */
-    /* JADX WARNING: Removed duplicated region for block: B:283:0x0541  */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x0574  */
-    /* JADX WARNING: Removed duplicated region for block: B:305:0x0599  */
-    /* JADX WARNING: Removed duplicated region for block: B:313:0x05c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:324:0x0618  */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x00c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x00cc  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x00df  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x00f1  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x010b  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x019d  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x01c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x01f5  */
+    /* JADX WARNING: Removed duplicated region for block: B:130:0x0207  */
+    /* JADX WARNING: Removed duplicated region for block: B:133:0x0223  */
+    /* JADX WARNING: Removed duplicated region for block: B:142:0x0258  */
+    /* JADX WARNING: Removed duplicated region for block: B:143:0x028c  */
+    /* JADX WARNING: Removed duplicated region for block: B:148:0x02a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x02aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:154:0x02bd  */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x02d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x02e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:220:0x038a  */
+    /* JADX WARNING: Removed duplicated region for block: B:223:0x0395  */
+    /* JADX WARNING: Removed duplicated region for block: B:224:0x039d  */
+    /* JADX WARNING: Removed duplicated region for block: B:232:0x03c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:233:0x03e2  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x0404  */
+    /* JADX WARNING: Removed duplicated region for block: B:237:0x040e  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x0423  */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x044c  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x046e  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x04a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x04a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x04f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x04fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:281:0x053e  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x0563  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x0596  */
+    /* JADX WARNING: Removed duplicated region for block: B:314:0x05bb  */
+    /* JADX WARNING: Removed duplicated region for block: B:322:0x05e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:341:0x065c  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x00dd  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x00e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x010b  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x0125  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateAttachState(boolean r24) {
         /*
@@ -1108,265 +1177,280 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             if (r1 == 0) goto L_0x0007
             return
         L_0x0007:
-            org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.participant
-            if (r1 != 0) goto L_0x0033
-            org.telegram.ui.Components.voip.GroupCallGridCell r1 = r0.primaryView
-            if (r1 != 0) goto L_0x0017
-            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r2 = r0.secondaryView
-            if (r2 != 0) goto L_0x0017
-            org.telegram.ui.Components.voip.GroupCallGridCell r2 = r0.tabletGridView
-            if (r2 == 0) goto L_0x0033
+            org.telegram.messenger.ChatObject$Call r1 = r0.call
+            org.telegram.tgnet.TLRPC$GroupCall r1 = r1.call
+            boolean r1 = r1.rtmp_stream
+            r2 = 0
+            if (r1 == 0) goto L_0x0022
+            boolean r1 = r0.showingInFullscreen
+            if (r1 == 0) goto L_0x0017
+            r1 = 1108344832(0x42100000, float:36.0)
+            goto L_0x0019
         L_0x0017:
-            if (r1 == 0) goto L_0x0020
+            r1 = 1101529088(0x41a80000, float:21.0)
+        L_0x0019:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            android.widget.TextView r3 = r0.noRtmpStreamTextView
+            r3.setPadding(r1, r2, r1, r2)
+        L_0x0022:
+            org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.participant
+            if (r1 != 0) goto L_0x004e
+            org.telegram.ui.Components.voip.GroupCallGridCell r1 = r0.primaryView
+            if (r1 != 0) goto L_0x0032
+            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r3 = r0.secondaryView
+            if (r3 != 0) goto L_0x0032
+            org.telegram.ui.Components.voip.GroupCallGridCell r3 = r0.tabletGridView
+            if (r3 == 0) goto L_0x004e
+        L_0x0032:
+            if (r1 == 0) goto L_0x003b
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r1.getParticipant()
             r0.participant = r1
-            goto L_0x0033
-        L_0x0020:
+            goto L_0x004e
+        L_0x003b:
             org.telegram.ui.Components.voip.GroupCallGridCell r1 = r0.tabletGridView
-            if (r1 == 0) goto L_0x002b
+            if (r1 == 0) goto L_0x0046
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r1.getParticipant()
             r0.participant = r1
-            goto L_0x0033
-        L_0x002b:
+            goto L_0x004e
+        L_0x0046:
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r1 = r0.secondaryView
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r1.getVideoParticipant()
             r0.participant = r1
-        L_0x0033:
+        L_0x004e:
             boolean r1 = r0.attached
-            r3 = 2
-            r4 = 1056964608(0x3var_, float:0.5)
-            r5 = 0
+            r4 = 2
+            r5 = 1056964608(0x3var_, float:0.5)
             r6 = 0
-            r7 = 1065353216(0x3var_, float:1.0)
-            r8 = 1
-            r9 = 0
-            if (r1 == 0) goto L_0x0115
+            r7 = 0
+            r8 = 1065353216(0x3var_, float:1.0)
+            r9 = 1
+            if (r1 == 0) goto L_0x012f
             boolean r10 = r0.showingInFullscreen
-            if (r10 != 0) goto L_0x0115
+            if (r10 != 0) goto L_0x012f
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 != 0) goto L_0x004c
+            if (r1 != 0) goto L_0x0066
             r1 = 1
-            goto L_0x004d
-        L_0x004c:
+            goto L_0x0067
+        L_0x0066:
             r1 = 0
-        L_0x004d:
+        L_0x0067:
             boolean r10 = org.telegram.ui.GroupCallActivity.paused
-            if (r10 != 0) goto L_0x0071
+            if (r10 != 0) goto L_0x008b
             org.telegram.messenger.ChatObject$VideoParticipant r10 = r0.participant
-            if (r10 == 0) goto L_0x0071
+            if (r10 == 0) goto L_0x008b
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r11 = r0.secondaryView
-            if (r11 != 0) goto L_0x0072
+            if (r11 != 0) goto L_0x008c
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r11 = r10.participant
             boolean r10 = r10.presentation
             org.telegram.messenger.ChatObject$Call r12 = r0.call
             boolean r10 = org.telegram.messenger.ChatObject.Call.videoIsActive(r11, r10, r12)
-            if (r10 == 0) goto L_0x0071
+            if (r10 == 0) goto L_0x008b
             org.telegram.messenger.ChatObject$Call r10 = r0.call
             boolean r11 = r10.canStreamVideo
-            if (r11 != 0) goto L_0x0072
+            if (r11 != 0) goto L_0x008c
             org.telegram.messenger.ChatObject$VideoParticipant r11 = r0.participant
             org.telegram.messenger.ChatObject$VideoParticipant r10 = r10.videoNotAvailableParticipant
-            if (r11 == r10) goto L_0x0072
-        L_0x0071:
+            if (r11 == r10) goto L_0x008c
+        L_0x008b:
             r1 = 1
-        L_0x0072:
-            if (r1 != 0) goto L_0x0088
+        L_0x008c:
+            if (r1 != 0) goto L_0x00a2
             org.telegram.ui.Components.voip.GroupCallGridCell r10 = r0.primaryView
-            if (r10 != 0) goto L_0x0290
+            if (r10 != 0) goto L_0x02b2
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r10 = r0.secondaryView
-            if (r10 != 0) goto L_0x0290
+            if (r10 != 0) goto L_0x02b2
             org.telegram.ui.Components.voip.GroupCallGridCell r10 = r0.tabletGridView
-            if (r10 != 0) goto L_0x0290
+            if (r10 != 0) goto L_0x02b2
             boolean r10 = r0.showingAsScrimView
-            if (r10 != 0) goto L_0x0290
+            if (r10 != 0) goto L_0x02b2
             boolean r10 = r0.animateToScrimView
-            if (r10 != 0) goto L_0x0290
-        L_0x0088:
-            r0.attached = r9
+            if (r10 != 0) goto L_0x02b2
+        L_0x00a2:
+            r0.attached = r2
             r23.saveThumb()
             org.telegram.ui.Components.voip.VoIPTextureView r10 = r0.textureView
             android.animation.ValueAnimator r10 = r10.currentAnimation
-            if (r10 != 0) goto L_0x00bd
-            if (r1 == 0) goto L_0x00bd
+            if (r10 != 0) goto L_0x00d7
+            if (r1 == 0) goto L_0x00d7
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r1 = r0.parentContainer
             r1.detach(r0)
             android.view.ViewPropertyAnimator r1 = r23.animate()
-            android.view.ViewPropertyAnimator r1 = r1.scaleX(r4)
-            android.view.ViewPropertyAnimator r1 = r1.scaleY(r4)
-            android.view.ViewPropertyAnimator r1 = r1.alpha(r6)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$4 r4 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$4
-            r4.<init>(r0)
-            android.view.ViewPropertyAnimator r1 = r1.setListener(r4)
+            android.view.ViewPropertyAnimator r1 = r1.scaleX(r5)
+            android.view.ViewPropertyAnimator r1 = r1.scaleY(r5)
+            android.view.ViewPropertyAnimator r1 = r1.alpha(r7)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$4 r5 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$4
+            r5.<init>(r0)
+            android.view.ViewPropertyAnimator r1 = r1.setListener(r5)
             r10 = 150(0x96, double:7.4E-322)
             android.view.ViewPropertyAnimator r1 = r1.setDuration(r10)
             r1.start()
-            goto L_0x00d7
-        L_0x00bd:
+            goto L_0x00f1
+        L_0x00d7:
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r1 = r0.parentContainer
-            boolean r4 = r1.inLayout
-            if (r4 == 0) goto L_0x00cc
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda6 r1 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda6
+            boolean r5 = r1.inLayout
+            if (r5 == 0) goto L_0x00e6
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda7 r1 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda7
             r1.<init>(r0, r0)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
-            goto L_0x00cf
-        L_0x00cc:
+            goto L_0x00e9
+        L_0x00e6:
             r1.removeView(r0)
-        L_0x00cf:
+        L_0x00e9:
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r1 = r0.parentContainer
             r1.detach(r0)
             r23.release()
-        L_0x00d7:
+        L_0x00f1:
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r1.participant
             boolean r1 = r1.self
-            if (r1 == 0) goto L_0x00f1
+            if (r1 == 0) goto L_0x010b
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 == 0) goto L_0x0104
+            if (r1 == 0) goto L_0x011e
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            org.telegram.messenger.ChatObject$VideoParticipant r4 = r0.participant
-            boolean r4 = r4.presentation
-            r1.setLocalSink(r5, r4)
-            goto L_0x0104
-        L_0x00f1:
+            org.telegram.messenger.ChatObject$VideoParticipant r5 = r0.participant
+            boolean r5 = r5.presentation
+            r1.setLocalSink(r6, r5)
+            goto L_0x011e
+        L_0x010b:
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 == 0) goto L_0x0104
+            if (r1 == 0) goto L_0x011e
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            org.telegram.messenger.ChatObject$VideoParticipant r4 = r0.participant
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r10 = r4.participant
-            boolean r4 = r4.presentation
-            r1.removeRemoteSink(r10, r4)
-        L_0x0104:
+            org.telegram.messenger.ChatObject$VideoParticipant r5 = r0.participant
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r10 = r5.participant
+            boolean r5 = r5.presentation
+            r1.removeRemoteSink(r10, r5)
+        L_0x011e:
             r23.invalidate()
             android.animation.ValueAnimator r1 = r0.noVideoStubAnimator
-            if (r1 == 0) goto L_0x0290
+            if (r1 == 0) goto L_0x02b2
             r1.removeAllListeners()
             android.animation.ValueAnimator r1 = r0.noVideoStubAnimator
             r1.cancel()
-            goto L_0x0290
-        L_0x0115:
-            if (r1 != 0) goto L_0x0290
+            goto L_0x02b2
+        L_0x012f:
+            if (r1 != 0) goto L_0x02b2
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 != 0) goto L_0x011e
+            if (r1 != 0) goto L_0x0138
             return
-        L_0x011e:
+        L_0x0138:
             org.telegram.ui.Components.voip.GroupCallGridCell r1 = r0.primaryView
-            if (r1 != 0) goto L_0x012e
+            if (r1 != 0) goto L_0x0148
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r10 = r0.secondaryView
-            if (r10 != 0) goto L_0x012e
+            if (r10 != 0) goto L_0x0148
             org.telegram.ui.Components.voip.GroupCallGridCell r10 = r0.tabletGridView
-            if (r10 != 0) goto L_0x012e
+            if (r10 != 0) goto L_0x0148
             boolean r10 = r0.showingInFullscreen
-            if (r10 == 0) goto L_0x0290
-        L_0x012e:
-            if (r1 == 0) goto L_0x0137
+            if (r10 == 0) goto L_0x02b2
+        L_0x0148:
+            if (r1 == 0) goto L_0x0151
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r1.getParticipant()
             r0.participant = r1
-            goto L_0x014c
-        L_0x0137:
+            goto L_0x0166
+        L_0x0151:
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r1 = r0.secondaryView
-            if (r1 == 0) goto L_0x0142
+            if (r1 == 0) goto L_0x015c
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r1.getVideoParticipant()
             r0.participant = r1
-            goto L_0x014c
-        L_0x0142:
+            goto L_0x0166
+        L_0x015c:
             org.telegram.ui.Components.voip.GroupCallGridCell r1 = r0.tabletGridView
-            if (r1 == 0) goto L_0x014c
+            if (r1 == 0) goto L_0x0166
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r1.getParticipant()
             r0.participant = r1
-        L_0x014c:
+        L_0x0166:
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r10 = r1.participant
             boolean r11 = r10.self
-            if (r11 == 0) goto L_0x016c
+            if (r11 == 0) goto L_0x0186
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 == 0) goto L_0x016a
+            if (r1 == 0) goto L_0x0184
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             org.telegram.messenger.ChatObject$VideoParticipant r10 = r0.participant
             boolean r10 = r10.presentation
             int r1 = r1.getVideoState(r10)
-            if (r1 != r3) goto L_0x016a
-        L_0x0168:
+            if (r1 != r4) goto L_0x0184
+        L_0x0182:
             r1 = 1
-            goto L_0x017f
-        L_0x016a:
+            goto L_0x0199
+        L_0x0184:
             r1 = 0
-            goto L_0x017f
-        L_0x016c:
+            goto L_0x0199
+        L_0x0186:
             org.telegram.messenger.ChatObject$Call r11 = r0.call
             boolean r12 = r11.canStreamVideo
-            if (r12 != 0) goto L_0x0176
+            if (r12 != 0) goto L_0x0190
             org.telegram.messenger.ChatObject$VideoParticipant r12 = r11.videoNotAvailableParticipant
-            if (r1 != r12) goto L_0x016a
-        L_0x0176:
+            if (r1 != r12) goto L_0x0184
+        L_0x0190:
             boolean r1 = r1.presentation
             boolean r1 = org.telegram.messenger.ChatObject.Call.videoIsActive(r10, r1, r11)
-            if (r1 == 0) goto L_0x016a
-            goto L_0x0168
-        L_0x017f:
+            if (r1 == 0) goto L_0x0184
+            goto L_0x0182
+        L_0x0199:
             boolean r10 = r0.showingInFullscreen
-            if (r10 != 0) goto L_0x01a5
+            if (r10 != 0) goto L_0x01bf
             org.telegram.messenger.voip.VoIPService r10 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             org.telegram.messenger.ChatObject$VideoParticipant r11 = r0.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r12 = r11.participant
             boolean r11 = r11.presentation
             boolean r10 = r10.isFullscreen(r12, r11)
-            if (r10 != 0) goto L_0x0290
+            if (r10 != 0) goto L_0x02b2
             org.telegram.messenger.voip.VoIPService r10 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             org.telegram.messenger.ChatObject$VideoParticipant r11 = r0.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r12 = r11.participant
             boolean r11 = r11.presentation
             boolean r10 = r10.isFullscreen(r12, r11)
-            if (r10 != 0) goto L_0x0290
-            if (r1 == 0) goto L_0x0290
-        L_0x01a5:
+            if (r10 != 0) goto L_0x02b2
+            if (r1 == 0) goto L_0x02b2
+        L_0x01bf:
             boolean r1 = org.telegram.messenger.BuildVars.DEBUG_PRIVATE_VERSION
-            if (r1 == 0) goto L_0x01cf
+            if (r1 == 0) goto L_0x01e9
             r1 = 0
-        L_0x01aa:
+        L_0x01c4:
             java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r10 = r0.attachedRenderers
             int r10 = r10.size()
-            if (r1 >= r10) goto L_0x01cf
+            if (r1 >= r10) goto L_0x01e9
             java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r10 = r0.attachedRenderers
             java.lang.Object r10 = r10.get(r1)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r10 = (org.telegram.ui.Components.voip.GroupCallMiniTextureView) r10
             org.telegram.messenger.ChatObject$VideoParticipant r10 = r10.participant
             org.telegram.messenger.ChatObject$VideoParticipant r11 = r0.participant
             boolean r10 = r10.equals(r11)
-            if (r10 != 0) goto L_0x01c7
+            if (r10 != 0) goto L_0x01e1
             int r1 = r1 + 1
-            goto L_0x01aa
-        L_0x01c7:
+            goto L_0x01c4
+        L_0x01e1:
             java.lang.RuntimeException r1 = new java.lang.RuntimeException
             java.lang.String r2 = "try add two same renderers"
             r1.<init>(r2)
             throw r1
-        L_0x01cf:
-            r0.attached = r8
+        L_0x01e9:
+            r0.attached = r9
             org.telegram.ui.GroupCallActivity r1 = r0.activity
             java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallStatusIcon> r1 = r1.statusIconPool
             int r1 = r1.size()
-            if (r1 <= 0) goto L_0x01ed
+            if (r1 <= 0) goto L_0x0207
             org.telegram.ui.GroupCallActivity r1 = r0.activity
             java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallStatusIcon> r1 = r1.statusIconPool
             int r10 = r1.size()
-            int r10 = r10 - r8
+            int r10 = r10 - r9
             java.lang.Object r1 = r1.remove(r10)
             org.telegram.ui.Components.voip.GroupCallStatusIcon r1 = (org.telegram.ui.Components.voip.GroupCallStatusIcon) r1
             r0.statusIcon = r1
-            goto L_0x01f4
-        L_0x01ed:
+            goto L_0x020e
+        L_0x0207:
             org.telegram.ui.Components.voip.GroupCallStatusIcon r1 = new org.telegram.ui.Components.voip.GroupCallStatusIcon
             r1.<init>()
             r0.statusIcon = r1
-        L_0x01f4:
+        L_0x020e:
             org.telegram.ui.Components.voip.GroupCallStatusIcon r1 = r0.statusIcon
             r1.setCallback(r0)
             org.telegram.ui.Components.voip.GroupCallStatusIcon r1 = r0.statusIcon
             org.telegram.ui.Components.RLottieImageView r10 = r0.micIconView
             r1.setImageView(r10)
-            r0.updateIconColor(r9)
+            r0.updateIconColor(r2)
             android.view.ViewParent r1 = r23.getParent()
-            if (r1 != 0) goto L_0x021b
+            if (r1 != 0) goto L_0x0235
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r1 = r0.parentContainer
             r10 = 51
             r11 = 46
@@ -1374,138 +1458,142 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             r1.addView(r0, r10)
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r1 = r0.parentContainer
             r1.attach(r0)
-        L_0x021b:
-            r0.checkScale = r8
-            r0.animateEnter = r9
+        L_0x0235:
+            r0.checkScale = r9
+            r0.animateEnter = r2
             android.view.ViewPropertyAnimator r1 = r23.animate()
-            android.view.ViewPropertyAnimator r1 = r1.setListener(r5)
+            android.view.ViewPropertyAnimator r1 = r1.setListener(r6)
             r1.cancel()
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             android.animation.ValueAnimator r1 = r1.currentAnimation
-            if (r1 != 0) goto L_0x0272
+            if (r1 != 0) goto L_0x028c
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r1 = r0.secondaryView
-            if (r1 == 0) goto L_0x0272
+            if (r1 == 0) goto L_0x028c
             org.telegram.ui.Components.voip.GroupCallGridCell r1 = r0.primaryView
-            if (r1 != 0) goto L_0x0272
+            if (r1 != 0) goto L_0x028c
             boolean r1 = r23.hasImage()
-            if (r1 != 0) goto L_0x0272
-            r0.setScaleX(r4)
-            r0.setScaleY(r4)
-            r0.setAlpha(r6)
-            r0.animateEnter = r8
+            if (r1 != 0) goto L_0x028c
+            r0.setScaleX(r5)
+            r0.setScaleY(r5)
+            r0.setAlpha(r7)
+            r0.animateEnter = r9
             r23.invalidate()
             android.view.ViewPropertyAnimator r1 = r23.animate()
-            android.view.ViewPropertyAnimator r1 = r1.scaleX(r7)
-            android.view.ViewPropertyAnimator r1 = r1.scaleY(r7)
-            android.view.ViewPropertyAnimator r1 = r1.alpha(r7)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$5 r4 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$5
-            r4.<init>()
-            android.view.ViewPropertyAnimator r1 = r1.setListener(r4)
+            android.view.ViewPropertyAnimator r1 = r1.scaleX(r8)
+            android.view.ViewPropertyAnimator r1 = r1.scaleY(r8)
+            android.view.ViewPropertyAnimator r1 = r1.alpha(r8)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$5 r5 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$5
+            r5.<init>()
+            android.view.ViewPropertyAnimator r1 = r1.setListener(r5)
             r10 = 100
             android.view.ViewPropertyAnimator r1 = r1.setDuration(r10)
             r1.start()
             r23.invalidate()
-            goto L_0x027b
-        L_0x0272:
-            r0.setScaleY(r7)
-            r0.setScaleX(r7)
-            r0.setAlpha(r7)
-        L_0x027b:
+            goto L_0x0295
+        L_0x028c:
+            r0.setScaleY(r8)
+            r0.setScaleX(r8)
+            r0.setAlpha(r8)
+        L_0x0295:
             r23.loadThumb()
             android.widget.ImageView r1 = r0.screencastIcon
-            org.telegram.messenger.ChatObject$VideoParticipant r4 = r0.participant
-            boolean r4 = r4.presentation
-            if (r4 == 0) goto L_0x0288
-            r4 = 0
-            goto L_0x028a
-        L_0x0288:
-            r4 = 8
-        L_0x028a:
-            r1.setVisibility(r4)
+            org.telegram.messenger.ChatObject$VideoParticipant r5 = r0.participant
+            boolean r5 = r5.presentation
+            if (r5 == 0) goto L_0x02aa
+            org.telegram.messenger.ChatObject$Call r5 = r0.call
+            org.telegram.tgnet.TLRPC$GroupCall r5 = r5.call
+            boolean r5 = r5.rtmp_stream
+            if (r5 != 0) goto L_0x02aa
+            r5 = 0
+            goto L_0x02ac
+        L_0x02aa:
+            r5 = 8
+        L_0x02ac:
+            r1.setVisibility(r5)
             r1 = 0
-            r4 = 1
-            goto L_0x0293
-        L_0x0290:
+            r5 = 1
+            goto L_0x02b5
+        L_0x02b2:
             r1 = r24
-            r4 = 0
-        L_0x0293:
+            r5 = 0
+        L_0x02b5:
             org.telegram.messenger.ChatObject$VideoParticipant r10 = r0.participant
             org.telegram.messenger.ChatObject$Call r11 = r0.call
             org.telegram.messenger.ChatObject$VideoParticipant r11 = r11.videoNotAvailableParticipant
-            if (r10 != r11) goto L_0x02af
+            if (r10 != r11) goto L_0x02d1
             org.telegram.ui.ActionBar.SimpleTextView r10 = r0.nameView
             int r10 = r10.getVisibility()
             r11 = 4
-            if (r10 == r11) goto L_0x02c1
+            if (r10 == r11) goto L_0x02e3
             org.telegram.ui.ActionBar.SimpleTextView r10 = r0.nameView
             r10.setVisibility(r11)
             org.telegram.ui.Components.RLottieImageView r10 = r0.micIconView
             r10.setVisibility(r11)
-            goto L_0x02c1
-        L_0x02af:
+            goto L_0x02e3
+        L_0x02d1:
             org.telegram.ui.ActionBar.SimpleTextView r10 = r0.nameView
             int r10 = r10.getVisibility()
-            if (r10 == 0) goto L_0x02c1
+            if (r10 == 0) goto L_0x02e3
             org.telegram.ui.ActionBar.SimpleTextView r10 = r0.nameView
-            r10.setVisibility(r9)
+            r10.setVisibility(r2)
             org.telegram.ui.Components.RLottieImageView r10 = r0.micIconView
-            r10.setVisibility(r9)
-        L_0x02c1:
+            r10.setVisibility(r2)
+        L_0x02e3:
             boolean r10 = r0.attached
-            if (r10 == 0) goto L_0x067b
+            if (r10 == 0) goto L_0x06bf
             boolean r10 = org.telegram.ui.GroupCallActivity.isTabletMode
-            if (r10 == 0) goto L_0x02d9
+            if (r10 == 0) goto L_0x02fb
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r10 = r0.parentContainer
             boolean r10 = r10.inFullscreenMode
-            if (r10 == 0) goto L_0x02d7
+            if (r10 == 0) goto L_0x02f9
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r10 = r0.secondaryView
-            if (r10 != 0) goto L_0x02d9
+            if (r10 != 0) goto L_0x02fb
             org.telegram.ui.Components.voip.GroupCallGridCell r10 = r0.primaryView
-            if (r10 != 0) goto L_0x02d9
-        L_0x02d7:
+            if (r10 != 0) goto L_0x02fb
+        L_0x02f9:
             r10 = 1
-            goto L_0x02da
-        L_0x02d9:
+            goto L_0x02fc
+        L_0x02fb:
             r10 = 0
-        L_0x02da:
+        L_0x02fc:
             boolean r11 = r0.showingInFullscreen
             r12 = -1
-            if (r11 == 0) goto L_0x02e6
-        L_0x02df:
+            if (r11 == 0) goto L_0x0308
+        L_0x0301:
             r10 = -1
-        L_0x02e0:
+        L_0x0302:
             r11 = 1065353216(0x3var_, float:1.0)
             r13 = 0
             r14 = 0
-            goto L_0x0345
-        L_0x02e6:
+            goto L_0x0367
+        L_0x0308:
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r11 = r0.secondaryView
-            if (r11 == 0) goto L_0x02f6
+            if (r11 == 0) goto L_0x0318
             org.telegram.ui.Components.voip.GroupCallGridCell r13 = r0.primaryView
-            if (r13 != 0) goto L_0x02f6
+            if (r13 != 0) goto L_0x0318
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r13 = r0.parentContainer
             boolean r13 = r13.inFullscreenMode
-            if (r13 != 0) goto L_0x02f6
-        L_0x02f4:
+            if (r13 != 0) goto L_0x0318
+        L_0x0316:
             r10 = 0
-            goto L_0x02e0
-        L_0x02f6:
+            goto L_0x0302
+        L_0x0318:
             boolean r13 = r0.showingAsScrimView
-            if (r13 == 0) goto L_0x02fb
-            goto L_0x02df
-        L_0x02fb:
+            if (r13 == 0) goto L_0x031d
+            goto L_0x0301
+        L_0x031d:
             r13 = 1117782016(0x42a00000, float:80.0)
-            if (r11 == 0) goto L_0x0308
+            if (r11 == 0) goto L_0x032a
             org.telegram.ui.Components.voip.GroupCallGridCell r14 = r0.primaryView
-            if (r14 != 0) goto L_0x0308
+            if (r14 != 0) goto L_0x032a
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            goto L_0x02e0
-        L_0x0308:
+            goto L_0x0302
+        L_0x032a:
             org.telegram.ui.Components.voip.GroupCallGridCell r14 = r0.tabletGridView
             r15 = 1110966272(0x42380000, float:46.0)
-            if (r14 == 0) goto L_0x0325
-            if (r10 == 0) goto L_0x0325
-            if (r14 == 0) goto L_0x0320
+            if (r14 == 0) goto L_0x0347
+            if (r10 == 0) goto L_0x0347
+            if (r14 == 0) goto L_0x0342
             int r10 = r14.spanCount
             float r10 = (float) r10
             org.telegram.ui.GroupCallTabletGridAdapter r11 = r14.gridAdapter
@@ -1514,195 +1602,195 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             r14 = 1
             r11 = r10
             r10 = -1
-            goto L_0x0345
-        L_0x0320:
+            goto L_0x0367
+        L_0x0342:
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            goto L_0x02e0
-        L_0x0325:
+            goto L_0x0302
+        L_0x0347:
             org.telegram.ui.Components.voip.GroupCallGridCell r10 = r0.primaryView
-            if (r10 == 0) goto L_0x032b
-            if (r11 == 0) goto L_0x032f
-        L_0x032b:
+            if (r10 == 0) goto L_0x034d
+            if (r11 == 0) goto L_0x0351
+        L_0x034d:
             boolean r11 = r0.isFullscreenMode
-            if (r11 != 0) goto L_0x033e
-        L_0x032f:
-            if (r10 == 0) goto L_0x0339
+            if (r11 != 0) goto L_0x0360
+        L_0x0351:
+            if (r10 == 0) goto L_0x035b
             int r10 = r10.spanCount
             float r10 = (float) r10
             r11 = r10
             r10 = -1
             r13 = 0
             r14 = 1
-            goto L_0x0345
-        L_0x0339:
+            goto L_0x0367
+        L_0x035b:
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            goto L_0x02e0
-        L_0x033e:
-            if (r10 == 0) goto L_0x02f4
+            goto L_0x0302
+        L_0x0360:
+            if (r10 == 0) goto L_0x0316
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            goto L_0x02e0
-        L_0x0345:
+            goto L_0x0302
+        L_0x0367:
             android.view.ViewGroup$LayoutParams r15 = r23.getLayoutParams()
             android.view.ViewGroup$MarginLayoutParams r15 = (android.view.ViewGroup.MarginLayoutParams) r15
-            if (r10 == 0) goto L_0x0390
-            int r2 = r15.height
-            if (r2 != r10) goto L_0x0363
-            if (r4 != 0) goto L_0x0363
-            boolean r2 = r0.useSpanSize
-            if (r2 != r14) goto L_0x0363
-            if (r14 == 0) goto L_0x035f
-            float r2 = r0.spanCount
-            int r2 = (r2 > r11 ? 1 : (r2 == r11 ? 0 : -1))
-            if (r2 != 0) goto L_0x0363
-        L_0x035f:
-            int r2 = r0.gridItemsCount
-            if (r2 == r13) goto L_0x0390
-        L_0x0363:
+            if (r10 == 0) goto L_0x03b2
+            int r3 = r15.height
+            if (r3 != r10) goto L_0x0385
+            if (r5 != 0) goto L_0x0385
+            boolean r3 = r0.useSpanSize
+            if (r3 != r14) goto L_0x0385
+            if (r14 == 0) goto L_0x0381
+            float r3 = r0.spanCount
+            int r3 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
+            if (r3 != 0) goto L_0x0385
+        L_0x0381:
+            int r3 = r0.gridItemsCount
+            if (r3 == r13) goto L_0x03b2
+        L_0x0385:
             r15.height = r10
-            if (r14 == 0) goto L_0x0368
-            goto L_0x0369
-        L_0x0368:
+            if (r14 == 0) goto L_0x038a
+            goto L_0x038b
+        L_0x038a:
             r12 = r10
-        L_0x0369:
+        L_0x038b:
             r15.width = r12
             r0.useSpanSize = r14
             r0.spanCount = r11
-            r0.checkScale = r8
-            if (r1 == 0) goto L_0x037b
-            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
-            r2.animateToLayout()
-            r0.updateNextLayoutAnimated = r8
-            goto L_0x0380
-        L_0x037b:
-            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
-            r2.requestLayout()
-        L_0x0380:
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda4 r2 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda4
-            r2.<init>(r0)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
-            org.telegram.ui.Components.voip.GroupCallRenderersContainer r2 = r0.parentContainer
-            r2.requestLayout()
+            r0.checkScale = r9
+            if (r1 == 0) goto L_0x039d
+            org.telegram.ui.Components.voip.VoIPTextureView r3 = r0.textureView
+            r3.animateToLayout()
+            r0.updateNextLayoutAnimated = r9
+            goto L_0x03a2
+        L_0x039d:
+            org.telegram.ui.Components.voip.VoIPTextureView r3 = r0.textureView
+            r3.requestLayout()
+        L_0x03a2:
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda4 r3 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda4
+            r3.<init>(r0)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r3)
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer r3 = r0.parentContainer
+            r3.requestLayout()
             r23.invalidate()
-        L_0x0390:
-            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r4 = r2.participant
-            boolean r4 = r4.self
-            if (r4 == 0) goto L_0x03c0
-            boolean r2 = r2.presentation
-            if (r2 != 0) goto L_0x03c0
-            org.telegram.messenger.voip.VoIPService r2 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r2 == 0) goto L_0x03c0
-            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
-            org.webrtc.TextureViewRenderer r2 = r2.renderer
-            org.telegram.messenger.voip.VoIPService r4 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            boolean r4 = r4.isFrontFaceCamera()
-            r2.setMirror(r4)
-            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
-            org.webrtc.TextureViewRenderer r2 = r2.renderer
-            r2.setRotateTextureWithScreen(r8)
-            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
-            org.webrtc.TextureViewRenderer r2 = r2.renderer
-            r2.setUseCameraRotation(r8)
-            goto L_0x03d5
-        L_0x03c0:
-            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
-            org.webrtc.TextureViewRenderer r2 = r2.renderer
-            r2.setMirror(r9)
-            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
-            org.webrtc.TextureViewRenderer r2 = r2.renderer
-            r2.setRotateTextureWithScreen(r8)
-            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
-            org.webrtc.TextureViewRenderer r2 = r2.renderer
-            r2.setUseCameraRotation(r9)
-        L_0x03d5:
-            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
-            r2.updateRotation()
-            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r2 = r2.participant
-            boolean r2 = r2.self
-            if (r2 == 0) goto L_0x03ec
-            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
-            org.webrtc.TextureViewRenderer r2 = r2.renderer
-            r4 = 720(0x2d0, float:1.009E-42)
-            r2.setMaxTextureSize(r4)
-            goto L_0x03f3
-        L_0x03ec:
-            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
-            org.webrtc.TextureViewRenderer r2 = r2.renderer
-            r2.setMaxTextureSize(r9)
-        L_0x03f3:
-            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r4 = r2.participant
-            boolean r2 = r2.presentation
-            org.telegram.messenger.ChatObject$Call r10 = r0.call
-            boolean r2 = org.telegram.messenger.ChatObject.Call.videoIsActive(r4, r2, r10)
-            if (r2 == 0) goto L_0x0411
-            org.telegram.messenger.ChatObject$Call r2 = r0.call
-            boolean r4 = r2.canStreamVideo
-            if (r4 != 0) goto L_0x040e
-            org.telegram.messenger.ChatObject$VideoParticipant r4 = r0.participant
-            org.telegram.messenger.ChatObject$VideoParticipant r2 = r2.videoNotAvailableParticipant
-            if (r4 == r2) goto L_0x040e
-            goto L_0x0411
+        L_0x03b2:
+            org.telegram.messenger.ChatObject$VideoParticipant r3 = r0.participant
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r5 = r3.participant
+            boolean r5 = r5.self
+            if (r5 == 0) goto L_0x03e2
+            boolean r3 = r3.presentation
+            if (r3 != 0) goto L_0x03e2
+            org.telegram.messenger.voip.VoIPService r3 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            if (r3 == 0) goto L_0x03e2
+            org.telegram.ui.Components.voip.VoIPTextureView r3 = r0.textureView
+            org.webrtc.TextureViewRenderer r3 = r3.renderer
+            org.telegram.messenger.voip.VoIPService r5 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            boolean r5 = r5.isFrontFaceCamera()
+            r3.setMirror(r5)
+            org.telegram.ui.Components.voip.VoIPTextureView r3 = r0.textureView
+            org.webrtc.TextureViewRenderer r3 = r3.renderer
+            r3.setRotateTextureWithScreen(r9)
+            org.telegram.ui.Components.voip.VoIPTextureView r3 = r0.textureView
+            org.webrtc.TextureViewRenderer r3 = r3.renderer
+            r3.setUseCameraRotation(r9)
+            goto L_0x03f7
+        L_0x03e2:
+            org.telegram.ui.Components.voip.VoIPTextureView r3 = r0.textureView
+            org.webrtc.TextureViewRenderer r3 = r3.renderer
+            r3.setMirror(r2)
+            org.telegram.ui.Components.voip.VoIPTextureView r3 = r0.textureView
+            org.webrtc.TextureViewRenderer r3 = r3.renderer
+            r3.setRotateTextureWithScreen(r9)
+            org.telegram.ui.Components.voip.VoIPTextureView r3 = r0.textureView
+            org.webrtc.TextureViewRenderer r3 = r3.renderer
+            r3.setUseCameraRotation(r2)
+        L_0x03f7:
+            org.telegram.ui.Components.voip.VoIPTextureView r3 = r0.textureView
+            r3.updateRotation()
+            org.telegram.messenger.ChatObject$VideoParticipant r3 = r0.participant
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r3.participant
+            boolean r3 = r3.self
+            if (r3 == 0) goto L_0x040e
+            org.telegram.ui.Components.voip.VoIPTextureView r3 = r0.textureView
+            org.webrtc.TextureViewRenderer r3 = r3.renderer
+            r5 = 720(0x2d0, float:1.009E-42)
+            r3.setMaxTextureSize(r5)
+            goto L_0x0415
         L_0x040e:
-            r2 = 1
-            goto L_0x04b3
-        L_0x0411:
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r2 = r0.noVideoStubLayout
-            org.telegram.messenger.ImageReceiver r2 = r2.avatarImageReceiver
-            int r4 = r0.currentAccount
-            r2.setCurrentAccount(r4)
-            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r2 = r2.participant
-            org.telegram.tgnet.TLRPC$Peer r2 = r2.peer
-            long r10 = org.telegram.messenger.MessageObject.getPeerId(r2)
-            boolean r2 = org.telegram.messenger.DialogObject.isUserDialog(r10)
-            if (r2 == 0) goto L_0x044c
-            int r2 = r0.currentAccount
-            org.telegram.messenger.AccountInstance r2 = org.telegram.messenger.AccountInstance.getInstance(r2)
-            org.telegram.messenger.MessagesController r2 = r2.getMessagesController()
-            java.lang.Long r4 = java.lang.Long.valueOf(r10)
-            org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r4)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r4 = r0.noVideoStubLayout
-            org.telegram.ui.Components.AvatarDrawable r4 = r4.avatarDrawable
-            r4.setInfo((org.telegram.tgnet.TLRPC$User) r2)
-            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForUser(r2, r9)
-            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForUser(r2, r8)
-            goto L_0x046e
-        L_0x044c:
-            int r2 = org.telegram.messenger.UserConfig.selectedAccount
-            org.telegram.messenger.AccountInstance r2 = org.telegram.messenger.AccountInstance.getInstance(r2)
-            org.telegram.messenger.MessagesController r2 = r2.getMessagesController()
-            long r10 = -r10
-            java.lang.Long r4 = java.lang.Long.valueOf(r10)
-            org.telegram.tgnet.TLRPC$Chat r2 = r2.getChat(r4)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r4 = r0.noVideoStubLayout
-            org.telegram.ui.Components.AvatarDrawable r4 = r4.avatarDrawable
-            r4.setInfo((org.telegram.tgnet.TLRPC$Chat) r2)
-            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForChat(r2, r9)
-            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForChat(r2, r8)
+            org.telegram.ui.Components.voip.VoIPTextureView r3 = r0.textureView
+            org.webrtc.TextureViewRenderer r3 = r3.renderer
+            r3.setMaxTextureSize(r2)
+        L_0x0415:
+            org.telegram.messenger.ChatObject$VideoParticipant r3 = r0.participant
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r5 = r3.participant
+            boolean r3 = r3.presentation
+            org.telegram.messenger.ChatObject$Call r10 = r0.call
+            boolean r3 = org.telegram.messenger.ChatObject.Call.videoIsActive(r5, r3, r10)
+            if (r3 == 0) goto L_0x0433
+            org.telegram.messenger.ChatObject$Call r3 = r0.call
+            boolean r5 = r3.canStreamVideo
+            if (r5 != 0) goto L_0x0430
+            org.telegram.messenger.ChatObject$VideoParticipant r5 = r0.participant
+            org.telegram.messenger.ChatObject$VideoParticipant r3 = r3.videoNotAvailableParticipant
+            if (r5 == r3) goto L_0x0430
+            goto L_0x0433
+        L_0x0430:
+            r3 = 1
+            goto L_0x04d5
+        L_0x0433:
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r3 = r0.noVideoStubLayout
+            org.telegram.messenger.ImageReceiver r3 = r3.avatarImageReceiver
+            int r5 = r0.currentAccount
+            r3.setCurrentAccount(r5)
+            org.telegram.messenger.ChatObject$VideoParticipant r3 = r0.participant
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r3.participant
+            org.telegram.tgnet.TLRPC$Peer r3 = r3.peer
+            long r10 = org.telegram.messenger.MessageObject.getPeerId(r3)
+            boolean r3 = org.telegram.messenger.DialogObject.isUserDialog(r10)
+            if (r3 == 0) goto L_0x046e
+            int r3 = r0.currentAccount
+            org.telegram.messenger.AccountInstance r3 = org.telegram.messenger.AccountInstance.getInstance(r3)
+            org.telegram.messenger.MessagesController r3 = r3.getMessagesController()
+            java.lang.Long r5 = java.lang.Long.valueOf(r10)
+            org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r5)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r5 = r0.noVideoStubLayout
+            org.telegram.ui.Components.AvatarDrawable r5 = r5.avatarDrawable
+            r5.setInfo((org.telegram.tgnet.TLRPC$User) r3)
+            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForUser(r3, r2)
+            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForUser(r3, r9)
+            goto L_0x0490
         L_0x046e:
+            int r3 = org.telegram.messenger.UserConfig.selectedAccount
+            org.telegram.messenger.AccountInstance r3 = org.telegram.messenger.AccountInstance.getInstance(r3)
+            org.telegram.messenger.MessagesController r3 = r3.getMessagesController()
+            long r10 = -r10
+            java.lang.Long r5 = java.lang.Long.valueOf(r10)
+            org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r5)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r5 = r0.noVideoStubLayout
+            org.telegram.ui.Components.AvatarDrawable r5 = r5.avatarDrawable
+            r5.setInfo((org.telegram.tgnet.TLRPC$Chat) r3)
+            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForChat(r3, r2)
+            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForChat(r3, r9)
+        L_0x0490:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r11 = r0.noVideoStubLayout
             org.telegram.ui.Components.AvatarDrawable r11 = r11.avatarDrawable
-            if (r10 == 0) goto L_0x0485
+            if (r10 == 0) goto L_0x04a7
             org.telegram.messenger.ImageLoader r12 = org.telegram.messenger.ImageLoader.getInstance()
             org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r10 = r10.location
             java.lang.String r13 = "50_50"
-            android.graphics.drawable.BitmapDrawable r10 = r12.getImageFromMemory(r10, r5, r13)
-            if (r10 == 0) goto L_0x0485
+            android.graphics.drawable.BitmapDrawable r10 = r12.getImageFromMemory(r10, r6, r13)
+            if (r10 == 0) goto L_0x04a7
             r19 = r10
-            goto L_0x0487
-        L_0x0485:
+            goto L_0x04a9
+        L_0x04a7:
             r19 = r11
-        L_0x0487:
+        L_0x04a9:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r10 = r0.noVideoStubLayout
             org.telegram.messenger.ImageReceiver r10 = r10.avatarImageReceiver
             r18 = 0
             r20 = 0
             r22 = 0
             r16 = r10
-            r17 = r4
-            r21 = r2
+            r17 = r5
+            r21 = r3
             r16.setImage(r17, r18, r19, r20, r21, r22)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r10 = r0.noVideoStubLayout
             org.telegram.messenger.ImageReceiver r10 = r10.backgroundImageReceiver
@@ -1714,237 +1802,252 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             r16 = r10
             r19 = r11
             r16.setImage(r17, r18, r19, r20, r21, r22)
-            r2 = 0
-        L_0x04b3:
-            if (r1 == 0) goto L_0x04c1
-            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r4 = r0.secondaryView
-            if (r4 == 0) goto L_0x04c1
-            boolean r4 = r0.showingInFullscreen
-            if (r4 != 0) goto L_0x04c1
-            if (r2 != 0) goto L_0x04c1
-            r4 = 1
-            goto L_0x04c2
-        L_0x04c1:
-            r4 = 0
-        L_0x04c2:
+            r3 = 0
+        L_0x04d5:
+            if (r1 == 0) goto L_0x04e3
+            org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r5 = r0.secondaryView
+            if (r5 == 0) goto L_0x04e3
+            boolean r5 = r0.showingInFullscreen
+            if (r5 != 0) goto L_0x04e3
+            if (r3 != 0) goto L_0x04e3
+            r5 = 1
+            goto L_0x04e4
+        L_0x04e3:
+            r5 = 0
+        L_0x04e4:
             boolean r10 = r0.hasVideo
-            if (r2 == r10) goto L_0x0546
-            if (r4 != 0) goto L_0x0546
-            r0.hasVideo = r2
-            android.animation.ValueAnimator r2 = r0.noVideoStubAnimator
-            if (r2 == 0) goto L_0x04d6
-            r2.removeAllListeners()
-            android.animation.ValueAnimator r2 = r0.noVideoStubAnimator
-            r2.cancel()
-        L_0x04d6:
-            if (r1 == 0) goto L_0x051c
-            boolean r2 = r0.hasVideo
-            if (r2 != 0) goto L_0x04ee
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r2 = r0.noVideoStubLayout
-            int r2 = r2.getVisibility()
-            if (r2 == 0) goto L_0x04ee
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r2 = r0.noVideoStubLayout
-            r2.setVisibility(r9)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r2 = r0.noVideoStubLayout
-            r2.setAlpha(r6)
-        L_0x04ee:
-            float[] r2 = new float[r3]
-            float r3 = r0.progressToNoVideoStub
-            r2[r9] = r3
+            if (r3 == r10) goto L_0x0568
+            if (r5 != 0) goto L_0x0568
+            r0.hasVideo = r3
+            android.animation.ValueAnimator r3 = r0.noVideoStubAnimator
+            if (r3 == 0) goto L_0x04f8
+            r3.removeAllListeners()
+            android.animation.ValueAnimator r3 = r0.noVideoStubAnimator
+            r3.cancel()
+        L_0x04f8:
+            if (r1 == 0) goto L_0x053e
             boolean r3 = r0.hasVideo
-            if (r3 == 0) goto L_0x04fa
-            r3 = 0
-            goto L_0x04fc
-        L_0x04fa:
-            r3 = 1065353216(0x3var_, float:1.0)
-        L_0x04fc:
-            r2[r8] = r3
-            android.animation.ValueAnimator r2 = android.animation.ValueAnimator.ofFloat(r2)
-            r0.noVideoStubAnimator = r2
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda0 r3 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda0
-            r3.<init>(r0)
-            r2.addUpdateListener(r3)
-            android.animation.ValueAnimator r2 = r0.noVideoStubAnimator
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$6 r3 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$6
-            r3.<init>()
-            r2.addListener(r3)
-            android.animation.ValueAnimator r2 = r0.noVideoStubAnimator
-            r2.start()
-            goto L_0x053d
-        L_0x051c:
-            boolean r2 = r0.hasVideo
-            if (r2 == 0) goto L_0x0522
-            r3 = 0
-            goto L_0x0524
-        L_0x0522:
-            r3 = 1065353216(0x3var_, float:1.0)
-        L_0x0524:
-            r0.progressToNoVideoStub = r3
+            if (r3 != 0) goto L_0x0510
             org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r3 = r0.noVideoStubLayout
-            if (r2 == 0) goto L_0x052d
-            r2 = 8
-            goto L_0x052e
-        L_0x052d:
-            r2 = 0
-        L_0x052e:
+            int r3 = r3.getVisibility()
+            if (r3 == 0) goto L_0x0510
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r3 = r0.noVideoStubLayout
             r3.setVisibility(r2)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r2 = r0.noVideoStubLayout
-            float r3 = r0.progressToNoVideoStub
-            r2.setAlpha(r3)
-            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
-            r2.invalidate()
-        L_0x053d:
-            boolean r2 = r0.hasVideo
-            if (r2 == 0) goto L_0x0546
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r2 = r0.noVideoStubLayout
-            r2.updateMuteButtonState(r9)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r3 = r0.noVideoStubLayout
+            r3.setAlpha(r7)
+        L_0x0510:
+            float[] r3 = new float[r4]
+            float r4 = r0.progressToNoVideoStub
+            r3[r2] = r4
+            boolean r4 = r0.hasVideo
+            if (r4 == 0) goto L_0x051c
+            r4 = 0
+            goto L_0x051e
+        L_0x051c:
+            r4 = 1065353216(0x3var_, float:1.0)
+        L_0x051e:
+            r3[r9] = r4
+            android.animation.ValueAnimator r3 = android.animation.ValueAnimator.ofFloat(r3)
+            r0.noVideoStubAnimator = r3
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda1 r4 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$$ExternalSyntheticLambda1
+            r4.<init>(r0)
+            r3.addUpdateListener(r4)
+            android.animation.ValueAnimator r3 = r0.noVideoStubAnimator
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$6 r4 = new org.telegram.ui.Components.voip.GroupCallMiniTextureView$6
+            r4.<init>()
+            r3.addListener(r4)
+            android.animation.ValueAnimator r3 = r0.noVideoStubAnimator
+            r3.start()
+            goto L_0x055f
+        L_0x053e:
+            boolean r3 = r0.hasVideo
+            if (r3 == 0) goto L_0x0544
+            r4 = 0
+            goto L_0x0546
+        L_0x0544:
+            r4 = 1065353216(0x3var_, float:1.0)
         L_0x0546:
-            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r2 = r2.participant
-            boolean r2 = r2.self
-            if (r2 == 0) goto L_0x0563
-            org.telegram.messenger.voip.VoIPService r2 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r2 == 0) goto L_0x0563
-            org.telegram.messenger.voip.VoIPService r2 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            r0.progressToNoVideoStub = r4
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r4 = r0.noVideoStubLayout
+            if (r3 == 0) goto L_0x054f
+            r3 = 8
+            goto L_0x0550
+        L_0x054f:
+            r3 = 0
+        L_0x0550:
+            r4.setVisibility(r3)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r3 = r0.noVideoStubLayout
+            float r4 = r0.progressToNoVideoStub
+            r3.setAlpha(r4)
             org.telegram.ui.Components.voip.VoIPTextureView r3 = r0.textureView
-            org.webrtc.TextureViewRenderer r3 = r3.renderer
-            org.telegram.messenger.ChatObject$VideoParticipant r4 = r0.participant
-            boolean r4 = r4.presentation
-            r2.setLocalSink(r3, r4)
-        L_0x0563:
-            org.telegram.ui.Components.voip.GroupCallStatusIcon r2 = r0.statusIcon
+            r3.invalidate()
+        L_0x055f:
+            boolean r3 = r0.hasVideo
+            if (r3 == 0) goto L_0x0568
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r3 = r0.noVideoStubLayout
+            r3.updateMuteButtonState(r2)
+        L_0x0568:
             org.telegram.messenger.ChatObject$VideoParticipant r3 = r0.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r3.participant
-            r2.setParticipant(r3, r1)
+            boolean r3 = r3.self
+            if (r3 == 0) goto L_0x0585
+            org.telegram.messenger.voip.VoIPService r3 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            if (r3 == 0) goto L_0x0585
+            org.telegram.messenger.voip.VoIPService r3 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            org.telegram.ui.Components.voip.VoIPTextureView r4 = r0.textureView
+            org.webrtc.TextureViewRenderer r4 = r4.renderer
+            org.telegram.messenger.ChatObject$VideoParticipant r5 = r0.participant
+            boolean r5 = r5.presentation
+            r3.setLocalSink(r4, r5)
+        L_0x0585:
+            org.telegram.ui.Components.voip.GroupCallStatusIcon r3 = r0.statusIcon
+            org.telegram.messenger.ChatObject$VideoParticipant r4 = r0.participant
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r4 = r4.participant
+            r3.setParticipant(r4, r1)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r1 = r0.noVideoStubLayout
             int r1 = r1.getVisibility()
-            if (r1 != 0) goto L_0x0579
+            if (r1 != 0) goto L_0x059b
             org.telegram.ui.Components.voip.GroupCallMiniTextureView$NoVideoStubLayout r1 = r0.noVideoStubLayout
-            r1.updateMuteButtonState(r8)
-        L_0x0579:
+            r1.updateMuteButtonState(r9)
+        L_0x059b:
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.participant
-            boolean r2 = r1.presentation
-            if (r2 == 0) goto L_0x058a
+            boolean r3 = r1.presentation
+            if (r3 == 0) goto L_0x05ac
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r1.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideo r1 = r1.presentation
-            if (r1 == 0) goto L_0x0595
+            if (r1 == 0) goto L_0x05b7
             boolean r1 = r1.paused
-            if (r1 == 0) goto L_0x0595
-            goto L_0x0594
-        L_0x058a:
+            if (r1 == 0) goto L_0x05b7
+            goto L_0x05b6
+        L_0x05ac:
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r1.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipantVideo r1 = r1.video
-            if (r1 == 0) goto L_0x0595
+            if (r1 == 0) goto L_0x05b7
             boolean r1 = r1.paused
-            if (r1 == 0) goto L_0x0595
-        L_0x0594:
-            r9 = 1
-        L_0x0595:
+            if (r1 == 0) goto L_0x05b7
+        L_0x05b6:
+            r2 = 1
+        L_0x05b7:
             boolean r1 = r0.videoIsPaused
-            if (r1 == r9) goto L_0x05ba
-            r0.videoIsPaused = r9
+            if (r1 == r2) goto L_0x05dc
+            r0.videoIsPaused = r2
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             org.webrtc.TextureViewRenderer r1 = r1.renderer
             android.view.ViewPropertyAnimator r1 = r1.animate()
             boolean r2 = r0.videoIsPaused
-            if (r2 == 0) goto L_0x05a8
-            r7 = 0
-        L_0x05a8:
-            android.view.ViewPropertyAnimator r1 = r1.alpha(r7)
+            if (r2 == 0) goto L_0x05ca
+            r8 = 0
+        L_0x05ca:
+            android.view.ViewPropertyAnimator r1 = r1.alpha(r8)
             r2 = 250(0xfa, double:1.235E-321)
             android.view.ViewPropertyAnimator r1 = r1.setDuration(r2)
             r1.start()
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             r1.invalidate()
-        L_0x05ba:
+        L_0x05dc:
             boolean r1 = org.telegram.ui.GroupCallActivity.paused
-            if (r1 != 0) goto L_0x0618
+            if (r1 != 0) goto L_0x065c
             boolean r1 = r0.hasVideo
-            if (r1 != 0) goto L_0x05c3
-            goto L_0x0618
-        L_0x05c3:
+            if (r1 != 0) goto L_0x05e6
+            goto L_0x065c
+        L_0x05e6:
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             org.webrtc.TextureViewRenderer r1 = r1.renderer
             boolean r1 = r1.isFirstFrameRendered()
-            if (r1 != 0) goto L_0x05d0
+            if (r1 != 0) goto L_0x05f3
             r23.loadThumb()
-        L_0x05d0:
+        L_0x05f3:
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r1.participant
             boolean r1 = r1.self
-            if (r1 == 0) goto L_0x05ef
+            if (r1 == 0) goto L_0x0612
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 == 0) goto L_0x0678
+            if (r1 == 0) goto L_0x06bc
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.textureView
             org.webrtc.TextureViewRenderer r2 = r2.renderer
             org.telegram.messenger.ChatObject$VideoParticipant r3 = r0.participant
             boolean r3 = r3.presentation
             r1.setLocalSink(r2, r3)
-            goto L_0x0678
-        L_0x05ef:
+            goto L_0x06bc
+        L_0x0612:
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 == 0) goto L_0x0678
-            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r2.participant
-            boolean r2 = r2.presentation
-            org.telegram.ui.Components.voip.VoIPTextureView r4 = r0.textureView
-            org.webrtc.TextureViewRenderer r4 = r4.renderer
-            r1.addRemoteSink(r3, r2, r4, r5)
+            if (r1 == 0) goto L_0x06bc
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r2.participant
             boolean r2 = r2.presentation
             org.telegram.ui.Components.voip.VoIPTextureView r4 = r0.textureView
             org.webrtc.TextureViewRenderer r4 = r4.renderer
-            r1.addRemoteSink(r3, r2, r4, r5)
-            goto L_0x0678
-        L_0x0618:
-            org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.participant
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r1.participant
-            boolean r1 = r1.self
-            if (r1 == 0) goto L_0x0632
-            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 == 0) goto L_0x0652
-            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
-            boolean r2 = r2.presentation
-            r1.setLocalSink(r5, r2)
-            goto L_0x0652
-        L_0x0632:
-            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r1 == 0) goto L_0x0652
+            r1.addRemoteSink(r3, r2, r4, r6)
             org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r2.participant
             boolean r2 = r2.presentation
-            r1.removeRemoteSink(r3, r2)
-            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r2.participant
-            boolean r2 = r2.presentation
-            r1.removeRemoteSink(r3, r2)
-        L_0x0652:
-            boolean r1 = org.telegram.ui.GroupCallActivity.paused
-            if (r1 == 0) goto L_0x0678
+            org.telegram.ui.Components.voip.VoIPTextureView r4 = r0.textureView
+            org.webrtc.TextureViewRenderer r4 = r4.renderer
+            r1.addRemoteSink(r3, r2, r4, r6)
+            org.telegram.messenger.ChatObject$Call r1 = r0.call
+            if (r1 == 0) goto L_0x06bc
+            org.telegram.tgnet.TLRPC$GroupCall r1 = r1.call
+            boolean r1 = r1.rtmp_stream
+            if (r1 == 0) goto L_0x06bc
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             org.webrtc.TextureViewRenderer r1 = r1.renderer
             boolean r1 = r1.isFirstFrameRendered()
-            if (r1 == 0) goto L_0x0678
+            if (r1 != 0) goto L_0x06bc
+            boolean r1 = r0.postedNoRtmpStreamCallback
+            if (r1 != 0) goto L_0x06bc
+            java.lang.Runnable r1 = r0.noRtmpStreamCallback
+            r2 = 15000(0x3a98, double:7.411E-320)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r2)
+            r0.postedNoRtmpStreamCallback = r9
+            goto L_0x06bc
+        L_0x065c:
+            org.telegram.messenger.ChatObject$VideoParticipant r1 = r0.participant
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r1.participant
+            boolean r1 = r1.self
+            if (r1 == 0) goto L_0x0676
+            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            if (r1 == 0) goto L_0x0696
+            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
+            boolean r2 = r2.presentation
+            r1.setLocalSink(r6, r2)
+            goto L_0x0696
+        L_0x0676:
+            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            if (r1 == 0) goto L_0x0696
+            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r2.participant
+            boolean r2 = r2.presentation
+            r1.removeRemoteSink(r3, r2)
+            org.telegram.messenger.voip.VoIPService r1 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            org.telegram.messenger.ChatObject$VideoParticipant r2 = r0.participant
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r2.participant
+            boolean r2 = r2.presentation
+            r1.removeRemoteSink(r3, r2)
+        L_0x0696:
+            boolean r1 = org.telegram.ui.GroupCallActivity.paused
+            if (r1 == 0) goto L_0x06bc
+            org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
+            org.webrtc.TextureViewRenderer r1 = r1.renderer
+            boolean r1 = r1.isFirstFrameRendered()
+            if (r1 == 0) goto L_0x06bc
             r23.saveThumb()
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             org.webrtc.TextureViewRenderer r1 = r1.renderer
             r1.clearFirstFrame()
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             org.webrtc.TextureViewRenderer r1 = r1.renderer
-            r1.setAlpha(r6)
+            r1.setAlpha(r7)
             org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.textureView
             android.view.TextureView r1 = r1.blurRenderer
-            r1.setAlpha(r6)
-        L_0x0678:
-            r0.updateIconColor(r8)
-        L_0x067b:
+            r1.setAlpha(r7)
+        L_0x06bc:
+            r0.updateIconColor(r9)
+        L_0x06bf:
             r23.updateInfo()
             return
         */
@@ -1952,12 +2055,12 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateAttachState$1(View view) {
+    public /* synthetic */ void lambda$updateAttachState$2(View view) {
         this.parentContainer.removeView(view);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateAttachState$2(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updateAttachState$3(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.progressToNoVideoStub = floatValue;
         this.noVideoStubLayout.setAlpha(floatValue);
@@ -2314,7 +2417,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                 if (VoIPService.getSharedInstance() != null) {
                     VoIPService.getSharedInstance().setLocalSink((VideoSink) null, this.participant.presentation);
                 }
-            } else if (VoIPService.getSharedInstance() != null) {
+            } else if (VoIPService.getSharedInstance() != null && !RTMPStreamPipOverlay.isVisible()) {
                 VoIPService sharedInstance = VoIPService.getSharedInstance();
                 ChatObject.VideoParticipant videoParticipant = this.participant;
                 sharedInstance.removeRemoteSink(videoParticipant.participant, videoParticipant.presentation);
@@ -2331,20 +2434,20 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
 
     public void saveThumb() {
         if (this.participant != null && this.textureView.renderer.getMeasuredHeight() != 0 && this.textureView.renderer.getMeasuredWidth() != 0) {
-            getRenderBufferBitmap(new GroupCallMiniTextureView$$ExternalSyntheticLambda7(this));
+            getRenderBufferBitmap(new GroupCallMiniTextureView$$ExternalSyntheticLambda8(this));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveThumb$4(Bitmap bitmap, int i) {
+    public /* synthetic */ void lambda$saveThumb$5(Bitmap bitmap, int i) {
         if (bitmap != null && bitmap.getPixel(0, 0) != 0) {
             Utilities.stackBlurBitmap(bitmap, Math.max(7, Math.max(bitmap.getWidth(), bitmap.getHeight()) / 180));
-            AndroidUtilities.runOnUIThread(new GroupCallMiniTextureView$$ExternalSyntheticLambda5(this, bitmap));
+            AndroidUtilities.runOnUIThread(new GroupCallMiniTextureView$$ExternalSyntheticLambda6(this, bitmap));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveThumb$3(Bitmap bitmap) {
+    public /* synthetic */ void lambda$saveThumb$4(Bitmap bitmap) {
         HashMap<String, Bitmap> hashMap = this.call.thumbs;
         ChatObject.VideoParticipant videoParticipant = this.participant;
         boolean z = videoParticipant.presentation;
@@ -2475,7 +2578,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateIconColor$5(int i, int i2, int i3, int i4, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updateIconColor$6(int i, int i2, int i3, int i4, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.lastIconColor = ColorUtils.blendARGB(i, i2, floatValue);
         int blendARGB = ColorUtils.blendARGB(i3, i4, floatValue);
@@ -2733,7 +2836,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             ((FrameLayout.LayoutParams) this.blurredFlippingStub.getLayoutParams()).gravity = 17;
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.flipAnimator = ofFloat;
-            ofFloat.addUpdateListener(new GroupCallMiniTextureView$$ExternalSyntheticLambda1(this));
+            ofFloat.addUpdateListener(new GroupCallMiniTextureView$$ExternalSyntheticLambda0(this));
             this.flipAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     super.onAnimationEnd(animator);
@@ -2753,7 +2856,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$startFlipAnimation$6(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$startFlipAnimation$7(ValueAnimator valueAnimator) {
         boolean z;
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         if (floatValue < 0.5f) {

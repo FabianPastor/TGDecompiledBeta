@@ -70,6 +70,10 @@ class HardwareVideoEncoder implements VideoEncoder {
         return VideoEncoder.CC.$default$createNativeVideoEncoder(this);
     }
 
+    public /* synthetic */ VideoEncoder.EncoderInfo getEncoderInfo() {
+        return VideoEncoder.CC.$default$getEncoderInfo(this);
+    }
+
     public String getImplementationName() {
         return "HWEncoder";
     }
@@ -80,6 +84,10 @@ class HardwareVideoEncoder implements VideoEncoder {
 
     public /* synthetic */ boolean isHardwareEncoder() {
         return VideoEncoder.CC.$default$isHardwareEncoder(this);
+    }
+
+    public /* synthetic */ VideoCodecStatus setRates(VideoEncoder.RateControlParameters rateControlParameters) {
+        return VideoEncoder.CC.$default$setRates(this, rateControlParameters);
     }
 
     private static class BusyCount {

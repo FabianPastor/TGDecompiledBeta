@@ -16,6 +16,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityPasswordView$$Exte
     }
 
     public final void run() {
-        this.f$0.lambda$new$2(this.f$1, this.f$2);
+        this.f$0.lambda$onNextPressed$10(this.f$1, this.f$2);
     }
 }

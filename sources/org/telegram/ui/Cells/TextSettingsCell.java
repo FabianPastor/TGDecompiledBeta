@@ -125,19 +125,19 @@ public class TextSettingsCell extends FrameLayout {
         this.valueTextView.setTextColor(i);
     }
 
-    public void setText(String str, boolean z) {
-        this.textView.setText(str);
+    public void setText(CharSequence charSequence, boolean z) {
+        this.textView.setText(charSequence);
         this.valueTextView.setVisibility(4);
         this.valueImageView.setVisibility(4);
         this.needDivider = z;
         setWillNotDraw(!z);
     }
 
-    public void setTextAndValue(String str, String str2, boolean z) {
-        this.textView.setText(str);
+    public void setTextAndValue(CharSequence charSequence, CharSequence charSequence2, boolean z) {
+        this.textView.setText(charSequence);
         this.valueImageView.setVisibility(4);
-        if (str2 != null) {
-            this.valueTextView.setText(str2);
+        if (charSequence2 != null) {
+            this.valueTextView.setText(charSequence2);
             this.valueTextView.setVisibility(0);
         } else {
             this.valueTextView.setVisibility(4);

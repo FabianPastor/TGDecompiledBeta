@@ -580,7 +580,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         if (i == 3 && iArr[0] != 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) this);
             builder.setTitle(LocaleController.getString("AppName", NUM));
-            builder.setMessage(LocaleController.getString("PermissionNoAudio", NUM));
+            builder.setMessage(LocaleController.getString("PermissionNoAudioWithHint", NUM));
             builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new PopupNotificationActivity$$ExternalSyntheticLambda0(this));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             builder.show();

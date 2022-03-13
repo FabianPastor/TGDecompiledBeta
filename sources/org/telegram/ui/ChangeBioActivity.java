@@ -84,7 +84,8 @@ public class ChangeBioActivity extends BaseFragment {
         editTextBoldCursor.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.firstNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        this.firstNameField.setBackgroundDrawable((Drawable) null);
+        this.firstNameField.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
         this.firstNameField.setMaxLines(4);
         EditTextBoldCursor editTextBoldCursor2 = this.firstNameField;
         float f = 24.0f;

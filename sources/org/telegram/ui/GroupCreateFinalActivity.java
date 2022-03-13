@@ -284,7 +284,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 setMeasuredDimension(size, size2);
                 int paddingTop = size2 - getPaddingTop();
                 measureChildWithMargins(GroupCreateFinalActivity.this.actionBar, i, 0, i2, 0);
-                if (measureKeyboardHeight() > AndroidUtilities.dp(20.0f)) {
+                if (measureKeyboardHeight() > AndroidUtilities.dp(20.0f) && !GroupCreateFinalActivity.this.editText.isPopupShowing()) {
                     this.ignoreLayout = true;
                     GroupCreateFinalActivity.this.editText.hideEmojiView();
                     this.ignoreLayout = false;
@@ -993,7 +993,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 android.content.Context r0 = r4.context
                 r6.<init>(r0)
                 android.content.Context r0 = r4.context
-                r1 = 2131165471(0x7var_f, float:1.794516E38)
+                r1 = 2131165473(0x7var_, float:1.7945164E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable

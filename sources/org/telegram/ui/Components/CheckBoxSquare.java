@@ -51,6 +51,7 @@ public class CheckBoxSquare extends View {
         this.key1 = str;
         this.key2 = str2;
         this.key3 = str3;
+        invalidate();
     }
 
     @Keep

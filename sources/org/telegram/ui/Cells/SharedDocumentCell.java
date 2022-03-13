@@ -72,7 +72,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     public ImageView placeholderImageView;
     private LineProgressView progressView;
     private final Theme.ResourcesProvider resourcesProvider;
-    private TextView rightDateTextView;
+    public TextView rightDateTextView;
     private RLottieDrawable statusDrawable;
     private RLottieImageView statusImageView;
     /* access modifiers changed from: private */
@@ -428,6 +428,17 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                 }
             }
             String documentFileName = FileLoader.getDocumentFileName(document);
+            if (TextUtils.isEmpty(documentFileName)) {
+                if (document.mime_type.startsWith("video")) {
+                    documentFileName = LocaleController.getString("AttachVideo", NUM);
+                } else if (document.mime_type.startsWith("image")) {
+                    documentFileName = LocaleController.getString("AttachPhoto", NUM);
+                } else if (document.mime_type.startsWith("audio")) {
+                    documentFileName = LocaleController.getString("AttachAudio", NUM);
+                } else {
+                    documentFileName = LocaleController.getString("AttachDocument", NUM);
+                }
+            }
             if (str4 == null) {
                 str4 = documentFileName;
             }

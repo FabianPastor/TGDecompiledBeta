@@ -103,9 +103,9 @@ public class ReorderingHintDrawable extends Drawable {
         int dp2 = AndroidUtilities.dp(8.0f);
         rect3.bottom = dp2;
         rect3.top = dp2;
-        this.tempRect.inset(-AndroidUtilities.dp(AndroidUtilities.lerp(10.0f, 11.0f, interpolation)), -AndroidUtilities.dp(AndroidUtilities.lerp(2.0f, 3.0f, interpolation)));
+        this.tempRect.inset(-AndroidUtilities.dp((float) AndroidUtilities.lerp(10, 11, interpolation)), -AndroidUtilities.dp((float) AndroidUtilities.lerp(2, 3, interpolation)));
         this.primaryRectDrawable.setBounds(this.tempRect);
-        this.primaryRectDrawable.setAlpha((int) AndroidUtilities.lerp(128.0f, 255.0f, interpolation));
+        this.primaryRectDrawable.setAlpha(AndroidUtilities.lerp(128, 255, interpolation));
         this.primaryRectDrawable.draw(canvas);
     }
 
@@ -117,15 +117,15 @@ public class ReorderingHintDrawable extends Drawable {
         Rect rect = this.tempRect;
         rect.right = bounds.right - rect.left;
         rect.top = rect.bottom - ((int) (((float) AndroidUtilities.dp(4.0f)) * this.scaleY));
-        this.tempRect.offset(0, AndroidUtilities.dp(AndroidUtilities.lerp(0.0f, -8.0f, interpolation)));
+        this.tempRect.offset(0, AndroidUtilities.dp((float) AndroidUtilities.lerp(0, -8, interpolation)));
         this.secondaryRectDrawable.setBounds(this.tempRect);
         this.secondaryRectDrawable.draw(canvas);
-        this.tempRect.left = (int) (AndroidUtilities.dpf2(AndroidUtilities.lerp(1.0f, 2.0f, interpolation)) * this.scaleX);
-        this.tempRect.top = (int) (AndroidUtilities.dpf2(AndroidUtilities.lerp(5.0f, 6.0f, interpolation)) * this.scaleY);
+        this.tempRect.left = (int) (AndroidUtilities.dpf2((float) AndroidUtilities.lerp(1, 2, interpolation)) * this.scaleX);
+        this.tempRect.top = (int) (AndroidUtilities.dpf2((float) AndroidUtilities.lerp(5, 6, interpolation)) * this.scaleY);
         Rect rect2 = this.tempRect;
         rect2.right = bounds.right - rect2.left;
-        rect2.bottom = rect2.top + ((int) (AndroidUtilities.dpf2(AndroidUtilities.lerp(6.0f, 4.0f, interpolation)) * this.scaleY));
-        this.tempRect.offset(0, AndroidUtilities.dp(AndroidUtilities.lerp(0.0f, 8.0f, interpolation)));
+        rect2.bottom = rect2.top + ((int) (AndroidUtilities.dpf2((float) AndroidUtilities.lerp(6, 4, interpolation)) * this.scaleY));
+        this.tempRect.offset(0, AndroidUtilities.dp((float) AndroidUtilities.lerp(0, 8, interpolation)));
         this.primaryRectDrawable.setBounds(this.tempRect);
         this.primaryRectDrawable.setAlpha(255);
         this.primaryRectDrawable.draw(canvas);
@@ -149,7 +149,7 @@ public class ReorderingHintDrawable extends Drawable {
         rect2.bottom = rect2.top + ((int) (AndroidUtilities.dpf2(4.0f) * this.scaleY));
         this.tempRect.offset(0, AndroidUtilities.dp(8.0f));
         this.primaryRectDrawable.setBounds(this.tempRect);
-        this.primaryRectDrawable.setAlpha((int) AndroidUtilities.lerp(255.0f, 128.0f, interpolation));
+        this.primaryRectDrawable.setAlpha(AndroidUtilities.lerp(255, 128, interpolation));
         this.primaryRectDrawable.draw(canvas);
     }
 

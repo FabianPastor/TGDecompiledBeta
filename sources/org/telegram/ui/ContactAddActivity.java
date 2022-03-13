@@ -126,7 +126,6 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         BackupImageView backupImageView = new BackupImageView(context2);
         this.avatarImage = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(30.0f));
-        int i = 3;
         frameLayout.addView(this.avatarImage, LayoutHelper.createFrame(60, 60, (LocaleController.isRTL ? 5 : 3) | 48));
         TextView textView = new TextView(context2);
         this.nameTextView = textView;
@@ -158,7 +157,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         editTextBoldCursor.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.firstNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        this.firstNameField.setBackgroundDrawable((Drawable) null);
+        this.firstNameField.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
         this.firstNameField.setMaxLines(1);
         this.firstNameField.setLines(1);
         this.firstNameField.setSingleLine(true);
@@ -172,13 +172,13 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
         this.firstNameField.setOnEditorActionListener(new ContactAddActivity$$ExternalSyntheticLambda2(this));
         this.firstNameField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            boolean focued;
+            boolean focused;
 
             public void onFocusChange(View view, boolean z) {
-                if (!ContactAddActivity.this.paused && !z && this.focued) {
+                if (!ContactAddActivity.this.paused && !z && this.focused) {
                     FileLog.d("changed");
                 }
-                this.focued = z;
+                this.focused = z;
             }
         });
         EditTextBoldCursor editTextBoldCursor2 = new EditTextBoldCursor(context2);
@@ -186,7 +186,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         editTextBoldCursor2.setTextSize(1, 18.0f);
         this.lastNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.lastNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.lastNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
+        this.lastNameField.setBackgroundDrawable((Drawable) null);
+        this.lastNameField.setLineColors(getThemedColor("windowBackgroundWhiteInputField"), getThemedColor("windowBackgroundWhiteInputFieldActivated"), getThemedColor("windowBackgroundWhiteRedText3"));
         this.lastNameField.setMaxLines(1);
         this.lastNameField.setLines(1);
         this.lastNameField.setSingleLine(true);
@@ -213,11 +214,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.infoTextView = textView5;
         textView5.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         this.infoTextView.setTextSize(1, 14.0f);
-        TextView textView6 = this.infoTextView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        }
-        textView6.setGravity(i);
+        this.infoTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         if (this.addContact) {
             if (!this.needAddException || TextUtils.isEmpty(user.phone)) {
                 linearLayout.addView(this.infoTextView, LayoutHelper.createLinear(-1, -2, 24.0f, 18.0f, 24.0f, 0.0f));

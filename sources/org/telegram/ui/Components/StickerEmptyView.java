@@ -10,9 +10,11 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
@@ -20,6 +22,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class StickerEmptyView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     private boolean animateLayoutChange;
+    String colorKey1;
     int currentAccount;
     int keyboardSize;
     private int lastH;
@@ -33,7 +36,6 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
     Runnable showProgressRunnable;
     private int stickerType;
     public BackupImageView stickerView;
-    private LoadingStickerDrawable stubDrawable;
     public final TextView subtitle;
     public final TextView title;
 
@@ -60,10 +62,11 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
                 stickerEmptyView.progressBar.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
             }
         };
+        this.colorKey1 = "emptyListPlaceholder";
         this.resourcesProvider = resourcesProvider2;
         this.progressView = view;
         this.stickerType = i;
-        AnonymousClass2 r0 = new LinearLayout(context) {
+        AnonymousClass2 r13 = new LinearLayout(context) {
             public void setVisibility(int i) {
                 if (getVisibility() == 8 && i == 0) {
                     StickerEmptyView.this.setSticker();
@@ -74,14 +77,11 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
                 super.setVisibility(i);
             }
         };
-        this.linearLayout = r0;
-        r0.setOrientation(1);
+        this.linearLayout = r13;
+        r13.setOrientation(1);
         BackupImageView backupImageView = new BackupImageView(context);
         this.stickerView = backupImageView;
         backupImageView.setOnClickListener(new StickerEmptyView$$ExternalSyntheticLambda0(this));
-        LoadingStickerDrawable loadingStickerDrawable = new LoadingStickerDrawable(this.stickerView, i == 1 ? "M503.1,302.3c-2-20-21.4-29.8-42.4-30.7CLASSNAME.8-56.8-8.2-121-52.8-164.1CLASSNAME.6,24,190,51.3,131.7,146.2\n\tc-21.2-30.5-65-34.3-91.1-7.6c-30,30.6-18.4,82.7,22.5,97.3c-4.7,2.4-6.4,7.6-5.7,12.4c-14.2,10.5-19,28.5-5.1,42.4\n\tc-5.4,15,13.2,28.8,26.9,18.8CLASSNAME.5,6.9,21,15,27.8,28.8c-17.1,55.3-8.5,79.4,8.5,98.7v0CLASSNAME.5,53.8,235.6,45.3,292.2,11.5\n\tCLASSNAME.6-13.5,39.5-34.6,30.4-96.8CLASSNAME.1,322.1,505.7,328.5,503.1,302.3z M107.4,234c0.1,2.8,0.2,5.8,0.4,8.8c-7-2.5-14-3.6-20.5-3.6\n\tCLASSNAME.4,238.6,101.2,236.9,107.4,234z" : "m418 282.6CLASSNAME.4-21.1 20.2-44.9 20.2-70.8 0-88.3-79.8-175.3-178.9-175.3-100.1 0-178.9 88-178.9 175.3 0 46.6 16.9 73.1 29.1 86.1-19.3 23.4-30.9 52.3-34.6 86.1-2.5 22.7 3.2 41.4 17.4 57.3 14.3 16 51.7 35 148.1 35 41.2 0 119.9-5.3 156.7-18.3 49.5-17.4 59.2-41.1 59.2-76.2 0-41.5-12.9-74.8-38.3-99.2z", AndroidUtilities.dp(130.0f), AndroidUtilities.dp(130.0f));
-        this.stubDrawable = loadingStickerDrawable;
-        this.stickerView.setImageDrawable(loadingStickerDrawable);
         TextView textView = new TextView(context);
         this.title = textView;
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -141,7 +141,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         this.title.setTextColor(getThemedColor(str));
         this.subtitle.setTag(str2);
         this.subtitle.setTextColor(getThemedColor(str2));
-        this.stubDrawable.setColors(str3, str4);
+        this.colorKey1 = str3;
     }
 
     public void setVisibility(int i) {
@@ -229,13 +229,26 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             tLRPC$Document = tLRPC$Document2;
             str = "130_130";
         }
+        boolean z = true;
         if (tLRPC$Document != null) {
-            this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$Document), str, "tgs", (Drawable) this.stubDrawable, (Object) tLRPC$TL_messages_stickerSet);
-            this.stickerView.getImageReceiver().setAutoRepeat(2);
-            return;
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document.thumbs, this.colorKey1, 0.2f);
+            if (svgThumb != null) {
+                svgThumb.overrideWidthAndHeight(512, 512);
+            }
+            this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$Document), str, "tgs", (Drawable) svgThumb, (Object) tLRPC$TL_messages_stickerSet);
+            if (this.stickerType == 9) {
+                this.stickerView.getImageReceiver().setAutoRepeat(1);
+            } else {
+                this.stickerView.getImageReceiver().setAutoRepeat(2);
+            }
+        } else {
+            MediaDataController instance = MediaDataController.getInstance(this.currentAccount);
+            if (tLRPC$TL_messages_stickerSet != null) {
+                z = false;
+            }
+            instance.loadStickersByEmojiOrName("tg_placeholders_android", false, z);
+            this.stickerView.getImageReceiver().clearImage();
         }
-        MediaDataController.getInstance(this.currentAccount).loadStickersByEmojiOrName("tg_placeholders_android", false, tLRPC$TL_messages_stickerSet == null);
-        this.stickerView.setImageDrawable(this.stubDrawable);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
@@ -355,5 +368,12 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
         Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
         return color != null ? color.intValue() : Theme.getColor(str);
+    }
+
+    public void setStickerType(int i) {
+        if (this.stickerType != i) {
+            this.stickerType = i;
+            setSticker();
+        }
     }
 }

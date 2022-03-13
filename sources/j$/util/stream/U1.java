@@ -83,7 +83,7 @@ class U1 implements CLASSNAMEv1 {
     }
 
     /* renamed from: spliterator  reason: collision with other method in class */
-    public y m532spliterator() {
+    public y m551spliterator() {
         return N.j(this.a, 0, this.b, 1040);
     }
 }

@@ -1,15 +1,14 @@
 package org.telegram.ui;
 
-import android.view.View;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda13 implements View.OnClickListener {
-    public final /* synthetic */ GroupCallActivity f$0;
+public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda13 implements DialogInterface.OnDismissListener {
+    public static final /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda13 INSTANCE = new GroupCallActivity$$ExternalSyntheticLambda13();
 
-    public /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda13(GroupCallActivity groupCallActivity) {
-        this.f$0 = groupCallActivity;
+    private /* synthetic */ GroupCallActivity$$ExternalSyntheticLambda13() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$updateTitle$36(view);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        GroupCallActivity.lambda$processSelectedOption$58(dialogInterface);
     }
 }

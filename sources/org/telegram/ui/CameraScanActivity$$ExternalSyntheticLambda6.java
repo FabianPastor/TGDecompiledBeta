@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda6 implements Runnable {
-    public final /* synthetic */ CameraScanActivity f$0;
-    public final /* synthetic */ String f$1;
+import androidx.dynamicanimation.animation.DynamicAnimation;
 
-    public /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda6(CameraScanActivity cameraScanActivity, String str) {
+public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda6 implements DynamicAnimation.OnAnimationEndListener {
+    public final /* synthetic */ CameraScanActivity f$0;
+
+    public /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda6(CameraScanActivity cameraScanActivity) {
         this.f$0 = cameraScanActivity;
-        this.f$1 = str;
     }
 
-    public final void run() {
-        this.f$0.lambda$onPreviewFrame$7(this.f$1);
+    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        this.f$0.lambda$createView$3(dynamicAnimation, z, f, f2);
     }
 }

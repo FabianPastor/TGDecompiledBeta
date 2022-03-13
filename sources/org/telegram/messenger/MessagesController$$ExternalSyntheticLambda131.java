@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda13
     }
 
     public final void run() {
-        this.f$0.lambda$loadHintDialogs$153(this.f$1);
+        this.f$0.lambda$loadSuggestedFilters$15(this.f$1);
     }
 }

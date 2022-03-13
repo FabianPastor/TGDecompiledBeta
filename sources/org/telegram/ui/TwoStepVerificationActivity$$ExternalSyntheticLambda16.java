@@ -1,20 +1,17 @@
 package org.telegram.ui;
 
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
 
 public final /* synthetic */ class TwoStepVerificationActivity$$ExternalSyntheticLambda16 implements Runnable {
     public final /* synthetic */ TwoStepVerificationActivity f$0;
-    public final /* synthetic */ TLRPC$TL_error f$1;
-    public final /* synthetic */ TLObject f$2;
+    public final /* synthetic */ TLObject f$1;
 
-    public /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda16(TwoStepVerificationActivity twoStepVerificationActivity, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ TwoStepVerificationActivity$$ExternalSyntheticLambda16(TwoStepVerificationActivity twoStepVerificationActivity, TLObject tLObject) {
         this.f$0 = twoStepVerificationActivity;
-        this.f$1 = tLRPC$TL_error;
-        this.f$2 = tLObject;
+        this.f$1 = tLObject;
     }
 
     public final void run() {
-        this.f$0.lambda$processDone$28(this.f$1, this.f$2);
+        this.f$0.lambda$cancelPasswordReset$8(this.f$1);
     }
 }

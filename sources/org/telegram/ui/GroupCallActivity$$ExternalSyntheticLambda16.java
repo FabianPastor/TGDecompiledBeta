@@ -10,6 +10,6 @@ public final /* synthetic */ class GroupCallActivity$$ExternalSyntheticLambda16 
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$20(view);
+        this.f$0.lambda$updateTitle$37(view);
     }
 }

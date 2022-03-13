@@ -14,7 +14,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
-import android.hardware.Camera;
 import android.media.AudioRecord;
 import android.media.MediaCodec;
 import android.media.MediaCrypto;
@@ -93,8 +92,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     /* access modifiers changed from: private */
     public int fpsLimit = -1;
     CameraInfo info;
+    private boolean inited;
     private boolean initialFrontface;
-    private boolean initied;
     private float innerAlpha;
     private Paint innerPaint = new Paint(1);
     private DecelerateInterpolator interpolator = new DecelerateInterpolator();
@@ -137,8 +136,6 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     public VideoRecorder videoEncoder;
 
     public interface CameraViewDelegate {
-        void onCameraCreated(Camera camera);
-
         void onCameraInit();
     }
 
@@ -343,7 +340,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             CameraController.getInstance().close(this.cameraSession, new CountDownLatch(1), (Runnable) null);
             this.cameraSession = null;
         }
-        this.initied = false;
+        this.inited = false;
         this.isFrontface = !this.isFrontface;
         updateCameraInfoSize();
         this.cameraThread.reinitForNewCamera();
@@ -442,12 +439,12 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
 
     public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
         CameraSession cameraSession2;
-        if (!this.initied && (cameraSession2 = this.cameraSession) != null && cameraSession2.isInitied()) {
+        if (!this.inited && (cameraSession2 = this.cameraSession) != null && cameraSession2.isInitied()) {
             CameraViewDelegate cameraViewDelegate = this.delegate;
             if (cameraViewDelegate != null) {
                 cameraViewDelegate.onCameraInit();
             }
-            this.initied = true;
+            this.inited = true;
         }
     }
 
@@ -531,8 +528,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         this.delegate = cameraViewDelegate;
     }
 
-    public boolean isInitied() {
-        return this.initied;
+    public boolean isInited() {
+        return this.inited;
     }
 
     public CameraSession getCameraSession() {

@@ -965,7 +965,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 this.sharingAccent = objArr[1];
                 AlertDialog alertDialog3 = new AlertDialog(getParentActivity(), 3);
                 this.sharingProgressDialog = alertDialog3;
-                alertDialog3.setCanCacnel(true);
+                alertDialog3.setCanCancel(true);
                 showDialog(this.sharingProgressDialog, new ThemeActivity$$ExternalSyntheticLambda5(this));
             }
         } else if (i == NotificationCenter.needSetDayNightTheme) {
@@ -1100,21 +1100,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     org.telegram.ui.ThemeActivity r1 = org.telegram.ui.ThemeActivity.this
                     android.app.Activity r1 = r1.getParentActivity()
                     r13.<init>((android.content.Context) r1)
-                    r1 = 2131628217(0x7f0e10b9, float:1.888372E38)
+                    r1 = 2131628322(0x7f0e1122, float:1.8883933E38)
                     java.lang.String r2 = "ThemeResetToDefaultsTitle"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     r13.setTitle(r1)
-                    r1 = 2131628216(0x7f0e10b8, float:1.8883718E38)
+                    r1 = 2131628321(0x7f0e1121, float:1.8883931E38)
                     java.lang.String r2 = "ThemeResetToDefaultsText"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     r13.setMessage(r1)
-                    r1 = 2131627600(0x7f0e0e50, float:1.888247E38)
+                    r1 = 2131627694(0x7f0e0eae, float:1.888266E38)
                     java.lang.String r2 = "Reset"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     org.telegram.ui.ThemeActivity$1$$ExternalSyntheticLambda0 r2 = new org.telegram.ui.ThemeActivity$1$$ExternalSyntheticLambda0
                     r2.<init>(r12)
                     r13.setPositiveButton(r1, r2)
-                    r1 = 2131624697(0x7f0e02f9, float:1.8876581E38)
+                    r1 = 2131624705(0x7f0e0301, float:1.8876597E38)
                     java.lang.String r2 = "Cancel"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                     r2 = 0
@@ -1562,7 +1562,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     try {
                         if (!((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isProviderEnabled("gps")) {
                             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                            builder.setTitle(LocaleController.getString("GpsDisabledAlertTitle", NUM));
+                            builder.setTopAnimation(NUM, 72, false, Theme.getColor("dialogTopBackground"));
                             builder.setMessage(LocaleController.getString("GpsDisabledAlertText", NUM));
                             builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new ThemeActivity$$ExternalSyntheticLambda2(this));
                             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -2145,7 +2145,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0160:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x0176 }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131627868(0x7f0e0f5c, float:1.8883013E38)
+                r0 = 2131627969(0x7f0e0fc1, float:1.8883217E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x0176 }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x0176 }
                 r10 = 500(0x1f4, float:7.0E-43)
@@ -2188,21 +2188,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131625261(0x7f0e052d, float:1.8877725E38)
+                r10 = 2131625283(0x7f0e0543, float:1.887777E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131625260(0x7f0e052c, float:1.8877723E38)
+                r10 = 2131625282(0x7f0e0542, float:1.8877768E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131625195(0x7f0e04eb, float:1.8877591E38)
+                r10 = 2131625217(0x7f0e0501, float:1.8877636E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 org.telegram.ui.ThemeActivity$ListAdapter$$ExternalSyntheticLambda1 r0 = new org.telegram.ui.ThemeActivity$ListAdapter$$ExternalSyntheticLambda1
                 r0.<init>(r7, r8)
                 r9.setPositiveButton(r10, r0)
-                r8 = 2131624697(0x7f0e02f9, float:1.8876581E38)
+                r8 = 2131624705(0x7f0e0301, float:1.8876597E38)
                 java.lang.String r10 = "Cancel"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r9.setNegativeButton(r8, r1)
@@ -2590,7 +2590,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 android.content.Context r10 = r8.mContext
                 r9.<init>(r10)
                 android.content.Context r10 = r8.mContext
-                r0 = 2131165469(0x7var_d, float:1.7945156E38)
+                r0 = 2131165471(0x7var_f, float:1.794516E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r10, (int) r0, (java.lang.String) r1)
                 r9.setBackgroundDrawable(r10)

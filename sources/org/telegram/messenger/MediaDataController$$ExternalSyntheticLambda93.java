@@ -12,6 +12,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda9
     }
 
     public final void run() {
-        this.f$0.lambda$loadGroupStickerSet$15(this.f$1);
+        this.f$0.lambda$replaceStickerSet$13(this.f$1);
     }
 }

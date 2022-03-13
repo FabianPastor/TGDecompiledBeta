@@ -173,6 +173,10 @@ public class AvatarsDarawable {
     }
 
     public void animateFromState(AvatarsDarawable avatarsDarawable, int i) {
+        ValueAnimator valueAnimator = avatarsDarawable.transitionProgressAnimator;
+        if (valueAnimator != null) {
+            valueAnimator.cancel();
+        }
         TLObject[] tLObjectArr = new TLObject[3];
         for (int i2 = 0; i2 < 3; i2++) {
             tLObjectArr[i2] = this.currentStates[i2].object;

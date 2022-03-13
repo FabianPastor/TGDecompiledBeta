@@ -13,6 +13,6 @@ public final /* synthetic */ class LoginActivity$LoginActivityPasswordView$$Exte
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$onNextPressed$10(tLObject, tLRPC$TL_error);
+        this.f$0.lambda$onNextPressed$11(tLObject, tLRPC$TL_error);
     }
 }
