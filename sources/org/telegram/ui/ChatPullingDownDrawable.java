@@ -711,7 +711,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             r12.restore()
         L_0x00da:
             android.text.TextPaint r12 = r11.textPaint2
-            r12.setAlpha(r1)
+            r12.setAlpha(r10)
             r0.setAlpha(r1)
             return
         */

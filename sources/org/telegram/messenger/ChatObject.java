@@ -7,6 +7,8 @@ import android.util.SparseArray;
 import androidx.collection.LongSparseArray;
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.gms.internal.mlkit_language_id.zzdp$$ExternalSyntheticBackport0;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -107,6 +109,9 @@ public class ChatObject {
     }
 
     public static class Call {
+        public static final int RECORD_TYPE_AUDIO = 0;
+        public static final int RECORD_TYPE_VIDEO_LANDSCAPE = 2;
+        public static final int RECORD_TYPE_VIDEO_PORTAIT = 1;
         private static int videoPointer;
         public int activeVideos;
         public TLRPC$GroupCall call;
@@ -196,6 +201,10 @@ public class ChatObject {
 
         public interface OnParticipantsLoad {
             void onLoad(ArrayList<Long> arrayList);
+        }
+
+        @Retention(RetentionPolicy.SOURCE)
+        public @interface RecordType {
         }
 
         /* access modifiers changed from: private */

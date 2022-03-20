@@ -521,7 +521,7 @@ public class UndoView extends FrameLayout {
             goto L_0x0171
         L_0x015b:
             r3 = 1
-            r2 = 2131628721(0x7f0e12b1, float:1.8884743E38)
+            r2 = 2131628722(0x7f0e12b2, float:1.8884745E38)
             java.lang.Object[] r4 = new java.lang.Object[r3]
             java.lang.String r3 = org.telegram.messenger.UserObject.getFirstName(r0)
             r4[r11] = r3
@@ -557,7 +557,7 @@ public class UndoView extends FrameLayout {
             org.telegram.tgnet.TLRPC$User r2 = (org.telegram.tgnet.TLRPC$User) r2
             boolean r0 = org.telegram.messenger.ChatObject.isChannelOrGiga(r0)
             if (r0 == 0) goto L_0x01be
-            r0 = 2131628657(0x7f0e1271, float:1.8884613E38)
+            r0 = 2131628658(0x7f0e1272, float:1.8884615E38)
             r4 = 1
             java.lang.Object[] r5 = new java.lang.Object[r4]
             java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r2)
@@ -568,7 +568,7 @@ public class UndoView extends FrameLayout {
             goto L_0x0207
         L_0x01be:
             r4 = 1
-            r0 = 2131628672(0x7f0e1280, float:1.8884643E38)
+            r0 = 2131628673(0x7f0e1281, float:1.8884645E38)
             java.lang.Object[] r5 = new java.lang.Object[r4]
             java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r2)
             r5[r11] = r2
@@ -592,7 +592,7 @@ public class UndoView extends FrameLayout {
             goto L_0x0207
         L_0x01f3:
             r4 = 1
-            r0 = 2131628662(0x7f0e1276, float:1.8884623E38)
+            r0 = 2131628663(0x7f0e1277, float:1.8884625E38)
             java.lang.Object[] r5 = new java.lang.Object[r4]
             java.lang.String r2 = r2.title
             r5[r11] = r2
@@ -644,7 +644,7 @@ public class UndoView extends FrameLayout {
             org.telegram.tgnet.TLRPC$Chat r2 = (org.telegram.tgnet.TLRPC$Chat) r2
             boolean r2 = org.telegram.messenger.ChatObject.isChannelOrGiga(r2)
             if (r2 == 0) goto L_0x027b
-            r2 = 2131628656(0x7f0e1270, float:1.888461E38)
+            r2 = 2131628657(0x7f0e1271, float:1.8884613E38)
             r3 = 1
             java.lang.Object[] r4 = new java.lang.Object[r3]
             r4[r11] = r0
@@ -654,7 +654,7 @@ public class UndoView extends FrameLayout {
             goto L_0x028d
         L_0x027b:
             r3 = 1
-            r2 = 2131628783(0x7f0e12ef, float:1.8884868E38)
+            r2 = 2131628786(0x7f0e12f2, float:1.8884875E38)
             java.lang.Object[] r4 = new java.lang.Object[r3]
             r4[r11] = r0
             java.lang.String r0 = "VoipGroupUserChanged"
@@ -667,7 +667,7 @@ public class UndoView extends FrameLayout {
             goto L_0x018f
         L_0x0296:
             if (r2 != r10) goto L_0x02a8
-            r0 = 2131628703(0x7f0e129f, float:1.8884706E38)
+            r0 = 2131628704(0x7f0e12a0, float:1.8884708E38)
             java.lang.String r2 = "VoipGroupCopyInviteLinkCopied"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r2 = 2131558562(0x7f0d00a2, float:1.8742443E38)
@@ -709,7 +709,7 @@ public class UndoView extends FrameLayout {
             org.telegram.tgnet.TLRPC$Chat r0 = (org.telegram.tgnet.TLRPC$Chat) r0
             java.lang.String r0 = r0.title
         L_0x02e9:
-            r2 = 2131628781(0x7f0e12ed, float:1.8884864E38)
+            r2 = 2131628784(0x7f0e12f0, float:1.888487E38)
             r3 = 1
             java.lang.Object[] r4 = new java.lang.Object[r3]
             r4[r11] = r0
@@ -738,7 +738,7 @@ public class UndoView extends FrameLayout {
         L_0x031c:
             r0 = r6
         L_0x031d:
-            r2 = 2131628782(0x7f0e12ee, float:1.8884866E38)
+            r2 = 2131628785(0x7f0e12f1, float:1.8884872E38)
             r3 = 1
             java.lang.Object[] r4 = new java.lang.Object[r3]
             r4[r11] = r0
@@ -762,7 +762,7 @@ public class UndoView extends FrameLayout {
             org.telegram.tgnet.TLRPC$Chat r0 = (org.telegram.tgnet.TLRPC$Chat) r0
             java.lang.String r0 = r0.title
         L_0x034b:
-            r2 = 2131628779(0x7f0e12eb, float:1.888486E38)
+            r2 = 2131628782(0x7f0e12ee, float:1.8884866E38)
             r3 = 1
             java.lang.Object[] r4 = new java.lang.Object[r3]
             r4[r11] = r0
@@ -779,7 +779,7 @@ public class UndoView extends FrameLayout {
             if (r0 == 0) goto L_0x0384
             r0 = r3
             org.telegram.tgnet.TLRPC$Chat r0 = (org.telegram.tgnet.TLRPC$Chat) r0
-            r2 = 2131628791(0x7f0e12f7, float:1.8884885E38)
+            r2 = 2131628794(0x7f0e12fa, float:1.888489E38)
             r3 = 1
             java.lang.Object[] r4 = new java.lang.Object[r3]
             java.lang.String r0 = r0.title
@@ -789,7 +789,7 @@ public class UndoView extends FrameLayout {
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             goto L_0x0391
         L_0x0384:
-            r0 = 2131628790(0x7f0e12f6, float:1.8884883E38)
+            r0 = 2131628793(0x7f0e12f9, float:1.8884889E38)
             java.lang.String r2 = "VoipGroupYouCanNowSpeak"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
@@ -810,7 +810,7 @@ public class UndoView extends FrameLayout {
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             goto L_0x03c0
         L_0x03b3:
-            r0 = 2131628761(0x7f0e12d9, float:1.8884824E38)
+            r0 = 2131628762(0x7f0e12da, float:1.8884826E38)
             java.lang.String r2 = "VoipGroupSoundMuted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
@@ -831,7 +831,7 @@ public class UndoView extends FrameLayout {
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             goto L_0x03ef
         L_0x03e2:
-            r0 = 2131628762(0x7f0e12da, float:1.8884826E38)
+            r0 = 2131628763(0x7f0e12db, float:1.8884828E38)
             java.lang.String r2 = "VoipGroupSoundUnmuted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
@@ -865,7 +865,7 @@ public class UndoView extends FrameLayout {
             org.telegram.tgnet.TLRPC$Chat r0 = (org.telegram.tgnet.TLRPC$Chat) r0
             java.lang.String r0 = r0.title
         L_0x041f:
-            r2 = 2131628780(0x7f0e12ec, float:1.8884862E38)
+            r2 = 2131628783(0x7f0e12ef, float:1.8884868E38)
             r3 = 1
             java.lang.Object[] r4 = new java.lang.Object[r3]
             r4[r11] = r0
@@ -889,7 +889,7 @@ public class UndoView extends FrameLayout {
             org.telegram.tgnet.TLRPC$Chat r0 = (org.telegram.tgnet.TLRPC$Chat) r0
             java.lang.String r0 = r0.title
         L_0x044d:
-            r2 = 2131628752(0x7f0e12d0, float:1.8884806E38)
+            r2 = 2131628753(0x7f0e12d1, float:1.8884808E38)
             r3 = 1
             java.lang.Object[] r4 = new java.lang.Object[r3]
             r4[r11] = r0
@@ -1259,11 +1259,11 @@ public class UndoView extends FrameLayout {
         L_0x0767:
             r2 = 40
             if (r0 != r2) goto L_0x0771
-            r0 = 2131628693(0x7f0e1295, float:1.8884686E38)
+            r0 = 2131628694(0x7f0e1296, float:1.8884688E38)
             java.lang.String r2 = "VoipGroupAudioRecordSaved"
             goto L_0x0776
         L_0x0771:
-            r0 = 2131628785(0x7f0e12f1, float:1.8884872E38)
+            r0 = 2131628788(0x7f0e12f4, float:1.8884879E38)
             java.lang.String r2 = "VoipGroupVideoRecordSaved"
         L_0x0776:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
@@ -1311,11 +1311,11 @@ public class UndoView extends FrameLayout {
         L_0x07d9:
             r2 = 39
             if (r0 != r2) goto L_0x07e3
-            r0 = 2131628694(0x7f0e1296, float:1.8884688E38)
+            r0 = 2131628695(0x7f0e1297, float:1.888469E38)
             java.lang.String r2 = "VoipGroupAudioRecordStarted"
             goto L_0x07e8
         L_0x07e3:
-            r0 = 2131628786(0x7f0e12f2, float:1.8884875E38)
+            r0 = 2131628789(0x7f0e12f5, float:1.888488E38)
             java.lang.String r2 = "VoipGroupVideoRecordStarted"
         L_0x07e8:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)

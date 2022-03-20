@@ -3472,4 +3472,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             statisticActivity4.presentFragment(new ChatActivity(bundle));
         }
     }
+
+    public boolean isLightStatusBar() {
+        return ColorUtils.calculateLuminance(Theme.getColor("windowBackgroundWhite")) > 0.699999988079071d;
+    }
 }

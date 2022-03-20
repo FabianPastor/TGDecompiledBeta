@@ -105,7 +105,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
     public float pinchTranslationX;
     /* access modifiers changed from: private */
     public float pinchTranslationY;
-    ImageView pipView;
+    public ImageView pipView;
     private int pointerId1;
     private int pointerId2;
     public float progressToFullscreenMode;

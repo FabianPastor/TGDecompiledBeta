@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda2 impleme
     }
 
     public final void run() {
-        VoIPService.lambda$updateBluetoothHeadsetState$79(this.f$0);
+        VoIPService.lambda$onDestroy$65(this.f$0);
     }
 }

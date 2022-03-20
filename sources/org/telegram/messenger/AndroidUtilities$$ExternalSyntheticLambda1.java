@@ -1,14 +1,16 @@
 package org.telegram.messenger;
 
-import android.text.util.Linkify;
+import android.content.DialogInterface;
+import org.telegram.ui.ActionBar.BaseFragment;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda1 implements Linkify.MatchFilter {
-    public static final /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda1 INSTANCE = new AndroidUtilities$$ExternalSyntheticLambda1();
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda1 implements DialogInterface.OnClickListener {
+    public final /* synthetic */ BaseFragment f$0;
 
-    private /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda1() {
+    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda1(BaseFragment baseFragment) {
+        this.f$0 = baseFragment;
     }
 
-    public final boolean acceptMatch(CharSequence charSequence, int i, int i2) {
-        return AndroidUtilities.lambda$static$0(charSequence, i, i2);
+    public final void onClick(DialogInterface dialogInterface, int i) {
+        AndroidUtilities.lambda$isGoogleMapsInstalled$2(this.f$0, dialogInterface, i);
     }
 }

@@ -6559,6 +6559,7 @@ public final class R {
         public static final int VoipChannelSoundMuted = NUM;
         public static final int VoipChannelSoundUnmuted = NUM;
         public static final int VoipChannelStart2 = NUM;
+        public static final int VoipChannelStartRecordingRtmpVideoText = NUM;
         public static final int VoipChannelStartRecordingVideoText = NUM;
         public static final int VoipChannelStartVoiceChat = NUM;
         public static final int VoipChannelStopRecordingText = NUM;
@@ -6671,6 +6672,8 @@ public final class R {
         public static final int VoipGroupStartAsInfo = NUM;
         public static final int VoipGroupStartAsInfoGroup = NUM;
         public static final int VoipGroupStartNow = NUM;
+        public static final int VoipGroupStartRecordingRtmpText = NUM;
+        public static final int VoipGroupStartRecordingRtmpVideoText = NUM;
         public static final int VoipGroupStartRecordingText = NUM;
         public static final int VoipGroupStartRecordingTitle = NUM;
         public static final int VoipGroupStartRecordingVideoText = NUM;

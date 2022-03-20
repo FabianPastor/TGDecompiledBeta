@@ -252,12 +252,12 @@ public class AvatarsDarawable {
         this.parent = view;
         for (int i = 0; i < 3; i++) {
             this.currentStates[i] = new DrawingState();
-            ImageReceiver unused = this.currentStates[i].imageReceiver = new ImageReceiver();
+            ImageReceiver unused = this.currentStates[i].imageReceiver = new ImageReceiver(view);
             this.currentStates[i].imageReceiver.setRoundRadius(AndroidUtilities.dp(12.0f));
             AvatarDrawable unused2 = this.currentStates[i].avatarDrawable = new AvatarDrawable();
             this.currentStates[i].avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
             this.animatingStates[i] = new DrawingState();
-            ImageReceiver unused3 = this.animatingStates[i].imageReceiver = new ImageReceiver();
+            ImageReceiver unused3 = this.animatingStates[i].imageReceiver = new ImageReceiver(view);
             this.animatingStates[i].imageReceiver.setRoundRadius(AndroidUtilities.dp(12.0f));
             AvatarDrawable unused4 = this.animatingStates[i].avatarDrawable = new AvatarDrawable();
             this.animatingStates[i].avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));

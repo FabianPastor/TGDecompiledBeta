@@ -6420,6 +6420,7 @@
     <public type="string" name="VoipChannelSoundMuted" id="NUM" />
     <public type="string" name="VoipChannelSoundUnmuted" id="NUM" />
     <public type="string" name="VoipChannelStart2" id="NUM" />
+    <public type="string" name="VoipChannelStartRecordingRtmpVideoText" id="NUM" />
     <public type="string" name="VoipChannelStartRecordingVideoText" id="NUM" />
     <public type="string" name="VoipChannelStartVoiceChat" id="NUM" />
     <public type="string" name="VoipChannelStopRecordingText" id="NUM" />
@@ -6532,6 +6533,8 @@
     <public type="string" name="VoipGroupStartAsInfo" id="NUM" />
     <public type="string" name="VoipGroupStartAsInfoGroup" id="NUM" />
     <public type="string" name="VoipGroupStartNow" id="NUM" />
+    <public type="string" name="VoipGroupStartRecordingRtmpText" id="NUM" />
+    <public type="string" name="VoipGroupStartRecordingRtmpVideoText" id="NUM" />
     <public type="string" name="VoipGroupStartRecordingText" id="NUM" />
     <public type="string" name="VoipGroupStartRecordingTitle" id="NUM" />
     <public type="string" name="VoipGroupStartRecordingVideoText" id="NUM" />

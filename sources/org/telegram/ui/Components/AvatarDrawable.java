@@ -8,6 +8,7 @@ import android.os.Build;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.LruCache;
 import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
@@ -24,13 +25,15 @@ public class AvatarDrawable extends Drawable {
     private int avatarType;
     private int color;
     private boolean drawDeleted;
-    private TextPaint namePaint;
+    /* access modifiers changed from: private */
+    public TextPaint namePaint;
     private boolean needApplyColorAccent;
     private Theme.ResourcesProvider resourcesProvider;
     private boolean smallSize;
     private StringBuilder stringBuilder;
     private float textHeight;
     private StaticLayout textLayout;
+    private LruCache<CharSequence, StaticLayout> textLayoutCache;
     private float textLeft;
     private float textWidth;
 
@@ -57,6 +60,12 @@ public class AvatarDrawable extends Drawable {
     }
 
     public AvatarDrawable(Theme.ResourcesProvider resourcesProvider2) {
+        this.textLayoutCache = new LruCache<CharSequence, StaticLayout>(50) {
+            /* access modifiers changed from: protected */
+            public StaticLayout create(CharSequence charSequence) {
+                return new StaticLayout(charSequence, AvatarDrawable.this.namePaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            }
+        };
         this.stringBuilder = new StringBuilder(5);
         this.alpha = 255;
         this.resourcesProvider = resourcesProvider2;
@@ -264,7 +273,7 @@ public class AvatarDrawable extends Drawable {
         }
         if (this.stringBuilder.length() > 0) {
             try {
-                StaticLayout staticLayout = new StaticLayout(this.stringBuilder.toString().toUpperCase(), this.namePaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                StaticLayout staticLayout = this.textLayoutCache.get(this.stringBuilder.toString().toUpperCase());
                 this.textLayout = staticLayout;
                 if (staticLayout.getLineCount() > 0) {
                     this.textLeft = this.textLayout.getLineLeft(0);

@@ -1,14 +1,15 @@
 package org.telegram.messenger;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.dynamicanimation.animation.DynamicAnimation;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda5 implements OnSuccessListener {
-    public static final /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda5 INSTANCE = new AndroidUtilities$$ExternalSyntheticLambda5();
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda5 implements DynamicAnimation.OnAnimationEndListener {
+    public final /* synthetic */ Runnable f$0;
 
-    private /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda5() {
+    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda5(Runnable runnable) {
+        this.f$0 = runnable;
     }
 
-    public final void onSuccess(Object obj) {
-        AndroidUtilities.lambda$setWaitingForSms$3((Void) obj);
+    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        AndroidUtilities.lambda$shakeViewSpring$4(this.f$0, dynamicAnimation, z, f, f2);
     }
 }

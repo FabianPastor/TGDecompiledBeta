@@ -117,11 +117,11 @@ public class FilterShaders {
     private boolean skinTextureCreated;
     private int skipToneHandle;
     private int sourceImageHandle;
-    private FloatBuffer textureBuffer;
+    public FloatBuffer textureBuffer;
     private ToneCurve toneCurve;
     private int toolsShaderProgram;
-    private FloatBuffer vertexBuffer;
-    private FloatBuffer vertexInvertBuffer;
+    public FloatBuffer vertexBuffer;
+    public FloatBuffer vertexInvertBuffer;
     private float[] videoMatrix;
     private int videoTexture;
     private int vignetteHandle;

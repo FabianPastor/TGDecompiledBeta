@@ -77,7 +77,7 @@ public class SearchDownloadsContainer extends FrameLayout implements Notificatio
         addView(blurredRecyclerView);
         this.recyclerListView.setLayoutManager(new LinearLayoutManager(this, baseFragment.getParentActivity()) {
             public boolean supportsPredictiveItemAnimations() {
-                return false;
+                return true;
             }
         });
         this.recyclerListView.setAdapter(this.adapter);

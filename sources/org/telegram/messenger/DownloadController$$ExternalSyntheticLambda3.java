@@ -12,6 +12,6 @@ public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda3 
     }
 
     public final void run() {
-        this.f$0.lambda$deleteRecentFiles$11(this.f$1);
+        this.f$0.lambda$deleteRecentFiles$13(this.f$1);
     }
 }

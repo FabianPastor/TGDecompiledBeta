@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -125,6 +126,7 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.ForegroundColorSpanThemable;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Components.HideViewAfterAnimation;
@@ -167,6 +169,7 @@ public class AndroidUtilities {
     public static boolean firstConfigurationWas;
     private static WeakReference<BaseFragment> flagSecureFragment;
     private static final HashMap<Window, ArrayList<Long>> flagSecureReasons = new HashMap<>();
+    private static SimpleDateFormat generatingVideoPathFormat;
     private static boolean hasCallPermissions = (Build.VERSION.SDK_INT >= 23);
     public static boolean incorrectDisplaySizeFix;
     public static boolean isInMultiwindow;
@@ -176,6 +179,8 @@ public class AndroidUtilities {
     public static int leftBaseline = (isTablet() ? 80 : 72);
     private static Field mAttachInfoField;
     private static Field mStableInsetsField;
+    /* access modifiers changed from: private */
+    public static HashMap<Window, ValueAnimator> navigationBarColorAnimators;
     public static int navigationBarHeight = 0;
     public static final String[] numbersSignatureArray = {"", "K", "M", "G", "T", "P"};
     public static OvershootInterpolator overshootInterpolator = new OvershootInterpolator();
@@ -187,7 +192,7 @@ public class AndroidUtilities {
     public static int roundMessageSize;
     private static Paint roundPaint;
     public static int roundPlayingMessageSize;
-    public static final Linkify.MatchFilter sUrlMatchFilter = AndroidUtilities$$ExternalSyntheticLambda1.INSTANCE;
+    public static final Linkify.MatchFilter sUrlMatchFilter = AndroidUtilities$$ExternalSyntheticLambda2.INSTANCE;
     public static float screenRefreshRate = 60.0f;
     private static final Object smsLock = new Object();
     public static int statusBarHeight = 0;
@@ -502,7 +507,7 @@ public class AndroidUtilities {
 
     private static void pruneOverlaps(ArrayList<LinkSpec> arrayList) {
         int i;
-        Collections.sort(arrayList, AndroidUtilities$$ExternalSyntheticLambda7.INSTANCE);
+        Collections.sort(arrayList, AndroidUtilities$$ExternalSyntheticLambda8.INSTANCE);
         int size = arrayList.size();
         int i2 = 0;
         while (i2 < size - 1) {
@@ -852,7 +857,7 @@ public class AndroidUtilities {
             }
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
             builder.setMessage(LocaleController.getString("InstallGoogleMaps", NUM));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new AndroidUtilities$$ExternalSyntheticLambda0(baseFragment));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new AndroidUtilities$$ExternalSyntheticLambda1(baseFragment));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
             baseFragment.showDialog(builder.create());
             return false;
@@ -1858,7 +1863,7 @@ public class AndroidUtilities {
             waitingForSms = z;
             if (z) {
                 try {
-                    SmsRetriever.getClient(ApplicationLoader.applicationContext).startSmsRetriever().addOnSuccessListener(AndroidUtilities$$ExternalSyntheticLambda5.INSTANCE);
+                    SmsRetriever.getClient(ApplicationLoader.applicationContext).startSmsRetriever().addOnSuccessListener(AndroidUtilities$$ExternalSyntheticLambda6.INSTANCE);
                 } catch (Throwable th) {
                     FileLog.e(th);
                 }
@@ -2825,7 +2830,7 @@ public class AndroidUtilities {
     }
 
     public static void shakeViewSpring(View view, float f, Runnable runnable) {
-        ((SpringAnimation) ((SpringAnimation) new SpringAnimation(view, DynamicAnimation.TRANSLATION_X, 0.0f).setSpring(new SpringForce(0.0f).setStiffness(600.0f)).setStartVelocity((float) ((-dp(f)) * 100))).addEndListener(new AndroidUtilities$$ExternalSyntheticLambda4(runnable))).start();
+        ((SpringAnimation) ((SpringAnimation) new SpringAnimation(view, DynamicAnimation.TRANSLATION_X, 0.0f).setSpring(new SpringForce(0.0f).setStiffness(600.0f)).setStartVelocity((float) ((-dp(f)) * 100))).addEndListener(new AndroidUtilities$$ExternalSyntheticLambda5(runnable))).start();
     }
 
     /* access modifiers changed from: private */
@@ -3148,7 +3153,10 @@ public class AndroidUtilities {
             File albumDir = getAlbumDir(z);
             Date date = new Date();
             date.setTime(System.currentTimeMillis() + ((long) Utilities.random.nextInt(1000)) + 1);
-            String format = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
+            if (generatingVideoPathFormat == null) {
+                generatingVideoPathFormat = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US);
+            }
+            String format = generatingVideoPathFormat.format(date);
             return new File(albumDir, "VID_" + format + ".mp4");
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -3741,14 +3749,14 @@ public class AndroidUtilities {
     }
 
     public static SpannableStringBuilder formatSpannableSimple(String str, CharSequence... charSequenceArr) {
-        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda9.INSTANCE, charSequenceArr);
+        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda10.INSTANCE, charSequenceArr);
     }
 
     public static SpannableStringBuilder formatSpannable(String str, CharSequence... charSequenceArr) {
         if (str.contains("%s")) {
             return formatSpannableSimple(str, charSequenceArr);
         }
-        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda8.INSTANCE, charSequenceArr);
+        return formatSpannable(str, AndroidUtilities$$ExternalSyntheticLambda9.INSTANCE, charSequenceArr);
     }
 
     /* access modifiers changed from: private */
@@ -4240,12 +4248,12 @@ public class AndroidUtilities {
         pickerBottomLayout.cancelButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda2(dismissRunnable));
+        pickerBottomLayout.cancelButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda3(dismissRunnable));
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.doneButton.setPadding(dp(18.0f), 0, dp(18.0f), 0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", NUM).toUpperCase());
-        pickerBottomLayout.doneButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda3(str, str2, str5, str4, str3, dismissRunnable));
+        pickerBottomLayout.doneButton.setOnClickListener(new AndroidUtilities$$ExternalSyntheticLambda4(str, str2, str5, str4, str3, dismissRunnable));
         builder.show();
     }
 
@@ -4584,7 +4592,7 @@ public class AndroidUtilities {
         }
         arrayList.add(Long.valueOf(random));
         updateFlagSecure(window);
-        return new AndroidUtilities$$ExternalSyntheticLambda6(arrayList, random, window);
+        return new AndroidUtilities$$ExternalSyntheticLambda7(arrayList, random, window);
     }
 
     /* access modifiers changed from: private */
@@ -4706,6 +4714,41 @@ public class AndroidUtilities {
         }
     }
 
+    public static void setNavigationBarColor(Window window, int i) {
+        setNavigationBarColor(window, i, true);
+    }
+
+    public static void setNavigationBarColor(final Window window, int i, boolean z) {
+        ValueAnimator valueAnimator;
+        if (Build.VERSION.SDK_INT >= 21) {
+            HashMap<Window, ValueAnimator> hashMap = navigationBarColorAnimators;
+            if (!(hashMap == null || (valueAnimator = hashMap.get(window)) == null)) {
+                valueAnimator.cancel();
+                navigationBarColorAnimators.remove(window);
+            }
+            if (!z) {
+                window.setNavigationBarColor(i);
+                return;
+            }
+            ValueAnimator ofArgb = ValueAnimator.ofArgb(new int[]{window.getNavigationBarColor(), i});
+            ofArgb.addUpdateListener(new AndroidUtilities$$ExternalSyntheticLambda0(window));
+            ofArgb.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    if (AndroidUtilities.navigationBarColorAnimators != null) {
+                        AndroidUtilities.navigationBarColorAnimators.remove(window);
+                    }
+                }
+            });
+            ofArgb.setDuration(200);
+            ofArgb.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
+            ofArgb.start();
+            if (navigationBarColorAnimators == null) {
+                navigationBarColorAnimators = new HashMap<>();
+            }
+            navigationBarColorAnimators.put(window, ofArgb);
+        }
+    }
+
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0050 A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:51:? A[ADDED_TO_REGION, RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -4794,7 +4837,7 @@ public class AndroidUtilities {
                 Field declaredField = baseFragment.getClass().getDeclaredField("listView");
                 declaredField.setAccessible(true);
                 RecyclerListView recyclerListView = (RecyclerListView) declaredField.get(baseFragment);
-                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda10(baseFragment, str, recyclerListView));
+                recyclerListView.highlightRow(new AndroidUtilities$$ExternalSyntheticLambda11(baseFragment, str, recyclerListView));
                 declaredField.setAccessible(false);
             } catch (Throwable unused) {
             }
@@ -4802,7 +4845,7 @@ public class AndroidUtilities {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ int lambda$scrollToFragmentRow$10(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
+    public static /* synthetic */ int lambda$scrollToFragmentRow$11(BaseFragment baseFragment, String str, RecyclerListView recyclerListView) {
         int i = -1;
         try {
             Field declaredField = baseFragment.getClass().getDeclaredField(str);

@@ -10,6 +10,7 @@ import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 
 public class CellFlickerDrawable {
+    public float animationSpeedScale;
     public boolean drawFrame;
     private final Shader gradientShader;
     private final Shader gradientShader2;
@@ -34,6 +35,7 @@ public class CellFlickerDrawable {
         this.matrix = new Matrix();
         this.drawFrame = true;
         this.repeatProgress = 1.2f;
+        this.animationSpeedScale = 1.0f;
         this.size = AndroidUtilities.dp(160.0f);
         LinearGradient linearGradient = new LinearGradient(0.0f, 0.0f, (float) this.size, 0.0f, new int[]{0, ColorUtils.setAlphaComponent(-1, i), 0}, (float[]) null, Shader.TileMode.CLAMP);
         this.gradientShader = linearGradient;
@@ -52,7 +54,7 @@ public class CellFlickerDrawable {
         if (j != 0) {
             long j2 = currentTimeMillis - j;
             if (j2 > 10) {
-                float f2 = this.progress + (((float) j2) / 1200.0f);
+                float f2 = this.progress + ((((float) j2) / 1200.0f) * this.animationSpeedScale);
                 this.progress = f2;
                 if (f2 > this.repeatProgress) {
                     this.progress = 0.0f;

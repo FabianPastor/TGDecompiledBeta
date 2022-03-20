@@ -99,6 +99,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     private DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private boolean isFrontface;
     private long lastDrawTime;
+    private int lastHeight = -1;
+    private int lastWidth = -1;
     /* access modifiers changed from: private */
     public final Object layoutLock = new Object();
     /* access modifiers changed from: private */
@@ -106,6 +108,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     /* access modifiers changed from: private */
     public float[] mSTMatrix = new float[16];
     private Matrix matrix = new Matrix();
+    private int measurementsCount = 0;
     private boolean mirror;
     /* access modifiers changed from: private */
     public float[] moldSTMatrix = new float[16];
@@ -255,12 +258,23 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     }
 
     /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.measurementsCount = 0;
+    }
+
+    /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         CameraSession cameraSession2;
         int i3;
         int i4;
+        int size = View.MeasureSpec.getSize(i);
+        int size2 = View.MeasureSpec.getSize(i2);
         if (!(this.previewSize == null || (cameraSession2 = this.cameraSession) == null)) {
-            cameraSession2.updateRotation();
+            if (!(this.lastWidth == size && this.lastHeight == size2) && this.measurementsCount > 1) {
+                cameraSession2.updateRotation();
+            }
+            this.measurementsCount++;
             if (this.cameraSession.getWorldAngle() == 90 || this.cameraSession.getWorldAngle() == 270) {
                 i4 = this.previewSize.getWidth();
                 i3 = this.previewSize.getHeight();
@@ -282,6 +296,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         }
         super.onMeasure(i, i2);
         checkPreviewMatrix();
+        this.lastWidth = size;
+        this.lastHeight = size2;
     }
 
     public float getTextureHeight(float f, float f2) {
@@ -471,20 +487,12 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             matrix2.postTranslate(f / 2.0f, f2 / 2.0f);
             matrix2.invert(this.matrix);
             CameraGLThread cameraGLThread = this.cameraThread;
-            if (cameraGLThread != null) {
-                cameraGLThread.postRunnable(new CameraView$$ExternalSyntheticLambda2(this));
-            }
-        }
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkPreviewMatrix$0() {
-        CameraGLThread cameraGLThread = this.cameraThread;
-        if (cameraGLThread != null && cameraGLThread.currentSession != null) {
-            int worldAngle = cameraGLThread.currentSession.getWorldAngle();
-            android.opengl.Matrix.setIdentityM(this.mMVPMatrix, 0);
-            if (worldAngle != 0) {
-                android.opengl.Matrix.rotateM(this.mMVPMatrix, 0, (float) worldAngle, 0.0f, 0.0f, 1.0f);
+            if (cameraGLThread != null && cameraGLThread != null && cameraGLThread.currentSession != null) {
+                int worldAngle = this.cameraThread.currentSession.getWorldAngle();
+                android.opengl.Matrix.setIdentityM(this.mMVPMatrix, 0);
+                if (worldAngle != 0) {
+                    android.opengl.Matrix.rotateM(this.mMVPMatrix, 0, (float) worldAngle, 0.0f, 0.0f, 1.0f);
+                }
             }
         }
     }
@@ -732,9 +740,9 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                     } else {
                         this.eglContext.getGL();
                         android.opengl.Matrix.setIdentityM(CameraView.this.mSTMatrix, 0);
-                        int access$300 = CameraView.this.loadShader(35633, "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n");
-                        int access$3002 = CameraView.this.loadShader(35632, "#extension GL_OES_EGL_image_external : require\nprecision lowp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n");
-                        if (access$300 == 0 || access$3002 == 0) {
+                        int access$400 = CameraView.this.loadShader(35633, "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n");
+                        int access$4002 = CameraView.this.loadShader(35632, "#extension GL_OES_EGL_image_external : require\nprecision lowp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n");
+                        if (access$400 == 0 || access$4002 == 0) {
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.e("failed creating shader");
                             }
@@ -743,8 +751,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                         }
                         int glCreateProgram = GLES20.glCreateProgram();
                         this.drawProgram = glCreateProgram;
-                        GLES20.glAttachShader(glCreateProgram, access$300);
-                        GLES20.glAttachShader(this.drawProgram, access$3002);
+                        GLES20.glAttachShader(glCreateProgram, access$400);
+                        GLES20.glAttachShader(this.drawProgram, access$4002);
                         GLES20.glLinkProgram(this.drawProgram);
                         int[] iArr2 = new int[1];
                         GLES20.glGetProgramiv(this.drawProgram, 35714, iArr2, 0);
@@ -958,7 +966,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 }
             } else if (i == 3) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("CameraView set gl rednderer session");
+                    FileLog.d("CameraView set gl renderer session");
                 }
                 CameraSession cameraSession = (CameraSession) message.obj;
                 if (this.currentSession != cameraSession) {
@@ -1055,11 +1063,11 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
 
     /* access modifiers changed from: private */
     public void createCamera(SurfaceTexture surfaceTexture) {
-        AndroidUtilities.runOnUIThread(new CameraView$$ExternalSyntheticLambda3(this, surfaceTexture));
+        AndroidUtilities.runOnUIThread(new CameraView$$ExternalSyntheticLambda2(this, surfaceTexture));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createCamera$3(SurfaceTexture surfaceTexture) {
+    public /* synthetic */ void lambda$createCamera$2(SurfaceTexture surfaceTexture) {
         if (this.cameraThread != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("CameraView create camera session");
@@ -1074,13 +1082,13 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 this.cameraSession = cameraSession2;
                 this.cameraThread.setCurrentSession(cameraSession2);
                 requestLayout();
-                CameraController.getInstance().open(this.cameraSession, surfaceTexture, new CameraView$$ExternalSyntheticLambda1(this), new CameraView$$ExternalSyntheticLambda0(this));
+                CameraController.getInstance().open(this.cameraSession, surfaceTexture, new CameraView$$ExternalSyntheticLambda0(this), new CameraView$$ExternalSyntheticLambda1(this));
             }
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createCamera$1() {
+    public /* synthetic */ void lambda$createCamera$0() {
         if (this.cameraSession != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("CameraView camera initied");
@@ -1091,7 +1099,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createCamera$2() {
+    public /* synthetic */ void lambda$createCamera$1() {
         this.cameraThread.setCurrentSession(this.cameraSession);
     }
 
@@ -1177,7 +1185,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             this.keyframeThumbs = new ArrayList<>();
             this.recorderRunnable = new Runnable() {
                 /* JADX WARNING: Code restructure failed: missing block: B:12:0x002d, code lost:
-                    if (org.telegram.messenger.camera.CameraView.VideoRecorder.access$1700(r13.this$1) == 0) goto L_0x00e4;
+                    if (org.telegram.messenger.camera.CameraView.VideoRecorder.access$1800(r13.this$1) == 0) goto L_0x00e4;
                  */
                 /* Code decompiled incorrectly, please refer to instructions dump. */
                 public void run() {
@@ -2062,13 +2070,13 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                                     FloatBuffer asFloatBuffer = ByteBuffer.allocateDirect(32).order(ByteOrder.nativeOrder()).asFloatBuffer();
                                     this.textureBuffer = asFloatBuffer;
                                     asFloatBuffer.put(new float[]{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f}).position(0);
-                                    int access$300 = CameraView.this.loadShader(35633, "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n");
-                                    int access$3002 = CameraView.this.loadShader(35632, "#extension GL_OES_EGL_image_external : require\nprecision lowp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n");
-                                    if (access$300 != 0 && access$3002 != 0) {
+                                    int access$400 = CameraView.this.loadShader(35633, "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n");
+                                    int access$4002 = CameraView.this.loadShader(35632, "#extension GL_OES_EGL_image_external : require\nprecision lowp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n");
+                                    if (access$400 != 0 && access$4002 != 0) {
                                         int glCreateProgram = GLES20.glCreateProgram();
                                         this.drawProgram = glCreateProgram;
-                                        GLES20.glAttachShader(glCreateProgram, access$300);
-                                        GLES20.glAttachShader(this.drawProgram, access$3002);
+                                        GLES20.glAttachShader(glCreateProgram, access$400);
+                                        GLES20.glAttachShader(this.drawProgram, access$4002);
                                         GLES20.glLinkProgram(this.drawProgram);
                                         int[] iArr2 = new int[1];
                                         GLES20.glGetProgramiv(this.drawProgram, 35714, iArr2, 0);

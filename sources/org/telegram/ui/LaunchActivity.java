@@ -9879,9 +9879,12 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
 
     public void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList<Long> arrayList, CharSequence charSequence, boolean z) {
         ChatActivity chatActivity;
-        String str;
         boolean z2;
+        boolean z3;
+        ChatActivity chatActivity2;
         int i;
+        boolean z4;
+        boolean z5;
         ArrayList<SendMessagesHelper.SendingMediaInfo> arrayList2;
         DialogsActivity dialogsActivity2 = dialogsActivity;
         ArrayList<Long> arrayList3 = arrayList;
@@ -9896,7 +9899,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             } catch (Exception unused) {
             }
         } else {
-            boolean z3 = dialogsActivity2 == null || dialogsActivity2.notify;
+            boolean z6 = dialogsActivity2 == null || dialogsActivity2.notify;
             if (arrayList.size() <= 1) {
                 long longValue = arrayList3.get(0).longValue();
                 Bundle bundle = new Bundle();
@@ -9949,93 +9952,100 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             }
             ArrayList<TLRPC$User> arrayList9 = this.contactsToSend;
             if (arrayList9 == null || arrayList9.size() != 1 || mainFragmentsStack.isEmpty()) {
-                String str2 = null;
+                String str = null;
                 int i3 = 0;
                 while (i3 < arrayList.size()) {
                     long longValue2 = arrayList3.get(i3).longValue();
                     AccountInstance instance = AccountInstance.getInstance(UserConfig.selectedAccount);
                     if (chatActivity != null) {
                         i = 1024;
+                        chatActivity2 = chatActivity;
                         this.actionBarLayout.presentFragment(chatActivity, dialogsActivity2 != null, dialogsActivity2 == null || this.videoPath != null || ((arrayList2 = this.photoPathsArray) != null && arrayList2.size() > 0), true, false);
-                        String str3 = this.videoPath;
-                        if (str3 != null) {
-                            chatActivity.openVideoEditor(str3, this.sendingText);
+                        String str2 = this.videoPath;
+                        if (str2 != null) {
+                            chatActivity2.openVideoEditor(str2, this.sendingText);
                             this.sendingText = null;
+                            z5 = true;
                         } else {
                             ArrayList<SendMessagesHelper.SendingMediaInfo> arrayList10 = this.photoPathsArray;
-                            if (arrayList10 != null && arrayList10.size() > 0) {
-                                z2 = chatActivity.openPhotosEditor(this.photoPathsArray, (charSequence == null || charSequence.length() == 0) ? this.sendingText : charSequence);
-                                if (z2) {
+                            if (arrayList10 == null || arrayList10.size() <= 0) {
+                                z5 = false;
+                            } else {
+                                boolean openPhotosEditor = chatActivity2.openPhotosEditor(this.photoPathsArray, (charSequence == null || charSequence.length() == 0) ? this.sendingText : charSequence);
+                                if (openPhotosEditor) {
                                     this.sendingText = null;
                                 }
-                                str = str2;
+                                z4 = openPhotosEditor;
+                                z5 = false;
+                                z3 = z5;
+                                z2 = z4;
                             }
                         }
-                        z2 = false;
-                        str = str2;
+                        z4 = false;
+                        z3 = z5;
+                        z2 = z4;
                     } else {
+                        chatActivity2 = chatActivity;
                         i = 1024;
                         if (this.videoPath != null) {
-                            String str4 = this.sendingText;
-                            if (str4 != null && str4.length() <= 1024) {
-                                str2 = this.sendingText;
+                            String str3 = this.sendingText;
+                            if (str3 != null && str3.length() <= 1024) {
+                                str = this.sendingText;
                                 this.sendingText = null;
                             }
-                            str = str2;
                             ArrayList arrayList11 = new ArrayList();
                             arrayList11.add(this.videoPath);
-                            SendMessagesHelper.prepareSendingDocuments(instance, arrayList11, arrayList11, (ArrayList<Uri>) null, str, (String) null, longValue2, (MessageObject) null, (MessageObject) null, (InputContentInfoCompat) null, (MessageObject) null, z3, 0);
-                        } else {
-                            str = str2;
+                            SendMessagesHelper.prepareSendingDocuments(instance, arrayList11, arrayList11, (ArrayList<Uri>) null, str, (String) null, longValue2, (MessageObject) null, (MessageObject) null, (InputContentInfoCompat) null, (MessageObject) null, z6, 0);
                         }
+                        z3 = false;
                         z2 = false;
                     }
                     if (this.photoPathsArray != null && !z2) {
-                        String str5 = this.sendingText;
-                        if (str5 != null && str5.length() <= i && this.photoPathsArray.size() == 1) {
+                        String str4 = this.sendingText;
+                        if (str4 != null && str4.length() <= i && this.photoPathsArray.size() == 1) {
                             this.photoPathsArray.get(0).caption = this.sendingText;
                             this.sendingText = null;
                         }
-                        SendMessagesHelper.prepareSendingMedia(instance, this.photoPathsArray, longValue2, (MessageObject) null, (MessageObject) null, (InputContentInfoCompat) null, false, false, (MessageObject) null, z3, 0);
+                        SendMessagesHelper.prepareSendingMedia(instance, this.photoPathsArray, longValue2, (MessageObject) null, (MessageObject) null, (InputContentInfoCompat) null, false, false, (MessageObject) null, z6, 0);
                     }
-                    if (!(this.documentsPathsArray == null && this.documentsUrisArray == null)) {
-                        String str6 = this.sendingText;
-                        if (str6 != null && str6.length() <= i) {
+                    if (this.documentsPathsArray != null || this.documentsUrisArray != null) {
+                        String str5 = this.sendingText;
+                        if (str5 != null && str5.length() <= i) {
                             ArrayList<String> arrayList12 = this.documentsPathsArray;
                             int size2 = arrayList12 != null ? arrayList12.size() : 0;
                             ArrayList<Uri> arrayList13 = this.documentsUrisArray;
                             if (size2 + (arrayList13 != null ? arrayList13.size() : 0) == 1) {
-                                String str7 = this.sendingText;
+                                str = this.sendingText;
                                 this.sendingText = null;
-                                str = str7;
                             }
                         }
-                        SendMessagesHelper.prepareSendingDocuments(instance, this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, str, this.documentsMimeType, longValue2, (MessageObject) null, (MessageObject) null, (InputContentInfoCompat) null, (MessageObject) null, z3, 0);
+                        SendMessagesHelper.prepareSendingDocuments(instance, this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, str, this.documentsMimeType, longValue2, (MessageObject) null, (MessageObject) null, (InputContentInfoCompat) null, (MessageObject) null, z6, 0);
                     }
-                    String str8 = this.sendingText;
-                    if (str8 != null) {
-                        SendMessagesHelper.prepareSendingText(instance, str8, longValue2, true, 0);
+                    String str6 = this.sendingText;
+                    if (str6 != null) {
+                        SendMessagesHelper.prepareSendingText(instance, str6, longValue2, true, 0);
                     }
                     ArrayList<TLRPC$User> arrayList14 = this.contactsToSend;
                     if (arrayList14 != null && !arrayList14.isEmpty()) {
                         for (int i4 = 0; i4 < this.contactsToSend.size(); i4++) {
-                            SendMessagesHelper.getInstance(currentAccount).sendMessage(this.contactsToSend.get(i4), longValue2, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z3, 0);
+                            SendMessagesHelper.getInstance(currentAccount).sendMessage(this.contactsToSend.get(i4), longValue2, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z6, 0);
                         }
                     }
-                    if (!TextUtils.isEmpty(charSequence)) {
-                        SendMessagesHelper.prepareSendingText(instance, charSequence.toString(), longValue2, z3, 0);
+                    if (!TextUtils.isEmpty(charSequence) && !z3 && !z2) {
+                        SendMessagesHelper.prepareSendingText(instance, charSequence.toString(), longValue2, z6, 0);
                     }
                     i3++;
-                    str2 = str;
+                    chatActivity = chatActivity2;
                 }
             } else {
                 ArrayList<BaseFragment> arrayList15 = mainFragmentsStack;
                 PhonebookShareAlert phonebookShareAlert = new PhonebookShareAlert(arrayList15.get(arrayList15.size() - 1), (ContactsController.Contact) null, (TLRPC$User) null, this.contactsToSendUri, (File) null, (String) null, (String) null);
-                phonebookShareAlert.setDelegate(new LaunchActivity$$ExternalSyntheticLambda80(this, chatActivity, arrayList3, currentAccount));
+                phonebookShareAlert.setDelegate(new LaunchActivity$$ExternalSyntheticLambda80(this, chatActivity, arrayList, currentAccount, charSequence, z6));
                 ArrayList<BaseFragment> arrayList16 = mainFragmentsStack;
                 arrayList16.get(arrayList16.size() - 1).showDialog(phonebookShareAlert);
             }
-            if (dialogsActivity2 != null && chatActivity == null) {
+            ChatActivity chatActivity3 = chatActivity;
+            if (dialogsActivity2 != null && chatActivity3 == null) {
                 dialogsActivity.finishFragment();
             }
         }
@@ -10083,12 +10093,17 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$didSelectDialogs$65(ChatActivity chatActivity, ArrayList arrayList, int i, TLRPC$User tLRPC$User, boolean z, int i2) {
+    public /* synthetic */ void lambda$didSelectDialogs$65(ChatActivity chatActivity, ArrayList arrayList, int i, CharSequence charSequence, boolean z, TLRPC$User tLRPC$User, boolean z2, int i2) {
         if (chatActivity != null) {
             this.actionBarLayout.presentFragment(chatActivity, true, false, true, false);
         }
+        AccountInstance instance = AccountInstance.getInstance(UserConfig.selectedAccount);
         for (int i3 = 0; i3 < arrayList.size(); i3++) {
-            SendMessagesHelper.getInstance(i).sendMessage(tLRPC$User, ((Long) arrayList.get(i3)).longValue(), (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2);
+            long longValue = ((Long) arrayList.get(i3)).longValue();
+            SendMessagesHelper.getInstance(i).sendMessage(tLRPC$User, longValue, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z2, i2);
+            if (!TextUtils.isEmpty(charSequence)) {
+                SendMessagesHelper.prepareSendingText(instance, charSequence.toString(), longValue, z, 0);
+            }
         }
     }
 
@@ -11399,7 +11414,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             long r0 = r0.longValue()
             int r2 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
             if (r2 <= 0) goto L_0x0780
-            r0 = 2131628949(0x7f0e1395, float:1.8885205E38)
+            r0 = 2131628952(0x7f0e1398, float:1.8885211E38)
             java.lang.String r1 = "YourNameChanged"
             goto L_0x0785
         L_0x0780:
@@ -11424,7 +11439,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             long r0 = r0.longValue()
             int r2 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
             if (r2 <= 0) goto L_0x07b2
-            r0 = 2131628932(0x7f0e1384, float:1.888517E38)
+            r0 = 2131628935(0x7f0e1387, float:1.8885177E38)
             java.lang.String r1 = "YourBioChanged"
             goto L_0x07b7
         L_0x07b2:

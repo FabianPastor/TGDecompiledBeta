@@ -4703,6 +4703,7 @@
     <string name="VoipChannelSoundMuted">Live stream sound muted.</string>
     <string name="VoipChannelSoundUnmuted">Live stream sound unmuted.</string>
     <string name="VoipChannelStart2">Subscribers of this channel will be notified once you start the live stream.</string>
+    <string name="VoipChannelStartRecordingRtmpVideoText">Do you want to start recording this live stream and save the result into a video file?</string>
     <string name="VoipChannelStartRecordingVideoText">Do you want to start recording this live stream and save the result into a video file?\10\10Other members will see that the stream is being recorded.</string>
     <string name="VoipChannelStartVoiceChat">Start Live Stream</string>
     <string name="VoipChannelStopRecordingText">Do you want to stop recording this live stream?</string>
@@ -4815,6 +4816,8 @@
     <string name="VoipGroupStartAsInfo">Choose whether you want to be displayed as your personal account or as your channel.</string>
     <string name="VoipGroupStartAsInfoGroup">Choose whether you want to be displayed as your personal account, this group, or one of your channels.</string>
     <string name="VoipGroupStartNow">Start Now</string>
+    <string name="VoipGroupStartRecordingRtmpText">Do you want to start recording this chat and save the result into an audio file?</string>
+    <string name="VoipGroupStartRecordingRtmpVideoText">Do you want to start recording this chat and save the result into a video file?</string>
     <string name="VoipGroupStartRecordingText">Do you want to start recording this chat and save the result into an audio file?\10\10Other members will see that the chat is being recorded.</string>
     <string name="VoipGroupStartRecordingTitle">Start recording</string>
     <string name="VoipGroupStartRecordingVideoText">Do you want to start recording this chat and save the result into a video file?\10\10Other members will see that the chat is being recorded.</string>

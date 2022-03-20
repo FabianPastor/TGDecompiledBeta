@@ -7,6 +7,7 @@ import android.graphics.RectF;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
 public class LineProgressView extends View {
     private static DecelerateInterpolator decelerateInterpolator;
@@ -15,6 +16,7 @@ public class LineProgressView extends View {
     private float animatedProgressValue;
     private float animationProgressStart;
     private int backColor;
+    CellFlickerDrawable cellFlickerDrawable;
     private float currentProgress;
     private long currentProgressTime;
     private long lastUpdateTime;
@@ -105,12 +107,24 @@ public class LineProgressView extends View {
             progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
             getWidth();
             this.rect.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
-            canvas.drawRoundRect(this.rect, (float) (getHeight() / 2), (float) (getHeight() / 2), progressPaint);
+            canvas.drawRoundRect(this.rect, ((float) getHeight()) / 2.0f, ((float) getHeight()) / 2.0f, progressPaint);
         }
         progressPaint.setColor(this.progressColor);
         progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
         this.rect.set(0.0f, 0.0f, ((float) getWidth()) * this.animatedProgressValue, (float) getHeight());
-        canvas.drawRoundRect(this.rect, (float) (getHeight() / 2), (float) (getHeight() / 2), progressPaint);
+        canvas.drawRoundRect(this.rect, ((float) getHeight()) / 2.0f, ((float) getHeight()) / 2.0f, progressPaint);
+        if (this.animatedAlphaValue > 0.0f) {
+            if (this.cellFlickerDrawable == null) {
+                CellFlickerDrawable cellFlickerDrawable2 = new CellFlickerDrawable(160, 0);
+                this.cellFlickerDrawable = cellFlickerDrawable2;
+                cellFlickerDrawable2.drawFrame = false;
+                cellFlickerDrawable2.animationSpeedScale = 0.8f;
+                cellFlickerDrawable2.repeatProgress = 1.2f;
+            }
+            this.cellFlickerDrawable.setParentWidth(getMeasuredWidth());
+            this.cellFlickerDrawable.draw(canvas, this.rect, ((float) getHeight()) / 2.0f);
+            invalidate();
+        }
         updateAnimation();
     }
 }

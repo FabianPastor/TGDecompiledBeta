@@ -68,6 +68,7 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -85,6 +86,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -2258,14 +2260,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             boolean r1 = org.telegram.messenger.ChatObject.isChannelOrGiga(r1)
             if (r1 == 0) goto L_0x0164
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r13.callItem
-            r2 = 2131628660(0x7f0e1274, float:1.8884619E38)
+            r2 = 2131628661(0x7f0e1275, float:1.888462E38)
             java.lang.String r3 = "VoipChannelVoiceChat"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
             goto L_0x0188
         L_0x0164:
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r13.callItem
-            r2 = 2131628788(0x7f0e12f4, float:1.8884879E38)
+            r2 = 2131628791(0x7f0e12f7, float:1.8884885E38)
             java.lang.String r3 = "VoipGroupVoiceChat"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
@@ -3077,7 +3079,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ProfileActivity$NestedFrameLayout r0 = r13.contentView
             java.util.ArrayList<android.view.View> r0 = r0.blurBehindViews
             org.telegram.ui.Components.SharedMediaLayout r1 = r13.sharedMediaLayout
-            org.telegram.ui.Components.ScrollSlidingTextTabStrip r1 = r1.scrollSlidingTextTabStrip
             r0.add(r1)
             android.view.View r0 = r13.fragmentView
             return r0
@@ -7263,7 +7264,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r2 = 2
             r4 = 1
             if (r1 != r2) goto L_0x0022
-            r1 = 2131628879(0x7f0e134f, float:1.8885063E38)
+            r1 = 2131628882(0x7f0e1352, float:1.888507E38)
             java.lang.String r5 = "WaitingForNetwork"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
@@ -7727,7 +7728,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x03c3:
             boolean r2 = org.telegram.messenger.ChatObject.isKickedFromChat(r3)
             if (r2 == 0) goto L_0x03d4
-            r2 = 2131628931(0x7f0e1383, float:1.8885169E38)
+            r2 = 2131628934(0x7f0e1386, float:1.8885175E38)
             java.lang.String r5 = "YouWereKicked"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r2)
         L_0x03d2:
@@ -7736,7 +7737,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x03d4:
             boolean r2 = org.telegram.messenger.ChatObject.isLeftFromChat(r3)
             if (r2 == 0) goto L_0x03e4
-            r2 = 2131628928(0x7f0e1380, float:1.8885163E38)
+            r2 = 2131628931(0x7f0e1383, float:1.8885169E38)
             java.lang.String r5 = "YouLeft"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r2)
             goto L_0x03d2
@@ -8727,6 +8728,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             presentFragment(new ChatActivity(bundle), true);
             removeSelfFromStack();
             getSendMessagesHelper().sendMessage(getMessagesController().getUser(Long.valueOf(this.userId)), longValue, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+            if (!TextUtils.isEmpty(charSequence)) {
+                SendMessagesHelper.prepareSendingText(AccountInstance.getInstance(this.currentAccount), charSequence.toString(), longValue, true, 0);
+            }
         }
     }
 
@@ -9825,7 +9829,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x02e2
             L_0x0252:
                 r3 = 3600(0xe10, float:5.045E-42)
-                r4 = 2131628907(0x7f0e136b, float:1.888512E38)
+                r4 = 2131628910(0x7f0e136e, float:1.8885126E38)
                 java.lang.String r5 = "WillUnmuteIn"
                 if (r2 >= r3) goto L_0x026e
                 java.lang.Object[] r3 = new java.lang.Object[r7]

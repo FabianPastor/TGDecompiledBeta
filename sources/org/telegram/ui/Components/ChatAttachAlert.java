@@ -28,6 +28,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -1726,6 +1727,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     public void show() {
         super.show();
+        boolean z = false;
         this.buttonPressed = false;
         BaseFragment baseFragment2 = this.baseFragment;
         if (baseFragment2 instanceof ChatActivity) {
@@ -1734,9 +1736,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         this.openTransitionFinished = false;
         if (Build.VERSION.SDK_INT >= 30) {
             int themedColor = getThemedColor("windowBackgroundGray");
-            if (((double) AndroidUtilities.computePerceivedBrightness(themedColor)) < 0.721d) {
-                getWindow().setNavigationBarColor(themedColor);
+            getWindow().setNavigationBarColor(themedColor);
+            Window window = getWindow();
+            if (((double) AndroidUtilities.computePerceivedBrightness(themedColor)) > 0.721d) {
+                z = true;
             }
+            AndroidUtilities.setLightNavigationBar(window, z);
         }
     }
 

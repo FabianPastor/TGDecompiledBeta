@@ -10,6 +10,6 @@ public final /* synthetic */ class VoIPService$$ExternalSyntheticLambda35 implem
     }
 
     public final void run() {
-        this.f$0.lambda$onSignalBarCountChanged$88(this.f$1);
+        this.f$0.lambda$onSignalBarCountChanged$89(this.f$1);
     }
 }

@@ -381,7 +381,7 @@ public class CameraScanActivity extends BaseFragment {
                 int height2 = (int) (((float) ((int) (((float) view.getHeight()) * access$1600.height()))) * ((CameraScanActivity.this.qrAppearingValue * 0.5f) + 0.5f));
                 int width2 = ((int) (((float) view.getWidth()) * access$1600.centerX())) - (width / 2);
                 int i = height - (height2 / 2);
-                CameraScanActivity.this.paint.setAlpha((int) (CameraScanActivity.this.backShadowAlpha * 255.0f * Math.min(1.0f, CameraScanActivity.this.qrAppearingValue)));
+                CameraScanActivity.this.paint.setAlpha((int) ((1.0f - ((1.0f - CameraScanActivity.this.backShadowAlpha) * Math.min(1.0f, CameraScanActivity.this.qrAppearingValue))) * 255.0f));
                 float f = (float) i;
                 float f2 = f;
                 canvas.drawRect(0.0f, 0.0f, (float) view.getMeasuredWidth(), f, CameraScanActivity.this.paint);
@@ -400,9 +400,13 @@ public class CameraScanActivity extends BaseFragment {
                 int i4 = width2 + width;
                 float f9 = (float) i4;
                 float var_ = f9;
+                float var_ = f9;
+                float var_ = f5;
                 int i5 = i4;
-                canvas.drawRect(f9, f7, (float) view.getMeasuredWidth(), f5, CameraScanActivity.this.paint);
-                int lerp = AndroidUtilities.lerp(0, AndroidUtilities.dp(4.0f), (float) Math.pow((double) CameraScanActivity.this.qrAppearingValue, 0.125d));
+                canvas.drawRect(var_, f7, (float) view.getMeasuredWidth(), var_, CameraScanActivity.this.paint);
+                CameraScanActivity.this.paint.setAlpha((int) (Math.max(0.0f, 1.0f - CameraScanActivity.this.qrAppearingValue) * 255.0f));
+                canvas.drawRect(f8, f7, var_, var_, CameraScanActivity.this.paint);
+                int lerp = AndroidUtilities.lerp(0, AndroidUtilities.dp(4.0f), Math.min(1.0f, CameraScanActivity.this.qrAppearingValue * 20.0f));
                 int i6 = lerp / 2;
                 int lerp2 = AndroidUtilities.lerp(Math.min(width, height2), AndroidUtilities.dp(20.0f), Math.min(1.2f, (float) Math.pow((double) CameraScanActivity.this.qrAppearingValue, 1.7999999523162842d)));
                 CameraScanActivity.this.cornerPaint.setAlpha((int) (Math.min(1.0f, CameraScanActivity.this.qrAppearingValue) * 255.0f));
@@ -463,7 +467,7 @@ public class CameraScanActivity extends BaseFragment {
         this.fragmentView = r2;
         int i = this.currentType;
         if (i == 1 || i == 2) {
-            r2.postDelayed(new CameraScanActivity$$ExternalSyntheticLambda9(this), 400);
+            r2.postDelayed(new CameraScanActivity$$ExternalSyntheticLambda9(this), 200);
         } else {
             initCameraView();
         }

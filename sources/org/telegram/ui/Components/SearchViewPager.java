@@ -619,13 +619,15 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
     }
 
     public void setPosition(int i) {
-        super.setPosition(i);
-        this.viewsByType.clear();
-        ViewPagerFixed.TabsView tabsView = this.tabsView;
-        if (tabsView != null) {
-            tabsView.selectTabWithId(i, 1.0f);
+        if (i >= 0) {
+            super.setPosition(i);
+            this.viewsByType.clear();
+            ViewPagerFixed.TabsView tabsView = this.tabsView;
+            if (tabsView != null) {
+                tabsView.selectTabWithId(i, 1.0f);
+            }
+            invalidate();
         }
-        invalidate();
     }
 
     public void setKeyboardHeight(int i) {
@@ -809,6 +811,15 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
 
     public void showDownloads() {
         setPosition(2);
+    }
+
+    public int getPositionForType(int i) {
+        for (int i2 = 0; i2 < this.viewPagerAdapter.items.size(); i2++) {
+            if (this.viewPagerAdapter.items.get(i2).type == 2 && this.viewPagerAdapter.items.get(i2).filterIndex == i) {
+                return i2;
+            }
+        }
+        return -1;
     }
 
     private class ViewPagerAdapter extends ViewPagerFixed.Adapter {

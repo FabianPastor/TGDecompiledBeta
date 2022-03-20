@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC$TL_error;
-
-public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda10 implements RequestDelegate {
+public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda10 implements Runnable {
     public final /* synthetic */ DownloadController f$0;
+    public final /* synthetic */ MessageObject f$1;
+    public final /* synthetic */ int f$2;
 
-    public /* synthetic */ DownloadController$$ExternalSyntheticLambda10(DownloadController downloadController) {
+    public /* synthetic */ DownloadController$$ExternalSyntheticLambda10(DownloadController downloadController, MessageObject messageObject, int i) {
         this.f$0 = downloadController;
+        this.f$1 = messageObject;
+        this.f$2 = i;
     }
 
-    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$loadAutoDownloadConfig$2(tLObject, tLRPC$TL_error);
+    public final void run() {
+        this.f$0.lambda$onDownloadFail$8(this.f$1, this.f$2);
     }
 }

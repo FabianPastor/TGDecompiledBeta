@@ -1856,7 +1856,7 @@ public class MessageObject {
             this.emojiAnimatedSticker = null;
             if (this.emojiOnlyCount == 1) {
                 TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message2.media;
-                if (!(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaWebPage) && !(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaInvoice) && tLRPC$Message2.entities.isEmpty()) {
+                if (!(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaWebPage) && !(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaInvoice) && tLRPC$Message2.entities.isEmpty() && (tLRPC$Message2.media instanceof TLRPC$TL_messageMediaEmpty) && this.messageOwner.grouped_id == 0) {
                     CharSequence charSequence = this.messageText;
                     int indexOf = TextUtils.indexOf(charSequence, "🏻");
                     if (indexOf >= 0) {
@@ -6571,7 +6571,7 @@ public class MessageObject {
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
             if (r2 == 0) goto L_0x07ae
-            r2 = 2131629006(0x7f0e13ce, float:1.888532E38)
+            r2 = 2131629009(0x7f0e13d1, float:1.8885327E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -6737,7 +6737,7 @@ public class MessageObject {
         L_0x08eb:
             boolean r11 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
             if (r11 == 0) goto L_0x08ff
-            r0 = 2131628926(0x7f0e137e, float:1.8885158E38)
+            r0 = 2131628929(0x7f0e1381, float:1.8885165E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"

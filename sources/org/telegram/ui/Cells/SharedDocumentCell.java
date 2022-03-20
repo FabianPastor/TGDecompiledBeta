@@ -58,6 +58,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     private int currentAccount;
     private TextView dateTextView;
     private SpannableStringBuilder dotSpan;
+    private long downloadedSize;
     private boolean drawDownloadIcon;
     float enterAlpha;
     /* access modifiers changed from: private */
@@ -349,8 +350,8 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         File file = new File(str);
         this.nameTextView.setText(file.getName());
         FileLoader.getFileExtension(file);
-        StringBuilder sb = new StringBuilder();
         this.extTextView.setVisibility(8);
+        StringBuilder sb = new StringBuilder();
         if (!(photoEntry.width == 0 || photoEntry.height == 0)) {
             if (sb.length() > 0) {
                 sb.append(", ");
@@ -416,13 +417,17 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         this.message = messageObject2;
         this.loaded = false;
         this.loading = false;
+        if (!z2) {
+            this.downloadedSize = 0;
+        }
         TLRPC$Document document = messageObject.getDocument();
+        int i = 8;
         String str3 = "";
         if (document != null) {
             String str4 = null;
             if (messageObject.isMusic()) {
-                for (int i = 0; i < document.attributes.size(); i++) {
-                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute = document.attributes.get(i);
+                for (int i2 = 0; i2 < document.attributes.size(); i2++) {
+                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute = document.attributes.get(i2);
                     if ((tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeAudio) && !(((str = tLRPC$DocumentAttribute.performer) == null || str.length() == 0) && ((str2 = tLRPC$DocumentAttribute.title) == null || str2.length() == 0))) {
                         str4 = messageObject.getMusicAuthor() + " - " + messageObject.getMusicTitle();
                     }
@@ -482,13 +487,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                     this.thumbImageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, document), "40_40", ImageLocation.getForDocument(closestPhotoSizeWithSize2, document), "40_40_b", (String) null, 0, 1, messageObject);
                 }
             }
-            long j = ((long) messageObject2.messageOwner.date) * 1000;
-            if (this.viewType == 2) {
-                this.dateTextView.setText(new SpannableStringBuilder().append(AndroidUtilities.formatFileSize((long) document.size)).append(' ').append(this.dotSpan).append(' ').append(FilteredSearchView.createFromInfoString(messageObject)));
-                this.rightDateTextView.setText(LocaleController.stringForMessageListDate((long) messageObject2.messageOwner.date));
-            } else {
-                this.dateTextView.setText(String.format("%s, %s", new Object[]{AndroidUtilities.formatFileSize((long) document.size), LocaleController.formatString("formatDateAtTime", NUM, LocaleController.getInstance().formatterYear.format(new Date(j)), LocaleController.getInstance().formatterDay.format(new Date(j)))}));
-            }
+            updateDateView();
             if (!messageObject.hasHighlightedWords() || TextUtils.isEmpty(this.message.messageOwner.message)) {
                 TextView textView2 = this.captionTextView;
                 if (textView2 != null) {
@@ -499,7 +498,10 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                 this.caption = highlightText2;
                 TextView textView3 = this.captionTextView;
                 if (textView3 != null) {
-                    textView3.setVisibility(highlightText2 == null ? 8 : 0);
+                    if (highlightText2 != null) {
+                        i = 0;
+                    }
+                    textView3.setVisibility(i);
                 }
             }
         } else {
@@ -521,6 +523,27 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         setWillNotDraw(!this.needDivider);
         this.progressView.setProgress(0.0f, false);
         updateFileExistIcon(z2);
+    }
+
+    private void updateDateView() {
+        String str;
+        MessageObject messageObject = this.message;
+        if (messageObject != null && messageObject.getDocument() != null) {
+            MessageObject messageObject2 = this.message;
+            long j = ((long) messageObject2.messageOwner.date) * 1000;
+            long j2 = this.downloadedSize;
+            if (j2 == 0) {
+                str = AndroidUtilities.formatFileSize((long) messageObject2.getDocument().size);
+            } else {
+                str = String.format(Locale.ENGLISH, "%s / %s", new Object[]{AndroidUtilities.formatFileSize(j2), AndroidUtilities.formatFileSize((long) this.message.getDocument().size)});
+            }
+            if (this.viewType == 2) {
+                this.dateTextView.setText(new SpannableStringBuilder().append(str).append(' ').append(this.dotSpan).append(' ').append(FilteredSearchView.createFromInfoString(this.message)));
+                this.rightDateTextView.setText(LocaleController.stringForMessageListDate((long) this.message.messageOwner.date));
+                return;
+            }
+            this.dateTextView.setText(String.format("%s, %s", new Object[]{str, LocaleController.formatString("formatDateAtTime", NUM, LocaleController.getInstance().formatterYear.format(new Date(j)), LocaleController.getInstance().formatterDay.format(new Date(j)))}));
+        }
     }
 
     public void updateFileExistIcon(boolean z) {
@@ -676,17 +699,23 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
 
     public void onFailedDownload(String str, boolean z) {
         updateFileExistIcon(true);
+        this.downloadedSize = 0;
+        updateDateView();
     }
 
     public void onSuccessDownload(String str) {
         this.progressView.setProgress(1.0f, true);
         updateFileExistIcon(true);
+        this.downloadedSize = 0;
+        updateDateView();
     }
 
     public void onProgressDownload(String str, long j, long j2) {
         if (this.progressView.getVisibility() != 0) {
             updateFileExistIcon(true);
         }
+        this.downloadedSize = j;
+        updateDateView();
         this.progressView.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
     }
 

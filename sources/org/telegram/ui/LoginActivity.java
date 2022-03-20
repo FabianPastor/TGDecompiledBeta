@@ -1836,7 +1836,7 @@ public class LoginActivity extends BaseFragment {
                 android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
                 r6.setTypeface(r7)
                 android.widget.TextView r6 = r1.titleView
-                r7 = 2131628950(0x7f0e1396, float:1.8885207E38)
+                r7 = 2131628953(0x7f0e1399, float:1.8885213E38)
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString((int) r7)
                 r6.setText(r7)
                 android.widget.TextView r6 = r1.titleView
@@ -2538,8 +2538,17 @@ public class LoginActivity extends BaseFragment {
             }
             spannableStringBuilder.append(country.name);
             setCountryButtonText(Emoji.replaceEmoji(spannableStringBuilder, this.countryButton.getCurrentView().getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
-            String str2 = (String) this.phoneFormatMap.get(str).get(0);
-            this.phoneField.setHintText(str2 != null ? str2.replace('X', '0') : null);
+            String str2 = null;
+            if (this.phoneFormatMap.get(str) == null || this.phoneFormatMap.get(str).isEmpty()) {
+                this.phoneField.setHintText((String) null);
+                return;
+            }
+            String str3 = (String) this.phoneFormatMap.get(str).get(0);
+            AnimatedPhoneNumberEditText animatedPhoneNumberEditText = this.phoneField;
+            if (str3 != null) {
+                str2 = str3.replace('X', '0');
+            }
+            animatedPhoneNumberEditText.setHintText(str2);
         }
 
         /* access modifiers changed from: private */
@@ -3598,7 +3607,7 @@ public class LoginActivity extends BaseFragment {
                 if (r4 == 0) goto L_0x0263
                 goto L_0x026a
             L_0x0263:
-                r4 = 2131628933(0x7f0e1385, float:1.8885173E38)
+                r4 = 2131628936(0x7f0e1388, float:1.8885179E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString((int) r4)
             L_0x026a:
                 r5.setText(r4)
@@ -3858,7 +3867,7 @@ public class LoginActivity extends BaseFragment {
                 android.widget.TextView r1 = new android.widget.TextView
                 r1.<init>(r2)
                 r0.wrongCode = r1
-                r7 = 2131628910(0x7f0e136e, float:1.8885126E38)
+                r7 = 2131628913(0x7f0e1371, float:1.8885132E38)
                 java.lang.String r12 = "WrongCode"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r12, r7)
                 r1.setText(r7)
@@ -5447,7 +5456,7 @@ public class LoginActivity extends BaseFragment {
                 android.graphics.Typeface r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r8)
                 r3.setTypeface(r8)
                 android.widget.TextView r3 = r0.titleView
-                r8 = 2131628953(0x7f0e1399, float:1.8885213E38)
+                r8 = 2131628956(0x7f0e139c, float:1.888522E38)
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString((int) r8)
                 r3.setText(r8)
                 android.widget.TextView r3 = r0.titleView
@@ -6992,7 +7001,7 @@ public class LoginActivity extends BaseFragment {
                 int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
                 r1.setPadding(r3, r5, r4, r5)
                 android.widget.TextView r1 = r0.cancelButton
-                r3 = 2131628942(0x7f0e138e, float:1.888519E38)
+                r3 = 2131628945(0x7f0e1391, float:1.8885197E38)
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString((int) r3)
                 r1.setText(r3)
                 android.widget.FrameLayout r1 = new android.widget.FrameLayout

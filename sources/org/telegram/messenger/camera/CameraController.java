@@ -1097,8 +1097,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     }
 
     public static Size chooseOptimalSize(List<Size> list, int i, int i2, Size size) {
-        ArrayList arrayList = new ArrayList();
-        ArrayList arrayList2 = new ArrayList();
+        ArrayList arrayList = new ArrayList(list.size());
+        ArrayList arrayList2 = new ArrayList(list.size());
         int width = size.getWidth();
         int height = size.getHeight();
         for (int i3 = 0; i3 < list.size(); i3++) {

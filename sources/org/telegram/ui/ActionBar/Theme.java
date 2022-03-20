@@ -547,7 +547,7 @@ public class Theme {
         private boolean isBottomNear;
         public boolean isCrossfadeBackground;
         private final boolean isOut;
-        private boolean isSelected;
+        public boolean isSelected;
         private boolean isTopNear;
         public boolean lastDrawWithShadow;
         private Matrix matrix;
@@ -659,14 +659,15 @@ public class Theme {
             setTop(i, i2, i3, i3, 0, 0, z, z2);
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:105:0x028e  */
-        /* JADX WARNING: Removed duplicated region for block: B:21:0x0065  */
-        /* JADX WARNING: Removed duplicated region for block: B:23:0x006b  */
-        /* JADX WARNING: Removed duplicated region for block: B:25:0x0071  */
-        /* JADX WARNING: Removed duplicated region for block: B:28:0x007a  */
-        /* JADX WARNING: Removed duplicated region for block: B:29:0x007c  */
-        /* JADX WARNING: Removed duplicated region for block: B:40:0x0096  */
-        /* JADX WARNING: Removed duplicated region for block: B:87:0x0194  */
+        /* JADX WARNING: Removed duplicated region for block: B:107:0x0295  */
+        /* JADX WARNING: Removed duplicated region for block: B:21:0x0066  */
+        /* JADX WARNING: Removed duplicated region for block: B:23:0x006c  */
+        /* JADX WARNING: Removed duplicated region for block: B:25:0x0072  */
+        /* JADX WARNING: Removed duplicated region for block: B:27:0x0078  */
+        /* JADX WARNING: Removed duplicated region for block: B:30:0x0081  */
+        /* JADX WARNING: Removed duplicated region for block: B:31:0x0083  */
+        /* JADX WARNING: Removed duplicated region for block: B:42:0x009d  */
+        /* JADX WARNING: Removed duplicated region for block: B:89:0x019b  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void setTop(int r35, int r36, int r37, int r38, int r39, int r40, boolean r41, boolean r42) {
             /*
@@ -687,339 +688,343 @@ public class Theme {
                 r1.setTop(r2, r3, r4, r5, r6, r7, r8, r9)
             L_0x001d:
                 boolean r1 = r0.isOut
-                r3 = 1
-                r4 = 0
-                if (r1 == 0) goto L_0x0052
-                boolean r1 = r0.isSelected
-                if (r1 == 0) goto L_0x002a
-                java.lang.String r1 = "chat_outBubbleSelected"
-                goto L_0x002c
-            L_0x002a:
-                java.lang.String r1 = "chat_outBubble"
-            L_0x002c:
-                int r1 = r0.getColor(r1)
-                java.lang.String r5 = "chat_outBubbleGradient"
-                java.lang.Integer r5 = r0.getCurrentColor(r5)
-                java.lang.String r6 = "chat_outBubbleGradient2"
-                java.lang.Integer r6 = r0.getCurrentColor(r6)
-                java.lang.String r7 = "chat_outBubbleGradient3"
-                java.lang.Integer r7 = r0.getCurrentColor(r7)
-                java.lang.String r8 = "chat_outBubbleGradientAnimated"
-                java.lang.Integer r8 = r0.getCurrentColor(r8)
-                if (r8 == 0) goto L_0x0062
-                int r8 = r8.intValue()
-                if (r8 == 0) goto L_0x0062
-                r8 = 1
-                goto L_0x0063
-            L_0x0052:
-                boolean r1 = r0.isSelected
-                if (r1 == 0) goto L_0x0059
-                java.lang.String r1 = "chat_inBubbleSelected"
-                goto L_0x005b
-            L_0x0059:
-                java.lang.String r1 = "chat_inBubble"
-            L_0x005b:
-                int r1 = r0.getColor(r1)
+                java.lang.String r2 = "chat_outBubble"
+                r4 = 1
                 r5 = 0
+                if (r1 == 0) goto L_0x0053
+                boolean r1 = r0.isSelected
+                if (r1 == 0) goto L_0x002c
+                java.lang.String r1 = "chat_outBubbleSelected"
+                goto L_0x002d
+            L_0x002c:
+                r1 = r2
+            L_0x002d:
+                int r1 = r0.getColor(r1)
+                java.lang.String r6 = "chat_outBubbleGradient"
+                java.lang.Integer r6 = r0.getCurrentColor(r6)
+                java.lang.String r7 = "chat_outBubbleGradient2"
+                java.lang.Integer r7 = r0.getCurrentColor(r7)
+                java.lang.String r8 = "chat_outBubbleGradient3"
+                java.lang.Integer r8 = r0.getCurrentColor(r8)
+                java.lang.String r9 = "chat_outBubbleGradientAnimated"
+                java.lang.Integer r9 = r0.getCurrentColor(r9)
+                if (r9 == 0) goto L_0x0063
+                int r9 = r9.intValue()
+                if (r9 == 0) goto L_0x0063
+                r9 = 1
+                goto L_0x0064
+            L_0x0053:
+                boolean r1 = r0.isSelected
+                if (r1 == 0) goto L_0x005a
+                java.lang.String r1 = "chat_inBubbleSelected"
+                goto L_0x005c
+            L_0x005a:
+                java.lang.String r1 = "chat_inBubble"
+            L_0x005c:
+                int r1 = r0.getColor(r1)
                 r6 = 0
                 r7 = 0
-            L_0x0062:
                 r8 = 0
             L_0x0063:
-                if (r5 != 0) goto L_0x0069
-                java.lang.Integer r5 = java.lang.Integer.valueOf(r4)
-            L_0x0069:
-                if (r6 != 0) goto L_0x006f
-                java.lang.Integer r6 = java.lang.Integer.valueOf(r4)
-            L_0x006f:
-                if (r7 != 0) goto L_0x0075
-                java.lang.Integer r7 = java.lang.Integer.valueOf(r4)
-            L_0x0075:
-                boolean r9 = r0.themePreview
-                r12 = 2
-                if (r9 == 0) goto L_0x007c
-                r9 = 2
-                goto L_0x0083
-            L_0x007c:
-                int r9 = r0.currentType
-                if (r9 != r12) goto L_0x0082
-                r9 = 1
-                goto L_0x0083
-            L_0x0082:
                 r9 = 0
+            L_0x0064:
+                if (r6 == 0) goto L_0x006a
+                int r1 = r0.getColor(r2)
+            L_0x006a:
+                if (r6 != 0) goto L_0x0070
+                java.lang.Integer r6 = java.lang.Integer.valueOf(r5)
+            L_0x0070:
+                if (r7 != 0) goto L_0x0076
+                java.lang.Integer r7 = java.lang.Integer.valueOf(r5)
+            L_0x0076:
+                if (r8 != 0) goto L_0x007c
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r5)
+            L_0x007c:
+                boolean r2 = r0.themePreview
+                r12 = 2
+                if (r2 == 0) goto L_0x0083
+                r2 = 2
+                goto L_0x008a
             L_0x0083:
+                int r2 = r0.currentType
+                if (r2 != r12) goto L_0x0089
+                r2 = 1
+                goto L_0x008a
+            L_0x0089:
+                r2 = 0
+            L_0x008a:
                 boolean r13 = r0.isCrossfadeBackground
                 r14 = 3
-                if (r13 != 0) goto L_0x00ac
-                int r13 = r6.intValue()
-                if (r13 == 0) goto L_0x00ac
-                if (r8 == 0) goto L_0x00ac
+                if (r13 != 0) goto L_0x00b3
+                int r13 = r7.intValue()
+                if (r13 == 0) goto L_0x00b3
+                if (r9 == 0) goto L_0x00b3
                 org.telegram.ui.Components.MotionBackgroundDrawable[] r13 = motionBackground
-                r15 = r13[r9]
-                if (r15 == 0) goto L_0x00ac
-                r13 = r13[r9]
+                r15 = r13[r2]
+                if (r15 == 0) goto L_0x00b3
+                r13 = r13[r2]
                 int[] r13 = r13.getColors()
-                r15 = r13[r4]
+                r15 = r13[r5]
                 r0.currentColor = r15
-                r15 = r13[r3]
+                r15 = r13[r4]
                 r0.currentGradientColor1 = r15
                 r15 = r13[r12]
                 r0.currentGradientColor2 = r15
                 r13 = r13[r14]
                 r0.currentGradientColor3 = r13
-            L_0x00ac:
+            L_0x00b3:
                 boolean r13 = r0.isCrossfadeBackground
                 r15 = 1065353216(0x3var_, float:1.0)
-                r2 = -1
-                if (r13 == 0) goto L_0x0166
-                int r13 = r6.intValue()
-                if (r13 == 0) goto L_0x0166
-                if (r8 == 0) goto L_0x0166
+                r3 = -1
+                if (r13 == 0) goto L_0x016d
+                int r13 = r7.intValue()
+                if (r13 == 0) goto L_0x016d
+                if (r9 == 0) goto L_0x016d
                 int r13 = r0.currentBackgroundHeight
-                if (r10 != r13) goto L_0x00e3
+                if (r10 != r13) goto L_0x00ea
                 android.graphics.Shader r13 = r0.crosfadeFromBitmapShader
-                if (r13 == 0) goto L_0x00e3
+                if (r13 == 0) goto L_0x00ea
                 int r13 = r0.currentColor
-                if (r13 != r1) goto L_0x00e3
+                if (r13 != r1) goto L_0x00ea
                 int r13 = r0.currentGradientColor1
-                int r14 = r5.intValue()
-                if (r13 != r14) goto L_0x00e3
-                int r13 = r0.currentGradientColor2
                 int r14 = r6.intValue()
-                if (r13 != r14) goto L_0x00e3
-                int r13 = r0.currentGradientColor3
+                if (r13 != r14) goto L_0x00ea
+                int r13 = r0.currentGradientColor2
                 int r14 = r7.intValue()
-                if (r13 != r14) goto L_0x00e3
+                if (r13 != r14) goto L_0x00ea
+                int r13 = r0.currentGradientColor3
+                int r14 = r8.intValue()
+                if (r13 != r14) goto L_0x00ea
                 boolean r13 = r0.currentAnimateGradient
-                if (r13 == r8) goto L_0x0140
-            L_0x00e3:
+                if (r13 == r9) goto L_0x0147
+            L_0x00ea:
                 android.graphics.Bitmap r13 = r0.crosfadeFromBitmap
-                if (r13 != 0) goto L_0x00fe
+                if (r13 != 0) goto L_0x0105
                 r13 = 60
                 r14 = 80
-                android.graphics.Bitmap$Config r4 = android.graphics.Bitmap.Config.ARGB_8888
-                android.graphics.Bitmap r4 = android.graphics.Bitmap.createBitmap(r13, r14, r4)
-                r0.crosfadeFromBitmap = r4
-                android.graphics.BitmapShader r4 = new android.graphics.BitmapShader
+                android.graphics.Bitmap$Config r5 = android.graphics.Bitmap.Config.ARGB_8888
+                android.graphics.Bitmap r5 = android.graphics.Bitmap.createBitmap(r13, r14, r5)
+                r0.crosfadeFromBitmap = r5
+                android.graphics.BitmapShader r5 = new android.graphics.BitmapShader
                 android.graphics.Bitmap r13 = r0.crosfadeFromBitmap
                 android.graphics.Shader$TileMode r14 = android.graphics.Shader.TileMode.CLAMP
-                r4.<init>(r13, r14, r14)
-                r0.crosfadeFromBitmapShader = r4
-            L_0x00fe:
-                org.telegram.ui.Components.MotionBackgroundDrawable[] r4 = motionBackground
-                r13 = r4[r9]
-                if (r13 != 0) goto L_0x0121
+                r5.<init>(r13, r14, r14)
+                r0.crosfadeFromBitmapShader = r5
+            L_0x0105:
+                org.telegram.ui.Components.MotionBackgroundDrawable[] r5 = motionBackground
+                r13 = r5[r2]
+                if (r13 != 0) goto L_0x0128
                 org.telegram.ui.Components.MotionBackgroundDrawable r13 = new org.telegram.ui.Components.MotionBackgroundDrawable
                 r13.<init>()
-                r4[r9] = r13
-                int r4 = r0.currentType
-                if (r4 == r12) goto L_0x0116
+                r5[r2] = r13
+                int r5 = r0.currentType
+                if (r5 == r12) goto L_0x011d
+                org.telegram.ui.Components.MotionBackgroundDrawable[] r5 = motionBackground
+                r5 = r5[r2]
+                r5.setPostInvalidateParent(r4)
+            L_0x011d:
                 org.telegram.ui.Components.MotionBackgroundDrawable[] r4 = motionBackground
-                r4 = r4[r9]
-                r4.setPostInvalidateParent(r3)
-            L_0x0116:
-                org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
-                r3 = r3[r9]
-                int r4 = org.telegram.messenger.AndroidUtilities.dp(r15)
-                r3.setRoundRadius(r4)
-            L_0x0121:
-                org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
-                r12 = r3[r9]
-                int r14 = r5.intValue()
-                int r15 = r6.intValue()
-                int r16 = r7.intValue()
-                android.graphics.Bitmap r3 = r0.crosfadeFromBitmap
+                r4 = r4[r2]
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r15)
+                r4.setRoundRadius(r5)
+            L_0x0128:
+                org.telegram.ui.Components.MotionBackgroundDrawable[] r4 = motionBackground
+                r12 = r4[r2]
+                int r14 = r6.intValue()
+                int r15 = r7.intValue()
+                int r16 = r8.intValue()
+                android.graphics.Bitmap r4 = r0.crosfadeFromBitmap
                 r13 = r1
-                r17 = r3
+                r17 = r4
                 r12.setColors(r13, r14, r15, r16, r17)
-                android.graphics.Shader r3 = r0.crosfadeFromBitmapShader
-                android.graphics.Matrix r4 = r0.matrix
-                r3.setLocalMatrix(r4)
-            L_0x0140:
-                android.graphics.Shader r3 = r0.crosfadeFromBitmapShader
-                r0.gradientShader = r3
+                android.graphics.Shader r4 = r0.crosfadeFromBitmapShader
+                android.graphics.Matrix r5 = r0.matrix
+                r4.setLocalMatrix(r5)
+            L_0x0147:
+                android.graphics.Shader r4 = r0.crosfadeFromBitmapShader
+                r0.gradientShader = r4
+                android.graphics.Paint r5 = r0.paint
+                r5.setShader(r4)
                 android.graphics.Paint r4 = r0.paint
-                r4.setShader(r3)
-                android.graphics.Paint r3 = r0.paint
-                r3.setColor(r2)
+                r4.setColor(r3)
                 r0.currentColor = r1
-                r0.currentAnimateGradient = r8
-                int r1 = r5.intValue()
-                r0.currentGradientColor1 = r1
+                r0.currentAnimateGradient = r9
                 int r1 = r6.intValue()
-                r0.currentGradientColor2 = r1
+                r0.currentGradientColor1 = r1
                 int r1 = r7.intValue()
+                r0.currentGradientColor2 = r1
+                int r1 = r8.intValue()
                 r0.currentGradientColor3 = r1
-                goto L_0x02a5
-            L_0x0166:
-                int r4 = r5.intValue()
-                if (r4 == 0) goto L_0x028e
-                android.graphics.Shader r4 = r0.gradientShader
-                if (r4 == 0) goto L_0x0194
-                int r4 = r0.currentBackgroundHeight
-                if (r10 != r4) goto L_0x0194
-                int r4 = r0.currentColor
-                if (r4 != r1) goto L_0x0194
-                int r4 = r0.currentGradientColor1
-                int r13 = r5.intValue()
-                if (r4 != r13) goto L_0x0194
-                int r4 = r0.currentGradientColor2
+                goto L_0x02ac
+            L_0x016d:
+                int r5 = r6.intValue()
+                if (r5 == 0) goto L_0x0295
+                android.graphics.Shader r5 = r0.gradientShader
+                if (r5 == 0) goto L_0x019b
+                int r5 = r0.currentBackgroundHeight
+                if (r10 != r5) goto L_0x019b
+                int r5 = r0.currentColor
+                if (r5 != r1) goto L_0x019b
+                int r5 = r0.currentGradientColor1
                 int r13 = r6.intValue()
-                if (r4 != r13) goto L_0x0194
-                int r4 = r0.currentGradientColor3
+                if (r5 != r13) goto L_0x019b
+                int r5 = r0.currentGradientColor2
                 int r13 = r7.intValue()
-                if (r4 != r13) goto L_0x0194
-                boolean r4 = r0.currentAnimateGradient
-                if (r4 == r8) goto L_0x028e
-            L_0x0194:
-                int r4 = r6.intValue()
-                if (r4 == 0) goto L_0x01de
-                if (r8 == 0) goto L_0x01de
-                org.telegram.ui.Components.MotionBackgroundDrawable[] r4 = motionBackground
-                r13 = r4[r9]
-                if (r13 != 0) goto L_0x01bf
+                if (r5 != r13) goto L_0x019b
+                int r5 = r0.currentGradientColor3
+                int r13 = r8.intValue()
+                if (r5 != r13) goto L_0x019b
+                boolean r5 = r0.currentAnimateGradient
+                if (r5 == r9) goto L_0x0295
+            L_0x019b:
+                int r5 = r7.intValue()
+                if (r5 == 0) goto L_0x01e5
+                if (r9 == 0) goto L_0x01e5
+                org.telegram.ui.Components.MotionBackgroundDrawable[] r5 = motionBackground
+                r13 = r5[r2]
+                if (r13 != 0) goto L_0x01c6
                 org.telegram.ui.Components.MotionBackgroundDrawable r13 = new org.telegram.ui.Components.MotionBackgroundDrawable
                 r13.<init>()
-                r4[r9] = r13
-                int r4 = r0.currentType
-                if (r4 == r12) goto L_0x01b4
+                r5[r2] = r13
+                int r5 = r0.currentType
+                if (r5 == r12) goto L_0x01bb
+                org.telegram.ui.Components.MotionBackgroundDrawable[] r5 = motionBackground
+                r5 = r5[r2]
+                r5.setPostInvalidateParent(r4)
+            L_0x01bb:
                 org.telegram.ui.Components.MotionBackgroundDrawable[] r4 = motionBackground
-                r4 = r4[r9]
-                r4.setPostInvalidateParent(r3)
-            L_0x01b4:
-                org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
-                r3 = r3[r9]
-                int r4 = org.telegram.messenger.AndroidUtilities.dp(r15)
-                r3.setRoundRadius(r4)
-            L_0x01bf:
-                org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
-                r3 = r3[r9]
-                int r4 = r5.intValue()
-                int r12 = r6.intValue()
-                int r13 = r7.intValue()
-                r3.setColors(r1, r4, r12, r13)
-                org.telegram.ui.Components.MotionBackgroundDrawable[] r3 = motionBackground
-                r3 = r3[r9]
-                android.graphics.BitmapShader r3 = r3.getBitmapShader()
-                r0.gradientShader = r3
-                goto L_0x026b
-            L_0x01de:
-                int r4 = r6.intValue()
-                if (r4 == 0) goto L_0x0247
-                int r4 = r7.intValue()
-                if (r4 == 0) goto L_0x021c
-                r4 = 4
-                int[] r4 = new int[r4]
-                int r13 = r7.intValue()
+                r4 = r4[r2]
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r15)
+                r4.setRoundRadius(r5)
+            L_0x01c6:
+                org.telegram.ui.Components.MotionBackgroundDrawable[] r4 = motionBackground
+                r4 = r4[r2]
+                int r5 = r6.intValue()
+                int r12 = r7.intValue()
+                int r13 = r8.intValue()
+                r4.setColors(r1, r5, r12, r13)
+                org.telegram.ui.Components.MotionBackgroundDrawable[] r4 = motionBackground
+                r4 = r4[r2]
+                android.graphics.BitmapShader r4 = r4.getBitmapShader()
+                r0.gradientShader = r4
+                goto L_0x0272
+            L_0x01e5:
+                int r5 = r7.intValue()
+                if (r5 == 0) goto L_0x024e
+                int r5 = r8.intValue()
+                if (r5 == 0) goto L_0x0223
+                r5 = 4
+                int[] r5 = new int[r5]
+                int r13 = r8.intValue()
                 r15 = 0
-                r4[r15] = r13
-                int r13 = r6.intValue()
-                r4[r3] = r13
-                int r3 = r5.intValue()
-                r4[r12] = r3
-                r4[r14] = r1
-                android.graphics.LinearGradient r3 = new android.graphics.LinearGradient
+                r5[r15] = r13
+                int r13 = r7.intValue()
+                r5[r4] = r13
+                int r4 = r6.intValue()
+                r5[r12] = r4
+                r5[r14] = r1
+                android.graphics.LinearGradient r4 = new android.graphics.LinearGradient
                 r19 = 0
                 float r12 = (float) r11
                 r21 = 0
                 float r13 = (float) r10
                 r24 = 0
                 android.graphics.Shader$TileMode r25 = android.graphics.Shader.TileMode.CLAMP
-                r18 = r3
+                r18 = r4
                 r20 = r12
                 r22 = r13
-                r23 = r4
+                r23 = r5
                 r18.<init>(r19, r20, r21, r22, r23, r24, r25)
-                r0.gradientShader = r3
-                goto L_0x026b
-            L_0x021c:
-                int[] r4 = new int[r14]
-                int r13 = r6.intValue()
+                r0.gradientShader = r4
+                goto L_0x0272
+            L_0x0223:
+                int[] r5 = new int[r14]
+                int r13 = r7.intValue()
                 r14 = 0
-                r4[r14] = r13
-                int r13 = r5.intValue()
-                r4[r3] = r13
-                r4[r12] = r1
-                android.graphics.LinearGradient r3 = new android.graphics.LinearGradient
+                r5[r14] = r13
+                int r13 = r6.intValue()
+                r5[r4] = r13
+                r5[r12] = r1
+                android.graphics.LinearGradient r4 = new android.graphics.LinearGradient
                 r27 = 0
                 float r12 = (float) r11
                 r29 = 0
                 float r13 = (float) r10
                 r32 = 0
                 android.graphics.Shader$TileMode r33 = android.graphics.Shader.TileMode.CLAMP
-                r26 = r3
+                r26 = r4
                 r28 = r12
                 r30 = r13
-                r31 = r4
+                r31 = r5
                 r26.<init>(r27, r28, r29, r30, r31, r32, r33)
-                r0.gradientShader = r3
-                goto L_0x026b
-            L_0x0247:
-                int[] r4 = new int[r12]
-                int r12 = r5.intValue()
+                r0.gradientShader = r4
+                goto L_0x0272
+            L_0x024e:
+                int[] r5 = new int[r12]
+                int r12 = r6.intValue()
                 r13 = 0
-                r4[r13] = r12
-                r4[r3] = r1
-                android.graphics.LinearGradient r3 = new android.graphics.LinearGradient
+                r5[r13] = r12
+                r5[r4] = r1
+                android.graphics.LinearGradient r4 = new android.graphics.LinearGradient
                 r19 = 0
                 float r12 = (float) r11
                 r21 = 0
                 float r13 = (float) r10
                 r24 = 0
                 android.graphics.Shader$TileMode r25 = android.graphics.Shader.TileMode.CLAMP
-                r18 = r3
+                r18 = r4
                 r20 = r12
                 r22 = r13
-                r23 = r4
+                r23 = r5
                 r18.<init>(r19, r20, r21, r22, r23, r24, r25)
-                r0.gradientShader = r3
-            L_0x026b:
-                android.graphics.Paint r3 = r0.paint
-                android.graphics.Shader r4 = r0.gradientShader
-                r3.setShader(r4)
+                r0.gradientShader = r4
+            L_0x0272:
+                android.graphics.Paint r4 = r0.paint
+                android.graphics.Shader r5 = r0.gradientShader
+                r4.setShader(r5)
                 r0.currentColor = r1
-                r0.currentAnimateGradient = r8
-                int r1 = r5.intValue()
-                r0.currentGradientColor1 = r1
+                r0.currentAnimateGradient = r9
                 int r1 = r6.intValue()
-                r0.currentGradientColor2 = r1
+                r0.currentGradientColor1 = r1
                 int r1 = r7.intValue()
+                r0.currentGradientColor2 = r1
+                int r1 = r8.intValue()
                 r0.currentGradientColor3 = r1
                 android.graphics.Paint r1 = r0.paint
-                r1.setColor(r2)
-                goto L_0x02a5
-            L_0x028e:
-                int r2 = r5.intValue()
-                if (r2 != 0) goto L_0x02a5
-                android.graphics.Shader r2 = r0.gradientShader
-                if (r2 == 0) goto L_0x02a0
-                r2 = 0
-                r0.gradientShader = r2
+                r1.setColor(r3)
+                goto L_0x02ac
+            L_0x0295:
+                int r3 = r6.intValue()
+                if (r3 != 0) goto L_0x02ac
+                android.graphics.Shader r3 = r0.gradientShader
+                if (r3 == 0) goto L_0x02a7
+                r3 = 0
+                r0.gradientShader = r3
+                android.graphics.Paint r4 = r0.paint
+                r4.setShader(r3)
+            L_0x02a7:
                 android.graphics.Paint r3 = r0.paint
-                r3.setShader(r2)
-            L_0x02a0:
-                android.graphics.Paint r2 = r0.paint
-                r2.setColor(r1)
-            L_0x02a5:
+                r3.setColor(r1)
+            L_0x02ac:
                 android.graphics.Shader r1 = r0.gradientShader
                 boolean r1 = r1 instanceof android.graphics.BitmapShader
-                if (r1 == 0) goto L_0x02b8
+                if (r1 == 0) goto L_0x02bf
                 org.telegram.ui.Components.MotionBackgroundDrawable[] r1 = motionBackground
-                r1 = r1[r9]
+                r1 = r1[r2]
                 int r2 = r10 - r38
                 r3 = r36
                 r4 = 0
                 r1.setBounds(r4, r11, r3, r2)
-                goto L_0x02b9
-            L_0x02b8:
+                goto L_0x02c0
+            L_0x02bf:
                 r4 = 0
-            L_0x02b9:
+            L_0x02c0:
                 r0.currentBackgroundHeight = r10
                 android.graphics.Shader r1 = r0.gradientShader
                 boolean r1 = r1 instanceof android.graphics.BitmapShader
-                if (r1 == 0) goto L_0x02c3
+                if (r1 == 0) goto L_0x02ca
                 r4 = r38
-            L_0x02c3:
+            L_0x02ca:
                 int r1 = r35 - r4
                 r0.topY = r1
                 r1 = r41
@@ -3296,7 +3301,7 @@ public class Theme {
                 java.lang.String r6 = "chat_outBubbleGradientSelectedOverlay"
                 r2.put(r6, r4)
                 int r3 = r3.intValue()
-                int r1 = r0.mix(r3, r1)
+                int r1 = org.telegram.ui.ActionBar.Theme.blendOver(r3, r1)
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 java.lang.String r3 = "chat_outBubbleSelected"
                 r2.put(r3, r1)
@@ -3314,7 +3319,7 @@ public class Theme {
                 java.lang.String r6 = "chat_inBubbleSelectedOverlay"
                 r2.put(r6, r4)
                 int r3 = r3.intValue()
-                int r1 = r0.mix(r3, r1)
+                int r1 = org.telegram.ui.ActionBar.Theme.blendOver(r3, r1)
                 java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
                 java.lang.String r3 = "chat_inBubbleSelected"
                 r2.put(r3, r1)
@@ -3339,17 +3344,6 @@ public class Theme {
             float[] fArr3 = this.tempHSV;
             fArr3[2] = Math.max(0.0f, Math.min(1.0f, fArr3[2] - 0.05f));
             return Color.HSVToColor(30, this.tempHSV);
-        }
-
-        private int mix(int i, int i2) {
-            float alpha = ((float) Color.alpha(i2)) / 255.0f;
-            float alpha2 = ((float) Color.alpha(i)) / 255.0f;
-            float f = 1.0f - alpha;
-            float f2 = (alpha2 * f) + alpha;
-            if (f2 == 0.0f) {
-                return 0;
-            }
-            return Color.argb((int) (255.0f * f2), (int) (((((float) Color.red(i2)) * alpha) + ((((float) Color.red(i)) * alpha2) * f)) / f2), (int) (((((float) Color.green(i2)) * alpha) + ((((float) Color.green(i)) * alpha2) * f)) / f2), (int) (((((float) Color.blue(i2)) * alpha) + ((((float) Color.blue(i)) * alpha2) * f)) / f2));
         }
 
         private int averageColor(HashMap<String, Integer> hashMap, String... strArr) {
@@ -3749,6 +3743,17 @@ public class Theme {
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.ThemeAccent.saveToFile():java.io.File");
         }
+    }
+
+    public static int blendOver(int i, int i2) {
+        float alpha = ((float) Color.alpha(i2)) / 255.0f;
+        float alpha2 = ((float) Color.alpha(i)) / 255.0f;
+        float f = 1.0f - alpha;
+        float f2 = (alpha2 * f) + alpha;
+        if (f2 == 0.0f) {
+            return 0;
+        }
+        return Color.argb((int) (255.0f * f2), (int) (((((float) Color.red(i2)) * alpha) + ((((float) Color.red(i)) * alpha2) * f)) / f2), (int) (((((float) Color.green(i2)) * alpha) + ((((float) Color.green(i)) * alpha2) * f)) / f2), (int) (((((float) Color.blue(i2)) * alpha) + ((((float) Color.blue(i)) * alpha2) * f)) / f2));
     }
 
     public static class OverrideWallpaperInfo {

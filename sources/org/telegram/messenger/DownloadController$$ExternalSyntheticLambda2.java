@@ -8,6 +8,6 @@ public final /* synthetic */ class DownloadController$$ExternalSyntheticLambda2 
     }
 
     public final void run() {
-        this.f$0.lambda$loadDownloadingFiles$9();
+        this.f$0.lambda$clearRecentDownloadedFiles$12();
     }
 }

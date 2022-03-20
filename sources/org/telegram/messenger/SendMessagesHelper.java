@@ -18132,10 +18132,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     private static VideoEditedInfo createCompressionSettings(String str) {
-        boolean z;
-        String str2 = str;
         int[] iArr = new int[11];
-        AnimatedFileDrawable.getVideoInfo(str2, iArr);
+        AnimatedFileDrawable.getVideoInfo(str, iArr);
+        boolean z = false;
         if (iArr[0] == 0) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("video hasn't avc1 atom");
@@ -18148,9 +18147,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         }
         int i = 4;
         float f = (float) iArr[4];
-        long j = (long) iArr[6];
-        long j2 = (long) iArr[5];
-        int i2 = iArr[7];
+        int i2 = iArr[6];
+        long j = (long) iArr[5];
+        int i3 = iArr[7];
         if (Build.VERSION.SDK_INT < 18) {
             try {
                 MediaCodecInfo selectCodec = MediaController.selectCodec("video/avc");
@@ -18182,18 +18181,19 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         videoEditedInfo.startTime = -1;
         videoEditedInfo.endTime = -1;
         videoEditedInfo.bitrate = videoBitrate;
-        videoEditedInfo.originalPath = str2;
-        videoEditedInfo.framerate = i2;
+        videoEditedInfo.originalPath = str;
+        videoEditedInfo.framerate = i3;
         videoEditedInfo.estimatedDuration = (long) Math.ceil((double) f);
-        int i3 = iArr[1];
-        videoEditedInfo.originalWidth = i3;
-        videoEditedInfo.resultWidth = i3;
-        int i4 = iArr[2];
-        videoEditedInfo.originalHeight = i4;
-        videoEditedInfo.resultHeight = i4;
+        int i4 = iArr[1];
+        videoEditedInfo.originalWidth = i4;
+        videoEditedInfo.resultWidth = i4;
+        int i5 = iArr[2];
+        videoEditedInfo.originalHeight = i5;
+        videoEditedInfo.resultHeight = i5;
         videoEditedInfo.rotationValue = iArr[8];
         videoEditedInfo.originalDuration = (long) (f * 1000.0f);
-        float max = (float) Math.max(i3, i4);
+        float max = (float) Math.max(i4, i5);
+        float f2 = 640.0f;
         if (max <= 1280.0f) {
             i = max > 854.0f ? 3 : max > 640.0f ? 2 : 1;
         }
@@ -18202,29 +18202,29 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             round = i;
         }
         if (round != i - 1 || Math.max(videoEditedInfo.originalWidth, videoEditedInfo.originalHeight) > 1280) {
-            float f2 = round != 1 ? round != 2 ? round != 3 ? 1280.0f : 848.0f : 640.0f : 432.0f;
-            int i5 = videoEditedInfo.originalWidth;
-            int i6 = videoEditedInfo.originalHeight;
-            float f3 = f2 / (i5 > i6 ? (float) i5 : (float) i6);
-            videoEditedInfo.resultWidth = Math.round((((float) i5) * f3) / 2.0f) * 2;
+            if (round == 1) {
+                f2 = 432.0f;
+            } else if (round != 2) {
+                f2 = round != 3 ? 1280.0f : 848.0f;
+            }
+            int i6 = videoEditedInfo.originalWidth;
+            int i7 = videoEditedInfo.originalHeight;
+            float f3 = f2 / (i6 > i7 ? (float) i6 : (float) i7);
+            videoEditedInfo.resultWidth = Math.round((((float) i6) * f3) / 2.0f) * 2;
             videoEditedInfo.resultHeight = Math.round((((float) videoEditedInfo.originalHeight) * f3) / 2.0f) * 2;
             z = true;
-        } else {
-            z = false;
         }
         int makeVideoBitrate = MediaController.makeVideoBitrate(videoEditedInfo.originalHeight, videoEditedInfo.originalWidth, videoBitrate, videoEditedInfo.resultHeight, videoEditedInfo.resultWidth);
         if (!z) {
             videoEditedInfo.resultWidth = videoEditedInfo.originalWidth;
             videoEditedInfo.resultHeight = videoEditedInfo.originalHeight;
             videoEditedInfo.bitrate = makeVideoBitrate;
-            videoEditedInfo.estimatedSize = (long) ((int) (((float) j2) + (((f / 1000.0f) * ((float) makeVideoBitrate)) / 8.0f)));
         } else {
             videoEditedInfo.bitrate = makeVideoBitrate;
-            long j3 = (long) ((int) (j2 + j));
-            videoEditedInfo.estimatedSize = j3;
-            videoEditedInfo.estimatedSize = j3 + ((j3 / 32768) * 16);
         }
-        if (videoEditedInfo.estimatedSize == 0) {
+        long j2 = (long) ((int) (((float) j) + (((f / 1000.0f) * ((float) makeVideoBitrate)) / 8.0f)));
+        videoEditedInfo.estimatedSize = j2;
+        if (j2 == 0) {
             videoEditedInfo.estimatedSize = 1;
         }
         return videoEditedInfo;

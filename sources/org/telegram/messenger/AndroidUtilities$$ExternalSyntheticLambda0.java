@@ -1,16 +1,16 @@
 package org.telegram.messenger;
 
-import android.content.DialogInterface;
-import org.telegram.ui.ActionBar.BaseFragment;
+import android.animation.ValueAnimator;
+import android.view.Window;
 
-public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda0 implements DialogInterface.OnClickListener {
-    public final /* synthetic */ BaseFragment f$0;
+public final /* synthetic */ class AndroidUtilities$$ExternalSyntheticLambda0 implements ValueAnimator.AnimatorUpdateListener {
+    public final /* synthetic */ Window f$0;
 
-    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda0(BaseFragment baseFragment) {
-        this.f$0 = baseFragment;
+    public /* synthetic */ AndroidUtilities$$ExternalSyntheticLambda0(Window window) {
+        this.f$0 = window;
     }
 
-    public final void onClick(DialogInterface dialogInterface, int i) {
-        AndroidUtilities.lambda$isGoogleMapsInstalled$2(this.f$0, dialogInterface, i);
+    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+        this.f$0.setNavigationBarColor(((Integer) valueAnimator.getAnimatedValue()).intValue());
     }
 }

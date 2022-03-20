@@ -42,6 +42,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.SvgHelper;
+import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$TL_availableReaction;
 import org.telegram.ui.ActionBar.Theme;
@@ -337,14 +338,12 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         canvas2.clipPath(this.mPath);
         canvas2.translate(((float) ((LocaleController.isRTL ? -1 : 1) * getWidth())) * (1.0f - this.transitionProgress), 0.0f);
         super.dispatchDraw(canvas);
-        Paint paint = this.leftShadowPaint;
-        if (paint != null) {
-            paint.setAlpha((int) (this.leftAlpha * this.transitionProgress * 255.0f));
+        if (this.leftShadowPaint != null) {
+            this.leftShadowPaint.setAlpha((int) (Utilities.clamp(this.leftAlpha * this.transitionProgress, 1.0f, 0.0f) * 255.0f));
             canvas2.drawRect(this.rect, this.leftShadowPaint);
         }
-        Paint paint2 = this.rightShadowPaint;
-        if (paint2 != null) {
-            paint2.setAlpha((int) (this.rightAlpha * this.transitionProgress * 255.0f));
+        if (this.rightShadowPaint != null) {
+            this.rightShadowPaint.setAlpha((int) (Utilities.clamp(this.rightAlpha * this.transitionProgress, 1.0f, 0.0f) * 255.0f));
             canvas2.drawRect(this.rect, this.rightShadowPaint);
         }
         canvas2.restoreToCount(save3);

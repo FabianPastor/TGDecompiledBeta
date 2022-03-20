@@ -335,21 +335,21 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                 r10 = r38
                 java.util.ArrayList<org.telegram.messenger.MediaController$PhotoEntry> r0 = r10.photos
                 int r11 = r0.size()
+                java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r0 = r10.posArray
+                r0.clear()
+                java.util.HashMap<org.telegram.messenger.MediaController$PhotoEntry, org.telegram.messenger.MessageObject$GroupedMessagePosition> r0 = r10.positions
+                r0.clear()
                 r12 = 0
                 r13 = 0
-                if (r11 != 0) goto L_0x0015
+                if (r11 != 0) goto L_0x001f
                 r10.width = r13
                 r10.height = r12
                 r10.maxX = r13
                 r10.maxY = r13
                 return
-            L_0x0015:
-                java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r0 = r10.posArray
-                r0.clear()
+            L_0x001f:
                 java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r0 = r10.posArray
                 r0.ensureCapacity(r11)
-                java.util.HashMap<org.telegram.messenger.MediaController$PhotoEntry, org.telegram.messenger.MessageObject$GroupedMessagePosition> r0 = r10.positions
-                r0.clear()
                 char[] r0 = new char[r11]
                 r2 = 0
                 r3 = 1065353216(0x3var_, float:1.0)
@@ -2831,18 +2831,17 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                     if (groupCalculator != null && groupedMessagePosition != null) {
                         this.positionFlags = groupedMessagePosition.flags;
                         if (z) {
-                            long elapsedRealtime = SystemClock.elapsedRealtime();
-                            float interpolation = PreviewGroupCell.this.interpolator.getInterpolation(Math.min(1.0f, ((float) (elapsedRealtime - this.lastUpdate)) / 200.0f));
+                            float t = getT();
                             RectF rectF = this.fromRect;
                             if (rectF != null) {
-                                AndroidUtilities.lerp(rectF, this.rect, interpolation, rectF);
+                                AndroidUtilities.lerp(rectF, this.rect, t, rectF);
                             }
                             RectF rectF2 = this.fromRoundRadiuses;
                             if (rectF2 != null) {
-                                AndroidUtilities.lerp(rectF2, this.roundRadiuses, interpolation, rectF2);
+                                AndroidUtilities.lerp(rectF2, this.roundRadiuses, t, rectF2);
                             }
-                            this.fromScale = AndroidUtilities.lerp(this.fromScale, this.scale, interpolation);
-                            this.lastUpdate = elapsedRealtime;
+                            this.fromScale = AndroidUtilities.lerp(this.fromScale, this.scale, t);
+                            this.lastUpdate = SystemClock.elapsedRealtime();
                         }
                         float f = groupedMessagePosition.left;
                         int i = groupCalculator.width;
@@ -2875,15 +2874,14 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                             rectF5.set(this.roundRadiuses);
                         }
                     } else if (z) {
-                        long elapsedRealtime2 = SystemClock.elapsedRealtime();
-                        float interpolation2 = PreviewGroupCell.this.interpolator.getInterpolation(Math.min(1.0f, ((float) (elapsedRealtime2 - this.lastUpdate)) / 200.0f));
-                        this.fromScale = AndroidUtilities.lerp(this.fromScale, this.scale, interpolation2);
+                        long elapsedRealtime = SystemClock.elapsedRealtime();
+                        this.fromScale = AndroidUtilities.lerp(this.fromScale, this.scale, getT());
                         RectF rectF6 = this.fromRect;
                         if (rectF6 != null) {
-                            AndroidUtilities.lerp(rectF6, this.rect, interpolation2, rectF6);
+                            AndroidUtilities.lerp(rectF6, this.rect, getT(), this.fromRect);
                         }
                         this.scale = 0.0f;
-                        this.lastUpdate = elapsedRealtime2;
+                        this.lastUpdate = elapsedRealtime;
                     } else {
                         this.fromScale = 0.0f;
                         this.scale = 0.0f;
