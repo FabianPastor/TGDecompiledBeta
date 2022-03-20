@@ -1462,20 +1462,23 @@ public class FileLoader extends BaseController {
     }
 
     public static String getDocumentFileName(TLRPC$Document tLRPC$Document) {
-        String str = tLRPC$Document.file_name_fixed;
-        if (str != null) {
-            return str;
+        String str = null;
+        if (tLRPC$Document == null) {
+            return null;
         }
-        String str2 = null;
+        String str2 = tLRPC$Document.file_name_fixed;
+        if (str2 != null) {
+            return str2;
+        }
         String str3 = tLRPC$Document.file_name;
         if (str3 == null) {
             for (int i = 0; i < tLRPC$Document.attributes.size(); i++) {
                 TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i);
                 if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeFilename) {
-                    str2 = tLRPC$DocumentAttribute.file_name;
+                    str = tLRPC$DocumentAttribute.file_name;
                 }
             }
-            str3 = str2;
+            str3 = str;
         }
         String fixFileName = fixFileName(str3);
         return fixFileName != null ? fixFileName : "";

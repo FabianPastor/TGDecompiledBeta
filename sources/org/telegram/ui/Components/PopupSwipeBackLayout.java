@@ -17,6 +17,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import androidx.core.view.GestureDetectorCompat;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
@@ -41,7 +42,7 @@ public class PopupSwipeBackLayout extends FrameLayout {
     private RectF mRect = new RectF();
     /* access modifiers changed from: private */
     public int notificationIndex;
-    private OnSwipeBackProgressListener onSwipeBackProgressListener;
+    private ArrayList<OnSwipeBackProgressListener> onSwipeBackProgressListeners = new ArrayList<>();
     private Paint overlayPaint = new Paint(1);
     private float overrideForegroundHeight;
     SparseIntArray overrideHeightIndex = new SparseIntArray();
@@ -106,8 +107,8 @@ public class PopupSwipeBackLayout extends FrameLayout {
         this.isSwipeBackDisallowed = z;
     }
 
-    public void setOnSwipeBackProgressListener(OnSwipeBackProgressListener onSwipeBackProgressListener2) {
-        this.onSwipeBackProgressListener = onSwipeBackProgressListener2;
+    public void addOnSwipeBackProgressListener(OnSwipeBackProgressListener onSwipeBackProgressListener) {
+        this.onSwipeBackProgressListeners.add(onSwipeBackProgressListener);
     }
 
     /* access modifiers changed from: protected */
@@ -131,14 +132,15 @@ public class PopupSwipeBackLayout extends FrameLayout {
     public void invalidateTransforms() {
         float f;
         float f2;
-        OnSwipeBackProgressListener onSwipeBackProgressListener2 = this.onSwipeBackProgressListener;
-        if (onSwipeBackProgressListener2 != null) {
-            onSwipeBackProgressListener2.onSwipeBackProgress(this, this.toProgress, this.transitionProgress);
+        if (!this.onSwipeBackProgressListeners.isEmpty()) {
+            for (int i = 0; i < this.onSwipeBackProgressListeners.size(); i++) {
+                this.onSwipeBackProgressListeners.get(i).onSwipeBackProgress(this, this.toProgress, this.transitionProgress);
+            }
         }
         View childAt = getChildAt(0);
         View view = null;
-        int i = this.currentForegroundIndex;
-        if (i >= 0 && i < getChildCount()) {
+        int i2 = this.currentForegroundIndex;
+        if (i2 >= 0 && i2 < getChildCount()) {
             view = getChildAt(this.currentForegroundIndex);
         }
         childAt.setTranslationX((-this.transitionProgress) * ((float) getWidth()) * 0.5f);
@@ -168,8 +170,8 @@ public class PopupSwipeBackLayout extends FrameLayout {
             float paddingTop = measuredHeight + ((f - measuredHeight) * f4) + ((float) (actionBarPopupWindowLayout.getPaddingTop() + actionBarPopupWindowLayout.getPaddingBottom()));
             actionBarPopupWindowLayout.setBackScaleX(paddingLeft / ((float) actionBarPopupWindowLayout.getMeasuredWidth()));
             actionBarPopupWindowLayout.setBackScaleY(paddingTop / ((float) actionBarPopupWindowLayout.getMeasuredHeight()));
-            for (int i2 = 0; i2 < getChildCount(); i2++) {
-                View childAt2 = getChildAt(i2);
+            for (int i3 = 0; i3 < getChildCount(); i3++) {
+                View childAt2 = getChildAt(i3);
                 childAt2.setPivotX(0.0f);
                 childAt2.setPivotY(0.0f);
             }

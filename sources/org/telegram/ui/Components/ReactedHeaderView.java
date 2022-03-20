@@ -39,7 +39,6 @@ import org.telegram.ui.ActionBar.Theme;
 public class ReactedHeaderView extends FrameLayout {
     private AvatarsImageView avatarsImageView;
     private int currentAccount;
-    private long dialogId;
     private FlickerLoadingView flickerLoadingView;
     private ImageView iconView;
     private boolean ignoreLayout;
@@ -55,7 +54,6 @@ public class ReactedHeaderView extends FrameLayout {
         super(context);
         this.currentAccount = i;
         this.message = messageObject;
-        this.dialogId = j;
         FlickerLoadingView flickerLoadingView2 = new FlickerLoadingView(context);
         this.flickerLoadingView = flickerLoadingView2;
         flickerLoadingView2.setColors("actionBarDefaultSubmenuBackground", "listSelectorSDK21", (String) null);
@@ -215,9 +213,11 @@ public class ReactedHeaderView extends FrameLayout {
     private void loadReactions() {
         MessagesController instance = MessagesController.getInstance(this.currentAccount);
         TLRPC$TL_messages_getMessageReactionsList tLRPC$TL_messages_getMessageReactionsList = new TLRPC$TL_messages_getMessageReactionsList();
-        tLRPC$TL_messages_getMessageReactionsList.peer = instance.getInputPeer(this.dialogId);
+        tLRPC$TL_messages_getMessageReactionsList.peer = instance.getInputPeer(this.message.getDialogId());
         tLRPC$TL_messages_getMessageReactionsList.id = this.message.getId();
         tLRPC$TL_messages_getMessageReactionsList.limit = 3;
+        tLRPC$TL_messages_getMessageReactionsList.reaction = null;
+        tLRPC$TL_messages_getMessageReactionsList.offset = null;
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getMessageReactionsList, new ReactedHeaderView$$ExternalSyntheticLambda4(this), 64);
     }
 

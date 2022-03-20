@@ -1348,7 +1348,8 @@ public class QrActivity extends BaseFragment {
         public ValueAnimator changeDayNightViewAnimator;
         /* access modifiers changed from: private */
         public float changeDayNightViewProgress;
-        private final RLottieDrawable darkThemeDrawable;
+        /* access modifiers changed from: private */
+        public final RLottieDrawable darkThemeDrawable;
         /* access modifiers changed from: private */
         public final RLottieImageView darkThemeView;
         private boolean forceDark;
@@ -1477,12 +1478,12 @@ public class QrActivity extends BaseFragment {
             r5.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 8388659, 0.0f, 0.0f, 62.0f, 0.0f));
             int themedColor = baseFragment2.getThemedColor("featuredStickers_addButton");
             int dp = AndroidUtilities.dp(28.0f);
-            RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "NUM", dp, dp, true, (int[]) null);
+            RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "NUM", dp, dp, false, (int[]) null);
             this.darkThemeDrawable = rLottieDrawable;
+            this.forceDark = !Theme.getActiveTheme().isDark();
+            setForceDark(Theme.getActiveTheme().isDark(), false);
             rLottieDrawable.setPlayInDirectionOfCustomEndFrame(true);
-            rLottieDrawable.beginApplyLayerColors();
-            setDarkButtonColor(themedColor);
-            rLottieDrawable.commitApplyLayerColors();
+            rLottieDrawable.setColorFilter(new PorterDuffColorFilter(themedColor, PorterDuff.Mode.MULTIPLY));
             RLottieImageView rLottieImageView = new RLottieImageView(parentActivity);
             this.darkThemeView = rLottieImageView;
             rLottieImageView.setAnimation(rLottieDrawable);
@@ -1491,8 +1492,6 @@ public class QrActivity extends BaseFragment {
             rLottieImageView.setAlpha(0.0f);
             rLottieImageView.setVisibility(4);
             r5.addView(rLottieImageView, LayoutHelper.createFrame(44, 44.0f, 8388661, 0.0f, -2.0f, 7.0f, 0.0f));
-            this.forceDark = !Theme.getActiveTheme().isDark();
-            setForceDark(Theme.getActiveTheme().isDark(), false);
             FlickerLoadingView flickerLoadingView = new FlickerLoadingView(parentActivity, baseFragment.getResourceProvider());
             this.progressView = flickerLoadingView;
             flickerLoadingView.setVisibility(0);
@@ -1736,27 +1735,23 @@ public class QrActivity extends BaseFragment {
         public void setForceDark(boolean z, boolean z2) {
             if (this.forceDark != z) {
                 this.forceDark = z;
-                int i = 0;
+                int framesCount = z ? this.darkThemeDrawable.getFramesCount() - 1 : 0;
                 if (z2) {
-                    RLottieDrawable rLottieDrawable = this.darkThemeDrawable;
-                    if (z) {
-                        i = rLottieDrawable.getFramesCount();
+                    this.darkThemeDrawable.setCustomEndFrame(framesCount);
+                    RLottieImageView rLottieImageView = this.darkThemeView;
+                    if (rLottieImageView != null) {
+                        rLottieImageView.playAnimation();
+                        return;
                     }
-                    rLottieDrawable.setCustomEndFrame(i);
-                    this.darkThemeView.playAnimation();
                     return;
                 }
-                RLottieDrawable rLottieDrawable2 = this.darkThemeDrawable;
-                rLottieDrawable2.setCurrentFrame(z ? rLottieDrawable2.getFramesCount() - 1 : 0, false, true);
-                this.darkThemeView.invalidate();
+                this.darkThemeDrawable.setCustomEndFrame(framesCount);
+                this.darkThemeDrawable.setCurrentFrame(framesCount, false, true);
+                RLottieImageView rLottieImageView2 = this.darkThemeView;
+                if (rLottieImageView2 != null) {
+                    rLottieImageView2.invalidate();
+                }
             }
-        }
-
-        public void setDarkButtonColor(int i) {
-            this.darkThemeDrawable.setLayerColor("Sunny.**", i);
-            this.darkThemeDrawable.setLayerColor("Path.**", i);
-            this.darkThemeDrawable.setLayerColor("Path 10.**", i);
-            this.darkThemeDrawable.setLayerColor("Path 11.**", i);
         }
 
         /* access modifiers changed from: private */
@@ -1805,16 +1800,15 @@ public class QrActivity extends BaseFragment {
                         ThemeListViewController.this.onAnimationStart();
                         this.isAnimationStarted = true;
                     }
+                    ThemeListViewController.this.darkThemeDrawable.setColorFilter(new PorterDuffColorFilter(ThemeListViewController.this.fragment.getThemedColor("featuredStickers_addButton"), PorterDuff.Mode.MULTIPLY));
                     ThemeListViewController themeListViewController = ThemeListViewController.this;
-                    themeListViewController.setDarkButtonColor(themeListViewController.fragment.getThemedColor("featuredStickers_addButton"));
-                    ThemeListViewController themeListViewController2 = ThemeListViewController.this;
-                    if (themeListViewController2.isLightDarkChangeAnimation) {
-                        themeListViewController2.setItemsAnimationProgress(f);
+                    if (themeListViewController.isLightDarkChangeAnimation) {
+                        themeListViewController.setItemsAnimationProgress(f);
                     }
                     if (f == 1.0f && this.isAnimationStarted) {
-                        ThemeListViewController themeListViewController3 = ThemeListViewController.this;
-                        themeListViewController3.isLightDarkChangeAnimation = false;
-                        themeListViewController3.onAnimationEnd();
+                        ThemeListViewController themeListViewController2 = ThemeListViewController.this;
+                        themeListViewController2.isLightDarkChangeAnimation = false;
+                        themeListViewController2.onAnimationEnd();
                         this.isAnimationStarted = false;
                     }
                 }

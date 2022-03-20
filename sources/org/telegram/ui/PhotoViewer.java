@@ -5369,8 +5369,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             };
             this.windowView = r1;
             r1.setBackgroundDrawable(this.backgroundDrawable);
-            this.windowView.setClipChildren(false);
-            this.windowView.setClipToPadding(false);
             this.windowView.setFocusable(false);
             ClippingImageView clippingImageView = new ClippingImageView(activity2);
             this.animatingImageView = clippingImageView;
@@ -5378,9 +5376,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             this.windowView.addView(this.animatingImageView, LayoutHelper.createFrame(40, 40.0f));
             FrameLayoutDrawer frameLayoutDrawer = new FrameLayoutDrawer(activity2);
             this.containerView = frameLayoutDrawer;
-            frameLayoutDrawer.setClipChildren(false);
-            this.containerView.setClipToPadding(false);
-            this.containerView.setFocusable(false);
+            frameLayoutDrawer.setFocusable(false);
             this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
             int i2 = Build.VERSION.SDK_INT;
             if (i2 >= 21) {

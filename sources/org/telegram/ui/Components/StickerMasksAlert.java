@@ -253,8 +253,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
                 r4.setScaleType(r7)
                 android.widget.ImageView r4 = r0.clearSearchImageView
-                org.telegram.ui.Components.CloseProgressDrawable2 r7 = new org.telegram.ui.Components.CloseProgressDrawable2
-                r7.<init>()
+                org.telegram.ui.Components.StickerMasksAlert$SearchField$1 r7 = new org.telegram.ui.Components.StickerMasksAlert$SearchField$1
+                r7.<init>(r0, r1)
                 r0.progressDrawable = r7
                 r4.setImageDrawable(r7)
                 org.telegram.ui.Components.CloseProgressDrawable2 r4 = r0.progressDrawable
@@ -269,11 +269,6 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 android.widget.ImageView r4 = r0.clearSearchImageView
                 r4.setAlpha(r5)
                 android.widget.ImageView r4 = r0.clearSearchImageView
-                android.graphics.PorterDuffColorFilter r5 = new android.graphics.PorterDuffColorFilter
-                android.graphics.PorterDuff$Mode r7 = android.graphics.PorterDuff.Mode.MULTIPLY
-                r5.<init>(r10, r7)
-                r4.setColorFilter(r5)
-                android.widget.ImageView r4 = r0.clearSearchImageView
                 r13 = 53
                 r14 = 1096810496(0x41600000, float:14.0)
                 r16 = 1096810496(0x41600000, float:14.0)
@@ -283,7 +278,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 org.telegram.ui.Components.StickerMasksAlert$SearchField$$ExternalSyntheticLambda0 r5 = new org.telegram.ui.Components.StickerMasksAlert$SearchField$$ExternalSyntheticLambda0
                 r5.<init>(r0)
                 r4.setOnClickListener(r5)
-                org.telegram.ui.Components.StickerMasksAlert$SearchField$1 r4 = new org.telegram.ui.Components.StickerMasksAlert$SearchField$1
+                org.telegram.ui.Components.StickerMasksAlert$SearchField$2 r4 = new org.telegram.ui.Components.StickerMasksAlert$SearchField$2
                 r4.<init>(r2, r1)
                 r0.searchEditText = r4
                 r2 = 1098907648(0x41800000, float:16.0)
@@ -307,30 +302,30 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
                 r4 = 268435459(0x10000003, float:2.5243558E-29)
                 r2.setImeOptions(r4)
-                if (r3 != 0) goto L_0x014c
+                if (r3 != 0) goto L_0x0140
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
                 r3 = 2131627823(0x7f0e0f2f, float:1.8882921E38)
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
-                goto L_0x016e
-            L_0x014c:
-                if (r3 != r6) goto L_0x015d
+                goto L_0x0162
+            L_0x0140:
+                if (r3 != r6) goto L_0x0151
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
                 r3 = 2131627797(0x7f0e0var_, float:1.8882869E38)
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
-                goto L_0x016e
-            L_0x015d:
+                goto L_0x0162
+            L_0x0151:
                 r2 = 2
-                if (r3 != r2) goto L_0x016e
+                if (r3 != r2) goto L_0x0162
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
                 r3 = 2131627813(0x7f0e0var_, float:1.8882901E38)
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
-            L_0x016e:
+            L_0x0162:
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
                 r2.setCursorColor(r9)
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
@@ -351,7 +346,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r4, r5, r6, r7, r8, r9)
                 r0.addView(r2, r3)
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                org.telegram.ui.Components.StickerMasksAlert$SearchField$2 r3 = new org.telegram.ui.Components.StickerMasksAlert$SearchField$2
+                org.telegram.ui.Components.StickerMasksAlert$SearchField$3 r3 = new org.telegram.ui.Components.StickerMasksAlert$SearchField$3
                 r3.<init>(r1)
                 r2.addTextChangedListener(r3)
                 return

@@ -222,17 +222,21 @@ public class UsersAlertBase extends BottomSheet {
             ImageView imageView2 = new ImageView(context);
             this.clearSearchImageView = imageView2;
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
-            CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2();
-            this.progressDrawable = closeProgressDrawable2;
-            imageView2.setImageDrawable(closeProgressDrawable2);
-            closeProgressDrawable2.setSide(AndroidUtilities.dp(7.0f));
+            AnonymousClass1 r1 = new CloseProgressDrawable2(UsersAlertBase.this) {
+                /* access modifiers changed from: protected */
+                public int getCurrentColor() {
+                    return Theme.getColor(UsersAlertBase.this.keySearchPlaceholder);
+                }
+            };
+            this.progressDrawable = r1;
+            imageView2.setImageDrawable(r1);
+            r1.setSide(AndroidUtilities.dp(7.0f));
             imageView2.setScaleX(0.1f);
             imageView2.setScaleY(0.1f);
             imageView2.setAlpha(0.0f);
-            imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(UsersAlertBase.this.keySearchPlaceholder), PorterDuff.Mode.MULTIPLY));
             addView(imageView2, LayoutHelper.createFrame(36, 36.0f, 53, 14.0f, 11.0f, 14.0f, 0.0f));
             imageView2.setOnClickListener(new UsersAlertBase$SearchField$$ExternalSyntheticLambda0(this));
-            AnonymousClass1 r0 = new EditTextBoldCursor(context, UsersAlertBase.this) {
+            AnonymousClass2 r0 = new EditTextBoldCursor(context, UsersAlertBase.this) {
                 public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                     MotionEvent obtain = MotionEvent.obtain(motionEvent);
                     obtain.setLocation(obtain.getRawX(), obtain.getRawY() - UsersAlertBase.this.containerView.getTranslationY());

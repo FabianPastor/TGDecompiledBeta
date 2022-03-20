@@ -185,16 +185,19 @@ public class ThemeEditorView {
                 this.clearSearchImageView = imageView2;
                 imageView2.setScaleType(ImageView.ScaleType.CENTER);
                 ImageView imageView3 = this.clearSearchImageView;
-                CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2();
-                imageView3.setImageDrawable(closeProgressDrawable2);
-                closeProgressDrawable2.setSide(AndroidUtilities.dp(7.0f));
+                AnonymousClass1 r1 = new CloseProgressDrawable2(this, EditorAlert.this) {
+                    public int getCurrentColor() {
+                        return -6182737;
+                    }
+                };
+                imageView3.setImageDrawable(r1);
+                r1.setSide(AndroidUtilities.dp(7.0f));
                 this.clearSearchImageView.setScaleX(0.1f);
                 this.clearSearchImageView.setScaleY(0.1f);
                 this.clearSearchImageView.setAlpha(0.0f);
-                this.clearSearchImageView.setColorFilter(new PorterDuffColorFilter(-6182737, PorterDuff.Mode.MULTIPLY));
                 addView(this.clearSearchImageView, LayoutHelper.createFrame(36, 36.0f, 53, 14.0f, 11.0f, 14.0f, 0.0f));
                 this.clearSearchImageView.setOnClickListener(new ThemeEditorView$EditorAlert$SearchField$$ExternalSyntheticLambda0(this));
-                AnonymousClass1 r0 = new EditTextBoldCursor(context, EditorAlert.this) {
+                AnonymousClass2 r0 = new EditTextBoldCursor(context, EditorAlert.this) {
                     public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                         MotionEvent obtain = MotionEvent.obtain(motionEvent);
                         obtain.setLocation(obtain.getRawX(), obtain.getRawY() - EditorAlert.this.containerView.getTranslationY());

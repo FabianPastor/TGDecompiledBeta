@@ -3610,7 +3610,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             if (editTextEmoji != null) {
                 AndroidUtilities.hideKeyboard(editTextEmoji.getEditText());
             }
-            if (this.allowPassConfirmationAlert || this.currentAttachLayout.getSelectedItemsCount() <= 0) {
+            if (this.allowPassConfirmationAlert || this.baseFragment == null || this.currentAttachLayout.getSelectedItemsCount() <= 0) {
                 int i = 0;
                 while (true) {
                     AttachAlertLayout[] attachAlertLayoutArr = this.layouts;

@@ -5815,6 +5815,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         float f2;
         float f3;
         int childCount = this.listView.getChildCount();
+        boolean z2 = false;
         float f4 = 2.14748365E9f;
         for (int i = 0; i < childCount; i++) {
             View childAt = this.listView.getChildAt(i);
@@ -5830,10 +5831,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 f4 = (float) this.listView.getPaddingTop();
             }
         }
-        final boolean z2 = f4 <= ((float) (ActionBar.getCurrentActionBarHeight() - AndroidUtilities.dp(14.0f)));
+        final boolean z3 = f4 <= ((float) (ActionBar.getCurrentActionBarHeight() - AndroidUtilities.dp(14.0f)));
         float currentActionBarHeight = f4 + ((float) (ActionBar.getCurrentActionBarHeight() + AndroidUtilities.dp(14.0f)));
-        if ((z2 && this.actionBar.getTag() == null) || (!z2 && this.actionBar.getTag() != null)) {
-            this.actionBar.setTag(z2 ? 1 : null);
+        if ((z3 && this.actionBar.getTag() == null) || (!z3 && this.actionBar.getTag() != null)) {
+            this.actionBar.setTag(z3 ? 1 : null);
             AnimatorSet animatorSet = this.actionBarAnimation;
             if (animatorSet != null) {
                 animatorSet.cancel();
@@ -5841,12 +5842,12 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             }
             setUseLightStatusBar(this.actionBar.getTag() == null);
             float f6 = 0.9f;
-            ViewPropertyAnimator scaleX = this.actionBar.getBackButton().animate().scaleX(z2 ? 1.0f : 0.9f);
-            if (z2) {
+            ViewPropertyAnimator scaleX = this.actionBar.getBackButton().animate().scaleX(z3 ? 1.0f : 0.9f);
+            if (z3) {
                 f6 = 1.0f;
             }
             ViewPropertyAnimator scaleY = scaleX.scaleY(f6);
-            if (z2) {
+            if (z3) {
                 f = 0.0f;
             } else {
                 f = (float) (-AndroidUtilities.dp(14.0f));
@@ -5855,7 +5856,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;
             duration.setInterpolator(cubicBezierInterpolator).start();
             ViewPropertyAnimator animate = this.actionBar.getTitleTextView().animate();
-            if (z2) {
+            if (z3) {
                 f2 = 0.0f;
             } else {
                 f2 = (float) AndroidUtilities.dp(23.0f);
@@ -5870,7 +5871,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             Property property = View.TRANSLATION_Y;
             float[] fArr = new float[2];
             fArr[0] = this.actionBar.getSubtitleTextView().getTranslationY();
-            fArr[1] = z2 ? 0.0f : (float) AndroidUtilities.dp(20.0f);
+            fArr[1] = z3 ? 0.0f : (float) AndroidUtilities.dp(20.0f);
             ObjectAnimator ofFloat = ObjectAnimator.ofFloat(subtitleTextView, property, fArr);
             this.subtitleYAnimator = ofFloat;
             ofFloat.setDuration(300);
@@ -5879,12 +5880,12 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 public void onAnimationEnd(Animator animator) {
                     GroupCallActivity groupCallActivity = GroupCallActivity.this;
                     groupCallActivity.subtitleYAnimator = null;
-                    groupCallActivity.actionBar.getSubtitleTextView().setTranslationY(z2 ? 0.0f : (float) AndroidUtilities.dp(20.0f));
+                    groupCallActivity.actionBar.getSubtitleTextView().setTranslationY(z3 ? 0.0f : (float) AndroidUtilities.dp(20.0f));
                 }
             });
             this.subtitleYAnimator.start();
             ViewPropertyAnimator animate2 = this.actionBar.getAdditionalSubtitleTextView().animate();
-            if (z2) {
+            if (z3) {
                 f3 = 0.0f;
             } else {
                 f3 = (float) AndroidUtilities.dp(20.0f);
@@ -5898,17 +5899,17 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             ActionBar actionBar2 = this.actionBar;
             Property property2 = View.ALPHA;
             float[] fArr2 = new float[1];
-            fArr2[0] = z2 ? 1.0f : 0.0f;
+            fArr2[0] = z3 ? 1.0f : 0.0f;
             animatorArr[0] = ObjectAnimator.ofFloat(actionBar2, property2, fArr2);
             View view = this.actionBarBackground;
             Property property3 = View.ALPHA;
             float[] fArr3 = new float[1];
-            fArr3[0] = z2 ? 1.0f : 0.0f;
+            fArr3[0] = z3 ? 1.0f : 0.0f;
             animatorArr[1] = ObjectAnimator.ofFloat(view, property3, fArr3);
             View view2 = this.actionBarShadow;
             Property property4 = View.ALPHA;
             float[] fArr4 = new float[1];
-            if (z2) {
+            if (z3) {
                 f5 = 1.0f;
             }
             fArr4[0] = f5;
@@ -5920,7 +5921,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 }
             });
             this.actionBarAnimation.start();
-            this.renderersContainer.pipView.setClickable(!z2);
+            ImageView imageView = this.renderersContainer.pipView;
+            if (!z3 || isLandscapeMode) {
+                z2 = true;
+            }
+            imageView.setClickable(z2);
         }
         if (this.scrollOffsetY != currentActionBarHeight) {
             setScrollOffsetY(currentActionBarHeight);

@@ -1491,6 +1491,7 @@ public class DownloadController extends BaseController implements NotificationCe
                 queryFinalized3.dispose();
                 SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("DELETE FROM downloading_documents WHERE hash = ? AND id = ?");
                 for (int i = 0; i < arrayList.size(); i++) {
+                    executeFast.requery();
                     executeFast.bindInteger(1, ((DownloadingDocumentEntry) arrayList.get(i)).hash);
                     executeFast.bindLong(2, ((DownloadingDocumentEntry) arrayList.get(i)).id);
                     executeFast.step();
@@ -1677,6 +1678,7 @@ public class DownloadController extends BaseController implements NotificationCe
         try {
             SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("DELETE FROM downloading_documents WHERE hash = ? AND id = ?");
             for (int i = 0; i < arrayList.size(); i++) {
+                executeFast.requery();
                 executeFast.bindInteger(1, ((MessageObject) arrayList.get(i)).getDocument().dc_id);
                 executeFast.bindLong(2, ((MessageObject) arrayList.get(i)).getDocument().id);
                 executeFast.step();

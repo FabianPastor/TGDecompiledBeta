@@ -64,6 +64,10 @@ public class ActionBarPopupWindow extends PopupWindow {
         void onDispatchKeyEvent(KeyEvent keyEvent);
     }
 
+    public interface onSizeChangedListener {
+        void onSizeChanged();
+    }
+
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$static$0() {
     }
@@ -98,6 +102,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         public int lastStartedChild;
         protected LinearLayout linearLayout;
         private OnDispatchKeyEventListener mOnDispatchKeyEventListener;
+        private onSizeChangedListener onSizeChangedListener;
         /* access modifiers changed from: private */
         public HashMap<View, Integer> positions;
         private final Theme.ResourcesProvider resourcesProvider;
@@ -264,48 +269,61 @@ public class ActionBarPopupWindow extends PopupWindow {
 
         @Keep
         public void setBackScaleX(float f) {
-            this.backScaleX = f;
-            invalidate();
+            if (this.backScaleY != f) {
+                this.backScaleY = f;
+                this.backScaleX = f;
+                invalidate();
+                onSizeChangedListener onsizechangedlistener = this.onSizeChangedListener;
+                if (onsizechangedlistener != null) {
+                    onsizechangedlistener.onSizeChanged();
+                }
+            }
         }
 
         @Keep
         public void setBackScaleY(float f) {
-            this.backScaleY = f;
-            if (this.animationEnabled) {
-                int measuredHeight = getMeasuredHeight() - AndroidUtilities.dp(16.0f);
-                if (this.shownFromBotton) {
-                    for (int i = this.lastStartedChild; i >= 0; i--) {
-                        View itemAt = getItemAt(i);
-                        if (itemAt.getVisibility() == 0) {
-                            Integer num = this.positions.get(itemAt);
-                            if (num != null && ((float) (measuredHeight - ((num.intValue() * AndroidUtilities.dp(48.0f)) + AndroidUtilities.dp(32.0f)))) > ((float) measuredHeight) * f) {
-                                break;
-                            }
-                            this.lastStartedChild = i - 1;
-                            startChildAnimation(itemAt);
-                        }
-                    }
-                } else {
-                    int itemsCount = getItemsCount();
-                    int i2 = 0;
-                    for (int i3 = 0; i3 < itemsCount; i3++) {
-                        View itemAt2 = getItemAt(i3);
-                        if (itemAt2.getVisibility() == 0) {
-                            i2 += itemAt2.getMeasuredHeight();
-                            if (i3 >= this.lastStartedChild) {
-                                if (this.positions.get(itemAt2) != null && ((float) (i2 - AndroidUtilities.dp(24.0f))) > ((float) measuredHeight) * f) {
+            if (this.backScaleY != f) {
+                this.backScaleY = f;
+                if (this.animationEnabled) {
+                    int measuredHeight = getMeasuredHeight() - AndroidUtilities.dp(16.0f);
+                    if (this.shownFromBotton) {
+                        for (int i = this.lastStartedChild; i >= 0; i--) {
+                            View itemAt = getItemAt(i);
+                            if (itemAt.getVisibility() == 0) {
+                                Integer num = this.positions.get(itemAt);
+                                if (num != null && ((float) (measuredHeight - ((num.intValue() * AndroidUtilities.dp(48.0f)) + AndroidUtilities.dp(32.0f)))) > ((float) measuredHeight) * f) {
                                     break;
                                 }
-                                this.lastStartedChild = i3 + 1;
-                                startChildAnimation(itemAt2);
-                            } else {
-                                continue;
+                                this.lastStartedChild = i - 1;
+                                startChildAnimation(itemAt);
+                            }
+                        }
+                    } else {
+                        int itemsCount = getItemsCount();
+                        int i2 = 0;
+                        for (int i3 = 0; i3 < itemsCount; i3++) {
+                            View itemAt2 = getItemAt(i3);
+                            if (itemAt2.getVisibility() == 0) {
+                                i2 += itemAt2.getMeasuredHeight();
+                                if (i3 >= this.lastStartedChild) {
+                                    if (this.positions.get(itemAt2) != null && ((float) (i2 - AndroidUtilities.dp(24.0f))) > ((float) measuredHeight) * f) {
+                                        break;
+                                    }
+                                    this.lastStartedChild = i3 + 1;
+                                    startChildAnimation(itemAt2);
+                                } else {
+                                    continue;
+                                }
                             }
                         }
                     }
                 }
+                invalidate();
+                onSizeChangedListener onsizechangedlistener = this.onSizeChangedListener;
+                if (onsizechangedlistener != null) {
+                    onsizechangedlistener.onSizeChanged();
+                }
             }
-            invalidate();
         }
 
         public void setBackgroundDrawable(Drawable drawable) {
@@ -491,6 +509,14 @@ public class ActionBarPopupWindow extends PopupWindow {
             Theme.ResourcesProvider resourcesProvider2 = this.resourcesProvider;
             Integer color = resourcesProvider2 != null ? resourcesProvider2.getColor(str) : null;
             return color != null ? color.intValue() : Theme.getColor(str);
+        }
+
+        public void setOnSizeChangedListener(onSizeChangedListener onsizechangedlistener) {
+            this.onSizeChangedListener = onsizechangedlistener;
+        }
+
+        public int getVisibleHeight() {
+            return (int) (((float) getMeasuredHeight()) * this.backScaleY);
         }
     }
 

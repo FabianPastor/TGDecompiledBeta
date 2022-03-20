@@ -1501,4 +1501,11 @@ public class CalendarActivity extends BaseFragment {
         animateSelection();
         return false;
     }
+
+    public boolean isLightStatusBar() {
+        if (ColorUtils.calculateLuminance(Theme.getColor("windowBackgroundWhite", (boolean[]) null, true)) > 0.699999988079071d) {
+            return true;
+        }
+        return false;
+    }
 }

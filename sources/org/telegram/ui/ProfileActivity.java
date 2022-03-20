@@ -735,7 +735,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (ProfileActivity.this.previousTransitionFragment != null) {
                     Rect rect = AndroidUtilities.rectTmp2;
                     rect.set(0, 0, getMeasuredWidth(), access$1000);
-                    ProfileActivity.this.previousTransitionFragment.contentView.drawBlur(canvas, getY(), rect, ProfileActivity.this.previousTransitionFragment.getActionBar().blurScrimPaint, true);
+                    ProfileActivity.this.previousTransitionFragment.contentView.drawBlurRect(canvas, getY(), rect, ProfileActivity.this.previousTransitionFragment.getActionBar().blurScrimPaint, true);
                 }
                 this.paint.setColor(this.currentColor);
                 canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) access$1000, this.paint);
@@ -744,7 +744,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 this.paint.setColor(Theme.getColor("windowBackgroundWhite"));
                 Rect rect2 = AndroidUtilities.rectTmp2;
                 rect2.set(0, access$1000, getMeasuredWidth(), (int) access$800);
-                ProfileActivity.this.contentView.drawBlur(canvas, getY(), rect2, this.paint, true);
+                ProfileActivity.this.contentView.drawBlurRect(canvas, getY(), rect2, this.paint, true);
             }
             if (ProfileActivity.this.parentLayout != null) {
                 ProfileActivity.this.parentLayout.drawHeaderShadow(canvas, (int) (ProfileActivity.this.headerShadowAlpha * 255.0f), (int) access$800);

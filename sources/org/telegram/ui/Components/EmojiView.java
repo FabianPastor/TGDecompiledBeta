@@ -583,17 +583,21 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             this.clearSearchImageView = imageView2;
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
             ImageView imageView3 = this.clearSearchImageView;
-            CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2();
-            this.progressDrawable = closeProgressDrawable2;
-            imageView3.setImageDrawable(closeProgressDrawable2);
+            AnonymousClass1 r3 = new CloseProgressDrawable2(EmojiView.this) {
+                /* access modifiers changed from: protected */
+                public int getCurrentColor() {
+                    return EmojiView.this.getThemedColor("chat_emojiSearchIcon");
+                }
+            };
+            this.progressDrawable = r3;
+            imageView3.setImageDrawable(r3);
             this.progressDrawable.setSide(AndroidUtilities.dp(7.0f));
             this.clearSearchImageView.setScaleX(0.1f);
             this.clearSearchImageView.setScaleY(0.1f);
             this.clearSearchImageView.setAlpha(0.0f);
-            this.clearSearchImageView.setColorFilter(new PorterDuffColorFilter(EmojiView.this.getThemedColor("chat_emojiSearchIcon"), PorterDuff.Mode.MULTIPLY));
             addView(this.clearSearchImageView, LayoutHelper.createFrame(36, 36.0f, 53, 14.0f, 14.0f, 14.0f, 0.0f));
             this.clearSearchImageView.setOnClickListener(new EmojiView$SearchField$$ExternalSyntheticLambda0(this));
-            AnonymousClass1 r0 = new EditTextBoldCursor(context, EmojiView.this, i) {
+            AnonymousClass2 r0 = new EditTextBoldCursor(context, EmojiView.this, i) {
                 final /* synthetic */ int val$type;
 
                 {

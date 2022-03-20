@@ -1752,9 +1752,10 @@ public class NotificationsController extends BaseController {
                     if (instance.showBadgeMessages) {
                         if (instance.showBadgeMuted) {
                             try {
-                                int size = MessagesController.getInstance(i4).allDialogs.size();
+                                ArrayList arrayList = new ArrayList(MessagesController.getInstance(i4).allDialogs);
+                                int size = arrayList.size();
                                 for (int i5 = 0; i5 < size; i5++) {
-                                    TLRPC$Dialog tLRPC$Dialog = MessagesController.getInstance(i4).allDialogs.get(i5);
+                                    TLRPC$Dialog tLRPC$Dialog = (TLRPC$Dialog) arrayList.get(i5);
                                     if (tLRPC$Dialog == null || !DialogObject.isChatDialog(tLRPC$Dialog.id) || !ChatObject.isNotInChat(getMessagesController().getChat(Long.valueOf(-tLRPC$Dialog.id)))) {
                                         if (!(tLRPC$Dialog == null || (i2 = tLRPC$Dialog.unread_count) == 0)) {
                                             i3 += i2;

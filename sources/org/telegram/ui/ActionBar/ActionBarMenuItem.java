@@ -81,7 +81,8 @@ public class ActionBarMenuItem extends FrameLayout {
     /* access modifiers changed from: private */
     public int notificationIndex;
     protected boolean overrideMenuClick;
-    private ActionBarMenu parentMenu;
+    /* access modifiers changed from: private */
+    public ActionBarMenu parentMenu;
     /* access modifiers changed from: private */
     public ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout;
     private ActionBarPopupWindow popupWindow;
@@ -1440,10 +1441,13 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             };
             this.clearButton = r1;
-            CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2();
-            this.progressDrawable = closeProgressDrawable2;
-            r1.setImageDrawable(closeProgressDrawable2);
-            this.clearButton.setColorFilter(new PorterDuffColorFilter(this.parentMenu.parentActionBar.itemsColor, PorterDuff.Mode.MULTIPLY));
+            AnonymousClass13 r23 = new CloseProgressDrawable2() {
+                public int getCurrentColor() {
+                    return ActionBarMenuItem.this.parentMenu.parentActionBar.itemsColor;
+                }
+            };
+            this.progressDrawable = r23;
+            r1.setImageDrawable(r23);
             this.clearButton.setScaleType(ImageView.ScaleType.CENTER);
             this.clearButton.setAlpha(0.0f);
             this.clearButton.setRotation(45.0f);

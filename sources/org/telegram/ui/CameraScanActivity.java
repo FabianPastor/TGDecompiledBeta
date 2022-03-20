@@ -48,6 +48,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MrzRecognizer;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.camera.CameraSession;
 import org.telegram.messenger.camera.CameraView;
@@ -105,8 +106,7 @@ public class CameraScanActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public float qrAppearingValue = 0.0f;
     private boolean qrLoading = false;
-    /* access modifiers changed from: private */
-    public QRCodeReader qrReader = null;
+    private QRCodeReader qrReader = null;
     private int recognizeFailed = 0;
     private int recognizeIndex = 0;
     /* access modifiers changed from: private */
@@ -120,7 +120,7 @@ public class CameraScanActivity extends BaseFragment {
     private Runnable requestShot = new Runnable() {
         public void run() {
             if (CameraScanActivity.this.cameraView != null && !CameraScanActivity.this.recognized && CameraScanActivity.this.cameraView.getCameraSession() != null) {
-                CameraScanActivity.this.handler.post(new CameraScanActivity$8$$ExternalSyntheticLambda0(this));
+                CameraScanActivity.this.handler.post(new CameraScanActivity$7$$ExternalSyntheticLambda0(this));
             }
         }
 
@@ -137,8 +137,7 @@ public class CameraScanActivity extends BaseFragment {
     public TextView titleTextView;
     private float useRecognizedBounds = 0.0f;
     private SpringAnimation useRecognizedBoundsAnimator;
-    /* access modifiers changed from: private */
-    public BarcodeDetector visionQrReader = null;
+    private BarcodeDetector visionQrReader = null;
 
     public interface CameraScanActivityDelegate {
 
@@ -163,7 +162,7 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
+    public static /* synthetic */ boolean lambda$createView$1(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -244,12 +243,7 @@ public class CameraScanActivity extends BaseFragment {
     public CameraScanActivity(int i) {
         this.currentType = i;
         if (isQr()) {
-            new Thread() {
-                public void run() {
-                    QRCodeReader unused = CameraScanActivity.this.qrReader = new QRCodeReader();
-                    BarcodeDetector unused2 = CameraScanActivity.this.visionQrReader = new BarcodeDetector.Builder(ApplicationLoader.applicationContext).setBarcodeFormats(256).build();
-                }
-            }.start();
+            Utilities.globalQueue.postRunnable(new CameraScanActivity$$ExternalSyntheticLambda16(this));
         }
         int devicePerformanceClass = SharedConfig.getDevicePerformanceClass();
         if (devicePerformanceClass == 0) {
@@ -261,8 +255,10 @@ public class CameraScanActivity extends BaseFragment {
         }
     }
 
-    public void onResume() {
-        super.onResume();
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$0() {
+        this.qrReader = new QRCodeReader();
+        this.visionQrReader = new BarcodeDetector.Builder(ApplicationLoader.applicationContext).setBarcodeFormats(256).build();
     }
 
     public void onFragmentDestroy() {
@@ -296,7 +292,7 @@ public class CameraScanActivity extends BaseFragment {
         this.paint.setColor(NUM);
         this.cornerPaint.setColor(-1);
         this.cornerPaint.setStyle(Paint.Style.FILL);
-        AnonymousClass4 r2 = new ViewGroup(context2) {
+        AnonymousClass3 r2 = new ViewGroup(context2) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 int size = View.MeasureSpec.getSize(i);
@@ -375,11 +371,11 @@ public class CameraScanActivity extends BaseFragment {
                 if (!CameraScanActivity.this.isQr() || view != CameraScanActivity.this.cameraView) {
                     return drawChild;
                 }
-                RectF access$1600 = CameraScanActivity.this.getBounds();
-                int height = (int) (((float) view.getHeight()) * access$1600.centerY());
-                int width = (int) (((float) ((int) (((float) view.getWidth()) * access$1600.width()))) * ((CameraScanActivity.this.qrAppearingValue * 0.5f) + 0.5f));
-                int height2 = (int) (((float) ((int) (((float) view.getHeight()) * access$1600.height()))) * ((CameraScanActivity.this.qrAppearingValue * 0.5f) + 0.5f));
-                int width2 = ((int) (((float) view.getWidth()) * access$1600.centerX())) - (width / 2);
+                RectF access$1400 = CameraScanActivity.this.getBounds();
+                int height = (int) (((float) view.getHeight()) * access$1400.centerY());
+                int width = (int) (((float) ((int) (((float) view.getWidth()) * access$1400.width()))) * ((CameraScanActivity.this.qrAppearingValue * 0.5f) + 0.5f));
+                int height2 = (int) (((float) ((int) (((float) view.getHeight()) * access$1400.height()))) * ((CameraScanActivity.this.qrAppearingValue * 0.5f) + 0.5f));
+                int width2 = ((int) (((float) view.getWidth()) * access$1400.centerX())) - (width / 2);
                 int i = height - (height2 / 2);
                 CameraScanActivity.this.paint.setAlpha((int) ((1.0f - ((1.0f - CameraScanActivity.this.backShadowAlpha) * Math.min(1.0f, CameraScanActivity.this.qrAppearingValue))) * 255.0f));
                 float f = (float) i;
@@ -488,7 +484,7 @@ public class CameraScanActivity extends BaseFragment {
         final Paint paint2 = new Paint(1);
         paint2.setPathEffect(LinkPath.roundedEffect);
         paint2.setColor(ColorUtils.setAlphaComponent(-1, 50));
-        AnonymousClass5 r11 = new TextView(this, context2) {
+        AnonymousClass4 r11 = new TextView(this, context2) {
             LinkPath textPath;
 
             /* access modifiers changed from: protected */
@@ -616,7 +612,7 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$1(View view) {
+    public /* synthetic */ void lambda$createView$2(View view) {
         if (getParentActivity() != null) {
             if (Build.VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                 PhotoAlbumPickerActivity photoAlbumPickerActivity = new PhotoAlbumPickerActivity(PhotoAlbumPickerActivity.SELECT_TYPE_QR, false, false, (ChatActivity) null);
@@ -629,10 +625,10 @@ public class CameraScanActivity extends BaseFragment {
                                 SendMessagesHelper.SendingMediaInfo sendingMediaInfo = arrayList.get(0);
                                 if (sendingMediaInfo.path != null) {
                                     Point realScreenSize = AndroidUtilities.getRealScreenSize();
-                                    QrResult access$2600 = CameraScanActivity.this.tryReadQr((byte[]) null, (Size) null, 0, 0, 0, ImageLoader.loadBitmap(sendingMediaInfo.path, (Uri) null, (float) realScreenSize.x, (float) realScreenSize.y, true));
-                                    if (access$2600 != null) {
+                                    QrResult access$2400 = CameraScanActivity.this.tryReadQr((byte[]) null, (Size) null, 0, 0, 0, ImageLoader.loadBitmap(sendingMediaInfo.path, (Uri) null, (float) realScreenSize.x, (float) realScreenSize.y, true));
+                                    if (access$2400 != null) {
                                         if (CameraScanActivity.this.delegate != null) {
-                                            CameraScanActivity.this.delegate.didFindQr(access$2600.text);
+                                            CameraScanActivity.this.delegate.didFindQr(access$2400.text);
                                         }
                                         CameraScanActivity.this.removeSelfFromStack();
                                     }
@@ -661,7 +657,7 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$3(View view) {
+    public /* synthetic */ void lambda$createView$4(View view) {
         CameraSession cameraSession;
         CameraView cameraView2 = this.cameraView;
         if (cameraView2 != null && (cameraSession = cameraView2.getCameraSession()) != null) {
@@ -697,7 +693,7 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$createView$2(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$createView$3(ValueAnimator valueAnimator) {
         this.flashButton.invalidate();
     }
 
@@ -712,7 +708,7 @@ public class CameraScanActivity extends BaseFragment {
         this.recognizedAnimator = ofFloat;
         ofFloat.addUpdateListener(new CameraScanActivity$$ExternalSyntheticLambda0(this));
         this.recognizedAnimator.setDuration((long) (Math.abs(this.recognizedT - f) * 300.0f));
-        this.recognizedAnimator.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
+        this.recognizedAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
         this.recognizedAnimator.start();
         SpringAnimation springAnimation = this.useRecognizedBoundsAnimator;
         if (springAnimation != null) {
@@ -728,7 +724,7 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateRecognized$4(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$updateRecognized$5(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.recognizedT = floatValue;
         this.titleTextView.setAlpha(1.0f - floatValue);
@@ -738,7 +734,7 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateRecognized$5(DynamicAnimation dynamicAnimation, float f, float f2) {
+    public /* synthetic */ void lambda$updateRecognized$6(DynamicAnimation dynamicAnimation, float f, float f2) {
         this.useRecognizedBounds = this.recognized ? f / 500.0f : 1.0f - (f / 500.0f);
         this.fragmentView.invalidate();
     }
@@ -752,7 +748,7 @@ public class CameraScanActivity extends BaseFragment {
             this.cameraView = cameraView2;
             cameraView2.setUseMaxPreview(true);
             this.cameraView.setOptimizeForBarcode(true);
-            this.cameraView.setDelegate(new CameraScanActivity$$ExternalSyntheticLambda18(this));
+            this.cameraView.setDelegate(new CameraScanActivity$$ExternalSyntheticLambda19(this));
             ((ViewGroup) this.fragmentView).addView(this.cameraView, 0, LayoutHelper.createFrame(-1, -1.0f));
             if (this.currentType == 0 && (textView = this.recognizedMrzView) != null) {
                 this.cameraView.addView(textView);
@@ -761,7 +757,7 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$initCameraView$8() {
+    public /* synthetic */ void lambda$initCameraView$9() {
         startRecognizing();
         if (isQr()) {
             SpringAnimation springAnimation = this.qrAppearing;
@@ -781,13 +777,13 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$initCameraView$6(DynamicAnimation dynamicAnimation, float f, float f2) {
+    public /* synthetic */ void lambda$initCameraView$7(DynamicAnimation dynamicAnimation, float f, float f2) {
         this.qrAppearingValue = f / 500.0f;
         this.fragmentView.invalidate();
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$initCameraView$7(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+    public /* synthetic */ void lambda$initCameraView$8(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
         SpringAnimation springAnimation = this.qrAppearing;
         if (springAnimation != null) {
             springAnimation.cancel();
@@ -899,11 +895,11 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     private void onNoQrFound() {
-        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda15(this));
+        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda10(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onNoQrFound$9() {
+    public /* synthetic */ void lambda$onNoQrFound$10() {
         if (this.recognizedMrzView.getTag() != null) {
             this.recognizedMrzView.setTag((Object) null);
             this.recognizedMrzView.animate().setDuration(200).alpha(0.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
@@ -920,7 +916,7 @@ public class CameraScanActivity extends BaseFragment {
                     if (recognize != null && !TextUtils.isEmpty(recognize.firstName) && !TextUtils.isEmpty(recognize.lastName) && !TextUtils.isEmpty(recognize.number) && recognize.birthDay != 0 && ((recognize.expiryDay != 0 || recognize.doesNotExpire) && recognize.gender != 0)) {
                         this.recognized = true;
                         CameraController.getInstance().stopPreview(this.cameraView.getCameraSession());
-                        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda16(this, recognize));
+                        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda17(this, recognize));
                         return;
                     }
                 } else {
@@ -936,11 +932,11 @@ public class CameraScanActivity extends BaseFragment {
                         this.recognizedText = str;
                         if (!z) {
                             this.recognized = true;
-                            this.qrLoading = this.delegate.processQr(str, new CameraScanActivity$$ExternalSyntheticLambda10(this));
+                            this.qrLoading = this.delegate.processQr(str, new CameraScanActivity$$ExternalSyntheticLambda12(this));
                             this.recognizedStart = SystemClock.elapsedRealtime();
-                            AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda14(this));
+                            AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda15(this));
                         }
-                        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda17(this, tryReadQr));
+                        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda18(this, tryReadQr));
                     } else if (z) {
                         int i = this.recognizeFailed + 1;
                         this.recognizeFailed = i;
@@ -948,7 +944,7 @@ public class CameraScanActivity extends BaseFragment {
                             this.recognized = false;
                             this.recognizeIndex = 0;
                             this.recognizedText = null;
-                            AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda14(this));
+                            AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda15(this));
                             AndroidUtilities.runOnUIThread(this.requestShot, 500);
                             return;
                         }
@@ -958,9 +954,9 @@ public class CameraScanActivity extends BaseFragment {
                         if (!(cameraView2 == null || cameraView2.getCameraSession() == null)) {
                             CameraController.getInstance().stopPreview(this.cameraView.getCameraSession());
                         }
-                        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda12(this));
+                        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda13(this));
                     } else if (this.recognized) {
-                        this.handler.postDelayed(new CameraScanActivity$$ExternalSyntheticLambda11(this), Math.max(16, ((long) (1000 / this.sps)) - ((long) this.averageProcessTime)));
+                        this.handler.postDelayed(new CameraScanActivity$$ExternalSyntheticLambda14(this), Math.max(16, ((long) (1000 / this.sps)) - ((long) this.averageProcessTime)));
                     }
                 }
             } catch (Throwable unused) {
@@ -980,7 +976,7 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processShot$10(MrzRecognizer.Result result) {
+    public /* synthetic */ void lambda$processShot$11(MrzRecognizer.Result result) {
         this.recognizedMrzView.setText(result.rawMRZ);
         this.recognizedMrzView.animate().setDuration(200).alpha(1.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
         CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
@@ -991,16 +987,16 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processShot$12() {
+    public /* synthetic */ void lambda$processShot$13() {
         CameraView cameraView2 = this.cameraView;
         if (!(cameraView2 == null || cameraView2.getCameraSession() == null)) {
             CameraController.getInstance().stopPreview(this.cameraView.getCameraSession());
         }
-        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda13(this));
+        AndroidUtilities.runOnUIThread(new CameraScanActivity$$ExternalSyntheticLambda11(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processShot$11() {
+    public /* synthetic */ void lambda$processShot$12() {
         CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
         if (cameraScanActivityDelegate != null) {
             cameraScanActivityDelegate.didFindQr(this.recognizedText);
@@ -1009,12 +1005,12 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processShot$13(QrResult qrResult) {
+    public /* synthetic */ void lambda$processShot$14(QrResult qrResult) {
         updateRecognizedBounds(qrResult.bounds);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processShot$14() {
+    public /* synthetic */ void lambda$processShot$15() {
         CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
         if (cameraScanActivityDelegate != null) {
             cameraScanActivityDelegate.didFindQr(this.recognizedText);
@@ -1023,7 +1019,7 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$processShot$15() {
+    public /* synthetic */ void lambda$processShot$16() {
         CameraView cameraView2 = this.cameraView;
         if (cameraView2 != null) {
             processShot(cameraView2.getTextureView().getBitmap());

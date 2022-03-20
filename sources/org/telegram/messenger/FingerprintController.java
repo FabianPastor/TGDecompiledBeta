@@ -10,6 +10,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.util.Locale;
 import javax.crypto.Cipher;
+import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
 
 public class FingerprintController {
     private static final String KEY_ALIAS = "tmessages_passcode";
@@ -84,7 +85,7 @@ public class FingerprintController {
     }
 
     public static void checkKeyReady(boolean z) {
-        if (!isKeyReady() && AndroidUtilities.isKeyguardSecure()) {
+        if (!isKeyReady() && AndroidUtilities.isKeyguardSecure() && FingerprintManagerCompat.from(ApplicationLoader.applicationContext).isHardwareDetected() && FingerprintManagerCompat.from(ApplicationLoader.applicationContext).hasEnrolledFingerprints()) {
             Utilities.globalQueue.postRunnable(new FingerprintController$$ExternalSyntheticLambda1(z));
         }
     }

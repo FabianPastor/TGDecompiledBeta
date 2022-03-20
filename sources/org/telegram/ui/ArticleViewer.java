@@ -4862,8 +4862,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
         };
         this.clearButton = r04;
-        r04.setImageDrawable(new CloseProgressDrawable2());
-        this.clearButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
+        r04.setImageDrawable(new CloseProgressDrawable2(this) {
+            /* access modifiers changed from: protected */
+            public int getCurrentColor() {
+                return Theme.getColor("windowBackgroundWhiteBlackText");
+            }
+        });
         this.clearButton.setScaleType(ImageView.ScaleType.CENTER);
         this.clearButton.setAlpha(0.0f);
         this.clearButton.setRotation(45.0f);
@@ -4886,15 +4890,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.headerView.addView(this.backButton, LayoutHelper.createFrame(54, 56.0f));
         this.backButton.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda8(this));
         this.backButton.setContentDescription(LocaleController.getString("AccDescrGoBack", NUM));
-        AnonymousClass15 r05 = new ActionBarMenuItem(this.parentActivity, (ActionBarMenu) null, NUM, -5000269) {
+        AnonymousClass16 r12 = r0;
+        AnonymousClass16 r05 = new ActionBarMenuItem(this.parentActivity, (ActionBarMenu) null, NUM, -5000269) {
             public void toggleSubMenu() {
                 super.toggleSubMenu();
                 ArticleViewer.this.listView[0].stopScroll();
                 ArticleViewer.this.checkScrollAnimated();
             }
         };
-        this.menuButton = r05;
-        r05.setLayoutInScreen(true);
+        this.menuButton = r12;
+        r12.setLayoutInScreen(true);
         this.menuButton.setDuplicateParentStateEnabled(false);
         this.menuButton.setClickable(true);
         this.menuButton.setIcon(NUM);
@@ -4911,7 +4916,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.menuContainer.addView(this.progressView, LayoutHelper.createFrame(48, 56.0f));
         this.menuButton.setOnClickListener(new ArticleViewer$$ExternalSyntheticLambda5(this));
         this.menuButton.setDelegate(new ArticleViewer$$ExternalSyntheticLambda37(this));
-        AnonymousClass16 r06 = new FrameLayout(this, this.parentActivity) {
+        AnonymousClass17 r06 = new FrameLayout(this, this.parentActivity) {
             public void onDraw(Canvas canvas) {
                 int intrinsicHeight = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                 Theme.chat_composeShadowDrawable.setBounds(0, 0, getMeasuredWidth(), intrinsicHeight);
@@ -6102,7 +6107,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r12.setDuration(r13)
             android.view.animation.DecelerateInterpolator r13 = r11.interpolator
             r12.setInterpolator(r13)
-            org.telegram.ui.ArticleViewer$22 r13 = new org.telegram.ui.ArticleViewer$22
+            org.telegram.ui.ArticleViewer$23 r13 = new org.telegram.ui.ArticleViewer$23
             r13.<init>()
             r12.addListener(r13)
             long r13 = java.lang.System.currentTimeMillis()

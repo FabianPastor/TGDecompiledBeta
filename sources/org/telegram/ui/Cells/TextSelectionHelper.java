@@ -114,7 +114,6 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     protected Paint selectionHandlePaint;
     protected Paint selectionPaint;
     protected Path selectionPath;
-    protected PathCopyTo selectionPathMirror;
     protected int selectionStart;
     protected boolean showActionsAsPopupAlways;
     /* access modifiers changed from: private */
@@ -123,6 +122,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     public RectF startArea;
     final Runnable startSelectionRunnable;
     protected Path tempPath;
+    private final ScalablePath tempPath2;
     protected final Rect textArea;
     private final ActionMode.Callback textSelectActionCallback;
     protected TextSelectionHelper<Cell>.TextSelectionOverlay textSelectionOverlay;
@@ -236,7 +236,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         this.selectionPaint = new Paint();
         this.selectionHandlePaint = new Paint();
         this.selectionPath = new Path();
-        this.selectionPathMirror = new PathCopyTo(this.selectionPath);
+        new PathCopyTo(this.selectionPath);
         this.selectionStart = -1;
         this.selectionEnd = -1;
         this.textSelectActionCallback = createActionCallback();
@@ -420,6 +420,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             }
         };
         this.tempPath = new Path();
+        this.tempPath2 = new ScalablePath();
         this.longpressDelay = ViewConfiguration.getLongPressTimeout();
         this.touchSlop = ViewConfiguration.get(ApplicationLoader.applicationContext).getScaledTouchSlop();
         Paint paint = this.selectionPaint;
@@ -2057,12 +2058,13 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         float f;
         Canvas canvas2 = canvas;
         StaticLayout staticLayout2 = staticLayout;
-        int i3 = i2;
+        int i3 = i;
+        int i4 = i2;
         this.selectionPath.reset();
         int lineForOffset = staticLayout.getLineForOffset(i);
-        int lineForOffset2 = staticLayout2.getLineForOffset(i3);
+        int lineForOffset2 = staticLayout2.getLineForOffset(i4);
         if (lineForOffset == lineForOffset2) {
-            drawLine(canvas, staticLayout, lineForOffset, i, i2);
+            drawLine(staticLayout2, lineForOffset, i3, i4);
         } else {
             int lineEnd = staticLayout2.getLineEnd(lineForOffset);
             if (staticLayout2.getParagraphDirection(lineForOffset) != -1 && lineEnd > 0) {
@@ -2070,37 +2072,34 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 CharSequence text = staticLayout.getText();
                 int primaryHorizontal = (int) staticLayout2.getPrimaryHorizontal(lineEnd);
                 if (staticLayout2.isRtlCharAt(lineEnd)) {
-                    int i4 = lineEnd;
-                    while (staticLayout2.isRtlCharAt(i4) && i4 != 0) {
-                        i4--;
+                    int i5 = lineEnd;
+                    while (staticLayout2.isRtlCharAt(i5) && i5 != 0) {
+                        i5--;
                     }
-                    f = staticLayout2.getLineForOffset(i4) == staticLayout2.getLineForOffset(lineEnd) ? staticLayout2.getPrimaryHorizontal(i4 + 1) : staticLayout2.getLineLeft(lineForOffset);
+                    f = staticLayout2.getLineForOffset(i5) == staticLayout2.getLineForOffset(lineEnd) ? staticLayout2.getPrimaryHorizontal(i5 + 1) : staticLayout2.getLineLeft(lineForOffset);
                 } else {
                     f = staticLayout2.getLineRight(lineForOffset);
                 }
-                int i5 = (int) f;
-                int min = Math.min(primaryHorizontal, i5);
-                int max = Math.max(primaryHorizontal, i5);
+                int i6 = (int) f;
+                int min = Math.min(primaryHorizontal, i6);
+                int max = Math.max(primaryHorizontal, i6);
                 if (lineEnd > 0 && lineEnd < text.length() && !Character.isWhitespace(text.charAt(lineEnd - 1))) {
                     this.selectionPath.addRect((float) min, (float) staticLayout2.getLineTop(lineForOffset), (float) max, (float) staticLayout2.getLineBottom(lineForOffset), Path.Direction.CW);
                 }
             }
-            int i6 = lineEnd;
-            Canvas canvas3 = canvas;
-            StaticLayout staticLayout3 = staticLayout;
-            drawLine(canvas3, staticLayout3, lineForOffset, i, i6);
-            drawLine(canvas3, staticLayout3, lineForOffset2, staticLayout2.getLineStart(lineForOffset2), i2);
+            drawLine(staticLayout2, lineForOffset, i3, lineEnd);
+            drawLine(staticLayout2, lineForOffset2, staticLayout2.getLineStart(lineForOffset2), i4);
             for (int i7 = lineForOffset + 1; i7 < lineForOffset2; i7++) {
                 int lineLeft = (int) staticLayout2.getLineLeft(i7);
                 int lineRight = (int) staticLayout2.getLineRight(i7);
-                this.selectionPath.addRect((float) Math.min(lineLeft, lineRight), (float) staticLayout2.getLineTop(i7), (float) Math.max(lineLeft, lineRight), (float) staticLayout2.getLineBottom(i7), Path.Direction.CW);
+                this.selectionPath.addRect((float) Math.min(lineLeft, lineRight), (float) (staticLayout2.getLineTop(i7) - 1), (float) Math.max(lineLeft, lineRight), (float) (staticLayout2.getLineBottom(i7) + 1), Path.Direction.CW);
             }
         }
         canvas2.drawPath(this.selectionPath, this.selectionPaint);
-        int i8 = (int) (this.cornerRadius * 1.65f);
+        int i8 = (int) (this.cornerRadius * 1.66f);
         float primaryHorizontal2 = staticLayout.getPrimaryHorizontal(i);
-        float primaryHorizontal3 = staticLayout2.getPrimaryHorizontal(i3);
-        if (i + 1 < staticLayout2.getLineEnd(lineForOffset) && (lineForOffset == lineForOffset2 || (lineForOffset + 1 == lineForOffset2 && primaryHorizontal2 > primaryHorizontal3))) {
+        float primaryHorizontal3 = staticLayout2.getPrimaryHorizontal(i4);
+        if (i3 + 1 < staticLayout2.getLineEnd(lineForOffset) && (lineForOffset == lineForOffset2 || (lineForOffset + 1 == lineForOffset2 && primaryHorizontal2 > primaryHorizontal3))) {
             float lineBottom = (float) staticLayout2.getLineBottom(lineForOffset);
             this.tempPath.reset();
             float f2 = (float) i8;
@@ -2114,7 +2113,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             this.tempPath.arcTo(rectF, 180.0f, -90.0f);
             canvas2.drawPath(this.tempPath, this.selectionHandlePaint);
         }
-        if (staticLayout2.getLineStart(lineForOffset2) < i3) {
+        if (staticLayout2.getLineStart(lineForOffset2) < i4) {
             float lineBottom2 = (float) staticLayout2.getLineBottom(lineForOffset2);
             this.tempPath.reset();
             float f5 = (float) i8;
@@ -2130,8 +2129,17 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         }
     }
 
-    private void drawLine(Canvas canvas, StaticLayout staticLayout, int i, int i2, int i3) {
-        staticLayout.getSelectionPath(i2, i3, this.selectionPathMirror);
+    private void drawLine(StaticLayout staticLayout, int i, int i2, int i3) {
+        this.tempPath2.reset();
+        staticLayout.getSelectionPath(i2, i3, this.tempPath2);
+        if (this.tempPath2.lastBottom < ((float) staticLayout.getLineBottom(i))) {
+            int lineTop = staticLayout.getLineTop(i);
+            ScalablePath scalablePath = this.tempPath2;
+            float f = (float) lineTop;
+            scalablePath.scaleY(((float) (staticLayout.getLineBottom(i) - lineTop)) / (scalablePath.lastBottom - f), f, this.selectionPath);
+            return;
+        }
+        this.tempPath2.scaleY(1.0f, 0.0f, this.selectionPath);
     }
 
     private static class LayoutBlock {
@@ -3291,6 +3299,52 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             super.addRect(f, f2, f3, f4, direction);
             if (f4 > this.lastBottom) {
                 this.lastBottom = f4;
+            }
+        }
+    }
+
+    private static class ScalablePath extends Path {
+        float lastBottom;
+        private ArrayList<RectF> rects;
+        private int rectsCount;
+
+        private ScalablePath() {
+            this.lastBottom = 0.0f;
+            this.rects = new ArrayList<>(1);
+            this.rectsCount = 0;
+        }
+
+        public void reset() {
+            super.reset();
+            this.rects.clear();
+            this.rectsCount = 0;
+            this.lastBottom = 0.0f;
+        }
+
+        public void addRect(float f, float f2, float f3, float f4, Path.Direction direction) {
+            this.rects.add(new RectF(f, f2, f3, f4));
+            this.rectsCount++;
+            super.addRect(f, f2, f3, f4, direction);
+            if (f4 > this.lastBottom) {
+                this.lastBottom = f4;
+            }
+        }
+
+        public void scaleY(float f, float f2, Path path) {
+            int i = 0;
+            if (path != null) {
+                while (i < this.rectsCount) {
+                    RectF rectF = this.rects.get(i);
+                    path.addRect(rectF.left, ((rectF.top - f2) * f) + f2, rectF.right, ((rectF.bottom - f2) * f) + f2, Path.Direction.CW);
+                    i++;
+                }
+                return;
+            }
+            super.reset();
+            while (i < this.rectsCount) {
+                RectF rectF2 = this.rects.get(i);
+                super.addRect(rectF2.left, ((rectF2.top - f2) * f) + f2, rectF2.right, ((rectF2.bottom - f2) * f) + f2, Path.Direction.CW);
+                i++;
             }
         }
     }

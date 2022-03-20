@@ -10,6 +10,7 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.graphics.Typeface;
@@ -69,7 +70,8 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     /* access modifiers changed from: private */
     public float changeDayNightViewProgress;
     private final ChatActivity chatActivity;
-    private final RLottieDrawable darkThemeDrawable;
+    /* access modifiers changed from: private */
+    public final RLottieDrawable darkThemeDrawable;
     /* access modifiers changed from: private */
     public final RLottieImageView darkThemeView;
     private boolean forceDark;
@@ -169,16 +171,25 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             org.telegram.ui.Components.RLottieDrawable r9 = new org.telegram.ui.Components.RLottieDrawable
             r12 = 2131558518(0x7f0d0076, float:1.8742354E38)
             java.lang.String r13 = "NUM"
-            r16 = 1
+            r16 = 0
             r17 = 0
             r11 = r9
             r14 = r15
             r11.<init>(r12, r13, r14, r15, r16, r17)
             r0.darkThemeDrawable = r9
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r11 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
+            boolean r11 = r11.isDark()
+            r11 = r11 ^ r3
+            r0.forceDark = r11
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r11 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
+            boolean r11 = r11.isDark()
+            r0.setForceDark(r11, r5)
+            r9.setAllowDecodeSingleFrame(r3)
             r9.setPlayInDirectionOfCustomEndFrame(r3)
-            r9.beginApplyLayerColors()
-            r0.setDarkButtonColor(r8)
-            r9.commitApplyLayerColors()
+            android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
+            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r11.<init>(r8, r12)
+            r9.setColorFilter(r11)
             org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
             android.content.Context r11 = r20.getContext()
             r8.<init>(r11)
@@ -198,13 +209,6 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r17 = 0
             android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
             r4.addView(r8, r9)
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
-            boolean r8 = r8.isDark()
-            r8 = r8 ^ r3
-            r0.forceDark = r8
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
-            boolean r8 = r8.isDark()
-            r0.setForceDark(r8, r5)
             org.telegram.ui.Components.ChatThemeBottomSheet$1 r8 = new org.telegram.ui.Components.ChatThemeBottomSheet$1
             android.content.Context r9 = r20.getContext()
             r8.<init>(r0, r9)
@@ -243,10 +247,8 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r11 = -1
             r12 = 1120927744(0x42d00000, float:104.0)
             r13 = 8388611(0x800003, float:1.1754948E-38)
-            r14 = 0
             r15 = 1110441984(0x42300000, float:44.0)
             r16 = 0
-            r17 = 0
             android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
             r4.addView(r2, r9)
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
@@ -292,14 +294,14 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             r2.setSingleLine(r3)
             android.widget.TextView r2 = r0.resetTextView
             org.telegram.ui.ActionBar.EmojiThemes r1 = r22.getCurrentTheme()
-            if (r1 != 0) goto L_0x020c
+            if (r1 != 0) goto L_0x020d
             r1 = 2131625359(0x7f0e058f, float:1.8877924E38)
             java.lang.String r6 = "DoNoSetTheme"
-            goto L_0x0211
-        L_0x020c:
+            goto L_0x0212
+        L_0x020d:
             r1 = 2131624901(0x7f0e03c5, float:1.8876995E38)
             java.lang.String r6 = "ChatResetTheme"
-        L_0x0211:
+        L_0x0212:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             r2.setText(r1)
             android.widget.TextView r1 = r0.resetTextView
@@ -533,10 +535,9 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                     ChatThemeBottomSheet.this.onAnimationStart();
                     this.isAnimationStarted = true;
                 }
+                ChatThemeBottomSheet.this.darkThemeDrawable.setColorFilter(new PorterDuffColorFilter(ChatThemeBottomSheet.this.getThemedColor("featuredStickers_addButton"), PorterDuff.Mode.MULTIPLY));
                 ChatThemeBottomSheet chatThemeBottomSheet = ChatThemeBottomSheet.this;
-                chatThemeBottomSheet.setDarkButtonColor(chatThemeBottomSheet.getThemedColor("featuredStickers_addButton"));
-                ChatThemeBottomSheet chatThemeBottomSheet2 = ChatThemeBottomSheet.this;
-                chatThemeBottomSheet2.setOverlayNavBarColor(chatThemeBottomSheet2.getThemedColor("dialogBackground"));
+                chatThemeBottomSheet.setOverlayNavBarColor(chatThemeBottomSheet.getThemedColor("dialogBackground"));
                 if (ChatThemeBottomSheet.this.isLightDarkChangeAnimation) {
                     ChatThemeBottomSheet.this.setItemsAnimationProgress(f);
                 }
@@ -758,14 +759,6 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         this.isLightDarkChangeAnimation = false;
     }
 
-    /* access modifiers changed from: private */
-    public void setDarkButtonColor(int i) {
-        this.darkThemeDrawable.setLayerColor("Sunny.**", i);
-        this.darkThemeDrawable.setLayerColor("Path.**", i);
-        this.darkThemeDrawable.setLayerColor("Path 10.**", i);
-        this.darkThemeDrawable.setLayerColor("Path 11.**", i);
-    }
-
     private void setForceDark(boolean z, boolean z2) {
         this.useLightNavBar = z;
         this.useLightStatusBar = z;
@@ -778,12 +771,20 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                     i = rLottieDrawable.getFramesCount();
                 }
                 rLottieDrawable.setCustomEndFrame(i);
-                this.darkThemeView.playAnimation();
+                RLottieImageView rLottieImageView = this.darkThemeView;
+                if (rLottieImageView != null) {
+                    rLottieImageView.playAnimation();
+                    return;
+                }
                 return;
             }
-            RLottieDrawable rLottieDrawable2 = this.darkThemeDrawable;
-            rLottieDrawable2.setCurrentFrame(z ? rLottieDrawable2.getFramesCount() - 1 : 0, false, true);
-            this.darkThemeView.invalidate();
+            int framesCount = z ? this.darkThemeDrawable.getFramesCount() - 1 : 0;
+            this.darkThemeDrawable.setCurrentFrame(framesCount, false, true);
+            this.darkThemeDrawable.setCustomEndFrame(framesCount);
+            RLottieImageView rLottieImageView2 = this.darkThemeView;
+            if (rLottieImageView2 != null) {
+                rLottieImageView2.invalidate();
+            }
         }
     }
 

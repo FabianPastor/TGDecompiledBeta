@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
 import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Components.EmptyStubSpan;
 import org.telegram.ui.Components.StaticLayoutEx;
@@ -73,6 +74,7 @@ public class SimpleTextView extends View {
     private TextPaint textPaint = new TextPaint(1);
     private int textWidth;
     private int totalWidth;
+    private boolean usaAlphaForEmoji;
     private boolean wasLayout;
     private Drawable wrapBackgroundDrawable;
 
@@ -658,6 +660,7 @@ public class SimpleTextView extends View {
             }
         }
         if (this.layout != null) {
+            Emoji.emojiDrawingUseAlpha = this.usaAlphaForEmoji;
             if (this.wrapBackgroundDrawable != null) {
                 int i19 = this.textWidth;
                 int i20 = ((int) (((float) (this.offsetX + i)) - this.scrollingOffset)) + (i19 / 2);
@@ -722,6 +725,7 @@ public class SimpleTextView extends View {
                 canvas.restore();
             }
             updateScrollAnimation();
+            Emoji.emojiDrawingUseAlpha = true;
         }
         if (z) {
             canvas.restoreToCount(i6);

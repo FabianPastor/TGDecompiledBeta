@@ -358,30 +358,33 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             this.searchIconImageView = imageView;
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             this.searchIconImageView.setImageResource(NUM);
-            String str = "dialogSearchIcon";
-            this.searchIconImageView.setColorFilter(new PorterDuffColorFilter(ShareAlert.this.getThemedColor(ShareAlert.this.darkTheme ? "voipgroup_mutedIcon" : str), PorterDuff.Mode.MULTIPLY));
+            this.searchIconImageView.setColorFilter(new PorterDuffColorFilter(ShareAlert.this.getThemedColor(ShareAlert.this.darkTheme ? "voipgroup_mutedIcon" : "dialogSearchIcon"), PorterDuff.Mode.MULTIPLY));
             addView(this.searchIconImageView, LayoutHelper.createFrame(36, 36.0f, 51, 16.0f, 11.0f, 0.0f, 0.0f));
             ImageView imageView2 = new ImageView(context);
             this.clearSearchImageView = imageView2;
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
             ImageView imageView3 = this.clearSearchImageView;
-            CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2();
-            this.progressDrawable = closeProgressDrawable2;
-            imageView3.setImageDrawable(closeProgressDrawable2);
+            AnonymousClass1 r1 = new CloseProgressDrawable2(ShareAlert.this) {
+                /* access modifiers changed from: protected */
+                public int getCurrentColor() {
+                    ShareAlert shareAlert = ShareAlert.this;
+                    return shareAlert.getThemedColor(shareAlert.darkTheme ? "voipgroup_searchPlaceholder" : "dialogSearchIcon");
+                }
+            };
+            this.progressDrawable = r1;
+            imageView3.setImageDrawable(r1);
             this.progressDrawable.setSide(AndroidUtilities.dp(7.0f));
             this.clearSearchImageView.setScaleX(0.1f);
             this.clearSearchImageView.setScaleY(0.1f);
             this.clearSearchImageView.setAlpha(0.0f);
-            String str2 = "voipgroup_searchPlaceholder";
-            this.clearSearchImageView.setColorFilter(new PorterDuffColorFilter(ShareAlert.this.getThemedColor(ShareAlert.this.darkTheme ? str2 : str), PorterDuff.Mode.MULTIPLY));
             addView(this.clearSearchImageView, LayoutHelper.createFrame(36, 36.0f, 53, 14.0f, 11.0f, 14.0f, 0.0f));
             this.clearSearchImageView.setOnClickListener(new ShareAlert$SearchField$$ExternalSyntheticLambda0(this));
             EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context);
             this.searchEditText = editTextBoldCursor;
             editTextBoldCursor.setTextSize(1, 16.0f);
-            this.searchEditText.setHintTextColor(ShareAlert.this.getThemedColor(!ShareAlert.this.darkTheme ? "dialogSearchHint" : str2));
-            String str3 = "voipgroup_searchText";
-            this.searchEditText.setTextColor(ShareAlert.this.getThemedColor(ShareAlert.this.darkTheme ? str3 : "dialogSearchText"));
+            this.searchEditText.setHintTextColor(ShareAlert.this.getThemedColor(ShareAlert.this.darkTheme ? "voipgroup_searchPlaceholder" : "dialogSearchHint"));
+            String str = "voipgroup_searchText";
+            this.searchEditText.setTextColor(ShareAlert.this.getThemedColor(ShareAlert.this.darkTheme ? str : "dialogSearchText"));
             this.searchEditText.setBackgroundDrawable((Drawable) null);
             this.searchEditText.setPadding(0, 0, 0, 0);
             this.searchEditText.setMaxLines(1);
@@ -389,7 +392,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             this.searchEditText.setSingleLine(true);
             this.searchEditText.setImeOptions(NUM);
             this.searchEditText.setHint(LocaleController.getString("ShareSendTo", NUM));
-            this.searchEditText.setCursorColor(ShareAlert.this.getThemedColor(!ShareAlert.this.darkTheme ? "featuredStickers_addedIcon" : str3));
+            this.searchEditText.setCursorColor(ShareAlert.this.getThemedColor(!ShareAlert.this.darkTheme ? "featuredStickers_addedIcon" : str));
             this.searchEditText.setCursorSize(AndroidUtilities.dp(20.0f));
             this.searchEditText.setCursorWidth(1.5f);
             addView(this.searchEditText, LayoutHelper.createFrame(-1, 40.0f, 51, 54.0f, 9.0f, 46.0f, 0.0f));

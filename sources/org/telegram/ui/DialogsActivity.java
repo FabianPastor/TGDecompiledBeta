@@ -766,7 +766,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 rect.set(0, i2, getMeasuredWidth(), i3);
                 int i4 = i3;
                 Rect rect2 = rect;
-                drawBlur(canvas, 0.0f, rect, DialogsActivity.this.searchAnimationProgress == 1.0f ? this.actionBarSearchPaint : DialogsActivity.this.actionBarDefaultPaint, true);
+                drawBlurRect(canvas, 0.0f, rect, DialogsActivity.this.searchAnimationProgress == 1.0f ? this.actionBarSearchPaint : DialogsActivity.this.actionBarDefaultPaint, true);
                 if (DialogsActivity.this.searchAnimationProgress > 0.0f && DialogsActivity.this.searchAnimationProgress < 1.0f) {
                     Paint paint = this.actionBarSearchPaint;
                     if (DialogsActivity.this.folderId != 0) {
@@ -778,12 +778,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         canvas2.clipRect(0, i2, getMeasuredWidth(), i4);
                         float measuredWidth = (float) (getMeasuredWidth() - AndroidUtilities.dp(24.0f));
                         int i5 = DialogsActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0;
-                        canvas2.drawCircle(measuredWidth, ((float) i5) + (((float) (DialogsActivity.this.actionBar.getMeasuredHeight() - i5)) / 2.0f), ((float) getMeasuredWidth()) * 1.3f * DialogsActivity.this.searchAnimationProgress, this.actionBarSearchPaint);
+                        drawBlurCircle(canvas, 0.0f, measuredWidth, ((float) i5) + (((float) (DialogsActivity.this.actionBar.getMeasuredHeight() - i5)) / 2.0f), ((float) getMeasuredWidth()) * 1.3f * DialogsActivity.this.searchAnimationProgress, this.actionBarSearchPaint, true);
                         canvas.restore();
                     } else {
                         Rect rect3 = rect2;
                         rect3.set(0, i2, getMeasuredWidth(), i4);
-                        drawBlur(canvas, 0.0f, rect3, this.actionBarSearchPaint, true);
+                        drawBlurRect(canvas, 0.0f, rect3, this.actionBarSearchPaint, true);
                     }
                     if (DialogsActivity.this.filterTabsView != null && DialogsActivity.this.filterTabsView.getVisibility() == 0) {
                         DialogsActivity.this.filterTabsView.setTranslationY((float) (actionBarFullHeight - (DialogsActivity.this.actionBar.getHeight() + DialogsActivity.this.filterTabsView.getMeasuredHeight())));
@@ -812,11 +812,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     paint2.setColor(ColorUtils.blendARGB(Theme.getColor(str), Theme.getColor("windowBackgroundWhite"), DialogsActivity.this.progressToActionMode));
                     Rect rect4 = AndroidUtilities.rectTmp2;
                     rect4.set(0, i2, getMeasuredWidth(), i2 + actionBarFullHeight);
-                    drawBlur(canvas, 0.0f, rect4, this.actionBarSearchPaint, true);
+                    drawBlurRect(canvas, 0.0f, rect4, this.actionBarSearchPaint, true);
                 } else {
                     Rect rect5 = AndroidUtilities.rectTmp2;
                     rect5.set(0, i2, getMeasuredWidth(), i2 + actionBarFullHeight);
-                    drawBlur(canvas, 0.0f, rect5, DialogsActivity.this.actionBarDefaultPaint, true);
+                    drawBlurRect(canvas, 0.0f, rect5, DialogsActivity.this.actionBarDefaultPaint, true);
                 }
             }
             float unused = DialogsActivity.this.tabsYOffset = 0.0f;
@@ -3711,9 +3711,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 public void didFinishChatCreation(GroupCreateFinalActivity groupCreateFinalActivity, long j) {
                     ArrayList arrayList = new ArrayList();
                     arrayList.add(Long.valueOf(-j));
-                    DialogsActivityDelegate access$24200 = DialogsActivity.this.delegate;
+                    DialogsActivityDelegate access$24400 = DialogsActivity.this.delegate;
                     DialogsActivity.this.removeSelfFromStack();
-                    access$24200.didSelectDialogs(DialogsActivity.this, arrayList, (CharSequence) null, true);
+                    access$24400.didSelectDialogs(DialogsActivity.this, arrayList, (CharSequence) null, true);
                 }
             });
             presentFragment(groupCreateFinalActivity);
@@ -4112,11 +4112,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 dialogsActivity4.performSelectedDialogsAction(dialogsActivity4.selectedDialogs, i2, true);
                             }
                         } else if (DialogsActivity.this.getParentActivity() != null) {
-                            DialogsActivityDelegate access$24200 = DialogsActivity.this.delegate;
+                            DialogsActivityDelegate access$24400 = DialogsActivity.this.delegate;
                             LaunchActivity launchActivity = (LaunchActivity) DialogsActivity.this.getParentActivity();
                             launchActivity.switchToAccount(i2 - 10, true);
                             DialogsActivity dialogsActivity5 = new DialogsActivity(DialogsActivity.this.arguments);
-                            dialogsActivity5.setDelegate(access$24200);
+                            dialogsActivity5.setDelegate(access$24400);
                             launchActivity.presentFragment(dialogsActivity5, false, true);
                         }
                     }

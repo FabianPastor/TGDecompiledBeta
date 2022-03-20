@@ -20,6 +20,7 @@ public class CellFlickerDrawable {
     private final Paint paintOutline;
     int parentWidth;
     float progress;
+    public boolean repeatEnabled;
     public float repeatProgress;
     int size;
 
@@ -33,6 +34,7 @@ public class CellFlickerDrawable {
         Paint paint3 = new Paint(1);
         this.paintOutline = paint3;
         this.matrix = new Matrix();
+        this.repeatEnabled = true;
         this.drawFrame = true;
         this.repeatProgress = 1.2f;
         this.animationSpeedScale = 1.0f;
@@ -48,32 +50,42 @@ public class CellFlickerDrawable {
         paint3.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
     }
 
+    public float getProgress() {
+        return this.progress;
+    }
+
+    public void setProgress(float f) {
+        this.progress = f;
+    }
+
     public void draw(Canvas canvas, RectF rectF, float f) {
-        long currentTimeMillis = System.currentTimeMillis();
-        long j = this.lastUpdateTime;
-        if (j != 0) {
-            long j2 = currentTimeMillis - j;
-            if (j2 > 10) {
-                float f2 = this.progress + ((((float) j2) / 1200.0f) * this.animationSpeedScale);
-                this.progress = f2;
-                if (f2 > this.repeatProgress) {
-                    this.progress = 0.0f;
+        if (this.progress <= 1.0f || this.repeatEnabled) {
+            long currentTimeMillis = System.currentTimeMillis();
+            long j = this.lastUpdateTime;
+            if (j != 0) {
+                long j2 = currentTimeMillis - j;
+                if (j2 > 10) {
+                    float f2 = this.progress + ((((float) j2) / 1200.0f) * this.animationSpeedScale);
+                    this.progress = f2;
+                    if (f2 > this.repeatProgress) {
+                        this.progress = 0.0f;
+                    }
+                    this.lastUpdateTime = currentTimeMillis;
                 }
+            } else {
                 this.lastUpdateTime = currentTimeMillis;
             }
-        } else {
-            this.lastUpdateTime = currentTimeMillis;
-        }
-        float f3 = this.progress;
-        if (f3 <= 1.0f) {
-            int i = this.parentWidth;
-            int i2 = this.size;
-            this.matrix.setTranslate((((float) (i + (i2 * 2))) * f3) - ((float) i2), 0.0f);
-            this.gradientShader.setLocalMatrix(this.matrix);
-            this.gradientShader2.setLocalMatrix(this.matrix);
-            canvas.drawRoundRect(rectF, f, f, this.paint);
-            if (this.drawFrame) {
-                canvas.drawRoundRect(rectF, f, f, this.paintOutline);
+            float f3 = this.progress;
+            if (f3 <= 1.0f) {
+                int i = this.parentWidth;
+                int i2 = this.size;
+                this.matrix.setTranslate((((float) (i + (i2 * 2))) * f3) - ((float) i2), 0.0f);
+                this.gradientShader.setLocalMatrix(this.matrix);
+                this.gradientShader2.setLocalMatrix(this.matrix);
+                canvas.drawRoundRect(rectF, f, f, this.paint);
+                if (this.drawFrame) {
+                    canvas.drawRoundRect(rectF, f, f, this.paintOutline);
+                }
             }
         }
     }

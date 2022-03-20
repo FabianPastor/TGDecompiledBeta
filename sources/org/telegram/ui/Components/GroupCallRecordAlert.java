@@ -27,7 +27,6 @@ public class GroupCallRecordAlert extends BottomSheet {
     /* access modifiers changed from: private */
     public ViewPager viewPager;
 
-    /* access modifiers changed from: protected */
     public void onStartRecord(int i) {
         throw null;
     }

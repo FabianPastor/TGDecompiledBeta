@@ -4740,7 +4740,7 @@ public class AndroidUtilities {
                 }
             });
             ofArgb.setDuration(200);
-            ofArgb.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
+            ofArgb.setInterpolator(CubicBezierInterpolator.DEFAULT);
             ofArgb.start();
             if (navigationBarColorAnimators == null) {
                 navigationBarColorAnimators = new HashMap<>();

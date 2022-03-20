@@ -70,6 +70,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AudioPlayerAlert;
+import org.telegram.ui.Components.voip.CellFlickerDrawable;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.GroupCallActivity;
@@ -122,6 +123,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     /* access modifiers changed from: private */
     public boolean isMuted;
     private TextView joinButton;
+    /* access modifiers changed from: private */
+    public CellFlickerDrawable joinButtonFlicker;
     private int lastLocationSharingCount;
     private MessageObject lastMessageObject;
     private String lastString;
@@ -397,9 +400,27 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         };
         this.subtitleTextView = r13;
         addView(r13, LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 10.0f, 36.0f, 0.0f));
-        TextView textView = new TextView(context2);
-        this.joinButton = textView;
-        textView.setText(LocaleController.getString("VoipChatJoin", NUM));
+        CellFlickerDrawable cellFlickerDrawable = new CellFlickerDrawable();
+        this.joinButtonFlicker = cellFlickerDrawable;
+        cellFlickerDrawable.setProgress(2.0f);
+        this.joinButtonFlicker.repeatEnabled = false;
+        AnonymousClass6 r14 = new TextView(context2) {
+            public void draw(Canvas canvas) {
+                super.draw(canvas);
+                RectF rectF = AndroidUtilities.rectTmp;
+                rectF.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
+                FragmentContextView.this.joinButtonFlicker.draw(canvas, rectF, (float) AndroidUtilities.dp(4.0f));
+                invalidate();
+            }
+
+            /* access modifiers changed from: protected */
+            public void onSizeChanged(int i, int i2, int i3, int i4) {
+                super.onSizeChanged(i, i2, i3, i4);
+                FragmentContextView.this.joinButtonFlicker.setParentWidth(getWidth());
+            }
+        };
+        this.joinButton = r14;
+        r14.setText(LocaleController.getString("VoipChatJoin", NUM));
         this.joinButton.setTextColor(getThemedColor("featuredStickers_buttonText"));
         this.joinButton.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), getThemedColor("featuredStickers_addButton"), getThemedColor("featuredStickers_addButtonPressed")));
         this.joinButton.setTextSize(1, 14.0f);
@@ -416,7 +437,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             actionBarMenuItem.setLongClickEnabled(false);
             this.playbackSpeedButton.setShowSubmenuByMove(false);
             this.playbackSpeedButton.setContentDescription(LocaleController.getString("AccDescrPlayerSpeed", NUM));
-            this.playbackSpeedButton.setDelegate(new FragmentContextView$$ExternalSyntheticLambda10(this));
+            this.playbackSpeedButton.setDelegate(new FragmentContextView$$ExternalSyntheticLambda11(this));
             this.speedItems[0] = this.playbackSpeedButton.addSubItem(1, NUM, LocaleController.getString("SpeedSlow", NUM));
             this.speedItems[1] = this.playbackSpeedButton.addSubItem(2, NUM, LocaleController.getString("SpeedNormal", NUM));
             this.speedItems[2] = this.playbackSpeedButton.addSubItem(3, NUM, LocaleController.getString("SpeedFast", NUM));
@@ -435,15 +456,15 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
         AvatarsImageView avatarsImageView = new AvatarsImageView(context2, false);
         this.avatars = avatarsImageView;
-        avatarsImageView.setDelegate(new FragmentContextView$$ExternalSyntheticLambda9(this));
+        avatarsImageView.setDelegate(new FragmentContextView$$ExternalSyntheticLambda10(this));
         this.avatars.setVisibility(8);
         addView(this.avatars, LayoutHelper.createFrame(108, i, 51));
         this.muteDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(16.0f), AndroidUtilities.dp(20.0f), true, (int[]) null);
-        AnonymousClass6 r14 = new RLottieImageView(context2) {
-            private final Runnable pressRunnable = new FragmentContextView$6$$ExternalSyntheticLambda0(this);
+        AnonymousClass7 r15 = new RLottieImageView(context2) {
+            private final Runnable pressRunnable = new FragmentContextView$7$$ExternalSyntheticLambda1(this);
             boolean pressed;
             boolean scheduled;
-            private final Runnable toggleMicRunnable = new FragmentContextView$6$$ExternalSyntheticLambda1(this);
+            private final Runnable toggleMicRunnable = new FragmentContextView$7$$ExternalSyntheticLambda0(this);
 
             /* access modifiers changed from: private */
             public /* synthetic */ void lambda$$0() {
@@ -532,8 +553,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 accessibilityNodeInfo.setText(LocaleController.getString(str, i));
             }
         };
-        this.muteButton = r14;
-        r14.setColorFilter(new PorterDuffColorFilter(getThemedColor("returnToCallText"), PorterDuff.Mode.MULTIPLY));
+        this.muteButton = r15;
+        r15.setColorFilter(new PorterDuffColorFilter(getThemedColor("returnToCallText"), PorterDuff.Mode.MULTIPLY));
         if (i2 >= 21) {
             this.muteButton.setBackground(Theme.createSelectorDrawable(getThemedColor("inappPlayerClose") & NUM, 1, AndroidUtilities.dp(f)));
         }
@@ -758,7 +779,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 if (j != 0) {
                     openSharingLocation(LocationController.getInstance(i2).getSharingLocationInfo(j));
                 } else {
-                    this.fragment.showDialog(new SharingLocationsAlert(getContext(), new FragmentContextView$$ExternalSyntheticLambda11(this), resourcesProvider3));
+                    this.fragment.showDialog(new SharingLocationsAlert(getContext(), new FragmentContextView$$ExternalSyntheticLambda12(this), resourcesProvider3));
                 }
             } else if (i == 3) {
                 if (VoIPService.getSharedInstance() != null && (getContext() instanceof LaunchActivity)) {
@@ -841,7 +862,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             launchActivity.switchToAccount(sharingLocationInfo.messageObject.currentAccount, true);
             LocationActivity locationActivity = new LocationActivity(2);
             locationActivity.setMessageObject(sharingLocationInfo.messageObject);
-            locationActivity.setDelegate(new FragmentContextView$$ExternalSyntheticLambda12(sharingLocationInfo, sharingLocationInfo.messageObject.getDialogId()));
+            locationActivity.setDelegate(new FragmentContextView$$ExternalSyntheticLambda13(sharingLocationInfo, sharingLocationInfo.messageObject.getDialogId()));
             launchActivity.lambda$runLinkRequest$47(locationActivity);
         }
     }
@@ -851,16 +872,13 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         return this.topPadding;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:28:0x008c, code lost:
-        if (isPlayingVoice() == false) goto L_0x00a1;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:32:0x009d, code lost:
-        if (r0.getId() != 0) goto L_0x00a1;
+    /* JADX WARNING: Code restructure failed: missing block: B:34:0x00a3, code lost:
+        if (r0.getId() != 0) goto L_0x00a7;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:5:0x0010, code lost:
-        if (org.telegram.messenger.LocationController.getLocationsCount() != 0) goto L_0x00a1;
+        if (org.telegram.messenger.LocationController.getLocationsCount() != 0) goto L_0x00a7;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x00a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00aa  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void checkVisibility() {
         /*
@@ -873,8 +891,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean r3 = r0 instanceof org.telegram.ui.DialogsActivity
             if (r3 == 0) goto L_0x0014
             int r0 = org.telegram.messenger.LocationController.getLocationsCount()
-            if (r0 == 0) goto L_0x00a0
-            goto L_0x00a1
+            if (r0 == 0) goto L_0x00a6
+            goto L_0x00a7
         L_0x0014:
             int r0 = r0.getCurrentAccount()
             org.telegram.messenger.LocationController r0 = org.telegram.messenger.LocationController.getInstance(r0)
@@ -882,63 +900,65 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             org.telegram.ui.ChatActivity r2 = (org.telegram.ui.ChatActivity) r2
             long r2 = r2.getDialogId()
             boolean r2 = r0.isSharingLocation(r2)
-            goto L_0x00a1
+            goto L_0x00a7
         L_0x002a:
             org.telegram.messenger.voip.VoIPService r0 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r0 == 0) goto L_0x0047
+            if (r0 == 0) goto L_0x004a
             org.telegram.messenger.voip.VoIPService r0 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             boolean r0 = r0.isHangingUp()
-            if (r0 != 0) goto L_0x0047
+            if (r0 != 0) goto L_0x004a
             org.telegram.messenger.voip.VoIPService r0 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             int r0 = r0.getCallState()
             r3 = 15
-            if (r0 == r3) goto L_0x0047
-            goto L_0x00a1
-        L_0x0047:
+            if (r0 == r3) goto L_0x004a
+            r5.startJoinFlickerAnimation()
+            goto L_0x00a7
+        L_0x004a:
             org.telegram.ui.ActionBar.BaseFragment r0 = r5.fragment
             boolean r3 = r0 instanceof org.telegram.ui.ChatActivity
-            if (r3 == 0) goto L_0x0066
+            if (r3 == 0) goto L_0x0069
             org.telegram.messenger.SendMessagesHelper r0 = r0.getSendMessagesHelper()
             org.telegram.ui.ActionBar.BaseFragment r3 = r5.fragment
             org.telegram.ui.ChatActivity r3 = (org.telegram.ui.ChatActivity) r3
             long r3 = r3.getDialogId()
             org.telegram.messenger.SendMessagesHelper$ImportingHistory r0 = r0.getImportingHistory(r3)
-            if (r0 == 0) goto L_0x0066
+            if (r0 == 0) goto L_0x0069
             boolean r0 = r5.isPlayingVoice()
-            if (r0 != 0) goto L_0x0066
-            goto L_0x00a1
-        L_0x0066:
+            if (r0 != 0) goto L_0x0069
+            goto L_0x00a7
+        L_0x0069:
             org.telegram.ui.ActionBar.BaseFragment r0 = r5.fragment
             boolean r3 = r0 instanceof org.telegram.ui.ChatActivity
-            if (r3 == 0) goto L_0x008f
+            if (r3 == 0) goto L_0x0095
             org.telegram.ui.ChatActivity r0 = (org.telegram.ui.ChatActivity) r0
             org.telegram.messenger.ChatObject$Call r0 = r0.getGroupCall()
-            if (r0 == 0) goto L_0x008f
+            if (r0 == 0) goto L_0x0095
             org.telegram.ui.ActionBar.BaseFragment r0 = r5.fragment
             org.telegram.ui.ChatActivity r0 = (org.telegram.ui.ChatActivity) r0
             org.telegram.messenger.ChatObject$Call r0 = r0.getGroupCall()
             boolean r0 = r0.shouldShowPanel()
-            if (r0 == 0) goto L_0x008f
+            if (r0 == 0) goto L_0x0095
             boolean r0 = org.telegram.ui.Components.GroupCallPip.isShowing()
-            if (r0 != 0) goto L_0x008f
+            if (r0 != 0) goto L_0x0095
             boolean r0 = r5.isPlayingVoice()
-            if (r0 != 0) goto L_0x008f
-            goto L_0x00a1
-        L_0x008f:
+            if (r0 != 0) goto L_0x0095
+            r5.startJoinFlickerAnimation()
+            goto L_0x00a7
+        L_0x0095:
             org.telegram.messenger.MediaController r0 = org.telegram.messenger.MediaController.getInstance()
             org.telegram.messenger.MessageObject r0 = r0.getPlayingMessageObject()
-            if (r0 == 0) goto L_0x00a0
+            if (r0 == 0) goto L_0x00a6
             int r0 = r0.getId()
-            if (r0 == 0) goto L_0x00a0
-            goto L_0x00a1
-        L_0x00a0:
-            r2 = 0
-        L_0x00a1:
-            if (r2 == 0) goto L_0x00a4
-            goto L_0x00a6
-        L_0x00a4:
-            r1 = 8
+            if (r0 == 0) goto L_0x00a6
+            goto L_0x00a7
         L_0x00a6:
+            r2 = 0
+        L_0x00a7:
+            if (r2 == 0) goto L_0x00aa
+            goto L_0x00ac
+        L_0x00aa:
+            r1 = 8
+        L_0x00ac:
             r5.setVisibility(r1)
             return
         */
@@ -2360,7 +2380,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             org.telegram.ui.Components.CubicBezierInterpolator r4 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
             r3.setInterpolator(r4)
             android.animation.AnimatorSet r3 = r0.animatorSet
-            org.telegram.ui.Components.FragmentContextView$13 r4 = new org.telegram.ui.Components.FragmentContextView$13
+            org.telegram.ui.Components.FragmentContextView$14 r4 = new org.telegram.ui.Components.FragmentContextView$14
             r4.<init>(r1)
             r3.addListener(r4)
             android.animation.AnimatorSet r1 = r0.animatorSet
@@ -2377,15 +2397,15 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             r0.visible = r5
             r0.setVisibility(r11)
         L_0x0113:
-            if (r2 == 0) goto L_0x03a6
+            if (r2 == 0) goto L_0x03a9
             org.telegram.ui.ActionBar.BaseFragment r1 = r0.fragment
             boolean r2 = r1 instanceof org.telegram.ui.ChatActivity
-            if (r2 == 0) goto L_0x03a6
+            if (r2 == 0) goto L_0x03a9
             org.telegram.ui.ChatActivity r1 = (org.telegram.ui.ChatActivity) r1
             boolean r1 = r1.openedWithLivestream()
-            if (r1 == 0) goto L_0x03a6
+            if (r1 == 0) goto L_0x03a9
             boolean r1 = org.telegram.ui.Components.GroupCallPip.isShowing()
-            if (r1 != 0) goto L_0x03a6
+            if (r1 != 0) goto L_0x03a9
             org.telegram.ui.ActionBar.BaseFragment r1 = r0.fragment
             org.telegram.ui.Components.BulletinFactory r1 = org.telegram.ui.Components.BulletinFactory.of(r1)
             r2 = 2131558474(0x7f0d004a, float:1.8742265E38)
@@ -2394,7 +2414,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             org.telegram.ui.Components.Bulletin r1 = r1.createSimpleBulletin(r2, r3)
             r1.show()
-            goto L_0x03a6
+            goto L_0x03a9
         L_0x0144:
             if (r6 == 0) goto L_0x0148
             r4 = 4
@@ -2444,7 +2464,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
             r2.setInterpolator(r3)
             android.animation.AnimatorSet r2 = r0.animatorSet
-            org.telegram.ui.Components.FragmentContextView$14 r3 = new org.telegram.ui.Components.FragmentContextView$14
+            org.telegram.ui.Components.FragmentContextView$15 r3 = new org.telegram.ui.Components.FragmentContextView$15
             r3.<init>(r1)
             r2.addListener(r3)
             android.animation.AnimatorSet r1 = r0.animatorSet
@@ -2625,7 +2645,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             r0.updateStyle(r3)
         L_0x02fa:
             boolean r1 = r0.visible
-            if (r1 != 0) goto L_0x03a6
+            if (r1 != 0) goto L_0x03a9
             if (r2 != 0) goto L_0x0391
             android.animation.AnimatorSet r1 = r0.animatorSet
             if (r1 == 0) goto L_0x0309
@@ -2684,12 +2704,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             org.telegram.ui.Components.CubicBezierInterpolator r4 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
             r2.setInterpolator(r4)
             android.animation.AnimatorSet r2 = r0.animatorSet
-            org.telegram.ui.Components.FragmentContextView$15 r4 = new org.telegram.ui.Components.FragmentContextView$15
+            org.telegram.ui.Components.FragmentContextView$16 r4 = new org.telegram.ui.Components.FragmentContextView$16
             r4.<init>(r1)
             r2.addListener(r4)
             android.animation.AnimatorSet r1 = r0.animatorSet
             r1.start()
-            goto L_0x03a1
+            goto L_0x03a4
         L_0x0391:
             r16.updatePaddings()
             int r1 = r16.getStyleHeight()
@@ -2697,13 +2717,26 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r1 = org.telegram.messenger.AndroidUtilities.dp2(r1)
             float r1 = (float) r1
             r0.setTopPadding(r1)
-        L_0x03a1:
+            r16.startJoinFlickerAnimation()
+        L_0x03a4:
             r0.visible = r3
             r0.setVisibility(r5)
-        L_0x03a6:
+        L_0x03a9:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.FragmentContextView.checkCall(boolean):void");
+    }
+
+    /* access modifiers changed from: private */
+    public void startJoinFlickerAnimation() {
+        if (this.joinButtonFlicker.getProgress() > 1.0f) {
+            AndroidUtilities.runOnUIThread(new FragmentContextView$$ExternalSyntheticLambda9(this), 150);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$startJoinFlickerAnimation$12() {
+        this.joinButtonFlicker.setProgress(0.0f);
     }
 
     private void updateAvatars(boolean z) {

@@ -10,6 +10,6 @@ public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda6 
     }
 
     public final void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
-        this.f$0.lambda$initCameraView$6(dynamicAnimation, f, f2);
+        this.f$0.lambda$initCameraView$7(dynamicAnimation, f, f2);
     }
 }
