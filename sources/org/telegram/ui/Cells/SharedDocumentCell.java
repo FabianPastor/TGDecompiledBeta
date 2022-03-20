@@ -35,6 +35,7 @@ import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;
+import org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC$TL_photoSizeEmpty;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
@@ -427,10 +428,14 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                     }
                 }
             }
-            String documentFileName = FileLoader.getDocumentFileName(document);
+            String documentFileName = (messageObject.isVideo() || (messageObject2.messageOwner.media instanceof TLRPC$TL_messageMediaPhoto) || MessageObject.isGifDocument(document)) ? null : FileLoader.getDocumentFileName(document);
             if (TextUtils.isEmpty(documentFileName)) {
                 if (document.mime_type.startsWith("video")) {
-                    documentFileName = LocaleController.getString("AttachVideo", NUM);
+                    if (MessageObject.isGifDocument(document)) {
+                        documentFileName = LocaleController.getString("AttachGif", NUM);
+                    } else {
+                        documentFileName = LocaleController.getString("AttachVideo", NUM);
+                    }
                 } else if (document.mime_type.startsWith("image")) {
                     documentFileName = LocaleController.getString("AttachPhoto", NUM);
                 } else if (document.mime_type.startsWith("audio")) {

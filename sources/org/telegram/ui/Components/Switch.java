@@ -57,6 +57,7 @@ public class Switch extends View {
     private RippleDrawable rippleDrawable;
     /* access modifiers changed from: private */
     public Paint ripplePaint;
+    private boolean semHaptics = false;
     private String thumbCheckedColorKey = "windowBackgroundWhite";
     private String thumbColorKey = "windowBackgroundWhite";
     private String trackCheckedColorKey = "switch2TrackChecked";
@@ -211,7 +212,7 @@ public class Switch extends View {
         fArr[0] = z ? 1.0f : 0.0f;
         ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "progress", fArr);
         this.checkAnimator = ofFloat;
-        ofFloat.setDuration(250);
+        ofFloat.setDuration(this.semHaptics ? 150 : 250);
         this.checkAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 ObjectAnimator unused = Switch.this.checkAnimator = null;
@@ -225,7 +226,7 @@ public class Switch extends View {
         fArr[0] = z ? 1.0f : 0.0f;
         ObjectAnimator ofFloat = ObjectAnimator.ofFloat(this, "iconProgress", fArr);
         this.iconAnimator = ofFloat;
-        ofFloat.setDuration(250);
+        ofFloat.setDuration(this.semHaptics ? 150 : 250);
         this.iconAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 ObjectAnimator unused = Switch.this.iconAnimator = null;
@@ -262,6 +263,7 @@ public class Switch extends View {
                 cancelCheckAnimator();
                 setProgress(z ? 1.0f : 0.0f);
             } else {
+                vibrateChecked();
                 animateToCheckedState(z);
             }
             OnCheckedChangeListener onCheckedChangeListener2 = this.onCheckedChangeListener;
@@ -944,5 +946,58 @@ public class Switch extends View {
         accessibilityNodeInfo.setClassName("android.widget.Switch");
         accessibilityNodeInfo.setCheckable(true);
         accessibilityNodeInfo.setChecked(this.isChecked);
+    }
+
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v3, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v2, resolved type: java.lang.Integer} */
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private void vibrateChecked() {
+        /*
+            r7 = this;
+            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x004d }
+            r1 = 29
+            r2 = 0
+            r3 = 0
+            r4 = 1
+            if (r0 < r1) goto L_0x0018
+            java.lang.Class<android.view.HapticFeedbackConstants> r0 = android.view.HapticFeedbackConstants.class
+            java.lang.String r1 = "hidden_semGetVibrationIndex"
+            java.lang.Class[] r5 = new java.lang.Class[r4]     // Catch:{ Exception -> 0x004d }
+            java.lang.Class r6 = java.lang.Integer.TYPE     // Catch:{ Exception -> 0x004d }
+            r5[r2] = r6     // Catch:{ Exception -> 0x004d }
+            java.lang.reflect.Method r0 = r0.getDeclaredMethod(r1, r5)     // Catch:{ Exception -> 0x004d }
+            goto L_0x002c
+        L_0x0018:
+            r1 = 28
+            if (r0 < r1) goto L_0x002b
+            java.lang.Class<android.view.HapticFeedbackConstants> r0 = android.view.HapticFeedbackConstants.class
+            java.lang.String r1 = "semGetVibrationIndex"
+            java.lang.Class[] r5 = new java.lang.Class[r4]     // Catch:{ Exception -> 0x004d }
+            java.lang.Class r6 = java.lang.Integer.TYPE     // Catch:{ Exception -> 0x004d }
+            r5[r2] = r6     // Catch:{ Exception -> 0x004d }
+            java.lang.reflect.Method r0 = r0.getMethod(r1, r5)     // Catch:{ Exception -> 0x004d }
+            goto L_0x002c
+        L_0x002b:
+            r0 = r3
+        L_0x002c:
+            if (r0 == 0) goto L_0x0042
+            r0.setAccessible(r4)     // Catch:{ Exception -> 0x004d }
+            java.lang.Object[] r1 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x004d }
+            r5 = 27
+            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)     // Catch:{ Exception -> 0x004d }
+            r1[r2] = r5     // Catch:{ Exception -> 0x004d }
+            java.lang.Object r0 = r0.invoke(r3, r1)     // Catch:{ Exception -> 0x004d }
+            r3 = r0
+            java.lang.Integer r3 = (java.lang.Integer) r3     // Catch:{ Exception -> 0x004d }
+        L_0x0042:
+            if (r3 == 0) goto L_0x004d
+            int r0 = r3.intValue()     // Catch:{ Exception -> 0x004d }
+            r7.performHapticFeedback(r0)     // Catch:{ Exception -> 0x004d }
+            r7.semHaptics = r4     // Catch:{ Exception -> 0x004d }
+        L_0x004d:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Switch.vibrateChecked():void");
     }
 }

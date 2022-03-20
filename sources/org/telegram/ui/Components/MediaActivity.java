@@ -236,7 +236,7 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
             boolean r6 = r3.self
             if (r6 == 0) goto L_0x01bb
             org.telegram.ui.ActionBar.SimpleTextView r3 = r15.nameTextView
-            r6 = 2131627774(0x7f0e0efe, float:1.8882822E38)
+            r6 = 2131627778(0x7f0e0var_, float:1.888283E38)
             java.lang.String r7 = "SavedMessages"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
@@ -275,7 +275,7 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
             boolean r3 = android.text.TextUtils.isEmpty(r3)
             if (r3 == 0) goto L_0x020f
             org.telegram.ui.ActionBar.SimpleTextView r3 = r15.nameTextView
-            r4 = 2131627991(0x7f0e0fd7, float:1.8883262E38)
+            r4 = 2131627995(0x7f0e0fdb, float:1.888327E38)
             java.lang.String r5 = "SharedContentTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r3.setText(r4)

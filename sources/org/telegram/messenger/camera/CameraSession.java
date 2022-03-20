@@ -43,7 +43,6 @@ public class CameraSession {
     private final int pictureFormat;
     private final Size pictureSize;
     private final Size previewSize;
-    public boolean previewStarted = false;
     private boolean sameTakePictureOrientation;
     private boolean useTorch;
 
@@ -58,7 +57,7 @@ public class CameraSession {
         this.cameraInfo = cameraInfo2;
         this.isRound = z;
         this.currentFlashMode = ApplicationLoader.applicationContext.getSharedPreferences("camera", 0).getString(this.cameraInfo.frontCamera != 0 ? "flashMode_front" : "flashMode", "off");
-        AnonymousClass1 r3 = new OrientationEventListener(ApplicationLoader.applicationContext) {
+        AnonymousClass1 r2 = new OrientationEventListener(ApplicationLoader.applicationContext) {
             public void onOrientationChanged(int i) {
                 if (CameraSession.this.orientationEventListener != null && CameraSession.this.initied && i != -1) {
                     CameraSession cameraSession = CameraSession.this;
@@ -75,8 +74,8 @@ public class CameraSession {
                 }
             }
         };
-        this.orientationEventListener = r3;
-        if (r3.canDetectOrientation()) {
+        this.orientationEventListener = r2;
+        if (r2.canDetectOrientation()) {
             this.orientationEventListener.enable();
             return;
         }

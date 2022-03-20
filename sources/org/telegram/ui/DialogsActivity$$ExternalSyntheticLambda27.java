@@ -10,6 +10,6 @@ public final /* synthetic */ class DialogsActivity$$ExternalSyntheticLambda27 im
     }
 
     public final void run() {
-        this.f$0.getMessagesStorage().loadDownloadingFiles();
+        this.f$0.getDownloadController().loadDownloadingFiles();
     }
 }

@@ -326,6 +326,8 @@
     <string name="Allow">Allow</string>
     <string name="AllowBackgroundActivity">Allow background activity</string>
     <string name="AllowBackgroundActivityInfo">This will improve reliability for incoming notifications and Telegram calls.</string>
+    <string name="AllowBackgroundActivityInfoOneUIAboveS">This will improve reliability for incoming notifications and Telegram calls. Please select **Optimised** or **Unrestricted** in Settings &gt; Battery.</string>
+    <string name="AllowBackgroundActivityInfoOneUIBelowS">This will improve reliability for incoming notifications and Telegram calls. Tap Settings -&gt; Battery and turn **Allow background activity** on.</string>
     <string name="AllowCustomQuickReply">Allow Custom</string>
     <string name="AllowFillNumber">Please allow Telegram to receive calls so that we can automatically confirm your phone number.</string>
     <string name="AllowReadCall">Please allow Telegram to receive calls so that we can automatically enter your code for you.</string>
@@ -1382,6 +1384,8 @@
     <string name="DisappearingPhoto">Secret Photo</string>
     <string name="DisappearingVideo">Secret Video</string>
     <string name="DiscardChanges">Discard changes?</string>
+    <string name="DiscardSelectionAlertMessage">Are you sure you want to discard the selection?</string>
+    <string name="DiscardSelectionAlertTitle">Discard selection?</string>
     <string name="DiscardVideoMessageDescription">Are you sure you want to stop recording and discard your video message?</string>
     <string name="DiscardVideoMessageTitle">Discard Video Message</string>
     <string name="DiscardVoiceMessageAction">Discard</string>
@@ -3659,7 +3663,7 @@
     <string name="RemindDayYearAt">\'Remind on\' MMM d yyyy \'at\' HH:mm</string>
     <string name="RemindTodayAt">\'Remind today at\' HH:mm</string>
     <string name="Reminders">Reminders</string>
-    <string name="RemoveDocumentsMessage">They will be deleted from your disk, but will remain accessible in the cloud.</string>
+    <string name="RemoveDocumentsAlertMessage">They will be deleted from your disk, but will remain accessible in the cloud.</string>
     <string name="RemoveDocumentsMessage_few">Do you want remove these **%d documents** from Downloads?</string>
     <string name="RemoveDocumentsMessage_many">Do you want remove these **%d documents** from Downloads?</string>
     <string name="RemoveDocumentsMessage_one">Do you want remove this document from Downloads?</string>

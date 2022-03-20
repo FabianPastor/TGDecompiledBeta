@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import java.util.HashMap;
-import org.telegram.tgnet.TLRPC$TL_messageMediaPoll;
-import org.telegram.ui.Components.ChatAttachAlertPollLayout;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda22 implements ChatAttachAlertPollLayout.PollCreateActivityDelegate {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda22 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ ChatAttachAlert f$0;
 
     public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda22(ChatAttachAlert chatAttachAlert) {
         this.f$0 = chatAttachAlert;
     }
 
-    public final void sendPoll(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
-        this.f$0.lambda$new$6(tLRPC$TL_messageMediaPoll, hashMap, z, i);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.lambda$new$11(z, i);
     }
 }

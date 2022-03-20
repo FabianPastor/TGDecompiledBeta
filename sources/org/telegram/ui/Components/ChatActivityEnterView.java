@@ -3091,7 +3091,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r5 = 8
             r1.setVisibility(r5)
             android.widget.ImageView r1 = r7.scheduledButton
-            r5 = 2131627781(0x7f0e0var_, float:1.8882836E38)
+            r5 = 2131627785(0x7f0e0var_, float:1.8882844E38)
             java.lang.String r6 = "ScheduledMessages"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r1.setContentDescription(r5)
@@ -3391,7 +3391,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r0.setInvalidateOnProgressSet(r1)
             r39.updateRecordedDeleteIconColors()
             org.telegram.ui.Components.RLottieImageView r0 = r7.recordDeleteImageView
-            r1 = 2131625217(0x7f0e0501, float:1.8877636E38)
+            r1 = 2131625219(0x7f0e0503, float:1.887764E38)
             java.lang.String r2 = "Delete"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -3726,7 +3726,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             r7.progressDrawable = r9
             r1.setImageDrawable(r9)
             android.widget.ImageView r1 = r7.cancelBotButton
-            r9 = 2131624705(0x7f0e0301, float:1.8876597E38)
+            r9 = 2131624707(0x7f0e0303, float:1.8876601E38)
             java.lang.String r10 = "Cancel"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r1.setContentDescription(r9)
@@ -3799,7 +3799,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             java.lang.String r1 = "chat_messagePanelSend"
             int r1 = r7.getThemedColor(r1)
             android.view.View r9 = r7.sendButton
-            r10 = 2131627871(0x7f0e0f5f, float:1.8883019E38)
+            r10 = 2131627875(0x7f0e0var_, float:1.8883027E38)
             java.lang.String r12 = "Send"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r9.setContentDescription(r10)
@@ -3963,7 +3963,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.widget.ImageView r0 = r7.doneButtonImage
             r0.setImageDrawable(r5)
             android.widget.ImageView r0 = r7.doneButtonImage
-            r1 = 2131625358(0x7f0e058e, float:1.8877922E38)
+            r1 = 2131625362(0x7f0e0592, float:1.887793E38)
             java.lang.String r5 = "Done"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             r0.setContentDescription(r1)
@@ -4282,99 +4282,100 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$11(SimpleAvatarView simpleAvatarView, int[] iArr, SenderSelectPopup.SenderView senderView) {
         final SimpleAvatarView simpleAvatarView2 = simpleAvatarView;
-        Dialog dialog = new Dialog(getContext(), NUM);
-        FrameLayout frameLayout = new FrameLayout(getContext());
-        frameLayout.addView(simpleAvatarView2, LayoutHelper.createFrame(40, 40, 3));
-        dialog.setContentView(frameLayout);
-        dialog.getWindow().setLayout(-1, -1);
-        int i = Build.VERSION.SDK_INT;
-        if (i >= 21) {
-            dialog.getWindow().clearFlags(1024);
-            dialog.getWindow().clearFlags(67108864);
-            dialog.getWindow().clearFlags(NUM);
-            dialog.getWindow().addFlags(Integer.MIN_VALUE);
-            dialog.getWindow().addFlags(512);
-            dialog.getWindow().addFlags(131072);
-            dialog.getWindow().getAttributes().windowAnimations = 0;
-            dialog.getWindow().getDecorView().setSystemUiVisibility(1792);
-            dialog.getWindow().setStatusBarColor(0);
-            dialog.getWindow().setNavigationBarColor(0);
-            AndroidUtilities.setLightStatusBar(dialog.getWindow(), Theme.getColor("actionBarDefault", (boolean[]) null, true) == -1);
-            if (i >= 26) {
-                AndroidUtilities.setLightNavigationBar(dialog.getWindow(), AndroidUtilities.computePerceivedBrightness(Theme.getColor("windowBackgroundGray", (boolean[]) null, true)) >= 0.721f);
-            }
-        }
-        if (i >= 23) {
-            this.popupX += getRootWindowInsets().getSystemWindowInsetLeft();
-        }
-        this.senderSelectView.getLocationInWindow(this.location);
-        int[] iArr2 = this.location;
-        float f = (float) iArr2[0];
-        final float f2 = (float) iArr2[1];
-        float dp = (float) AndroidUtilities.dp(5.0f);
-        float dp2 = ((float) (iArr[0] + this.popupX)) + dp + ((float) AndroidUtilities.dp(4.0f)) + 0.0f;
-        float f3 = ((float) (iArr[1] + this.popupY)) + dp + 0.0f;
-        simpleAvatarView2.setTranslationX(dp2);
-        simpleAvatarView2.setTranslationY(f3);
-        float dp3 = ((float) this.senderSelectView.getLayoutParams().width) / ((float) AndroidUtilities.dp(40.0f));
-        simpleAvatarView2.setPivotX(0.0f);
-        simpleAvatarView2.setPivotY(0.0f);
-        simpleAvatarView2.setScaleX(0.75f);
-        simpleAvatarView2.setScaleY(0.75f);
-        final SenderSelectPopup.SenderView senderView2 = senderView;
-        simpleAvatarView.getViewTreeObserver().addOnDrawListener(new ViewTreeObserver.OnDrawListener(this) {
-            public void onDraw() {
-                SimpleAvatarView simpleAvatarView = simpleAvatarView2;
-                simpleAvatarView.post(new ChatActivityEnterView$20$$ExternalSyntheticLambda0(this, simpleAvatarView, senderView2));
-            }
-
-            /* access modifiers changed from: private */
-            public /* synthetic */ void lambda$onDraw$0(SimpleAvatarView simpleAvatarView, SenderSelectPopup.SenderView senderView) {
-                simpleAvatarView.getViewTreeObserver().removeOnDrawListener(this);
-                senderView.avatar.setHideAvatar(true);
-            }
-        });
-        dialog.show();
-        this.senderSelectView.setScaleX(1.0f);
-        this.senderSelectView.setScaleY(1.0f);
-        this.senderSelectView.setAlpha(1.0f);
-        SenderSelectPopup senderSelectPopup = this.senderSelectPopupWindow;
-        SpringAnimation[] springAnimationArr = new SpringAnimation[7];
-        SenderSelectView senderSelectView2 = this.senderSelectView;
-        DynamicAnimation.ViewProperty viewProperty = DynamicAnimation.SCALE_X;
-        springAnimationArr[0] = new SpringAnimation(senderSelectView2, viewProperty).setSpring(new SpringForce(0.5f).setStiffness(750.0f).setDampingRatio(1.0f));
-        SenderSelectView senderSelectView3 = this.senderSelectView;
-        DynamicAnimation.ViewProperty viewProperty2 = DynamicAnimation.SCALE_Y;
-        springAnimationArr[1] = new SpringAnimation(senderSelectView3, viewProperty2).setSpring(new SpringForce(0.5f).setStiffness(750.0f).setDampingRatio(1.0f));
-        SpringAnimation spring = new SpringAnimation(this.senderSelectView, DynamicAnimation.ALPHA).setSpring(new SpringForce(0.0f).setStiffness(750.0f).setDampingRatio(1.0f));
-        DynamicAnimation.ViewProperty viewProperty3 = viewProperty2;
-        SpringAnimation[] springAnimationArr2 = springAnimationArr;
-        SenderSelectPopup senderSelectPopup2 = senderSelectPopup;
-        float f4 = dp3;
-        ChatActivityEnterView$$ExternalSyntheticLambda28 chatActivityEnterView$$ExternalSyntheticLambda28 = r0;
-        DynamicAnimation.ViewProperty viewProperty4 = viewProperty;
-        float f5 = f;
-        float f6 = f2;
-        ChatActivityEnterView$$ExternalSyntheticLambda28 chatActivityEnterView$$ExternalSyntheticLambda282 = new ChatActivityEnterView$$ExternalSyntheticLambda28(this, dialog, simpleAvatarView, f5, f6);
-        springAnimationArr2[2] = (SpringAnimation) spring.addEndListener(chatActivityEnterView$$ExternalSyntheticLambda28);
-        springAnimationArr2[3] = (SpringAnimation) ((SpringAnimation) new SpringAnimation(simpleAvatarView2, DynamicAnimation.TRANSLATION_X).setStartValue(MathUtils.clamp(dp2, f - ((float) AndroidUtilities.dp(6.0f)), dp2))).setSpring(new SpringForce(f).setStiffness(700.0f).setDampingRatio(0.75f)).setMinValue(f - ((float) AndroidUtilities.dp(6.0f)));
-        springAnimationArr2[4] = (SpringAnimation) ((SpringAnimation) ((SpringAnimation) ((SpringAnimation) new SpringAnimation(simpleAvatarView2, DynamicAnimation.TRANSLATION_Y).setStartValue(MathUtils.clamp(f3, f3, ((float) AndroidUtilities.dp(6.0f)) + f2))).setSpring(new SpringForce(f2).setStiffness(700.0f).setDampingRatio(0.75f)).setMaxValue(((float) AndroidUtilities.dp(6.0f)) + f2)).addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener(this) {
-            boolean performedHapticFeedback = false;
-
-            public void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
-                if (!this.performedHapticFeedback && f >= f2) {
-                    this.performedHapticFeedback = true;
-                    try {
-                        simpleAvatarView2.performHapticFeedback(3, 2);
-                    } catch (Exception unused) {
-                    }
+        if (this.senderSelectPopupWindow != null) {
+            Dialog dialog = new Dialog(getContext(), NUM);
+            FrameLayout frameLayout = new FrameLayout(getContext());
+            frameLayout.addView(simpleAvatarView2, LayoutHelper.createFrame(40, 40, 3));
+            dialog.setContentView(frameLayout);
+            dialog.getWindow().setLayout(-1, -1);
+            int i = Build.VERSION.SDK_INT;
+            if (i >= 21) {
+                dialog.getWindow().clearFlags(1024);
+                dialog.getWindow().clearFlags(67108864);
+                dialog.getWindow().clearFlags(NUM);
+                dialog.getWindow().addFlags(Integer.MIN_VALUE);
+                dialog.getWindow().addFlags(512);
+                dialog.getWindow().addFlags(131072);
+                dialog.getWindow().getAttributes().windowAnimations = 0;
+                dialog.getWindow().getDecorView().setSystemUiVisibility(1792);
+                dialog.getWindow().setStatusBarColor(0);
+                dialog.getWindow().setNavigationBarColor(0);
+                AndroidUtilities.setLightStatusBar(dialog.getWindow(), Theme.getColor("actionBarDefault", (boolean[]) null, true) == -1);
+                if (i >= 26) {
+                    AndroidUtilities.setLightNavigationBar(dialog.getWindow(), AndroidUtilities.computePerceivedBrightness(Theme.getColor("windowBackgroundGray", (boolean[]) null, true)) >= 0.721f);
                 }
             }
-        })).addEndListener(new ChatActivityEnterView$$ExternalSyntheticLambda29(this, dialog, simpleAvatarView, f5, f6));
-        float f7 = f4;
-        springAnimationArr2[5] = new SpringAnimation(simpleAvatarView2, viewProperty4).setSpring(new SpringForce(f7).setStiffness(1000.0f).setDampingRatio(1.0f));
-        springAnimationArr2[6] = new SpringAnimation(simpleAvatarView2, viewProperty3).setSpring(new SpringForce(f7).setStiffness(1000.0f).setDampingRatio(1.0f));
-        senderSelectPopup2.startDismissAnimation(springAnimationArr2);
+            if (i >= 23) {
+                this.popupX += getRootWindowInsets().getSystemWindowInsetLeft();
+            }
+            this.senderSelectView.getLocationInWindow(this.location);
+            int[] iArr2 = this.location;
+            float f = (float) iArr2[0];
+            final float f2 = (float) iArr2[1];
+            float dp = (float) AndroidUtilities.dp(5.0f);
+            float dp2 = ((float) (iArr[0] + this.popupX)) + dp + ((float) AndroidUtilities.dp(4.0f)) + 0.0f;
+            float f3 = ((float) (iArr[1] + this.popupY)) + dp + 0.0f;
+            simpleAvatarView2.setTranslationX(dp2);
+            simpleAvatarView2.setTranslationY(f3);
+            float dp3 = ((float) this.senderSelectView.getLayoutParams().width) / ((float) AndroidUtilities.dp(40.0f));
+            simpleAvatarView2.setPivotX(0.0f);
+            simpleAvatarView2.setPivotY(0.0f);
+            simpleAvatarView2.setScaleX(0.75f);
+            simpleAvatarView2.setScaleY(0.75f);
+            final SenderSelectPopup.SenderView senderView2 = senderView;
+            simpleAvatarView.getViewTreeObserver().addOnDrawListener(new ViewTreeObserver.OnDrawListener(this) {
+                public void onDraw() {
+                    SimpleAvatarView simpleAvatarView = simpleAvatarView2;
+                    simpleAvatarView.post(new ChatActivityEnterView$20$$ExternalSyntheticLambda0(this, simpleAvatarView, senderView2));
+                }
+
+                /* access modifiers changed from: private */
+                public /* synthetic */ void lambda$onDraw$0(SimpleAvatarView simpleAvatarView, SenderSelectPopup.SenderView senderView) {
+                    simpleAvatarView.getViewTreeObserver().removeOnDrawListener(this);
+                    senderView.avatar.setHideAvatar(true);
+                }
+            });
+            dialog.show();
+            this.senderSelectView.setScaleX(1.0f);
+            this.senderSelectView.setScaleY(1.0f);
+            this.senderSelectView.setAlpha(1.0f);
+            SenderSelectPopup senderSelectPopup = this.senderSelectPopupWindow;
+            SpringAnimation[] springAnimationArr = new SpringAnimation[7];
+            SenderSelectView senderSelectView2 = this.senderSelectView;
+            DynamicAnimation.ViewProperty viewProperty = DynamicAnimation.SCALE_X;
+            springAnimationArr[0] = new SpringAnimation(senderSelectView2, viewProperty).setSpring(new SpringForce(0.5f).setStiffness(750.0f).setDampingRatio(1.0f));
+            SenderSelectView senderSelectView3 = this.senderSelectView;
+            DynamicAnimation.ViewProperty viewProperty2 = DynamicAnimation.SCALE_Y;
+            springAnimationArr[1] = new SpringAnimation(senderSelectView3, viewProperty2).setSpring(new SpringForce(0.5f).setStiffness(750.0f).setDampingRatio(1.0f));
+            SpringAnimation spring = new SpringAnimation(this.senderSelectView, DynamicAnimation.ALPHA).setSpring(new SpringForce(0.0f).setStiffness(750.0f).setDampingRatio(1.0f));
+            DynamicAnimation.ViewProperty viewProperty3 = viewProperty2;
+            SpringAnimation[] springAnimationArr2 = springAnimationArr;
+            float f4 = dp3;
+            SenderSelectPopup senderSelectPopup2 = senderSelectPopup;
+            ChatActivityEnterView$$ExternalSyntheticLambda28 chatActivityEnterView$$ExternalSyntheticLambda28 = r0;
+            float f5 = f;
+            float f6 = f2;
+            ChatActivityEnterView$$ExternalSyntheticLambda28 chatActivityEnterView$$ExternalSyntheticLambda282 = new ChatActivityEnterView$$ExternalSyntheticLambda28(this, dialog, simpleAvatarView, f5, f6);
+            springAnimationArr2[2] = (SpringAnimation) spring.addEndListener(chatActivityEnterView$$ExternalSyntheticLambda28);
+            springAnimationArr2[3] = (SpringAnimation) ((SpringAnimation) new SpringAnimation(simpleAvatarView2, DynamicAnimation.TRANSLATION_X).setStartValue(MathUtils.clamp(dp2, f - ((float) AndroidUtilities.dp(6.0f)), dp2))).setSpring(new SpringForce(f).setStiffness(700.0f).setDampingRatio(0.75f)).setMinValue(f - ((float) AndroidUtilities.dp(6.0f)));
+            springAnimationArr2[4] = (SpringAnimation) ((SpringAnimation) ((SpringAnimation) ((SpringAnimation) new SpringAnimation(simpleAvatarView2, DynamicAnimation.TRANSLATION_Y).setStartValue(MathUtils.clamp(f3, f3, ((float) AndroidUtilities.dp(6.0f)) + f2))).setSpring(new SpringForce(f2).setStiffness(700.0f).setDampingRatio(0.75f)).setMaxValue(((float) AndroidUtilities.dp(6.0f)) + f2)).addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener(this) {
+                boolean performedHapticFeedback = false;
+
+                public void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
+                    if (!this.performedHapticFeedback && f >= f2) {
+                        this.performedHapticFeedback = true;
+                        try {
+                            simpleAvatarView2.performHapticFeedback(3, 2);
+                        } catch (Exception unused) {
+                        }
+                    }
+                }
+            })).addEndListener(new ChatActivityEnterView$$ExternalSyntheticLambda29(this, dialog, simpleAvatarView, f5, f6));
+            float f7 = f4;
+            springAnimationArr2[5] = new SpringAnimation(simpleAvatarView2, viewProperty).setSpring(new SpringForce(f7).setStiffness(1000.0f).setDampingRatio(1.0f));
+            springAnimationArr2[6] = new SpringAnimation(simpleAvatarView2, viewProperty3).setSpring(new SpringForce(f7).setStiffness(1000.0f).setDampingRatio(1.0f));
+            senderSelectPopup2.startDismissAnimation(springAnimationArr2);
+        }
     }
 
     /* access modifiers changed from: private */
@@ -9625,7 +9626,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
             }
             boolean z = this.senderSelectView.getVisibility() == 0;
-            boolean z2 = this.delegate.getSendAsPeers() != null && tLRPC$Peer != null && this.delegate.getSendAsPeers().peers.size() > 1 && !isEditingMessage() && !isRecordingAudioVideo() && this.recordedAudioPanel.getVisibility() != 0;
+            boolean z2 = tLRPC$Peer != null && (this.delegate.getSendAsPeers() == null || this.delegate.getSendAsPeers().peers.size() > 1) && !isEditingMessage() && !isRecordingAudioVideo() && this.recordedAudioPanel.getVisibility() != 0;
             int dp = AndroidUtilities.dp(2.0f);
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) this.senderSelectView.getLayoutParams();
             float f = 0.0f;

@@ -969,7 +969,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         return emojiView2 != null && emojiView2.getVisibility() == 0;
     }
 
-    public boolean isPopupAnimatig() {
+    public boolean isPopupAnimating() {
         return this.popupAnimating;
     }
 

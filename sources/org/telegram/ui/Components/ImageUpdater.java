@@ -391,7 +391,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                             }
                             ImageUpdater.this.didSelectPhotos(arrayList);
                             if (i != 8) {
-                                ImageUpdater.this.chatAttachAlert.dismiss();
+                                ImageUpdater.this.chatAttachAlert.dismiss(true);
                                 return;
                             }
                             return;
@@ -552,12 +552,15 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     }
 
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
-        ChatAttachAlert chatAttachAlert2;
-        if (i == 17 && (chatAttachAlert2 = this.chatAttachAlert) != null) {
+        ChatAttachAlert chatAttachAlert2 = this.chatAttachAlert;
+        if (chatAttachAlert2 == null) {
+            return;
+        }
+        if (i == 17) {
             chatAttachAlert2.getPhotoLayout().checkCamera(false);
             this.chatAttachAlert.getPhotoLayout().checkStorage();
         } else if (i == 4) {
-            this.chatAttachAlert.getPhotoLayout().checkStorage();
+            chatAttachAlert2.getPhotoLayout().checkStorage();
         }
     }
 

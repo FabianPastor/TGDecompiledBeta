@@ -15,6 +15,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda8 imple
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        LoginActivity.lambda$needShowInvalidAlert$12(this.f$0, this.f$1, this.f$2, dialogInterface, i);
+        LoginActivity.lambda$needShowInvalidAlert$10(this.f$0, this.f$1, this.f$2, dialogInterface, i);
     }
 }

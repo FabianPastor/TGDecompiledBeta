@@ -4783,6 +4783,10 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("configureDeviceForCall, route to set = " + this.audioRouteToSet);
         }
+        if (Build.VERSION.SDK_INT >= 21) {
+            WebRtcAudioTrack.setAudioTrackUsageAttribute(hasRtmpStream() ? 1 : 2);
+            WebRtcAudioTrack.setAudioStreamType(hasRtmpStream() ? Integer.MIN_VALUE : 0);
+        }
         this.needPlayEndSound = true;
         AudioManager audioManager = (AudioManager) getSystemService("audio");
         if (!USE_CONNECTION_SERVICE) {
@@ -4805,11 +4809,16 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$configureDeviceForCall$78(AudioManager audioManager) {
         try {
+            if (hasRtmpStream()) {
+                audioManager.setMode(0);
+                audioManager.setBluetoothScoOn(false);
+                return;
+            }
             audioManager.setMode(3);
+            AndroidUtilities.runOnUIThread(new VoIPService$$ExternalSyntheticLambda44(this, audioManager));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        AndroidUtilities.runOnUIThread(new VoIPService$$ExternalSyntheticLambda44(this, audioManager));
     }
 
     /* access modifiers changed from: private */
@@ -4936,14 +4945,18 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("SCO already active, setting audio routing");
                 }
-                audioManager.setSpeakerphoneOn(false);
-                audioManager.setBluetoothScoOn(true);
+                if (!hasRtmpStream()) {
+                    audioManager.setSpeakerphoneOn(false);
+                    audioManager.setBluetoothScoOn(true);
+                }
             } else {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("startBluetoothSco");
                 }
-                this.needSwitchToBluetoothAfterScoActivates = true;
-                AndroidUtilities.runOnUIThread(new VoIPService$$ExternalSyntheticLambda2(audioManager), 500);
+                if (!hasRtmpStream()) {
+                    this.needSwitchToBluetoothAfterScoActivates = true;
+                    AndroidUtilities.runOnUIThread(new VoIPService$$ExternalSyntheticLambda2(audioManager), 500);
+                }
             }
             Iterator<StateListener> it = this.stateListeners.iterator();
             while (it.hasNext()) {
@@ -5188,9 +5201,9 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r4.setAction(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r1)
-            r6 = 2131628792(0x7f0e12f8, float:1.8884887E38)
+            r6 = 2131628796(0x7f0e12fc, float:1.8884895E38)
             java.lang.String r7 = "VoipInVideoCallBranding"
-            r8 = 2131628790(0x7f0e12f6, float:1.8884883E38)
+            r8 = 2131628794(0x7f0e12fa, float:1.888489E38)
             java.lang.String r9 = "VoipInCallBranding"
             if (r22 == 0) goto L_0x002a
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -5284,7 +5297,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             r10.append(r15)
             r10.append(r14)
             java.lang.String r10 = r10.toString()
-            r13 = 2131626047(0x7f0e083f, float:1.887932E38)
+            r13 = 2131626051(0x7f0e0843, float:1.8879327E38)
             r17 = r7
             java.lang.String r7 = "IncomingCalls"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r13)
@@ -5336,7 +5349,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             java.lang.String r8 = "call_id"
             r2.putExtra(r8, r6)
             java.lang.String r6 = "VoipDeclineCall"
-            r7 = 2131628670(0x7f0e127e, float:1.888464E38)
+            r7 = 2131628674(0x7f0e1282, float:1.8884647E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10 = 24
             if (r12 < r10) goto L_0x01a7
@@ -5371,7 +5384,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             long r13 = r18.getCallID()
             r9.putExtra(r8, r13)
             java.lang.String r8 = "VoipAnswerCall"
-            r13 = 2131628611(0x7f0e1243, float:1.888452E38)
+            r13 = 2131628615(0x7f0e1247, float:1.8884528E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r8, r13)
             if (r12 < r10) goto L_0x01fc
             android.text.SpannableString r10 = new android.text.SpannableString
@@ -5451,7 +5464,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             if (r22 == 0) goto L_0x02af
-            r12 = 2131628793(0x7f0e12f9, float:1.8884889E38)
+            r12 = 2131628797(0x7f0e12fd, float:1.8884897E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r14 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5463,7 +5476,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             goto L_0x02c5
         L_0x02af:
             r14 = 0
-            r12 = 2131628791(0x7f0e12f7, float:1.8884885E38)
+            r12 = 2131628795(0x7f0e12fb, float:1.8884893E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5477,11 +5490,11 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x02c9:
             if (r22 == 0) goto L_0x02d1
             r10 = r17
-            r0 = 2131628792(0x7f0e12f8, float:1.8884887E38)
+            r0 = 2131628796(0x7f0e12fc, float:1.8884895E38)
             goto L_0x02d6
         L_0x02d1:
             r10 = r16
-            r0 = 2131628790(0x7f0e12f6, float:1.8884883E38)
+            r0 = 2131628794(0x7f0e12fa, float:1.888489E38)
         L_0x02d6:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r10, r0)
             r7.setTextViewText(r11, r0)
@@ -5493,7 +5506,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             int r0 = r1.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
-            r10 = 2131628612(0x7f0e1244, float:1.8884522E38)
+            r10 = 2131628616(0x7f0e1248, float:1.888453E38)
             java.lang.Object[] r14 = new java.lang.Object[r14]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -5515,7 +5528,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r13)
             r7.setTextViewText(r3, r8)
             r3 = 2131230804(0x7var_, float:1.8077671E38)
-            r8 = 2131628670(0x7f0e127e, float:1.888464E38)
+            r8 = 2131628674(0x7f0e1282, float:1.8884647E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r8)
             r7.setTextViewText(r3, r6)
             r3 = 2131230885(0x7var_a5, float:1.8077835E38)
@@ -5858,23 +5871,25 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
     }
 
     public void updateOutputGainControlState() {
-        int i = 0;
-        if (this.tgVoip[0] == null) {
-            return;
-        }
-        if (!USE_CONNECTION_SERVICE) {
-            AudioManager audioManager = (AudioManager) getSystemService("audio");
-            this.tgVoip[0].setAudioOutputGainControlEnabled(hasEarpiece() && !audioManager.isSpeakerphoneOn() && !audioManager.isBluetoothScoOn() && !this.isHeadsetPlugged);
-            NativeInstance nativeInstance = this.tgVoip[0];
-            if (!this.isHeadsetPlugged && (!hasEarpiece() || audioManager.isSpeakerphoneOn() || audioManager.isBluetoothScoOn() || this.isHeadsetPlugged)) {
-                i = 1;
+        if (!hasRtmpStream()) {
+            int i = 0;
+            if (this.tgVoip[0] == null) {
+                return;
             }
-            nativeInstance.setEchoCancellationStrength(i);
-            return;
+            if (!USE_CONNECTION_SERVICE) {
+                AudioManager audioManager = (AudioManager) getSystemService("audio");
+                this.tgVoip[0].setAudioOutputGainControlEnabled(hasEarpiece() && !audioManager.isSpeakerphoneOn() && !audioManager.isBluetoothScoOn() && !this.isHeadsetPlugged);
+                NativeInstance nativeInstance = this.tgVoip[0];
+                if (!this.isHeadsetPlugged && (!hasEarpiece() || audioManager.isSpeakerphoneOn() || audioManager.isBluetoothScoOn() || this.isHeadsetPlugged)) {
+                    i = 1;
+                }
+                nativeInstance.setEchoCancellationStrength(i);
+                return;
+            }
+            boolean z = this.systemCallConnection.getCallAudioState().getRoute() == 1;
+            this.tgVoip[0].setAudioOutputGainControlEnabled(z);
+            this.tgVoip[0].setEchoCancellationStrength(z ^ true ? 1 : 0);
         }
-        boolean z = this.systemCallConnection.getCallAudioState().getRoute() == 1;
-        this.tgVoip[0].setAudioOutputGainControlEnabled(z);
-        this.tgVoip[0].setEchoCancellationStrength(z ^ true ? 1 : 0);
     }
 
     public int getAccount() {

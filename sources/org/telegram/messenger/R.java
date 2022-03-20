@@ -2182,6 +2182,8 @@ public final class R {
         public static final int Allow = NUM;
         public static final int AllowBackgroundActivity = NUM;
         public static final int AllowBackgroundActivityInfo = NUM;
+        public static final int AllowBackgroundActivityInfoOneUIAboveS = NUM;
+        public static final int AllowBackgroundActivityInfoOneUIBelowS = NUM;
         public static final int AllowCustomQuickReply = NUM;
         public static final int AllowFillNumber = NUM;
         public static final int AllowReadCall = NUM;
@@ -3238,6 +3240,8 @@ public final class R {
         public static final int DisappearingPhoto = NUM;
         public static final int DisappearingVideo = NUM;
         public static final int DiscardChanges = NUM;
+        public static final int DiscardSelectionAlertMessage = NUM;
+        public static final int DiscardSelectionAlertTitle = NUM;
         public static final int DiscardVideoMessageDescription = NUM;
         public static final int DiscardVideoMessageTitle = NUM;
         public static final int DiscardVoiceMessageAction = NUM;
@@ -5515,7 +5519,7 @@ public final class R {
         public static final int RemindDayYearAt = NUM;
         public static final int RemindTodayAt = NUM;
         public static final int Reminders = NUM;
-        public static final int RemoveDocumentsMessage = NUM;
+        public static final int RemoveDocumentsAlertMessage = NUM;
         public static final int RemoveDocumentsMessage_few = NUM;
         public static final int RemoveDocumentsMessage_many = NUM;
         public static final int RemoveDocumentsMessage_one = NUM;

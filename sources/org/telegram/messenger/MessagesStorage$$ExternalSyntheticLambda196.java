@@ -1,19 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC$UserFull;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC$Message;
 
-public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda196 implements Runnable {
-    public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ boolean f$1;
-    public final /* synthetic */ TLRPC$UserFull f$2;
+public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda196 implements Comparator {
+    public static final /* synthetic */ MessagesStorage$$ExternalSyntheticLambda196 INSTANCE = new MessagesStorage$$ExternalSyntheticLambda196();
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda196(MessagesStorage messagesStorage, boolean z, TLRPC$UserFull tLRPC$UserFull) {
-        this.f$0 = messagesStorage;
-        this.f$1 = z;
-        this.f$2 = tLRPC$UserFull;
+    private /* synthetic */ MessagesStorage$$ExternalSyntheticLambda196() {
     }
 
-    public final void run() {
-        this.f$0.lambda$updateUserInfo$101(this.f$1, this.f$2);
+    public final int compare(Object obj, Object obj2) {
+        return MessagesStorage.lambda$getMessagesInternal$120((TLRPC$Message) obj, (TLRPC$Message) obj2);
     }
 }

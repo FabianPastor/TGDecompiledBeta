@@ -1,39 +1,27 @@
 package org.telegram.messenger;
 
-import android.util.SparseArray;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import org.telegram.tgnet.TLRPC$messages_Dialogs;
+import org.telegram.tgnet.TLRPC$messages_Messages;
 
 public final /* synthetic */ class MessagesStorage$$ExternalSyntheticLambda184 implements Runnable {
     public final /* synthetic */ MessagesStorage f$0;
-    public final /* synthetic */ TLRPC$messages_Dialogs f$1;
-    public final /* synthetic */ HashSet f$10;
-    public final /* synthetic */ TLRPC$messages_Dialogs f$2;
-    public final /* synthetic */ ArrayList f$3;
-    public final /* synthetic */ ArrayList f$4;
-    public final /* synthetic */ ArrayList f$5;
-    public final /* synthetic */ SparseArray f$6;
-    public final /* synthetic */ ArrayList f$7;
-    public final /* synthetic */ HashMap f$8;
-    public final /* synthetic */ HashMap f$9;
+    public final /* synthetic */ boolean f$1;
+    public final /* synthetic */ long f$2;
+    public final /* synthetic */ TLRPC$messages_Messages f$3;
+    public final /* synthetic */ int f$4;
+    public final /* synthetic */ int f$5;
+    public final /* synthetic */ boolean f$6;
 
-    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda184(MessagesStorage messagesStorage, TLRPC$messages_Dialogs tLRPC$messages_Dialogs, TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, SparseArray sparseArray, ArrayList arrayList4, HashMap hashMap, HashMap hashMap2, HashSet hashSet) {
+    public /* synthetic */ MessagesStorage$$ExternalSyntheticLambda184(MessagesStorage messagesStorage, boolean z, long j, TLRPC$messages_Messages tLRPC$messages_Messages, int i, int i2, boolean z2) {
         this.f$0 = messagesStorage;
-        this.f$1 = tLRPC$messages_Dialogs;
-        this.f$2 = tLRPC$messages_Dialogs2;
-        this.f$3 = arrayList;
-        this.f$4 = arrayList2;
-        this.f$5 = arrayList3;
-        this.f$6 = sparseArray;
-        this.f$7 = arrayList4;
-        this.f$8 = hashMap;
-        this.f$9 = hashMap2;
-        this.f$10 = hashSet;
+        this.f$1 = z;
+        this.f$2 = j;
+        this.f$3 = tLRPC$messages_Messages;
+        this.f$4 = i;
+        this.f$5 = i2;
+        this.f$6 = z2;
     }
 
     public final void run() {
-        this.f$0.lambda$processLoadedFilterPeers$53(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10);
+        this.f$0.lambda$putMessages$173(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
     }
 }

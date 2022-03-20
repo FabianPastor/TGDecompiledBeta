@@ -733,7 +733,7 @@ public class FileLoader extends BaseController {
             org.telegram.messenger.MessageObject r13 = (org.telegram.messenger.MessageObject) r13
             boolean r15 = r13.putInDownloadsStore
             if (r15 == 0) goto L_0x006f
-            org.telegram.messenger.MessagesStorage r15 = r24.getMessagesStorage()
+            org.telegram.messenger.DownloadController r15 = r24.getDownloadController()
             r15.startDownloadFile(r2, r13)
         L_0x006f:
             j$.util.concurrent.ConcurrentHashMap<java.lang.String, org.telegram.messenger.FileLoadOperation> r13 = r7.loadOperationPaths
@@ -1798,7 +1798,7 @@ public class FileLoader extends BaseController {
 
     public void getCurrentLoadingFiles(ArrayList<MessageObject> arrayList) {
         arrayList.clear();
-        arrayList.addAll(getMessagesStorage().downloadingFiles);
+        arrayList.addAll(getDownloadController().downloadingFiles);
         for (int i = 0; i < arrayList.size(); i++) {
             arrayList.get(i).isDownloadingFile = true;
         }
@@ -1806,7 +1806,7 @@ public class FileLoader extends BaseController {
 
     public void getRecentLoadingFiles(ArrayList<MessageObject> arrayList) {
         arrayList.clear();
-        arrayList.addAll(getMessagesStorage().recentDownloadingFiles);
+        arrayList.addAll(getDownloadController().recentDownloadingFiles);
         for (int i = 0; i < arrayList.size(); i++) {
             arrayList.get(i).isDownloadingFile = true;
         }
@@ -1814,7 +1814,7 @@ public class FileLoader extends BaseController {
 
     public void checkCurrentDownloadsFiles() {
         ArrayList arrayList = new ArrayList();
-        ArrayList arrayList2 = new ArrayList(getMessagesStorage().recentDownloadingFiles);
+        ArrayList arrayList2 = new ArrayList(getDownloadController().recentDownloadingFiles);
         for (int i = 0; i < arrayList2.size(); i++) {
             ((MessageObject) arrayList2.get(i)).checkMediaExistance();
             if (((MessageObject) arrayList2.get(i)).mediaExists) {
@@ -1828,11 +1828,11 @@ public class FileLoader extends BaseController {
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$checkCurrentDownloadsFiles$13(ArrayList arrayList) {
-        getMessagesStorage().recentDownloadingFiles.removeAll(arrayList);
+        getDownloadController().recentDownloadingFiles.removeAll(arrayList);
         getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged, new Object[0]);
     }
 
     public void clearRecentDownloadedFiles() {
-        getMessagesStorage().clearRecentDownloadedFiles();
+        getDownloadController().clearRecentDownloadedFiles();
     }
 }

@@ -723,6 +723,9 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         }
         Paint paint2 = z ? this.blurPaintTop : this.blurPaintBottom;
         Paint paint3 = z ? this.blurPaintTop2 : this.blurPaintBottom2;
+        if (z) {
+            f += getTranslationY();
+        }
         if (paint2.getShader() != null) {
             this.matrix.reset();
             this.matrix2.reset();

@@ -124,7 +124,7 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
     }
 
     private void updateDownloadingListeners() {
-        MessagesStorage instance = MessagesStorage.getInstance(this.currentAccount);
+        DownloadController instance = DownloadController.getInstance(this.currentAccount);
         HashMap hashMap = new HashMap();
         for (int i = 0; i < this.currentListeners.size(); i++) {
             hashMap.put(this.currentListeners.get(i).fileName, this.currentListeners.get(i));

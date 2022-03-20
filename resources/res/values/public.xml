@@ -2043,6 +2043,8 @@
     <public type="string" name="Allow" id="NUM" />
     <public type="string" name="AllowBackgroundActivity" id="NUM" />
     <public type="string" name="AllowBackgroundActivityInfo" id="NUM" />
+    <public type="string" name="AllowBackgroundActivityInfoOneUIAboveS" id="NUM" />
+    <public type="string" name="AllowBackgroundActivityInfoOneUIBelowS" id="NUM" />
     <public type="string" name="AllowCustomQuickReply" id="NUM" />
     <public type="string" name="AllowFillNumber" id="NUM" />
     <public type="string" name="AllowReadCall" id="NUM" />
@@ -3099,6 +3101,8 @@
     <public type="string" name="DisappearingPhoto" id="NUM" />
     <public type="string" name="DisappearingVideo" id="NUM" />
     <public type="string" name="DiscardChanges" id="NUM" />
+    <public type="string" name="DiscardSelectionAlertMessage" id="NUM" />
+    <public type="string" name="DiscardSelectionAlertTitle" id="NUM" />
     <public type="string" name="DiscardVideoMessageDescription" id="NUM" />
     <public type="string" name="DiscardVideoMessageTitle" id="NUM" />
     <public type="string" name="DiscardVoiceMessageAction" id="NUM" />
@@ -5376,7 +5380,7 @@
     <public type="string" name="RemindDayYearAt" id="NUM" />
     <public type="string" name="RemindTodayAt" id="NUM" />
     <public type="string" name="Reminders" id="NUM" />
-    <public type="string" name="RemoveDocumentsMessage" id="NUM" />
+    <public type="string" name="RemoveDocumentsAlertMessage" id="NUM" />
     <public type="string" name="RemoveDocumentsMessage_few" id="NUM" />
     <public type="string" name="RemoveDocumentsMessage_many" id="NUM" />
     <public type="string" name="RemoveDocumentsMessage_one" id="NUM" />

@@ -1,17 +1,17 @@
 package org.telegram.ui.Components;
 
-import androidx.dynamicanimation.animation.DynamicAnimation;
+import android.view.View;
 
-public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda9 implements DynamicAnimation.OnAnimationEndListener {
+public final /* synthetic */ class ChatAttachAlert$$ExternalSyntheticLambda9 implements View.OnClickListener {
     public final /* synthetic */ ChatAttachAlert f$0;
-    public final /* synthetic */ Runnable f$1;
+    public final /* synthetic */ boolean f$1;
 
-    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda9(ChatAttachAlert chatAttachAlert, Runnable runnable) {
+    public /* synthetic */ ChatAttachAlert$$ExternalSyntheticLambda9(ChatAttachAlert chatAttachAlert, boolean z) {
         this.f$0 = chatAttachAlert;
-        this.f$1 = runnable;
+        this.f$1 = z;
     }
 
-    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-        this.f$0.lambda$onCustomOpenAnimation$21(this.f$1, dynamicAnimation, z, f, f2);
+    public final void onClick(View view) {
+        this.f$0.lambda$new$3(this.f$1, view);
     }
 }

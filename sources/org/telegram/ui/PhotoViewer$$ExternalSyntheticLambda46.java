@@ -8,6 +8,6 @@ public final /* synthetic */ class PhotoViewer$$ExternalSyntheticLambda46 implem
     }
 
     public final void run() {
-        this.f$0.lambda$updateFirstFrameView$45();
+        this.f$0.lambda$onDraw$66();
     }
 }

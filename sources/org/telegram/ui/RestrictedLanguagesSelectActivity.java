@@ -429,7 +429,7 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
                 r3.<init>(r0)
                 int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 r3.setBackgroundColor(r2)
-                r2 = 2131624982(0x7f0e0416, float:1.887716E38)
+                r2 = 2131624984(0x7f0e0418, float:1.8877163E38)
                 java.lang.String r0 = "ChooseLanguages"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r0, r2)
                 r3.setText(r2)
@@ -523,7 +523,7 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
                 java.lang.Object[] r5 = new java.lang.Object[r5]
                 java.lang.String r6 = r0.name
                 r5[r2] = r6
-                r6 = 2131626155(0x7f0e08ab, float:1.8879538E38)
+                r6 = 2131626159(0x7f0e08af, float:1.8879546E38)
                 java.lang.String r7 = "LanguageCustom"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 r5[r1] = r6

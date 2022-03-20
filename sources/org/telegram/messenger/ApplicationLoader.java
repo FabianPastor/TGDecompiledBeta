@@ -76,7 +76,7 @@ public class ApplicationLoader extends Application {
     }
 
     public static void postInitApplication() {
-        if (!applicationInited) {
+        if (!applicationInited && applicationContext != null) {
             applicationInited = true;
             try {
                 LocaleController.getInstance();

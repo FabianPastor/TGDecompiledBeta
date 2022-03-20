@@ -2058,7 +2058,7 @@ public class ActionBar extends FrameLayout {
         if (this.blurredBackground && this.actionBarColor != 0) {
             this.rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
             this.blurScrimPaint.setColor(this.actionBarColor);
-            this.contentView.drawBlur(canvas, 0.0f, this.rectTmp, this.blurScrimPaint, true);
+            this.contentView.drawBlur(canvas, getY(), this.rectTmp, this.blurScrimPaint, true);
         }
         super.dispatchDraw(canvas);
     }

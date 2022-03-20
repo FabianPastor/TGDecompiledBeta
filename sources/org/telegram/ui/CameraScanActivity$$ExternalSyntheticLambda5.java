@@ -1,15 +1,15 @@
 package org.telegram.ui;
 
-import android.view.MotionEvent;
-import android.view.View;
+import androidx.dynamicanimation.animation.DynamicAnimation;
 
-public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda5 implements View.OnTouchListener {
-    public static final /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda5 INSTANCE = new CameraScanActivity$$ExternalSyntheticLambda5();
+public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda5 implements DynamicAnimation.OnAnimationEndListener {
+    public final /* synthetic */ CameraScanActivity f$0;
 
-    private /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda5() {
+    public /* synthetic */ CameraScanActivity$$ExternalSyntheticLambda5(CameraScanActivity cameraScanActivity) {
+        this.f$0 = cameraScanActivity;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return CameraScanActivity.lambda$createView$1(view, motionEvent);
+    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        this.f$0.lambda$initCameraView$7(dynamicAnimation, z, f, f2);
     }
 }

@@ -784,7 +784,6 @@ public abstract class BaseFragment {
         return getAccountInstance().getSecretChatHelper();
     }
 
-    /* access modifiers changed from: protected */
     public DownloadController getDownloadController() {
         return getAccountInstance().getDownloadController();
     }

@@ -10,6 +10,6 @@ public final /* synthetic */ class LoginActivity$$ExternalSyntheticLambda18 impl
     }
 
     public final Object provide(Object obj) {
-        return LoginActivity.lambda$needFinishActivity$18(this.f$0, (Void) obj);
+        return LoginActivity.lambda$needFinishActivity$16(this.f$0, (Void) obj);
     }
 }

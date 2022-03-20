@@ -36,6 +36,7 @@ public class AvatarsDarawable {
     View parent;
     Random random;
     public long transitionDuration = 220;
+    private boolean transitionInProgress;
     float transitionProgress = 1.0f;
     ValueAnimator transitionProgressAnimator;
     boolean updateAfterTransition;
@@ -45,24 +46,38 @@ public class AvatarsDarawable {
     private Paint xRefP = new Paint(1);
 
     public void commitTransition(boolean z) {
-        boolean z2;
+        commitTransition(z, true);
+    }
+
+    public void setTransitionProgress(float f) {
+        if (this.transitionInProgress && this.transitionProgress != f) {
+            this.transitionProgress = f;
+            if (f == 1.0f) {
+                swapStates();
+                this.transitionInProgress = false;
+            }
+        }
+    }
+
+    public void commitTransition(boolean z, boolean z2) {
+        boolean z3;
         if (!this.wasDraw || !z) {
             this.transitionProgress = 1.0f;
             swapStates();
             return;
         }
         DrawingState[] drawingStateArr = new DrawingState[3];
-        boolean z3 = false;
+        boolean z4 = false;
         for (int i = 0; i < 3; i++) {
             DrawingState[] drawingStateArr2 = this.currentStates;
             drawingStateArr[i] = drawingStateArr2[i];
             if (drawingStateArr2[i].id != this.animatingStates[i].id) {
-                z3 = true;
+                z4 = true;
             } else {
                 long unused = this.currentStates[i].lastSpeakTime = this.animatingStates[i].lastSpeakTime;
             }
         }
-        if (!z3) {
+        if (!z4) {
             this.transitionProgress = 1.0f;
             return;
         }
@@ -70,7 +85,7 @@ public class AvatarsDarawable {
             int i3 = 0;
             while (true) {
                 if (i3 >= 3) {
-                    z2 = false;
+                    z3 = false;
                     break;
                 } else if (this.currentStates[i3].id == this.animatingStates[i2].id) {
                     drawingStateArr[i3] = null;
@@ -83,12 +98,12 @@ public class AvatarsDarawable {
                         int unused5 = this.animatingStates[i2].animationType = 2;
                         int unused6 = this.animatingStates[i2].moveFromIndex = i3;
                     }
-                    z2 = true;
+                    z3 = true;
                 } else {
                     i3++;
                 }
             }
-            if (!z2) {
+            if (!z3) {
                 int unused7 = this.animatingStates[i2].animationType = 0;
             }
         }
@@ -100,33 +115,41 @@ public class AvatarsDarawable {
         ValueAnimator valueAnimator = this.transitionProgressAnimator;
         if (valueAnimator != null) {
             valueAnimator.cancel();
+            if (this.transitionInProgress) {
+                swapStates();
+                this.transitionInProgress = false;
+            }
         }
         this.transitionProgress = 0.0f;
-        ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-        this.transitionProgressAnimator = ofFloat;
-        ofFloat.addUpdateListener(new AvatarsDarawable$$ExternalSyntheticLambda0(this));
-        this.transitionProgressAnimator.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
-                AvatarsDarawable avatarsDarawable = AvatarsDarawable.this;
-                if (avatarsDarawable.transitionProgressAnimator != null) {
-                    avatarsDarawable.transitionProgress = 1.0f;
-                    avatarsDarawable.swapStates();
-                    AvatarsDarawable avatarsDarawable2 = AvatarsDarawable.this;
-                    if (avatarsDarawable2.updateAfterTransition) {
-                        avatarsDarawable2.updateAfterTransition = false;
-                        Runnable runnable = avatarsDarawable2.updateDelegate;
-                        if (runnable != null) {
-                            runnable.run();
+        if (z2) {
+            ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+            this.transitionProgressAnimator = ofFloat;
+            ofFloat.addUpdateListener(new AvatarsDarawable$$ExternalSyntheticLambda0(this));
+            this.transitionProgressAnimator.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    AvatarsDarawable avatarsDarawable = AvatarsDarawable.this;
+                    if (avatarsDarawable.transitionProgressAnimator != null) {
+                        avatarsDarawable.transitionProgress = 1.0f;
+                        avatarsDarawable.swapStates();
+                        AvatarsDarawable avatarsDarawable2 = AvatarsDarawable.this;
+                        if (avatarsDarawable2.updateAfterTransition) {
+                            avatarsDarawable2.updateAfterTransition = false;
+                            Runnable runnable = avatarsDarawable2.updateDelegate;
+                            if (runnable != null) {
+                                runnable.run();
+                            }
                         }
+                        AvatarsDarawable.this.invalidate();
                     }
-                    AvatarsDarawable.this.invalidate();
+                    AvatarsDarawable.this.transitionProgressAnimator = null;
                 }
-                AvatarsDarawable.this.transitionProgressAnimator = null;
-            }
-        });
-        this.transitionProgressAnimator.setDuration(this.transitionDuration);
-        this.transitionProgressAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
-        this.transitionProgressAnimator.start();
+            });
+            this.transitionProgressAnimator.setDuration(this.transitionDuration);
+            this.transitionProgressAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
+            this.transitionProgressAnimator.start();
+        } else {
+            this.transitionInProgress = true;
+        }
         invalidate();
     }
 
@@ -172,10 +195,14 @@ public class AvatarsDarawable {
         this.overrideSize = i;
     }
 
-    public void animateFromState(AvatarsDarawable avatarsDarawable, int i) {
+    public void animateFromState(AvatarsDarawable avatarsDarawable, int i, boolean z) {
         ValueAnimator valueAnimator = avatarsDarawable.transitionProgressAnimator;
         if (valueAnimator != null) {
             valueAnimator.cancel();
+            if (this.transitionInProgress) {
+                this.transitionInProgress = false;
+                swapStates();
+            }
         }
         TLObject[] tLObjectArr = new TLObject[3];
         for (int i2 = 0; i2 < 3; i2++) {
@@ -187,7 +214,7 @@ public class AvatarsDarawable {
             setObject(i3, i, tLObjectArr[i3]);
         }
         this.wasDraw = true;
-        commitTransition(true);
+        commitTransition(true, z);
     }
 
     public void setAlpha(float f) {

@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -253,7 +254,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r3.addItem((int) r4, (int) r5)
             r0.otherItem = r3
             r5 = 2131165826(0x7var_, float:1.794588E38)
-            r12 = 2131626923(0x7f0e0bab, float:1.8881096E38)
+            r12 = 2131626927(0x7f0e0baf, float:1.8881104E38)
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString((int) r12)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r3.addSubItem(r8, r5, r12)
             goto L_0x00ce
@@ -314,21 +315,21 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             int r6 = r6.length()
             if (r6 == 0) goto L_0x015c
             android.widget.TextView r6 = r0.titleTextView
-            r7 = 2131625482(0x7f0e060a, float:1.8878173E38)
+            r7 = 2131625486(0x7f0e060e, float:1.8878181E38)
             java.lang.String r9 = "EnterNewPasscode"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r6.setText(r7)
             goto L_0x0177
         L_0x015c:
             android.widget.TextView r6 = r0.titleTextView
-            r7 = 2131625138(0x7f0e04b2, float:1.8877475E38)
+            r7 = 2131625140(0x7f0e04b4, float:1.887748E38)
             java.lang.String r9 = "CreatePasscode"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r6.setText(r7)
             goto L_0x0177
         L_0x016b:
             android.widget.TextView r6 = r0.titleTextView
-            r7 = 2131625486(0x7f0e060e, float:1.8878181E38)
+            r7 = 2131625490(0x7f0e0612, float:1.887819E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString((int) r7)
             r6.setText(r7)
         L_0x0177:
@@ -397,7 +398,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             r11 = 8
         L_0x0206:
             r6.setVisibility(r11)
-            r11 = 2131625761(0x7f0e0721, float:1.887874E38)
+            r11 = 2131625765(0x7f0e0725, float:1.8878747E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString((int) r11)
             r6.setText(r11)
             r21 = -1
@@ -428,7 +429,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             r6.setTextColor(r9)
             android.widget.TextView r6 = r0.passcodesDoNotMatchTextView
-            r9 = 2131626924(0x7f0e0bac, float:1.8881098E38)
+            r9 = 2131626928(0x7f0e0bb0, float:1.8881106E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r9)
             r6.setText(r9)
             android.widget.TextView r6 = r0.passcodesDoNotMatchTextView
@@ -447,7 +448,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Components.OutlineTextContainerView r6 = new org.telegram.ui.Components.OutlineTextContainerView
             r6.<init>(r1)
             r0.outlinePasswordView = r6
-            r9 = 2131625483(0x7f0e060b, float:1.8878175E38)
+            r9 = 2131625487(0x7f0e060f, float:1.8878183E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString((int) r9)
             r6.setText(r9)
             org.telegram.ui.Components.EditTextBoldCursor r6 = new org.telegram.ui.Components.EditTextBoldCursor
@@ -740,7 +741,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Components.TransformableLoginButtonView r2 = r0.floatingButtonIcon
             r2.setDrawBackground(r4)
             android.widget.FrameLayout r2 = r0.floatingButtonContainer
-            r5 = 2131626564(0x7f0e0a44, float:1.8880368E38)
+            r5 = 2131626568(0x7f0e0a48, float:1.8880376E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString((int) r5)
             r2.setContentDescription(r5)
             android.widget.FrameLayout r2 = r0.floatingButtonContainer
@@ -788,7 +789,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             goto L_0x05e1
         L_0x0588:
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
-            r5 = 2131626915(0x7f0e0ba3, float:1.888108E38)
+            r5 = 2131626919(0x7f0e0ba7, float:1.8881088E38)
             java.lang.String r6 = "Passcode"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r3.setTitle(r5)
@@ -1164,43 +1165,27 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         runnable.run();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:8:0x0029 A[LOOP:0: B:7:0x0027->B:8:0x0029, LOOP_END] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void onConfigurationChanged(android.content.res.Configuration r5) {
-        /*
-            r4 = this;
-            super.onConfigurationChanged(r5)
-            boolean r5 = r4.isCustomKeyboardVisible()
-            r0 = 0
-            r4.setCustomKeyboardVisible(r5, r0)
-            org.telegram.ui.Components.RLottieImageView r5 = r4.lockImageView
-            boolean r1 = org.telegram.messenger.AndroidUtilities.isSmallScreen()
-            if (r1 != 0) goto L_0x001d
-            android.graphics.Point r1 = org.telegram.messenger.AndroidUtilities.displaySize
-            int r2 = r1.x
-            int r1 = r1.y
-            if (r2 >= r1) goto L_0x001d
-            r1 = 0
-            goto L_0x001f
-        L_0x001d:
-            r1 = 8
-        L_0x001f:
-            r5.setVisibility(r1)
-            org.telegram.ui.CodeFieldContainer r5 = r4.codeFieldContainer
-            org.telegram.ui.CodeNumberField[] r5 = r5.codeField
-            int r1 = r5.length
-        L_0x0027:
-            if (r0 >= r1) goto L_0x0037
-            r2 = r5[r0]
-            boolean r3 = r4.isCustomKeyboardVisible()
-            r3 = r3 ^ 1
-            r2.setShowSoftInputOnFocusCompat(r3)
-            int r0 = r0 + 1
-            goto L_0x0027
-        L_0x0037:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PasscodeActivity.onConfigurationChanged(android.content.res.Configuration):void");
+    public void onConfigurationChanged(Configuration configuration) {
+        int i;
+        super.onConfigurationChanged(configuration);
+        setCustomKeyboardVisible(isCustomKeyboardVisible(), false);
+        RLottieImageView rLottieImageView = this.lockImageView;
+        if (rLottieImageView != null) {
+            if (!AndroidUtilities.isSmallScreen()) {
+                Point point = AndroidUtilities.displaySize;
+                if (point.x < point.y) {
+                    i = 0;
+                    rLottieImageView.setVisibility(i);
+                }
+            }
+            i = 8;
+            rLottieImageView.setVisibility(i);
+        }
+        CodeNumberField[] codeNumberFieldArr = this.codeFieldContainer.codeField;
+        int length = codeNumberFieldArr.length;
+        for (int i2 = 0; i2 < length; i2++) {
+            codeNumberFieldArr[i2].setShowSoftInputOnFocusCompat(!isCustomKeyboardVisible());
+        }
     }
 
     public void onResume() {

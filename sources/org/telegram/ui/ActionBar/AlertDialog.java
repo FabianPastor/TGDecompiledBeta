@@ -1625,6 +1625,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             return this;
         }
 
+        public Builder setOnCancelListener(DialogInterface.OnCancelListener onCancelListener) {
+            this.alertDialog.setOnCancelListener(onCancelListener);
+            return this;
+        }
+
         public Builder setCustomViewOffset(int i) {
             int unused = this.alertDialog.customViewOffset = i;
             return this;

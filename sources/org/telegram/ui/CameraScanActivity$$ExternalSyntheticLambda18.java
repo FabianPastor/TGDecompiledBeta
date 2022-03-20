@@ -10,6 +10,6 @@ public final /* synthetic */ class CameraScanActivity$$ExternalSyntheticLambda18
     }
 
     public final void onCameraInit() {
-        this.f$0.lambda$createView$4();
+        this.f$0.lambda$initCameraView$8();
     }
 }

@@ -12,6 +12,6 @@ public final /* synthetic */ class LoginActivity$PhoneView$$ExternalSyntheticLam
     }
 
     public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return this.f$0.lambda$new$5(textView, i, keyEvent);
+        return this.f$0.lambda$new$6(textView, i, keyEvent);
     }
 }
