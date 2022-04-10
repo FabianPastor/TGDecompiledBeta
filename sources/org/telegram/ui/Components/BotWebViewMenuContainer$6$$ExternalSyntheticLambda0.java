@@ -3,10 +3,10 @@ package org.telegram.ui.Components;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import org.telegram.ui.Components.BotWebViewMenuContainer;
 
-public final /* synthetic */ class BotWebViewMenuContainer$5$$ExternalSyntheticLambda0 implements DynamicAnimation.OnAnimationEndListener {
-    public final /* synthetic */ BotWebViewMenuContainer.AnonymousClass5 f$0;
+public final /* synthetic */ class BotWebViewMenuContainer$6$$ExternalSyntheticLambda0 implements DynamicAnimation.OnAnimationEndListener {
+    public final /* synthetic */ BotWebViewMenuContainer.AnonymousClass6 f$0;
 
-    public /* synthetic */ BotWebViewMenuContainer$5$$ExternalSyntheticLambda0(BotWebViewMenuContainer.AnonymousClass5 r1) {
+    public /* synthetic */ BotWebViewMenuContainer$6$$ExternalSyntheticLambda0(BotWebViewMenuContainer.AnonymousClass6 r1) {
         this.f$0 = r1;
     }
 

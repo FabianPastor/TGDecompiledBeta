@@ -10,6 +10,6 @@ public final /* synthetic */ class ChatAttachAlertBotWebViewLayout$$ExternalSynt
     }
 
     public final void accept(Object obj) {
-        this.f$0.lambda$new$6((Float) obj);
+        this.f$0.lambda$new$7((Float) obj);
     }
 }

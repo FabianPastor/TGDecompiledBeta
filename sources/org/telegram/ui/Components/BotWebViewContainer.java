@@ -84,6 +84,7 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     private int lastButtonColor = Theme.getColor("featuredStickers_addButton");
     private String lastButtonText = "";
     private int lastButtonTextColor = Theme.getColor("featuredStickers_buttonText");
+    private boolean lastExpanded;
     /* access modifiers changed from: private */
     public ValueCallback<Uri[]> mFilePathCallback;
     /* access modifiers changed from: private */
@@ -92,6 +93,7 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     /* access modifiers changed from: private */
     public Activity parentActivity;
     private Theme.ResourcesProvider resourcesProvider;
+    private int viewPortOffset;
     private WebView webView;
     /* access modifiers changed from: private */
     public Consumer<Float> webViewProgressListener;
@@ -465,15 +467,41 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
         }
     }
 
-    public void invalidateTranslation() {
-        invalidateViewPortHeight();
+    public void setViewPortOffset(int i) {
+        this.viewPortOffset = i;
+        invalidateViewPortHeight(true);
     }
 
-    private void invalidateViewPortHeight() {
-        if (this.isPageLoaded && (getParent() instanceof ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer)) {
+    /* access modifiers changed from: protected */
+    public void onSizeChanged(int i, int i2, int i3, int i4) {
+        super.onSizeChanged(i, i2, i3, i4);
+        invalidateViewPortHeight(true);
+    }
+
+    public void invalidateViewPortHeight() {
+        invalidateViewPortHeight(false);
+    }
+
+    public void invalidateViewPortHeight(boolean z) {
+        invalidateViewPortHeight(z, false);
+    }
+
+    public void invalidateViewPortHeight(boolean z, boolean z2) {
+        if ((this.isPageLoaded || z2) && (getParent() instanceof ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer)) {
             ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer webViewSwipeContainer = (ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer) getParent();
-            int height = (int) (((((float) getHeight()) - webViewSwipeContainer.getOffsetY()) - webViewSwipeContainer.getSwipeOffsetY()) + webViewSwipeContainer.getTopActionBarOffsetY());
-            evaluateJs("window.Telegram.WebView.receiveEvent('viewport_changed', {\"height\": " + height + "});");
+            if (z) {
+                this.lastExpanded = webViewSwipeContainer.getSwipeOffsetY() == (-webViewSwipeContainer.getOffsetY()) + webViewSwipeContainer.getTopActionBarOffsetY();
+            }
+            int measuredHeight = (int) (((((float) webViewSwipeContainer.getMeasuredHeight()) - webViewSwipeContainer.getOffsetY()) - webViewSwipeContainer.getSwipeOffsetY()) + webViewSwipeContainer.getTopActionBarOffsetY() + ((float) this.viewPortOffset));
+            try {
+                JSONObject jSONObject = new JSONObject();
+                jSONObject.put("height", (double) (((float) measuredHeight) / AndroidUtilities.density));
+                jSONObject.put("is_state_stable", z);
+                jSONObject.put("is_expanded", this.lastExpanded);
+                evaluateJs("window.Telegram.WebView.receiveEvent('viewport_changed', " + jSONObject + ");");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -658,6 +686,7 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     /* access modifiers changed from: private */
     public void onEventReceived(String str, String str2) {
         str.hashCode();
+        boolean z = false;
         char c = 65535;
         switch (str.hashCode()) {
             case -921083201:
@@ -699,7 +728,10 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
         }
         switch (c) {
             case 0:
-                invalidateViewPortHeight();
+                if ((getParent() instanceof ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer) && ((ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer) getParent()).isSwipeInProgress()) {
+                    z = true;
+                }
+                invalidateViewPortHeight(!z, true);
                 return;
             case 1:
                 this.delegate.onCloseRequested();
@@ -715,15 +747,15 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
                     JSONObject jSONObject = new JSONObject(str2);
                     boolean optBoolean = jSONObject.optBoolean("is_active", false);
                     String trim = jSONObject.optString("text", this.lastButtonText).trim();
-                    boolean z = jSONObject.optBoolean("is_visible", false) && !TextUtils.isEmpty(trim);
+                    boolean z2 = jSONObject.optBoolean("is_visible", false) && !TextUtils.isEmpty(trim);
                     int parseColor = jSONObject.has("color") ? Color.parseColor(jSONObject.optString("color")) : this.lastButtonColor;
                     int parseColor2 = jSONObject.has("text_color") ? Color.parseColor(jSONObject.optString("text_color")) : this.lastButtonTextColor;
-                    boolean z2 = jSONObject.optBoolean("is_progress_visible", false) && z;
+                    boolean z3 = jSONObject.optBoolean("is_progress_visible", false) && z2;
                     this.lastButtonColor = parseColor;
                     this.lastButtonTextColor = parseColor2;
                     this.lastButtonText = trim;
                     this.buttonData = str2;
-                    this.delegate.onSetupMainButton(z, optBoolean, trim, parseColor, parseColor2, z2);
+                    this.delegate.onSetupMainButton(z2, optBoolean, trim, parseColor, parseColor2, z3);
                     return;
                 } catch (IllegalArgumentException | JSONException e) {
                     FileLog.e(e);

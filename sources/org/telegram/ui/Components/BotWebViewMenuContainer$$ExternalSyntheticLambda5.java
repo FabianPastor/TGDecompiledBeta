@@ -1,13 +1,15 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda5 implements Runnable {
+import androidx.dynamicanimation.animation.DynamicAnimation;
+
+public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda5 implements DynamicAnimation.OnAnimationEndListener {
     public final /* synthetic */ BotWebViewMenuContainer f$0;
 
     public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda5(BotWebViewMenuContainer botWebViewMenuContainer) {
         this.f$0 = botWebViewMenuContainer;
     }
 
-    public final void run() {
-        this.f$0.lambda$new$5();
+    public final void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+        this.f$0.lambda$onAttachedToWindow$11(dynamicAnimation, z, f, f2);
     }
 }

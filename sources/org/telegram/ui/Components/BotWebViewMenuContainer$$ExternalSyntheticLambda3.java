@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.core.util.Consumer;
 
-public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda3 implements DynamicAnimation.OnAnimationUpdateListener {
+public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda3 implements Consumer {
     public final /* synthetic */ BotWebViewMenuContainer f$0;
 
     public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda3(BotWebViewMenuContainer botWebViewMenuContainer) {
         this.f$0 = botWebViewMenuContainer;
     }
 
-    public final void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
-        this.f$0.lambda$animateBotButton$6(dynamicAnimation, f, f2);
+    public final void accept(Object obj) {
+        this.f$0.lambda$new$8((Float) obj);
     }
 }

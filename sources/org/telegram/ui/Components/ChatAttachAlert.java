@@ -54,6 +54,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
@@ -731,7 +732,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         public float checkedState;
         /* access modifiers changed from: private */
         public TLRPC$User currentUser;
-        private int iconColor;
+        private int iconBackgroundColor;
         /* access modifiers changed from: private */
         public BackupImageView imageView;
         /* access modifiers changed from: private */
@@ -746,6 +747,21 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             setFocusable(true);
             setFocusableInTouchMode(true);
             AnonymousClass1 r1 = new BackupImageView(context, ChatAttachAlert.this) {
+                {
+                    this.imageReceiver = new ImageReceiver(this, this) {
+                        /* access modifiers changed from: protected */
+                        public boolean setImageBitmapByKey(Drawable drawable, String str, int i, boolean z, int i2) {
+                            if (drawable instanceof RLottieDrawable) {
+                                RLottieDrawable rLottieDrawable = (RLottieDrawable) drawable;
+                                rLottieDrawable.setCustomEndFrame(0);
+                                rLottieDrawable.stop();
+                                rLottieDrawable.setProgress(0.0f, false);
+                            }
+                            return super.setImageBitmapByKey(drawable, str, i, z, i2);
+                        }
+                    };
+                }
+
                 public void setScaleX(float f) {
                     super.setScaleX(f);
                     AttachBotButton.this.invalidate();
@@ -796,7 +812,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 float dp = ((float) AndroidUtilities.dp(23.0f)) * scaleX;
                 float left = ((float) this.imageView.getLeft()) + (((float) this.imageView.getMeasuredWidth()) / 2.0f);
                 float top = ((float) this.imageView.getTop()) + (((float) this.imageView.getMeasuredWidth()) / 2.0f);
-                ChatAttachAlert.this.attachButtonPaint.setColor(this.textColor);
+                ChatAttachAlert.this.attachButtonPaint.setColor(this.iconBackgroundColor);
                 ChatAttachAlert.this.attachButtonPaint.setStyle(Paint.Style.STROKE);
                 ChatAttachAlert.this.attachButtonPaint.setStrokeWidth(((float) AndroidUtilities.dp(3.0f)) * scaleX);
                 ChatAttachAlert.this.attachButtonPaint.setAlpha(Math.round(this.checkedState * 255.0f));
@@ -828,6 +844,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 if (z) {
                     if (this.checked.booleanValue() && lottieAnimation != null) {
                         lottieAnimation.setAutoRepeat(0);
+                        lottieAnimation.setCustomEndFrame(-1);
                         lottieAnimation.setProgress(0.0f, false);
                         lottieAnimation.start();
                     }
@@ -895,7 +912,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 }
                 if (tLRPC$TL_attachMenuBotIcon != null) {
                     this.textColor = ChatAttachAlert.this.getThemedColor("chat_attachContactText");
-                    this.iconColor = ChatAttachAlert.this.getThemedColor("chat_attachContactIcon");
+                    this.iconBackgroundColor = ChatAttachAlert.this.getThemedColor("chat_attachContactBackground");
                     Iterator<TLRPC$TL_attachMenuBotIconColor> it = tLRPC$TL_attachMenuBotIcon.colors.iterator();
                     while (it.hasNext()) {
                         TLRPC$TL_attachMenuBotIconColor next = it.next();
@@ -933,7 +950,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                                 if (!Theme.getCurrentTheme().isDark()) {
                                     break;
                                 } else {
-                                    this.iconColor = next.color;
+                                    this.iconBackgroundColor = next.color;
                                     break;
                                 }
                             case 1:
@@ -947,7 +964,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                                 if (Theme.getCurrentTheme().isDark()) {
                                     break;
                                 } else {
-                                    this.iconColor = next.color;
+                                    this.iconBackgroundColor = next.color;
                                     break;
                                 }
                             case 3:
@@ -959,12 +976,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                                 }
                         }
                     }
+                    this.textColor = ColorUtils.setAlphaComponent(this.textColor, 255);
+                    this.iconBackgroundColor = ColorUtils.setAlphaComponent(this.iconBackgroundColor, 255);
                     TLRPC$Document tLRPC$Document = tLRPC$TL_attachMenuBotIcon.icon;
                     this.imageView.getImageReceiver().setAllowStartLottieAnimation(false);
                     this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "32_32", z ? "tgs" : "svg", (Drawable) null, (Object) tLRPC$TL_attachMenuBotIcon);
                 }
                 this.imageView.setSize(AndroidUtilities.dp(28.0f), AndroidUtilities.dp(28.0f));
-                this.imageView.setColorFilter(new PorterDuffColorFilter(this.iconColor, PorterDuff.Mode.SRC_IN));
+                this.imageView.setColorFilter(new PorterDuffColorFilter(ChatAttachAlert.this.getThemedColor("chat_attachContactIcon"), PorterDuff.Mode.SRC_IN));
                 this.attachMenuBot = tLRPC$TL_attachMenuBot;
                 this.selector.setVisibility(8);
                 updateMargins();

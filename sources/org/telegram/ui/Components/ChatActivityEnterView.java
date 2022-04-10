@@ -4810,6 +4810,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         this.attachButton.setTranslationX(f);
         this.audioSendButton.setTranslationX(f);
         this.videoSendButton.setTranslationX(f);
+        ImageView imageView = this.botButton;
+        if (imageView != null) {
+            imageView.setTranslationX(f);
+        }
     }
 
     public void setComposeShadowAlpha(float f) {
@@ -12622,7 +12626,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
             android.view.ViewGroup$MarginLayoutParams r0 = (android.view.ViewGroup.MarginLayoutParams) r0
             org.telegram.ui.Components.EditTextCaption r1 = r6.messageEditText
-            int r1 = r1.getHeight()
+            int r1 = r1.getMeasuredHeight()
             r0.bottomMargin = r1
             org.telegram.ui.Components.BotWebViewMenuContainer r0 = r6.botWebViewMenuContainer
             r6.measureChild(r0, r7, r8)

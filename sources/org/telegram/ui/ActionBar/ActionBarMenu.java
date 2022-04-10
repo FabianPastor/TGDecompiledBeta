@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.LinearLayout;
+import com.google.android.exoplayer2.util.Log;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -82,10 +83,27 @@ public class ActionBarMenu extends LinearLayout {
         Drawable drawable2 = drawable;
         int i6 = i4;
         CharSequence charSequence4 = charSequence2;
-        ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(getContext(), this, i3, this.isActionMode ? this.parentActionBar.itemsActionModeColor : this.parentActionBar.itemsColor, charSequence3 != null, resourcesProvider);
-        actionBarMenuItem.setTag(Integer.valueOf(i));
+        final int i7 = i2;
+        AnonymousClass1 r15 = r0;
+        final int i8 = i;
+        AnonymousClass1 r0 = new ActionBarMenuItem(this, getContext(), this, i3, this.isActionMode ? this.parentActionBar.itemsActionModeColor : this.parentActionBar.itemsColor, charSequence3 != null, resourcesProvider) {
+            public void setVisibility(int i) {
+                super.setVisibility(i);
+                if (i7 == NUM) {
+                    int i2 = i8;
+                    if (i2 == 0 || i2 == 14) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(i8);
+                        sb.append(" ");
+                        sb.append(i == 0);
+                        Log.d("kek", sb.toString());
+                    }
+                }
+            }
+        };
+        r15.setTag(Integer.valueOf(i));
         if (charSequence3 != null) {
-            actionBarMenuItem.textView.setText(charSequence3);
+            r15.textView.setText(charSequence3);
             if (i6 == 0) {
                 i6 = -2;
             }
@@ -93,24 +111,26 @@ public class ActionBarMenu extends LinearLayout {
             int dp = AndroidUtilities.dp(14.0f);
             layoutParams.rightMargin = dp;
             layoutParams.leftMargin = dp;
-            addView(actionBarMenuItem, layoutParams);
+            addView(r15, layoutParams);
         } else {
             if (drawable2 != null) {
                 if (drawable2 instanceof RLottieDrawable) {
-                    actionBarMenuItem.iconView.setAnimation((RLottieDrawable) drawable2);
+                    r15.iconView.setAnimation((RLottieDrawable) drawable2);
                 } else {
-                    actionBarMenuItem.iconView.setImageDrawable(drawable2);
+                    r15.iconView.setImageDrawable(drawable2);
                 }
             } else if (i5 != 0) {
-                actionBarMenuItem.iconView.setImageResource(i5);
+                r15.iconView.setImageResource(i5);
             }
-            addView(actionBarMenuItem, new LinearLayout.LayoutParams(i6, -1));
+            addView(r15, new LinearLayout.LayoutParams(i6, -1));
         }
-        actionBarMenuItem.setOnClickListener(new ActionBarMenu$$ExternalSyntheticLambda0(this));
-        if (charSequence4 != null) {
-            actionBarMenuItem.setContentDescription(charSequence4);
+        r15.setOnClickListener(new ActionBarMenu$$ExternalSyntheticLambda0(this));
+        CharSequence charSequence5 = charSequence2;
+        AnonymousClass1 r1 = r15;
+        if (charSequence5 != null) {
+            r1.setContentDescription(charSequence5);
         }
-        return actionBarMenuItem;
+        return r1;
     }
 
     /* access modifiers changed from: private */

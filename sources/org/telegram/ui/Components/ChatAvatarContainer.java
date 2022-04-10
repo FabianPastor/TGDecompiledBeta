@@ -911,6 +911,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.lastSubtitle = this.subtitleTextView.getText();
         }
         this.subtitleTextView.setText(str);
+        Integer num2 = this.overrideSubtitleColor;
+        if (num2 != null) {
+            this.subtitleTextView.setTextColor(num2.intValue());
+            return;
+        }
         this.subtitleTextView.setTextColor(getThemedColor("actionBarDefaultSubtitle"));
         this.subtitleTextView.setTag("actionBarDefaultSubtitle");
     }

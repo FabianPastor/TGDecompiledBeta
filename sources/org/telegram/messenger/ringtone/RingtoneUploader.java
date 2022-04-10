@@ -5,6 +5,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -85,16 +86,16 @@ public class RingtoneUploader implements NotificationCenter.NotificationCenterDe
         unsubscribe();
         MediaDataController.getInstance(this.currentAccount).onRingtoneUploaded(this.filePath, (TLRPC$Document) null, true);
         if (tLRPC$TL_error != null) {
-            NotificationCenter.getInstance(this.currentAccount).doOnIdle(new RingtoneUploader$$ExternalSyntheticLambda1(tLRPC$TL_error));
+            NotificationCenter.getInstance(this.currentAccount).doOnIdle(new RingtoneUploader$$ExternalSyntheticLambda1(this, tLRPC$TL_error));
         }
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$error$2(TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$error$2(TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error.text.equals("RINGTONE_DURATION_TOO_LONG")) {
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 4, LocaleController.formatString("TooLongError", NUM, new Object[0]), LocaleController.formatString("ErrorRingtoneDurationTooLong", NUM, new Object[0]));
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 4, LocaleController.formatString("TooLongError", NUM, new Object[0]), LocaleController.formatString("ErrorRingtoneDurationTooLong", NUM, Integer.valueOf(MessagesController.getInstance(this.currentAccount).ringtoneDurationMax)));
         } else if (tLRPC$TL_error.text.equals("RINGTONE_SIZE_TOO_BIG")) {
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 4, LocaleController.formatString("TooLargeError", NUM, new Object[0]), LocaleController.formatString("ErrorRingtoneSizeTooBig", NUM, new Object[0]));
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 4, LocaleController.formatString("TooLargeError", NUM, new Object[0]), LocaleController.formatString("ErrorRingtoneSizeTooBig", NUM, Integer.valueOf(MessagesController.getInstance(this.currentAccount).ringtoneSizeMax / 1024)));
         } else {
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 4, LocaleController.formatString("InvalidFormatError", NUM, new Object[0]), LocaleController.formatString("ErrorRingtoneInvalidFormat", NUM, new Object[0]));
         }

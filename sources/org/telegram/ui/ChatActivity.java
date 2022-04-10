@@ -1461,6 +1461,37 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         showProgressView(false);
     }
 
+    public void showHeaderItem(boolean z) {
+        if (!z) {
+            ActionBarMenuItem actionBarMenuItem = this.attachItem;
+            if (actionBarMenuItem != null) {
+                actionBarMenuItem.setVisibility(8);
+            }
+            ActionBarMenuItem actionBarMenuItem2 = this.headerItem;
+            if (actionBarMenuItem2 != null) {
+                actionBarMenuItem2.setVisibility(8);
+            }
+        } else if (!this.chatActivityEnterView.hasText() || !TextUtils.isEmpty(this.chatActivityEnterView.getSlowModeTimer())) {
+            ActionBarMenuItem actionBarMenuItem3 = this.attachItem;
+            if (actionBarMenuItem3 != null) {
+                actionBarMenuItem3.setVisibility(8);
+            }
+            ActionBarMenuItem actionBarMenuItem4 = this.headerItem;
+            if (actionBarMenuItem4 != null) {
+                actionBarMenuItem4.setVisibility(0);
+            }
+        } else {
+            ActionBarMenuItem actionBarMenuItem5 = this.attachItem;
+            if (actionBarMenuItem5 != null) {
+                actionBarMenuItem5.setVisibility(0);
+            }
+            ActionBarMenuItem actionBarMenuItem6 = this.headerItem;
+            if (actionBarMenuItem6 != null) {
+                actionBarMenuItem6.setVisibility(8);
+            }
+        }
+    }
+
     private class UnreadCounterTextView extends View {
         boolean animatedFromBottom;
         private int circleWidth;
@@ -8041,10 +8072,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     public /* synthetic */ void lambda$createView$74(float[] fArr) {
         fArr[1] = (float) (this.chatListView.getBottom() - this.blurredViewBottomOffset);
         fArr[0] = (((float) this.chatListView.getTop()) + this.chatListViewPaddingTop) - ((float) AndroidUtilities.dp(4.0f));
-    }
-
-    public ActionBarMenuItem getHeaderItem() {
-        return this.headerItem;
     }
 
     private void playReactionAnimation(Integer num) {

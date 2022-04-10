@@ -22171,8 +22171,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX WARNING: Code restructure failed: missing block: B:7:0x0017, code lost:
         if ((r1 & 1) != 0) goto L_0x0019;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x0116  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x0132  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x011a  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x0136  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateReactionLayoutPosition() {
         /*
@@ -22182,17 +22182,17 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r2 = 1098907648(0x41800000, float:16.0)
             r3 = 1110179840(0x422CLASSNAME, float:43.0)
             r4 = 0
-            if (r1 != 0) goto L_0x00cf
+            if (r1 != 0) goto L_0x00d3
             org.telegram.messenger.MessageObject$GroupedMessagePosition r1 = r7.currentPosition
             if (r1 == 0) goto L_0x0019
             int r1 = r1.flags
             r5 = r1 & 8
-            if (r5 == 0) goto L_0x00cf
+            if (r5 == 0) goto L_0x00d3
             r1 = r1 & 1
-            if (r1 == 0) goto L_0x00cf
+            if (r1 == 0) goto L_0x00d3
         L_0x0019:
             boolean r0 = r0.isSmall
-            if (r0 != 0) goto L_0x00cf
+            if (r0 != 0) goto L_0x00d3
             org.telegram.messenger.MessageObject r0 = r7.currentMessageObject
             boolean r0 = r0.isOutOwner()
             r1 = 1093664768(0x41300000, float:11.0)
@@ -22254,76 +22254,78 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r0.y = r1
         L_0x0090:
             android.text.StaticLayout r0 = r7.captionLayout
-            if (r0 == 0) goto L_0x00c6
+            if (r0 == 0) goto L_0x00ca
             org.telegram.messenger.MessageObject r0 = r7.currentMessageObject
             int r1 = r0.type
             r5 = 2
-            if (r1 == r5) goto L_0x00b1
+            if (r1 == r5) goto L_0x00b5
             boolean r0 = r0.isOut()
-            if (r0 == 0) goto L_0x00a5
+            if (r0 == 0) goto L_0x00a9
             boolean r0 = r7.drawForwardedName
-            if (r0 != 0) goto L_0x00b1
-        L_0x00a5:
+            if (r0 == 0) goto L_0x00a9
+            boolean r0 = r7.drawPhotoImage
+            if (r0 == 0) goto L_0x00b5
+        L_0x00a9:
             org.telegram.messenger.MessageObject r0 = r7.currentMessageObject
             int r0 = r0.type
             r1 = 9
-            if (r0 != r1) goto L_0x00b9
+            if (r0 != r1) goto L_0x00bd
             boolean r0 = r7.drawPhotoImage
-            if (r0 == 0) goto L_0x00b9
-        L_0x00b1:
+            if (r0 == 0) goto L_0x00bd
+        L_0x00b5:
             org.telegram.messenger.MessageObject$GroupedMessagePosition r0 = r7.currentPosition
-            if (r0 == 0) goto L_0x00c6
+            if (r0 == 0) goto L_0x00ca
             org.telegram.messenger.MessageObject$GroupedMessages r0 = r7.currentMessagesGroup
-            if (r0 == 0) goto L_0x00c6
-        L_0x00b9:
+            if (r0 == 0) goto L_0x00ca
+        L_0x00bd:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
             int r1 = r0.y
             r5 = 1096810496(0x41600000, float:14.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r1 = r1 - r5
             r0.y = r1
-        L_0x00c6:
+        L_0x00ca:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
             int r1 = r0.y
             int r5 = r0.positionOffsetY
             int r1 = r1 + r5
             r0.y = r1
-        L_0x00cf:
+        L_0x00d3:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
             boolean r1 = r0.isSmall
-            if (r1 == 0) goto L_0x0174
+            if (r1 == 0) goto L_0x0178
             boolean r0 = r0.isEmpty
-            if (r0 != 0) goto L_0x0174
+            if (r0 != 0) goto L_0x0178
             boolean r0 = r7.shouldDrawTimeOnMedia()
-            if (r0 == 0) goto L_0x00ec
+            if (r0 == 0) goto L_0x00f0
             boolean r0 = r7.drawCommentButton
-            if (r0 == 0) goto L_0x00ea
+            if (r0 == 0) goto L_0x00ee
             r0 = 1109734195(0x42253333, float:41.3)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r0)
-        L_0x00ea:
+        L_0x00ee:
             int r0 = -r4
-            goto L_0x010e
-        L_0x00ec:
+            goto L_0x0112
+        L_0x00f0:
             org.telegram.messenger.MessageObject r0 = r7.currentMessageObject
             boolean r0 = r0.isSponsored()
-            if (r0 == 0) goto L_0x0105
+            if (r0 == 0) goto L_0x0109
             r0 = 1111490560(0x42400000, float:48.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r0 = -r0
             boolean r1 = r7.hasNewLineForTime
-            if (r1 == 0) goto L_0x010e
+            if (r1 == 0) goto L_0x0112
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 - r1
-            goto L_0x010e
-        L_0x0105:
+            goto L_0x0112
+        L_0x0109:
             boolean r0 = r7.drawCommentButton
-            if (r0 == 0) goto L_0x00ea
+            if (r0 == 0) goto L_0x00ee
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            goto L_0x00ea
-        L_0x010e:
+            goto L_0x00ee
+        L_0x0112:
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r1 = r7.reactionsLayoutInBubble
             boolean r2 = r7.shouldDrawTimeOnMedia()
-            if (r2 == 0) goto L_0x0132
+            if (r2 == 0) goto L_0x0136
             org.telegram.messenger.ImageReceiver r0 = r7.photoImage
             float r0 = r0.getImageY2()
             int r2 = r7.additionalTimeOffsetY
@@ -22337,20 +22339,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r2 = r2.getHeight()
             float r2 = (float) r2
             float r0 = r0 - r2
-            goto L_0x0150
-        L_0x0132:
+            goto L_0x0154
+        L_0x0136:
             int r2 = r7.layoutHeight
             boolean r3 = r7.pinnedBottom
-            if (r3 != 0) goto L_0x0140
+            if (r3 != 0) goto L_0x0144
             boolean r3 = r7.pinnedTop
-            if (r3 == 0) goto L_0x013d
-            goto L_0x0140
-        L_0x013d:
+            if (r3 == 0) goto L_0x0141
+            goto L_0x0144
+        L_0x0141:
             r3 = 1087373312(0x40d00000, float:6.5)
-            goto L_0x0142
-        L_0x0140:
+            goto L_0x0146
+        L_0x0144:
             r3 = 1089470464(0x40var_, float:7.5)
-        L_0x0142:
+        L_0x0146:
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r2 = r2 - r3
             android.text.StaticLayout r3 = r7.timeLayout
@@ -22358,7 +22360,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r2 = r2 - r3
             int r2 = r2 + r0
             float r0 = (float) r2
-        L_0x0150:
+        L_0x0154:
             int r0 = (int) r0
             r1.y = r0
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
@@ -22379,7 +22381,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble r0 = r7.reactionsLayoutInBubble
             int r1 = r7.timeX
             r0.x = r1
-        L_0x0174:
+        L_0x0178:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.updateReactionLayoutPosition():void");

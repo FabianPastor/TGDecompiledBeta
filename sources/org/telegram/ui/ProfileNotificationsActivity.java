@@ -432,8 +432,10 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             this.avatarContainer.setTitle(chat.title);
         } else {
             TLRPC$User user = getMessagesController().getUser(Long.valueOf(this.dialogId));
-            this.avatarContainer.setUserAvatar(user);
-            this.avatarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
+            if (user != null) {
+                this.avatarContainer.setUserAvatar(user);
+                this.avatarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
+            }
         }
         if (this.addingException) {
             this.avatarContainer.setSubtitle(LocaleController.getString("NotificationsNewException", NUM));

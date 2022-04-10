@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build;
+import android.text.Editable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
@@ -41,7 +43,7 @@ import org.telegram.ui.Components.BotWebViewContainer;
 import org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout;
 
 public class BotWebViewMenuContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
-    private static final SimpleFloatPropertyCompat<BotWebViewMenuContainer> ACTION_BAR_TRANSITION_PROGRESS_VALUE = new SimpleFloatPropertyCompat("actionBarTransitionProgress", BotWebViewMenuContainer$$ExternalSyntheticLambda12.INSTANCE, BotWebViewMenuContainer$$ExternalSyntheticLambda13.INSTANCE).setMultiplier(100.0f);
+    private static final SimpleFloatPropertyCompat<BotWebViewMenuContainer> ACTION_BAR_TRANSITION_PROGRESS_VALUE = new SimpleFloatPropertyCompat("actionBarTransitionProgress", BotWebViewMenuContainer$$ExternalSyntheticLambda18.INSTANCE, BotWebViewMenuContainer$$ExternalSyntheticLambda19.INSTANCE).setMultiplier(100.0f);
     private ActionBar.ActionBarMenuOnItemClick actionBarOnItemClick;
     /* access modifiers changed from: private */
     public float actionBarTransitionProgress;
@@ -66,8 +68,13 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
     public long lastSwipeTime;
     private Paint linePaint = new Paint();
     private ChatActivityEnterView parentEnterView;
-    private Runnable pollRunnable = new BotWebViewMenuContainer$$ExternalSyntheticLambda4(this);
+    private Runnable pollRunnable = new BotWebViewMenuContainer$$ExternalSyntheticLambda8(this);
+    /* access modifiers changed from: private */
+    public ChatAttachAlertBotWebViewLayout.WebProgressView progressView;
     private long queryId;
+    private MessageObject savedEditMessageObject;
+    private Editable savedEditText;
+    private MessageObject savedReplyMessageObject;
     private SpringAnimation springAnimation;
     /* access modifiers changed from: private */
     public ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer swipeContainer;
@@ -83,14 +90,15 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         Integer num;
         botWebViewMenuContainer.actionBarTransitionProgress = f;
         botWebViewMenuContainer.invalidate();
+        int blendARGB = ColorUtils.blendARGB(botWebViewMenuContainer.getColor("actionBarDefaultSubtitle"), botWebViewMenuContainer.getColor("windowBackgroundWhiteGrayText"), f);
         ChatActivity parentFragment = botWebViewMenuContainer.parentEnterView.getParentFragment();
         ActionBar actionBar = parentFragment.getActionBar();
         actionBar.setBackgroundColor(ColorUtils.blendARGB(botWebViewMenuContainer.getColor("actionBarDefault"), botWebViewMenuContainer.getColor("windowBackgroundWhite"), f));
         actionBar.setItemsColor(ColorUtils.blendARGB(botWebViewMenuContainer.getColor("actionBarDefaultIcon"), botWebViewMenuContainer.getColor("windowBackgroundWhiteBlackText"), f), false);
         actionBar.setItemsBackgroundColor(ColorUtils.blendARGB(botWebViewMenuContainer.getColor("actionBarDefaultSelector"), botWebViewMenuContainer.getColor("actionBarWhiteSelector"), f), false);
+        actionBar.setSubtitleColor(blendARGB);
         ChatAvatarContainer avatarContainer = parentFragment.getAvatarContainer();
         avatarContainer.getTitleTextView().setTextColor(ColorUtils.blendARGB(botWebViewMenuContainer.getColor("actionBarDefaultTitle"), botWebViewMenuContainer.getColor("windowBackgroundWhiteBlackText"), f));
-        int blendARGB = ColorUtils.blendARGB(botWebViewMenuContainer.getColor("actionBarDefaultSubtitle"), botWebViewMenuContainer.getColor("windowBackgroundWhiteGrayText"), f);
         avatarContainer.getSubtitleTextView().setTextColor(blendARGB);
         if (f == 0.0f) {
             num = null;
@@ -108,13 +116,13 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
             tLRPC$TL_messages_prolongWebView.bot = MessagesController.getInstance(this.currentAccount).getInputUser(this.botId);
             tLRPC$TL_messages_prolongWebView.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(this.botId);
             tLRPC$TL_messages_prolongWebView.query_id = this.queryId;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_prolongWebView, new BotWebViewMenuContainer$$ExternalSyntheticLambda10(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_prolongWebView, new BotWebViewMenuContainer$$ExternalSyntheticLambda16(this));
         }
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$3(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new BotWebViewMenuContainer$$ExternalSyntheticLambda8(this, tLRPC$TL_error));
+        AndroidUtilities.runOnUIThread(new BotWebViewMenuContainer$$ExternalSyntheticLambda14(this, tLRPC$TL_error));
     }
 
     /* access modifiers changed from: private */
@@ -139,6 +147,8 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         this.actionBarOnItemClick = actionBar.getActionBarMenuOnItemClick();
         BotWebViewContainer botWebViewContainer = new BotWebViewContainer(context, chatActivityEnterView.getParentFragment().getResourceProvider(), getColor("windowBackgroundWhite"));
         this.webViewContainer = botWebViewContainer;
+        botWebViewContainer.setViewPortOffset(-AndroidUtilities.dp(5.0f));
+        BotWebViewContainer botWebViewContainer2 = this.webViewContainer;
         AnonymousClass1 r2 = new BotWebViewContainer.Delegate() {
             private boolean sentWebViewData;
 
@@ -189,13 +199,13 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
             }
         };
         this.webViewDelegate = r2;
-        botWebViewContainer.setDelegate(r2);
+        botWebViewContainer2.setDelegate(r2);
         this.linePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         this.linePaint.setStrokeWidth((float) AndroidUtilities.dp(4.0f));
         this.linePaint.setStrokeCap(Paint.Cap.ROUND);
         this.dimPaint.setColor(NUM);
         this.backgroundPaint.setColor(getColor("windowBackgroundWhite"));
-        AnonymousClass2 r9 = new ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer(context) {
+        AnonymousClass2 r0 = new ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer(context) {
             /* access modifiers changed from: protected */
             /* JADX WARNING: Removed duplicated region for block: B:11:0x0029  */
             /* JADX WARNING: Removed duplicated region for block: B:8:0x001f  */
@@ -254,6 +264,11 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                     int r6 = android.view.View.MeasureSpec.getSize(r6)
                     int r0 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
                     int r6 = r6 - r0
+                    int r0 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+                    int r6 = r6 - r0
+                    r0 = 1103101952(0x41CLASSNAME, float:24.0)
+                    int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
+                    int r6 = r6 + r0
                     int r6 = android.view.View.MeasureSpec.makeMeasureSpec(r6, r1)
                     super.onMeasure(r5, r6)
                     return
@@ -267,14 +282,19 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                 }
             }
         };
-        this.swipeContainer = r9;
-        r9.setWebView(this.webViewContainer.getWebView());
-        this.swipeContainer.setScrollListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda5(this));
+        this.swipeContainer = r0;
+        r0.setWebView(this.webViewContainer.getWebView());
+        this.swipeContainer.setScrollListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda10(this));
+        this.swipeContainer.setScrollEndListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda11(this));
         this.swipeContainer.addView(this.webViewContainer);
-        this.swipeContainer.setDelegate(new BotWebViewMenuContainer$$ExternalSyntheticLambda11(this));
+        this.swipeContainer.setDelegate(new BotWebViewMenuContainer$$ExternalSyntheticLambda17(this));
         this.swipeContainer.setTopActionBarOffsetY((float) ((ActionBar.getCurrentActionBarHeight() + AndroidUtilities.statusBarHeight) - AndroidUtilities.dp(24.0f)));
         this.swipeContainer.setSwipeOffsetAnimationDisallowed(true);
         addView(this.swipeContainer, LayoutHelper.createFrame(-1, -1.0f, 48, 0.0f, 24.0f, 0.0f, 0.0f));
+        ChatAttachAlertBotWebViewLayout.WebProgressView webProgressView = new ChatAttachAlertBotWebViewLayout.WebProgressView(context, chatActivityEnterView.getParentFragment().getResourceProvider());
+        this.progressView = webProgressView;
+        addView(webProgressView, LayoutHelper.createFrame(-1, -2.0f, 80, 0.0f, 0.0f, 0.0f, 5.0f));
+        this.webViewContainer.setWebViewProgressListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda3(this));
         setWillNotDraw(false);
     }
 
@@ -286,6 +306,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
             this.dimPaint.setAlpha(64);
         }
         invalidate();
+        this.webViewContainer.invalidateViewPortHeight();
         if (this.springAnimation != null) {
             float f = ((float) (1.0f - (Math.min(this.swipeContainer.getTopActionBarOffsetY(), this.swipeContainer.getTranslationY() - this.swipeContainer.getTopActionBarOffsetY()) / this.swipeContainer.getTopActionBarOffsetY()) > 0.5f ? 1 : 0)) * 100.0f;
             if (this.springAnimation.getSpring().getFinalPosition() != f) {
@@ -294,6 +315,32 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
             }
         }
         this.lastSwipeTime = System.currentTimeMillis();
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$6() {
+        this.webViewContainer.invalidateViewPortHeight(true);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$8(Float f) {
+        this.progressView.setLoadProgressAnimated(f.floatValue());
+        if (f.floatValue() == 1.0f) {
+            ValueAnimator duration = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f}).setDuration(200);
+            duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
+            duration.addUpdateListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda0(this));
+            duration.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    BotWebViewMenuContainer.this.progressView.setVisibility(8);
+                }
+            });
+            duration.start();
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$7(ValueAnimator valueAnimator) {
+        this.progressView.setAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 
     /* access modifiers changed from: private */
@@ -314,21 +361,21 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         if (z) {
             f = 1.0f;
         }
-        SpringAnimation springAnimation4 = (SpringAnimation) ((SpringAnimation) springAnimation3.setSpring(new SpringForce(f * simpleFloatPropertyCompat.getMultiplier()).setStiffness(z ? 600.0f : 750.0f).setDampingRatio(1.0f)).addUpdateListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda3(this))).addEndListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda2(this, z, botWebViewButton));
+        SpringAnimation springAnimation4 = (SpringAnimation) ((SpringAnimation) springAnimation3.setSpring(new SpringForce(f * simpleFloatPropertyCompat.getMultiplier()).setStiffness(z ? 600.0f : 750.0f).setDampingRatio(1.0f)).addUpdateListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda7(this))).addEndListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda6(this, z, botWebViewButton));
         this.botWebViewButtonAnimator = springAnimation4;
         springAnimation4.start();
         this.botWebViewButtonWasVisible = z;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$animateBotButton$6(DynamicAnimation dynamicAnimation, float f, float f2) {
+    public /* synthetic */ void lambda$animateBotButton$9(DynamicAnimation dynamicAnimation, float f, float f2) {
         float multiplier = f / ChatActivityBotWebViewButton.PROGRESS_PROPERTY.getMultiplier();
         this.parentEnterView.setBotWebViewButtonOffsetX(((float) AndroidUtilities.dp(64.0f)) * multiplier);
         this.parentEnterView.setComposeShadowAlpha(1.0f - multiplier);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$animateBotButton$7(boolean z, ChatActivityBotWebViewButton chatActivityBotWebViewButton, DynamicAnimation dynamicAnimation, boolean z2, float f, float f2) {
+    public /* synthetic */ void lambda$animateBotButton$10(boolean z, ChatActivityBotWebViewButton chatActivityBotWebViewButton, DynamicAnimation dynamicAnimation, boolean z2, float f, float f2) {
         if (!z) {
             chatActivityBotWebViewButton.setVisibility(8);
         }
@@ -340,27 +387,20 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.springAnimation == null) {
-            this.springAnimation = (SpringAnimation) new SpringAnimation(this, ACTION_BAR_TRANSITION_PROGRESS_VALUE).setSpring(new SpringForce().setStiffness(1200.0f).setDampingRatio(1.0f)).addEndListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda1(this));
+            this.springAnimation = (SpringAnimation) new SpringAnimation(this, ACTION_BAR_TRANSITION_PROGRESS_VALUE).setSpring(new SpringForce().setStiffness(1200.0f).setDampingRatio(1.0f)).addEndListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda5(this));
         }
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.webViewResultSent);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onAttachedToWindow$8(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+    public /* synthetic */ void lambda$onAttachedToWindow$11(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
         ChatActivity parentFragment = this.parentEnterView.getParentFragment();
         ChatAvatarContainer avatarContainer = parentFragment.getAvatarContainer();
-        boolean z2 = true;
         avatarContainer.setClickable(f == 0.0f);
-        BackupImageView avatarImageView = avatarContainer.getAvatarImageView();
-        if (f != 0.0f) {
-            z2 = false;
-        }
-        avatarImageView.setClickable(z2);
+        avatarContainer.getAvatarImageView().setClickable(f == 0.0f);
         ActionBar actionBar = parentFragment.getActionBar();
         if (f == 100.0f) {
-            if (parentFragment.getHeaderItem() != null) {
-                parentFragment.getHeaderItem().setVisibility(8);
-            }
+            parentFragment.showHeaderItem(false);
             this.botMenuItem.setVisibility(0);
             actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
                 public void onItemClick(int i) {
@@ -376,9 +416,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
             });
             return;
         }
-        if (parentFragment.getHeaderItem() != null) {
-            parentFragment.getHeaderItem().setVisibility(0);
-        }
+        parentFragment.showHeaderItem(true);
         this.botMenuItem.setVisibility(8);
         actionBar.setActionBarMenuOnItemClick(this.actionBarOnItemClick);
     }
@@ -417,7 +455,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
             ValueAnimator duration = ValueAnimator.ofInt(new int[]{scrollY, i2}).setDuration(250);
             this.webViewScrollAnimator = duration;
             duration.setInterpolator(ChatListItemAnimator.DEFAULT_INTERPOLATOR);
-            this.webViewScrollAnimator.addUpdateListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda0(this));
+            this.webViewScrollAnimator.addUpdateListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda2(this));
             this.webViewScrollAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     BotWebViewMenuContainer.this.webViewContainer.getWebView().setScrollY(i2);
@@ -431,7 +469,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onPanTransitionStart$9(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$onPanTransitionStart$12(ValueAnimator valueAnimator) {
         this.webViewContainer.getWebView().setScrollY(((Integer) valueAnimator.getAnimatedValue()).intValue());
     }
 
@@ -496,6 +534,14 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         this.currentAccount = i;
         this.botId = j;
         this.botUrl = str;
+        this.savedEditText = this.parentEnterView.getEditField().getText();
+        this.parentEnterView.getEditField().setText((CharSequence) null);
+        this.savedReplyMessageObject = this.parentEnterView.getReplyingMessageObject();
+        this.savedEditMessageObject = this.parentEnterView.getEditingMessageObject();
+        ChatActivity parentFragment = this.parentEnterView.getParentFragment();
+        if (parentFragment != null) {
+            parentFragment.hideFieldPanel(true);
+        }
         if (!this.isLoaded) {
             loadWebView();
         }
@@ -506,7 +552,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                 view.removeOnLayoutChangeListener(this);
                 BotWebViewMenuContainer.this.swipeContainer.setSwipeOffsetY((float) BotWebViewMenuContainer.this.swipeContainer.getHeight());
                 BotWebViewMenuContainer.this.setAlpha(1.0f);
-                ((SpringAnimation) new SpringAnimation(BotWebViewMenuContainer.this.swipeContainer, ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer.SWIPE_OFFSET_Y, 0.0f).setSpring(new SpringForce(0.0f).setDampingRatio(0.75f).setStiffness(500.0f)).addEndListener(new BotWebViewMenuContainer$5$$ExternalSyntheticLambda0(this))).start();
+                ((SpringAnimation) new SpringAnimation(BotWebViewMenuContainer.this.swipeContainer, ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer.SWIPE_OFFSET_Y, 0.0f).setSpring(new SpringForce(0.0f).setDampingRatio(0.75f).setStiffness(500.0f)).addEndListener(new BotWebViewMenuContainer$6$$ExternalSyntheticLambda0(this))).start();
             }
 
             /* access modifiers changed from: private */
@@ -518,6 +564,9 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
 
     /* access modifiers changed from: private */
     public void loadWebView() {
+        this.progressView.setLoadProgress(0.0f);
+        this.progressView.setAlpha(1.0f);
+        this.progressView.setVisibility(0);
         this.webViewContainer.setBotUser(MessagesController.getInstance(this.currentAccount).getUser(Long.valueOf(this.botId)));
         this.webViewContainer.loadFlicker(this.currentAccount, this.botId);
         TLRPC$TL_messages_requestWebView tLRPC$TL_messages_requestWebView = new TLRPC$TL_messages_requestWebView();
@@ -541,16 +590,16 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
             FileLog.e((Throwable) e);
         }
         tLRPC$TL_messages_requestWebView.from_bot_menu = true;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_requestWebView, new BotWebViewMenuContainer$$ExternalSyntheticLambda9(this));
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_requestWebView, new BotWebViewMenuContainer$$ExternalSyntheticLambda15(this));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadWebView$11(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new BotWebViewMenuContainer$$ExternalSyntheticLambda7(this, tLObject));
+    public /* synthetic */ void lambda$loadWebView$14(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new BotWebViewMenuContainer$$ExternalSyntheticLambda13(this, tLObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$loadWebView$10(TLObject tLObject) {
+    public /* synthetic */ void lambda$loadWebView$13(TLObject tLObject) {
         if (tLObject instanceof TLRPC$TL_webViewResultUrl) {
             this.isLoaded = true;
             TLRPC$TL_webViewResultUrl tLRPC$TL_webViewResultUrl = (TLRPC$TL_webViewResultUrl) tLObject;
@@ -579,12 +628,12 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         if (!this.dismissed) {
             this.dismissed = true;
             ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer webViewSwipeContainer = this.swipeContainer;
-            webViewSwipeContainer.stickTo((float) (webViewSwipeContainer.getHeight() + this.parentEnterView.getSizeNotifierLayout().measureKeyboardHeight()), new BotWebViewMenuContainer$$ExternalSyntheticLambda6(this, runnable));
+            webViewSwipeContainer.stickTo((float) (webViewSwipeContainer.getHeight() + this.parentEnterView.getSizeNotifierLayout().measureKeyboardHeight()), new BotWebViewMenuContainer$$ExternalSyntheticLambda12(this, runnable));
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$dismiss$12(Runnable runnable) {
+    public /* synthetic */ void lambda$dismiss$15(Runnable runnable) {
         onDismiss();
         if (runnable != null) {
             runnable.run();
@@ -597,14 +646,61 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         this.swipeContainer.removeView(this.webViewContainer);
         BotWebViewContainer botWebViewContainer = new BotWebViewContainer(getContext(), this.parentEnterView.getParentFragment().getResourceProvider(), getColor("windowBackgroundWhite"));
         this.webViewContainer = botWebViewContainer;
-        botWebViewContainer.setDelegate(this.webViewDelegate);
+        botWebViewContainer.setViewPortOffset(-AndroidUtilities.dp(5.0f));
+        this.webViewContainer.setDelegate(this.webViewDelegate);
+        this.webViewContainer.setWebViewProgressListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda4(this));
         this.swipeContainer.addView(this.webViewContainer);
         this.swipeContainer.setWebView(this.webViewContainer.getWebView());
         this.isLoaded = false;
         AndroidUtilities.cancelRunOnUIThread(this.pollRunnable);
-        if (this.botWebViewButtonWasVisible) {
+        boolean z = this.botWebViewButtonWasVisible;
+        if (z) {
             this.botWebViewButtonWasVisible = false;
             animateBotButton(false);
+        }
+        AndroidUtilities.runOnUIThread(new BotWebViewMenuContainer$$ExternalSyntheticLambda9(this), z ? 200 : 0);
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDismiss$17(Float f) {
+        this.progressView.setLoadProgressAnimated(f.floatValue());
+        if (f.floatValue() == 1.0f) {
+            ValueAnimator duration = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f}).setDuration(200);
+            duration.setInterpolator(CubicBezierInterpolator.DEFAULT);
+            duration.addUpdateListener(new BotWebViewMenuContainer$$ExternalSyntheticLambda1(this));
+            duration.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    BotWebViewMenuContainer.this.progressView.setVisibility(8);
+                }
+            });
+            duration.start();
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDismiss$16(ValueAnimator valueAnimator) {
+        this.progressView.setAlpha(((Float) valueAnimator.getAnimatedValue()).floatValue());
+    }
+
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$onDismiss$18() {
+        if (this.savedEditText != null) {
+            this.parentEnterView.getEditField().setText(this.savedEditText);
+            this.savedEditText = null;
+        }
+        if (this.savedReplyMessageObject != null) {
+            ChatActivity parentFragment = this.parentEnterView.getParentFragment();
+            if (parentFragment != null) {
+                parentFragment.showFieldPanelForReply(this.savedReplyMessageObject);
+            }
+            this.savedReplyMessageObject = null;
+        }
+        if (this.savedEditMessageObject != null) {
+            ChatActivity parentFragment2 = this.parentEnterView.getParentFragment();
+            if (parentFragment2 != null) {
+                parentFragment2.showFieldPanelForEdit(true, this.savedEditMessageObject);
+            }
+            this.savedEditMessageObject = null;
         }
     }
 
