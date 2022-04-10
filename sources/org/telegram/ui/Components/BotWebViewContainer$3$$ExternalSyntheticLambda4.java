@@ -16,6 +16,6 @@ public final /* synthetic */ class BotWebViewContainer$3$$ExternalSyntheticLambd
     }
 
     public final void accept(Object obj) {
-        this.f$0.lambda$onPermissionRequest$5(this.f$1, this.f$2, (Boolean) obj);
+        this.f$0.lambda$onPermissionRequest$4(this.f$1, this.f$2, (Boolean) obj);
     }
 }

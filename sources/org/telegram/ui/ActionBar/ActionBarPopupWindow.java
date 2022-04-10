@@ -237,7 +237,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         }
 
         public int addViewToSwipeBack(View view) {
-            this.swipeBackLayout.addView(view);
+            this.swipeBackLayout.addView(view, LayoutHelper.createFrame(-2, -2.0f));
             return this.swipeBackLayout.getChildCount() - 1;
         }
 
@@ -839,12 +839,17 @@ public class ActionBarPopupWindow extends PopupWindow {
     private void dismissDim() {
         View rootView = getContentView().getRootView();
         WindowManager windowManager = (WindowManager) getContentView().getContext().getSystemService("window");
-        WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) rootView.getLayoutParams();
-        int i = layoutParams.flags;
-        if ((i & 2) != 0) {
-            layoutParams.flags = i & -3;
-            layoutParams.dimAmount = 0.0f;
-            windowManager.updateViewLayout(rootView, layoutParams);
+        if (rootView.getLayoutParams() != null && (rootView.getLayoutParams() instanceof WindowManager.LayoutParams)) {
+            WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) rootView.getLayoutParams();
+            try {
+                int i = layoutParams.flags;
+                if ((i & 2) != 0) {
+                    layoutParams.flags = i & -3;
+                    layoutParams.dimAmount = 0.0f;
+                    windowManager.updateViewLayout(rootView, layoutParams);
+                }
+            } catch (Exception unused) {
+            }
         }
     }
 

@@ -304,7 +304,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2.setImeOptions(r4)
                 if (r3 != 0) goto L_0x0140
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627897(0x7f0e0var_, float:1.8883071E38)
+                r3 = 2131627900(0x7f0e0f7c, float:1.8883077E38)
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -312,7 +312,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             L_0x0140:
                 if (r3 != r6) goto L_0x0151
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627871(0x7f0e0f5f, float:1.8883019E38)
+                r3 = 2131627874(0x7f0e0var_, float:1.8883025E38)
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -321,7 +321,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2 = 2
                 if (r3 != r2) goto L_0x0162
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627887(0x7f0e0f6f, float:1.8883051E38)
+                r3 = 2131627890(0x7f0e0var_, float:1.8883057E38)
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)

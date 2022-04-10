@@ -16,6 +16,6 @@ public final /* synthetic */ class AutoDeletePopupWrapper$$ExternalSyntheticLamb
     }
 
     public final void onClick(View view) {
-        this.f$0.lambda$new$6(this.f$1, this.f$2, view);
+        this.f$0.lambda$new$5(this.f$1, this.f$2, view);
     }
 }

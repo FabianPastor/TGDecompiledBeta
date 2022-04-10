@@ -1582,6 +1582,8 @@
     <public type="raw" name="attach_poll" id="NUM" />
     <public type="raw" name="audio_speed" id="NUM" />
     <public type="raw" name="audio_stop_speed" id="NUM" />
+    <public type="raw" name="bot_webview_cross_to_sheet" id="NUM" />
+    <public type="raw" name="bot_webview_sheet_to_cross" id="NUM" />
     <public type="raw" name="calls_log" id="NUM" />
     <public type="raw" name="camera" id="NUM" />
     <public type="raw" name="camera_flip" id="NUM" />
@@ -2496,9 +2498,12 @@
     <public type="string" name="BotWebViewReloadPage" id="NUM" />
     <public type="string" name="BotWebViewRequestAllow" id="NUM" />
     <public type="string" name="BotWebViewRequestCameraPermission" id="NUM" />
+    <public type="string" name="BotWebViewRequestCameraPermissionWithHint" id="NUM" />
     <public type="string" name="BotWebViewRequestDontAllow" id="NUM" />
     <public type="string" name="BotWebViewRequestGeolocationPermission" id="NUM" />
+    <public type="string" name="BotWebViewRequestGeolocationPermissionWithHint" id="NUM" />
     <public type="string" name="BotWebViewRequestMicrophonePermission" id="NUM" />
+    <public type="string" name="BotWebViewRequestMicrophonePermissionWithHint" id="NUM" />
     <public type="string" name="BotsMenuTitle" id="NUM" />
     <public type="string" name="BroadcastGroup" id="NUM" />
     <public type="string" name="BroadcastGroupConvert" id="NUM" />

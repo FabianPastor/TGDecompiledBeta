@@ -5,15 +5,17 @@ import androidx.core.util.Consumer;
 import org.telegram.ui.Components.BotWebViewContainer;
 
 public final /* synthetic */ class BotWebViewContainer$3$$ExternalSyntheticLambda0 implements Consumer {
-    public final /* synthetic */ GeolocationPermissions.Callback f$0;
-    public final /* synthetic */ String f$1;
+    public final /* synthetic */ BotWebViewContainer.AnonymousClass3 f$0;
+    public final /* synthetic */ GeolocationPermissions.Callback f$1;
+    public final /* synthetic */ String f$2;
 
-    public /* synthetic */ BotWebViewContainer$3$$ExternalSyntheticLambda0(GeolocationPermissions.Callback callback, String str) {
-        this.f$0 = callback;
-        this.f$1 = str;
+    public /* synthetic */ BotWebViewContainer$3$$ExternalSyntheticLambda0(BotWebViewContainer.AnonymousClass3 r1, GeolocationPermissions.Callback callback, String str) {
+        this.f$0 = r1;
+        this.f$1 = callback;
+        this.f$2 = str;
     }
 
     public final void accept(Object obj) {
-        BotWebViewContainer.AnonymousClass3.lambda$onGeolocationPermissionsShowPrompt$0(this.f$0, this.f$1, (Boolean) obj);
+        this.f$0.lambda$onGeolocationPermissionsShowPrompt$1(this.f$1, this.f$2, (Boolean) obj);
     }
 }

@@ -5,6 +5,7 @@ public class TLRPC$TL_messages_requestWebView extends TLObject {
     public boolean background;
     public TLRPC$InputUser bot;
     public int flags;
+    public boolean from_bot_menu;
     public TLRPC$InputPeer peer;
     public int reply_to_msg_id;
     public boolean silent;
@@ -22,7 +23,9 @@ public class TLRPC$TL_messages_requestWebView extends TLObject {
         this.flags = i;
         int i2 = this.background ? i | 64 : i & -65;
         this.flags = i2;
-        abstractSerializedData.writeInt32(i2);
+        int i3 = this.from_bot_menu ? i2 | 16 : i2 & -17;
+        this.flags = i3;
+        abstractSerializedData.writeInt32(i3);
         this.peer.serializeToStream(abstractSerializedData);
         this.bot.serializeToStream(abstractSerializedData);
         if ((this.flags & 2) != 0) {

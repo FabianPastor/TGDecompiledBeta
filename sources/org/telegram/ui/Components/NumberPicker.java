@@ -713,34 +713,38 @@ public class NumberPicker extends LinearLayout {
         int[] iArr = this.mSelectorIndices;
         for (int i2 = 0; i2 < iArr.length; i2++) {
             String str = this.mSelectorIndexToStringCache.get(iArr[i2]);
-            float measuredHeight = ((float) getMeasuredHeight()) * 0.5f;
-            float textSize = f2 - (this.mSelectorWheelPaint.getTextSize() / 2.0f);
-            if (textSize < ((float) getMeasuredHeight()) / 2.0f) {
-                f = textSize / measuredHeight;
-                z = true;
-            } else {
-                f = (((float) getMeasuredHeight()) - textSize) / measuredHeight;
-                z = false;
-            }
-            float interpolation = interpolator.getInterpolation(Utilities.clamp(f, 1.0f, 0.0f));
-            float textSize2 = (1.0f - interpolation) * this.mSelectorWheelPaint.getTextSize();
-            if (!z) {
-                textSize2 = -textSize2;
-            }
             if (!(str == null || (i2 == this.SELECTOR_MIDDLE_ITEM_INDEX && this.mInputText.getVisibility() == 0))) {
-                canvas.save();
-                canvas.translate(0.0f, textSize2);
-                canvas.scale((0.2f * interpolation) + 0.8f, interpolation, right, textSize);
-                if (interpolation < 0.1f) {
-                    i = this.mSelectorWheelPaint.getAlpha();
-                    this.mSelectorWheelPaint.setAlpha((int) ((((float) i) * interpolation) / 0.1f));
+                if (this.SELECTOR_WHEEL_ITEM_COUNT > 3) {
+                    float measuredHeight = ((float) getMeasuredHeight()) * 0.5f;
+                    float textSize = f2 - (this.mSelectorWheelPaint.getTextSize() / 2.0f);
+                    if (textSize < ((float) getMeasuredHeight()) / 2.0f) {
+                        f = textSize / measuredHeight;
+                        z = true;
+                    } else {
+                        f = (((float) getMeasuredHeight()) - textSize) / measuredHeight;
+                        z = false;
+                    }
+                    float interpolation = interpolator.getInterpolation(Utilities.clamp(f, 1.0f, 0.0f));
+                    float textSize2 = (1.0f - interpolation) * this.mSelectorWheelPaint.getTextSize();
+                    if (!z) {
+                        textSize2 = -textSize2;
+                    }
+                    canvas.save();
+                    canvas.translate(0.0f, textSize2);
+                    canvas.scale((0.2f * interpolation) + 0.8f, interpolation, right, textSize);
+                    if (interpolation < 0.1f) {
+                        i = this.mSelectorWheelPaint.getAlpha();
+                        this.mSelectorWheelPaint.setAlpha((int) ((((float) i) * interpolation) / 0.1f));
+                    } else {
+                        i = -1;
+                    }
+                    canvas.drawText(str, right, f2, this.mSelectorWheelPaint);
+                    canvas.restore();
+                    if (i != -1) {
+                        this.mSelectorWheelPaint.setAlpha(i);
+                    }
                 } else {
-                    i = -1;
-                }
-                canvas.drawText(str, right, f2, this.mSelectorWheelPaint);
-                canvas.restore();
-                if (i != -1) {
-                    this.mSelectorWheelPaint.setAlpha(i);
+                    canvas.drawText(str, right, f2, this.mSelectorWheelPaint);
                 }
             }
             f2 += (float) this.mSelectorElementHeight;

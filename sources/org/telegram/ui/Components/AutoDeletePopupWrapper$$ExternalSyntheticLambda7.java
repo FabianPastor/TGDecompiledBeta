@@ -1,15 +1,16 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class AutoDeletePopupWrapper$$ExternalSyntheticLambda7 implements Runnable {
-    public final /* synthetic */ AutoDeletePopupWrapper f$0;
-    public final /* synthetic */ int f$1;
+import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.AutoDeletePopupWrapper;
 
-    public /* synthetic */ AutoDeletePopupWrapper$$ExternalSyntheticLambda7(AutoDeletePopupWrapper autoDeletePopupWrapper, int i) {
-        this.f$0 = autoDeletePopupWrapper;
-        this.f$1 = i;
+public final /* synthetic */ class AutoDeletePopupWrapper$$ExternalSyntheticLambda7 implements AlertsCreator.ScheduleDatePickerDelegate {
+    public final /* synthetic */ AutoDeletePopupWrapper.Callback f$0;
+
+    public /* synthetic */ AutoDeletePopupWrapper$$ExternalSyntheticLambda7(AutoDeletePopupWrapper.Callback callback) {
+        this.f$0 = callback;
     }
 
-    public final void run() {
-        this.f$0.lambda$updateItems$8(this.f$1);
+    public final void didSelectDate(boolean z, int i) {
+        AutoDeletePopupWrapper.lambda$new$4(this.f$0, z, i);
     }
 }

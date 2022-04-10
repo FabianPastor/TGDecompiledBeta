@@ -217,7 +217,7 @@ public class EditWidgetActivity extends BaseFragment {
                 org.telegram.ui.Cells.ChatActionCell r9 = new org.telegram.ui.Cells.ChatActionCell
                 r9.<init>(r2)
                 java.lang.String r10 = "WidgetPreview"
-                r11 = 2131628998(0x7f0e13c6, float:1.8885304E38)
+                r11 = 2131629001(0x7f0e13c9, float:1.888531E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
                 r9.setCustomText(r10)
                 r11 = -2
@@ -332,7 +332,7 @@ public class EditWidgetActivity extends BaseFragment {
                 org.telegram.ui.EditWidgetActivity r0 = r1.this$0
                 int r0 = r0.widgetType
                 r2 = 1111490560(0x42400000, float:48.0)
-                r3 = 2131627852(0x7f0e0f4c, float:1.888298E38)
+                r3 = 2131627855(0x7f0e0f4f, float:1.8882986E38)
                 java.lang.String r4 = "SavedMessages"
                 r5 = 0
                 r6 = 0
@@ -418,14 +418,14 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x00c7:
                 boolean r10 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
                 if (r10 == 0) goto L_0x00d7
-                r10 = 2131627711(0x7f0e0ebf, float:1.8882694E38)
+                r10 = 2131627714(0x7f0e0ec2, float:1.88827E38)
                 java.lang.String r11 = "RepliesTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
                 goto L_0x00ef
             L_0x00d7:
                 boolean r10 = org.telegram.messenger.UserObject.isDeleted(r0)
                 if (r10 == 0) goto L_0x00e7
-                r10 = 2131626012(0x7f0e081c, float:1.8879248E38)
+                r10 = 2131626015(0x7f0e081f, float:1.8879254E38)
                 java.lang.String r11 = "HiddenName"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
                 goto L_0x00ef
@@ -659,7 +659,7 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x02ad:
                 boolean r0 = r2.isOutOwner()
                 if (r0 == 0) goto L_0x02be
-                r0 = 2131625919(0x7f0e07bf, float:1.887906E38)
+                r0 = 2131625922(0x7f0e07c2, float:1.8879066E38)
                 java.lang.String r3 = "FromYou"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             L_0x02bc:
@@ -1092,7 +1092,7 @@ public class EditWidgetActivity extends BaseFragment {
                 int r13 = r13 + 1
                 r4 = r17
                 r2 = 1111490560(0x42400000, float:48.0)
-                r3 = 2131627852(0x7f0e0f4c, float:1.888298E38)
+                r3 = 2131627855(0x7f0e0f4f, float:1.8882986E38)
                 r5 = 0
                 r8 = 8
                 r9 = 2
@@ -1245,22 +1245,22 @@ public class EditWidgetActivity extends BaseFragment {
                 boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r0)
                 if (r8 == 0) goto L_0x0780
                 r10 = r17
-                r8 = 2131627852(0x7f0e0f4c, float:1.888298E38)
+                r8 = 2131627855(0x7f0e0f4f, float:1.8882986E38)
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 goto L_0x07a9
             L_0x0780:
                 r10 = r17
-                r8 = 2131627852(0x7f0e0f4c, float:1.888298E38)
+                r8 = 2131627855(0x7f0e0f4f, float:1.8882986E38)
                 boolean r11 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
                 if (r11 == 0) goto L_0x0795
-                r11 = 2131627711(0x7f0e0ebf, float:1.8882694E38)
+                r11 = 2131627714(0x7f0e0ec2, float:1.88827E38)
                 java.lang.String r13 = "RepliesTitle"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
                 goto L_0x07a9
             L_0x0795:
                 boolean r11 = org.telegram.messenger.UserObject.isDeleted(r0)
                 if (r11 == 0) goto L_0x07a5
-                r11 = 2131626012(0x7f0e081c, float:1.8879248E38)
+                r11 = 2131626015(0x7f0e081f, float:1.8879254E38)
                 java.lang.String r13 = "HiddenName"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
                 goto L_0x07a9

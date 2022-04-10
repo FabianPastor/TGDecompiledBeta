@@ -1,16 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.TLRPC$KeyboardButton;
-import org.telegram.ui.Components.BotKeyboardView;
+import org.telegram.ui.Components.AlertsCreator;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda52 implements BotKeyboardView.BotKeyboardViewDelegate {
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda52 implements AlertsCreator.ScheduleDatePickerDelegate {
     public final /* synthetic */ ChatActivityEnterView f$0;
 
     public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda52(ChatActivityEnterView chatActivityEnterView) {
         this.f$0 = chatActivityEnterView;
     }
 
-    public final void didPressedButton(TLRPC$KeyboardButton tLRPC$KeyboardButton) {
-        this.f$0.lambda$setButtons$42(tLRPC$KeyboardButton);
+    public final void didSelectDate(boolean z, int i) {
+        this.f$0.sendMessageInternal(z, i);
     }
 }

@@ -740,10 +740,13 @@
     <string name="BotWebViewOpenBot">Open bot</string>
     <string name="BotWebViewReloadPage">Reload page</string>
     <string name="BotWebViewRequestAllow">Allow</string>
-    <string name="BotWebViewRequestCameraPermission">Allow **%1$s** to use your camera?</string>
+    <string name="BotWebViewRequestCameraPermission">Allow **%1$s** to access to your camera?\10\10The developer of **%1$s** will be able to access your camera while you are using this web app.</string>
+    <string name="BotWebViewRequestCameraPermissionWithHint">Allow **%1$s** to access to your camera?\10\10The developer of **%1$s** will be able to access your camera while you are using this web app.\10\10To allow access to your camera tap Settings -&gt; Permissions, and turn **Camera** on.</string>
     <string name="BotWebViewRequestDontAllow">Don\'t Allow</string>
-    <string name="BotWebViewRequestGeolocationPermission">**%1$s** would like to know geolocation.</string>
-    <string name="BotWebViewRequestMicrophonePermission">Allow **%1$s** to use your microphone?</string>
+    <string name="BotWebViewRequestGeolocationPermission">Allow **%1$s** to access to your location?\10\10The developer of **%1$s** will be able to access your location while you are using this web app.</string>
+    <string name="BotWebViewRequestGeolocationPermissionWithHint">Allow **%1$s** to access to your location?\10\10The developer of **%1$s** will be able to access your location while you are using this web app.\10\10To allow access to your location tap Settings -&gt; Permissions, and turn **Location** on.</string>
+    <string name="BotWebViewRequestMicrophonePermission">Allow **%1$s** to access to your microphone?\10\10The developer of **%1$s** will be able to access your microphone while you are using this web app.</string>
+    <string name="BotWebViewRequestMicrophonePermissionWithHint">Allow **%1$s** to access to your microphone?\10\10The developer of **%1$s** will be able to access your microphone while you are using this web app.\10\10To allow access to your microphone tap Settings -&gt; Permissions, and turn **Microphone** on.</string>
     <string name="BotsMenuTitle">Menu</string>
     <string name="BroadcastGroup">Broadcast Group</string>
     <string name="BroadcastGroupConvert">Convert to Broadcast Group</string>
@@ -4217,7 +4220,7 @@
     <string name="SoundMuted">Sound muted</string>
     <string name="SoundOff">Disable sound</string>
     <string name="SoundOffHint">You will receive silent notifications. </string>
-    <string name="SoundOn">Sound On</string>
+    <string name="SoundOn">Enable sound</string>
     <string name="SoundOnHint">You will receive notifications with sound.</string>
     <string name="Speaking">speaking</string>
     <string name="SpeakingWithVolume">%1$d%% speaking</string>

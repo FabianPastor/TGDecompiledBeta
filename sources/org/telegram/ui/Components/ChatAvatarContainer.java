@@ -221,7 +221,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                     }
                 }
             }, true, this.resourcesProvider);
-            autoDeletePopupWrapper.lambda$updateItems$8(i);
+            autoDeletePopupWrapper.lambda$updateItems$7(i);
             final ActionBarPopupWindow[] actionBarPopupWindowArr = {new ActionBarPopupWindow(autoDeletePopupWrapper.windowLayout, -2, -2) {
                 public void dismiss() {
                     super.dismiss();

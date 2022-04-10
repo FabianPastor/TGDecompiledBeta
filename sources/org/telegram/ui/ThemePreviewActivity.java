@@ -473,7 +473,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ThemePreviewActivity$1 r1 = new org.telegram.ui.ThemePreviewActivity$1
             r1.<init>(r6)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setActionBarMenuItemSearchListener(r1)
-            r1 = 2131627867(0x7f0e0f5b, float:1.888301E38)
+            r1 = 2131627870(0x7f0e0f5e, float:1.8883017E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setSearchFieldHint(r1)
@@ -484,7 +484,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             r0.setAddToContainer(r9)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131628381(0x7f0e115d, float:1.8884053E38)
+            r1 = 2131628384(0x7f0e1160, float:1.888406E38)
             java.lang.String r2 = "ThemePreview"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -768,7 +768,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             if (r0 != r8) goto L_0x03e4
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar2
             org.telegram.ui.ActionBar.ActionBarMenu r3 = r0.createMenu()
-            r0 = 2131627840(0x7f0e0var_, float:1.8882956E38)
+            r0 = 2131627843(0x7f0e0var_, float:1.8882962E38)
             java.lang.String r1 = "Save"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -787,17 +787,17 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r6.dropDownContainer = r10
             r10.setSubMenuOpenSide(r8)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.dropDownContainer
-            r1 = 2131625078(0x7f0e0476, float:1.8877354E38)
+            r1 = 2131625081(0x7f0e0479, float:1.887736E38)
             java.lang.String r2 = "ColorPickerBackground"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.addSubItem(r12, r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.dropDownContainer
-            r1 = 2131625079(0x7f0e0477, float:1.8877356E38)
+            r1 = 2131625082(0x7f0e047a, float:1.8877362E38)
             java.lang.String r2 = "ColorPickerMainColor"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.addSubItem(r8, r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.dropDownContainer
-            r1 = 2131625080(0x7f0e0478, float:1.8877358E38)
+            r1 = 2131625083(0x7f0e047b, float:1.8877364E38)
             java.lang.String r2 = "ColorPickerMyMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.addSubItem(r14, r1)
@@ -850,7 +850,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r19)
             r0.setTypeface(r1)
             android.widget.TextView r0 = r6.dropDown
-            r1 = 2131625079(0x7f0e0477, float:1.8877356E38)
+            r1 = 2131625082(0x7f0e047a, float:1.8877362E38)
             java.lang.String r2 = "ColorPickerMainColor"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setText(r1)
@@ -1065,7 +1065,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             r0.setTextColor(r1)
             android.widget.TextView r0 = r6.bottomOverlayChatText
-            r1 = 2131628014(0x7f0e0fee, float:1.8883309E38)
+            r1 = 2131628017(0x7f0e0ff1, float:1.8883315E38)
             java.lang.String r11 = "SetBackground"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r11, r1)
             r0.setText(r1)
@@ -1685,7 +1685,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r3.setTextColor(r11)
             android.widget.TextView[] r3 = r6.patternsCancelButton
             r3 = r3[r1]
-            r11 = 2131624747(0x7f0e032b, float:1.8876682E38)
+            r11 = 2131624750(0x7f0e032e, float:1.8876689E38)
             java.lang.String r12 = "Cancel"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             java.lang.String r11 = r11.toUpperCase()
@@ -2084,7 +2084,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r0.setPadding(r2, r9, r3, r9)
             android.widget.TextView r0 = r6.cancelButton
-            r2 = 2131624747(0x7f0e032b, float:1.8876682E38)
+            r2 = 2131624750(0x7f0e032e, float:1.8876689E38)
             java.lang.String r3 = "Cancel"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
@@ -3386,21 +3386,21 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r7.getParentActivity()
             r0.<init>((android.content.Context) r1)
-            r1 = 2131627842(0x7f0e0var_, float:1.888296E38)
+            r1 = 2131627845(0x7f0e0var_, float:1.8882966E38)
             java.lang.String r2 = "SaveChangesAlertTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131627841(0x7f0e0var_, float:1.8882958E38)
+            r1 = 2131627844(0x7f0e0var_, float:1.8882964E38)
             java.lang.String r2 = "SaveChangesAlertText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
-            r1 = 2131627840(0x7f0e0var_, float:1.8882956E38)
+            r1 = 2131627843(0x7f0e0var_, float:1.8882962E38)
             java.lang.String r2 = "Save"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda1 r2 = new org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda1
             r2.<init>(r7)
             r0.setPositiveButton(r1, r2)
-            r1 = 2131627049(0x7f0e0CLASSNAME, float:1.8881351E38)
+            r1 = 2131627052(0x7f0e0c2c, float:1.8881358E38)
             java.lang.String r2 = "PassportDiscard"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda2 r2 = new org.telegram.ui.ThemePreviewActivity$$ExternalSyntheticLambda2
@@ -5110,7 +5110,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r1 = org.telegram.ui.Components.MotionBackgroundDrawable.getPatternColor(r5, r6, r7, r1)
         L_0x00c2:
             org.telegram.ui.Components.BackupImageView r5 = r0.backgroundImage
-            r6 = 2131558433(0x7f0d0021, float:1.8742182E38)
+            r6 = 2131558435(0x7f0d0023, float:1.8742186E38)
             android.graphics.Bitmap r1 = org.telegram.messenger.SvgHelper.getBitmap((int) r6, (int) r3, (int) r4, (int) r1)
             r5.setImageBitmap(r1)
             goto L_0x0385

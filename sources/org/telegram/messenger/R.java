@@ -1719,6 +1719,8 @@ public final class R {
         public static final int attach_poll = NUM;
         public static final int audio_speed = NUM;
         public static final int audio_stop_speed = NUM;
+        public static final int bot_webview_cross_to_sheet = NUM;
+        public static final int bot_webview_sheet_to_cross = NUM;
         public static final int calls_log = NUM;
         public static final int camera = NUM;
         public static final int camera_flip = NUM;
@@ -2639,9 +2641,12 @@ public final class R {
         public static final int BotWebViewReloadPage = NUM;
         public static final int BotWebViewRequestAllow = NUM;
         public static final int BotWebViewRequestCameraPermission = NUM;
+        public static final int BotWebViewRequestCameraPermissionWithHint = NUM;
         public static final int BotWebViewRequestDontAllow = NUM;
         public static final int BotWebViewRequestGeolocationPermission = NUM;
+        public static final int BotWebViewRequestGeolocationPermissionWithHint = NUM;
         public static final int BotWebViewRequestMicrophonePermission = NUM;
+        public static final int BotWebViewRequestMicrophonePermissionWithHint = NUM;
         public static final int BotsMenuTitle = NUM;
         public static final int BroadcastGroup = NUM;
         public static final int BroadcastGroupConvert = NUM;

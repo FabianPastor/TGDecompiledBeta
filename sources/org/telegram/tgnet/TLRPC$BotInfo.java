@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public abstract class TLRPC$BotInfo extends TLObject {
     public ArrayList<TLRPC$TL_botCommand> commands = new ArrayList<>();
     public String description;
+    public TLRPC$BotMenuButton menu_button;
     public long user_id;
     public int version;
 
@@ -17,11 +18,14 @@ public abstract class TLRPC$BotInfo extends TLObject {
             case -1154598962:
                 tLRPC$BotInfo = new TLRPC$TL_botInfoEmpty_layer48();
                 break;
+            case -468280483:
+                tLRPC$BotInfo = new TLRPC$TL_botInfo();
+                break;
             case 164583517:
                 tLRPC$BotInfo = new TLRPC$TL_botInfo_layer48();
                 break;
             case 460632885:
-                tLRPC$BotInfo = new TLRPC$TL_botInfo();
+                tLRPC$BotInfo = new TLRPC$TL_botInfo_layer139();
                 break;
             default:
                 tLRPC$BotInfo = null;

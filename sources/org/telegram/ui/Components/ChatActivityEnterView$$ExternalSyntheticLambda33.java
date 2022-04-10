@@ -1,13 +1,15 @@
 package org.telegram.ui.Components;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda33 implements Runnable {
-    public final /* synthetic */ ChatActivityEnterView f$0;
+import android.view.View;
 
-    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda33(ChatActivityEnterView chatActivityEnterView) {
-        this.f$0 = chatActivityEnterView;
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda33 implements Runnable {
+    public final /* synthetic */ View f$0;
+
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda33(View view) {
+        this.f$0 = view;
     }
 
     public final void run() {
-        this.f$0.lambda$new$22();
+        this.f$0.callOnClick();
     }
 }

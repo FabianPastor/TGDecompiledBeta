@@ -1361,7 +1361,9 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     public void startDownloadFile(TLRPC$Document tLRPC$Document, MessageObject messageObject) {
-        AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda9(this, messageObject));
+        if (messageObject.getDocument() != null) {
+            AndroidUtilities.runOnUIThread(new DownloadController$$ExternalSyntheticLambda9(this, messageObject));
+        }
     }
 
     /* access modifiers changed from: private */

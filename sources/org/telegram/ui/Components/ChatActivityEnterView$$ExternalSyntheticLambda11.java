@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import android.content.DialogInterface;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda11 implements View.OnClickListener {
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda11 implements DialogInterface.OnDismissListener {
     public final /* synthetic */ ChatActivityEnterView f$0;
 
     public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda11(ChatActivityEnterView chatActivityEnterView) {
         this.f$0 = chatActivityEnterView;
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$onSendLongClick$31(view);
+    public final void onDismiss(DialogInterface dialogInterface) {
+        this.f$0.lambda$openWebViewMenu$32(dialogInterface);
     }
 }

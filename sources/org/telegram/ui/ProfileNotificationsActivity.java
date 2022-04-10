@@ -466,7 +466,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     boolean unused = profileNotificationsActivity.customEnabled = true ^ profileNotificationsActivity.customEnabled;
                     ProfileNotificationsActivity profileNotificationsActivity2 = ProfileNotificationsActivity.this;
                     boolean unused2 = profileNotificationsActivity2.notificationsEnabled = profileNotificationsActivity2.customEnabled;
-                    notificationsSettings.edit().putBoolean("custom_" + ProfileNotificationsActivity.this.dialogId, ProfileNotificationsActivity.this.customEnabled).commit();
+                    notificationsSettings.edit().putBoolean("custom_" + ProfileNotificationsActivity.this.dialogId, ProfileNotificationsActivity.this.customEnabled).apply();
                     TextCheckCell textCheckCell = (TextCheckCell) view;
                     textCheckCell.setChecked(ProfileNotificationsActivity.this.customEnabled);
                     int color = Theme.getColor(ProfileNotificationsActivity.this.customEnabled ? "windowBackgroundChecked" : "windowBackgroundUnchecked");

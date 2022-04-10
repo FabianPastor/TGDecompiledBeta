@@ -151,6 +151,9 @@ public abstract class TLRPC$Update extends TLObject {
             case 347227392:
                 tLRPC$Update = new TLRPC$TL_updateGroupCall();
                 break;
+            case 347625491:
+                tLRPC$Update = new TLRPC$TL_updateBotMenuButton();
+                break;
             case 357013699:
                 tLRPC$Update = new TLRPC$TL_updateMessageReactions();
                 break;

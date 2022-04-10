@@ -1671,7 +1671,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
             int max = Math.max(0, currentItemTop);
             canvas.save();
             canvas.clipRect(0, max, getWidth(), getHeight());
-            wallpaperDrawable.setBounds(0, max, getWidth(), AndroidUtilities.displaySize.y);
+            wallpaperDrawable.setBounds(0, max, getWidth(), AndroidUtilities.displaySize.y + max);
             wallpaperDrawable.draw(canvas);
             z = true;
         }

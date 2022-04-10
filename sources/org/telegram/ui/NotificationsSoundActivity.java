@@ -933,9 +933,10 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             edit.apply();
             if (this.dialogId != 0) {
                 getNotificationsController().updateServerNotificationsSettings(this.dialogId);
-            } else {
-                getNotificationsController().updateServerNotificationsSettings(this.currentType);
+                return;
             }
+            getNotificationsController().updateServerNotificationsSettings(this.currentType);
+            getNotificationCenter().postNotificationName(NotificationCenter.notificationsSettingsUpdated, new Object[0]);
         }
     }
 

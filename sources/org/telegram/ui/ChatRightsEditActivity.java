@@ -1531,7 +1531,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         L_0x01d2:
             android.text.SpannableStringBuilder r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1)
             r0.setMessage(r1)
-            r1 = 2131624747(0x7f0e032b, float:1.8876682E38)
+            r1 = 2131624750(0x7f0e032e, float:1.8876689E38)
             java.lang.String r3 = "Cancel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r3 = 0

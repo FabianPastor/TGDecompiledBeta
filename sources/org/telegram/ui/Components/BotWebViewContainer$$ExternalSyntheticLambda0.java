@@ -1,15 +1,14 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+import android.webkit.ValueCallback;
 
-public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda0 implements View.OnClickListener {
-    public final /* synthetic */ BotWebViewContainer f$0;
+public final /* synthetic */ class BotWebViewContainer$$ExternalSyntheticLambda0 implements ValueCallback {
+    public static final /* synthetic */ BotWebViewContainer$$ExternalSyntheticLambda0 INSTANCE = new BotWebViewContainer$$ExternalSyntheticLambda0();
 
-    public /* synthetic */ BotWebViewContainer$$ExternalSyntheticLambda0(BotWebViewContainer botWebViewContainer) {
-        this.f$0 = botWebViewContainer;
+    private /* synthetic */ BotWebViewContainer$$ExternalSyntheticLambda0() {
     }
 
-    public final void onClick(View view) {
-        this.f$0.lambda$new$0(view);
+    public final void onReceiveValue(Object obj) {
+        BotWebViewContainer.lambda$evaluateJs$3((String) obj);
     }
 }

@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.MotionEvent;
 import android.view.View;
 
-public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda28 implements View.OnTouchListener {
-    public static final /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda28 INSTANCE = new ChatActivityEnterView$$ExternalSyntheticLambda28();
+public final /* synthetic */ class ChatActivityEnterView$$ExternalSyntheticLambda28 implements View.OnLongClickListener {
+    public final /* synthetic */ ChatActivityEnterView f$0;
 
-    private /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda28() {
+    public /* synthetic */ ChatActivityEnterView$$ExternalSyntheticLambda28(ChatActivityEnterView chatActivityEnterView) {
+        this.f$0 = chatActivityEnterView;
     }
 
-    public final boolean onTouch(View view, MotionEvent motionEvent) {
-        return ChatActivityEnterView.lambda$new$16(view, motionEvent);
+    public final boolean onLongClick(View view) {
+        return this.f$0.onSendLongClick(view);
     }
 }

@@ -11,6 +11,7 @@ public abstract class TLRPC$User extends TLObject {
     public int bot_info_version;
     public boolean bot_inline_geo;
     public String bot_inline_placeholder;
+    public boolean bot_menu_webview;
     public boolean bot_nochats;
     public boolean contact;
     public boolean deleted;

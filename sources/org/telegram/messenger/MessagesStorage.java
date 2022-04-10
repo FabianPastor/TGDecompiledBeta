@@ -24549,7 +24549,7 @@ public class MessagesStorage extends BaseController {
             return
         L_0x0021:
             java.lang.String r7 = "SavedMessages"
-            r8 = 2131627852(0x7f0e0f4c, float:1.888298E38)
+            r8 = 2131627855(0x7f0e0f4f, float:1.8882986E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)     // Catch:{ Exception -> 0x0654 }
             java.lang.String r7 = r7.toLowerCase()     // Catch:{ Exception -> 0x0654 }
             java.lang.String r8 = "saved messages"

@@ -51,16 +51,15 @@ public class AutoDeletePopupWrapper {
         if (popupSwipeBackLayout != null) {
             ActionBarMenuSubItem addItem = ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("Back", NUM), false, resourcesProvider);
             this.backItem = addItem;
-            addItem.setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda6(popupSwipeBackLayout));
+            addItem.setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda5(popupSwipeBackLayout));
         }
-        ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDelete1Hour", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda4(this, callback2));
-        ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDelete1Day", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda2(this, callback2));
-        ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDelete7Days", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda1(this, callback2));
-        ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDelete1Month", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda3(this, callback2));
+        ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDelete1Day", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda4(this, callback2));
+        ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDelete7Days", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda2(this, callback2));
+        ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDelete1Month", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda1(this, callback2));
         ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDeleteCustom", NUM), false, resourcesProvider).setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda0(this, context, callback2));
         ActionBarMenuSubItem addItem2 = ActionBarMenuItem.addItem(this.windowLayout, NUM, LocaleController.getString("AutoDeleteDisable", NUM), false, resourcesProvider);
         this.disableItem = addItem2;
-        addItem2.setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda5(this, callback2));
+        addItem2.setOnClickListener(new AutoDeletePopupWrapper$$ExternalSyntheticLambda3(this, callback2));
         addItem2.setColors(Theme.getColor("dialogTextRed2"), Theme.getColor("dialogTextRed2"));
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.setBackgroundColor(Theme.getColor("graySection"));
@@ -78,40 +77,34 @@ public class AutoDeletePopupWrapper {
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(Callback callback2, View view) {
         dismiss();
-        callback2.setAutoDeleteHistory(3600, 70);
+        callback2.setAutoDeleteHistory(86400, 70);
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$2(Callback callback2, View view) {
         dismiss();
-        callback2.setAutoDeleteHistory(86400, 70);
+        callback2.setAutoDeleteHistory(604800, 70);
     }
 
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$3(Callback callback2, View view) {
         dismiss();
-        callback2.setAutoDeleteHistory(604800, 70);
-    }
-
-    /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$4(Callback callback2, View view) {
-        dismiss();
         callback2.setAutoDeleteHistory(2678400, 70);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$6(Context context, Callback callback2, View view) {
+    public /* synthetic */ void lambda$new$5(Context context, Callback callback2, View view) {
         dismiss();
-        AlertsCreator.createAutoDeleteDatePickerDialog(context, new AutoDeletePopupWrapper$$ExternalSyntheticLambda8(callback2));
+        AlertsCreator.createAutoDeleteDatePickerDialog(context, new AutoDeletePopupWrapper$$ExternalSyntheticLambda7(callback2));
     }
 
     /* access modifiers changed from: private */
-    public static /* synthetic */ void lambda$new$5(Callback callback2, boolean z, int i) {
+    public static /* synthetic */ void lambda$new$4(Callback callback2, boolean z, int i) {
         callback2.setAutoDeleteHistory(i * 60, i == 0 ? 71 : 70);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$7(Callback callback2, View view) {
+    public /* synthetic */ void lambda$new$6(Callback callback2, View view) {
         dismiss();
         callback2.setAutoDeleteHistory(0, 71);
     }
@@ -122,9 +115,9 @@ public class AutoDeletePopupWrapper {
     }
 
     /* renamed from: updateItems */
-    public void lambda$updateItems$8(int i) {
+    public void lambda$updateItems$7(int i) {
         if (System.currentTimeMillis() - this.lastDismissTime < 200) {
-            AndroidUtilities.runOnUIThread(new AutoDeletePopupWrapper$$ExternalSyntheticLambda7(this, i));
+            AndroidUtilities.runOnUIThread(new AutoDeletePopupWrapper$$ExternalSyntheticLambda6(this, i));
         } else if (i == 0) {
             this.disableItem.setVisibility(8);
         } else {

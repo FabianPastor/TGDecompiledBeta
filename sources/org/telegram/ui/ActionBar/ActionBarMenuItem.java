@@ -80,6 +80,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private boolean longClickEnabled;
     /* access modifiers changed from: private */
     public int notificationIndex;
+    private View.OnClickListener onClickListener;
     protected boolean overrideMenuClick;
     /* access modifiers changed from: private */
     public ActionBarMenu parentMenu;
@@ -231,9 +232,9 @@ public class ActionBarMenuItem extends FrameLayout {
         ActionBarPopupWindow actionBarPopupWindow3;
         if (motionEvent.getActionMasked() == 0) {
             if (this.longClickEnabled && hasSubMenu() && ((actionBarPopupWindow3 = this.popupWindow) == null || !actionBarPopupWindow3.isShowing())) {
-                ActionBarMenuItem$$ExternalSyntheticLambda10 actionBarMenuItem$$ExternalSyntheticLambda10 = new ActionBarMenuItem$$ExternalSyntheticLambda10(this);
-                this.showMenuRunnable = actionBarMenuItem$$ExternalSyntheticLambda10;
-                AndroidUtilities.runOnUIThread(actionBarMenuItem$$ExternalSyntheticLambda10, 200);
+                ActionBarMenuItem$$ExternalSyntheticLambda11 actionBarMenuItem$$ExternalSyntheticLambda11 = new ActionBarMenuItem$$ExternalSyntheticLambda11(this);
+                this.showMenuRunnable = actionBarMenuItem$$ExternalSyntheticLambda11;
+                AndroidUtilities.runOnUIThread(actionBarMenuItem$$ExternalSyntheticLambda11, 200);
             }
         } else if (motionEvent.getActionMasked() != 2) {
             ActionBarPopupWindow actionBarPopupWindow4 = this.popupWindow;
@@ -362,8 +363,11 @@ public class ActionBarMenuItem extends FrameLayout {
             this.location = new int[2];
             ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext(), NUM, this.resourcesProvider, 1);
             this.popupLayout = actionBarPopupWindowLayout;
-            actionBarPopupWindowLayout.setOnTouchListener(new ActionBarMenuItem$$ExternalSyntheticLambda7(this));
-            this.popupLayout.setDispatchKeyEventListener(new ActionBarMenuItem$$ExternalSyntheticLambda13(this));
+            actionBarPopupWindowLayout.setOnTouchListener(new ActionBarMenuItem$$ExternalSyntheticLambda8(this));
+            this.popupLayout.setDispatchKeyEventListener(new ActionBarMenuItem$$ExternalSyntheticLambda14(this));
+            if (this.popupLayout.getSwipeBack() != null) {
+                this.popupLayout.getSwipeBack().setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda1(this));
+            }
         }
     }
 
@@ -389,6 +393,14 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    public /* synthetic */ void lambda$createPopupLayout$3(View view) {
+        ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
+        if (actionBarPopupWindow != null) {
+            actionBarPopupWindow.dismiss();
+        }
+    }
+
     public void removeAllSubItems() {
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
         if (actionBarPopupWindowLayout != null) {
@@ -408,12 +420,12 @@ public class ActionBarMenuItem extends FrameLayout {
         view.setLayoutParams(new LinearLayout.LayoutParams(i2, i3));
         this.popupLayout.addView(view);
         view.setTag(Integer.valueOf(i));
-        view.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda2(this));
+        view.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda3(this));
         view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$addSubItem$3(View view) {
+    public /* synthetic */ void lambda$addSubItem$4(View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             if (!this.processedPopupClick) {
@@ -459,12 +471,12 @@ public class ActionBarMenuItem extends FrameLayout {
         layoutParams.width = -1;
         layoutParams.height = AndroidUtilities.dp(48.0f);
         textView2.setLayoutParams(layoutParams);
-        textView2.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda1(this));
+        textView2.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda0(this));
         return textView2;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$addSubItem$4(View view) {
+    public /* synthetic */ void lambda$addSubItem$5(View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             if (!this.processedPopupClick) {
@@ -535,12 +547,12 @@ public class ActionBarMenuItem extends FrameLayout {
         layoutParams.width = -1;
         layoutParams.height = AndroidUtilities.dp(48.0f);
         actionBarMenuSubItem.setLayoutParams(layoutParams);
-        actionBarMenuSubItem.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda4(this, z));
+        actionBarMenuSubItem.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda5(this, z));
         return actionBarMenuSubItem;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$addSubItem$5(boolean z, View view) {
+    public /* synthetic */ void lambda$addSubItem$6(boolean z, View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing() && z) {
             if (!this.processedPopupClick) {
@@ -575,14 +587,14 @@ public class ActionBarMenuItem extends FrameLayout {
         layoutParams.width = -1;
         layoutParams.height = AndroidUtilities.dp(48.0f);
         actionBarMenuSubItem.setLayoutParams(layoutParams);
-        actionBarMenuSubItem.openSwipeBackLayout = new ActionBarMenuItem$$ExternalSyntheticLambda12(this, this.popupLayout.addViewToSwipeBack(view));
-        actionBarMenuSubItem.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda5(actionBarMenuSubItem));
+        actionBarMenuSubItem.openSwipeBackLayout = new ActionBarMenuItem$$ExternalSyntheticLambda13(this, this.popupLayout.addViewToSwipeBack(view));
+        actionBarMenuSubItem.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda6(actionBarMenuSubItem));
         this.popupLayout.swipeBackGravityRight = true;
         return actionBarMenuSubItem;
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$addSwipeBackItem$6(int i) {
+    public /* synthetic */ void lambda$addSwipeBackItem$7(int i) {
         if (this.popupLayout.getSwipeBack() != null) {
             this.popupLayout.getSwipeBack().openForeground(i);
         }
@@ -801,11 +813,11 @@ public class ActionBarMenuItem extends FrameLayout {
             org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
             r11.setSoftInputMode(r2)
             r12.setFocusableInTouchMode(r1)
-            org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda6 r11 = new org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda6
+            org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda7 r11 = new org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda7
             r11.<init>(r10)
             r12.setOnKeyListener(r11)
             org.telegram.ui.ActionBar.ActionBarPopupWindow r11 = r10.popupWindow
-            org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda8 r0 = new org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda8
+            org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda9 r0 = new org.telegram.ui.ActionBar.ActionBarMenuItem$$ExternalSyntheticLambda9
             r0.<init>(r10)
             r11.setOnDismissListener(r0)
             android.graphics.Point r11 = org.telegram.messenger.AndroidUtilities.displaySize
@@ -847,7 +859,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$toggleSubMenu$8(View view, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$toggleSubMenu$9(View view, int i, KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (i != 82 || keyEvent.getRepeatCount() != 0 || keyEvent.getAction() != 1 || (actionBarPopupWindow = this.popupWindow) == null || !actionBarPopupWindow.isShowing()) {
             return false;
@@ -857,7 +869,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$toggleSubMenu$9() {
+    public /* synthetic */ void lambda$toggleSubMenu$10() {
         onDismiss();
         ActionBarSubMenuItemDelegate actionBarSubMenuItemDelegate = this.subMenuDelegate;
         if (actionBarSubMenuItemDelegate != null) {
@@ -1084,7 +1096,7 @@ public class ActionBarMenuItem extends FrameLayout {
         for (int i3 = 0; i3 < arrayList.size(); i3++) {
             SearchFilterView searchFilterView = new SearchFilterView(getContext(), this.resourcesProvider);
             searchFilterView.setData((FiltersView.MediaFilterData) arrayList.get(i3));
-            searchFilterView.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda3(this, searchFilterView));
+            searchFilterView.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda4(this, searchFilterView));
             this.searchFilterLayout.addView(searchFilterView, LayoutHelper.createLinear(-2, -1, 0, 0, 0, 6, 0));
         }
         int i4 = 0;
@@ -1110,7 +1122,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$onFiltersChanged$10(SearchFilterView searchFilterView, View view) {
+    public /* synthetic */ void lambda$onFiltersChanged$11(SearchFilterView searchFilterView, View view) {
         int indexOf = this.currentSearchFilters.indexOf(searchFilterView.getFilter());
         if (this.selectedFilterIndex != indexOf) {
             this.selectedFilterIndex = indexOf;
@@ -1419,7 +1431,7 @@ public class ActionBarMenuItem extends FrameLayout {
                     }
                 });
             }
-            this.searchField.setOnEditorActionListener(new ActionBarMenuItem$$ExternalSyntheticLambda9(this));
+            this.searchField.setOnEditorActionListener(new ActionBarMenuItem$$ExternalSyntheticLambda10(this));
             this.searchField.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable editable) {
                 }
@@ -1492,7 +1504,7 @@ public class ActionBarMenuItem extends FrameLayout {
             this.clearButton.setRotation(45.0f);
             this.clearButton.setScaleX(0.0f);
             this.clearButton.setScaleY(0.0f);
-            this.clearButton.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda0(this));
+            this.clearButton.setOnClickListener(new ActionBarMenuItem$$ExternalSyntheticLambda2(this));
             this.clearButton.setContentDescription(LocaleController.getString("ClearButton", NUM));
             if (z2) {
                 this.wrappedSearchFrameLayout.addView(this.clearButton, LayoutHelper.createFrame(48, -1, 21));
@@ -1505,7 +1517,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$setIsSearchField$11(TextView textView2, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$setIsSearchField$12(TextView textView2, int i, KeyEvent keyEvent) {
         if (keyEvent == null) {
             return false;
         }
@@ -1522,7 +1534,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$setIsSearchField$12(View view) {
+    public /* synthetic */ void lambda$setIsSearchField$13(View view) {
         if (this.searchField.length() != 0) {
             this.searchField.setText("");
         } else if (hasRemovableFilters()) {
@@ -1545,6 +1557,15 @@ public class ActionBarMenuItem extends FrameLayout {
         }
         this.searchField.requestFocus();
         AndroidUtilities.showKeyboard(this.searchField);
+    }
+
+    public View.OnClickListener getOnClickListener() {
+        return this.onClickListener;
+    }
+
+    public void setOnClickListener(View.OnClickListener onClickListener2) {
+        this.onClickListener = onClickListener2;
+        super.setOnClickListener(onClickListener2);
     }
 
     /* access modifiers changed from: private */
@@ -1573,7 +1594,7 @@ public class ActionBarMenuItem extends FrameLayout {
             this.clearButton.setTag((Object) null);
             this.clearButton.clearAnimation();
             if (this.animateClear) {
-                this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new ActionBarMenuItem$$ExternalSyntheticLambda11(this)).start();
+                this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new ActionBarMenuItem$$ExternalSyntheticLambda12(this)).start();
                 return;
             }
             this.clearButton.setAlpha(0.0f);
@@ -1586,7 +1607,7 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkClearButton$13() {
+    public /* synthetic */ void lambda$checkClearButton$14() {
         this.clearButton.setVisibility(4);
     }
 

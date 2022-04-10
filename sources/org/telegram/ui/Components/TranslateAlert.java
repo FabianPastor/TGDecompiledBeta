@@ -871,7 +871,7 @@ public class TranslateAlert extends Dialog {
             r1 = 1096810496(0x41600000, float:14.0)
             r0.setTextSize(r13, r1)
             android.widget.TextView r0 = r6.buttonTextView
-            r1 = 2131625070(0x7f0e046e, float:1.8877338E38)
+            r1 = 2131625073(0x7f0e0471, float:1.8877344E38)
             java.lang.String r3 = "CloseTranslation"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setText(r1)

@@ -489,7 +489,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             int r2 = r7.getThemedColor(r1)
             r0.setTextColor(r2)
             android.widget.TextView r0 = r7.dropDown
-            r2 = 2131624924(0x7f0e03dc, float:1.8877041E38)
+            r2 = 2131624927(0x7f0e03df, float:1.8877048E38)
             java.lang.String r4 = "ChatGallery"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setText(r2)
@@ -526,20 +526,20 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r7.checkCamera(r3)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131627985(0x7f0e0fd1, float:1.888325E38)
+            r5 = 2131627988(0x7f0e0fd4, float:1.8883256E38)
             java.lang.String r6 = "SendWithoutGrouping"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.addSubItem(r3, r5)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
-            r5 = 2131627984(0x7f0e0fd0, float:1.8883248E38)
+            r5 = 2131627987(0x7f0e0fd3, float:1.8883254E38)
             java.lang.String r6 = "SendWithoutCompression"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.addSubItem(r13, r5)
             org.telegram.ui.Components.ChatAttachAlert r0 = r7.parentAlert
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.selectedMenuItem
             r5 = 2131165841(0x7var_, float:1.794591E38)
-            r6 = 2131626930(0x7f0e0bb2, float:1.888111E38)
+            r6 = 2131626933(0x7f0e0bb5, float:1.8881116E38)
             java.lang.String r11 = "OpenInExternalApp"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
             r0.addSubItem(r10, r5, r6)
@@ -607,7 +607,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             org.telegram.ui.Components.EmptyTextProgressView r0 = new org.telegram.ui.Components.EmptyTextProgressView
             r0.<init>(r8, r5, r9)
             r7.progressView = r0
-            r6 = 2131626679(0x7f0e0ab7, float:1.88806E38)
+            r6 = 2131626682(0x7f0e0aba, float:1.8880607E38)
             java.lang.String r11 = "NoPhotos"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
             r0.setText(r6)
@@ -828,7 +828,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             android.widget.TextView r0 = r7.tooltipTextView
             r0.setTextColor(r14)
             android.widget.TextView r0 = r7.tooltipTextView
-            r2 = 2131628303(0x7f0e110f, float:1.8883895E38)
+            r2 = 2131628306(0x7f0e1112, float:1.88839E38)
             java.lang.String r4 = "TapForVideo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setText(r2)
@@ -2566,8 +2566,10 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     public void updateSelected(HashMap<Object, Object> hashMap, ArrayList<Object> arrayList, boolean z) {
-        selectedPhotos = hashMap;
-        selectedPhotosOrder = arrayList;
+        selectedPhotos.clear();
+        selectedPhotos.putAll(hashMap);
+        selectedPhotosOrder.clear();
+        selectedPhotosOrder.addAll(arrayList);
         if (z) {
             updatePhotosCounter(false);
             updateCheckedPhotoIndices();
@@ -2593,9 +2595,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         photoAttachPhotoCell.setPhotoEntry(photoEntryAtPosition, z3, z2);
                         ChatAttachAlert chatAttachAlert = this.parentAlert;
                         if (!(chatAttachAlert.baseFragment instanceof ChatActivity) || !chatAttachAlert.allowOrder) {
-                            photoAttachPhotoCell.setChecked(-1, hashMap.containsKey(Integer.valueOf(photoEntryAtPosition.imageId)), false);
+                            photoAttachPhotoCell.setChecked(-1, selectedPhotos.containsKey(Integer.valueOf(photoEntryAtPosition.imageId)), false);
                         } else {
-                            photoAttachPhotoCell.setChecked(selectedPhotosOrder.indexOf(Integer.valueOf(photoEntryAtPosition.imageId)), hashMap.containsKey(Integer.valueOf(photoEntryAtPosition.imageId)), false);
+                            photoAttachPhotoCell.setChecked(selectedPhotosOrder.indexOf(Integer.valueOf(photoEntryAtPosition.imageId)), selectedPhotos.containsKey(Integer.valueOf(photoEntryAtPosition.imageId)), false);
                         }
                     }
                 }

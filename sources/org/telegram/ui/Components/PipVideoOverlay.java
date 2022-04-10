@@ -292,7 +292,12 @@ public class PipVideoOverlay {
 
     /* access modifiers changed from: private */
     public void onDismissedInternal() {
-        this.windowManager.removeViewImmediate(this.contentView);
+        try {
+            if (this.controlsView.getParent() != null) {
+                this.windowManager.removeViewImmediate(this.contentView);
+            }
+        } catch (IllegalArgumentException unused) {
+        }
         this.videoProgressView = null;
         this.innerView = null;
         this.photoViewer = null;
@@ -509,7 +514,10 @@ public class PipVideoOverlay {
                 int access$1200 = (int) (((float) PipVideoOverlay.this.getSuggestedHeight()) * PipVideoOverlay.this.scaleFactor);
                 access$19002.height = access$1200;
                 int unused2 = pipVideoOverlay2.pipHeight = access$1200;
-                PipVideoOverlay.this.windowManager.updateViewLayout(PipVideoOverlay.this.contentView, PipVideoOverlay.this.windowLayoutParams);
+                try {
+                    PipVideoOverlay.this.windowManager.updateViewLayout(PipVideoOverlay.this.contentView, PipVideoOverlay.this.windowLayoutParams);
+                } catch (IllegalArgumentException unused3) {
+                }
             }
         });
         this.scaleGestureDetector = scaleGestureDetector2;
@@ -875,7 +883,7 @@ public class PipVideoOverlay {
             return;
         }
         view.getClass();
-        LaunchActivity.onResumeStaticCallback = new EmbedBottomSheet$$ExternalSyntheticLambda7(view);
+        LaunchActivity.onResumeStaticCallback = new ChatActivityEnterView$$ExternalSyntheticLambda33(view);
         Context context = ApplicationLoader.applicationContext;
         Intent intent = new Intent(context, LaunchActivity.class);
         intent.addFlags(NUM);

@@ -175,6 +175,7 @@ public class MediaDataController extends BaseController {
     public static final String ATTACH_MENU_BOT_COLOR_DARK_TEXT = "dark_text";
     public static final String ATTACH_MENU_BOT_COLOR_LIGHT_ICON = "light_icon";
     public static final String ATTACH_MENU_BOT_COLOR_LIGHT_TEXT = "light_text";
+    public static final String ATTACH_MENU_BOT_PLACEHOLDER_STATIC_KEY = "placeholder_static";
     public static final String ATTACH_MENU_BOT_STATIC_ICON_KEY = "default_static";
     private static Pattern BOLD_PATTERN = Pattern.compile("\\*\\*(.+?)\\*\\*");
     private static Pattern ITALIC_PATTERN = Pattern.compile("__(.+?)__");
@@ -1498,6 +1499,17 @@ public class MediaDataController extends BaseController {
         while (it.hasNext()) {
             TLRPC$TL_attachMenuBotIcon next = it.next();
             if (next.name.equals("default_static")) {
+                return next;
+            }
+        }
+        return null;
+    }
+
+    public static TLRPC$TL_attachMenuBotIcon getPlaceholderStaticAttachMenuBotIcon(TLRPC$TL_attachMenuBot tLRPC$TL_attachMenuBot) {
+        Iterator<TLRPC$TL_attachMenuBotIcon> it = tLRPC$TL_attachMenuBot.icons.iterator();
+        while (it.hasNext()) {
+            TLRPC$TL_attachMenuBotIcon next = it.next();
+            if (next.name.equals("placeholder_static")) {
                 return next;
             }
         }
@@ -5146,7 +5158,7 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02c9 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02c9 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02c9 }
-            r10 = 2131626611(0x7f0e0a73, float:1.8880463E38)
+            r10 = 2131626614(0x7f0e0a76, float:1.888047E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02c9 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02c9 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02c9 }
@@ -5847,7 +5859,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0074
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627711(0x7f0e0ebf, float:1.8882694E38)
+            r9 = 2131627714(0x7f0e0ec2, float:1.88827E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
         L_0x0071:
             r9 = r4
@@ -5857,7 +5869,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x024f }
             if (r8 == 0) goto L_0x0084
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627852(0x7f0e0f4c, float:1.888298E38)
+            r9 = 2131627855(0x7f0e0f4f, float:1.8882986E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024f }
             goto L_0x0071
         L_0x0084:

@@ -1,15 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
+public final /* synthetic */ class AutoDeletePopupWrapper$$ExternalSyntheticLambda6 implements Runnable {
+    public final /* synthetic */ AutoDeletePopupWrapper f$0;
+    public final /* synthetic */ int f$1;
 
-public final /* synthetic */ class AutoDeletePopupWrapper$$ExternalSyntheticLambda6 implements View.OnClickListener {
-    public final /* synthetic */ PopupSwipeBackLayout f$0;
-
-    public /* synthetic */ AutoDeletePopupWrapper$$ExternalSyntheticLambda6(PopupSwipeBackLayout popupSwipeBackLayout) {
-        this.f$0 = popupSwipeBackLayout;
+    public /* synthetic */ AutoDeletePopupWrapper$$ExternalSyntheticLambda6(AutoDeletePopupWrapper autoDeletePopupWrapper, int i) {
+        this.f$0 = autoDeletePopupWrapper;
+        this.f$1 = i;
     }
 
-    public final void onClick(View view) {
-        this.f$0.closeForeground();
+    public final void run() {
+        this.f$0.lambda$updateItems$7(this.f$1);
     }
 }
