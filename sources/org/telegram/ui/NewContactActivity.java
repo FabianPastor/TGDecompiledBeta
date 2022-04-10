@@ -93,7 +93,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r1 = r30
             r0 = r31
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
-            r3 = 2131165497(0x7var_, float:1.7945213E38)
+            r3 = 2131165503(0x7var_f, float:1.7945225E38)
             r2.setBackButtonImage(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             r3 = 1
@@ -117,11 +117,11 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.ActionBar.ActionBarMenu r2 = r2.createMenu()
             r4 = 1113587712(0x42600000, float:56.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r5 = 2131165527(0x7var_, float:1.7945274E38)
+            r5 = 2131165533(0x7var_d, float:1.7945286E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r2.addItemWithWidth(r3, r5, r4)
             r1.editDoneItem = r2
             java.lang.String r4 = "Done"
-            r5 = 2131625420(0x7f0e05cc, float:1.8878047E38)
+            r5 = 2131625421(0x7f0e05cd, float:1.887805E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r2.setContentDescription(r4)
             org.telegram.ui.Components.ContextProgressView r2 = new org.telegram.ui.Components.ContextProgressView
@@ -224,7 +224,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r4.setImeOptions(r14)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
             java.lang.String r8 = "FirstName"
-            r14 = 2131625797(0x7f0e0745, float:1.8878812E38)
+            r14 = 2131625798(0x7f0e0746, float:1.8878814E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r14)
             r4.setHint(r8)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
@@ -296,7 +296,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r8 = 5
             r7.setImeOptions(r8)
             org.telegram.ui.Components.EditTextBoldCursor r7 = r1.lastNameField
-            r8 = 2131626239(0x7f0e08ff, float:1.8879709E38)
+            r8 = 2131626240(0x7f0e0900, float:1.887971E38)
             java.lang.String r9 = "LastName"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r7.setHint(r8)

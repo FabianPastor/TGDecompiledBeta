@@ -70,7 +70,7 @@ public class JoinGroupAlert extends BottomSheet {
             java.lang.String r8 = "key_sheet_other"
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
             r7.setColorFilter(r8)
-            r8 = 2131165534(0x7var_e, float:1.7945288E38)
+            r8 = 2131165540(0x7var_, float:1.79453E38)
             r7.setImageResource(r8)
             org.telegram.ui.Components.JoinGroupAlert$$ExternalSyntheticLambda1 r8 = new org.telegram.ui.Components.JoinGroupAlert$$ExternalSyntheticLambda1
             r8.<init>(r0)
@@ -279,11 +279,11 @@ public class JoinGroupAlert extends BottomSheet {
             r3.setSingleLine(r5)
             android.widget.TextView r3 = r0.requestTextView
             if (r6 == 0) goto L_0x0237
-            r8 = 2131627762(0x7f0e0ef2, float:1.8882798E38)
+            r8 = 2131627763(0x7f0e0ef3, float:1.88828E38)
             java.lang.String r9 = "RequestToJoinChannel"
             goto L_0x023c
         L_0x0237:
-            r8 = 2131627766(0x7f0e0ef6, float:1.8882806E38)
+            r8 = 2131627767(0x7f0e0ef7, float:1.8882808E38)
             java.lang.String r9 = "RequestToJoinGroup"
         L_0x023c:
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
@@ -317,11 +317,11 @@ public class JoinGroupAlert extends BottomSheet {
             r1.setGravity(r11)
             r1.setTextSize(r5, r14)
             if (r6 == 0) goto L_0x0294
-            r2 = 2131627764(0x7f0e0ef4, float:1.8882802E38)
+            r2 = 2131627765(0x7f0e0ef5, float:1.8882804E38)
             java.lang.String r3 = "RequestToJoinChannelDescription"
             goto L_0x0299
         L_0x0294:
-            r2 = 2131627768(0x7f0e0ef8, float:1.888281E38)
+            r2 = 2131627769(0x7f0e0ef9, float:1.8882812E38)
             java.lang.String r3 = "RequestToJoinGroupDescription"
         L_0x0299:
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
@@ -428,7 +428,7 @@ public class JoinGroupAlert extends BottomSheet {
             if (r1 != 0) goto L_0x03b7
         L_0x03a4:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131627537(0x7f0e0e11, float:1.8882341E38)
+            r2 = 2131627538(0x7f0e0e12, float:1.8882343E38)
             java.lang.String r3 = "ProfileJoinChannel"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
@@ -436,7 +436,7 @@ public class JoinGroupAlert extends BottomSheet {
             goto L_0x03c5
         L_0x03b7:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131626190(0x7f0e08ce, float:1.887961E38)
+            r2 = 2131626191(0x7f0e08cf, float:1.8879611E38)
             java.lang.String r3 = "JoinGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)

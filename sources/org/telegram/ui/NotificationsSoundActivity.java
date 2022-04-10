@@ -1,5 +1,6 @@
 package org.telegram.ui;
 
+import android.app.NotificationManager;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -334,7 +335,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             r9.show()
         L_0x0019:
             boolean r9 = r8 instanceof org.telegram.ui.NotificationsSoundActivity.ToneCell
-            if (r9 == 0) goto L_0x00d7
+            if (r9 == 0) goto L_0x00da
             org.telegram.ui.NotificationsSoundActivity$ToneCell r8 = (org.telegram.ui.NotificationsSoundActivity.ToneCell) r8
             org.telegram.ui.ActionBar.ActionBar r9 = r6.actionBar
             boolean r9 = r9.isActionModeShowed()
@@ -351,7 +352,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             boolean r0 = r9.isSystemDefault
             r2 = 2
             r3 = 0
-            r4 = 5
+            r4 = 4
             if (r0 == 0) goto L_0x0053
             android.content.Context r7 = r7.getApplicationContext()
             android.net.Uri r9 = android.media.RingtoneManager.getDefaultUri(r2)
@@ -419,7 +420,8 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             org.telegram.ui.NotificationsSoundActivity$Adapter r7 = r6.adapter
             int r8 = r7.getItemCount()
             r7.notifyItemRangeChanged(r1, r8)
-        L_0x00d7:
+            r6.checkDisabledBySystem()
+        L_0x00da:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsSoundActivity.lambda$createView$1(android.content.Context, android.view.View, int):void");
@@ -470,6 +472,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
 
     private void loadTones() {
         TLRPC$Document tLRPC$Document;
+        TLRPC$Document tLRPC$Document2;
         getMediaDataController().ringtoneDataStore.loadUserRingtones();
         for (int i = 0; i < getMediaDataController().ringtoneDataStore.userRingtones.size(); i++) {
             RingtoneDataStore.CachedTone cachedTone = getMediaDataController().ringtoneDataStore.userRingtones.get(i);
@@ -479,13 +482,13 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             tone.stableId = i2;
             tone.fromServer = true;
             tone.localId = cachedTone.localId;
-            tone.title = cachedTone.document.file_name_fixed;
+            TLRPC$Document tLRPC$Document3 = cachedTone.document;
+            tone.title = tLRPC$Document3.file_name_fixed;
+            tone.document = tLRPC$Document3;
             trimTitle(tone);
-            TLRPC$Document tLRPC$Document2 = cachedTone.document;
-            tone.document = tLRPC$Document2;
             tone.uri = cachedTone.localUri;
             Tone tone2 = this.startSelectedTone;
-            if (!(tone2 == null || (tLRPC$Document = tone2.document) == null || tLRPC$Document2 == null || tLRPC$Document.id != tLRPC$Document2.id)) {
+            if (!(tone2 == null || (tLRPC$Document = tone2.document) == null || (tLRPC$Document2 = cachedTone.document) == null || tLRPC$Document.id != tLRPC$Document2.id)) {
                 this.startSelectedTone = null;
                 this.selectedTone = tone;
             }
@@ -499,32 +502,43 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
         int i3 = this.stableIds;
         this.stableIds = i3 + 1;
         tone3.stableId = i3;
-        tone3.title = LocaleController.getString("DefaultRingtone", NUM);
-        tone3.isSystemDefault = true;
+        tone3.title = LocaleController.getString("NoSound", NUM);
         this.systemTones.add(tone3);
-        Tone tone4 = this.startSelectedTone;
-        if (tone4 != null && tone4.document == null && tone4.uri.equals("NoSound")) {
+        Tone tone4 = new Tone();
+        int i4 = this.stableIds;
+        this.stableIds = i4 + 1;
+        tone4.stableId = i4;
+        tone4.title = LocaleController.getString("DefaultRingtone", NUM);
+        tone4.isSystemDefault = true;
+        this.systemTones.add(tone4);
+        Tone tone5 = this.startSelectedTone;
+        if (tone5 != null && tone5.document == null && tone5.uri.equals("NoSound")) {
             this.startSelectedTone = null;
             this.selectedTone = tone3;
+        }
+        Tone tone6 = this.startSelectedTone;
+        if (tone6 != null && tone6.document == null && tone6.uri.equals("Default")) {
+            this.startSelectedTone = null;
+            this.selectedTone = tone4;
         }
         while (cursor.moveToNext()) {
             String string = cursor.getString(1);
             String str = cursor.getString(2) + "/" + cursor.getString(0);
-            Tone tone5 = new Tone();
-            int i4 = this.stableIds;
-            this.stableIds = i4 + 1;
-            tone5.stableId = i4;
-            tone5.title = string;
-            tone5.uri = str;
-            Tone tone6 = this.startSelectedTone;
-            if (tone6 != null && tone6.document == null && tone6.uri.equals(str)) {
+            Tone tone7 = new Tone();
+            int i5 = this.stableIds;
+            this.stableIds = i5 + 1;
+            tone7.stableId = i5;
+            tone7.title = string;
+            tone7.uri = str;
+            Tone tone8 = this.startSelectedTone;
+            if (tone8 != null && tone8.document == null && tone8.uri.equals(str)) {
                 this.startSelectedTone = null;
-                this.selectedTone = tone5;
+                this.selectedTone = tone7;
             }
-            this.systemTones.add(tone5);
+            this.systemTones.add(tone7);
         }
         if (getMediaDataController().ringtoneDataStore.isLoaded() && this.selectedTone == null) {
-            this.selectedTone = tone3;
+            this.selectedTone = tone4;
             this.selectedToneChanged = true;
         }
         updateRows();
@@ -829,6 +843,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         TLRPC$Document tLRPC$Document;
+        TLRPC$Document tLRPC$Document2;
         if (i == NotificationCenter.onUserRingtonesUpdated) {
             HashMap hashMap = new HashMap();
             for (int i3 = 0; i3 < this.serverTones.size(); i3++) {
@@ -851,18 +866,17 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
                 }
                 tone.fromServer = true;
                 tone.localId = cachedTone.localId;
-                TLRPC$Document tLRPC$Document2 = cachedTone.document;
-                if (tLRPC$Document2 != null) {
-                    tone.title = tLRPC$Document2.file_name_fixed;
+                TLRPC$Document tLRPC$Document3 = cachedTone.document;
+                if (tLRPC$Document3 != null) {
+                    tone.title = tLRPC$Document3.file_name_fixed;
                 } else {
                     tone.title = new File(cachedTone.localUri).getName();
                 }
+                tone.document = cachedTone.document;
                 trimTitle(tone);
-                TLRPC$Document tLRPC$Document3 = cachedTone.document;
-                tone.document = tLRPC$Document3;
                 tone.uri = cachedTone.localUri;
                 Tone tone3 = this.startSelectedTone;
-                if (!(tone3 == null || (tLRPC$Document = tone3.document) == null || tLRPC$Document3 == null || tLRPC$Document.id != tLRPC$Document3.id)) {
+                if (!(tone3 == null || (tLRPC$Document = tone3.document) == null || (tLRPC$Document2 = cachedTone.document) == null || tLRPC$Document.id != tLRPC$Document2.id)) {
                     this.startSelectedTone = null;
                     this.selectedTone = tone;
                 }
@@ -878,11 +892,18 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
     }
 
     private void trimTitle(Tone tone) {
+        tone.title = trimTitle(tone.document, tone.title);
+    }
+
+    public static String trimTitle(TLRPC$Document tLRPC$Document, String str) {
         int lastIndexOf;
-        String str = tone.title;
-        if (str != null && (lastIndexOf = str.lastIndexOf(46)) != -1) {
-            tone.title = tone.title.substring(0, lastIndexOf);
+        if (!(str == null || (lastIndexOf = str.lastIndexOf(46)) == -1)) {
+            str = str.substring(0, lastIndexOf);
         }
+        if (!TextUtils.isEmpty(str) || tLRPC$Document == null) {
+            return str;
+        }
+        return LocaleController.formatString("SoundNameEmpty", NUM, LocaleController.formatDateChat((long) tLRPC$Document.date, true));
     }
 
     public void onFragmentDestroy() {
@@ -926,6 +947,10 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
                 edit.putString(str2, this.selectedTone.uri);
                 edit.remove(str);
             } else if (tone.isSystemDefault) {
+                edit.putString(str3, "Default");
+                edit.putString(str2, "Default");
+                edit.remove(str);
+            } else {
                 edit.putString(str3, "NoSound");
                 edit.putString(str2, "NoSound");
                 edit.remove(str);
@@ -959,12 +984,14 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             boolean z2 = false;
             if (intent.getData() != null) {
                 String path = AndroidUtilities.getPath(intent.getData());
-                if (this.chatAttachAlert.getDocumentLayout().isRingtone(new File(path))) {
-                    getMediaDataController().uploadRingtone(path);
-                    getNotificationCenter().postNotificationName(NotificationCenter.onUserRingtonesUpdated, new Object[0]);
-                } else {
-                    z = false;
+                if (path != null) {
+                    if (this.chatAttachAlert.getDocumentLayout().isRingtone(new File(path))) {
+                        getMediaDataController().uploadRingtone(path);
+                        getNotificationCenter().postNotificationName(NotificationCenter.onUserRingtonesUpdated, new Object[0]);
+                        z2 = z;
+                    }
                 }
+                z = false;
                 z2 = z;
             } else if (intent.getClipData() != null) {
                 ClipData clipData = intent.getClipData();
@@ -1023,6 +1050,13 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
                 }
             }
             return Uri.fromFile(file);
+        }
+    }
+
+    private void checkDisabledBySystem() {
+        NotificationManager notificationManager = (NotificationManager) ApplicationLoader.applicationContext.getSystemService("notification");
+        if (Build.VERSION.SDK_INT >= 24) {
+            notificationManager.areNotificationsEnabled();
         }
     }
 }

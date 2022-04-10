@@ -472,7 +472,7 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
                 android.view.View r9 = r9.itemView
                 org.telegram.ui.Cells.ShadowSectionCell r9 = (org.telegram.ui.Cells.ShadowSectionCell) r9
                 android.content.Context r10 = r8.mContext
-                r0 = 2131165478(0x7var_, float:1.7945174E38)
+                r0 = 2131165484(0x7var_c, float:1.7945186E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r10, (int) r0, (java.lang.String) r1)
                 r9.setBackgroundDrawable(r10)
@@ -523,7 +523,7 @@ public class RestrictedLanguagesSelectActivity extends BaseFragment implements N
                 java.lang.Object[] r5 = new java.lang.Object[r5]
                 java.lang.String r6 = r0.name
                 r5[r2] = r6
-                r6 = 2131626221(0x7f0e08ed, float:1.8879672E38)
+                r6 = 2131626222(0x7f0e08ee, float:1.8879674E38)
                 java.lang.String r7 = "LanguageCustom"
                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 r5[r1] = r6

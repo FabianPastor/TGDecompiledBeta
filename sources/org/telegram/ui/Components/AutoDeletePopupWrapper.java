@@ -24,25 +24,6 @@ public class AutoDeletePopupWrapper {
         void setAutoDeleteHistory(int i, int i2);
     }
 
-    public static int getTtlIcon(int i) {
-        if (i == 0) {
-            return NUM;
-        }
-        if (i == 60) {
-            return NUM;
-        }
-        if (i == 3600) {
-            return NUM;
-        }
-        if (i < 86400) {
-            return NUM;
-        }
-        if (i < 604800) {
-            return NUM;
-        }
-        return (i < 2592000 || i > 2678400) ? NUM : NUM;
-    }
-
     public AutoDeletePopupWrapper(Context context, PopupSwipeBackLayout popupSwipeBackLayout, Callback callback2, boolean z, Theme.ResourcesProvider resourcesProvider) {
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(context, z ? NUM : 0, resourcesProvider);
         this.windowLayout = actionBarPopupWindowLayout;

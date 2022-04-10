@@ -2053,7 +2053,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 android.content.Context r11 = r9.mContext
                 r10.<init>(r11)
                 android.content.Context r11 = r9.mContext
-                r0 = 2131165478(0x7var_, float:1.7945174E38)
+                r0 = 2131165484(0x7var_c, float:1.7945186E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r11, (int) r0, (java.lang.String) r1)
                 r10.setBackgroundDrawable(r11)

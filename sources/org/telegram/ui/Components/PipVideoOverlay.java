@@ -271,8 +271,11 @@ public class PipVideoOverlay {
                 AndroidUtilities.cancelRunOnUIThread(this.dismissControlsCallback);
                 this.postedDismissControls = false;
             }
-            this.pipXSpring.cancel();
-            this.pipYSpring.cancel();
+            SpringAnimation springAnimation = this.pipXSpring;
+            if (springAnimation != null) {
+                springAnimation.cancel();
+                this.pipYSpring.cancel();
+            }
             if (z) {
                 AndroidUtilities.runOnUIThread(new PipVideoOverlay$$ExternalSyntheticLambda6(this), 100);
                 return;

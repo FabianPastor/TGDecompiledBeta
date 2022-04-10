@@ -270,7 +270,7 @@ public class QrActivity extends BaseFragment {
             r0.logoImageView = r6
             r6.setAutoRepeat(r10)
             org.telegram.ui.Components.RLottieImageView r6 = r0.logoImageView
-            r7 = 2131558502(0x7f0d0066, float:1.8742322E38)
+            r7 = 2131558503(0x7f0d0067, float:1.8742324E38)
             r8 = 60
             r6.setAnimation(r7, r8, r8)
             org.telegram.ui.Components.RLottieImageView r6 = r0.logoImageView
@@ -311,7 +311,7 @@ public class QrActivity extends BaseFragment {
             android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r7, r8, r9)
             r6.setBackground(r7)
             android.widget.ImageView r6 = r0.closeImageView
-            r7 = 2131165497(0x7var_, float:1.7945213E38)
+            r7 = 2131165503(0x7var_f, float:1.7945225E38)
             r6.setImageResource(r7)
             android.widget.ImageView r6 = r0.closeImageView
             android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
@@ -357,7 +357,7 @@ public class QrActivity extends BaseFragment {
             r7.setXfermode(r6)
             android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.content.res.Resources r6 = r6.getResources()
-            r8 = 2131165857(0x7var_a1, float:1.7945943E38)
+            r8 = 2131165863(0x7var_a7, float:1.7945955E38)
             android.graphics.Bitmap r6 = android.graphics.BitmapFactory.decodeResource(r6, r8)
             android.graphics.Bitmap r8 = r0.emojiThemeIcon
             int r8 = r8.getWidth()
@@ -388,7 +388,7 @@ public class QrActivity extends BaseFragment {
             r1.setItemSelectedListener(r4)
             org.telegram.ui.QrActivity$ThemeListViewController r1 = r0.themesViewController
             android.widget.TextView r1 = r1.titleView
-            r4 = 2131627610(0x7f0e0e5a, float:1.888249E38)
+            r4 = 2131627611(0x7f0e0e5b, float:1.8882491E38)
             java.lang.String r6 = "QrCode"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r1.setText(r4)
@@ -1054,7 +1054,7 @@ public class QrActivity extends BaseFragment {
                 if (r6 > r14) goto L_0x016a
                 if (r6 != 0) goto L_0x0077
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166077(0x7var_d, float:1.794639E38)
+                r8 = 2131166083(0x7var_, float:1.7946401E38)
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r18)
                 float r8 = (float) r8
@@ -1063,7 +1063,7 @@ public class QrActivity extends BaseFragment {
             L_0x0077:
                 if (r6 != r11) goto L_0x008f
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166078(0x7var_e, float:1.7946391E38)
+                r8 = 2131166084(0x7var_, float:1.7946403E38)
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 r8 = 1103626240(0x41CLASSNAME, float:25.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
@@ -1072,7 +1072,7 @@ public class QrActivity extends BaseFragment {
                 goto L_0x00a4
             L_0x008f:
                 android.content.Context r7 = r33.getContext()
-                r8 = 2131166079(0x7var_f, float:1.7946393E38)
+                r8 = 2131166085(0x7var_, float:1.7946405E38)
                 android.graphics.drawable.Drawable r7 = androidx.core.content.ContextCompat.getDrawable(r7, r8)
                 r8 = 1100480512(0x41980000, float:19.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)

@@ -1,5 +1,6 @@
 package org.telegram.messenger.ringtone;
 
+import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
@@ -32,7 +33,13 @@ public class RingtoneUploader implements NotificationCenter.NotificationCenterDe
                 TLRPC$TL_account_uploadRingtone tLRPC$TL_account_uploadRingtone = new TLRPC$TL_account_uploadRingtone();
                 tLRPC$TL_account_uploadRingtone.file = tLRPC$InputFile;
                 tLRPC$TL_account_uploadRingtone.file_name = tLRPC$InputFile.name;
-                tLRPC$TL_account_uploadRingtone.mime_type = "audio/mpeg";
+                String fileExtension = FileLoader.getFileExtension(new File(tLRPC$InputFile.name));
+                tLRPC$TL_account_uploadRingtone.mime_type = fileExtension;
+                if ("ogg".equals(fileExtension)) {
+                    tLRPC$TL_account_uploadRingtone.mime_type = "audio/ogg";
+                } else {
+                    tLRPC$TL_account_uploadRingtone.mime_type = "audio/mpeg";
+                }
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_uploadRingtone, new RingtoneUploader$$ExternalSyntheticLambda2(this));
             }
         }
@@ -84,12 +91,12 @@ public class RingtoneUploader implements NotificationCenter.NotificationCenterDe
 
     /* access modifiers changed from: private */
     public static /* synthetic */ void lambda$error$2(TLRPC$TL_error tLRPC$TL_error) {
-        if (tLRPC$TL_error.text.equals("RINGTONE_TYPE_INVALID")) {
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 4, LocaleController.formatString("InvalidFormatError", NUM, new Object[0]), LocaleController.formatString("ErrorRingtoneInvalidFormat", NUM, new Object[0]));
-        } else if (tLRPC$TL_error.text.equals("RINGTONE_DURATION_TOO_LONG")) {
+        if (tLRPC$TL_error.text.equals("RINGTONE_DURATION_TOO_LONG")) {
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 4, LocaleController.formatString("TooLongError", NUM, new Object[0]), LocaleController.formatString("ErrorRingtoneDurationTooLong", NUM, new Object[0]));
         } else if (tLRPC$TL_error.text.equals("RINGTONE_SIZE_TOO_BIG")) {
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 4, LocaleController.formatString("TooLargeError", NUM, new Object[0]), LocaleController.formatString("ErrorRingtoneSizeTooBig", NUM, new Object[0]));
+        } else {
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 4, LocaleController.formatString("InvalidFormatError", NUM, new Object[0]), LocaleController.formatString("ErrorRingtoneInvalidFormat", NUM, new Object[0]));
         }
     }
 }

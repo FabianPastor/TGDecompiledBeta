@@ -541,7 +541,7 @@ public class TranslateAlert extends Dialog {
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.subtitleArrowView = r0
-            r1 = 2131166096(0x7var_, float:1.7946428E38)
+            r1 = 2131166102(0x7var_, float:1.794644E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r6.subtitleArrowView
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -662,7 +662,7 @@ public class TranslateAlert extends Dialog {
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.backButton = r0
-            r1 = 2131165497(0x7var_, float:1.7945213E38)
+            r1 = 2131165503(0x7var_f, float:1.7945225E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r6.backButton
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter

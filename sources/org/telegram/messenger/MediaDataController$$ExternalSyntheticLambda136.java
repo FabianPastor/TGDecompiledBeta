@@ -18,6 +18,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda1
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        this.f$0.lambda$fetchNewEmojiKeywords$156(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+        this.f$0.lambda$fetchNewEmojiKeywords$157(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
     }
 }

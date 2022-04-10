@@ -573,10 +573,10 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
-    public ActionBarMenuSubItem addSwipeBackItem(int i, String str, View view) {
+    public ActionBarMenuSubItem addSwipeBackItem(int i, Drawable drawable, String str, View view) {
         createPopupLayout();
         ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(getContext(), false, false, false, this.resourcesProvider);
-        actionBarMenuSubItem.setTextAndIcon(str, i, (Drawable) null);
+        actionBarMenuSubItem.setTextAndIcon(str, i, drawable);
         actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
         actionBarMenuSubItem.setRightIcon(NUM);
         this.popupLayout.addView(actionBarMenuSubItem);
@@ -750,7 +750,7 @@ public class ActionBarMenuItem extends FrameLayout {
             android.view.ViewPropertyAnimator r3 = r3.setDuration(r4)
             r3.start()
             android.content.Context r3 = r10.getContext()
-            r4 = 2131166053(0x7var_, float:1.794634E38)
+            r4 = 2131166059(0x7var_b, float:1.7946353E38)
             android.graphics.drawable.Drawable r3 = androidx.core.content.ContextCompat.getDrawable(r3, r4)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter

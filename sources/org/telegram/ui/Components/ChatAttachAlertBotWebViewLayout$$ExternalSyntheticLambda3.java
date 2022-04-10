@@ -8,6 +8,6 @@ public final /* synthetic */ class ChatAttachAlertBotWebViewLayout$$ExternalSynt
     }
 
     public final void run() {
-        this.f$0.lambda$onShown$4();
+        this.f$0.requestEnableKeyboard();
     }
 }

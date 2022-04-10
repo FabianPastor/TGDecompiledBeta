@@ -279,6 +279,7 @@ public final class R {
         public static final int audiosend_pause = NUM;
         public static final int audiosend_play = NUM;
         public static final int authorize = NUM;
+        public static final int avd_flip = NUM;
         public static final int background_selected = NUM;
         public static final int bar_selector_lock = NUM;
         public static final int bar_selector_style = NUM;
@@ -1198,6 +1199,7 @@ public final class R {
         public static final int tooltip_sound = NUM;
         public static final int transparent = NUM;
         public static final int update = NUM;
+        public static final int vd_flip = NUM;
         public static final int venue_tooltip = NUM;
         public static final int verified_area = NUM;
         public static final int verified_check = NUM;
@@ -1272,6 +1274,16 @@ public final class R {
         public static final int zoom_round_b = NUM;
         public static final int zoom_slide = NUM;
         public static final int zoom_slide_a = NUM;
+        /* added by JADX */
+        public static final int $avd_flip__0 = NUM;
+        /* added by JADX */
+        public static final int $avd_flip__1 = NUM;
+        /* added by JADX */
+        public static final int $avd_flip__2 = NUM;
+        /* added by JADX */
+        public static final int $avd_flip__3 = NUM;
+        /* added by JADX */
+        public static final int $avd_flip__4 = NUM;
         /* added by JADX */
         public static final int $fingerprint_dialog_error_to_fp__0 = NUM;
         /* added by JADX */
@@ -1750,6 +1762,7 @@ public final class R {
         public static final int download_arrow = NUM;
         public static final int download_finish = NUM;
         public static final int download_progress = NUM;
+        public static final int durgerking_placeholder = NUM;
         public static final int edge_30 = NUM;
         public static final int error = NUM;
         public static final int filter_new = NUM;
@@ -3201,6 +3214,7 @@ public final class R {
         public static final int DebugMenuCallSettings = NUM;
         public static final int DebugMenuCheckAppUpdate = NUM;
         public static final int DebugMenuClearMediaCache = NUM;
+        public static final int DebugMenuClearWebViewCache = NUM;
         public static final int DebugMenuDisableCamera = NUM;
         public static final int DebugMenuDisableForceRtmpStreamFlag = NUM;
         public static final int DebugMenuDisableLogs = NUM;
@@ -6118,6 +6132,7 @@ public final class R {
         public static final int SoundAddedSubtitle = NUM;
         public static final int SoundDefault = NUM;
         public static final int SoundMuted = NUM;
+        public static final int SoundNameEmpty = NUM;
         public static final int SoundOff = NUM;
         public static final int SoundOffHint = NUM;
         public static final int SoundOn = NUM;

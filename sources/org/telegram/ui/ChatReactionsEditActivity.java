@@ -116,11 +116,10 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
         TextCheckCell textCheckCell = new TextCheckCell(context);
         this.enableReactionsCell = textCheckCell;
         textCheckCell.setHeight(56);
-        this.enableReactionsCell.setTextAndCheck(LocaleController.getString("EnableReactions", NUM), !this.chatReactions.isEmpty(), false);
+        this.enableReactionsCell.setTextAndCheck(LocaleController.getString("EnableReactions", NUM), true ^ this.chatReactions.isEmpty(), false);
         TextCheckCell textCheckCell2 = this.enableReactionsCell;
         textCheckCell2.setBackgroundColor(Theme.getColor(textCheckCell2.isChecked() ? "windowBackgroundChecked" : "windowBackgroundUnchecked"));
         this.enableReactionsCell.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.enableReactionsCell.setAnimatingToThumbInsteadOfTouch(true);
         this.enableReactionsCell.setOnClickListener(new ChatReactionsEditActivity$$ExternalSyntheticLambda0(this));
         linearLayout.addView(this.enableReactionsCell, LayoutHelper.createLinear(-1, -2));
         RecyclerListView recyclerListView = new RecyclerListView(context);

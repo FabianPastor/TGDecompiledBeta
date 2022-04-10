@@ -20,6 +20,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class TimerDrawable extends Drawable {
     Context context;
+    ColorFilter currentColorFilter;
     private Drawable currentTtlIcon;
     private int iconColor;
     private boolean isStaticIcon;
@@ -52,7 +53,9 @@ public class TimerDrawable extends Drawable {
         String str;
         if (this.time != i) {
             this.time = i;
-            this.currentTtlIcon = ContextCompat.getDrawable(this.context, i == 0 ? NUM : NUM).mutate();
+            Drawable mutate = ContextCompat.getDrawable(this.context, i == 0 ? NUM : NUM).mutate();
+            this.currentTtlIcon = mutate;
+            mutate.setColorFilter(this.currentColorFilter);
             invalidateSelf();
             int i2 = this.time;
             if (i2 >= 1 && i2 < 60) {
@@ -75,7 +78,7 @@ public class TimerDrawable extends Drawable {
                 if (str.length() < 2) {
                     str = str + LocaleController.getString("SecretChatTimerDays", NUM);
                 }
-            } else if (i2 < 2592000 || i2 > 2678400) {
+            } else if (i2 < 2678400) {
                 str = "" + ((((i / 60) / 60) / 24) / 7);
                 if (str.length() < 2) {
                     str = str + LocaleController.getString("SecretChatTimerWeeks", NUM);
@@ -92,11 +95,11 @@ public class TimerDrawable extends Drawable {
             this.timePaint.setTextSize((float) AndroidUtilities.dp(11.0f));
             float measureText = this.timePaint.measureText(str2);
             this.timeWidth = measureText;
-            if (measureText > ((float) AndroidUtilities.dp(12.0f))) {
+            if (measureText > ((float) AndroidUtilities.dp(13.0f))) {
                 this.timePaint.setTextSize((float) AndroidUtilities.dp(9.0f));
                 this.timeWidth = this.timePaint.measureText(str2);
             }
-            if (this.timeWidth > ((float) AndroidUtilities.dp(12.0f))) {
+            if (this.timeWidth > ((float) AndroidUtilities.dp(13.0f))) {
                 this.timePaint.setTextSize((float) AndroidUtilities.dp(6.0f));
                 this.timeWidth = this.timePaint.measureText(str2);
             }
@@ -112,7 +115,7 @@ public class TimerDrawable extends Drawable {
         }
     }
 
-    public static Drawable getTtlIcon(int i) {
+    public static TimerDrawable getTtlIcon(int i) {
         TimerDrawable timerDrawable = new TimerDrawable(ApplicationLoader.applicationContext, (Theme.ResourcesProvider) null);
         timerDrawable.setTime(i);
         timerDrawable.isStaticIcon = true;
@@ -159,6 +162,7 @@ public class TimerDrawable extends Drawable {
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
+        this.currentColorFilter = colorFilter;
         if (this.isStaticIcon) {
             this.currentTtlIcon.setColorFilter(colorFilter);
         }

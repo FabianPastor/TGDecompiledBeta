@@ -506,10 +506,10 @@ public class Browser {
             r1 = 1
             r2.setShowTitle(r1)     // Catch:{ Exception -> 0x0309 }
             android.content.res.Resources r1 = r16.getResources()     // Catch:{ Exception -> 0x0309 }
-            r3 = 2131165247(0x7var_f, float:1.7944706E38)
+            r3 = 2131165252(0x7var_, float:1.7944716E38)
             android.graphics.Bitmap r1 = android.graphics.BitmapFactory.decodeResource(r1, r3)     // Catch:{ Exception -> 0x0309 }
             java.lang.String r3 = "ShareFile"
-            r4 = 2131628050(0x7f0e1012, float:1.8883382E38)
+            r4 = 2131628051(0x7f0e1013, float:1.8883384E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0309 }
             android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0309 }
             r5 = 0

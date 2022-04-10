@@ -906,6 +906,9 @@ public class VoIPHelper {
                 arrayList.remove(file);
             }
         }
+        if (z) {
+            return new File(logsDir, j + "_stats.log").getAbsolutePath();
+        }
         return new File(logsDir, j + ".log").getAbsolutePath();
     }
 

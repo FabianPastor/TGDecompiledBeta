@@ -33,6 +33,7 @@ import org.telegram.messenger.NotificationsController;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Dialog;
+import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_peerNotifySettings;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -783,7 +784,6 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     TextCheckCell textCheckCell = new TextCheckCell(this.context);
                     textCheckCell.setHeight(56);
                     textCheckCell.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                    textCheckCell.setAnimatingToThumbInsteadOfTouch(true);
                     textCheckCell.setColors("windowBackgroundCheckText", "switchTrackBlue", "switchTrackBlueChecked", "switchTrackBlueThumb", "switchTrackBlueThumbChecked");
                     shadowSectionCell = textCheckCell;
                     break;
@@ -834,8 +834,14 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
                     if (i3 == ProfileNotificationsActivity.this.soundRow) {
                         String string = notificationsSettings.getString("sound_" + ProfileNotificationsActivity.this.dialogId, LocaleController.getString("SoundDefault", NUM));
-                        if (string.equals("NoSound")) {
+                        long j = notificationsSettings.getLong("sound_document_id_" + ProfileNotificationsActivity.this.dialogId, 0);
+                        if (j != 0) {
+                            TLRPC$Document document = ProfileNotificationsActivity.this.getMediaDataController().ringtoneDataStore.getDocument(j);
+                            string = NotificationsSoundActivity.trimTitle(document, document.file_name_fixed);
+                        } else if (string.equals("NoSound")) {
                             string = LocaleController.getString("NoSound", NUM);
+                        } else if (string.equals("Default")) {
+                            string = LocaleController.getString("SoundDefault", NUM);
                         }
                         textSettingsCell.setTextAndValue(LocaleController.getString("Sound", NUM), string, true);
                         return;

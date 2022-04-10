@@ -55,7 +55,8 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
     public int currentAccount;
     /* access modifiers changed from: private */
     public Paint dimPaint = new Paint();
-    private boolean dismissed;
+    /* access modifiers changed from: private */
+    public boolean dismissed;
     /* access modifiers changed from: private */
     public SizeNotifierFrameLayout frameLayout;
     /* access modifiers changed from: private */
@@ -110,7 +111,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
                 tLRPC$TL_messages_prolongWebView.reply_to_msg_id = i;
                 tLRPC$TL_messages_prolongWebView.flags |= 1;
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_prolongWebView, new BotWebViewSheet$$ExternalSyntheticLambda8(this));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_prolongWebView, new BotWebViewSheet$$ExternalSyntheticLambda10(this));
         }
     }
 
@@ -217,6 +218,10 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             android.widget.TextView r4 = r0.mainButton
             r8 = 17
             r4.setGravity(r8)
+            android.widget.TextView r4 = r0.mainButton
+            java.lang.String r8 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r8)
+            r4.setTypeface(r8)
             r4 = 1098907648(0x41800000, float:16.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             android.widget.TextView r8 = r0.mainButton
@@ -266,7 +271,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             org.telegram.ui.Components.VerticalPositionAutoAnimator r4 = org.telegram.ui.Components.VerticalPositionAutoAnimator.attach(r4)
             r0.radialProgressAutoAnimator = r4
             android.content.Context r4 = r17.getContext()
-            r5 = 2131165494(0x7var_, float:1.7945207E38)
+            r5 = 2131165500(0x7var_c, float:1.7945219E38)
             android.graphics.drawable.Drawable r4 = androidx.core.content.ContextCompat.getDrawable(r4, r5)
             android.graphics.drawable.Drawable r4 = r4.mutate()
             r0.actionBarShadow = r4
@@ -286,7 +291,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r1.setItemsBackgroundColor(r2, r7)
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            r2 = 2131165497(0x7var_, float:1.7945213E38)
+            r2 = 2131165503(0x7var_f, float:1.7945225E38)
             r1.setBackButtonImage(r2)
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
             org.telegram.ui.Components.BotWebViewSheet$4 r2 = new org.telegram.ui.Components.BotWebViewSheet$4
@@ -444,8 +449,9 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
 
     public void requestWebView(int i, long j, long j2, String str, String str2, boolean z, int i2, boolean z2) {
         String str3;
+        int i3 = i;
         String str4 = str2;
-        this.currentAccount = i;
+        this.currentAccount = i3;
         this.peerId = j;
         this.botId = j2;
         this.replyToMsgId = i2;
@@ -460,13 +466,13 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
         AnonymousClass5 r0 = r1;
         final long j3 = j2;
         ActionBar actionBar2 = this.actionBar;
-        final int i3 = i;
+        final int i4 = i;
         boolean z3 = false;
         final long j4 = j;
         final String str5 = str;
         final String str6 = str2;
         final boolean z4 = z;
-        final int i4 = i2;
+        final int i5 = i2;
         final boolean z5 = z2;
         AnonymousClass5 r1 = new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
@@ -482,7 +488,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
                 } else if (i == NUM) {
                     BotWebViewSheet.this.webViewContainer.getWebView().animate().cancel();
                     BotWebViewSheet.this.webViewContainer.getWebView().animate().alpha(0.0f).start();
-                    BotWebViewSheet.this.requestWebView(i3, j4, j3, str5, str6, z4, i4, z5);
+                    BotWebViewSheet.this.requestWebView(i4, j4, j3, str5, str6, z4, i5, z5);
                 }
             }
         };
@@ -501,9 +507,11 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             FileLog.e((Throwable) e);
             str3 = null;
         }
+        this.webViewContainer.setBotUser(MessagesController.getInstance(i).getUser(Long.valueOf(j2)));
+        long j5 = j2;
+        this.webViewContainer.loadFlicker(i3, j5);
         if (z) {
             TLRPC$TL_messages_requestSimpleWebView tLRPC$TL_messages_requestSimpleWebView = new TLRPC$TL_messages_requestSimpleWebView();
-            long j5 = j2;
             tLRPC$TL_messages_requestSimpleWebView.bot = MessagesController.getInstance(i).getInputUser(j5);
             if (z3) {
                 TLRPC$TL_dataJSON tLRPC$TL_dataJSON = new TLRPC$TL_dataJSON();
@@ -511,17 +519,16 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
                 tLRPC$TL_dataJSON.data = str3;
                 tLRPC$TL_messages_requestSimpleWebView.flags |= 1;
             }
-            tLRPC$TL_messages_requestSimpleWebView.url = str4;
-            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_requestSimpleWebView, new BotWebViewSheet$$ExternalSyntheticLambda10(this, i, j5));
+            tLRPC$TL_messages_requestSimpleWebView.url = str2;
+            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_requestSimpleWebView, new BotWebViewSheet$$ExternalSyntheticLambda9(this));
             return;
         }
-        int i5 = i;
-        long j6 = j2;
+        String str7 = str2;
         TLRPC$TL_messages_requestWebView tLRPC$TL_messages_requestWebView = new TLRPC$TL_messages_requestWebView();
         tLRPC$TL_messages_requestWebView.peer = MessagesController.getInstance(i).getInputPeer(j);
-        tLRPC$TL_messages_requestWebView.bot = MessagesController.getInstance(i).getInputUser(j6);
-        if (str4 != null) {
-            tLRPC$TL_messages_requestWebView.url = str4;
+        tLRPC$TL_messages_requestWebView.bot = MessagesController.getInstance(i).getInputUser(j5);
+        if (str7 != null) {
+            tLRPC$TL_messages_requestWebView.url = str7;
             tLRPC$TL_messages_requestWebView.flags |= 2;
         }
         int i6 = i2;
@@ -535,36 +542,32 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             tLRPC$TL_dataJSON2.data = str3;
             tLRPC$TL_messages_requestWebView.flags |= 4;
         }
-        ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_requestWebView, new BotWebViewSheet$$ExternalSyntheticLambda9(this, i5, j6));
+        ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_messages_requestWebView, new BotWebViewSheet$$ExternalSyntheticLambda8(this));
         NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.webViewResultSent);
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$requestWebView$10(int i, long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new BotWebViewSheet$$ExternalSyntheticLambda6(this, tLObject, i, j));
+    public /* synthetic */ void lambda$requestWebView$10(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new BotWebViewSheet$$ExternalSyntheticLambda6(this, tLObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$requestWebView$9(TLObject tLObject, int i, long j) {
+    public /* synthetic */ void lambda$requestWebView$9(TLObject tLObject) {
         if (tLObject instanceof TLRPC$TL_simpleWebViewResultUrl) {
-            this.webViewContainer.setBotUser(MessagesController.getInstance(i).getUser(Long.valueOf(j)));
-            this.webViewContainer.loadFlicker(i, j);
             this.webViewContainer.loadUrl(((TLRPC$TL_simpleWebViewResultUrl) tLObject).url);
         }
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$requestWebView$12(int i, long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new BotWebViewSheet$$ExternalSyntheticLambda5(this, tLObject, i, j));
+    public /* synthetic */ void lambda$requestWebView$12(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new BotWebViewSheet$$ExternalSyntheticLambda5(this, tLObject));
     }
 
     /* access modifiers changed from: private */
-    public /* synthetic */ void lambda$requestWebView$11(TLObject tLObject, int i, long j) {
+    public /* synthetic */ void lambda$requestWebView$11(TLObject tLObject) {
         if (tLObject instanceof TLRPC$TL_webViewResultUrl) {
             TLRPC$TL_webViewResultUrl tLRPC$TL_webViewResultUrl = (TLRPC$TL_webViewResultUrl) tLObject;
             this.queryId = tLRPC$TL_webViewResultUrl.query_id;
-            this.webViewContainer.setBotUser(MessagesController.getInstance(i).getUser(Long.valueOf(j)));
-            this.webViewContainer.loadFlicker(i, j);
             this.webViewContainer.loadUrl(tLRPC$TL_webViewResultUrl.url);
             AndroidUtilities.runOnUIThread(this.pollRunnable, 60000);
         }
@@ -601,7 +604,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             this.webViewContainer.destroyWebView();
             NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.webViewResultSent);
             ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer webViewSwipeContainer = this.swipeContainer;
-            webViewSwipeContainer.stickTo((float) webViewSwipeContainer.getHeight(), new BotWebViewSheet$$ExternalSyntheticLambda2(this));
+            webViewSwipeContainer.stickTo((float) (webViewSwipeContainer.getHeight() + this.frameLayout.measureKeyboardHeight()), new BotWebViewSheet$$ExternalSyntheticLambda2(this));
         }
     }
 

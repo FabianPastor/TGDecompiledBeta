@@ -12,6 +12,6 @@ public final /* synthetic */ class MediaDataController$$ExternalSyntheticLambda5
     }
 
     public final void run() {
-        this.f$0.lambda$loadStickersByEmojiOrName$49(this.f$1, this.f$2);
+        this.f$0.lambda$processLoadedDiceStickers$53(this.f$1, this.f$2);
     }
 }

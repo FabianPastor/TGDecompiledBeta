@@ -37,6 +37,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$KeyboardButton;
+import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$TL_reactionCount;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -87,6 +88,7 @@ public class ForwardingPreviewView extends FrameLayout {
     /* access modifiers changed from: private */
     public final ResourcesDelegate resourcesProvider;
     boolean returnSendersNames;
+    TLRPC$Peer sendAsPeer;
     ActionBarMenuSubItem sendMessagesView;
     ActionBarMenuSubItem showCaptionView;
     ActionBarMenuSubItem showSendersNameView;
@@ -109,11 +111,15 @@ public class ForwardingPreviewView extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onDismiss(boolean z) {
-        throw null;
     }
 
     /* access modifiers changed from: protected */
     public void selectAnotherChat() {
+    }
+
+    public void setSendAsPeer(TLRPC$Peer tLRPC$Peer) {
+        this.sendAsPeer = tLRPC$Peer;
+        updateMessages();
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
@@ -896,11 +902,14 @@ public class ForwardingPreviewView extends FrameLayout {
         for (int i = 0; i < this.forwardingMessagesParams.previewMessages.size(); i++) {
             MessageObject messageObject = this.forwardingMessagesParams.previewMessages.get(i);
             messageObject.forceUpdate = true;
+            messageObject.sendAsPeer = this.sendAsPeer;
             ForwardingMessagesParams forwardingMessagesParams2 = this.forwardingMessagesParams;
             if (!forwardingMessagesParams2.hideForwardSendersName) {
                 messageObject.messageOwner.flags |= 4;
+                messageObject.hideSendersName = false;
             } else {
                 messageObject.messageOwner.flags &= -5;
+                messageObject.hideSendersName = true;
             }
             if (forwardingMessagesParams2.hideCaption) {
                 messageObject.caption = null;
@@ -1183,6 +1192,10 @@ public class ForwardingPreviewView extends FrameLayout {
 
                 public /* synthetic */ void didPressViaBot(ChatMessageCell chatMessageCell, String str) {
                     ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressViaBot(this, chatMessageCell, str);
+                }
+
+                public /* synthetic */ void didPressViaBotNotInline(ChatMessageCell chatMessageCell, long j) {
+                    ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressViaBotNotInline(this, chatMessageCell, j);
                 }
 
                 public /* synthetic */ void didPressVoteButtons(ChatMessageCell chatMessageCell, ArrayList arrayList, int i, int i2, int i3) {

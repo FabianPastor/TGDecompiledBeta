@@ -4,7 +4,9 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -26,6 +28,7 @@ import org.telegram.tgnet.TLRPC$TL_error;
 public class RingtoneDataStore {
     private static volatile long lastReloadTimeMs;
     private static volatile long queryHash;
+    public static final HashSet<String> ringtoneSupportedMimeType = new HashSet<>(Arrays.asList(new String[]{"audio/mpeg", "audio/ogg", "audio/m4a"}));
     private final long clientUserId;
     private final int currentAccount;
     private boolean loaded;
@@ -36,7 +39,13 @@ public class RingtoneDataStore {
     public RingtoneDataStore(int i) {
         this.currentAccount = i;
         this.clientUserId = UserConfig.getInstance(i).clientUserId;
-        getSharedPreferences();
+        SharedPreferences sharedPreferences = getSharedPreferences();
+        try {
+            queryHash = sharedPreferences.getLong("hash", 0);
+            lastReloadTimeMs = sharedPreferences.getLong("lastReload", 0);
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
         loadUserRingtones();
     }
 
@@ -296,16 +305,7 @@ public class RingtoneDataStore {
     }
 
     public boolean contains(long j) {
-        if (!this.loaded) {
-            loadFromPrefs(true);
-            this.loaded = true;
-        }
-        for (int i = 0; i < this.userRingtones.size(); i++) {
-            if (this.userRingtones.get(i).document != null && this.userRingtones.get(i).document.id == j) {
-                return true;
-            }
-        }
-        return false;
+        return getDocument(j) != null;
     }
 
     public void addTone(TLRPC$Document tLRPC$Document) {
@@ -319,6 +319,19 @@ public class RingtoneDataStore {
             this.userRingtones.add(cachedTone);
             saveTones();
         }
+    }
+
+    public TLRPC$Document getDocument(long j) {
+        if (!this.loaded) {
+            loadFromPrefs(true);
+            this.loaded = true;
+        }
+        for (int i = 0; i < this.userRingtones.size(); i++) {
+            if (this.userRingtones.get(i).document != null && this.userRingtones.get(i).document.id == j) {
+                return this.userRingtones.get(i).document;
+            }
+        }
+        return null;
     }
 
     public class CachedTone {

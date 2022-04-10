@@ -1,14 +1,15 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.SimpleFloatPropertyCompat;
+import org.telegram.ui.Components.ChatAttachAlertBotWebViewLayout;
 
-public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda11 implements SimpleFloatPropertyCompat.Setter {
-    public static final /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda11 INSTANCE = new BotWebViewMenuContainer$$ExternalSyntheticLambda11();
+public final /* synthetic */ class BotWebViewMenuContainer$$ExternalSyntheticLambda11 implements ChatAttachAlertBotWebViewLayout.WebViewSwipeContainer.Delegate {
+    public final /* synthetic */ BotWebViewMenuContainer f$0;
 
-    private /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda11() {
+    public /* synthetic */ BotWebViewMenuContainer$$ExternalSyntheticLambda11(BotWebViewMenuContainer botWebViewMenuContainer) {
+        this.f$0 = botWebViewMenuContainer;
     }
 
-    public final void set(Object obj, float f) {
-        BotWebViewMenuContainer.lambda$static$1((BotWebViewMenuContainer) obj, f);
+    public final void onDismiss() {
+        this.f$0.dismiss();
     }
 }

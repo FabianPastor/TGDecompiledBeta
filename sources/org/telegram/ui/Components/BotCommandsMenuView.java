@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.collection.LongSparseArray;
-import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -27,6 +26,7 @@ import org.telegram.ui.Components.RecyclerListView;
 public class BotCommandsMenuView extends View {
     final MenuDrawable backDrawable;
     Drawable backgroundDrawable;
+    boolean drawBackgroundDrawable;
     float expandProgress;
     boolean expanded;
     boolean isOpened;
@@ -68,6 +68,7 @@ public class BotCommandsMenuView extends View {
             }
         };
         this.menuText = LocaleController.getString(NUM);
+        this.drawBackgroundDrawable = true;
         updateColors();
         r1.setMiniIcon(true);
         r1.setRotateToBack(false);
@@ -75,9 +76,14 @@ public class BotCommandsMenuView extends View {
         r1.setCallback(this);
         textPaint2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         r1.setRoundCap();
-        Drawable createSimpleSelectorRoundRectDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(16.0f), 0, ColorUtils.setAlphaComponent(Theme.getColor("listSelectorSDK21"), 60));
+        Drawable createSimpleSelectorRoundRectDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(16.0f), 0, Theme.getColor("featuredStickers_addButtonPressed"));
         this.backgroundDrawable = createSimpleSelectorRoundRectDrawable;
         createSimpleSelectorRoundRectDrawable.setCallback(this);
+    }
+
+    public void setDrawBackgroundDrawable(boolean z) {
+        this.drawBackgroundDrawable = z;
+        invalidate();
     }
 
     /* access modifiers changed from: protected */
@@ -125,16 +131,17 @@ public class BotCommandsMenuView extends View {
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x00a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x00d1  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x00ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x0115  */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x0059  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x00a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x00d5  */
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x00f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x0119  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void dispatchDraw(android.graphics.Canvas r11) {
         /*
             r10 = this;
             android.text.StaticLayout r0 = r10.menuTextLayout
-            if (r0 == 0) goto L_0x0126
+            if (r0 == 0) goto L_0x012a
             boolean r0 = r10.expanded
             r1 = 1
             r2 = 1037726734(0x3dda740e, float:0.10666667)
@@ -183,76 +190,79 @@ public class BotCommandsMenuView extends View {
             int r5 = (int) r5
             r2.setAlpha(r5)
         L_0x0053:
+            boolean r2 = r10.drawBackgroundDrawable
+            r5 = 1082130432(0x40800000, float:4.0)
+            if (r2 == 0) goto L_0x00a4
             android.graphics.RectF r2 = r10.rectTmp
-            r5 = 1109393408(0x42200000, float:40.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r5 = (float) r5
-            android.text.StaticLayout r6 = r10.menuTextLayout
-            int r6 = r6.getWidth()
-            r7 = 1082130432(0x40800000, float:4.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r6 = r6 + r8
+            r6 = 1109393408(0x42200000, float:40.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             float r6 = (float) r6
-            float r6 = r6 * r0
-            float r5 = r5 + r6
-            int r6 = r10.getMeasuredHeight()
-            float r6 = (float) r6
-            r2.set(r4, r4, r5, r6)
+            android.text.StaticLayout r7 = r10.menuTextLayout
+            int r7 = r7.getWidth()
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r7 = r7 + r8
+            float r7 = (float) r7
+            float r7 = r7 * r0
+            float r6 = r6 + r7
+            int r7 = r10.getMeasuredHeight()
+            float r7 = (float) r7
+            r2.set(r4, r4, r6, r7)
             android.graphics.RectF r2 = r10.rectTmp
-            r5 = 1098907648(0x41800000, float:16.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            r6 = 1098907648(0x41800000, float:16.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r7 = (float) r7
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             float r6 = (float) r6
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r5 = (float) r5
             android.graphics.Paint r8 = r10.paint
-            r11.drawRoundRect(r2, r6, r5, r8)
+            r11.drawRoundRect(r2, r7, r6, r8)
             android.graphics.drawable.Drawable r2 = r10.backgroundDrawable
-            android.graphics.RectF r5 = r10.rectTmp
-            float r6 = r5.left
-            int r6 = (int) r6
-            float r8 = r5.top
+            android.graphics.RectF r6 = r10.rectTmp
+            float r7 = r6.left
+            int r7 = (int) r7
+            float r8 = r6.top
             int r8 = (int) r8
-            float r9 = r5.right
+            float r9 = r6.right
             int r9 = (int) r9
-            float r5 = r5.bottom
-            int r5 = (int) r5
-            r2.setBounds(r6, r8, r9, r5)
+            float r6 = r6.bottom
+            int r6 = (int) r6
+            r2.setBounds(r7, r8, r9, r6)
             android.graphics.drawable.Drawable r2 = r10.backgroundDrawable
             r2.draw(r11)
+        L_0x00a4:
             boolean r2 = r10.isWebView
-            if (r2 == 0) goto L_0x00d1
+            if (r2 == 0) goto L_0x00d5
             r11.save()
-            r2 = 1092616192(0x41200000, float:10.0)
+            r2 = 1092091904(0x41180000, float:9.5)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             float r2 = (float) r2
-            r5 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r5 = (float) r5
-            r11.translate(r2, r5)
+            r6 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            r11.translate(r2, r6)
             org.telegram.ui.Components.RLottieDrawable r2 = r10.webViewAnimation
-            int r5 = r2.width
-            int r6 = r2.height
-            r2.setBounds(r3, r3, r5, r6)
+            int r6 = r2.width
+            int r7 = r2.height
+            r2.setBounds(r3, r3, r6, r7)
             r2.draw(r11)
             r11.restore()
             boolean r2 = r2.isRunning()
-            if (r2 == 0) goto L_0x00eb
+            if (r2 == 0) goto L_0x00ef
             r10.invalidate()
-            goto L_0x00eb
-        L_0x00d1:
+            goto L_0x00ef
+        L_0x00d5:
             r11.save()
             r2 = 1090519040(0x41000000, float:8.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             float r2 = (float) r2
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
             float r3 = (float) r3
             r11.translate(r2, r3)
             org.telegram.ui.ActionBar.MenuDrawable r2 = r10.backDrawable
             r2.draw(r11)
             r11.restore()
-        L_0x00eb:
+        L_0x00ef:
             int r2 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0113
+            if (r2 <= 0) goto L_0x0117
             r11.save()
             r2 = 1107820544(0x42080000, float:34.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
@@ -268,16 +278,16 @@ public class BotCommandsMenuView extends View {
             android.text.StaticLayout r2 = r10.menuTextLayout
             r2.draw(r11)
             r11.restore()
-        L_0x0113:
-            if (r1 == 0) goto L_0x0126
+        L_0x0117:
+            if (r1 == 0) goto L_0x012a
             android.text.StaticLayout r1 = r10.menuTextLayout
             int r1 = r1.getWidth()
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r1 = r1 + r2
             float r1 = (float) r1
             float r1 = r1 * r0
             r10.onTranslationChanged(r1)
-        L_0x0126:
+        L_0x012a:
             super.dispatchDraw(r11)
             return
         */

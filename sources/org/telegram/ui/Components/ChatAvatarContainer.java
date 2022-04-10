@@ -51,6 +51,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private int leftPadding;
     private boolean occupyStatusBar;
     private int onlineCount;
+    private Integer overrideSubtitleColor;
     /* access modifiers changed from: private */
     public ChatActivity parentFragment;
     private Theme.ResourcesProvider resourcesProvider;
@@ -186,6 +187,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     /* access modifiers changed from: private */
     public /* synthetic */ void lambda$new$2(View view) {
         openProfile(false);
+    }
+
+    public void setOverrideSubtitleColor(Integer num) {
+        this.overrideSubtitleColor = num;
     }
 
     public boolean openSetTimer() {
@@ -730,8 +735,13 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 this.lastSubtitleColorKey = z2 ? "chat_status" : "actionBarDefaultSubtitle";
                 if (this.lastSubtitle == null) {
                     this.subtitleTextView.setText(str);
-                    this.subtitleTextView.setTextColor(getThemedColor(this.lastSubtitleColorKey));
-                    this.subtitleTextView.setTag(this.lastSubtitleColorKey);
+                    Integer num = this.overrideSubtitleColor;
+                    if (num == null) {
+                        this.subtitleTextView.setTextColor(getThemedColor(this.lastSubtitleColorKey));
+                        this.subtitleTextView.setTag(this.lastSubtitleColorKey);
+                        return;
+                    }
+                    this.subtitleTextView.setTextColor(num.intValue());
                     return;
                 }
                 this.lastSubtitle = str;
@@ -882,6 +892,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             if (charSequence != null) {
                 this.subtitleTextView.setText(charSequence);
                 this.lastSubtitle = null;
+                Integer num = this.overrideSubtitleColor;
+                if (num != null) {
+                    this.subtitleTextView.setTextColor(num.intValue());
+                    return;
+                }
                 String str2 = this.lastSubtitleColorKey;
                 if (str2 != null) {
                     this.subtitleTextView.setTextColor(getThemedColor(str2));

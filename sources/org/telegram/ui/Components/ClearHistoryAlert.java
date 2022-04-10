@@ -161,7 +161,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r0.newTimer = r8
         L_0x0060:
             android.content.res.Resources r7 = r28.getResources()
-            r10 = 2131166123(0x7var_ab, float:1.7946482E38)
+            r10 = 2131166129(0x7var_b1, float:1.7946495E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r10)
             android.graphics.drawable.Drawable r7 = r7.mutate()
             r0.shadowDrawable = r7
@@ -417,7 +417,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r3.addView(r2, r5)
             org.telegram.ui.Cells.ShadowSectionCell r2 = new org.telegram.ui.Cells.ShadowSectionCell
             r2.<init>(r1)
-            r3 = 2131165477(0x7var_, float:1.7945172E38)
+            r3 = 2131165483(0x7var_b, float:1.7945184E38)
             android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r3, (java.lang.String) r8)
             org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
             android.graphics.drawable.ColorDrawable r6 = new android.graphics.drawable.ColorDrawable
@@ -458,7 +458,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r5.<init>(r1)
             r6 = 0
             r5.setAutoRepeat(r6)
-            r7 = 2131558553(0x7f0d0099, float:1.8742425E38)
+            r7 = 2131558554(0x7f0d009a, float:1.8742427E38)
             r14 = 120(0x78, float:1.68E-43)
             r5.setAnimation(r7, r14, r14)
             r7 = 1101004800(0x41a00000, float:20.0)
@@ -578,7 +578,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r3.addView(r2, r5)
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
-            r3 = 2131165478(0x7var_, float:1.7945174E38)
+            r3 = 2131165484(0x7var_c, float:1.7945186E38)
             android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r3, (java.lang.String) r8)
             org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
             android.graphics.drawable.ColorDrawable r6 = new android.graphics.drawable.ColorDrawable
@@ -617,7 +617,7 @@ public class ClearHistoryAlert extends BottomSheet {
             int r1 = r0.currentTimer
             if (r1 != 0) goto L_0x0498
             org.telegram.ui.Components.ClearHistoryAlert$BottomSheetCell r1 = r0.setTimerButton
-            r3 = 2131625513(0x7f0e0629, float:1.8878236E38)
+            r3 = 2131625514(0x7f0e062a, float:1.8878238E38)
             java.lang.String r4 = "EnableAutoDelete"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)

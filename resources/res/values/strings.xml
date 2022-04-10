@@ -1301,6 +1301,7 @@
     <string name="DebugMenuCallSettings">Call settings</string>
     <string name="DebugMenuCheckAppUpdate">Check app update</string>
     <string name="DebugMenuClearMediaCache">Clear sent media cache</string>
+    <string name="DebugMenuClearWebViewCache">Clear WebView cache</string>
     <string name="DebugMenuDisableCamera">Disable in-app camera</string>
     <string name="DebugMenuDisableForceRtmpStreamFlag">Disable forced RTMP Stream Flag</string>
     <string name="DebugMenuDisableLogs">Disable Logs</string>
@@ -1613,7 +1614,7 @@
     <string name="EnterYourTelegramPasscode">Enter your Telegram passcode</string>
     <string name="ErrorOccurred">An error occurred.</string>
     <string name="ErrorRingtoneDurationTooLong">The duration is longer than 5 seconds.</string>
-    <string name="ErrorRingtoneInvalidFormat">The file is not in mp3 format.</string>
+    <string name="ErrorRingtoneInvalidFormat">The file is not in mp3 or ogg format.</string>
     <string name="ErrorRingtoneSizeTooBig">The size is over 100 Kb.</string>
     <string name="ErrorSendRestrictedMedia">Sorry, the admins of this group have restricted you from sending media.</string>
     <string name="ErrorSendRestrictedMediaAll">Sorry, sending media is not allowed in this group.</string>
@@ -4218,6 +4219,7 @@
     <string name="SoundAddedSubtitle">You can now use this sound as a notification tone in your **custom notification settings**.</string>
     <string name="SoundDefault">Default</string>
     <string name="SoundMuted">Sound muted</string>
+    <string name="SoundNameEmpty">Message dated %s</string>
     <string name="SoundOff">Disable sound</string>
     <string name="SoundOffHint">You will receive silent notifications. </string>
     <string name="SoundOn">Enable sound</string>

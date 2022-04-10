@@ -244,7 +244,7 @@ public final class Instance {
     }
 
     public static final class FinalState {
-        public final String debugLog;
+        public String debugLog;
         public final boolean isRatingSuggested;
         public final byte[] persistentState;
         public final TrafficStats trafficStats;
